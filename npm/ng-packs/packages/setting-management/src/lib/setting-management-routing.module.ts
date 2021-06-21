@@ -2,6 +2,7 @@ import {
   DynamicLayoutComponent,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
+  AuthGuard,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,6 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: DynamicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',

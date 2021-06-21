@@ -32,38 +32,40 @@ namespace Volo.Abp.Modularity
 
         public void InitializeModules(ApplicationInitializationContext context)
         {
-            LogListOfModules();
-
-            foreach (var Contributor in _lifecycleContributors)
+            foreach (var contributor in _lifecycleContributors)
             {
                 foreach (var module in _moduleContainer.Modules)
                 {
-                    Contributor.Initialize(context, module.Instance);
+                    try
+                    {
+                        contributor.Initialize(context, module.Instance);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                    }
                 }
             }
 
             _logger.LogInformation("Initialized all ABP modules.");
         }
 
-        private void LogListOfModules()
-        {
-            _logger.LogInformation("Loaded ABP modules:");
-
-            foreach (var module in _moduleContainer.Modules)
-            {
-                _logger.LogInformation("- " + module.Type.FullName);
-            }
-        }
-
         public void ShutdownModules(ApplicationShutdownContext context)
         {
             var modules = _moduleContainer.Modules.Reverse().ToList();
 
-            foreach (var Contributor in _lifecycleContributors)
+            foreach (var contributor in _lifecycleContributors)
             {
                 foreach (var module in modules)
                 {
-                    Contributor.Shutdown(context, module.Instance);
+                    try
+                    {
+                        contributor.Shutdown(context, module.Instance);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new AbpShutdownException($"An error occurred during the shutdown {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                    }
                 }
             }
         }

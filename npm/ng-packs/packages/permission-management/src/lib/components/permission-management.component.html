@@ -22,19 +22,24 @@
 
       <hr class="mt-2 mb-2" />
       <div class="row">
-        <div class="col-md-4">
+        <div class="overflow-scroll col-md-4">
           <ul class="nav nav-pills flex-column">
             <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
               <a
+                *ngIf="{ assignedCount: getAssignedCount(group.name) } as data"
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
-                >{{ group?.displayName }}</a
               >
+                <div [class.font-weight-bold]="data.assignedCount">
+                  {{ group?.displayName }}
+                  <span>({{ data.assignedCount }})</span>
+                </div>
+              </a>
             </li>
           </ul>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 overflow-scroll">
           <h4>{{ selectedGroup?.displayName }}</h4>
           <hr class="mt-2 mb-3" />
           <div class="pl-1 pt-1">
@@ -58,7 +63,7 @@
                 let i = index;
                 trackBy: trackByFn
               "
-              [style.margin-left]="permission.margin + 'px'"
+              [ngStyle]="permission.style"
               class="custom-checkbox custom-control mb-2"
             >
               <input
@@ -89,7 +94,7 @@
       </div>
     </ng-template>
     <ng-template #abpFooter>
-      <button type="button" class="btn btn-secondary" #abpClose>
+      <button type="button" class="btn btn-secondary" abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
       <abp-button iconClass="fa fa-check" (click)="submit()">{{

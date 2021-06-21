@@ -1,13 +1,7 @@
 import { TemplateRef } from '@angular/core';
 
 export namespace Account {
-  export interface AuthWrapperComponentInputs {
-    readonly mainContentRef: TemplateRef<any>;
-    readonly cancelContentRef?: TemplateRef<any>;
-  }
-
   //tslint:disable
-  export interface AuthWrapperComponentOutputs {}
   export interface TenantBoxComponentInputs {}
   export interface TenantBoxComponentOutputs {}
   export interface PersonalSettingsComponentInputs {}

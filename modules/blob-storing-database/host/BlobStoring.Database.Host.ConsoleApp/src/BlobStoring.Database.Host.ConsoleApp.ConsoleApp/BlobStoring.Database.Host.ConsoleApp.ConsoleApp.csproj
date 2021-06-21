@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="appsettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+      <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\..\src\Volo.Abp.BlobStoring.Database.EntityFrameworkCore\Volo.Abp.BlobStoring.Database.EntityFrameworkCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftPackageVersion)" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+      <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+      <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftPackageVersion)" />
+    </ItemGroup>
+
+</Project>

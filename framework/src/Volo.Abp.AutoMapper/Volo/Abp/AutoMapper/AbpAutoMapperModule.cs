@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
@@ -10,24 +11,25 @@ namespace Volo.Abp.AutoMapper
 {
     [DependsOn(
         typeof(AbpObjectMappingModule),
-        typeof(AbpObjectExtendingModule))]
+        typeof(AbpObjectExtendingModule),
+        typeof(AbpAuditingModule)
+    )]
     public class AbpAutoMapperModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper();
 
-            var mapperAccessor = new MapperAccessor();
-            context.Services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
-            context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
+            context.Services.AddSingleton<MapperAccessor>(CreateMappings);
+            context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
         }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            CreateMappings(context.ServiceProvider);
-        }
-
-        private void CreateMappings(IServiceProvider serviceProvider)
+        private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -41,11 +43,13 @@ namespace Volo.Abp.AutoMapper
                     }
                 }
 
+                options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
+
                 void ValidateAll(IConfigurationProvider config)
                 {
                     foreach (var profileType in options.ValidatingProfiles)
                     {
-                        config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                        config.AssertConfigurationIsValid(((Profile) Activator.CreateInstance(profileType)).ProfileName);
                     }
                 }
 
@@ -56,7 +60,10 @@ namespace Volo.Abp.AutoMapper
 
                 ValidateAll(mapperConfiguration);
 
-                scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = mapperConfiguration.CreateMapper();
+                return new MapperAccessor
+                {
+                    Mapper = new Mapper(mapperConfiguration)
+                };
             }
         }
     }

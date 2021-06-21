@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
+using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp
@@ -42,6 +45,7 @@ namespace Volo.Abp
             services.AddCoreAbpServices(this, options);
 
             Modules = LoadModules(services, options);
+            ConfigureServices();
         }
 
         public virtual void Shutdown()
@@ -58,7 +62,7 @@ namespace Volo.Abp
         {
             //TODO: Shutdown if not done before?
         }
-        
+
         protected virtual void SetServiceProvider(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
@@ -69,13 +73,32 @@ namespace Volo.Abp
         {
             using (var scope = ServiceProvider.CreateScope())
             {
+                WriteInitLogs(scope.ServiceProvider);
                 scope.ServiceProvider
                     .GetRequiredService<IModuleManager>()
                     .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
             }
         }
 
-        private IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
+        protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
+            if (logger == null)
+            {
+                return;
+            }
+
+            var initLogger = serviceProvider.GetRequiredService<IInitLoggerFactory>().Create<AbpApplicationBase>();
+
+            foreach (var entry in initLogger.Entries)
+            {
+                logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
+            }
+
+            initLogger.Entries.Clear();
+        }
+
+        protected virtual IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
         {
             return services
                 .GetSingletonInstance<IModuleLoader>()
@@ -84,6 +107,76 @@ namespace Volo.Abp
                     StartupModuleType,
                     options.PlugInSources
                 );
+        }
+
+        //TODO: We can extract a new class for this
+        protected virtual void ConfigureServices()
+        {
+            var context = new ServiceConfigurationContext(Services);
+            Services.AddSingleton(context);
+
+            foreach (var module in Modules)
+            {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    abpModule.ServiceConfigurationContext = context;
+                }
+            }
+
+            //PreConfigureServices
+            foreach (var module in Modules.Where(m => m.Instance is IPreConfigureServices))
+            {
+                try
+                {
+                    ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IPreConfigureServices.PreConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
+            }
+
+            //ConfigureServices
+            foreach (var module in Modules)
+            {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    if (!abpModule.SkipAutoServiceRegistration)
+                    {
+                        Services.AddAssembly(module.Type.Assembly);
+                    }
+                }
+
+                try
+                {
+                    module.Instance.ConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IAbpModule.ConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
+            }
+
+            //PostConfigureServices
+            foreach (var module in Modules.Where(m => m.Instance is IPostConfigureServices))
+            {
+                try
+                {
+                    ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IPostConfigureServices.PostConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
+            }
+
+            foreach (var module in Modules)
+            {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    abpModule.ServiceConfigurationContext = null;
+                }
+            }
         }
     }
 }

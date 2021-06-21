@@ -38,7 +38,7 @@ public class CustomSignInManager : Microsoft.AspNetCore.Identity.SignInManager<V
 一个好的开始是从复制[源码](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Identity/Core/src/SignInManager.cs#L638-L674)而不是从零开始. 在这个用例中我们对源码进行较少的修改,为了帮助理解概念它显式显示了方法和属性的命名空间.
 
 ````csharp
-public override async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
+public async override Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
 {
     var auth = await Context.AuthenticateAsync(Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme);
     var items = auth?.Properties?.Items;
@@ -93,7 +93,7 @@ PreConfigure<IdentityBuilder>(identityBuilder =>
 
 ## 本文的源代码
 
-你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)找到已完成的示例源码.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)找到已完成的示例源码.
 
 ## 另请参阅
 

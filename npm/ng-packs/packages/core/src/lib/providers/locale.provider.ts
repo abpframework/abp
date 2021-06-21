@@ -1,5 +1,5 @@
 import { LOCALE_ID, Provider } from '@angular/core';
-import localesMapping from '../constants/different-locales';
+import { differentLocales } from '../constants/different-locales';
 import { LocalizationService } from '../services/localization.service';
 
 export class LocaleId extends String {
@@ -9,7 +9,7 @@ export class LocaleId extends String {
 
   toString(): string {
     const { currentLang } = this.localizationService;
-    return localesMapping[currentLang] || currentLang;
+    return differentLocales[currentLang] || currentLang;
   }
 
   valueOf(): string {

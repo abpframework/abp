@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.Security;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
@@ -75,6 +77,16 @@ namespace Microsoft.AspNetCore.Builder
 
             app.Properties[ExceptionHandlingMiddlewareMarker] = true;
             return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpClaimsMapMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
         }
     }
 }

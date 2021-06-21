@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\common.test.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace />
+        <UserSecretsId>9f0d2c00-80c1-435b-bfab-2c39c8249091</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.Sms.Aliyun\Volo.Abp.Sms.Aliyun.csproj" />
+        <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftPackageVersion)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

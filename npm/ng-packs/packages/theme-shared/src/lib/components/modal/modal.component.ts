@@ -1,35 +1,50 @@
-import { takeUntilDestroy } from '@abp/ng.core';
+import { SubscriptionService } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
   ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnDestroy,
+  Optional,
   Output,
-  Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren,
+  isDevMode,
+  OnInit,
 } from '@angular/core';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
-import { fadeAnimation } from '../../animations/modal.animations';
 import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
-import { ModalService } from '../../services/modal.service';
+import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
+import { DismissableModal, ModalRefService, ModalDismissMode } from './modal-ref.service';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [fadeAnimation],
   styleUrls: ['./modal.component.scss'],
-  providers: [ModalService],
+  providers: [SubscriptionService],
 })
-export class ModalComponent implements OnDestroy {
+export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
+  /**
+   * @deprecated Use centered property of options input instead. To be deleted in v5.0.
+   */
+  @Input() centered = false;
+  /**
+   * @deprecated Use windowClass property of options input instead. To be deleted in v5.0.
+   */
+  @Input() modalClass = '';
+  /**
+   * @deprecated Use size property of options input instead. To be deleted in v5.0.
+   */
+  @Input() size: ModalSize = 'lg';
+
   @Input()
   get visible(): boolean {
     return this._visible;
@@ -51,14 +66,11 @@ export class ModalComponent implements OnDestroy {
     this._busy = value;
   }
 
-  @Input() centered = false;
+  @Input() options: NgbModalOptions = {};
 
-  @Input() modalClass = '';
+  @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 
-  @Input() size: ModalSize = 'lg';
-
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
-  abpSubmit: ButtonComponent;
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
@@ -66,28 +78,28 @@ export class ModalComponent implements OnDestroy {
 
   @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
 
+  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
+  abpSubmit: ButtonComponent;
+
+  /**
+   * @deprecated will be removed in v5.0
+   */
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
-
-  @ViewChild('template', { static: false }) template: TemplateRef<any>;
-
-  @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
-
-  @ViewChildren('abp-button') abpButtons;
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @Output() readonly init = new EventEmitter<void>();
 
-  @Output() readonly appear = new EventEmitter();
+  @Output() readonly appear = new EventEmitter<void>();
 
-  @Output() readonly disappear = new EventEmitter();
+  @Output() readonly disappear = new EventEmitter<void>();
 
   _visible = false;
 
   _busy = false;
 
-  isModalOpen = false;
+  modalRef: NgbModalRef;
 
   isConfirmationOpen = false;
 
@@ -100,45 +112,80 @@ export class ModalComponent implements OnDestroy {
   }
 
   constructor(
-    private renderer: Renderer2,
     private confirmationService: ConfirmationService,
-    private modalService: ModalService,
+    private subscription: SubscriptionService,
+    @Optional()
+    @Inject(SUPPRESS_UNSAVED_CHANGES_WARNING)
+    private suppressUnsavedChangesWarningToken: boolean,
+    private modal: NgbModal,
+    private modalRefService: ModalRefService,
   ) {
     this.initToggleStream();
   }
-
-  private initToggleStream() {
-    this.toggle$
-      .pipe(takeUntilDestroy(this), debounceTime(0), distinctUntilChanged())
-      .subscribe(value => this.toggle(value));
+  ngOnInit(): void {
+    this.modalRefService.register(this);
   }
 
-  private toggle(value: boolean) {
-    this.isModalOpen = value;
-    this._visible = value;
-    this.visibleChange.emit(value);
-
-    if (value) {
-      this.modalService.renderTemplate(this.template);
-      setTimeout(() => this.listen(), 0);
-      this.renderer.addClass(document.body, 'modal-open');
-      this.appear.emit();
-    } else {
-      this.modalService.clearModal();
-      this.renderer.removeClass(document.body, 'modal-open');
-      this.disappear.emit();
-      this.destroy$.next();
+  dismiss(mode: ModalDismissMode) {
+    switch (mode) {
+      case 'hard':
+        this.visible = false;
+        break;
+      case 'soft':
+        this.close();
+        break;
+      default:
+        break;
     }
   }
 
+  private initToggleStream() {
+    this.subscription.addOne(this.toggle$.pipe(debounceTime(0), distinctUntilChanged()), value =>
+      this.toggle(value),
+    );
+  }
+
+  private toggle(value: boolean) {
+    this._visible = value;
+    this.visibleChange.emit(value);
+
+    if (!value) {
+      this.modalRef?.dismiss();
+      this.disappear.emit();
+      this.destroy$.next();
+      return;
+    }
+
+    setTimeout(() => this.listen(), 0);
+    this.modalRef = this.modal.open(this.modalContent, {
+      // TODO: set size to 'lg' when removed the size variable
+      size: this.size,
+      windowClass: this.modalClass,
+      centered: this.centered,
+      keyboard: false,
+      scrollable: true,
+      beforeDismiss: () => {
+        if (!this.visible) return true;
+
+        this.close();
+        return !this.visible;
+      },
+      ...this.options,
+    });
+
+    this.appear.emit();
+  }
+
   ngOnDestroy(): void {
+    this.modalRefService.unregister(this);
+    this.toggle(false);
     this.destroy$.next();
   }
 
   close() {
     if (this.busy) return;
 
-    if (this.isFormDirty) {
+    if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
@@ -170,24 +217,30 @@ export class ModalComponent implements OnDestroy {
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        if (this.isFormDirty) {
+        event.preventDefault();
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
           event.returnValue = true;
         } else {
-          event.returnValue = false;
           delete event.returnValue;
         }
       });
 
     setTimeout(() => {
       if (!this.abpClose) return;
+      this.warnForDeprecatedClose();
       fromEvent(this.abpClose.nativeElement, 'click')
-        .pipe(
-          takeUntil(this.destroy$),
-          filter(() => !!this.modalContent),
-        )
+        .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
+  }
+
+  private warnForDeprecatedClose() {
+    if (isDevMode()) {
+      console.warn(
+        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
+      );
+    }
   }
 }

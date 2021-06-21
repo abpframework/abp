@@ -11,6 +11,8 @@
             public const string Role = "Role";
 
             public const string ClaimType = "ClaimType";
+            
+            public const string OrganizationUnit = "OrganizationUnit";
         }
     }
 }

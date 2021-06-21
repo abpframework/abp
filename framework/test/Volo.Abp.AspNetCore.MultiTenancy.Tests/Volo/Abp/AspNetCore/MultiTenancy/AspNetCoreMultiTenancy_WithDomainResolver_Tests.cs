@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
                 services.Configure<AbpTenantResolveOptions>(options =>
                 {
-                    options.AddDomainTenantResolver("{0}.abp.io");
+                    options.AddDomainTenantResolver("{0}.abp.io:8080");
                 });
             });
         }
@@ -46,14 +46,14 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         [Fact]
         public async Task Should_Use_Host_If_Tenant_Is_Not_Specified()
         {
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io:8080");
             result["TenantId"].ShouldBe("");
         }
 
         [Fact]
         public async Task Should_Use_Domain_If_Specified()
         {
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io:8080");
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
 
@@ -62,7 +62,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             Client.DefaultRequestHeaders.Add(_options.TenantKey, Guid.NewGuid().ToString());
 
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io:8080");
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
     }

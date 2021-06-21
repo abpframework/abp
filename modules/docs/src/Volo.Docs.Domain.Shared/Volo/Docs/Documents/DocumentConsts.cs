@@ -2,14 +2,49 @@
 {
     public static class DocumentConsts
     {
-        public const int MaxNameLength = 255;
-        public const int MaxVersionNameLength = 128;
-        public const int MaxLanguageCodeNameLength = 128;
-        public const int MaxFileNameNameLength = 128;
-        public const int MaxFormatNameLength = 128;
-        public const int MaxEditLinkLength = 2048;
-        public const int MaxRootUrlLength = 2048;
-        public const int MaxRawRootUrlLength = 2048;
-        public const int MaxLocalDirectoryLength = 512;
+        /// <summary>
+        /// Default value: 255
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 255;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxVersionNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxLanguageCodeNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxFileNameNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxFormatNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 2048
+        /// </summary>
+        public static int MaxEditLinkLength { get; set; } = 2048;
+        
+        /// <summary>
+        /// Default value: 2048
+        /// </summary>
+        public static int MaxRootUrlLength { get; set; } = 2048;
+        
+        /// <summary>
+        /// Default value: 2048
+        /// </summary>
+        public static int MaxRawRootUrlLength { get; set; } = 2048;
+        
+        /// <summary>
+        /// Default value: 512
+        /// </summary>
+        public static int MaxLocalDirectoryLength { get; set; } = 512;
     }
 }

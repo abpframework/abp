@@ -2,52 +2,79 @@
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public interface IIdentityServerDbContext : IEfCoreDbContext
     {
-        DbSet<ApiResource> ApiResources { get; set; }
+        #region ApiResource
 
-        DbSet<ApiSecret> ApiSecrets { get; set; }
+        DbSet<ApiResource> ApiResources { get; }
 
-        DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
+        DbSet<ApiResourceSecret> ApiResourceSecrets { get; }
 
-        DbSet<ApiScope> ApiScopes { get; set; }
+        DbSet<ApiResourceClaim> ApiResourceClaims { get; }
 
-        DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
+        DbSet<ApiResourceScope> ApiResourceScopes { get; }
 
-        DbSet<IdentityResource> IdentityResources { get; set; }
+        DbSet<ApiResourceProperty> ApiResourceProperties { get; }
 
-        DbSet<IdentityClaim> IdentityClaims { get; set; }
+        #endregion
 
-        DbSet<Client> Clients { get; set; }
+        #region ApiScope
 
-        DbSet<ClientGrantType> ClientGrantTypes { get; set; }
+        DbSet<ApiScope> ApiScopes { get; }
 
-        DbSet<ClientRedirectUri> ClientRedirectUris { get; set; }
+        DbSet<ApiScopeClaim> ApiScopeClaims { get; }
 
-        DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; }
+        DbSet<ApiScopeProperty> ApiScopeProperties { get; }
 
-        DbSet<ClientScope> ClientScopes { get; set; }
+        #endregion
 
-        DbSet<ClientSecret> ClientSecrets { get; set; }
+        #region IdentityResource
 
-        DbSet<ClientClaim> ClientClaims { get; set; }
+        DbSet<IdentityResource> IdentityResources { get; }
 
-        DbSet<ClientIdPRestriction> ClientIdPRestrictions { get; set; }
+        DbSet<IdentityResourceClaim> IdentityClaims { get; }
 
-        DbSet<ClientCorsOrigin> ClientCorsOrigins { get; set; }
+        DbSet<IdentityResourceProperty> IdentityResourceProperties { get; }
 
-        DbSet<ClientProperty> ClientProperties { get; set; }
+        #endregion
 
-        DbSet<PersistedGrant> PersistedGrants { get; set; }
+        #region Client
 
-        DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
+        DbSet<Client> Clients { get; }
+
+        DbSet<ClientGrantType> ClientGrantTypes { get; }
+
+        DbSet<ClientRedirectUri> ClientRedirectUris { get; }
+
+        DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; }
+
+        DbSet<ClientScope> ClientScopes { get; }
+
+        DbSet<ClientSecret> ClientSecrets { get; }
+
+        DbSet<ClientClaim> ClientClaims { get; }
+
+        DbSet<ClientIdPRestriction> ClientIdPRestrictions { get; }
+
+        DbSet<ClientCorsOrigin> ClientCorsOrigins { get; }
+
+        DbSet<ClientProperty> ClientProperties { get; }
+
+            #endregion
+
+        DbSet<PersistedGrant> PersistedGrants { get; }
+
+        DbSet<DeviceFlowCodes> DeviceFlowCodes { get; }
     }
 }

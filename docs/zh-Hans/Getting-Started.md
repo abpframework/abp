@@ -19,24 +19,27 @@
 
 你需要安装以下工具:
 
-* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/).
-* [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/).<sup id="a-editor">[1](#f-editor)</sup>
+* [.NET Core 3.1+](https://www.microsoft.com/net/download/dotnet-core/)
 
-* [Node v12+](https://nodejs.org)
+* [Node v12 或 v14](https://nodejs.org/en/)
 * [Yarn v1.19+](https://classic.yarnpkg.com/)
+* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> 或 npm v6+ (与Node一起安装)
 {{ if Tiered == "Yes" }}
 
-* [Redis](https://redis.io/): 应用程序将Redis用作[分布式缓存](../Caching.md). 因此你需要安装并运行Redis.
+* [Redis](https://redis.io/): 入门解决方案将Redis用作[分布式缓存](Caching.md). 因此你需要安装并运行Redis.
 
 {{ end }}
 
-> 你可以也使用其他支持.NET Core 和 ASP.NET Core的编辑器.
+<sup id="f-editor"><b>1</b></sup> _只要支持.NET Core和ASP.NET Core,就可以使用其他编辑器代替Visual Studio._ <sup>[↩](#a-editor)</sup>
+
+<sup id="f-yarn"><b>2</b></sup> _Yarn v2 的工作方式不同,不受支持._ <sup>[↩](#a-yarn)</sup>
 
 ### 安装ABP CLI
 
-[ABP CLI](./CLI.md)是一个命令行页面,用于为基于ABP的应用程序验证和自动化一些任务.
+[ABP CLI](./CLI.md)是一个命令行页面,用于自动执行一些基于ABP的应用程序的常见任务.
 
-> ABP CLI是[ABP框架](https://abp.io/)一个免费开源的工具.
+> ABP CLI是ABP框架一个免费开源的工具.
 
 你需要使用以下命令安排ABP CLI:
 
@@ -59,10 +62,10 @@ dotnet tool update -g Volo.Abp.Cli
 使用ABP CLI的 `new` 命令创建新项目:
 
 ````shell
-abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}} --mobile react-native
 ````
 
-* `-t` 参数指定 [启动模板](Startup-Templates/Application.md) 名称. `app` 是一个启动模板名称,包含了预安装并且配置好的[ABP模块](Modules/Index.md).
+* 此命令还会在解决方案文件夹内创建一个React Native移动应用程序. 如果你不想要它,可以安全地删除它或从`abp new`命令中删除`--mobile react-native`选项, 以使其完全不包含在解决方案中.
 
 {{ if UI == "NG" }}
 
@@ -70,7 +73,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 
 {{ if Tiered == "Yes" }}
 
-* `--separate-identity-server` 参数用于将Identity服务器应用程序与API主机应用程序分隔开. 如果未指定,你将只有一个端点.
+* `--separate-identity-server` 参数用于将Identity服务器应用程序与API主机应用程序分隔开. 如果未指定,则服务器上将只有一个端点.
 
 {{ end }}
 
@@ -89,6 +92,12 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 {{ end }}
 
 > 你可以使用不同级别的命令空间; 例如. BookStore, Acme.BookStore or Acme.Retail.BookStore.
+
+#### ABP CLI 命令 & 选项
+
+[ABP CLI文档](./CLI.md)涵盖了ABP CLI的所有可用命令和选项. 本文档使用[应用程序启动模板](Startup-Templates/Application.md)创建新的Web应用程序. 有关其他模板,请参见[ABP启动模板](Startup-Templates/Index.md)文档.
+
+> 或者,您可以从[ABP Framework网站](https://abp.io/get-started)中选择"直接下载"选项卡创建新的解决方案.
 
 ## 解决方案结构
 
@@ -111,6 +120,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 {{end}}
 
 {{ else if UI == "NG" }}
+
 在创建的解决方案中有三个文件夹:
 
 ![](images/solution-files-non-mvc.png)
@@ -120,6 +130,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 * `react-native` 文件夹包含React Native UI 应用程序.
 
 打开 `aspnet-core` 文件夹下的 `.sln`(`Visual Studio`解决方案)文件:
+
 ![vs-angular-app-backend-solution-structure](images/vs-spa-app-backend-structure{{if DB == "Mongo"}}-mongodb{{end}}.png)
 
 {{ end }}
@@ -142,9 +153,22 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 
 > 请参阅[应用程序模板文档](Startup-Templates/Application.md)详细了解解决方案结构.
 
+{{ if DB == "Mongo" }}
+
+> [启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
+
+  ```csharp
+  Configure<AbpUnitOfWorkDefaultOptions>(options =>
+  {
+      options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+  });
+  ```
+
+{{ end }}
+
 ## 创建数据库
 
-### 数据库连接字符串
+### 连接字符串
 
 检查 {{if UI == "MVC"}}{{if Tiered == "Yes"}}`.IdentityServer` 和 `.HttpApi.Host` 项目{{else}}`.Web` 项目{{end}}{{else if UI == "NG" }}`.HttpApi.Host` 项目{{end}}下 `appsettings.json` 文件中的 **链接字符串**:
 
@@ -212,7 +236,9 @@ Ef Core具有`Update-Database`命令, 可根据需要创建数据库并应用挂
 
 这将基于配置的连接字符串创建新数据库.
 
-> 使用`.Migrator`工具是建议的方法, 因为它还能初始化初始数据能够正确运行Web应用程序.
+> **使用`.DbMigrator`工具是建议的方法**, 因为它能初始化初始数据能够正确运行Web应用程序.
+>
+> 如果你只是使用 `Update-Database` 命令,你会得到一个空数据库,所以你无法登录到应用程序因为数据库中没有初始管理用户. 不需要种子数据库时,可以在开发期间使用 `Update-Database` 命令. 但是使用 `.DbMigrator` 应用程序会更简单,你始终可以使用它来迁移模式并为数据库添加种子.
 
 {{ else if DB == "Mongo" }}
 
@@ -238,7 +264,7 @@ Ef Core具有`Update-Database`命令, 可根据需要创建数据库并应用挂
 
  ![db-migrator-output](images/db-migrator-output.png)
 
-> 数据库创建后会初始化种子数据, 其中包含用于登录的 `admin` 用户. 所以你至少使用 `.DbMigrator` 一次.
+> 数据库创建后会初始化[种子数据](Data-Seeding.md), 其中包含用于登录的 `admin` 用户. 所以你至少使用 `.DbMigrator` 一次.
 
 {{ end }}
 
@@ -334,83 +360,15 @@ yarn start
 
 {{ end }}
 
-输入用户名 **admin**,密码 **1q2w3E*** 登录到应用程序.
-
-![bookstore-home](images/bookstore-home.png)
-
-应用程序已经启动并执行,你可以基于该启动模板开发应用程序.
+输入用户名 **admin**,密码 **1q2w3E*** 登录到应用程序,应用程序已经启动并执行,你可以基于此启动模板开始开发应用程序.
 
 #### 移动开发
 
-ABP平台提供了[React Native](https://reactnative.dev/)模板用于开发移动应用程序.
+当你创建一个新的应用程序时. 可以添加`-m react-native`选项以在解决方案中包含 `react-native`项目. 这是一个基础的[React Native](https://reactnative.dev/)启动模板,用于开发与基于ABP的后端集成的移动应用程序.
 
-> 该解决方案默认 `react-native` 包含了React Native应用程序,如果你不计划使用React Native开发移动应用程序,你可以忽略并删除 `react-native` 文件夹.
 
-运行在Android模拟器或真机上的React Native应用程序无法连接到 `localhost` 上的后.要修复此问题,需要在本地IP上运行后端.
-
-{{ if Tiered == "No"}}
-![React Native host project local IP entry](images/rn-host-local-ip.png)
-
-* 打开 `.HttpApi.Host` 文件夹下的 `appsettings.json` 文件. 将  `SelfUrl` 和 `Authority` 属性的 `localhost` 替换为你本地的IP地址.
-* 打开 `.HttpApi.Host/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
-
-{{ else if Tiered == "Yes" }}
-
-![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
-
-* 打开 `.IdentityServer` 文件夹下的 `appsettings.json` 文件. 将 `SelfUrl` 属性的 `localhost` 替换为你本地的IP地址.
-* 打开 `.IdentityServer/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
-* 打开 `.HttpApi.Host` 文件夹下的 `appsettings.json` 文件. 将 `Authority` 属性的 `localhost` 替换为你本地的IP地址.
-* 打开 `.HttpApi.Host/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
-
-{{ end }}
-
-按照**运行HTTP API Host (服务端口)**那样运行后端.
-
-> React Native应用程序不信任自动生成的.NET HTTPS证书,你可以在开发期间使用HTTP.
-
-在 `react-native` 文件夹打开命令行终端,输入 `yarn` 命令(我们推荐使用[yarn](https://yarnpkg.com/)包管理, `npm install` 在大多数情况下也可以工作).
-
-```bash
-yarn
-```
-
-* 打开 `react-nativer` 文件夹下的 `Environment.js` 文件. 将 `apiUrl` 和 `issuer` 属性的 `localhost` 替换为你本地的IP地址:
-
-![react native environment local IP](images/rn-environment-local-ip.png)
-
-{{ if Tiered == "Yes" }}
-
-> 确保 `issuer` 与正在运行的 `.IdentityServer` 项目匹配, `apiUrl` 与正在运行的 `.HttpApi.Host` 项目匹配.
-
-{{else}}
-
-> 确保 `issuer` 和 `apiUrl` 与正在运行的 `.HttpApi.Host` 项目匹配
-
-{{ end }}
-
-等到所有node模块加载成功,  执行 `yarn start` (或 `npm start`) 命令:
-
-```bash
-yarn start
-```
-
-等待Expo CLI启动后Expo CLI在 `http://localhost:19002/` 地址要开管理页面.
-
-![expo-interface](images/rn-expo-interface.png)
-
-在上面的管理界面中,可以通过使用[Expo Client](https://expo.io/tools#client)扫描二维码,使用Android模拟器,iOS模拟器或真机来启动应用程序.
-
-> 请参阅[expo.io](https://docs.expo.io/versions/v36.0.0/workflow/ios-simulator/)上的[Android Studio模拟器](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/)和[iOS模拟器文档](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/).
-
-![React Native login screen on iPhone 11](images/rn-login-iphone.png)
-
-输入用户名 **admin**,密码  **1q2w3E*** 登录到应用程序.
-
-应用程序已经启动并执行,你可以基于该启动模板开发应用程序.
-
-> [应用程序启动模板](Startup-Templates/Application.md) 包含租户管理和Identity模块.
+请参阅"[React Native入门](Getting-Started-React-Native.md)"文档了解如何配置和运行React Native应用程序.
 
 ## 下一步是什么?
 
-[应用程序开发教程](Tutorials/Part-1.md)
+[Web应用程序开发教程](Tutorials/Part-1.md)

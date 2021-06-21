@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+@using Volo.Abp.FeatureManagement
 @using Volo.Abp.TenantManagement
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Navigation
@@ -18,7 +20,6 @@
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
-        <abp-script src="/Pages/TenantManagement/Tenants/ConnectionStringsModal.js" />
         <abp-script src="/Pages/TenantManagement/Tenants/Index.js" />
     </abp-script-bundle>
 }
@@ -29,21 +30,11 @@
                 <abp-card-title>@L["Tenants"]</abp-card-title>
             </abp-column>
             <abp-column size-md="_6" class="text-right">
-                @if (await Authorization.IsGrantedAsync(TenantManagementPermissions.Tenants.Create))
-                {
-                    <abp-button button-type="Primary" name="CreateTenant" icon="plus" text="@L["NewTenant"].Value" />
-                }
+                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
             </abp-column>
         </abp-row>
     </abp-card-header>
     <abp-card-body>
-        <abp-table striped-rows="true" class="nowrap">
-            <thead>
-                <tr>
-                    <th>@L["Actions"]</th>
-                    <th>@L["TenantName"]</th>
-                </tr>
-            </thead>
-        </abp-table>
+        <abp-table striped-rows="true" class="nowrap"></abp-table>
     </abp-card-body>
 </abp-card>

@@ -1,9 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -14,7 +15,8 @@ namespace Volo.Abp.IdentityServer
     [DependsOn(
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerTestBaseModule)
+        typeof(AbpIdentityServerTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
     {
@@ -31,11 +33,6 @@ namespace Volo.Abp.IdentityServer
             });
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedTestData(context);
-        }
-
         private static SqliteConnection CreateDatabaseAndGetConnection()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
@@ -50,16 +47,6 @@ namespace Volo.Abp.IdentityServer
             ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
             return connection;
-        }
-
-        private static void SeedTestData(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(() => scope.ServiceProvider
-                    .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                    .BuildAsync());
-            }
         }
     }
 }

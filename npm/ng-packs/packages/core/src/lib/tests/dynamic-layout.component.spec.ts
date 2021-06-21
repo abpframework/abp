@@ -1,13 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
-import { eLayoutType } from '../enums';
+import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
-import { ConfigState, ReplaceableComponentsState } from '../states';
-import { ApplicationConfigurationService } from '../services';
-import { HttpClient } from '@angular/common/http';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ReplaceableComponentsService, RoutesService } from '../services';
+import { mockRoutesService } from './routes.service.spec';
 
 @Component({
   selector: 'abp-layout-application',
@@ -48,57 +48,49 @@ class DummyComponent {
   constructor(public route: ActivatedRoute) {}
 }
 
-const storeData = {
-  ConfigState: {
-    routes: [
-      {
-        path: '',
-        wrapper: true,
-        children: [
-          {
-            path: 'parentWithLayout',
-            layout: eLayoutType.application,
-            children: [
-              { path: 'childWithoutLayout' },
-              { path: 'childWithLayout', layout: eLayoutType.account },
-            ],
-          },
-        ],
-      },
-      { path: 'withData', layout: eLayoutType.application },
-      ,
-    ] as ABP.FullRoute[],
-    environment: { application: {} },
+const routes: ABP.Route[] = [
+  {
+    path: '',
+    name: 'Root',
   },
-  ReplaceableComponentsState: {
-    replaceableComponents: [
-      {
-        key: 'Theme.ApplicationLayoutComponent',
-        component: DummyApplicationLayoutComponent,
-      },
-      {
-        key: 'Theme.AccountLayoutComponent',
-        component: DummyAccountLayoutComponent,
-      },
-      {
-        key: 'Theme.EmptyLayoutComponent',
-        component: DummyEmptyLayoutComponent,
-      },
-    ],
+  {
+    path: '/parentWithLayout',
+    name: 'ParentWithLayout',
+    parentName: 'Root',
+    layout: eLayoutType.application,
   },
-};
+  {
+    path: '/parentWithLayout/childWithoutLayout',
+    name: 'ChildWithoutLayout',
+    parentName: 'ParentWithLayout',
+  },
+  {
+    path: '/parentWithLayout/childWithLayout',
+    name: 'ChildWithLayout',
+    parentName: 'ParentWithLayout',
+    layout: eLayoutType.account,
+  },
+  {
+    path: '/withData',
+    name: 'WithData',
+    layout: eLayoutType.application,
+  },
+];
 
 describe('DynamicLayoutComponent', () => {
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
-    mocks: [ApplicationConfigurationService, HttpClient],
-    imports: [
-      RouterModule,
-      DummyLayoutModule,
-      NgxsModule.forRoot([ConfigState, ReplaceableComponentsState]),
+    mocks: [AbpApplicationConfigurationService, HttpClient],
+    providers: [
+      {
+        provide: RoutesService,
+        useFactory: () => mockRoutesService(),
+      },
+      ReplaceableComponentsService,
     ],
+    imports: [RouterModule, DummyLayoutModule],
     routes: [
       { path: '', component: RouterOutletComponent },
       {
@@ -145,13 +137,26 @@ describe('DynamicLayoutComponent', () => {
   });
 
   let spectator: SpectatorRouting<RouterOutletComponent>;
-  let store: Store;
+  let replaceableComponents: ReplaceableComponentsService;
 
   beforeEach(async () => {
     spectator = createComponent();
-    store = spectator.get(Store);
+    replaceableComponents = spectator.inject(ReplaceableComponentsService);
+    const routesService = spectator.inject(RoutesService);
+    routesService.add(routes);
 
-    store.reset(storeData);
+    replaceableComponents.add({
+      key: 'Theme.ApplicationLayoutComponent',
+      component: DummyApplicationLayoutComponent,
+    });
+    replaceableComponents.add({
+      key: 'Theme.AccountLayoutComponent',
+      component: DummyAccountLayoutComponent,
+    });
+    replaceableComponents.add({
+      key: 'Theme.EmptyLayoutComponent',
+      component: DummyEmptyLayoutComponent,
+    });
   });
 
   it('should handle application layout from parent abp route and display it', async () => {
@@ -184,8 +189,8 @@ describe('DynamicLayoutComponent', () => {
   });
 
   it('should not display any layout when layouts are empty', async () => {
-    store.reset({ ...storeData, ReplaceableComponentsState: {} });
-
+    const spy = jest.spyOn(replaceableComponents, 'get');
+    spy.mockReturnValue(null);
     spectator.detectChanges();
 
     spectator.router.navigateByUrl('/withoutLayout');

@@ -1,16 +1,16 @@
 # Dapper 集成
 
-由于Dapper的思想是sql语句优先, 且主要为`IDbConnection`接口提供了一些扩展方法.
+Dapper 是轻量化的数据库提供者,使用Dapper主要的好处是编写T-SQL查询,它为 `IDbConnection` 接口提供了一些扩展方法.
 
-Abp并没有为Dapper封装太多功能. Abp Dapper在Abp EntityFrameworkCore的基础上提供了`DapperRepository<TDbContext>`基类, 在其中提供了Dapper需要的`IDbConnection`和`IDbTransaction`属性.
-
-这两个属性可以和[工作单元](Unit-Of-Work.md)很好的配合.
+ABP没有为Dapper封装许多功能, ABP Dapper库在ABP EntityFrameworkCore的基础上提供了 `DapperRepository<TDbContext>` 基类,在其中提供了Dapper需要的`IDbConnection`和`IDbTransaction`属性,这两个属性可以和[工作单元](Unit-Of-Work.md)很好的配合.
 
 ## 安装
 
 请先根据[EF Core的集成文档](Entity-Framework-Core.md)安装并配置好EF Core.
 
-`Volo.Abp.Dapper`是Dapper集成的主要nuget包. 将其安装到你的项目中(在分层应用程序中适用于 数据访问/基础设施层):
+`Volo.Abp.Dapper`是Dapper集成的主要[nuget包](https://www.nuget.org/packages/Volo.Abp.Dapper).
+
+将其安装到你的项目中(在分层应用程序中适用于 数据访问/基础设施层):
 
 ```shell
 Install-Package Volo.Abp.Dapper

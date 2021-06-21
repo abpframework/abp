@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "Pages/Blog/Shared/Styles/blog.css",
+    "inputFile": "Pages/Blog/Shared/Styles/blog.scss"
+  },
+  {
+    "outputFile": "Pages/Blog/Shared/Styles/_home.css",
+    "inputFile": "Pages/Blog/Shared/Styles/_home.scss"
+  },
+  {
+    "outputFile": "Pages/Blog/Posts/Index.css",
+    "inputFile": "Pages/Blog/Posts/Index.scss"
+  },
+  {
+    "outputFile": "Pages/Blogs/Shared/Styles/blog.css",
+    "inputFile": "Pages/Blogs/Shared/Styles/blog.scss"
+  }
+]

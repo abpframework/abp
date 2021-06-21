@@ -36,7 +36,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
         {
         }
 
-        public override async Task<IActionResult> OnPostAsync()
+        public async override Task<IActionResult> OnPostAsync()
         {
             //TODO: Additional logic
             await base.OnPostAsync();
@@ -51,15 +51,13 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 ### 重写Razor页面 (.CSHTML)
 
-使用[虚拟文件系统](../../Virtual-File-System.md)可以重写 `.cshtml` 文件(razor page, razor view, view component... 等.)
-
-虚拟文件系统允许我们将**资源嵌入到程序集中**. 通过这个方式,预构建的模块在Nuget包中定义了Razor页面. 当你依赖模块时,可以覆盖这个模块向虚拟文件系统添加的任何文件,包括页面/视图.
+同一路径下创建相同的`.cshtml`文件可以实现重写功能(razor page, razor view, view component... 等.)
 
 #### 示例
 
 这个示例重写了[账户模块](../../Modules/Account.md)定义的**登录页面**UI
 
-物理文件可以覆盖相同位置的嵌入文件. 账户模块在 `Pages/Account` 文件夹下定义了 `Login.cshtml` 文件. 所以你可以在同一路径下创建文件覆盖它:
+账户模块在 `Pages/Account` 文件夹下定义了 `Login.cshtml` 文件. 所以你可以在同一路径下创建文件覆盖它:
 ![overriding-login-cshtml](../../images/overriding-login-cshtml.png)
 
 通常你想要拷贝模块的 `.cshtml` 原文件,然后进行需要的更改. 你可以在[这里](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml)找到源文件. 不要拷贝 `Login.cshtml.cs` 文件,它是隐藏razor页面的代码,我们不希望覆盖它(见下节).
@@ -72,7 +70,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 在这种情况下;
 
-1. 像上面描述过的那术重写C#页面模型类,但不需要替换已存在的页面模型类.
+1. 像上面描述过的那样重写C#页面模型类,但不需要替换已存在的页面模型类.
 2. 像上面描述过的那样重写Razor页面,并且更改@model指向新的页面模型
 
 #### 示例
@@ -85,10 +83,10 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
-        IAuthenticationSchemeProvider schemeProvider, 
+        IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions
         ) : base(
-        schemeProvider, 
+        schemeProvider,
         accountOptions)
     {
 
@@ -135,7 +133,7 @@ public class MyLoginModel : LoginModel
 
 [基本主题](../../Themes/Basic.md) 为layout定义了一些视图组件. 例如上面带有红色矩形的突出显示区域称为 **Brand组件**, 你可能想添加自己的**自己的应用程序logo**来自定义此组件. 让我们来看看如何去做.
 
-首先创建你的logo并且放到你的web应用程序文件夹中,我们使用 `wwwroot/logos/bookstore-logo.png` 路径. 然后在 `Themes/Basic/Components/Brand` 文件夹下复制[Brand组件视图](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml). 结果应该是类似下面的图片:
+首先创建你的logo并且放到你的web应用程序文件夹中,我们使用 `wwwroot/logos/bookstore-logo.png` 路径. 然后在 `Themes/Basic/Components/Brand` 文件夹下复制[Brand组件视图](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml). 结果应该是类似下面的图片:
 
 ![bookstore-added-brand-files](../../images/bookstore-added-brand-files.png)
 
@@ -151,7 +149,7 @@ public class MyLoginModel : LoginModel
 
 ![bookstore-added-logo](../../images/bookstore-added-logo.png)
 
-如果你需要,你也可以仅使用依赖注入系统替换组件[背后的C#类代码](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs)
+如果你需要,你也可以仅使用依赖注入系统替换组件[背后的C#类代码](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs)
 
 ### 重写主题
 
@@ -159,7 +157,7 @@ public class MyLoginModel : LoginModel
 
 ## 重写静态资源
 
-重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,虚拟文件系统会自动处理它.
+重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,[虚拟文件系统](../../Virtual-File-System.md)会自动处理它.
 
 ## 操作捆绑
 
@@ -446,7 +444,7 @@ Configure<AbpLayoutHookOptions>(options =>
 
 #### 布局位置
 
-你可以在[这里](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts)找到基本主题的布局文件. 你可以将它们作用构建自己的布局的参考,也可以在必要时覆盖它们.
+你可以在[这里](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts)找到基本主题的布局文件. 你可以将它们作用构建自己的布局的参考,也可以在必要时覆盖它们.
 
 #### ITheme
 

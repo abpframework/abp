@@ -79,13 +79,15 @@ var abp = abp || {};
         }
     };
 
-    new MutationObserver(mutationObserverCallback).observe(
-        $('body')[0],
-        {
-            subtree: true,
-            childList: true
-        }
-    );
+    $(function(){
+        new MutationObserver(mutationObserverCallback).observe(
+            $('body')[0],
+            {
+                subtree: true,
+                childList: true
+            }
+        );
+    });    
 
     // AJAX ///////////////////////////////////////////////////////////////////
 
@@ -97,19 +99,28 @@ var abp = abp || {};
         options.success = undefined;
         options.error = undefined;
 
-        return $.Deferred(function ($dfd) {
-            $.ajax(options)
+        var xhr = null;
+        var promise = $.Deferred(function ($dfd) {
+            xhr = $.ajax(options)
                 .done(function (data, textStatus, jqXHR) {
                     $dfd.resolve(data);
                     userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
+                    if(jqXHR.status === 0 || jqXHR.statusText === 'abort') {
+                        //ajax request is abort, ignore error handle.
+                        return;
+                    }
                     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
                         abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
                     }
                 });
-        });
+        }).promise();
+
+        promise['jqXHR'] = xhr;
+
+        return promise;
     };
 
     $.extend(abp.ajax, {
@@ -359,13 +370,17 @@ var abp = abp || {};
 
         var _loadScript = function (url, loadCallback, failCallback) {
             _loadFromUrl(url, loadCallback, failCallback, function (urlInfo) {
-                $.getScript(url)
-                    .done(function () {
-                        urlInfo.succeed();
-                    })
-                    .fail(function () {
-                        urlInfo.failed();
-                    });
+                $.get({
+                    url: url,
+                    dataType: 'text'
+                })
+                .done(function (script) {
+                    $.globalEval(script);
+                    urlInfo.succeed();
+                })
+                .fail(function () {
+                    urlInfo.failed();
+                });
             });
         };
 

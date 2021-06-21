@@ -29,9 +29,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [HtmlAttributeName("required-symbol")]
         public bool DisplayRequiredSymbol { get; set; } = true;
 
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
+        [HtmlAttributeName("asp-format")]
+        public string Format { get; set; }
+
+        public string Name { get; set; }
+
+        public string Value { get; set; }
+
+        public bool SuppressLabel { get; set; }
+
+        public CheckBoxHiddenInputRenderMode CheckBoxHiddenInputRenderMode { get; set; }
 
         public AbpInputTagHelper(AbpInputTagHelperService tagHelperService)
             : base(tagHelperService)

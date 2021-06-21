@@ -1,13 +1,17 @@
 ﻿@page
-@inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
-@using Volo.Blogging.Pages.Blog.Posts
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@using Volo.Blogging.Pages.Blog
+@using IndexModel = Volo.Blogging.Pages.Blog.Posts.IndexModel
+@inject IHtmlLocalizer<BloggingResource> L
+@inject BloggingPageHelper BloggingPageHelper
 @{
-    ViewBag.Title = "Blog";
+    ViewBag.Title = "Read All Blog Posts";
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -42,7 +46,7 @@
                                         <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                     </h2>
                                     <p class="article-sum">
-                                        @Html.Raw(GetShortContent(post.Content))
+                                        @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                     </p>
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
 
@@ -57,10 +61,10 @@
                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                     </div>
                                                     <div class="col pl-1">
-                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
                                                         <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
-                                                        <span class="vs-seperator">|</span>
-                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
+                                                        @*<span class="vs-seperator">|</span>
+                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]*@
                                                     </div>
                                                 </div>
                                             </div>
@@ -88,7 +92,7 @@
                     }
 
                     <div class="list-group">
-                        @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
+                        @for (var index = 1; index < Model.Posts.Count && index < 4; index++)
                         {
                             var post = Model.Posts[index];
                             <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -105,19 +109,23 @@
                                             <h3 class="font-125">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                             </h3>
-                                            <div class="article-owner">
-                                                <div class="article-infos">
-                                                    <div class="user-card">
-                                                        @if (post.Writer != null)
-                                                        {
-                                                            <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
-                                                        }
-                                                        <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
-                                                        <span class="vs-seperator">|</span>
-                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
+
+                                            @if (post.Writer != null)
+                                            {
+                                                <div class="article-owner">
+                                                    <div class="article-infos">
+                                                        <div class="user-card">
+                                                            @if (post.Writer != null)
+                                                            {
+                                                                <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                            }
+                                                            <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                            @*<span class="vs-seperator">|</span>
+                                                            <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]*@
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         </div>
                                     </div>
                                 </section>
@@ -132,16 +140,16 @@
         <div class="pb-5">
             <div class="row">
                 <div class="col-md-8 box-articles">
-                    @if (Model.Posts.Count > 3)
+                    @if (Model.Posts.Count > 4)
                     {
                         <div class="vs-blog-title">
                             <h2>@L["LastPosts"]</h2>
                         </div>
                         <div class="list-group">
-                            @for (var index = 3; index < Model.Posts.Count; index++)
+                            @for (var index = 4; index < Model.Posts.Count; index++)
                             {
                                 var post = Model.Posts[index];
-                                var oddPost = index % 2 == 1;
+                                var oddPost = index % 2 == 0;
 
                                 <div class="list-group-item">
                                     <div class="row">
@@ -157,28 +165,30 @@
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                             </h3>
                                             <p>
-                                                @Html.Raw(GetShortContent(post.Content))
+                                                @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                             </p>
                                             <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
 
-                                            <div class="article-owner">
-                                                <div class="article-infos">
-                                                    <div class="user-card">
-                                                        <div class="row">
-                                                            <div class="col-auto pr-1">
-                                                                <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                                            </div>
-                                                            <div class="col pl-1">
-                                                                <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
-                                                                <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
-                                                                <span class="vs-seperator">|</span>
-                                                                <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
+                                            @if (post.Writer != null)
+                                            {
+                                                <div class="article-owner">
+                                                    <div class="article-infos">
+                                                        <div class="user-card">
+                                                            <div class="row">
+                                                                <div class="col-auto pr-1">
+                                                                    <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                                </div>
+                                                                <div class="col pl-1">
+                                                                    <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                    <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
+                                                                    @*<span class="vs-seperator">|</span>
+                                                                    <i class="fa fa-comment"></i> @L["CommentWithCount", post.CommentCount]*@
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
+                                            }
                                             <p class="tags">
                                                 @foreach (var tag in post.Tags)
                                                 {
@@ -202,9 +212,9 @@
                         </div>
                         <div class="tags">
                             @foreach (var popularTag in Model.PopularTags)
-                                { 
-                                    <a class="tag" asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <small>(@popularTag.UsageCount)</small></a>
-                                }
+                            {
+                                <a class="tag" asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <small>(@popularTag.UsageCount)</small></a>
+                            }
                         </div>
                     </div>
                 }

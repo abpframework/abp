@@ -7,6 +7,6 @@ services:
       context: ../../
       dockerfile: modules/docs/app/VoloDocs.Migrator/Dockerfile
     environment:
-      - ConnectionString=Server=sqlserver;Database=VoloDocs;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionString=Server=sqlserver;Database=VoloDocs;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
     depends_on:
       - sqlserver

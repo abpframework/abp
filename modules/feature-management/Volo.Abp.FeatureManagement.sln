@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.Domain.Shared", "src\Volo.Abp.FeatureManagement.Domain.Shared\Volo.Abp.FeatureManagement.Domain.Shared.csproj", "{D64C1577-4929-4B60-939E-96DE1534891A}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{649A3FFA-182F-4E56-9717-E6A9A2BEC545}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.EntityFrameworkCore", "src\Volo.Abp.FeatureManagement.EntityFrameworkCore\Volo.Abp.FeatureManagement.EntityFrameworkCore.csproj", "{0CE86223-D31D-4315-A1F5-87BA3EE1B844}"
 EndProject
@@ -34,6 +34,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.MongoDB.Tests", "test\Volo.Abp.FeatureManagement.MongoDB.Tests\Volo.Abp.FeatureManagement.MongoDB.Tests.csproj", "{AA783A34-86E4-41A5-AE21-5D9FBD98D858}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.Application.Tests", "test\Volo.Abp.FeatureManagement.Application.Tests\Volo.Abp.FeatureManagement.Application.Tests.csproj", "{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.FeatureManagement.Blazor", "src\Volo.Abp.FeatureManagement.Blazor\Volo.Abp.FeatureManagement.Blazor.csproj", "{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FeatureManagement.Blazor.Server", "src\Volo.Abp.FeatureManagement.Blazor.Server\Volo.Abp.FeatureManagement.Blazor.Server.csproj", "{5B2EA81B-9FAE-456E-B83B-58205AA48752}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FeatureManagement.Blazor.WebAssembly", "src\Volo.Abp.FeatureManagement.Blazor.WebAssembly\Volo.Abp.FeatureManagement.Blazor.WebAssembly.csproj", "{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +103,18 @@ Global
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2EA81B-9FAE-456E-B83B-58205AA48752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2EA81B-9FAE-456E-B83B-58205AA48752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2EA81B-9FAE-456E-B83B-58205AA48752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2EA81B-9FAE-456E-B83B-58205AA48752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +134,9 @@ Global
 		{E5906DE1-B2F5-472E-BE1B-1D96A68B834D} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{AA783A34-86E4-41A5-AE21-5D9FBD98D858} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{5B2EA81B-9FAE-456E-B83B-58205AA48752} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}

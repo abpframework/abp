@@ -2,6 +2,9 @@
   "culture": "tr",
   "texts": {
     "Features": "Özellikler",
-    "NoFeatureFoundMessage": "Hiç özellik yok."
+    "NoFeatureFoundMessage": "Hiç özellik yok.",
+    "Permission:FeatureManagement": "Özellik yönetimi",
+    "Permission:FeatureManagement.ManageHostFeatures": "Host özelliklerini düzenle",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0} özellik değeri geçerli değil!"
   }
 }

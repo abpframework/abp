@@ -5,6 +5,8 @@ import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from './cross-origin.strat
 import { DomStrategy, DOM_STRATEGY } from './dom.strategy';
 
 export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElement = any> {
+  element: T;
+
   constructor(
     public path: string,
     protected domStrategy: DomStrategy = DOM_STRATEGY.AppendToHead(),
@@ -14,10 +16,10 @@ export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElem
   abstract createElement(): T;
 
   createStream<E extends Event>(): Observable<E> {
+    this.element = this.createElement();
+
     return of(null).pipe(
-      switchMap(() =>
-        fromLazyLoad<E>(this.createElement(), this.domStrategy, this.crossOriginStrategy),
-      ),
+      switchMap(() => fromLazyLoad<E>(this.element, this.domStrategy, this.crossOriginStrategy)),
     );
   }
 }
@@ -50,6 +52,13 @@ export class StyleLoadingStrategy extends LoadingStrategy<HTMLLinkElement> {
 }
 
 export const LOADING_STRATEGY = {
+  AppendScriptToBody(src: string) {
+    return new ScriptLoadingStrategy(
+      src,
+      DOM_STRATEGY.AppendToBody(),
+      CROSS_ORIGIN_STRATEGY.None(),
+    );
+  },
   AppendAnonymousScriptToBody(src: string, integrity?: string) {
     return new ScriptLoadingStrategy(
       src,

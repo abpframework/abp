@@ -184,7 +184,7 @@ public class PersonAppService : ApplicationService, IPersonAppService
 }
 ````
 
-ABP Framework's repository doesn't have this method. Instead, it implements the `IQueryable` itself. So, you can directly use LINQ on the repository:
+ABP Framework's repository have `GetQueryableAsync` instead:
 
 ````csharp
 public class PersonAppService : ApplicationService, IPersonAppService
@@ -198,14 +198,15 @@ public class PersonAppService : ApplicationService, IPersonAppService
 
     public async Task DoIt()
     {
-        var people = await _personRepository
+        var queryable = await _personRepository.GetQueryableAsync();
+        var people = await queryable
             .Where(p => p.BirthYear > 2000) //Use LINQ extension methods
             .ToListAsync();
     }
 }
 ````
 
-> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods.
+> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods. See the [repository document](Repositories.md) for alternative approaches for async query execution.
 
 #### FirstOrDefault(predicate), Single()... Methods
 
@@ -216,9 +217,9 @@ However, it provides the following methods those can be used to query a single e
 * `FindAsync(id)` returns the entity or null if not found.
 * `GetAsync(id)` method returns the entity or throws an `EntityNotFoundException` (which causes HTTP 404 status code) if not found.
 
-#### Sync vs Async 
+#### Sync vs Async
 
-ABP Framework repository has no sync methods (like `Insert`). All the methods are async (like `InsertAsync`). So, if your application has sync repository method usages, convert them to async versions. 
+ABP Framework repository has no sync methods (like `Insert`). All the methods are async (like `InsertAsync`). So, if your application has sync repository method usages, convert them to async versions.
 
 In general, ABP Framework forces you to completely use async everywhere, because mixing async & sync methods is not a recommended approach.
 
@@ -364,9 +365,9 @@ ABP Framework doesn't have the same service. Instead, use `ICurrentUser` and `IC
 
 ABP Framework extends the [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing the authorization system to be usable in the [application services](Application-Services.md) too.
 
-#### AbpAutorize vs Autorize
+#### AbpAuthorize vs Authorize
 
-Use the standard `[Autorize]` and `[AllowAnonymous]` attributes instead of ASP.NET Boilerplate's custom `[AbpAutorize]` and `[AbpAllowAnonymous]` attributes.
+Use the standard `[Authorize]` and `[AllowAnonymous]` attributes instead of ASP.NET Boilerplate's custom `[AbpAuthorize]` and `[AbpAllowAnonymous]` attributes.
 
 #### IPermissionChecker vs IAuthorizationService
 
@@ -438,13 +439,13 @@ ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](
 
 ### Logging
 
-ASP.NET Boilerplate uses Castle Windsor's [logging facility](http://docs.castleproject.org/Windsor.Logging-Facility.ashx) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
+ASP.NET Boilerplate uses Castle Windsor's [logging facility](https://github.com/castleproject/Windsor/blob/master/docs/logging-facility.md) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
 
 ````csharp
 using Castle.Core.Logging; //1: Import Logging namespace
 
 public class TaskAppService : ITaskAppService
-{    
+{
     //2: Getting a logger using property injection
     public ILogger Logger { get; set; }
 
@@ -595,7 +596,7 @@ ABP Framework separates it and provides the setting management module (pre-added
 
 ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplate.com/Pages/Documents/Timing)) which is used to abstract the `DateTime` kind, so you can easily switch between Local and UTC times. You don't inject it, but just use the `Clock.Now` static method to obtain the current time.
 
-ABP Framework has the `IClock` service ([see](Clock.md)) which has a similar goal, but now you need to inject it whenever you need it.
+ABP Framework has the `IClock` service ([see](Timing.md)) which has a similar goal, but now you need to inject it whenever you need it.
 
 ### Event Bus
 
@@ -672,9 +673,9 @@ It was like `abp.localization.localize(...)` in the ASP.NET Boilerplate.
 
 ### Navigation vs Menu
 
-In ASP.NET you create a class deriving from the `NavigationProvider` to define your menu elements. Menu items has `requiredPermissionName` attributes to restrict access to a menu element. Menu items were static and your class is executed only one time.
+In ASP.NET Boilerplate you create a class deriving from the `NavigationProvider` to define your menu elements. Menu items has `requiredPermissionName` attributes to restrict access to a menu element. Menu items were static and your class is executed only one time.
 
-Int the ABP Framework you need to create a class implements the `IMenuContributor` interface. Your class is executed whenever the menu needs to be rendered. So, you can conditionally add menu items.
+In the ABP Framework you need to create a class implements the `IMenuContributor` interface. Your class is executed whenever the menu needs to be rendered. So, you can conditionally add menu items.
 
 As an example, this is the menu contributor of the tenant management module:
 
@@ -693,26 +694,22 @@ public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
         var administrationMenu = context.Menu.GetAdministration();
 
         //Resolve some needed services from the DI container
-        var authorizationService = context.ServiceProvider
-            .GetRequiredService<IAuthorizationService>();
-        var l = context.ServiceProvider
-            .GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
+        var l = context.GetLocalizer<AbpTenantManagementResource>();
 
         var tenantManagementMenuItem = new ApplicationMenuItem(
             TenantManagementMenuNames.GroupName,
             l["Menu:TenantManagement"],
             icon: "fa fa-users");
-        
+
         administrationMenu.AddItem(tenantManagementMenuItem);
 
         //Conditionally add the "Tenants" menu item based on the permission
-        if (await authorizationService
-            .IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
+        if (await context.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
         {
             tenantManagementMenuItem.AddItem(
                 new ApplicationMenuItem(
                     TenantManagementMenuNames.Tenants,
-                    l["Tenants"], 
+                    l["Tenants"],
                     url: "/TenantManagement/Tenants"));
         }
     }

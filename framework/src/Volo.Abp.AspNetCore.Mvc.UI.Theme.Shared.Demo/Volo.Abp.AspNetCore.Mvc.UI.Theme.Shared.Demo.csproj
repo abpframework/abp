@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo</PackageId>
@@ -12,23 +12,26 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Views\**\*.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Views\**\*.cshtml" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Components\Themes\Shared\**\*.cshtml" />
+    <EmbeddedResource Include="Views\Components\Themes\Shared\**\*.cshtml" />
   </ItemGroup>
 
 </Project>

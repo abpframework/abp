@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
@@ -15,6 +17,8 @@ namespace Volo.Abp.Identity
         protected ILookupNormalizer LookupNormalizer { get; }
         protected IdentityUserManager UserManager { get; }
         protected IdentityRoleManager RoleManager { get; }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public IdentityDataSeeder(
             IGuidGenerator guidGenerator,
@@ -22,7 +26,9 @@ namespace Volo.Abp.Identity
             IIdentityUserRepository userRepository,
             ILookupNormalizer lookupNormalizer,
             IdentityUserManager userManager,
-            IdentityRoleManager roleManager)
+            IdentityRoleManager roleManager,
+            ICurrentTenant currentTenant,
+            IOptions<IdentityOptions> identityOptions)
         {
             GuidGenerator = guidGenerator;
             RoleRepository = roleRepository;
@@ -30,6 +36,8 @@ namespace Volo.Abp.Identity
             LookupNormalizer = lookupNormalizer;
             UserManager = userManager;
             RoleManager = roleManager;
+            CurrentTenant = currentTenant;
+            IdentityOptions = identityOptions;
         }
 
         [UnitOfWork]
@@ -41,54 +49,59 @@ namespace Volo.Abp.Identity
             Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
             Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
 
-            var result = new IdentityDataSeedResult();
-
-            //"admin" user
-            const string adminUserName = "admin";
-            var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
-                LookupNormalizer.NormalizeName(adminUserName)
-            );
-
-            if (adminUser != null)
+            using (CurrentTenant.Change(tenantId))
             {
-                return result;
-            }
+                await IdentityOptions.SetAsync();
 
-            adminUser = new IdentityUser(
-                GuidGenerator.Create(),
-                adminUserName,
-                adminEmail,
-                tenantId
-            )
-            {
-                Name = adminUserName
-            };
+                var result = new IdentityDataSeedResult();
+                //"admin" user
+                const string adminUserName = "admin";
+                var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
+                    LookupNormalizer.NormalizeName(adminUserName)
+                );
 
-            (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
-            result.CreatedAdminUser = true;
+                if (adminUser != null)
+                {
+                    return result;
+                }
 
-            //"admin" role
-            const string adminRoleName = "admin";
-            var adminRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
-            if (adminRole == null)
-            {
-                adminRole = new IdentityRole(
+                adminUser = new IdentityUser(
                     GuidGenerator.Create(),
-                    adminRoleName,
+                    adminUserName,
+                    adminEmail,
                     tenantId
                 )
                 {
-                    IsStatic = true,
-                    IsPublic = true
+                    Name = adminUserName
                 };
 
-                (await RoleManager.CreateAsync(adminRole)).CheckErrors();
-                result.CreatedAdminRole = true;
+                (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
+                result.CreatedAdminUser = true;
+
+                //"admin" role
+                const string adminRoleName = "admin";
+                var adminRole =
+                    await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
+                if (adminRole == null)
+                {
+                    adminRole = new IdentityRole(
+                        GuidGenerator.Create(),
+                        adminRoleName,
+                        tenantId
+                    )
+                    {
+                        IsStatic = true,
+                        IsPublic = true
+                    };
+
+                    (await RoleManager.CreateAsync(adminRole)).CheckErrors();
+                    result.CreatedAdminRole = true;
+                }
+
+                (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+
+                return result;
             }
-
-            (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
-
-            return result;
         }
     }
 }

@@ -3,7 +3,7 @@
 
 本文首先介绍[应用程序启动模板](Startup-Templates/Application.md)提供的**默认结构**,并讨论你可能希望为自己的应用程序实现的**各种场景**.
 
-> 本文档适用于希望完全理解和自定义[应用程序启动模板](Startup-Templates/Application.md)附带的数据库结构的人员. 如果你只是想创建实体和管理代码优先(code first)迁移,只需要遵循[启动教程](Tutorials/Index.md).
+> 本文档适用于希望完全理解和自定义[应用程序启动模板](Startup-Templates/Application.md)附带的数据库结构的人员. 如果你只是想创建实体和管理代码优先(code first)迁移,只需要遵循[启动教程](Tutorials/Part-1.md).
 
 ### 源码
 
@@ -235,7 +235,7 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 }
 ````
 
-此u还获取选项用于更改此模块的数据库表前缀和模式,但在这里并不重要.
+此扩展方法还提供了选项用于更改此模块的数据库表前缀和模式,但在这里并不重要.
 
 最终的应用程序在 `MigrationsDbContext` 类中调用扩展方法, 因此它可以确定此 `MigrationsDbContext` 维护的数据库中包含哪些模块. 如果要创建第二个数据库并将某些模块表移动到第二个数据库,则需要有第二个`MigrationsDbContext` 类,该类仅调用相关模块的扩展方法. 下一部分将详细介绍该主题.
 
@@ -414,7 +414,10 @@ public static class MyProjectNameEntityExtensions
             ObjectExtensionManager.Instance
                 .MapEfCoreProperty<IdentityRole, string>(
                     "Title",
-                    builder => { builder.HasMaxLength(64); }
+                    (entityBuilder, propertyBuilder) =>
+                    {
+                        propertyBuilder.HasMaxLength(128);
+                    }
                 );
         });
     }
@@ -550,6 +553,8 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 你需要做的就是如上所诉使用 `ObjectExtensionManager` 定义额外属性, 然后你就可以使得 `GetProperty` 和 `SetProperty` 方法对实体的属性进行get/set,但是这时它存储在数据库表的单独字段中.
 
+参阅[实体扩展系统](Customizing-Application-Modules-Extending-Entities.md)了解更多.
+
 ###### 创建新表
 
 你可以创建**自己的表**来存储属性,而不是创建新实体并映射到同一表. 你通常复制原始实体的一些值. 例如可以将 `Name` 字段添加到你自己的表中,它是原表中 `Name` 字段的副本.
@@ -583,7 +588,7 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -591,10 +596,10 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True",
+  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True"
 }
 ````
 

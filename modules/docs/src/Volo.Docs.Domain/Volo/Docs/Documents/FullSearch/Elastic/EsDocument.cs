@@ -10,9 +10,9 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             Highlight = new List<string>();
         }
 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
-        public Guid ProjectId { get; set; }
+        public string ProjectId { get; set; }
 
         public string Name { get; set; }
 

@@ -66,9 +66,7 @@ After you have installed these NuGet packages, you need to configure your projec
   }
 ````
 
-2. We need to add `UseHangfireServer` call in the `OnApplicationInitialization` method in `Module` class
-
-If you want to use hangfire's dashboard, you can add it, too: by `UseHangfireDashboard`
+2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
 
 ````csharp
  public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -77,7 +75,6 @@ If you want to use hangfire's dashboard, you can add it, too: by `UseHangfireDas
             
     // ... others
     
-    app.UseHangfireServer();
     app.UseHangfireDashboard();
  
  }

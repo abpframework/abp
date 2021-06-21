@@ -69,6 +69,26 @@ namespace Volo.Abp.Emailing
             );
         }
 
+        public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+        {
+            if (!BackgroundJobManager.IsAvailable())
+            {
+                await SendAsync(from, to, subject, body, isBodyHtml);
+                return;
+            }
+
+            await BackgroundJobManager.EnqueueAsync(
+                new BackgroundEmailSendingJobArgs
+                {
+                    From = from,
+                    To = to,
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = isBodyHtml
+                }
+            );
+        }
+
         /// <summary>
         /// Should implement this method to send email in derived classes.
         /// </summary>

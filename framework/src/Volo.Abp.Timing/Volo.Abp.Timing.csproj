@@ -15,7 +15,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <EmbeddedResource Include="Volo\Abp\Timing\Localization\**\*.json" />
+    <Content Remove="Volo\Abp\Timing\Localization\**\*.json" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TimeZoneConverter" Version="3.4.0" />
+  </ItemGroup>
+
 </Project>

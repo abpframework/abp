@@ -84,6 +84,16 @@ namespace System
         }
 
         [Fact]
+        public void ToSnakeCase_Test()
+        {
+            (null as string).ToSnakeCase().ShouldBe(null);
+            "helloMoon".ToSnakeCase().ShouldBe("hello_moon");
+            "HelloWorld".ToSnakeCase().ShouldBe("hello_world");
+            "HelloIsparta".ToSnakeCase().ShouldBe("hello_isparta");
+            "ThisIsSampleText".ToSnakeCase().ShouldBe("this_is_sample_text");
+        }
+
+        [Fact]
         public void ToSentenceCase_Test()
         {
             (null as string).ToSentenceCase().ShouldBe(null);
@@ -172,7 +182,10 @@ namespace System
         public void RemovePostFix_Tests()
         {
             //null case
-            (null as string).RemovePreFix("Test").ShouldBeNull();
+            (null as string).RemovePostFix("Test").ShouldBeNull();
+
+            //empty case
+            string.Empty.RemovePostFix("Test").ShouldBe(string.Empty);
 
             //Simple case
             "MyTestAppService".RemovePostFix("AppService").ShouldBe("MyTest");
@@ -192,7 +205,13 @@ namespace System
         [Fact]
         public void RemovePreFix_Tests()
         {
-            "Home.Index".RemovePreFix("NotMatchedPostfix").ShouldBe("Home.Index");
+            //null case
+            (null as string).RemovePreFix("Test").ShouldBeNull();
+
+            //empty case
+            string.Empty.RemovePreFix("Test").ShouldBe(string.Empty);
+
+            "Home.Index".RemovePreFix("NotMatchedPrefix").ShouldBe("Home.Index");
             "Home.About".RemovePreFix("Home.").ShouldBe("About");
 
             //Ignore case

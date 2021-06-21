@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.Uow;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
@@ -25,13 +27,15 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
+        private readonly IDocumentFullSearch _elasticSearchService;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDistributedCache<LanguageConfig> languageCache)
+            IDistributedCache<LanguageConfig> languageCache,
+            IDocumentFullSearch elasticSearchService)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -39,6 +43,7 @@ namespace Volo.Docs.Admin.Documents
             _documentUpdateCache = documentUpdateCache;
             _versionCache = versionCache;
             _languageCache = languageCache;
+            _elasticSearchService = elasticSearchService;
 
             LocalizationResource = typeof(DocsResource);
         }
@@ -57,7 +62,13 @@ namespace Volo.Docs.Admin.Documents
 
             foreach (var document in documents)
             {
-                var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, document.LanguageCode, document.LanguageCode);
+                var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                    project: project,
+                    documentName: document.Name,
+                    languageCode: document.LanguageCode,
+                    version: document.Version
+                );
+
                 await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
 
                 document.LastCachedTime = DateTime.MinValue;
@@ -76,7 +87,7 @@ namespace Volo.Docs.Admin.Documents
                 input.Version
             );
 
-            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content, out var navigation))
+            if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content, out var navigation))
             {
                 throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
             }
@@ -90,9 +101,22 @@ namespace Volo.Docs.Admin.Documents
             var documents = new List<Document>();
             foreach (var leaf in leafs)
             {
-                var sourceDocument =
-                    await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
-                documents.Add(sourceDocument);
+                if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                    (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
+                    documents.Add(sourceDocument);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogException(e);
+                }
             }
 
             foreach (var document in documents)
@@ -117,6 +141,80 @@ namespace Volo.Docs.Admin.Documents
                 sourceDocument.LanguageCode, sourceDocument.Version);
             await _documentRepository.InsertAsync(sourceDocument, true);
             await UpdateDocumentUpdateInfoCache(sourceDocument);
+        }
+
+        public async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
+        {
+            var totalCount = await _documentRepository.GetAllCountAsync(
+                projectId: input.ProjectId,
+                name: input.Name,
+                version: input.Version,
+                languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
+                sorting: input.Sorting,
+                maxResultCount: input.MaxResultCount,
+                skipCount: input.SkipCount
+            );
+
+            var docs = await _documentRepository.GetAllAsync(
+                projectId: input.ProjectId,
+                name: input.Name,
+                version: input.Version,
+                languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
+                sorting: input.Sorting,
+                maxResultCount: input.MaxResultCount,
+                skipCount: input.SkipCount
+            );
+
+            return new PagedResultDto<DocumentDto>
+            {
+                TotalCount = totalCount,
+                Items = ObjectMapper.Map<List<Document>, List<DocumentDto>>(docs)
+            };
+        }
+
+        public async Task RemoveFromCacheAsync(Guid documentId)
+        {
+            var document = await _documentRepository.GetAsync(documentId);
+            var project = await _projectRepository.GetAsync(document.ProjectId);
+
+            var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                project: project,
+                documentName: document.Name,
+                languageCode: document.LanguageCode,
+                version: document.Version
+            );
+
+            await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
+            await _documentRepository.DeleteAsync(document);
+        }
+
+        public async Task ReindexAsync(Guid documentId)
+        {
+            _elasticSearchService.ValidateElasticSearchEnabled();
+
+            await _elasticSearchService.DeleteAsync(documentId);
+            var document = await _documentRepository.GetAsync(documentId);
+            await _elasticSearchService.AddOrUpdateAsync(document);
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

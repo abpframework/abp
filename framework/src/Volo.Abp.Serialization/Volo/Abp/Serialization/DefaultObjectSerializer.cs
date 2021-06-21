@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text.Json;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Serialization.Binary;
 
 namespace Volo.Abp.Serialization
 {
@@ -58,12 +58,12 @@ namespace Volo.Abp.Serialization
 
         protected virtual byte[] AutoSerialize<T>(T obj)
         {
-            return BinarySerializationHelper.Serialize(obj);
+            return JsonSerializer.SerializeToUtf8Bytes(obj);
         }
 
         protected virtual T AutoDeserialize<T>(byte[] bytes)
         {
-            return (T) BinarySerializationHelper.DeserializeExtended(bytes);
+            return JsonSerializer.Deserialize<T>(bytes);
         }
     }
 }

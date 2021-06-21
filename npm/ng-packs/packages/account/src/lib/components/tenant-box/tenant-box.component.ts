@@ -1,11 +1,14 @@
-import { ABP, GetAppConfiguration, SessionState, SetTenant } from '@abp/ng.core';
+import {
+  AbpApplicationConfigurationService,
+  AbpTenantService,
+  ConfigStateService,
+  CurrentTenantDto,
+  SessionStateService,
+} from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, take } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
-import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'abp-tenant-box',
@@ -13,8 +16,7 @@ import { AccountService } from '../../services/account.service';
 })
 export class TenantBoxComponent
   implements Account.TenantBoxComponentInputs, Account.TenantBoxComponentOutputs {
-  @Select(SessionState.getTenant)
-  currentTenant$: Observable<ABP.BasicItem>;
+  currentTenant$ = this.sessionState.getTenant$();
 
   name: string;
 
@@ -23,14 +25,16 @@ export class TenantBoxComponent
   modalBusy: boolean;
 
   constructor(
-    private store: Store,
     private toasterService: ToasterService,
-    private accountService: AccountService,
+    private tenantService: AbpTenantService,
+    private sessionState: SessionStateService,
+    private configState: ConfigStateService,
+    private appConfigService: AbpApplicationConfigurationService,
   ) {}
 
   onSwitch() {
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-    this.name = (tenant || ({} as ABP.BasicItem)).name;
+    const tenant = this.sessionState.getTenant();
+    this.name = tenant?.name;
     this.isModalVisible = true;
   }
 
@@ -42,22 +46,23 @@ export class TenantBoxComponent
     }
 
     this.modalBusy = true;
-    this.accountService
-      .findTenant(this.name)
+    this.tenantService
+      .findTenantByName(this.name, {})
       .pipe(finalize(() => (this.modalBusy = false)))
-      .subscribe(({ success, tenantId: id, name }) => {
+      .subscribe(({ success, tenantId: id, ...tenant }) => {
         if (!success) {
           this.showError();
           return;
         }
 
-        this.setTenant({ id, name });
+        this.setTenant({ ...tenant, id, isAvailable: true });
         this.isModalVisible = false;
       });
   }
 
-  private setTenant(tenant: ABP.BasicItem) {
-    return this.store.dispatch([new SetTenant(tenant), new GetAppConfiguration()]);
+  private setTenant(tenant: CurrentTenantDto) {
+    this.sessionState.setTenant(tenant);
+    this.appConfigService.get().subscribe(res => this.configState.setState(res));
   }
 
   private showError() {

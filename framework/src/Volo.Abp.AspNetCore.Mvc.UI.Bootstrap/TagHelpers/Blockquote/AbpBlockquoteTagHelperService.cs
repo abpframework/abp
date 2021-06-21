@@ -8,6 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.Attributes.AddClass("blockquote");
+            output.TagName = "blockquote";
         }
     }
 }

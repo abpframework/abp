@@ -9,7 +9,7 @@ namespace Volo.Abp.RabbitMQ
     public class RabbitMqConnections : Dictionary<string, ConnectionFactory>
     {
         public const string DefaultConnectionName = "Default";
-        
+
         [NotNull]
         public ConnectionFactory Default
         {

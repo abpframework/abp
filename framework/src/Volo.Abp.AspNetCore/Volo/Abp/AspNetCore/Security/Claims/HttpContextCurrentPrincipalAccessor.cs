@@ -6,13 +6,16 @@ namespace Volo.Abp.AspNetCore.Security.Claims
 {
     public class HttpContextCurrentPrincipalAccessor : ThreadCurrentPrincipalAccessor
     {
-        public override ClaimsPrincipal Principal => _httpContextAccessor.HttpContext?.User ?? base.Principal;
-
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HttpContextCurrentPrincipalAccessor(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        protected override ClaimsPrincipal GetClaimsPrincipal()
+        {
+            return _httpContextAccessor.HttpContext?.User ?? base.GetClaimsPrincipal();
         }
     }
 }

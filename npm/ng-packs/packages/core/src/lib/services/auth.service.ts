@@ -1,71 +1,59 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
-import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { Injectable, Injector } from '@angular/core';
+import { Params } from '@angular/router';
 import { from, Observable } from 'rxjs';
-import { switchMap, tap, take } from 'rxjs/operators';
-import snq from 'snq';
-import { GetAppConfiguration } from '../actions/config.actions';
-import { SessionState } from '../states/session.state';
-import { RestService } from './rest.service';
-import { ConfigState } from '../states/config.state';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { LoginParams } from '../models/auth';
+import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
+import { EnvironmentService } from './environment.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private rest: RestService,
-    private oAuthService: OAuthService,
-    private store: Store,
-    @Optional() @Inject('ACCOUNT_OPTIONS') private options: any,
-  ) {}
+  private strategy: AuthFlowStrategy;
 
-  login(username: string, password: string): Observable<any> {
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-
-    this.oAuthService.configure(
-      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
-    );
-
-    return from(this.oAuthService.loadDiscoveryDocument()).pipe(
-      switchMap(() =>
-        from(
-          this.oAuthService.fetchTokenUsingPasswordFlow(
-            username,
-            password,
-            new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
-          ),
-        ),
-      ),
-      switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-      tap(() => {
-        const redirectUrl =
-          snq(() => window.history.state.redirectUrl) || (this.options || {}).redirectUrl || '/';
-        this.store.dispatch(new Navigate([redirectUrl]));
-      }),
-      take(1),
-    );
+  get isInternalAuth() {
+    return this.strategy.isInternalAuth;
   }
 
-  logout(): Observable<void> {
-    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
+  constructor(protected injector: Injector) {}
 
-    return this.rest
-      .request(
-        {
-          method: 'GET',
-          url: '/api/account/logout',
-        },
-        null,
-        issuer,
-      )
+  async init() {
+    const environmentService = this.injector.get(EnvironmentService);
+
+    return environmentService
+      .getEnvironment$()
       .pipe(
-        switchMap(() => {
-          this.oAuthService.logOut();
-          return this.store.dispatch(new GetAppConfiguration());
+        map(env => env?.oAuthConfig),
+        filter(oAuthConfig => !!oAuthConfig),
+        tap(oAuthConfig => {
+          this.strategy =
+            oAuthConfig.responseType === 'code'
+              ? AUTH_FLOW_STRATEGY.Code(this.injector)
+              : AUTH_FLOW_STRATEGY.Password(this.injector);
         }),
-      );
+        switchMap(() => from(this.strategy.init())),
+        take(1),
+      )
+      .toPromise();
+  }
+
+  logout(queryParams?: Params): Observable<any> {
+    return this.strategy.logout(queryParams);
+  }
+
+  /**
+   * @deprecated Use navigateToLogin method instead. To be deleted in v5.0
+   */
+  initLogin() {
+    this.strategy.navigateToLogin();
+  }
+
+  navigateToLogin(queryParams?: Params) {
+    this.strategy.navigateToLogin(queryParams);
+  }
+
+  login(params: LoginParams) {
+    return this.strategy.login(params);
   }
 }

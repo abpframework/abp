@@ -300,3 +300,14 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 - 如果请求的实体不存在,则抛出`EntityNotFoundException` 异常. 此异常大多数由 [repositories](Repositories.md) 抛出.
 
 你同样可以在代码中抛出这些类型的异常(虽然很少需要这样做)
+
+## 发送异常详情到客户端
+
+你可以通过 `AbpExceptionHandlingOptions` 类的 `SendExceptionsDetailsToClients` 属性异常发送到客户端:
+
+````csharp
+services.Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionsDetailsToClients = true;
+});
+````

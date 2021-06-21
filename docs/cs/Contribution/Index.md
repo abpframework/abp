@@ -41,13 +41,17 @@ Nový jazyk je publikován jakmile jsou minimálně tyto překlady dokončeny.
 
 ABP framework má flexibilní [lokalizační systém](../Localization.md). Můžete tak vytvořit lokalizované uživatelské prostředí pro svou vlastní aplikaci.
 
-K tomu mají framework a vestavěné moduly již lokalizované texty. Například [lokalizační texty pro Volo.Abp.UI balík](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). Můžete vytvořit nový soubor ve [stejné složce](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) k přidání překladu.
+K tomu mají framework a vestavěné moduly již lokalizované texty. Například [lokalizační texty pro Volo.Abp.UI balík](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
+
+Můžete vytvořit nový soubor ve [stejné složce](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) k přidání překladu.
 
 * Naklonujte [ABP repozitář](https://github.com/abpframework/abp/) z Githubu.
 * Vytvořte nový soubor pro cílový jazyk pro lokalizační text v (json) souboru (u souboru en.json).
 * Zkopírujte veškerý text ze souboru en.json.
 * Přeložte texty.
 * Zašlete pull request na Githubu.
+
+K překladu lokalizovaných textů můžete také použít příkaz `abp translate` of [ABP CLI](CLI.md).
 
 ABP je modulářní framework, proto je zde mnoho zdrojů lokalizačních textů, jeden pro každý modul. K najití všech .json souborů, vyhledejte po naklonování repozitáře soubory "en.json". Můžete se taky podívat na [tento seznam](Localization-Text-Files.md) souborů lokalizačních textů.
 

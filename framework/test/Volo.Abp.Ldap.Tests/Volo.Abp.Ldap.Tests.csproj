@@ -3,16 +3,14 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <ProjectReference Include="..\..\src\Volo.Abp.Ldap\Volo.Abp.Ldap.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
   </ItemGroup>
 </Project>

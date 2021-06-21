@@ -24,14 +24,5 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
                 hangfireConfiguration.UseSqlServerStorage(configuration.GetConnectionString("Default"));
             });
         }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            //TODO: Configure console logging
-            //context
-            //    .ServiceProvider
-            //    .GetRequiredService<ILoggerFactory>()
-            //    .AddConsole(LogLevel.Debug);
-        }
     }
 }

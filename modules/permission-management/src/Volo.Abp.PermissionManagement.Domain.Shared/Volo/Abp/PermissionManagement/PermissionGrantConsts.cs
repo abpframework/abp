@@ -2,10 +2,19 @@
 {
     public static class PermissionGrantConsts
     {
-        public const int MaxNameLength = 128;
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 128;
 
-        public const int MaxProviderNameLength = 64;
+        /// <summary>
+        /// Default value: 64
+        /// </summary>
+        public static int MaxProviderNameLength { get; set; } = 64;
 
-        public const int MaxProviderKeyLength = 64;
+        /// <summary>
+        /// Default value: 64
+        /// </summary>
+        public static int MaxProviderKeyLength { get; set; } = 64;
     }
 }

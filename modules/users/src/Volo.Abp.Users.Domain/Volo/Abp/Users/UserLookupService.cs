@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -138,6 +140,59 @@ namespace Volo.Abp.Users
             return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
         }
 
+        public async Task<List<IUserData>> SearchAsync(
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default)
+        {
+            if (ExternalUserLookupServiceProvider != null)
+            {
+                return await ExternalUserLookupServiceProvider
+                    .SearchAsync(
+                        sorting,
+                        filter,
+                        maxResultCount,
+                        skipCount,
+                        cancellationToken
+                    );
+            }
+
+            var localUsers = await _userRepository
+                .SearchAsync(
+                    sorting,
+                    maxResultCount,
+                    skipCount,
+                    filter,
+                    cancellationToken
+                );
+
+            return localUsers
+                .Cast<IUserData>()
+                .ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (ExternalUserLookupServiceProvider != null)
+            {
+                return await ExternalUserLookupServiceProvider
+                    .GetCountAsync(
+                        filter,
+                        cancellationToken
+                    );
+            }
+
+            return await _userRepository
+                .GetCountAsync(
+                    filter,
+                    cancellationToken
+                );
+        }
+
         protected abstract TUser CreateUser(IUserData externalUser);
 
         private async Task WithNewUowAsync(Func<Task> func)
@@ -145,7 +200,7 @@ namespace Volo.Abp.Users
             using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
             {
                 await func();
-                await uow.SaveChangesAsync();
+                await uow.CompleteAsync();
             }
         }
     }

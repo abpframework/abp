@@ -9,6 +9,5 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
         public Dictionary<string, ExtensionPropertyDto> Properties { get; set; }
 
         public Dictionary<string, object> Configuration { get; set; }
-
     }
 }

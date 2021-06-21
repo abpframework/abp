@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
@@ -12,38 +13,55 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
         {
             SetRandomIdIfNotProvided();
 
-            var innerContent = (await output.GetChildContentAsync()).GetContent();
+            var childContent = await output.GetChildContentAsync();
 
-            var html = GetAccordionHeaderItem(context, output) + GetAccordionContentItem(context, output, innerContent);
+            var html = GetAccordionHeaderItem(context, output) + GetAccordionContentItem(context, output, childContent);
 
             var tabHeaderItems = context.GetValue<List<string>>(AccordionItems);
-
             tabHeaderItems.Add(html);
 
             output.SuppressOutput();
         }
 
-
-
         protected virtual string GetAccordionHeaderItem(TagHelperContext context, TagHelperOutput output)
         {
-            return "     <div class=\"card-header\" id=\"" + GetHeadingId() + "\">" + Environment.NewLine +
-                   "      <h5 class=\"mb-0\">" + Environment.NewLine +
-                   "        <button class=\"btn btn-link\" type=\"button\" data-toggle=\"collapse\" data-target=\"#" + GetContentId() + "\" aria-expanded=\"true\" aria-controls=\"" + GetContentId() + "\">" + Environment.NewLine +
-                                    TagHelper.Title + Environment.NewLine +
-                   "        </button>" + Environment.NewLine +
-                   "      </h5>" + Environment.NewLine +
-                   "    </div>" + Environment.NewLine;
+            var button = new TagBuilder("button");
+            button.AddCssClass("btn btn-link");
+            button.Attributes.Add("type", "button");
+            button.Attributes.Add("data-toggle", "collapse");
+            button.Attributes.Add("data-target", "#" + GetContentId());
+            button.Attributes.Add("aria-expanded", "true");
+            button.Attributes.Add("aria-controls", GetContentId());
+            button.InnerHtml.AppendHtml(TagHelper.Title);
+
+            var h5 = new TagBuilder("h5");
+            h5.AddCssClass("mb-0");
+            h5.InnerHtml.AppendHtml(button);
+
+            var header = new TagBuilder("div");
+            header.AddCssClass("card-header");
+            header.Attributes.Add("id", GetHeadingId());
+            header.InnerHtml.AppendHtml(h5);
+
+            return header.ToHtmlString();
         }
 
-        protected virtual string GetAccordionContentItem(TagHelperContext context, TagHelperOutput output, string content)
+        protected virtual string GetAccordionContentItem(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
         {
             var show = (TagHelper.Active ?? false) ? " show" : "";
-            return "<div id=\"" + GetContentId() + "\" class=\"collapse"+ show + "\" aria-labelledby=\"" + GetHeadingId() + "\" data-parent=\"#" + AbpAccordionParentIdPlaceholder + "\">" + Environment.NewLine +
-                   "      <div class=\"card-body\">" + Environment.NewLine +
-                            content + Environment.NewLine +
-                   "      </div>" + Environment.NewLine +
-                   "</div>" + Environment.NewLine;
+
+            var cardBody = new TagBuilder("div");
+            cardBody.AddCssClass("card-body");
+            cardBody.InnerHtml.AppendHtml(content);
+
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("collapse" + show);
+            wrapper.Attributes.Add("id", GetContentId());
+            wrapper.Attributes.Add("aria-labelledby", GetHeadingId());
+            wrapper.Attributes.Add("data-parent", "#" + AbpAccordionParentIdPlaceholder);
+            wrapper.InnerHtml.AppendHtml(cardBody);
+
+            return wrapper.ToHtmlString();
         }
 
         protected virtual string GetHeadingId()

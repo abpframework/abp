@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +20,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
@@ -29,6 +31,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
@@ -53,12 +56,15 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityApplicationModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpFeatureManagementWebModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {
@@ -96,6 +102,12 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -112,8 +124,9 @@ namespace MyCompanyName.MyProjectName
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
-            if (context.GetEnvironment().IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -124,25 +137,27 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseHttpsRedirection();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseAbpRequestLocalization();
+            app.UseAuthorization();
+
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
 
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             using (var scope = context.ServiceProvider.CreateScope())
             {

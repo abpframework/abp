@@ -1,12 +1,12 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
@@ -53,15 +53,35 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 var inlineClass = (TagHelper.Inline ?? false) ? " custom-control-inline" : "";
                 var id = TagHelper.AspFor.Name + "Radio" + selectItem.Value;
                 var name = TagHelper.AspFor.Name;
-                var selected = selectItem.Selected ? " checked=\"checked\"" : "";
-                var disabled = (TagHelper.Disabled??false) ? " disabled" : "";
 
-                var htmlPart = "<div class=\"custom-control custom-radio" + inlineClass + "\">\r\n" +
-                               "  <input type=\"radio\" id=\"" + id + "\" name=\"" + name + "\" value=\"" + selectItem.Value + "\"" + selected + " class=\"custom-control-input\""+ disabled + ">\r\n" +
-                               "  <label class=\"custom-control-label\" for=\"" + id + "\">" + selectItem.Text + "</label>\r\n" +
-                               "</div>";
+                var input = new TagBuilder("input");
+                input.AddCssClass("custom-control-input");
+                input.Attributes.Add("type", "radio");
+                input.Attributes.Add("id", id);
+                input.Attributes.Add("name", name);
+                input.Attributes.Add("value", selectItem.Value);
 
-                html.AppendLine(htmlPart);
+                if (selectItem.Selected)
+                {
+                    input.Attributes.Add("checked", "checked");
+                }
+
+                if (TagHelper.Disabled ?? false)
+                {
+                    input.Attributes.Add("disabled", "disabled");
+                }
+
+                var label = new TagBuilder("label");
+                label.AddCssClass("custom-control-label");
+                label.Attributes.Add("for", id);
+                label.InnerHtml.AppendHtml(selectItem.Text);
+
+                var wrapper = new TagBuilder("div");
+                wrapper.AddCssClass("custom-control custom-radio" + inlineClass);
+                wrapper.InnerHtml.AppendHtml(input);
+                wrapper.InnerHtml.AppendHtml(label);
+
+                html.AppendLine(wrapper.ToHtmlString());
             }
 
             return html.ToString();
@@ -90,7 +110,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
+            var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
 
             var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;

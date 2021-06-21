@@ -39,6 +39,7 @@ describe('ScriptLoadingStrategy', () => {
       const strategy = new ScriptLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
       strategy.createStream<CustomEvent>().subscribe(event => {
+        expect(strategy.element.tagName).toBe('SCRIPT');
         expect(event.detail.crossOrigin).toBe('use-credentials');
         done();
       });
@@ -78,6 +79,7 @@ describe('StyleLoadingStrategy', () => {
       const strategy = new StyleLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
       strategy.createStream<CustomEvent>().subscribe(event => {
+        expect(strategy.element.tagName).toBe('LINK');
         expect(event.detail.crossOrigin).toBe('use-credentials');
         done();
       });

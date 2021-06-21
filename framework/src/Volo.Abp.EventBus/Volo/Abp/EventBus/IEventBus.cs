@@ -33,7 +33,7 @@ namespace Volo.Abp.EventBus
 
         /// <summary>
         /// Registers to an event.
-        /// A new instance of <see cref="THandler"/> object is created for every event occurrence.
+        /// A new instance of <typeparamref name="THandler"/> object is created for every event occurrence.
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <typeparam name="THandler">Type of the event handler</typeparam>

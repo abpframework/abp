@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,16 +35,34 @@ namespace Volo.Abp.VirtualFileSystem
         }
 
         [Fact]
+        public void Should_Define_And_Get_Embedded_Resources_With_Special_Chars()
+        {
+            //Act
+            var resource = _virtualFileProvider.GetFileInfo("/js/my{test}.2.9.min.js");
+
+            //Assert
+            resource.ShouldNotBeNull();
+            resource.Exists.ShouldBeTrue();
+
+            using (var stream = resource.CreateReadStream())
+            {
+                Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//my{test}.2.9.min.js-content");
+            }
+        }
+
+        [Fact]
         public void Should_Define_And_Get_Embedded_Directory_Contents()
         {
             //Act
             var contents = _virtualFileProvider.GetDirectoryContents("/js");
 
             //Assert
-            contents.Exists.ShouldNotBeNull();
+            contents.Exists.ShouldBeTrue();
 
             var contentList = contents.ToList();
+
             contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
+            contentList.ShouldContain(x => x.Name == "my{test}.2.9.min.js");
         }
 
         [Theory]
@@ -57,7 +74,7 @@ namespace Volo.Abp.VirtualFileSystem
             var contents = _virtualFileProvider.GetDirectoryContents(path);
 
             //Assert
-            contents.Exists.ShouldNotBeNull();
+            contents.Exists.ShouldBeTrue();
 
             var contentList = contents.ToList();
             contentList.ShouldContain(x => x.Name == "js");
@@ -70,7 +87,9 @@ namespace Volo.Abp.VirtualFileSystem
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.AddEmbedded<TestModule>("Volo.Abp.VirtualFileSystem.MyResources");
+                    options.FileSets.AddEmbedded<TestModule>(
+                        baseFolder: "/Volo/Abp/VirtualFileSystem/MyResources"
+                    );
                 });
             }
         }

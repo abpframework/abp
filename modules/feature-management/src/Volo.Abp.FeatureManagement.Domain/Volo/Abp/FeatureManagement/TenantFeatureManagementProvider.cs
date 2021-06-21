@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 
@@ -18,14 +19,14 @@ namespace Volo.Abp.FeatureManagement
             CurrentTenant = currentTenant;
         }
 
-        protected override string NormalizeProviderKey(string providerKey)
+        protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
         {
             if (providerKey != null)
             {
-                return providerKey;
+                return Task.FromResult(providerKey);
             }
 
-            return CurrentTenant.Id?.ToString();
+            return Task.FromResult(CurrentTenant.Id?.ToString());
         }
     }
 }

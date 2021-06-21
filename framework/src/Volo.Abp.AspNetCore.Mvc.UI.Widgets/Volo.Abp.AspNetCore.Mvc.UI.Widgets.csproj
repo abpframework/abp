@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Widgets</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Widgets</PackageId>
@@ -15,11 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
-    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
   </ItemGroup>
 
 </Project>

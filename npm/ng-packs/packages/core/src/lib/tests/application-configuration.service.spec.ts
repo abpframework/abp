@@ -1,20 +1,27 @@
-import { createHttpFactory, HttpMethod, SpectatorHttp } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { of } from 'rxjs';
 import { ApplicationConfigurationService, RestService } from '../services';
-import { Store } from '@ngxs/store';
 
 describe('ApplicationConfigurationService', () => {
-  let spectator: SpectatorHttp<ApplicationConfigurationService>;
-  const createHttp = createHttpFactory({
-    dataService: ApplicationConfigurationService,
-    providers: [RestService],
-    mocks: [Store],
+  let spectator: SpectatorService<ApplicationConfigurationService>;
+  const createService = createServiceFactory({
+    service: ApplicationConfigurationService,
+    mocks: [RestService],
   });
 
-  beforeEach(() => (spectator = createHttp()));
+  beforeEach(() => (spectator = createService()));
 
   it('should send a GET to application-configuration API', () => {
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    const rest = spectator.inject(RestService);
+
+    const requestSpy = jest.spyOn(rest, 'request');
+    requestSpy.mockReturnValue(of(null));
+
     spectator.service.getConfiguration().subscribe();
-    spectator.expectOne('https://abp.io/api/abp/application-configuration', HttpMethod.GET);
+
+    expect(requestSpy).toHaveBeenCalledWith(
+      { method: 'GET', url: '/api/abp/application-configuration' },
+      {},
+    );
   });
 });

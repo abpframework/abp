@@ -7,6 +7,8 @@
     "UserLockedOut": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
     "LoginIsNotAllowed": "Giriş yapamazsınız! E-posta adresinizi ya da telefon numaranızı doğrulamanız gerekiyor.",
-    "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!"
+    "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
+    "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
+    "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
   }
 }

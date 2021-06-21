@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 @using Volo.Abp.Identity
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.Identity.Web.Navigation
@@ -33,21 +34,11 @@
                 <abp-card-title>@L["Roles"]</abp-card-title>
             </abp-column>
             <abp-column size-md="_6" class="text-right">
-                @if (await Authorization.IsGrantedAsync(IdentityPermissions.Roles.Create))
-                {
-                    <abp-button button-type="Primary" name="CreateRole" text="@L["NewRole"].Value" icon="plus" />
-                }
+                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
             </abp-column>
         </abp-row>
     </abp-card-header>
     <abp-card-body>
-        <abp-table striped-rows="true" class="nowrap">
-            <thead>
-                <tr>
-                    <th>@L["Actions"]</th>
-                    <th>@L["RoleName"]</th>
-                </tr>
-            </thead>
-        </abp-table>
+        <abp-table striped-rows="true" class="nowrap"></abp-table>
     </abp-card-body>
 </abp-card>

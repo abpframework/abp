@@ -86,11 +86,6 @@ namespace Volo.Docs.Projects
                 }
             }
 
-            if (versions.Any() && !string.IsNullOrEmpty(project.LatestVersionBranchName))
-            {
-                versions.First().Name = project.LatestVersionBranchName;
-            }
-
             return versions;
         }
 
@@ -111,6 +106,8 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
             var store = _documentSource.Create(project.DocumentStoreType);
 
+            version = GetProjectVersionPrefixIfExist(project) + version;
+
             async Task<LanguageConfig> GetLanguagesAsync()
             {
                 return await store.GetLanguageListAsync(project, version);
@@ -124,6 +121,24 @@ namespace Volo.Docs.Projects
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
                 }
             );
+        }
+
+        private string GetProjectVersionPrefixIfExist(Project project)
+        {
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
+            {
+                return string.Empty;
+            }
+
+            return project.ExtraProperties["VersionBranchPrefix"].ToString();
+
+        }
+
+        private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
+        {
+            return project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
+                ? (GithubVersionProviderSource) (long) project.ExtraProperties["GithubVersionProviderSource"]
+                : GithubVersionProviderSource.Releases;
         }
     }
 }

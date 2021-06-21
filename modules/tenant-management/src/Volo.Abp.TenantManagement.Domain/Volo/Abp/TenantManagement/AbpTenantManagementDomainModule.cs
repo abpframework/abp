@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.UI;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -14,9 +17,11 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddDomainModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
-    [DependsOn(typeof(AbpUiModule))] //TODO: It's not good to depend on the UI module. However, UserFriendlyException is inside it!
+    [DependsOn(typeof(AbpCachingModule))]
     public class AbpTenantManagementDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpTenantManagementDomainModule>();
@@ -26,9 +31,21 @@ namespace Volo.Abp.TenantManagement
                 options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);
             });
 
-            Configure<AbpDistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEntityEventOptions>(options =>
             {
                 options.EtoMappings.Add<Tenant, TenantEto>();
+            });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    TenantManagementModuleExtensionConsts.ModuleName,
+                    TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                    typeof(Tenant)
+                );
             });
         }
     }

@@ -1,7 +1,7 @@
-import { SettingTab } from '@abp/ng.theme.shared';
+import { ABP } from '@abp/ng.core';
 
 export namespace SettingManagement {
   export interface State {
-    selectedTab: SettingTab;
+    selectedTab?: ABP.Tab;
   }
 }

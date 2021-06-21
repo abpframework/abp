@@ -1,4 +1,22 @@
 {
+  "[typescriptreact]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "[xml]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "files.associations": {
+    "*.ts.template": "typescriptreact",
+    "*.html.template": "xml"
+  },
   "search.exclude": {
     "**/dist": true
   },
@@ -18,9 +36,7 @@
     "titleBar.inactiveForeground": "#e7e7e799",
     "statusBar.background": "#1d70a2",
     "statusBarItem.hoverBackground": "#258ecd",
-    "statusBar.foreground": "#e7e7e7",
-    "statusBar.border": "#1d70a2",
-    "titleBar.border": "#1d70a2"
+    "statusBar.foreground": "#e7e7e7"
   },
   "peacock.color": "#1D70A2"
 }

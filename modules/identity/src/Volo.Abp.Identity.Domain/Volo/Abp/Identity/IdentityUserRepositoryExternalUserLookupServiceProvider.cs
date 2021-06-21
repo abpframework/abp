@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -44,6 +46,32 @@ namespace Volo.Abp.Identity
                         cancellationToken: cancellationToken
                     )
                 )?.ToAbpUserData();
+        }
+
+        public virtual async Task<List<IUserData>> SearchAsync(
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default)
+        {
+            var users = await UserRepository.GetListAsync(
+                sorting: sorting,
+                maxResultCount: maxResultCount,
+                skipCount: skipCount,
+                filter: filter,
+                includeDetails: false,
+                cancellationToken: cancellationToken
+            );
+
+            return users.Select(u => u.ToAbpUserData()).ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserRepository.GetCountAsync(filter, cancellationToken);
         }
     }
 }

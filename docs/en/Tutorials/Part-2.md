@@ -1,535 +1,500 @@
-## ASP.NET Core {{UI_Value}} Tutorial - Part 2
+# Web Application Development Tutorial - Part 2: The Book List Page
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"]
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "DB": ["EF","Mongo"]
 }
 ````
+## About This Tutorial
 
-{{
-if UI == "MVC"
-  DB="ef"
-  DB_Text="Entity Framework Core"
-  UI_Text="mvc"
-else if UI == "NG"
-  DB="mongodb"
-  DB_Text="MongoDB"
-  UI_Text="angular"
-else 
-  DB ="?"
-  UI_Text="?"
-end
-}}
+In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-### About this tutorial
+* **{{DB_Value}}** as the ORM provider. 
+* **{{UI_Value}}** as the UI Framework.
 
-This is the second part of the ASP.NET Core {{UI_Value}} tutorial series. All parts:
+This tutorial is organized as the following parts;
 
-* [Part I: Creating the project and book list page](part-1.md)
-* **Part II: Creating, updating and deleting books (this tutorial)**
-* [Part III: Integration tests](part-3.md)
+- [Part 1: Creating the server side](Part-1.md)
+- **Part 2: The book list page (this part)**
+- [Part 3: Creating, updating and deleting books](Part-3.md)
+- [Part 4: Integration tests](Part-4.md)
+- [Part 5: Authorization](Part-5.md)
+- [Part 6: Authors: Domain layer](Part-6.md)
+- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
-*You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.*
+### Download the Source Code
 
-{{if UI == "MVC"}}
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
-### Creating a new book
+* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
+* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the below image:
+{{if UI == "MVC" && DB == "EF"}}
 
-![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
+### Video Tutorial
 
-#### Create the modal form
-
-Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
-
-![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
-
-##### CreateModal.cshtml.cs
-
-Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace with the following code:
-
-````C#
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class CreateModalModel : BookStorePageModel
-    {
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
-
-        private readonly IBookAppService _bookAppService;
-
-        public CreateModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.CreateAsync(Book);
-            return NoContent();
-        }
-    }
-}
-````
-
-* This class is derived from the `BookStorePageModel` instead of standard `PageModel`. `BookStorePageModel` inherits the `PageModel` and adds some common properties & methods that can be used in your page model classes.
-* `[BindProperty]` attribute on the `Book` property binds post request data to this property.
-* This class simply injects the `IBookAppService` in the constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
-
-##### CreateModal.cshtml
-
-Open the `CreateModal.cshtml` file and paste the code below:
-
-````html
-@page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model Acme.BookStore.Web.Pages.Books.CreateModalModel
-@{
-    Layout = null;
-}
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/CreateModal">
-    <abp-modal>
-        <abp-modal-header title="@L["NewBook"].Value"></abp-modal-header>
-        <abp-modal-body>
-            <abp-form-content />
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
-    </abp-modal>
-</abp-dynamic-form>
-````
-
-* This modal uses `abp-dynamic-form` tag helper to automatically create the form from the model  `CreateBookViewModel`.
-  * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
-  * `data-ajaxForm` attribute sets the form to submit via AJAX, instead of a classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
-
-#### Add the "New book" button
-
-Open the `Pages/Books/Index.cshtml` and set the content of `abp-card-header` tag as below:
-
-````html
-<abp-card-header>
-    <abp-row>
-        <abp-column size-md="_6">
-            <h2>@L["Books"]</h2>
-        </abp-column>
-        <abp-column size-md="_6" class="text-right">
-            <abp-button id="NewBookButton"
-                        text="@L["NewBook"].Value"
-                        icon="plus"
-                        button-type="Primary" />
-        </abp-column>
-    </abp-row>
-</abp-card-header>
-````
-
-This adds a new button called **New book** to the **top-right** of the table:
-
-![bookstore-new-book-button](./images/bookstore-new-book-button.png)
-
-Open the `pages/books/index.js` and add the following code just after the `Datatable` configuration:
-
-````js
-var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-
-createModal.onResult(function () {
-    dataTable.ajax.reload();
-});
-
-$('#NewBookButton').click(function (e) {
-    e.preventDefault();
-    createModal.open();
-});
-````
-
-* `abp.ModalManager` is a helper class to manage modals in the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
-
-Now, you can **run the application** and add new books using the new modal form.
-
-### Updating a book
-
-Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
-
-![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
-
-#### EditModal.cshtml.cs
-
-Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace with the following code:
-
-````csharp
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class EditModalModel : BookStorePageModel
-    {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public Guid Id { get; set; }
-
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
-
-        private readonly IBookAppService _bookAppService;
-
-        public EditModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            var bookDto = await _bookAppService.GetAsync(Id);
-            Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.UpdateAsync(Id, Book);
-            return NoContent();
-        }
-    }
-}
-````
-
-* `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. `SupportsGet` is used to be able to get `Id` value from query string parameter of the request.
-* In the `GetAsync` method, we get `BookDto `from `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
-* The `OnPostAsync` uses `BookAppService.UpdateAsync()` to update the entity.
-
-#### Mapping from BookDto to CreateUpdateBookDto 
-
-To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and change it as shown below:
-
-````csharp
-using AutoMapper;
-
-namespace Acme.BookStore.Web
-{
-    public class BookStoreWebAutoMapperProfile : Profile
-    {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
-    }
-}
-````
-
-* We have just added `CreateMap<BookDto, CreateUpdateBookDto>();` to define this mapping.
-
-#### EditModal.cshtml
-
-Replace `EditModal.cshtml` content with the following content:
-
-````html
-@page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
-@using Acme.BookStore.Web.Pages.Books
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model EditModalModel
-@{
-    Layout = null;
-}
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/EditModal">
-    <abp-modal>
-        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
-        <abp-modal-body>
-            <abp-input asp-for="Id" />
-            <abp-form-content />
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
-    </abp-modal>
-</abp-dynamic-form>
-````
-
-This page is very similar to the `CreateModal.cshtml`, except:
-
-* It includes an `abp-input` for the `Id` property to store `Id` of the editing book (which is a hidden input).
-* It uses `Books/EditModal` as the post URL and *Update* text as the modal header.
-
-#### Add "Actions" dropdown to the table
-
-We will add a dropdown button to the table named *Actions*. 
-
-Open the `Pages/Books/Index.cshtml` page and change the `<abp-table>` section as shown below:
-
-````html
-<abp-table striped-rows="true" id="BooksTable">
-    <thead>
-        <tr>
-            <th>@L["Actions"]</th>
-            <th>@L["Name"]</th>
-            <th>@L["Type"]</th>
-            <th>@L["PublishDate"]</th>
-            <th>@L["Price"]</th>
-            <th>@L["CreationTime"]</th>
-        </tr>
-    </thead>
-</abp-table>
-````
-
-* We just added a new `th` tag for the "*Actions*" button.
-
-Open the `pages/books/index.js` and replace the content as below:
-
-````js
-$(function () {
-
-    var l = abp.localization.getResource('BookStore');
-
-    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
-
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                        [
-                            {
-                                text: l('Edit'),
-                                action: function (data) {
-                                    editModal.open({ id: data.record.id });
-                                }
-                            }
-                        ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
-
-    createModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    $('#NewBookButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
-});
-````
-
-* Used `abp.localization.getResource('BookStore')` to be able to use the same localization texts defined on the server-side.
-* Added a new `ModalManager` named `createModal` to open the create modal dialog.
-* Added a new `ModalManager` named `editModal` to open the edit modal dialog.
-* Added a new column at the beginning of the `columnDefs` section. This column is used for the "*Actions*" dropdown button.
-* "*New Book*" action simply calls `createModal.open()` to open the create dialog.
-* "*Edit*" action simply calls `editModal.open()` to open the edit dialog.
-
-You can run the application and edit any book by selecting the edit action. The final UI looks as below:
-
-![bookstore-books-table-actions](./images/bookstore-edit-button.png)
-
-### Deleting a book
-
-Open the `pages/books/index.js` and add a new item to the `rowAction` `items`:
-
-````js
-{
-    text: l('Delete'),
-    confirmMessage: function (data) {
-        return l('BookDeletionConfirmationMessage', data.record.name);
-    },
-    action: function (data) {
-        acme.bookStore.book
-            .delete(data.record.id)
-            .then(function() {
-                abp.notify.info(l('SuccessfullyDeleted'));
-                dataTable.ajax.reload();
-            });
-    }
-}
-````
-
-* `confirmMessage` option is used to ask a confirmation question before executing the `action`.
-* `acme.bookStore.book.delete()` method makes an AJAX request to JavaScript proxy function to delete a book.
-* `abp.notify.info()` shows a notification after the delete operation.
-
-The final `index.js` content is shown below:
-
-````js
-$(function () {
-
-    var l = abp.localization.getResource('BookStore');
-
-    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
-
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                    [
-                        {
-                            text: l('Edit'),
-                            action: function (data) {
-                                editModal.open({ id: data.record.id });
-                            }
-                        },
-                        {
-                            text: l('Delete'),
-                            confirmMessage: function (data) {
-                                return l('BookDeletionConfirmationMessage', data.record.name);
-                            },
-                            action: function (data) {
-                                acme.bookStore.book
-                                    .delete(data.record.id)
-                                    .then(function() {
-                                        abp.notify.info(l('SuccessfullyDeleted'));
-                                        dataTable.ajax.reload();
-                                    });
-                            }
-                        }
-                    ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
-
-    createModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    $('#NewBookButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
-});
-````
-
-Open the `en.json` in the `Acme.BookStore.Domain.Shared` project and add the following translations:
-
-````json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
-"SuccessfullyDeleted": "Successfully deleted"
-````
-
-Run the application and try to delete a book.
+This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=UDNlLiPiBiw&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=2" target="_blank">published on YouTube</a>**.
 
 {{end}}
 
-{{if UI == "NG"}}
+{{if UI == "MVC"}}
 
-### Creating a new book
+## Dynamic JavaScript Proxies
 
-In this section, you will learn how to create a new modal dialog form to create a new book.
+It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-#### State definitions
+ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
-Open `books.action.ts` in `books\state` folder and replace the content as below:
+### Testing in the Developer Console
 
-```js
-import { CreateUpdateBookDto } from '../../app/shared/models'; //<== added this line ==>
+You can easily test the JavaScript proxies using your favorite browser's **Developer Console**. Run the application, open your browser's **developer tools** (*shortcut is generally F12*), switch to the **Console** tab, type the following code and press enter:
 
-export class GetBooks {
-  static readonly type = '[Books] Get';
+````js
+acme.bookStore.books.book.getList({}).done(function (result) { console.log(result); });
+````
+
+* `acme.bookStore.books` is the namespace of the `BookAppService` converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case).
+* `book` is the conventional name for the `BookAppService` (removed `AppService` postfix and converted to camelCase).
+* `getList` is the conventional name for the `GetListAsync` method defined in the `CrudAppService` base class (removed `Async` postfix and converted to camelCase).
+* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional with default values, so you can send an empty object).
+* `getList` function returns a `promise`. You can pass a callback to the `then` (or `done`) function to get the result returned from the server.
+
+Running this code produces the following output:
+
+![bookstore-javascript-proxy-console](images/bookstore-javascript-proxy-console.png)
+
+You can see the **book list** returned from the server. You can also check the **network** tab of the developer tools to see the client to server communication:
+
+![bookstore-getlist-result-network](images/bookstore-getlist-result-network.png)
+
+Let's **create a new book** using the `create` function:
+
+````js
+acme.bookStore.books.book.create({ 
+        name: 'Foundation', 
+        type: 7, 
+        publishDate: '1951-05-24', 
+        price: 21.5 
+    }).then(function (result) { 
+        console.log('successfully created the book with id: ' + result.id); 
+    });
+````
+
+You should see a message in the console something like that:
+
+````text
+successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
+````
+
+Check the `Books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions yourself.
+
+We will use these dynamic proxy functions in the next sections to communicate to the server.
+
+{{end}}
+
+## Localization
+
+Before starting to the UI development, we first want to prepare the localization texts (you normally do this when needed while developing your application).
+
+Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
+
+![bookstore-localization-files](images/bookstore-localization-files-v2.png)
+
+Open the `en.json` (*the English translations*) file and change the content as below:
+
+````json
+{
+  "Culture": "en",
+  "Texts": {
+    "Menu:Home": "Home",
+    "Welcome": "Welcome",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Menu:BookStore": "Book Store",
+    "Menu:Books": "Books",
+    "Actions": "Actions",
+    "Close": "Close",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "PublishDate": "Publish date",
+    "NewBook": "New book",
+    "Name": "Name",
+    "Type": "Type",
+    "Price": "Price",
+    "CreationTime": "Creation time",
+    "AreYouSure": "Are you sure?",
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "Science fiction",
+    "Enum:BookType:8": "Poetry"
+  }
 }
+````
 
-// added CreateUpdateBook class
-export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: CreateUpdateBookDto) { }
+* Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
+  * Add `Menu:` prefix for menu items.
+  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
+
+If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
+
+> ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../Localization.md) for details.
+
+{{if UI == "MVC"}}
+
+## Create a Books Page
+
+It's time to create something visible and usable! Instead of classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
+
+Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
+
+![bookstore-add-index-page](images/bookstore-add-index-page-v2.png)
+
+Open the `Index.cshtml` and change the whole content as shown below:
+
+````html
+@page
+@using Acme.BookStore.Web.Pages.Books
+@model IndexModel
+
+<h2>Books</h2>
+````
+
+`Index.cshtml.cs` content should be like that:
+
+```csharp
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Acme.BookStore.Web.Pages.Books
+{
+    public class IndexModel : PageModel
+    {
+        public void OnGet()
+        {
+            
+        }
+    }
 }
 ```
 
-* We imported the `CreateUpdateBookDto` model and created the `CreateUpdateBook` action.
+### Add Books Page to the Main Menu
 
-Open `books.state.ts` file in `books\state` folder and replace the content as below:
+Open the `BookStoreMenuContributor` class in the `Menus` folder and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook } from './books.actions'; // <== added CreateUpdateBook==>
-import { BookService } from '../../app/shared/services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        )
+    )
+);
+````
 
-export class BooksStateModel {
-  public book: PagedResultDto<BookDto>;
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
+
+![bookstore-menu-items](images/bookstore-new-menu-item.png)
+
+When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
+
+### Book List
+
+We will use the [Datatables.net](https://datatables.net/) jQuery library to show the book list. Datatables library completely work via AJAX, it is fast, popular and provides a good user experience.
+
+> Datatables library is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
+
+#### Index.cshtml
+
+Change the `Pages/Books/Index.cshtml` as following:
+
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<BookStoreResource> L
+@section scripts
+{
+    <abp-script src="/Pages/Books/Index.js" />
 }
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Books"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+````
 
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
-})
-@Injectable()
-export class BooksState {
-  @Selector()
-  static getBooks(state: BooksStateModel) {
-    return state.book.items || [];
-  }
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning**. See the [bundling & minification document](../UI/AspNetCore/Bundling-Minification.md) for details.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of the [bootstrap](https://getbootstrap.com/) components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help the of IntelliSense and compile time type checking. Further information, see the [tag helpers](../UI/AspNetCore/Tag-Helpers/Index.md) document.
 
-  constructor(private bookService: BookService) {}
+#### Index.js
 
-  @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((bookResponse) => {
-        ctx.patchState({
-          book: bookResponse,
-        });
-      })
+Create an `Index.js` file under the `Pages/Books` folder:
+
+![bookstore-index-js-file](images/bookstore-index-js-file-v3.png)
+
+The content of the file is shown below:
+
+````js
+$(function () {
+    var l = abp.localization.getResource('BookStore');
+
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+            serverSide: true,
+            paging: true,
+            order: [[1, "asc"]],
+            searching: false,
+            scrollX: true,
+            ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+            columnDefs: [
+                {
+                    title: l('Name'),
+                    data: "name"
+                },
+                {
+                    title: l('Type'),
+                    data: "type",
+                    render: function (data) {
+                        return l('Enum:BookType:' + data);
+                    }
+                },
+                {
+                    title: l('PublishDate'),
+                    data: "publishDate",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString();
+                    }
+                },
+                {
+                    title: l('Price'),
+                    data: "price"
+                },
+                {
+                    title: l('CreationTime'), data: "creationTime",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                    }
+                }
+            ]
+        })
     );
-  }
+});
+````
 
-  // added CreateUpdateBook action listener
-  @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-    return this.bookService.createByInput(action.payload);
+* `abp.localization.getResource` gets a function that is used to localize text using the same JSON file defined in the server side. In this way, you can share the localization values with the client side.
+* `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP Framework. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional default values for missing options.
+* `abp.libs.datatables.createAjax` is another helper function to adapt ABP's dynamic JavaScript API proxies to [Datatable](https://datatables.net/)'s expected parameter format
+* `acme.bookStore.books.book.getList` is the dynamic JavaScript proxy function introduced before.
+* [luxon](https://moment.github.io/luxon/) library is also a standard library that is pre-configured in the solution, so you can use to perform date/time operations easily.
+
+> See [Datatables documentation](https://datatables.net/manual/) for all configuration options.
+
+## Run the Final Application
+
+You can run the application! The final UI of this part is shown below:
+
+![Book list](images/bookstore-book-list-3.png)
+
+This is a fully working, server side paged, sorted and localized table of books.
+
+{{else if UI == "NG"}}
+
+## Install NPM packages
+
+> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. See the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
+
+If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install the NPM packages:
+
+```bash
+yarn
+```
+
+## Create a Books Page
+
+It's time to create something visible and usable! There are some tools that we will use when developing the Angular frontend application:
+
+- [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
+- [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
+
+Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
+
+```bash
+yarn ng generate module book --module app --routing --route books
+```
+
+This command should produce the following output:
+
+````bash
+> yarn ng generate module book --module app --routing --route books
+
+yarn run v1.19.1
+$ ng generate module book --module app --routing --route books
+CREATE src/app/book/book-routing.module.ts (336 bytes)
+CREATE src/app/book/book.module.ts (335 bytes)
+CREATE src/app/book/book.component.html (19 bytes)
+CREATE src/app/book/book.component.spec.ts (614 bytes)
+CREATE src/app/book/book.component.ts (268 bytes)
+CREATE src/app/book/book.component.scss (0 bytes)
+UPDATE src/app/app-routing.module.ts (1289 bytes)
+Done in 3.88s.
+````
+
+### BookModule
+
+Open the `/src/app/book/book.module.ts` and replace the content as shown below:
+
+````js
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { BookRoutingModule } from './book-routing.module';
+import { BookComponent } from './book.component';
+
+@NgModule({
+  declarations: [BookComponent],
+  imports: [
+    BookRoutingModule,
+    SharedModule
+  ]
+})
+export class BookModule { }
+
+````
+
+* Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
+* `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
+
+### Routing
+
+Generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
+
+````js
+const routes: Routes = [
+  // other route definitions...
+  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
+];
+````
+
+Now, open the `src/app/route.provider.ts` file replace the `configureRoutes` function declaration as shown below:
+
+```js
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      {
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/book-store',
+        name: '::Menu:BookStore',
+        iconClass: 'fas fa-book',
+        order: 2,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/books',
+        name: '::Menu:Books',
+        parentName: '::Menu:BookStore',
+        layout: eLayoutType.application,
+      },
+    ]);
+  };
+}
+```
+
+`RoutesService` is a service provided by the ABP Framework to configure the main menu and the routes.
+
+* `path` is the URL of the route.
+* `name` is the localized menu item name (see the [localization document](../UI/Angular/Localization.md) for details).
+* `iconClass` is the icon of the menu item (you can use [Font Awesome](https://fontawesome.com/) icons by default).
+* `order` is the order of the menu item.
+* `layout` is the layout of the BooksModule's routes (there are three types of pre-defined layouts: `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty`).
+
+For more information, see the [RoutesService document](../UI/Angular/Modifying-the-Menu.md#via-routesservice).
+
+### Service Proxy Generation
+
+[ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+
+![vs-run-without-iisexpress](images/vs-run-without-iisexpress.png)
+
+Once the host application is running, execute the following command in the `angular` folder:
+
+```bash
+abp generate-proxy
+```
+
+This command will create the following files under the `/src/app/proxy/books` folder:
+
+![Generated files](images/generated-proxies-3.png)
+
+### BookComponent
+
+Open the `/src/app/book/book.component.ts` file and replace the content as below:
+
+```js
+import { ListService, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
+import { BookService, BookDto } from '@proxy/books';
+
+@Component({
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
+  providers: [ListService],
+})
+export class BookComponent implements OnInit {
+  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+
+  constructor(public readonly list: ListService, private bookService: BookService) {}
+
+  ngOnInit() {
+    const bookStreamCreator = (query) => this.bookService.getList(query);
+
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.book = response;
+    });
   }
 }
 ```
 
-* We imported `CreateUpdateBook` action and defined the `save` method that will listen to a `CreateUpdateBook` action to create a book.
+* We imported and injected the generated `BookService`.
+* We are using the [ListService](../UI/Angular/List-Service.md), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
 
-When the `SaveBook` action dispatched, the save method is being executed. It calls `createByInput` method of the `BookService`. 
-
-#### Add a modal to BookListComponent
-
-Open `book-list.component.html` file in `books\book-list` folder and replace the content as below:
+Open the `/src/app/book/book.component.html` and replace the content as below:
 
 ```html
 <div class="card">
@@ -540,818 +505,167 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
           {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
-       <!--Added new book button -->
-      <div class="text-right col col-md-6">
-        <div class="text-lg-right pt-2">
-          <button
-            id="create"
-            class="btn btn-primary"
-            type="button"
-            (click)="createBook()"
-          >
-            <i class="fa fa-plus mr-1"></i>
-            <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
-          </button>
-        </div>
-      </div>
+      <div class="text-right col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">
-    <abp-table
-      [value]="books$ | async"
-      [abpLoading]="loading"
-      [headerTemplate]="tableHeader"
-      [bodyTemplate]="tableBody"
-      [rows]="10"
-      [scrollable]="true"
-    >
-    </abp-table>
-    <ng-template #tableHeader>
-      <tr>
-        <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-      </tr>
-    </ng-template>
-    <ng-template #tableBody let-data>
-      <tr>
-        <td>{%{{{ data.name }}}%}</td>
-        <td>{%{{{ booksType[data.type] }}}%}</td>
-        <td>{%{{{ data.publishDate | date }}}%}</td>
-        <td>{%{{{ data.price }}}%}</td>
-      </tr>
-    </ng-template>
+    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ '::Enum:BookType:' + row.type | abpLocalization }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.publishDate | date }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.price | currency }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </div>
-
-<!--added modal-->
-<abp-modal [(visible)]="isModalOpen">
-    <ng-template #abpHeader>
-        <h3>{%{{{ '::NewBook' | abpLocalization }}}%}</h3>
-    </ng-template>
-
-    <ng-template #abpBody> </ng-template>
-
-    <ng-template #abpFooter>
-        <button type="button" class="btn btn-secondary" #abpClose>
-             {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-        </button>
-    </ng-template>
-</abp-modal>
 ```
 
-* We added the `abp-modal` which renders a modal to allow user to create a new book. 
-* `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
-* We added `New book` button to the `AbpContentToolbar`.
+Now you can see the final result on your browser:
 
-Open `book-list.component.ts` file in `books\book-list` folder and replace the content as below:
+![Book list final result](images/bookstore-book-list.png)
 
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
+{{else if UI == "Blazor" || UI == "BlazorServer"}}
 
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
+## Create a Books Page
 
-  booksType = BookType;
+It's time to create something visible and usable! Right click to the `Pages` folder under the `Acme.BookStore.Blazor` project and add a new **razor component**, named `Books.razor`:
 
-  loading = false;
+![blazor-add-books-component](images/blazor-add-books-component.png)
 
-  isModalOpen = false; // <== added this line ==>
+Replace the contents of this component as shown below:
 
-  constructor(private store: Store) {}
+````html
+@page "/books"
 
-  ngOnInit() {
-    this.get();
-  }
+<h2>Books</h2>
 
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
+@code {
 
-  // added createBook method
-  createBook() {
-    this.isModalOpen = true;
-  }
 }
-```
+````
+
+### Add Books Page to the Main Menu
+
+Open the `BookStoreMenuContributor` class in the `Blazor` project add the following code to the end of the `ConfigureMainMenuAsync` method:
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/books"
+        )
+    )
+);
+````
+
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
+
+![blazor-menu-bookstore](images/blazor-menu-bookstore.png)
+
+When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
+
+### Book List
+
+We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including the Bootstrap.
+
+ABP Framework provides a generic base class, `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible to the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
+
+Open the `Books.razor` and replace the content as the following:
+
+````xml
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookStoreResource> L
+@inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <h2>@L["Books"]</h2>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Name)"
+                                Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Type)"
+                                Caption="@L["Type"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:BookType:{(int)context.Type}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.PublishDate)"
+                                Caption="@L["PublishDate"]">
+                    <DisplayTemplate>
+                        @context.PublishDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Price)"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.CreationTime)"
+                                Caption="@L["CreationTime"]">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToLongDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+````
+
+> If you see some syntax errors, you can ignore them if your application properly built and run. Visual Studio still has some bugs with Blazor.
+
+* Inherited from the `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.
+* Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
+
+While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+
+#### About the AbpCrudPageBase
+
+We will continue to benefit from the `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
 
-* We added `isModalOpen = false` and `createBook` method.
+## Run the Final Application
 
-You can open your browser and click **New book** button to see the new modal.
+You can run the application! The final UI of this part is shown below:
 
-![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
+![blazor-bookstore-book-list](images/blazor-bookstore-book-list.png)
 
-#### Create a reactive form
+This is a fully working, server side paged, sorted and localized table of books.
 
-[Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
+{{end # UI }}
 
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
+## The Next Part
 
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this line ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup; // <== added this line ==>
-
-  constructor(private store: Store, private fb: FormBuilder) {} // <== added FormBuilder ==>
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm(); //<== added this line ==>
-    this.isModalOpen = true;
-  }
-
-  // added buildForm method
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-}
-```
-
-* We imported `FormGroup, FormBuilder and Validators`.
-* We added `form: FormGroup` variable.
-* We injected `fb: FormBuilder` service to the constructor. The [FormBuilder](https://angular.io/api/forms/FormBuilder) service provides convenient methods for generating controls. It reduces the amount of boilerplate needed to build complex forms.
-* We added `buildForm` method to the end of the file and executed  `buildForm()` in the `createBook` method. This method creates a reactive form to be able to create a new book.
-  * The `group` method of `FormBuilder`, `fb` creates a `FormGroup`.
-  * Added `Validators.required` static method which validates the relevant form element.
-
-#### Create the DOM elements of the form
-
-Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
-
-```html
-<ng-template #abpBody>
-  <form [formGroup]="form">
-    <div class="form-group">
-      <label for="book-name">Name</label><span> * </span>
-      <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
-    </div>
-
-    <div class="form-group">
-      <label for="book-price">Price</label><span> * </span>
-      <input type="number" id="book-price" class="form-control" formControlName="price" />
-    </div>
-
-    <div class="form-group">
-      <label for="book-type">Type</label><span> * </span>
-      <select class="form-control" id="book-type" formControlName="type">
-        <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Publish date</label><span> * </span>
-      <input
-        #datepicker="ngbDatepicker"
-        class="form-control"
-        name="datepicker"
-        formControlName="publishDate"
-        ngbDatepicker
-        (click)="datepicker.toggle()"
-      />
-    </div>
-  </form>
-</ng-template>
-```
-
-- This template creates a form with `Name`, `Price`, `Type` and `Publish` date fields.
-- We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
-
-#### Datepicker requirements
-
-Open `books.module.ts` file in `app\books` folder and replace the content as below:
-
-```js
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { BooksRoutingModule } from './books-routing.module';
-import { BooksComponent } from './books.component';
-import { BookListComponent } from './book-list/book-list.component';
-import { SharedModule } from '../shared/shared.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
-
-@NgModule({
-  declarations: [BooksComponent, BookListComponent],
-  imports: [
-    CommonModule,
-    BooksRoutingModule,
-    SharedModule,
-    NgbDatepickerModule //<== added this line ==>
-  ]
-})
-export class BooksModule { }
-```
-
-* We imported `NgbDatepickerModule`  to be able to use the date picker.
-
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; // <== added this line ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }], // <== added this line ==>
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  //added bookTypeArr array
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  constructor(private store: Store, private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-}
-```
-
-* We imported ` NgbDateNativeAdapter, NgbDateAdapter` 
-
-* We added a new provider `NgbDateAdapter` that converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
-
-* We added `bookTypeArr` array to be able to use it in the combobox values. The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
-
-  ```js
-  ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
-  ```
-
-  This array was used in the previous form template in the `ngFor` loop.
-
-Now, you can open your browser to see the changes:
-
-
-![New book modal](./images/bookstore-new-book-form.png)
-
-#### Saving the book
-
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions'; // <== added CreateUpdateBook ==>
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  //added bookTypeArr array
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  constructor(private store: Store, private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-
-  //<== added save ==>
-  save() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.store.dispatch(new CreateUpdateBook(this.form.value)).subscribe(() => {
-      this.isModalOpen = false;
-      this.form.reset();
-      this.get();
-    });
-  }
-}
-```
-
-* We imported `CreateUpdateBook`.
-* We added `save` method
-
-Open `book-list.component.html` in `app\books\book-list` folder and add the following `abp-button` to save the new book.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-  </button>
-    
-  <!--added save button-->
-  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
-  </button>
-</ng-template>
-```
-
-Find the `<form [formGroup]="form">` tag and replace below content:
-
-```html
-<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
-```
-
-  
-* We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
-* We added `abp-button` to the bottom area of the modal to save a new book.
-
-The final modal UI looks like below:
-
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
-
-### Updating a book
-
-#### CreateUpdateBook action
-
-Open the `books.actions.ts` in `books\state` folder and replace the content as below:
-
-```js
-import { CreateUpdateBookDto } from '../../app/shared/models';
-
-export class GetBooks {
-  static readonly type = '[Books] Get';
-}
-
-export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: CreateUpdateBookDto, public id?: string) { } // <== added id parameter ==>
-}
-```
-
-* We added `id` parameter to the `CreateUpdateBook` action's constructor.
-
-Open the `books.state.ts` in `books\state` folder and replace the `save` method as below:
-
-```js
-@Action(CreateUpdateBook)
-save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-  if (action.id) {
-    return this.bookService.updateByIdAndInput(action.payload, action.id);
-  } else {
-    return this.bookService.createByInput(action.payload);
-  }
-}
-```
-
-#### BookListComponent
-
-Open `book-list.component.ts` in `app\books\book-list` folder and inject `BookService` dependency by adding it to the constructor and add a variable named `selectedBook`.
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { BookService } from '../../app/shared/services'; // <== imported BookService ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  selectedBook = {} as BookDto; // <== declared selectedBook ==>
-
-  constructor(private store: Store, private fb: FormBuilder, private bookService: BookService) {} //<== injected BookService ==>
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  // <== this method is replaced ==>
-  createBook() {
-    this.selectedBook = {} as BookDto; // <== added ==>
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  // <== added editBook method ==>
-  editBook(id: string) {
-    this.bookService.getById(id).subscribe((book) => {
-      this.selectedBook = book;
-      this.buildForm();
-      this.isModalOpen = true;
-    });
-  }
-
-  // <== this method is replaced ==>
-  buildForm() {
-    this.form = this.fb.group({
-      name: [this.selectedBook.name || '', Validators.required],
-      type: [this.selectedBook.type || null, Validators.required],
-      publishDate: [
-        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
-        Validators.required,
-      ],
-      price: [this.selectedBook.price || null, Validators.required],
-    });
-  }
-
-  save() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    //<== added this.selectedBook.id ==>
-    this.store
-      .dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
-      .subscribe(() => {
-        this.isModalOpen = false;
-        this.form.reset();
-        this.get();
-      });
-  }
-}
-```
-
-* We imported `BookService`.
-* We declared a variable named `selectedBook` as `BookDto`.
-* We injected  `BookService` to the constructor. `BookService` is being used to retrieve the book data which is being edited.
-* We added `editBook`  method. This method fetches the book with the given `Id` and sets it to `selectedBook` object. 
-* We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
-* We replaced the `createBook` method so it sets `selectedBook` to an empty object.
-* We added `selectedBook.id` to the constructor of the new `CreateUpdateBook`.
-
-#### Add "Actions" dropdown to the table
-
-Open the `book-list.component.html` in `app\books\book-list` folder and replace the `<div class="card-body">` tag as below:
-
-```html
-<div class="card-body">
-  <abp-table
-    [value]="books$ | async"
-    [abpLoading]="loading"
-    [headerTemplate]="tableHeader"
-    [bodyTemplate]="tableBody"
-    [rows]="10"
-    [scrollable]="true"
-  >
-  </abp-table>
-  <ng-template #tableHeader>
-    <tr>
-      <th>{%{{{ "::Actions" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-    </tr>
-  </ng-template>
-  <ng-template #tableBody let-data>
-    <tr>
-      <td>
-        <div ngbDropdown container="body" class="d-inline-block">
-          <button
-            class="btn btn-primary btn-sm dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            ngbDropdownToggle
-          >
-            <i class="fa fa-cog mr-1"></i>{%{{{ "::Actions" | abpLocalization }}}%}
-          </button>
-          <div ngbDropdownMenu>
-            <button ngbDropdownItem (click)="editBook(data.id)">
-              {%{{{ "::Edit" | abpLocalization }}}%}
-            </button>
-          </div>
-        </div>
-      </td>
-      <td>{%{{{ data.name }}}%}</td>
-      <td>{%{{{ booksType[data.type] }}}%}</td>
-      <td>{%{{{ data.publishDate | date }}}%}</td>
-      <td>{%{{{ data.price }}}%}</td>
-    </tr>
-  </ng-template>
-</div>
-```
-
-- We added a `th` for the "Actions" column.
-- We added `button` with `ngbDropdownToggle` to open actions when clicked the button.
-- We have used to [NgbDropdown](https://ng-bootstrap.github.io/#/components/dropdown/examples) for the dropdown menu of actions.
-
-The final UI looks like as below:
-
-![Action buttons](./images/bookstore-actions-buttons.png)
-
-Open `book-list.component.html` in `app\books\book-list` folder and find the `<ng-template #abpHeader>` tag and replace the content as below.
-
-```html
-<ng-template #abpHeader>
-    <h3>{%{{{ (selectedBook.id ? 'AbpIdentity::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
-</ng-template>
-```
-
-* This template will show **Edit** text for edit record operation, **New Book** for new record operation in the title.
-
-### Deleting a book
-
-#### DeleteBook action
-
-Open `books.actions.ts` in `books\state `folder and add an action named `DeleteBook`.
-
-```js
-export class DeleteBook {
-  static readonly type = '[Books] Delete';
-  constructor(public id: string) {}
-}
-```
-
-Open the `books.state.ts` in `books\state` folder and replace the content as below:
-
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook, DeleteBook } from './books.actions'; // <== added DeleteBook==>
-import { BookService } from '../../app/shared/services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
-
-export class BooksStateModel {
-  public book: PagedResultDto<BookDto>;
-}
-
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
-})
-@Injectable()
-export class BooksState {
-  @Selector()
-  static getBooks(state: BooksStateModel) {
-    return state.book.items || [];
-  }
-
-  constructor(private bookService: BookService) {}
-
-  @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((booksResponse) => {
-        ctx.patchState({
-          book: booksResponse,
-        });
-      })
-    );
-  }
-
-  @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-    if (action.id) {
-      return this.bookService.updateByIdAndInput(action.payload, action.id);
-    } else {
-      return this.bookService.createByInput(action.payload);
-    }
-  }
-
-  // <== added DeleteBook action listener ==>
-  @Action(DeleteBook)
-  delete(ctx: StateContext<BooksStateModel>, action: DeleteBook) {
-    return this.bookService.deleteById(action.id);
-  }
-}
-```
-
-- We imported `DeleteBook` .
-
-- We added `DeleteBook` action listener to the end of the file.
-
-
-#### Delete confirmation popup
-
-Open `book-list.component.ts`  in`app\books\book-list` folder and inject the `ConfirmationService`.
-
-Replace the constructor as below:
-
-```js
-import { ConfirmationService } from '@abp/ng.theme.shared';
-//...
-
-constructor(
-    private store: Store, 
-    private fb: FormBuilder,
-    private bookService: BookService,
-    private confirmation: ConfirmationService // <== added this line ==>
-) { }
-```
-
-* We imported `ConfirmationService`.
-* We injected `ConfirmationService` to the constructor.
-
-See the [Confirmation Popup documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Confirmation-Service)
-
-In the `book-list.component.ts` add a delete method :
-
-```js
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../state/books.actions' ;// <== imported DeleteBook ==>
-
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== imported Confirmation ==>
-
-//...
-
-delete(id: string) {
-    this.confirmation
-        .warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure')
-        .subscribe(status => {
-        if (status === Confirmation.Status.confirm) {
-            this.store.dispatch(new DeleteBook(id)).subscribe(() => this.get());
-        }
-    });
-}
-```
-
-
-The `delete` method shows a confirmation popup and subscribes for the user response. `DeleteBook` action dispatched only if user clicks to the `Yes` button. The confirmation popup looks like below:
-
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
-
-
-#### Add a delete button
-
-
-Open `book-list.component.html` in `app\books\book-list` folder and modify the `ngbDropdownMenu` to add the delete button as shown below:
-
-```html
-<div ngbDropdownMenu>
-  <!-- added Delete button -->
-    <button ngbDropdownItem (click)="delete(data.id)">
-        {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
-    </button>
-</div>
-```
-
-The final actions dropdown UI looks like below:
-
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
-
-{{end}}
-
-### Next Part
-
-See the [next part](part-3.md) of this tutorial.
+See the [next part](Part-3.md) of this tutorial.

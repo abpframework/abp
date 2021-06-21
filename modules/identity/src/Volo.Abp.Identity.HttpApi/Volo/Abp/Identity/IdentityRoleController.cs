@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity
         }
 
         [HttpGet]
-        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
             return RoleAppService.GetListAsync(input);
         }

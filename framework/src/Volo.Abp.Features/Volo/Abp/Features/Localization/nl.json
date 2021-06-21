@@ -1,0 +1,8 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Volo.Feature:010001": "Functie '{FeatureName}' is niet ingeschakeld",
+    "Volo.Feature:010002": "Vereiste functies zijn niet ingeschakeld. Al deze functies moeten zijn ingeschakeld: {FeatureNames}",
+    "Volo.Feature:010003": "Vereiste functies zijn niet ingeschakeld. Ten minste een van deze functies moet zijn ingeschakeld: {FeatureNames}"
+  }
+}

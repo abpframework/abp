@@ -10,9 +10,9 @@ This document explains how to switch to the **PostgreSQL** database provider for
 
 Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute, add `typeof(AbpEntityFrameworkCorePostgreSqlModule)` (also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.PostgreSql;`).
 
-## UsePostgreSql()
+## UseNpgsql()
 
-Find `UseSqlServer()` call in *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project and replace with `UsePostgreSql()`.
+Find `UseSqlServer()` call in *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project and replace with `UseNpgsql()`.
 
 
 Find `UseSqlServer()` call in *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project and replace with `UseNpgsql()`.

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Docs.Localization;
 
 namespace Volo.Docs.Admin.Navigation
@@ -13,27 +14,24 @@ namespace Volo.Docs.Admin.Navigation
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private async Task ConfigureMainMenu(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-
             var administrationMenu = context.Menu.GetAdministration();
 
-            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<DocsResource>>();
+            var l = context.GetLocalizer<DocsResource>();
 
-            var rootMenuItem = new ApplicationMenuItem(DocsMenuNames.GroupName, l["Menu:DocumentManagement"], icon: "fa fa-book");
+            var rootMenuItem = new ApplicationMenuItem(DocsMenuNames.GroupName, l["Menu:Documents"], icon: "fa fa-book");
 
             administrationMenu.AddItem(rootMenuItem);
 
-            if (await authorizationService.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
-            {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "/Docs/Admin/Projects"));
-            }
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects").RequirePermissions(DocsAdminPermissions.Projects.Default));
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents").RequirePermissions(DocsAdminPermissions.Documents.Default));
 
+            return Task.CompletedTask;
         }
     }
 }

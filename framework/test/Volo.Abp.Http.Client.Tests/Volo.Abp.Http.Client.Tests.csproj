@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -11,7 +11,11 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Tests\Volo.Abp.AspNetCore.Mvc.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Http\Localization\en.json" />
   </ItemGroup>
 
 </Project>

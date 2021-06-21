@@ -19,7 +19,6 @@ namespace Volo.Docs.Admin
             public const string Default = GroupName + ".Documents";
         }
 
-
         public static string[] GetAll()
         {
             return ReflectionHelper.GetPublicConstantsRecursively(typeof(DocsAdminPermissions));

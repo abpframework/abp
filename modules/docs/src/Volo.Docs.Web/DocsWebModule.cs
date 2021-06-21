@@ -45,7 +45,7 @@ namespace Volo.Docs
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
+                options.FileSets.AddEmbedded<DocsWebModule>();
             });
 
             var configuration = context.Services.GetConfiguration();
@@ -61,7 +61,7 @@ namespace Volo.Docs
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
-                options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}/{*keyword}");
+                options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
             });
 
             context.Services.AddAutoMapperObjectMapper<DocsWebModule>();

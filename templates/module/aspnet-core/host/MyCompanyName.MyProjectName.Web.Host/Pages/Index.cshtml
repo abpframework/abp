@@ -1,7 +1,12 @@
 ﻿@page
 @using MyCompanyName.MyProjectName.Pages
-@inherits MyProjectNamePage
 @model IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyCompanyName.MyProjectName.Localization
+@using Volo.Abp.Users
+@inject IHtmlLocalizer<MyProjectNameResource> L
+@inject ICurrentUser CurrentUser
+
 <abp-card>
     <abp-card-header>Welcome</abp-card-header>
     <abp-card-body>

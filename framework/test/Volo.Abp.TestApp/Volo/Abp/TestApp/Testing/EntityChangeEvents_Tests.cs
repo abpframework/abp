@@ -84,5 +84,44 @@ namespace Volo.Abp.TestApp.Testing
             createdEventTriggered.ShouldBeTrue();
             createdEtoTriggered.ShouldBeTrue();
         }
+        
+        [Fact]
+        public async Task Multiple_Update_Should_Result_With_Single_Updated_Event_In_The_Same_Uow()
+        {
+            var personId = Guid.NewGuid();
+            await PersonRepository.InsertAsync(new Person(personId, Guid.NewGuid().ToString("D"), 42));
+
+            var updateEventCount = 0;
+            var updatedAge = 0;
+            
+            DistributedEventBus.Subscribe<EntityUpdatedEto<PersonEto>>(eto =>
+            {
+                updateEventCount++;
+                updatedAge = eto.Entity.Age;
+                return Task.CompletedTask;
+            });
+            
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var person = await PersonRepository.GetAsync(personId);
+
+                person.Age = 43;
+                await PersonRepository.UpdateAsync(person, autoSave: true);
+                updateEventCount.ShouldBe(0);
+                
+                person.Age = 44;
+                await PersonRepository.UpdateAsync(person, autoSave: true);
+                updateEventCount.ShouldBe(0);
+                
+                person.Age = 45;
+                await PersonRepository.UpdateAsync(person, autoSave: true);
+                updateEventCount.ShouldBe(0);
+
+                await uow.CompleteAsync();
+            }
+            
+            updateEventCount.ShouldBe(1);
+            updatedAge.ShouldBe(45);
+        }
     }
 }

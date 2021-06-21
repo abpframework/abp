@@ -22,7 +22,7 @@ namespace Volo.Abp.Uow
         /// Timeout of UOW As milliseconds.
         /// Uses default value if not supplied.
         /// </summary>
-        public TimeSpan? Timeout { get; set; }
+        public int? Timeout { get; set; }
 
         /// <summary>
         /// If this UOW is transactional, this option indicated the isolation level of the transaction.
@@ -39,7 +39,7 @@ namespace Volo.Abp.Uow
 
         public UnitOfWorkAttribute()
         {
-            
+
         }
 
         public UnitOfWorkAttribute(bool isTransactional)
@@ -53,7 +53,7 @@ namespace Volo.Abp.Uow
             IsolationLevel = isolationLevel;
         }
 
-        public UnitOfWorkAttribute(bool isTransactional, IsolationLevel isolationLevel, TimeSpan timeout)
+        public UnitOfWorkAttribute(bool isTransactional, IsolationLevel isolationLevel, int timeout)
         {
             IsTransactional = isTransactional;
             IsolationLevel = isolationLevel;

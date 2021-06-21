@@ -136,7 +136,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 ## 本文的源代码
 
-你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)找到已完成的示例源码.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)找到已完成的示例源码.
 
 # FAQ
 
@@ -157,6 +157,16 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
        ````
 
+* Help! 我一直得到 ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** 错误!
+
+    * 当你使用 Azure Authority **v2.0 端点** 而不请求 `email` 域, 会发生这些情况. [Abp 创建用户检查了唯一的邮箱](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). 只需添加
+
+      ````csharp
+      options.Scope.Add("email");
+      ````
+
+      到你的 openid 配置.
+
 * Help! 我一直得到 ***AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application*** 错误!
 
   * 如果你在appsettings设置 **CallbackPath** 为:
@@ -170,15 +180,17 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
    你在azure门户的应用程序**重定向URI**必须具有之类 `https://localhost:44320/signin-azuread-oidc` 的<u>域</u>, 而不仅是 `/signin-azuread-oidc`.
 
-* Help! 我一直得到 ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** 错误!
+* Help! 我一直得到 ***AADSTS700051: The response_type 'token' is not enabled for the application.*** 错误!
 
-    * 当你使用 Azure Authority **v2.0 端点** 而不请求 `email` 域, 会发生这些情况. [Abp 创建用户检查了唯一的邮箱](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). 只需添加
+  * 当你请求**token**(访问令牌)和**id_token**时没有在Azure门户应用程序启用访问令牌时会发生这个错误,只需勾选ID令牌顶部的**访问令牌**复选框即可同时请求令牌.
 
-      ````csharp
-      options.Scope.Add("email");
-      ````
+* Help! 我一直得到 ***AADSTS7000218: The request body must contain the following parameter: 'client_assertion' or 'client_secret*** 错误!
 
-      到你的 openid 配置.
+  * 当你与 **id_token** 一起请求 **code**时,你需要在Azure门户的**证书和机密**菜单下添加**证书和机密**. 然后你需要添加openid配置选项:
+
+    ````csharp
+    options.ClientSecret = "Value of your secret on azure portal";
+    ````
 
 * 如何**调试/监视**在映射之前获得的声明?
 

@@ -2,14 +2,11 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
@@ -48,16 +45,22 @@ namespace Volo.Abp.Cli.Commands
             var outputFolder = GetOutPutFolder(commandLineArgs);
             Logger.LogInformation("Output folder: " + outputFolder);
 
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
-            if (gitHubLocalRepositoryPath != null)
+            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+            if (gitHubAbpLocalRepositoryPath != null)
             {
-                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            }
+
+            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+            if (gitHubVoloLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
             }
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-            
-            await _sourceCodeDownloadService.DownloadAsync(
-                commandLineArgs.Target, outputFolder, version, gitHubLocalRepositoryPath, commandLineArgs.Options);
+
+            await _sourceCodeDownloadService.DownloadModuleAsync(
+                commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
         }
 
         private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
@@ -93,6 +96,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
@@ -117,15 +121,25 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "output-folder";
             }
 
-            public static class GitHubLocalRepositoryPath
+            public static class GitHubAbpLocalRepositoryPath
             {
                 public const string Long = "abp-path";
+            }
+
+            public static class GitHubVoloLocalRepositoryPath
+            {
+                public const string Long = "volo-path";
             }
 
             public static class Version
             {
                 public const string Short = "v";
                 public const string Long = "version";
+            }
+
+            public static class Preview
+            {
+                public const string Long = "preview";
             }
         }
     }

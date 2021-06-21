@@ -1,18 +1,17 @@
 <div class="row">
   <div class="mx-auto col col-md-5">
-    <ng-container *ngIf="isMultiTenancyEnabled$ | async">
+    <ng-container *ngIf="(isMultiTenancyEnabled$ | async) && isTenantBoxVisible">
       <abp-tenant-box *abpReplaceableTemplate="{ componentKey: tenantBoxKey }"></abp-tenant-box>
     </ng-container>
 
     <div class="abp-account-container">
       <div
-        *ngIf="enableLocalLogin; else disableLocalLoginTemplate"
+        *ngIf="enableLocalLogin$ | async; else disableLocalLoginTemplate"
         class="card mt-3 shadow-sm rounded"
       >
         <div class="card-body p-5">
-          <ng-content *ngTemplateOutlet="mainContentRef"></ng-content>
+          <router-outlet></router-outlet>
         </div>
-        <ng-content *ngTemplateOutlet="cancelContentRef"></ng-content>
       </div>
     </div>
   </div>

@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -13,25 +12,29 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Authentication.OAuth;
+using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
-using Volo.Abp.FeatureManagement;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.SettingManagement.Web;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
@@ -43,15 +46,17 @@ namespace MyCompanyName.MyProjectName.Web
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpAspNetCoreAuthenticationOAuthModule),
+        typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
-        typeof(AbpFeatureManagementWebModule),
+        typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpSettingManagementWebModule),
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -67,13 +72,15 @@ namespace MyCompanyName.MyProjectName.Web
                 );
             });
         }
-        
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureCache(configuration);
+            ConfigureBundles();
+            ConfigureCache();
+            ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -83,7 +90,21 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureCache(IConfiguration configuration)
+        private void ConfigureBundles()
+        {
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles.Configure(
+                    BasicThemeBundles.Styles.Global,
+                    bundle =>
+                    {
+                        bundle.AddFiles("/global-styles.css");
+                    }
+                );
+            });
+        }
+
+        private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
             {
@@ -118,10 +139,10 @@ namespace MyCompanyName.MyProjectName.Web
                 {
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
-                .AddOpenIdConnect("oidc", options =>
+                .AddAbpOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                     options.ClientId = configuration["AuthServer:ClientId"];
@@ -134,8 +155,6 @@ namespace MyCompanyName.MyProjectName.Web
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("MyProjectName");
-
-                    options.ClaimActions.MapAbpClaimTypes();
                 });
         }
 
@@ -158,7 +177,7 @@ namespace MyCompanyName.MyProjectName.Web
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     //</TEMPLATE-REMOVE>
@@ -174,6 +193,11 @@ namespace MyCompanyName.MyProjectName.Web
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
+            });
+
+            Configure<AbpToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new MyProjectNameToolbarContributor());
             });
         }
 
@@ -194,11 +218,6 @@ namespace MyCompanyName.MyProjectName.Web
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["Redis:Configuration"];
-            });
-
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -213,18 +232,20 @@ namespace MyCompanyName.MyProjectName.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseCorrelationId();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseAbpRequestLocalization();
+
+            if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
             }
 
-            app.UseVirtualFiles();
+            app.UseCorrelationId();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
 
@@ -234,19 +255,13 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAuthorization();
-
-
-            app.UseAbpRequestLocalization();
-
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-
-            app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

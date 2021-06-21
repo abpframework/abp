@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.Contracts</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.Contracts</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

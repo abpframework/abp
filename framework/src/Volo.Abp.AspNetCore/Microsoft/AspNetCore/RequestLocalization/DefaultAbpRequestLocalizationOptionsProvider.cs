@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Nito.AsyncEx;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -34,51 +33,51 @@ namespace Microsoft.AspNetCore.RequestLocalization
             _optionsAction = optionsAction;
         }
 
-        public RequestLocalizationOptions GetLocalizationOptions()
-        {
-            if (_requestLocalizationOptions != null)
-            {
-                return _requestLocalizationOptions;
-            }
-
-            return AsyncHelper.RunSync(GetLocalizationOptionsAsync);
-        }
-
         public async Task<RequestLocalizationOptions> GetLocalizationOptionsAsync()
         {
             if (_requestLocalizationOptions == null)
             {
                 using (await _syncSemaphore.LockAsync())
                 {
-                    using (var serviceScope = _serviceProviderFactory.CreateScope())
+                    if (_requestLocalizationOptions == null)
                     {
-                        var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                        var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
+                        using (var serviceScope = _serviceProviderFactory.CreateScope())
+                        {
+                            var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
+                            var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
 
-                        var languages = await languageProvider.GetLanguagesAsync();
-                        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+                            var languages = await languageProvider.GetLanguagesAsync();
+                            var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
 
-                        var options = !languages.Any()
-                            ? new RequestLocalizationOptions()
-                            : new RequestLocalizationOptions
+                            var options = !languages.Any()
+                                ? new RequestLocalizationOptions()
+                                : new RequestLocalizationOptions
+                                {
+                                    DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+
+                                    SupportedCultures = languages
+                                        .Select(l => l.CultureName)
+                                        .Distinct()
+                                        .Select(c => new CultureInfo(c))
+                                        .ToArray(),
+
+                                    SupportedUICultures = languages
+                                        .Select(l => l.UiCultureName)
+                                        .Distinct()
+                                        .Select(c => new CultureInfo(c))
+                                        .ToArray()
+                                };
+
+                            foreach (var configurator in serviceScope.ServiceProvider
+                                .GetRequiredService<IOptions<AbpRequestLocalizationOptions>>()
+                                .Value.RequestLocalizationOptionConfigurators)
                             {
-                                DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+                                await configurator(serviceScope.ServiceProvider, options);
+                            }
 
-                                SupportedCultures = languages
-                                    .Select(l => l.CultureName)
-                                    .Distinct()
-                                    .Select(c => new CultureInfo(c))
-                                    .ToArray(),
-
-                                SupportedUICultures = languages
-                                    .Select(l => l.UiCultureName)
-                                    .Distinct()
-                                    .Select(c => new CultureInfo(c))
-                                    .ToArray()
-                            };
-
-                        _optionsAction?.Invoke(options);
-                        _requestLocalizationOptions = options;
+                            _optionsAction?.Invoke(options);
+                            _requestLocalizationOptions = options;
+                        }
                     }
                 }
             }

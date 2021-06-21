@@ -1,9 +1,9 @@
-(function() {
+(function () {
     function handleArrows() {
-        var herosWidth = $(".hero-articles").width();
-        var arrowsPosition = (herosWidth / 2 - 90);
-        $(".owl-next").css("right", arrowsPosition);
-        $(".owl-prev").css("left", arrowsPosition);
+        var herosWidth = $('.hero-articles').width();
+        var arrowsPosition = herosWidth / 2 - 90;
+        $('.owl-next').css('right', arrowsPosition);
+        $('.owl-prev').css('left', arrowsPosition);
     }
 
     function handleImages() {
@@ -24,7 +24,7 @@
             margin: 0,
             nav: false,
             dots: false,
-            //center: true, 
+            //center: true,
             autoplay: true,
             autoHeight: true,
             autoplaySpeed: 1000,
@@ -39,9 +39,9 @@
             autoplaySpeed: 1000,
             responsive: {
                 0: {
-                    items: 1
-                }
-            }
+                    items: 1,
+                },
+            },
         });
     }
 
@@ -49,7 +49,7 @@
         handleImages();
         handleOwlCarousel();
 
-        $(".nav-link").on("click", function () {
+        $('.nav-link').on('click', function () {
             $(this).parent().parent();
         });
 

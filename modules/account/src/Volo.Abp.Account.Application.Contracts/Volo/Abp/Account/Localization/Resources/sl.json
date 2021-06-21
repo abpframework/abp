@@ -36,10 +36,22 @@
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "Manage": "Upravljaj",
-    "ManageYourProfile": "Upravljaj svoj profil",
+    "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Ali lahko uporabnik sam registrira račun.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Avtenticirajte se z lokalnim računom",
-    "Description:Abp.Account.EnableLocalLogin": "Označuje, ali bo strežnik uporabnikom omogočil avtentikacijo z lokalnim računom."
+    "Description:Abp.Account.EnableLocalLogin": "Označuje, ali bo strežnik uporabnikom omogočil avtentikacijo z lokalnim računom.",
+    "ForgotPassword": "Ste pozabili geslo?",
+    "SendPasswordResetLink_Information": "Na vaš e-poštni naslov bo poslana povezava za ponastavitev gesla za ponastavitev gesla. Če v nekaj minutah ne dobite e-poštnega sporočila, poskusite znova.",
+    "PasswordResetMailSentMessage": "E-poštno sporočilo za obnovitev računa je bilo poslano na vaš e-poštni naslov. Če v 15 minutah tega e-poštnega sporočila ne vidite v mapi »Prejeto«, ga poiščite v mapi z neželeno pošto. Če ga najdete tam, ga prosimo označite kot -Ni neželeno-. ",
+    "ResetPassword": "Ponastavitev gesla",
+    "ConfirmPassword": "Potrditev (ponovitev) gesla",
+    "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
+    "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
+    "BackToLogin": "Nazaj na prijavo",
+    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}",
+    "PasswordReset": "Ponastavitev gesla",
+    "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
+    "ResetMyPassword": "Ponastavi geslo"
   }
 }

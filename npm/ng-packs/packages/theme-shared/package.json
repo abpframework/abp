@@ -1,18 +1,20 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "2.6.2",
+  "version": "4.3.3",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.core": "^2.6.2",
-    "@fortawesome/fontawesome-free": "^5.12.1",
-    "@ng-bootstrap/ng-bootstrap": "^5.3.0",
-    "@ngx-validate/core": "^0.0.7",
-    "bootstrap": "^4.4.1",
-    "chart.js": "^2.9.3"
+    "@abp/ng.core": "~4.3.3",
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "@ng-bootstrap/ng-bootstrap": "^7.0.0",
+    "@ngx-validate/core": "^0.0.13",
+    "@swimlane/ngx-datatable": "^17.1.0",
+    "bootstrap": "~4.6.0",
+    "chart.js": "^2.9.3",
+    "tslib": "^2.0.0"
   },
   "publishConfig": {
     "access": "public"

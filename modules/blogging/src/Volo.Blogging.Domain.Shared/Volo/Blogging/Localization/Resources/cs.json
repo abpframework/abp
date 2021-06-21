@@ -2,7 +2,16 @@
   "culture": "cs",
   "texts": {
     "Menu:Blogs": "Blogy",
-    "Menu:BlogManagement": "Správa blogu",
+    "Menu:BlogManagement": "Blogování",
+    "Permission:Blogs": "Blogy",
+    "Permission:Management": "Správa",
+    "Permission:Edit": "Upravit",
+    "Permission:Create": "Vytvořit",
+    "Permission:Delete": "Smazat",
+    "Permission:Blogging": "Blog",
+    "Permission:Posts": "Příspěvky",
+    "Permission:Tags": "Tagy",
+    "Permission:Comments": "Komentáře",
     "Title": "Nadpis",
     "Delete": "Smazat",
     "Reply": "Odpovědět",
@@ -42,6 +51,8 @@
     "CreationTime": "Vytvořeno",
     "Description": "Popis",
     "Blogs": "Blogy",
-    "Tags": "Tagy"
+    "Tags": "Tagy",
+    "ShareOn": "Sdílet na",
+    "TitleLengthWarning": "Zachovejte velikost titulku pod 60 znaků kvůli SEO!"
   }
 }

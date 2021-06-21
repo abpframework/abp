@@ -1,0 +1,25 @@
+{
+  "culture": "ar",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "العنوان الإفتراضي",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "اسم المرسل الإفتراضي",
+    "DisplayName:Abp.Mailing.Smtp.Host": "المضيف",
+    "DisplayName:Abp.Mailing.Smtp.Port": "المنفذ",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "اسم المستخدم",
+    "DisplayName:Abp.Mailing.Smtp.Password": "كلمة المرور",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "المجال",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "تمكين SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "استخدام الصلاحيات الإفتراضية",
+    "Description:Abp.Mailing.DefaultFromAddress": "وصف العنوان الافتراضي",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "وصف اسم المرسل الإفتراضي",
+    "Description:Abp.Mailing.Smtp.Host": "اسم أو عنوان IP للمضيف المستخدم في معاملات SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "المنفذ المستخدم في معاملات.",
+    "Description:Abp.Mailing.Smtp.UserName": "اسم المستخدم المرتبط ببيانات الاعتماد.",
+    "Description:Abp.Mailing.Smtp.Password": "كلمة المرور لاسم المستخدم المرتبط ببيانات الاعتماد.",
+    "Description:Abp.Mailing.Smtp.Domain": "اسم المجال أو الكمبيوتر الذي يتحقق من بيانات الاعتماد.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "ما إذا كان SmtpClient يستخدم (SSL) لتشفير الاتصال.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "إرسال الصلاحيات الافتراضية مع الطلب.",
+    "TextTemplate:StandardEmailTemplates.Layout": "نموذج تخطيط إفتراضي للبريد الإلكتروني",
+    "TextTemplate:StandardEmailTemplates.Message": "نموذج بسيط للرسائل الإلكترونية"
+  }
+}

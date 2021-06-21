@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -11,36 +12,43 @@ namespace Volo.Abp.PermissionManagement
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
         protected IGuidGenerator GuidGenerator { get; }
 
+        protected ICurrentTenant CurrentTenant { get; }
+
         public PermissionDataSeeder(
-            IPermissionGrantRepository permissionGrantRepository, 
-            IGuidGenerator guidGenerator)
+            IPermissionGrantRepository permissionGrantRepository,
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
             PermissionGrantRepository = permissionGrantRepository;
             GuidGenerator = guidGenerator;
+            CurrentTenant = currentTenant;
         }
 
         public virtual async Task SeedAsync(
-            string providerName, 
+            string providerName,
             string providerKey,
             IEnumerable<string> grantedPermissions,
             Guid? tenantId = null)
         {
-            foreach (var permissionName in grantedPermissions)
+            using (CurrentTenant.Change(tenantId))
             {
-                if (await PermissionGrantRepository.FindAsync(permissionName, providerName, providerKey) != null)
+                foreach (var permissionName in grantedPermissions)
                 {
-                    continue;
-                }
+                    if (await PermissionGrantRepository.FindAsync(permissionName, providerName, providerKey) != null)
+                    {
+                        continue;
+                    }
 
-                await PermissionGrantRepository.InsertAsync(
-                    new PermissionGrant(
-                        GuidGenerator.Create(),
-                        permissionName,
-                        providerName,
-                        providerKey,
-                        tenantId
-                    )
-                );
+                    await PermissionGrantRepository.InsertAsync(
+                        new PermissionGrant(
+                            GuidGenerator.Create(),
+                            permissionName,
+                            providerName,
+                            providerKey,
+                            tenantId
+                        )
+                    );
+                }
             }
         }
     }

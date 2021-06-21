@@ -4,26 +4,38 @@ namespace Volo.Abp.Identity
 {
     public static class IdentityUserConsts
     {
-        public const int MaxUserNameLength = AbpUserConsts.MaxUserNameLength;
+        public static int MaxUserNameLength { get; set; } = AbpUserConsts.MaxUserNameLength;
 
-        public const int MaxNameLength = AbpUserConsts.MaxNameLength;
+        public static int MaxNameLength { get; set; } = AbpUserConsts.MaxNameLength;
 
-        public const int MaxSurnameLength = AbpUserConsts.MaxSurnameLength;
+        public static int MaxSurnameLength { get; set; } = AbpUserConsts.MaxSurnameLength;
 
-        public const int MaxNormalizedUserNameLength = MaxUserNameLength;
+        public static int MaxNormalizedUserNameLength { get; set; } = MaxUserNameLength;
 
-        public const int MaxEmailLength = AbpUserConsts.MaxEmailLength;
+        public static int MaxEmailLength { get; set; } = AbpUserConsts.MaxEmailLength;
 
-        public const int MaxNormalizedEmailLength = MaxEmailLength;
+        public static int MaxNormalizedEmailLength { get; set; } = MaxEmailLength;
 
-        public const int MaxPhoneNumberLength = AbpUserConsts.MaxPhoneNumberLength;
+        public static int MaxPhoneNumberLength { get; set; } = AbpUserConsts.MaxPhoneNumberLength;
 
-        public const int MaxPasswordLength = 128;
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxPasswordLength { get; set; } = 128;
 
-        public const int MaxPasswordHashLength = 256;
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
+        public static int MaxPasswordHashLength { get; set; } = 256;
 
-        public const int MaxSecurityStampLength = 256;
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
+        public static int MaxSecurityStampLength { get; set; } = 256;
 
-        public const int MaxConcurrencyStampLength = 256;
+        /// <summary>
+        /// Default value: 16
+        /// </summary>
+        public static int MaxLoginProviderLength { get; set; } = 16;
     }
 }

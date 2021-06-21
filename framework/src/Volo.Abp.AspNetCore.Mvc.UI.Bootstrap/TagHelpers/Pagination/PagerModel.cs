@@ -38,7 +38,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             PageSize = pageSize;
             TotalPageCount = (int)Math.Ceiling(Convert.ToDouble((decimal)TotalItemsCount / PageSize));
             Sort = sort;
-            PageUrl = pageUrl;
+
+            PageUrl = pageUrl?.EnsureStartsWith('/') ?? "/";
 
             if (currentPage > TotalPageCount)
             {
@@ -53,8 +54,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 CurrentPage = currentPage;
             }
 
-            ShowingFrom = totalCount == 0 ? 0 : CurrentPage * PageSize;
-            ShowingTo = totalCount == 0 ? 0 : ShowingFrom + PageSize;
+            ShowingFrom = totalCount == 0 ? 0 : (CurrentPage - 1) * PageSize + 1;
+            ShowingTo = totalCount == 0 ? 0 : (int)Math.Min(ShowingFrom + PageSize - 1 , totalCount);
             PreviousPage = CurrentPage <= 1 ? 1 : CurrentPage - 1;
             NextPage = CurrentPage >= TotalPageCount ? CurrentPage : CurrentPage + 1;
             Pages = CalculatePageNumbers();
@@ -68,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         }
 
         /// <summary>
-        /// Gets first two, previous & current & next, last two pages
+        /// Gets first two, previous, current, next, last two pages
         /// </summary>
         private List<PageItem> GetPagesWithGaps()
         {

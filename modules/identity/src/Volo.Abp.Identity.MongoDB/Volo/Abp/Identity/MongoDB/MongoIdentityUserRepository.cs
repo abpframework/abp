@@ -8,24 +8,24 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
-using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
-        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider) 
+        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
-            string normalizedUserName, 
+            string normalizedUserName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     u => u.NormalizedUserName == normalizedUserName,
                     GetCancellationToken(cancellationToken)
@@ -33,22 +33,61 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<List<string>> GetRoleNamesAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            var organizationUnitIds = user.OrganizationUnits
+                .Select(r => r.OrganizationUnitId)
+                .ToArray();
+
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
+            var organizationUnits = dbContext.OrganizationUnits
+                .AsQueryable()
+                .Where(ou => organizationUnitIds.Contains(ou.Id))
+                .ToArray();
+            var orgUnitRoleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
+            var allRoleIds = orgUnitRoleIds.Union(roleIds);
+            return await dbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+
+            var organizationUnitIds = user.OrganizationUnits
+                .Select(r => r.OrganizationUnitId)
+                .ToArray();
+
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
+            var organizationUnits = dbContext.OrganizationUnits
+                .AsQueryable()
+                .Where(ou => organizationUnitIds.Contains(ou.Id))
+                .ToArray();
+
+            var roleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
+
+            return await dbContext.Roles //TODO: Such usage suppress filters!
+                .AsQueryable()
+                .Where(r => roleIds.Contains(r.Id))
+                .Select(r => r.Name)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
-            string loginProvider, 
-            string providerKey, 
+            string loginProvider,
+            string providerKey,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -57,7 +96,8 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .OrderBy(x => x.Id).FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListByClaimAsync(
@@ -65,44 +105,52 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(u => u.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var role = await DbContext.Roles.AsQueryable().Where(x => x.NormalizedName == normalizedRoleName).FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            cancellationToken = GetCancellationToken(cancellationToken);
+
+            var role = await (await GetDbContextAsync(cancellationToken)).Roles.AsQueryable() //TODO: Such usages breaks data filters
+                .Where(x => x.NormalizedName == normalizedRoleName)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (role == null)
             {
                 return new List<IdentityUser>();
             }
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
         }
 
         public virtual async Task<List<IdentityUser>> GetListAsync(
             string sorting = null,
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
-            string filter = null, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
-                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -114,22 +162,91 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            var organizationUnitIds = user.OrganizationUnits
+                .Select(r => r.OrganizationUnitId)
+                .ToArray();
+
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
+            var organizationUnits = dbContext.OrganizationUnits
+                .AsQueryable()
+                .Where(ou => organizationUnitIds.Contains(ou.Id))
+                .ToArray();
+            var orgUnitRoleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+            var allRoleIds = orgUnitRoleIds.Union(roleIds);
+            return await dbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            Guid id,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
+
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
+            return await dbContext.OrganizationUnits.AsQueryable()
+                            .Where(ou => organizationUnitIds.Contains(ou.Id))
+                            .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+            Guid organizationUnitId,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await (await GetMongoQueryableAsync(cancellationToken))
+                    .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnitId))
+                    .ToListAsync(GetCancellationToken(cancellationToken))
+                    ;
+            return result;
+        }
+
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+            List<Guid> organizationUnitIds,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await (await GetMongoQueryableAsync(cancellationToken))
+                    .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
+                    .ToListAsync(GetCancellationToken(cancellationToken))
+                    ;
+            return result;
+        }
+
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+            string code,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken = GetCancellationToken(cancellationToken);
+
+            var organizationUnitIds = await (await GetDbContextAsync(cancellationToken)).OrganizationUnits.AsQueryable()
+                .Where(ou => ou.Code.StartsWith(code))
+                .Select(ou => ou.Id)
+                .ToListAsync(cancellationToken)
+                ;
+
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                     .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
+                     .ToListAsync(cancellationToken);
         }
     }
 }

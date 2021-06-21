@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.TenantManagement
 {

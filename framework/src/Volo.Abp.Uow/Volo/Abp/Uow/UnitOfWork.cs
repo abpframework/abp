@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading;
@@ -11,6 +11,13 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
+
+        public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
+
         public Guid Id { get; } = Guid.NewGuid();
 
         public IAbpUnitOfWorkOptions Options { get; private set; }
@@ -82,6 +89,11 @@ namespace Volo.Abp.Uow
 
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            if (_isRolledback)
+            {
+                return;
+            }
+
             foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsSavingChanges)
@@ -255,27 +267,6 @@ namespace Volo.Abp.Uow
             }
         }
 
-        protected virtual void RollbackAll()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                try
-                {
-                    (databaseApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-
-            foreach (var transactionApi in GetAllActiveTransactionApis())
-            {
-                try
-                {
-                    (transactionApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-        }
-
         protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
         {
             foreach (var databaseApi in GetAllActiveDatabaseApis())
@@ -300,14 +291,6 @@ namespace Volo.Abp.Uow
                     }
                     catch { }
                 }
-            }
-        }
-
-        protected virtual void CommitTransactions()
-        {
-            foreach (var transaction in GetAllActiveTransactionApis())
-            {
-                transaction.Commit();
             }
         }
 

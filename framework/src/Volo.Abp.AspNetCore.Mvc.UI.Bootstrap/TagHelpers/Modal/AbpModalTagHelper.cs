@@ -6,6 +6,8 @@
 
         public bool? Centered { get; set; } = false;
 
+        public bool? Scrollable { get; set; } = false;
+
         public bool? Static { get; set; } = false;
 
         public AbpModalTagHelper(AbpModalTagHelperService tagHelperService)

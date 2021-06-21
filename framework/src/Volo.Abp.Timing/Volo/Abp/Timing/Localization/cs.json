@@ -1,0 +1,7 @@
+{
+  "culture": "cs",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Časové pásmo",
+    "Description:Abp.Timing.Timezone": "Časové pásmo aplikace"
+  }
+}

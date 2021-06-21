@@ -37,14 +37,9 @@ namespace Volo.Blogging
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new BloggingMenuContributor());
-            });
-
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
+                options.FileSets.AddEmbedded<BloggingWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<BloggingWebModule>();

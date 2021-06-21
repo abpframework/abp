@@ -2,7 +2,6 @@ export default `
 .content-header-title {
     font-size: 24px;
 }
-
 .entry-row {
     margin-bottom: 15px;
 }
@@ -26,17 +25,25 @@ export default `
     border-radius: 0.25rem;
     min-height: 44px;
 }
+[dir=rtl] .navbar .dropdown-menu a {
+    text-align: right!important;
+}
 .navbar .dropdown-submenu a::after {
     transform: rotate(-90deg);
     position: absolute;
     right: 16px;
     top: 18px;
 }
+[dir=rtl] .navbar .dropdown-submenu a::after {
+    transform: rotate(90deg);
+    left: 16px;
+    right: auto;
+    top: 20px;
+}
 .navbar .dropdown-submenu .dropdown-menu {
     top: 0;
     left: 100%;
 }
-
 .card-header .btn {
     padding: 2px 6px;
 }
@@ -46,7 +53,7 @@ export default `
 .container > .card {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 992px) {
     .navbar .dropdown:hover > .dropdown-menu {
         display: block;
     }
@@ -65,7 +72,7 @@ export default `
     border: 1px solid #c8c8c8;
   }
 .abp-loading {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.05);
 }
 .modal-backdrop {
 background-color: rgba(0, 0, 0, 0.6);
@@ -126,5 +133,13 @@ background-color: rgba(0, 0, 0, 0.6);
 .ui-table .pagination-wrapper {
     background-color: #f4f4f4;
     border: 1px solid #c8c8c8;
+}
+.bordered .datatable-body-row {
+    border-top: 1px solid #eee;
+    margin-top: -1px;
+}
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.27rem;
 }
 `;

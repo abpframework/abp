@@ -1,0 +1,21 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
+@model Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs.CreateModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
+@{
+    Layout = null;
+}
+
+<abp-dynamic-form submit-button="false" abp-model="Blog" asp-page="/Blogging/Admin/Blogs/Create">
+    <abp-modal size="@(AbpModalSize.Large)">
+        <abp-modal-header title="@L["Create"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+        </abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

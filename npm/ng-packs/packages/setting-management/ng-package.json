@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@abp/ng.theme.shared", "@abp/ng.setting-management.config"]
+  "allowedNonPeerDependencies": ["@abp/ng.theme.shared", "@abp/ng.components"]
 }

@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
@@ -35,7 +37,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             return NoContent();
         }
 
-        public class RoleInfoModel : IHasConcurrencyStamp
+        public class RoleInfoModel : ExtensibleObject, IHasConcurrencyStamp
         {
             [HiddenInput]
             public Guid Id { get; set; }
@@ -44,7 +46,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             public string ConcurrencyStamp { get; set; }
 
             [Required]
-            [StringLength(IdentityRoleConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
             [Display(Name = "DisplayName:RoleName")]
             public string Name { get; set; }
 

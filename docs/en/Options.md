@@ -80,7 +80,7 @@ If you are developing a module, you may need to allow developers to set some opt
 
 For such cases, ABP introduces the `PreConfigure<TOptions>` and the `ExecutePreConfiguredActions<TOptions>` extension methods for the `IServiceCollection`. The pattern works as explained below.
 
-1. Define a plan option class in your module. Example:
+Define a pre option class in your module. Example:
 
 ````csharp
 public class MyPreOptions

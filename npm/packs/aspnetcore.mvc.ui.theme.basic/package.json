@@ -1,11 +1,11 @@
 {
-  "version": "2.6.2",
+  "version": "4.3.3",
   "name": "@abp/aspnetcore.mvc.ui.theme.basic",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "^2.6.2"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~4.3.3"
   },
-  "gitHead": "eb4a0e507f492e275865b72caeb02ce28d69ae56"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

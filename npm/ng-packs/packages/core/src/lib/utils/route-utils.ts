@@ -1,85 +1,36 @@
+import { NgZone } from '@angular/core';
+import { PRIMARY_OUTLET, Router, UrlSegmentGroup } from '@angular/router';
 import { ABP } from '../models/common';
+import { RoutesService } from '../services/routes.service';
+import { noop } from './common-utils';
+import { TreeNode } from './tree-utils';
 
-export function organizeRoutes(
-  routes: ABP.FullRoute[],
-  wrappers: ABP.FullRoute[] = [],
-  parentNameArr = [] as ABP.FullRoute[],
-  parentName: string = null,
-): ABP.FullRoute[] {
-  const filter = route => {
-    if (route.children && route.children.length) {
-      route.children = organizeRoutes(route.children, wrappers, parentNameArr, route.name);
-    }
+export function findRoute(routesService: RoutesService, path: string): TreeNode<ABP.Route> {
+  const node = routesService.find(route => route.path === path);
 
-    if (route.parentName && route.parentName !== parentName) {
-      parentNameArr.push(route);
-      return false;
-    }
+  return node || path === '/'
+    ? node
+    : findRoute(routesService, path.split('/').slice(0, -1).join('/') || '/');
+}
 
-    return true;
+export function getRoutePath(router: Router, url = router.url) {
+  const emptyGroup = { segments: [] } as UrlSegmentGroup;
+  const primaryGroup = router.parseUrl(url).root.children[PRIMARY_OUTLET];
+
+  return '/' + (primaryGroup || emptyGroup).segments.map(({ path }) => path).join('/');
+}
+
+export function reloadRoute(router: Router, ngZone: NgZone) {
+  const { shouldReuseRoute } = router.routeReuseStrategy;
+  const setRouteReuse = (reuse: typeof shouldReuseRoute) => {
+    router.routeReuseStrategy.shouldReuseRoute = reuse;
   };
 
-  if (parentName) {
-    // recursive block
-    return routes.filter(filter);
-  }
+  setRouteReuse(() => false);
+  router.navigated = false;
 
-  const filteredRoutes = routes.filter(filter);
-
-  if (parentNameArr.length) {
-    return sortRoutes(setChildRoute([...filteredRoutes, ...wrappers], parentNameArr));
-  }
-
-  return filteredRoutes;
-}
-
-export function setChildRoute(
-  routes: ABP.FullRoute[],
-  parentNameArr: ABP.FullRoute[],
-): ABP.FullRoute[] {
-  return routes.map(route => {
-    if (route.children && route.children.length) {
-      route.children = setChildRoute(route.children, parentNameArr);
-    }
-
-    const foundedChildren = parentNameArr.filter(parent => parent.parentName === route.name);
-    if (foundedChildren && foundedChildren.length) {
-      route.children = [...(route.children || []), ...foundedChildren];
-    }
-
-    return route;
+  ngZone.run(async () => {
+    await router.navigateByUrl(router.url).catch(noop);
+    setRouteReuse(shouldReuseRoute);
   });
-}
-
-export function sortRoutes(routes: ABP.FullRoute[] = []): ABP.FullRoute[] {
-  if (!routes.length) return [];
-  return routes
-    .map((route, index) => {
-      return {
-        ...route,
-        order: typeof route.order === 'undefined' ? index + 1 : route.order,
-      };
-    })
-    .sort((a, b) => a.order - b.order)
-    .map(route => {
-      if (route.children && route.children.length) {
-        route.children = sortRoutes(route.children);
-      }
-
-      return route;
-    });
-}
-
-const ABP_ROUTES = [] as ABP.FullRoute[];
-
-export function addAbpRoutes(routes: ABP.FullRoute | ABP.FullRoute[]): void {
-  if (!Array.isArray(routes)) {
-    routes = [routes];
-  }
-
-  ABP_ROUTES.push(...routes);
-}
-
-export function getAbpRoutes(): ABP.FullRoute[] {
-  return ABP_ROUTES;
 }

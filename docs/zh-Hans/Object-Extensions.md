@@ -176,6 +176,44 @@ ObjectExtensionManager.Instance
 
 `options` 有一个名为 `Configuration` 的字典,该字典存储对象扩展定义甚至可以扩展. EF Core使用它来将其他属性映射到数据库中的表字段. 请参阅[扩展实体文档](Customizing-Application-Modules-Extending-Entities.md).
 
+#### 默认值
+
+自动为新属性设置默认值,默认值是属性类型的自然默认值,例如: `string`: `null` , `bool`: `false` 或 `int`: `0`.
+
+有两种方法可以覆盖默认值:
+
+##### DefaultValue 选项
+
+`DefaultValue` 选项可以设置任何值:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, int>(
+        "MyIntProperty",
+        options =>
+        {
+            options.DefaultValue = 42;
+        });
+````
+
+##### DefaultValueFactory 选项
+
+`DefaultValueFactory` 可以设置返回默认值的函数:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, DateTime>(
+        "MyDateTimeProperty",
+        options =>
+        {
+            options.DefaultValueFactory = () => DateTime.Now;
+        });
+````
+
+`options.DefaultValueFactory` 比 `options.DefaultValue` 优先级要高.
+
+> 提示: 只有在默认值可能发生变化时(如示例中的`DateTime.Now;`) 才使用 `DefaultValueFactory`,如果是一个常量请使用 `DefaultValue` 选项.
+
 #### CheckPairDefinitionOnMapping
 
 控制在映射两个可扩展对象时如何检查属性定义. 请参阅*对象到对象映射*部分,了解 `CheckPairDefinitionOnMapping` 选项.

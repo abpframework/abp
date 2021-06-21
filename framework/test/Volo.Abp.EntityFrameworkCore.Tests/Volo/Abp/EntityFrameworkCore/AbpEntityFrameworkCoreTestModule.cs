@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.Domain;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
@@ -16,7 +17,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreSqliteModule))]
     [DependsOn(typeof(TestAppModule))]
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
@@ -38,7 +39,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
-                
+
                 options.Entity<Author>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
@@ -75,7 +76,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     @"CREATE VIEW View_PersonView AS 
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
-            
+
             return connection;
         }
     }

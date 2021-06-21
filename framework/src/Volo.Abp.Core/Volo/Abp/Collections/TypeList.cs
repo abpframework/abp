@@ -60,14 +60,15 @@ namespace Volo.Abp.Collections
             _typeList.Add(typeof(T));
         }
 
-        public void TryAdd<T>() where T : TBaseType
+        public bool TryAdd<T>() where T : TBaseType
         {
             if (Contains<T>())
             {
-                return;
+                return false;
             }
 
             Add<T>();
+            return true;
         }
 
         /// <inheritdoc/>

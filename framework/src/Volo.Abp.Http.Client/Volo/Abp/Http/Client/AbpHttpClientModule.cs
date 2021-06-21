@@ -4,6 +4,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.Http.Client
 {
@@ -12,7 +13,8 @@ namespace Volo.Abp.Http.Client
         typeof(AbpCastleCoreModule),
         typeof(AbpThreadingModule),
         typeof(AbpMultiTenancyModule),
-        typeof(AbpValidationModule)
+        typeof(AbpValidationModule),
+        typeof(AbpExceptionHandlingModule)
         )]
     public class AbpHttpClientModule : AbpModule
     {

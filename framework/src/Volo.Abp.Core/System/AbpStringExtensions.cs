@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -87,7 +88,7 @@ namespace System
         /// Gets index of nth occurrence of a char in a string.
         /// </summary>
         /// <param name="str">source string to be searched</param>
-        /// <param name="c">Char to search in <see cref="str"/></param>
+        /// <param name="c">Char to search in <paramref name="str"/></param>
         /// <param name="n">Count of the occurrence</param>
         public static int NthIndexOf(this string str, char c, int n)
         {
@@ -132,7 +133,7 @@ namespace System
         {
             if (str.IsNullOrEmpty())
             {
-                return null;
+                return str;
             }
 
             if (postFixes.IsNullOrEmpty())
@@ -173,7 +174,7 @@ namespace System
         {
             if (str.IsNullOrEmpty())
             {
-                return null;
+                return str;
             }
 
             if (preFixes.IsNullOrEmpty())
@@ -259,8 +260,9 @@ namespace System
         /// </summary>
         /// <param name="str">String to convert</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
+        /// <param name="handleAbbreviations">set true to if you want to convert 'XYZ' to 'xyz'.</param>
         /// <returns>camelCase of the string</returns>
-        public static string ToCamelCase(this string str, bool useCurrentCulture = false)
+        public static string ToCamelCase(this string str, bool useCurrentCulture = false, bool handleAbbreviations = false)
         {
             if (string.IsNullOrWhiteSpace(str))
             {
@@ -268,6 +270,11 @@ namespace System
             }
 
             if (str.Length == 1)
+            {
+                return useCurrentCulture ? str.ToLower() : str.ToLowerInvariant();
+            }
+
+            if (handleAbbreviations && IsAllUpperCase(str))
             {
                 return useCurrentCulture ? str.ToLower() : str.ToLowerInvariant();
             }
@@ -310,6 +317,75 @@ namespace System
             return useCurrentCulture
                 ? Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLower(m.Value[1]))
                 : Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLowerInvariant(m.Value[1]));
+        }
+
+        /// <summary>
+        /// Converts given PascalCase/camelCase string to snake case.
+        /// Example: "ThisIsSampleSentence" is converted to "this_is_a_sample_sentence".
+        /// https://github.com/npgsql/npgsql/blob/dev/src/Npgsql/NameTranslation/NpgsqlSnakeCaseNameTranslator.cs#L51
+        /// </summary>
+        /// <param name="str">String to convert.</param>
+        /// <returns></returns>
+        public static string ToSnakeCase(this string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return str;
+            }
+
+            var builder = new StringBuilder(str.Length + Math.Min(2, str.Length / 5));
+            var previousCategory = default(UnicodeCategory?);
+
+            for (var currentIndex = 0; currentIndex < str.Length; currentIndex++)
+            {
+                var currentChar = str[currentIndex];
+                if (currentChar == '_')
+                {
+                    builder.Append('_');
+                    previousCategory = null;
+                    continue;
+                }
+
+                var currentCategory = char.GetUnicodeCategory(currentChar);
+                switch (currentCategory)
+                {
+                    case UnicodeCategory.UppercaseLetter:
+                    case UnicodeCategory.TitlecaseLetter:
+                        if (previousCategory == UnicodeCategory.SpaceSeparator ||
+                            previousCategory == UnicodeCategory.LowercaseLetter ||
+                            previousCategory != UnicodeCategory.DecimalDigitNumber &&
+                            previousCategory != null &&
+                            currentIndex > 0 &&
+                            currentIndex + 1 < str.Length &&
+                            char.IsLower(str[currentIndex + 1]))
+                        {
+                            builder.Append('_');
+                        }
+
+                        currentChar = char.ToLower(currentChar);
+                        break;
+
+                    case UnicodeCategory.LowercaseLetter:
+                    case UnicodeCategory.DecimalDigitNumber:
+                        if (previousCategory == UnicodeCategory.SpaceSeparator)
+                        {
+                            builder.Append('_');
+                        }
+                        break;
+
+                    default:
+                        if (previousCategory != null)
+                        {
+                            previousCategory = UnicodeCategory.SpaceSeparator;
+                        }
+                        continue;
+                }
+
+                builder.Append(currentChar);
+                previousCategory = currentCategory;
+            }
+
+            return builder.ToString();
         }
 
         /// <summary>
@@ -474,6 +550,19 @@ namespace System
             Check.NotNull(encoding, nameof(encoding));
 
             return encoding.GetBytes(str);
+        }
+
+        private static bool IsAllUpperCase(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsLetter(input[i]) && !Char.IsUpper(input[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

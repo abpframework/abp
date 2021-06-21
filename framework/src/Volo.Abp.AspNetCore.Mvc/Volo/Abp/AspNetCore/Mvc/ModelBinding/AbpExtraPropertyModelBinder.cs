@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 {
@@ -59,7 +60,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 return value;
             }
 
-            return Convert.ChangeType(value, propertyInfo.Type);
+            return TypeHelper.ConvertFromString(
+                propertyInfo.Type,
+                value
+            );
         }
     }
 }

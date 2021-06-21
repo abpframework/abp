@@ -1,12 +1,12 @@
-import { Store } from '@ngxs/store';
-import { ABP, ConfigState } from '@abp/ng.core';
+import { ABP, ConfigStateService } from '@abp/ng.core';
+import { Injector } from '@angular/core';
+import { ValidatorFn, Validators } from '@angular/forms';
 import { PasswordRules, validatePassword } from '@ngx-validate/core';
-import { Validators, ValidatorFn } from '@angular/forms';
 
 const { minLength, maxLength } = Validators;
 
-export function getPasswordValidators(store: Store): ValidatorFn[] {
-  const getRule = getRuleFn(store);
+export function getPasswordValidators(injector: Injector): ValidatorFn[] {
+  const getRule = getRuleFn(injector);
 
   const passwordRulesArr = [] as PasswordRules;
   let requiredLength = 1;
@@ -34,11 +34,11 @@ export function getPasswordValidators(store: Store): ValidatorFn[] {
   return [validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(128)];
 }
 
-function getRuleFn(store: Store) {
+function getRuleFn(injector: Injector) {
+  const configState = injector.get(ConfigStateService);
+
   return (key: string) => {
-    const passwordRules: ABP.Dictionary<string> = store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
+    const passwordRules: ABP.Dictionary<string> = configState.getSettings('Identity.Password');
 
     return (passwordRules[`Abp.Identity.Password.${key}`] || '').toLowerCase();
   };

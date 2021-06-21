@@ -3,9 +3,9 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : AbpTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper 
+    public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : AbpTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper
         where TTagHelper : AbpTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper
-        where TTagHelperService: AbpBundleItemTagHelperService<TTagHelper>
+        where TTagHelperService: AbpBundleItemTagHelperService<TTagHelper, TTagHelperService>
     {
         /// <summary>
         /// A file path.

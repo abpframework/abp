@@ -9,7 +9,7 @@
         });
 
         tenantSwitchModal.onResult(function() {
-            location.reload();
+            location.assign(location.href);
         });
     });
 

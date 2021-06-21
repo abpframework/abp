@@ -43,7 +43,10 @@ Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entit
 ObjectExtensionManager.Instance
     .MapEfCoreProperty<IdentityUser, string>(
         "SocialSecurityNumber",
-        b => { b.HasMaxLength(32); }
+        (entityBuilder, propertyBuilder) =>
+        {
+            propertyBuilder.HasMaxLength(32);
+        }
     );
 ````
 

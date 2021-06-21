@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Blogging.Admin.Application\Volo.Blogging.Admin.Application.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
     <ProjectReference Include="..\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj" />
   </ItemGroup>
 

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
@@ -19,19 +21,17 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         public AssignedRoleViewModel[] Roles { get; set; }
 
         protected IIdentityUserAppService IdentityUserAppService { get; }
-        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
-        public EditModalModel(IIdentityUserAppService identityUserAppService, IIdentityRoleAppService identityRoleAppService)
+        public EditModalModel(IIdentityUserAppService identityUserAppService)
         {
             IdentityUserAppService = identityUserAppService;
-            IdentityRoleAppService = identityRoleAppService;
         }
 
         public virtual async Task<IActionResult> OnGetAsync(Guid id)
         {
             UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
 
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityRoleAppService.GetAllListAsync()).Items);
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
 
             var userRoleNames = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
             foreach (var role in Roles)
@@ -56,7 +56,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             return NoContent();
         }
 
-        public class UserInfoViewModel : IHasConcurrencyStamp
+        public class UserInfoViewModel : ExtensibleObject, IHasConcurrencyStamp
         {
             [HiddenInput]
             public Guid Id { get; set; }
@@ -65,29 +65,27 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             public string ConcurrencyStamp { get; set; }
 
             [Required]
-            [StringLength(IdentityUserConsts.MaxUserNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
             public string UserName { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
             public string Name { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxSurnameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
             public string Surname { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxPasswordLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
             [DataType(DataType.Password)]
             [DisableAuditing]
             public string Password { get; set; }
 
             [Required]
             [EmailAddress]
-            [StringLength(IdentityUserConsts.MaxEmailLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
             public string Email { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
             public string PhoneNumber { get; set; }
-
-            public bool TwoFactorEnabled { get; set; }
 
             public bool LockoutEnabled { get; set; }
         }

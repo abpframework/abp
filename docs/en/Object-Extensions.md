@@ -2,7 +2,7 @@
 
 ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](Modules/Index.md), especially when you want to [extend entities](Customizing-Application-Modules-Extending-Entities.md) and [DTOs](Customizing-Application-Modules-Overriding-Services.md) defined by the module.
 
-> Object extension system is not normally not needed for your own objects since you can easily add regular properties to your own classes.
+> Object extension system normally is not needed for your own objects since you can easily add regular properties to your own classes.
 
 ## IHasExtraProperties Interface
 
@@ -174,6 +174,44 @@ ObjectExtensionManager.Instance
 
 The following sections explain the fundamental property configuration options.
 
+#### Default Value
+
+A default value is automatically set for the new property, which is the natural default value for the property type, like `null` for `string`, `false` for `bool` or `0` for `int`.
+
+There are two ways to override the default value:
+
+##### DefaultValue Option
+
+`DefaultValue` option can be set to any value:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, int>(
+        "MyIntProperty",
+        options =>
+        {
+            options.DefaultValue = 42;
+        });
+````
+
+##### DefaultValueFactory Options
+
+`DefaultValueFactory` can be set to a function that returns the default value:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, DateTime>(
+        "MyDateTimeProperty",
+        options =>
+        {
+            options.DefaultValueFactory = () => DateTime.Now;
+        });
+````
+
+`options.DefaultValueFactory` has a higher priority than the `options.DefaultValue` .
+
+> Tip: Use `DefaultValueFactory` option only if the default value may change over the time (like `DateTime.Now` in this example). If it is a constant value, then use the `DefaultValue` option.
+
 #### CheckPairDefinitionOnMapping
 
 Controls how to check property definitions while mapping two extensible objects. See the "Object to Object Mapping" section to understand the `CheckPairDefinitionOnMapping` option better.
@@ -207,6 +245,15 @@ ObjectExtensionManager.Instance
 ````
 
 With this configuration, `IdentityUserCreateDto` objects will be invalid without a valid `SocialSecurityNumber` value provided.
+
+#### Default Validation Attributes
+
+There are some attributes **automatically added** when you create certain type of properties;
+
+* `RequiredAttribute` is added for non nullable primitive property types (e.g. `int`, `bool`, `DateTime`...) and `enum` types.
+* `EnumDataTypeAttribute` is added for enum types, to prevent to set invalid enum values.
+
+Use `options.Attributes.Clear();` if you don't want these attributes.
 
 ### Custom Validation
 
@@ -363,3 +410,7 @@ ObjectExtensionManager.Instance
 ````
 
 See the [Entity Framework Core Integration document](Entity-Framework-Core.md) for more.
+
+## See Also
+
+* [Module Entity Extensions](Module-Entity-Extensions.md)

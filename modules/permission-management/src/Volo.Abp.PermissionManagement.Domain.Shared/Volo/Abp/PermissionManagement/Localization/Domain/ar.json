@@ -1,0 +1,10 @@
+﻿{
+  "culture": "ar",
+  "texts": {
+    "Permissions": "الأذونات",
+    "OnlyProviderPermissons": "هذا الموفر فقط",
+    "All": "الكل",
+    "SelectAllInAllTabs": "منح كافة الأذونات",
+    "SelectAllInThisTab": "تحديد الكل"
+  }
+}

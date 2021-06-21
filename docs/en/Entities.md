@@ -1,6 +1,6 @@
 # Entities
 
-Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describe it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
+Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describes  it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
 
 An entity is generally mapped to a table in a relational database.
 
@@ -19,16 +19,16 @@ public class Book : Entity<Guid>
 
 > If you do not want to derive your entity from the base `Entity<TKey>` class, you can directly implement `IEntity<TKey>` interface.
 
-`Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `Guid` in the example above. It can be other types like `string`, `int`, `long` or whatever you need.
+`Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `Guid` in the example above. It can be other types like `string`, `int`, `long`, or whatever you need.
 
 ### Entities with GUID Keys
 
 If your entity's Id type is `Guid`, there are some good practices to implement:
 
 * Create a constructor that gets the Id as a parameter and passes to the base class.
-  * If you don't set a GUID Id, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
-* If you create an entity with a constructor that takes parameters, also create a `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
-* Don't use the `Guid.NewGuid()` to set the Id! Use [the `IGuidGenerator` service](Guid-Generation.md) while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
+  * If you don't set a GUID Id, **ABP Framework sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
+* If you create an entity with a constructor that takes parameters, also create a `private` or `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
+* Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](Guid-Generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
 An example entity:
 
@@ -226,13 +226,19 @@ While this example may not implement all the best practices of an aggregate root
 * `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** the object while reading from a data source.
 * `OrderLine` constructor is internal, so it is only allowed to be created by the domain layer. It's used inside of the `Order.AddProduct` method.
 * `Order.AddProduct` implements the business rule to add a product to an order.
-* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For exmple, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
+* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For example, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
 
 ABP Framework does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
 
 ### Aggregate Roots with Composite Keys
 
 While it's not common (and not suggested) for aggregate roots, it is in fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.
+
+### BasicAggregateRoot Class
+
+`AggregateRoot` class implements the `IHasExtraProperties` and `IHasConcurrencyStamp` interfaces which brings two properties to the derived class. `IHasExtraProperties` makes the entity extensible (see the *Extra Properties* section below) and `IHasConcurrencyStamp` adds a `ConcurrencyStamp` property that is managed by the ABP Framework to implement the [optimistic concurrency](https://docs.microsoft.com/en-us/ef/core/saving/concurrency). In most cases, these are wanted features for aggregate roots.
+
+However, if you don't need these features, you can inherit from the `BasicAggregateRoot<TKey>` (or `BasicAggregateRoot`) for your aggregate root.
 
 ## Base Classes & Interfaces for Audit Properties
 
@@ -293,7 +299,7 @@ While you can manually implement any of the interfaces defined above, it is sugg
 
 All these base classes also have non-generic versions to take `AuditedEntity` and `FullAuditedAggregateRoot` to support the composite primary keys.
 
-All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and`FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern).
+All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and `FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern). Also, if you add navigation properties to the AppUser class that comes with the startup template, consider to handle (ignore/map) it on the migration dbcontext (see [the EF Core migration document](Entity-Framework-Core-Migrations.md)). 
 
 ## Extra Properties
 
@@ -382,7 +388,7 @@ The way to store this dictionary in the database depends on the database provide
 
 Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way.
 
-You normally **don't need** to this system for your own entities, because it has the following drawbacks:
+You typically **don't need** to use this system for your own entities, because it has the following drawbacks:
 
 * It is **not fully type safe** since it works with strings as property names.
 * It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.

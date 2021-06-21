@@ -19,7 +19,7 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 * Has a **console application** to show the simplest way of using a service by authenticating.
 * Uses [Redis](https://redis.io/) for **distributed caching**.
 * Uses [RabbitMQ](https://www.rabbitmq.com/) for service-to-service **messaging**.
-* Uses [Docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
+* Uses [Docker](https://www.docker.com/) & [Kubernetes](https://kubernetes.io/) to **deploy** & run all services and applications.
 * Uses [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) to store and visualize the logs (written using [Serilog](https://serilog.net/)).
 
 The diagram below shows the system:
@@ -28,7 +28,7 @@ The diagram below shows the system:
 
 ### Source Code
 
-You can get the source code from [the GitHub repository](https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo).
+You can get the source code from [the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo).
 
 ## Running the Solution
 
@@ -42,6 +42,12 @@ To be able to run the solution from source code, following tools should be insta
 * [MongoDB](https://www.mongodb.com/download-center) 4.0+
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
 * [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (optional, recommended to show logs)
+
+### Running Infrastructure
+
+* Docker-compose is used to run the pre requirements with ease as default. If you don't have it, you can download and start using [Docker for Windows](https://docs.docker.com/docker-for-windows/) from [here](https://docs.docker.com/docker-for-windows/install/) on windows environment.
+* Run the command `docker-compose -f docker-compose.infrastructure.yml -f docker-compose.infrastructure.override.yml up -d` at `MicroserviceDemo` directory or run the powershell script `__Run_Infrastructure.ps1` located at `MicroserviceDemo/_run` directory.
+* If you don't want to use docker for pre required services and install them on your local development, you need to update `appsettings.json` files of the projects in the MicroserviceDemo solution accordingly.
 
 ### Open & Build the Visual Studio Solution
 
@@ -552,7 +558,7 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                    ctx.Request.Path.ToString().StartsWith("/Abp/"),
     app2 =>
     {
-        app2.UseMvcWithDefaultRouteAndArea();
+        app2.UseConfiguredEndpoints();
     });
 
 app.UseOcelot().Wait();
@@ -836,7 +842,7 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
   "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
@@ -962,8 +968,8 @@ There are two connection strings in the `appsettings.json` file:
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True"
 }
 ````
 

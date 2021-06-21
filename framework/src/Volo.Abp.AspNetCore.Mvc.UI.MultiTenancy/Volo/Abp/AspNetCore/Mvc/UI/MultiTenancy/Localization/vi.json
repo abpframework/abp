@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
+    "GivenTenantIsNotExist": "Người thuê đã cho không tồn tại: {0}",
     "GivenTenantIsNotAvailable": "Người thuê không có sẵn: {0}",
     "Tenant": "Người thuê",
     "Switch": "Chuyển đổi",

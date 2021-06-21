@@ -1,0 +1,11 @@
+﻿{
+  "culture": "ar",
+  "texts": {
+    "Hello <b>{0}</b>.": "مرحباً <b>{0}</b>.",
+    "Car": "سيارة",
+    "CarPlural": "سيارات",
+    "MaxLenghtErrorMessage": "اقصى طول للحقل '{0}' حرف",
+    "Universe": "عالم",
+    "FortyTwo": "اثنان وأربعون"
+  }
+}

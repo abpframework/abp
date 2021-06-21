@@ -15,11 +15,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="2.3.8" />
+    <PackageReference Include="LdapForNet" Version="2.7.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <Content Remove="Volo\Abp\Ldap\Localization\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Ldap\Localization\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 
 </Project>

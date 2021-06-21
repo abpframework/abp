@@ -41,5 +41,12 @@
             public const string IsUserNameUpdateEnabled = UserPrefix + ".IsUserNameUpdateEnabled";
             public const string IsEmailUpdateEnabled = UserPrefix + ".IsEmailUpdateEnabled";
         }
+
+        public static class OrganizationUnit
+        {
+            private const string OrganizationUnitPrefix = Prefix + ".OrganizationUnit";
+
+            public const string MaxUserMembershipCount = OrganizationUnitPrefix + ".MaxUserMembershipCount";
+        }
     }
 }

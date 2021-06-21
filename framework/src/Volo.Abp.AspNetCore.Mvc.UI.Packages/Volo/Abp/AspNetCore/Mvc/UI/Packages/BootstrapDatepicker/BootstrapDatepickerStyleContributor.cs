@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 {
     public class BootstrapDatepickerStyleContributor : BundleContributor
     {

@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^4.3.3",
+    "highlight.js": "^9.13.1"
+  },
+  "devDependencies": {}
+}

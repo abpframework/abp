@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             modelBuilder.ConfigureAuditLogging();
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureIdentityServer();
+            modelBuilder.ConfigureFeatureManagement();
             modelBuilder.ConfigureTenantManagement();
         }
     }

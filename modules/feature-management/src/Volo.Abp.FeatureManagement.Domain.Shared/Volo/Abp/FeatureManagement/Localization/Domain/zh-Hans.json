@@ -2,6 +2,9 @@
 	"culture": "zh-Hans",
 	"texts": {
 		"Features": "功能",
-		"NoFeatureFoundMessage": "没有可用的功能."
+		"NoFeatureFoundMessage": "没有可用的功能.",
+		"Permission:FeatureManagement": "特性管理",
+		"Permission:FeatureManagement.ManageHostFeatures": "管理Host特性",
+		"Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0}功能的值无效!"
 	}
 }

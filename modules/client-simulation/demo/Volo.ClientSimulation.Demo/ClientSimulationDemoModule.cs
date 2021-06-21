@@ -40,9 +40,9 @@ namespace Volo.ClientSimulation.Demo
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

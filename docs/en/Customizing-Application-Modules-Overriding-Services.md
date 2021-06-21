@@ -29,7 +29,7 @@ public class TestAppService : IIdentityUserAppService, ITransientDependency
 }
 ````
 
-The dependency injection system allows to register multiple services for the same interface. The last registered one is used when the interface is injected. It is a good practice to explicitly replace the service. 
+The dependency injection system allows to register multiple services for the same interface. The last registered one is used when the interface is injected. It is a good practice to explicitly replace the service.
 
 Example:
 
@@ -60,7 +60,7 @@ In most cases, you will want to change one or a few methods of the current imple
 
 ````csharp
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
@@ -75,7 +75,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
     {
     }
 
-    public override async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public async override Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         if (input.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -106,32 +106,35 @@ You could completely **re-write** the entire business logic for a user creation 
 [ExposeServices(typeof(IdentityUserManager))]
 public class MyIdentityUserManager : IdentityUserManager
 {
-    public MyIdentityUserManager(
-        IdentityUserStore store, 
-        IOptions<IdentityOptions> optionsAccessor, 
-        IPasswordHasher<IdentityUser> passwordHasher,
-        IEnumerable<IUserValidator<IdentityUser>> userValidators, 
-        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
-        ILookupNormalizer keyNormalizer, 
-        IdentityErrorDescriber errors, 
-        IServiceProvider services, 
-        ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider
-        ) : base(
-            store, 
-            optionsAccessor, 
-            passwordHasher, 
-            userValidators, 
-            passwordValidators, 
-            keyNormalizer, 
-            errors, 
-            services, 
-            logger, 
-            cancellationTokenProvider)
-    {
-    }
+        public MyIdentityUserManager(
+            IdentityUserStore store,
+            IIdentityRoleRepository roleRepository,
+            IIdentityUserRepository userRepository,
+            IOptions<IdentityOptions> optionsAccessor,
+            IPasswordHasher<IdentityUser> passwordHasher,
+            IEnumerable<IUserValidator<IdentityUser>> userValidators,
+            IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
+            ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors,
+            IServiceProvider services,
+            ILogger<IdentityUserManager> logger,
+            ICancellationTokenProvider cancellationTokenProvider) :
+            base(store,
+                roleRepository,
+                userRepository,
+                optionsAccessor,
+                passwordHasher,
+                userValidators,
+                passwordValidators,
+                keyNormalizer,
+                errors,
+                services,
+                logger,
+                cancellationTokenProvider)
+        {
+        }
 
-    public override async Task<IdentityResult> CreateAsync(IdentityUser user)
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
     {
         if (user.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -158,6 +161,54 @@ This example class inherits from the `IdentityUserManager` [domain service](Doma
 
 Check the [localization system](Localization.md) to learn how to localize the error messages.
 
+### Example: Overriding a Controller
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.Account;
+using Volo.Abp.DependencyInjection;
+
+namespace MyProject.Controllers
+{
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(AccountController))]
+    public class MyAccountController : AccountController
+    {
+        public MyAccountController(IAccountAppService accountAppService)
+            : base(accountAppService)
+        {
+
+        }
+
+        public async override Task SendPasswordResetCodeAsync(
+            SendPasswordResetCodeDto input)
+        {
+            Logger.LogInformation("Your custom logic...");
+
+            await base.SendPasswordResetCodeAsync(input);
+        }
+    }
+}
+````
+
+This example replaces the `AccountController` (An API Controller defined in the [Account Module](Modules/Account.md)) and overrides the `SendPasswordResetCodeAsync` method.
+
+**`[ExposeServices(typeof(AccountController))]` is essential** here since it registers this controller for the `AccountController` in the dependency injection system. `[Dependency(ReplaceServices = true)]` is also recommended to clear the old registration (even the ASP.NET Core DI system selects the last registered one).
+
+In addition, the `MyAccountController` will be removed from [`ApplicationModel`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.applicationmodels.applicationmodel.controllers) because it defines `ExposeServicesAttribute`.
+
+If `IncludeSelf = true` is specified, i.e. `[ExposeServices(typeof(AccountController), IncludeSelf = true)]`, then `AccountController` will be removed instead. This is useful for **extending** a controller.
+
+If you don't want to remove either controller, you can configure `AbpAspNetCoreMvcOptions`:
+
+```csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.IgnoredControllersOnModelExclusion.AddIfNotContains(typeof(MyAccountController));
+});
+```
+
 ### Overriding Other Classes
 
 Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.
@@ -175,7 +226,7 @@ Assuming that you've already added a `SocialSecurityNumber` as described in the 
 You can use the [object extension system](Object-Extensions.md) to add the property to the `IdentityUserDto`. Write this code inside the `YourProjectNameDtoExtensions` class comes with the application startup template:
 
 ````csharp
-ObjectExtensionManager.Instance                    
+ObjectExtensionManager.Instance
     .AddOrUpdateProperty<IdentityUserDto, string>(
         "SocialSecurityNumber"
     );
@@ -247,8 +298,8 @@ ObjectExtensionManager.Instance
     .AddOrUpdateProperty<string>(
         new[]
         {
-            typeof(IdentityUserDto), 
-            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
             typeof(IdentityUserUpdateDto)
         },
         "SocialSecurityNumber"

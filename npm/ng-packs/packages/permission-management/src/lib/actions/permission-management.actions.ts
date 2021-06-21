@@ -1,11 +1,11 @@
-import { PermissionManagement } from '../models/permission-management';
+import { ProviderInfoDto, UpdatePermissionsDto } from '../proxy/models';
 
 export class GetPermissions {
   static readonly type = '[PermissionManagement] Get Permissions';
-  constructor(public payload: PermissionManagement.GrantedProvider) {}
+  constructor(public payload: ProviderInfoDto) {}
 }
 
 export class UpdatePermissions {
   static readonly type = '[PermissionManagement] Update Permissions';
-  constructor(public payload: PermissionManagement.GrantedProvider & PermissionManagement.UpdateRequest) {}
+  constructor(public payload: ProviderInfoDto & UpdatePermissionsDto) {}
 }

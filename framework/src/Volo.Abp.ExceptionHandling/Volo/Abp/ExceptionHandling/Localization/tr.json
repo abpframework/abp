@@ -1,0 +1,26 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "InternalServerErrorMessage": "Sayfa işlenirken sunucu tarafında beklenmedik bir hata oluştu!",
+    "ValidationErrorMessage": "İşleminiz geçerli değil!",
+    "ValidationNarrativeErrorMessageTitle": "Aşağıdaki hatalar doğrulama sırasında tespit edilmiştir.",
+    "DefaultErrorMessage": "Bir hata oluştu!",
+    "DefaultErrorMessageDetail": "Hatanın ne olduğu sunucu tarafından gönderilmedi.",
+    "DefaultErrorMessage401": "Giriş yapılmamış!",
+    "DefaultErrorMessage401Detail": "Bu işlemi gerçekleştirmek için uygulamaya giriş yapmalısınız.",
+    "DefaultErrorMessage403": "İzinsiz işlem!",
+    "DefaultErrorMessage403Detail": "Bu işlemi gerçekleştirmek için gereken izne sahip değilsiniz.",
+    "DefaultErrorMessage404": "Kaynak bulunamadı!",
+    "DefaultErrorMessage404Detail": "İstenilen kaynak sunucuda bulunamadı.",
+    "EntityNotFoundErrorMessage": "Id değeri {1} olan {0} türünden bir nesne bulunamadı!",
+    "AbpDbConcurrencyErrorMessage": "Gönderdiğiniz veri başka bir kullanıcı/istemci tarafından değiştirilmiş. Lütfen işlemi iptal edip baştan deneyin.",
+    "Error": "Hata",
+    "UnhandledException": "Yakalanmamış hata!",
+    "401Message": "Yetkisiz İşlem",
+    "403Message": "İzinsiz",
+    "404Message": "Sayfa bulunamadı",
+    "500Message": "Sunucu tarafında hata",
+    "403MessageDetail": "Bu işlemi gerçekleştirmek için gereken yetkiye sahip değilsiniz!",
+    "404MessageDetail": "Üzgünüz, bu adreste bir şey yok."
+  }
+}

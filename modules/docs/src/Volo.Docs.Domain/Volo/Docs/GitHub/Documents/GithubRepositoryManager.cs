@@ -6,6 +6,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Octokit;
 using Octokit.Internal;
+using Volo.Docs.GitHub.Documents.Version;
+using Volo.Docs.Projects;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
 namespace Volo.Docs.GitHub.Documents
@@ -15,10 +17,12 @@ namespace Volo.Docs.GitHub.Documents
         public const string HttpClientName = "GithubRepositoryManagerHttpClientName";
 
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IGithubVersionProviderFactory _githubVersionProviderFactory;
 
-        public GithubRepositoryManager(IHttpClientFactory clientFactory)
+        public GithubRepositoryManager(IHttpClientFactory clientFactory, IGithubVersionProviderFactory githubVersionProviderFactory)
         {
             _clientFactory = clientFactory;
+            _githubVersionProviderFactory = githubVersionProviderFactory;
         }
 
         public async Task<string> GetFileRawStringContentAsync(string rawUrl, string token, string userAgent)
@@ -32,11 +36,12 @@ namespace Volo.Docs.GitHub.Documents
             using var httpClient = CreateHttpClient(token, userAgent);
             return await httpClient.GetByteArrayAsync(new Uri(rawUrl));
         }
-         
-        public async Task<IReadOnlyList<Release>> GetReleasesAsync(string name, string repositoryName, string token)
+
+        public async Task<IReadOnlyList<GithubVersion>> GetVersionsAsync(string name, string repositoryName, string token, GithubVersionProviderSource githubVersionProviderSource)
         {
-            var client = GetGitHubClient(name, token);
-            return await client.Repository.Release.GetAll(name, repositoryName);
+            var _provider = _githubVersionProviderFactory.Create(githubVersionProviderSource);
+
+            return await _provider.GetVersions(name, repositoryName, token);
         }
 
         public async Task<IReadOnlyList<GitHubCommit>> GetFileCommitsAsync(string name, string repositoryName, string version, string filename, string token)

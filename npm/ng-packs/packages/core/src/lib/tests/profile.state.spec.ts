@@ -26,7 +26,7 @@ describe('ProfileState', () => {
 
   beforeEach(() => {
     spectator = createService();
-    profileService = spectator.get(ProfileService);
+    profileService = spectator.inject(ProfileService);
     state = new ProfileState(profileService);
   });
 

@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
@@ -16,8 +18,14 @@ namespace Volo.Abp.Domain.Repositories.Dapper
             _dbContextProvider = dbContextProvider;
         }
 
+        [Obsolete("Use GetDbConnectionAsync method.")]
         public IDbConnection DbConnection => _dbContextProvider.GetDbContext().Database.GetDbConnection();
 
+        public async Task<IDbConnection> GetDbConnectionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.GetDbConnection();
+
+        [Obsolete("Use GetDbTransactionAsync method.")]
         public IDbTransaction DbTransaction => _dbContextProvider.GetDbContext().Database.CurrentTransaction?.GetDbTransaction();
+
+        public async Task<IDbTransaction> GetDbTransactionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.CurrentTransaction?.GetDbTransaction();
     }
 }

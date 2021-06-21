@@ -87,16 +87,11 @@ The following is the list of supported scopes:
 - **core**
 - **theme-shared**
 - **theme-basic**
-- **account**
 - **identity**
 - **tenant-management**
 - **feature-management**
 - **permission-management**
 - **setting-management**
-- **account-config**
-- **identity-config**
-- **setting-management-config**
-- **tenant-management-config**
 
 There are currently a few exceptions to the "use package name" rule:
 

@@ -2,7 +2,7 @@
 
 应用服务实现应用程序的**用例**, 将**领域层逻辑公开给表示层**.
 
-从表示层(可选)调用应用服务,**DTO (数据传对象)** 作为参数. 返回(可选)DTO给表示层.
+从表示层(可选)调用应用服务,**DTO ([数据传对象](Data-Transfer-Objects.md))** 作为参数. 返回(可选)DTO给表示层.
 
 ## 示例
 
@@ -353,12 +353,12 @@ public class DistrictAppService
     {
     }
 
-    protected override async Task DeleteByIdAsync(DistrictKey id)
+    protected async override Task DeleteByIdAsync(DistrictKey id)
     {
         await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
     }
 
-    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    protected async override Task<District> GetEntityByIdAsync(DistrictKey id)
     {
         return await AsyncQueryableExecuter.FirstOrDefaultAsync(
             Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)

@@ -1,11 +1,20 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Linq;
+using System.Web;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 {
     public class AbpPopoverTagHelperService : AbpTagHelperService<AbpPopoverTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpPopoverTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.Disabled ?? true)
@@ -21,38 +30,51 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
                 SetDisabled(context, output);
             }
         }
+
         protected virtual void SetDisabled(TagHelperContext context, TagHelperOutput output)
         {
-            var triggerAsHtml = TagHelper.Dismissible ?? false ? "data-trigger=\"focus\" " : "";
+            var triggerValue = TagHelper.Dismissible ?? false ? "focus" : "";
             if (TagHelper.Hoverable ?? false)
             {
-                if (triggerAsHtml.Contains("focus"))
+                if (triggerValue.Contains("focus"))
                 {
-                    triggerAsHtml = triggerAsHtml.Replace("focus", "focus hover");
+                    triggerValue = triggerValue.Replace("focus", "focus hover");
                 }
                 else
                 {
-                    triggerAsHtml = "data-trigger=\"hover\" ";
+                    triggerValue = "hover";
                 }
             }
-            var dataPlacementAsHtml = "data-placement=\"" + GetDirectory().ToString().ToLowerInvariant() + "\" ";
 
+            var dataPlacement = GetDirectory().ToString().ToLowerInvariant();
             // data-placement="default" with data-trigger="focus" causes Cannot read property 'indexOf' of undefined at computeAutoPlacement(bootstrap.bundle.js?_v=637146714627330435:2185) error
             if (IsDismissibleOrHoverable() && GetDirectory() == PopoverDirectory.Default)
             {
                 //dataPlacementAsHtml = string.Empty; //bootstrap default placement is right, abp's is top.
-                dataPlacementAsHtml = dataPlacementAsHtml.Replace("default", "top");
+                dataPlacement = dataPlacement.Replace("default", "top");
             }
-            var titleAttribute = output.Attributes.FirstOrDefault(at => at.Name == "title");
-            var titleAsHtml = titleAttribute == null ? "" : "title=\"" + titleAttribute.Value + "\" ";
-            var preElementHtml = "<span tabindex=\"0\" class=\"d-inline-block\" " + titleAsHtml + triggerAsHtml + dataPlacementAsHtml + "data-toggle=\"popover\" data-content=\"" + GetDataContent() + "\">";
-            var postElementHtml = "</span>";
 
-            output.PreElement.SetHtmlContent(preElementHtml);
-            output.PostElement.SetHtmlContent(postElementHtml);
+            var titleAttribute = output.Attributes.FirstOrDefault(at => at.Name == "title");
+
+            var span = new TagBuilder("span");
+            span.AddCssClass("d-inline-block");
+            span.Attributes.Add("tabindex", "0");
+            span.Attributes.Add("data-toggle", "popover");
+            span.Attributes.Add("data-content", GetDataContent());
+            span.Attributes.Add("data-trigger", triggerValue);
+            span.Attributes.Add("data-placement", dataPlacement);
+
+            if (titleAttribute != null)
+            {
+                span.Attributes.Add("title", HttpUtility.HtmlDecode(titleAttribute.Value.ToString()));
+            }
+
+            output.PreElement.SetHtmlContent(span.RenderStartTag());
+            output.PostElement.SetHtmlContent(span.RenderEndTag());
 
             output.Attributes.Add("style", "pointer-events: none;");
         }
+
         protected virtual void SetDataTriggerIfDismissible(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.Dismissible ?? false)

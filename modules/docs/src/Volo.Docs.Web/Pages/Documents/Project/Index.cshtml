@@ -126,15 +126,15 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="col-5  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                <div class="@(Model.VersionSelectItems.Any()? "pl-0 col-5" : "col")">
                                     <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
                                                 @*<div class="input-group-prepend">
-                                                    <label class="input-group-text">
-                                                        <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
-                                                    </label>
-                                                </div>*@
+                                                        <label class="input-group-text">
+                                                            <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
+                                                        </label>
+                                                    </div>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
                                                         class="form-control"
                                                         onchange="window.location.replace(this.value)">
@@ -163,25 +163,6 @@
                             </div>
                         </div>
 
-                        @if (Model.FullSearchEnabled)
-                        {
-                            <div class="docs-version mt-2 mb-4">
-                                <div class="version-select">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text"><i class="fa fa-search"></i></label>
-                                        </div>
-
-                                        <input class="form-control"
-                                               id="fullsearch"
-                                               type="search"
-                                               data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
-                                               placeholder="@L["FullSearch"].Value"
-                                               aria-label="Filter">
-                                    </div>
-                                </div>
-                            </div>
-                        }
 
                         @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                         {
@@ -209,48 +190,60 @@
             {
                 <div class="col-md-7 docs-content bg-white">
                     <div class="docs-link-btns">
-                        <div class="float-left">
-                            @(L["ShareOn"].Value + " :")
-                            <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                            <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
-                                <i class="fa fa-linkedin"></i>
-                            </a>
-                            <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
-                                <i class="fa fa-envelope-square"></i>
-                            </a>
-                        </div>
-
-                        <div class="float-right">
-                            @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                            {
-                                <a href="@Model.Document.EditLink" target="_blank">
-                                    <i class="fa fa-edit"></i>
-                                    @(L["Edit"])
-                                    <span class="for-desktop">(@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</span>
-                                </a>
-                            }
-                        </div>
-
-                        <div class="float-right mr-3">
-                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                            {
-                            <span class="for-desktop">
-                                @(L["Contributors"].Value + " :") </span>
-                                @foreach (var contributor in Model.Document.Contributors)
+                        <div class="row">
+                            <div class="col">
+                                @if (Model.FullSearchEnabled)
                                 {
-                                    <a href="@contributor.UserProfileUrl" target="_blank">
-                                        <img src="@contributor.AvatarUrl"
-                                             class="rounded-circle"
-                                             alt="Avatar"
-                                             height="21"
-                                             width="21"
-                                             title="@contributor.Username" />
+                                    <div class="search-area">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text"><i class="fa fa-search"></i></label>
+                                            </div>
+
+                                            <input class="form-control"
+                                                   id="fullsearch"
+                                                   type="search"
+                                                   data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                                   placeholder="@L["FullSearch"].Value"
+                                                   aria-label="Filter">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-auto">
+                                <div class="cont-container">
+                                    @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                                    {
+                                        <span class="for-desktop mr-3">
+                                            @(L["Contributors"].Value)
+                                        </span>
+                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c=> c.CommitCount).ToList())
+                                        {
+                                            <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
+                                                <img src="@contributor.AvatarUrl"
+                                                     class="rounded-circle"
+                                                     alt="Avatar"
+                                                     height="21"
+                                                     width="21"
+                                                     title="@contributor.Username" />
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                                {
+                                    <a href="@Model.Document.EditLink" target="_blank">
+                                        <i class="fa fa-edit"></i>
+                                        @(L["Edit"])
+                                        <span class="for-desktop text-muted">@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString()</span>
                                     </a>
                                 }
-                                }
-</div>
+
+                            </div>
+                        </div>
+
 
                     </div>
 
@@ -302,7 +295,7 @@
                             <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                                 <article class="docs-body">
 
-                                    @if (Model.DocumentLanguageIsDifferent)
+                                    @if (Model.DocumentLanguageCode != Model.LanguageCode)
                                     {
                                         <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
                                             @L["DocumentNotFoundInSelectedLanguage"]
@@ -312,14 +305,29 @@
                                 </article>
 
                                 <div id="crawler_link" style="display:none;">
-
+                                    @foreach (var query in Model.AlternativeOptionLinkQueries)
+                                    {
+                                        <a href="@($"{Request.Path}?{query}")"> @query </a>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <!-- Right Bar -->
                 <div class="col-md-2 docs-page-index position-relative bg-light">
+                    <div class="doc-social-btns">
+                        @(L["ShareOn"].Value + " :")
+                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
+                            <i class="fa fa-envelope-square"></i>
+                        </a>
+                    </div>
                     <div id="scroll-index" class="docs-inner-anchors mt-2">
                         <h5>@L["InThisDocument"]</h5>
                         <nav id="docs-sticky-index" class="navbar index-scroll">
@@ -350,17 +358,17 @@
 else
 {
     if (!Model.ProjectFound)
-        {
-             @(await Component.InvokeAsync<ErrorViewComponent>(new
-              {
-                  model = new ErrorPageModel
-                  {
-                      RedirectUrl = Model.DocumentsUrlPrefix,
-                      ErrorCode =  "404",
-                      ErrorMessage = L.GetString("ProjectNotFound")
-                  }
-              }))
-        }
+    {
+        @(await Component.InvokeAsync<ErrorViewComponent>(new
+         {
+             model = new ErrorPageModel
+             {
+                 RedirectUrl = Model.DocumentsUrlPrefix,
+                 ErrorCode = "404",
+                 ErrorMessage = L.GetString("ProjectNotFound")
+             }
+         }))
+    }
 
     if (!Model.DocumentFound)
     {
@@ -370,9 +378,9 @@ else
               {
                   RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
                                 + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
-                  ErrorCode =  "404",
+                  ErrorCode = "404",
                   ErrorMessage = L.GetString("DocumentNotFound"),
-                  AutoRedirect =  !Model.DocumentName.IsNullOrWhiteSpace()
+                  AutoRedirect = !Model.DocumentName.IsNullOrWhiteSpace()
               }
           }))
     }

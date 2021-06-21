@@ -9,7 +9,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string name,
             string type,
             [CanBeNull] string version = null,
-            [CanBeNull] string templateSource = null
+            [CanBeNull] string templateSource = null,
+            bool includePreReleases = false
         );
     }
 }

@@ -2,13 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement.Web
 {
@@ -18,6 +23,8 @@ namespace Volo.Abp.TenantManagement.Web
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpTenantManagementWebModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -40,7 +47,7 @@ namespace Volo.Abp.TenantManagement.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
+                options.FileSets.AddEmbedded<AbpTenantManagementWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpTenantManagementWebModule>();
@@ -54,7 +61,42 @@ namespace Volo.Abp.TenantManagement.Web
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/Index", TenantManagementPermissions.Tenants.Default);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/EditModal", TenantManagementPermissions.Tenants.Update);
-                options.Conventions.AuthorizePage("/TenantManagement/Tenants/ConnectionStrings", TenantManagementPermissions.Tenants.ManageConnectionStrings);
+            });
+            
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+                options.Configure<Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<AbpTenantManagementResource>("ManageHostFeatures"),
+                            icon: "cog",
+                            name: "ManageHostFeatures",
+                            requiredPolicyName: FeatureManagementPermissions.ManageHostFeatures
+                        );
+                        
+                        toolbar.AddButton(
+                            LocalizableString.Create<AbpTenantManagementResource>("NewTenant"),
+                            icon: "plus",
+                            name: "CreateTenant",
+                            requiredPolicyName: TenantManagementPermissions.Tenants.Create
+                        );
+                    }
+                );
+            });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper
+                    .ApplyEntityConfigurationToUi(
+                        TenantManagementModuleExtensionConsts.ModuleName,
+                        TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                        createFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.CreateModalModel.TenantInfoModel) },
+                        editFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.EditModalModel.TenantInfoModel) }
+                    );
             });
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Json;
@@ -25,8 +27,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
         protected IJsonSerializer JsonSerializer { get; }
         protected AbpAuditingOptions Options { get; }
         protected IAuditingHelper AuditingHelper { get; }
-
-        private readonly IClock _clock;
+        protected IClock Clock{ get; }
 
         public EntityHistoryHelper(
             IAuditingStore auditingStore,
@@ -35,7 +36,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             IJsonSerializer jsonSerializer,
             IAuditingHelper auditingHelper)
         {
-            _clock = clock;
+            Clock = clock;
             AuditingStore = auditingStore;
             JsonSerializer = jsonSerializer;
             AuditingHelper = auditingHelper;
@@ -68,7 +69,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
         }
 
         [CanBeNull]
-        private EntityChangeInfo CreateEntityChangeOrNull(EntityEntry entityEntry)
+        protected virtual EntityChangeInfo CreateEntityChangeOrNull(EntityEntry entityEntry)
         {
             var entity = entityEntry.Entity;
 
@@ -120,23 +121,23 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return multiTenantEntity.TenantId;
         }
 
-        private DateTime GetChangeTime(EntityChangeInfo entityChange)
+        protected virtual DateTime GetChangeTime(EntityChangeInfo entityChange)
         {
             var entity = entityChange.EntityEntry.As<EntityEntry>().Entity;
             switch (entityChange.ChangeType)
             {
                 case EntityChangeType.Created:
-                    return (entity as IHasCreationTime)?.CreationTime ?? _clock.Now;
+                    return (entity as IHasCreationTime)?.CreationTime ?? Clock.Now;
                 case EntityChangeType.Deleted:
-                    return (entity as IHasDeletionTime)?.DeletionTime ?? _clock.Now;
+                    return (entity as IHasDeletionTime)?.DeletionTime ?? Clock.Now;
                 case EntityChangeType.Updated:
-                    return (entity as IHasModificationTime)?.LastModificationTime ?? _clock.Now;
+                    return (entity as IHasModificationTime)?.LastModificationTime ?? Clock.Now;
                 default:
                     throw new AbpException($"Unknown {nameof(EntityChangeInfo)}: {entityChange}");
             }
         }
 
-        private string GetEntityId(object entityAsObj)
+        protected virtual string GetEntityId(object entityAsObj)
         {
             if (!(entityAsObj is IEntity entity))
             {
@@ -155,7 +156,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
         /// <summary>
         /// Gets the property changes for this entry.
         /// </summary>
-        private List<EntityPropertyChangeInfo> GetPropertyChanges(EntityEntry entityEntry)
+        protected virtual List<EntityPropertyChangeInfo> GetPropertyChanges(EntityEntry entityEntry)
         {
             var propertyChanges = new List<EntityPropertyChangeInfo>();
             var properties = entityEntry.Metadata.GetProperties();
@@ -180,12 +181,12 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return propertyChanges;
         }
 
-        private bool IsCreated(EntityEntry entityEntry)
+        protected virtual bool IsCreated(EntityEntry entityEntry)
         {
             return entityEntry.State == EntityState.Added;
         }
 
-        private bool IsDeleted(EntityEntry entityEntry)
+        protected virtual bool IsDeleted(EntityEntry entityEntry)
         {
             if (entityEntry.State == EntityState.Deleted)
             {
@@ -196,7 +197,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return entity is ISoftDelete && entity.As<ISoftDelete>().IsDeleted;
         }
 
-        private bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
+        protected virtual bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
         {
             if (entityEntry.State == EntityState.Detached ||
                 entityEntry.State == EntityState.Unchanged)
@@ -219,7 +220,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return defaultValue;
         }
 
-        private bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
+        protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
         {
             if (propertyEntry.Metadata.Name == "Id")
             {
@@ -241,6 +242,31 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
+            if (propertyInfo != null && IsBaseAuditProperty(propertyInfo, entityType))
+            {
+                return false;
+            }
+
+            if (propertyEntry.OriginalValue is ExtraPropertyDictionary originalValue && propertyEntry.CurrentValue is ExtraPropertyDictionary currentValue)
+            {
+                if (originalValue.IsNullOrEmpty() && currentValue.IsNullOrEmpty())
+                {
+                    return false;
+                }
+
+                if (!originalValue.Select(x => x.Key).SequenceEqual(currentValue.Select(x => x.Key)))
+                {
+                    return true;
+                }
+
+                if (!originalValue.Select(x => x.Value).SequenceEqual(currentValue.Select(x => x.Value)))
+                {
+                    return true;
+                }
+
+                return defaultValue;
+            }
+
             var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
             if (isModified)
             {
@@ -250,10 +276,63 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return defaultValue;
         }
 
+        protected virtual bool IsBaseAuditProperty(PropertyInfo propertyInfo, Type entityType)
+        {
+            if (entityType.IsAssignableTo<IHasCreationTime>()
+                && propertyInfo.Name == nameof(IHasCreationTime.CreationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMayHaveCreator>()
+                && propertyInfo.Name == nameof(IMayHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMustHaveCreator>()
+                && propertyInfo.Name == nameof(IMustHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasModificationTime>()
+                && propertyInfo.Name == nameof(IHasModificationTime.LastModificationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IModificationAuditedObject>()
+                && propertyInfo.Name == nameof(IModificationAuditedObject.LastModifierId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<ISoftDelete>()
+                && propertyInfo.Name == nameof(ISoftDelete.IsDeleted))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasDeletionTime>()
+                && propertyInfo.Name == nameof(IHasDeletionTime.DeletionTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IDeletionAuditedObject>()
+                && propertyInfo.Name == nameof(IDeletionAuditedObject.DeleterId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Updates change time, entity id and foreign keys after SaveChanges is called.
         /// </summary>
-        public void UpdateChangeList(List<EntityChangeInfo> entityChanges)
+        public virtual void UpdateChangeList(List<EntityChangeInfo> entityChanges)
         {
             foreach (var entityChange in entityChanges)
             {

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Volo.Abp.BlobStoring.Database</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="$(MicrosoftPackageVersion)" />
+    <ProjectReference Include="..\..\src\Volo.Abp.BlobStoring.Database.EntityFrameworkCore\Volo.Abp.BlobStoring.Database.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.BlobStoring.Database.TestBase\Volo.Abp.BlobStoring.Database.TestBase.csproj" />
+  </ItemGroup>
+
+</Project>

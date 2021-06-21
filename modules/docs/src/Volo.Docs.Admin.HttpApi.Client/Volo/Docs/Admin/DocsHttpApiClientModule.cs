@@ -1,11 +1,17 @@
-﻿using Volo.Abp.Modularity;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Http.Client;
+using Volo.Abp.Modularity;
 
 namespace Volo.Docs.Admin
 {
     [DependsOn(
-        typeof(DocsAdminApplicationContractsModule))]
+        typeof(DocsAdminApplicationContractsModule),
+        typeof(AbpHttpClientModule))]
     public class DocsAdminHttpApiClientModule : AbpModule
     {
-        //TODO: Create client proxies!
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddHttpClientProxies(typeof(DocsAdminApplicationContractsModule).Assembly, DocsAdminRemoteServiceConsts.RemoteServiceName);
+        }
     }
 }

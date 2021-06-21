@@ -15,6 +15,13 @@ namespace Volo.Abp.RabbitMQ
         {
             var configuration = context.Services.GetConfiguration();
             Configure<AbpRabbitMqOptions>(configuration.GetSection("RabbitMQ"));
+            Configure<AbpRabbitMqOptions>(options =>
+            {
+                foreach (var connectionFactory in options.Connections.Values)
+                {
+                    connectionFactory.DispatchConsumersAsync = true;
+                }
+            });
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

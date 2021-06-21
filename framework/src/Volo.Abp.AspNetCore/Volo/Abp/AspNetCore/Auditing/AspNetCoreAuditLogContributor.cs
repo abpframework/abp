@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
@@ -35,14 +36,15 @@ namespace Volo.Abp.AspNetCore.Auditing
                 context.AuditInfo.Url = BuildUrl(httpContext);
             }
 
+            var clientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
             if (context.AuditInfo.ClientIpAddress == null)
             {
-                context.AuditInfo.ClientIpAddress = GetClientIpAddress(httpContext);
+                context.AuditInfo.ClientIpAddress = clientInfoProvider.ClientIpAddress;
             }
 
             if (context.AuditInfo.BrowserInfo == null)
             {
-                context.AuditInfo.BrowserInfo = GetBrowserInfo(httpContext);
+                context.AuditInfo.BrowserInfo = clientInfoProvider.BrowserInfo;
             }
 
             //TODO: context.AuditInfo.ClientName
@@ -59,24 +61,6 @@ namespace Volo.Abp.AspNetCore.Auditing
             if (context.AuditInfo.HttpStatusCode == null)
             {
                 context.AuditInfo.HttpStatusCode = httpContext.Response.StatusCode;
-            }
-        }
-
-        protected virtual string GetBrowserInfo(HttpContext httpContext)
-        {
-            return httpContext.Request?.Headers?["User-Agent"];
-        }
-
-        protected virtual string GetClientIpAddress(HttpContext httpContext)
-        {
-            try
-            {
-                return httpContext.Connection?.RemoteIpAddress?.ToString();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex, LogLevel.Warning);
-                return null;
             }
         }
 

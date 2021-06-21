@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -43,7 +44,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
                 return;
             }
 
-            output.Content.AppendHtml($"<i class=\"{GetIconClass(context, output)}\"></i> ");
+            var icon = new TagBuilder("i");
+            icon.AddCssClass(GetIconClass(context, output));
+            output.Content.AppendHtml(icon);
+            output.Content.Append(" ");
         }
 
         protected virtual string GetIconClass(TagHelperContext context, TagHelperOutput output)
@@ -64,7 +68,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
                 return;
             }
 
-            output.Content.AppendHtml($"<span>{TagHelper.Text}</span>");
+            var span = new TagBuilder("span");
+            span.InnerHtml.AppendHtml(TagHelper.Text);
+            output.Content.AppendHtml(span);
         }
 
         protected virtual void AddDisabled(TagHelperContext context, TagHelperOutput output)

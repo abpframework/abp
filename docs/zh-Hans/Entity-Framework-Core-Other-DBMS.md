@@ -6,6 +6,7 @@ ABP框架为一些常见的DMBS提供了简化配置的**集成包**,你可以�
 
 * [MySQL](Entity-Framework-Core-MySQL.md)
 * [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [Oracle](Entity-Framework-Core-Oracle.md)
 * [SQLite](Entity-Framework-Core-SQLite.md)
 
 你也可以不使用集成包配置DBMS提供程序,虽然总是建议使用集成包(它也使不同模块之间的依赖版本成为标准版本),但是如果没有用于DBMS提供程序的集成包,也可以手动集成.
@@ -61,22 +62,25 @@ MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决
 
 通常需要更改 `.DbMigrator` 和 `.Web` 项目里面的 `appsettings.json` ,但它取决于你的解决方案结构.
 
-## 更改迁移DbContext
+## 更改迁移DbContext Factory
 
-MySQL DBMS与SQL Server有一些细微的差异. 某些模块数据库映射配置(尤其是字段长度)会导致MySQL出现问题. 例如某些[IdentityServer模块](Modules/IdentityServer.md)表就存在这样的问题,它提供了一个选项可以根据你的DBMS配置字段.
+启动模板包含***YourProjectName*MigrationsDbContextFactory**类，这是EF Core控制台命令所必须的类（比如[Add-Migration](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)和[Update-Database](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)），在切换到MySql数据库时，我们同时也需要修改`DbContextOptionsBuilder`
 
-启动模板包含*YourProjectName*MigrationsDbContext,它负责维护和迁移数据库架构. 此DbContext基本上调用依赖模块的扩展方法来配置其数据库表.
-
-打开 *YourProjectName*MigrationsDbContext 更改 `builder.ConfigureIdentityServer();` 行,如下所示:
+在 *YourProjectName*MigrationsDbContextFactory 类中找到以下代码：
 
 ````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
+var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+    .UseSqlServer(configuration.GetConnectionString("Default"));
 ````
 
-然后 `ConfigureIdentityServer()` 方法会将字段长度设置为超过MySQL的限制. 如果在创建或执行数据库迁移时遇到任何问题请参考相关的模块文档.
+将其替换为：
+
+````csharp
+var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+    .UseMySql(configuration.GetConnectionString("Default"));
+````
+
+如果在创建或执行数据库迁移时遇到任何问题，请参考相关模块文档
 
 ## 重新生成迁移
 
@@ -104,5 +108,6 @@ builder.ConfigureIdentityServer(options =>
     options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
 });
 ```
+v2.9+版本无需手动设置 ([版本历史](https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore/Volo/Abp/IdentityServer/EntityFrameworkCore/IdentityServerModelBuilderConfigurationOptions.cs))
 
 相关讨论: https://github.com/abpframework/abp/issues/1920

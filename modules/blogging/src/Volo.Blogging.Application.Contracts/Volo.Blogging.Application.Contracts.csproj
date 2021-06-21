@@ -7,16 +7,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Blogging.Application.Contracts</AssemblyName>
     <PackageId>Volo.Blogging.Application.Contracts</PackageId>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\*.json" />
-    <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\*.json" />
+    <ProjectReference Include="..\Volo.Blogging.Application.Contracts.Shared\Volo.Blogging.Application.Contracts.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
-  </ItemGroup>
 </Project>

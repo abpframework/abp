@@ -1,21 +1,28 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
+import { ABP } from '../models/common';
 import { Rest } from '../models/rest';
-import { ConfigState } from '../states/config.state';
+import { CORE_OPTIONS } from '../tokens/options.token';
 import { isUndefinedOrEmptyString } from '../utils/common-utils';
+import { EnvironmentService } from './environment.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestService {
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    @Inject(CORE_OPTIONS) protected options: ABP.Root,
+    protected http: HttpClient,
+    protected environment: EnvironmentService,
+    protected store: Store,
+  ) {}
 
-  private getApiFromStore(apiName: string): string {
-    return this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
+  protected getApiFromStore(apiName: string): string {
+    return this.environment.getApiUrl(apiName);
   }
 
   handleError(err: any): Observable<any> {
@@ -23,7 +30,7 @@ export class RestService {
     return throwError(err);
   }
 
-  // TODO: Deprecate service or improve interface in v3.0
+  // TODO: Deprecate service or improve interface in v5.0
   request<T, R>(
     request: HttpRequest<T> | Rest.Request<T>,
     config?: Rest.Config,
@@ -41,8 +48,10 @@ export class RestService {
           params: Object.keys(params).reduce((acc, key) => {
             const value = params[key];
 
-            if (!isUndefinedOrEmptyString(value)) acc[key] = value;
+            if (isUndefinedOrEmptyString(value)) return acc;
+            if (value === null && !this.options.sendNullsAsQueryParam) return acc;
 
+            acc[key] = value;
             return acc;
           }, {}),
         }),

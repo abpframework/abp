@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdenityClaimTypeManager_Tests : AbpIdentityDomainTestBase
+    public class IdentityClaimTypeManager_Tests : AbpIdentityDomainTestBase
     {
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
-        private readonly IdenityClaimTypeManager _claimTypeManager;
+        private readonly IdentityClaimTypeManager _claimTypeManager;
         private readonly IdentityTestData _testData;
 
-        public IdenityClaimTypeManager_Tests()
+        public IdentityClaimTypeManager_Tests()
         {
             _identityClaimTypeRepository = GetRequiredService<IIdentityClaimTypeRepository>();
-            _claimTypeManager = GetRequiredService<IdenityClaimTypeManager>();
+            _claimTypeManager = GetRequiredService<IdentityClaimTypeManager>();
             _testData = GetRequiredService<IdentityTestData>();
         }
 

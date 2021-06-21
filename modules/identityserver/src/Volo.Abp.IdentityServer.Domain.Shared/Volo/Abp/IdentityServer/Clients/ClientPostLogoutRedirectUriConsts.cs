@@ -2,6 +2,10 @@
 {
     public class ClientPostLogoutRedirectUriConsts
     {
-        public const int PostLogoutRedirectUriMaxLength = 2000;
+        /// <summary>
+        /// Default value: 200
+        /// </summary>
+        public static int PostLogoutRedirectUriMaxLength { get; set; } = 2000;
+        public static int PostLogoutRedirectUriMaxLengthValue { get; set; } = 2000;
     }
 }

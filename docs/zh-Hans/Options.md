@@ -82,7 +82,7 @@ public class MyService : ITransientDependency
 
 对于此类情况,ABP为 `IServiceCollection` 引入了 `PreConfigure<TOptions>` 和 `ExecutePreConfiguredActions<TOptions>` 扩展方法. 该模式的工作原理如下所述.
 
-1. 你的模块中定义计划选项类. 例:
+在你的模块中定义预先选项类. 例:
 
 ````csharp
 public class MyPreOptions

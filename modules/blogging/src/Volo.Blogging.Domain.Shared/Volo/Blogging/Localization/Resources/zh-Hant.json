@@ -3,6 +3,15 @@
   "texts": {
     "Menu:Blogs": "部落格",
     "Menu:BlogManagement": "部落格管理",
+    "Permission:Management": "管理",
+    "Permission:Edit": "標及",
+    "Permission:Create": "新增",
+    "Permission:Delete": "刪除",
+    "Permission:Blogging": "部落格",
+    "Permission:Blogs": "部落格",
+    "Permission:Posts": "文章",
+    "Permission:Tags": "標籤",
+    "Permission:Comments": "評論",
     "Title": "標題",
     "Delete": "刪除",
     "Reply": "回覆",
@@ -42,6 +51,8 @@
     "CreationTime": "建立時間",
     "Description": "描述",
     "Blogs": "部落格",
-    "Tags": "標籤"
+    "Tags": "標籤",
+    "ShareOn": "分享在",
+    "TitleLengthWarning": "為了優化搜索引擎，標題建議保持在60個字元以內"
   }
 }

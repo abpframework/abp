@@ -5,12 +5,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
     <content Remove="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

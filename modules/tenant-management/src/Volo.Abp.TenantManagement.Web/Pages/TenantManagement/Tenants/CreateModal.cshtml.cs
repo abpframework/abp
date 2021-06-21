@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
@@ -18,6 +20,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
         public virtual Task<IActionResult> OnGetAsync()
         {
+            Tenant = new TenantInfoModel();
             return Task.FromResult<IActionResult>(Page());
         }
 
@@ -31,10 +34,10 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             return NoContent();
         }
 
-        public class TenantInfoModel
+        public class TenantInfoModel: ExtensibleObject
         {
             [Required]
-            [StringLength(TenantConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
             public string Name { get; set; }
 
             [Required]

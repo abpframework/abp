@@ -1,11 +1,26 @@
 ﻿using System.Linq;
 using Shouldly;
+using Volo.Abp;
 using Xunit;
 
 namespace System.Collections.Generic
 {
     public class AbpListExtensions_Tests
     {
+        [Fact]
+        public void InsertRange()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+            list.InsertRange(1, new[] {7, 8, 9});
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(7);
+            list[2].ShouldBe(8);
+            list[3].ShouldBe(9);
+            list[4].ShouldBe(2);
+            list[5].ShouldBe(3);
+        }
+
         [Fact]
         public void InsertAfter()
         {
@@ -170,6 +185,37 @@ namespace System.Collections.Generic
             list[0].ShouldBe(1);
             list[1].ShouldBe(42);
             list[2].ShouldBe(3);
+        }
+
+        [Fact]
+        public void SortByDependencies()
+        {
+            var dependencies = new Dictionary<char, char[]>
+            {
+                {'A', new[] {'B', 'G'}},
+                {'B', new[] {'C', 'E'}},
+                {'C', new[] {'D'}},
+                {'D', new char[0]},
+                {'E', new[] {'C', 'F'}},
+                {'F', new[] {'C'}},
+                {'G', new[] {'F'}}
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                var list = RandomHelper
+                    .GenerateRandomizedList(new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G'});
+
+                list = list.SortByDependencies(c => dependencies[c]);
+
+                foreach (var dependency in dependencies)
+                {
+                    foreach (var dependedValue in dependency.Value)
+                    {
+                        list.IndexOf(dependency.Key).ShouldBeGreaterThan(list.IndexOf(dependedValue));
+                    }
+                }
+            }
         }
     }
 }

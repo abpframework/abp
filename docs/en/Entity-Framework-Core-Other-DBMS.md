@@ -6,6 +6,7 @@ ABP framework provides **integration packages** for some common DBMSs to make th
 
 * [MySQL](Entity-Framework-Core-MySQL.md)
 * [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [Oracle](Entity-Framework-Core-Oracle.md)
 * [SQLite](Entity-Framework-Core-SQLite.md)
 
 However, you can configure your DBMS provider **without** these integration packages. While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it manually if there is no integration package for your DBMS provider.

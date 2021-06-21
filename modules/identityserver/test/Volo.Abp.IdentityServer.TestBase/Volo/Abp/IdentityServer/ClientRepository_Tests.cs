@@ -19,9 +19,9 @@ namespace Volo.Abp.IdentityServer
         }
 
         [Fact]
-        public async Task FindByCliendIdAsync()
+        public async Task FindByClientIdAsync()
         {
-            (await clientRepository.FindByCliendIdAsync("ClientId2")).ShouldNotBeNull();
+            (await clientRepository.FindByClientIdAsync("ClientId2")).ShouldNotBeNull();
         }
 
         [Fact]

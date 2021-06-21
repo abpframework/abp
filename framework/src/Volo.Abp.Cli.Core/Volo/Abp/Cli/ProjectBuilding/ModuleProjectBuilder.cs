@@ -48,7 +48,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
                 SourceCodeTypes.Module,
-                args.Version
+                args.Version,
+                null,
+                args.ExtraProperties.ContainsKey(GetSourceCommand.Options.Preview.Long)
             );
 
             var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
@@ -65,6 +67,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var context = new ProjectBuildContext(
                 null,
                 moduleInfo,
+                null,
+                null,
                 templateFile,
                 args
             );

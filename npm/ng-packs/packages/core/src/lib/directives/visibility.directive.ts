@@ -1,7 +1,11 @@
-import { Directive, Input, Optional, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, Optional, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import snq from 'snq';
 
+/**
+ *
+ * @deprecated To be deleted in v5.0
+ */
 @Directive({
   selector: '[abpVisibility]',
 })
@@ -40,7 +44,8 @@ export class VisibilityDirective implements AfterViewInit {
 
     setTimeout(() => {
       const htmlNodes = snq(
-        () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
+        () =>
+          Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
         [],
       );
 

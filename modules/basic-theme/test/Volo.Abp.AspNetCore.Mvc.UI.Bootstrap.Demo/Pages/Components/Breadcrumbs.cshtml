@@ -1,0 +1,96 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.BreadcrumbsModel
+@{
+    ViewData["Title"] = "Breadcrumbs";
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<h2>Breadcrumbs</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/breadcrumb/" target="_blank"> Bootstrap Breadcrumb</a>.</p>
+
+<h4>Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-breadcrumb>
+            <abp-breadcrumb-item title="Home" />
+        </abp-breadcrumb>
+
+        <abp-breadcrumb>
+            <abp-breadcrumb-item href="#" title="Home" />
+            <abp-breadcrumb-item title="Library" />
+        </abp-breadcrumb>
+
+        <abp-breadcrumb>
+            <abp-breadcrumb-item href="#" title="Home" />
+            <abp-breadcrumb-item href="#" title="Library"/>
+            <abp-breadcrumb-item title="Page"/>
+        </abp-breadcrumb>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+
+&lt;abp-breadcrumb&gt;
+    &lt;abp-breadcrumb-item title=&quot;Home&quot; /&gt;
+&lt;/abp-breadcrumb&gt;
+
+&lt;abp-breadcrumb&gt;
+    &lt;abp-breadcrumb-item href=&quot;#&quot; title=&quot;Home&quot; /&gt;
+    &lt;abp-breadcrumb-item title=&quot;Library&quot; /&gt;
+&lt;/abp-breadcrumb&gt;
+
+&lt;abp-breadcrumb&gt;
+    &lt;abp-breadcrumb-item href=&quot;#&quot; title=&quot;Home&quot; /&gt;
+    &lt;abp-breadcrumb-item href=&quot;#&quot; title=&quot;Library&quot;/&gt;
+    &lt;abp-breadcrumb-item title=&quot;Page&quot;/&gt;
+&lt;/abp-breadcrumb&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;nav aria-label=&quot;breadcrumb&quot;&gt;
+  &lt;ol class=&quot;breadcrumb&quot;&gt;
+    &lt;li class=&quot;breadcrumb-item active&quot; aria-current=&quot;page&quot;&gt;Home&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+
+&lt;nav aria-label=&quot;breadcrumb&quot;&gt;
+  &lt;ol class=&quot;breadcrumb&quot;&gt;
+    &lt;li class=&quot;breadcrumb-item&quot;&gt;&lt;a href=&quot;#&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;breadcrumb-item active&quot; aria-current=&quot;page&quot;&gt;Library&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+
+&lt;nav aria-label=&quot;breadcrumb&quot;&gt;
+  &lt;ol class=&quot;breadcrumb&quot;&gt;
+    &lt;li class=&quot;breadcrumb-item&quot;&gt;&lt;a href=&quot;#&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;breadcrumb-item&quot;&gt;&lt;a href=&quot;#&quot;&gt;Library&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;breadcrumb-item active&quot; aria-current=&quot;page&quot;&gt;Data&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

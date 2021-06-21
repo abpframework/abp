@@ -1,4 +1,4 @@
-# Dom Insertion (of Scripts and Styles)
+# Inserting Scripts & Styles to DOM
 
 You can use the `DomInsertionService` in @abp/ng.core package in order to insert scripts and styles in an easy and explicit way.
 
@@ -134,7 +134,3 @@ has(content: string): boolean
 The `has` method returns a boolean value that indicates the given content has already been added to the DOM or not.
 
 - `content` parameter is the content of the inserted `HTMLScriptElement` or `HTMLStyleElement` element.
-
-## What's Next?
-
-- [ContentProjectionService](./Content-Projection-Service.md)

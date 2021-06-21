@@ -1,26 +1,51 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.BackgroundJobs.Quartz
 {
     [Dependency(ReplaceServices = true)]
     public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
-        private readonly IScheduler _scheduler;
+        public const string JobDataPrefix = "Abp";
+        public const string RetryIndex = "RetryIndex";
 
-        public QuartzBackgroundJobManager(IScheduler scheduler)
+        protected IScheduler Scheduler { get; }
+
+        protected AbpBackgroundJobQuartzOptions Options { get; }
+
+        protected IJsonSerializer JsonSerializer { get; }
+
+        public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options, IJsonSerializer jsonSerializer)
         {
-            _scheduler = scheduler;
+            Scheduler = scheduler;
+            JsonSerializer = jsonSerializer;
+            Options = options.Value;
         }
 
-        public async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().SetJobData(new JobDataMap { { nameof(TArgs), args } }).Build();
+            return await ReEnqueueAsync(args, Options.RetryCount, Options.RetryIntervalMillisecond, priority, delay);
+        }
+
+        public virtual async Task<string> ReEnqueueAsync<TArgs>(TArgs args, int retryCount, int retryIntervalMillisecond,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+        {
+            var jobDataMap = new JobDataMap
+            {
+                {nameof(TArgs), JsonSerializer.Serialize(args)},
+                {JobDataPrefix+ nameof(Options.RetryCount), retryCount.ToString()},
+                {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond.ToString()},
+                {JobDataPrefix+ RetryIndex, "0"}
+            };
+
+            var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();
             var trigger = !delay.HasValue ? TriggerBuilder.Create().StartNow().Build() : TriggerBuilder.Create().StartAt(new DateTimeOffset(DateTime.Now.Add(delay.Value))).Build();
-            await _scheduler.ScheduleJob(jobDetail, trigger);
+            await Scheduler.ScheduleJob(jobDetail, trigger);
             return jobDetail.Key.ToString();
         }
     }

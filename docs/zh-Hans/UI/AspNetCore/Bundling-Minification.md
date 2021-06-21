@@ -167,7 +167,27 @@ public class MyWebExtensionModule : AbpModule
 }
 ````
 
-> 无法通过代码配置未命名的bundle tag helpers, 因为它们的名称在开发时是未知的. 建议始终使用bundle tag helper的名称.
+你也可以使用 `ConfigureAll` 方法配置所有现有的捆绑包:
+
+````C#
+[DependsOn(typeof(MyWebModule))]
+public class MyWebExtensionModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options
+                .ScriptBundles
+                .ConfigureAll(bundle => {
+                    bundle.AddFiles(
+                        "/scripts/my-extension-script.js"
+                    );
+                });
+        });
+    }
+}
+````
 
 ### Bundle 贡献者
 

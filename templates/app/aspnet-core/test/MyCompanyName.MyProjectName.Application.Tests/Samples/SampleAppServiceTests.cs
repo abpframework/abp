@@ -10,6 +10,7 @@ namespace MyCompanyName.MyProjectName.Samples
      * (like IIdentityUserAppService here).
      * Only test your own application services.
      */
+    [Collection(MyProjectNameTestConsts.CollectionDefinitionName)]
     public class SampleAppServiceTests : MyProjectNameApplicationTestBase
     {
         private readonly IIdentityUserAppService _userAppService;

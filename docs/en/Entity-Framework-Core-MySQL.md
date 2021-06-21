@@ -12,10 +12,10 @@ Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFra
 
 ## UseMySQL()
 
-Find `UseSqlServer()` calls in your solution, replace with `UseMySQL()`. Check the following files:
+Find `UseSqlServer()` calls in your solution. Check the following files:
 
-* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
+* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project. Replace `UseSqlServer()` with `UseMySQL()`.
+* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project. Replace `UseSqlServer()` with `UseMySql()`. Then add a new parameter (`ServerVersion`) to `UseMySql()` method. Example: `.UseMySql(configuration.GetConnectionString("Default"), ServerVersion.FromString("8.0.21-mysql"))`. See [this issue](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/pull/1233) for more information about `ServerVersion`)
 
 > Depending on your solution structure, you may find more code files need to be changed.
 
@@ -24,23 +24,6 @@ Find `UseSqlServer()` calls in your solution, replace with `UseMySQL()`. Check t
 MySQL connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/mysql/ ) for details of MySQL connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
-
-## Change the Migrations DbContext
-
-MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](Modules/IdentityServer.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
-
-The startup template contains a *YourProjectName*MigrationsDbContext which is responsible to maintain and migrate the database schema. This DbContext basically calls extension methods of the depended modules to configure their database tables.
-
-Open the *YourProjectName*MigrationsDbContext and change the `builder.ConfigureIdentityServer();` line as shown below:
-
-````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
-````
-
-Then `ConfigureIdentityServer()` method will set the field lengths to not exceed the MySQL limits. Refer to related module documentation if you have any problem while creating or executing the database migrations.
 
 ## Re-Generate the Migrations
 

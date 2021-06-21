@@ -3,8 +3,10 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Docs.Admin
 @using Volo.Docs.Admin.Navigation
-@inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
 @model Volo.Docs.Admin.Pages.Docs.Admin.Projects.IndexModel
+@inject IHtmlLocalizer<DocsResource> L
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Projects";

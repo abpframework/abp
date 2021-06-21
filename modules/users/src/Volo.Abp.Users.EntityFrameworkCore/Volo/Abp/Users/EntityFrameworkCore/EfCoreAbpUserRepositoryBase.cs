@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,12 +22,51 @@ namespace Volo.Abp.Users.EntityFrameworkCore
 
         public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await this.FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
+            return await this.OrderBy(x => x.Id).FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .Where(u => ids.Contains(u.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<TUser>> SearchAsync(
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        (u.Email != null && u.Email.Contains(filter)) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
+                )
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUser.UserName) : sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        (u.Email != null && u.Email.Contains(filter)) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
+                )
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

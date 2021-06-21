@@ -1,4 +1,4 @@
-import { Config, takeUntilDestroy } from '@abp/ng.core';
+import { Config, SubscriptionService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -20,6 +20,7 @@ import snq from 'snq';
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],
+  providers: [SubscriptionService],
 })
 export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
   appRef: ApplicationRef;
@@ -51,6 +52,8 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
     return this.status ? `[${this.status}]` : '';
   }
 
+  constructor(private subscription: SubscriptionService) {}
+
   ngOnInit() {
     this.backgroundColor =
       snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) ||
@@ -71,15 +74,11 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
-    fromEvent(document, 'keyup')
-      .pipe(
-        takeUntilDestroy(this),
-        debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
-      )
-      .subscribe(() => {
-        this.destroy();
-      });
+    const keyup$ = fromEvent(document, 'keyup').pipe(
+      debounceTime(150),
+      filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+    );
+    this.subscription.addOne(keyup$, () => this.destroy());
   }
 
   ngOnDestroy() {}

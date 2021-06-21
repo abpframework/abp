@@ -9,6 +9,9 @@ namespace Volo.Abp.Uow
 
         IsolationLevel? IsolationLevel { get; }
 
-        TimeSpan? Timeout { get; }
+        /// <summary>
+        /// Milliseconds
+        /// </summary>
+        int? Timeout { get; }
     }
 }

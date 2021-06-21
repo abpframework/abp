@@ -53,6 +53,7 @@ namespace Volo.Abp.Identity
         protected IIdentityRoleRepository RoleRepository { get; }
         protected IGuidGenerator GuidGenerator { get; }
         protected ILogger<IdentityRoleStore> Logger { get; }
+        protected ILookupNormalizer LookupNormalizer { get; }
         protected IIdentityUserRepository UserRepository { get; }
 
         public IdentityUserStore(
@@ -60,12 +61,14 @@ namespace Volo.Abp.Identity
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
             ILogger<IdentityRoleStore> logger,
+            ILookupNormalizer lookupNormalizer,
             IdentityErrorDescriber describer = null)
         {
             UserRepository = userRepository;
             RoleRepository = roleRepository;
             GuidGenerator = guidGenerator;
             Logger = logger;
+            LookupNormalizer = lookupNormalizer;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -288,7 +291,7 @@ namespace Volo.Abp.Identity
         /// </summary>
         /// <param name="user">The user to retrieve the password hash for.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-        /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user has a password. If the 
+        /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user has a password. If the
         /// user has a password the returned value with be true, otherwise it will be false.</returns>
         public virtual Task<bool> HasPasswordAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
         {
@@ -313,8 +316,12 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(normalizedRoleName, nameof(normalizedRoleName));
 
-            var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
+            if (await IsInRoleAsync(user, normalizedRoleName, cancellationToken))
+            {
+                return;
+            }
 
+            var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
             if (role == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist!", normalizedRoleName));
@@ -337,11 +344,7 @@ namespace Volo.Abp.Identity
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
-
-            if (string.IsNullOrWhiteSpace(normalizedRoleName))
-            {
-                throw new ArgumentException(nameof(normalizedRoleName) + " can not be null or whitespace");
-            }
+            Check.NotNullOrWhiteSpace(normalizedRoleName, nameof(normalizedRoleName));
 
             var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
             if (role == null)
@@ -350,7 +353,7 @@ namespace Volo.Abp.Identity
             }
 
             await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
-            
+
             user.RemoveRole(role.Id);
         }
 
@@ -366,7 +369,13 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            return await UserRepository.GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
+            var userRoles = await UserRepository
+                .GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
+
+            var userOrganizationUnitRoles = await UserRepository
+                .GetRoleNamesInOrganizationUnitAsync(user.Id, cancellationToken: cancellationToken);
+
+            return userRoles.Union(userOrganizationUnitRoles).ToList();
         }
 
         /// <summary>
@@ -375,28 +384,23 @@ namespace Volo.Abp.Identity
         /// <param name="user">The user whose role membership should be checked.</param>
         /// <param name="normalizedRoleName">The role to check membership of</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-        /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user is a member of the given group. If the 
+        /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user is a member of the given group. If the
         /// user is a member of the group the returned value with be true, otherwise it will be false.</returns>
-        public virtual async Task<bool> IsInRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> IsInRoleAsync(
+            [NotNull] IdentityUser user,
+            [NotNull] string normalizedRoleName,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
+            Check.NotNullOrWhiteSpace(normalizedRoleName, nameof(normalizedRoleName));
 
-            if (string.IsNullOrWhiteSpace(normalizedRoleName))
-            {
-                throw new ArgumentException(nameof(normalizedRoleName) + " can not be null or whitespace");
-            }
+            var roles = await GetRolesAsync(user, cancellationToken);
 
-            var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
-            if (role == null)
-            {
-                return false;
-            }
-
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
-
-            return user.IsInRole(role.Id);
+            return roles
+                .Select(r => LookupNormalizer.NormalizeName(r))
+                .Contains(normalizedRoleName);
         }
 
         /// <summary>
@@ -585,7 +589,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            user.EmailConfirmed = confirmed;
+            user.SetEmailConfirmed(confirmed);
 
             return Task.CompletedTask;
         }
@@ -860,7 +864,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            user.PhoneNumberConfirmed = confirmed;
+            user.SetPhoneNumberConfirmed(confirmed);
 
             return Task.CompletedTask;
         }
@@ -924,7 +928,7 @@ namespace Volo.Abp.Identity
         /// <param name="user">The user whose two factor authentication enabled status should be set.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>
-        /// The <see cref="Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified 
+        /// The <see cref="Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified
         /// <paramref name="user"/> has two factor authentication enabled or not.
         /// </returns>
         public virtual Task<bool> GetTwoFactorEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
@@ -942,7 +946,7 @@ namespace Volo.Abp.Identity
         /// <param name="claim">The claim whose users should be retrieved.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>
-        /// The <see cref="Task"/> contains a list of users, if any, that contain the specified claim. 
+        /// The <see cref="Task"/> contains a list of users, if any, that contain the specified claim.
         /// </returns>
         public virtual async Task<IList<IdentityUser>> GetUsersForClaimAsync([NotNull] Claim claim, CancellationToken cancellationToken = default)
         {
@@ -959,7 +963,7 @@ namespace Volo.Abp.Identity
         /// <param name="normalizedRoleName">The role whose users should be retrieved.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>
-        /// The <see cref="Task"/> contains a list of users, if any, that are in the specified role. 
+        /// The <see cref="Task"/> contains a list of users, if any, that are in the specified role.
         /// </returns>
         public virtual async Task<IList<IdentityUser>> GetUsersInRoleAsync([NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
         {

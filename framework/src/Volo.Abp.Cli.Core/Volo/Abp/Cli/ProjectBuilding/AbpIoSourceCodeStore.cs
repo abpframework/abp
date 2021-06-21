@@ -9,10 +9,13 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.IO;
@@ -26,22 +29,23 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
 
         protected AbpCliOptions Options { get; }
-
         protected IJsonSerializer JsonSerializer { get; }
-
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public AbpIoSourceCodeStore(
             IOptions<AbpCliOptions> options,
             IJsonSerializer jsonSerializer,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             CancellationTokenProvider = cancellationTokenProvider;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Options = options.Value;
 
             Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
@@ -51,17 +55,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string name,
             string type,
             string version = null,
-            string templateSource = null)
+            string templateSource = null,
+            bool includePreReleases = false)
         {
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+            var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type, null, includePreReleases);
 
-            string latestVersion;
-
-#if DEBUG
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type, $"{CliUrls.WwwAbpIoProduction}api/download/{type}/get-version/");
-#else
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
-#endif
             if (version == null)
             {
                 if (latestVersion == null)
@@ -69,12 +68,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
-                    Logger.LogWarning("\t Template Name\tVersion");
+                    Logger.LogWarning("\tTemplate Name\tVersion");
 
                     var templateList = GetLocalTemplates();
                     foreach (var cacheFile in templateList)
                     {
-                        Logger.LogWarning($"\t {cacheFile.TemplateName}\t\t{cacheFile.Version}");
+                        Logger.LogWarning($"\t{cacheFile.TemplateName}\t\t{cacheFile.Version}");
                     }
 
                     Logger.LogWarning(string.Empty);
@@ -84,21 +83,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 version = latestVersion;
             }
 
-            string nugetVersion;
-
-#if DEBUG
-            nugetVersion = version;
-#else
-            nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-#endif
+            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")), version, latestVersion, nugetVersion);
+                return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
+                    version, latestVersion, nugetVersion);
             }
 
-            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
+            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
 
 #if DEBUG
             if (File.Exists(localCacheFile))
@@ -121,7 +115,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Name = name,
                     Type = type,
                     TemplateSource = templateSource,
-                    Version = version
+                    Version = version,
+                    IncludePreReleases = includePreReleases
                 }
             );
 
@@ -133,7 +128,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null,
+            bool includePreReleases = false)
         {
             if (url == null)
             {
@@ -142,24 +138,19 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+                var client = _cliHttpClientFactory.CreateClient();
+                var stringContent = new StringContent(
+                    JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto
+                        {Name = name, IncludePreReleases = includePreReleases}),
+                    Encoding.UTF8,
+                    MimeTypes.Application.Json
+                );
+
+                using (var response = await client.PostAsync(url, stringContent,
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
                 {
-                    var response = await client.PostAsync(
-                        url,
-                        new StringContent(
-                            JsonSerializer.Serialize(
-                                new GetLatestSourceCodeVersionDto { Name = name }
-                            ),
-                            Encoding.UTF8,
-                            MimeTypes.Application.Json
-                        ),
-                        CancellationTokenProvider.Token
-                    );
-
                     await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
                     var result = await response.Content.ReadAsStringAsync();
-
                     return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
                 }
             }
@@ -172,34 +163,32 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
         {
-            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/";
+            if (type != SourceCodeTypes.Template)
+            {
+                return null;
+            }
 
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+                var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/";
+                var client = _cliHttpClientFactory.CreateClient();
+
+                var stringContent = new StringContent(
+                    JsonSerializer.Serialize(new GetTemplateNugetVersionDto {Name = name, Version = version}),
+                    Encoding.UTF8,
+                    MimeTypes.Application.Json
+                );
+
+                using (var response = await client.PostAsync(url, stringContent,
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
                 {
-                    var response = await client.PostAsync(
-                        url,
-                        new StringContent(
-                            JsonSerializer.Serialize(
-                                new GetTemplateNugetVersionDto { Name = name, Version = version }
-                            ),
-                            Encoding.UTF8,
-                            MimeTypes.Application.Json
-                        ),
-                        CancellationTokenProvider.Token
-                    );
-
                     await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
                     var result = await response.Content.ReadAsStringAsync();
-
                     return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Error occured while getting the NuGet version from {0} : {1}", url, ex.Message);
                 return null;
             }
         }
@@ -208,38 +197,41 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
 
+            HttpResponseMessage responseMessage = null;
+
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+                var client = _cliHttpClientFactory.CreateClient(timeout: TimeSpan.FromMinutes(5));
+
+                if (input.TemplateSource.IsNullOrWhiteSpace())
                 {
-                    HttpResponseMessage responseMessage;
-
-                    if (input.TemplateSource.IsNullOrWhiteSpace())
-                    {
-                        responseMessage = await client.PostAsync(
-                            url,
-                            new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, MimeTypes.Application.Json),
-                            CancellationTokenProvider.Token
-                        );
-                    }
-                    else
-                    {
-                        responseMessage = await client.GetAsync(input.TemplateSource, CancellationTokenProvider.Token);
-                    }
-
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-
-                    return await responseMessage.Content.ReadAsByteArrayAsync();
+                    responseMessage = await client.PostAsync(
+                        url,
+                        new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, MimeTypes.Application.Json),
+                        _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))
+                    );
                 }
+                else
+                {
+                    responseMessage = await client.GetAsync(input.TemplateSource,
+                        _cliHttpClientFactory.GetCancellationToken());
+                }
+
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                var resultAsBytes = await responseMessage.Content.ReadAsByteArrayAsync();
+                responseMessage.Dispose();
+
+                return resultAsBytes;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while downloading source-code from {0} : {1}", url, ex.Message);
+                Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
+                    responseMessage?.ToString(), Environment.NewLine, ex.Message);
                 throw;
             }
         }
 
-        private bool IsNetworkSource(string source)
+        private static bool IsNetworkSource(string source)
         {
             return source.ToLower().StartsWith("http");
         }
@@ -254,7 +246,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 stringBuilder.AppendLine(cacheFile);
             }
 
-            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
+            var matches = Regex.Matches(stringBuilder.ToString(),
+                $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
             foreach (Match match in matches)
             {
                 templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
@@ -272,11 +265,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Type { get; set; }
 
             public string TemplateSource { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetLatestSourceCodeVersionDto
         {
             public string Name { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetTemplateNugetVersionDto
@@ -284,6 +281,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Name { get; set; }
 
             public string Version { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetVersionResultDto

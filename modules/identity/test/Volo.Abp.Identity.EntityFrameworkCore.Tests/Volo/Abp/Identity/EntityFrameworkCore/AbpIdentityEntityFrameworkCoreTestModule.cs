@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 
@@ -11,7 +12,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     [DependsOn(
         typeof(AbpIdentityTestBaseModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule)
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpIdentityEntityFrameworkCoreTestModule : AbpModule
     {

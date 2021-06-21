@@ -1,19 +1,333 @@
-<div id="AbpContentToolbar"></div>
-<div class="jumbotron text-center">
-  <h1>{{ '::Welcome' | abpLocalization }}</h1>
-  <div class="row">
-    <div class="col-md-6 mx-auto">
-      <p>{{ '::LongWelcomeMessage' | abpLocalization }}</p>
-      <hr class="my-4" />
+<div class="container">
+  <div class="p-5 text-center">
+    <div class="badge badge-success h5 rounded mb-4" role="alert">
+      <h5 class="m-1">
+        <i class="fas fa-rocket"></i> Congratulations, <strong>MyProjectName</strong> is
+        successfully running!
+      </h5>
+    </div>
+    <h1>{{ '::Welcome' | abpLocalization }}</h1>
+
+    <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
+
+    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
+      ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+    >
+  </div>
+  <div class="my-3 text-center">
+    <h3>Let's improve your application!</h3>
+    <p>Here are some links to help you get started:</p>
+  </div>
+  <div class="card mt-4 mb-5">
+    <div class="card-body">
+      <div class="row text-center justify-content-md-center">
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'Learn the ABP Framework',
+                description:
+                  'Explore the compherensive documentation to learn how to build a modern web application.',
+                links: [
+                  {
+                    href: 'https://docs.abp.io/en/abp/latest?ref=tmpl',
+                    label: 'See Documents'
+                  }
+                ]
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'Samples',
+                description: 'See the example projects built with the ABP Framework.',
+                links: [
+                  {
+                    href: 'https://docs.abp.io/en/abp/latest/Samples/Index?ref=tmpl',
+                    label: 'All samples'
+                  }
+                ]
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'ABP Community',
+                description: 'Get involved with a vibrant community and become a contributor.',
+                links: [
+                  {
+                    href: 'https://community.abp.io/',
+                    label: 'Community'
+                  },
+                  {
+                    href: 'https://docs.abp.io/en/abp/latest/Contribution/Index?ref=tmpl',
+                    label: 'Contribute'
+                  }
+                ]
+              }
+            }
+          "
+        ></ng-container>
+      </div>
+      <div class="row text-center mt-lg-3 justify-content-md-center">
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'ABP Blog',
+                description: 'Take a look at our recently published articles.',
+                links: [
+                  {
+                    href: 'https://blog.abp.io/abp?ref=tmpl',
+                    label: 'See Blog'
+                  }
+                ]
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-template #githubButtonsTemplate>
+          <p class="mb-1">
+            <iframe
+              scrolling="no"
+              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp&amp;title=&amp;aria-label=Star%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star&amp;data-size=large&amp;data-show-count=true"
+              style="
+                width: 122px;
+                height: 28px;
+                border: none;
+                display: inline-block;
+                margin-right: 4px;
+              "
+            ></iframe>
+            <iframe
+              scrolling="no"
+              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Fissues&amp;title=&amp;aria-label=Issue%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-issue-opened&amp;data-text=Issue&amp;data-size=large"
+              style="
+                width: 72px;
+                height: 28px;
+                border: none;
+                display: inline-block;
+                margin-right: 4px;
+              "
+            ></iframe>
+
+            <iframe
+              scrolling="no"
+              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Ffork&amp;title=&amp;aria-label=Fork%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-repo-forked&amp;data-text=Fork&amp;data-size=large&amp;"
+              style="width: 72px; height: 28px; border: none; display: inline-block"
+            ></iframe>
+          </p>
+        </ng-template>
+
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'Github',
+                description:
+                  'Do you love the ABP Framework? Please <strong>give a star</strong> to support it!',
+                links: [
+                  {
+                    href: 'https://github.com/abpframework/abp/issues/new?template=feature.md',
+                    label: 'Request a feature'
+                  }
+                ],
+                customTemplate: githubButtonsTemplate
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            starterLinkTemplate;
+            context: {
+              $implicit: {
+                title: 'Stackoverflow',
+                description: 'See answers to previously asked questions or ask a new one.',
+                links: [
+                  {
+                    href: 'https://stackoverflow.com/questions/tagged/abp',
+                    label: 'Questions'
+                  },
+                  {
+                    href: 'https://stackoverflow.com/questions/ask',
+                    label: 'Ask a Question'
+                  }
+                ]
+              }
+            }
+          "
+        ></ng-container>
+      </div>
     </div>
   </div>
-  <a href="https://abp.io?ref=tmpl" target="_blank" class="btn btn-primary px-4">abp.io</a>
-  <a
-    *ngIf="!hasLoggedIn"
-    routerLink="/account/login"
-    [state]="{ redirectUrl: '/' }"
-    class="px-4 btn btn-primary ml-1"
-    role="button"
-    ><i class="fa fa-sign-in"></i> {{ 'AbpIdentity::Login' | abpLocalization }}</a
-  >
+
+  <div class="mt-5 my-3 text-center">
+    <h3>Meet the ABP Commercial</h3>
+    <p>A Complete Web Application Platform Built on the ABP Framework</p>
+  </div>
+
+  <div class="card mt-4 mb-5">
+    <div class="card-body">
+      <p class="px-lg-5 mx-lg-5 py-3 text-center">
+        <a href="https://commercial.abp.io/" target="_blank">ABP Commercial</a> is a platform based
+        on the open source ABP framework. It provides pre-built application modules, rapid
+        application development tooling, professional UI themes, premium support and more.
+      </p>
+
+      <div class="row text-center justify-content-md-center">
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'Startup Templates',
+                href: 'https://commercial.abp.io/startup-templates?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'Application Modules',
+                href: 'https://commercial.abp.io/modules?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'Developer<br />Tools',
+                href: 'https://commercial.abp.io/tools?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'UI<br />Themes',
+                href: 'https://commercial.abp.io/themes?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'Premium Support',
+                href: 'https://support.abp.io/QA/Questions?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="
+            featuresTemplate;
+            context: {
+              $implicit: {
+                title: 'Additional Services',
+                href: 'https://commercial.abp.io/additional-services?ref=tmpl'
+              }
+            }
+          "
+        ></ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="mb-5 text-center">
+    <p class="align-middle">
+      <a href="https://twitter.com/abpframework" target="_blank" class="mx-2"
+        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Framework</span></a
+      >
+      <a href="https://twitter.com/abpcommercial" target="_blank" class="mx-2"
+        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Commercial</span></a
+      >
+      <a href="https://github.com/abpframework/abp" target="_blank" class="mx-2"
+        ><i class="fa fa-github"></i><span class="text-secondary"> abpframework</span></a
+      >
+    </p>
+  </div>
 </div>
+
+<ng-template #starterLinkTemplate let-context>
+  <div class="col-lg-4 border-left">
+    <div class="p-4">
+      <h5 class="mb-3">
+        <i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> {{ context.title }}
+      </h5>
+      <p [innerHTML]="context.description"></p>
+      <ng-container
+        *ngIf="context.customTemplate"
+        [ngTemplateOutlet]="context.customTemplate"
+      ></ng-container>
+      <a
+        *ngFor="let link of context.links"
+        [href]="link.href"
+        target="_blank"
+        class="btn btn-link px-1"
+        >{{ link.label }} <i class="fas fa-chevron-right"></i
+      ></a>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #featuresTemplate let-context>
+  <div class="col-lg-2 border-left">
+    <div class="p-3">
+      <h6>
+        <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
+        <span [innerHTML]="context.title"></span>
+        <a [href]="context.href" target="_blank" class="d-block mt-2 btn btn-sm btn-link"
+          >Details <i class="fas fa-chevron-right"></i
+        ></a>
+      </h6>
+    </div>
+  </div>
+</ng-template>
+
+<style scoped>
+  .col-lg-2.border-left:nth-of-type(6n + 1) {
+    border-left: 0 !important;
+  }
+
+  .col-lg-4.border-left:nth-of-type(3n + 1) {
+    border-left: 0 !important;
+  }
+
+  @media (max-width: 991px) {
+    .border-left {
+      border-left: 0 !important;
+    }
+  }
+</style>

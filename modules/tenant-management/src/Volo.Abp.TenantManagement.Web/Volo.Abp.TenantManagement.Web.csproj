@@ -4,26 +4,27 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.TenantManagement.Web</AssemblyName>
     <PackageId>Volo.Abp.TenantManagement.Web</PackageId>
     <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <OutputType>Library</OutputType>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-    <Content Remove="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
-    <Content Remove="Properties\launchSettings.json" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,10 @@
     <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi\Volo.Abp.TenantManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

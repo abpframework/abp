@@ -49,7 +49,7 @@ this.confirmation
 - `message` 和 `title` 参数接收字符串,本地化Key或本地化对象. 参阅[本地化文档](./Localization.md)
 - `Confirmation.Status` 是一个枚举,具有三个属性;
     - `Confirmation.Status.confirm` 是一个关闭事件值,当通过确认按钮关闭弹出窗口时触发此事件.
-    - `Confirmation.Status.reject` 是一个关闭事件值,当通过“取消”按钮关闭弹出窗口时触发此事件.
+    - `Confirmation.Status.reject` 是一个关闭事件值,当通过取消按钮关闭弹出窗口时触发此事件.
     - `Confirmation.Status.dismiss` 是一个关闭事件值,当通过按Escape键关闭弹出窗口时触发此事件.
 
 如果你对确认状态不感兴趣,则不必订阅返回的observable:
@@ -66,6 +66,7 @@ this.confirmation.error('You are not authorized.', 'Error');
 const options: Partial<Confirmation.Options> = {
   hideCancelBtn: false,
   hideYesBtn: false,
+  dismissible: false,
   cancelText: 'Close',
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
@@ -81,8 +82,9 @@ this.confirmation.warn(
 
 - `hideCancelBtn` 选项为 `true` 时隐藏取消按钮. 默认值为 `false`.
 - `hideYesBtn` 选项为 `true` 时隐藏确认按钮. 默认值为 `false`.
-- `cancelText` 是取消按钮的文本,可以传递本地化键或本地化对象. 默认值是 `AbpUi::Cancel`.
-- `yesText` 是确定按钮的文本,可以传递本地化键或本地化对象. 默认值是 `AbpUi::Yes`.
+- `dismissible`选项允许通过按Escape键或单击背景来取消确认弹出窗口. 默认值为 `true`.
+- `cancelText` 是取消按钮的文本,可以传递本地化键或本地化对象. 默认值为 `AbpUi::Cancel`.
+- `yesText` 是确定按钮的文本,可以传递本地化键或本地化对象. 默认值为 `AbpUi::Yes`.
 - `messageLocalizationParams`是用于消息本地化的插值参数.
 - `titleLocalizationParams` 是标题本地化的插值参数.
 

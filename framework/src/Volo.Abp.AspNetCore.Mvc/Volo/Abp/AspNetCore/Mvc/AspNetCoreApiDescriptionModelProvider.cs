@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
-using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -27,17 +26,20 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public ILogger<AspNetCoreApiDescriptionModelProvider> Logger { get; set; }
 
+        private readonly AspNetCoreApiDescriptionModelProviderOptions _options;
         private readonly IApiDescriptionGroupCollectionProvider _descriptionProvider;
-        private readonly AbpAspNetCoreMvcOptions _options;
+        private readonly AbpAspNetCoreMvcOptions _abpAspNetCoreMvcOptions;
         private readonly AbpApiDescriptionModelOptions _modelOptions;
 
         public AspNetCoreApiDescriptionModelProvider(
+            IOptions<AspNetCoreApiDescriptionModelProviderOptions> options,
             IApiDescriptionGroupCollectionProvider descriptionProvider,
-            IOptions<AbpAspNetCoreMvcOptions> options,
+            IOptions<AbpAspNetCoreMvcOptions> abpAspNetCoreMvcOptions,
             IOptions<AbpApiDescriptionModelOptions> modelOptions)
         {
-            _descriptionProvider = descriptionProvider;
             _options = options.Value;
+            _descriptionProvider = descriptionProvider;
+            _abpAspNetCoreMvcOptions = abpAspNetCoreMvcOptions.Value;
             _modelOptions = modelOptions.Value;
 
             Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
@@ -67,34 +69,61 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private void AddApiDescriptionToModel(
             ApiDescription apiDescription,
-            ApplicationApiDescriptionModel applicationModel, 
+            ApplicationApiDescriptionModel applicationModel,
             ApplicationApiDescriptionModelRequestDto input)
         {
-            var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
+            var controllerType = apiDescription
+                .ActionDescriptor
+                .AsControllerActionDescriptor()
+                .ControllerTypeInfo;
+
             var setting = FindSetting(controllerType);
 
-            var moduleModel = applicationModel.GetOrAddModule(GetRootPath(controllerType, setting), GetRemoteServiceName(controllerType, setting));
+            var moduleModel = applicationModel.GetOrAddModule(
+                GetRootPath(controllerType, setting),
+                GetRemoteServiceName(controllerType, setting)
+            );
 
-            var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
+            var controllerModel = moduleModel.GetOrAddController(
+                _options.ControllerNameGenerator(controllerType, setting),
+                controllerType,
+                _modelOptions.IgnoredInterfaces
+            );
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
-            var uniqueMethodName = GetUniqueActionName(method);
+            var uniqueMethodName = _options.ActionNameGenerator(method);
             if (controllerModel.Actions.ContainsKey(uniqueMethodName))
             {
-                Logger.LogWarning($"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.RootPath}'. Ignored: " + method);
+                Logger.LogWarning(
+                    $"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.RootPath}'. Ignored: " +
+                    method);
                 return;
             }
 
             Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
 
-            var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
+            bool? allowAnonymous = null;
+            if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAllowAnonymous))
+            {
+                allowAnonymous = true;
+            }
+            else if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAuthorizeData))
+            {
+                allowAnonymous = false;
+            }
+
+            var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
-                method,
-                apiDescription.RelativePath,
-                apiDescription.HttpMethod,
-                GetSupportedVersions(controllerType, method, setting)
-            ));
+                ActionApiDescriptionModel.Create(
+                    uniqueMethodName,
+                    method,
+                    apiDescription.RelativePath,
+                    apiDescription.HttpMethod,
+                    GetSupportedVersions(controllerType, method, setting),
+                    allowAnonymous
+                )
+            );
 
             if (input.IncludeTypes)
             {
@@ -104,42 +133,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
         }
 
-        private static string CalculateControllerName(Type controllerType, ConventionalControllerSetting setting)
-        {
-            var controllerName = controllerType.Name.RemovePostFix("Controller").RemovePostFix(ApplicationService.CommonPostfixes);
-
-            if (setting?.UrlControllerNameNormalizer != null)
-            {
-                controllerName = setting.UrlControllerNameNormalizer(new UrlControllerNameNormalizerContext(setting.RootPath, controllerName));
-            }
-
-            return controllerName;
-        }
-
-        private static string GetUniqueActionName(MethodInfo method)
-        {
-            var methodNameBuilder = new StringBuilder(method.Name);
-
-            var parameters = method.GetParameters();
-            if (parameters.Any())
-            {
-                methodNameBuilder.Append("By");
-
-                for (var i = 0; i < parameters.Length; i++)
-                {
-                    if (i > 0)
-                    {
-                        methodNameBuilder.Append("And");
-                    }
-
-                    methodNameBuilder.Append(parameters[i].Name.ToPascalCase());
-                }
-            }
-
-            return methodNameBuilder.ToString();
-        }
-
-        private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method, ConventionalControllerSetting setting)
+        private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method,
+            ConventionalControllerSetting setting)
         {
             var supportedVersions = new List<ApiVersion>();
 
@@ -172,9 +167,15 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddCustomTypesToModel(applicationModel, method.ReturnType);
         }
 
-        private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel, [CanBeNull] Type type)
+        private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel,
+            [CanBeNull] Type type)
         {
             if (type == null)
+            {
+                return;
+            }
+
+            if (type.IsGenericParameter)
             {
                 return;
             }
@@ -182,17 +183,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             type = AsyncHelper.UnwrapTask(type);
 
             if (type == typeof(object) ||
-                type == typeof(void) || 
+                type == typeof(void) ||
                 type == typeof(Enum) ||
                 type == typeof(ValueType) ||
                 TypeHelper.IsPrimitiveExtended(type))
             {
-                return;
-            }
-
-            if (TypeHelper.IsEnumerable(type, out var itemType))
-            {
-                AddCustomTypesToModel(applicationModel, itemType);
                 return;
             }
 
@@ -203,48 +198,92 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            /* TODO: Add interfaces
-             */
+            if (TypeHelper.IsEnumerable(type, out var itemType))
+            {
+                AddCustomTypesToModel(applicationModel, itemType);
+                return;
+            }
 
-            var typeName = TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
+            if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            {
+                var genericTypeDefinition = type.GetGenericTypeDefinition();
 
+                AddCustomTypesToModel(applicationModel, genericTypeDefinition);
+
+                foreach (var genericArgument in type.GetGenericArguments())
+                {
+                    AddCustomTypesToModel(applicationModel, genericArgument);
+                }
+
+                return;
+            }
+
+            var typeName = CalculateTypeName(type);
             if (applicationModel.Types.ContainsKey(typeName))
             {
                 return;
             }
-            
-            var typeModel = TypeApiDescriptionModel.Create(type);
-            applicationModel.Types[typeName] = typeModel;
+
+            applicationModel.Types[typeName] = TypeApiDescriptionModel.Create(type);
 
             AddCustomTypesToModel(applicationModel, type.BaseType);
 
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
             {
                 AddCustomTypesToModel(applicationModel, propertyInfo.PropertyType);
             }
         }
 
-        private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method, ApiDescription apiDescription)
+        private static string CalculateTypeName(Type type)
+        {
+            if (!type.IsGenericTypeDefinition)
+            {
+                return TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
+            }
+
+            var i = 0;
+            var argumentList = type
+                .GetGenericArguments()
+                .Select(_ => "T" + i++)
+                .JoinAsString(",");
+
+            return $"{type.FullName.Left(type.FullName.IndexOf('`'))}<{argumentList}>";
+        }
+
+        private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method,
+            ApiDescription apiDescription)
         {
             if (!apiDescription.ParameterDescriptions.Any())
             {
                 return;
             }
 
+            var parameterDescriptionNames = apiDescription
+                .ParameterDescriptions
+                .Select(p => p.Name)
+                .ToArray();
+
+            var methodParameterNames = method
+                .GetParameters()
+                .Where(IsNotFromServicesParameter)
+                .Select(GetMethodParamName)
+                .ToArray();
+
             var matchedMethodParamNames = ArrayMatcher.Match(
-                apiDescription.ParameterDescriptions.Select(p => p.Name).ToArray(),
-                method.GetParameters().Select(GetMethodParamName).ToArray()
+                parameterDescriptionNames,
+                methodParameterNames
             );
 
             for (var i = 0; i < apiDescription.ParameterDescriptions.Count; i++)
             {
                 var parameterDescription = apiDescription.ParameterDescriptions[i];
                 var matchedMethodParamName = matchedMethodParamNames.Length > i
-                                                 ? matchedMethodParamNames[i]
-                                                 : parameterDescription.Name;
+                    ? matchedMethodParamNames[i]
+                    : parameterDescription.Name;
 
                 actionModel.AddParameter(ParameterApiDescriptionModel.Create(
                         parameterDescription.Name,
+                        _options.ApiParameterNameGenerator?.Invoke(parameterDescription),
                         matchedMethodParamName,
                         parameterDescription.Type,
                         parameterDescription.RouteInfo?.IsOptional ?? false,
@@ -259,6 +298,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
         }
 
+        private static bool IsNotFromServicesParameter(ParameterInfo parameterInfo)
+        {
+            return !parameterInfo.IsDefined(typeof(FromServicesAttribute), true);
+        }
+
         public string GetMethodParamName(ParameterInfo parameterInfo)
         {
             var modelNameProvider = parameterInfo.GetCustomAttributes()
@@ -270,10 +314,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return parameterInfo.Name;
             }
 
-            return modelNameProvider.Name;
+            return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
-        private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] ConventionalControllerSetting setting)
+        private static string GetRootPath([NotNull] Type controllerType,
+            [CanBeNull] ConventionalControllerSetting setting)
         {
             if (setting != null)
             {
@@ -296,7 +341,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RemoteServiceName;
             }
 
-            var remoteServiceAttr = controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
+            var remoteServiceAttr =
+                controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
             if (remoteServiceAttr?.Name != null)
             {
                 return remoteServiceAttr.Name;
@@ -308,7 +354,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         private ConventionalControllerSetting FindSetting(Type controllerType)
         {
-            foreach (var controllerSetting in _options.ConventionalControllers.ConventionalControllerSettings)
+            foreach (var controllerSetting in _abpAspNetCoreMvcOptions.ConventionalControllers.ConventionalControllerSettings)
             {
                 if (controllerSetting.ControllerTypes.Contains(controllerType))
                 {

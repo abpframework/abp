@@ -26,14 +26,14 @@ body {
         left: 0;
         position: fixed;
         background: #1d1d1d;
-         
+
         .input-group {
             border-radius: 5px;
             overflow: hidden;
         }
 
         .docs-sidebar-wrapper {
-            width: 270px;
+            width: 300px;
             float: right;
 
             input.form-control {
@@ -103,12 +103,14 @@ body {
 
                 > ul {
                     display: block;
-                    height: calc(100vh - 320px);
+                    height: calc(100vh - 230px);
                     overflow-y: auto;
+                    margin-right: 12px !important;
+                    margin-top: 20px !important;
                 }
 
                 ul {
-                    font-size: .935em;
+                    font-size: 14px;
                     list-style: none;
                     padding: 0 1rem;
                     margin: 0;
@@ -298,37 +300,45 @@ body {
         }
 
         .docs-link-btns {
-            border-bottom: 1px solid #f4f5f7;
-            background: #fdfdfd;
-            padding: 10px 20px;
+            background: #f5f7fa;
+            padding: 15px 30px;
             margin: 0 -15px;
             text-align: right;
             font-size: .8em;
-            min-height: 40px;
+            min-height: 48px;
 
             a {
-                color: #999;
+                color: #222;
+
+                .text-muted {
+                    color: #ccc !important;
+                }
 
                 &:hover {
-                    color: #444;
+                    color: #000;
                     text-decoration: none;
                 }
             }
 
-            .twitter {
-                color: #00ACEE;
-            }
+            .search-area {
+                margin: -5px 0 -5px -10px;
+                box-shadow: 0 0 10px #e8e8e8;
 
-            .linkedin {
-                color: #0077B5;
-            }
+                .input-group-text {
+                    background: white;
+                    border: 0;
+                    color: #000;
+                    font-size: 1em;
+                }
 
-            .email {
-                color: #5a5a5a;
-            }
-
-            .share-button {
-                margin-left: 10px;
+                .form-control {
+                    background: #fff;
+                    border: 0;
+                    font-size: 1em;
+                    padding-left: 0;
+                    outline: 0;
+                    box-shadow: none;
+                }
             }
         }
 
@@ -432,16 +442,73 @@ body {
         }
     }
 
+    .doc-social-btns {
+        margin: 0 -15px 0;
+        font-size: .8em;
+        background: #e9ecf0;
+        height: 53px;
+        padding: 15px 20px;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .twitter {
+            color: #00ACEE;
+        }
+
+        .linkedin {
+            color: #0077B5;
+        }
+
+        .email {
+            color: #5a5a5a;
+        }
+
+        .share-button {
+            margin-left: 10px;
+        }
+    }
+
+    .cont-container {
+        a.cont-avatar {
+            position: relative;
+
+            img {
+                width: 24px;
+                height: 24px;
+                box-shadow: 0 0 8px #c1bbbb;
+                border: 2px solid #fff;
+                margin-left: -10px;
+                display: inline-block;
+                margin-top: -2px;
+                transition: .2s;
+            }
+        }
+
+        &:hover {
+            a.cont-avatar {
+                img {
+                    margin-left: -2px;
+                }
+            }
+        }
+    }
+
     .docs-page-index {
-        min-height: 96vh;
+        min-height: 90vh;
+        background-color: #f5f7fa !important;
 
         #scroll-index {
-            max-height: 96vh;
+            max-height: 90vh;
         }
 
         .docs-inner-anchors {
             position: fixed;
-            top: 0px;
+            top: 50px;
             padding: 10px;
             font-size: .90em;
 
@@ -517,11 +584,11 @@ body {
 
 
 .docs-page {
-    .docs-sidebar { 
+    .docs-sidebar {
         .docs-sidebar-wrapper {
 
             .docs-version {
-                .version-select { 
+                .version-select {
 
                     select.form-control, input.form-control {
                         background: #000000;
@@ -696,7 +763,6 @@ body {
     .container {
         max-width: 1080px;
     }
-
 }
 
 @media (min-width: 1366px) {
@@ -877,6 +943,10 @@ div.code-toolbar > .toolbar a {
     cursor: copy;
 }
 
+.logo-nav ul {
+    width: 300px !important;
+}
+
 @media (max-width: 767px) {
     body {
         font-size: 14px;
@@ -960,7 +1030,7 @@ div.code-toolbar > .toolbar a {
 @media screen and (max-width: 767px) {
     .navbar-logo {
         .navbar-brand {
-            display: inline-block; 
+            display: inline-block;
             margin: 0 auto !important;
             max-width: 70%;
             overflow: hidden;
@@ -1012,6 +1082,7 @@ div.code-toolbar > .toolbar a {
         }
     }
 }
+
 .scrolledMore {
     padding-top: 107px;
 
@@ -1034,4 +1105,10 @@ div.code-toolbar > .toolbar a {
         }
     }
 }
- 
+
+.mCS-autoHide > .mCustomScrollBox > .mCSB_scrollTools,
+.mCS-autoHide > .mCustomScrollBox ~ .mCSB_scrollTools {
+    opacity: 1 !important;
+    filter: "alpha(opacity=1)";
+    -ms-filter: "alpha(opacity=1)";
+}

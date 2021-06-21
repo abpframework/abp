@@ -1,9 +1,9 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   TemplateRef,
   TrackByFunction,
@@ -11,13 +11,17 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+/**
+ *
+ * @deprecated To be deleted in v5.0. Use ngx-datatale instead.
+ */
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
   styleUrls: ['table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
   private _totalRecords: number;
   bodyScrollLeft = 0;
 
@@ -54,7 +58,7 @@ export class TableComponent {
   @Output()
   readonly pageChange = new EventEmitter<number>();
 
-  @ViewChild('wrapper', { read: ElementRef, static: false })
+  @ViewChild('wrapper', { read: ElementRef })
   wrapperRef: ElementRef<HTMLDivElement>;
 
   @Input()
@@ -84,7 +88,23 @@ export class TableComponent {
     return this.value.slice(start, start + this.rows);
   }
 
+  marginCalculator: MarginCalculator;
+
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;
   };
+
+  ngOnInit() {
+    this.marginCalculator = document.body.dir === 'rtl' ? rtlCalculator : ltrCalculator;
+  }
 }
+
+function ltrCalculator(div: HTMLDivElement): string {
+  return `0 auto 0 -${div.scrollLeft}px`;
+}
+
+function rtlCalculator(div: HTMLDivElement): string {
+  return `0 ${-(div.scrollWidth - div.clientWidth - div.scrollLeft)}px 0 auto`;
+}
+
+type MarginCalculator = (div: HTMLDivElement) => string;

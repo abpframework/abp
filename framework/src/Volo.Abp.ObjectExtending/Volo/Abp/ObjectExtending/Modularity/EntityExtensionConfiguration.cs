@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
@@ -47,16 +48,51 @@ namespace Volo.Abp.ObjectExtending.Modularity
                 propertyName,
                 () => new ExtensionPropertyConfiguration(this, propertyType, propertyName)
             );
-
             configureAction?.Invoke(propertyInfo);
 
+            NormalizeProperty(propertyInfo);
+
+            if (!propertyInfo.UI.Lookup.Url.IsNullOrEmpty())
+            {
+                AddLookupTextProperty(propertyInfo);
+                propertyInfo.UI.OnTable.IsVisible = false;
+            }
             return this;
+        }
+
+        private void AddLookupTextProperty(ExtensionPropertyConfiguration propertyInfo)
+        {
+            var lookupTextPropertyName = $"{propertyInfo.Name}_Text";
+            var lookupTextPropertyInfo = Properties.GetOrAdd(
+               lookupTextPropertyName,
+               () => new ExtensionPropertyConfiguration(this, typeof(string), lookupTextPropertyName)
+           );
+            
+            lookupTextPropertyInfo.DisplayName = propertyInfo.DisplayName;
         }
 
         [NotNull]
         public virtual ImmutableList<ExtensionPropertyConfiguration> GetProperties()
         {
             return Properties.Values.ToImmutableList();
+        }
+
+        private static void NormalizeProperty(ExtensionPropertyConfiguration propertyInfo)
+        {
+            if (!propertyInfo.Api.OnGet.IsAvailable)
+            {
+                propertyInfo.UI.OnTable.IsVisible = false;
+            }
+
+            if (!propertyInfo.Api.OnCreate.IsAvailable)
+            {
+                propertyInfo.UI.OnCreateForm.IsVisible = false;
+            }
+
+            if (!propertyInfo.Api.OnUpdate.IsAvailable)
+            {
+                propertyInfo.UI.OnEditForm.IsVisible = false;
+            }
         }
     }
 }

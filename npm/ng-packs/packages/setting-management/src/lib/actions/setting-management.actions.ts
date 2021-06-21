@@ -1,6 +1,6 @@
-import { SettingTab } from '@abp/ng.theme.shared';
+import { ABP } from '@abp/ng.core';
 
 export class SetSelectedSettingTab {
   static readonly type = '[SettingManagement] Set Selected Tab';
-  constructor(public payload: SettingTab) {}
+  constructor(public payload: ABP.Tab) {}
 }

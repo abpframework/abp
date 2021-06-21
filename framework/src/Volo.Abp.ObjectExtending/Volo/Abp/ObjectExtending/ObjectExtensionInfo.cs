@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
@@ -12,19 +14,19 @@ namespace Volo.Abp.ObjectExtending
         public Type Type { get; }
 
         [NotNull]
-        protected Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
+        protected ConcurrentDictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
 
         [NotNull]
-        public Dictionary<object, object> Configuration { get; }
+        public ConcurrentDictionary<object, object> Configuration { get; }
 
         [NotNull]
         public List<Action<ObjectExtensionValidationContext>> Validators { get; }
 
         public ObjectExtensionInfo([NotNull] Type type)
         {
-            Type = Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
-            Properties = new Dictionary<string, ObjectExtensionPropertyInfo>();
-            Configuration = new Dictionary<object, object>();
+            Type = Check.NotNull(type, nameof(type));
+            Properties = new ConcurrentDictionary<string, ObjectExtensionPropertyInfo>();
+            Configuration = new ConcurrentDictionary<object, object>();
             Validators = new List<Action<ObjectExtensionValidationContext>>();
         }
 
@@ -56,7 +58,7 @@ namespace Volo.Abp.ObjectExtending
 
             var propertyInfo = Properties.GetOrAdd(
                 propertyName,
-                () => new ObjectExtensionPropertyInfo(this, propertyType, propertyName)
+                _ => new ObjectExtensionPropertyInfo(this, propertyType, propertyName)
             );
 
             configureAction?.Invoke(propertyInfo);
@@ -67,7 +69,9 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public virtual ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
         {
-            return Properties.Values.ToImmutableList();
+            return Properties.OrderBy(t=>t.Key)
+                            .Select(t=>t.Value)
+                            .ToImmutableList();
         }
 
         [CanBeNull]

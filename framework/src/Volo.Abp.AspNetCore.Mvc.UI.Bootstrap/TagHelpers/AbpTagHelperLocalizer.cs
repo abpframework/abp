@@ -21,38 +21,30 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public string GetLocalizedText(string text, ModelExplorer explorer)
         {
-            var resourceType = GetResourceTypeFromModelExplorer(explorer);
-            var localizer = GetStringLocalizer(resourceType);
-
-            return localizer == null ? text : localizer[text].Value;
+            var localizer = GetLocalizerOrNull(explorer);
+            return localizer == null
+                ? text
+                : localizer[text].Value;
         }
 
-        public IStringLocalizer GetLocalizer(ModelExplorer explorer)
+        public IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer)
         {
-            var resourceType = GetResourceTypeFromModelExplorer(explorer);
-            return GetStringLocalizer(resourceType);
+            return GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
         }
 
-        public IStringLocalizer GetLocalizer(Assembly assembly)
+        public IStringLocalizer GetLocalizerOrNull(Assembly assembly)
         {
-            var resourceType = _options.AssemblyResources.GetOrDefault(assembly);
-            return GetStringLocalizer(resourceType);
+            var resourceType = GetResourceType(assembly);
+            return resourceType == null
+                ? _stringLocalizerFactory.CreateDefaultOrNull()
+                : _stringLocalizerFactory.Create(resourceType);
         }
 
-        public IStringLocalizer GetLocalizer(Type resourceType)
+        private Type GetResourceType(Assembly assembly)
         {
-            return GetStringLocalizer(resourceType);
-        }
-
-        private IStringLocalizer GetStringLocalizer(Type resourceType)
-        {
-            return resourceType == null ? null : _stringLocalizerFactory.Create(resourceType);
-        }
-
-        private Type GetResourceTypeFromModelExplorer(ModelExplorer explorer)
-        {
-            var assembly = explorer.Container.ModelType.Assembly;
-            return _options.AssemblyResources.GetOrDefault(assembly);
+            return _options
+                .AssemblyResources
+                .GetOrDefault(assembly);
         }
     }
 }

@@ -2,10 +2,12 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Posts
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
 @model EditModel
-@inherits Volo.Blogging.Pages.Blog.BloggingPage
 @{
-    ViewBag.PageTitle = "Blog";
+    ViewBag.PageTitle = "Edit Blog Post";
 }
 @section styles {
     <abp-style-bundle name="@typeof(EditModel).FullName">
@@ -18,19 +20,19 @@
         <abp-script type="@typeof(TuiEditorScriptContributor)" />
         <abp-script src="/Pages/Blogs/Posts/edit.js" />
     </abp-script-bundle>
-} 
+}
 <div id="edit-post-container">
     <div class="container py-5">
         <div class="row">
             <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <div class="card">
-                    <div class="card-body"> 
+                    <div class="card-body">
                         <form method="post" id="edit-post-form">
                             <abp-input asp-for="Post.Title" auto-focus="true" />
-                            
-                            <abp-alert 
-                                dismissible="true" 
-                                style="display: none" 
+
+                            <abp-alert
+                                dismissible="true"
+                                style="display: none"
                                 id="title-length-warning"
                                 data-max-length="@PostConsts.MaxTitleLengthToBeSeoFriendly">
                                 @L["TitleLengthWarning"]
@@ -38,11 +40,12 @@
 
                             <abp-input asp-for="Post.Url" />
                             <abp-input asp-for="Post.CoverImage" />
-                            
+
                             <abp-row>
                                 <abp-column size-sm="_9">
                                     <div class="form-group">
                                         <label for="CoverImageFile">@L["CoverImage"]</label>
+                                        <span> * </span>
                                         <input class="form-control" type="file" id="CoverImageFile" />
                                     </div>
                                 </abp-column>
@@ -77,7 +80,7 @@
 
                                 </div>
                                 <div class="mt-3 d-flex flex-row-reverse">
-                                    <abp-button button-type="Primary" type="submit" form="edit-post-form" text="@L["Submit"].Value" icon="check" />
+                                    <abp-button id="PostFormSubmitButton" button-type="Primary" type="submit" form="edit-post-form" text="@L["Submit"].Value" icon="check" />
 
                                     <a asp-page="/Blog/Posts/Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-default mr-2"><span>@L["Cancel"]</span></a>
                                 </div>
@@ -87,5 +90,5 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>

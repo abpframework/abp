@@ -1,18 +1,10 @@
 <nav
   class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
   id="main-navbar"
-  style="min-height: 4rem;"
+  style="min-height: 4rem"
 >
-  <div class="container ">
-    <a class="navbar-brand" routerLink="/">
-      <img
-        *ngIf="appInfo.logoUrl; else appName"
-        [src]="appInfo.logoUrl"
-        [alt]="appInfo.name"
-        width="100%"
-        height="auto"
-      />
-    </a>
+  <div class="container">
+    <abp-logo *abpReplaceableTemplate="{ componentKey: logoComponentKey }"></abp-logo>
     <button
       class="navbar-toggler"
       type="button"
@@ -29,212 +21,30 @@
       </div>
 
       <ng-template #navigations>
-        <ul class="navbar-nav mx-auto">
-          <ng-container
-            *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"
-            [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"
-            [ngTemplateOutletContext]="{ $implicit: route }"
-          >
-          </ng-container>
+        <abp-routes
+          *abpReplaceableTemplate="{
+            componentKey: routesComponentKey,
+            inputs: {
+              smallScreen: { value: smallScreen }
+            }
+          }"
+          class="mx-auto"
+          [smallScreen]="smallScreen"
+        ></abp-routes>
 
-          <ng-template #defaultLink let-route>
-            <li class="nav-item" *abpPermission="route.requiredPolicy">
-              <a class="nav-link" [routerLink]="[route.url]"
-                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
-                {{ route.name | abpLocalization }}</a
-              >
-            </li>
-          </ng-template>
-
-          <ng-template #dropdownLink let-route>
-            <li
-              #navbarRootDropdown
-              *abpPermission="route.requiredPolicy"
-              [abpVisibility]="routeContainer"
-              class="nav-item dropdown"
-              display="static"
-              (click)="
-                navbarRootDropdown.expand
-                  ? (navbarRootDropdown.expand = false)
-                  : (navbarRootDropdown.expand = true)
-              "
-            >
-              <a
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                href="javascript:void(0)"
-              >
-                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
-                {{ route.name | abpLocalization }}
-              </a>
-              <div
-                #routeContainer
-                class="dropdown-menu border-0 shadow-sm"
-                (click)="$event.preventDefault(); $event.stopPropagation()"
-                [class.d-block]="smallScreen && navbarRootDropdown.expand"
-              >
-                <ng-template
-                  #forTemplate
-                  ngFor
-                  [ngForOf]="route.children"
-                  [ngForTrackBy]="trackByFn"
-                  [ngForTemplate]="childWrapper"
-                ></ng-template>
-              </div>
-            </li>
-          </ng-template>
-
-          <ng-template #childWrapper let-child>
-            <ng-template
-              [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"
-              [ngTemplateOutletContext]="{ $implicit: child }"
-            ></ng-template>
-          </ng-template>
-
-          <ng-template #defaultChild let-child>
-            <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-              <a class="dropdown-item" [routerLink]="[child.url]">
-                <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
-                {{ child.name | abpLocalization }}</a
-              >
-            </div>
-          </ng-template>
-
-          <ng-template #dropdownChild let-child>
-            <div
-              [abpVisibility]="childrenContainer"
-              class="dropdown-submenu"
-              ngbDropdown
-              #dropdownSubmenu="ngbDropdown"
-              [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
-              placement="right-top"
-              [autoClose]="true"
-              *abpPermission="child.requiredPolicy"
-              (openChange)="openChange($event, childrenContainer)"
-            >
-              <div ngbDropdownToggle [class.dropdown-toggle]="false">
-                <a
-                  abpEllipsis="210px"
-                  [abpEllipsisEnabled]="isDropdownChildDynamic"
-                  role="button"
-                  class="btn d-block text-left dropdown-toggle"
-                >
-                  <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
-                  {{ child.name | abpLocalization }}
-                </a>
-              </div>
-              <div
-                #childrenContainer
-                class="dropdown-menu border-0 shadow-sm"
-                [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
-              >
-                <ng-template
-                  ngFor
-                  [ngForOf]="child.children"
-                  [ngForTrackBy]="trackByFn"
-                  [ngForTemplate]="childWrapper"
-                ></ng-template>
-              </div>
-            </div>
-          </ng-template>
-        </ul>
-
-        <ul class="navbar-nav">
-          <ng-container
-            *ngFor="let element of rightPartElements; trackBy: trackElementByFn"
-            [ngTemplateOutlet]="element"
-          ></ng-container>
-        </ul>
+        <abp-nav-items
+          *abpReplaceableTemplate="{
+            componentKey: navItemsComponentKey
+          }"
+        ></abp-nav-items>
       </ng-template>
     </div>
   </div>
 </nav>
 
-<div
-  [@slideFromBottom]="
-    outlet && outlet.isActivated && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path
-  "
-  class="container"
->
+<!-- [@slideFromBottom]="outlet.isActivated && outlet.activatedRoute?.routeConfig?.path" TODO: throws ExpressionChangedAfterItHasBeenCheck when animation is active. It should be fixed -->
+<div class="container">
+  <abp-page-alert-container></abp-page-alert-container>
+
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
-
-<ng-template #appName>
-  {{ appInfo.name }}
-</ng-template>
-
-<ng-template #language>
-  <li *ngIf="(dropdownLanguages$ | async)?.length > 0" class="nav-item">
-    <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
-      <a
-        ngbDropdownToggle
-        class="nav-link"
-        href="javascript:void(0)"
-        role="button"
-        id="dropdownMenuLink"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        {{ defaultLanguage$ | async }}
-      </a>
-      <div
-        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
-        aria-labelledby="dropdownMenuLink"
-        [class.d-block]="smallScreen && languageDropdown.isOpen()"
-      >
-        <a
-          *ngFor="let lang of dropdownLanguages$ | async"
-          href="javascript:void(0)"
-          class="dropdown-item"
-          (click)="onChangeLang(lang.cultureName)"
-          >{{ lang?.displayName }}</a
-        >
-      </div>
-    </div>
-  </li>
-</ng-template>
-
-<ng-template #currentUser>
-  <li class="nav-item">
-    <ng-template #loginBtn>
-      <a role="button" class="nav-link" routerLink="/account/login">{{
-        'AbpAccount::Login' | abpLocalization
-      }}</a>
-    </ng-template>
-    <div
-      *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
-      ngbDropdown
-      class="dropdown"
-      #currentUserDropdown="ngbDropdown"
-      display="static"
-    >
-      <a
-        ngbDropdownToggle
-        class="nav-link"
-        href="javascript:void(0)"
-        role="button"
-        id="dropdownMenuLink"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        {{ (currentUser$ | async)?.userName }}
-      </a>
-      <div
-        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
-        aria-labelledby="dropdownMenuLink"
-        [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
-      >
-        <a class="dropdown-item" routerLink="/account/manage-profile"
-          ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
-        >
-        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
-          ><i class="fa fa-power-off mr-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
-        >
-      </div>
-    </div>
-  </li>
-</ng-template>

@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Features;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.SettingManagement.Localization;
@@ -19,17 +18,22 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                 return;
             }
 
+            if (context.Menu.FindMenuItem(SettingManagementMenuNames.GroupName) != null)
+            {
+                /* This may happen if blazor server UI is being used in the same application.
+                 * In this case, we don't add the MVC setting management UI. */
+                return;
+            }
+
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
             var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
-            if (
-                !settingManagementPageOptions.Contributors.Any() ||
-                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext))
-                )
+            if (!settingManagementPageOptions.Contributors.Any() ||
+                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext)))
             {
                 return;
             }
 
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
+            var l = context.GetLocalizer<AbpSettingManagementResource>();
 
             context.Menu
                 .GetAdministration()
@@ -37,9 +41,9 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                     new ApplicationMenuItem(
                         SettingManagementMenuNames.GroupName,
                         l["Settings"],
-                        "/SettingManagement",
+                        "~/SettingManagement",
                         icon: "fa fa-cog"
-                    )
+                    ).RequireFeatures(SettingManagementFeatures.Enable)
                 );
         }
 

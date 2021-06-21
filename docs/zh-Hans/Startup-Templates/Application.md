@@ -57,6 +57,20 @@ abp new Acme.BookStore -u angular
 abp new Acme.BookStore -d mongodb
 ````
 
+### 指定移动应用程序框架
+
+该模板支持以下移动应用程序框架:
+
+- `react-native`: React Native
+
+使用 `-m` (or `--mobile`) 选项来指定移动应用程序框架:
+
+````bash
+abp new Acme.BookStore -m react-native
+````
+
+如果未指定, 则不会创建任何移动应用程序.
+
 ## 解决方案结构
 
 根据命令的选项,会创建略有不同的解决方案结构.
@@ -342,7 +356,7 @@ Home模块是一个可延迟加载的模块, 它加载应用程序的根地址.
 
 ### React Native
 
-解决方案将[React Native](https://reactnative.dev/)应用程序作为默认值包含在 `react-native` 文件夹中. 
+如果使用 `-m react-native` 选项解决方案将[React Native](https://reactnative.dev/)应用程序作为默认值包含在 `react-native` 文件夹中. 
 
 服务器端类似于上面描述的解决方案. `*.HttpApi.Host` 的项目提供 API, 所以 React 本机应用程序使用它. 
 
@@ -423,7 +437,11 @@ Screens 是通过在 `src/screens` 文件夹中创建将名称分开的文件夹
 * [Formik](https://github.com/jaredpalmer/formik) 用于构建表单.
 * [Yup](https://github.com/jquense/yup) 用于表单验证.
 
+## 社交/外部登录
+
+如果你想要为你的应用程序配置社交/外部登录,请参阅[社交/外部登录](../Authentication/Social-External-Logins.md)文档.
+
 ## 下一步是什么?
 
-* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-AspNetCore-MVC-Template.md)创建此模板的新解决方案并运行它.
-* 参阅[ASP.NET Core MVC 教程](../Tutorials/AspNetCore-Mvc/Part-I.md)学习使用此模板开发应用程序.
+* [入门文档](../Getting-Started.md)介绍了如何在几分钟内创建新应用程序.
+* [Web应用程序开发教程](../Tutorials/Part-1.md)逐步介绍了应用程序开发.

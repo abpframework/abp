@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Projects
@@ -52,21 +50,19 @@ namespace Volo.Docs.Projects
 
         protected Project()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public Project(
-            Guid id, 
-            [NotNull] string name, 
-            [NotNull] string shortName, 
+            Guid id,
+            [NotNull] string name,
+            [NotNull] string shortName,
             [NotNull] string documentStoreType,
             [NotNull] string format,
-            [NotNull] string defaultDocumentName = "Index", 
-            [NotNull] string navigationDocumentName = "docs-nav.json", 
+            [NotNull] string defaultDocumentName = "Index",
+            [NotNull] string navigationDocumentName = "docs-nav.json",
             [NotNull] string parametersDocumentName = "docs-params.json")
+            : base(id)
         {
-            Id = id;
-
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             ShortName = Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
             DocumentStoreType = Check.NotNullOrWhiteSpace(documentStoreType, nameof(documentStoreType));
@@ -74,8 +70,6 @@ namespace Volo.Docs.Projects
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
             ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
-
-            ExtraProperties = new Dictionary<string, object>();
 
             NormalizeShortName();
         }

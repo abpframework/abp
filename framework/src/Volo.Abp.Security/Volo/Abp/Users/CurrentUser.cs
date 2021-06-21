@@ -17,6 +17,10 @@ namespace Volo.Abp.Users
 
         public virtual string UserName => this.FindClaimValue(AbpClaimTypes.UserName);
 
+        public virtual string Name  => this.FindClaimValue(AbpClaimTypes.Name);
+
+        public virtual string SurName  => this.FindClaimValue(AbpClaimTypes.SurName);
+
         public virtual string PhoneNumber => this.FindClaimValue(AbpClaimTypes.PhoneNumber);
 
         public virtual bool PhoneNumberVerified => string.Equals(this.FindClaimValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
@@ -27,7 +31,7 @@ namespace Volo.Abp.Users
 
         public virtual Guid? TenantId => _principalAccessor.Principal?.FindTenantId();
 
-        public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
+        public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).Distinct().ToArray();
 
         private readonly ICurrentPrincipalAccessor _principalAccessor;
 

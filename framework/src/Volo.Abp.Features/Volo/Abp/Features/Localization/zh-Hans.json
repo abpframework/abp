@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.Feature:010001": "功能未启用: {FeatureName}",
+    "Volo.Feature:010002": "必要的功能未启用. 这些功能需要启用: {FeatureNames}",
+    "Volo.Feature:010003": "必要的功能未启用. 需要启用这些功能中的一项：{FeatureNames}"
+  }
+}

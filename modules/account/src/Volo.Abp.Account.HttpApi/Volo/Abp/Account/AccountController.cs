@@ -23,5 +23,19 @@ namespace Volo.Abp.Account
         {
             return AccountAppService.RegisterAsync(input);
         }
+
+        [HttpPost]
+        [Route("send-password-reset-code")]
+        public virtual Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
+        {
+            return AccountAppService.SendPasswordResetCodeAsync(input);
+        }
+
+        [HttpPost]
+        [Route("reset-password")]
+        public virtual Task ResetPasswordAsync(ResetPasswordDto input)
+        {
+            return AccountAppService.ResetPasswordAsync(input);
+        }
     }
 }

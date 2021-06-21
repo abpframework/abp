@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Documents": "Dökümanlar",
@@ -9,17 +9,31 @@
     "Edit": "Düzenle",
     "LastEditTime": "Son Düzenleme",
     "Delete": "Sil",
+    "ClearCache": "Önbelleği temizle",
+    "ClearCacheConfirmationMessage": "\"{0}\" Projesinin tüm önbelliğini temizlemek istediğinize emin misiniz? ",
+    "ReIndexAllProjects": "Tüm projeleri yeniden indexle",
+    "ReIndexProject": "Projeyi yeniden indeksle",
+    "ReIndexProjectConfirmationMessage": "\"{0}\" Projesini yeniden insdekslemek istediğinize emin misiniz?",
+    "SuccessfullyReIndexProject": "\"{0}\" Projesi başarıyla yeniden indekslendi",
+    "ReIndexAllProjectConfirmationMessage": "Tüm projeleri yeniden indekslemek istediğinize emin misiniz?",
+    "SuccessfullyReIndexAllProject": "Tüm projeler başarıyla yeniden indekslendi",
     "InThisDocument": "Bu dökümanda",
     "GoToTop": "En üste çık",
     "Projects": "Proje(ler)",
     "NoProjectWarning": "Hiç proje yok!",
     "DocumentNotFound": "Aradığınız döküman bulunamadı!",
+    "ProjectNotFound": "Talep edilen proje bulunamadı!",
     "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!",
     "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir.",
+    "FilterTopics": "Konuları Filtrele",
+    "FullSearch": "Dokümanlarda Ara",
+    "Volo.Docs.Domain:010001": "Elastic search etkin değil",
     "MultipleVersionDocumentInfo": "Bu dökümanın birden çok versiyonu bulunmaktadır. Sizin için en uygun olan seçenekleri seçiniz.",
     "New": "Yeni",
     "Upd": "Günc",
     "NewExplanation": "Son iki hafta içinde oluşturuldu.",
-    "UpdatedExplanation": "Son iki hafta içinde güncellendi."
+    "UpdatedExplanation": "Son iki hafta içinde güncellendi.",
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} zaten var.",
+    "Preview": "ön izleme"
   }
 }

@@ -12,6 +12,11 @@
             return theme.GetLayout(StandardLayouts.Account, fallbackToDefault);
         }
 
+        public static string GetPublicLayout(this ITheme theme, bool fallbackToDefault = true)
+        {
+            return theme.GetLayout(StandardLayouts.Public, fallbackToDefault);
+        }
+
         public static string GetEmptyLayout(this ITheme theme, bool fallbackToDefault = true)
         {
             return theme.GetLayout(StandardLayouts.Empty, fallbackToDefault);

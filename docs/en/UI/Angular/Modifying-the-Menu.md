@@ -3,9 +3,6 @@
 The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./Component-Replacement.md) and learn how to replace a layout.
 
 
-<!-- TODO: Replace layout replacement document with component replacement. Layout replacement document will be created.-->
-
-
 ## How to Add a Logo
 
 The `logoUrl` property in the environment variables is the url of the logo. 
@@ -25,9 +22,99 @@ export const environment = {
 
 ## How to Add a Navigation Element
 
+### Via `RoutesService`
+
+You can add routes to the menu by calling the `add` method of `RoutesService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
+
+```js
+import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { Component } from '@angular/core';
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(routes: RoutesService) {
+    routes.add([
+      {
+        path: '/your-path',
+        name: 'Your navigation',
+        order: 101,
+        iconClass: 'fas fa-question-circle',
+        requiredPolicy: 'permission key here',
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/your-path/child',
+        name: 'Your child navigation',
+        parentName: 'Your navigation',
+        order: 1,
+        requiredPolicy: 'permission key here',
+      },
+    ]);
+  }
+}
+```
+
+An alternative and probably cleaner way is to use a route provider. First create a provider:
+
+```js
+// route.provider.ts
+import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { APP_INITIALIZER } from '@angular/core';
+
+export const APP_ROUTE_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+];
+
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      {
+        path: '/your-path',
+        name: 'Your navigation',
+        requiredPolicy: 'permission key here',
+        order: 101,
+        iconClass: 'fas fa-question-circle',
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/your-path/child',
+        name: 'Your child navigation',
+        parentName: 'Your navigation',
+        requiredPolicy: 'permission key here',
+        order: 1,
+      },
+    ]);
+  };
+}
+```
+
+...and then in app.module.ts...
+
+```js
+import { NgModule } from '@angular/core';
+import { APP_ROUTE_PROVIDER } from './route.provider';
+
+@NgModule({
+  providers: [APP_ROUTE_PROVIDER],
+  // imports, declarations, and bootstrap
+})
+export class AppModule {}
+```
+
+Here is what every property works as:
+
+- `path` is the absolute path of the navigation element.
+- `name` is the label of the navigation element. A localization key or a localization object can be passed.
+- `parentName` is a reference to the `name` of the parent route in the menu and is used for creating multi-level menu items.
+- `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
+- `order` is the order of the navigation element. "Administration" has an order of `100`, so keep that in mind when ordering top level menu items.
+- `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
+- `layout` defines in which layout the route will be loaded. (default: `eLayoutType.empty`)
+- `invisible` makes the item invisible in the menu. (default: `false`)
+
 ### Via `routes` Property in `AppRoutingModule`
 
-You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `ConfigState`. `ApplicationLayoutComponent` gets routes from store and displays them on the menu.
+You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `RoutesService`.
 
 You can add the `routes` property like below:
 
@@ -37,7 +124,7 @@ You can add the `routes` property like below:
   data: {
     routes: {
       name: 'Your navigation',
-      order: 3,
+      order: 101,
       iconClass: 'fas fa-question-circle',
       requiredPolicy: 'permission key here',
       children: [
@@ -48,152 +135,139 @@ You can add the `routes` property like below:
           requiredPolicy: 'permission key here',
         },
       ],
-    } as ABP.Route, // can be imported from @abp/ng.core
-  }
+    },
+  },
 }
 ```
 
-- `name` is the label of the navigation element. A localization key or a localization object can be passed.
-- `order` is the order of the navigation element.
-- `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
-- `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
-- `children` is an array and is used for declaring child navigation elements. The child navigation element will be placed as a child route which will be available at `'/your-path/child'` based on the given `path` property.
+Alternatively, you can do this:
+
+```js
+{
+  path: 'your-path',
+  data: {
+    routes: [
+      {
+        path: '/your-path',
+        name: 'Your navigation',
+        order: 101,
+        iconClass: 'fas fa-question-circle',
+        requiredPolicy: 'permission key here',
+      },
+      {
+        path: '/your-path/child',
+        name: 'Your child navigation',
+        parentName: 'Your navigation',
+        order: 1,
+        requiredPolicy: 'permission key here',
+      },
+    ] as ABP.Route[], // can be imported from @abp/ng.core
+  },
+}
+```
+
+The advantage of the second method is that you are not bound to the parent/child structure and use any paths you like.
 
 After adding the `routes` property as described above, the navigation menu looks like this:
 
 ![navigation-menu-via-app-routing](./images/navigation-menu-via-app-routing.png)
 
-## Via ConfigState
+## How to Patch or Remove a Navigation Element
 
-The `dispatchAddRoute` method of `ConfigStateService` adds a new navigation element to the menu.
-
-```js
-// this.config is instance of ConfigStateService
-
-const newRoute: ABP.Route = {
-  name: 'My New Page',
-  iconClass: 'fa fa-dashboard',
-  path: 'page',
-  invisible: false,
-  order: 2,
-  requiredPolicy: 'MyProjectName.MyNewPage',
-} as Omit<ABP.Route, 'children'>;
-
-this.config.dispatchAddRoute(newRoute);
-// returns a state stream which emits after dispatch action is complete
-```
-
-The `newRoute` will be placed as at root level, i.e. without any parent routes, and its url will be stored as `'/path'`.
-
-If you want **to add a child route, you can do this:**
+The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children.
 
 ```js
-// this.config is instance of ConfigStateService
-// eIdentityRouteNames enum can be imported from @abp/ng.identity
+// this.routes is instance of RoutesService
+// eThemeSharedRouteNames enum can be imported from @abp/ng.theme.shared
 
-const newRoute: ABP.Route = {
-  parentName: eIdentityRouteNames.IdentityManagement,
-  name: 'My New Page',
-  iconClass: 'fa fa-dashboard',
-  path: 'page',
-  invisible: false,
-  order: 3,
-  requiredPolicy: 'MyProjectName.MyNewPage'
-} as Omit<ABP.Route, 'children'>;
-
-this.config.dispatchAddRoute(newRoute);
-// returns a state stream which emits after dispatch action is complete
-```
-
-The `newRoute` will then be placed as a child of the parent route named `eIdentityRouteNames.IdentityManagement` and its url will be set as `'/identity/page'`.
-
-The new route will be added like below:
-
-![navigation-menu-via-config-state](./images/navigation-menu-via-config-state.png)
-
-## How to Patch a Navigation Element
-
-The `dispatchPatchRouteByName` method finds a route by its name and replaces its configuration in the store with the new configuration passed as the second parameter.
-
-```js
-// this.config is instance of ConfigStateService
-// eIdentityRouteNames enum can be imported from @abp/ng.identity
-
-const newRouteConfig: Partial<ABP.Route> = {
-  iconClass: 'fas fa-home',
-  parentName: eIdentityRouteNames.Administration,
-  order: 0,
-  children: [
-    {
-      name: 'Dashboard',
-      path: 'dashboard',
-    },
-  ],
+const dashboardRouteConfig: ABP.Route = {
+  path: '/dashboard',
+  name: '::Menu:Dashboard',
+  parentName: '::Menu:Home',
+  order: 1,
+  layout: eLayoutType.application,
 };
 
-this.config.dispatchPatchRouteByName('::Menu:Home', newRouteConfig);
-// returns a state stream which emits after dispatch action is complete
+const newHomeRouteConfig: Partial<ABP.Route> = {
+  iconClass: 'fas fa-home',
+  parentName: eThemeSharedRouteNames.Administration,
+  order: 0,
+};
+
+this.routes.add([dashboardRouteConfig]);
+this.routes.patch('::Menu:Home', newHomeRouteConfig);
+this.routes.remove(['Your navigation']);
 ```
 
-* Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
-* Added an icon.
-* Specified the order.
-* Added a child route named _Dashboard_.
+- Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
+- Added an icon to _Home_.
+- Specified the order and made _Home_ the first item in list.
+- Added a route named _Dashboard_ as a child of _Home_.
+- Removed _Your navigation_ along with its child route.
 
-After the patch above, navigation elements looks like below:
+After the operations above, the new menu looks like below:
 
 ![navigation-menu-after-patching](./images/navigation-menu-after-patching.png)
 
 
 ## How to Add an Element to Right Part of the Menu
 
-The right part elements are stored in the `LayoutState` that is in the @abp/ng.theme.basic package.
-
-The `dispatchAddNavigationElement` method of the `LayoutStateService` adds an element to the right part of the menu. 
-
-You can insert an element by adding your template to `app.component` and calling the `dispatchAddNavigationElement` method:
+You can add elements to the right part of the menu by calling the `addItems` method of `NavItemsService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
 ```js
-import { Layout, LayoutStateService } from '@abp/ng.theme.basic'; // added this line
+import { NavItemsService } from '@abp/ng.theme.shared';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
   template: `
-  
-    <!-- Added below content -->
-    <ng-template #search
-      ><input type="search" placeholder="Search" class="bg-transparent border-0"
-    /></ng-template>
+    <input type="search" placeholder="Search" class="bg-transparent border-0 color-white" />
   `,
 })
+export class MySearchInputComponent {}
+
+
+@Component(/* component metadata */)
 export class AppComponent {
-  // Added ViewChild
-  @ViewChild('search', { static: false, read: TemplateRef }) searchElementRef: TemplateRef<any>;
-
-  constructor(private layout: LayoutStateService) {} // injected LayoutStateService
-
-  // Added ngAfterViewInit
-  ngAfterViewInit() {
-    const newElement = {
-      name: 'Search',
-      element: this.searchElementRef,
-      order: 1,
-    } as Layout.NavigationElement;
-
-    this.layout.dispatchAddNavigationElement(newElement);
+  constructor(private navItems: NavItemsService) {
+    navItems.addItems([
+      {
+        id: 'MySearchInput',
+        order: 1,
+        component: MySearchInputComponent,
+      },
+      {
+        id: 'SignOutIcon',
+        html: '<i class="fas fa-sign-out-alt fa-lg text-white m-2"><i>',
+        action: () => console.log('Clicked the sign out icon'),
+        order: 101, // puts as last element
+      },
+    ]);
   }
 }
 ```
 
-This inserts a search input to the menu. The final UI looks like below:
+This inserts a search input and a sign out icon to the menu. The final UI looks like below:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
 
-## How to Remove an Element From Right Part of the Menu
+> The default elements have an order of `100`. If you want to place a custom element before the defaults, assign an order number up to `99`. If you want to place a custom element after the defaults, assign orders starting from `101`. Finally, if you must place an item between the defaults, patch the default element orders as described below. A warning though: We may add another default element in the future and it too will have an order number of `100`.
 
-TODO
+## How to Patch or Remove an Right Part Element
 
+The `patchItem` method of `NavItemsService` finds an element by its `id` property and replaces its configuration with the new configuration passed as the second parameter. Similarly, `removeItem` method finds an element and removes it.
 
-## What's Next
+```js
+export class AppComponent {
+  constructor(private navItems: NavItemsService) {
+    navItems.patchItem(eThemeBasicComponents.Languages, {
+      requiredPolicy: 'new policy here',
+      order: 1,
+    });
 
-* [Component Replacement](./Component-Replacement.md)
+    navItems.removeItem(eThemeBasicComponents.CurrentUser);
+  }
+}
+```
+
+* Patched the languages dropdown element with new `requiredPolicy` and new `order`.
+* Removed the current user dropdown element.

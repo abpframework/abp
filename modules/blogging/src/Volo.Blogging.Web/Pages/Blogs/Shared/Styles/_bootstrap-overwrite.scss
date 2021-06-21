@@ -1,7 +1,15 @@
-a, a:hover {
-    text-decoration: none;
-    color: #000000;
-} 
+.post-content {
+    color: #555; 
+    a {
+        text-decoration: underline !important;
+        color: #555;
+    }
+
+    a:hover {
+        text-decoration: underline !important;
+        color: #000000;
+    }
+}
 p { 
     color: #444;
     a {

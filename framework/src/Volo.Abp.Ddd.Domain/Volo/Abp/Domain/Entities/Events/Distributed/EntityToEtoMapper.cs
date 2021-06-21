@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
     public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
     {
-        protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
-        protected AbpDistributedEventBusOptions Options { get; }
+        protected IServiceScopeFactory HybridServiceScopeFactory { get; }
+
+        protected AbpDistributedEntityEventOptions Options { get; }
 
         public EntityToEtoMapper(
-            IOptions<AbpDistributedEventBusOptions> options,
-            IHybridServiceScopeFactory hybridServiceScopeFactory)
+            IOptions<AbpDistributedEntityEventOptions> options,
+            IServiceScopeFactory hybridServiceScopeFactory)
         {
             HybridServiceScopeFactory = hybridServiceScopeFactory;
             Options = options.Value;

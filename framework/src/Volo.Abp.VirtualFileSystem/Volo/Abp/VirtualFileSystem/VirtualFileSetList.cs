@@ -2,13 +2,8 @@
 
 namespace Volo.Abp.VirtualFileSystem
 {
-    public class VirtualFileSetList : List<IVirtualFileSet>
+    public class VirtualFileSetList : List<VirtualFileSetInfo>
     {
-        public List<string> PhysicalPaths { get; }
-
-        public VirtualFileSetList()
-        {
-            PhysicalPaths = new List<string>();
-        }
+        
     }
 }

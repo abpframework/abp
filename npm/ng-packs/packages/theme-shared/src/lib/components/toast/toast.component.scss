@@ -10,7 +10,9 @@
   }
 }
 
-.toast {
+$toastClass: abp-toast;
+
+.#{$toastClass} {
   display: grid;
   grid-template-columns: 50px 1fr;
   gap: 10px;
@@ -23,19 +25,19 @@
   z-index: 9999;
   @include fillColor(#f0f0f0, #000);
   opacity: 1;
-  &.toast-success {
+  &.#{$toastClass}-success {
     @include fillColor(#51a351, #fff);
   }
-  &.toast-info {
+  &.#{$toastClass}-info {
     @include fillColor(#2f96b4, #fff);
   }
-  &.toast-warning {
+  &.#{$toastClass}-warning {
     @include fillColor(#f89406, #fff);
   }
-  &.toast-error {
+  &.#{$toastClass}-error {
     @include fillColor(#bd362f, #fff);
   }
-  .toast-icon {
+  .#{$toastClass}-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,9 +45,9 @@
       font-size: 36px;
     }
   }
-  .toast-content {
+  .#{$toastClass}-content {
     position: relative;
-    .toast-close-button {
+    .#{$toastClass}-close-button {
       position: absolute;
       top: 0;
       right: 0;
@@ -64,15 +66,16 @@
         outline: none;
       }
     }
-    .toast-title {
+    .#{$toastClass}-title {
       margin: 0;
       padding: 0;
       font-size: 1rem;
       font-weight: 600;
     }
-    .toast-message {
+    .#{$toastClass}-message {
       margin: 0;
       padding: 0;
+      max-width: 240px;
     }
   }
 }

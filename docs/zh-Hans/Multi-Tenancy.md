@@ -127,13 +127,14 @@ namespace MyCompany.MyProject
 `MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
     public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
-        public void Resolve(ITenantResolveContext context)
+        public override Task ResolveAsync(ITenantResolveContext context)
         {
             context.TenantIdOrName = ... //从其他地方获取租户id或租户名字...
         }
@@ -304,10 +305,11 @@ TODO:...
 Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前Web请求(按优先级排序)中确定当前租户.
 
 * **CurrentUserTenantResolveContributor**: 如果当前用户已登录,从当前用户的声明中获取租户Id. **出于安全考虑,应该始终将其做为第一个Contributor**.
-* **QueryStringTenantResolver**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
-* **RouteTenantResolver**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
-* **HeaderTenantResolver**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
-* **CookieTenantResolver**: 尝试从当前cookie中获取当前租户.默认的Cookie名称是"__tenant".
+* **QueryStringTenantResolveContributor**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
+* **FormTenantResolveContributor**： 尝试从form参数中获取当前租户,默认参数名为"__tenant".
+* **RouteTenantResolveContributor**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
+* **HeaderTenantResolveContributor**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
+* **CookieTenantResolveContributor**: 尝试从当前cookie中获取当前租户.默认的Cookie名称是"__tenant".
 
 > 如果你使用nginx作为反向代理服务器,请注意如果`TenantKey`包含下划线或其他特殊字符可能存在问题, 请参考: 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
@@ -344,7 +346,7 @@ namespace MyCompany.MyProject
             Configure<AbpTenantResolveOptions>(options =>
             {
                 //子域名格式: {0}.mydomain.com (作为第二优先级解析器添加, 位于CurrentUserTenantResolveContributor之后)
-                options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));
+                options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));
             });
 
             //...
@@ -355,7 +357,7 @@ namespace MyCompany.MyProject
 
 {0}是用来确定当前租户唯一名称的占位符.
 
-你可以使用下面的方法,代替``options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));``:
+你可以使用下面的方法,代替``options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));``:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");

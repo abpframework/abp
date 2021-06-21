@@ -10,7 +10,6 @@ namespace Volo.Abp.ObjectExtending
             return propertyInfo
                 .Attributes
                 .OfType<ValidationAttribute>()
-                .Union(propertyInfo.ValidationAttributes)
                 .ToArray();
         }
     }

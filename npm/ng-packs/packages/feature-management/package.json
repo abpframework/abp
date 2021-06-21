@@ -1,13 +1,14 @@
 {
   "name": "@abp/ng.feature-management",
-  "version": "2.6.2",
+  "version": "4.3.3",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.theme.shared": "^2.6.2"
+    "@abp/ng.theme.shared": "~4.3.3",
+    "tslib": "^2.0.0"
   },
   "publishConfig": {
     "access": "public"

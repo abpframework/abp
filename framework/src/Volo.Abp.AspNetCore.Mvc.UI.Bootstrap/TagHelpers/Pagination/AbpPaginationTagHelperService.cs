@@ -1,10 +1,13 @@
-﻿using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Localization.Resources.AbpUi;
+﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -15,12 +18,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
         private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
+        public AbpPaginationTagHelperService(
+            IHtmlGenerator generator,
+            HtmlEncoder encoder,
+            IAbpTagHelperLocalizer tagHelperLocalizer,
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
             _tagHelperLocalizer = tagHelperLocalizer;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -117,13 +126,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual async Task<string> RenderAnchorTagHelperLinkHtmlAsync(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
             var tagHelperOutput = await anchorTagHelper.ProcessAndGetOutputAsync(attributeList, context, "a", TagMode.StartTagAndEndTag);
 
-            tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
+            SetHrefAttribute(currentPage, attributeList);
+
+            tagHelperOutput.Content.SetContent(localizer[localizationKey]);
 
             var renderedHtml = tagHelperOutput.Render(_encoder);
 
@@ -152,10 +163,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var pagerInfo = (TagHelper.ShowInfo ?? false) ?
-                "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
+                "    <div class=\"col-sm-12 col-md-5\"> " + _encoder.Encode(localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount]) + "</div>\r\n"
                 : "";
 
             return
@@ -171,6 +182,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 "            </ul>\r\n" +
                 "         </ nav>\r\n" +
                 "    </div>\r\n";
+        }
+
+        protected virtual void SetHrefAttribute(string currentPage, TagHelperAttributeList attributeList)
+        {
+            var hrefAttribute = attributeList.FirstOrDefault(x => x.Name.Equals("href", StringComparison.OrdinalIgnoreCase));
+
+            if (hrefAttribute != null)
+            {
+                var pageUrl = TagHelper.Model.PageUrl;
+                var routeValue = $"currentPage={currentPage}{(TagHelper.Model.Sort.IsNullOrWhiteSpace()? "" : "&sort="+TagHelper.Model.Sort)}";
+                pageUrl += pageUrl.Contains("?") ? "&" + routeValue : "?" + routeValue;
+
+                attributeList.Remove(hrefAttribute);
+                attributeList.Add(new TagHelperAttribute("href", pageUrl, hrefAttribute.ValueStyle));
+            }
         }
     }
 }

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Volo.Abp.AspNetCore.Mvc.Client.Common</AssemblyName>
+        <PackageId>Volo.Abp.AspNetCore.Mvc.Client.Common</PackageId>
+        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -3,11 +3,11 @@
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
- 
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\VoloDocs.EntityFrameworkCore\VoloDocs.EntityFrameworkCore.csproj" />
@@ -19,7 +19,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="Migrate.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -12,63 +12,78 @@ namespace Volo.Abp.IdentityServer.Grants
 {
     public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
     {
-        public PersistentGrantRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) 
+        public PersistentGrantRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
 
+        }
+
+        public async Task<List<PersistedGrant>> GetListAsync(string subjectId, string sessionId, string clientId, string type, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await FilterAsync(subjectId, sessionId, clientId, type))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<PersistedGrant> FindByKeyAsync(
             string key,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
-                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken))
-                ;
+            return await (await GetDbSetAsync())
+                .Where(x => x.Key == key)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
             string subjectId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.SubjectId == subjectId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(
-            DateTime maxExpirationDate, 
+            DateTime maxExpirationDate,
             int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task DeleteAsync(
-            string subjectId, 
-            string clientId,
+        public async Task DeleteAsync(
+            string subjectId = null,
+            string sessionId = null,
+            string clientId = null,
+            string type = null,
             CancellationToken cancellationToken = default)
         {
-            await DeleteAsync(
-                x => x.SubjectId == subjectId && x.ClientId == clientId,
-                cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            var persistedGrants = await (await FilterAsync(subjectId, sessionId, clientId, type)).ToListAsync(GetCancellationToken(cancellationToken));
+
+            var dbSet = await GetDbSetAsync();
+
+            foreach (var persistedGrant in persistedGrants)
+            {
+                dbSet.Remove(persistedGrant);
+            }
         }
 
-        public virtual async Task DeleteAsync(
-            string subjectId, 
-            string clientId, 
-            string type,
-            CancellationToken cancellationToken = default)
+        private async Task<IQueryable<PersistedGrant>> FilterAsync(
+            string subjectId,
+            string sessionId,
+            string clientId,
+            string type)
         {
-            await DeleteAsync(
-                x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
-                cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            return (await GetDbSetAsync())
+                .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+                .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+                .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+                .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 {
@@ -10,34 +10,37 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagName = "nav";
+            output.Attributes.Add("aria-label", "breadcrumb");
+
             var list = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();
-            
-            SetInnerOlTag(context, output);
-            SetInnerList(context, output, list);
+
+            var listTagBuilder = GetOlTagBuilder();
+
+            SetInnerList(context, output, list, listTagBuilder);
+
+            output.Content.SetHtmlContent(listTagBuilder);
         }
 
-        protected virtual void SetInnerOlTag(TagHelperContext context, TagHelperOutput output)
+        protected virtual TagBuilder GetOlTagBuilder()
         {
-            output.PreContent.SetHtmlContent("<ol class=\"breadcrumb\">");
-            output.PostContent.SetHtmlContent("</ol>");
+            var builder = new TagBuilder("ol");
+            builder.AddCssClass("breadcrumb");
+            return builder;
         }
 
-        protected virtual void SetInnerList(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list)
+        protected virtual void SetInnerList(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list, TagBuilder listTagBuilder)
         {
             SetLastOneActiveIfThereIsNotAny(context, output, list);
-
-            var html = new StringBuilder("");
 
             foreach (var breadcrumbItem in list)
             {
                 var htmlPart = SetActiveClassIfActiveAndGetHtml(breadcrumbItem);
 
-                html.AppendLine(htmlPart);
+                listTagBuilder.InnerHtml.AppendHtml(htmlPart);
             }
-
-            output.Content.SetHtmlContent(html.ToString());
         }
 
         protected virtual List<BreadcrumbItem> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)

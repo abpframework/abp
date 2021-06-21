@@ -1,0 +1,33 @@
+{
+  "culture": "en-GB",
+  "texts": {
+    "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
+    "Comments": "Comments",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "LoginToAddComment": "Login to add comment",
+    "LoginToRate": "Login to rate",
+    "LoginToReply": "Login to reply",
+    "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
+    "Permission:CmsKit": "CmsKit",
+    "Permission:TagManagement": "Tag Management",
+    "Permission:TagManagement.Create": "Create Tag",
+    "Permission:TagManagement.Delete": "Delete Tag",
+    "Permission:TagManagement.Update": "Update Tag",
+    "Permission:Menus": "Menu Management",
+    "Permission:Menus.Create": "Create",
+    "Permission:Menus.Delete": "Delete",
+    "Permission:Menus.Update": "Update",
+    "PickYourReaction": "Pick your reaction",
+    "RatingUndoMessage": "Your rating will be undone.",
+    "Reply": "Reply",
+    "Send": "Send",
+    "Star": "Star",
+    "TagDeletionConfirmationMessage": "Are you sure to delete the '{0}' tag?",
+    "Tags": "Tags",
+    "Undo": "Undo",
+    "Update": "Update",
+    "YourComment": "Your comment",
+    "YourReply": "Your reply"
+  }
+}

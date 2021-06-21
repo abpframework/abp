@@ -1,4 +1,5 @@
-using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.UI.Navigation
@@ -7,6 +8,8 @@ namespace Volo.Abp.UI.Navigation
     {
         ApplicationMenu Menu { get; }
 
-        //TODO: Add Localization, Authorization components since they are most used components on menu creation!
+        IAuthorizationService AuthorizationService { get; }
+
+        IStringLocalizerFactory StringLocalizerFactory { get; }
     }
 }

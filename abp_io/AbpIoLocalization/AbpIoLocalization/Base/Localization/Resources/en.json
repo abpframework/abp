@@ -26,6 +26,15 @@
     "ContributionGuide": "Contribution Guide",
     "Blog": "Blog",
     "Commercial": "Commercial",
-    "SeeDocuments": "See Documents"
+    "MyAccount": "My account",
+    "Permission:License": "License",
+    "Permission:UserInfo": "Usere info",
+    "SeeDocuments": "See Documents",
+    "Samples": "Samples",
+    "Framework": "Framework",
+    "Support": "Support",
+    "FreeDDDBook": "Free DDD E-book",
+    "New": "New",
+    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years "
   }
 }

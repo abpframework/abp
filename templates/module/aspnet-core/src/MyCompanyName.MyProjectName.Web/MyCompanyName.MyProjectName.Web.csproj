@@ -3,11 +3,12 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <RootNamespace>MyCompanyName.MyProjectName.Web</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,19 +21,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
-    <EmbeddedResource Include="Pages\**\*.css" />
-    <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="wwwroot\**\*.*" />
-    <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Pages\**\*.css" />
-    <Content Remove="Pages\**\*.js" />
-    <Content Remove="wwwroot\**\*.*" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
+    <EmbeddedResource Include="Pages\**\*.css" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.*" />
+    <Content Remove="Pages\**\*.css" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
+    <Content Remove="wwwroot\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>

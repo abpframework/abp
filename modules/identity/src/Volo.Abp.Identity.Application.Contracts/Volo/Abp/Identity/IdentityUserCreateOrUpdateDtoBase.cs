@@ -1,34 +1,39 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity
 {
     public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
     {
         [Required]
-        [StringLength(IdentityUserConsts.MaxUserNameLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
         public string UserName { get; set; }
 
-        [StringLength(IdentityUserConsts.MaxNameLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
         public string Name { get; set; }
 
-        [StringLength(IdentityUserConsts.MaxSurnameLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
         public string Surname { get; set; }
 
         [Required]
         [EmailAddress]
-        [StringLength(IdentityUserConsts.MaxEmailLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string Email { get; set; }
 
-        [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
         public string PhoneNumber { get; set; }
-
-        public bool TwoFactorEnabled { get; set; }
 
         public bool LockoutEnabled { get; set; }
 
         [CanBeNull]
         public string[] RoleNames { get; set; }
+
+        protected IdentityUserCreateOrUpdateDtoBase() : base(false)
+        {
+
+        }
     }
 }

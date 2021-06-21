@@ -1,6 +1,7 @@
-﻿{
+{
   "culture": "en",
   "texts": {
+    "GivenTenantIsNotExist": "Given tenant is not exist: {0}",
     "GivenTenantIsNotAvailable": "Given tenant is not available: {0}",
     "Tenant": "Tenant",
     "Switch": "switch",

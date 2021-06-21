@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
 
@@ -87,12 +88,14 @@ namespace Microsoft.Extensions.Logging
                 return;
             }
 
-            logger.LogWithLevel(logLevel, "---------- Exception Data ----------");
-
+            var exceptionData = new StringBuilder();
+            exceptionData.AppendLine("---------- Exception Data ----------");
             foreach (var key in exception.Data.Keys)
             {
-                logger.LogWithLevel(logLevel, $"{key} = {exception.Data[key]}");
+                exceptionData.AppendLine($"{key} = {exception.Data[key]}");
             }
+
+            logger.LogWithLevel(logLevel, exceptionData.ToString());
         }
 
         private static void LogSelfLogging(ILogger logger, Exception exception)

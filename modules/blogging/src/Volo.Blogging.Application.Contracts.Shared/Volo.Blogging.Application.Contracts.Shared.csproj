@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Volo.Blogging.Application.Contracts.Shared</AssemblyName>
+        <PackageId>Volo.Blogging.Application.Contracts.Shared</PackageId>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

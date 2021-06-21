@@ -21,7 +21,7 @@
   <div class="ui-table-scrollable-wrapper">
     <div class="ui-table-scrollable-view"></div>
     <div class="ui-table-scrollable-header ui-widget-header">
-      <div [style.margin-left.px]="-bodyScrollLeft" class="ui-table-scrollable-header-box">
+      <div #header class="ui-table-scrollable-header-box">
         <table class="ui-table-scrollable-header-table">
           <ng-container *ngTemplateOutlet="colGroup"></ng-container>
           <ng-container *ngTemplateOutlet="head"></ng-container>
@@ -31,7 +31,7 @@
     </div>
     <div
       #scrollableBody
-      (scroll)="bodyScrollLeft = scrollableBody.scrollLeft"
+      (scroll)="header.style.margin = marginCalculator(scrollableBody)"
       class="ui-table-scrollable-body"
       [style.max-height]="scrollHeight"
     >

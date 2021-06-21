@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Permission:DocumentManagement": "Döküman yönetimi",
@@ -7,6 +7,7 @@
     "Permission:Delete": "Sil",
     "Permission:Create": "Oluştur",
     "Permission:Documents": "Döküman",
+    "Menu:Documents": "Dokümanlar",
     "Menu:DocumentManagement": "Dökümanlar",
     "Menu:ProjectManagement": "Projeler",
     "CreateANewProject": "Yeni proje oluştur",
@@ -29,8 +30,18 @@
     "DisplayName:LatestVersionBranchName": "Son versiyon Branch adı",
     "DisplayName:GitHubRootUrl": "GitHub kök adresi",
     "DisplayName:GitHubAccessToken": "GitHub erişim token",
+    "DisplayName:GitHubUserAgent": "GitHub kullanıcı temsilcisi",
     "DisplayName:All": "Çekme bütün",
     "DisplayName:LanguageCode": "Dil kodu",
-    "DisplayName:Version": "versiyon"
+    "DisplayName:Version": "versiyon",
+    "Documents": "Dokümanlar",
+    "RemoveFromCache": "Önbellekten kaldır",
+    "Reindex": "Yeniden İndeksle",
+    "ReindexCompleted": "Yeniden indeksleme tamamlandı",
+    "RemovedFromCache": "Önbellekten kaldırıldı",
+    "RemoveFromCacheConfirmation": "Bu maddeyi önbellekten kaldırmak istediğiniz emin misiniz?",
+    "ReIndexDocumentConfirmation": "Bu maddeyi yeniden indekslemek istediğinize emin misiniz?",
+    "DeleteFromDatabase": "Veritabanından sil",
+    "Deleted": "Silindi"
   }
 }

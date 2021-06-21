@@ -1,4 +1,4 @@
-. ".\common.ps1"
+. ".\common.ps1" -f
 
 # Build all solutions
 

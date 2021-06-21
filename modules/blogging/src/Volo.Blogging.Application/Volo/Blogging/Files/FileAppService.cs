@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Validation;
 using Volo.Blogging.Areas.Blog.Helpers;
 
@@ -12,46 +12,29 @@ namespace Volo.Blogging.Files
 {
     public class FileAppService : BloggingAppServiceBase, IFileAppService
     {
-        public BlogFileOptions Options { get; }
-        private readonly ILogger<FileAppService> _logger;
+        protected IBlobContainer<BloggingFileContainer> BlobContainer { get; }
 
-        public FileAppService(IOptions<BlogFileOptions> options, ILogger<FileAppService> logger)
+        public FileAppService(
+            IBlobContainer<BloggingFileContainer> blobContainer)
         {
-            _logger = logger;
-            Options = options.Value;
+            BlobContainer = blobContainer;
         }
 
-        public virtual Task<RawFileDto> GetAsync(string name)
+        public virtual async Task<RawFileDto> GetAsync(string name)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
-            if (!Directory.Exists(Options.FileUploadLocalFolder))
+            return new RawFileDto
             {
-                Directory.CreateDirectory(Options.FileUploadLocalFolder);
-                return Task.FromResult(
-                    new RawFileDto
-                    {
-                        Bytes = new byte[0]
-                    }
-                );
-            }
-
-            var filePath = Path.Combine(Options.FileUploadLocalFolder, name);
-
-            if (File.Exists(filePath))
-            {
-                return Task.FromResult(new RawFileDto {Bytes = File.ReadAllBytes(filePath)});
-            }
-
-            _logger.LogError($"Cannot find the file {filePath}");
-            return Task.FromResult(RawFileDto.EmptyResult());
+                Bytes = await BlobContainer.GetAllBytesAsync(name)
+            };
         }
 
-        public virtual Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
+        public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
             if (input.Bytes.IsNullOrEmpty())
             {
-                ThrowValidationException("Bytes can not be null or empty!", "Bytes");
+                ThrowValidationException("Bytes of file can not be null or empty!", "Bytes");
             }
 
             if (input.Bytes.Length > BloggingWebConsts.FileUploading.MaxFileSize)
@@ -61,24 +44,18 @@ namespace Volo.Blogging.Files
 
             if (!ImageFormatHelper.IsValidImage(input.Bytes, FileUploadConsts.AllowedImageUploadFormats))
             {
-                throw new UserFriendlyException("Not a valid image format!");
+                throw new UserFriendlyException("Invalid image format!");
             }
 
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
-            var filePath = Path.Combine(Options.FileUploadLocalFolder, uniqueFileName);
 
-            if (!Directory.Exists(Options.FileUploadLocalFolder))
-            {
-                Directory.CreateDirectory(Options.FileUploadLocalFolder);
-            }
-            
-            File.WriteAllBytes(filePath, input.Bytes); //TODO: Previously was using WriteAllBytesAsync, but it's only in .netcore.
+            await BlobContainer.SaveAsync(uniqueFileName, input.Bytes);
 
-            return Task.FromResult(new FileUploadOutputDto
+            return new FileUploadOutputDto
             {
                 Name = uniqueFileName,
                 WebUrl = "/api/blogging/files/www/" + uniqueFileName
-            });
+            };
         }
 
         private static void ThrowValidationException(string message, string memberName)

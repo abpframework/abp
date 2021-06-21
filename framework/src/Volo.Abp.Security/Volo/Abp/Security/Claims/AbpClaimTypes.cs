@@ -14,6 +14,16 @@ namespace Volo.Abp.Security.Claims
         public static string UserName { get; set; } = ClaimTypes.Name;
 
         /// <summary>
+        /// Default: <see cref="ClaimTypes.GivenName"/>
+        /// </summary>
+        public static string Name { get; set; } = ClaimTypes.GivenName;
+
+        /// <summary>
+        /// Default: <see cref="ClaimTypes.Surname"/>
+        /// </summary>
+        public static string SurName { get; set; } = ClaimTypes.Surname;
+
+        /// <summary>
         /// Default: <see cref="ClaimTypes.NameIdentifier"/>
         /// </summary>
         public static string UserId { get; set; } = ClaimTypes.NameIdentifier;
@@ -48,7 +58,6 @@ namespace Volo.Abp.Security.Claims
         /// </summary>
         public static string TenantId { get; set; } = "tenantid";
 
-
         /// <summary>
         /// Default: "editionid".
         /// </summary>
@@ -58,5 +67,15 @@ namespace Volo.Abp.Security.Claims
         /// Default: "client_id".
         /// </summary>
         public static string ClientId { get; set; } = "client_id";
+
+        /// <summary>
+        /// Default: "impersonator_tenantid".
+        /// </summary>
+        public static string ImpersonatorTenantId { get; set; } = "impersonator_tenantid";
+
+        /// <summary>
+        /// Default: "impersonator_userid".
+        /// </summary>
+        public static string ImpersonatorUserId { get; set; } = "impersonator_userid";
     }
 }

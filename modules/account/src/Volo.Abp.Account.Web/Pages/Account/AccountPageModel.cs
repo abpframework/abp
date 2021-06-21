@@ -1,19 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity;
+using Volo.Abp.MultiTenancy;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
     public abstract class AccountPageModel : AbpPageModel
     {
+        public IAccountAppService AccountAppService { get; set; }
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
+        public IOptions<IdentityOptions> IdentityOptions { get; set; }
+        public IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; set; }
+
+        public ITenantResolveResultAccessor TenantResolveResultAccessor { get; set; }
+
+        public IOptions<AbpAspNetCoreMultiTenancyOptions> AspNetCoreMultiTenancyOptions { get; set; }
+
+        public IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; set; }
 
         protected AccountPageModel()
         {
@@ -21,9 +39,44 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
-        protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        protected virtual bool SwitchTenant(Guid? tenantId)
         {
-            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+            if (MultiTenancyOptions.Value.IsEnabled &&
+                TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true)
+            {
+                if (CurrentTenant.Id != tenantId)
+                {
+                    if (tenantId != null)
+                    {
+                        Response.Cookies.Append(
+                            AspNetCoreMultiTenancyOptions.Value.TenantKey,
+                            tenantId.ToString(),
+                            new CookieOptions
+                            {
+                                Path = "/",
+                                HttpOnly = false,
+                                Expires = DateTimeOffset.Now.AddYears(10)
+                            }
+                        );
+                    }
+                    else
+                    {
+                        Response.Cookies.Delete(AspNetCoreMultiTenancyOptions.Value.TenantKey);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        protected virtual void CheckCurrentTenant(Guid? tenantId)
+        {
+            if (CurrentTenant.Id != tenantId)
+            {
+                throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
+            }
         }
 
         protected virtual void CheckIdentityErrors(IdentityResult identityResult)
@@ -36,44 +89,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
         }
 
-        protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+        protected virtual string GetLocalizeExceptionMessage(Exception exception)
         {
-            returnUrl = NormalizeReturnUrl(returnUrl);
-
-            if (!returnUrlHash.IsNullOrWhiteSpace())
+            if (exception is ILocalizeErrorMessage || exception is IHasErrorCode)
             {
-                returnUrl = returnUrl + returnUrlHash;
+                return ExceptionToErrorInfoConverter.Convert(exception, false).Message;
             }
 
-            return returnUrl;
-        }
-
-        protected virtual string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return GetAppHomeUrl();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return GetAppHomeUrl();
-        }
-
-        protected virtual void CheckCurrentTenant(Guid? tenantId)
-        {
-            if (CurrentTenant.Id != tenantId)
-            {
-                throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
-            }
-        }
-
-        protected virtual string GetAppHomeUrl()
-        {
-            return "/"; //TODO: ???
+            return exception.Message;
         }
     }
 }

@@ -1,9 +1,10 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
-import { PermissionManagementService } from '../services/permission-management.service';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { ProviderInfoDto } from '../proxy/models';
+import { PermissionsService } from '../proxy/permissions.service';
 
 @State<PermissionManagement.State>({
   name: 'PermissionManagementState',
@@ -21,14 +22,14 @@ export class PermissionManagementState {
     return permissionRes.entityDisplayName;
   }
 
-  constructor(private permissionManagementService: PermissionManagementService) {}
+  constructor(private service: PermissionsService) {}
 
   @Action(GetPermissions)
   permissionManagementGet(
     { patchState }: StateContext<PermissionManagement.State>,
-    { payload }: GetPermissions,
+    { payload: { providerKey, providerName } = {} as ProviderInfoDto }: GetPermissions,
   ) {
-    return this.permissionManagementService.getPermissions(payload).pipe(
+    return this.service.get(providerName, providerKey).pipe(
       tap(permissionResponse =>
         patchState({
           permissionRes: permissionResponse,
@@ -39,6 +40,8 @@ export class PermissionManagementState {
 
   @Action(UpdatePermissions)
   permissionManagementUpdate(_, { payload }: UpdatePermissions) {
-    return this.permissionManagementService.updatePermissions(payload);
+    return this.service.update(payload.providerName, payload.providerKey, {
+      permissions: payload.permissions,
+    });
   }
 }

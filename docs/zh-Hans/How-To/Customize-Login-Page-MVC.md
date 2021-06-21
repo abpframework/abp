@@ -26,7 +26,7 @@ public class CustomLoginModel : LoginModel
 
 ## 重写登录页面UI
 
-在 **Pages** 目录下创建名为 **Account** 的文件夹,并在这个文件夹中创建 `Login.cshtml` ,借助[虚拟文件系统](../Virtual-File-System.md)它会自动覆盖账户模块的页面文件.
+在 **Pages** 目录下创建名为 **Account** 的文件夹,并在这个文件夹中创建 `Login.cshtml` , 它会自动覆盖账户模块的页面文件.
 
 自定义页面一个很好的开始是复制它的源代码. [点击这里](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml)找到登录页面的源码. 在编写本文档时,源代码如下:
 
@@ -35,7 +35,6 @@ public class CustomLoginModel : LoginModel
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Settings
 @model Acme.BookStore.Web.Pages.Account.CustomLoginModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 @if (Model.EnableLocalLogin)
 {
@@ -106,7 +105,7 @@ public class CustomLoginModel : LoginModel
 
 ## 本文的源代码
 
-你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)找到已完成的示例源码.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)找到已完成的示例源码.
 
 ## 另请参阅
 

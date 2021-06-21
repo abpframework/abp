@@ -1,0 +1,10 @@
+{
+ "culture": "fr",
+ "texts": {
+  "Permissions": "Autorisations",
+  "OnlyProviderPermissons": "Seul ce fournisseur",
+  "All": "Tous",
+  "SelectAllInAllTabs": "Accorder toutes les autorisations",
+  "SelectAllInThisTab": "Sélectionner tous les"
+ }
+}

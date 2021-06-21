@@ -1,0 +1,24 @@
+name: Merge branch dev with rel-4.3
+on:
+  push:
+    branches:
+      - rel-4.3
+jobs:
+  merge-dev-with-rel-4-3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: dev
+      - name: Reset promotion branch
+        run: |
+          git fetch origin rel-4.3:rel-4.3
+          git reset --hard rel-4.3
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: auto-merge/rel-4-3/${{github.run_number}}
+          title: Merge branch dev with rel-4.3
+          body: This PR generated automatically to merge dev with rel-4.3. Please review the changed files before merging to prevent any errors that may occur.
+          reviewers: ${{github.actor}}
+          token: ${{ github.token }}

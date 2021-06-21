@@ -10,6 +10,7 @@ namespace Volo.Abp.Identity
             CreateMap<IdentityUser, UserEto>();
             CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
             CreateMap<IdentityRole, IdentityRoleEto>();
+            CreateMap<OrganizationUnit, OrganizationUnitEto>();
         }
     }
 }

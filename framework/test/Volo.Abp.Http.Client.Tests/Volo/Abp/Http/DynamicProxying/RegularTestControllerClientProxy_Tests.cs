@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -33,11 +35,18 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
+        public async Task GetException2Async()
+        {
+            var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.GetException2Async());
+            exception.Error.Message.ShouldBe("Business exception with data: TEST");
+        }
+
+        [Fact]
         public async Task GetWithDateTimeParameterAsync()
         {
             var dateTime1 = new DateTime(2020, 04, 19, 19, 05, 01);
             var result = await _controller.GetWithDateTimeParameterAsync(dateTime1);
-            result.ShouldBe(dateTime1);
+            result.ToUniversalTime().ShouldBe(dateTime1.ToUniversalTime());
         }
 
         [Fact]
@@ -47,7 +56,7 @@ namespace Volo.Abp.Http.DynamicProxying
             {
                 var dateTime1 = new DateTime(2020, 04, 19, 19, 05, 01);
                 var result = await _controller.GetWithDateTimeParameterAsync(dateTime1);
-                result.ShouldBe(dateTime1);
+                result.ToUniversalTime().ShouldBe(dateTime1.ToUniversalTime());
             }
         }
 

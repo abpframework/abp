@@ -33,7 +33,7 @@ abp generate-proxy
 服务的 `providerIn` 属性定义为 `'root'`. 因此无需将服务作为提供程序添加到模块. 你可以通过将服务注入到构造函数中来使用它,如下所示:
 
 ```js
-import { AbpApplicationConfigurationService } from '../app/shared/services';
+import { AbpApplicationConfigurationService } from '../abp/applicationconfiguration/services';
 
 //...
 export class HomeComponent{
@@ -49,14 +49,14 @@ Angular编译器会从最终输出中删除那些没有被注入的服务. 参�
 
 ### Models
 
-生成的模型与后端中的dto匹配. 每个模型在 `src/app/*/shared/models` 文件夹生成一个类.
+生成的模型与后端中的dto匹配. 每个模型在 `src/app/*/models` 文件夹生成一个类.
 
 `@abp/ng.core` 包有一些[基类](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/dtos.ts). 一些模型扩展了这些类.
 
 可以如下所示创建一个类的实例:
 
 ```js
-import { IdentityRoleCreateDto } from '../identity/shared/models';
+import { IdentityRoleCreateDto } from '../identity/role/models'
 //...
 const instance = new IdentityRoleCreateDto({name: 'Role 1', isDefault: false, isPublic: true})
 ```

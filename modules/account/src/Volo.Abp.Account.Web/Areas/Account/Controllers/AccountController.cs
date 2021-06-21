@@ -2,11 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -25,14 +27,23 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentityUserManager UserManager { get; }
         protected ISettingProvider SettingProvider { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
-        public AccountController(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager, ISettingProvider settingProvider)
+        public AccountController(
+            SignInManager<IdentityUser> signInManager,
+            IdentityUserManager userManager,
+            ISettingProvider settingProvider,
+            IdentitySecurityLogManager identitySecurityLogManager,
+            IOptions<IdentityOptions> identityOptions)
         {
             LocalizationResource = typeof(AccountResource);
 
             SignInManager = signInManager;
             UserManager = userManager;
             SettingProvider = settingProvider;
+            IdentitySecurityLogManager = identitySecurityLogManager;
+            IdentityOptions = identityOptions;
         }
 
         [HttpPost]
@@ -44,24 +55,46 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             ValidateLoginInfo(login);
 
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
-            
-            return GetAbpLoginResult(await SignInManager.PasswordSignInAsync(
+            var signInResult = await SignInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
                 login.RememberMe,
                 true
-            ));
+            );
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = signInResult.ToIdentitySecurityLogAction(),
+                UserName = login.UserNameOrEmailAddress
+            });
+
+            return GetAbpLoginResult(signInResult);
         }
 
         [HttpGet]
         [Route("logout")]
         public virtual async Task Logout()
         {
-           await SignInManager.SignOutAsync();
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
+            await SignInManager.SignOutAsync();
         }
 
         [HttpPost]
         [Route("checkPassword")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
+        {
+            return CheckPassword(login);
+        }
+
+        [HttpPost]
+        [Route("check-password")]
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);
@@ -75,6 +108,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
+            await IdentityOptions.SetAsync();
             return GetAbpLoginResult(await SignInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
         }
 

@@ -15,8 +15,8 @@ describe('AppendContentToken', () => {
   beforeEach(() => (spectator = createComponent()));
 
   it('should insert a style element to the DOM', () => {
-    spectator.get(THEME_SHARED_APPEND_CONTENT);
-    expect(spectator.get(DomInsertionService).has(styles)).toBe(true);
+    spectator.inject(THEME_SHARED_APPEND_CONTENT);
+    expect(spectator.inject(DomInsertionService).has(styles)).toBe(true);
   });
 
   it('should be loaded the chart.js', done => {
@@ -25,6 +25,6 @@ describe('AppendContentToken', () => {
       done();
     });
 
-    spectator.get(THEME_SHARED_APPEND_CONTENT);
+    spectator.inject(THEME_SHARED_APPEND_CONTENT);
   });
 });

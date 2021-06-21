@@ -20,13 +20,12 @@ namespace Volo.Abp.Modularity
             var modules = GetDescriptors(services, startupModuleType, plugInSources);
 
             modules = SortByDependency(modules, startupModuleType);
-            ConfigureServices(modules, services);
 
             return modules.ToArray();
         }
 
         private List<IAbpModuleDescriptor> GetDescriptors(
-            IServiceCollection services, 
+            IServiceCollection services,
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
@@ -44,14 +43,16 @@ namespace Volo.Abp.Modularity
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
+            var logger = services.GetInitLogger<AbpApplicationBase>();
+
             //All modules starting from the startup module
-            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType))
+            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType, logger))
             {
                 modules.Add(CreateModuleDescriptor(services, moduleType));
             }
 
             //Plugin modules
-            foreach (var moduleType in plugInSources.GetAllModules())
+            foreach (var moduleType in plugInSources.GetAllModules(logger))
             {
                 if (modules.Any(m => m.Type == moduleType))
                 {
@@ -87,54 +88,6 @@ namespace Volo.Abp.Modularity
             var module = (IAbpModule)Activator.CreateInstance(moduleType);
             services.AddSingleton(moduleType, module);
             return module;
-        }
-
-        protected virtual void ConfigureServices(List<IAbpModuleDescriptor> modules, IServiceCollection services)
-        {
-            var context = new ServiceConfigurationContext(services);
-            services.AddSingleton(context);
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = context;
-                }
-            }
-
-            //PreConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
-            {
-                ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
-            }
-
-            //ConfigureServices
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    if (!abpModule.SkipAutoServiceRegistration)
-                    {
-                        services.AddAssembly(module.Type.Assembly);
-                    }
-                }
-
-                module.Instance.ConfigureServices(context);
-            }
-
-            //PostConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
-            {
-                ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
-            }
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = null;
-                }
-            }
         }
 
         protected virtual void SetDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)

@@ -1,0 +1,42 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.Account.Web": {
+      "path": "src/Volo.Abp.Account.Web/Volo.Abp.Account.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.Web.IdentityServer": {
+      "path": "src/Volo.Abp.Account.Web.IdentityServer/Volo.Abp.Account.Web.IdentityServer.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.Application": {
+      "path": "src/Volo.Abp.Account.Application/Volo.Abp.Account.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.Application.Contracts": {
+      "path": "src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.HttpApi": {
+      "path": "src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.HttpApi.Client": {
+      "path": "src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.Application.Tests": {
+      "path": "test/Volo.Abp.Account.Application.Tests/Volo.Abp.Account.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Account.Blazor": {
+      "path": "src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

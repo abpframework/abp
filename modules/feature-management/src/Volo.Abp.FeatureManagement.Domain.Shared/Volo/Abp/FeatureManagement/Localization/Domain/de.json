@@ -2,6 +2,7 @@
   "culture": "de",
   "texts": {
     "Features": "Funktionen",
-    "NoFeatureFoundMessage": "Es ist keine Funktion verf�gbar."
+    "NoFeatureFoundMessage": "Es ist keine Funktion verfügbar.",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Der {0} -Feature-Wert ist ungültig!"
   }
 }

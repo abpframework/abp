@@ -1,0 +1,40 @@
+<ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
+  <ngx-datatable-column
+    *ngIf="actionsTemplate || actionList.length"
+    [name]="actionsText | abpLocalization"
+    [maxWidth]="columnWidths[0]"
+    [width]="columnWidths[0]"
+    [sortable]="false"
+  >
+    <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+      <ng-container
+        *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"
+      ></ng-container>
+      <ng-template #gridActions>
+        <abp-grid-actions [index]="i" [record]="row" text="AbpUi::Actions"></abp-grid-actions>
+      </ng-template>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ng-container *ngFor="let prop of propList; let i = index; trackBy: trackByFn">
+    <ngx-datatable-column
+      [width]="columnWidths[i + 1] || 200"
+      [name]="prop.displayName | abpLocalization"
+      [prop]="prop.name"
+      [sortable]="prop.sortable"
+    >
+      <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
+        <ng-container *abpPermission="prop.permission">
+          <div
+            *ngIf="row['_' + prop.name].visible"
+            [innerHTML]="row['_' + prop.name].value | async"
+            (click)="
+              prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
+            "
+            [class.pointer]="prop.action"
+          ></div>
+        </ng-container>
+      </ng-template>
+    </ngx-datatable-column>
+  </ng-container>
+</ngx-datatable>

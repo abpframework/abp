@@ -56,7 +56,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 ### .Domain 项目
 
-解决方案的领域层. 它主要包含 [实体, 集合根](../Entities.md), [领域服务](../Domain-Services.md), [值类型](../Value-Types.md), [仓储接口](../Repositories.md) 和解决方案的其他领域对象.
+解决方案的领域层. 它主要包含 [实体, 集合根](../Entities.md), [领域服务](../Domain-Services.md), 值类型, [仓储接口](../Repositories.md) 和解决方案的其他领域对象.
 
 例如 `Issue` 实体, `IssueManager` 领域服务和 `IIssueRepository` 接口都适合放在这个项目中.
 
@@ -133,7 +133,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 ##### 如何运行?
 
-将其设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
+将`host/YourProjectName.Web.Unified`设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
 
 #### 分离部署&数据库 场景
 
@@ -148,6 +148,10 @@ abp new Acme.IssueManagement -t module --no-ui
 ![tiered-solution-applications](../images/tiered-solution-applications.png)
 
 `.Web.Host` 项目使用OpenId Connect身份认证从`.IdentityServer`获取当前用户的身份和访问令牌. 然后使用访问令牌调用 `.HttpApi.Host`. HTTP API 服务器使用bearer token验证访问令牌获取当前用户声明并授权用户.
+
+##### 前置条件
+
+* [Redis](https://redis.io/): 应用程序使用Redis做分布式缓存,你需要安装并运行Redis.
 
 ##### 如何运行?
 

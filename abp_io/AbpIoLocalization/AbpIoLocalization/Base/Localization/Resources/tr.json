@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Volo.AbpIo.Domain:010004": "Maksimum üye sayısı aşıldı!",
@@ -8,7 +8,27 @@
     "Volo.AbpIo.Domain:010008": "Maksimum izin verilen kullanıcı sayısı mevcut kullanıcı sayısından az olamaz!",
     "Volo.AbpIo.Domain:010009": "Maksimum izin verilen kullanıcı sayısı sıfırdan az olamaz!",
     "Volo.AbpIo.Domain:010010": "Maksimum mac adresi sayısı geçildi!",
-	"Volo.AbpIo.Domain:010011": "Bireysel lisans birden fazla geliştiriciye sahip olamaz!",
-	"Volo.AbpIo.Domain:010012": "Lisans, lisans süresi bittikten bir ay sonra uzatılamaz!",
+    "Volo.AbpIo.Domain:010011": "Bireysel lisans birden fazla geliştiriciye sahip olamaz!",
+    "Volo.AbpIo.Domain:010012": "Lisans, lisans süresi bittikten bir ay sonra uzatılamaz!",
+    "Volo.AbpIo.Domain:020001": "Bu NPM Paketi silinemiyor çünkü \"{NugetPackages}\" Nuget Paketleri bu pakete bağımlı.",
+    "Volo.AbpIo.Domain:020002": "Bu NPM Paketi silinemiyor çünkü \"{Modules}\" Modülleri bu paketi kullanıyor.",
+    "Volo.AbpIo.Domain:020003": "Bu NPM Paketi silinemiyor çünkü \"{Modules}\" Modülleri bu paketi kullanıyor ve \"{NugetPackages}\" Nuget Paketleri bu pakete bağımlı.",
+    "Volo.AbpIo.Domain:020004": "Bu Nuget Paketi silinemiyor çünkü \"{Modules}\" Modülleri bu paketi kullanıyor.",
+    "WantToLearn?": "Öğrenmek ister misin?",
+    "ReadyToGetStarted?": "Başlamaya hazır mısın?",
+    "JoinOurCommunity": "Topluluğumuza katılın",
+    "GetStartedUpper": "BAŞLAYIN",
+    "ForkMeOnGitHub": "Fork me on GitHub",
+    "Features": "Özellikler",
+    "GetStarted": "Başlayın",
+    "Documents": "Dokümanlar",
+    "Community": "Topluluk",
+    "ContributionGuide": "Katkı Rehberi",
+    "Blog": "Blog",
+    "Commercial": "Ticari",
+    "SeeDocuments": "Dokümanlara Göz Atın",
+    "FreeDDDBook": "Ücretsiz DDD Kitabı",
+    "New": "Yeni",
+    "Volo.AbpIo.Domain:020005": "Lisans uzatma yılı {MinExtendLicenseYear} yıldan az {MaxExtendLicenseYear} yıldan fazla olamaz."
   }
 }

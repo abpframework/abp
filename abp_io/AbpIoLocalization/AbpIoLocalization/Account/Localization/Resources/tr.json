@@ -1,5 +1,14 @@
 {
   "culture": "tr",
   "texts": {
+    "Account": "ABP Hesabı - Giriş Yap & Kayıt Ol | ABP.IO",
+    "Welcome": "Hoş Geldiniz",
+    "UseOneOfTheFollowingLinksToContinue": "Devam etmek için linkleri kullanabilirsiniz",
+    "FrameworkHomePage": "Framework ana sayfa",
+    "FrameworkDocumentation": "Framework Dokümantasyon",
+    "OfficialBlog": "Resmi blog",
+    "CommercialHomePage": "Kurumsal ana sayfa",
+    "CommercialSupportWebSite": "Kurumsal destek web sitesi",
+    "CommunityWebSite": "ABP topluluk web sitesi"
   }
 }

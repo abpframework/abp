@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,14 @@ namespace Volo.Abp.Http.DynamicProxying
         public Task GetException1Async()
         {
             throw new UserFriendlyException("This is an error message!");
+        }
+
+        [HttpGet]
+        [Route("get-exception2")]
+        public Task GetException2Async()
+        {
+            throw new BusinessException("Volo.Abp.Http.DynamicProxying:10001")
+                .WithData("0","TEST");
         }
 
         [HttpGet]
@@ -132,5 +141,13 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [FromQuery]
         public DateTime FirstReleaseDate { get; set; }
+
+        [FromQuery]
+        public List<string> Colors { get; set; }
+
+        public Car()
+        {
+            Colors = new List<string>();
+        }
     }
 }

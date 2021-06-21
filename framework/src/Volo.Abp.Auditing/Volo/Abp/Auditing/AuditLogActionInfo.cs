@@ -17,11 +17,11 @@ namespace Volo.Abp.Auditing
 
         public int ExecutionDuration { get; set; }
 
-        public Dictionary<string, object> ExtraProperties { get; }
+        public ExtraPropertyDictionary ExtraProperties { get; }
 
         public AuditLogActionInfo()
         {
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
         }
     }
 }

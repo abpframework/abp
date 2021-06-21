@@ -1,0 +1,25 @@
+<% for (const {keyword, specifiers, path} of imports) {
+%><%= keyword %> { <%= specifiers.join(', ') %> } from '<%= path %>';
+<% } %>
+@Injectable({
+  providedIn: 'root',
+})
+export class <%= name %>Service {
+  apiName = '<%= apiName %>';<%
+  for (let {body, signature} of methods) { %>
+
+  <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
+    this.restService.request<<%= body.requestType %>, <%= body.responseType %>>({
+      method: '<%= body.method %>',<% 
+      if (body.responseType === 'string') { %>
+      responseType: 'text',<% } %>
+      url: <%= body.url %>,<%
+      if (body.params.length) { %>
+      params: { <%= body.params.join(', ') %> },<% }
+      if (body.body) { %>
+      body: <%= body.body %>,<% } %>
+    },
+    { apiName: this.apiName });<% } %>
+
+  constructor(private restService: RestService) {}
+}

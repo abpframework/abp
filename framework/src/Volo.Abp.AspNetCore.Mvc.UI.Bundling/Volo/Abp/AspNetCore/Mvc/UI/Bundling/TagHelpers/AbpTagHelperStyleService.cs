@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
@@ -14,12 +18,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     {
         public AbpTagHelperStyleService(
             IBundleManager bundleManager,
-            IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment
             ) : base(
                 bundleManager,
-                webContentFileProvider,
                 options,
                 hostingEnvironment)
         {
@@ -39,9 +41,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             return await BundleManager.GetStyleBundleFilesAsync(bundleName);
         }
 
-        protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)
+        protected override void AddHtmlTag(ViewContext viewContext, TagHelperContext context, TagHelperOutput output, string file)
         {
-            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{file}\" />{Environment.NewLine}");
+            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
         }
     }
 }

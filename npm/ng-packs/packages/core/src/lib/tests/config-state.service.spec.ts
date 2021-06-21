@@ -1,11 +1,12 @@
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { ConfigStateService } from '../services/config-state.service';
-import { ConfigState } from '../states';
-import { Store } from '@ngxs/store';
-import { Config } from '../models/config';
-import * as ConfigActions from '../actions';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import {
+  ApplicationConfigurationDto,
+  CurrentUserDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { ConfigStateService } from '../services';
 
-const CONFIG_STATE_DATA = {
+export const CONFIG_STATE_DATA = ({
   environment: {
     production: false,
     application: {
@@ -29,43 +30,6 @@ const CONFIG_STATE_DATA = {
   requirements: {
     layouts: [null, null, null],
   },
-  routes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-      ],
-      url: '/account',
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: '::Menu:Identity',
-      path: 'identity',
-      children: [],
-      url: '/identity',
-    },
-  ],
   localization: {
     values: {
       MyProjectName: {
@@ -110,10 +74,12 @@ const CONFIG_STATE_DATA = {
     },
     grantedPolicies: {
       'Abp.Identity': false,
+      'Abp.Account': true,
     },
   },
   setting: {
     values: {
+      'Abp.Custom.SomeSetting': 'X',
       'Abp.Localization.DefaultLanguage': 'en',
     },
   },
@@ -122,60 +88,96 @@ const CONFIG_STATE_DATA = {
     id: null,
     tenantId: null,
     userName: null,
-  },
+    email: null,
+    roles: [],
+  } as CurrentUserDto,
   features: {
-    values: {},
+    values: {
+      'Chat.Enable': 'True',
+    },
   },
-} as Config.State;
+  registerLocaleFn: () => Promise.resolve(),
+} as any) as ApplicationConfigurationDto;
 
-describe('ConfigStateService', () => {
-  let service: ConfigStateService;
+describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigStateService>;
-  let store: SpyObject<Store>;
+  let configState: ConfigStateService;
 
-  const createService = createServiceFactory({ service: ConfigStateService, mocks: [Store] });
+  const createService = createServiceFactory({
+    service: ConfigStateService,
+  });
+
   beforeEach(() => {
     spectator = createService();
-    service = spectator.service;
-    store = spectator.get(Store);
-  });
-  test('should have the all ConfigState static methods', () => {
-    const reg = /(?<=static )(.*)(?=\()/gm;
-    ConfigState.toString()
-      .match(reg)
-      .forEach(fnName => {
-        expect(service[fnName]).toBeTruthy();
+    configState = spectator.service;
 
-        const spy = jest.spyOn(store, 'selectSnapshot');
-        spy.mockClear();
-
-        const isDynamicSelector = ConfigState[fnName].name !== 'memoized';
-
-        if (isDynamicSelector) {
-          ConfigState[fnName] = jest.fn((...args) => args);
-          service[fnName]('test', 0, {});
-          expect(ConfigState[fnName]).toHaveBeenCalledWith('test', 0, {});
-        } else {
-          service[fnName]();
-          expect(spy).toHaveBeenCalledWith(ConfigState[fnName]);
-        }
-      });
+    configState.setState(CONFIG_STATE_DATA);
   });
 
-  test('should have a dispatch method for every ConfigState action', () => {
-    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
-    ConfigStateService.toString()
-      .match(reg)
-      .forEach(fnName => {
-        expect(ConfigActions[fnName]).toBeTruthy();
+  describe('#getAll', () => {
+    it('should return CONFIG_STATE_DATA', () => {
+      expect(configState.getAll()).toEqual(CONFIG_STATE_DATA);
+      configState.getAll$().subscribe(data => expect(data).toEqual(CONFIG_STATE_DATA));
+    });
+  });
 
-        const spy = jest.spyOn(store, 'dispatch');
-        spy.mockClear();
+  describe('#getOne', () => {
+    it('should return one property', () => {
+      expect(configState.getOne('localization')).toEqual(CONFIG_STATE_DATA.localization);
+      configState
+        .getOne$('localization')
+        .subscribe(localization => expect(localization).toEqual(CONFIG_STATE_DATA.localization));
+    });
+  });
 
-        const params = Array.from(new Array(ConfigActions[fnName].length));
+  describe('#getDeep', () => {
+    it('should return deeper', () => {
+      expect(configState.getDeep('localization.languages')).toEqual(
+        CONFIG_STATE_DATA.localization.languages,
+      );
 
-        service[`dispatch${fnName}`](...params);
-        expect(spy).toHaveBeenCalledWith(new ConfigActions[fnName](...params));
+      configState
+        .getDeep$('localization.languages')
+        .subscribe(languages =>
+          expect(languages).toEqual(CONFIG_STATE_DATA.localization.languages),
+        );
+
+      expect(configState.getDeep('test')).toBeFalsy();
+    });
+  });
+
+  describe('#getFeature', () => {
+    it('should return a setting', () => {
+      expect(configState.getFeature('Chat.Enable')).toEqual(
+        CONFIG_STATE_DATA.features.values['Chat.Enable'],
+      );
+      configState
+        .getFeature$('Chat.Enable')
+        .subscribe(data => expect(data).toEqual(CONFIG_STATE_DATA.features.values['Chat.Enable']));
+    });
+  });
+
+  describe('#getSetting', () => {
+    it('should return a setting', () => {
+      expect(configState.getSetting('Abp.Localization.DefaultLanguage')).toEqual(
+        CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage'],
+      );
+      configState.getSetting$('Abp.Localization.DefaultLanguage').subscribe(data => {
+        expect(data).toEqual(CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']);
       });
+    });
+  });
+
+  describe('#getSettings', () => {
+    test.each`
+      keyword           | expected
+      ${undefined}      | ${CONFIG_STATE_DATA.setting.values}
+      ${'Localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
+      ${'X'}            | ${{}}
+      ${'localization'} | ${{}}
+    `('should return $expected when keyword is given as $keyword', ({ keyword, expected }) => {
+      expect(configState.getSettings(keyword)).toEqual(expected);
+      configState.getSettings$(keyword).subscribe(data => expect(data).toEqual(expected));
+    });
   });
 });

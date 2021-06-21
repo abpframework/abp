@@ -52,6 +52,12 @@ namespace Volo.Abp.Features
         public bool IsVisibleToClients { get; set; }
 
         /// <summary>
+        /// Can host use this feature.
+        /// Default: true.
+        /// </summary>
+        public bool IsAvailableToHost { get; set; }
+
+        /// <summary>
         /// A list of allowed providers to get/set value of this feature.
         /// An empty list indicates that all providers are allowed.
         /// </summary>
@@ -63,8 +69,8 @@ namespace Volo.Abp.Features
         /// </summary>
         /// <param name="name">Name of the property</param>
         /// <returns>
-        /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
-        /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
+        /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
+        /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
         /// </returns>
         [CanBeNull]
         public object this[string name]
@@ -93,7 +99,8 @@ namespace Volo.Abp.Features
             ILocalizableString displayName = null,
             ILocalizableString description = null,
             IStringValueType valueType = null,
-            bool isVisibleToClients = true)
+            bool isVisibleToClients = true,
+            bool isAvailableToHost = true)
         {
             Name = name;
             DefaultValue = defaultValue;
@@ -101,6 +108,7 @@ namespace Volo.Abp.Features
             Description = description;
             ValueType = valueType;
             IsVisibleToClients = isVisibleToClients;
+            IsAvailableToHost = isAvailableToHost;
 
             Properties = new Dictionary<string, object>();
             AllowedProviders = new List<string>();
@@ -136,20 +144,22 @@ namespace Volo.Abp.Features
         /// </summary>
         /// <returns>Returns a newly created child feature</returns>
         public FeatureDefinition CreateChild(
-            string name, 
-            string defaultValue = null, 
-            ILocalizableString displayName = null, 
+            string name,
+            string defaultValue = null,
+            ILocalizableString displayName = null,
             ILocalizableString description = null,
             IStringValueType valueType = null,
-            bool isVisibleToClients = true)
+            bool isVisibleToClients = true,
+            bool isAvailableToHost = true)
         {
             var feature = new FeatureDefinition(
-                name, 
-                defaultValue, 
-                displayName, 
+                name,
+                defaultValue,
+                displayName,
                 description,
                 valueType,
-                isVisibleToClients)
+                isVisibleToClients,
+                isAvailableToHost)
             {
                 Parent = this
             };

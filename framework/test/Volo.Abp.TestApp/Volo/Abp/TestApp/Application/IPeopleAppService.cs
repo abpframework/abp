@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
@@ -10,6 +12,8 @@ namespace Volo.Abp.TestApp.Application
     {
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
 
+        Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names);
+
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
 
         Task RemovePhone(Guid id, string number);
@@ -17,5 +21,16 @@ namespace Volo.Abp.TestApp.Application
         Task GetWithAuthorized();
 
         Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
+
+        Task<IRemoteStreamContent> DownloadAsync();
+
+        Task<string> UploadAsync(IRemoteStreamContent streamContent);
+
+        Task<string> UploadMultipleAsync(IEnumerable<IRemoteStreamContent> streamContents);
+
+        Task<string> CreateFileAsync(CreateFileInput input);
+
+        Task<string> CreateMultipleFileAsync(CreateMultipleFileInput input);
+
     }
 }

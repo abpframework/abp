@@ -11,11 +11,11 @@ foreach($solution in $solutions) {
 foreach($project in $projects) {
     
     $projectFolder = Join-Path $rootFolder $project
-
+	
     # Create nuget pack
     Set-Location $projectFolder
     Remove-Item -Recurse (Join-Path $projectFolder "bin/Release")
-    & dotnet msbuild /t:pack /p:Configuration=Release /p:SourceLinkCreate=true
+    & dotnet pack -c Release
 
     if (-Not $?) {
         Write-Host ("Packaging failed for the project: " + $projectFolder)
@@ -26,7 +26,6 @@ foreach($project in $projects) {
     $projectName = $project.Substring($project.LastIndexOf("/") + 1)
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $projectName + ".*.nupkg")
     Move-Item $projectPackPath $packFolder
-
 }
 
 # Go back to the pack folder

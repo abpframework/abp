@@ -6,7 +6,11 @@
 
 ## 通用(泛型)仓储
 
-ABP为每个聚合根或实体提供了  **默认的通用(泛型)仓储**  . 你可以在服务中[注入](Dependency-Injection.md) `IRepository<TEntity, TKey>` 使用标准的**CRUD**操作. 用法示例:
+ABP为每个聚合根或实体提供了  **默认的通用(泛型)仓储**  . 你可以在服务中[注入](Dependency-Injection.md) `IRepository<TEntity, TKey>` 使用标准的**CRUD**操作.
+
+> 数据库提供程序层应正确配置为能够使用默认的通用存储库. 如果你已经使用启动模板创建了项目,则这些配置 **已经完成**了. 如果不是,请参考数据库提供程序文档([EF Core](Entity-Framework-Core.md) / [MongoDB](MongoDB.md))进行配置.
+
+**默认通用仓储用法示例:**
 
 ````C#
 public class PersonAppService : ApplicationService
@@ -37,6 +41,8 @@ public class PersonAppService : ApplicationService
     }
 }
 ````
+
+> 参阅 "*IQueryable & 异步操作*" 部分了解如何使用 **异步扩展方法**, 如 `ToListAsync()` (建议始终使用异步) 而不是 `ToList()`.
 
 在这个例子中;
 
@@ -119,4 +125,129 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 }
 ````
 
-你可以直接使用数据库访问提供程序 (本例中是 `DbContext` ) 来执行操作. 有关基于EF Core的自定义仓储的更多信息, 请参阅[EF Core 集成文档](Entity-Framework-Core.md).
+你可以直接使用数据库访问提供程序 (本例中是 `DbContext` ) 来执行操作.
+
+> 请参阅[EF Core](Entity-Framework-Core.md)或[MongoDb](MongoDB.md)了解如何自定义仓储.
+
+## IQueryable & 异步操作
+
+`IRepository` 继承自 `IQueryable`,这意味着你可以**直接使用LINQ扩展方法**. 如上面的*泛型仓储*示例.
+
+**示例: 使用 `Where(...)` 和 `ToList()` 扩展方法**
+
+````csharp
+var people = _personRepository
+    .Where(p => p.Name.Contains(nameFilter))
+    .ToList();
+````
+
+`.ToList`, `Count()`... 是在 `System.Linq` 命名空间下定义的扩展方法. ([参阅所有方法](https://docs.microsoft.com/en-us/dotnet/api/system.linq.queryable)).
+
+你通常想要使用 `.ToListAsync()`, `.CountAsync()`.... 来编写**真正的异步代码**.
+
+但在你使用标准的[应用程序启动模板](Startup-Templates/Application.md)时会发现无法在应用层或领域层使用这些异步扩展方法,因为:
+
+* 这里异步方法**不是标准LINQ方法**,它们定义在[Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore)Nuget包中.
+* 标准模板应用层与领域层**不引用**EF Core 包以实现数据库提供程序独立.
+
+根据你的需求和开发模式,你可以根据以下选项使用异步方法.
+
+> 强烈建议使用异步方法! 在执行数据库查询时不要使用同步LINQ方法,以便能够开发可伸缩的应用程序.
+
+### 选项-1: 引用EF Core
+
+最简单的方法是在你想要使用异步方法的项目直接引用EF Core包.
+
+> 添加[Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore)NuGet包到你的项目间接引用EF Core包. 这可以确保你的应用程序其余部分兼容正确版本的EF Core.
+
+当你添加NuGet包后,你可以使用全功能的EF Core扩展方法.
+
+**示例: 直接使用 `ToListAsync()`**
+
+````csharp
+var people = _personRepository
+    .Where(p => p.Name.Contains(nameFilter))
+    .ToListAsync();
+````
+
+此方法建议;
+
+* 如果你正在开发一个应用程序并且**不打算在将来** 更新FE Core,或者如果以后需要更改,你可以**容忍**它. 如果你正在开发最终的应用程序,这是合理的.
+
+#### MongoDB
+
+如果使用的是MongoDB,则需要将[Volo.Abp.MongoDB] NuGet包添加到项目中. 但在这种情况下你也不能直接使用异步LINQ扩展(例如`ToListAsync`),因为MongoDB不提供 `IQueryable<T>`的异步扩展方法,而是提供 `IMongoQueryable<T>`. 你需要先将查询强制转换为 `IMongoQueryable<T>` 才能使用异步扩展方法.
+
+**示例: 转换Cast `IQueryable<T>` 为 `IMongoQueryable<T>` 并且使用 `ToListAsync()`**
+
+````csharp
+var people = ((IMongoQueryable<Person>)_personRepository
+    .Where(p => p.Name.Contains(nameFilter)))
+    .ToListAsync();
+````
+
+### 选项-2: 自定义仓储方法
+
+你始终可以创建自定义仓储方法并使用特定数据库提供程序的API,比如这里的异步扩展方法. 有关自定义存储库的更多信息,请参阅[EF Core](Entity-Framework-Core.md)或[MongoDb](MongoDB.md)文档.
+
+此方法建议;
+
+* 如果你想**完全隔离**你的领域和应用层和数据库提供程序.
+* 如果你开发可**重用的[应用模块](Modules/Index.md)**,并且不想强制使用特定的数据库提供程序,这应该作为一种[最佳实践](Best-Practices/Index.md).
+
+### 选项-3: IAsyncQueryableExecuter
+
+`IAsyncQueryableExecuter` 是一个用于异步执行 `IQueryable<T>` 对象的服务,**不依赖于实际的数据库提供程序**.
+
+**示例: 注入并使用 `IAsyncQueryableExecuter.ToListAsync()` 方法**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Linq;
+
+namespace AbpDemo
+{
+    public class ProductAppService : ApplicationService, IProductAppService
+    {
+        private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IAsyncQueryableExecuter _asyncExecuter;
+
+        public ProductAppService(
+            IRepository<Product, Guid> productRepository,
+            IAsyncQueryableExecuter asyncExecuter)
+        {
+            _productRepository = productRepository;
+            _asyncExecuter = asyncExecuter;
+        }
+
+        public async Task<ListResultDto<ProductDto>> GetListAsync(string name)
+        {
+            //Create the query
+            var query = _productRepository
+                .Where(p => p.Name.Contains(name))
+                .OrderBy(p => p.Name);
+
+            //Run the query asynchronously
+            List<Product> products = await _asyncExecuter.ToListAsync(query);
+
+            //...
+        }
+    }
+}
+````
+
+> `ApplicationService` 和 `DomainService` 基类已经预属性注入了 `AsyncExecuter` 属性,所以你可直接使用.
+
+ABP框架使用实际数据库提供程序的API异步执行查询.虽然这不是执行查询的常见方式,但它是使用异步API而不依赖于数据库提供者的最佳方式.
+
+此方法建议;
+
+* 如果你正在构建一个没有数据库提供程序集成包的**可重用库**,但是在某些情况下需要执行 `IQueryable<T>`对象.
+
+例如,ABP框架在 `CrudAppService` 基类中(参阅[应用程序](Application-Services.md)文档)使用 `IAsyncQueryableExecuter`.

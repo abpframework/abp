@@ -6,11 +6,35 @@
         overflow: hidden;
 
         .hero-content {
+            h1 {
+                margin-top: 2em;
+                font-size: 2em;
+                font-weight: bold;
+                line-height: 1.25;
+
+                a {
+                    color: #000;
+                    font-weight: 700;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
             h2 {
                 margin-top: .5rem;
                 font-size: 1.75em;
                 font-weight: bold;
                 line-height: 1.25;
+
+                a {
+                    color: #000;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
             }
         }
 

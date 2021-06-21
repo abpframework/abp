@@ -21,8 +21,8 @@ namespace Volo.Abp.Auditing
             {
                 return false;
             }
-            
-            if (ShouldAuditTypeByDefault(type))
+
+            if (ShouldAuditTypeByDefaultOrNull(type) == true)
             {
                 return true;
             }
@@ -36,7 +36,7 @@ namespace Volo.Abp.Auditing
         }
 
         //TODO: Move to a better place
-        public static bool ShouldAuditTypeByDefault(Type type)
+        public static bool? ShouldAuditTypeByDefaultOrNull(Type type)
         {
             //TODO: In an inheritance chain, it would be better to check the attributes on the top class first.
 
@@ -55,7 +55,7 @@ namespace Volo.Abp.Auditing
                 return true;
             }
 
-            return false;
+            return null;
         }
     }
 }

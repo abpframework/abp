@@ -27,6 +27,11 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new SettingManagementModelBuilderConfigurationOptions(
                 AbpSettingManagementDbProperties.DbTablePrefix,
                 AbpSettingManagementDbProperties.DbSchema
@@ -41,12 +46,19 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
-                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLength).IsRequired();
+
+                if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
+                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLengthValue).IsRequired();
+
                 b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
                 b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
         }
     }
 }

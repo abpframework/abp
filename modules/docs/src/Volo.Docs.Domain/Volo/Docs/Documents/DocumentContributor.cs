@@ -9,6 +9,8 @@ namespace Volo.Docs.Documents
 
         public string Username { get; set; }
 
+        public int CommitCount { get; set; }
+
         public string UserProfileUrl { get; set; }
 
         public string AvatarUrl { get; set; }
@@ -23,12 +25,13 @@ namespace Volo.Docs.Documents
             return DocumentId == documentId && Username == username;
         }
 
-        public DocumentContributor(Guid documentId, string username, string userProfileUrl, string avatarUrl)
+        public DocumentContributor(Guid documentId, string username, string userProfileUrl, string avatarUrl, int commitCount = 1)
         {
             DocumentId = documentId;
             Username = username;
             UserProfileUrl = userProfileUrl;
             AvatarUrl = avatarUrl;
+            CommitCount = commitCount;
         }
 
         public override object[] GetKeys()

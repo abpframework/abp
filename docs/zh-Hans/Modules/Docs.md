@@ -47,7 +47,7 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
   }
 }
 ```
@@ -58,13 +58,17 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 输入用户名 `admin` 密码 `1q2w3E*` 登录到网站.
 
-### 2- 引用文档模块包
+### 3- 安装模块
 
 文档模块包托管在Nuget上面. 需要有四个包安装到你的应用程序中. 每个包必须安装到相关的项目.
+
+#### 3.1- 使用ABP CLI
 
 建议使用ABP CLI安装模块,在解决方案文件 (`.sln`) 目录打开 `CMD` 窗口,运行以下命令:
 
 `abp add-module Volo.Docs`
+
+#### 3.2- 手动安装
 
 或者你也可以手动安装nuget包到每个项目:
 
@@ -83,7 +87,7 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 * 安装[Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Web` 项目.
   `Install-Package Volo.Docs.Web`
 
-### 3- 添加模块依赖
+##### 3.2.1- 添加模块依赖
 
 一个ABP模块必须声明 `[DependsOn]` attribute 如果它依赖于另一个模块. 每个模块都必须在相关的项目的`[DependsOn]`Attribute 中添加.
 
@@ -121,7 +125,6 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
           //...
       }
   ```
-
 
 * 打开 `MyProjectApplicationModule.cs`并且添加 `typeof(DocsApplicationModule)` 如下所示;
 
@@ -164,6 +167,27 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
           //...
       }
   ```
+
+##### 3.2.2- 添加NPM包
+
+打开 `package.json` 添加 `@abp/docs` 如下所示:
+  
+  ```json
+    {
+        "version": "1.0.0",
+        "name": "my-app",
+        "private": true,
+        "dependencies": {
+            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
+            "@abp/docs": "^2.9.0"
+        }
+    }
+  ```
+
+  然后在 `Acme.MyProject.Web` 项目目录打开命令行终端运行以下命令:
+
+  1. `yarn`
+  2. `gulp`
 
 ### 4- 数据库集成
 
@@ -587,7 +611,7 @@ Configure<DocsElasticSearchOptions>(options =>
 应用程序启动后如果`Index`不存在则会自动创建`Index`.
 
 `DefaultElasticClientProvider`负责创建`IElasticClient`, 默认情况下它会从`IConfiguration`中读取Elastic Search的`Url`.
-如果你的IElasticClient需要其它配置请使用重写IElasticClientProvider服务并在依赖注入系统中替换它.
+如果你的 `IElasticClient` 需要其它配置请使用重写 `IElasticClientProvider` 服务并在[依赖注入](../Dependency-Injection.md)系统中替换它.
 ```
 {
   "ElasticSearch": {

@@ -14,24 +14,29 @@ namespace Volo.Abp.FeatureManagement
             Store = store;
         }
 
+        public virtual bool Compatible(string providerName)
+        {
+            return providerName == Name;
+        }
+
         public virtual async Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)
         {
-            return await Store.GetOrNullAsync(feature.Name, Name, NormalizeProviderKey(providerKey));
+            return await Store.GetOrNullAsync(feature.Name, Name, await NormalizeProviderKeyAsync(providerKey));
         }
 
         public virtual async Task SetAsync(FeatureDefinition feature, string value, string providerKey)
         {
-            await Store.SetAsync(feature.Name, value, Name, NormalizeProviderKey(providerKey));
+            await Store.SetAsync(feature.Name, value, Name, await NormalizeProviderKeyAsync(providerKey));
         }
 
         public virtual async Task ClearAsync(FeatureDefinition feature, string providerKey)
         {
-            await Store.DeleteAsync(feature.Name, Name, NormalizeProviderKey(providerKey));
+            await Store.DeleteAsync(feature.Name, Name, await NormalizeProviderKeyAsync(providerKey));
         }
 
-        protected virtual string NormalizeProviderKey(string providerKey)
+        protected virtual Task<string> NormalizeProviderKeyAsync(string providerKey)
         {
-            return providerKey;
+            return Task.FromResult(providerKey);
         }
     }
 }

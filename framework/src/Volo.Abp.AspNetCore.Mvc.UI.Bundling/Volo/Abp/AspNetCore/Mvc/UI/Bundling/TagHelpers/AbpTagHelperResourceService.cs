@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -17,18 +19,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     {
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
         protected IBundleManager BundleManager { get; }
-        protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IWebHostEnvironment HostingEnvironment { get; }
-        protected readonly AbpBundlingOptions Options;
-        
+        protected AbpBundlingOptions Options { get; }
+
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
-            IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
-            WebContentFileProvider = webContentFileProvider;
             HostingEnvironment = hostingEnvironment;
             Options = options.Value;
 
@@ -36,11 +35,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         }
 
         public virtual async Task ProcessAsync(
+            [NotNull] ViewContext viewContext,
             [NotNull] TagHelperContext context,
             [NotNull] TagHelperOutput output,
             [NotNull] List<BundleTagHelperItem> bundleItems,
             [CanBeNull] string bundleName = null)
         {
+            Check.NotNull(viewContext, nameof(viewContext));
             Check.NotNull(context, nameof(context));
             Check.NotNull(output, nameof(output));
             Check.NotNull(bundleItems, nameof(bundleItems));
@@ -62,14 +63,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             foreach (var bundleFile in bundleFiles)
             {
-                var file = WebContentFileProvider.GetFileInfo(bundleFile);
+                var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
 
                 if (file == null || !file.Exists)
                 {
-                    throw new AbpException($"Could not find the bundle file '{bundleFile}' from {nameof(IWebContentFileProvider)}");
+                    throw new AbpException($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
                 }
 
-                AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                if (file.Length > 0)
+                {
+                    AddHtmlTag(viewContext, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                }
             }
 
             stopwatch.Stop();
@@ -80,7 +84,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
-        protected abstract void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file);
+        protected abstract void AddHtmlTag(ViewContext viewContext, TagHelperContext context, TagHelperOutput output, string file);
 
         protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
         {

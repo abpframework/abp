@@ -4,7 +4,6 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   Self,
@@ -12,15 +11,16 @@ import {
 import { FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { takeUntilDestroy } from '../utils';
+import { SubscriptionService } from '../services/subscription.service';
 
 type Controls = { [key: string]: FormControl } | FormGroup[];
 
 @Directive({
   // tslint:disable-next-line: directive-selector
   selector: 'form[ngSubmit][formGroup]',
+  providers: [SubscriptionService],
 })
-export class FormSubmitDirective implements OnInit, OnDestroy {
+export class FormSubmitDirective implements OnInit {
   @Input()
   debounce = 200;
 
@@ -35,30 +35,31 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
     @Self() private formGroupDirective: FormGroupDirective,
     private host: ElementRef<HTMLFormElement>,
     private cdRef: ChangeDetectorRef,
+    private subscription: SubscriptionService,
   ) {}
 
   ngOnInit() {
-    this.formGroupDirective.ngSubmit.pipe(takeUntilDestroy(this)).subscribe(() => {
+    this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {
       this.markAsDirty();
       this.executedNgSubmit = true;
     });
 
-    fromEvent(this.host.nativeElement as HTMLElement, 'keyup')
-      .pipe(
-        debounceTime(this.debounce),
-        filter((key: KeyboardEvent) => key && key.key === 'Enter'),
-        takeUntilDestroy(this),
-      )
-      .subscribe(() => {
-        if (!this.executedNgSubmit) {
-          this.host.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-        }
+    const keyup$ = fromEvent(this.host.nativeElement as HTMLElement, 'keyup').pipe(
+      debounceTime(this.debounce),
+      filter(event => !(event.target instanceof HTMLTextAreaElement)),
+      filter((event: KeyboardEvent) => event && event.key === 'Enter'),
+    );
 
-        this.executedNgSubmit = false;
-      });
+    this.subscription.addOne(keyup$, () => {
+      if (!this.executedNgSubmit) {
+        this.host.nativeElement.dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true }),
+        );
+      }
+
+      this.executedNgSubmit = false;
+    });
   }
-
-  ngOnDestroy(): void {}
 
   markAsDirty() {
     const { form } = this.formGroupDirective;

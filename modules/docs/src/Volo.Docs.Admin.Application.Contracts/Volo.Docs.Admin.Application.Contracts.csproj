@@ -7,6 +7,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Docs.Admin.Application.Contracts</AssemblyName>
     <PackageId>Volo.Docs.Admin.Application.Contracts</PackageId>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
@@ -17,7 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Docs.Domain.Shared\Volo.Docs.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

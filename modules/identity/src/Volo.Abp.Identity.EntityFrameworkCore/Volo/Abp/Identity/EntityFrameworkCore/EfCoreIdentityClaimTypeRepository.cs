@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -11,32 +12,51 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<IIdentityDbContext, IdentityClaimType, Guid>, IIdentityClaimTypeRepository
     {
-        public EfCoreIdentityClaimTypeRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider) 
+        public EfCoreIdentityClaimTypeRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
-
         }
 
-        public virtual async Task<bool> AnyAsync(string name, Guid? ignoredId = null)
+        public virtual async Task<bool> AnyAsync(
+            string name,
+            Guid? ignoredId = null,
+            CancellationToken cancellationToken = default)
         {
-            return await DbSet
-                       .WhereIf(ignoredId != null, ct => ct.Id != ignoredId)
-                       .CountAsync(ct => ct.Name == name) > 0;
+            return await (await GetDbSetAsync())
+                .WhereIf(ignoredId != null, ct => ct.Id != ignoredId)
+                .CountAsync(ct => ct.Name == name, GetCancellationToken(cancellationToken)) > 0;
         }
 
-        public virtual async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
+        public virtual async Task<List<IdentityClaimType>> GetListAsync(
+            string sorting,
+            int maxResultCount,
+            int skipCount,
+            string filter,
+            CancellationToken cancellationToken = default)
         {
-            var identityClaimTypes = await DbSet
+            var identityClaimTypes = await (await GetDbSetAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? "name desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return identityClaimTypes;
+        }
+
+        public virtual async Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                ).LongCountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

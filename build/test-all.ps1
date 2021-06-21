@@ -1,4 +1,6 @@
-. ".\common.ps1"
+$full = $args[0] 
+
+. ".\common.ps1" $full
 
 # Test all solutions
 

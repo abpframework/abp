@@ -285,8 +285,6 @@ public async Task CreateAsync(CreateAuthorDto input)
 abp.auth.isGranted('MyPermissionName');
 ````
 
-参阅 [abp.auth](AspNetCore/JavaScript-API/Auth.md) API 文档了解详情.
-
 ## 权限管理
 
 通常权限管理是管理员用户使用权限管理模态框进行授权:
@@ -345,7 +343,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 
     public override string Name => "SystemAdmin";
 
-    public override async Task<PermissionGrantResult>
+    public async override Task<PermissionGrantResult>
            CheckAsync(PermissionValueCheckContext context)
     {
         if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")

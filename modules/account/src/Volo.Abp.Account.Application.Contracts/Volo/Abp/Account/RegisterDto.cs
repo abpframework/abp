@@ -1,22 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account
 {
-    public class RegisterDto
+    public class RegisterDto : ExtensibleObject
     {
         [Required]
-        [StringLength(IdentityUserConsts.MaxUserNameLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
         public string UserName { get; set; }
 
         [Required]
         [EmailAddress]
-        [StringLength(IdentityUserConsts.MaxEmailLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string EmailAddress { get; set; }
 
         [Required]
-        [StringLength(IdentityUserConsts.MaxPasswordLength)]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         [DisableAuditing]
         public string Password { get; set; }

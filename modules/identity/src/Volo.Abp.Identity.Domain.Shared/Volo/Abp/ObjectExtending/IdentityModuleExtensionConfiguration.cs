@@ -31,5 +31,14 @@ namespace Volo.Abp.ObjectExtending
                 configureAction
             );
         }
+        
+        public IdentityModuleExtensionConfiguration ConfigureOrganizationUnit(
+            Action<EntityExtensionConfiguration> configureAction)
+        {
+            return this.ConfigureEntity(
+                IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
+                configureAction
+            );
+        }
     }
 }

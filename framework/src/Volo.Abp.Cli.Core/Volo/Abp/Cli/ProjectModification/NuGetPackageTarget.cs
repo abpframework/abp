@@ -11,6 +11,11 @@
         HttpApiClient = 6,
         Web = 7,
         EntityFrameworkCore = 8,
-        MongoDB = 9
+        MongoDB = 9,
+        SignalR = 10,
+        Blazor = 11,
+        IdentityServer = 12,
+        BlazorServer = 13,
+        BlazorWebAssembly = 14
     }
 }

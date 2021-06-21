@@ -4,14 +4,19 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Docs.Admin.Web</AssemblyName>
     <PackageId>Volo.Docs.Admin.Web</PackageId>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Volo.Docs.Admin</RootNamespace>
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+      <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
@@ -19,21 +24,24 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
     <ProjectReference Include="..\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj" />
-    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
 </Project>

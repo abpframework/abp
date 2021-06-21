@@ -53,7 +53,7 @@ this.confirmation
 - `Confirmation.Status` is an enum and has three properties;
     - `Confirmation.Status.confirm` is a closing event value that will be emitted when the popup is closed by the confirm button.
     - `Confirmation.Status.reject` is a closing event value that will be emitted when the popup is closed by the cancel button.
-    - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape.
+    - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape or clicking the backdrop.
 
 
 If you are not interested in the confirmation status, you do not have to subscribe to the returned observable:
@@ -70,6 +70,7 @@ Options can be passed as the third parameter to `success`, `warn`, `error`, and 
 const options: Partial<Confirmation.Options> = {
   hideCancelBtn: false,
   hideYesBtn: false,
+  dismissible: false,
   cancelText: 'Close',
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
@@ -83,10 +84,11 @@ this.confirmation.warn(
 );
 ```
 
-- `hideCancelBtn` option hides the cancellation button when `true`. Default value is `false`
-- `hideYesBtn` option hides the confirmation button when `true`. Default value is `false`
-- `cancelText` is the text of the cancellation button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`
-- `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
+- `hideCancelBtn` option hides the cancellation button when `true`. Default value is `false`.
+- `hideYesBtn` option hides the confirmation button when `true`. Default value is `false`.
+- `dismissible` option allows dismissing the confirmation popup by pressing escape or clicking the backdrop. Default value is `true`.
+- `cancelText` is the text of the cancellation button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`.
+- `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
 
@@ -178,8 +180,3 @@ clear(
 ```
 
 - `status` parameter is the value of the confirmation closing event.
-
-
-## What's Next?
-
-- [Toast Overlay](./Toaster-Service.md)

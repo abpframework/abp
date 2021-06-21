@@ -18,19 +18,26 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual void AddRepositories()
         {
+            RegisterCustomRepositories();
+            RegisterDefaultRepositories();
+            RegisterSpecifiedDefaultRepositories();
+        }
+
+        protected virtual void RegisterCustomRepositories()
+        {
             foreach (var customRepository in Options.CustomRepositories)
             {
-                Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value);
-            }
-
-            if (Options.RegisterDefaultRepositories)
-            {
-                RegisterDefaultRepositories();
+                Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value, replaceExisting: true);
             }
         }
 
         protected virtual void RegisterDefaultRepositories()
         {
+            if (!Options.RegisterDefaultRepositories)
+            {
+                return;
+            }
+
             foreach (var entityType in GetEntityTypes(Options.OriginalDbContextType))
             {
                 if (!ShouldRegisterDefaultRepositoryFor(entityType))
@@ -39,6 +46,17 @@ namespace Volo.Abp.Domain.Repositories
                 }
 
                 RegisterDefaultRepository(entityType);
+            }
+        }
+
+        protected virtual void RegisterSpecifiedDefaultRepositories()
+        {
+            foreach (var entityType in Options.SpecifiedDefaultRepositories)
+            {
+                if (!Options.CustomRepositories.ContainsKey(entityType))
+                {
+                    RegisterDefaultRepository(entityType);
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -20,6 +21,9 @@ namespace MyCompanyName.MyProjectName.Web
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
+#if DEBUG
+                .WriteTo.Async(c => c.Console())
+#endif
                 .CreateLogger();
 
             try
@@ -41,6 +45,10 @@ namespace MyCompanyName.MyProjectName.Web
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(build =>
+                {
+                    build.AddJsonFile("appsettings.secrets.json", optional: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

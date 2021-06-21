@@ -36,7 +36,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.HttpMethod).HasMaxLength(AuditLogConsts.MaxHttpMethodLength).HasColumnName(nameof(AuditLog.HttpMethod));
                 b.Property(x => x.Url).HasMaxLength(AuditLogConsts.MaxUrlLength).HasColumnName(nameof(AuditLog.Url));
                 b.Property(x => x.HttpStatusCode).HasColumnName(nameof(AuditLog.HttpStatusCode));
-                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLength).HasColumnName(nameof(AuditLog.Exceptions));
+
                 b.Property(x => x.Comments).HasMaxLength(AuditLogConsts.MaxCommentsLength).HasColumnName(nameof(AuditLog.Comments));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
                 b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
@@ -50,6 +50,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
                 b.HasIndex(x => new { x.TenantId, x.ExecutionTime });
                 b.HasIndex(x => new { x.TenantId, x.UserId, x.ExecutionTime });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<AuditLogAction>(b =>
@@ -64,9 +66,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.Parameters).HasMaxLength(AuditLogActionConsts.MaxParametersLength).HasColumnName(nameof(AuditLogAction.Parameters));
                 b.Property(x => x.ExecutionTime).HasColumnName(nameof(AuditLogAction.ExecutionTime));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLogAction.ExecutionDuration));
-                
+
                 b.HasIndex(x => new { x.AuditLogId });
                 b.HasIndex(x => new { x.TenantId, x.ServiceName, x.MethodName, x.ExecutionTime });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<EntityChange>(b =>
@@ -86,6 +90,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
                 b.HasIndex(x => new { x.AuditLogId });
                 b.HasIndex(x => new { x.TenantId, x.EntityTypeFullName, x.EntityId });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<EntityPropertyChange>(b =>
@@ -100,7 +106,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.OriginalValue).HasMaxLength(EntityPropertyChangeConsts.MaxOriginalValueLength).HasColumnName(nameof(EntityPropertyChange.OriginalValue));
 
                 b.HasIndex(x => new { x.EntityChangeId });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<AbpAuditLoggingDbContext>();
         }
     }
 }

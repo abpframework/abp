@@ -60,7 +60,7 @@ context.Services.Replace(
 
 ````csharp
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
@@ -75,7 +75,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
     {
     }
 
-    public override async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public async override Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         if (input.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -107,31 +107,34 @@ public class MyIdentityUserAppService : IdentityUserAppService
 public class MyIdentityUserManager : IdentityUserManager
 {
     public MyIdentityUserManager(
-        IdentityUserStore store, 
-        IOptions<IdentityOptions> optionsAccessor, 
+        IdentityUserStore store,
+        IIdentityRoleRepository roleRepository,
+        IIdentityUserRepository userRepository,
+        IOptions<IdentityOptions> optionsAccessor,
         IPasswordHasher<IdentityUser> passwordHasher,
-        IEnumerable<IUserValidator<IdentityUser>> userValidators, 
-        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
-        ILookupNormalizer keyNormalizer, 
-        IdentityErrorDescriber errors, 
-        IServiceProvider services, 
-        ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider
-        ) : base(
-            store, 
-            optionsAccessor, 
-            passwordHasher, 
-            userValidators, 
-            passwordValidators, 
-            keyNormalizer, 
-            errors, 
-            services, 
-            logger, 
+        IEnumerable<IUserValidator<IdentityUser>> userValidators,
+        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
+        ILookupNormalizer keyNormalizer,
+        IdentityErrorDescriber errors,
+        IServiceProvider services,
+        ILogger<IdentityUserManager> logger,
+        ICancellationTokenProvider cancellationTokenProvider) :
+        base(store,
+            roleRepository,
+            userRepository,
+            optionsAccessor,
+            passwordHasher,
+            userValidators,
+            passwordValidators,
+            keyNormalizer,
+            errors,
+            services,
+            logger,
             cancellationTokenProvider)
     {
     }
 
-    public override async Task<IdentityResult> CreateAsync(IdentityUser user)
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
     {
         if (user.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -240,15 +243,15 @@ ObjectExtensionManager.Instance
 
 这是定义实体属性的另一种方法( 有关 `ObjectExtensionManager` 更多信息,请参阅[文档](Object-Extensions.md)). 这次我们设置了 `CheckPairDefinitionOnMapping` 为false,在将实体映射到DTO时会跳过定义检查.
 
-如果你不喜欢这种方法,但想简单的向多个对象(DTO)添加单个属, `AddOrUpdateProperty` 可以使用类型数组添加额外的属性:
+如果你不喜欢这种方法,但想简单的向多个对象(DTO)添加单个属性, `AddOrUpdateProperty` 可以使用类型数组添加额外的属性:
 
 ````csharp
 ObjectExtensionManager.Instance
     .AddOrUpdateProperty<string>(
         new[]
         {
-            typeof(IdentityUserDto), 
-            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
             typeof(IdentityUserUpdateDto)
         },
         "SocialSecurityNumber"

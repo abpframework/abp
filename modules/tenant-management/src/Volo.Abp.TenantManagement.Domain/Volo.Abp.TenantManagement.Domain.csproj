@@ -21,7 +21,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI\Volo.Abp.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
 </Project>

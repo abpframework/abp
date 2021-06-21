@@ -9,35 +9,48 @@ namespace Volo.Abp.DependencyInjection
         IServiceCollection Services { get; }
 
         /// <summary>
-        /// Registers default repositories for this DbContext. 
+        /// Registers default repositories for all the entities in this DbContext.
         /// </summary>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// Set <paramref name="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false);
 
         /// <summary>
-        /// Registers default repositories for this DbContext.
+        /// Registers default repositories for all the entities in this DbContext.
         /// Default repositories will use given <see cref="TDefaultRepositoryDbContext"/>.
         /// </summary>
         /// <typeparam name="TDefaultRepositoryDbContext">DbContext type that will be used by default repositories</typeparam>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// Set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
 
         /// <summary>
-        /// Registers default repositories for this DbContext.
+        /// Registers default repositories for all the entities in this DbContext.
         /// Default repositories will use given <see cref="defaultRepositoryDbContextType"/>.
         /// </summary>
         /// <param name="defaultRepositoryDbContextType">DbContext type that will be used by default repositories</param>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// Set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false);
+
+        /// <summary>
+        /// Registers default repository for a specific entity.
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository<TEntity>();
+
+        /// <summary>
+        /// Registers default repository for a specific entity.
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <returns></returns>
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository(Type entityType);
 
         /// <summary>
         /// Registers custom repository for a specific entity.
@@ -62,9 +75,17 @@ namespace Volo.Abp.DependencyInjection
         IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>();
 
         /// <summary>
-        /// Replaces given DbContext type with this DbContext type.
+        /// Replaces given DbContext type with the target DbContext type.
+        /// </summary>
+        /// <typeparam name="TOtherDbContext">The DbContext type to be replaced</typeparam>
+        /// <typeparam name="TTargetDbContext">The target DbContext type</typeparam>
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>();
+
+        /// <summary>
+        /// Replaces given DbContext type with the given or this DbContext type.
         /// </summary>
         /// <param name="otherDbContextType">The DbContext type to be replaced</param>
-        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType);
+        /// <param name="targetDbContextType">The target DbContext type (optional, used this DbContext type if not provided)</param>
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null);
     }
 }

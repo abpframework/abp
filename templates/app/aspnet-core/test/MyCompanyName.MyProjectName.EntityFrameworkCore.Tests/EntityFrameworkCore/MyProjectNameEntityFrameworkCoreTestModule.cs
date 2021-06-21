@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
-        typeof(MyProjectNameTestBaseModule)
+        typeof(MyProjectNameEntityFrameworkCoreModule),
+        typeof(MyProjectNameTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
     {
@@ -28,7 +30,10 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 
             services.Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(context => { context.DbContextOptions.UseSqlite(_sqliteConnection); });
+                options.Configure(context =>
+                {
+                    context.DbContextOptions.UseSqlite(_sqliteConnection);
+                });
             });
         }
 
@@ -42,11 +47,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
+            var options = new DbContextOptionsBuilder<MyProjectNameDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            using (var context = new MyProjectNameMigrationsDbContext(options))
+            using (var context = new MyProjectNameDbContext(options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }

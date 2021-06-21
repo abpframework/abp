@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.IdentityServer;
@@ -30,7 +31,13 @@ namespace Volo.Abp.Account.Web
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpAccountWebIdentityServerModule>("Volo.Abp.Account.Web");
+                options.FileSets.AddEmbedded<AbpAccountWebIdentityServerModule>();
+            });
+
+            Configure<IdentityServerOptions>(options =>
+            {
+                options.UserInteraction.ConsentUrl = "/Consent";
+                options.UserInteraction.ErrorUrl = "/Account/Error";
             });
 
             //TODO: Try to reuse from AbpIdentityAspNetCoreModule

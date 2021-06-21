@@ -23,7 +23,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task GetListByScopesAsync()
         {
-            (await identityResourceRepository.GetListByScopesAsync(new[] { "", "NewIdentityResource2" })).Count.ShouldBe(1);
+            (await identityResourceRepository.GetListByScopeNameAsync(new[] { "", "NewIdentityResource2" })).Count.ShouldBe(1);
         }
     }
 }

@@ -1,0 +1,43 @@
+<div *ngIf="actionList.length > 1" ngbDropdown container="body" class="d-inline-block">
+  <button
+    class="btn btn-primary btn-sm dropdown-toggle"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    ngbDropdownToggle
+  >
+    <i [ngClass]="icon" [class.mr-1]="icon"></i>{{ text | abpLocalization }}
+  </button>
+  <div ngbDropdownMenu>
+    <ng-container
+      *ngFor="let action of actionList; trackBy: trackByFn"
+      [ngTemplateOutlet]="btnItem"
+      [ngTemplateOutletContext]="{ $implicit: action }"
+    >
+    </ng-container>
+  </div>
+</div>
+
+<ng-container
+  *ngIf="actionList.length === 1"
+  [ngTemplateOutlet]="btnItem"
+  [ngTemplateOutletContext]="{ $implicit: actionList.get(0).value }"
+></ng-container>
+
+<ng-template #btnItem let-action>
+  <ng-container *ngIf="action.visible(data)">
+    <button
+      ngbDropdownItem
+      *abpPermission="action.permission"
+      (click)="action.action(data)"
+      type="button"
+      class="{{ actionList.length === 1 ? 'btn btn-primary' : '' }}"
+      [class.text-center]="actionList.length === 1"
+    >
+      <i [ngClass]="action.icon" [class.mr-1]="action.icon"></i>
+      <span *ngIf="action.icon; else ellipsis">{{ action.text | abpLocalization }}</span>
+      <ng-template #ellipsis>
+        <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+      </ng-template>
+    </button>
+  </ng-container>
+</ng-template>

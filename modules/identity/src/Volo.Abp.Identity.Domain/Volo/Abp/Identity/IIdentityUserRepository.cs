@@ -21,6 +21,10 @@ namespace Volo.Abp.Identity
             CancellationToken cancellationToken = default
         );
 
+        Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+            Guid id,
+            CancellationToken cancellationToken = default);
+
         Task<IdentityUser> FindByLoginAsync(
             [NotNull] string loginProvider,
             [NotNull] string providerKey,
@@ -29,19 +33,19 @@ namespace Volo.Abp.Identity
         );
 
         Task<IdentityUser> FindByNormalizedEmailAsync(
-            [NotNull] string normalizedEmail, 
+            [NotNull] string normalizedEmail,
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );
 
         Task<List<IdentityUser>> GetListByClaimAsync(
-            Claim claim, 
+            Claim claim,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
 
         Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
@@ -60,6 +64,25 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            Guid id,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
+
+        Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+            Guid organizationUnitId,
+            CancellationToken cancellationToken = default
+            );
+        Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+            List<Guid> organizationUnitIds,
+            CancellationToken cancellationToken = default
+            );
+
+        Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+            string code,
+            CancellationToken cancellationToken = default
+            );
 
         Task<long> GetCountAsync(
             string filter = null,

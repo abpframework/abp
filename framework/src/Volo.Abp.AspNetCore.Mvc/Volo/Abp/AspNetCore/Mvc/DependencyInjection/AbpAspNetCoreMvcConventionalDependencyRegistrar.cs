@@ -29,8 +29,13 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
 
             foreach (var serviceType in serviceTypes)
             {
-                var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime);
-                services.Add(serviceDescriptor);
+                services.Add(
+                    ServiceDescriptor.Describe(
+                        serviceType,
+                        type,
+                        lifeTime
+                    )
+                );
             }
         }
 

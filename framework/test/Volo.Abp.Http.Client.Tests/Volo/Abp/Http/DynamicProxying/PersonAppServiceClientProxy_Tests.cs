@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NSubstitute.Extensions;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
@@ -40,10 +47,27 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
-                ;
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe((int) people.TotalCount);
+        }
+
+        [Fact]
+        public async Task GetParams()
+        {
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+
+            var @params = await _peopleAppService.GetParams(new List<Guid>
+            {
+                id1,
+                id2
+            }, new[] {"name1", "name2"});
+
+            @params.ShouldContain(id1.ToString("N"));
+            @params.ShouldContain(id2.ToString("N"));
+            @params.ShouldContain("name1");
+            @params.ShouldContain("name2");
         }
 
         [Fact]
@@ -149,6 +173,117 @@ namespace Volo.Abp.Http.DynamicProxying
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");
             result.Inner1.Inner2.Value3.ShouldBe("value three");
+        }
+
+        [Fact]
+        public async Task DownloadAsync()
+        {
+            var result = await _peopleAppService.DownloadAsync();
+
+            result.ContentType.ShouldBe("application/rtf");
+            using (var reader = new StreamReader(result.GetStream()))
+            {
+                var str = await reader.ReadToEndAsync();
+                str.ShouldBe("DownloadAsync");
+            }
+        }
+
+        [Fact]
+        public async Task UploadAsync()
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
+            memoryStream.Position = 0;
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream)
+            {
+                ContentType = "application/rtf"
+            });
+            result.ShouldBe("UploadAsync:application/rtf");
+        }
+
+        [Fact]
+        public async Task UploadMultipleAsync()
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("File1"));
+            memoryStream.Position = 0;
+
+            var memoryStream2 = new MemoryStream();
+            await memoryStream2.WriteAsync(Encoding.UTF8.GetBytes("File2"));
+            memoryStream2.Position = 0;
+
+            var result = await _peopleAppService.UploadMultipleAsync(new List<IRemoteStreamContent>()
+            {
+                new RemoteStreamContent(memoryStream)
+                {
+                    ContentType = "application/rtf"
+                },
+
+                new RemoteStreamContent(memoryStream2)
+                {
+                    ContentType = "application/rtf2"
+                }
+            });
+            result.ShouldBe("File1:application/rtfFile2:application/rtf2");
+        }
+
+        [Fact]
+        public async Task CreateFileAsync()
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("CreateFileAsync"));
+            memoryStream.Position = 0;
+            var result = await _peopleAppService.CreateFileAsync(new CreateFileInput()
+            {
+                Name = "123.rtf",
+                Content = new RemoteStreamContent(memoryStream)
+                {
+                    ContentType = "application/rtf"
+                }
+            });
+            result.ShouldBe("123.rtf:CreateFileAsync:application/rtf");
+        }
+
+        [Fact]
+        public async Task CreateMultipleFileAsync()
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("File1"));
+            memoryStream.Position = 0;
+
+            var memoryStream2 = new MemoryStream();
+            await memoryStream2.WriteAsync(Encoding.UTF8.GetBytes("File2"));
+            memoryStream2.Position = 0;
+
+            var memoryStream3 = new MemoryStream();
+            await memoryStream3.WriteAsync(Encoding.UTF8.GetBytes("File3"));
+            memoryStream3.Position = 0;
+
+            var result = await _peopleAppService.CreateMultipleFileAsync(new CreateMultipleFileInput()
+            {
+                Name = "123.rtf",
+                Contents = new List<IRemoteStreamContent>()
+                {
+                    new RemoteStreamContent(memoryStream)
+                    {
+                        ContentType = "application/rtf"
+                    },
+
+                    new RemoteStreamContent(memoryStream2)
+                    {
+                        ContentType = "application/rtf2"
+                    }
+                },
+                Inner = new CreateFileInput()
+                {
+                    Name = "789.rtf",
+                    Content = new RemoteStreamContent(memoryStream3)
+                    {
+                        ContentType = "application/rtf3"
+                    }
+                }
+            });
+            result.ShouldBe("123.rtf:File1:application/rtf123.rtf:File2:application/rtf2789.rtf:File3:application/rtf3");
         }
     }
 }

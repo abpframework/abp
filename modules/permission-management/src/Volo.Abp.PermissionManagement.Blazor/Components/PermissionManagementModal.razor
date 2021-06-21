@@ -1,0 +1,85 @@
+﻿@using Microsoft.Extensions.Localization
+@using Volo.Abp.PermissionManagement.Localization
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+<Modal @ref="_modal" Closing="@ClosingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Permissions"] - @_entityDisplayName</ModalTitle>
+            <CloseButton Clicked="CloseModal" />
+        </ModalHeader>
+        <ModalBody MaxHeight="50">
+            
+            <Field>
+                <Check Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">@L["SelectAllInAllTabs"]</Check>
+            </Field>
+            
+            <Divider />
+            
+            @if (_groups != null)
+            {
+                <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@_selectedTabName">
+                    <Items>
+                        @foreach (var group in _groups)
+                        {
+                            <Tab Name="@GetNormalizedGroupName(group.Name)">
+                                @if (group.Permissions.Any(x => x.IsGranted))
+                                {
+                                    <span>
+                                        <b>@group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )</b>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        @group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )
+                                    </span>
+                                }
+                            </Tab>
+                        }
+                    </Items>
+                    <Content>
+                        @foreach (var group in _groups)
+                        {
+                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
+                                <h4>@group.DisplayName</h4>
+                                
+                                <Divider />
+                                
+                                <Field>
+                                    <Check
+                                        Checked="@(group.Permissions.All(x => x.IsGranted))"
+                                        Cursor="Cursor.Pointer"
+                                        CheckedChanged="@(b => GroupGrantAllChanged(b, group))"
+                                        TValue="bool">
+                                        @L["SelectAllInThisTab"]
+                                    </Check>
+                                </Field>
+
+                                <Divider />
+                                
+                                @foreach (var permission in group.Permissions)
+                                {
+                                    <Field Margin="permission.ParentName != null ? Margin.Is3.OnAll : Margin.Is0.OnAll">
+                                        <Check
+                                            Disabled="@(IsDisabledPermission(permission))"
+                                            Cursor="Cursor.Pointer"
+                                            Checked="@permission.IsGranted"
+                                            CheckedChanged="@(b => PermissionChanged(b, group, permission))"
+                                            TValue="bool">
+                                            @GetShownName(permission)
+                                        </Check>
+                                    </Field>
+                                }
+                                
+                            </TabPanel>
+                        }
+                    </Content>
+                </Tabs>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

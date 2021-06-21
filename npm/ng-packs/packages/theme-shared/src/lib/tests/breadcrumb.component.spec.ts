@@ -1,63 +1,83 @@
-import { LocalizationPipe } from '@abp/ng.core';
-import { Directive } from '@angular/core';
-import { Router } from '@angular/router';
-import { createComponentFactory, Spectator, SpyObject } from '@ngneat/spectator/jest';
+import {
+  ABP,
+  CORE_OPTIONS,
+  LocalizationPipe,
+  RouterOutletComponent,
+  RoutesService,
+} from '@abp/ng.core';
+import { HttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
+import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
 
-@Directive({
-  // tslint:disable-next-line: directive-selector
-  selector: '[routerLink], [routerLinkActive]',
-})
-class DummyRouterLinkDirective {}
+const mockRoutes: ABP.Route[] = [
+  { name: 'Identity', path: '/identity' },
+  { name: 'Users', path: '/identity/users', parentName: 'Identity' },
+];
 
 describe('BreadcrumbComponent', () => {
-  let spectator: Spectator<BreadcrumbComponent>;
+  let spectator: SpectatorRouting<RouterOutletComponent>;
+  let routes: RoutesService;
   let store: SpyObject<Store>;
-  const createComponent = createComponentFactory({
-    component: BreadcrumbComponent,
-    mocks: [Store, Router],
-    imports: [],
-    declarations: [LocalizationPipe, DummyRouterLinkDirective],
+
+  const createRouting = createRoutingFactory({
+    component: RouterOutletComponent,
+    stubsEnabled: false,
     detectChanges: false,
+    mocks: [Store, HttpClient],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: {} },
+      {
+        provide: RoutesService,
+        useFactory: () => mockRoutesService(),
+      },
+    ],
+    declarations: [LocalizationPipe, BreadcrumbComponent],
+    imports: [RouterModule],
+    routes: [
+      {
+        path: '',
+        children: [
+          {
+            path: 'identity',
+            children: [
+              {
+                path: 'users',
+                component: BreadcrumbComponent,
+              },
+            ],
+          },
+        ],
+      },
+    ],
   });
 
   beforeEach(() => {
-    spectator = createComponent();
-    store = spectator.get(Store);
+    spectator = createRouting();
+    routes = spectator.inject(RoutesService);
+    store = spectator.inject(Store);
   });
 
-  it('should display the breadcrumb', () => {
-    const router = spectator.get(Router);
-    (router as any).url = '/identity/users';
-    store.selectSnapshot.mockReturnValueOnce({ LeptonLayoutState: {} });
-    store.selectSnapshot.mockReturnValueOnce({
-      name: 'Identity',
-      children: [{ name: 'Users', path: 'users' }],
-    });
+  it('should display the breadcrumb', async () => {
+    routes.add(mockRoutes);
+    await spectator.router.navigateByUrl('/identity/users');
     // for abpLocalization
     store.selectSnapshot.mockReturnValueOnce('Identity');
     store.selectSnapshot.mockReturnValueOnce('Users');
     spectator.detectChanges();
 
-    expect(spectator.component.segments).toEqual(['Identity', 'Users']);
     const elements = spectator.queryAll('li');
     expect(elements).toHaveLength(3);
     expect(elements[1]).toHaveText('Identity');
     expect(elements[2]).toHaveText('Users');
   });
 
-  it('should not display the breadcrumb', () => {
-    const router = spectator.get(Router);
-    (router as any).url = '/identity/users';
-    spectator.detectChanges();
-    expect(spectator.query('ol.breadcrumb')).toBeFalsy();
-  });
+  it('should not display the breadcrumb when empty', async () => {
+    routes.add([]);
+    await spectator.router.navigateByUrl('/identity/users');
 
-  it('should not display the breadcrumb when abp route not found', () => {
-    const router = spectator.get(Router);
-    (router as any).url = '/identity/users';
-    store.selectSnapshot.mockReturnValueOnce({ LeptonLayoutState: {} });
     spectator.detectChanges();
     expect(spectator.query('ol.breadcrumb')).toBeFalsy();
   });

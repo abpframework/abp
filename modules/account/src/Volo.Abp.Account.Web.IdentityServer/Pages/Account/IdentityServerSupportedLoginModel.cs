@@ -12,11 +12,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -32,10 +34,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IOptions<AbpAccountOptions> accountOptions,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
-            IEventService identityServerEvents)
+            IEventService identityServerEvents,
+            IOptions<IdentityOptions> identityOptions)
             :base(
                 schemeProvider,
-                accountOptions)
+                accountOptions,
+                identityOptions)
         {
             Interaction = interaction;
             ClientStore = clientStore;
@@ -50,6 +54,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (context != null)
             {
+                ShowCancelButton = true;
+
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -73,9 +79,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            if (context?.ClientId != null)
+            if (context?.Client?.ClientId != null)
             {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
                 if (client != null)
                 {
                     EnableLocalLogin = client.EnableLocalLogin;
@@ -97,15 +103,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public override async Task<IActionResult> OnPostAsync(string action)
         {
+            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (action == "Cancel")
             {
-                var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
                 if (context == null)
                 {
                     return Redirect("~/");
                 }
 
-                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied);
+                await Interaction.GrantConsentAsync(context, new ConsentResponse()
+                {
+                    Error = AuthorizationError.AccessDenied
+                });
 
                 return Redirect(ReturnUrl);
             }
@@ -113,6 +122,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            await IdentityOptions.SetAsync();
 
             ExternalProviders = await GetExternalProviders();
 
@@ -127,14 +138,17 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress,
+                ClientId = context?.Client?.ClientId
+            });
+
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
+                return await TwoFactorLoginResultAsync();
             }
 
             if (result.IsLockedOut)
@@ -175,46 +189,32 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return await base.OnPostExternalLogin(provider);
         }
 
-        private async Task<IActionResult> ProcessWindowsLoginAsync()
+        protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
         {
             var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
-            if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
+            if (result.Succeeded)
             {
-                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
+                var props = new AuthenticationProperties()
+                {
+                    RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new {ReturnUrl, ReturnUrlHash}),
+                    Items =
+                    {
+                        {
+                            "LoginProvider", AccountOptions.WindowsAuthenticationSchemeName
+                        },
+                    }
+                };
+
+                var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
+                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
+                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+
+                await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
+
+                return Redirect(props.RedirectUri);
             }
 
-            var props = new AuthenticationProperties
-            {
-                RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
-                Items =
-                {
-                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
-                }
-            };
-
-            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-            identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
-            identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
-
-            //TODO: Consider to add Windows groups the the identity
-            //if (_accountOptions.IncludeWindowsGroups)
-            //{
-            //    var windowsIdentity = windowsPrincipal.Identity as WindowsIdentity;
-            //    if (windowsIdentity != null)
-            //    {
-            //        var groups = windowsIdentity.Groups?.Translate(typeof(NTAccount));
-            //        var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
-            //        identity.AddClaims(roles);
-            //    }
-            //}
-
-            await HttpContext.SignInAsync(
-                IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                new ClaimsPrincipal(identity),
-                props
-            );
-
-            return RedirectSafely(props.RedirectUri);
+            return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
         }
     }
 }

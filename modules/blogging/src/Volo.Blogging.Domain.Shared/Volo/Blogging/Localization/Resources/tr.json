@@ -1,8 +1,18 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Menu:Blogs": "Bloglar",
     "Menu:BlogManagement": "Blog Yönetimi",
+    "Permission:Management": "Yönetme",
+    "Permission:Edit": "Düzenle",
+    "Permission:Create": "Ekle",
+    "Permission:Delete": "Sil",
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Bloglar",
+    "Permission:Posts": "Yazılar",
+    "Permission:Tags": "Etiketler",
+    "Permission:Comments": "Yorumlar",
+    "Permission:ClearCache": "Önbelleği temizle",
     "Title": "Başlık",
     "Delete": "Sil",
     "Reply": "Yanıtla",
@@ -20,7 +30,6 @@
     "SeeAll": "Hepsini Gör",
     "PopularTags": "Popüler Etiketler",
     "WiewsWithCount": "{0} görüntüleme",
-    "ShareOnTwitter": "Twitter'da paylaş",
     "LastPosts": "Son Yazılar",
     "LeaveComment": "Yorum Bırak",
     "TagsInThisArticle": "Makalenin Etiketleri",
@@ -33,6 +42,7 @@
     "AreYouSure": "Emin misiniz?",
     "CommentWithCount": "{0} yorum",
     "Comment": "Yorum",
+    "ShareOnTwitter": "Twitter'da paylaş",
     "CoverImage": "Kapak resmi",
     "CreateANewPost": "Yeni Yazı oluştur",
     "CreateANewBlog": "Yeni Blog Ekle",
@@ -43,6 +53,9 @@
     "Description": "Açıklama",
     "Blogs": "Bloglar",
     "Tags": "Etiketler",
-    "ShareOn": "Paylaş"
+    "ShareOn": "Paylaş",
+    "TitleLengthWarning": "Başlığınınz SEO dostu olabilmesi için 60 karakterden az olmasını sağlayın!",
+    "ClearCache": "Önbelleği temizle",
+    "ClearCacheConfirmationMessage": "Önbelleği temizlemek istediğinizden emin misiniz?"
   }
 }

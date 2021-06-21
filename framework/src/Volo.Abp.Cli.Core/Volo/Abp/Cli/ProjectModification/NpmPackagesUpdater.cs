@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -24,24 +26,23 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
         private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
-        private readonly MyGetPackageListFinder _myGetPackageListFinder;
         private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
-        private MyGetApiResponse _myGetApiResponse;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public NpmPackagesUpdater(
             PackageJsonFileFinder packageJsonFileFinder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
-            MyGetPackageListFinder myGetPackageListFinder,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
             _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
-            _myGetPackageListFinder = myGetPackageListFinder;
             CancellationTokenProvider = cancellationTokenProvider;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }
 
-        public async Task Update(string rootDirectory, bool includePreviews = false, bool switchToStable = false)
+        public async Task Update(string rootDirectory, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, string version = null)
         {
             var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
@@ -52,33 +53,42 @@ namespace Volo.Abp.Cli.ProjectModification
 
             _npmGlobalPackagesChecker.Check();
 
-            foreach (var file in fileList)
+            var packagesUpdated = new ConcurrentDictionary<string, bool>();
+
+            async Task UpdateAsync(string file)
             {
-                var packagesUpdated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
+                var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates, switchToStable, version);
+                packagesUpdated.TryAdd(file, updated);
+            }
 
-                if (packagesUpdated)
+            Task.WaitAll(fileList.Select(UpdateAsync).ToArray());
+
+            foreach (var file in packagesUpdated.Where(x => x.Value))
+            {
+                var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
+
+                if (includePreviews)
                 {
-                    var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
+                    await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
+                else if (switchToStable)
+                {
+                    await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
 
-                    if (IsAngularProject(fileDirectory))
-                    {
-                        if (includePreviews)
-                        {
-                            await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
-                        else if (switchToStable)
-                        {
-                            await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
-                    }
-
+                if (await NpmrcFileExistAsync(fileDirectory))
+                {
+                    RunNpmInstall(fileDirectory);
+                }
+                else
+                {
                     RunYarn(fileDirectory);
+                }
 
-                    if (!IsAngularProject(fileDirectory))
-                    {
-                        Thread.Sleep(500);
-                        RunGulp(fileDirectory);
-                    }
+                if (!IsAngularProject(fileDirectory))
+                {
+                    Thread.Sleep(1000);
+                    RunGulp(fileDirectory);
                 }
             }
         }
@@ -90,15 +100,20 @@ namespace Volo.Abp.Cli.ProjectModification
             await Task.CompletedTask;
         }
 
+        private static async Task<bool> NpmrcFileExistAsync(string directoryName)
+        {
+            return await Task.FromResult(File.Exists(Path.Combine(directoryName, ".npmrc")));
+        }
+
         private async Task CreateNpmrcFileAsync(string directoryName)
         {
             var fileName = Path.Combine(directoryName, ".npmrc");
-
             var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
             var voloRegistry = await GetVoloRegistryAsync();
 
-            if (File.Exists(fileName))
+            if (await NpmrcFileExistAsync(directoryName))
             {
+
                 var fileContent = File.ReadAllText(fileName);
 
                 if (!fileContent.Contains(abpRegistry))
@@ -139,20 +154,19 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(1)))
+                var client = _cliHttpClientFactory.CreateClient();
+                using (var response = await client.GetHttpResponseMessageWithRetryAsync(
+                    url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
+                    cancellationToken: CancellationTokenProvider.Token,
+                    logger: Logger
+                ))
                 {
-                    var response = await client.GetHttpResponseMessageWithRetryAsync(
-                        url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                        cancellationToken: CancellationTokenProvider.Token,
-                        logger: Logger
-                    );
-
                     return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
                 }
             }
             catch (Exception)
             {
-                return "";
+                return string.Empty;
             }
         }
 
@@ -161,7 +175,12 @@ namespace Volo.Abp.Cli.ProjectModification
             return File.Exists(Path.Combine(fileDirectory, "angular.json"));
         }
 
-        protected virtual async Task<bool> UpdatePackagesInFile(string filePath, bool includePreviews = false, bool switchToStable = false)
+        protected virtual async Task<bool> UpdatePackagesInFile(
+            string filePath,
+            bool includePreviews = false,
+            bool includeReleaseCandidates = false,
+            bool switchToStable = false,
+            string specifiedVersion = null)
         {
             var packagesUpdated = false;
             var fileContent = File.ReadAllText(filePath);
@@ -175,7 +194,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var abpPackage in abpPackages)
             {
-                var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, switchToStable);
+                var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates, switchToStable, specifiedVersion);
 
                 if (updated)
                 {
@@ -194,59 +213,93 @@ namespace Volo.Abp.Cli.ProjectModification
             string filePath,
             JProperty package,
             bool includePreviews = false,
-            bool switchToStable = false)
+            bool includeReleaseCandidates = false,
+            bool switchToStable = false,
+            string specifiedVersion = null)
         {
             var currentVersion = (string)package.Value;
 
-            var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
+            var version = string.Empty;
 
-            var versionWithPrefix = $"~{version}";
+            if (!specifiedVersion.IsNullOrWhiteSpace())
+            {
+                if (!SpecifiedVersionExists(specifiedVersion, package))
+                {
+                    return false;
+                }
 
-            if (versionWithPrefix == currentVersion)
+                if (SemanticVersion.Parse(specifiedVersion) <= SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                {
+                    return false;
+                }
+                version = specifiedVersion.EnsureStartsWith('^');
+            }
+            else
+            {
+                if ((includePreviews || (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) && !includeReleaseCandidates)
+                {
+                    version = "preview";
+                }
+                else
+                {
+                    if (!switchToStable && IsPrerelease(currentVersion))
+                    {
+                        version = await GetLatestVersion(package, true);
+                    }
+                    else
+                    {
+                        version = await GetLatestVersion(package, includeReleaseCandidates);
+                    }
+                }
+            }
+
+
+            if (string.IsNullOrEmpty(version) || version == currentVersion)
             {
                 return false;
             }
 
-            package.Value.Replace(versionWithPrefix);
+            package.Value.Replace(version);
 
-            Logger.LogInformation($"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
+            Logger.LogInformation(
+                $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
             return true;
         }
 
-        protected virtual async Task<string> GetLatestVersion(
-            JProperty package,
-            string currentVersion,
-            bool includePreviews = false,
-            bool switchToStable = false)
+        protected virtual bool IsPrerelease(string version)
+        {
+            if (version == null)
+            {
+                return false;
+            }
+
+            return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
+        }
+
+        protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false)
         {
             if (_fileVersionStorage.ContainsKey(package.Name))
             {
-                return _fileVersionStorage[package.Name];
+                return await Task.FromResult(_fileVersionStorage[package.Name]);
             }
 
-            var newVersion = currentVersion;
+            var versionList = GetPackageVersionList(package);
 
-            if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
+            var newVersion = includeReleaseCandidates
+                ? versionList.First()
+                : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+
+            if (string.IsNullOrEmpty(newVersion))
             {
-                if (_myGetApiResponse == null)
-                {
-                    _myGetApiResponse = await _myGetPackageListFinder.GetPackagesAsync();
-                }
-
-                var mygetPackage = _myGetApiResponse.Packages.FirstOrDefault(p => p.Id == package.Name);
-                if (mygetPackage != null)
-                {
-                    newVersion = mygetPackage.Versions.Last();
-                }
-            }
-            else
-            {
-                newVersion = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
+                _fileVersionStorage[package.Name] = newVersion;
+                return await Task.FromResult(newVersion);
             }
 
-            _fileVersionStorage[package.Name] = newVersion;
+            var newVersionWithPrefix = $"~{newVersion}";
 
-            return newVersion;
+            _fileVersionStorage[package.Name] = newVersionWithPrefix;
+
+            return await Task.FromResult(newVersionWithPrefix);
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
@@ -264,7 +317,10 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 var properties = dependencies.Properties().ToList();
-                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList());
+
+                abpPackages
+                    .AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
+                    .ToList());
             }
 
             return abpPackages;
@@ -280,6 +336,35 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             Logger.LogInformation($"Running Yarn on {fileDirectory}");
             CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
+        }
+
+        protected virtual void RunNpmInstall(string fileDirectory)
+        {
+            Logger.LogInformation($"Running npm install on {fileDirectory}");
+            CmdHelper.RunCmd($"cd {fileDirectory} && npm install");
+        }
+
+        protected virtual List<string> GetPackageVersionList(JProperty package)
+        {
+            var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json");
+
+            var versionListAsJson = ExtractVersions(output);
+
+            return JsonConvert.DeserializeObject<string[]>(versionListAsJson)
+                .OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToList();
+        }
+
+        protected virtual string ExtractVersions(string output)
+        {
+            var arrayStart = output.IndexOf('[');
+            return output.Substring(arrayStart, output.IndexOf(']') - arrayStart + 1);
+        }
+
+        protected virtual bool SpecifiedVersionExists(string version, JProperty package)
+        {
+            var versionList = GetPackageVersionList(package);
+
+            return versionList.Any(v => v.Equals(version, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.Web.IdentityServer</AssemblyName>
     <PackageId>Volo.Abp.Account.Web.IdentityServer</PackageId>
     <IsPackable>true</IsPackable>
@@ -12,19 +12,20 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Volo.Abp.Account.Web</RootNamespace>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <Content Remove="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,7 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+    <PackageReference Include="System.Security.Principal.Windows" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

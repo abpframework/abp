@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Specifications\Volo.Abp.Specifications.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 
 </Project>

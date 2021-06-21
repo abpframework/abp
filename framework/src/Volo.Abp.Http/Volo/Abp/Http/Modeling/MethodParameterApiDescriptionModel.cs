@@ -19,7 +19,7 @@ namespace Volo.Abp.Http.Modeling
 
         public object DefaultValue { get; set; }
 
-        private MethodParameterApiDescriptionModel()
+        public MethodParameterApiDescriptionModel()
         {
 
         }
@@ -30,8 +30,8 @@ namespace Volo.Abp.Http.Modeling
             {
                 Name = parameterInfo.Name,
                 TypeAsString = parameterInfo.ParameterType.GetFullNameWithAssemblyName(),
-                Type = parameterInfo.ParameterType != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(parameterInfo.ParameterType) : null,
-                TypeSimple = parameterInfo.ParameterType != null ? TypeHelper.GetSimplifiedName(parameterInfo.ParameterType) : null,
+                Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(parameterInfo.ParameterType),
+                TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(parameterInfo.ParameterType),
                 IsOptional = parameterInfo.IsOptional,
                 DefaultValue = parameterInfo.HasDefaultValue ? parameterInfo.DefaultValue : null
             };

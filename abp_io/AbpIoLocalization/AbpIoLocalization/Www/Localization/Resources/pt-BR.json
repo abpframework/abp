@@ -29,17 +29,17 @@
     "Authorization": "Autorização",
     "AuthorizationExplanation": "Autorização avançada com usuário, função e sistema de permissão refinado. Criada na biblioteca Microsoft Identity.",
     "MultiTenancy": "Múltiplos inquilinos",
-    "MultiTenancyExplanation": "Aplicativos SaaS facilitados! Multilocação integrada do banco de dados à interface do usuário.",
+    "MultiTenancyExplanationShort": "Aplicativos SaaS facilitados! Multilocação integrada do banco de dados à interface do usuário.",
     "CrossCuttingConcerns": "Características transversais",
-    "CrossCuttingConcernsExplanation": "Infraestrutura completa para autorização, validação, tratamento de exceções, armazenamento em cache, log de auditoria, gerenciamento de transações e assim por diante.",
+    "CrossCuttingConcernsExplanationShort": "Infraestrutura completa para autorização, validação, tratamento de exceções, armazenamento em cache, log de auditoria, gerenciamento de transações e assim por diante.",
     "BuiltInBundlingMinification": "Pacote & Minificação Integrados",
     "BuiltInBundlingMinificationExplanation": "Pare de usar ferramentas externas para empacotamento e minificação. O ABP oferece uma maneira mais simples, dinâmica, poderosa, modular e integrada!",
     "VirtualFileSystem": "Sistema de arquivos virtual",
     "VirtualFileSystemExplanation": "Incorpore visualizações, scripts, estilos, imagens ... aos pacotes/bibliotecas e reutilize-os em diferentes aplicativos.",
     "Theming": "Theming",
-    "ThemingExplanation": "Use e personalize o tema da interface do usuário padrão baseado em bootstrap-based ou crie o seu próprio.",
+    "ThemingExplanationShort": "Use e personalize o tema da interface do usuário padrão baseado em bootstrap-based ou crie o seu próprio.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers & Dynamic Forms",
-    "BootstrapTagHelpersDynamicFormsExplanation": "Sistema de tarefas em segundo plano integrado que pode ser integrado ao Hangfire, RabbitMQ ou a qualquer ferramenta que você desejar.", //TODO explanation doesn't match.
+    "BootstrapTagHelpersDynamicFormsExplanation": "Em vez de escrever manualmente os detalhes repetidos dos componentes de autoinicialização, use os auxiliares de tag da ABP para simplificá-lo e tirar proveito do intellisense. O formulário dinâmico pode criar o formulário completo a partir de uma classe C# como modelo.",
     "HTTPAPIsDynamicProxies": "APIs HTTP e proxies dinâmicos",
     "HTTPAPIsDynamicProxiesExplanation": "Exponha automaticamente os serviços de aplicativo como APIs HTTP do estilo REST e consuma com proxies JavaScript & C # dinâmicos.",
     "CompleteArchitectureInfo": "Arquitetura moderna para criar soluções de software sustentáveis.",
@@ -100,7 +100,6 @@
     "DistributedEventBus": "Barramento de Eventos Distribuídos",
     "DistributedEventBusWithRabbitMQIntegration": "Barramento de Eventos Distribuídos com Integração RabbitMQ",
     "TestInfrastructure": "Infraestrutura de Teste",
-    "AuditLogging": "Log de auditoria",
     "AuditLoggingEntityHistories": "Log de auditoria e históricos de entidades",
     "ObjectToObjectMapping": "Objeto para Mapeamento de Objetos",
     "EmailSMSAbstractions": "Abstrações de E-mail e SMS",
@@ -155,6 +154,7 @@
     "SeeTheDocumentForMoreInformation": "Consulte o <a href=\"{1}\">{0} documento</a> para obter mais informações",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>código aberto</strong></span><span class=\"second-line text-uppercase\">Aplicativo da Web<br />Framework </span><span class=\"third-line shine2\"><strong>para o ASP.NET Core</strong></span>",
     "UiFramework": "UI Framework",
-    "EmailAddress": "Endereço de email"
+    "EmailAddress": "Endereço de email",
+    "SelectLanguage": "Selecione o idioma"
   }
 }

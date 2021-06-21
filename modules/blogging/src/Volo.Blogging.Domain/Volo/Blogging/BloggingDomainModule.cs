@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
@@ -13,7 +14,9 @@ namespace Volo.Blogging
     [DependsOn(
         typeof(BloggingDomainSharedModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(AbpAutoMapperModule),
+        typeof(AbpCachingModule)
+    )]
     public class BloggingDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -25,7 +28,7 @@ namespace Volo.Blogging
                 options.AddProfile<BloggingDomainMappingProfile>(validate: true);
             });
 
-            Configure<AbpDistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEntityEventOptions>(options =>
             {
                 options.EtoMappings.Add<Blog, BlogEto>(typeof(BloggingDomainModule));
                 options.EtoMappings.Add<Comment, CommentEto>(typeof(BloggingDomainModule));

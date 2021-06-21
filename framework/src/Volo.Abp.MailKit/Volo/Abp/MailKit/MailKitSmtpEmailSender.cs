@@ -56,21 +56,21 @@ namespace Volo.Abp.MailKit
 
         protected virtual async Task ConfigureClient(SmtpClient client)
         {
-            client.Connect(
+            await client.ConnectAsync(
                 await SmtpConfiguration.GetHostAsync(),
                 await SmtpConfiguration.GetPortAsync(),
                 await GetSecureSocketOption()
-        );
+            );
 
             if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
             {
                 return;
             }
 
-            client.Authenticate(
+            await client.AuthenticateAsync(
                 await SmtpConfiguration.GetUserNameAsync(),
                 await SmtpConfiguration.GetPasswordAsync()
-        );
+            );
         }
 
         protected virtual async Task<SecureSocketOptions> GetSecureSocketOption()

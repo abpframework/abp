@@ -5,11 +5,9 @@
     "entryFile": "src/public-api.ts"
   },
   "deleteDestPath": false,
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@abp/utils",
     "@angular/localize",
-    "@ngxs/router-plugin",
-    "@ngxs/storage-plugin",
     "@ngxs/store",
     "angular-oauth2-oidc",
     "just-compare",

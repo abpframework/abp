@@ -1,17 +1,19 @@
 import { SpectatorHost, createHostFactory } from '@ngneat/spectator/jest';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { LocalizationPipe } from '@abp/ng.core';
+import { CORE_OPTIONS, LocalizationPipe } from '@abp/ng.core';
 import { Store } from '@ngxs/store';
 import { Renderer2, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 describe('ErrorComponent', () => {
   let spectator: SpectatorHost<HttpErrorWrapperComponent>;
   const createHost = createHostFactory({
     component: HttpErrorWrapperComponent,
     declarations: [LocalizationPipe],
-    mocks: [Store],
+    mocks: [Store, HttpClient],
     providers: [
+      { provide: CORE_OPTIONS, useValue: {} },
       { provide: Renderer2, useValue: { removeChild: () => null } },
       { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } },
     ],

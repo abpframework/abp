@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</PackageId>
@@ -18,20 +18,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*.*" />
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
-    <EmbeddedResource Include="Views\**\*.cshtml" />
-    <EmbeddedResource Include="Areas\**\*.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Views\**\*.cshtml" />
-    <Content Remove="Areas\**\*.cshtml" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Properties\launchSettings.json" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>

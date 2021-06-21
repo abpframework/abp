@@ -8,7 +8,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         public MyProjectNameHttpApiHostMigrationsDbContext(DbContextOptions<MyProjectNameHttpApiHostMigrationsDbContext> options)
             : base(options)
         {
-        
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

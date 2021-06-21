@@ -1,0 +1,29 @@
+{
+  "schematics": {
+    "proxy-add": {
+      "description": "ABP Proxy Generator Add Schematics",
+      "factory": "./commands/proxy-add",
+      "schema": "./commands/proxy-add/schema.json"
+    },
+    "proxy-index": {
+      "description": "ABP Proxy Generator Index Schematics",
+      "factory": "./commands/proxy-index",
+      "schema": "./commands/proxy-index/schema.json"
+    },
+    "proxy-refresh": {
+      "description": "ABP Proxy Generator Refresh Schematics",
+      "factory": "./commands/proxy-refresh",
+      "schema": "./commands/proxy-refresh/schema.json"
+    },
+    "proxy-remove": {
+      "description": "ABP Proxy Generator Remove Schematics",
+      "factory": "./commands/proxy-remove",
+      "schema": "./commands/proxy-remove/schema.json"
+    },
+    "api": {
+      "description": "ABP API Generator Schematics",
+      "factory": "./commands/api",
+      "schema": "./commands/api/schema.json"
+    }
+  }
+}

@@ -8,9 +8,22 @@ namespace Volo.Abp
     {
         public static void UseAutofac(this AbpApplicationCreationOptions options)
         {
-            var builder = new ContainerBuilder();
-            options.Services.AddObjectAccessor(builder);
-            options.Services.AddSingleton((IServiceProviderFactory<ContainerBuilder>) new AbpAutofacServiceProviderFactory(builder));
+            options.Services.AddAutofacServiceProviderFactory();
+        }
+
+        public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services)
+        {
+            return services.AddAutofacServiceProviderFactory(new ContainerBuilder());
+        }
+
+        public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services, ContainerBuilder containerBuilder)
+        {
+            var factory = new AbpAutofacServiceProviderFactory(containerBuilder);
+
+            services.AddObjectAccessor(containerBuilder);
+            services.AddSingleton((IServiceProviderFactory<ContainerBuilder>) factory);
+
+            return factory;
         }
     }
 }

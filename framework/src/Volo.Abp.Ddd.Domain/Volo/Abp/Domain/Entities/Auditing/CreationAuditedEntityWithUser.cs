@@ -11,7 +11,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
     public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEntity, ICreationAuditedObject<TUser>
     {
         /// <inheritdoc />
-        public virtual TUser Creator { get; set; }
+        public virtual TUser Creator { get; protected set; }
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
     public abstract class CreationAuditedEntityWithUser<TKey, TUser> : CreationAuditedEntity<TKey>, ICreationAuditedObject<TUser>
     {
         /// <inheritdoc />
-        public virtual TUser Creator { get; set; }
+        public virtual TUser Creator { get; protected set; }
 
         protected CreationAuditedEntityWithUser()
         {

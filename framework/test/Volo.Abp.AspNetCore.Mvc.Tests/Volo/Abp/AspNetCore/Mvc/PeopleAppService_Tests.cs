@@ -83,7 +83,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             (await _personRepository.FindAsync(resultDto.Id)).ShouldNotBeNull();
         }
 
-
         [Fact]
         public async Task Update_Test()
         {

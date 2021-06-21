@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.Client</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.Client</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -17,10 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Client.Common\Volo.Abp.AspNetCore.Mvc.Client.Common.csproj" />
+    <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

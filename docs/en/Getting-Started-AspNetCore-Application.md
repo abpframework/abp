@@ -4,7 +4,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Create A New Project
 
-1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.4.0+):
+1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.8.0+):
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
@@ -57,7 +57,7 @@ namespace BasicAspNetCoreApplication
 
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

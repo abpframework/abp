@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\common.props" />
+    <Import Project="..\..\..\..\configureawait.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
+        <ProjectReference Include="..\Volo.CmsKit.Common.Application.Contracts\Volo.CmsKit.Common.Application.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

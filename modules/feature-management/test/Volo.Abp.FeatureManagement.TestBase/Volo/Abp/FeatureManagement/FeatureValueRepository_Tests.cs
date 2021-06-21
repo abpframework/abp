@@ -41,6 +41,18 @@ namespace Volo.Abp.FeatureManagement
         }
 
         [Fact]
+        public async Task FindAllAsync()
+        {
+            var featureValues = await Repository.FindAllAsync(
+                TestFeatureDefinitionProvider.ProjectCount,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
+
+            featureValues.Count.ShouldBe(1);
+        }
+
+        [Fact]
         public async Task GetListAsync()
         {
             var featureValues = await Repository.GetListAsync(

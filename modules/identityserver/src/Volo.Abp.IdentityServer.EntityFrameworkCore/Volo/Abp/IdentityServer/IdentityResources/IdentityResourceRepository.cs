@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,53 +13,73 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 {
     public class IdentityResourceRepository : EfCoreRepository<IIdentityServerDbContext, IdentityResource, Guid>, IIdentityResourceRepository
     {
-        public IdentityResourceRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) 
+        public IdentityResourceRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
 
         }
 
-        public virtual async Task<List<IdentityResource>> GetListByScopesAsync(
+        public virtual async Task<List<IdentityResource>> GetListByScopeNameAsync(
             string[] scopeNames,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from identityResource in DbSet.IncludeDetails(includeDetails)
+            var query = from identityResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
                         where scopeNames.Contains(identityResource.Name)
                         select identityResource;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<IdentityResource> WithDetails()
         {
             return GetQueryable().IncludeDetails();
         }
 
-        public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, 
-            bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<IQueryable<IdentityResource>> WithDetailsAsync()
         {
-            return await DbSet
+            return (await GetQueryableAsync()).IncludeDetails();
+        }
+
+        public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount,
+            string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
-                .OrderBy(sorting ?? "name desc")
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityResource.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<IdentityResource> FindByNameAsync(
-            string name, 
-            bool includeDetails = true, 
+            string name,
+            bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
         }
     }
 }

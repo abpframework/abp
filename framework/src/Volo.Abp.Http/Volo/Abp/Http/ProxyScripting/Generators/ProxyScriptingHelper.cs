@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.Http.ProxyScripting.Generators
 {
@@ -11,10 +13,16 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
         public static string GenerateUrlWithParameters(ActionApiDescriptionModel action)
         {
-            //TODO: Can be optimized using StringBuilder?
-            var url = ReplacePathVariables(action.Url, action.Parameters);
-            url = AddQueryStringParameters(url, action.Parameters);
-            return url;
+            // The ASP.NET Core route value provider and query string value provider:
+            //  Treat values as invariant culture.
+            //  Expect that URLs are culture-invariant.
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                //TODO: Can be optimized using StringBuilder?
+                var url = ReplacePathVariables(action.Url, action.Parameters);
+                url = AddQueryStringParameters(url, action.Parameters);
+                return url;
+            }
         }
 
         public static string GenerateHeaders(ActionApiDescriptionModel action, int indent = 0)

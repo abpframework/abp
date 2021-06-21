@@ -30,11 +30,13 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the Name for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Surname for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string Surname { get; set; }
 
         /// <summary>
@@ -66,9 +68,12 @@ namespace Volo.Abp.Identity
         [DisableAuditing]
         public virtual string SecurityStamp { get; protected internal set; }
 
+        public virtual bool IsExternal { get; set; }
+
         /// <summary>
         /// Gets or sets a telephone number for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string PhoneNumber { get; protected internal set; }
 
         /// <summary>
@@ -124,17 +129,25 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
+        /// <summary>
+        /// Navigation property for this organization units.
+        /// </summary>
+        public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
+
         protected IdentityUser()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
+        public IdentityUser(
+            Guid id,
+            [NotNull] string userName,
+            [NotNull] string email,
+            Guid? tenantId = null)
+            : base(id)
         {
             Check.NotNull(userName, nameof(userName));
             Check.NotNull(email, nameof(email));
 
-            Id = id;
             TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
@@ -147,8 +160,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
-
-            ExtraProperties = new Dictionary<string, object>();
+            OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
         }
 
         public virtual void AddRole(Guid roleId)
@@ -249,7 +261,8 @@ namespace Volo.Abp.Identity
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            Logins.RemoveAll(userLogin => userLogin.LoginProvider == loginProvider && userLogin.ProviderKey == providerKey);
+            Logins.RemoveAll(userLogin =>
+                userLogin.LoginProvider == loginProvider && userLogin.ProviderKey == providerKey);
         }
 
         [CanBeNull]
@@ -276,9 +289,72 @@ namespace Volo.Abp.Identity
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
         }
 
+        public virtual void AddOrganizationUnit(Guid organizationUnitId)
+        {
+            if (IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.Add(
+                new IdentityUserOrganizationUnit(
+                    Id,
+                    organizationUnitId,
+                    TenantId
+                )
+            );
+        }
+
+        public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
+        {
+            if (!IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.RemoveAll(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
+        }
+
+        public virtual bool IsInOrganizationUnit(Guid organizationUnitId)
+        {
+            return OrganizationUnits.Any(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
+        }
+
+        /// <summary>
+        /// Use <see cref="IdentityUserManager.ConfirmEmailAsync"/> for regular email confirmation.
+        /// Using this skips the confirmation process and directly sets the <see cref="EmailConfirmed"/>.
+        /// </summary>
+        public virtual void SetEmailConfirmed(bool confirmed)
+        {
+            EmailConfirmed = confirmed;
+        }
+
+        public virtual void SetPhoneNumberConfirmed(bool confirmed)
+        {
+            PhoneNumberConfirmed = confirmed;
+        }
+
         public override string ToString()
         {
             return $"{base.ToString()}, UserName = {UserName}";
+        }
+
+        /// <summary>
+        /// Normally use <see cref="IdentityUserManager.ChangePhoneNumberAsync"/> to change the phone number
+        /// in the application code.
+        /// This method is to directly set it with a confirmation information.
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <param name="confirmed"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetPhoneNumber(string phoneNumber, bool confirmed)
+        {
+            PhoneNumber = phoneNumber;
+            PhoneNumberConfirmed = !phoneNumber.IsNullOrWhiteSpace() && confirmed;
         }
     }
 }

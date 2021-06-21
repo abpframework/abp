@@ -62,7 +62,7 @@ function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleT
         <Content px20 style={{ flex: 1 }}>
           <InputGroup abpInputGroup>
             <Label abpLabel>{i18n.t('AbpUiMultiTenancy::Name')}</Label>
-            <Input abpInput value={tenantName} onChangeText={setTenantName} />
+            <Input abpInput value={tenantName} onChangeText={setTenantName} autoCapitalize = 'none'/>
           </InputGroup>
           <Text style={style.hint}>{i18n.t('AbpUiMultiTenancy::SwitchTenantHint')}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

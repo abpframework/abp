@@ -15,11 +15,13 @@ namespace Volo.Abp.Identity
     {
         protected IIdentityUserRepository UserRepository { get; }
         protected ILookupNormalizer LookupNormalizer { get; }
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
 
         protected IdentityUserRepository_Tests()
         {
             UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
             LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
+            OrganizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
         }
 
         [Fact]
@@ -42,9 +44,10 @@ namespace Volo.Abp.Identity
         {
             var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRoleNamesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain("moderator");
             roles.ShouldContain("supporter");
+            roles.ShouldContain("manager");
         }
 
         [Fact]
@@ -116,9 +119,10 @@ namespace Volo.Abp.Identity
         {
             var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRolesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain(r => r.Name == "moderator");
             roles.ShouldContain(r => r.Name == "supporter");
+            roles.ShouldContain(r => r.Name == "manager");
         }
 
         [Fact]
@@ -126,6 +130,22 @@ namespace Volo.Abp.Identity
         {
             (await UserRepository.GetCountAsync("n")).ShouldBeGreaterThan(1);
             (await UserRepository.GetCountAsync("undefined-username")).ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task GetUsersInOrganizationUnitAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitAsync((await GetOU("OU111")).Id);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetUsersInOrganizationUnitWithChildrenAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync((await GetOU("OU111")).Code);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
@@ -144,6 +164,16 @@ namespace Volo.Abp.Identity
 
             john.Tokens.ShouldNotBeNull();
             john.Tokens.Any().ShouldBeTrue();
+
+            john.OrganizationUnits.ShouldNotBeNull();
+            john.OrganizationUnits.Any().ShouldBeTrue();
+        }
+
+        private async Task<OrganizationUnit> GetOU(string diplayName)
+        {
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(diplayName);
+            organizationUnit.ShouldNotBeNull();
+            return organizationUnit;
         }
     }
 }

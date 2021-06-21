@@ -36,5 +36,11 @@ namespace Volo.Abp.Identity
 
             result2.ShouldBe(false);
         }
+
+        [Fact]
+        public async Task GetCountAsync_With_Filter()
+        {
+            (await ClaimTypeRepository.GetCountAsync("Age")).ShouldBe(1);
+        }
     }
 }

@@ -9,5 +9,9 @@
         public NuGetPackageTarget Target { get; set; }
 
         public NuGetPackageTarget TieredTarget { get; set; }
+
+        public string MinVersion { get; set; }
+
+        public string MaxVersion { get; set; }
     }
 }

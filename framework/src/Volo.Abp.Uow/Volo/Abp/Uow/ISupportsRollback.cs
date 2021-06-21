@@ -5,8 +5,6 @@ namespace Volo.Abp.Uow
 {
     public interface ISupportsRollback
     {
-        void Rollback();
-
         Task RollbackAsync(CancellationToken cancellationToken);
     }
 }

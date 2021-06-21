@@ -8,14 +8,14 @@
 
 ## 替换模块依赖项
 
-在 `.EntityFrameworkCore` 项目中找到 **YourProjectName*EntityFrameworkCoreModule** 类, 删除 `DependsOn` attribute 上的`typeof(AbpEntityFrameworkCoreSqlServerModule)`, 添加 `typeof(AbpEntityFrameworkCoreMySQLModule)` (或者替换 `using Volo.Abp.EntityFrameworkCore.SqlServer;` 为 `using Volo.Abp.EntityFrameworkCore.MySQL;`).
+在 `.EntityFrameworkCore` 项目中找到 **YourProjectName*EntityFrameworkCoreModule** 类, 删除 `DependsOn` attribute 上的`typeof(AbpEntityFrameworkCoreSqlServerModule)`, 添加 `typeof(AbpEntityFrameworkCoreMySQLModule)` (并且替换 `using Volo.Abp.EntityFrameworkCore.SqlServer;` 为 `using Volo.Abp.EntityFrameworkCore.MySQL;`).
 
 ## UseMySQL()
 
 查找你的解决方案中 `UseSqlServer()`调用,替换为 `UseMySQL()`. 检查下列文件:
 
 * `.EntityFrameworkCore` 项目中的*YourProjectName*EntityFrameworkCoreModule.cs.
-* `.EntityFrameworkCore` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
+* `.EntityFrameworkCore.DbMigrations` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
 
 > 根据你的解决方案的结构,你可能发现更多需要改变代码的文件.
 
@@ -24,23 +24,6 @@
 MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决方案中所有的 `appsettings.json` 文件,更改其中的连接字符串. 有关MySQL连接字符串选项的详细内容请参见[connectionstrings.com](https://www.connectionstrings.com/mysql/).
 
 通常需要更改 `.DbMigrator` 和 `.Web` 项目里面的 `appsettings.json` ,但它取决于你的解决方案结构.
-
-## 更改迁移DbContext
-
-MySQL DBMS与SQL Server有一些细微的差异. 某些模块数据库映射配置(尤其是字段长度)会导致MySQL出现问题. 例如某些[IdentityServer模块](Modules/IdentityServer.md)表就存在这样的问题,它提供了一个选项可以根据你的DBMS配置字段.
-
-启动模板包含*YourProjectName*MigrationsDbContext,它负责维护和迁移数据库架构. 此DbContext基本上调用依赖模块的扩展方法来配置其数据库表.
-
-打开 *YourProjectName*MigrationsDbContext 更改 `builder.ConfigureIdentityServer();` 行,如下所示:
-
-````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
-````
-
-然后 `ConfigureIdentityServer()` 方法会将字段长度设置为不超过MySQL的限制. 如果在创建或执行数据库迁移时遇到任何问题请参考相关的模块文档.
 
 ## 重新生成迁移
 

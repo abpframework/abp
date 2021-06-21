@@ -8,23 +8,25 @@ param(
 
 npm install
 
-$NextVersion = $(node get-version.js)
-$rootFolder = (Get-Item -Path "./" -Verbose).FullName
+$NextVersion = $(node publish-utils.js --nextVersion)
+$RootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 if(-Not $Version) {
 $Version = $NextVersion;
 }
 
 if(-Not $Registry) {
-$Registry = "http://localhost:4873";
+exit
 }
 
 $commands = (
   "cd ng-packs\scripts",
   "npm install",
-  "npm run publish-packages -- --nextVersion $Version --preview",
+  "npm run publish-packages -- --nextVersion $Version --preview --registry $Registry",
   "cd ../../",
-  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish --dist-tag preview --registry $Registry"
+  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "npm run replace-with-tilde",
+  "npm run lerna -- exec 'npm publish --registry $Registry --tag preview'"
 )
 
 foreach ($command in $commands) { 
@@ -32,7 +34,7 @@ foreach ($command in $commands) {
   Invoke-Expression $command
   if($LASTEXITCODE -ne '0' -And $command -notlike '*cd *'){
     Write-Host ("Process failed! " + $command)
-    Set-Location $rootFolder
+    Set-Location $RootFolder
     exit $LASTEXITCODE
   }
 }

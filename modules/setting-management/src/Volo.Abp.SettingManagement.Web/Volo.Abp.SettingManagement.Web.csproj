@@ -4,30 +4,40 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\Volo.Abp.SettingManagement.Domain.Shared\Volo.Abp.SettingManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\Volo.Abp.SettingManagement.HttpApi\Volo.Abp.SettingManagement.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-    <Content Remove="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\SettingManagement\Components" />
   </ItemGroup>
 
 </Project>

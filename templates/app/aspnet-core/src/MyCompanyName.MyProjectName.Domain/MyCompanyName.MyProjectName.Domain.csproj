@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Emailing\Volo.Abp.Emailing.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identityserver\src\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />

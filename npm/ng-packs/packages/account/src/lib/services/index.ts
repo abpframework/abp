@@ -1,1 +1,1 @@
-export * from './account.service';
+export * from './manage-profile.state.service';

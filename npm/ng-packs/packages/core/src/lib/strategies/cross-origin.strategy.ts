@@ -7,11 +7,18 @@ export class CrossOriginStrategy {
   }
 }
 
+export class NoCrossOriginStrategy extends CrossOriginStrategy {
+  setCrossOrigin() {}
+}
+
 export const CROSS_ORIGIN_STRATEGY = {
   Anonymous(integrity?: string) {
     return new CrossOriginStrategy('anonymous', integrity);
   },
   UseCredentials(integrity?: string) {
     return new CrossOriginStrategy('use-credentials', integrity);
+  },
+  None() {
+    return new NoCrossOriginStrategy(null);
   },
 };

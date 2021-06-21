@@ -13,7 +13,7 @@
     "ClearCacheConfirmationMessage": "Are you sure to clear all caches for project \"{0}\"",
     "ReIndexAllProjects": "ReIndex all projects",
     "ReIndexProject": "ReIndex project",
-    "ReIndexProjectConfirmationMessage":"Are you sure to reindex for project \"{0}\"",
+    "ReIndexProjectConfirmationMessage": "Are you sure to reindex for project \"{0}\"",
     "SuccessfullyReIndexProject": "Successfully reindex for project \"{0}\"",
     "ReIndexAllProjectConfirmationMessage": "Are you sure to reindex all project?",
     "SuccessfullyReIndexAllProject": "Successfully reindex for all projects",
@@ -33,6 +33,9 @@
     "Upd": "Upd",
     "NewExplanation": "Created in the last two weeks.",
     "UpdatedExplanation": "Updated in the last two weeks.",
-    "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists."
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists.",
+    "Preview": "preview",
+    "Search": "Search",
+    "SearchResults": "Search Results"
   }
 }

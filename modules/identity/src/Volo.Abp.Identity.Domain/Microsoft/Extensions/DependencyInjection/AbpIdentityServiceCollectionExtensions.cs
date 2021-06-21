@@ -29,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //AbpRoleStore
             services.TryAddScoped<IdentityRoleStore>();
             services.TryAddScoped(typeof(IRoleStore<IdentityRole>), provider => provider.GetService(typeof(IdentityRoleStore)));
-            
+
             return services
                 .AddIdentityCore<IdentityUser>(setupAction)
                 .AddRoles<IdentityRole>()

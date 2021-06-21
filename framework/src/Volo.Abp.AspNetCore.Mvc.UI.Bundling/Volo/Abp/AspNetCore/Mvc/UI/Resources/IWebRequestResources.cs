@@ -4,6 +4,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Resources
 {
     public interface IWebRequestResources
     {
-        List<string> TryAdd(IEnumerable<string> resources);
+        List<string> TryAdd(List<string> resources);
     }
 }

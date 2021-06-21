@@ -21,7 +21,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
@@ -55,6 +55,11 @@ namespace Volo.Abp.Application.Services
 
         }
 
+        protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
+        {
+            return MapToGetOutputDtoAsync(entity);
+        }
+
         protected override TEntityDto MapToGetListOutputDto(TEntity entity)
         {
             return MapToGetOutputDto(entity);
@@ -70,7 +75,7 @@ namespace Volo.Abp.Application.Services
         protected new IRepository<TEntity, TKey> Repository { get; }
 
         protected CrudAppService(IRepository<TEntity, TKey> repository)
-        : base(repository)
+            : base(repository)
         {
             Repository = repository;
         }
@@ -97,9 +102,9 @@ namespace Volo.Abp.Application.Services
 
         protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
         {
-            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
+            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
             {
-                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
+                return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
             }
             else
             {

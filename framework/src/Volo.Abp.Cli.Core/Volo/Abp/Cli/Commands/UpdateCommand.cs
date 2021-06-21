@@ -34,28 +34,26 @@ namespace Volo.Abp.Cli.Commands
 
             var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
                             Directory.GetCurrentDirectory();
+            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
             if (updateNuget || !updateNpm)
             {
-                await UpdateNugetPackages(commandLineArgs, directory);
+                await UpdateNugetPackages(commandLineArgs, directory, version);
             }
 
             if (updateNpm || !updateNuget)
             {
-                await UpdateNpmPackages(directory);
+                await UpdateNpmPackages(directory, version);
             }
         }
 
-        private async Task UpdateNpmPackages(string directory)
+        private async Task UpdateNpmPackages(string directory, string version)
         {
-            await _npmPackagesUpdater.Update(directory);
+            await _npmPackagesUpdater.Update(directory, version: version);
         }
 
-        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
+        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory, string version)
         {
-            var includePreviews = commandLineArgs
-                                      .Options
-                                      .GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
             var solution = commandLineArgs.Options.GetOrNull(Options.SolutionName.Short, Options.SolutionName.Long);
             if (solution.IsNullOrWhiteSpace())
@@ -63,11 +61,13 @@ namespace Volo.Abp.Cli.Commands
                 solution = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories).FirstOrDefault();
             }
 
+            var checkAll = commandLineArgs.Options.ContainsKey(Options.CheckAll.Long);
+
             if (solution != null)
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -79,7 +79,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, checkAll: checkAll, version: version);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -107,6 +107,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("--nuget                                     (Only updates Nuget packages)");
             sb.AppendLine("-sp|--solution-path                         (Specify the solution path)");
             sb.AppendLine("-sn|--solution-name                         (Specify the solution name)");
+            sb.AppendLine("--check-all                                 (Check the new version of each package separately)");
+            sb.AppendLine("-v|--version <version>                      (default: latest version)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
             sb.AppendLine("");
@@ -138,16 +140,21 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "solution-name";
             }
 
-            public static class IncludePreviews
-            {
-                public const string Short = "p";
-                public const string Long = "include-previews";
-            }
-
             public static class Packages
             {
                 public const string Npm = "npm";
                 public const string NuGet = "nuget";
+            }
+
+            public static class CheckAll
+            {
+                public const string Long = "check-all";
+            }
+
+            public static class Version
+            {
+                public const string Short = "v";
+                public const string Long = "version";
             }
         }
     }

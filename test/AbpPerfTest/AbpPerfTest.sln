@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpPerfTest.WithoutAbp", "AbpPerfTest.WithoutAbp\AbpPerfTest.WithoutAbp.csproj", "{E3406CA0-9B0C-45FC-A3C0-8179A9C4A3E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpPerfTest.WithAbp", "AbpPerfTest.WithAbp\AbpPerfTest.WithAbp.csproj", "{13021286-B5D8-4A3E-8F36-5256D32638A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3406CA0-9B0C-45FC-A3C0-8179A9C4A3E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3406CA0-9B0C-45FC-A3C0-8179A9C4A3E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3406CA0-9B0C-45FC-A3C0-8179A9C4A3E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3406CA0-9B0C-45FC-A3C0-8179A9C4A3E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13021286-B5D8-4A3E-8F36-5256D32638A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13021286-B5D8-4A3E-8F36-5256D32638A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13021286-B5D8-4A3E-8F36-5256D32638A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13021286-B5D8-4A3E-8F36-5256D32638A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
