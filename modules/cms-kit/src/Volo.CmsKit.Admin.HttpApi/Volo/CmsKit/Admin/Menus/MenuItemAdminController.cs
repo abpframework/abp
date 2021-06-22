@@ -16,11 +16,11 @@ namespace Volo.CmsKit.Admin.Menus
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.Menus.Default)]
     [Route("api/cms-kit-admin/menu-items")]
-    public class MenuAdminController : CmsKitAdminController, IMenuItemAdminAppService
+    public class MenuItemAdminController : CmsKitAdminController, IMenuItemAdminAppService
     {
         protected IMenuItemAdminAppService MenuItemAdminAppService { get; }
 
-        public MenuAdminController(IMenuItemAdminAppService menuAdminAppService)
+        public MenuItemAdminController(IMenuItemAdminAppService menuAdminAppService)
         {
             MenuItemAdminAppService = menuAdminAppService;
         }

@@ -11,13 +11,13 @@ using Xunit;
 
 namespace Volo.CmsKit.Menus
 {
-    public class MenuAdminAppService_Tests : CmsKitApplicationTestBase
+    public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
     {
         protected IMenuItemAdminAppService MenuAdminAppService { get; }
         protected CmsKitTestData TestData { get; }
         protected IMenuItemRepository MenuRepository { get; }
 
-        public MenuAdminAppService_Tests()
+        public MenuItemAdminAppService_Tests()
         {
             MenuAdminAppService = GetRequiredService<IMenuItemAdminAppService>();
             TestData = GetRequiredService<CmsKitTestData>();
