@@ -6,8 +6,6 @@ namespace Volo.CmsKit.Admin.Menus
     [Serializable]
     public class MenuItemCreateInput
     {
-        public Guid MenuId { get; set; }
-
         public Guid? ParentId { get; set; }
 
         [Required]

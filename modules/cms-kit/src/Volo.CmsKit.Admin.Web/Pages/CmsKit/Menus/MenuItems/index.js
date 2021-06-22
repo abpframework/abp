@@ -2,8 +2,6 @@
 $(function () {
     var l = abp.localization.getResource("CmsKit");
 
-    var menuId = $('#CmsKitMenuItemsWrapper').data('menu-id');
-
     var menuService = volo.cmsKit.admin.menus.menuAdmin;
 
     var createModal = new abp.ModalManager({ viewUrl: abp.appPath + 'CmsKit/Menus/MenuItems/CreateModal', modalClass: 'createMenuItem' });
@@ -96,8 +94,7 @@ $(function () {
                         var instance = $.jstree.reference(data.reference);
 
                         updateModal.open({
-                            id: node.id,
-                            menuId: menuId
+                            id: node.id
                         })
                     }
                 },
@@ -124,7 +121,7 @@ $(function () {
                             function (isConfirmed) {
                                 if (isConfirmed) {
                                     menuService
-                                        .deleteMenuItem(menuId, node.id)
+                                        .delete(node.id)
                                         .done(function () {
                                             instance.delete_node(node);
                                             menuTree.refreshItemCount();
@@ -147,7 +144,6 @@ $(function () {
             var instance = $.jstree.reference(menuTree.$tree);
 
             createModal.open({
-                menuId: menuId,
                 parentId: parentId,
             }, function (newMenuItem) {
                 instance.create_node(
@@ -182,7 +178,7 @@ $(function () {
         },
 
         getTreeDataFromServer: function (callback) {
-            menuService.get(menuId).done(function (result) {
+            menuService.getList().done(function (result) {
                 var treeData = _.map(result.items, function (item) {
                     return {
                         id: item.id,
@@ -233,7 +229,7 @@ $(function () {
                             function (isConfirmed) {
                                 if (isConfirmed) {
                                     menuService
-                                        .moveMenuItem(menuId, data.node.id, {
+                                        .moveMenuItem(data.node.id, {
                                             newParentId: data.parent === '#' ? null : data.parent,
                                             position: data.position
                                         })
@@ -285,7 +281,7 @@ $(function () {
 
                 $('button[name=CreateMenuItem]').click(function (e) {
                     e.preventDefault();
-                    createModal.open({menuId: menuId});
+                    createModal.open();
                 });
 
                 createModal.onResult(function () {

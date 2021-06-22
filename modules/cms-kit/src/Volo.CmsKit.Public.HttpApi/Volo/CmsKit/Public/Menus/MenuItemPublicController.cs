@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -10,21 +11,20 @@ namespace Volo.CmsKit.Public.Menus
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
-    [Route("api/cms-kit-public/menus")]
-    public class MenuPublicController : CmsKitPublicControllerBase, IMenuPublicAppService
+    [Route("api/cms-kit-public/menus/items")]
+    public class MenuItemPublicController : CmsKitPublicControllerBase, IMenuItemPublicAppService
     {
-        protected  IMenuPublicAppService MenuPublicAppService { get; }
+        protected  IMenuItemPublicAppService MenuPublicAppService { get; }
 
-        public MenuPublicController(IMenuPublicAppService menuPublicAppService)
+        public MenuItemPublicController(IMenuItemPublicAppService menuPublicAppService)
         {
             MenuPublicAppService = menuPublicAppService;
         }
 
-        [Route("main-menu")]
         [HttpGet]
-        public Task<MenuWithDetailsDto> GetMainMenuAsync()
+        public Task<List<MenuItemDto>> GetMenuItemsAsync()
         {
-            return MenuPublicAppService.GetMainMenuAsync();
+            return MenuPublicAppService.GetMenuItemsAsync();
         }
     }
 }

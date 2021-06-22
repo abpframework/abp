@@ -11,27 +11,23 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {
     public class UpdateModalModel : CmsKitAdminPageModel
     {
-        protected IMenuAdminAppService MenuAdminAppService { get; }
+        protected IMenuItemAdminAppService MenuAdminAppService { get; }
 
         [BindProperty]
         public MenuItemUpdateViewModel ViewModel { get; set; }
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public Guid MenuId { get; set; }
-
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
         public Guid Id { get; set; }
      
-        public UpdateModalModel(IMenuAdminAppService menuAdminAppService)
+        public UpdateModalModel(IMenuItemAdminAppService menuAdminAppService)
         {
             MenuAdminAppService = menuAdminAppService;
         }
 
         public async Task OnGetAsync()
         {
-            var menuItemDto = await MenuAdminAppService.GetMenuItemAsync(MenuId, Id);
+            var menuItemDto = await MenuAdminAppService.GetAsync(Id);
 
             ViewModel = ObjectMapper.Map<MenuItemDto, MenuItemUpdateViewModel>(menuItemDto);
         }
@@ -40,7 +36,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         {
             var input = ObjectMapper.Map<MenuItemUpdateViewModel, MenuItemUpdateInput>(ViewModel);
             
-            var result = await MenuAdminAppService.UpdateMenuItemAsync(MenuId, Id, input);
+            var result = await MenuAdminAppService.UpdateAsync(Id, input);
 
             return new OkObjectResult(result);
         }

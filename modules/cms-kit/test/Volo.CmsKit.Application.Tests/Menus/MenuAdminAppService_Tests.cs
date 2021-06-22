@@ -13,15 +13,15 @@ namespace Volo.CmsKit.Menus
 {
     public class MenuAdminAppService_Tests : CmsKitApplicationTestBase
     {
-        protected IMenuAdminAppService MenuAdminAppService { get; }
+        protected IMenuItemAdminAppService MenuAdminAppService { get; }
         protected CmsKitTestData TestData { get; }
-        protected IMenuRepository MenuRepository { get; }
+        protected IMenuItemRepository MenuRepository { get; }
 
         public MenuAdminAppService_Tests()
         {
-            MenuAdminAppService = GetRequiredService<IMenuAdminAppService>();
+            MenuAdminAppService = GetRequiredService<IMenuItemAdminAppService>();
             TestData = GetRequiredService<CmsKitTestData>();
-            MenuRepository = GetRequiredService<IMenuRepository>();
+            MenuRepository = GetRequiredService<IMenuItemRepository>();
         }
 
         [Fact]

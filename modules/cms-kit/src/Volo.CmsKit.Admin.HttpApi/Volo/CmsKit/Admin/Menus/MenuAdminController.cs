@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.UI.Navigation;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Permissions;
@@ -19,105 +15,65 @@ namespace Volo.CmsKit.Admin.Menus
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.Menus.Default)]
-    [Route("api/cms-kit-admin/menus")]
-    public class MenuAdminController : CmsKitAdminController, IMenuAdminAppService
+    [Route("api/cms-kit-admin/menu-items")]
+    public class MenuAdminController : CmsKitAdminController, IMenuItemAdminAppService
     {
-        protected IMenuAdminAppService MenuAdminAppService { get; }
+        protected IMenuItemAdminAppService MenuItemAdminAppService { get; }
 
-        public MenuAdminController(IMenuAdminAppService menuAdminAppService)
+        public MenuAdminController(IMenuItemAdminAppService menuAdminAppService)
         {
-            MenuAdminAppService = menuAdminAppService;
+            MenuItemAdminAppService = menuAdminAppService;
+        }
+
+        [HttpGet]
+        public virtual Task<ListResultDto<MenuItemDto>> GetListAsync()
+        {
+            return MenuItemAdminAppService.GetListAsync();
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public virtual Task<MenuItemDto> GetAsync(Guid id)
+        {
+            return MenuItemAdminAppService.GetAsync(id);
         }
 
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
-        public Task<MenuWithDetailsDto> CreateAsync(MenuCreateInput input)
+        public virtual Task<MenuItemDto> CreateAsync(MenuItemCreateInput input)
         {
-            return MenuAdminAppService.CreateAsync(input);
+            return MenuItemAdminAppService.CreateAsync(input);
         }
 
-        [Route("{menuId}/menu-items/{menuItemId}")]        
+        [HttpPut]
+        [Route("{id}")]
         [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        [HttpGet]
-        public Task<MenuItemDto> GetMenuItemAsync(Guid menuId, Guid menuItemId)
+        public virtual Task<MenuItemDto> UpdateAsync(Guid id, MenuItemUpdateInput input)
         {
-            return MenuAdminAppService.GetMenuItemAsync(menuId, menuItemId);
+            return MenuItemAdminAppService.UpdateAsync(id, input);
         }
 
-        [Route("{menuId}/menu-items")]
-        [HttpPost]
-        [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task<MenuItemDto> CreateMenuItemAsync(Guid menuId, MenuItemCreateInput input)
-        {
-            return MenuAdminAppService.CreateMenuItemAsync(menuId, input);
-        }
-
-        [Route("{menuId}")]
         [HttpDelete]
+        [Route("{id}")]
         [Authorize(CmsKitAdminPermissions.Menus.Delete)]
-        public Task DeleteAsync(Guid menuId)
+        public virtual Task DeleteAsync(Guid id)
         {
-            return MenuAdminAppService.DeleteAsync(menuId);
+            return MenuItemAdminAppService.DeleteAsync(id);
         }
 
-        [Route("{menuId}/menu-items/{menuItemId}")]
-        [HttpDelete]
-        [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task DeleteMenuItemAsync(Guid menuId, Guid menuItemId)
-        {
-            return MenuAdminAppService.DeleteMenuItemAsync(menuId, menuItemId);
-        }
-
-        [Route("{menuId}")]
-        [HttpGet]
-        public Task<MenuWithDetailsDto> GetAsync(Guid menuId)
-        {
-            return MenuAdminAppService.GetAsync(menuId);
-        }
-
-        [HttpGet]
-        public Task<PagedResultDto<MenuWithDetailsDto>> GetListAsync(PagedAndSortedResultRequestDto input)
-        {
-            return MenuAdminAppService.GetListAsync(input);
-        }
-
-        [Route("{menuId}/menu-items/{menuItemId}/move")]
         [HttpPut]
+        [Route("{id}/move")]
         [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input)
+        public virtual Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input)
         {
-            return MenuAdminAppService.MoveMenuItemAsync(menuId, menuItemId, input);
-        }
-        
-        [Route("{menuId}/main-menu")]
-        [HttpPut]        
-        [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input)
-        {
-            return MenuAdminAppService.UpdateMainMenuAsync(menuId, input);
-        }
-
-        [Route("{menuId}")]
-        [HttpPut]
-        [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task<MenuWithDetailsDto> UpdateAsync(Guid menuId, MenuUpdateInput input)
-        {
-            return MenuAdminAppService.UpdateAsync(menuId, input);
-        }
-
-        [Route("{menuId}/menu-items/{menuItemId}")]
-        [HttpPut]
-        [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemUpdateInput input)
-        {
-            return MenuAdminAppService.UpdateMenuItemAsync(menuId, menuItemId, input);
+            return MenuItemAdminAppService.MoveMenuItemAsync(id, input);
         }
 
         [HttpGet]
         [Route("lookup/pages")]
-        public virtual Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync([FromQuery]PageLookupInputDto input)
+        public virtual Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input)
         {
-            return MenuAdminAppService.GetPageLookupAsync(input);
+            return MenuItemAdminAppService.GetPageLookupAsync(input);
         }
     }
 }
