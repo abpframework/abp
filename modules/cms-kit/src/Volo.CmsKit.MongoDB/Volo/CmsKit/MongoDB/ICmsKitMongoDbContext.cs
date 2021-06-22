@@ -39,6 +39,6 @@ namespace Volo.CmsKit.MongoDB
         
         IMongoCollection<MediaDescriptor> MediaDescriptors { get; }
 
-        IMongoCollection<MenuItem> Menus { get; }
+        IMongoCollection<MenuItem> MenuItems { get; }
     }
 }

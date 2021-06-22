@@ -7,6 +7,6 @@ namespace Volo.CmsKit.Public.Menus
 {
     public interface IMenuItemPublicAppService : IApplicationService
     {
-        Task<List<MenuItemDto>> GetMenuItemsAsync();
+        Task<List<MenuItemDto>> GetListAsync();
     }
 }

@@ -22,9 +22,9 @@ namespace Volo.CmsKit.Public.Menus
         }
 
         [HttpGet]
-        public Task<List<MenuItemDto>> GetMenuItemsAsync()
+        public Task<List<MenuItemDto>> GetListAsync()
         {
-            return MenuPublicAppService.GetMenuItemsAsync();
+            return MenuPublicAppService.GetListAsync();
         }
     }
 }

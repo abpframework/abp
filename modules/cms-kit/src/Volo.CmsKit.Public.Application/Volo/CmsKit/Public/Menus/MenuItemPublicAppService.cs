@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Public.Menus
             DistributedCache = distributedCache;
         }
 
-        public async Task<List<MenuItemDto>> GetMenuItemsAsync()
+        public async Task<List<MenuItemDto>> GetListAsync()
         {
             var cachedMenu = await DistributedCache.GetOrAddAsync(
                 MenuApplicationConsts.MainMenuCacheKey,

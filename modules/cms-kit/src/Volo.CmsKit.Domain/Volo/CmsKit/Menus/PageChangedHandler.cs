@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -8,20 +7,21 @@ using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Menus
 {
-    public class PageChangedHandler: ILocalEventHandler<EntityUpdatedEventData<Page>>,
+    public class PageChangedHandler : 
+        ILocalEventHandler<EntityUpdatedEventData<Page>>,
         ITransientDependency
     {
         protected IMenuItemRepository MenuRepository { get; }
         protected MenuItemManager MenuManager { get; }
 
         public PageChangedHandler(
-            IMenuItemRepository menuRepository, 
+            IMenuItemRepository menuRepository,
             MenuItemManager menuManager)
         {
             MenuRepository = menuRepository;
             MenuManager = menuManager;
         }
-        
+
         public async Task HandleEventAsync(EntityUpdatedEventData<Page> eventData)
         {
             // TODO: Write a repository query.

@@ -2,7 +2,7 @@
 $(function () {
     var l = abp.localization.getResource("CmsKit");
 
-    var menuService = volo.cmsKit.admin.menus.menuAdmin;
+    var menuService = volo.cmsKit.admin.menus.menuItemAdmin;
 
     var createModal = new abp.ModalManager({ viewUrl: abp.appPath + 'CmsKit/Menus/MenuItems/CreateModal', modalClass: 'createMenuItem' });
     var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + 'CmsKit/Menus/MenuItems/UpdateModal', modalClass: 'updateMenuItem'});

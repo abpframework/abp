@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Public.Web.Menus
             {
                 var menuAppService = context.ServiceProvider.GetRequiredService<IMenuItemPublicAppService>();
 
-                var menuItems = await menuAppService.GetMenuItemsAsync();
+                var menuItems = await menuAppService.GetListAsync();
 
                 if (!menuItems.IsNullOrEmpty())
                 {
