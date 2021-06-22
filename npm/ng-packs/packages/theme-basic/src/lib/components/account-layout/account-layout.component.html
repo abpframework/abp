@@ -13,10 +13,17 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse" [class.overflow-hidden]="service.smallScreen" id="main-navbar-collapse">
+    <div
+      class="navbar-collapse"
+      [class.overflow-hidden]="service.smallScreen"
+      id="main-navbar-collapse"
+    >
       <ng-container *ngTemplateOutlet="!service.smallScreen ? navigations : null"></ng-container>
 
-      <div *ngIf="service.smallScreen" [@collapseWithMargin]="service.isCollapsed ? 'collapsed' : 'expanded'">
+      <div
+        *ngIf="service.smallScreen"
+        [@collapseWithMargin]="service.isCollapsed ? 'collapsed' : 'expanded'"
+      >
         <ng-container *ngTemplateOutlet="navigations"></ng-container>
       </div>
 
@@ -45,6 +52,11 @@
 <!-- [@slideFromBottom]="outlet.isActivated && outlet.activatedRoute?.routeConfig?.path" TODO: throws ExpressionChangedAfterItHasBeenCheck when animation is active. It should be fixed -->
 <div class="container">
   <abp-page-alert-container></abp-page-alert-container>
-
-  <router-outlet #outlet="outlet"></router-outlet>
+  <abp-auth-wrapper
+    *abpReplaceableTemplate="{
+      componentKey: authWrapperKey
+    }"
+  >
+    <router-outlet #outlet="outlet"></router-outlet>
+  </abp-auth-wrapper>
 </div>

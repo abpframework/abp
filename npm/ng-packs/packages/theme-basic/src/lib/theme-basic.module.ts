@@ -20,6 +20,8 @@ import { ValidationErrorComponent } from './components/validation-error/validati
 import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
 import { PageAlertContainerComponent } from './components/page-alert-container/page-alert-container.component';
+import { TenantBoxComponent } from './components/account-layout/tenant-box/tenant-box.component';
+import { AuthWrapperComponent } from './components/account-layout/auth-wrapper/auth-wrapper.component';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -33,6 +35,8 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     CurrentUserComponent,
     LanguagesComponent,
     PageAlertContainerComponent,
+    TenantBoxComponent,
+    AuthWrapperComponent,
   ],
   exports: [
     ...LAYOUTS,
