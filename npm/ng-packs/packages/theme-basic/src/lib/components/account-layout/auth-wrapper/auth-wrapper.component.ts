@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthWrapperService } from '@abp/ng.account-core';
+import { AuthWrapperService } from '@abp/ng.account.core';
 
 @Component({
   selector: 'abp-auth-wrapper',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TenantBoxService } from '@abp/ng.account-core';
+import { TenantBoxService } from '@abp/ng.account.core';
 
 @Component({
   selector: 'abp-tenant-box',

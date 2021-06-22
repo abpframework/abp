@@ -561,11 +561,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/account-core/src/test.ts",
-            "tsConfig": "packages/account-core/tsconfig.spec.json",
-            "karmaConfig": "packages/account-core/karma.conf.js"
+            "tsConfig": "tsconfig.json",
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -575,9 +575,7 @@
               "packages/account-core/tsconfig.lib.json",
               "packages/account-core/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

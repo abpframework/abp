@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { eThemeBasicComponents } from '../enums';
 import { SubscriptionService } from '@abp/ng.core';
 import { fromEvent } from 'rxjs';
@@ -16,22 +16,18 @@ export class LayoutService {
 
   navItemsComponentKey = eThemeBasicComponents.NavItems;
 
-  constructor(private subscription: SubscriptionService) {}
+  constructor(private subscription: SubscriptionService, private cdRef: ChangeDetectorRef) {}
 
   private checkWindowWidth() {
-    setTimeout(() => {
-      if (window.innerWidth < 992) {
-        if (this.smallScreen === false) {
-          this.isCollapsed = false;
-          setTimeout(() => {
-            this.isCollapsed = true;
-          }, 100);
-        }
-        this.smallScreen = true;
-      } else {
-        this.smallScreen = false;
-      }
-    }, 0);
+    const isSmallScreen = window.innerWidth < 992;
+    if (isSmallScreen && this.smallScreen === false) {
+      this.isCollapsed = false;
+      setTimeout(() => {
+        this.isCollapsed = true;
+      }, 100);
+    }
+    this.smallScreen = isSmallScreen;
+    this.cdRef.detectChanges();
   }
 
   subscribeWindowSize() {

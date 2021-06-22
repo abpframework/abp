@@ -38,13 +38,13 @@ export function configureRoutes(routes: RoutesService) {
       {
         path: '/account/forgot-password',
         parentName: eAccountRouteNames.Account,
-        name: 'AbpAccount::Forgot',
+        name: eAccountRouteNames.ForgotPassword,
         invisible: true,
       },
       {
         path: '/account/reset-password',
         parentName: eAccountRouteNames.Account,
-        name: 'AbpAccount::Reset',
+        name: eAccountRouteNames.ResetPassword,
         invisible: true,
       },
     ]);
