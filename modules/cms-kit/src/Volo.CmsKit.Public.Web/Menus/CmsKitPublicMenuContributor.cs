@@ -24,15 +24,15 @@ namespace Volo.CmsKit.Public.Web.Menus
         {
             if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
             {
-                var menuAppService = context.ServiceProvider.GetRequiredService<IMenuPublicAppService>();
+                var menuAppService = context.ServiceProvider.GetRequiredService<IMenuItemPublicAppService>();
 
-                var mainMenu = await menuAppService.GetMainMenuAsync();
+                var menuItems = await menuAppService.GetListAsync();
 
-                if (mainMenu != null)
+                if (!menuItems.IsNullOrEmpty())
                 {
-                    foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null && x.IsActive))
+                    foreach (var menuItemDto in menuItems.Where(x => x.ParentId == null && x.IsActive))
                     {
-                        AddChildItems(menuItemDto, mainMenu.Items, context.Menu);
+                        AddChildItems(menuItemDto, menuItems, context.Menu);
                     }
                 }
             }

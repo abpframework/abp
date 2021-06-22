@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -8,38 +7,36 @@ using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Menus
 {
-    public class PageChangedHandler: ILocalEventHandler<EntityUpdatedEventData<Page>>,
+    public class PageChangedHandler : 
+        ILocalEventHandler<EntityUpdatedEventData<Page>>,
         ITransientDependency
     {
-        protected IMenuRepository MenuRepository { get; }
-        protected MenuManager MenuManager { get; }
+        protected IMenuItemRepository MenuRepository { get; }
+        protected MenuItemManager MenuManager { get; }
 
         public PageChangedHandler(
-            IMenuRepository menuRepository, 
-            MenuManager menuManager)
+            IMenuItemRepository menuRepository,
+            MenuItemManager menuManager)
         {
             MenuRepository = menuRepository;
             MenuManager = menuManager;
         }
-        
+
         public async Task HandleEventAsync(EntityUpdatedEventData<Page> eventData)
         {
             // TODO: Write a repository query.
-            var allMenus = await MenuRepository.GetListAsync(includeDetails: true);
+            var allMenuItems = await MenuRepository.GetListAsync();
 
-            var affectedMenus = allMenus
-                .Where(menu => menu.Items.Any(x => x.PageId == eventData.Entity.Id))
-                .ToArray();
-
-            var affectedMenuItems =
-                affectedMenus.SelectMany(sm => sm.Items).Where(mItem => mItem.PageId == eventData.Entity.Id);
+            var affectedMenuItems = allMenuItems
+                                    .Where(x => x.PageId == eventData.Entity.Id)
+                                    .ToArray();
 
             foreach (var menuItem in affectedMenuItems)
             {
                 MenuManager.SetPageUrl(menuItem, eventData.Entity);
             }
 
-            await MenuRepository.UpdateManyAsync(affectedMenus);
+            await MenuRepository.UpdateManyAsync(affectedMenuItems);
         }
     }
 }

@@ -70,8 +70,8 @@ namespace Volo.CmsKit.Admin.Web
                 options.Conventions.AuthorizeFolder("/CmsKit/Comments/", CmsKitAdminPermissions.Comments.Default);
                 options.Conventions.AuthorizeFolder("/CmsKit/Comments/Details", CmsKitAdminPermissions.Comments.Default);
                 options.Conventions.AuthorizeFolder("/CmsKit/Menus", CmsKitAdminPermissions.Menus.Default);
-                options.Conventions.AuthorizePage("/CmsKit/Menus/CreateModal", CmsKitAdminPermissions.Menus.Create);
-                options.Conventions.AuthorizePage("/CmsKit/Menus/UpdateModal", CmsKitAdminPermissions.Menus.Update);
+                options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/CreateModal", CmsKitAdminPermissions.Menus.Create);
+                options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/UpdateModal", CmsKitAdminPermissions.Menus.Update);
                 options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
             });
 
@@ -87,8 +87,7 @@ namespace Volo.CmsKit.Admin.Web
                 options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Update", "/Cms/BlogPosts/Update/{Id}");
                 options.Conventions.AddPageRoute("/CmsKit/Comments/Index", "/Cms/Comments");
                 options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
-                options.Conventions.AddPageRoute("/CmsKit/Menus/Index", "/Cms/Menus");
-                options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/{Id}/menu-items");
+                options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
             });
 
             Configure<AbpPageToolbarOptions>(options =>
@@ -138,18 +137,6 @@ namespace Volo.CmsKit.Admin.Web
                             name: "CreateBlogPost",
                             id: "CreateBlogPost",
                             requiredPolicyName: CmsKitAdminPermissions.BlogPosts.Create
-                            );
-                    });
-
-                options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.IndexModel>(
-                    toolbar =>
-                    {
-                        toolbar.AddButton(
-                            LocalizableString.Create<CmsKitResource>("NewMenu"),
-                            icon: "plus",
-                            name: "CreateMenu",
-                            id: "CreateMenu",
-                            requiredPolicyName: CmsKitAdminPermissions.Menus.Create
                             );
                     });
 

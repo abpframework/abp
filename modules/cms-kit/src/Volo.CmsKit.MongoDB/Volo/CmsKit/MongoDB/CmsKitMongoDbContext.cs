@@ -39,7 +39,7 @@ namespace Volo.CmsKit.MongoDB
 
         public IMongoCollection<MediaDescriptor> MediaDescriptors => Collection<MediaDescriptor>();
 
-        public IMongoCollection<Menu> Menus => Collection<Menu>();
+        public IMongoCollection<MenuItem> MenuItems => Collection<MenuItem>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

@@ -28,7 +28,7 @@ namespace Volo.CmsKit.Migrations
                     BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     HttpMethod = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     Url = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Exceptions = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    Exceptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comments = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     HttpStatusCode = table.Column<int>(type: "int", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -369,26 +369,31 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CmsMenus",
+                name: "CmsMenuItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsMainMenu = table.Column<bool>(type: "bit", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Target = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ElementId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CssClass = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CmsMenus", x => x.Id);
+                    table.PrimaryKey("PK_CmsMenuItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -751,38 +756,6 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CmsMenuItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MenuId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Order = table.Column<int>(type: "int", nullable: false),
-                    Target = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ElementId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CssClass = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CmsMenuItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CmsMenuItems_CmsMenus_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "CmsMenus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CmsBlogPosts",
                 columns: table => new
                 {
@@ -1027,11 +1000,6 @@ namespace Volo.CmsKit.Migrations
                 columns: new[] { "TenantId", "EntityId", "TagId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsMenuItems_MenuId",
-                table: "CmsMenuItems",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CmsPages_TenantId_Slug",
                 table: "CmsPages",
                 columns: new[] { "TenantId", "Slug" });
@@ -1173,9 +1141,6 @@ namespace Volo.CmsKit.Migrations
 
             migrationBuilder.DropTable(
                 name: "CmsUsers");
-
-            migrationBuilder.DropTable(
-                name: "CmsMenus");
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");

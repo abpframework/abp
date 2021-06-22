@@ -11,9 +11,8 @@
 @model IndexModel
 
 @{
-    PageLayout.Content.Title = @Model.Menu.Name + " - " + L["MenuItems"].Value;
+    PageLayout.Content.Title = L["MenuItems"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
-    PageLayout.Content.BreadCrumb.Add(L["Menus"].Value, "/Cms/Menus");
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Menus.MenusMenu;
 }
 
@@ -37,11 +36,11 @@
     @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new {pageName = typeof(IndexModel).FullName})
 }
 
-<div id="CmsKitMenuItemsWrapper" data-menu-id="@Model.Id">
+<div id="CmsKitMenuItemsWrapper">
     <abp-card>
         <abp-card-body>
             <abp-card-title>
-                @Model.Menu.Name
+                @L["MenuItems"].Value
             </abp-card-title>
 
             <div id="MenuItemsEditTree"></div>

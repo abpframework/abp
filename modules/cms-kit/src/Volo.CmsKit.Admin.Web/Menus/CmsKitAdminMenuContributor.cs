@@ -74,8 +74,8 @@ namespace Volo.CmsKit.Admin.Web.Menus
             cmsMenus.Add(new ApplicationMenuItem(
                     CmsKitAdminMenus.Menus.MenusMenu,
                     l["Menus"],
-                    "/Cms/Menus",
-                    "fa fa-bars")
+                    "/Cms/Menus/Items",
+                    "fa fa-stream")
                 .RequireGlobalFeatures(typeof(MenuFeature))
                 .RequirePermissions(CmsKitAdminPermissions.Menus.Default));
 

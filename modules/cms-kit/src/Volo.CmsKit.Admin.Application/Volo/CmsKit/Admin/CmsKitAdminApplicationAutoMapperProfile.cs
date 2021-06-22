@@ -43,7 +43,6 @@ namespace Volo.CmsKit.Admin
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
 
-            CreateMap<Menu, MenuWithDetailsDto>();
             CreateMap<MenuItem, MenuItemDto>();
         }
     }
