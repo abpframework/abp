@@ -13,7 +13,7 @@ export function configureRoutes(routes: RoutesService) {
         path: undefined,
         name: eAccountRouteNames.Account,
         invisible: true,
-        layout: eLayoutType.application,
+        layout: eLayoutType.account,
         order: 1,
       },
       {
@@ -32,7 +32,20 @@ export function configureRoutes(routes: RoutesService) {
         path: '/account/manage',
         name: eAccountRouteNames.ManageProfile,
         parentName: eAccountRouteNames.Account,
+        layout: eLayoutType.application,
         order: 3,
+      },
+      {
+        path: '/account/forgot-password',
+        parentName: eAccountRouteNames.Account,
+        name: 'AbpAccount::Forgot',
+        invisible: true,
+      },
+      {
+        path: '/account/reset-password',
+        parentName: eAccountRouteNames.Account,
+        name: 'AbpAccount::Reset',
+        invisible: true,
       },
     ]);
   };
