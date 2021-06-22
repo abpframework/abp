@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+import { ToasterService } from '@abp/ng.theme.shared';
 import {
   AbpApplicationConfigurationService,
   AbpTenantService,
@@ -5,17 +7,10 @@ import {
   CurrentTenantDto,
   SessionStateService,
 } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { Account } from '../../models/account';
 
-@Component({
-  selector: 'abp-tenant-box',
-  templateUrl: './tenant-box.component.html',
-})
-export class TenantBoxComponent
-  implements Account.TenantBoxComponentInputs, Account.TenantBoxComponentOutputs {
+@Injectable()
+export class TenantBoxService {
   currentTenant$ = this.sessionState.getTenant$();
 
   name: string;

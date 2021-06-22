@@ -1,17 +1,11 @@
-import { ConfigStateService, MultiTenancyService, SubscriptionService } from '@abp/ng.core';
-import { Component, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { eAccountComponents } from '../../enums/components';
 import { ActivatedRoute } from '@angular/router';
+import { ConfigStateService, MultiTenancyService } from '@abp/ng.core';
 
-@Component({
-  selector: 'abp-auth-wrapper',
-  templateUrl: './auth-wrapper.component.html',
-  exportAs: 'abpAuthWrapper',
-  providers: [SubscriptionService],
-})
-export class AuthWrapperComponent {
+@Injectable()
+export class AuthWrapperService {
   isMultiTenancyEnabled$ = this.configState.getDeep$('multiTenancy.isEnabled');
 
   get enableLocalLogin$(): Observable<boolean> {
@@ -20,7 +14,7 @@ export class AuthWrapperComponent {
       .pipe(map(value => value?.toLowerCase() !== 'false'));
   }
 
-  tenantBoxKey = eAccountComponents.TenantBox;
+  tenantBoxKey = 'Account.TenantBoxComponent';
   route: ActivatedRoute;
 
   private _tenantBoxVisible = true;
