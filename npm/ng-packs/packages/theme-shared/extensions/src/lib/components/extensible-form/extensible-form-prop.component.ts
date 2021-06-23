@@ -1,10 +1,4 @@
-import {
-  ABP,
-  AbpValidators,
-  AutofocusDirective,
-  ConfigStateService,
-  TrackByService,
-} from '@abp/ng.core';
+import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -131,8 +125,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.first && this.fieldRef) {
-      const autofocusDirective = new AutofocusDirective(this.fieldRef);
-      autofocusDirective.ngAfterViewInit();
+      this.fieldRef.nativeElement.focus();
     }
   }
 
