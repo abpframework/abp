@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Http.Client
@@ -11,15 +12,15 @@ namespace Volo.Abp.Http.Client
         {
             Options = options.Value;
         }
-        
-        public virtual RemoteServiceConfiguration GetConfigurationOrDefault(string name)
+
+        public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name)
         {
-            return Options.RemoteServices.GetConfigurationOrDefault(name);
+            return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefault(name));
         }
-        
-        public virtual RemoteServiceConfiguration GetConfigurationOrDefaultOrNull(string name)
+
+        public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name)
         {
-            return Options.RemoteServices.GetConfigurationOrDefaultOrNull(name);
+            return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefaultOrNull(name));
         }
     }
 }

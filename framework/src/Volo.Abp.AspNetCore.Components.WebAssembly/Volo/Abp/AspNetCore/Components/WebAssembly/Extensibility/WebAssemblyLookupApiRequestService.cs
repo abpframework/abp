@@ -40,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility
             var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!uri.IsAbsoluteUri)
             {
-                var remoteServiceConfig = RemoteServiceConfigurationProvider.GetConfigurationOrDefault("Default");
+                var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
                 client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
                 await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
             }
