@@ -119,13 +119,20 @@ namespace Volo.Docs.Markdown.Renderers
                 if (line.Contains("-"))
                 {
                     var numbers = line.Split("-");
-
-                    foreach (var number in numbers)
+                    if (numbers.Length > 2)
                     {
-                        if (int.TryParse(number, out var lineNumber))
-                        {
-                            highlightedLines.Add(lineNumber);
-                        }
+                        continue;
+                    }
+
+                    if (!int.TryParse(numbers[0], out var minLineNumber) ||
+                        !int.TryParse(numbers[1], out var maxLineNumber))
+                    {
+                        continue;
+                    }
+
+                    for (var lineNumber = minLineNumber; lineNumber < maxLineNumber + 1; lineNumber++)
+                    {
+                        highlightedLines.Add(lineNumber);
                     }
                 }
                 else
