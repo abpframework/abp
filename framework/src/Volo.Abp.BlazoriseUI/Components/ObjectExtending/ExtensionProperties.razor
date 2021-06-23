@@ -3,7 +3,6 @@
 @using Volo.Abp.ObjectExtending
 @using Volo.Abp.Localization
 @using Volo.Abp.Data
-@using Newtonsoft.Json
 
 @{
     Entity.SetDefaultsForExtraProperties();
@@ -23,8 +22,6 @@
             else
             {
                 var inputType = propertyInfo.GetInputType();
-
-                Console.WriteLine(JsonConvert.SerializeObject(propertyInfo));
                 __builder.OpenComponent(0, inputType.MakeGenericType(new[] { typeof(TEntityType), typeof(TResourceType) }));
                 __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
                 __builder.AddAttribute(2, "Entity", Entity);
