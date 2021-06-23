@@ -6,7 +6,7 @@ using Volo.Docs.Markdown.Renderers;
 
 namespace Volo.Docs.Markdown.Extensions
 {
-    public class CustomCodeBlockExtension : IMarkdownExtension
+    public class HighlightedCodeBlockExtension : IMarkdownExtension
     {
         public void Setup(MarkdownPipelineBuilder pipeline)
         {
@@ -27,7 +27,7 @@ namespace Volo.Docs.Markdown.Extensions
                     htmlRenderer.ObjectRenderers.Remove(codeBlockRenderer);
                 }
 
-                htmlRenderer.ObjectRenderers.AddIfNotAlready(new CustomCodeBlockRenderer());
+                htmlRenderer.ObjectRenderers.AddIfNotAlready(new HighlightedCodeBlockRenderer());
             }
         }
     }

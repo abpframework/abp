@@ -10,14 +10,14 @@ using Markdig.Syntax;
 
 namespace Volo.Docs.Markdown.Renderers
 {
-    public class CustomCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
+    public class HighlightedCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
     {
         private const string Pattern = @"\{([^}]+)\}";
         public bool OutputAttributesOnPre { get; set; }
 
         public HashSet<string> BlocksAsDiv { get; }
 
-        public CustomCodeBlockRenderer()
+        public HighlightedCodeBlockRenderer()
         {
             BlocksAsDiv = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
@@ -46,7 +46,6 @@ namespace Volo.Docs.Markdown.Renderers
                 {
                     renderer.WriteLine("</div>");
                 }
-
             }
             else
             {
@@ -58,19 +57,8 @@ namespace Volo.Docs.Markdown.Renderers
                     {
                         renderer.WriteAttributes(obj);
                     }
-                    
-                    var highlightedLines = GetHighlightedLines(fencedCodeBlock);
-                    if (highlightedLines.Any())
-                    {
-                        renderer.WriteAttributes(new HtmlAttributes {Classes = new List<string> {"line-numbers"}});
 
-                        var lines = string.Join(",", highlightedLines);
-                        renderer.Write($"data-line={lines}><code");
-                    }
-                    else
-                    {
-                        renderer.Write("><code");
-                    }
+                    WriteHighlightedCodeLines(renderer, fencedCodeBlock);
 
                     if (!OutputAttributesOnPre)
                     {
@@ -90,41 +78,65 @@ namespace Volo.Docs.Markdown.Renderers
 
             renderer.EnsureLine();
         }
+        
+        private void WriteHighlightedCodeLines(HtmlRenderer renderer, FencedCodeBlock fencedCodeBlock)
+        {
+            var highlightedLines = GetHighlightedLines(fencedCodeBlock);
+            if (highlightedLines.Any())
+            {
+                renderer.WriteAttributes(new HtmlAttributes
+                {
+                    Classes = new List<string> {"line-numbers"} //prevents adding line-numbers for highlighted lines
+                });
 
+                var lines = string.Join(",", highlightedLines);
+                renderer.Write($"data-line={lines}><code");
+            }
+            else
+            {
+                renderer.Write("><code");
+            }
+        }
+        
         private List<int> GetHighlightedLines(FencedCodeBlock fencedCodeBlock)
         {
             var highlightedLines = new List<int>();
-
-            if (string.IsNullOrWhiteSpace(fencedCodeBlock?.Arguments))
+            if (string.IsNullOrWhiteSpace(fencedCodeBlock?.Arguments) || !Regex.IsMatch(pattern: Pattern, input: fencedCodeBlock.Arguments))
             {
                 return highlightedLines;
             }
 
-            if (Regex.IsMatch(pattern: Pattern, input: fencedCodeBlock.Arguments))
+            var match = Regex.Match(fencedCodeBlock.Arguments, Pattern);
+            var groups = match.Groups;
+            if (groups.Count < 2 || string.IsNullOrWhiteSpace(groups[1].Value))
             {
-                var match = Regex.Match(fencedCodeBlock.Arguments, Pattern);
-                var groups = match.Groups;
-
-                if (groups.Count < 2 || string.IsNullOrWhiteSpace(groups[1].Value))
-                {
-                    return highlightedLines;
-                }
+                return highlightedLines;
+            }
                 
-                var lines = groups[1].Value.Split(",");
-                foreach (var line in lines)
+            var lines = groups[1].Value.Split(",");
+            foreach (var line in lines)
+            {
+                if (line.Contains("-"))
                 {
-                    if (line.Contains("-"))
+                    var numbers = line.Split("-");
+
+                    foreach (var number in numbers)
                     {
-                        var numbers = line.Split("-");
-                        highlightedLines.AddRange(numbers.Select(number => Convert.ToInt32(number)));
+                        if (int.TryParse(number, out var lineNumber))
+                        {
+                            highlightedLines.Add(lineNumber);
+                        }
                     }
-                    else
+                }
+                else
+                {
+                    if (int.TryParse(line, out var lineNumber))
                     {
-                        highlightedLines.Add(Convert.ToInt32(line));
+                        highlightedLines.Add(lineNumber);
                     }
                 }
             }
-            
+
             return highlightedLines;
         }
     }
