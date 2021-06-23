@@ -124,5 +124,5 @@ So, if you want to set the `warn` icon, you can set it like:
 abp.libs.sweetAlert.config.warn.icon = 'error';
 ````
 
-See the [SweetAlert](https://sweetalert.js.org/) for all the configuration options.
+See the [SweetAlert document](https://sweetalert.js.org/) for all the configuration options.
 
