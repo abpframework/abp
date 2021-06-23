@@ -630,33 +630,33 @@ You can apply highlight to specific code lines or a range of sequential lines.
 See the following examples:
 
 ```
-```C# {3, 5}
-public class Book : Entity<Guid>
-{
-    public string Name { get; set; }
-    public string Surname { get; set; }
-}
-```
-```
-
-```
-```C# {2-4}
-public class Book : Entity<Guid>
-{
-    public string Name { get; set; }
-    public string Surname { get; set; }
-}
-```
+	```C# {3, 5}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
 ```
 
 ```
-```C# {1, 2-4}
-public class Book : Entity<Guid>
-{
-    public string Name { get; set; }
-    public string Surname { get; set; }
-}
+	```C# {2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
 ```
+
+```
+	```C# {1, 2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
 ```
 
 ---
