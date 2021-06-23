@@ -258,15 +258,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
             
             if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
             {
-                builder.Entity<Menu>(b =>
-                {
-                    b.ToTable(options.TablePrefix + "Menus", options.Schema);
-
-                    b.ConfigureByConvention();
-
-                    b.HasMany(x => x.Items).WithOne().HasForeignKey(fk => fk.MenuId);
-                });
-
                 builder.Entity<MenuItem>(b =>
                 {
                     b.ToTable(options.TablePrefix + "MenuItems", options.Schema);
@@ -280,7 +271,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
             }
             else
             {
-                builder.Ignore<Menu>();
                 builder.Ignore<MenuItem>();
             }
             

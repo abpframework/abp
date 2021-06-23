@@ -33,8 +33,6 @@ namespace Volo.CmsKit.Public
             CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
 
             CreateMap<MenuItem, MenuItemDto>();
-            
-            CreateMap<Menu, MenuWithDetailsDto>();
         }
     }
 }

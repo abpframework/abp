@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -48,7 +47,7 @@ namespace Volo.CmsKit
         private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
         private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
         private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
-        private readonly IMenuRepository _menuRepository;
+        private readonly IMenuItemRepository _menuItemRepository;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -75,7 +74,7 @@ namespace Volo.CmsKit
             IOptions<CmsKitMediaOptions> cmsMediaOptions,
             IOptions<CmsKitCommentOptions> commentsOptions,
             IOptions<CmsKitRatingOptions> ratingOptions,
-            IMenuRepository menuRepository)
+            IMenuItemRepository menuItemRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -101,7 +100,7 @@ namespace Volo.CmsKit
             _mediaOptions = cmsMediaOptions;
             _commentsOptions = commentsOptions;
             _ratingOptions = ratingOptions;
-            _menuRepository = menuRepository;
+            _menuItemRepository = menuItemRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -415,38 +414,22 @@ namespace Volo.CmsKit
 
         private async Task SeedMenusAsync()
         {
-            var menu = new Menu(_cmsKitTestData.Menu_1_Id, null, _cmsKitTestData.Menu_1_Name);
-            menu.IsMainMenu = true;
-            
-            menu.Items.Add(
+            await _menuItemRepository.InsertManyAsync(new[]
+            {
                 new MenuItem(
                     _cmsKitTestData.MenuItem_1_Id,
-                    menu.Id,
                     _cmsKitTestData.MenuItem_1_Name,
-                    _cmsKitTestData.MenuItem_1_Url));
-
-            menu.Items.Add(
+                    _cmsKitTestData.MenuItem_1_Url),
                 new MenuItem(
                     _cmsKitTestData.MenuItem_2_Id,
-                    menu.Id,
                     _cmsKitTestData.MenuItem_2_Name,
-                    _cmsKitTestData.MenuItem_2_Url));
-
-            await _menuRepository.InsertAsync(menu);
-
-            var menu2 = new Menu(
-                _cmsKitTestData.Menu_2_Id,
-                null,
-                _cmsKitTestData.Menu_2_Name);
-            
-            menu2.Items.Add(
+                    _cmsKitTestData.MenuItem_2_Url),
                 new MenuItem(
-                    _cmsKitTestData.MenuItem_3_Id, 
-                    menu2.Id,
+                    _cmsKitTestData.MenuItem_3_Id,
                     _cmsKitTestData.MenuItem_3_Name,
-                    _cmsKitTestData.MenuItem_3_Url));
-            
-            await _menuRepository.InsertAsync(menu2);
+                    _cmsKitTestData.MenuItem_3_Url)
+
+            });
         }
     }
 }

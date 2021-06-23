@@ -1,6 +1,6 @@
 <ng-container *ngIf="form">
   <ng-container *abpPropData="let data; fromList: propList; withRecord: record">
-    <ng-container *ngFor="let prop of propList; trackBy: track.by('name')">
+    <ng-container *ngFor="let prop of propList; let first = first; trackBy: track.by('name')">
       <ng-container *ngIf="prop.visible(data)">
         <ng-container
           [formGroupName]="extraPropertiesKey"
@@ -14,6 +14,7 @@
             *ngIf="form.get(prop.name)"
             [prop]="prop"
             [data]="data"
+            [first]="first"
           ></abp-extensible-form-prop>
         </ng-template>
       </ng-container>

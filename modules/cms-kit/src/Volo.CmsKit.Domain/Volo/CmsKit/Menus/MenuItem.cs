@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Menus
 {
-    public class MenuItem : AuditedEntity<Guid>
+    public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
     {
-        /// <summary>
-        /// Parent <see cref="Menu"/> Id.
-        /// </summary>
-        public Guid MenuId { get; set; }
-
         /// <summary>
         /// Presents another <see cref="MenuItem"/> Id.
         /// If it's <see langword="null"/>, then it's a root menu item.
@@ -43,9 +39,9 @@ namespace Volo.CmsKit.Menus
 
         public Guid? PageId { get; protected set; }
 
+        public Guid? TenantId { get; }
 
         public MenuItem(Guid id,
-                        Guid menuId,
                         [NotNull] string displayName,
                         [NotNull] string url,
                         bool isActive = true,
@@ -57,7 +53,6 @@ namespace Volo.CmsKit.Menus
                         [CanBeNull] string cssClass = null) 
             :base(id)
         {
-            MenuId = menuId;
             SetDisplayName(displayName);
             IsActive = isActive;
             ParentId = parentId;

@@ -11,21 +11,5 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {
     public class IndexModel : CmsKitAdminPageModel
     {
-        protected IMenuAdminAppService MenuAdminAppService { get; }
-
-        [BindProperty(SupportsGet = true)] 
-        public Guid Id { get; set; }
-
-        public MenuWithDetailsDto Menu { get; protected set; }
-
-        public IndexModel(IMenuAdminAppService menuAdminAppService)
-        {
-            MenuAdminAppService = menuAdminAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            Menu = await MenuAdminAppService.GetAsync(Id);
-        }
     }
 }

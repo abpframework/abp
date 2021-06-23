@@ -7,7 +7,6 @@ namespace Volo.CmsKit.Menus
     [Serializable]
     public class MenuItemDto : AuditedEntityDto<Guid>
     {
-        public Guid MenuId { get; set; }
         public Guid? ParentId { get; set; }
         public string DisplayName { get; set; }
         public bool IsActive { get; set; }

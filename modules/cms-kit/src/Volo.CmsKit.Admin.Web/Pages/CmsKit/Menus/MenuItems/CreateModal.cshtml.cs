@@ -13,20 +13,19 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {
     public class CreateModalModel : CmsKitAdminPageModel
     {
-        protected IMenuAdminAppService MenuAdminAppService { get; }
+        protected IMenuItemAdminAppService MenuAdminAppService { get; }
 
         [BindProperty]
         public MenuItemCreateViewModel ViewModel { get; set; }
 
-        public CreateModalModel(IMenuAdminAppService menuAdminAppService)
+        public CreateModalModel(IMenuItemAdminAppService menuAdminAppService)
         {
             MenuAdminAppService = menuAdminAppService;
             ViewModel = new MenuItemCreateViewModel();
         }
 
-        public virtual Task OnGetAsync(Guid menuId, Guid? parentId)
+        public virtual Task OnGetAsync(Guid? parentId)
         {
-            ViewModel.MenuId = menuId;
             ViewModel.ParentId = parentId;
 
             return Task.CompletedTask;
@@ -36,7 +35,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         {
             var input = ObjectMapper.Map<MenuItemCreateViewModel, MenuItemCreateInput>(ViewModel);
 
-            var dto = await MenuAdminAppService.CreateMenuItemAsync(ViewModel.MenuId, input);
+            var dto = await MenuAdminAppService.CreateAsync(input);
 
             return new OkObjectResult(dto);
         }
@@ -44,9 +43,6 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         [AutoMap(typeof(MenuItemCreateInput), ReverseMap = true)]
         public class MenuItemCreateViewModel
         {
-            [HiddenInput]
-            public Guid MenuId { get; set; }
-
             [HiddenInput]
             public Guid? ParentId { get; set; }
 

@@ -19,9 +19,7 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
     {
         public IHttpClientFactory HttpClientFactory { get; }
         public IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
-
-        public AbpRemoteServiceOptions RemoteServiceOptions { get; }
-
+        public IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         public ICurrentTenant CurrentTenant { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
         public NavigationManager NavigationManager { get; }
@@ -29,16 +27,16 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
         public BlazorServerLookupApiRequestService(IHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
             ICurrentTenant currentTenant,
-            IOptions<AbpRemoteServiceOptions> remoteServiceOptions,
             IHttpContextAccessor httpContextAccessor,
-            NavigationManager navigationManager)
+            NavigationManager navigationManager,
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
             HttpClientFactory = httpClientFactory;
             HttpClientAuthenticator = httpClientAuthenticator;
-            RemoteServiceOptions = remoteServiceOptions.Value;
             CurrentTenant = currentTenant;
             HttpContextAccessor = httpContextAccessor;
             NavigationManager = navigationManager;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
         }
 
         public async Task<string> SendAsync(string url)
@@ -53,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
                 try
                 {
                     //Blazor tiered -- mode
-                    var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault("Default");
+                    var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
                     baseUrl = remoteServiceConfig.BaseUrl;
                     client.BaseAddress = new Uri(baseUrl);
                     AddHeaders(requestMessage);
