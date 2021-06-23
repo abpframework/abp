@@ -9,17 +9,17 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     [Dependency(ReplaceServices = true)]
     public class WebAssemblyServerUrlProvider : IServerUrlProvider, ITransientDependency
     {
-        public AbpRemoteServiceOptions Options { get; }
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
 
         public WebAssemblyServerUrlProvider(
-            IOptions<AbpRemoteServiceOptions> options)
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
-            Options = options.Value;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
         }
         
         public string GetBaseUrl(string remoteServiceName = null)
         {
-            return Options.RemoteServices.GetConfigurationOrDefault(
+            return RemoteServiceConfigurationProvider.GetConfigurationOrDefault(
                 remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
             ).BaseUrl.EnsureEndsWith('/');
         }
