@@ -6,7 +6,7 @@
     "Contributors": "Contributori",
     "ShareOn": "Condividere su",
     "Version": "Versione",
-    "Edit": "modificare",
+    "Edit": "Modifica",
     "LastEditTime": "Ultima modifica",
     "Delete": "Elimina",
     "ClearCache": "Cancella cache",
@@ -19,10 +19,10 @@
     "SuccessfullyReIndexAllProject": "Reindicizza con successo tutti i progetti",
     "InThisDocument": "In questo documento",
     "GoToTop": "Vai in alto",
-    "Projects": "Progetto (i)",
+    "Projects": "Progetto(i)",
     "NoProjectWarning": "Non ci sono ancora progetti!",
-    "DocumentNotFound": "Oops, il documento richiesto non è stato trovato!",
-    "ProjectNotFound": "Oops, il progetto richiesto non è stato trovato!",
+    "DocumentNotFound": "Ops, il documento richiesto non è stato trovato!",
+    "ProjectNotFound": "Ops, il progetto richiesto non è stato trovato!",
     "NavigationDocumentNotFound": "Questa versione non ha un documento di navigazione!",
     "DocumentNotFoundInSelectedLanguage": "Il documento nella lingua desiderata non è stato trovato. Viene visualizzato il documento nella lingua predefinita.",
     "FilterTopics": "Filtra gli argomenti",
@@ -33,9 +33,9 @@
     "Upd": "Agg",
     "NewExplanation": "Creato nelle ultime due settimane.",
     "UpdatedExplanation": "Aggiornato nelle ultime due settimane.",
-    "Volo.Docs.Domain:010002": "ShortName {ShortName} esiste già.",
+    "Volo.Docs.Domain:010002": "Abbreviazione {ShortName} esiste già.",
     "Preview": "anteprima",
     "Search": "Ricerca",
-    "SearchResults": "risultati di ricerca"
+    "SearchResults": "Risultati della ricerca"
   }
 }
