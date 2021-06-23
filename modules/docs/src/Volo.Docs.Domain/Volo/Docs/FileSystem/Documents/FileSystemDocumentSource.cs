@@ -40,7 +40,7 @@ namespace Volo.Docs.FileSystem.Documents
                 Path.GetFileName(path),
                 content,
                 project.Format,
-                path,
+                null,
                 "/",
                 $"/document-resources?projectId={project.Id.ToString()}&version={version}&languageCode={languageCode}&name=",
                 localDirectory,
