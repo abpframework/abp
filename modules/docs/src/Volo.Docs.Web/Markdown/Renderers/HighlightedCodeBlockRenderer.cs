@@ -98,9 +98,9 @@ namespace Volo.Docs.Markdown.Renderers
             }
         }
         
-        private List<int> GetHighlightedLines(FencedCodeBlock fencedCodeBlock)
+        private HashSet<int> GetHighlightedLines(FencedCodeBlock fencedCodeBlock)
         {
-            var highlightedLines = new List<int>();
+            var highlightedLines = new HashSet<int>();
             if (string.IsNullOrWhiteSpace(fencedCodeBlock?.Arguments) || !Regex.IsMatch(pattern: Pattern, input: fencedCodeBlock.Arguments))
             {
                 return highlightedLines;
