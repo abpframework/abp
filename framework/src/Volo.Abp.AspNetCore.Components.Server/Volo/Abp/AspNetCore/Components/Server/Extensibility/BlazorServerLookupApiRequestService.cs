@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
                 try
                 {
                     //Blazor tiered -- mode
-                    var remoteServiceConfig = RemoteServiceConfigurationProvider.GetConfigurationOrDefault("Default");
+                    var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
                     baseUrl = remoteServiceConfig.BaseUrl;
                     client.BaseAddress = new Uri(baseUrl);
                     AddHeaders(requestMessage);

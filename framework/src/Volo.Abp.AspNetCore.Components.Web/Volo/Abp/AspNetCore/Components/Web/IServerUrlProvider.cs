@@ -1,7 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Components.Web
+﻿using System.Threading.Tasks;
+
+namespace Volo.Abp.AspNetCore.Components.Web
 {
     public interface IServerUrlProvider
     {
-        string GetBaseUrl(string remoteServiceName = null);
+        Task<string> GetBaseUrlAsync(string remoteServiceName = null);
     }
 }

@@ -135,7 +135,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = RemoteServiceConfigurationProvider.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
@@ -146,7 +146,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 invocation.Method
             );
 
-            var apiVersion = GetApiVersionInfo(action);
+            var apiVersion = await GetApiVersionInfoAsync(action);
             var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
             var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
@@ -182,9 +182,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return response.Content;
         }
 
-        private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
+        private async Task<ApiVersionInfo> GetApiVersionInfoAsync(ActionApiDescriptionModel action)
         {
-            var apiVersion = FindBestApiVersion(action);
+            var apiVersion = await FindBestApiVersionAsync(action);
 
             //TODO: Make names configurable?
             var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
@@ -193,9 +193,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
         }
 
-        private string FindBestApiVersion(ActionApiDescriptionModel action)
+        private async Task<string> FindBestApiVersionAsync(ActionApiDescriptionModel action)
         {
-            var configuredVersion = GetConfiguredApiVersion();
+            var configuredVersion = await GetConfiguredApiVersionAsync();
 
             if (action.SupportedVersions.IsNullOrEmpty())
             {
@@ -258,13 +258,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
-        private string GetConfiguredApiVersion()
+        private async Task<string> GetConfiguredApiVersionAsync()
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return RemoteServiceConfigurationProvider
-                .GetConfigurationOrDefaultOrNull(clientConfig.RemoteServiceName)?.Version;
+            return (await RemoteServiceConfigurationProvider
+                .GetConfigurationOrDefaultOrNullAsync(clientConfig.RemoteServiceName))?.Version;
         }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
