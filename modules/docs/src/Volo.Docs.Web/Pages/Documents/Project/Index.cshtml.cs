@@ -83,7 +83,6 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentSectionRenderer _documentSectionRenderer;
-        private readonly IVersionHelper _versionHelper;
         private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
@@ -91,8 +90,7 @@ namespace Volo.Docs.Pages.Documents.Project
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
             IOptions<DocsUiOptions> options,
-            IDocumentSectionRenderer documentSectionRenderer,
-            IVersionHelper versionHelper)
+            IDocumentSectionRenderer documentSectionRenderer)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
@@ -100,7 +98,6 @@ namespace Volo.Docs.Pages.Documents.Project
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
             _documentSectionRenderer = documentSectionRenderer;
-            _versionHelper = versionHelper;
             _uiOptions = options.Value;
 
             LocalizationResourceType = typeof(DocsResource);
@@ -331,7 +328,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
             }
 
-            return versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+            return versions.FirstOrDefault(v => !SemanticVersionHelper.IsPreRelease(v.Version)) ?? versions.First();
         }
 
         private string RemoveVersionPrefix(string version)
@@ -356,7 +353,7 @@ namespace Volo.Docs.Pages.Documents.Project
             if (!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
                 || (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
             {
-                versions.First(v=> !_versionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
+                versions.First(v=> !SemanticVersionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
         }
 
