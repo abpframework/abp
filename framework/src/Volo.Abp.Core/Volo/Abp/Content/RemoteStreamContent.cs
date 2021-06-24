@@ -11,9 +11,16 @@ namespace Volo.Abp.Content
             _stream = stream;
         }
 
+        public RemoteStreamContent(Stream stream, string fileName): this(stream)
+        {
+            FileName = fileName;
+        }
+
         public virtual string ContentType { get; set; }
 
         public virtual long? ContentLength => _stream.Length;
+
+        public virtual string FileName { get; set; }
 
         public virtual Stream GetStream()
         {

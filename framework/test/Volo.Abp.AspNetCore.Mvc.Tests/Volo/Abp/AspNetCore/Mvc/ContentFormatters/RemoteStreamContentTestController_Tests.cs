@@ -15,6 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         {
             var result = await GetResponseAsync("/api/remote-stream-content-test/download");
             result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
+            result.Content.Headers.ContentDisposition?.FileName.ShouldBe("\"download.rtf\"");
             (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
         }
 
@@ -30,11 +31,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                 var streamContent = new StreamContent(memoryStream);
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/rtf");
 
-                requestMessage.Content = new MultipartFormDataContent {{streamContent, "file", "file"}};
+                requestMessage.Content = new MultipartFormDataContent {{streamContent, "file", "upload.rtf"}};
 
                 var response = await Client.SendAsync(requestMessage);
 
-                (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf");
+                (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf:upload.rtf");
             }
         }
     }

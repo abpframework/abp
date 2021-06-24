@@ -114,7 +114,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                  * it before we finish doing our work with the stream */
                 return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
                 {
-                    ContentType = responseContent.Headers.ContentType?.ToString()
+                    ContentType = responseContent.Headers.ContentType?.ToString(),
+                    FileName = responseContent.Headers?.ContentDisposition?.FileName?.RemovePreFix("\"")?.RemovePostFix("\"")
                 };
             }
 

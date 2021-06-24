@@ -26,6 +26,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
             {
                 context.HttpContext.Response.ContentType = remoteStream.ContentType;
 
+                if (!remoteStream.FileName.IsNullOrWhiteSpace())
+                {
+                    //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#syntax
+                    context.HttpContext.Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{remoteStream.FileName}\"");
+                }
+
                 using (var stream = remoteStream.GetStream())
                 {
                     if (stream.CanSeek)
