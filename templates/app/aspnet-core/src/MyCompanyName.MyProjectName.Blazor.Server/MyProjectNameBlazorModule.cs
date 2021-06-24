@@ -193,7 +193,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
-            services.AddSwaggerGen(
+            services.AddAbpSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
