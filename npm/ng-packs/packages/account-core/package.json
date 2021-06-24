@@ -1,0 +1,18 @@
+{
+  "name": "@abp/ng.account.core",
+  "version": "0.0.1",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=11.1.2",
+    "@angular/core": ">=11.1.2",
+    "@abp/ng.core": "~4.3.3",
+    "@abp/ng.theme.shared": "~4.3.3"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

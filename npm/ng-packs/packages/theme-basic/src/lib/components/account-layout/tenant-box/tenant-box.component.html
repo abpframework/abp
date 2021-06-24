@@ -1,4 +1,4 @@
-<ng-container *ngIf="(currentTenant$ | async) || {} as currentTenant">
+<ng-container *ngIf="(service.currentTenant$ | async) || {} as currentTenant">
   <div class="card shadow-sm rounded mb-3">
     <div class="card-body px-5">
       <div class="row">
@@ -16,7 +16,7 @@
             id="AbpTenantSwitchLink"
             href="javascript:void(0);"
             class="btn btn-sm mt-3 btn-outline-primary"
-            (click)="onSwitch()"
+            (click)="service.onSwitch()"
             >{{ 'AbpUiMultiTenancy::Switch' | abpLocalization }}</a
           >
         </div>
@@ -24,17 +24,17 @@
     </div>
   </div>
 
-  <abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal size="md" [(visible)]="service.isModalVisible" [busy]="service.modalBusy">
     <ng-template #abpHeader>
       <h5>Switch Tenant</h5>
     </ng-template>
     <ng-template #abpBody>
-      <form (ngSubmit)="save()">
+      <form (ngSubmit)="service.save()">
         <div class="mt-2">
           <div class="form-group">
             <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
             <input
-              [(ngModel)]="name"
+              [(ngModel)]="service.name"
               type="text"
               id="name"
               name="tenant"
@@ -53,8 +53,8 @@
       <abp-button
         type="abp-button"
         iconClass="fa fa-check"
-        (click)="save()"
-        [disabled]="currentTenant?.name === name"
+        (click)="service.save()"
+        [disabled]="currentTenant?.name === service.name"
       >
         <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
       </abp-button>

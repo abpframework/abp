@@ -3,4 +3,6 @@ export const enum eAccountRouteNames {
   Login = 'AbpAccount::Login',
   Register = 'AbpAccount::Register',
   ManageProfile = 'AbpAccount::MyAccount',
+  ForgotPassword = 'AbpAccount::ForgotPassword',
+  ResetPassword = 'AbpAccount::ResetPassword',
 }
