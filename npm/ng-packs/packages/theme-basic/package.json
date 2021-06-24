@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@abp/ng.theme.shared": "~4.3.3",
-    "@abp/ng.account.core": "~0.0.1",
+    "@abp/ng.account.core": "~4.3.3",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
