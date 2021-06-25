@@ -93,7 +93,7 @@ namespace MyCompanyName.MyProjectName
                 options.UseSqlServer();
             });
 
-            context.Services.AddSwaggerGen(
+            context.Services.AddAbpSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
