@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement.Blazor.Components
@@ -11,6 +12,7 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
     public partial class PermissionManagementModal
     {
         [Inject] private IPermissionAppService PermissionAppService { get; set; }
+        [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
         private Modal _modal;
 
@@ -132,6 +134,8 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
                 };
 
                 await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
+
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
                 await InvokeAsync(_modal.Hide);
             }
