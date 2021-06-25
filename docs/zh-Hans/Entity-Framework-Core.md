@@ -274,7 +274,7 @@ public async override Task DeleteAsync(
 
 ## 加载关联实体
 
-假设您拥有带有`OrderLine`集合的`Order`，并且`OrderLine`具有`Order`的导航属性：
+假设你拥有带有`OrderLine`集合的`Order`,并且`OrderLine`具有`Order`的导航属性:
 
 ````csharp
 using System;
@@ -380,7 +380,7 @@ namespace AbpDemo.Orders
 }
 ````
 
-> `AsyncExecuter` 用于执行异步 LINQ 扩展，而无需依赖 EF Core. 如果您将 EF Core NuGet 包引用添加到您的项目中，则可以直接使用 `await query.FirstOrDefaultAsync()`. 但是, 这次您依赖于域层中的 EF 核心。请参阅. 请参阅 [仓储文档](Repositories.md) 以了解更多.
+> `AsyncExecuter` 用于执行异步 LINQ 扩展,而无需依赖 EF Core. 如果你将 EF Core NuGet 包引用添加到你的项目中,则可以直接使用 `await query.FirstOrDefaultAsync()`. 但是, 这次你依赖于域层中的 EF 核心.请参阅. 请参阅 [仓储文档](Repositories.md) 以了解更多.
 
 **示例: 获取一个包含 `lines` 的 `orders` 列表**
 
@@ -395,13 +395,13 @@ public async Task TestWithDetails()
 }
 ````
 
-> 如果您需要包含多个导航属性或集合，`WithDetailsAsync`方法可以获得多个表达参数。
+> 如果你需要包含多个导航属性或集合,`WithDetailsAsync`方法可以获得多个表达参数.
 
 #### DefaultWithDetailsFunc
 
-如果您没有将任何表达式传递到 `WithDetailsAsync` 方法，则它包括使用您提供的 `DefaultWithDetailsFunc` 选项的所有详细信息。
+如果你没有将任何表达式传递到 `WithDetailsAsync` 方法,则它包括使用你提供的 `DefaultWithDetailsFunc` 选项的所有详细信息.
 
-您可以在您的 `EntityFrameworkCore` 项目[模块](Module-Development-Basics.md)的  `ConfigureServices`方法为一个实体配置 `DefaultWithDetailsFunc`.
+你可以在你的 `EntityFrameworkCore` 项目[模块](Module-Development-Basics.md)的  `ConfigureServices`方法为一个实体配置 `DefaultWithDetailsFunc`.
 
 **示例: 在查询一个 `Order` 时包含 `Lines`**
 
@@ -415,9 +415,9 @@ Configure<AbpEntityOptions>(options =>
 });
 ````
 
-> 您可以在这里完全使用 EF Core API,因为这位于 EF Core集成项目中.
+> 你可以在这里完全使用 EF Core API,因为这位于 EF Core集成项目中.
 
-然后您可以不带任何参数地调用 `WithDetails` 方法:
+然后你可以不带任何参数地调用 `WithDetails` 方法:
 
 ````csharp
 public async Task TestWithDetails()
@@ -430,7 +430,7 @@ public async Task TestWithDetails()
 }
 ````
 
-`WithDetailsAsync()` 执行您已经在 `DefaultWithDetailsFunc` 中设置的表达式.
+`WithDetailsAsync()` 执行你已经在 `DefaultWithDetailsFunc` 中设置的表达式.
 
 #### 仓储 Get/Find 方法
 
@@ -439,9 +439,9 @@ public async Task TestWithDetails()
 * `GetAsync` 和 `FindAsync` 方法带有默认值为 `true` 的 `includeDetails`.
 * `GetListAsync` 和 `GetPagedListAsync` 方法带有默认值为 `false` 的 `includeDetails`.
 
-这意味着，默认情况下返回**包含子对象的单个实体**，而列表返回方法则默认不包括子对象信息。您可以明确通过 `includeDetails` 来更改此行为。
+这意味着,默认情况下返回**包含子对象的单个实体**,而列表返回方法则默认不包括子对象信息.你可以明确通过 `includeDetails` 来更改此行为.
 
-> 这些方法使用上面解释的 `DefaultWithDetailsFunc` 选项。
+> 这些方法使用上面解释的 `DefaultWithDetailsFunc` 选项.
 
 **示例:获取一个包含子对象的 `order`**
 
@@ -472,16 +472,16 @@ public async Task TestWithDetails()
 
 #### 选择
 
-存储库模式尝试封装 EF Core, 因此您的选项是有限的. 如果您需要高级方案，您可以按照其中一个选项执行:
+存储库模式尝试封装 EF Core, 因此你的选项是有限的. 如果你需要高级方案,你可以按照其中一个选项执行:
 
 * 创建自定义存储库方法并使用完整的 EF Core API.
-* 在您的项目中引用 `Volo.Abp.EntityFrameworkCore` . 通过这种方式，您可以直接在代码中使用 `Include` 和 `ThenInclude` .
+* 在你的项目中引用 `Volo.Abp.EntityFrameworkCore` . 通过这种方式,你可以直接在代码中使用 `Include` 和 `ThenInclude` .
 
 请参阅 EF Core 的 [预先加载文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/eager).
 
 ### 显示 / 延迟加载
 
-如果您在查询实体时不包括关系，并且以后需要访问导航属性或集合，则您有不同的选择。
+如果你在查询实体时不包括关系,并且以后需要访问导航属性或集合,则你有不同的选择.
 
 #### EnsurePropertyLoadedAsync / EnsureCollectionLoadedAsync
 
@@ -506,12 +506,12 @@ public async Task TestWithDetails(Guid id)
 
 #### 使用代理的延时加载
 
-在某些情况下，可能无法使用显示加载，尤其是当您没有引用 `Repository` 或 `DbContext`时。延时加载是 EF Core 加载关联属性/集合的一个功能，，当你第一次访问它。
+在某些情况下,可能无法使用显示加载,尤其是当你没有引用 `Repository` 或 `DbContext`时.延时加载是 EF Core 加载关联属性/集合的一个功能,,当你第一次访问它.
 
 启用延时加载:
 
-1. 安装 [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies/) 包到您的项目(通常是 EF Core 集成项目)
-2. 为您的 `DbContext` 配置 `UseLazyLoadingProxies` (在 EF Core 项目的模块的 `ConfigureServices` 方法中). 例如:
+1. 安装 [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies/) 包到你的项目(通常是 EF Core 集成项目)
+2. 为你的 `DbContext` 配置 `UseLazyLoadingProxies` (在 EF Core 项目的模块的 `ConfigureServices` 方法中). 例如:
 
 ````csharp
 Configure<AbpDbContextOptions>(options =>
@@ -525,14 +525,14 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
-3. 使您的导航属性和集合是 `virtual`. 例如:
+3. 使你的导航属性和集合是 `virtual`. 例如:
 
 ````csharp
 public virtual ICollection<OrderLine> Lines { get; set; } //虚集合
 public virtual Order Order { get; set; } //虚导航属性
 ````
 
-启用延时加载并整理实体后，您可以自由访问导航属性和集合：
+启用延时加载并整理实体后,你可以自由访问导航属性和集合:
 
 ````csharp
 public async Task TestWithDetails(Guid id)
@@ -545,9 +545,9 @@ public async Task TestWithDetails(Guid id)
 }
 ````
 
-每当您访问属性/集合时，EF Core 都会自动执行额外的查询，从数据库中加载属性/集合。
+每当你访问属性/集合时,EF Core 都会自动执行额外的查询,从数据库中加载属性/集合.
 
-> 应谨慎使用延时加载，因为它可能会在某些特定情况下导致性能问题。
+> 应谨慎使用延时加载,因为它可能会在某些特定情况下导致性能问题.
 
 请参阅 EF Core 的[延时加载文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/lazy).
 
