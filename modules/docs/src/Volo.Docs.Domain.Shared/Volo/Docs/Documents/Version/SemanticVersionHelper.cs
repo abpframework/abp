@@ -7,24 +7,24 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.GitHub.Documents.Version
 {
-    public class SemanticVersionHelper : IVersionHelper, ITransientDependency
+    public static class SemanticVersionHelper
     {
-        public List<string> OrderByDescending(List<string> versions)
+        public static List<string> OrderByDescending(List<string> versions)
         {
             return versions.OrderByDescending(v=> SemanticVersion.Parse(NormalizeVersion(v)), new VersionComparer()).ToList();
         }
 
-        public List<VersionInfo> OrderByDescending(List<VersionInfo> versions)
+        public static List<VersionInfo> OrderByDescending(List<VersionInfo> versions)
         {
             return versions.OrderByDescending(v => SemanticVersion.Parse(NormalizeVersion(v.Name)), new VersionComparer()).ToList();
         }
 
-        public bool IsPreRelease(string version)
+        public static bool IsPreRelease(string version)
         {
             return SemanticVersion.Parse(NormalizeVersion(version)).IsPrerelease;
         }
 
-        private string NormalizeVersion(string version)
+        private static string NormalizeVersion(string version)
         {
             version = version.RemovePreFix("v");
 
