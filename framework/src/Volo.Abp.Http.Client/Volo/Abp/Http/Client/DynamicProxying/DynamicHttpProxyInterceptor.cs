@@ -57,7 +57,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
             CancellationTokenProvider = cancellationTokenProvider;
@@ -115,7 +115,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
                 {
                     ContentType = responseContent.Headers.ContentType?.ToString(),
-                    FileName = responseContent.Headers?.ContentDisposition?.FileName?.RemovePreFix("\"")?.RemovePostFix("\"")
+                    FileName = responseContent.Headers?.ContentDisposition?.FileNameStar ?? 
+                               responseContent.Headers?.ContentDisposition?.FileName?.RemovePreFix("\"")?.RemovePostFix("\"")
                 };
             }
 
@@ -278,7 +279,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 throw new AbpRemoteCallException(errorResponse.Error)
                 {
-                    HttpStatusCode = (int) response.StatusCode
+                    HttpStatusCode = (int)response.StatusCode
                 };
             }
 
@@ -290,7 +291,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 }
             )
             {
-                HttpStatusCode = (int) response.StatusCode
+                HttpStatusCode = (int)response.StatusCode
             };
         }
 
