@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Messages;
+using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
@@ -23,6 +24,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
 
         [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
+        
+        [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
         protected Modal Modal;
 
@@ -100,6 +103,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 };
 
                 await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
+
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
                 await InvokeAsync(Modal.Hide);
             }
