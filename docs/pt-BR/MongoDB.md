@@ -118,9 +118,9 @@ namespace MyCompany.MyProject
 }
 ```
 
-### Adicionar Repositórios Padrão
+### Adicionar Repositories Padrão
 
-O ABP pode criar automaticamente [repositórios genéricos](Repositories.md) padrão para as entidades em seu DbContext. Basta usar a opção `AddDefaultRepositories()` no registro:
+O ABP pode criar automaticamente [repositories genéricas](Repositories.md) padrão para as entidades em seu DbContext. Basta usar a opção `AddDefaultRepositories()` no registro:
 
 ````C#
 services.AddMongoDbContext<MyDbContext>(options =>
@@ -129,7 +129,7 @@ services.AddMongoDbContext<MyDbContext>(options =>
 });
 ````
 
-Isso criará um repositório para cada [aggregate root entity](Entities.md) (classes derivadas de `AggregateRoot`) por padrão. Se você quiser criar repositórios para outras entidades também, em seguida defina `includeAllEntities` para `true`:
+Isso criará uma repository para cada [aggregate root entity](Entities.md) (classes derivadas de `AggregateRoot`) por padrão. Se você quiser criar repositories para outras entidades também, em seguida defina `includeAllEntities` para `true`:
 
 ```c#
 services.AddMongoDbContext<MyDbContext>(options =>
@@ -181,11 +181,11 @@ public class BookManager : DomainService
 
 Este exemplo usa o método `InsertAsync` para inserir uma nova entity no banco de dados.
 
-### Adicionar Repositórios Personalizados
+### Adicionar Repositories Personalizadas
 
-Repositories genéricos padrão são poderosos e suficiente na maioria dos casos (uma vez que implementam `IQueryable`). No entanto, pode ser necessário criar um repositório customizado para adicionar seus próprios métodos de repositório.
+Repositories genéricas padrão são poderosas e suficiente na maioria dos casos (uma vez que implementam `IQueryable`). No entanto, pode ser necessário criar uma repository customizada para adicionar seus próprios métodos de repository.
 
-Suponha que você deseja excluir todos os books por type. É sugerido definir uma interface para seu repositório personalizado:
+Suponha que você deseja excluir todos os books por type. É sugerido definir uma interface para sua repository personalizada:
 
 ```csharp
 public interface IBookRepository : IRepository<Book, Guid>
@@ -228,9 +228,9 @@ Agora é possível [injetar](Dependency-Injection.md) a `IBookRepository` e usar
 
 #### Substituir Repository Genérica Padrão
 
-Mesmo se você criar um repository personalizado, você ainda pode injetar o repository genérico padrão (`IRepository<Book, Guid>` para este exemplo). A implementação do repository padrão não usará a classe que você criou.
+Mesmo se você criar uma repository personalizada, você ainda pode injetar a repository genérica padrão (`IRepository<Book, Guid>` para este exemplo). A implementação da repository padrão não usará a classe que você criou.
 
-If you want to replace default repository implementation with your custom repository, do it inside `AddMongoDbContext` options:
+Se você querer substituir a implementação da repository padrão pela sua repository personalizada, faça dentro das opções `AddMongoDbContext`:
 
 ```csharp
 context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
