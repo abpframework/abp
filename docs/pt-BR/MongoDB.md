@@ -275,11 +275,11 @@ public class BookService
 }
 ```
 
-> Important: You must reference to the `Volo.Abp.MongoDB` package from the project you want to access to the MongoDB API. This breaks encapsulation, but this is what you want in that case.
+> Importante: Você deve fazer referência ao pacote `Volo.Abp.MongoDB` do projeto que deseja acessar a API MongoDB. Isso quebra o encapsulamento, mas é o que você deseja nesse caso.
 
 ### Transactions
 
-MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+O MongoDB oferece suporte multi-document transactions a partir da versão 4.0 e o ABP Framework oferece suporte para isso. No entanto, o [startup template](Startup-templates/Index.md) **desativa** transactions por padrão. Se o seu **servidor** MongoDB suportar transactions, você pode habilitar esse recurso na classe *YourProjectMongoDbModule*:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -288,13 +288,13 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 });
 ```
 
-> Or you can delete this code since this is already the default behavior.
+> Ou você pode excluir este código, pois este já é o comportamento padrão.
 
 ### Tópicos Avançados
 
 ### Controlando o Multi-Tenancy
 
-If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+Se sua solução for [multi-tenant](Multi-Tenancy.md), os tenants podem ter **bancos de dados separados**, você tem **múltiplas** classes `DbContext` em sua solução e algumas de suas classes `DbContext` devem ser utilizáveis **apenas do lado do host**, é recomendado adicionar o atributo `[IgnoreMultiTenancy]` em sua classe `DbContext`. Nesse caso, a ABP garante que o `DbContext` relacionado sempre usa a [connection string](Connection-Strings.md) do host, mesmo se você estiver em um tenant context.
 
 **Exemplo:**
 
@@ -306,7 +306,7 @@ public class MyDbContext : AbpMongoDbContext
 }
 ````
 
-Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+Não use o atributo `[IgnoreMultiTenancy]` se qualquer uma de suas entidades em seu `DbContext` puder ser persistida em um outro banco de dados de um tenant.
 
 > When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
