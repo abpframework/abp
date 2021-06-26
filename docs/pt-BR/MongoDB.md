@@ -21,7 +21,7 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpMongoDbModule))]
     public class MyModule : AbpModule
     {
-        //...
+        // ...
     }
 }
 ```
@@ -41,7 +41,7 @@ public class MyDbContext : AbpMongoDbContext
     {
         base.CreateModel(modelBuilder);
 
-        //Personalize a configuração para as suas collections.
+        // Personalize a configuração para as suas collections.
     }
 }
 ```
@@ -65,8 +65,8 @@ protected override void CreateModel(IMongoModelBuilder modelBuilder)
 
     modelBuilder.Entity<Question>(b =>
     {
-        b.CollectionName = "MyQuestions"; //Define o nome da collection
-        b.BsonMap.UnmapProperty(x => x.MyProperty); //Ignora 'MyProperty'
+        b.CollectionName = "MyQuestions"; // Define o nome da collection
+        b.BsonMap.UnmapProperty(x => x.MyProperty); // Ignora 'MyProperty'
     });
 }
 ````
@@ -76,7 +76,7 @@ Este exemplo altera o nome da collection mapeada para 'MyQuestions' no banco de 
 Se você só precisa configurar o nome da collection, você também pode usar o atributo `[MongoCollection]` para a collection em seu DbContext. Exemplo:
 
 ````csharp
-[MongoCollection("MyQuestions")] //Define o nome da collection
+[MongoCollection("MyQuestions")] // Define o nome da collection
 public IMongoCollection<Question> Questions => Collection<Question>();
 ````
 
@@ -112,7 +112,7 @@ namespace MyCompany.MyProject
         {
             context.Services.AddMongoDbContext<MyDbContext>();
 
-            //...
+            // ...
         }
     }
 }
@@ -156,7 +156,7 @@ public class BookManager : DomainService
 {
     private readonly IRepository<Book, Guid> _bookRepository;
 
-    public BookManager(IRepository<Book, Guid> bookRepository) //injetar repositório padrão
+    public BookManager(IRepository<Book, Guid> bookRepository) // injetar repositório padrão
     {
         _bookRepository = bookRepository;
     }
@@ -172,7 +172,7 @@ public class BookManager : DomainService
             Type = type
         };
 
-        await _bookRepository.InsertAsync(book); //Use um método de repositório padrão
+        await _bookRepository.InsertAsync(book); // Use um método de repositório padrão
 
         return book;
     }
@@ -240,7 +240,7 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 });
 ```
 
-This is especially important when you want to **override a base repository method** to customize it. For instance, you may want to override `DeleteAsync` method to delete an entity in a more efficient way:
+Isso é especialmente importante quando você deseja dar **override em um método da base repository** para customizar. Por exemplo, você pode querer substituir o método `DeleteAsync` para excluir uma entidade de uma forma mais eficiente:
 
 ```csharp
 public async override Task DeleteAsync(
@@ -248,13 +248,13 @@ public async override Task DeleteAsync(
     bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
-    //TODO: Custom implementation of the delete method
+    // TODO: Implementação customizada do método delete
 }
 ```
 
-### Access to the MongoDB API
+### Acesso à API MongoDB
 
-In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()`, `GetCollectionAsync()` or `GetAggregateAsync()` extension methods. Example:
+Na maioria dos casos, você vai querer ocultar APIs do MongoDB atrás de uma repository (este é o objetivo principal da repository). No entanto, se você quiser acessar a API MongoDB através da Repository, você pode usar os métodos de extensão `GetDatabaseAsync()`, `GetCollectionAsync()` ou `GetAggregateAsync()`. Exemplo:
 
 ```csharp
 public class BookService
@@ -292,11 +292,11 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 ### Tópicos Avançados
 
-### Controlling the Multi-Tenancy
+### Controlando o Multi-Tenancy
 
 If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
 
-**Example:**
+**Exemplo:**
 
 ````csharp
 [IgnoreMultiTenancy]
@@ -310,7 +310,7 @@ Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in y
 
 > When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
-#### Set Default Repository Classes
+#### Definir Classes Repository Padrão
 
 Default generic repositories are implemented by `MongoDbRepository` class by default. You can create your own implementation and use it for default repository implementation.
 
@@ -351,7 +351,7 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
         typeof(MyRepositoryBase<,>),
         typeof(MyRepositoryBase<>)
     );
-    //...
+    // ...
 });
 ```
 
@@ -372,7 +372,7 @@ public interface IBookStoreMongoDbContext : IAbpMongoDbContext
 context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 {
     options.AddDefaultRepositories<IBookStoreMongoDbContext>();
-    //...
+    // ...
 });
 ```
 
@@ -383,7 +383,7 @@ public class BookRepository
     : MongoDbRepository<IBookStoreMongoDbContext, Book, Guid>,
       IBookRepository
 {
-    //...
+    // ...
 }
 ```
 
@@ -399,16 +399,16 @@ Once you properly define and use an interface for a MongoDbContext , then any ot
 [ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
 public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
 {
-    //...
+    // ...
 }
 ```
 
-**ReplaceDbContext option**
+**Opção ReplaceDbContext**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 {
-    //...
+    // ...
     options.ReplaceDbContext<IBookStoreMongoDbContext>();
 });
 ```
@@ -417,7 +417,7 @@ In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. Th
 
 ### Personalizar Operações em Massa
 
-If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
+Se você tiver uma lógica melhor ou usar uma biblioteca externa para operações em massa, pode substituir a lógica por meio da implementação de `IMongoDbBulkOperationProvider`.
 
 - Você pode usar o modelo de exemplo abaixo:
 
@@ -433,7 +433,7 @@ public class MyCustomMongoDbBulkOperationProvider
         CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
-        // Your logic here.
+        // Sua lógica aqui.
     }
 
     public async Task InsertManyAsync<TEntity>(
@@ -444,7 +444,7 @@ public class MyCustomMongoDbBulkOperationProvider
         CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
-        // Your logic here.
+        // Sua lógica aqui.
     }
 
     public async Task UpdateManyAsync<TEntity>(
@@ -455,7 +455,7 @@ public class MyCustomMongoDbBulkOperationProvider
         CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
-        // Your logic here.
+        // Sua lógica aqui.
     }
 }
 ```
