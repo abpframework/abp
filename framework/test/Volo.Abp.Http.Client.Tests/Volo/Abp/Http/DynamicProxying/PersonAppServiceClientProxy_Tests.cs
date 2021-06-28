@@ -49,7 +49,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
-            people.Items.Count.ShouldBe((int)people.TotalCount);
+            people.Items.Count.ShouldBe((int) people.TotalCount);
         }
 
         [Fact]
@@ -215,12 +215,12 @@ namespace Volo.Abp.Http.DynamicProxying
 
             var result = await _peopleAppService.UploadMultipleAsync(new List<IRemoteStreamContent>()
             {
-                new RemoteStreamContent(memoryStream,"File1.rtf")
+                new RemoteStreamContent(memoryStream, "File1.rtf")
                 {
                     ContentType = "application/rtf"
                 },
 
-                new RemoteStreamContent(memoryStream2,"File2.rtf")
+                new RemoteStreamContent(memoryStream2, "File2.rtf")
                 {
                     ContentType = "application/rtf2"
                 }
@@ -265,12 +265,12 @@ namespace Volo.Abp.Http.DynamicProxying
                 Name = "123.rtf",
                 Contents = new List<IRemoteStreamContent>()
                 {
-                    new RemoteStreamContent(memoryStream,"1-1.rtf")
+                    new RemoteStreamContent(memoryStream, "1-1.rtf")
                     {
                         ContentType = "application/rtf"
                     },
 
-                    new RemoteStreamContent(memoryStream2,"1-2.rtf")
+                    new RemoteStreamContent(memoryStream2, "1-2.rtf")
                     {
                         ContentType = "application/rtf2"
                     }
