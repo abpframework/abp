@@ -312,9 +312,9 @@ Não use o atributo `[IgnoreMultiTenancy]` se qualquer uma de suas entidades em 
 
 #### Definir Classes Repository Padrão
 
-Default generic repositories are implemented by `MongoDbRepository` class by default. You can create your own implementation and use it for default repository implementation.
+Repositories genéricas padrão são implementados pela classe `MongoDbRepository` por padrão. Você pode criar sua própria implementação e usá-la para implementação da repository padrão.
 
-First, define your repository classes like that:
+Primeiro, defina suas classes de repository assim:
 
 ```csharp
 public class MyRepositoryBase<TEntity>
@@ -338,11 +338,11 @@ public class MyRepositoryBase<TEntity, TKey>
 }
 ```
 
-First one is for [entities with composite keys](Entities.md), second one is for entities with single primary key.
+O primeiro é para [entities com chaves compostas](Entities.md), o segundo é para entities com uma única chave primária.
 
-It's suggested to inherit from the `MongoDbRepository` class and override methods if needed. Otherwise, you will have to implement all standard repository methods manually.
+É sugerido herdar da classe `MongoDbRepository` e substituir os métodos, se necessário. Caso contrário, você terá que implementar todos os métodos de repository padrão manualmente.
 
-Now, you can use `SetDefaultRepositoryClasses` option:
+Agora, você pode usar a opção `SetDefaultRepositoryClasses`:
 
 ```csharp
 context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
@@ -357,7 +357,7 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 
 #### Definir classe base MongoDbContext ou Interface para Repositories padrão
 
-If your MongoDbContext inherits from another MongoDbContext or implements an interface, you can use that base class or interface as the MongoDbContext for default repositories. Example:
+Se seu MongoDbContext herda de outro MongoDbContext ou implementa uma interface, você pode usar essa classe base ou interface como o MongoDbContext para repositories padrão. Exemplo:
 
 ```csharp
 public interface IBookStoreMongoDbContext : IAbpMongoDbContext
@@ -366,7 +366,7 @@ public interface IBookStoreMongoDbContext : IAbpMongoDbContext
 }
 ```
 
-`IBookStoreMongoDbContext` is implemented by the `BookStoreMongoDbContext` class. Then you can use generic overload of the `AddDefaultRepositories`:
+`IBookStoreMongoDbContext` é implementado pela classe `BookStoreMongoDbContext`. Então você pode usar sobrecarga genérica do `AddDefaultRepositories`:
 
 ```csharp
 context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
@@ -376,7 +376,7 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 });
 ```
 
-Now, your custom `BookRepository` can also use the `IBookStoreMongoDbContext` interface:
+Agora, seu `BookRepository` personalizado também pode usar a interface `IBookStoreMongoDbContext`:
 
 ```csharp
 public class BookRepository
@@ -387,11 +387,11 @@ public class BookRepository
 }
 ```
 
-One advantage of using interface for a MongoDbContext is then it becomes replaceable by another implementation.
+Uma vantagem de usar a interface para um MongoDbContext é que ela pode ser substituída por outra implementação.
 
 #### Substituir Outros DbContexts
 
-Once you properly define and use an interface for a MongoDbContext , then any other implementation can use the following ways to replace it:
+Depois de definir e usar adequadamente uma interface para um MongoDbContext, qualquer outra implementação pode usar as seguintes maneiras de substituí-lo:
 
 **ReplaceDbContextAttribute**
 
@@ -413,7 +413,7 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 });
 ```
 
-In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+Neste exemplo, `OtherMongoDbContext` implementa `IBookStoreMongoDbContext`. Este recurso permite que você tenha vários MongoDbContext (um por módulo) no desenvolvimento, mas um único MongoDbContext (implementa todas as interfaces de todos os MongoDbContexts) no tempo de execução.
 
 ### Personalizar Operações em Massa
 
