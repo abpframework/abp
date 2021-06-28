@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -57,7 +58,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
             CancellationTokenProvider = cancellationTokenProvider;
@@ -114,7 +115,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                  * it before we finish doing our work with the stream */
                 return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
                 {
-                    ContentType = responseContent.Headers.ContentType?.ToString()
+                    ContentType = responseContent.Headers.ContentType?.ToString(),
+                    FileName = responseContent.Headers?.ContentDisposition?.FileNameStar ??
+                               RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString()
                 };
             }
 
@@ -291,6 +294,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 HttpStatusCode = (int) response.StatusCode
             };
+        }
+
+        protected virtual StringSegment RemoveQuotes(StringSegment input)
+        {
+            if (!StringSegment.IsNullOrEmpty(input) && input.Length >= 2 && input[0] == '"' && input[input.Length - 1] == '"')
+            {
+                input = input.Subsegment(1, input.Length - 2);
+            }
+
+            return input;
         }
 
         protected virtual CancellationToken GetCancellationToken()
