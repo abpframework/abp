@@ -102,10 +102,6 @@
       "path": "CLI.md",
       "items": [
         {
-          "text": "Build Command",
-          "path": "CLI-BuildCommand.md"
-        },
-        {
           "text": "Create Solution Sample Commands",
           "path": "CLI-New-Command-Samples.md"
         }
