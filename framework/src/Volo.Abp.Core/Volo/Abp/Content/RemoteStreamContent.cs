@@ -14,6 +14,7 @@ namespace Volo.Abp.Content
         public RemoteStreamContent(Stream stream, string fileName): this(stream)
         {
             FileName = fileName;
+            ContentType = "application/octet-stream";
         }
 
         public virtual string ContentType { get; set; }
