@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
                 )
             );
         }
-        
+
         /// <summary>
         /// Adds a specific entity type and the types derived from that entity type.
         /// </summary>
@@ -49,18 +49,18 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
                 )
             );
         }
-        
-        public static bool Remove<TEntity>(
-            [NotNull] this IAutoEntityDistributedEventSelectorList selectors) where TEntity : IEntity
+
+        /// <summary>
+        /// Remove a specific entity type and the types derived from that entity type.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of the entity</typeparam>
+        public static void Remove<TEntity>([NotNull] this IAutoEntityDistributedEventSelectorList selectors)
+            where TEntity : IEntity
         {
             Check.NotNull(selectors, nameof(selectors));
 
             var selectorName = "Entity:" + typeof(TEntity).FullName;
-            if (selectors.Any(s => s.Name == selectorName))
-            {
-                return selectors.RemoveAll(s => s.Name == selectorName).Count > 0;
-            }
-            return true;
+            selectors.RemoveAll(s => s.Name == selectorName);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
         public static void AddAll([NotNull] this IAutoEntityDistributedEventSelectorList selectors)
         {
             Check.NotNull(selectors, nameof(selectors));
-            
+
             if (selectors.Any(s => s.Name == AllEntitiesSelectorName))
             {
                 return;
@@ -85,11 +85,11 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
 
         public static void Add(
             [NotNull] this IAutoEntityDistributedEventSelectorList selectors,
-            string selectorName, 
+            string selectorName,
             Func<Type, bool> predicate)
         {
             Check.NotNull(selectors, nameof(selectors));
-            
+
             if (selectors.Any(s => s.Name == selectorName))
             {
                 throw new AbpException($"There is already a selector added before with the same name: {selectorName}");
@@ -102,7 +102,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
                 )
             );
         }
-        
+
         public static void Add(
             [NotNull] this IAutoEntityDistributedEventSelectorList selectors,
             Func<Type, bool> predicate)
@@ -116,11 +116,11 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
         {
             Check.NotNull(selectors, nameof(selectors));
             Check.NotNull(name, nameof(name));
-            
+
             return selectors.RemoveAll(s => s.Name == name).Count > 0;
         }
 
-        
+
         public static bool IsMatch([NotNull] this IAutoEntityDistributedEventSelectorList selectors, Type entityType)
         {
             Check.NotNull(selectors, nameof(selectors));
