@@ -312,7 +312,7 @@ Não use o atributo `[IgnoreMultiTenancy]` se qualquer uma de suas entidades em 
 
 #### Definir Classes Repository Padrão
 
-Repositories genéricas padrão são implementados pela classe `MongoDbRepository` por padrão. Você pode criar sua própria implementação e usá-la para implementação da repository padrão.
+Repositories genéricas padrão são implementadas pela classe `MongoDbRepository` por padrão. Você pode criar sua própria implementação e usá-la para implementação da repository padrão.
 
 Primeiro, defina suas classes de repository assim:
 
