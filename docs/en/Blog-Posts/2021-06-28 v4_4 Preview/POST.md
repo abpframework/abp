@@ -48,7 +48,15 @@ Beside the `DbContext` unification, we've also used the new `ReplaceDbContext` a
 
 CMS Kit is a set of reusable *Content Management System* features packaged as an ABP application module. We had published the first usable version with the previous release. With this release, we are adding another feature to the CMS Kit module: You can now dynamically arrange the main menu on the UI, which is an essential feature for any kind of content management system. In this way, you can add pages or any kind of arbitrary URLs to the main menu from the UI.
 
-TODO
+A screenshot from the menu management page (from the CMS Kit admin side):
+
+![menu-items-admin](menu-items-admin.png)
+
+And the items rendered in a public website:
+
+![menu-items-public](menu-items-public.png)
+
+Note that this feature is also available with the open source [CMS Kit module](https://docs.abp.io/en/abp/4.4/Modules/Cms-Kit/Index).
 
 ### Razor Engine Support for Text Templating
 
@@ -56,7 +64,22 @@ TODO
 
 ### New Customization Points for DbContext/Entities of Existing Modules
 
-TODO
+Two new extension methods are added to `ObjectExtensionManager.Instance` to override EF Core mappings of [pre-built application modules](https://docs.abp.io/en/abp/latest/Modules/Index).
+
+**Example: Change mappings for the `IdentityDbContext` to override mappings for the `IdentityUser` entity**
+
+````csharp
+ObjectExtensionManager.Instance.MapEfCoreDbContext<IdentityDbContext>(modelBuilder =>
+{
+    modelBuilder.Entity<IdentityUser>(b =>
+    {
+        b.ToTable("MyUsers");
+        b.Property(x => x.Email).HasMaxLength(300);
+    });
+});
+````
+
+The startup template contains a class, like `YourProjectNameEfCoreEntityExtensionMappings`, that can be used to place that code.
 
 ### New ABP CLI Commands
 
@@ -68,7 +91,7 @@ There are new [ABP CLI](https://docs.abp.io/en/abp/4.4/CLI) commands introduced 
 
 ### appsettings.secrets.json
 
-Added `appsettings.secrets.json` to the startup template that can be used to configure your sensitive settings, like connection strings. You can ignore this file from source control (e.g. git) and keep it in developer machines.
+Added `appsettings.secrets.json` to the startup template that can be used to set your sensitive/secret configuration values. You can ignore this file from source control (by adding to `.gitignore` if you're using git) and keep it in developer/production machines.
 
 ### Other ABP Framework Improvements
 
@@ -90,9 +113,9 @@ We've implemented some important features to the [SaaS module](https://commercia
 * Allow to **limit user count** for a tenant.
 * Allow to set **different connection strings** for a tenant for each database/module, which makes possible to create different databases for a tenant for each microservice in a microservice solution.
 
-TODO: A screenshot
-
 ### New ABP Suite Code Generation Features
+
+There are many improvements done for for [ABP Suite](https://commercial.abp.io/tools/suite), including the following code generation features:
 
 * ABP Suite now can generate CRUD pages also for the **[microservice solution](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index) template**.
 * Generate CRUD page from a **database table**.
@@ -123,17 +146,22 @@ We've published a free e-book for the ABP Community in the beginning of June. Th
 
 Thousands of copies are already downloaded. If you haven't seen it yet, [click here to get a free copy of that e-book](https://abp.io/books/implementing-domain-driven-design).
 
+### The LeptonX Theme
+
+We have been working on a new ABP theme, named the LeptonX, for a long time. It is being finalized in the next weeks and we will release the first version in a short time. See [this blog post](https://volosoft.com/blog/introducing-the-lepton-theme-next-generation) to learn more about that project.
+
 ### Volosoft & .NET Foundation
 
-Volosoft, the company leads the ABP Framework project, has been a corporate sponsor of the [.NET Foundation](https://dotnetfoundation.org/). We will continue to contribute to and support open source!
+[Volosoft](https://volosoft.com/), the company leads the ABP Framework project, has been a corporate sponsor of the [.NET Foundation](https://dotnetfoundation.org/). We are happy by taking our place among other great sponsors!
 
 ![dotnetfoundation-sponsor-volosoft](dotnetfoundation-sponsor-volosoft.png)
 
-See this [blog post for the announcement](https://volosoft.com/blog/Volosoft-Announces-the-NET-Foundation-Sponsorship).
+We will continue to contribute to and support open source! See this [blog post for the announcement](https://volosoft.com/blog/Volosoft-Announces-the-NET-Foundation-Sponsorship).
 
-### Looing for Developer Advocate(s)
+### Looking for Developer Advocate(s)
 
-TODO
+We are actively looking for developer advocate position for the ABP.IO platform. If you want to create content and touch to the ABP community, please check our [job post](https://github.com/volosoft/vs-home/issues/13).
 
+## About the Next Version
 
-
+The next version will be a major version: 5.0, which will be based on .NET 6.0. We are planning to release it in the end of 2021, short time after the .NET 6.0 release. We will release multiple preview/beta versions before the RC version. See the [road map](https://docs.abp.io/en/abp/latest/Road-Map) for details of the planned works for the version 5.0.
