@@ -28,8 +28,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
                 if (!remoteStream.FileName.IsNullOrWhiteSpace())
                 {
-                    //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#syntax
-                    context.HttpContext.Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{remoteStream.FileName}\"; filename*=UTF-8''{Uri.EscapeDataString(remoteStream.FileName)}");
+                    var contentDisposition = new ContentDispositionHeaderValue("attachment");
+                    contentDisposition.SetHttpFileName(remoteStream.FileName);
+                    context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
                 }
 
                 using (var stream = remoteStream.GetStream())

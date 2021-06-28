@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         {
             var result = await GetResponseAsync("/api/remote-stream-content-test/download");
             result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
-            result.Content.Headers.ContentDisposition?.FileName.ShouldBe("\"download.rtf\"");
+            result.Content.Headers.ContentDisposition?.FileName.ShouldBe("download.rtf");
             (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
         }
 
