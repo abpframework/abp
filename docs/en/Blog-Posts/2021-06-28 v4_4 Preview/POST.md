@@ -1,6 +1,6 @@
 # ABP Platform 4.4 RC Has Been Released
 
-Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) 4.4.0 RC (Release Candidate). This blog post introduces the new features and important changes in this new version.
+Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version 4.4 RC (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
 > **The planned release date for the [4.4.0 final](https://github.com/abpframework/abp/milestone/53) version is July 13, 2021**.
 
@@ -36,13 +36,13 @@ There is **no breaking change** with this version. However, if you are using Ent
 
 ## What's new with the ABP Framework 4.4
 
-### Removed EntityFrameworkCore.DbMigrations Project from the Startup Template
+### Removed EntityFrameworkCore.DbMigrations Project
 
-With this version, we are doing an important change in the application startup template. The startup solution was containing an `EntityFrameworkCore.DbMigrations` project that contains a separate `DbContext` class that was responsible to unify module database mappings and maintain the code-first database migrations. With the v4.4, we've removed that project from the solution. In the new structure, the `EntityFrameworkCore` integration project will be used for database migrations as well as on runtime.
+With this version, we are doing an important change in the application startup solution template. The startup solution was containing an `EntityFrameworkCore.DbMigrations` project that contains a separate `DbContext` class which was responsible to unify the module database mappings and maintain the code-first database migrations. With the v4.4, we've removed that project from the solution. In the new structure, the `EntityFrameworkCore` integration project will be used for database migrations as well as on runtime.
 
 We'd published [a community article](https://community.abp.io/articles/unifying-dbcontexts-for-ef-core-removing-the-ef-core-migrations-project-nsyhrtna) about that change. Please see the article to understand the motivation behind the change.
 
-Beside the `DbContext` unification, we've also used the new `ReplaceDbContext` attribute and [replaced](https://github.com/abpframework/abp/blob/ea2205f0855f52015152ae066a5c239af4b8511f/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore/EntityFrameworkCore/MyProjectNameDbContext.cs#L18-L19) `IIdentityDbContext` and `ITenantManagementDbContext` interfaces to make it possible to perform join queries over repositories for these modules. In the next days, we will publish another community article to explain the problem and the solution. Most of times, you don't need to know details.
+Beside the `DbContext` unification, we've also used the new `ReplaceDbContext` attribute and [replaced](https://github.com/abpframework/abp/blob/ea2205f0855f52015152ae066a5c239af4b8511f/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore/EntityFrameworkCore/MyProjectNameDbContext.cs#L18-L19) the `IIdentityDbContext` and `ITenantManagementDbContext` interfaces to make it possible to perform join queries over repositories for these modules easily. In the next days, we will publish another community article to explain the problem and the solution. However, most of times, you don't need to know these details.
 
 ### Dynamic Menu Management for the CMS Kit Module
 
@@ -56,13 +56,13 @@ And the items rendered in a public website:
 
 ![menu-items-public](menu-items-public.png)
 
-Note that this feature is also available with the open source [CMS Kit module](https://docs.abp.io/en/abp/4.4/Modules/Cms-Kit/Index).
+Note that this feature is also available with the open source [CMS Kit module](https://docs.abp.io/en/abp/4.4/Modules/Cms-Kit/Index) (while the screenshots have been taken from the ABP Commercial).
 
 ### Razor Engine Support for Text Templating
 
-[Text Templating](https://docs.abp.io/en/abp/4.4/Text-Templating) system is a system to generate content on runtime by using a model (data) and a template. It was running on the [Scriban](https://github.com/scriban/scriban) templating engine. Beginning from this version, we have a second option: We can use the familiar **razor syntax** to build and render the templates. See the text templating [razor integration document](https://docs.abp.io/en/abp/4.4/Text-Templating-Razor) to get started with the new engine!
+[Text Templating](https://docs.abp.io/en/abp/4.4/Text-Templating) is a system to generate content on runtime by using a model (data) and a template. It was running on the [Scriban](https://github.com/scriban/scriban) templating engine. Beginning from this version, we have a second option: We can use the familiar **razor syntax** to build and render the templates. See the text templating [razor integration document](https://docs.abp.io/en/abp/4.4/Text-Templating-Razor) to get started with the new engine!
 
-### New Customization Points for DbContext/Entities of Existing Modules
+### New Customization Points for DbContext/Entities
 
 Two new extension methods are added to `ObjectExtensionManager.Instance` to override EF Core mappings of [pre-built application modules](https://docs.abp.io/en/abp/latest/Modules/Index).
 
@@ -91,7 +91,7 @@ There are new [ABP CLI](https://docs.abp.io/en/abp/4.4/CLI) commands introduced 
 
 ### appsettings.secrets.json
 
-Added `appsettings.secrets.json` to the startup template that can be used to set your sensitive/secret configuration values. You can ignore this file from source control (by adding to `.gitignore` if you're using git) and keep it in developer/production machines.
+Added `appsettings.secrets.json` to the startup template that can be used to set your sensitive/secret configuration values. You can ignore this file from source control (by adding to `.gitignore` if you're using git) and keep it only in developer/production machines.
 
 ### Other ABP Framework Improvements
 
@@ -104,7 +104,7 @@ Beside these, there are a lot of enhancements and bug fixes. See the [4.4-previe
 
 ## What's new with the ABP Commercial 4.4
 
-### SaaS Module: New Features
+### New Features for the SaaS Module
 
 We've implemented some important features to the [SaaS module](https://commercial.abp.io/modules/Volo.Saas):
 
@@ -115,10 +115,7 @@ We've implemented some important features to the [SaaS module](https://commercia
 
 ### New ABP Suite Code Generation Features
 
-There are many improvements done for for [ABP Suite](https://commercial.abp.io/tools/suite), including the following code generation features:
-
-* ABP Suite now can generate CRUD pages also for the **[microservice solution](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index) template**.
-* Generate CRUD page from a **database table**.
+There are many improvements done for for [ABP Suite](https://commercial.abp.io/tools/suite), including CRUD page generation for the **[microservice solution](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index) template**.
 
 ### Angular UI: Two Factor Authentication for the Resource Owner Password Flow
 
@@ -138,17 +135,27 @@ In this section, I will share some news that you may be interested in.
 
 ### New Article: Using Elsa Workflow with ABP Framework
 
-We have been frequently asked how to use Elsa Workflows with the ABP Framework. Finally, we have [created an article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9) to demonstrate it. You can check it to see how to integrate Elsa into an ABP based solution easily.
+We have been frequently asked how to use [Elsa Workflows](https://elsa-workflows.github.io/elsa-core/) with the ABP Framework. Finally, we have [created an article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9) to demonstrate it.
+
+![elsa-overview](elsa-overview.gif)
+
+You can [check it](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9) to see how to integrate Elsa into an ABP based solution easily.
 
 ### Free E-Book: Implementing Domain Driven Design
 
 We've published a free e-book for the ABP Community in the beginning of June. This is a practical guide for implementing Domain Driven Design (DDD). While the implementation details are based on the ABP Framework infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
 
+![ddd-book](ddd-book.png)
+
 Thousands of copies are already downloaded. If you haven't seen it yet, [click here to get a free copy of that e-book](https://abp.io/books/implementing-domain-driven-design).
 
 ### The LeptonX Theme
 
-We have been working on a new ABP theme, named the LeptonX, for a long time. It is being finalized in the next weeks and we will release the first version in a short time. See [this blog post](https://volosoft.com/blog/introducing-the-lepton-theme-next-generation) to learn more about that project.
+We have been working on a new ABP theme, named the *LeptonX*, for a long time. The theme will be available for ABP Framework (free - lite version) and ABP Commercial (pro version). It is being finalized in the next weeks and we will release the first version in a short time.
+
+![leptonx](leptonx.png)
+
+See [this blog post](https://volosoft.com/blog/introducing-the-lepton-theme-next-generation) to learn more about that project.
 
 ### Volosoft & .NET Foundation
 
@@ -160,7 +167,7 @@ We will continue to contribute to and support open source! See this [blog post f
 
 ### Looking for Developer Advocate(s)
 
-We are actively looking for developer advocate position for the ABP.IO platform. If you want to create content and touch to the ABP community, please check our [job post](https://github.com/volosoft/vs-home/issues/13).
+We are actively looking for professional developer advocates for the ABP.IO platform. If you want to create content and touch to the ABP community, please check our [job post](https://github.com/volosoft/vs-home/issues/13).
 
 ## About the Next Version
 
