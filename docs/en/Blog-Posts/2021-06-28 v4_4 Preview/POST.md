@@ -1,4 +1,4 @@
-# ABP Framework 4.4 RC Has Been Published
+# ABP Platform 4.4 RC Has Been Released
 
 Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) 4.4.0 RC (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
