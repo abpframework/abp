@@ -12,5 +12,10 @@
             : base(cliService)
         {
         }
+
+        public override string GetShortDescription()
+        {
+            return "Remove Angular service proxies and DTOs to consume HTTP APIs.";
+        }
     }
 }
