@@ -1,0 +1,11 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Hello <b>{0}</b>.": "Ahoj <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Autá",
+    "MaxLenghtErrorMessage": "Dĺžka tohto poľa môže byť maximálne '{0}' znakov",
+    "Universe": "Vesmír",
+    "FortyTwo": "Štyridsaťdva"
+  }
+}
