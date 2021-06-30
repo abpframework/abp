@@ -24,13 +24,14 @@ $.extend( $.validator.messages, {
 	creditcard: "Lütfen geçerli bir kredi kartı giriniz.",
 	equalTo: "Lütfen aynı değeri tekrar giriniz.",
 	extension: "Lütfen geçerli uzantıya sahip bir değer giriniz.",
+	phone: "Lütfen geçerli bir telefon numarası giriniz.",
 	maxlength: $.validator.format( "Lütfen en fazla {0} karakter uzunluğunda bir değer giriniz." ),
 	minlength: $.validator.format( "Lütfen en az {0} karakter uzunluğunda bir değer giriniz." ),
 	rangelength: $.validator.format( "Lütfen en az {0} ve en fazla {1} uzunluğunda bir değer giriniz." ),
 	range: $.validator.format( "Lütfen {0} ile {1} arasında bir değer giriniz." ),
 	max: $.validator.format( "Lütfen {0} değerine eşit ya da daha küçük bir değer giriniz." ),
 	min: $.validator.format( "Lütfen {0} değerine eşit ya da daha büyük bir değer giriniz." ),
-	require_from_group: "Lütfen bu alanların en az {0} tanesini doldurunuz."
+	require_from_group: $.validator.format( "Lütfen bu alanların en az {0} tanesini doldurunuz." )
 } );
 return $;
 }));

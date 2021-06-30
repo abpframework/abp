@@ -140,10 +140,7 @@ namespace Volo.Abp.Cli.Commands
             return sb.ToString();
         }
 
-        public string GetShortDescription()
-        {
-            return "Generates Angular service proxies and DTOs to consume HTTP APIs.";
-        }
+        public abstract string GetShortDescription();
 
         public static class Options
         {
