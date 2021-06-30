@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -18,6 +19,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     {
+        private static readonly Regex _regex = new Regex("VERSION=([\\d|.]+),", RegexOptions.IgnoreCase);
+        private const string _defaultVersion = "VERSION=0.0.0.0,";
+    
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
         protected IApiDescriptionCache Cache { get; }
         protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
@@ -143,8 +147,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
         {
-            return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
+            return NormalizeTypeName(actionParameter.Type.ToUpper()) == NormalizeTypeName(TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper());
         }
 
+        protected override string NormalizeTypeName(string typeName)
+        {
+            if ( !_regex.IsMatch(typeName) )
+            {
+                return typeName;
+            }
+
+            return _regex.Replace(typeName, _defaultVersion);
+        }
     }
 }
