@@ -8,6 +8,8 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentRepository : IBasicRepository<Document>
     {
+        Task<List<DocumentWithoutDetails>> GetListWithoutContentByProjectId(Guid projectId, CancellationToken cancellationToken = default);
+
         Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default);
 
         Task<Document> FindAsync(Guid projectId,
@@ -23,7 +25,7 @@ namespace Volo.Docs.Documents
             string version,
             CancellationToken cancellationToken = default);
 
-        Task<List<Document>> GetAllAsync(
+        Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,
             string version,

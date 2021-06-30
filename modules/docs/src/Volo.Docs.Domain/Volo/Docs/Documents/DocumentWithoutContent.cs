@@ -1,12 +1,11 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Entities;
+using System;
 
-namespace Volo.Docs.Admin.Documents
+namespace Volo.Docs.Documents
 {
-    [Serializable]
-    public class DocumentDto : EntityDto<Guid>
+    public class DocumentWithoutContent
     {
+        public Guid Id { get; set; }
+        
         public virtual Guid ProjectId { get; set; }
 
         public virtual string Name { get; set; }
