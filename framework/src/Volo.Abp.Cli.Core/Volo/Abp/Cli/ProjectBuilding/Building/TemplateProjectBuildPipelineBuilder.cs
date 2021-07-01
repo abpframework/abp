@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+﻿using System;
+using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
@@ -31,7 +32,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             if (context.Template.Name == AppTemplate.TemplateName ||
                 context.Template.Name == AppProTemplate.TemplateName)
             {
-                pipeline.Steps.Add(new DatabaseManagementSystemChangeStep()); // todo: move to custom steps?
+                pipeline.Steps.Add(new DatabaseManagementSystemChangeStep(context.Template.As<AppTemplateBase>().HasDbMigrations)); // todo: move to custom steps?
             }
 
             if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor || context.BuildArgs.UiFramework == UiFramework.BlazorServer)

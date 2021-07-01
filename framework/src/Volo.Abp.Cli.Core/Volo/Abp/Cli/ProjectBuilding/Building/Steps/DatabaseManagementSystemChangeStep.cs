@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
     public class DatabaseManagementSystemChangeStep : ProjectBuildPipelineStep
     {
+        private readonly bool _hasDbMigrations;
+
+        public DatabaseManagementSystemChangeStep(bool hasDbMigrations)
+        {
+            _hasDbMigrations = hasDbMigrations;
+        }
+
         public override void Execute(ProjectBuildContext context)
         {
             switch (context.BuildArgs.DatabaseManagementSystem)
@@ -55,19 +63,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         private void AdjustOracleDbContextOptionsBuilder(ProjectBuildContext context)
         {
-            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
-                ?? context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                                       ?? context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
 
             dbContextFactoryFile?.ReplaceText("new DbContextOptionsBuilder",
-                $"(DbContextOptionsBuilder<{context.BuildArgs.SolutionName.ProjectName}MigrationsDbContext>) new DbContextOptionsBuilder");
+                $"(DbContextOptionsBuilder<{context.BuildArgs.SolutionName.ProjectName}{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContext>) new DbContextOptionsBuilder");
         }
 
         private void AddMySqlServerVersion(ProjectBuildContext context)
         {
-            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
-                                       ?? context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                                       ?? context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
 
-            dbContextFactoryFile.ReplaceText("configuration.GetConnectionString(\"Default\")",
+            dbContextFactoryFile?.ReplaceText("configuration.GetConnectionString(\"Default\")",
                 "configuration.GetConnectionString(\"Default\"), MySqlServerVersion.LatestSupportedServerVersion");
         }
 
