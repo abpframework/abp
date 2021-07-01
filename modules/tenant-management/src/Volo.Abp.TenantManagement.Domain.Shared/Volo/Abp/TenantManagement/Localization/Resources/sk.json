@@ -1,0 +1,23 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Menu:TenantManagement": "Správa tenantov",
+    "Tenants": "Tentanti",
+    "NewTenant": "Nový tenant",
+    "TenantName": "Meno tenanta",
+    "DisplayName:TenantName": "Meno tenanta",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' bude vymazaný. Chcete akciu potvrdiť?",
+    "ConnectionStrings": "Connection stringy",
+    "DisplayName:DefaultConnectionString": "Predvolený connection string",
+    "DisplayName:UseSharedDatabase": "Použiť zdieľanú databázu",
+    "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
+    "Permission:TenantManagement": "Správa tenantov",
+    "Permission:Create": "Vytvoriť",
+    "Permission:Edit": "Upraviť",
+    "Permission:Delete": "Zmazať",
+    "Permission:ManageConnectionStrings": "Správa connection stringov",
+    "Permission:ManageFeatures": "Správa funkcií",
+    "DisplayName:AdminEmailAddress": "Emailová adresa administrátora",
+    "DisplayName:AdminPassword": "Heslo administrátora"
+  }
+}

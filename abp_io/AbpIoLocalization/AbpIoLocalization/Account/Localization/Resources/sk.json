@@ -1,0 +1,14 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Account": "Účet ABP - Prihlásenie a registrácia | ABP.IO",
+    "Welcome": "Vitajte",
+    "UseOneOfTheFollowingLinksToContinue": "Ak chcete pokračovať, použite jeden z nasledujúcich odkazov",
+    "FrameworkHomePage": "Domovská stránka frameworku",
+    "FrameworkDocumentation": "Dokumentácia k frameworku",
+    "OfficialBlog": "Oficiálny blog",
+    "CommercialHomePage": "Komerčná domovská stránka",
+    "CommercialSupportWebSite": "Webová stránka komerčnej podpory",
+    "CommunityWebSite": "Webová stránka ABP komunity"
+  }
+}
