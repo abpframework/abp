@@ -124,6 +124,16 @@ The localized UI will be as seen below:
 
 ![authorization-new-permission-ui-localized](images/authorization-new-permission-ui-localized.png)
 
+#### Adding permissions to a user on registration when using a separate Identity Server
+On registration of a user, the user can be assigned permissions by utilizing the [local event bus](Local-Event-Bus.md) using ```SetForUserAsync```.
+
+But when using a separate Identity Server there are few steps that need to be followed to have access to the permissions at that time.
+
+- Extract (and remove) the permission folder from the ProjectName.Application.Contracts to a separate project (e.g. ProjectName.Application.Contracts.Shared)
+- Add a ProjectNameApplicationContractsSharedModule.cs to the Shared project
+- Let ProjectNameApplicationContractsSharedModule.cs inherit from AbpModule to make it a [module](Module-Development-Basics.md)
+- Add ```typeof(ProjectNameApplicationContractsSharedModule)``` to the ```DependsOn``` in module classes for both **IndentityServer** and **Application.Contracts**
+
 #### Multi-Tenancy
 
 ABP supports [multi-tenancy](Multi-Tenancy.md) as a first class citizen. You can define multi-tenancy side option while defining a new permission. It gets one of the three values defined below:
