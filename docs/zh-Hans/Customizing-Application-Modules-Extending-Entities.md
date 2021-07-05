@@ -151,14 +151,14 @@ public class MyDistributedIdentityUserChangeEventHandler :
 * 它实现了多个 `IDistributedEventHandler` 接口: **创建**,**更改**和**删除**,因为分布式事件总线单独发布事件,没有本地事件总线那样的"Changed"事件.
 * 它订阅了 `EntityEto`, 这是一个通用的事件类,ABP框架针对所有类型的实体**自动发布**. 这就是为什么它检查**实体类型**(因为我们没有假设有对 `IdentityUser` 实体有安全的类型引用,所以它是字符串类型的).
 
-预构建应用模块没有定义专门的事件类型(如`IdentityUserEto` - "ETO" 意思是 "事件传输对象"). 此功能在路线图上([关注这个issue](https://github.com/abpframework/abp/issues/3033)),一旦完成后,你就可以订阅独立的实体类型:
+预构建应用模块没有定义专门的事件类型(如`UserEto` - "ETO" 意思是 "事件传输对象"). 此功能在路线图上([关注这个issue](https://github.com/abpframework/abp/issues/3033)),一旦完成后,你就可以订阅独立的实体类型:
 
 ````csharp
 public class MyDistributedIdentityUserCreatedEventHandler :
-    IDistributedEventHandler<EntityCreatedEto<IdentityUserEto>>,
+    IDistributedEventHandler<EntityCreatedEto<UserEto>>,
     ITransientDependency
 {
-    public async Task HandleEventAsync(EntityCreatedEto<IdentityUserEto> eventData)
+    public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
     {
         var userId = eventData.Entity.Id;
         var userName = eventData.Entity.UserName;
