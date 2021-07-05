@@ -152,14 +152,14 @@ public class MyDistributedIdentityUserChangeEventHandler :
 * It implements multiple `IDistributedEventHandler` interfaces: **Created**, **Updated** and **Deleted**. Because, the distributed event bus system publishes events individually. There is no "Changed" event like the local event bus.
 * It subscribes to `EntityEto`, which is a generic event class that is **automatically published** for all type of entities by the ABP framework. This is why it checks the **entity type** (checking the entity type as string since we assume that there is no type safe reference to the `IdentityUser` entity).
 
-Pre-built application modules do not define specialized event types yet (like `IdentityUserEto` - "ETO" means "Event Transfer Object"). This feature is on the road map and will be available in a short term ([follow this issue](https://github.com/abpframework/abp/issues/3033)). Once it is implemented, you will be able to subscribe to individual entity types. Example:
+Pre-built application modules do not define specialized event types yet (like `UserEto` - "ETO" means "Event Transfer Object"). This feature is on the road map and will be available in a short term ([follow this issue](https://github.com/abpframework/abp/issues/3033)). Once it is implemented, you will be able to subscribe to individual entity types. Example:
 
 ````csharp
 public class MyDistributedIdentityUserCreatedEventHandler :
-    IDistributedEventHandler<EntityCreatedEto<IdentityUserEto>>,
+    IDistributedEventHandler<EntityCreatedEto<UserEto>>,
     ITransientDependency
 {
-    public async Task HandleEventAsync(EntityCreatedEto<IdentityUserEto> eventData)
+    public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
     {
         var userId = eventData.Entity.Id;
         var userName = eventData.Entity.UserName;
