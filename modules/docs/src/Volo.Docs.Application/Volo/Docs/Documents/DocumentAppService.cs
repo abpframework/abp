@@ -205,7 +205,7 @@ namespace Volo.Docs.Documents
 
             foreach (var project in projects)
             {
-                var documentWithoutDetailsList = await _documentRepository.GetListWithoutContentByProjectId(project.Id);
+                var documentWithoutDetailsList = await _documentRepository.GetListWithoutDetailsByProjectId(project.Id);
 
                 foreach (var document in documentWithoutDetailsList)
                 {

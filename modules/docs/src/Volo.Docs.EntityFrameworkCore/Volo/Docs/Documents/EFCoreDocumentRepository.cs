@@ -18,7 +18,7 @@ namespace Volo.Docs.Documents
         {
         }
 
-        public async Task<List<DocumentWithoutDetails>> GetListWithoutContentByProjectId(Guid projectId, CancellationToken cancellationToken = default)
+        public async Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(d => d.ProjectId == projectId)
@@ -200,10 +200,6 @@ namespace Volo.Docs.Documents
                     LanguageCode = x.LanguageCode,
                     FileName = x.FileName,
                     Format = x.Format,
-                    EditLink = x.EditLink,
-                    RootUrl = x.RootUrl,
-                    RawRootUrl = x.RawRootUrl,
-                    LocalDirectory = x.LocalDirectory,
                     CreationTime = x.CreationTime,
                     LastUpdatedTime = x.LastUpdatedTime,
                     LastSignificantUpdateTime = x.LastSignificantUpdateTime,
