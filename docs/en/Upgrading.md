@@ -22,7 +22,7 @@ Run this command in the terminal while you are in the root folder of your soluti
 
 When you upgrade to a new version, it is good to check if there is a database schema change and upgrade your database schema if your database provider is **Entity Framework Core**;
 
-* Use `Add-Migration "Upgraded_To_Abp_4_1"` or a similar command in the Package Manager Console (PMC) to create a new migration (Set the `EntityFrameworkCore.DbMigrations` as the Default project in the PMC and `.DbMigrator` as the Startup Project in the Solution Explorer, in the Visual Studio).
+* Use `Add-Migration "Upgraded_To_Abp_4_1"` or a similar command in the Package Manager Console (PMC) to create a new migration (Set the `EntityFrameworkCore` as the Default project in the PMC and `.DbMigrator` as the Startup Project in the Solution Explorer, in the Visual Studio).
 * Run the `.DbMigrator` application to upgrade the database and seed the initial data.
 
 If `Add-Migration` generates an empty migration, you can use `Remove-Migration` to delete it before executing the `.DbMigrator`.
