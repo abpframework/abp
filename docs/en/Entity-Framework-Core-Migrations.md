@@ -87,7 +87,7 @@ This code changes the prefix of the [Identity Server](Modules/IdentityServer.md)
 
 ### The Projects
 
-From the database point of view, there are three important projects those will be explained in the next sections.
+From the database point of view, there is one important project that will be explained in the next sections.
 
 #### .EntityFrameworkCore Project
 
@@ -147,56 +147,9 @@ This simple `DbContext` class still needs some explanations:
 
 This design will be explained in more details after introducing the other database related projects.
 
-#### .EntityFrameworkCore.DbMigrations Project
-
-As mentioned in the previous section, every module (and your application) have **their own** separate `DbContext` classes. Each `DbContext` class only defines the entity to table mappings related to its own module and each module (and your application) use the related `DbContext` class **on runtime**.
-
-As you know, EF Core Code First migration system relies on a `DbContext` class **to track and generate** the code first migrations. So, which `DbContext` we should use for the migrations? The answer is *none of them*. There is another `DbContext` defined in the `.EntityFrameworkCore.DbMigrations` project (which is the `BookStoreMigrationsDbContext` for this example solution).
-
-##### The MigrationsDbContext
-
-The `MigrationsDbContext` is only used to create and apply the database migrations. It is **not used on runtime**. It **merges** all the entity to table mappings of all the used modules plus the application's mappings.
-
-In this way, you create and maintain a **single database migration path**. However, there are some difficulties of this approach and the next sections explains how ABP Framework overcomes these difficulties. But first, see the `BookStoreMigrationsDbContext` class as an example:
-
-````csharp
-/* This DbContext is only used for database migrations.
- * It is not used on runtime. See BookStoreDbContext for the runtime DbContext.
- * It is a unified model that includes configuration for
- * all used modules and your application.
- */
-public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbContext>
-{
-    public BookStoreMigrationsDbContext(
-        DbContextOptions<BookStoreMigrationsDbContext> options)
-        : base(options)
-    {
-
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        /* Include modules to your migration db context */
-        builder.ConfigurePermissionManagement();
-        builder.ConfigureSettingManagement();
-        builder.ConfigureBackgroundJobs();
-        builder.ConfigureAuditLogging();
-        builder.ConfigureIdentity();
-        builder.ConfigureIdentityServer();
-        builder.ConfigureFeatureManagement();
-        builder.ConfigureTenantManagement();
-
-        /* Configure your own tables/entities inside the ConfigureBookStore method */
-        builder.ConfigureBookStore();
-    }
-}
-````
-
 ##### Sharing the Mapping Code
 
-First problem is that: A module uses its own `DbContext` which needs to the database mappings. The `MigrationsDbContext` also needs to the same mapping in order to create the database tables for this module. We definitely **don't want to duplicate** the mapping code.
+First problem is that: A module uses its own `DbContext` which needs to the database mappings. The `ApplicationDbContext` also needs to the same mapping in order to create the database tables for this module. We definitely **don't want to duplicate** the mapping code.
 
 The solution is to define an **extension method** (on the `ModelBuilder`) that can be called by both `DbContext` classes. So, all modules define such extension methods.
 
@@ -235,7 +188,7 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 
 This extension method also gets options to change the database table prefix and schema for this module, but it is not important here.
 
-The final application calls the extension methods inside the `MigrationsDbContext`  class, so it can decide which modules are included in the database maintained by this `MigrationsDbContext`. If you want to create a second database and move some module tables to the second database, then you need to have a second `MigrationsDbContext` class which only calls the extension methods of the related modules. This topic will be detailed in the next sections.
+The final application calls the extension methods inside the `ApplicationDbContext`  class, so it can decide which modules are included in the database maintained by this `ApplicationDbContext`. If you want to create a second database and move some module tables to the second database, then you need to have a second `ApplicationDbContext` class which only calls the extension methods of the related modules. This topic will be detailed in the next sections.
 
 The same `ConfigureBackgroundJobs` method is also called in the `DbContext` of the Background Jobs module:
 
@@ -430,7 +383,7 @@ See the [EF Core integration documentation](Entity-Framework-Core.md) for more a
 
 > We've repeated a similar database mapping code, like `HasMaxLength(128)`, in both classes.
 
-Now, you can add a new EF Core database migration using the standard `Add-Migration` command in the Package Manager Console (remember to select `.EntityFrameworkCore.DbMigrations` as the Default Project in the PMC and make sure that the `.Web` project is still the startup project):
+Now, you can add a new EF Core database migration using the standard `Add-Migration` command in the Package Manager Console (remember to select `.EntityFrameworkCore` as the Default Project in the PMC and make sure that the `.Web` project is still the startup project):
 
 ![pmc-add-migration-role-title](images/pmc-add-migration-role-title.png)
 
@@ -561,7 +514,7 @@ In this case, you don't deal with migration problems, however you need to deal w
 
 #### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
 
-As mentioned before, `.EntityFrameworkCore.DbMigrations` merges all the database mappings of all the modules (plus your application's mappings) to create a unified migration path.
+As mentioned before, `.EntityFrameworkCore` merges all the database mappings of all the modules (plus your application's mappings) to create a unified migration path.
 
 An alternative approach would be to allow each module to have its own migrations to maintain its database tables. While it seems more module in the beginning, it has some important drawbacks:
 
@@ -605,112 +558,6 @@ Added **three more connection strings** for the related module to target the `Bo
 
 The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](Connection-Strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
 
-### Create a Second Migration Project
-
-Defining the connection strings as explained above is enough **on runtime**. However, `BookStore_SecondDb` database doesn't exist yet. You need to create the database and the tables for the related modules.
-
-Just like the main database, we want to use the EF Core Code First migration system to create and maintain the second database.
-
-An easy way is to create a second project (`.csproj`) for the second migration `DbContext`.
-
-So, create a new **class library project** in your solution named `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` (or name it better if you didn't like it).
-
-The `.csproj` content should be something like that:
-
-````xml
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="..\..\common.props" />
-
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Acme.BookStore.DbMigrationsForSecondDb</RootNamespace>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0" />
-  </ItemGroup>
-
-</Project>
-````
-
-You can just copy & modify the content of the original `.DbMigrations` project. This project references to the `.EntityFrameworkCore` project. **Only difference** is the `RootNamespace` value.
-
-**Add a reference** to this project from the `.Web` project (otherwise, EF Core tooling doesn't allow to use the `Add-Migration` command).
-
-### Create the Second DbMigrationDbContext
-
-Create a new `DbContext` for the migrations and call the **extension methods** of the modules to configure the database tables for the related modules:
-
-````csharp
-[ConnectionStringName("AbpPermissionManagement")]
-public class BookStoreSecondMigrationsDbContext :
-               AbpDbContext<BookStoreSecondMigrationsDbContext>
-{
-    public BookStoreSecondMigrationsDbContext(
-        DbContextOptions<BookStoreSecondMigrationsDbContext> options)
-        : base(options)
-    {
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        /* Include modules to your migration db context */
-
-        builder.ConfigurePermissionManagement();
-        builder.ConfigureSettingManagement();
-        builder.ConfigureAuditLogging();
-    }
-}
-````
-
-> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP Framework which connection string should be used for this `DbContext`. We've used `AbpPermissionManagement`, but all are the same.
-
-Create a **Design Time Db Factory** class, that is used by the EF Core tooling (by `Add-Migration` and `Update-Database` PCM commands for example):
-
-````csharp
-/* This class is needed for EF Core console commands
- * (like Add-Migration and Update-Database commands) */
-public class BookStoreSecondMigrationsDbContextFactory
-    : IDesignTimeDbContextFactory<BookStoreSecondMigrationsDbContext>
-{
-    public BookStoreSecondMigrationsDbContext CreateDbContext(string[] args)
-    {
-        var configuration = BuildConfiguration();
-
-        var builder = new DbContextOptionsBuilder<BookStoreSecondMigrationsDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("AbpPermissionManagement"));
-
-        return new BookStoreSecondMigrationsDbContext(builder.Options);
-    }
-
-    private static IConfigurationRoot BuildConfiguration()
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false);
-
-        return builder.Build();
-    }
-}
-````
-
-This is similar to the class inside the `.EntityFrameworCore.DbMigrations`  project, except this one uses the `AbpPermissionManagement` connection string.
-
-Now, you can open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrationsForSecondDb` project as the default project (make sure the `.Web` project is still the startup project) and run the `Add-Migration "Initial"` and `Update-Database` commands as shown below:
-
-![pmc-add-migration-initial-update-database](images/pmc-add-migration-initial-update-database.png)
-
-Now, you should have a new database contains only the tables needed by the related modules:
-
-![bookstore-second-database](images/bookstore-second-database.png)
-
 ### Remove Modules from the Main Database
 
 We've **created a second database** contains tables for the Audit Logging, Permission Management and Setting Management modules. So, we should **delete these tables from the main database**. It is pretty easy.
@@ -723,7 +570,7 @@ builder.ConfigureSettingManagement();
 builder.ConfigureAuditLogging();
 ````
 
-Open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrations` as the Default project (make sure that the `.Web` project is still the startup project) and run the following command:
+Open the Package Manager Console, select the `.EntityFrameworkCore` as the Default project (make sure that the `.Web` project is still the startup project) and run the following command:
 
 ````
 Add-Migration "Removed_Audit_Setting_Permission_Modules"
@@ -774,7 +621,7 @@ Notice that you've also **deleted some initial seed data** (for example, permiss
 
 #### Implementing the IBookStoreDbSchemaMigrator
 
-`EntityFrameworkCoreBookStoreDbSchemaMigrator` class inside the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project is responsible to migrate the database schema for the `BookStoreMigrationsDbContext`. It should be like that:
+`EntityFrameworkCoreBookStoreDbSchemaMigrator` class inside the `Acme.BookStore.EntityFrameworkCore` project is responsible to migrate the database schema for the `BookStoreMigrationsDbContext`. It should be like that:
 
 ````csharp
 [Dependency(ReplaceServices = true)]
@@ -809,7 +656,7 @@ It implements the `IBookStoreDbSchemaMigrator` and **replaces existing services*
 
 Remove the `[Dependency(ReplaceServices = true)]` line, because we will have two implementations of this interface and we want to use both. We don't want to replace one of them.
 
-Create a copy of this class inside the new migration project (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`), but use the `BookStoreSecondMigrationsDbContext`. Example implementation:
+Create a copy of this class inside the new migration project (`Acme.BookStore.EntityFrameworkCore.ForSecondDb`), but use the `BookStoreSecondMigrationsDbContext`. Example implementation:
 
 ````csharp
 public class EntityFrameworkCoreSecondBookStoreDbSchemaMigrator 
@@ -842,40 +689,6 @@ public class EntityFrameworkCoreSecondBookStoreDbSchemaMigrator
 > Name of this class is important for [dependency injection](Dependency-Injection.md). It should end with `BookStoreDbSchemaMigrator` to be injectable by `IBookStoreDbSchemaMigrator` reference.
 
 We, now, have two implementations of the `IBookStoreDbSchemaMigrator` interface, each one responsible to migrate the related database schema.
-
-#### Define a Module Class for the Second Migration Project
-
-It is time to define the [module](Module-Development-Basics.md) class for this second migrations (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`) project:
-
-````csharp
-[DependsOn(
-    typeof(BookStoreEntityFrameworkCoreModule)
-    )]
-public class BookStoreEntityFrameworkCoreSecondDbMigrationsModule : AbpModule
-{
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddAbpDbContext<BookStoreSecondMigrationsDbContext>();
-    }
-}
-````
-
-Now, reference `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.DbMigrator` project and `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreDbMigratorModule`. `BookStoreDbMigratorModule` class should be something like that:
-
-````csharp
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(BookStoreEntityFrameworkCoreDbMigrationsModule),
-    typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule), // ADDED THIS!
-    typeof(BookStoreApplicationContractsModule)
-    )]
-public class BookStoreDbMigratorModule : AbpModule
-{
-    ...
-}
-````
-
-We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.Web` project, but hadn't added module dependency since we hadn't created it before. But, now we have it and we need to add `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreWebModule` class.
 
 #### Run the Database Migrator!
 
