@@ -36,7 +36,7 @@
     "PasswordChanged": "Şifre değiştirildi",
     "NewPasswordConfirmFailed": "Lütfen yeni şifreyi onaylayın.",
     "Manage": "Manage",
-    "ManageYourProfile": "Profilinizi yönetin",
+    "MyAccount": "Hesabım",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "self-registration etkin mi ?",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Bir kullanıcının hesabı kendisi tarafından kaydedip kaydedememesidir.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Yerel bir hesapla kimlik doğrulaması",

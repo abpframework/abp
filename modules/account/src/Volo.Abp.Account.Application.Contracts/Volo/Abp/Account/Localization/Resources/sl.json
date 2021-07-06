@@ -36,7 +36,7 @@
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "Manage": "Upravljaj",
-    "ManageYourProfile": "Upravljaj svoj profil",
+    "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Ali lahko uporabnik sam registrira račun.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Avtenticirajte se z lokalnim računom",

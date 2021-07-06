@@ -33,7 +33,7 @@ export default function SettingsStackNavigator() {
         name="ManageProfile"
         component={ManageProfileScreen}
         options={{
-          title: i18n.t('AbpAccount::ManageYourProfile'),
+          title: i18n.t('AbpAccount::MyAccount'),
         }}
       />
     </Stack.Navigator>

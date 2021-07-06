@@ -1,7 +1,7 @@
 {
   "culture": "it",
   "texts": {
-    "Features": "Caratteristiche",
+    "Features": "Funzionalità",
     "NoFeatureFoundMessage": "Non ci sono funzioni disponibili.",
     "Permission:FeatureManagement": "Gestione delle funzionalità",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestisci le funzionalità dell'host",

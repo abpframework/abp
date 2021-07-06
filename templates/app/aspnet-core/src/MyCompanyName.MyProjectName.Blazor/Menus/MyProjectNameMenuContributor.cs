@@ -56,7 +56,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Menus
 
             context.Menu.AddItem(new ApplicationMenuItem(
                 "Account.Manage",
-                accountStringLocalizer["ManageYourProfile"],
+                accountStringLocalizer["MyAccount"],
                 $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
                 icon: "fa fa-cog",
                 order: 1000,

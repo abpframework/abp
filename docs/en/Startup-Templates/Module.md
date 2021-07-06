@@ -20,23 +20,9 @@ abp new Acme.IssueManagement -t module
 
 - `Acme.IssueManagement` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
 
-### Specify the UI Framework
-
-This template provides multiple UI frameworks:
-
-* `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
-* `blazor`: Blazor UI
-* `angular`: Angular UI
-
-Use `-u` or `--ui` option to specify the UI framework:
-
-````bash
-abp new Acme.IssueManagement -t module -u angular
-````
-
 ### Without User Interface
 
-The template comes with an MVC UI by default. You can use `--no-ui` option to not include the UI layer.
+The template comes with MVC, Blazor & Angular user interfaces by default. You can use `--no-ui` option to not include any of these UI layers.
 
 ````bash
 abp new Acme.IssueManagement -t module --no-ui
@@ -179,7 +165,7 @@ You should run the application with the given order:
 
 ### Angular UI
 
-If you choose `Angular` as the UI framework (using the `-u angular` option), the solution will have a folder called `angular` in it. This is where the client-side code is located. When you open that folder in an IDE, the folder structure will look like below:
+The solution will have a folder called `angular` in it. This is where the Angular client-side code is located. When you open that folder in an IDE, the folder structure will look like below:
 
 ![Folder structure of ABP Angular module project](../images/angular-module-folder-structure.png)
 

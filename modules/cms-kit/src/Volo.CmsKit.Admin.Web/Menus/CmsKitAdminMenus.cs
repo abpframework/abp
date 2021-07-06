@@ -29,5 +29,9 @@
             public const string BlogPostsMenu = GroupName + ".BlogPosts";
         }
 
+        public static class Menus
+        {
+            public const string MenusMenu = GroupName + ".Menus";
+        }
     }
 }

@@ -30,8 +30,9 @@ namespace Volo.Abp.EventBus.Rebus
             ICurrentTenant currentTenant,
             IBus rebus,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
-            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions) :
-            base(serviceScopeFactory, currentTenant)
+            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
+            IEventErrorHandler errorHandler) :
+            base(serviceScopeFactory, currentTenant, errorHandler)
         {
             Rebus = rebus;
             AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;

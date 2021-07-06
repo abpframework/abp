@@ -1,0 +1,7 @@
+{
+  "culture": "sk",
+  "texts": {
+    "ThisFieldIsRequired": "Toto pole je povinné",
+    "MaxLenghtErrorMessage": "Toto pole môže mať maximálne '{0}' znakov"
+  }
+}

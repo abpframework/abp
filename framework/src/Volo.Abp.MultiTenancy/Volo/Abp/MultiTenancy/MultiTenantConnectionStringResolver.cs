@@ -41,7 +41,7 @@ namespace Volo.Abp.MultiTenancy
             }
 
             var tenantDefaultConnectionString = tenant.ConnectionStrings.Default;
-            
+
             //Requesting default connection string...
             if (connectionStringName == null ||
                 connectionStringName == ConnectionStrings.DefaultConnectionStringName)
@@ -59,10 +59,10 @@ namespace Volo.Abp.MultiTenancy
                 //Found for the tenant
                 return connString;
             }
-            
+
             //Fallback to the mapped database for the specific connection string
             var database = Options.Databases.GetMappedDatabaseOrNull(connectionStringName);
-            if (database != null)
+            if (database != null && database.IsUsedByTenants)
             {
                 connString = tenant.ConnectionStrings.GetOrDefault(database.DatabaseName);
                 if (!connString.IsNullOrWhiteSpace())

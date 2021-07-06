@@ -1,6 +1,5 @@
 import program from 'commander';
 import execa from 'execa';
-import fse from 'fs-extra';
 
 (async () => {
   program.option('-i, --noInstall', 'skip updating package.json and installation', false);
@@ -37,7 +36,7 @@ import fse from 'fs-extra';
         '--prod',
         '--no-watch',
         '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management',
+        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -52,7 +51,7 @@ import fse from 'fs-extra';
         '--no-watch',
         '--all-packages',
         '--excluded-packages',
-        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
+        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

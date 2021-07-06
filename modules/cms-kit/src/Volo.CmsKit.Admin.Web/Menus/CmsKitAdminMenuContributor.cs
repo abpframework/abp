@@ -71,6 +71,14 @@ namespace Volo.CmsKit.Admin.Web.Menus
                 .RequireGlobalFeatures(typeof(CommentsFeature))
                 .RequirePermissions(CmsKitAdminPermissions.Comments.Default));
 
+            cmsMenus.Add(new ApplicationMenuItem(
+                    CmsKitAdminMenus.Menus.MenusMenu,
+                    l["Menus"],
+                    "/Cms/Menus/Items",
+                    "fa fa-stream")
+                .RequireGlobalFeatures(typeof(MenuFeature))
+                .RequirePermissions(CmsKitAdminPermissions.Menus.Default));
+
             if (cmsMenus.Any())
             {
                 var cmsMenu = context.Menu.FindMenuItem(CmsKitAdminMenus.GroupName);

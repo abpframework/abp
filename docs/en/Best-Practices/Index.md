@@ -25,3 +25,6 @@ Also, this guide is mostly usable for general **application development**.
   * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
   * [MongoDB Integration](MongoDB-Integration.md)  
 
+## See Also
+
+* [E-Book: Implementing Domain Driven Design](https://abp.io/books/implementing-domain-driven-design)

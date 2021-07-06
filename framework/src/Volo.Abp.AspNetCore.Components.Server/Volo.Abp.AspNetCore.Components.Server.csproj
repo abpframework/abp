@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
+      <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
+      <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
       <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
       <ProjectReference Include="..\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj" />
     </ItemGroup>

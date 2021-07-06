@@ -12,7 +12,7 @@ export function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
       {
-        path: '/tenant-management',
+        path: undefined,
         name: eTenantManagementRouteNames.TenantManagement,
         parentName: eThemeSharedRouteNames.Administration,
         requiredPolicy: eTenantManagementPolicyNames.TenantManagement,
