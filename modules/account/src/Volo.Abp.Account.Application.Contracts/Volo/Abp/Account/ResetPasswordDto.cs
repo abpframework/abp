@@ -8,8 +8,6 @@ namespace Volo.Abp.Account
     {
         public Guid UserId { get; set; }
 
-        public Guid? TenantId { get; set; }
-
         [Required]
         public string ResetToken { get; set; }
 
