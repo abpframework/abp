@@ -64,6 +64,10 @@ We're highly recommend to run application with TYE. None of steps are required t
 
 Your comments and suggestions is important for us. You can ask your questions or post your reviews under [eShopOnAbp Discussion](https://github.com/abpframework/abp/discussions/XXXX) page.
 
+
+
+*TODO: Update Discussion page link before publishing!*
+
 ## What's next?
 
 We'll work on deployment & CI-CD processes as a next step and build eShop business logic on.  First goal is deploying & hosting entire application on local kubernetes. 
