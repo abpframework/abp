@@ -138,8 +138,15 @@ namespace Volo.Abp.Identity.MongoDB
             int skipCount = 0,
             string filter = null,
             bool includeDetails = false,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
+            if(roleId.HasValue || organizationUnitId.HasValue)
+            {
+                includeDetails = true;
+            }
+
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
@@ -150,6 +157,8 @@ namespace Volo.Abp.Identity.MongoDB
                         (u.Surname != null && u.Surname.Contains(filter)) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
                 .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -195,6 +204,8 @@ namespace Volo.Abp.Identity.MongoDB
 
         public virtual async Task<long> GetCountAsync(
             string filter = null,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
@@ -207,6 +218,8 @@ namespace Volo.Abp.Identity.MongoDB
                         (u.Surname != null && u.Surname.Contains(filter)) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
