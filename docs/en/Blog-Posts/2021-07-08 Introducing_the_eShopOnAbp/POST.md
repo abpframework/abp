@@ -14,8 +14,6 @@ The project has three types of end applications built with ASP.NET Core & Angula
 
 > Source code is available on  [GitHub | abpframework/eShopOnAbp](https://github.com/abpframework/eShopOnAbp)
 
-
-
 ## Structure
 
 The project follows micro-service architecture and overall structure is presented below.
@@ -32,11 +30,11 @@ The project follows micro-service architecture and overall structure is presente
 
 ## How to run?
 
-We're highly recommend to run application with tye. None of steps are required for infrastructure or running application. All steps are automated.
+We're highly recommend to run application with TYE. None of steps are required to setup development infrastructure or running applications one by one. All steps are automated.
 
-### Run with TYE
+### Runing with TYE
 
-[Tye](https://github.com/dotnet/tye) is a developer tool that makes developing, testing, and deploying microservices and distributed applications easier.
+[Tye](https://github.com/dotnet/tye) is a developer tool that makes developing, testing, and deploying micro-services and distributed applications easier.
 
  #### Requirements
 
@@ -48,7 +46,7 @@ We're highly recommend to run application with tye. None of steps are required f
 
 - Clone the repository ( [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) )
 
-- Install TYE, follow [these steps](https://github.com/dotnet/tye/blob/main/docs/getting_started.md#installing-tye)
+- Install TYE ( *follow [these steps](https://github.com/dotnet/tye/blob/main/docs/getting_started.md#installing-tye)* )
 
 - Execute `run-tye.ps1`
 
@@ -62,23 +60,10 @@ We're highly recommend to run application with tye. None of steps are required f
   cd apps/angular
   yarn start
 
-
-
 ## Community
 
 Your comments and suggestions is important for us. You can ask your questions or post your reviews under [eShopOnAbp Discussion](https://github.com/abpframework/abp/discussions/XXXX) page.
 
-
-
 ## What's next?
 
 We'll work on deployment & CI-CD processes as a next step and build eShop business logic on.  First goal is deploying & hosting entire application on local kubernetes. 
-
-
-
-
-
-
-
-
-
