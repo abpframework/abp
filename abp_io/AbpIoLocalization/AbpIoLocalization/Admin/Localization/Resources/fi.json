@@ -108,12 +108,12 @@
     "LicenseStartDate": "Lisenssin aloituspäivä",
     "LicenseEndDate": "Lisenssin päättymispäivä",
     "OrganizationNamePlaceholder": "Organisaation nimi...",
-    "TotalQuestionCountPlaceholder": "Kysymysten kokonaismäärä ...",
-    "RemainingQuestionCountPlaceholder": "Jäljellä oleva kysymysten määrä ...",
+    "TotalQuestionCountPlaceholder": "Kysymysten kokonaismäärä...",
+    "RemainingQuestionCountPlaceholder": "Jäljellä oleva kysymysten määrä...",
     "LicenseTypePlaceholder": "Lisenssi-tyyppi...",
     "CreationDatePlaceholder": "Luomispäivä...",
-    "LicenseStartDatePlaceholder": "Lisenssin aloituspäivä ...",
-    "LicenseEndDatePlaceholder": "Lisenssin päättymispäivä ...",
+    "LicenseStartDatePlaceholder": "Lisenssin aloituspäivä...",
+    "LicenseEndDatePlaceholder": "Lisenssin päättymispäivä...",
     "UsernameOrEmail": "Käyttäjätunnus tai sähköpostiosoite",
     "UsernameOrEmailPlaceholder": "Käyttäjätunnus tai sähköpostiosoite...",
     "Member": "Jäsen",
@@ -277,6 +277,6 @@
     "ThisExtensionIsNotAllowed": "Tätä laajennusta ei sallita.",
     "TheFileIsTooLarge": "Tiedosto on liian suuri!",
     "ArticleDeletionConfirmationMessage": "Haluatko varmasti poistaa tämän artikkelin vaikeasti?",
-    "ChooseCoverImage": "Valitse kansikuva ..."
+    "ChooseCoverImage": "Valitse kansikuva..."
   }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
@@ -9,19 +9,21 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     [Dependency(ReplaceServices = true)]
     public class WebAssemblyServerUrlProvider : IServerUrlProvider, ITransientDependency
     {
-        public AbpRemoteServiceOptions Options { get; }
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
 
         public WebAssemblyServerUrlProvider(
-            IOptions<AbpRemoteServiceOptions> options)
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
-            Options = options.Value;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
         }
         
-        public string GetBaseUrl(string remoteServiceName = null)
+        public async Task<string> GetBaseUrlAsync(string remoteServiceName = null)
         {
-            return Options.RemoteServices.GetConfigurationOrDefault(
+            var remoteServiceConfiguration = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(
                 remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
-            ).BaseUrl.EnsureEndsWith('/');
+            );
+            
+            return remoteServiceConfiguration.BaseUrl.EnsureEndsWith('/');
         }
     }
 }

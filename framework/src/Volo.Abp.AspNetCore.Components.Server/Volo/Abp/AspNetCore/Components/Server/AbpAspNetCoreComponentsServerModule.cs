@@ -5,8 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.Components.Web;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.EventBus;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
@@ -15,7 +17,9 @@ namespace Volo.Abp.AspNetCore.Components.Server
     [DependsOn(
         typeof(AbpHttpClientModule),
         typeof(AbpAspNetCoreComponentsWebModule),
-        typeof(AbpAspNetCoreSignalRModule)
+        typeof(AbpAspNetCoreSignalRModule),
+        typeof(AbpEventBusModule),
+        typeof(AbpAspNetCoreMvcContractsModule)
         )]
     public class AbpAspNetCoreComponentsServerModule : AbpModule
     {

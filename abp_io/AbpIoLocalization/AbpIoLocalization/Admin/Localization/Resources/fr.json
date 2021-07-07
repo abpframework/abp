@@ -108,12 +108,12 @@
     "LicenseStartDate": "Date de début de la licence",
     "LicenseEndDate": "Date de fin de licence",
     "OrganizationNamePlaceholder": "Nom de l'organisation...",
-    "TotalQuestionCountPlaceholder": "Nombre total de questions ...",
-    "RemainingQuestionCountPlaceholder": "Nombre de questions restantes ...",
+    "TotalQuestionCountPlaceholder": "Nombre total de questions...",
+    "RemainingQuestionCountPlaceholder": "Nombre de questions restantes...",
     "LicenseTypePlaceholder": "Type de licence...",
     "CreationDatePlaceholder": "Date de création...",
-    "LicenseStartDatePlaceholder": "Date de début de la licence ...",
-    "LicenseEndDatePlaceholder": "Date de fin de licence ...",
+    "LicenseStartDatePlaceholder": "Date de début de la licence...",
+    "LicenseEndDatePlaceholder": "Date de fin de licence...",
     "UsernameOrEmail": "Nom d'utilisateur ou email",
     "UsernameOrEmailPlaceholder": "Nom d'utilisateur ou email...",
     "Member": "Membre",
@@ -277,6 +277,6 @@
     "ThisExtensionIsNotAllowed": "Cette extension n'est pas autorisée.",
     "TheFileIsTooLarge": "Le fichier est trop volumineux!",
     "ArticleDeletionConfirmationMessage": "Voulez-vous vraiment supprimer définitivement cet article?",
-    "ChooseCoverImage": "Choisissez une image de couverture ..."
+    "ChooseCoverImage": "Choisissez une image de couverture..."
   }
 }

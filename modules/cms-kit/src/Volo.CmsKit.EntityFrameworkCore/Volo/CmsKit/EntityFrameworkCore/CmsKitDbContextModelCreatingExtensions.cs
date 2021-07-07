@@ -8,6 +8,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -254,7 +255,25 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Ignore<MediaDescriptor>();
             }
+            
+            if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
+            {
+                builder.Entity<MenuItem>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "MenuItems", options.Schema);
 
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.DisplayName).IsRequired().HasMaxLength(MenuItemConsts.MaxDisplayNameLength);
+
+                    b.Property(x => x.Url).IsRequired().HasMaxLength(MenuItemConsts.MaxUrlLength);
+                });
+            }
+            else
+            {
+                builder.Ignore<MenuItem>();
+            }
+            
             builder.TryConfigureObjectExtensions<CmsKitDbContext>();
         }
     }

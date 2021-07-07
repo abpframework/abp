@@ -127,6 +127,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 IsAuthenticated = _currentUser.IsAuthenticated,
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
+                ImpersonatorUserId = _currentUser.FindImpersonatorUserId(),
+                ImpersonatorTenantId = _currentUser.FindImpersonatorTenantId(),
                 UserName = _currentUser.UserName,
                 SurName = _currentUser.SurName,
                 Name = _currentUser.Name,

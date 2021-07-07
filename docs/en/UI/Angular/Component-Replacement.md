@@ -491,7 +491,7 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
+          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' | abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
           ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a

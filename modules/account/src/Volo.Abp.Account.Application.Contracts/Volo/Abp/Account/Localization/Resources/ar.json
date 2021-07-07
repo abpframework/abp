@@ -36,7 +36,7 @@
     "PasswordChanged": "تم تغيير كلمة المرور",
     "NewPasswordConfirmFailed": "يرجى تأكيد كلمة المرور الجديدة.",
     "Manage": "إدارة",
-    "ManageYourProfile": "إدارة ملف التعريف الخاص بك",
+    "MyAccount": "حسابي",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "هل تم تمكين التسجيل الذاتي",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "ما إذا كان يمكن للمستخدم تسجيل الحساب بنفسه أم لا.",
     "DisplayName:Abp.Account.EnableLocalLogin": "المصادقة باستخدام حساب محلي",

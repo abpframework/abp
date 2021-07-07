@@ -24,7 +24,7 @@ There are some **free and open source** application modules developed and mainta
 * [**Tenant Management**](Tenant-Management.md): Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.
 * [**Virtual File Explorer**](Virtual-File-Explorer.md): Provided a simple UI to view files in [virtual file system](../Virtual-File-System.md).
 
-See [the GitHub repository](https://github.com/abpframework/abp/tree/master/modules) for source code of all modules.
+See [the GitHub repository](https://github.com/abpframework/abp/tree/dev/modules) for source code of all modules.
 
 ## Commercial Application Modules
 

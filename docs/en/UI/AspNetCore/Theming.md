@@ -124,7 +124,7 @@ The empty layout provides an empty page. It typically includes the following par
 
 ### The Easy Way
 
-The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` NuGet package and reference to the local project.
+The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` NuGet package and reference to the local project.
 
 ### The ITheme Interface
 
@@ -410,7 +410,7 @@ See the [Page Header](Page-Header.md) document for more.
 
 #### Tenant Switch
 
-The Account Layout should allow the user to switch the current tenant if the application is multi-tenant and the tenant was resolved from the cookies. See the [Basic Theme Account Layout](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts/Account.cshtml) as an example implementation.
+The Account Layout should allow the user to switch the current tenant if the application is multi-tenant and the tenant was resolved from the cookies. See the [Basic Theme Account Layout](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts/Account.cshtml) as an example implementation.
 
 ### Layout Classes
 

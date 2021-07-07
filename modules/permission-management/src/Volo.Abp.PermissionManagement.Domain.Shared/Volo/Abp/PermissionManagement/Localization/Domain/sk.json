@@ -1,0 +1,10 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Permissions": "Oprávnenia",
+    "OnlyProviderPermissons": "Iba tento poskytovateľ",
+    "All": "Všetky",
+    "SelectAllInAllTabs": "Udeliť všetky oprávnenia",
+    "SelectAllInThisTab": "Vybrať všetky"
+  }
+}

@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Public.Comments;
@@ -30,6 +31,8 @@ namespace Volo.CmsKit.Public
             CreateMap<Page, PageDto>();
 
             CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+
+            CreateMap<MenuItem, MenuItemDto>();
         }
     }
 }

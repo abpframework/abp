@@ -11,6 +11,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public Guid? TenantId { get; set; }
 
+        public Guid? ImpersonatorUserId { get; set; }
+
+        public Guid? ImpersonatorTenantId { get; set; }
+
         public string UserName { get; set; }
 
         public string Name { get; set; }
