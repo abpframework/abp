@@ -140,11 +140,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
-            if(roleId.HasValue || organizationUnitId.HasValue)
-            {
-                includeDetails = true;
-            }
-
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(
