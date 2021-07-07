@@ -142,11 +142,6 @@ namespace Volo.Abp.Identity.MongoDB
             Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
-            if(roleId.HasValue || organizationUnitId.HasValue)
-            {
-                includeDetails = true;
-            }
-
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
