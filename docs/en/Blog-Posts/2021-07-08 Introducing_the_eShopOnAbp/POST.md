@@ -22,7 +22,7 @@ The project follows micro-service architecture and overall structure is presente
 
 ### Overall Solution
 
-![eShopOnAbp Overall Solution](images/eShopOnAbp - Overall Solution.png)
+![eShopOnAbp Overall Solution](images/eShopOnAbp-Overall-Solution.png)
 
 
 
