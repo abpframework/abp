@@ -41,11 +41,8 @@ namespace Pages.Abp.MultiTenancy
 
         public async Task OnPostAsync()
         {
-            if (Input.Name.IsNullOrEmpty())
-            {
-                Response.Cookies.Delete(Options.TenantKey);
-            }
-            else
+            Guid? tenantId = null;
+            if (!Input.Name.IsNullOrEmpty())
             {
                 var tenant = await TenantStore.FindAsync(Input.Name);
                 if (tenant == null)
@@ -58,17 +55,10 @@ namespace Pages.Abp.MultiTenancy
                     throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
                 }
 
-                Response.Cookies.Append(
-                    Options.TenantKey,
-                    tenant.Id.ToString(),
-                    new CookieOptions
-                    {
-                        Path = "/",
-                        HttpOnly = false,
-                        Expires = DateTimeOffset.Now.AddYears(10)
-                    }
-                );
+                tenantId = tenant.Id;
             }
+
+            AbpMultiTenancyCookieHelper.SetTenantCookie(HttpContext, tenantId, Options.TenantKey);
         }
 
         public class TenantInfoModel

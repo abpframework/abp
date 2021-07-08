@@ -62,19 +62,16 @@ namespace Volo.Abp.Account
 
         public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
         {
-            using (CurrentTenant.Change(input.TenantId))
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(input.UserId);
+            (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
             {
-                await IdentityOptions.SetAsync();
-
-                var user = await UserManager.GetByIdAsync(input.UserId);
-                (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
-
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-                {
-                    Identity = IdentitySecurityLogIdentityConsts.Identity,
-                    Action = IdentitySecurityLogActionConsts.ChangePassword
-                });
-            }
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.ChangePassword
+            });
         }
 
         protected virtual async Task<IdentityUser> GetUserByEmail(string email)
