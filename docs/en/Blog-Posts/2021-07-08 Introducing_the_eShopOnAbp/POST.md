@@ -49,4 +49,4 @@ We'll work on deployment & CI-CD processes as a next step and build the business
 
 ## Feedback
 
-Your comments and suggestions is important for us. You can ask your questions or post your feedback under [this discussion entry](https://github.com/abpframework/abp/discussions/XXXX).
+Your comments and suggestions is important for us. You can ask your questions or post your feedback under [this discussion entry](https://github.com/abpframework/abp/discussions/9536).
