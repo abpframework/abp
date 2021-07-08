@@ -381,21 +381,6 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
 
-            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
-                project,
-                document.Name,
-                document.LanguageCode,
-                document.Version
-            );
-
-            await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
-            {
-                Name = document.Name,
-                CreationTime = document.CreationTime,
-                LastUpdatedTime = document.LastUpdatedTime,
-                LastSignificantUpdateTime = document.LastSignificantUpdateTime
-            });
-
             return CreateDocumentWithDetailsDto(project, document);
         }
 
