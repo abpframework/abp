@@ -12,7 +12,7 @@ The source code is available on [abpframework/eShopOnAbp](https://github.com/abp
 
 The project follows micro-service architecture and overall structure is presented below.
 
-![eShopOnAbp Overall Solution](images/eShopOnAbp-Overall-Solution.png)
+![eShopOnAbp Overall Solution](overall-solution.png)
 
 ## How to Run?
 
