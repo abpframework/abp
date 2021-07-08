@@ -1,73 +1,52 @@
-# Introducing the eShopOnAbp
+# Introducing the eShopOnAbp Project
 
-We introduce the **eShopOnAbp** project as ABP Team. This application demonstrates strength of ABP Framework and using it in a real-life case. eShopOnAbp is a a full-featured cloud-native microservices reference application and is inspired by the [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers) project.
+We are happy to introduce the **eShopOnAbp** project as an example microservice solution built with the ABP Framework by the core ABP team. This solution demonstrates the strength of ABP Framework and using it in a real-life case. The goal of the project is to create a full-featured cloud-native microservices reference application. The project is inspired by the [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers) project and shows how it can be implemented with the ABP Framework.
 
-Currently, the project doesn't have any business logic and it's pure micro-service sample that we'll built business logic on.
+> **Project Status**: Currently, the project doesn't have any business logic. We've just brought ABP's pre-built modules (Identity, Tenant Management, IdentityServer, etc) together as a base solution. However, it is fully working and you can now take it as a base solution for your microservice project. From now on, we will build the example application functionalities / business logic on top of it.
 
-The project has three types of end applications built with ASP.NET Core & Angular under ABP Framework:
+## Source Code
 
-- **Angular Application**: Back-Office application for management.
-- **Public Web Application**: Landing page with end-user actions.
-- **Backend Services**: There are some micro-services and gateways to perform backend processes
+The source code is available on [abpframework/eShopOnAbp](https://github.com/abpframework/eShopOnAbp) repository.
 
----
-
-> Source code is available on  [GitHub | abpframework/eShopOnAbp](https://github.com/abpframework/eShopOnAbp)
-
-## Structure
+## The Big Picture
 
 The project follows micro-service architecture and overall structure is presented below.
 
-### Overall Solution
-
 ![eShopOnAbp Overall Solution](images/eShopOnAbp-Overall-Solution.png)
 
+## How to Run?
 
+You can either run in Visual Studio, or using [Microsoft Tye](https://github.com/dotnet/tye). Tye is a developer tool that makes developing, testing, and deploying micro-services and distributed applications easier.
 
----
-
-
-
-## How to run?
-
-We're highly recommend to run application with TYE. None of steps are required to setup development infrastructure or running applications one by one. All steps are automated.
-
-### Runing with TYE
-
-[Tye](https://github.com/dotnet/tye) is a developer tool that makes developing, testing, and deploying micro-services and distributed applications easier.
-
- #### Requirements
+ ### Requirements
 
 - .NET 5.0+
 - Docker
 - Yarn
 
-#### Instructions
+### Instructions
 
 - Clone the repository ( [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) )
 
-- Install TYE ( *follow [these steps](https://github.com/dotnet/tye/blob/main/docs/getting_started.md#installing-tye)* )
+- Install Tye (*follow [these steps](https://github.com/dotnet/tye/blob/main/docs/getting_started.md#installing-tye)*)
 
 - Execute `run-tye.ps1`
 
 - Wait until all applications are up!
 
-  - You can check running application from tye dashboard ( [localhost:8000](http://127.0.0.1:8000/) )
+  - You can check running application from tye dashboard ([localhost:8000](http://127.0.0.1:8000/))
 
-- After all your backend services are up, start angular application:
+- After all your backend services are up, start the angular application:
 
   ```bash
   cd apps/angular
   yarn start
+  ```
 
-## Community
+## What's Next?
 
-Your comments and suggestions is important for us. You can ask your questions or post your reviews under [eShopOnAbp Discussion](https://github.com/abpframework/abp/discussions/XXXX) page.
+We'll work on deployment & CI-CD processes as a next step and build the business logic on. First goal is deploying the entire application on [Kubernetes](https://kubernetes.io/).
 
+## Feedback
 
-
-*TODO: Update Discussion page link before publishing!*
-
-## What's next?
-
-We'll work on deployment & CI-CD processes as a next step and build eShop business logic on.  First goal is deploying & hosting entire application on local kubernetes. 
+Your comments and suggestions is important for us. You can ask your questions or post your feedback under [this discussion entry](https://github.com/abpframework/abp/discussions/XXXX).
