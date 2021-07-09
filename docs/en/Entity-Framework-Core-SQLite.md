@@ -15,7 +15,7 @@ Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFra
 Find `UseSqlServer()` calls in your solution, replace with `UseSqlite()`. Check the following files:
 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore` project.
+* *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project.
 
 > Depending on your solution structure, you may find more code files need to be changed.
 

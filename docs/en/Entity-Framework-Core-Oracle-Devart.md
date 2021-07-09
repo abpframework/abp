@@ -19,20 +19,20 @@ Also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Ab
 Find `UseSqlServer()` calls in your solution, replace with `UseOracle()`. Check the following files:
 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore` project.
+* *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project.
 
 
-In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFactory.cs, replace the following code block
+In the `CreateDbContext()` method of the *YourProjectName*DbContextFactory.cs, replace the following code block
 
 ```csharp
-var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 ```
 
 with this one
 ```csharp
-var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
-	new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>().UseOracle
+var builder = (DbContextOptionsBuilder<YourProjectNameDbContext>)
+	new DbContextOptionsBuilder<YourProjectNameDbContext>().UseOracle
 	(
 		configuration.GetConnectionString("Default")
 	);

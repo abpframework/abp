@@ -15,7 +15,7 @@ Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFra
 Find `UseSqlServer()` call in *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project and replace with `UseNpgsql()`.
 
 
-Find `UseSqlServer()` call in *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore` project and replace with `UseNpgsql()`.
+Find `UseSqlServer()` call in *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project and replace with `UseNpgsql()`.
 
 > Depending on your solution structure, you may find more `UseSqlServer()` calls that needs to be changed.
 
