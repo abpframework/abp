@@ -1,17 +1,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Validation
 {
     public interface IObjectValidator
     {
-        void Validate(
+        Task ValidateAsync(
             object validatingObject,
             string name = null,
             bool allowNull = false
         );
 
-        List<ValidationResult> GetErrors(
+        Task<List<ValidationResult>> GetErrorsAsync(
             object validatingObject,
             string name = null,
             bool allowNull = false
