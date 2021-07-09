@@ -117,7 +117,7 @@
     "ABPCLIExplanation": "ABP CLI (Command Line Interface) è uno strumento a riga di comando per eseguire alcune operazioni comuni per soluzioni basate su ABP.",
     "ModularityExplanation": "ABP fornisce un'infrastruttura completa per creare i propri moduli applicativi che possono avere entità, servizi, integrazione di database, API, componenti dell'interfaccia utente e così via.",
     "MultiTenancyExplanation": "Il framework ABP non solo supporta lo sviluppo di applicazioni multi-tenant, ma rende anche il tuo codice per lo più inconsapevole del multi-tenancy.",
-    "MultiTenancyExplanation2": "Può determinare automaticamente il tenant corrente, isolare i dati di diversi inquilini l'uno dall'altro.",
+    "MultiTenancyExplanation2": "Può determinare automaticamente il tenant corrente, isolare i dati dei diversi tenant l'uno dall'altro.",
     "MultiTenancyExplanation3": "Supporta database singolo, database per tenant e approcci ibridi.",
     "MultiTenancyExplanation4": "Ti concentri sul tuo codice aziendale e lasci che il framework gestisca il multi-tenancy per tuo conto.",
     "BootstrapTagHelpersExplanation": "Invece di scrivere manualmente i dettagli ripetuti dei componenti bootstrap, usa gli helper tag di ABP per semplificarlo e sfruttare intellisense. Puoi sicuramente usare Bootstrap ogni volta che ne hai bisogno.",

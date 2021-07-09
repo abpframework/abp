@@ -9,7 +9,7 @@
     "SmtpHost": "Host",
     "SmtpPort": "Porta",
     "SmtpUserName": "Nome utente",
-    "SmtpPassword": "Parola d'ordine",
+    "SmtpPassword": "Password",
     "SmtpDomain": "Dominio",
     "SmtpEnableSsl": "Abilita SSL",
     "SmtpUseDefaultCredentials": "Usa credenziali predefinite",
