@@ -206,9 +206,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context)
         {
-            context.Services.AddTransient(sp => new HttpClient
+            context.Services.AddHttpClient("abp", sp => 
             {
-                BaseAddress = new Uri("/")
+                sp.BaseAddress = new Uri("/");
             });
         }
 
