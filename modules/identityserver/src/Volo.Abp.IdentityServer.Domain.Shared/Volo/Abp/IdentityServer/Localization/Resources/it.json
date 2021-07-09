@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "Username o password non validi!",
     "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Devi confermare la tua email/numero di telefono.",
     "InvalidUsername": "Username o password non validi!",
+    "InvalidAuthenticatorCode": "Codice autenticatore non valido!",
     "TheTargetUserIsNotLinkedToYou": "L'utente di destinazione non è collegato a te!"
   }
 }
