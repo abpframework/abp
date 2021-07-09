@@ -1,35 +1,33 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
     public class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCultureReplacement, ITransientDependency
     {
-        protected AbpQueryStringCultureReplacementOptions Options { get; }
-        protected IServiceProvider ServiceProvider { get; }
-
-        public AbpAspNetCoreMvcQueryStringCultureReplacement(
-            IOptions<AbpQueryStringCultureReplacementOptions> queryStringCultureReplacementOptions,
-            IServiceProvider serviceProvider)
+        public virtual Task ReplaceAsync(QueryStringCultureReplacementContext context)
         {
-            ServiceProvider = serviceProvider;
-            Options = queryStringCultureReplacementOptions.Value;
-        }
-
-        public virtual async Task ReplaceAsync(QueryStringCultureReplacementContext context)
-        {
-            using (var scope = ServiceProvider.CreateScope())
+            if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
             {
-                foreach (var provider in Options.QueryStringCultureReplacementProviders)
+                if (context.ReturnUrl.Contains("culture=", StringComparison.OrdinalIgnoreCase) &&
+                    context.ReturnUrl.Contains("ui-Culture=", StringComparison.OrdinalIgnoreCase))
                 {
-                    // ReSharper disable once PossibleNullReferenceException
-                    await (scope.ServiceProvider.GetRequiredService(provider) as IQueryStringCultureReplacementProvider)
-                        .ReplaceAsync(context);
+                    context.ReturnUrl = Regex.Replace(
+                        context.ReturnUrl,
+                        "culture=[A-Za-z-]+?&",
+                        $"culture={context.RequestCulture.Culture}&",
+                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    context.ReturnUrl = Regex.Replace(
+                        context.ReturnUrl, "ui-culture=[A-Za-z-]+?$",
+                        $"ui-culture={context.RequestCulture.UICulture}",
+                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }
