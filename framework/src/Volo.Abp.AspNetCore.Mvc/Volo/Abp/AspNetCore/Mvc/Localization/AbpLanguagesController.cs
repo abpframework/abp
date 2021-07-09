@@ -33,7 +33,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 new RequestCulture(culture, uiCulture)
             );
 
-            returnUrl = await QueryStringCultureReplacement.ReplaceAsync(returnUrl, new RequestCulture(culture, uiCulture));
+            returnUrl = await QueryStringCultureReplacement.ReplaceAsync(new QueryStringCultureReplacementContext()
+            {
+                HttpContext = HttpContext,
+                RequestCulture = new RequestCulture(culture, uiCulture),
+                ReturnUrl = returnUrl
+            });
 
             if (!string.IsNullOrWhiteSpace(returnUrl))
             {
