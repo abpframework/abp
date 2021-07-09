@@ -108,6 +108,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private string GetLeafNode(NavigationNode node, string content)
         {
+            var sb = new StringBuilder();
+            
             var textCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
             var isNodeSelected = node.IsSelected(SelectedDocumentName);
             var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
@@ -123,31 +125,36 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                var badge = "";
+                var badgeStringBuilder = new StringBuilder();
 
                 if (!node.Path.IsNullOrWhiteSpace() && node.CreationTime.HasValue && node.LastUpdatedTime.HasValue)
                 {
                     if(node.CreationTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        var newBadge = "<span class='badge badge-primary ml-2' title=\"" + _localizer["NewExplanation"] + "\">" + _localizer["New"] + "</span>";
-                        badge += newBadge;
+                        var newBadge = sb.Append("<span class='badge badge-primary ml-2' title=\"").Append(_localizer["NewExplanation"]).Append("\">").Append(_localizer["New"]).Append("</span>").ToString();
+                        
+                        badgeStringBuilder.Append(newBadge);
                     }
                     else if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        var updBadge = "<span class='badge badge-light ml-2' title=\"" + _localizer["UpdatedExplanation"] + "\">" + _localizer["Upd"] + "</span>";
-                        badge += updBadge;
+                        var updBadge = sb.Append("<span class='badge badge-light ml-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>");
+                        badgeStringBuilder.Append(updBadge);
                     }
                 }
+
+                sb.Clear();
 
                 listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
-                        : node.Text + badge);
+                        : sb.Append(node.Text).Append(badgeStringBuilder).ToString());
             }
 
+            sb.Clear();
+            
             return string.Format(LiItemTemplateWithLink,
                 listItemCss,
-                node.HasChildItems ? "chevron-right" : "long-arrow-right " + (node.Path.IsNullOrEmpty() ?  "no-link" : "has-link"),
+                node.HasChildItems ? "chevron-right" : sb.Append("long-arrow-right ").Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
                 listInnerItem,
                 content);
         }
@@ -167,8 +174,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
 
             var prefix = _uiOptions.RoutePrefix;
-
-            return  prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            
+            var sb = new StringBuilder();
+            return sb.Append(prefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(Version).Append("/").Append(pathWithoutFileExtension).ToString();
         }
 
         private string RemoveFileExtensionFromPath(string path)

@@ -209,11 +209,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult ReloadPageWithCulture()
         {
-            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
-                            + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" +
-                            DocumentName;
+            var sb = new StringBuilder();
 
-            return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
+            var returnUrl = sb.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(ProjectName)
+                .Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName);
+
+            sb.Clear();
+            
+            return Redirect(sb.Append("/Abp/Languages/Switch?culture=").Append(LanguageCode).Append("&uiCulture=")
+                .Append(LanguageCode).Append("&returnUrl=").Append(returnUrl).ToString());
         }
 
         private IActionResult RedirectToDefaultLanguage()
@@ -242,10 +246,12 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             var projects = await _projectAppService.GetListAsync();
 
+            var sb = new StringBuilder();
+            
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? DocumentsUrlPrefix + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Value = p.Id != Project.Id ? sb.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(p.ShortName).Append("/").Append(DocsAppConsts.Latest).ToString() : null,
                 Selected = p.Id == Project.Id
             }).ToList();
         }
@@ -383,14 +389,15 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
 
-            var link = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + version;
+            var linkStringBuilder = new StringBuilder();
+            linkStringBuilder.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(version);
 
             if (documentName != null)
             {
-                link += "/" + DocumentName;
+                linkStringBuilder.Append("/").Append(DocumentName);
             }
 
-            return link;
+            return linkStringBuilder.ToString();
         }
 
         public string GetSpecificVersionOrLatest()
@@ -407,7 +414,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
-            DocumentNameWithExtension = DocumentName + "." + Project.Format;
+            var sb = new StringBuilder();
+            DocumentNameWithExtension = sb.Append(DocumentName).Append(".").Append(Project.Format).ToString();
 
             try
             {
@@ -435,12 +443,14 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             LanguageSelectListItems = new List<SelectListItem>();
 
+            var sb = new StringBuilder();
+            
             foreach (var language in LanguageConfig.Languages)
             {
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" + DocumentName,
+                        sb.Append(DocumentsUrlPrefix).Append(language.Code).Append("/").Append(Project.ShortName).Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName).ToString(),
                         language.Code == LanguageCode
                         )
                     );
@@ -614,18 +624,17 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                 );
             }
-            else
-            {
-                return await _documentAppService.GetAsync(
-                    new GetDocumentInput
-                    {
-                        ProjectId = Project.Id,
-                        Name = DocumentNameWithExtension,
-                        LanguageCode = languageCode,
-                        Version = Version
-                    }
-                );
-            }
+            
+            
+            return await _documentAppService.GetAsync(
+                new GetDocumentInput
+                {
+                    ProjectId = Project.Id,
+                    Name = DocumentNameWithExtension,
+                    LanguageCode = languageCode,
+                    Version = Version
+                }
+            );
         }
 
         private async Task SetDocumentPreferencesAsync()
