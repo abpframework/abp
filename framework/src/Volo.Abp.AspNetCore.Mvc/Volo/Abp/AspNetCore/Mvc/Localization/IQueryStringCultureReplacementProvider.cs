@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
-    public interface IQueryStringCultureReplacement
+    public interface IQueryStringCultureReplacementProvider
     {
         Task ReplaceAsync(QueryStringCultureReplacementContext context);
     }

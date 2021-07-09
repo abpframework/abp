@@ -33,16 +33,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 new RequestCulture(culture, uiCulture)
             );
 
-            returnUrl = await QueryStringCultureReplacement.ReplaceAsync(new QueryStringCultureReplacementContext()
-            {
-                HttpContext = HttpContext,
-                RequestCulture = new RequestCulture(culture, uiCulture),
-                ReturnUrl = returnUrl
-            });
+            var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
+            await QueryStringCultureReplacement.ReplaceAsync(context);
 
-            if (!string.IsNullOrWhiteSpace(returnUrl))
+            if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
             {
-                return Redirect(GetRedirectUrl(returnUrl));
+                return Redirect(GetRedirectUrl(context.ReturnUrl));
             }
 
             return Redirect("~/");
