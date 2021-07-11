@@ -187,6 +187,12 @@ Select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default pr
 Add-Migration "Created_Book_Entity"
 ```
 
+If you get error something like this on the console:
+
+>"Your startup project 'Acme.BookStore.EntityFrameworkCore' doesn't reference Microsoft.EntityFrameworkCore.Design..."
+
+Then just install `Microsoft.EntityFrameworkCore.Design` into `Acme.BookStore.EntityFrameworkCore` project and try again
+
 ![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
 
 This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
