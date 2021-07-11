@@ -193,6 +193,8 @@ If you get error something like this on the console:
 
 Then just install `Microsoft.EntityFrameworkCore.Design` into `Acme.BookStore.EntityFrameworkCore` project and try again
 
+After trying, in case it says that it can not load `Acme.BookStore.EntityFrameworkCore.DbMigrations` project, just restart your visual studio
+
 ![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
 
 This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
