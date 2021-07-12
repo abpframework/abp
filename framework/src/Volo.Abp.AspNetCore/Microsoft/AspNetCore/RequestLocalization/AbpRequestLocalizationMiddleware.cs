@@ -29,6 +29,15 @@ namespace Microsoft.AspNetCore.RequestLocalization
                 _loggerFactory
             );
 
+            var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
+            if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider)
+            {
+                AbpRequestCultureCookieHelper.SetCultureCookie(
+                    context,
+                    requestCultureFeature.RequestCulture
+                );
+            }
+
             await middleware.Invoke(context);
         }
     }
