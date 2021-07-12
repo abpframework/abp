@@ -101,9 +101,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
             efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
 
-            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
-                                       ?? context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
-            dbContextFactoryFile.ReplaceText(oldUseMethod, newUseMethodForDbContext);
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                                       ?? context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            dbContextFactoryFile?.ReplaceText(oldUseMethod, newUseMethodForDbContext);
         }
     }
 }
