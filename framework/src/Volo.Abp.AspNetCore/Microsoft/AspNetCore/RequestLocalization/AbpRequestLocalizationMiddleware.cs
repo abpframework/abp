@@ -10,6 +10,8 @@ namespace Microsoft.AspNetCore.RequestLocalization
 {
     public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependency
     {
+        public const string HttpContextItemName = "__AbpSetCultureCookie";
+
         private readonly IAbpRequestLocalizationOptionsProvider _requestLocalizationOptionsProvider;
         private readonly ILoggerFactory _loggerFactory;
 
@@ -29,14 +31,22 @@ namespace Microsoft.AspNetCore.RequestLocalization
                 _loggerFactory
             );
 
-            var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
-            if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider)
+            context.Response.OnStarting(() =>
             {
-                AbpRequestCultureCookieHelper.SetCultureCookie(
-                    context,
-                    requestCultureFeature.RequestCulture
-                );
-            }
+                if (context.Items[HttpContextItemName] == null)
+                {
+                    var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
+                    if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider)
+                    {
+                        AbpRequestCultureCookieHelper.SetCultureCookie(
+                            context,
+                            requestCultureFeature.RequestCulture
+                        );
+                    }
+                }
+
+                return Task.CompletedTask;
+            });
 
             await middleware.Invoke(context);
         }
