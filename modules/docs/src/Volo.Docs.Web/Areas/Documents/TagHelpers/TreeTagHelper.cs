@@ -147,7 +147,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
-                        : sb.Append(node.Text).Append(badgeStringBuilder).ToString());
+                        : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());
             }
 
             sb.Clear();
