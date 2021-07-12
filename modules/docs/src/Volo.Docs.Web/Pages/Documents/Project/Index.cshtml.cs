@@ -212,7 +212,7 @@ namespace Volo.Docs.Pages.Documents.Project
             var sb = new StringBuilder();
 
             var returnUrl = sb.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(ProjectName)
-                .Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName);
+                .Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName).ToString();
 
             sb.Clear();
             
@@ -454,6 +454,8 @@ namespace Volo.Docs.Pages.Documents.Project
                         language.Code == LanguageCode
                         )
                     );
+
+                sb.Clear();
             }
         }
 
