@@ -12,7 +12,7 @@
     "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Folosiţi credenţialele implicite",
     "Description:Abp.Mailing.DefaultFromAddress": "Implicit de la adresa",
     "Description:Abp.Mailing.DefaultFromDisplayName": "Implicit de la numele afişat",
-    "Description:Abp.Mailing.Smtp.Host": Numele sau adresa IP al hostului folosit pentru tranzacţiile SMTP.",
+    "Description:Abp.Mailing.Smtp.Host": "Numele sau adresa IP al hostului folosit pentru tranzacţiile SMTP.",
     "Description:Abp.Mailing.Smtp.Port": "Portul folosit pentru tranzacţiile SMTP.",
     "Description:Abp.Mailing.Smtp.UserName": "Numele de utilizator asociat credenţialelor.",
     "Description:Abp.Mailing.Smtp.Password": "Parola folosită pentru numele de utilizator asociat credenţialelor.",
