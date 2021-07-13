@@ -190,7 +190,7 @@
     "BlobStoringExplanation": "Sistemul de depozitare BLOB oferă o abstractizare pentru lucrul cu BLOB-uri. ABP oferă câteva integrări prestabilite pentru furnizorii de stocare (Azure, AWS, File System, Database, etc.) pe care le puteţi folosi cu uşurinţă în aplicaţiile dumneavoastră.",
     "TextTemplating": "Modelare text",
     "TextTemplatingExplanation": "Modelarea textului este folosită pentru a reda dinamic conţinuturile bazate pe un şablon şi un model (un obiect de date). De exemplu, o puteţi folosi pentru a crea conţinuturi dinamice de email cu un şablon predefinit.",
-    "MultipleUIOptions": Opţiuni UI multiple",
+    "MultipleUIOptions": "Opţiuni UI multiple",
     "MultipleDBOptions": "Furnizori de baze de date multipli",
     "MultipleUIOptionsExplanation": "Framework-ul de bază este conceput ca independent de UI şi poate funcţiona cu orice tip de sistem UI, în timp ce mai multe opţiuni pre-construite şi integrate sunt oferite din start.",
     "MultipleDBOptionsExplanation": "Framework-ul poate lucra cu orice sursă de date, în timp ce furnizorii următori sunt dezvoltaţi şi acceptaţi oficial;",
