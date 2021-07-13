@@ -37,7 +37,7 @@
     "NewPasswordConfirmFailed": "Vă rugăm să confirmaţi noua parolă.",
     "Manage": "Administrează",
     "MyAccount": "Contul meu",
-    "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Este înregistrarea personală activată,
+    "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Este înregistrarea personală activată",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Dacă un utilizator îşi poate înregistra contul singur(ă).",
     "DisplayName:Abp.Account.EnableLocalLogin": "Autentificaţi-vă cu un cont local",
     "Description:Abp.Account.EnableLocalLogin": "Indică dacă serverul va permite utilizatorilor să se autentifice cu un cont local.",
