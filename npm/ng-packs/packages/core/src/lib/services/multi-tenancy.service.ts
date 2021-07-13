@@ -2,7 +2,10 @@ import { Injectable, Inject } from '@angular/core';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ABP } from '../models/common';
-import { FindTenantResultDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import {
+  FindTenantResultDto,
+  CurrentTenantDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { RestService } from './rest.service';
 import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy';
 import { ConfigStateService } from './config-state.service';
@@ -11,6 +14,8 @@ import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
+  domainTenant: CurrentTenantDto = null;
+
   isTenantBoxVisible = true;
 
   apiName = 'abp';

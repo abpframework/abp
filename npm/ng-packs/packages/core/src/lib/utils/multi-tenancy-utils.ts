@@ -35,15 +35,24 @@ export async function parseTenantFromUrl(injector: Injector) {
     multiTenancyService.isTenantBoxVisible = false;
   };
 
-  const setEnvironmentWithTenant = (tenant: FindTenantResultDto) => {
+  const setDomainTenant = (tenant: FindTenantResultDto) => {
+    multiTenancyService.domainTenant = {
+      id: tenant.tenantId,
+      name: tenant.name,
+      isAvailable: true,
+    };
+  };
+
+  const setEnvironmentWithDomainTenant = (tenant: FindTenantResultDto) => {
     hideTenantBox();
+    setDomainTenant(tenant);
     replaceTenantNameWithinEnvironment(injector, tenant.name);
   };
 
   if (tenancyName) {
     return multiTenancyService
       .setTenantByName(tenancyName)
-      .pipe(tap(setEnvironmentWithTenant))
+      .pipe(tap(setEnvironmentWithDomainTenant))
       .toPromise();
   } else {
     /**
