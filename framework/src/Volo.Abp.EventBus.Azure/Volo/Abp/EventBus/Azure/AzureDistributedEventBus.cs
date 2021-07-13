@@ -26,16 +26,16 @@ namespace Volo.Abp.EventBus.Azure
         private readonly ConcurrentDictionary<Type, List<IEventHandlerFactory>> _handlerFactories;
         private readonly ConcurrentDictionary<string, Type> _eventTypes;
         private IAzureServiceBusMessageConsumer _consumer;
-
         public AzureDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
+            IEventErrorHandler errorHandler,
             IOptions<AbpAzureEventBusOptions> abpAzureEventBusOptions,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IAzureServiceBusSerializer serializer,
             IAzureServiceBusMessageConsumerFactory messageConsumerFactory,
             IPublisherPool publisherPool)
-            : base(serviceScopeFactory, currentTenant)
+            : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             _options = abpAzureEventBusOptions.Value;
             _distributedEventBusOptions = abpDistributedEventBusOptions.Value;
