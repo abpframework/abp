@@ -106,7 +106,7 @@ var abp = abp || {};
                     $dfd.resolve(data);
                     userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
-                    if(jqXHR.status === 0 || jqXHR.statusText === 'abort') {
+                    if(jqXHR.statusText === 'abort') {
                         //ajax request is abort, ignore error handle.
                         return;
                     }

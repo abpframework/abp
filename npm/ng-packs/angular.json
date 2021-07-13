@@ -111,6 +111,44 @@
         }
       }
     },
+    "account-core": {
+      "projectType": "library",
+      "root": "packages/account-core",
+      "sourceRoot": "packages/account-core/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "packages/account-core/tsconfig.lib.json",
+            "project": "packages/account-core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/account-core/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "tsConfig": "tsconfig.json",
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/account-core/tsconfig.lib.json",
+              "packages/account-core/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
     "theme-basic": {
       "projectType": "library",
       "root": "packages/theme-basic",
@@ -536,44 +574,6 @@
               "apps/dev-app/tsconfig.dev.json",
               "apps/dev-app/tsconfig.prod.json",
               "apps/dev-app/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
-    "account-core": {
-      "projectType": "library",
-      "root": "packages/account-core",
-      "sourceRoot": "packages/account-core/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "packages/account-core/tsconfig.lib.json",
-            "project": "packages/account-core/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/account-core/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "tsConfig": "tsconfig.json",
-            "coverage": true,
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "packages/account-core/tsconfig.lib.json",
-              "packages/account-core/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }

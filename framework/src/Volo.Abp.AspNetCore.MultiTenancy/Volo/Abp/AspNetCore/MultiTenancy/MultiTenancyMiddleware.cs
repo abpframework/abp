@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
-using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
@@ -21,14 +18,17 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
         private readonly ICurrentTenant _currentTenant;
         private readonly AbpAspNetCoreMultiTenancyOptions _options;
+        private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
             ITenantConfigurationProvider tenantConfigurationProvider,
             ICurrentTenant currentTenant,
-            IOptions<AbpAspNetCoreMultiTenancyOptions> options)
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options,
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
             _tenantConfigurationProvider = tenantConfigurationProvider;
             _currentTenant = currentTenant;
+            _tenantResolveResultAccessor = tenantResolveResultAccessor;
             _options = options.Value;
         }
 
@@ -49,6 +49,12 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             {
                 using (_currentTenant.Change(tenant?.Id, tenant?.Name))
                 {
+                    if (_tenantResolveResultAccessor.Result != null &&
+                        _tenantResolveResultAccessor.Result.AppliedResolvers.Contains(QueryStringTenantResolveContributor.ContributorName))
+                    {
+                        AbpMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
+                    }
+
                     var requestCulture = await TryGetRequestCultureAsync(context);
                     if (requestCulture != null)
                     {

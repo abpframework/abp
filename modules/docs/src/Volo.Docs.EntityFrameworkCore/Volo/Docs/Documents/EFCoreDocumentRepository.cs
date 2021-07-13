@@ -18,13 +18,27 @@ namespace Volo.Docs.Documents
         {
         }
 
+        public async Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(d => d.ProjectId == projectId)
+                .Select(x => new DocumentWithoutDetails
+                {
+                    Id = x.Id,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    Format = x.Format,
+                })
+                .ToListAsync(cancellationToken: cancellationToken);
+        }
+
         public async Task<List<Document>> GetListByProjectId(Guid projectId,
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
         }
 
-        public async Task<List<Document>> GetAllAsync(
+        public async Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,
             string version,
@@ -130,7 +144,7 @@ namespace Volo.Docs.Documents
             return await (await GetDbSetAsync()).Where(x => x.Id == id).SingleAsync(cancellationToken: cancellationToken);
         }
 
-        protected virtual IQueryable<Document> ApplyFilterForGetAll(
+        protected virtual IQueryable<DocumentWithoutContent> ApplyFilterForGetAll(
             IQueryable<Document> query,
             Guid? projectId,
             string name,
@@ -176,7 +190,21 @@ namespace Volo.Docs.Documents
                 .WhereIf(lastCachedTimeMin.HasValue,
                     d => d.LastCachedTime.Date >= lastCachedTimeMin.Value.Date)
                 .WhereIf(lastCachedTimeMax.HasValue,
-                    d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date);
+                    d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date)
+                .Select(x => new DocumentWithoutContent
+                {
+                    Id = x.Id,
+                    ProjectId = x.ProjectId,
+                    Name = x.Name,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    FileName = x.FileName,
+                    Format = x.Format,
+                    CreationTime = x.CreationTime,
+                    LastUpdatedTime = x.LastUpdatedTime,
+                    LastSignificantUpdateTime = x.LastSignificantUpdateTime,
+                    LastCachedTime = x.LastCachedTime
+                });
         }
     }
 }
