@@ -1,7 +1,7 @@
 {
   "culture": "ro-RO",
   "texts": {
-    "AddSubMenuItem": "Adaugă submeniu,
+    "AddSubMenuItem": "Adaugă submeniu",
     "AreYouSure": "Sunteţi sigur(ă)?",
     "BlogDeletionConfirmationMessage": "Blogul '{0}' va fi şters. Sunteţi sigur(ă)?",
     "BlogFeatureNotAvailable": "Această caracteristică nu este disponibilă acum. Activaţi-o cu 'GlobalFeatureManager' pentru a o folosi.",
