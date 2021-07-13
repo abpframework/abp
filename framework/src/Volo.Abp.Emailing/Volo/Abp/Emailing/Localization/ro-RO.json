@@ -1,0 +1,25 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Implicit de la adresa",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Implicit de la numele afişat",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Host",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Nume de utilizator",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Parola",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domeniu",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Activează SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Folosiţi credenţialele implicite",
+    "Description:Abp.Mailing.DefaultFromAddress": "Implicit de la adresa",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Implicit de la numele afişat",
+    "Description:Abp.Mailing.Smtp.Host": Numele sau adresa IP al hostului folosit pentru tranzacţiile SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "Portul folosit pentru tranzacţiile SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "Numele de utilizator asociat credenţialelor.",
+    "Description:Abp.Mailing.Smtp.Password": "Parola folosită pentru numele de utilizator asociat credenţialelor.",
+    "Description:Abp.Mailing.Smtp.Domain": "Domeniul sau numele calculatorului care verifică credenţialele.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Dacă SmtpClient foloseste Secure Sockets Layer (SSL) pentru a cripta conexiunea.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Dacă DefaultCredentials sunt trimise odată cu solicitările.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Şablon aspect implicit pentru email",
+    "TextTemplate:StandardEmailTemplates.Message": "Şablon de mesaj simplu pentru emailuri"
+  }
+}
