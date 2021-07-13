@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.Authentication;
 
-namespace MyCompanyName.MyProjectName.Web.Controllers
+namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Controllers
 {
     public class AccountController : ChallengeAccountController
     {

@@ -41,6 +41,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
             ));
 
             steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.Server"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.WebAssembly"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
                 "MyCompanyName.MyProjectName.Blazor.Host",
                 projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host"
             ));

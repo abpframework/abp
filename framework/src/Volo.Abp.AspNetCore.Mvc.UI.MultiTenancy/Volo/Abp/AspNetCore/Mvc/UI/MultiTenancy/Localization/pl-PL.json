@@ -1,6 +1,7 @@
 ﻿{
   "culture": "pl-PL",
   "texts": {
+    "GivenTenantIsNotExist": "Podany najemca nie istnieje: {0}",
     "GivenTenantIsNotAvailable": "Podany tenant jest niedostępny: {0}",
     "Tenant": "Tenant",
     "Switch": "zmień",

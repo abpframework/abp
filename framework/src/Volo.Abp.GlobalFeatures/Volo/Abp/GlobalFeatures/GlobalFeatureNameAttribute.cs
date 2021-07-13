@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -17,7 +17,6 @@ namespace Volo.Abp.GlobalFeatures
         }
 
         public static string GetName<TFeature>()
-            where TFeature : GlobalFeature
         {
             return GetName(typeof(TFeature));
         }

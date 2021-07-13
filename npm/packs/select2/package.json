@@ -1,11 +1,11 @@
 {
-  "version": "4.3.0-rc.1",
+  "version": "4.4.0-rc.2",
   "name": "@abp/select2",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.3.0-rc.1",
+    "@abp/core": "~4.4.0-rc.2",
     "select2": "^4.0.13"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

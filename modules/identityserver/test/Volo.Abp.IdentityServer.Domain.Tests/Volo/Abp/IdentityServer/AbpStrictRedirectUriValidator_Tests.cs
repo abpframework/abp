@@ -54,6 +54,7 @@ namespace Volo.Abp.IdentityServer
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("https://api.t1.abp:8080/", _testClient)).ShouldBeFalse();
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.t1.abp.io", _testClient)).ShouldBeFalse();
+            (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://t1.ng.abp.io/index.html.mydomain.com", _testClient)).ShouldBeFalse();
         }
 
         [Fact]
@@ -68,6 +69,7 @@ namespace Volo.Abp.IdentityServer
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("https://api.t1.abp:8080/", _testClient)).ShouldBeFalse();
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.t1.abp.io", _testClient)).ShouldBeFalse();
+            (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://t1.ng.abp.io/index.html.mydomain.com", _testClient)).ShouldBeFalse();
         }
     }
 }

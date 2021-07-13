@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -52,7 +52,7 @@ This part covers the **server side** tests. There are several test projects in t
 
 Each project is used to test the related project. Test projects use the following libraries for testing:
 
-* [Xunit](https://xunit.github.io/) as the main test framework.
+* [Xunit](https://github.com/xunit/xunit) as the main test framework.
 * [Shoudly](https://github.com/shouldly/shouldly) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 

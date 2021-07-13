@@ -1,9 +1,5 @@
 # Module Entity Extensions
 
-> This feature is not supported by the Blazor UI yet.
-
-## Introduction
-
 Module entity extension system is a **high level** extension system that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
 
 > The module must be developed the *Module Entity Extensions* system in mind. All the **official modules** supports this system wherever possible.

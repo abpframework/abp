@@ -45,19 +45,26 @@ namespace Volo.Abp.AspNetCore.Auditing
             var hasError = false;
             using (var saveHandle = _auditingManager.BeginScope())
             {
+                Debug.Assert(_auditingManager.Current != null);
+
                 try
                 {
                     await next(context);
 
-                    Debug.Assert(_auditingManager.Current != null);
                     if (_auditingManager.Current.Log.Exceptions.Any())
                     {
                         hasError = true;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     hasError = true;
+
+                    if (!_auditingManager.Current.Log.Exceptions.Contains(ex))
+                    {
+                        _auditingManager.Current.Log.Exceptions.Add(ex);
+                    }
+
                     throw;
                 }
                 finally

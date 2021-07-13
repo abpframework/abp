@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
@@ -15,13 +16,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         protected IThemeManager ThemeManager { get; }
         protected AbpToolbarOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
+        protected ISimpleStateCheckerManager<ToolbarItem> SimpleStateCheckerManager { get; }
 
         public ToolbarManager(
             IOptions<AbpToolbarOptions> options,
             IServiceProvider serviceProvider,
-            IThemeManager themeManager)
+            IThemeManager themeManager,
+            ISimpleStateCheckerManager<ToolbarItem> simpleStateCheckerManager)
         {
             ThemeManager = themeManager;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
             ServiceProvider = serviceProvider;
             Options = options.Value;
         }
@@ -32,14 +36,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
-
-                foreach (var contributor in Options.Contributors)
+                using (RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ToolbarItem>()))
                 {
-                    await contributor.ConfigureToolbarAsync(context);
-                }
+                    var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
 
-                await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                    foreach (var contributor in Options.Contributors)
+                    {
+                        await contributor.ConfigureToolbarAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                }
             }
 
             return toolbar;
@@ -47,17 +54,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
         protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, Toolbar toolbar)
         {
-            var requiredPermissionItems = toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()).ToList();
-
-            if (requiredPermissionItems.Any())
+            foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
             {
-                var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
-                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).Distinct().ToArray());
+                item.RequirePermissions(item.RequiredPermissionName);
+            }
+
+            var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();
+            if (checkPermissionsToolbarItems.Any())
+            {
+                var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsToolbarItems);
 
                 var toBeDeleted = new HashSet<ToolbarItem>();
-                foreach (var item in requiredPermissionItems)
+                foreach (var item in checkPermissionsToolbarItems)
                 {
-                    if (grantResult.Result[item.RequiredPermissionName!] != PermissionGrantResult.Granted)
+                    if (!result[item])
                     {
                         toBeDeleted.Add(item);
                     }

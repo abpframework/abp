@@ -30,6 +30,21 @@ namespace Volo.Abp.Data.MultiTenancy
             {
                 options.ConnectionStrings.Default = "default-value";
                 options.ConnectionStrings["db1"] = "db1-default-value";
+                options.ConnectionStrings["Saas"] = "Saas-default-value";
+                options.ConnectionStrings["Admin"] = "Admin-default-value";
+
+                options.Databases.Configure("Saas", database =>
+                {
+                    database.MappedConnections.Add("Saas1");
+                    database.MappedConnections.Add("Saas2");
+                    database.IsUsedByTenants = false;
+                });
+
+                options.Databases.Configure("Admin", database =>
+                {
+                    database.MappedConnections.Add("Admin1");
+                    database.MappedConnections.Add("Admin2");
+                });
             });
 
             services.Configure<AbpDefaultTenantStoreOptions>(options =>
@@ -41,7 +56,8 @@ namespace Volo.Abp.Data.MultiTenancy
                         ConnectionStrings =
                         {
                             { ConnectionStrings.DefaultConnectionStringName, "tenant1-default-value"},
-                            {"db1", "tenant1-db1-value"}
+                            {"db1", "tenant1-db1-value"},
+                            {"Admin", "tenant1-Admin-value"}
 }
                     },
                     new TenantConfiguration(_tenant2Id, "tenant2")
@@ -55,12 +71,16 @@ namespace Volo.Abp.Data.MultiTenancy
             //No tenant in current context
             (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
             (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
+            (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("Saas-default-value");
+            (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("Admin-default-value");
 
             //Overriden connection strings for tenant1
             using (_currentTenant.Change(_tenant1Id))
             {
                 (await _connectionResolver.ResolveAsync()).ShouldBe("tenant1-default-value");
                 (await _connectionResolver.ResolveAsync("db1")).ShouldBe("tenant1-db1-value");
+                (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("tenant1-default-value");
+                (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("tenant1-Admin-value");
             }
 
             //No tenant in current context
@@ -72,6 +92,8 @@ namespace Volo.Abp.Data.MultiTenancy
             {
                 (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
                 (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
+                (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("Saas-default-value");
+                (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("Admin-default-value");
             }
         }
     }

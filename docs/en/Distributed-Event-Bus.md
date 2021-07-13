@@ -4,7 +4,7 @@ Distributed Event bus system allows to **publish** and **subscribe** to events t
 
 ## Providers
 
-Distributed event bus system provides an **abstraction** that can be implemented by any vendor/provider. There are two providers implemented out of the box:
+Distributed event bus system provides an **abstraction** that can be implemented by any vendor/provider. There are four providers implemented out of the box:
 
 * `LocalDistributedEventBus` is the default implementation that implements the distributed event bus to work as in-process. Yes! The **default implementation works just like the [local event bus](Local-Event-Bus.md)**, if you don't configure a real distributed provider.
 * `AzureDistributedEventBus` implements the distributed event bus with the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/). See the [Azure Service Bus integration document](Distributed-Event-Bus-Azure-Integration.md) to learn how to configure it.
@@ -303,3 +303,54 @@ namespace AbpDemo
 ````
 
 This example uses the `AutoMap` attribute of the AutoMapper to configure the mapping. You could create a profile class instead. Please refer to the AutoMapper document for more options.
+
+## Exception Handling
+
+ABP provides exception handling and retries when an exception occurs, it will move to the dead letter queue after the retry fails.
+
+Enable exception handling:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpEventBusOptions>(options =>
+    {
+        options.EnabledErrorHandle = true;
+        options.UseRetryStrategy();
+    });
+}
+```
+
+* `EnabledErrorHandle` is used to enable exception handing.
+* `UseRetryStrategy` is used to enable retry.
+
+When an exception occurs, it will retry every three seconds up to the maximum number of retries(default is 3) and move to dead letter queue, you can change the number of retries, retry interval and dead letter queue name:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.DeadLetterName = "dead_queue";
+    options.UseRetryStrategy(retryStrategyOptions =>
+    {
+        retryStrategyOptions.IntervalMillisecond = 0;
+        retryStrategyOptions.MaxRetryAttempts = 1;
+    });
+});
+```
+
+### Error Handle Selector
+
+By default all event types will be exception handling, you can use `ErrorHandleSelector` of `AbpEventBusOptions` to change it:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
+});
+```
+
+`options.ErrorHandleSelector` actually a list of type predicate. You can write a lambda expression to define your filter.
+
+### Customize Exception Handling
+
+ABP defines the `IEventErrorHandler` interface and implemented by the provider, you can replace it via [dependency injection](Dependency-Injection.md)

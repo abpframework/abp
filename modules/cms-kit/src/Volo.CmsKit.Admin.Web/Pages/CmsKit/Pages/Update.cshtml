@@ -30,6 +30,7 @@
 @section styles {
 <abp-style-bundle>
     <abp-style type="typeof(TuiEditorStyleContributor)" />
+    <abp-style src="/Pages/CmsKit/Pages/update.css" />
 </abp-style-bundle>
 }
 
@@ -49,7 +50,7 @@
             <abp-tabs tab-style="Tab">
 
                 <abp-tab title="@L["Content"]">
-                    <div class="content-editor"
+                    <div class="content-editor cms-kit-editor"
                          id="ContentEditor"
                          data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                          data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
@@ -57,11 +58,11 @@
                 </abp-tab>
 
                 <abp-tab title="@L["Script"]">
-                    <abp-input asp-for="ViewModel.Script" suppress-label="true" />
+                    <abp-input asp-for="ViewModel.Script" suppress-label="true" class="cms-kit-editor" />
                 </abp-tab>
 
                 <abp-tab title="@L["Style"]">
-                    <abp-input asp-for="ViewModel.Style" suppress-label="true"/>
+                    <abp-input asp-for="ViewModel.Style" suppress-label="true" class="cms-kit-editor"/>
                 </abp-tab>
 
             </abp-tabs>

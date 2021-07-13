@@ -53,17 +53,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return null;
             }
 
-            if (value is IRemoteStreamContent remoteStreamContent)
-            {
-                var content = new StreamContent(remoteStreamContent.GetStream());
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(remoteStreamContent.ContentType);
-                content.Headers.ContentLength = remoteStreamContent.ContentLength;
-                return content;
-            }
-            else
-            {
-                return new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json);
-            }
+            return new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json);
         }
 
         private static HttpContent GenerateFormPostData(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
@@ -80,7 +70,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             if (parameters.Any(x => x.BindingSourceId == ParameterBindingSources.FormFile))
             {
-                var postDataBuilder = new MultipartFormDataContent();
+                var formData = new MultipartFormDataContent();
                 foreach (var parameter in parameters)
                 {
                     var value = HttpActionParameterHelper.FindParameterValue(methodArguments, parameter);
@@ -91,32 +81,43 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                     if (value is IRemoteStreamContent remoteStreamContent)
                     {
-                        var streamContent = new StreamContent(remoteStreamContent.GetStream());
+                        var stream = remoteStreamContent.GetStream();
+                        if (stream.CanSeek)
+                        {
+                            stream.Position = 0;
+                        }
+                        var streamContent = new StreamContent(stream);
                         if (!remoteStreamContent.ContentType.IsNullOrWhiteSpace())
                         {
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
+
                         }
-                        postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
+                        formData.Add(streamContent, parameter.Name, remoteStreamContent.FileName ?? parameter.Name);
                     }
                     else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
                     {
                         foreach (var content in remoteStreamContents)
                         {
-                            var streamContent = new StreamContent(content.GetStream());
+                            var stream = content.GetStream();
+                            if (stream.CanSeek)
+                            {
+                                stream.Position = 0;
+                            }
+                            var streamContent = new StreamContent(stream);
                             if (!content.ContentType.IsNullOrWhiteSpace())
                             {
                                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
                             }
-                            postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
+                            formData.Add(streamContent, parameter.Name, content.FileName ?? parameter.Name);
                         }
                     }
                     else
                     {
-                        postDataBuilder.Add(new StringContent(value.ToString(), Encoding.UTF8), parameter.Name);
+                        formData.Add(new StringContent(value.ToString(), Encoding.UTF8), parameter.Name);
                     }
                 }
 
-                return postDataBuilder;
+                return formData;
             }
             else
             {

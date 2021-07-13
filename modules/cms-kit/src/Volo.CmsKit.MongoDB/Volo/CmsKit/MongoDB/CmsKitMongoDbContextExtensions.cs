@@ -4,6 +4,7 @@ using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -79,6 +80,11 @@ namespace Volo.CmsKit.MongoDB
             builder.Entity<MediaDescriptor>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
+            });
+
+            builder.Entity<MenuItem>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MenuItems";
             });
         }
     }

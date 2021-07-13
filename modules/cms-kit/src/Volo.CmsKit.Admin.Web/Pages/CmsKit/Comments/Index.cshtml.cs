@@ -6,8 +6,6 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
     {
         public string EntityType { get; set; }
 
-        public string EntityId { get; set; }
-
         public string Author { get; set; }
 
         public DateTime? CreationStartDate { get; set; }

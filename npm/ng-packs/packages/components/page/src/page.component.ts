@@ -37,4 +37,15 @@ export class PageComponent {
   @ContentChild(PageBreadcrumbContainerComponent)
   customBreadcrumb: PageBreadcrumbContainerComponent;
   @ContentChild(PageToolbarContainerComponent) customToolbar: PageToolbarContainerComponent;
+
+  get shouldRenderRow() {
+    return !!(
+      this.title ||
+      this.toolbarVisible ||
+      this.breadcrumbVisible ||
+      this.customTitle ||
+      this.customBreadcrumb ||
+      this.customToolbar
+    );
+  }
 }

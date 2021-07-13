@@ -1,13 +1,16 @@
-import { ABP, AbpValidators, TrackByService } from '@abp/ng.core';
+import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   Optional,
   SimpleChanges,
   SkipSelf,
+  ViewChild,
 } from '@angular/core';
 import {
   ControlContainer,
@@ -43,10 +46,14 @@ import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
     { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
-export class ExtensibleFormPropComponent implements OnChanges {
+export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @Input() data: PropData;
 
   @Input() prop: FormProp;
+
+  @Input() first: boolean;
+
+  @ViewChild('field') private fieldRef: ElementRef<HTMLElement>;
 
   asterisk = '';
 
@@ -82,6 +89,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   typeaheadFormatter = (option: ABP.Option<any>) => option.key;
 
+  get meridian() {
+    return (
+      this.configState.getDeep('localization.currentCulture.dateTimeFormat.shortTimePattern') || ''
+    ).includes('tt');
+  }
+
   get isInvalid() {
     const control = this.form.get(this.prop.name);
     return control.touched && control.invalid;
@@ -90,6 +103,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   constructor(
     public readonly cdRef: ChangeDetectorRef,
     public readonly track: TrackByService,
+    protected configState: ConfigStateService,
     groupDirective: FormGroupDirective,
   ) {
     this.form = groupDirective.form;
@@ -107,6 +121,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   private setAsterisk() {
     this.asterisk = this.validators.some(isRequired) ? '*' : '';
+  }
+
+  ngAfterViewInit() {
+    if (this.first && this.fieldRef) {
+      this.fieldRef.nativeElement.focus();
+    }
   }
 
   getComponent(prop: FormProp): string {

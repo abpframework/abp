@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using Volo.Abp.Authorization;
 using Volo.Abp.Features.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -14,7 +15,8 @@ namespace Volo.Abp.Features
     [DependsOn(
         typeof(AbpLocalizationModule),
         typeof(AbpMultiTenancyModule),
-        typeof(AbpValidationModule)
+        typeof(AbpValidationModule),
+        typeof(AbpAuthorizationAbstractionsModule)
         )]
     public class AbpFeaturesModule : AbpModule
     {

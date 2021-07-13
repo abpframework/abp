@@ -17,6 +17,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <!--APPSETTINGS-SECRETS-->
   </ItemGroup>
 
   <ItemGroup>

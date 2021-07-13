@@ -62,10 +62,9 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = ResolveConnectionString(connectionStringName);
-
             var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
+            var connectionString = ResolveConnectionString(connectionStringName);
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
@@ -85,10 +84,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
-            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);

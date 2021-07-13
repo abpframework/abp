@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -14,7 +15,9 @@ namespace Volo.Blogging
         typeof(BloggingApplicationContractsModule),
         typeof(AbpCachingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpBlobStoringModule))]
+        typeof(AbpBlobStoringModule),
+        typeof(AbpDddApplicationModule)
+        )]
     public class BloggingApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

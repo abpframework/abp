@@ -11,6 +11,8 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  isDevMode,
+  OnInit,
 } from '@angular/core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';
@@ -19,6 +21,7 @@ import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
+import { DismissableModal, ModalRefService, ModalDismissMode } from './modal-ref.service';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -28,7 +31,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   styleUrls: ['./modal.component.scss'],
   providers: [SubscriptionService],
 })
-export class ModalComponent implements OnDestroy {
+export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   /**
    * @deprecated Use centered property of options input instead. To be deleted in v5.0.
    */
@@ -78,6 +81,9 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
+  /**
+   * @deprecated will be removed in v5.0
+   */
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
 
@@ -112,8 +118,25 @@ export class ModalComponent implements OnDestroy {
     @Inject(SUPPRESS_UNSAVED_CHANGES_WARNING)
     private suppressUnsavedChangesWarningToken: boolean,
     private modal: NgbModal,
+    private modalRefService: ModalRefService,
   ) {
     this.initToggleStream();
+  }
+  ngOnInit(): void {
+    this.modalRefService.register(this);
+  }
+
+  dismiss(mode: ModalDismissMode) {
+    switch (mode) {
+      case 'hard':
+        this.visible = false;
+        break;
+      case 'soft':
+        this.close();
+        break;
+      default:
+        break;
+    }
   }
 
   private initToggleStream() {
@@ -154,6 +177,7 @@ export class ModalComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.modalRefService.unregister(this);
     this.toggle(false);
     this.destroy$.next();
   }
@@ -203,11 +227,20 @@ export class ModalComponent implements OnDestroy {
 
     setTimeout(() => {
       if (!this.abpClose) return;
+      this.warnForDeprecatedClose();
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
+  }
+
+  private warnForDeprecatedClose() {
+    if (isDevMode()) {
+      console.warn(
+        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
+      );
+    }
   }
 }

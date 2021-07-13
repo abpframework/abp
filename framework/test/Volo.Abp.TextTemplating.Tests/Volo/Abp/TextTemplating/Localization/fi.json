@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "HelloText": "Hei {0}",
+    "HowAreYou": "mitä kuuluu?"
+  }
+}

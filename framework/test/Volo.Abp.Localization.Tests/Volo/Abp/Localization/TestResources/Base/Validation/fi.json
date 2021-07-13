@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "ThisFieldIsRequired": "Tämä kenttä pitää täyttää",
+    "MaxLenghtErrorMessage": "Tämä kenttä voi olla enintään {0} merkkiä"
+  }
+}

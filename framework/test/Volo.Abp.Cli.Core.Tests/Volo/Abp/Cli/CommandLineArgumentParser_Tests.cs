@@ -64,5 +64,26 @@ namespace Volo.Abp.Cli
             commandLineArgs.Options.ShouldContainKey("optionC");
             commandLineArgs.Options["optionC"].ShouldBe("value2");
         }
+
+        [Fact]
+        public void Should_Parse_From_Line_Text()
+        {
+            var commandLineArgs = _commandLineArgumentParser.Parse(
+                "mycommand mytarget -a value1 -b \"value with space\" --optionC"
+            );
+            
+            commandLineArgs.Command.ShouldBe("mycommand");
+            commandLineArgs.Target.ShouldBe("mytarget");
+            commandLineArgs.Options.Any().ShouldBeTrue();
+            
+            commandLineArgs.Options.ShouldContainKey("a");
+            commandLineArgs.Options["a"].ShouldBe("value1");
+
+            commandLineArgs.Options.ShouldContainKey("b");
+            commandLineArgs.Options["b"].ShouldBe("value with space");
+
+            commandLineArgs.Options.ShouldContainKey("optionC");
+            commandLineArgs.Options["optionC"].ShouldBeNull();
+        }
     }
 }

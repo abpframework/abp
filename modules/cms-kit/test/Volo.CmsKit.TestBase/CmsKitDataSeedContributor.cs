@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,6 +12,7 @@ using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -47,6 +47,7 @@ namespace Volo.CmsKit
         private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
         private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
         private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
+        private readonly IMenuItemRepository _menuItemRepository;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -72,7 +73,8 @@ namespace Volo.CmsKit
             BlogManager blogManager,
             IOptions<CmsKitMediaOptions> cmsMediaOptions,
             IOptions<CmsKitCommentOptions> commentsOptions,
-            IOptions<CmsKitRatingOptions> ratingOptions)
+            IOptions<CmsKitRatingOptions> ratingOptions,
+            IMenuItemRepository menuItemRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -97,7 +99,8 @@ namespace Volo.CmsKit
             _blogManager = blogManager;
             _mediaOptions = cmsMediaOptions;
             _commentsOptions = commentsOptions;
-            this._ratingOptions = ratingOptions;
+            _ratingOptions = ratingOptions;
+            _menuItemRepository = menuItemRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -123,6 +126,8 @@ namespace Volo.CmsKit
                 await SeedBlogFeaturesAsync();
 
                 await SeedMediaAsync();
+
+                await SeedMenusAsync();
             }
         }
 
@@ -136,7 +141,7 @@ namespace Volo.CmsKit
 
             _mediaOptions.Value.EntityTypes.AddIfNotContains(
                 new MediaDescriptorDefinition(
-                    _cmsKitTestData.Media_1_EntityType, 
+                    _cmsKitTestData.Media_1_EntityType,
                     createPolicies: new[] { "SomeCreatePolicy" },
                     deletePolicies: new[] { "SomeDeletePolicy" }));
 
@@ -172,7 +177,7 @@ namespace Volo.CmsKit
         {
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1",
                 "user1@volo.com",
-                "user", "1")), 
+                "user", "1")),
                 autoSave: true);
 
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2",
@@ -318,8 +323,8 @@ namespace Volo.CmsKit
             {
                 var tagEntity = await _tagRepository.InsertAsync(
                     await _tagManager.CreateAsync(
-                        _guidGenerator.Create(), 
-                        _cmsKitTestData.Content_1_EntityType, 
+                        _guidGenerator.Create(),
+                        _cmsKitTestData.Content_1_EntityType,
                         tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
@@ -330,7 +335,7 @@ namespace Volo.CmsKit
                 var tagEntity = await _tagRepository.InsertAsync(
                     await _tagManager.CreateAsync(
                         _guidGenerator.Create(),
-                        _cmsKitTestData.Content_2_EntityType, 
+                        _cmsKitTestData.Content_2_EntityType,
                         tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_2_EntityType, _cmsKitTestData.Content_2_EntityId);
@@ -355,23 +360,23 @@ namespace Volo.CmsKit
 
             var author = await _cmsUserRepository.GetAsync(_cmsKitTestData.User1Id);
 
-            _cmsKitTestData.BlogPost_1_Id = 
+            _cmsKitTestData.BlogPost_1_Id =
                 (await _blogPostRepository.InsertAsync(
                     await _blogPostManager.CreateAsync(
-                        author, 
-                        blog, 
-                        _cmsKitTestData.BlogPost_1_Title, 
-                        _cmsKitTestData.BlogPost_1_Slug, 
+                        author,
+                        blog,
+                        _cmsKitTestData.BlogPost_1_Title,
+                        _cmsKitTestData.BlogPost_1_Slug,
                         "Short desc 1",
                         "Blog Post 1 Content"))).Id;
 
             _cmsKitTestData.BlogPost_2_Id =
-                (await _blogPostRepository.InsertAsync( 
+                (await _blogPostRepository.InsertAsync(
                     await _blogPostManager.CreateAsync(
                         author,
                         blog,
-                        _cmsKitTestData.BlogPost_2_Title, 
-                        _cmsKitTestData.BlogPost_2_Slug, 
+                        _cmsKitTestData.BlogPost_2_Title,
+                        _cmsKitTestData.BlogPost_2_Slug,
                         "Short desc 2",
                         "Blog Post 2 Content"))).Id;
         }
@@ -405,6 +410,26 @@ namespace Volo.CmsKit
 
                 await _mediaBlobContainer.SaveAsync(media.Id.ToString(), stream);
             }
+        }
+
+        private async Task SeedMenusAsync()
+        {
+            await _menuItemRepository.InsertManyAsync(new[]
+            {
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_1_Id,
+                    _cmsKitTestData.MenuItem_1_Name,
+                    _cmsKitTestData.MenuItem_1_Url),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_2_Id,
+                    _cmsKitTestData.MenuItem_2_Name,
+                    _cmsKitTestData.MenuItem_2_Url),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_3_Id,
+                    _cmsKitTestData.MenuItem_3_Name,
+                    _cmsKitTestData.MenuItem_3_Url)
+
+            });
         }
     }
 }

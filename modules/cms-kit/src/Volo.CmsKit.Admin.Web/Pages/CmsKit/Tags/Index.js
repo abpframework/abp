@@ -17,7 +17,6 @@
         serverSide: true,
         paging: true,
         searching: false,
-        autoWidth: false,
         scrollCollapse: true,
         scrollX: true,
         ordering: false,
@@ -44,7 +43,6 @@
                                 service
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         dataTable.ajax.reload(null, false);
                                     });
                             }

@@ -33,6 +33,7 @@
 @section styles {
     <abp-style-bundle>
         <abp-style type="typeof(TuiEditorStyleContributor)"/>
+        <abp-style src="/Pages/CmsKit/BlogPosts/create.css"/>
     </abp-style-bundle>
 }
 
@@ -61,7 +62,7 @@
             
             <abp-form-content />
 
-            <div class="content-editor" 
+            <div class="content-editor cms-kit-editor" 
                  id="ContentEditor" 
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">

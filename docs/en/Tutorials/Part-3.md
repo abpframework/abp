@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -709,7 +709,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
   </ng-template>
@@ -844,7 +844,7 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
 ````html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
   </button>
 
@@ -1158,7 +1158,7 @@ Clicking the "Delete" action calls the `delete` method which then shows a confir
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## Creating a New Book
 
@@ -1408,6 +1408,7 @@ Here the complete code to create the book management CRUD page, that has been de
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject IStringLocalizer<BookStoreResource> L
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>

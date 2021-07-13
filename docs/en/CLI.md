@@ -41,8 +41,8 @@ Here, the list of all available commands before explaining their details:
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
-* **`build`**: Builds a GIT repository and depending repositories or a single .NET solution.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
+* **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 
 ### help
 
@@ -113,10 +113,13 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
   * `SqlServer`
   * `MySQL`
   * `SQLite`
+  * `Oracle`
   * `Oracle-Devart`
   * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
 * `--no-random-port`: Uses template's default ports.
+
+See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
 ### update
 
@@ -406,25 +409,6 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
-### build
-
-This command builds a GIT repository and it's depending repositories or a single .NET solution File. In order ```build``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain one of;
-
-* A .NET solution file (*.sln)
-* abp-build-config.json (suggested to add this to .gitignore)
-
-Usage:
-
-````bash
-abp build [options]
-````
-
-Example:
-
-```
-abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
-```
-
 #### Options
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
@@ -435,9 +419,9 @@ abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
 For more details, see [build command documentation](CLI-BuildCommand.md).
 
 
-#### bundle
+### bundle
 
-This command generates script and style references for an ABP Blazor project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
+This command generates script and style references for an ABP Blazor WebAssembly project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
 
 Usage:
 
@@ -452,3 +436,22 @@ abp bundle [options]
 
 `bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
+### install-libs
+
+This command install NPM Packages for MVC / Razor Pages and Blazor Server UI types. Its **executing directory** or passed ```--working-directory``` parameter's directory must contain a project file(*.csproj).
+
+`install-libs` command reads the `abp.resourcemapping.js` file to manage package. For more details see [Client Side Package Management](UI/AspNetCore/Client-Side-Package-Management.md).
+
+Usage:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a project file.
+
+## See Also
+
+* [Examples for the new command](CLI-New-Command-Samples.md)

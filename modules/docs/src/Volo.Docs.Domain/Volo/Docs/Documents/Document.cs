@@ -55,7 +55,7 @@ namespace Volo.Docs.Documents
             [NotNull] string fileName,
             [NotNull] string content,
             [NotNull] string format,
-            [NotNull] string editLink,
+            [CanBeNull] string editLink,
             [NotNull] string rootUrl,
             [NotNull] string rawRootUrl,
             [NotNull] string localDirectory,
@@ -74,7 +74,7 @@ namespace Volo.Docs.Documents
             FileName = Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
             Content = Check.NotNullOrWhiteSpace(content, nameof(content));
             Format = Check.NotNullOrWhiteSpace(format, nameof(format));
-            EditLink = Check.NotNullOrWhiteSpace(editLink, nameof(editLink));
+            EditLink = editLink;
             RootUrl = Check.NotNullOrWhiteSpace(rootUrl, nameof(rootUrl));
             RawRootUrl = Check.NotNullOrWhiteSpace(rawRootUrl, nameof(rawRootUrl));
             LocalDirectory = Check.NotNull(localDirectory, nameof(localDirectory));

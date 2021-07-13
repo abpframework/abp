@@ -1,6 +1,6 @@
 # ABP CLI Create Solution Sample Commands 
 
-The `abp new` command creates an ABP solution or other artifacts based on an ABP template. ABP CLI has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
+The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
 
 ## Angular
 
@@ -126,6 +126,12 @@ Module are reusable sub applications used by your main project. Using ABP Module
   ```bash
   abp new Acme.IssueManagement -t module --no-ui
   ```
+  
+* Creates the module and adds it to your solution
+
+  ```bash
+  abp new Acme.IssueManagement -t module --add-to-solution-file
+  ```
 
 ## Create a solution from a specific version
 
@@ -167,7 +173,7 @@ ABP CLI always uses the latest version. In order to create a solution from a pre
 
 ## Choose database management system
 
-The default database management system (DBMS) is `Entity Framework Core` / ` SQL Server`. You can choose a DBMS by passing `--database-management-system` parameter. Accepted values are `SqlServer`, `MySQL`, `SQLite`, `Oracle-Devart`, `PostgreSQL`. The default value is `SqlServer`.
+The default database management system (DBMS) is `Entity Framework Core` / ` SQL Server`. You can choose a DBMS by passing `--database-management-system` parameter. [Accepted values](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Cli.Core/Volo/Abp/Cli/ProjectBuilding/Building/DatabaseManagementSystem.cs) are `SqlServer`, `MySQL`, `SQLite`, `Oracle`, `Oracle-Devart`, `PostgreSQL`. The default value is `SqlServer`.
 
 * Angular UI, **PostgreSQL** database, creates the project in a new folder:
 
@@ -211,6 +217,10 @@ As seen below, ABP Framework libraries are local project references.
 	<ProjectReference Include="C:\source\abp\framework\src\Volo.Abp.AspNetCore.Authentication.JwtBearer\Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj" />
 	<ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
 	<ProjectReference Include="..\Acme.BookStore.HttpApi\Acme.BookStore.HttpApi.csproj" />
-	<ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
+	<ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
 </ItemGroup>    
 ```
+
+## See Also
+
+* [ABP CLI documentation](CLI.md)

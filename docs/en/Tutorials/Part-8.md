@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -267,7 +267,7 @@ public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
 ````
 
 * `CreateAsync` requires the `BookStorePermissions.Authors.Create` permission (in addition to the `BookStorePermissions.Authors.Default` declared for the `AuthorAppService` class).
-* Used the `AuthorManeger` (domain service) to create a new author.
+* Used the `AuthorManager` (domain service) to create a new author.
 * Used the `IAuthorRepository.InsertAsync` to insert the new author to the database.
 * Used the `ObjectMapper` to return an `AuthorDto` representing the newly created author.
 

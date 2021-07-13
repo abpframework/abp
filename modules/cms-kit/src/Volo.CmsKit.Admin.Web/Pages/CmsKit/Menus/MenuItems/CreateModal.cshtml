@@ -1,0 +1,48 @@
+﻿@page
+
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
+@using Volo.CmsKit.Admin.Web.Pages
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+
+@inherits CmsKitAdminPageBase
+
+@model CreateModalModel
+
+@{
+    Layout = null;
+}
+
+<form asp-page="/CmsKit/Menus/MenuItems/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["New"].Value"></abp-modal-header>
+        <abp-modal-body>
+
+            <abp-tabs tab-style="Tab">
+                <abp-tab name="url" title="@L["Url"]">
+                
+                    <abp-input asp-for="ViewModel.Url"/>
+
+                </abp-tab>
+                <abp-tab title="@L["Page"]">
+
+                    <label asp-for="ViewModel.PageId"></label>
+
+                    <select class="form-control" asp-for="ViewModel.PageId"></select>
+                    
+                    <span asp-validation-for="ViewModel.PageId"></span>
+                </abp-tab>
+
+            </abp-tabs>
+            <hr/>
+            <abp-input asp-for="ViewModel.ParentId"/>
+            <abp-input asp-for="ViewModel.DisplayName"/>
+            <abp-input asp-for="ViewModel.IsActive"/>
+            <abp-input asp-for="ViewModel.Icon"/>
+            <abp-input asp-for="ViewModel.Order"/>
+            <abp-input asp-for="ViewModel.Target"/>
+            <abp-input asp-for="ViewModel.ElementId"/>
+            <abp-input asp-for="ViewModel.CssClass"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

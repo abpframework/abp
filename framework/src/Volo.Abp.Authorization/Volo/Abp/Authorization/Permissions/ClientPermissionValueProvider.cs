@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 using System.Linq;
 using Volo.Abp.Security.Claims;
@@ -38,7 +39,8 @@ namespace Volo.Abp.Authorization.Permissions
 
         public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
         {
-            var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
+            var permissionNames = context.Permissions.Select(x => x.Name).Distinct().ToArray();
+            Check.NotNullOrEmpty(permissionNames, nameof(permissionNames));
 
             var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
             if (clientId == null)

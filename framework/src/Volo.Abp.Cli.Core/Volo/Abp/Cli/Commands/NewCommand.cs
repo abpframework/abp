@@ -61,6 +61,11 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
+            if (!ProjectNameValidator.IsValid(projectName))
+            {
+                throw new CliUsageException("The project name is invalid! Please specify a different name.");
+            }
+
             Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + projectName);
 
@@ -89,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
             if (preview)
             {
-                Logger.LogInformation("Preview: yes if any exist for next version.");
+                Logger.LogInformation("Preview: yes");
             }
 
             var databaseProvider = GetDatabaseProvider(commandLineArgs);

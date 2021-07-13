@@ -30,17 +30,14 @@ namespace Volo.Docs.Pages.Documents
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentAppService _documentAppService;
         private readonly HtmlEncoder _encoder;
-        private readonly IVersionHelper _versionHelper;
 
         public SearchModel(IProjectAppService projectAppService,
             IDocumentAppService documentAppService,
-            HtmlEncoder encoder,
-            IVersionHelper versionHelper)
+            HtmlEncoder encoder)
         {
             _projectAppService = projectAppService;
             _documentAppService = documentAppService;
             _encoder = encoder;
-            _versionHelper = versionHelper;
         }
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
@@ -71,7 +68,7 @@ namespace Volo.Docs.Pages.Documents
                 }
                 else
                 {
-                    Version = (versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name;
+                    Version = (versions.FirstOrDefault(v => !SemanticVersionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name;
                 }
             }
 
