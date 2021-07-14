@@ -41,9 +41,8 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
         private Predicate<Type> _autoValidateFilter;
 
         /// <summary>
-        /// A predicate to filter types to auto-validate.
-        /// Return true to select the type to validate.
-        /// Default: returns true for all given types.
+        /// A list of predicates
+        /// Return true to validate the antiforgery of request.
         /// </summary>
         [NotNull]
         public List<Func<AuthorizationFilterContext, Task<bool>>> ShouldValidatePredicates

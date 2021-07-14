@@ -40,7 +40,7 @@ That's all. The systems works smoothly.
 * `TokenCookie`:  Can be used to configure the cookie details. This cookie is used to store the antiforgery token value in the client side, so clients can read it and sends the value as the HTTP header. Default cookie name is `XSRF-TOKEN`, expiration time is 10 years (yes, ten years! It should be a value longer than the authentication cookie max life time, for the security).
 * `AuthCookieSchemaName`: The name of the authentication cookie used by your application. Default value is `Identity.Application` (which becomes `AspNetCore.Identity.Application` on runtime). The default value properly works with the ABP startup templates. **If you change the authentication cookie name, you also must change this.**
 * `AutoValidate`: The single point to enable/disable the ABP automatic antiforgery validation system. Default value is `true`.
-* `AutoValidateFilter`: A predicate that gets a type and returns a boolean. ABP uses this predicate to check a controller type. If it returns false for a controller type, the controller is excluded from the automatic antiforgery token validation.
+* `ShouldValidatePredicates`: A list of predicates that gets `AuthorizationFilterContext` and returns a boolean. If any of these conditions return `false`, the request is excluded from the automatic antiforgery token validation.
 * `AutoValidateIgnoredHttpMethods`: A list of HTTP Methods to ignore on automatic antiforgery validation. Default value: "GET", "HEAD", "TRACE", "OPTIONS". These HTTP Methods are safe to skip antiforgery validation since they don't change the application state.
 
 If you need to change these options, do it in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
