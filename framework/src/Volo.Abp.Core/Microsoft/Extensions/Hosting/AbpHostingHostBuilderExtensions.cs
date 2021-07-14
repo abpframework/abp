@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.Hosting
 {
-    public static class AbpAspNetCoreHostBuilderExtensions
+    public static class AbpHostingHostBuilderExtensions
     {
         public const string AppSettingsSecretJsonPath = "appsettings.secrets.json";
 
@@ -13,9 +12,9 @@ namespace Microsoft.Extensions.Hosting
             bool reloadOnChange = true,
             string path = AppSettingsSecretJsonPath)
         {
-            return hostBuilder.ConfigureAppConfiguration(appConfig =>
+            return hostBuilder.ConfigureAppConfiguration((_, builder) =>
             {
-                appConfig.AddJsonFile(
+                builder.AddJsonFile(
                     path: AppSettingsSecretJsonPath,
                     optional: optional,
                     reloadOnChange: reloadOnChange
