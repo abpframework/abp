@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
@@ -30,12 +32,26 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
         /// Default: returns true for all given types.
         /// </summary>
         [NotNull]
+        [Obsolete("Use ShouldValidatePredicates instead.")]
         public Predicate<Type> AutoValidateFilter
         {
             get => _autoValidateFilter;
             set => _autoValidateFilter = Check.NotNull(value, nameof(value));
         }
         private Predicate<Type> _autoValidateFilter;
+
+        /// <summary>
+        /// A predicate to filter types to auto-validate.
+        /// Return true to select the type to validate.
+        /// Default: returns true for all given types.
+        /// </summary>
+        [NotNull]
+        public List<Func<AuthorizationFilterContext, Task<bool>>> ShouldValidatePredicates
+        {
+            get => _shouldValidatePredicates;
+            set => _shouldValidatePredicates = Check.NotNull(value, nameof(value));
+        }
+        private List<Func<AuthorizationFilterContext, Task<bool>>> _shouldValidatePredicates;
 
         /// <summary>
         /// Default methods: "GET", "HEAD", "TRACE", "OPTIONS".
@@ -51,6 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
         public AbpAntiForgeryOptions()
         {
             AutoValidateFilter = type => true;
+            ShouldValidatePredicates = new List<Func<AuthorizationFilterContext, Task<bool>>>();
 
             TokenCookie = new CookieBuilder
             {

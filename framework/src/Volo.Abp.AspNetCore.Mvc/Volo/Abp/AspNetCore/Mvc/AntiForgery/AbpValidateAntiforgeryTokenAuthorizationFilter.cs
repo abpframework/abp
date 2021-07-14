@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return;
             }
 
-            if (ShouldValidate(context))
+            if (await ShouldValidate(context))
             {
                 try
                 {
@@ -52,7 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             }
         }
 
-        protected virtual bool ShouldValidate(AuthorizationFilterContext context)
+        protected virtual Task<bool> ShouldValidate(AuthorizationFilterContext context)
         {
             var authCookieName = _antiForgeryCookieNameProvider.GetAuthCookieNameOrNull();
 
@@ -60,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             if (authCookieName != null &&
                 context.HttpContext.Request.Cookies.ContainsKey(authCookieName))
             {
-                return true;
+                return Task.FromResult(true);
             }
 
             var antiForgeryCookieName = _antiForgeryCookieNameProvider.GetAntiForgeryCookieNameOrNull();
@@ -71,11 +71,11 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             if (antiForgeryCookieName != null &&
                 !context.HttpContext.Request.Cookies.ContainsKey(antiForgeryCookieName))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             // Anything else requires a token.
-            return true;
+            return Task.FromResult(true);
         }
     }
 }
