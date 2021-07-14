@@ -61,7 +61,13 @@ Using NPM packages and NPM/Yarn tool is the de facto standard for client side li
 
 Next challenge is copying needed resources (js, css, img... files) from the `node_modules` into a folder inside the **wwwroot** folder to make it accessible to the clients/browsers.
 
-ABP defines a [Gulp](https://gulpjs.com/) based task to **copy resources** from **node_modules** to **wwwroot/libs** folder. Each **standard package** (see the *@ABP NPM Packages* section) defines the mapping for its own files. So, most of the time, you only configure dependencies.
+[ABP CLI](../../CLI.md) offers the command below to **copy resources** from **node_modules** to **wwwroot/libs** folder. You have to run it in the root folder of your web project:
+
+````bash
+abp install-libs
+````
+
+Each **standard package** (see the *@ABP NPM Packages* section) defines the mapping for its own files. So, most of the time, you only configure dependencies.
 
 The **startup templates** are already configured to work all these out of the box. This section will explain the configuration options.
 
@@ -100,17 +106,17 @@ mappings: {
 }
 ````
 
-#### Using The Gulp
+#### Using ABP CLI To Copy Resources
 
-Once you properly configure the `abp.resourcemapping.js` file, you can run the gulp command from the command line:
+Once you properly configure the `abp.resourcemapping.js` file, you can run the [ABP CLI](../../CLI.md) command from the command line:
 
+````bash
+abp install-libs
 ````
-gulp
-````
 
-When you run the `gulp`, all packages will copy their own resources into the **wwwroot/libs** folder. Running `yarn & gulp` is only necessary if you make a change in your dependencies in the **package.json** file.
+When you run this command, all packages will copy their own resources into the **wwwroot/libs** folder. Running `yarn` & `abp install-libs` are only necessary if you make a change in your dependencies in the **package.json** file.
 
-> When you run the Gulp command, dependencies of the application are resolved using the package.json file. The Gulp task automatically discovers and maps all resources from all dependencies (recursively).
+> When you run the `abp install-libs` command, dependencies of the application are resolved using the package.json file. [ABP CLI](../../CLI.md) automatically discovers and maps all resources from all dependencies (recursively).
 
 #### See Also
 
