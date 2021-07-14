@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 
         /// <summary>
         /// A list of predicates
-        /// Return true to validate the antiforgery of request.
+        /// Return false to skip validate.
         /// </summary>
         [NotNull]
         public List<Func<AuthorizationFilterContext, Task<bool>>> ShouldValidatePredicates
