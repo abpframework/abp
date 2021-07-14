@@ -52,8 +52,18 @@ Configure<AbpAntiForgeryOptions>(options =>
 {
     options.TokenCookie.Expiration = TimeSpan.FromDays(365);
     options.AutoValidateIgnoredHttpMethods.Remove("GET");
-    options.AutoValidateFilter =
-        type => !type.Namespace.StartsWith("MyProject.MyIgnoredNamespace");
+    options.ShouldValidatePredicates.Add(filterContext =>
+    {
+        var controllerActionDescriptor = filterContext.ActionDescriptor.AsControllerActionDescriptor();
+
+        if (controllerActionDescriptor.ControllerTypeInfo.AsType() == typeof(IgnoreController) &&
+            controllerActionDescriptor.ActionName == nameof(IgnoreController.IgnoreMethod))
+        {
+            return Task.FromResult(false);
+        }
+
+        return Task.FromResult(true);
+    });
 });
 ```
 

@@ -45,13 +45,13 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 {
                     return false;
                 }
-            }
 
-            foreach (var shouldValidatePredicate in _options.ShouldValidatePredicates)
-            {
-                if (!await shouldValidatePredicate(context))
+                foreach (var shouldValidatePredicate in _options.ShouldValidatePredicates)
                 {
-                    return false;
+                    if (!await shouldValidatePredicate(context))
+                    {
+                        return false;
+                    }
                 }
             }
 
