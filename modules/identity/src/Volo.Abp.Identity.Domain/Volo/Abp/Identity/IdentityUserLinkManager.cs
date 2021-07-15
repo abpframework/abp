@@ -124,7 +124,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
+        public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string tokenPurpose, CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
@@ -132,11 +132,11 @@ namespace Volo.Abp.Identity
                 return await UserManager.GenerateUserTokenAsync(
                     user,
                     LinkUserTokenProviderConsts.LinkUserTokenProviderName,
-                    LinkUserTokenProviderConsts.LinkUserTokenPurpose);
+                    tokenPurpose);
             }
         }
 
-        public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token, string tokenPurpose, CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
@@ -144,7 +144,7 @@ namespace Volo.Abp.Identity
                 return await UserManager.VerifyUserTokenAsync(
                     user,
                     LinkUserTokenProviderConsts.LinkUserTokenProviderName,
-                    LinkUserTokenProviderConsts.LinkUserTokenPurpose,
+                    tokenPurpose,
                     token);
             }
         }
