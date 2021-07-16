@@ -3,10 +3,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert2
 {
     [DependsOn(typeof(CoreScriptContributor))]
-    public class SweetalertScriptContributor : BundleContributor
+    public class Sweetalert2ScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

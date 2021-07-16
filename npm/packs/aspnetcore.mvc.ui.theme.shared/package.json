@@ -16,7 +16,7 @@
     "@abp/luxon": "~4.4.0-rc.2",
     "@abp/malihu-custom-scrollbar-plugin": "~4.4.0-rc.2",
     "@abp/select2": "~4.4.0-rc.2",
-    "@abp/sweetalert": "~4.4.0-rc.2",
+    "@abp/sweetalert2": "~4.4.0-rc.2",
     "@abp/timeago": "~4.4.0-rc.2",
     "@abp/toastr": "~4.4.0-rc.2"
   },
