@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/sweetalert/sweetalert.min.js");
+            context.Files.AddIfNotContains("/libs/sweetalert2/sweetalert2.all.min.js");
         }
     }
 }

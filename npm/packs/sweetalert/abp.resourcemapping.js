@@ -1,5 +1,5 @@
 ﻿module.exports = {
     mappings: {
-        "@node_modules/sweetalert/dist/*.*": "@libs/sweetalert/"
+        "@node_modules/sweetalert2/dist/*.*": "@libs/sweetalert2/"
     }
 }

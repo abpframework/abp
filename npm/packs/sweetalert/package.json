@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/core": "~4.4.0-rc.2",
-    "sweetalert": "^2.1.2"
+    "sweetalert2": "^11.0.18"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
