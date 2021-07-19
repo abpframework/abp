@@ -35,12 +35,12 @@ namespace Volo.CmsKit.MediaDescriptors
             var media = await _mediaDescriptorAdminAppService.CreateAsync(_cmsKitTestData.Media_1_EntityType, new CreateMediaInputWithStream
             {
                 Name = mediaName,
-                File = new RemoteStreamContent(stream, mediaType)
+                File = new RemoteStreamContent(stream, mediaName, mediaType)
             });
-            
+
             media.ShouldNotBeNull();
         }
-        
+
         [Fact]
         public async Task Should_Delete_Media()
         {

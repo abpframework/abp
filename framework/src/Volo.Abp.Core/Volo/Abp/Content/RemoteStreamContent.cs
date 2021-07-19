@@ -5,22 +5,30 @@ namespace Volo.Abp.Content
     public class RemoteStreamContent : IRemoteStreamContent
     {
         private readonly Stream _stream;
-        private readonly string _fileName;
-        private readonly string _contentType;
-        private readonly long? _length;
-        private readonly bool _leaveOpen;
+        private readonly bool _disposeStream;
+        private bool _disposed;
 
-        public virtual string FileName => _fileName;
-        public virtual string ContentType => _contentType;
-        public virtual long? ContentLength => _length;
+        public virtual string FileName { get; }
 
-        public RemoteStreamContent(Stream stream, string fileName, string contentType = null, long? readOnlylength = null, bool leaveOpen = false)
+        public virtual string ContentType { get; } = "application/octet-stream";
+
+        public virtual long? ContentLength { get; }
+
+        public RemoteStreamContent(Stream stream, bool disposeStream = true)
         {
             _stream = stream;
-            _fileName = fileName;
-            _contentType = contentType ?? "application/octet-stream";
-            _length = readOnlylength ?? (stream.GetNullableLength() - stream.GetNullablePosition());
-            _leaveOpen = leaveOpen;
+            _disposeStream = disposeStream;
+        }
+
+        public RemoteStreamContent(Stream stream, string fileName, string contentType = null, long? readOnlyLength = null, bool disposeStream = true)
+            : this(stream, disposeStream)
+        {
+            FileName = fileName;
+            if (contentType != null)
+            {
+                ContentType = contentType;
+            }
+            ContentLength = readOnlyLength ?? (_stream.CanSeek ? _stream.Length - _stream.Position : null);
         }
 
         public virtual Stream GetStream()
@@ -30,8 +38,9 @@ namespace Volo.Abp.Content
 
         public virtual void Dispose()
         {
-            if (!_leaveOpen)
+            if (!_disposed && _disposeStream)
             {
+                _disposed = true;
                 _stream?.Dispose();
             }
         }

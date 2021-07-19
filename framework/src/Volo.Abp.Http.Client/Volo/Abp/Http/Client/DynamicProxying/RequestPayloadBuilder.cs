@@ -87,7 +87,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                         {
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
                         }
-                        streamContent.Headers.ContentLength = stream.GetNullableLength() - stream.GetNullablePosition();
+                        streamContent.Headers.ContentLength = remoteStreamContent.ContentLength;
                         formData.Add(streamContent, parameter.Name, remoteStreamContent.FileName ?? parameter.Name);
                     }
                     else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
@@ -100,7 +100,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                             {
                                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
                             }
-                            streamContent.Headers.ContentLength = stream.GetNullableLength() - stream.GetNullablePosition();
+                            streamContent.Headers.ContentLength = content.ContentLength;
                             formData.Add(streamContent, parameter.Name, content.FileName ?? parameter.Name);
                         }
                     }
