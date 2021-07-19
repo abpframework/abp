@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Localization;
 
@@ -12,8 +13,15 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AbpLanguagesController : AbpController
     {
+        protected IQueryStringCultureReplacement QueryStringCultureReplacement { get; }
+
+        public AbpLanguagesController(IQueryStringCultureReplacement queryStringCultureReplacement)
+        {
+            QueryStringCultureReplacement = queryStringCultureReplacement;
+        }
+
         [HttpGet]
-        public IActionResult Switch(string culture, string uiCulture = "", string returnUrl = "")
+        public virtual async Task<IActionResult> Switch(string culture, string uiCulture = "", string returnUrl = "")
         {
             if (!CultureHelper.IsValidCultureCode(culture))
             {
@@ -25,15 +33,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 new RequestCulture(culture, uiCulture)
             );
 
-            if (!string.IsNullOrWhiteSpace(returnUrl))
+            var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
+            await QueryStringCultureReplacement.ReplaceAsync(context);
+
+            if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
             {
-                return Redirect(GetRedirectUrl(returnUrl));
+                return Redirect(GetRedirectUrl(context.ReturnUrl));
             }
 
             return Redirect("~/");
         }
 
-        private string GetRedirectUrl(string returnUrl)
+        protected virtual string GetRedirectUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {

@@ -21,12 +21,20 @@ namespace Volo.Abp.AspNetCore.App
 
         public class PersonModel
         {
-            //[Display(Name = nameof(BirthDate))]
             public string BirthDate { get; set; }
+
+            public string BirthDate1 { get; set; }
+
+            public string BirthDate2 { get; set; }
+
+            public string BirthDate3 { get; set; }
 
             public PersonModel()
             {
                 BirthDate = DateTime.Now.ToString("yyyy-MM-dd");
+                BirthDate1 = BirthDate;
+                BirthDate2 = BirthDate;
+                BirthDate3 = BirthDate;
             }
         }
     }
