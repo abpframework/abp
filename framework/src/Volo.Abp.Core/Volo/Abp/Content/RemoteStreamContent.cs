@@ -20,7 +20,7 @@ namespace Volo.Abp.Content
             _disposeStream = disposeStream;
         }
 
-        public RemoteStreamContent(Stream stream, string fileName, string contentType = null, long? readOnlyLength = null, bool disposeStream = true)
+        public RemoteStreamContent(Stream stream, string fileName = null, string contentType = null, long? readOnlyLength = null, bool disposeStream = true)
             : this(stream, disposeStream)
         {
             FileName = fileName;
