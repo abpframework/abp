@@ -89,6 +89,11 @@ namespace Volo.Abp.Uow
 
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            if (_isRolledback)
+            {
+                return;
+            }
+
             foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsSavingChanges)

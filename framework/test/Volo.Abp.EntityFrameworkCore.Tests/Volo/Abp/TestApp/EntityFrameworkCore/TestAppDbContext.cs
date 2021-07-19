@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
@@ -41,6 +43,13 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
+
+                b.ApplyObjectExtensionMappings();
+            });
+
+            modelBuilder.Entity<Person>(b =>
+            {
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder
@@ -48,6 +57,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                 {
                     p.HasNoKey();
                     p.ToView("View_PersonView");
+
+                    p.ApplyObjectExtensionMappings();
                 });
 
             modelBuilder.Entity<City>(b =>
@@ -57,7 +68,11 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                     d.WithOwner().HasForeignKey(x => x.CityId);
                     d.HasKey(x => new {x.CityId, x.Name});
                 });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
         }
     }
 }

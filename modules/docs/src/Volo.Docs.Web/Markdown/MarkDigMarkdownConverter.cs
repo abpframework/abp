@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Markdig;
 using Volo.Abp.DependencyInjection;
+using Volo.Docs.Markdown.Extensions;
 
 namespace Volo.Docs.Markdown
 {
@@ -15,6 +16,7 @@ namespace Volo.Docs.Markdown
               .UseBootstrap()
               .UseGridTables()
               .UsePipeTables()
+              .UseHighlightedCodeBlocks()
               .Build();
         }
 

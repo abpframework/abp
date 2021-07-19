@@ -9,6 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
         {
             output.TagName = "table";
             output.Attributes.AddClass("table");
+            output.TagMode = TagMode.StartTagAndEndTag;
 
             SetResponsiveness(context, output);
             SetTheme(context, output);

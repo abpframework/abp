@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
+using MyCompanyName.MyProjectName.Blazor.WebAssembly;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
@@ -26,7 +27,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
         typeof(AbpIdentityBlazorWebAssemblyModule),
         typeof(AbpTenantManagementBlazorWebAssemblyModule),
         typeof(AbpSettingManagementBlazorWebAssemblyModule),
-        typeof(MyProjectNameBlazorModule)
+        typeof(MyProjectNameBlazorWebAssemblyModule)
     )]
     public class MyProjectNameBlazorHostModule : AbpModule
     {

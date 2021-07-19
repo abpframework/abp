@@ -30,7 +30,7 @@ namespace MyCompany.MyProject
 
 ### 数据库管理系统选择
 
-EF Core支持多种数据库管理系统([查看全部](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP框架和本文档不依赖于任何特定的DBMS.
+EF Core支持多种数据库管理系统([查看全部](https://docs.microsoft.com/zh-cn/ef/core/providers/)). ABP框架和本文档不依赖于任何特定的DBMS.
 
 如果要创建一个可重用的[应用程序模块](Modules/Index.md),应避免依赖于特定的DBMS包.但在最终的应用程序中,始终会选择一个DBMS.
 
@@ -60,7 +60,7 @@ namespace MyCompany.MyProject
 
 ### 关于EF Core Fluent Mapping
 
-[应用程序启动模板](Startup-Templates/Application.md)已配置使用[EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/)映射你的实体到数据库表.
+[应用程序启动模板](Startup-Templates/Application.md)已配置使用[EF Core fluent configuration API](https://docs.microsoft.com/zh-cn/ef/core/modeling/)映射你的实体到数据库表.
 
 你依然为你的实体属性使用**data annotation attributes**(像`[Required]`),而ABP文档通常遵循**fluent mapping API** approach方法. 如何使用取决与你.
 
@@ -271,6 +271,285 @@ public async override Task DeleteAsync(
     //TODO: Custom implementation of the delete method
 }
 ````
+
+## 加载关联实体
+
+假设你拥有带有`OrderLine`集合的`Order`,并且`OrderLine`具有`Order`的导航属性:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
+
+namespace MyCrm
+{
+    public class Order : AggregateRoot<Guid>, IHasCreationTime
+    {
+        public Guid CustomerId { get; set; }
+        public DateTime CreationTime { get; set; }
+
+        public ICollection<OrderLine> Lines { get; set; } //子集合
+
+        public Order()
+        {
+            Lines = new Collection<OrderLine>();
+        }
+    }
+
+    public class OrderLine : Entity<Guid>
+    {
+        public Order Order { get; set; } //导航属性
+        public Guid OrderId { get; set; }
+
+        public Guid ProductId { get; set; }
+        public int Count { get; set; }
+        public double UnitPrice { get; set; }
+    }
+}
+
+````
+
+然后象下面显示的这样定义数据库映射:
+
+````csharp
+builder.Entity<Order>(b =>
+{
+    b.ToTable("Orders");
+    b.ConfigureByConvention();
+
+    //定义关系
+    b.HasMany(x => x.Lines)
+        .WithOne(x => x.Order)
+        .HasForeignKey(x => x.OrderId)
+        .IsRequired();
+});
+
+builder.Entity<OrderLine>(b =>
+{
+    b.ToTable("OrderLines");
+    b.ConfigureByConvention();
+});
+````
+
+当你查询一个 `Order`, 你可能想要在单个查询中**包含**所有的 `OrderLine`s 或根据需要在**以后加载它们**.
+
+> 实际上这与ABP框架没有直接关系. 你可以按照 [EF Core 文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/) 了解全部细节. 本节将涵盖与 ABP 框架相关的一些主题.
+
+### 预先加载 / 包含子对象的加载
+
+当你想加载一个带有关联实体的实体时,可以使用不同的选项.
+
+#### Repository.WithDetails
+
+`IRepository.WithDetailsAsync(...)` 可以通过包含一个关系收集/属性来获得 `IQueryable<T>` .
+
+**示例: 获取一个带有 `lines` 的 `order` 对象**
+
+````csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+
+namespace AbpDemo.Orders
+{
+    public class OrderManager : DomainService
+    {
+        private readonly IRepository<Order, Guid> _orderRepository;
+
+        public OrderManager(IRepository<Order, Guid> orderRepository)
+        {
+            _orderRepository = orderRepository;
+        }
+
+        public async Task TestWithDetails(Guid id)
+        {
+            //通过包含子集合获取一个 IQueryable<T>
+            var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
+            
+            //应用其他的 LINQ 扩展方法
+            var query = queryable.Where(x => x.Id == id);
+            
+            //执行此查询并获取结果
+            var order = await AsyncExecuter.FirstOrDefaultAsync(query);
+        }
+    }
+}
+````
+
+> `AsyncExecuter` 用于执行异步 LINQ 扩展,而无需依赖 EF Core. 如果你将 EF Core NuGet 包引用添加到你的项目中,则可以直接使用 `await query.FirstOrDefaultAsync()`. 但是, 这次你依赖于域层中的 EF 核心.请参阅. 请参阅 [仓储文档](Repositories.md) 以了解更多.
+
+**示例: 获取一个包含 `lines` 的 `orders` 列表**
+
+````csharp
+public async Task TestWithDetails()
+{
+    //通过包含一个子集合获取一个 IQueryable<T>
+    var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
+
+    //执行此查询并获取结果
+    var orders = await AsyncExecuter.ToListAsync(queryable);
+}
+````
+
+> 如果你需要包含多个导航属性或集合,`WithDetailsAsync`方法可以获得多个表达参数.
+
+#### DefaultWithDetailsFunc
+
+如果你没有将任何表达式传递到 `WithDetailsAsync` 方法,则它包括使用你提供的 `DefaultWithDetailsFunc` 选项的所有详细信息.
+
+你可以在你的 `EntityFrameworkCore` 项目[模块](Module-Development-Basics.md)的  `ConfigureServices`方法为一个实体配置 `DefaultWithDetailsFunc`.
+
+**示例: 在查询一个 `Order` 时包含 `Lines`**
+
+````csharp
+Configure<AbpEntityOptions>(options =>
+{
+    options.Entity<Order>(orderOptions =>
+    {
+        orderOptions.DefaultWithDetailsFunc = query => query.Include(o => o.Lines);
+    });
+});
+````
+
+> 你可以在这里完全使用 EF Core API,因为这位于 EF Core集成项目中.
+
+然后你可以不带任何参数地调用 `WithDetails` 方法:
+
+````csharp
+public async Task TestWithDetails()
+{
+    //通过包含一个子集合获取一个 IQueryable<T>
+    var queryable = await _orderRepository.WithDetailsAsync();
+
+    //执行此查询并获取结果
+    var orders = await AsyncExecuter.ToListAsync(queryable);
+}
+````
+
+`WithDetailsAsync()` 执行你已经在 `DefaultWithDetailsFunc` 中设置的表达式.
+
+#### 仓储 Get/Find 方法
+
+有些标准的 [仓储](Repositories.md) 方法带有可选的 `includeDetails` 参数;
+
+* `GetAsync` 和 `FindAsync` 方法带有默认值为 `true` 的 `includeDetails`.
+* `GetListAsync` 和 `GetPagedListAsync` 方法带有默认值为 `false` 的 `includeDetails`.
+
+这意味着,默认情况下返回**包含子对象的单个实体**,而列表返回方法则默认不包括子对象信息.你可以明确通过 `includeDetails` 来更改此行为.
+
+> 这些方法使用上面解释的 `DefaultWithDetailsFunc` 选项.
+
+**示例:获取一个包含子对象的 `order`**
+
+````csharp
+public async Task TestWithDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id);
+}
+````
+
+**示例:获取一个不包含子对象的 `order`**
+
+````csharp
+public async Task TestWithoutDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id, includeDetails: false);
+}
+````
+
+**示例:获取一个包含子对象的实体列表**
+
+````csharp
+public async Task TestWithDetails()
+{
+    var orders = await _orderRepository.GetListAsync(includeDetails: true);
+}
+````
+
+#### 选择
+
+存储库模式尝试封装 EF Core, 因此你的选项是有限的. 如果你需要高级方案,你可以按照其中一个选项执行:
+
+* 创建自定义存储库方法并使用完整的 EF Core API.
+* 在你的项目中引用 `Volo.Abp.EntityFrameworkCore` . 通过这种方式,你可以直接在代码中使用 `Include` 和 `ThenInclude` .
+
+请参阅 EF Core 的 [预先加载文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/eager).
+
+### 显示 / 延迟加载
+
+如果你在查询实体时不包括关系,并且以后需要访问导航属性或集合,则你有不同的选择.
+
+#### EnsurePropertyLoadedAsync / EnsureCollectionLoadedAsync
+
+仓储提供 `EnsurePropertyLoadedAsync` 和 `EnsureCollectionLoadedAsync` 扩展方法来**显示加载**一个导航属性或子集合.
+
+**示例: 在需要时加载一个 `Order` 的 `Lines`**
+
+````csharp
+public async Task TestWithDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id, includeDetails: false);
+    //order.Lines 此时是空的
+
+    await _orderRepository.EnsureCollectionLoadedAsync(order, x => x.Lines);
+    //order.Lines 被填充
+}
+````
+
+如果导航属性或集合已经被加载那么 `EnsurePropertyLoadedAsync` 和 `EnsureCollectionLoadedAsync` 方法不做任何处理. 所以,调用多次也没有问题.
+
+请参阅 EF Core 的[显示加载文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/explicit).
+
+#### 使用代理的延时加载
+
+在某些情况下,可能无法使用显示加载,尤其是当你没有引用 `Repository` 或 `DbContext`时.延时加载是 EF Core 加载关联属性/集合的一个功能,,当你第一次访问它.
+
+启用延时加载:
+
+1. 安装 [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies/) 包到你的项目(通常是 EF Core 集成项目)
+2. 为你的 `DbContext` 配置 `UseLazyLoadingProxies` (在 EF Core 项目的模块的 `ConfigureServices` 方法中). 例如:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.PreConfigure<MyCrmDbContext>(opts =>
+    {
+        opts.DbContextOptions.UseLazyLoadingProxies(); //启用延时加载
+    });
+    
+    options.UseSqlServer();
+});
+````
+
+3. 使你的导航属性和集合是 `virtual`. 例如:
+
+````csharp
+public virtual ICollection<OrderLine> Lines { get; set; } //虚集合
+public virtual Order Order { get; set; } //虚导航属性
+````
+
+启用延时加载并整理实体后,你可以自由访问导航属性和集合:
+
+````csharp
+public async Task TestWithDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id);
+    //order.Lines 此时是空的
+
+    var lines = order.Lines;
+    //order.Lines 被填充 (延时加载)
+}
+````
+
+每当你访问属性/集合时,EF Core 都会自动执行额外的查询,从数据库中加载属性/集合.
+
+> 应谨慎使用延时加载,因为它可能会在某些特定情况下导致性能问题.
+
+请参阅 EF Core 的[延时加载文档](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/lazy).
 
 ## 访问 EF Core API
 

@@ -1,11 +1,11 @@
 {
-  "version": "4.3.2",
+  "version": "4.4.0-rc.2",
   "name": "@abp/owl.carousel",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.3.2",
+    "@abp/core": "~4.4.0-rc.2",
     "owl.carousel": "^2.3.4"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

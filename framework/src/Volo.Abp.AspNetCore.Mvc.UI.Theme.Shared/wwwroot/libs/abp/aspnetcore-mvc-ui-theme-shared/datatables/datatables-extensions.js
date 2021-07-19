@@ -236,9 +236,11 @@ var abp = abp || {};
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".abp-action-button");
-                    if ($actionButton.length === 0) {
-                        $(cells[colIndex]).empty().append($actionContainer);
+                    if ($actionContainer) {
+                        var $actionButton = $(cells[colIndex]).find(".abp-action-button");
+                        if ($actionButton.length === 0) {
+                            $(cells[colIndex]).empty().append($actionContainer);
+                        }
                     }
                 }
             }

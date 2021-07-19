@@ -16,6 +16,8 @@ namespace Volo.Abp.IdentityServer
         private static readonly string[] AdditionalOptionalClaimNames =
         {
             AbpClaimTypes.TenantId,
+            AbpClaimTypes.ImpersonatorTenantId,
+            AbpClaimTypes.ImpersonatorUserId,
             AbpClaimTypes.Name,
             AbpClaimTypes.SurName,
             JwtClaimTypes.PreferredUserName,

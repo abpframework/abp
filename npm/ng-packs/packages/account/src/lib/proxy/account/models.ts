@@ -1,5 +1,6 @@
+import type { ExtensibleObject } from '@abp/ng.core';
 
-export interface RegisterDto {
+export interface RegisterDto extends ExtensibleObject {
   userName: string;
   emailAddress: string;
   password: string;

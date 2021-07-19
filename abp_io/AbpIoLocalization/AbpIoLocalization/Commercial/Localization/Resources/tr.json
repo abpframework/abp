@@ -97,6 +97,7 @@
     "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim.",
     "WeWillSendYouADownloadLink": "{0} adresine email gönderilmiştir.",
     "InvalidFormInputs": "Lütfen formda belirtilen geçerli bilgileri yazınız.",
-    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>."
+    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>.",
+    "FreeDDDEBook": "Ücretsiz DDD E-Kitap"
   }
 }

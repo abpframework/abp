@@ -1,7 +1,7 @@
-import type { CurrentTenantDto, MultiTenancyInfoDto } from '../multi-tenancy/models';
-import type { ObjectExtensionsDto } from './object-extending/models';
 import type { LanguageInfo } from '../../../localization/models';
 import type { NameValue } from '../../../models';
+import type { CurrentTenantDto, MultiTenancyInfoDto } from '../multi-tenancy/models';
+import type { ObjectExtensionsDto } from './object-extending/models';
 
 export interface ApplicationAuthConfigurationDto {
   policies: Record<string, boolean>;
@@ -66,6 +66,8 @@ export interface CurrentUserDto {
   phoneNumber?: string;
   phoneNumberVerified: boolean;
   roles: string[];
+  impersonatorUserId?: string;
+  impersonatorTenantId?: string;
 }
 
 export interface DateTimeFormatDto {

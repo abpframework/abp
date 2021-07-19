@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ExceptionHandling;
@@ -54,6 +55,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             if (exception is EntityNotFoundException)
             {
                 return HttpStatusCode.NotFound;
+            }
+            
+            if (exception is AbpDbConcurrencyException)
+            {
+                return HttpStatusCode.Conflict;
             }
 
             if (exception is NotImplementedException)

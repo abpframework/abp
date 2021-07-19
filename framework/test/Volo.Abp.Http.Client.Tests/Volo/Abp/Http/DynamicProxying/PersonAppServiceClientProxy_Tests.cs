@@ -90,8 +90,7 @@ namespace Volo.Abp.Http.DynamicProxying
             {
                 Name = uniquePersonName,
                 Age = 42
-            }
-            );
+            });
 
             person.ShouldNotBeNull();
             person.Id.ShouldNotBe(Guid.Empty);
@@ -110,8 +109,7 @@ namespace Volo.Abp.Http.DynamicProxying
                 var person = await _peopleAppService.CreateAsync(new PersonDto
                 {
                     Age = 42
-                }
-                );
+                });
             });
         }
 
@@ -180,6 +178,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var result = await _peopleAppService.DownloadAsync();
 
+            result.FileName.ShouldBe("download.rtf");
             result.ContentType.ShouldBe("application/rtf");
             using (var reader = new StreamReader(result.GetStream()))
             {
@@ -194,8 +193,9 @@ namespace Volo.Abp.Http.DynamicProxying
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
             memoryStream.Position = 0;
-            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "application/rtf"));
-            result.ShouldBe("UploadAsync:application/rtf");
+
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "upload.rtf", "application/rtf"));
+            result.ShouldBe("UploadAsync:application/rtf:upload.rtf");
         }
 
         [Fact]
@@ -207,8 +207,9 @@ namespace Volo.Abp.Http.DynamicProxying
             await memoryStream.WriteAsync(rawData);
             await memoryStream.WriteAsync(text);
             memoryStream.Position = rawData.Length;
-            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "application/rtf"));
-            result.ShouldBe("UploadAsync:application/rtf");
+
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "upload.rtf", "application/rtf"));
+            result.ShouldBe("UploadAsync:application/rtf:upload.rtf");
         }
 
         [Fact]
@@ -224,10 +225,10 @@ namespace Volo.Abp.Http.DynamicProxying
 
             var result = await _peopleAppService.UploadMultipleAsync(new List<IRemoteStreamContent>()
             {
-                new RemoteStreamContent(memoryStream, "application/rtf"),
-                new RemoteStreamContent(memoryStream2, "application/rtf2")
+                new RemoteStreamContent(memoryStream, "File1.rtf", "application/rtf"),
+                new RemoteStreamContent(memoryStream2, "File2.rtf", "application/rtf2")
             });
-            result.ShouldBe("File1:application/rtfFile2:application/rtf2");
+            result.ShouldBe("File1:application/rtf:File1.rtfFile2:application/rtf2:File2.rtf");
         }
 
         [Fact]
@@ -239,9 +240,9 @@ namespace Volo.Abp.Http.DynamicProxying
             var result = await _peopleAppService.CreateFileAsync(new CreateFileInput()
             {
                 Name = "123.rtf",
-                Content = new RemoteStreamContent(memoryStream, "application/rtf")
+                Content = new RemoteStreamContent(memoryStream, "create.rtf", "application/rtf")
             });
-            result.ShouldBe("123.rtf:CreateFileAsync:application/rtf");
+            result.ShouldBe("123.rtf:CreateFileAsync:application/rtf:create.rtf");
         }
 
         [Fact]
@@ -264,16 +265,16 @@ namespace Volo.Abp.Http.DynamicProxying
                 Name = "123.rtf",
                 Contents = new List<IRemoteStreamContent>()
                 {
-                    new RemoteStreamContent(memoryStream, "application/rtf"),
-                    new RemoteStreamContent(memoryStream2, "application/rtf2"),
+                    new RemoteStreamContent(memoryStream, "1-1.rtf", "application/rtf"),
+                    new RemoteStreamContent(memoryStream2, "1-2.rtf", "application/rtf2")
                 },
                 Inner = new CreateFileInput()
                 {
                     Name = "789.rtf",
-                    Content = new RemoteStreamContent(memoryStream3, "application/rtf3")
+                    Content = new RemoteStreamContent(memoryStream3, "i-789.rtf", "application/rtf3")
                 }
             });
-            result.ShouldBe("123.rtf:File1:application/rtf123.rtf:File2:application/rtf2789.rtf:File3:application/rtf3");
+            result.ShouldBe("123.rtf:File1:application/rtf:1-1.rtf123.rtf:File2:application/rtf2:1-2.rtf789.rtf:File3:application/rtf3:i-789.rtf");
         }
     }
 }

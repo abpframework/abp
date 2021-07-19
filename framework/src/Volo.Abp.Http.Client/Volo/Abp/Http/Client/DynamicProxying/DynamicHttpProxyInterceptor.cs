@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -34,7 +35,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
         protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
-        protected AbpRemoteServiceOptions AbpRemoteServiceOptions { get; }
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         protected AbpHttpClientOptions ClientOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
@@ -51,25 +52,25 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
             IOptions<AbpHttpClientOptions> clientOptions,
-            IOptionsSnapshot<AbpRemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
             AbpCorrelationIdOptions = correlationIdOptions.Value;
             HttpClientFactory = httpClientFactory;
             ApiDescriptionFinder = apiDescriptionFinder;
             JsonSerializer = jsonSerializer;
             ClientAuthenticator = clientAuthenticator;
             ClientOptions = clientOptions.Value;
-            AbpRemoteServiceOptions = remoteServiceOptions.Value;
 
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
@@ -112,7 +113,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 /* returning a class that holds a reference to response
                  * content just to be sure that GC does not dispose of
                  * it before we finish doing our work with the stream */
-                return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync(), responseContent.Headers.ContentType?.ToString(), responseContent.Headers.ContentLength);
+                return (T)(object)new RemoteStreamContent(
+                    await responseContent.ReadAsStreamAsync(), 
+                    responseContent.Headers?.ContentDisposition?.FileNameStar ?? RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString(),
+                    responseContent.Headers.ContentType?.ToString(), 
+                    responseContent.Headers.ContentLength);
             }
 
             var stringContent = await responseContent.ReadAsStringAsync();
@@ -132,7 +137,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
@@ -143,7 +148,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 invocation.Method
             );
 
-            var apiVersion = GetApiVersionInfo(action);
+            var apiVersion = await GetApiVersionInfoAsync(action);
             var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
             var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
@@ -153,14 +158,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             AddHeaders(invocation, action, requestMessage, apiVersion);
 
-            await ClientAuthenticator.Authenticate(
-                new RemoteServiceHttpClientAuthenticateContext(
-                    client,
-                    requestMessage,
-                    remoteServiceConfig,
-                    clientConfig.RemoteServiceName
-                )
-            );
+            if (action.AllowAnonymous != true)
+            {
+                await ClientAuthenticator.Authenticate(
+                    new RemoteServiceHttpClientAuthenticateContext(
+                        client,
+                        requestMessage,
+                        remoteServiceConfig,
+                        clientConfig.RemoteServiceName
+                    )
+                );
+            }
 
             var response = await client.SendAsync(
                 requestMessage,
@@ -176,9 +184,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return response.Content;
         }
 
-        private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
+        private async Task<ApiVersionInfo> GetApiVersionInfoAsync(ActionApiDescriptionModel action)
         {
-            var apiVersion = FindBestApiVersion(action);
+            var apiVersion = await FindBestApiVersionAsync(action);
 
             //TODO: Make names configurable?
             var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
@@ -187,9 +195,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
         }
 
-        private string FindBestApiVersion(ActionApiDescriptionModel action)
+        private async Task<string> FindBestApiVersionAsync(ActionApiDescriptionModel action)
         {
-            var configuredVersion = GetConfiguredApiVersion();
+            var configuredVersion = await GetConfiguredApiVersionAsync();
 
             if (action.SupportedVersions.IsNullOrEmpty())
             {
@@ -252,13 +260,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
-        private string GetConfiguredApiVersion()
+        private async Task<string> GetConfiguredApiVersionAsync()
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return AbpRemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
-                   ?? AbpRemoteServiceOptions.RemoteServices.Default?.Version;
+            return (await RemoteServiceConfigurationProvider
+                .GetConfigurationOrDefaultOrNullAsync(clientConfig.RemoteServiceName))?.Version;
         }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
@@ -285,6 +293,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 HttpStatusCode = (int) response.StatusCode
             };
+        }
+
+        protected virtual StringSegment RemoveQuotes(StringSegment input)
+        {
+            if (!StringSegment.IsNullOrEmpty(input) && input.Length >= 2 && input[0] == '"' && input[input.Length - 1] == '"')
+            {
+                input = input.Subsegment(1, input.Length - 2);
+            }
+
+            return input;
         }
 
         protected virtual CancellationToken GetCancellationToken()

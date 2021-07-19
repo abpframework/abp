@@ -6,5 +6,9 @@
   {
     "outputFile": "Pages/Documents/Project/index.css",
     "inputFile": "Pages/Documents/Project/index.less"
+  },
+  {
+    "outputFile": "Pages/Documents/Project/index.css",
+    "inputFile": "Pages/Documents/Project/index.scss"
   }
 ]

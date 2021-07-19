@@ -21,7 +21,6 @@
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="NEST" Version="7.7.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="NuGet.Versioning" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>

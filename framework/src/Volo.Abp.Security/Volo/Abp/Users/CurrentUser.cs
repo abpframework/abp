@@ -31,7 +31,7 @@ namespace Volo.Abp.Users
 
         public virtual Guid? TenantId => _principalAccessor.Principal?.FindTenantId();
 
-        public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
+        public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).Distinct().ToArray();
 
         private readonly ICurrentPrincipalAccessor _principalAccessor;
 

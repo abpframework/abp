@@ -9,6 +9,8 @@ namespace Volo.Abp.Content
 
         long? ContentLength { get; }
 
+        string FileName { get; }
+
         Stream GetStream();
     }
 }

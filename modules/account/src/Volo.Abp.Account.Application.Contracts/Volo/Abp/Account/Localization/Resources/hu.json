@@ -36,7 +36,7 @@
     "PasswordChanged": "Jelszó megváltoztatva",
     "NewPasswordConfirmFailed": "Kérjük, erősítse meg az új jelszót.",
     "Manage": "Kezelés",
-    "ManageYourProfile": "Kezelje a profilját",
+    "MyAccount": "A fiókom",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Engedélyezve van az önregisztráció",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "A felhasználó saját maga regisztrálhatja-e a fiókot.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Hitelesítés helyi fiókkal",
