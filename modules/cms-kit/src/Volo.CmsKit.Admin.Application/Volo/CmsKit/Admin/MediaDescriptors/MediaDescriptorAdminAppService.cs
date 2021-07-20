@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         public MediaDescriptorAdminAppService(
             IBlobContainer<MediaContainer> mediaContainer,
             IMediaDescriptorRepository mediaDescriptorRepository,
-            MediaDescriptorManager mediaDescriptorManager, 
+            MediaDescriptorManager mediaDescriptorManager,
             IMediaDescriptorDefinitionStore mediaDescriptorDefinitionStore)
         {
             MediaContainer = mediaContainer;
@@ -34,11 +34,11 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-            using (var stream = inputStream.File.GetStream())
+            using (var file = inputStream.File)
             {
                 var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
 
-                await MediaContainer.SaveAsync(newEntity.Id.ToString(), stream);
+                await MediaContainer.SaveAsync(newEntity.Id.ToString(), file.GetStream());
                 await MediaDescriptorRepository.InsertAsync(newEntity);
 
                 return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
