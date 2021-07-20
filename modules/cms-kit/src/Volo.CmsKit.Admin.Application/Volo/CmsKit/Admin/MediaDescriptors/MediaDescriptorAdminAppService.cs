@@ -34,15 +34,12 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-            using (var file = inputStream.File)
-            {
-                var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
+            var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
 
-                await MediaContainer.SaveAsync(newEntity.Id.ToString(), file.GetStream());
-                await MediaDescriptorRepository.InsertAsync(newEntity);
+            await MediaContainer.SaveAsync(newEntity.Id.ToString(), inputStream.File.GetStream());
+            await MediaDescriptorRepository.InsertAsync(newEntity);
 
-                return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
-            }
+            return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
         }
 
         public virtual async Task DeleteAsync(Guid id)
