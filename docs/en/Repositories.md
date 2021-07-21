@@ -70,8 +70,8 @@ Generic Repositories provides some standard CRUD features out of the box:
 
 There are overloads of these methods.
 
-* Provides `Update` and `Delete` methods to update or delete an entity by entity object or it's id.
-* Provides `Delete` method to delete multiple entities by a filter.
+* Provides `UpdateAsync` and `DeleteAsync` methods to update or delete an entity by entity object or it's id.
+* Provides `DeleteAsync` method to delete multiple entities by a filter.
 
 ### Querying / LINQ over the Repositories
 
@@ -222,8 +222,8 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 
     public async Task<Person> FindByNameAsync(string name)
     {
-        var dbSet = await GetDbSetAsync();
-        return await dbSet.Set<Person>()
+        var dbContext = await GetDbContextAsync();
+        return await dbContext.Set<Person>()
             .Where(p => p.Name == name)
             .FirstOrDefaultAsync();
     }

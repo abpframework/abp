@@ -30,5 +30,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
         {
             return Array.Empty<ProjectBuildPipelineStep>();
         }
+
+        public bool IsPro()
+        {
+            return Name.EndsWith("pro", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

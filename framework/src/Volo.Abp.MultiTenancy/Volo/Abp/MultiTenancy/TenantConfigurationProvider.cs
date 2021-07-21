@@ -42,6 +42,15 @@ namespace Volo.Abp.MultiTenancy
                         details: "There is no tenant with the tenant id or name: " + resolveResult.TenantIdOrName
                     );
                 }
+
+                if (!tenant.IsActive)
+                {
+                    throw new BusinessException(
+                        code: "Volo.AbpIo.MultiTenancy:010002",
+                        message: "Tenant not active!",
+                        details: "The tenant is no active with the tenant id or name: " + resolveResult.TenantIdOrName
+                    );
+                }
             }
 
             return tenant;

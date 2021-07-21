@@ -3,7 +3,6 @@
     var $editorContainer = $container.find('.edit-post-editor');
     var $submitButton = $container.find('button[type=submit]');
     var $form = $container.find('form#edit-post-form');
-    var editorDataKey = 'tuiEditor';
     var $titleLengthWarning = $('#title-length-warning');
     var maxTitleLength = parseInt($titleLengthWarning.data('max-length'));
 
@@ -77,32 +76,31 @@
         });
     };
 
-    var newPostEditor = $editorContainer
-        .tuiEditor({
-            usageStatistics: false,
-            initialEditType: 'markdown',
-            previewStyle: 'tab',
-            height: 'auto',
-            initialValue: $form.find("input[name='Post.Content']").val(),
-            hooks: {
-                addImageBlobHook: function (blob, callback, source) {
-                    var imageAltText = blob.name;
+    var newPostEditor = new toastui.Editor({
+        el: $editorContainer[0],
+        usageStatistics: false,
+        initialEditType: 'markdown',
+        previewStyle: 'tab',
+        height: 'auto',
+        initialValue: $form.find("input[name='Post.Content']").val(),
+        hooks: {
+            addImageBlobHook: function (blob, callback, source) {
+                var imageAltText = blob.name;
 
-                    uploadImage(blob, function (fileUrl) {
-                        callback(fileUrl, imageAltText);
-                    });
-                },
+                uploadImage(blob, function (fileUrl) {
+                    callback(fileUrl, imageAltText);
+                });
             },
-            events: {
-                load: function () {
-                    $editorContainer.find('.loading-cover').remove();
-                    $submitButton.prop('disabled', false);
-                    $form.data('validator').settings.ignore = '.ignore';
-                    $editorContainer.find(':input').addClass('ignore');
-                },
+        },
+        events: {
+            load: function () {
+                $editorContainer.find('.loading-cover').remove();
+                $submitButton.prop('disabled', false);
+                $form.data('validator').settings.ignore = '.ignore';
+                $editorContainer.find(':input').addClass('ignore');
             },
-        })
-        .data(editorDataKey);
+        },
+    });
 
     $container.find('form#edit-post-form').submit(function (e) {
         var $postTextInput = $form.find("input[name='Post.Content']");

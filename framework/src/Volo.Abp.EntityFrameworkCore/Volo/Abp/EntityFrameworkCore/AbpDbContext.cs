@@ -86,7 +86,6 @@ namespace Volo.Abp.EntityFrameworkCore
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -372,17 +371,20 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
-            UpdateConcurrencyStamp(entry);
-            SetModificationAuditProperties(entry);
+            if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+            {
+                UpdateConcurrencyStamp(entry);
+                SetModificationAuditProperties(entry);
 
-            if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
-            {
-                SetDeletionAuditProperties(entry);
-                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
-            }
-            else
-            {
-                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Updated));
+                if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+                {
+                    SetDeletionAuditProperties(entry);
+                    changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+                }
+                else
+                {
+                    changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Updated));
+                }
             }
         }
 

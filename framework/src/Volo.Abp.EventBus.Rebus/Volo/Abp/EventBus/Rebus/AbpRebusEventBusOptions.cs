@@ -32,7 +32,7 @@ namespace Volo.Abp.EventBus.Rebus
         public AbpRebusEventBusOptions()
         {
             _publish = DefaultPublish;
-            _configurer = DefaultConfigurer;
+            _configurer = DefaultConfigure;
         }
 
         private async Task DefaultPublish(IBus bus, Type eventType, object eventData)
@@ -40,10 +40,10 @@ namespace Volo.Abp.EventBus.Rebus
             await bus.Advanced.Routing.Send(InputQueueName, eventData);
         }
 
-        private void DefaultConfigurer(RebusConfigurer configurer)
+        private void DefaultConfigure(RebusConfigurer configure)
         {
-            configurer.Subscriptions(s => s.StoreInMemory());
-            configurer.Transport(t => t.UseInMemoryTransport(new InMemNetwork(), InputQueueName));
+            configure.Subscriptions(s => s.StoreInMemory());
+            configure.Transport(t => t.UseInMemoryTransport(new InMemNetwork(), InputQueueName));
         }
     }
 }

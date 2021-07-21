@@ -62,7 +62,14 @@
             {
                 title: l("CreationTime"),
                 orderable: true,
-                data: 'creationTime'
+                data: 'creationTime',
+                dataFormat: "datetime"
+            },
+            {
+                title: l("LastModificationTime"),
+                orderable: true,
+                data: 'lastModificationTime',
+                dataFormat: "datetime"
             }
         ]
     }));

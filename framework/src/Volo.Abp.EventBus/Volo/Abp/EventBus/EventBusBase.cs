@@ -19,10 +19,16 @@ namespace Volo.Abp.EventBus
 
         protected ICurrentTenant CurrentTenant { get; }
 
-        protected EventBusBase(IServiceScopeFactory serviceScopeFactory, ICurrentTenant currentTenant)
+        protected IEventErrorHandler ErrorHandler { get; }
+
+        protected EventBusBase(
+            IServiceScopeFactory serviceScopeFactory,
+            ICurrentTenant currentTenant,
+            IEventErrorHandler errorHandler)
         {
             ServiceScopeFactory = serviceScopeFactory;
             CurrentTenant = currentTenant;
+            ErrorHandler = errorHandler;
         }
 
         /// <inheritdoc/>
@@ -89,7 +95,7 @@ namespace Volo.Abp.EventBus
         /// <inheritdoc/>
         public abstract Task PublishAsync(Type eventType, object eventData);
 
-        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
+        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, Action<EventExecutionErrorContext> onErrorAction = null)
         {
             var exceptions = new List<Exception>();
 
@@ -97,16 +103,13 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                if (exceptions.Count == 1)
-                {
-                    exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
+                var context = new EventExecutionErrorContext(exceptions, eventType, this);
+                onErrorAction?.Invoke(context);
+                await ErrorHandler.HandleAsync(context);
             }
         }
 
-        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData, List<Exception> exceptions)
+        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData , List<Exception> exceptions)
         {
             await new SynchronizationContextRemover();
 

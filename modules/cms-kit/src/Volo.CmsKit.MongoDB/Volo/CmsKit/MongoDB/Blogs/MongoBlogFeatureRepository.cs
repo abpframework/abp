@@ -22,14 +22,14 @@ namespace Volo.CmsKit.MongoDB.Blogs
             return base.FindAsync(x => x.BlogId == blogId && x.FeatureName == featureName);
         }
 
-        public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
+        public virtual async Task<List<BlogFeature>> GetListAsync(Guid blogId)
         {
             return await (await GetMongoQueryableAsync())
                             .Where(x => x.BlogId == blogId)
                             .ToListAsync();
         }
 
-        public async Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames)
+        public virtual async Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames)
         {
             return await (await GetMongoQueryableAsync())
                         .Where(x => x.BlogId == blogId && featureNames.Contains(x.FeatureName))

@@ -2,21 +2,24 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthInfoEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
-import { from, Observable, of } from 'rxjs';
+import {
+  AuthConfig,
+  OAuthErrorEvent,
+  OAuthInfoEvent,
+  OAuthService,
+  OAuthStorage,
+} from 'angular-oauth2-oidc';
+import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
+import { LoginParams } from '../models/auth';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
-import { SessionStateService } from '../services/session-state.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
-
-export interface LoginParams {
-  username: string;
-  password: string;
-  rememberMe?: boolean;
-  redirectUrl?: string;
-}
+import { SessionStateService } from '../services/session-state.service';
+import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
+import { noop } from '../utils/common-utils';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 export const oAuthStorage = localStorage;
 
@@ -28,10 +31,14 @@ export abstract class AuthFlowStrategy {
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
-  abstract checkIfInternalAuth(): boolean;
+  protected sessionState: SessionStateService;
+  protected appConfigService: AbpApplicationConfigurationService;
+  protected tenantKey: string;
+
+  abstract checkIfInternalAuth(queryParams?: Params): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
-  abstract logout(): Observable<any>;
-  abstract login(params?: LoginParams): Observable<any>;
+  abstract logout(queryParams?: Params): Observable<any>;
+  abstract login(params?: LoginParams | Params): Observable<any>;
 
   private catchError = err => this.store.dispatch(new RestOccurError(err));
 
@@ -40,7 +47,12 @@ export abstract class AuthFlowStrategy {
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
+    this.appConfigService = injector.get(AbpApplicationConfigurationService);
+    this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
+    this.tenantKey = injector.get(TENANT_KEY);
+
+    this.listenToOauthErrors();
   }
 
   async init(): Promise<any> {
@@ -66,6 +78,18 @@ export abstract class AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
   }
+
+  protected listenToOauthErrors() {
+    this.oAuthService.events
+      .pipe(
+        filter(event => event instanceof OAuthErrorEvent),
+        tap(() => clearOAuthStorage()),
+        switchMap(() => this.appConfigService.get()),
+      )
+      .subscribe(res => {
+        this.configState.setState(res);
+      });
+  }
 }
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
@@ -74,26 +98,32 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   async init() {
     return super
       .init()
-      .then(() => this.oAuthService.tryLogin())
+      .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
   navigateToLogin(queryParams?: Params) {
-    this.oAuthService.initCodeFlow(null, queryParams);
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
   }
 
-  checkIfInternalAuth() {
-    this.oAuthService.initCodeFlow();
+  checkIfInternalAuth(queryParams?: Params) {
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
     return false;
   }
 
-  logout() {
-    return from(this.oAuthService.revokeTokenAndLogout());
+  logout(queryParams?: Params) {
+    return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 
-  login() {
-    this.oAuthService.initCodeFlow();
+  login(queryParams?: Params) {
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
     return of(null);
+  }
+
+  private getCultureParams(queryParams?: Params) {
+    const lang = this.sessionState.getLanguage();
+    const culture = { culture: lang, 'ui-culture': lang };
+    return { ...(lang && culture), ...queryParams };
   }
 }
 
@@ -101,7 +131,6 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = true;
   private cookieKey = 'rememberMe';
   private storageKey = 'passwordFlow';
-  private appConfigService = this.injector.get(AbpApplicationConfigurationService);
 
   private listenToTokenExpiration() {
     this.oAuthService.events
@@ -118,25 +147,12 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
           this.refreshToken();
         } else {
           this.oAuthService.logOut();
-          this.removeRememberMe();
+          removeRememberMe();
           this.appConfigService.get().subscribe(res => {
             this.configState.setState(res);
           });
         }
       });
-  }
-
-  private setRememberMe(remember: boolean) {
-    this.removeRememberMe();
-    localStorage.setItem(this.storageKey, 'true');
-    document.cookie = `${this.cookieKey}=true; path=/${
-      remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
-    }`;
-  }
-
-  private removeRememberMe() {
-    localStorage.removeItem(this.storageKey);
-    document.cookie = this.cookieKey + '= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   }
 
   async init() {
@@ -157,35 +173,39 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   login(params: LoginParams): Observable<any> {
-    const sessionState = this.injector.get(SessionStateService);
-    const router = this.injector.get(Router);
-    const tenant = sessionState.getTenant();
+    const tenant = this.sessionState.getTenant();
 
     return from(
       this.oAuthService.fetchTokenUsingPasswordFlow(
         params.username,
         params.password,
-        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
+        new HttpHeaders({ ...(tenant && tenant.id && { [this.tenantKey]: tenant.id }) }),
       ),
-    ).pipe(
+    ).pipe(this.pipeToLogin(params));
+  }
+
+  pipeToLogin(params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>) {
+    const router = this.injector.get(Router);
+
+    return pipe(
       switchMap(() => this.appConfigService.get()),
       tap(res => {
         this.configState.setState(res);
-        this.setRememberMe(params.rememberMe);
+        setRememberMe(params.rememberMe);
         if (params.redirectUrl) router.navigate([params.redirectUrl]);
       }),
     );
   }
 
-  logout() {
+  logout(queryParams?: Params) {
     const router = this.injector.get(Router);
 
-    return from(this.oAuthService.revokeTokenAndLogout()).pipe(
+    return from(this.oAuthService.revokeTokenAndLogout(queryParams)).pipe(
       switchMap(() => this.appConfigService.get()),
       tap(res => {
         this.configState.setState(res);
         router.navigateByUrl('/');
-        this.removeRememberMe();
+        removeRememberMe();
       }),
     );
   }
@@ -193,7 +213,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
-      this.removeRememberMe();
+      removeRememberMe();
     });
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +35,16 @@ namespace Volo.Abp.Identity.AspNetCore
         [UnitOfWork]
         public override async Task ValidateAsync(CookieValidatePrincipalContext context)
         {
-            var tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);
+            TenantConfiguration tenant = null;
+            try
+            {
+                tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);
+            }
+            catch (Exception e)
+            {
+                Logger.LogException(e);
+            }
+
             using (CurrentTenant.Change(tenant?.Id, tenant?.Name))
             {
                 await base.ValidateAsync(context);

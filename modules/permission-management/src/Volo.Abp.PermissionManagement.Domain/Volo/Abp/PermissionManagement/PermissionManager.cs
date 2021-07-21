@@ -9,6 +9,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -18,6 +19,8 @@ namespace Volo.Abp.PermissionManagement
 
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
+        protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
+
         protected IGuidGenerator GuidGenerator { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
@@ -25,23 +28,25 @@ namespace Volo.Abp.PermissionManagement
         protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
 
         protected PermissionManagementOptions Options { get; }
-        
+
         protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
         private readonly Lazy<List<IPermissionManagementProvider>> _lazyProviders;
 
         public PermissionManager(
             IPermissionDefinitionManager permissionDefinitionManager,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
             IPermissionGrantRepository permissionGrantRepository,
             IServiceProvider serviceProvider,
             IGuidGenerator guidGenerator,
             IOptions<PermissionManagementOptions> options,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IDistributedCache<PermissionGrantCacheItem> cache)
         {
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
             Cache = cache;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
@@ -76,7 +81,7 @@ namespace Volo.Abp.PermissionManagement
         {
             var permission = PermissionDefinitionManager.Get(permissionName);
 
-            if (!permission.IsEnabled)
+            if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 //TODO: BusinessException
                 throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
@@ -109,7 +114,7 @@ namespace Volo.Abp.PermissionManagement
 
             await provider.SetAsync(permissionName, providerKey, isGranted);
         }
-        
+
         public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
         {
             using (CurrentTenant.Change(permissionGrant.TenantId))
@@ -123,7 +128,7 @@ namespace Volo.Abp.PermissionManagement
                     )
                 );
             }
-            
+
             permissionGrant.ProviderKey = providerKey;
             return await PermissionGrantRepository.UpdateAsync(permissionGrant);
         }
@@ -142,6 +147,11 @@ namespace Volo.Abp.PermissionManagement
             var result = new PermissionWithGrantedProviders(permission.Name, false);
 
             if (!permission.IsEnabled)
+            {
+                return result;
+            }
+
+            if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 return result;
             }

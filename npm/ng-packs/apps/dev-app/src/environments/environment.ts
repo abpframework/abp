@@ -15,13 +15,16 @@ export const environment = {
     clientId: 'MyProjectName_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'offline_access MyProjectName',
-    // responseType: 'code',
-    // redirectUri: baseUrl
+    responseType: 'code',
+    redirectUri: baseUrl,
   },
   apis: {
     default: {
       url: 'https://localhost:44305',
       rootNamespace: 'MyCompanyName.MyProjectName',
+    },
+    AbpAccount: {
+      rootNamespace: 'Volo.Abp',
     },
     AbpFeatureManagement: {
       rootNamespace: 'Volo.Abp',

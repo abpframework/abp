@@ -719,7 +719,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       </div>
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
-          <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
+          <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
@@ -745,10 +745,10 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
-              <button ngbDropdownItem (click)="editAuthor(row.id)">
+              <button *abpPermission="'BookStore.Authors.Edit'" ngbDropdownItem (click)="editAuthor(row.id)">
                 {%{{{ '::Edit' | abpLocalization }}}%}
               </button>
-              <button ngbDropdownItem (click)="delete(row.id)">
+              <button *abpPermission="'BookStore.Authors.Delete'" ngbDropdownItem (click)="delete(row.id)">
                 {%{{{ '::Delete' | abpLocalization }}}%}
               </button>
             </div>
@@ -844,6 +844,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 @page "/authors"
 @using Acme.BookStore.Authors
 @using Acme.BookStore.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH

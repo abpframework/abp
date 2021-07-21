@@ -9,9 +9,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
     public abstract class AppTemplateBase : TemplateInfo
     {
+        public bool HasDbMigrations { get; set; }
+
         protected AppTemplateBase(string templateName)
             : base(templateName, DatabaseProvider.EntityFrameworkCore, UiFramework.Mvc)
         {
+
         }
 
         public static bool IsAppTemplate(string templateName)
@@ -40,31 +43,54 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             return steps;
         }
 
-        private static void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        private void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (context.BuildArgs.ExtraProperties.ContainsKey("separate-tenant-schema"))
             {
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
-                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                if (HasDbMigrations)
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                    steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                    steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCoreWithSeparateDbContext", "MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                }
             }
             else
             {
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations"));
+                if (HasDbMigrations)
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations"));
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCoreWithSeparateDbContext"));
+                }
             }
         }
 
-        private static void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        private void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
             {
-                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
+                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep(HasDbMigrations));
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                if (HasDbMigrations)
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                }
             }
             else
             {
@@ -169,7 +195,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
+            if (context.BuildArgs.PublicWebSite && !context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
             {
                 context.Symbols.Add("CMS-KIT");
             }
@@ -210,10 +236,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             if (string.IsNullOrWhiteSpace(context.BuildArgs.Version))
             {
-                // We'll return true after 4.3.0 stable release. see https://github.com/abpframework/abp/issues/8394
-                // return true;
-
-                return context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long);
+                return true;
             }
 
             return SemanticVersion.Parse(context.BuildArgs.Version) > SemanticVersion.Parse("4.2.9");
@@ -383,13 +406,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
         }
 
-        private static void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        private void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (string.IsNullOrWhiteSpace(context.BuildArgs.Version) ||
                 SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
             {
-                steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
-                steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/TenantMigrations"));
+                if (HasDbMigrations)
+                {
+                    steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+                    steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/TenantMigrations"));
+                }
+                else
+                {
+                    steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore/Migrations"));
+                    steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore/TenantMigrations"));
+                }
             }
         }
 

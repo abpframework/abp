@@ -15,6 +15,9 @@ namespace Volo.Abp.UI.Navigation
             {
                 options.MenuContributors.Add(new MenuManager_Tests.TestMenuContributor1());
                 options.MenuContributors.Add(new MenuManager_Tests.TestMenuContributor2());
+                options.MenuContributors.Add(new MenuManager_Tests.TestMenuContributor3());
+                
+                options.MainMenuNames.Add(MenuManager_Tests.TestMenuContributor3.MenuName);
             });
         }
     }

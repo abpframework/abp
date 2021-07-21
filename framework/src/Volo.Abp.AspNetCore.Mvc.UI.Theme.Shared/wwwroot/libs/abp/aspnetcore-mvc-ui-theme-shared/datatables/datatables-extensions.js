@@ -132,7 +132,7 @@ var abp = abp || {};
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(fieldItem.text));
+                $dropdownButton.append(htmlEncode(field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
@@ -236,9 +236,11 @@ var abp = abp || {};
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".abp-action-button");
-                    if ($actionButton.length === 0) {
-                        $(cells[colIndex]).empty().append($actionContainer);
+                    if ($actionContainer) {
+                        var $actionButton = $(cells[colIndex]).find(".abp-action-button");
+                        if ($actionButton.length === 0) {
+                            $(cells[colIndex]).empty().append($actionContainer);
+                        }
                     }
                 }
             }
@@ -462,11 +464,19 @@ var abp = abp || {};
     };
 
     datatables.defaultRenderers['date'] = function (value) {
-        return (ISOStringToDateTimeLocaleString())(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString())(value);
+        }
     };
 
     datatables.defaultRenderers['datetime'] = function (value) {
-        return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        }
     };
 
     /************************************************************************

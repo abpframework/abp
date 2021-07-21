@@ -110,5 +110,5 @@ function createMockLocalizationService() {
   const configState = new ConfigStateService();
   configState.setState({ localization: mockL10n } as any);
 
-  return new LocalizationService(mockSessionState, null, null, null, configState, null);
+  return new LocalizationService(mockSessionState, null, null, configState, null);
 }

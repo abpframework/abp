@@ -30,6 +30,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
 
+            if (isCheckBox)
+            {
+                TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode;
+            }
+
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
             AddGroupToFormGroupContents(
@@ -52,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.AddClass(isCheckBox ? "custom-checkbox" : "form-group");
                 output.Attributes.AddClass(isCheckBox ? "custom-control" : "");
                 output.Attributes.AddClass(isCheckBox ? "mb-2" : "");
-                output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
+                output.Content.AppendHtml(innerHtml);
             }
         }
 

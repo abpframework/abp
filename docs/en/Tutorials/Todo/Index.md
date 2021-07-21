@@ -135,7 +135,7 @@ namespace TodoApp
 }
 ````
 
-`BasicAggregateRoot` is one the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
+`BasicAggregateRoot` is the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
 
 ## Database Integration
 
@@ -151,13 +151,19 @@ Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *To
 public DbSet<TodoItem> TodoItems { get; set; }
 ````
 
-Then open the `TodoAppDbContextModelCreatingExtensions` class in the same folder and add a mapping configuration for the `TodoItem` class as shown below:
+Then locate  to `OnModelCreating` method in the `TodoAppDbContext` class and add the mapping code for the `TodoItem ` entity:
 
 ````csharp
-public static void ConfigureTodoApp(this ModelBuilder builder)
+protected override void OnModelCreating(ModelBuilder builder)
 {
-    Check.NotNull(builder, nameof(builder));
+    base.OnModelCreating(builder);
 
+    /* Include modules to your migration db context */
+
+    builder.ConfigurePermissionManagement();
+    ...
+
+    /* Configure your own tables/entities inside here */
     builder.Entity<TodoItem>(b =>
     {
         b.ToTable("TodoItems");
@@ -171,7 +177,7 @@ We've mapped `TodoItem` entity to a `TodoItems` table in the database.
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore.DbMigrations* project and type the following command:
+Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore* project and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
@@ -187,7 +193,7 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
@@ -214,7 +220,7 @@ Now, we can use ABP repositories to save and retrieve todo items, as we'll do in
 
 ## Application Layer
 
-An [Application Service](../../Application-Services.md) is used to perform use cases of the application. We need to perform the following use cases;
+An [Application Service](../../Application-Services.md) is used to perform use cases of the application. We need to perform the following use cases:
 
 * Get the list of todo items
 * Create a new todo item
@@ -243,7 +249,7 @@ namespace TodoApp
 
 ### Data Transfer Object
 
-`GetListAsync` and `CreateAsync` methods return `TodoItemDto`. Applications Services typically gets and returns DTOs ([Data Transfer Objects](../../Data-Transfer-Objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
+`GetListAsync` and `CreateAsync` methods return `TodoItemDto`. `ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../Data-Transfer-Objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
 
 ````csharp
 using System;
@@ -428,7 +434,7 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
 </div>
 ````
 
-We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers]() make it much easier and type safe.
+We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 
@@ -465,9 +471,9 @@ $(function () {
 });
 ````
 
-In the first part, we are registering to click events of the trash icons near to the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from DOM, so we don't need to refresh the page.
+In the first part, we are subscribing to click events of the trash icons near to the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from DOM, so we don't need to refresh the page.
 
-In the second part, we are creating a new todo item on the server. If it succeed, we are then manipulating DOM to insert a new `<li>` element to the todo list. In this way, no need to refresh the whole page after creating a new todo item.
+In the second part, we are creating a new todo item on the server. If it succeeds, we are then manipulating DOM to insert a new `<li>` element to the todo list. This way we don't need to refresh the whole page after creating a new todo item.
 
 The interesting part here is how we communicate with the server. See the *Dynamic JavaScript Proxies & Auto API Controllers* section to understand how it works. But now, let's continue and complete the application.
 
@@ -504,13 +510,13 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
-Now, you can run the application again to see the result.
+Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
 In the `Index.js` file, we've used `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
-However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
+However, you may notice that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
 
 If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
@@ -559,7 +565,7 @@ namespace TodoApp.Blazor.Pages
 }
 ````
 
-This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. In this way, we don't need to refresh the whole todo list from the server.
+This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
 {{if UI=="Blazor"}}
 
@@ -653,7 +659,7 @@ In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and
 
 The magic is done by the ABP Framework's [Dynamic C# Client Proxy](../../API/Dynamic-CSharp-API-Clients.md) system. It uses the standard `HttpClient` and performs HTTP API requests to the remote server. It also handles all the standard tasks for us, including authorization, JSON serialization and exception handling.
 
-However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
+However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
 
 If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
@@ -669,7 +675,7 @@ ABP provides a handy feature to automatically create client-side services to eas
 
 You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. 
 
-> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+> **Warning**: There is an issue with IIS Express: it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
 ![run-without-iisexpress](run-without-iisexpress.png)
 
@@ -813,7 +819,7 @@ Now, you can run the application again to see the result.
 
 ## Conclusion
 
-In this tutorial, we've build a very simple application to warm up to the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../Part-1.md) which covers all the aspects of a real-life web application development.
+In this tutorial, we've built a very simple application to warm up to the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../Part-1.md) which covers all the aspects of a real-life web application development.
 
 ## Source Code
 

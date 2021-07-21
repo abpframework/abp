@@ -18,7 +18,7 @@ $(function () {
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[1, "desc"]],
+        order: [[2, "desc"]],
         ajax: abp.libs.datatables.createAjax(blogsService.getList, getFilter),
         columnDefs: [
             {
@@ -28,14 +28,14 @@ $(function () {
                     items: [
                         {
                             text: l('Edit'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Update'),
+                            visible: abp.auth.isGranted('CmsKit.BlogPosts.Update'),
                             action: function (data) {
                                 location.href = "BlogPosts/Update/" + data.record.id
                             }
                         },
                         {
                             text: l('Delete'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Delete'),
+                            visible: abp.auth.isGranted('CmsKit.BlogPosts.Delete'),
                             confirmMessage: function (data) {
                                 return l("BlogPostDeletionConfirmationMessage", data.record.title)
                             },
@@ -51,6 +51,11 @@ $(function () {
                 }
             },
             {
+                title: l("Blog"),
+                orderable: false,
+                data: "blogName"
+            },
+            {
                 title: l("Title"),
                 orderable: true,
                 data: "title"
@@ -59,6 +64,12 @@ $(function () {
                 title: l("Slug"),
                 orderable: true,
                 data: "slug"
+            },
+            {
+                title: l("CreationTime"),
+                orderable: true,
+                data: 'creationTime',
+                dataFormat: "datetime"
             }
         ]
     }));

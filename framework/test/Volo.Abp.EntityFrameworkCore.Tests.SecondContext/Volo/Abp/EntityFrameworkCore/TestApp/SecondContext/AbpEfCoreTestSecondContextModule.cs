@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -18,6 +19,11 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
             context.Services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
             {
                 options.AddDefaultRepositories<IThirdDbContext>();
+            });
+
+            context.Services.AddAbpDbContext<FourthDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IFourthDbContext>();
             });
         }
 

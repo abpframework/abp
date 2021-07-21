@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Public.Pages
 {
+    [RequiresGlobalFeature(typeof(PagesFeature))]
     public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
     {
         protected IPageRepository PageRepository { get; }

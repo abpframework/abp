@@ -59,6 +59,9 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
                 await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
 
                 await _unitOfWorkManager.Current.RollbackAsync();
+
+                //Will ignore this call.
+                await _unitOfWorkManager.Current.SaveChangesAsync();
             });
 
             var person = await _personRepository.FindAsync(personId);

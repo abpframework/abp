@@ -1,0 +1,22 @@
+{
+  "culture": "it",
+  "texts": {
+    "Settings": "Impostazioni",
+    "SuccessfullySaved": "Salvato con successo",
+    "Permission:SettingManagement": "Gestione delle impostazioni",
+    "Permission:Emailing": "Invio di e-mail",
+    "Menu:Emailing": "Invio di e-mail",
+    "SmtpHost": "Host",
+    "SmtpPort": "Porta",
+    "SmtpUserName": "Nome utente",
+    "SmtpPassword": "Password",
+    "SmtpDomain": "Dominio",
+    "SmtpEnableSsl": "Abilita SSL",
+    "SmtpUseDefaultCredentials": "Usa credenziali predefinite",
+    "DefaultFromAddress": "Indirizzo mittente predefinito",
+    "DefaultFromDisplayName": "Nome mittente visualizzato predefinito",
+    "Feature:SettingManagementGroup": "Gestione Impostazioni",
+    "Feature:SettingManagementEnable": "Abilita gestione impostazioni",
+    "Feature:SettingManagementEnableDescription": "Abilita sistema gestione impostazioni nell'applicazione"
+  }
+}

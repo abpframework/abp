@@ -353,6 +353,7 @@ public class MyService : ITransientDependency
             {
                 //Add exceptions
                 _auditingManager.Current.Log.Exceptions.Add(ex);
+                throw;
             }
             finally
             {

@@ -131,28 +131,35 @@ namespace Volo.Abp.Cli.ProjectModification
             await RunBundleForBlazorAsync(projectFiles, module);
 
             ModifyDbContext(projectFiles, module, skipDbMigrations);
+
+            var documentationLink = module.GetFirstDocumentationLinkOrNull();
+            if (documentationLink != null)
+            {
+                CmdHelper.OpenWebPage(documentationLink);
+            }
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
         {
-            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np, version));
+            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np.MinVersion, np.MaxVersion, version));
+            module.NpmPackages.RemoveAll(np => IsPackageInCompatible(np.MinVersion, np.MaxVersion, version));
             return module;
         }
 
-        private bool IsPackageInCompatible(NugetPackageInfo package, string version)
+        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(package.MinVersion))
+                if (!string.IsNullOrWhiteSpace(minVersion))
                 {
-                    if (SemanticVersion.Parse(package.MinVersion) > SemanticVersion.Parse(version))
+                    if (SemanticVersion.Parse(minVersion) > SemanticVersion.Parse(version))
                     {
                         return true;
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(package.MaxVersion))
+                if (!string.IsNullOrWhiteSpace(maxVersion))
                 {
-                    if (SemanticVersion.Parse(package.MaxVersion) < SemanticVersion.Parse(version))
+                    if (SemanticVersion.Parse(maxVersion) < SemanticVersion.Parse(version))
                     {
                         return true;
                     }
@@ -186,6 +193,7 @@ namespace Volo.Abp.Cli.ProjectModification
         private async Task RemoveUnnecessaryProjectsAsync(string solutionDirectory, ModuleWithMastersInfo module,
             string[] projectFiles)
         {
+            var projectsToRemove = new List<string>();
             var moduleDirectory = Path.Combine(solutionDirectory, "modules", module.Name);
             var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
             var isProjectTiered = await IsProjectTiered(projectFiles);
@@ -194,10 +202,10 @@ namespace Volo.Abp.Cli.ProjectModification
             var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
             if (blazorProject == null)
             {
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Blazor, isProjectTiered);
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
-                await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor");
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.Blazor, isProjectTiered));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorServer, isProjectTiered));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByPostFix(moduleDirectory, "src", ".Blazor"));
             }
             else
             {
@@ -205,39 +213,58 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 if (isBlazorServer)
                 {
-                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+                    projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered));
 
-                    webPackagesWillBeAddedToBlazorServerProject = module.NugetPackages.All(np=> np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
+                    webPackagesWillBeAddedToBlazorServerProject = module.NugetPackages.All(np => np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
                 }
                 else
                 {
-                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                    projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorServer, isProjectTiered));
                 }
             }
 
             if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")) && !webPackagesWillBeAddedToBlazorServerProject)
             {
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Web, isProjectTiered);
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.Web, isProjectTiered));
             }
 
             if (!projectFiles.Any(p => p.EndsWith(".MongoDB.csproj")))
             {
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.MongoDB, isProjectTiered);
-                await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".MongoDB.Tests");
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.MongoDB, isProjectTiered));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByPostFix(moduleDirectory, "test", ".MongoDB.Tests"));
             }
 
             if (!projectFiles.Any(p => p.EndsWith(".EntityFrameworkCore.csproj")))
             {
-                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.EntityFrameworkCore, isProjectTiered);
-                await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".EntityFrameworkCore.Tests");
-                await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".Application.Tests");
+                projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.EntityFrameworkCore, isProjectTiered));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByPostFix(moduleDirectory, "test", ".EntityFrameworkCore.Tests"));
+                projectsToRemove.AddRange(await FindProjectsToRemoveByPostFix(moduleDirectory, "test", ".Application.Tests"));
                 ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
+            }
+
+            foreach (var projectToRemove in projectsToRemove)
+            {
+                if (IsReferencedByAnotherModuleProject(moduleDirectory, projectsToRemove, projectToRemove))
+                {
+                    continue;
+                }
+
+                RemoveProjectFromSolutionAsync(moduleSolutionFile, projectToRemove);
             }
         }
 
-        private async Task RemoveProjectByTarget(ModuleWithMastersInfo module, string moduleSolutionFile,
+        private bool IsReferencedByAnotherModuleProject(string moduleDirectory, List<string> projectsToRemove, string projectToRemove)
+        {
+            var moduleProjects = Directory.GetFiles(moduleDirectory, "*.csproj", SearchOption.AllDirectories);
+            var projectsToKeep = moduleProjects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
+            return projectsToKeep.Select(File.ReadAllText).Any(content => content.Contains($"\"{projectToRemove}\""));
+        }
+
+        private async Task<List<string>> FindProjectsToRemoveByTarget(ModuleWithMastersInfo module,
             NuGetPackageTarget target, bool isTieredProject)
         {
+            var projectsToRemove = new List<string>();
+
             var packages = module.NugetPackages.Where(n =>
                 (isTieredProject && n.TieredTarget != NuGetPackageTarget.Undefined
                     ? n.TieredTarget
@@ -251,32 +278,45 @@ namespace Volo.Abp.Cli.ProjectModification
                     continue;
                 }
 
-                await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, package.Name);
-
-                var projectPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "src", package.Name);
-                if (Directory.Exists(projectPath))
-                {
-                    Directory.Delete(projectPath, true);
-                }
+                projectsToRemove.Add(package.Name);
             }
+
+            return projectsToRemove;
         }
 
-        private async Task RemoveProjectByPostFix(ModuleWithMastersInfo module, string moduleSolutionFile, string targetFolder,
+        private async Task<List<string>> FindProjectsToRemoveByPostFix(string moduleDirectory, string targetFolder,
             string postFix)
         {
-            var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
+            var projectsToRemove = new List<string>();
+            var srcPath = Path.Combine(moduleDirectory, targetFolder);
 
             if (!Directory.Exists(srcPath))
             {
-                return;
+                return projectsToRemove;
             }
 
             var projectFolderPaths = Directory.GetDirectories(srcPath).Where(d => d.EndsWith(postFix)).ToList();
 
             foreach (var projectFolderPath in projectFolderPaths)
             {
-                await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
+                projectsToRemove.Add(new DirectoryInfo(projectFolderPath).Name);
+            }
 
+            return projectsToRemove;
+        }
+
+        private async Task RemoveProjectFromSolutionAsync(string moduleSolutionFile, string projectName)
+        {
+            await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, projectName);
+
+            var projectFolderPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "src", projectName);
+            if (Directory.Exists(projectFolderPath))
+            {
+                Directory.Delete(projectFolderPath, true);
+            }
+            else
+            {
+                projectFolderPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test", projectName);
                 if (Directory.Exists(projectFolderPath))
                 {
                     Directory.Delete(projectFolderPath, true);
@@ -500,7 +540,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     {
                         foreach (var npmPackage in mvcNpmPackages)
                         {
-                            await ProjectNpmPackageAdder.AddMvcPackageAsync(Path.GetDirectoryName(targetProject), npmPackage, null, true);
+                            await ProjectNpmPackageAdder.AddMvcPackageAsync(Path.GetDirectoryName(targetProject), npmPackage);
                         }
                     }
                 }

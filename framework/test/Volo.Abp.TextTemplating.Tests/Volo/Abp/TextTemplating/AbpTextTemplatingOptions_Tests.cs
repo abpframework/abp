@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Volo.Abp.TextTemplating
 {
-    public class AbpTextTemplatingOptions_Tests : AbpTextTemplatingTestBase
+    public class AbpTextTemplatingOptions_Tests : AbpTextTemplatingTestBase<AbpTextTemplatingTestModule>
     {
         private readonly AbpTextTemplatingOptions _options;
 

@@ -1,7 +1,7 @@
 {
   "culture": "ar",
   "texts": {
-    "ManageYourProfile": "إدارة ملفى",
+    "MyAccount": "إدارة ملفى",
     "SamplePageMessage": "صفحة نموذجية للوحدة النمطية MyProjectName"
   }
 }

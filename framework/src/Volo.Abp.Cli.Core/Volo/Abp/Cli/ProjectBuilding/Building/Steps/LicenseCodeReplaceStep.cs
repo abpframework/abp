@@ -12,7 +12,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var licenseCode = context.BuildArgs.ExtraProperties.GetOrDefault("license-code");
 
             var appSettingsJsonFiles = context.Files.Where(f =>
-                f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase));
+                f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase) ||
+                f.Name.EndsWith("appsettings.secrets.json", StringComparison.OrdinalIgnoreCase));
 
             foreach (var appSettingsJson in appSettingsJsonFiles)
             {

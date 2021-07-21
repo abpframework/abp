@@ -17,6 +17,7 @@ import { ConfirmationComponent } from './components/confirmation/confirmation.co
 import { HttpErrorWrapperComponent } from './components/http-error-wrapper/http-error-wrapper.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ModalCloseDirective } from './components/modal/modal-close.directive';
 import { ModalContainerComponent } from './components/modal/modal-container.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
@@ -33,11 +34,11 @@ import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
+import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
+import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { ModalCloseDirective } from './components/modal/modal-close.directive';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -117,6 +118,7 @@ export class ThemeSharedModule {
           deps: [HTTP_ERROR_CONFIG],
         },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
+        NG_BOOTSTRAP_CONFIG_PROVIDERS,
         {
           provide: VALIDATION_BLUEPRINTS,
           useValue: {

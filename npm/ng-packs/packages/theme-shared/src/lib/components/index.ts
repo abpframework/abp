@@ -7,6 +7,7 @@ export * from './loader-bar/loader-bar.component';
 export * from './loading/loading.component';
 export * from './modal/modal.component';
 export * from './modal/modal-close.directive';
+export * from './modal/modal-ref.service';
 export * from './sort-order-icon/sort-order-icon.component';
 export * from './table-empty-message/table-empty-message.component';
 export * from './table/table.component';
