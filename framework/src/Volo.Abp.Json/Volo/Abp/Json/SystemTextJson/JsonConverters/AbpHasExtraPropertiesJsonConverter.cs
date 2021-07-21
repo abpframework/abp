@@ -20,10 +20,6 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 newOptions.Converters.Remove(converterFactory);
                 newConverterFactory.AddExcludeTypes(converterFactory.GetExcludeTypes().ToArray());
             }
-            else
-            {
-                newConverterFactory.AddExcludeTypes(typeToConvert);
-            }
 
             newConverterFactory.AddExcludeTypes(typeToConvert);
             newOptions.Converters.Add(newConverterFactory);
