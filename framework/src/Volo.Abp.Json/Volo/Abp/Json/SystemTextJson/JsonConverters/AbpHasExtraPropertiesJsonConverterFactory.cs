@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,8 +12,20 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
     {
         private static readonly ConcurrentDictionary<Type, bool> CachedTypes = new ConcurrentDictionary<Type, bool>();
 
+        private static readonly List<Type> ExcludeTypes = new List<Type>();
+
+        public AbpHasExtraPropertiesJsonConverterFactory(params Type[] excludeTypes)
+        {
+            ExcludeTypes.AddIfNotContains(excludeTypes);
+        }
+
         public override bool CanConvert(Type typeToConvert)
         {
+            if (ExcludeTypes.Contains(typeToConvert))
+            {
+                return false;
+            }
+
             //Only for private or protected ExtraProperties.
             if (typeof(IHasExtraProperties).IsAssignableFrom(typeToConvert))
             {

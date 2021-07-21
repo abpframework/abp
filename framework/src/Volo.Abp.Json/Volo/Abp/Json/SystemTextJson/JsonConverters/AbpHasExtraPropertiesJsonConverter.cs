@@ -15,6 +15,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 x == this ||
                 x.GetType() == typeof(AbpHasExtraPropertiesJsonConverterFactory));
 
+            newOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory(typeToConvert));
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
             if (rootElement.ValueKind == JsonValueKind.Object)
             {
