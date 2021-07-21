@@ -64,7 +64,10 @@ namespace Volo.Abp.Http.ProxyScripting
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                return scope.ServiceProvider.GetRequiredService(generatorType).As<IProxyScriptGenerator>().CreateScript(apiModel);
+                return scope.ServiceProvider
+                    .GetRequiredService(generatorType)
+                    .As<IProxyScriptGenerator>()
+                    .CreateScript(apiModel);
             }
         }
 

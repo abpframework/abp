@@ -42,6 +42,8 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
+            
+            var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
 #if !DEBUG
             if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
@@ -49,11 +51,13 @@ namespace Volo.Abp.Cli
                 await CheckCliVersionAsync();
             }
 #endif
-            var commandLineArgs = CommandLineArgumentParser.Parse(args);
-            
             try
             {
-                if (commandLineArgs.IsCommand("batch"))
+                if (commandLineArgs.IsCommand("prompt"))
+                {
+                    await RunPromptAsync();
+                }
+                else if (commandLineArgs.IsCommand("batch"))
                 {
                     await RunBatchAsync(commandLineArgs);
                 }
@@ -70,6 +74,45 @@ namespace Volo.Abp.Cli
             {
                 Logger.LogException(ex);
             }
+        }
+
+        private async Task RunPromptAsync()
+        {
+            string GetPromptInput()
+            {
+                Console.WriteLine("Enter the command to execute or `exit` to exit the prompt model");
+                Console.Write("> ");
+                return Console.ReadLine();
+            }
+
+            var promptInput = GetPromptInput();
+            do
+            {
+                try
+                {
+                    var commandLineArgs = CommandLineArgumentParser.Parse(promptInput.Split(" ").Where(x => !x.IsNullOrWhiteSpace()).ToArray());
+
+                    if (commandLineArgs.IsCommand("batch"))
+                    {
+                        await RunBatchAsync(commandLineArgs);
+                    }
+                    else
+                    {
+                        await RunInternalAsync(commandLineArgs);
+                    }
+                }
+                catch (CliUsageException usageException)
+                {
+                    Logger.LogWarning(usageException.Message);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogException(ex);
+                }
+
+                promptInput = GetPromptInput();
+
+            } while (promptInput?.ToLower() != "exit");
         }
 
         private async Task RunBatchAsync(CommandLineArgs commandLineArgs)

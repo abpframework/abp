@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Messages;
+using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup
@@ -11,6 +12,9 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSetting
     {
         [Inject]
         protected IEmailSettingsAppService EmailSettingsAppService { get; set; }
+        
+        [Inject]
+        private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
         [Inject]
         protected IUiMessageService UiMessageService { get; set; }
@@ -42,6 +46,8 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSetting
             try
             {
                 await EmailSettingsAppService.UpdateAsync(ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsDto>(EmailSettings));
+                
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
                 await UiMessageService.Success(L["SuccessfullySaved"]);
             }

@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "Invalid username or password!",
     "LoginIsNotAllowed": "You are not allowed to login! You need to confirm your email/phone number.",
     "InvalidUsername": "Invalid username or password!",
+    "InvalidAuthenticatorCode": "Invalid authenticator code!",
     "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!"
   }
 }

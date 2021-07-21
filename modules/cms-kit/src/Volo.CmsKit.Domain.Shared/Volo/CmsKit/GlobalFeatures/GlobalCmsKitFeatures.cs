@@ -23,6 +23,8 @@ namespace Volo.CmsKit.GlobalFeatures
 
         public CmsUserFeature User => GetFeature<CmsUserFeature>();
 
+        public MenuFeature Menu => GetFeature<MenuFeature>();
+
         public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
             : base(featureManager)
         {
@@ -34,6 +36,7 @@ namespace Volo.CmsKit.GlobalFeatures
             AddFeature(new PagesFeature(this));
             AddFeature(new BlogsFeature(this));
             AddFeature(new CmsUserFeature(this));
+            AddFeature(new MenuFeature(this));
         }
     }
 }

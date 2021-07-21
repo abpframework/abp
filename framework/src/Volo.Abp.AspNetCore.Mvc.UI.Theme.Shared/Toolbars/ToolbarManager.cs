@@ -36,14 +36,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
-
-                foreach (var contributor in Options.Contributors)
+                using (RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ToolbarItem>()))
                 {
-                    await contributor.ConfigureToolbarAsync(context);
-                }
+                    var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
 
-                await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                    foreach (var contributor in Options.Contributors)
+                    {
+                        await contributor.ConfigureToolbarAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                }
             }
 
             return toolbar;

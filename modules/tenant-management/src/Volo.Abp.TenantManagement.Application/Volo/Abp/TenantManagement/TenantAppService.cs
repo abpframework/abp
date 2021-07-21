@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.TenantManagement
@@ -14,15 +16,18 @@ namespace Volo.Abp.TenantManagement
         protected IDataSeeder DataSeeder { get; }
         protected ITenantRepository TenantRepository { get; }
         protected ITenantManager TenantManager { get; }
+        protected IDistributedEventBus DistributedEventBus { get; }
 
         public TenantAppService(
             ITenantRepository tenantRepository,
             ITenantManager tenantManager,
-            IDataSeeder dataSeeder)
+            IDataSeeder dataSeeder,
+            IDistributedEventBus distributedEventBus)
         {
             DataSeeder = dataSeeder;
             TenantRepository = tenantRepository;
             TenantManager = tenantManager;
+            DistributedEventBus = distributedEventBus;
         }
 
         public virtual async Task<TenantDto> GetAsync(Guid id)
@@ -63,10 +68,22 @@ namespace Volo.Abp.TenantManagement
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
+            await DistributedEventBus.PublishAsync(
+                new TenantCreatedEto
+                {
+                    Id = tenant.Id,
+                    Name = tenant.Name,
+                    Properties =
+                    {
+                        { "AdminEmail", input.AdminEmailAddress },
+                        { "AdminPassword", input.AdminPassword }
+                    }
+                });
+
             using (CurrentTenant.Change(tenant.Id, tenant.Name))
             {
                 //TODO: Handle database creation?
-
+                // TODO: Seeder might be triggered via event handler.
                 await DataSeeder.SeedAsync(
                                 new DataSeedContext(tenant.Id)
                                     .WithProperty("AdminEmail", input.AdminEmailAddress)

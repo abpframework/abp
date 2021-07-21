@@ -11,6 +11,8 @@ using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
+using Volo.CmsKit.Menus;
+using Volo.CmsKit.Admin.Menus;
 
 namespace Volo.CmsKit.Admin
 {
@@ -19,12 +21,13 @@ namespace Volo.CmsKit.Admin
         public CmsKitAdminApplicationAutoMapperProfile()
         {
             CreateMap<CmsUser, Comments.CmsUserDto>();
-            
+
             CreateMap<Comment, CommentDto>();
             CreateMap<Comment, CommentWithAuthorDto>()
-                .Ignore(x=> x.Author);
-            
+                .Ignore(x => x.Author);
+
             CreateMap<Page, PageDto>();
+            CreateMap<Page, PageLookupDto>();
 
             CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
             CreateMap<BlogPost, BlogPostListDto>()
@@ -39,6 +42,8 @@ namespace Volo.CmsKit.Admin
             CreateMap<Tag, TagDto>();
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
+
+            CreateMap<MenuItem, MenuItemDto>();
         }
     }
 }

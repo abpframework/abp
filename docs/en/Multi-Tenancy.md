@@ -296,6 +296,32 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 });
 ````
 
+If you change the `TenantKey`, make sure to pass it to `CoreModule` in the Angular client as follows:
+
+```js
+@NgModule({
+  imports: [
+    CoreModule.forRoot({
+      // ...
+      tenantKey: 'MyTenantKey'
+    }),
+  ],
+  // ...
+})
+export class AppModule {}
+```
+
+If you need to access it, you can inject it as follows:
+
+```js
+import { Inject } from '@angular/core';
+import { TENANT_KEY } from '@abp/ng.core';
+
+class SomeComponent {
+    constructor(@Inject(TENANT_KEY) private tenantKey: string) {}
+} 
+```
+
 > However, we don't suggest to change this value since some clients may assume the the `__tenant` as the parameter name and they might need to manually configure then.
 
 ##### Domain/Subdomain Tenant Resolver

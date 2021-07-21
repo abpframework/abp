@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -14,7 +15,6 @@ namespace Volo.Abp.UI.Navigation
         protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
-
         public MenuManager(
             IOptions<AbpNavigationOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory,
@@ -25,20 +25,73 @@ namespace Volo.Abp.UI.Navigation
             SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
-        public async Task<ApplicationMenu> GetAsync(string name)
+        public Task<ApplicationMenu> GetAsync(string name)
+        {
+            return GetInternalAsync(name);
+        }
+
+        public Task<ApplicationMenu> GetMainMenuAsync()
+        {
+            return GetAsync(Options.MainMenuNames.ToArray());
+        }
+        
+        protected virtual async Task<ApplicationMenu> GetAsync(params string[] menuNames)
+        {
+            if (menuNames.IsNullOrEmpty())
+            {
+                return new ApplicationMenu(StandardMenus.Main);
+            }
+
+            var menus = new List<ApplicationMenu>();
+            
+            foreach (var menuName in Options.MainMenuNames)
+            { 
+                menus.Add(await GetInternalAsync(menuName));
+            }
+            
+            return MergeMenus(menus);
+        }
+
+        protected virtual ApplicationMenu MergeMenus(List<ApplicationMenu> menus)
+        {
+            Check.NotNullOrEmpty(menus, nameof(menus));
+
+            if (menus.Count == 1)
+            {
+                return menus[0];
+            }
+
+            var firstMenu = menus[0];
+
+            for (int i = 1; i < menus.Count; i++)
+            {
+                var currentMenu = menus[i];
+                foreach (var menuItem in currentMenu.Items)
+                {
+                    firstMenu.AddItem(menuItem);
+                }
+            }
+
+            return firstMenu;
+        }
+
+        protected virtual async Task<ApplicationMenu> GetInternalAsync(string name)
         {
             var menu = new ApplicationMenu(name);
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
-
-                foreach (var contributor in Options.MenuContributors)
+                using (RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>()))
                 {
-                    await contributor.ConfigureMenuAsync(context);
-                }
+                    var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
 
-                await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                    foreach (var contributor in Options.MenuContributors)
+                    {
+                        await contributor.ConfigureMenuAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                }
             }
 
             NormalizeMenu(menu);

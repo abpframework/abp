@@ -39,7 +39,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
-                
+
                 options.Entity<Author>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
@@ -76,7 +76,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     @"CREATE VIEW View_PersonView AS 
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
-            
+
             return connection;
         }
     }

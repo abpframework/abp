@@ -17,6 +17,12 @@ namespace Volo.Abp.BlobStoring.Azure
                 // All letters in a container name must be lowercase.
                 containerName = containerName.ToLower();
 
+                // Container names must be from 3 through 63 characters long.
+                if (containerName.Length > 63)
+                {
+                    containerName = containerName.Substring(0, 63);
+                }
+
                 // Container names can contain only letters, numbers, and the dash (-) character.
                 containerName = Regex.Replace(containerName, "[^a-z0-9-]", string.Empty);
 
@@ -35,11 +41,6 @@ namespace Volo.Abp.BlobStoring.Azure
                     {
                         containerName += "0";
                     }
-                }
-
-                if (containerName.Length > 63)
-                {
-                    containerName = containerName.Substring(0, 63);
                 }
 
                 return containerName;

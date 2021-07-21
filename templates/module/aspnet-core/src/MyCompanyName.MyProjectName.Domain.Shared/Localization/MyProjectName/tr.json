@@ -1,7 +1,7 @@
 {
   "culture": "tr",
   "texts": {
-    "ManageYourProfile":  "Profil yönetimi",
+    "MyAccount":  "Hesabım",
     "SamplePageMessage": "MyProjectName modulünden örnek bir sayfa"
   }
 }

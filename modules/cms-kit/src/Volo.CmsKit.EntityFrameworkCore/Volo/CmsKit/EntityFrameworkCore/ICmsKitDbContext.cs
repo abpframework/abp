@@ -4,6 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -25,5 +26,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
         DbSet<Blog> Blogs { get; }
         DbSet<BlogPost> BlogPosts { get; }
         DbSet<MediaDescriptor> MediaDescriptors { get; }
+        DbSet<MenuItem> MenuItems { get; }
     }
 }

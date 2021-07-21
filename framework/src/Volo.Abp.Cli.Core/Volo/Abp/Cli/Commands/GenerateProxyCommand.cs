@@ -12,5 +12,10 @@ namespace Volo.Abp.Cli.Commands
             : base(cliService)
         {
         }
+
+        public override string GetShortDescription()
+        {
+            return "Generates Angular service proxies and DTOs to consume HTTP APIs.";
+        }
     }
 }

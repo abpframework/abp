@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,6 +14,7 @@ namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .AddAppSettingsSecretsJson()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<ConsoleTestAppHostedService>();
