@@ -43,6 +43,22 @@ namespace Volo.Abp.Json
             fooDto.BarDtos.Count.ShouldBe(1);
             fooDto.BarDtos.First().Name.ShouldBe("bar-dto");
             fooDto.BarDtos.First().GetProperty("bar").ShouldBe("bar-value");
+
+            fooDto.Name = "new-foo-dto";
+            fooDto.SetProperty("foo", "new-foo-value");
+            fooDto.BarDtos.First().Name = "new-bar-dto";
+            fooDto.BarDtos.First().SetProperty("bar", "new-bar-value");
+
+            json = _jsonSerializer.Serialize(fooDto);
+
+            fooDto = _jsonSerializer.Deserialize<FooDto>(json);
+            fooDto.ShouldNotBeNull();
+            fooDto.Name.ShouldBe("new-foo-dto");
+            fooDto.GetProperty("foo").ShouldBe("new-foo-value");
+
+            fooDto.BarDtos.Count.ShouldBe(1);
+            fooDto.BarDtos.First().Name.ShouldBe("new-bar-dto");
+            fooDto.BarDtos.First().GetProperty("bar").ShouldBe("new-bar-value");
         }
     }
 
