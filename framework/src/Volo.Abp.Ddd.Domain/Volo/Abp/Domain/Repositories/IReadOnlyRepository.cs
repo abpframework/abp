@@ -28,12 +28,11 @@ namespace Volo.Abp.Domain.Repositories
         Task<IQueryable<TEntity>> GetQueryableAsync(); //TODO: CancellationToken
         
         /// <summary>
-        /// Gets a list entities by the given <paramref name="predicate"/>.
+        /// Gets a list of entities by the given <paramref name="predicate"/>.
         /// </summary>
-        /// <param name="predicate">A condition to find the entity</param>
-        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <param name="predicate">A condition to filter the entities</param>
+        /// <param name="includeDetails">Set true to include details (sub-collections) of this entity</param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <returns>Entity</returns>
         Task<List<TEntity>> GetListAsync(
             [NotNull] Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = false,
