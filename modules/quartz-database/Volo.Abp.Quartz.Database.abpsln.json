@@ -1,0 +1,10 @@
+{
+  "modules": {
+    "Volo.Abp.Quartz.Database": {
+      "path": "Volo.Abp.Quartz.Database.abpmdl.json"
+    },
+    "Quartz.Database.ConsoleApp": {
+      "path": "host/Quartz.Database.ConsoleApp/Quartz.Database.ConsoleApp.abpmdl.json"
+    }
+  }
+}

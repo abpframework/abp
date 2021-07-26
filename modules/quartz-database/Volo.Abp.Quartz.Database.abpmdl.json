@@ -1,0 +1,47 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.Quartz.Database.Domain.Shared": {
+      "path": "src/Volo.Abp.Quartz.Database.Domain.Shared/Volo.Abp.Quartz.Database.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Quartz.Database.Domain": {
+      "path": "src/Volo.Abp.Quartz.Database.Domain/Volo.Abp.Quartz.Database.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Quartz.Database.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.Quartz.Database.EntityFrameworkCore/Volo.Abp.Quartz.Database.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Quartz.Database.TestBase": {
+      "path": "test/Volo.Abp.Quartz.Database.TestBase/Volo.Abp.Quartz.Database.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests/Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Quartz.Database.Domain.Tests": {
+      "path": "test/Volo.Abp.Quartz.Database.Domain.Tests/Volo.Abp.Quartz.Database.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Quartz.Database.MySql.ConsoleApp": {
+      "path": "host/Quartz.Database.MySql.ConsoleApp/Quartz.Database.MySql.ConsoleApp/Quartz.Database.MySql.ConsoleApp.abppkg.json",
+      "folder": "host/Quartz.Database.MySql.ConsoleApp"
+    },
+    "Quartz.Database.PostgreSql.ConsoleApp": {
+      "path": "host/Quartz.Database.PostgreSql.ConsoleApp/Quartz.Database.PostgreSql.ConsoleApp/Quartz.Database.PostgreSql.ConsoleApp.abppkg.json",
+      "folder": "host/Quartz.Database.PostgreSql.ConsoleApp"
+    },
+    "Quartz.Database.SqlServer.ConsoleApp": {
+      "path": "host/Quartz.Database.SqlServer.ConsoleApp/Quartz.Database.SqlServer.ConsoleApp/Quartz.Database.SqlServer.ConsoleApp.abppkg.json",
+      "folder": "host/Quartz.Database.SqlServer.ConsoleApp"
+    }
+  }
+}

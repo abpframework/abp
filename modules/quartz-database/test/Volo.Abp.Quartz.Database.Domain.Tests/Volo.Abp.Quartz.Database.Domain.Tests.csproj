@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Volo.Abp.Quartz.Database</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <ProjectReference Include="..\Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests\Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

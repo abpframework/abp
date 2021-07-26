@@ -1,0 +1,90 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz.Database.Domain", "src\Volo.Abp.Quartz.Database.Domain\Volo.Abp.Quartz.Database.Domain.csproj", "{F2840BC7-0188-4606-9126-DADD0F5ABF7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{649A3FFA-182F-4E56-9717-E6A9A2BEC545}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{E400416D-2895-4512-9D17-90681EEC7E0A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz.Database.EntityFrameworkCore", "src\Volo.Abp.Quartz.Database.EntityFrameworkCore\Volo.Abp.Quartz.Database.EntityFrameworkCore.csproj", "{0CE86223-D31D-4315-A1F5-87BA3EE1B844}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz.Database.TestBase", "test\Volo.Abp.Quartz.Database.TestBase\Volo.Abp.Quartz.Database.TestBase.csproj", "{C5BB573D-3030-4BCB-88B7-F6A85C32766C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests", "test\Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests\Volo.Abp.Quartz.Database.EntityFrameworkCore.Tests.csproj", "{527F645C-C1FC-406E-8479-81386C8ECF13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz.Database.Domain.Tests", "test\Volo.Abp.Quartz.Database.Domain.Tests\Volo.Abp.Quartz.Database.Domain.Tests.csproj", "{E60895E5-79C4-447D-88B7-85CB5BA336A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quartz.Database.MySql.ConsoleApp", "host\Quartz.Database.MySql.ConsoleApp\Quartz.Database.MySql.ConsoleApp.csproj", "{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quartz.Database.PostgreSql.ConsoleApp", "host\Quartz.Database.PostgreSql.ConsoleApp\Quartz.Database.PostgreSql.ConsoleApp.csproj", "{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quartz.Database.SqlServer.ConsoleApp", "host\Quartz.Database.SqlServer.ConsoleApp\Quartz.Database.SqlServer.ConsoleApp.csproj", "{97814B97-B7CE-4E71-A91F-555CA6639950}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quartz.Database.Shared", "host\Quartz.Database.Shared\Quartz.Database.Shared.csproj", "{BD2F39B6-260E-4357-AC3F-33BED6A956E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5BB573D-3030-4BCB-88B7-F6A85C32766C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5BB573D-3030-4BCB-88B7-F6A85C32766C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5BB573D-3030-4BCB-88B7-F6A85C32766C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5BB573D-3030-4BCB-88B7-F6A85C32766C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{527F645C-C1FC-406E-8479-81386C8ECF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{527F645C-C1FC-406E-8479-81386C8ECF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{527F645C-C1FC-406E-8479-81386C8ECF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{527F645C-C1FC-406E-8479-81386C8ECF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60895E5-79C4-447D-88B7-85CB5BA336A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60895E5-79C4-447D-88B7-85CB5BA336A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E60895E5-79C4-447D-88B7-85CB5BA336A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E60895E5-79C4-447D-88B7-85CB5BA336A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97814B97-B7CE-4E71-A91F-555CA6639950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97814B97-B7CE-4E71-A91F-555CA6639950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97814B97-B7CE-4E71-A91F-555CA6639950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97814B97-B7CE-4E71-A91F-555CA6639950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD2F39B6-260E-4357-AC3F-33BED6A956E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD2F39B6-260E-4357-AC3F-33BED6A956E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD2F39B6-260E-4357-AC3F-33BED6A956E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD2F39B6-260E-4357-AC3F-33BED6A956E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{C5BB573D-3030-4BCB-88B7-F6A85C32766C} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{527F645C-C1FC-406E-8479-81386C8ECF13} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{E60895E5-79C4-447D-88B7-85CB5BA336A4} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{0E96F47D-B88C-472B-AF3C-BB0311CCCF4D} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{3E995CC6-5310-4C79-83ED-7D5A36B0DC5E} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{97814B97-B7CE-4E71-A91F-555CA6639950} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{BD2F39B6-260E-4357-AC3F-33BED6A956E8} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
+	EndGlobalSection
+EndGlobal
