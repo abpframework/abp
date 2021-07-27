@@ -334,5 +334,10 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi",
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi.Client",
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
-    "modules/cms-kit/src/Volo.CmsKit.Web"
+    "modules/cms-kit/src/Volo.CmsKit.Web",
+
+
+    # modles/quartz-database
+    "modules/quartz-database/src/Volo.Abp.Quartz.Database.Domain",
+    "modules/quartz-database/src/Volo.Abp.Quartz.Database.EntityFrameworkCore"
 )
