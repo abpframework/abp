@@ -12,10 +12,7 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            if (builder.IsUsingSqlite())
-            {
-                throw new AbpException("Module QuartzDatabase does not support sqlite.");
-            }
+            //TODO: sqlite database need to create triggers, any way?
 
             var options = new QuartzDatabaseModelBuilderConfigurationOptions(
                 QuartzDatabaseDbProperties.DbTablePrefix,
