@@ -5,7 +5,6 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
 {
-
     public static class QuartzDatabaseEfCoreQueryableExtensions
     {
         public static IQueryable<QuartzTrigger> IncludeDetails(this IQueryable<QuartzTrigger> queryable, bool include = true)

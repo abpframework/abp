@@ -4,6 +4,5 @@ namespace Volo.Abp.Quartz.Database
 {
     public interface IQuartzPausedTriggerGroupRepository : IReadOnlyBasicRepository<QuartzPausedTriggerGroup>
     {
-
     }
 }

@@ -3,7 +3,6 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
 {
-
     public class QuartzCalendarRepository : EfCoreRepository<IQuartzDatabaseDbContext, QuartzCalendar>,
         IQuartzCalendarRepository
     {
@@ -12,6 +11,4 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
         {
         }
     }
-
-
 }

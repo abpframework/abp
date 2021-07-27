@@ -2,7 +2,6 @@
 
 namespace Volo.Abp.Quartz.Database
 {
-
     public interface IQuartzSchedulerStateRepository : IReadOnlyRepository<QuartzSchedulerState>
     {
     }

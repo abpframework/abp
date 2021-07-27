@@ -8,7 +8,6 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
 {
-
     public class QuartzFiredTriggerRepository : EfCoreRepository<IQuartzDatabaseDbContext, QuartzFiredTrigger>,
         IQuartzFiredTriggerRepository
     {
@@ -17,6 +16,4 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
         {
         }
     }
-
-
 }

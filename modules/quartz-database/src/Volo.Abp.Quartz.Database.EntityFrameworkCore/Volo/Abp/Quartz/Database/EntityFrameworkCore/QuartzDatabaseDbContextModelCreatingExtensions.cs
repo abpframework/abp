@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
 {
@@ -173,11 +174,11 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
                 if (builder.IsUsingSqlServer())
                 {
                     b.HasIndex(x => new { x.SchedulerName, x.RequestsRecovery })
-                      .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}FT_INST_JOB_REQ_RCVRY"));
+                      .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}ft_inst_job_req_rcvry"));
                     b.HasIndex(x => new { x.SchedulerName, x.JobGroup, x.JobName })
-                      .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}FT_G_J"));
+                      .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}ft_g_j"));
                     b.HasIndex(x => new { x.SchedulerName, x.TriggerGroup, x.TriggerName })
-                      .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}FT_G_T"));
+                      .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}ft_g_t"));
                 }
                 else if (builder.IsUsingPostgreSql())
                 {
@@ -335,7 +336,7 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
             // QRTZ_SIMPROP_TRIGGERS
             builder.Entity<QuartzSimplePropertyTrigger>(b =>
             {
-                b.ToTable(builder.TableNameConvert($"{options.TablePrefix}SIMPROP_TRIGGERS"), options.Schema);
+                b.ToTable(builder.TableNameConvert($"{options.TablePrefix}simprop_tiggers"), options.Schema);
 
                 b.HasKey(x => new { x.SchedulerName, x.TriggerName, x.TriggerGroup });
 
@@ -478,24 +479,24 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
                 if (builder.IsUsingSqlServer())
                 {
                     b.HasIndex(x => new { x.SchedulerName, x.JobGroup, x.JobName })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_G_J"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_g_j"));
                     b.HasIndex(x => new { x.SchedulerName, x.CalendarName })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_C"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_c"));
 
                     b.HasIndex(x => new { x.SchedulerName, x.TriggerGroup, x.TriggerState })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_N_G_STATE"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_n_g_state"));
                     b.HasIndex(x => new { x.SchedulerName, x.TriggerState })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_STATE"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_state"));
                     b.HasIndex(x => new { x.SchedulerName, x.TriggerName, x.TriggerGroup, x.TriggerState })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_N_STATE"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_n_state"));
                     b.HasIndex(x => new { x.SchedulerName, x.NextFireTime })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_NEXT_FIRE_TIME"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_next_fire_time"));
                     b.HasIndex(x => new { x.SchedulerName, x.TriggerState, x.NextFireTime })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_NFT_ST"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_nft_st"));
                     b.HasIndex(x => new { x.SchedulerName, x.MisfireInstruction, x.NextFireTime, x.TriggerState })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_NFT_ST_MISFIRE"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_nft_st_misfire"));
                     b.HasIndex(x => new { x.SchedulerName, x.MisfireInstruction, x.NextFireTime, x.TriggerGroup, x.TriggerState })
-                        .HasDatabaseName(builder.IndexNameConvert($"IDX_{options.TablePrefix}T_NFT_ST_MISFIRE_GRP"));
+                        .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_nft_st_misfire_grp"));
                 }
                 else if (builder.IsUsingPostgreSql())
                 {
@@ -535,6 +536,8 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
                         .HasDatabaseName(builder.IndexNameConvert($"idx_{options.TablePrefix}t_nft_st_misfire_grp"));
                 }
             });
+
+            builder.TryConfigureObjectExtensions<QuartzDatabaseDbContext>();
         }
 
         private static string ColumnNameConvert(this ModelBuilder builder, string name)
@@ -542,15 +545,6 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
             if (builder.IsUsingPostgreSql())
             {
                 return name.ToLowerInvariant();
-            }
-            else if (
-                builder.IsUsingSqlServer() ||
-                builder.IsUsingFirebird() ||
-                builder.IsUsingMySQL() ||
-                builder.IsUsingOracle() ||
-                builder.IsUsingSqlite())
-            {
-                return name.ToUpperInvariant();
             }
 
             return name.ToUpperInvariant();
@@ -562,14 +556,7 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
             {
                 return name.ToLowerInvariant();
             }
-            else if (
-                builder.IsUsingSqlServer() ||
-                builder.IsUsingFirebird() ||
-                builder.IsUsingMySQL() ||
-                builder.IsUsingSqlite())
-            {
-                return name.ToUpperInvariant();
-            }
+
             return name.ToUpperInvariant();
         }
 
@@ -579,14 +566,7 @@ namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
             {
                 return name.ToLowerInvariant();
             }
-            else if (
-                builder.IsUsingSqlServer() ||
-                builder.IsUsingFirebird() ||
-                builder.IsUsingMySQL() ||
-                builder.IsUsingSqlite())
-            {
-                return name.ToUpperInvariant();
-            }
+
             return name.ToUpperInvariant();
         }
     }

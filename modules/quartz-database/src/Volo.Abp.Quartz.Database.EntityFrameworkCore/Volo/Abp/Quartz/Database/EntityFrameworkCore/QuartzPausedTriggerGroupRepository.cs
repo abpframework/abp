@@ -3,7 +3,6 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Quartz.Database.EntityFrameworkCore
 {
-
     public class QuartzPausedTriggerGroupRepository : EfCoreRepository<IQuartzDatabaseDbContext, QuartzPausedTriggerGroup>,
         IQuartzPausedTriggerGroupRepository
     {

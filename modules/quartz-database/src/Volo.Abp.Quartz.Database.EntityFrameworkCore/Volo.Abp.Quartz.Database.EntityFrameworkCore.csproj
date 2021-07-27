@@ -2,14 +2,10 @@
 
   <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
-  
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace></RootNamespace>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;CS1591;CS0436;S4144</NoWarn>
+    <RootNamespace/>
   </PropertyGroup>
 
   <ItemGroup>
