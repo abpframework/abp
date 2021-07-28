@@ -29,7 +29,9 @@ namespace Volo.Abp.Threading
 
             using (_cancellationTokenProvider.Use(cts.Token))
             {
-                _cancellationTokenProvider.Token.ShouldBe(cts.Token);
+                var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
+
+                newCancellationTokenProvider.Token.ShouldBe(cts.Token);
             }
 
             _cancellationTokenProvider.Token.ShouldBe(CancellationToken.None);
@@ -43,7 +45,8 @@ namespace Volo.Abp.Threading
 
             using (_cancellationTokenProvider.Use(cts.Token))
             {
-                Should.Throw<OperationCanceledException>(() => LongTask(1000, _cancellationTokenProvider.Token));
+                var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
+                Should.Throw<OperationCanceledException>(() => LongTask(1000, newCancellationTokenProvider.Token));
             }
         }
 
