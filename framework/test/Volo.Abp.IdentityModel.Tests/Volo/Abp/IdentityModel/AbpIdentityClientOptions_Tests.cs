@@ -37,6 +37,15 @@ namespace Volo.Abp.IdentityModel
                 var tenantIdentityConfiguration = _identityClientOptions.GetClientConfiguration(_currentTenant, "Identity");
                 tenantIdentityConfiguration.UserName.ShouldBe("tenant_identity_admin");
             }
+
+            using (_currentTenant.Change(Guid.NewGuid()))
+            {
+                var configuration = _identityClientOptions.GetClientConfiguration(_currentTenant);
+                configuration.UserName.ShouldBe("host_default_admin");
+
+                configuration = _identityClientOptions.GetClientConfiguration(_currentTenant, "Identity");
+                configuration.UserName.ShouldBe("host_identity_admin");
+            }
         }
     }
 }
