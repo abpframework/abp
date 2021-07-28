@@ -1,4 +1,5 @@
 ﻿using System;
+using NuGet.Versioning;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
@@ -13,7 +14,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             var pipeline = new ProjectBuildPipeline(context);
 
             pipeline.Steps.Add(new FileEntryListReadStep());
-            pipeline.Steps.Add(new CreateAppSettingsSecretsStep());
+
+            if (SemanticVersion.Parse(context.TemplateFile.Version) > new SemanticVersion(4, 3, 99))
+            {
+                pipeline.Steps.Add(new CreateAppSettingsSecretsStep());
+            }
 
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
 
