@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -159,5 +159,14 @@ namespace Volo.Abp.Http.DynamicProxying
             (await _controller.DeleteByIdAsync(42)).ShouldBe(43);
         }
 
+        [Fact]
+        public async Task AbortRequestAsync()
+        {
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(10);
+
+            var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _controller.AbortRequestAsync(cts.Token));
+            exception.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
+        }
     }
 }

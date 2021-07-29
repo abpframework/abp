@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.Http.DynamicProxying
@@ -36,5 +37,7 @@ namespace Volo.Abp.Http.DynamicProxying
         Task<string> PatchValueWithHeaderAndQueryStringAsync(string headerValue, string qsValue);
 
         Task<int> DeleteByIdAsync(int id);
+
+        Task AbortRequestAsync(CancellationToken cancellationToken);
     }
 }

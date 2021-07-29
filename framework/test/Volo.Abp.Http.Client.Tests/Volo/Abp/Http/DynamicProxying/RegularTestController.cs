@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
@@ -128,6 +127,13 @@ namespace Volo.Abp.Http.DynamicProxying
         public Task<int> DeleteByIdAsync(int id)
         {
             return Task.FromResult(id + 1);
+        }
+
+        [HttpGet]
+        [Route("abort-request")]
+        public async Task AbortRequestAsync(CancellationToken cancellationToken)
+        {
+            await Task.Delay(100, cancellationToken);
         }
     }
 

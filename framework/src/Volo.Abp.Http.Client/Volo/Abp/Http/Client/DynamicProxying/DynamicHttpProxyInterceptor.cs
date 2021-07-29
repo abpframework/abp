@@ -174,7 +174,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var response = await client.SendAsync(
                 requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken()
+                GetCancellationToken(invocation)
             );
 
             if (!response.IsSuccessStatusCode)
@@ -306,9 +306,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return input;
         }
 
-        protected virtual CancellationToken GetCancellationToken()
+        protected virtual CancellationToken GetCancellationToken(IAbpMethodInvocation invocation)
         {
-            return CancellationTokenProvider.Token;
+            var cancellationToken = invocation.Arguments.LastOrDefault(x => x is CancellationToken);
+            return (CancellationToken?)cancellationToken ?? CancellationTokenProvider.Token;
         }
     }
 }
