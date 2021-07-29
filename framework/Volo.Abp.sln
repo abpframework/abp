@@ -385,6 +385,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MongoDB.Tests.Seco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityModel.Tests", "test\Volo.Abp.IdentityModel.Tests\Volo.Abp.IdentityModel.Tests.csproj", "{40C6740E-BFCA-4D37-8344-3D84E2044BB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Threading.Tests", "test\Volo.Abp.Threading.Tests\Volo.Abp.Threading.Tests.csproj", "{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1147,6 +1149,10 @@ Global
 		{40C6740E-BFCA-4D37-8344-3D84E2044BB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C6740E-BFCA-4D37-8344-3D84E2044BB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C6740E-BFCA-4D37-8344-3D84E2044BB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1341,6 +1347,7 @@ Global
 		{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{90B1866A-EF99-40B9-970E-B898E5AA523F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{40C6740E-BFCA-4D37-8344-3D84E2044BB2} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

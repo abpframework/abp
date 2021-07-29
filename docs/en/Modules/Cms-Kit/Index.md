@@ -12,6 +12,7 @@ The following features are currently available:
 * Provides a [**comment**](Comments.md) system to add comments feature to any kind of resource, like blog post or a product review page.
 * Provides a [**reaction**](Reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
 * Provides a [**rating**](Ratings.md) system to add rating feature to any kind of resource.
+* Provides a [**menu**](Menus.md) system to manage public menus dynamically.
 
 Click to a feature to understand and learn how to use it.
 
