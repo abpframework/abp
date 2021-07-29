@@ -165,6 +165,9 @@ namespace Volo.Abp.Http.DynamicProxying
             var cts = new CancellationTokenSource();
             cts.CancelAfter(10);
 
+            var result = await _controller.AbortRequestAsync(default);
+            result.ShouldBe("AbortRequestAsync");
+
             var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _controller.AbortRequestAsync(cts.Token));
             exception.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
         }

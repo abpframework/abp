@@ -38,6 +38,6 @@ namespace Volo.Abp.Http.DynamicProxying
 
         Task<int> DeleteByIdAsync(int id);
 
-        Task AbortRequestAsync(CancellationToken cancellationToken);
+        Task<string> AbortRequestAsync(CancellationToken cancellationToken = default);
     }
 }

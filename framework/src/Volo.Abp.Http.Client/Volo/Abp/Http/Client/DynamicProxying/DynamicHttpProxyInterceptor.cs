@@ -308,8 +308,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected virtual CancellationToken GetCancellationToken(IAbpMethodInvocation invocation)
         {
-            var cancellationToken = invocation.Arguments.LastOrDefault(x => x is CancellationToken);
-            return (CancellationToken?)cancellationToken ?? CancellationTokenProvider.Token;
+            var cancellationTokenArg = invocation.Arguments.LastOrDefault(x => x is CancellationToken);
+            if (cancellationTokenArg != null)
+            {
+                var cancellationToken = (CancellationToken) cancellationTokenArg;
+                if (cancellationToken != default)
+                {
+                    return cancellationToken;
+                }
+            }
+
+            return CancellationTokenProvider.Token;
         }
     }
 }

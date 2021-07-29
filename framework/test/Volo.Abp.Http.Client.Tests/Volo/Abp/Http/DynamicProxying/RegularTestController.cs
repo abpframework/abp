@@ -131,9 +131,10 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [HttpGet]
         [Route("abort-request")]
-        public async Task AbortRequestAsync(CancellationToken cancellationToken)
+        public async Task<string> AbortRequestAsync(CancellationToken cancellationToken = default)
         {
             await Task.Delay(100, cancellationToken);
+            return "AbortRequestAsync";
         }
     }
 
