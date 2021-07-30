@@ -79,3 +79,31 @@ After you have installed these NuGet packages, you need to configure your projec
  
  }
 ````
+
+### Dashboard Authorization
+
+Hangfire can show a **dashboard page** so you can see the status of all background
+jobs in real time. You can configure it as described in its
+[documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html).
+By default, this dashboard page is available for all users, and is not
+authorized. You can integrate it in to ABP's [authorization
+system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
+class defined in the Abp.HangFire package. Example configuration:
+
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
+    });
+
+This checks if the current user has logged in to the application. If you
+want to require an additional permission, you can pass into its
+constructor:
+
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
+    });
+
+**Note**: UseHangfireDashboard should be called after the authentication
+middleware in your Startup class (probably as the last line). Otherwise,
+authorization will always fail.
