@@ -88,7 +88,7 @@ jobs in real time. You can configure it as described in its
 By default, this dashboard page is available for all users, and is not
 authorized. You can integrate it in to ABP's [authorization
 system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
-class defined in the Abp.HangFire package. Example configuration:
+class defined in the Volo.Abp.Hangfire package. Example configuration:
 
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
