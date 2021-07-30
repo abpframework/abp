@@ -576,11 +576,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
+            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"))
+                ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj")) ;
 
             if (dbMigrationsProject == null)
             {
-                Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
+                Logger.LogDebug("Solution doesn't have a Migrations project.");
 
                 if (!skipDbMigrations)
                 {
