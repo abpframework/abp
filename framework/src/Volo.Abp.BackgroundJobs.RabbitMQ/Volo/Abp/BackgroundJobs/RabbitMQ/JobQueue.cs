@@ -118,7 +118,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             ChannelAccessor?.Dispose();
         }
 
-        protected virtual Task EnsureInitializedAsync()
+        protected virtual Task EnsureInitializedAsync(TimeSpan? delay = null)
         {
             if (ChannelAccessor != null)
             {
@@ -130,9 +130,16 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 QueueConfiguration.ConnectionName
             );
 
-            var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
-            Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
-
+            if (delay.HasValue)
+            {
+                var result = QueueConfiguration.DeclareDelay(ChannelAccessor.Channel,"");
+                Logger.LogDebug($"RabbitMQ Delay Queue '{QueueConfiguration.DelayQueueNamePrefix}{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
+            }
+            else
+            {
+                var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
+                Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
+            }
             if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
                 Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
@@ -154,12 +161,16 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            //TODO: How to handle priority & delay?
-
+            //TODO: How to handle priority?
+            var basicProperties = CreateBasicPropertiesToPublish();
+            if (delay.HasValue)
+            {
+                basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
+            }
             ChannelAccessor.Channel.BasicPublish(
                 exchange: "",
                 routingKey: QueueConfiguration.QueueName,
-                basicProperties: CreateBasicPropertiesToPublish(),
+                basicProperties: basicProperties,
                 body: Serializer.Serialize(args)
             );
 
