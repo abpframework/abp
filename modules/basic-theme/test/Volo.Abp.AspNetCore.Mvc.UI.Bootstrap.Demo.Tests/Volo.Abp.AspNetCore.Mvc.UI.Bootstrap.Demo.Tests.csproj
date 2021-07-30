@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests</PackageId>

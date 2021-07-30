@@ -4,7 +4,7 @@
     <Import Project="..\..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Blogging.Admin.Web</AssemblyName>
         <PackageId>Volo.Blogging.Admin.Web</PackageId>
         <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
