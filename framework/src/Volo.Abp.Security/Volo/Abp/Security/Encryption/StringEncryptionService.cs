@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -92,7 +90,7 @@ namespace Volo.Abp.Security.Encryption
                         {
                             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                             {
-                                var plainTextBytes = new List<byte>();
+                                var plainTextBytes = new byte[cipherTextBytes.Length];
                                 var totalReadCount = 0;
                                 while (totalReadCount < cipherTextBytes.Length)
                                 {
@@ -103,11 +101,15 @@ namespace Volo.Abp.Security.Encryption
                                         break;
                                     }
 
-                                    plainTextBytes.AddRange(buffer.Take(readCount));
+                                    for (var i = 0; i < readCount; i++)
+                                    {
+                                        plainTextBytes[i + totalReadCount] = buffer[i];
+                                    }
+
                                     totalReadCount += readCount;
                                 }
 
-                                return Encoding.UTF8.GetString(plainTextBytes.ToArray(), 0, totalReadCount);
+                                return Encoding.UTF8.GetString(plainTextBytes, 0, totalReadCount);
                             }
                         }
                     }
