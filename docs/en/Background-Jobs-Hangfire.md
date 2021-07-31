@@ -82,28 +82,23 @@ After you have installed these NuGet packages, you need to configure your projec
 
 ### Dashboard Authorization
 
-Hangfire can show a **dashboard page** so you can see the status of all background
-jobs in real time. You can configure it as described in its
-[documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html).
-By default, this dashboard page is available for all users, and is not
-authorized. You can integrate it in to ABP's [authorization
-system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
-class defined in the Volo.Abp.Hangfire package. Example configuration:
+Hangfire Dashboard provides information about your background jobs, including method names and serialized arguments as well as gives you an opportunity to manage them by performing different actions – retry, delete, trigger, etc. So it is important to restrict access to the Dashboard.
+To make it secure by default, only local requests are allowed, however you can change this by following the [official documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html) of Hangfire.
+
+You can integrate the Hangfire dashboard to [ABP authorization system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
+class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
         AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
     });
 
-This checks if the current user has logged in to the application. If you
-want to require an additional permission, you can pass into its
-constructor:
+If you want to require an additional permission, you can pass it into the constructor as below:
 
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
         AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
     });
 
-**Note**: UseHangfireDashboard should be called after the authentication
-middleware in your Startup class (probably as the last line). Otherwise,
-authorization will always fail.
+**Important**: `UseHangfireDashboard` should be called after the authentication middleware in your `Startup` class (probably at the last line). Otherwise,
+authorization will always fail!
