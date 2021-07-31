@@ -1,43 +1,39 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EasyAbp.Abp.Aliyun.Common;
+using EasyAbp.Abp.Aliyun.Sms;
+using EasyAbp.Abp.Aliyun.Sms.Model.Request;
+using EasyAbp.Abp.Aliyun.Sms.Model.Response;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using AliyunClient = AlibabaCloud.SDK.Dysmsapi20170525.Client;
-using AliyunConfig = AlibabaCloud.OpenApiClient.Models.Config;
-using AliyunSendSmsRequest = AlibabaCloud.SDK.Dysmsapi20170525.Models.SendSmsRequest;
 
 namespace Volo.Abp.Sms.Aliyun
 {
     public class AliyunSmsSender : ISmsSender, ITransientDependency
     {
-        protected AbpAliyunSmsOptions Options { get; }
-
-        public AliyunSmsSender(IOptionsSnapshot<AbpAliyunSmsOptions> options)
+        private readonly AbpAliyunSmsOptions _abpAliyunSmsOptions;
+        private readonly IAliyunApiRequester _aliyunApiRequester;
+        
+        public AliyunSmsSender(IOptionsSnapshot<AbpAliyunSmsOptions> options, IAliyunApiRequester aliyunApiRequester)
         {
-            Options = options.Value;
+            _aliyunApiRequester = aliyunApiRequester;
+            _abpAliyunSmsOptions = options.Value;
         }
 
         public async Task SendAsync(SmsMessage smsMessage)
         {
-            var client = CreateClient();
+            var response = await _aliyunApiRequester.SendRequestAsync<SmsCommonResponse>(new SendSmsRequest(smsMessage.PhoneNumber,
+                    smsMessage.Properties.GetOrDefault("SignName") as string,
+                    smsMessage.Properties.GetOrDefault("TemplateCode") as string,
+                    smsMessage.Text),
+                _abpAliyunSmsOptions.EndPoint);
 
-            await client.SendSmsAsync(new AliyunSendSmsRequest
+            if (response.Code != "OK")
             {
-                PhoneNumbers = smsMessage.PhoneNumber,
-                SignName = smsMessage.Properties.GetOrDefault("SignName") as string,
-                TemplateCode = smsMessage.Properties.GetOrDefault("TemplateCode") as string,
-                TemplateParam = smsMessage.Text
-            });
-        }
-
-        protected virtual AliyunClient CreateClient()
-        {
-            return new(new AliyunConfig
-            {
-                AccessKeyId = Options.AccessKeyId,
-                AccessKeySecret = Options.AccessKeySecret,
-                Endpoint = Options.EndPoint
-            });
+                throw new BusinessException("Volo.Abp.Sms.Aliyun:00001",
+                    "Alibaba Cloud SMS failed to send, please check the Details property for specific errors.",
+                    response.Message);
+            }
         }
     }
 }
