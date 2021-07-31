@@ -33,9 +33,7 @@ namespace Volo.Abp.EventBus.Local
             LocalEventBus.Subscribe<MyExceptionHandleEventData>(eventData =>
             {
                 eventData.Value.ShouldBe(0);
-
                 retryAttempt++;
-                eventData.Value++;
                 if (retryAttempt < 2)
                 {
                     throw new Exception("This exception is intentionally thrown!");
@@ -58,7 +56,6 @@ namespace Volo.Abp.EventBus.Local
                 eventData.Value.ShouldBe(0);
 
                 retryAttempt++;
-                eventData.Value++;
 
                 throw new Exception("This exception is intentionally thrown!");
             });

@@ -164,7 +164,6 @@ namespace MyCompanyName.MyProjectName
             }
             else
             {
-                app.UseErrorPage();
                 app.UseHsts();
             }
 
