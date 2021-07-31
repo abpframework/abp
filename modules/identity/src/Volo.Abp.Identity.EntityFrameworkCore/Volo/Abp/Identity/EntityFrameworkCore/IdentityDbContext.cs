@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -22,19 +23,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public DbSet<IdentityLinkUser> LinkUsers { get; set; }
 
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
-            : base(options)
+        public IdentityDbContext(
+            DbContextOptions<IdentityDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            AbpDbContextEvent.OnConfiguring(nameof(IdentityDbContext), optionsBuilder);
-
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,7 +38,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.ConfigureIdentity();
 
-            AbpDbContextEvent.OnModelCreating(nameof(IdentityDbContext), builder);
+            builder.ConfigureNamingConvention<IdentityDbContext>(this.NamingConventionOptions);
 
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
@@ -11,18 +12,14 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
     {
         public DbSet<FeatureValue> FeatureValues { get; set; }
 
-        public FeatureManagementDbContext(DbContextOptions<FeatureManagementDbContext> options)
-            : base(options)
+        public FeatureManagementDbContext(
+            DbContextOptions<FeatureManagementDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            AbpDbContextEvent.OnConfiguring(nameof(FeatureManagementDbContext), optionsBuilder);
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,7 +27,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
             builder.ConfigureFeatureManagement();
 
-            AbpDbContextEvent.OnModelCreating(nameof(FeatureManagementDbContext), builder);
+            builder.ConfigureNamingConvention<FeatureManagementDbContext>(this.NamingConventionOptions);
         }
 
 

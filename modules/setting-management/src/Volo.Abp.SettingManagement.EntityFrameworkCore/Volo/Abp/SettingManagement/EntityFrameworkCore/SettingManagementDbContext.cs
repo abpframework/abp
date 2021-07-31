@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
@@ -11,17 +12,11 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
     {
         public DbSet<Setting> Settings { get; set; }
 
-        public SettingManagementDbContext(DbContextOptions<SettingManagementDbContext> options)
-            : base(options)
+        public SettingManagementDbContext(
+            DbContextOptions<SettingManagementDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
-
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            AbpDbContextEvent.OnConfiguring(nameof(SettingManagementDbContext), optionsBuilder);
 
         }
 
@@ -31,7 +26,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
             builder.ConfigureSettingManagement();
 
-            AbpDbContextEvent.OnModelCreating(nameof(SettingManagementDbContext), builder);
+            builder.ConfigureNamingConvention<SettingManagementDbContext>(this.NamingConventionOptions);
 
         }
 

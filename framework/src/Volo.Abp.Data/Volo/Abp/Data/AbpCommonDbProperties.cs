@@ -15,9 +15,5 @@
         /// </summary>
         public static string DbSchema { get; set; } = null;
 
-        /// <summary>
-        /// DbNamingConvention
-        /// </summary>
-        public static DbNamingConvention DbNamingConvention = DbNamingConvention.Default;
     }
 }

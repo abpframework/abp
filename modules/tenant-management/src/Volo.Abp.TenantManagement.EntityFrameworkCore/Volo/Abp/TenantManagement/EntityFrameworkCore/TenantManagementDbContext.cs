@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
@@ -13,17 +14,11 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
         public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
-        public TenantManagementDbContext(DbContextOptions<TenantManagementDbContext> options)
-            : base(options)
+        public TenantManagementDbContext(
+            DbContextOptions<TenantManagementDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            AbpDbContextEvent.OnConfiguring(nameof(TenantManagementDbContext), optionsBuilder);
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -32,7 +27,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
             builder.ConfigureTenantManagement();
 
-            AbpDbContextEvent.OnModelCreating(nameof(TenantManagementDbContext), builder);
+            builder.ConfigureNamingConvention<TenantManagementDbContext>(this.NamingConventionOptions);
 
         }
 
