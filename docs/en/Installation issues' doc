@@ -1,0 +1,58 @@
+The installation issues started by needing to install VMware fusion on my Mac to host the Windows server 2019 virtual machine.
+
+ 
+ - Installing the roles and features : 
+￼
+￼
+
+
+￼
+
+
+
+- After installing SQL server express both in Windows/SQL authentication, changed the server name in connection string from « localhost » to the machine name which is « WIN-6C0J9837SI9 ». I realized it is the same (localhost or the machine name) after succeeding in the migration
+- The batch file which works for windows 2019 is Volodocs.migrator and not migrator.bat  
+￼
+
+- Went to SQL management studio -> right click on server name/properties -> connections -> allow remote connections to the server
+
+
+￼
+- Enabled TCP/IP and port 1433 on properties (ipall)
+￼
+
+
+- Continued with the web folder and creating the application pool successfully, configurating, then running the website on port 8040 directly from its, encountered this issue:
+￼
+
+
+- Changed the setting in web configuration file in the Volodocs wwwroot folder for the parameter hosting model from in process to outofprocess
+￼
+
+    - I got another 500.30 error after the configuration change and came to try the command line to see the .net host, realized I need to install the latest hosting bundle (5.0) which I did. But still had the same error even after installation (ASP.NET core failed to start)
+￼
+- I ran ‘dotnet --info’ and it showed that the host was in version 5, so I excluded any .net host bundle issue afterwards
+
+￼
+
+
+￼
+￼
+The event log still showed the problem coming from the AspNetCore module V2!!!
+
+- After looking in the event logs, it hinted already to the installer .exe as the screenshot, but I was trying to deploy the .net core app from iis, as I did in the past, it was a mistake in my reading of Volodocs documentation, because running it from the command line mentioned ‘alternatively’ so I spent few hours trying to deploy it from its directly (even from visual studios)
+￼
+- I deactivated the windows firewall thinking it blocked the server on port 9200..
+- I checked the iis logs from C:\inetpub\logs\LogFiles\W3SVC1 showed nothing but a get request, and no error line.
+- After some other unsuccessful attempts, I came back to the Volodocs wwwroot folder and executed the Volodocsweb.exe as administrator after I read it in the documentation, this is where it works and when I realized that it was running as a server and the real meaning of self-contained app.
+- I navigate to localhost:5000 and here, the magic happens! I created the project and I am able to create a token to access public/private repositories from my own GitHub, but I was not able to display any document from the documentation because I don’t have writing access on 
+￼
+￼
+- I don’t have anything under documents in projects because I need a writing access to the repository, but the sample project didn’t work.
+
+￼
+
+
+￼
+ 
+So now what I am doing is copy/pasting this documentation directly to create new file and be granted a writing access.
