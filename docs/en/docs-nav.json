@@ -578,6 +578,10 @@
               "path": "API/Application-Configuration.md"
             }
           ]
+        },
+        {
+          "text": "Swagger Integration",
+          "path": "API/Swagger-Integration.md"
         }
       ]
     },
