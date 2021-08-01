@@ -1,0 +1,10 @@
+{
+  "culture": "en",
+  "texts": {
+    "Accept": "Accept",
+    "Deny": "Deny",
+    "Submit": "Submit",
+    "ScopesOfRequest": "Scopes Requested",
+    "IsRequestingAccessToYourData": "is requesting access to your data"
+  }
+}

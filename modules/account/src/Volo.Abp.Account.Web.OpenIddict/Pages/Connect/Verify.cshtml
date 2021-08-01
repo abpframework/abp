@@ -1,0 +1,57 @@
+﻿@page "~/connect/verify"
+
+@using Microsoft.Extensions.Primitives
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Web.Pages.Connect
+@using Volo.Abp.Account.Web.Localization
+
+@inject IHtmlLocalizer<AbpOpenIddictWebResource> L
+
+@model VerifyModel
+@{
+}
+
+<div class="jumbotron">
+    <h1>Authorization</h1>
+
+    @if (string.IsNullOrEmpty(Model.ViewModel.UserCode) || !string.IsNullOrEmpty(Model.ViewModel.Error))
+    {
+        @if (!string.IsNullOrEmpty(Model.ViewModel.Error) && !string.IsNullOrEmpty(Model.ViewModel.ErrorDescription))
+        {
+            <p class="lead text-center alert alert-warning">
+                An error occurred:
+                <br />
+                @Model.ViewModel.ErrorDescription (@Model.ViewModel.Error)
+            </p>
+        }
+
+        <p class="lead text-left">Enter the user code given by the client application:</p>
+
+        <form asp-controller="Authorization" asp-action="Verify" method="get">
+            <div class="form-check">
+                <input class="form-control" name="user_code" type="text" />
+            </div>
+            <abp-button button-type="Success" size="Small" type="submit" name="Action" value="Submit">@L["Submit"]</abp-button>
+        </form>
+    }
+    else
+    {
+        <p class="lead text-left">Do you want to grant <strong>@Model.ViewModel.ApplicationName</strong> access to your data? (scopes requested: @Model.ViewModel.Scope)</p>
+        <p class="lead text-center alert alert-warning">
+            Make sure that the code displayed on the device is <strong>@Model.ViewModel.UserCode</strong>.
+            <br />
+            If the two codes don't match, press "No" to reject the authorization demand.
+        </p>
+
+        <form asp-controller="Authorization" asp-action="Verify" method="post">
+            @* Flow the request parameters so they can be received by the VerifyAccept/VerifyReject actions: *@
+            @foreach (var parameter in Request.HasFormContentType ?
+                (IEnumerable<KeyValuePair<string, StringValues>>)Request.Form : Request.Query)
+            {
+                <input type="hidden" name="@parameter.Key" value="@parameter.Value" />
+            }
+            <abp-button button-type="Success" size="Small" type="submit" name="Action" value="Accept">@L["Accept"]</abp-button>
+            <abp-button button-type="Danger" size="Small" type="submit" name="Action" value="Deny">@L["Deny"]</abp-button>
+        </form>
+    }
+</div>

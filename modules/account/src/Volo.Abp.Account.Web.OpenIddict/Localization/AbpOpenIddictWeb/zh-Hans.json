@@ -1,0 +1,10 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Accept": "同意",
+    "Deny": "拒绝",
+    "Submit": "提交",
+    "ScopesOfRequest": "申请的范围",
+    "IsRequestingAccessToYourData": "正在申请访问你的数据"
+  }
+}

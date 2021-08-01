@@ -1,0 +1,44 @@
+﻿@page "~/connect/authorize"
+
+@using Microsoft.Extensions.Primitives
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Web.Pages.Connect
+@using Volo.Abp.Account.Web.Localization
+
+@inject IHtmlLocalizer<AbpOpenIddictWebResource> L
+
+@model AuthorizeModel
+@{
+}
+
+<abp-card id="IdentityServerConsentWrapper">
+    <abp-card-header>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>
+                    @Model.ViewModel.ApplicationName
+                    <small>@L["IsRequestingAccessToYourData"]</small>
+                </h2>
+            </div>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <form method="post">
+
+            <h5>@L["ScopesOfRequest"]</h5>
+
+            <p>@Model.ViewModel.Scope</p>
+
+            @* Flow the request parameters so they can be received by the Accept/Reject actions: *@
+            @foreach (var parameter in Request.HasFormContentType ?
+              (IEnumerable<KeyValuePair<string, StringValues>>)Request.Form : Request.Query)
+            {
+                <input type="hidden" name="@parameter.Key" value="@parameter.Value" />
+            }
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <abp-button button-type="Success" size="Small" type="submit" name="Action" value="Accept">@L["Accept"]</abp-button>
+            <abp-button button-type="Danger" size="Small" type="submit" name="Action" value="Deny">@L["Deny"]</abp-button>
+        </form>
+    </abp-card-body>
+</abp-card>
