@@ -18,7 +18,7 @@ To solve the versioning problem, we created a **standard set of packages** those
 The benefit of a **standard package** is:
 
 * It depends on a **standard version** of a package. Depending on this package is **safe** because all modules depend on the same version.
-* It contains the gulp task to copy library resources (js, css, img... files) from the **node_modules** folder to **wwwroot/libs** folder. See the *Mapping The Library Resources* section for more.
+* It contains the necessary mapping configuration to copy library resources (js, css, img... files) from the **node_modules** folder to **wwwroot/libs** folder. See the *Mapping The Library Resources* section for more.
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
