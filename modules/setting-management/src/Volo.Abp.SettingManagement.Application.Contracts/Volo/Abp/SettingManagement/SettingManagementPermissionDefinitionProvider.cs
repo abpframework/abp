@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Features;
+﻿using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement
@@ -15,7 +12,7 @@ namespace Volo.Abp.SettingManagement
 
             moduleGroup
                 .AddPermission(SettingManagementPermissions.Emailing, L("Permission:Emailing"))
-                .RequireFeatures(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+                .StateCheckers.Add(new AllowTenantsToChangeEmailSettingsFeatureSimpleStateChecker());
         }
 
         private static LocalizableString L(string name)

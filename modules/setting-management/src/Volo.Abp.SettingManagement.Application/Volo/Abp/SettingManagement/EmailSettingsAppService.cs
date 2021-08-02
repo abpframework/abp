@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Emailing;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Features;
 
 namespace Volo.Abp.SettingManagement
 {
@@ -18,6 +19,8 @@ namespace Volo.Abp.SettingManagement
 
         public virtual async Task<EmailSettingsDto> GetAsync()
         {
+            await CheckFeatureAsync();
+
             var settingsDto = new EmailSettingsDto {
                 SmtpHost = await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Host),
                 SmtpPort = Convert.ToInt32(await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Port)),
@@ -43,6 +46,8 @@ namespace Volo.Abp.SettingManagement
 
         public virtual async Task UpdateAsync(UpdateEmailSettingsDto input)
         {
+            await CheckFeatureAsync();
+
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Host, input.SmtpHost);
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Port, input.SmtpPort.ToString());
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.UserName, input.SmtpUserName);
@@ -52,6 +57,14 @@ namespace Volo.Abp.SettingManagement
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.DefaultFromAddress, input.DefaultFromAddress);
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.DefaultFromDisplayName, input.DefaultFromDisplayName);
+        }
+
+        private async Task CheckFeatureAsync()
+        {
+            if (CurrentTenant.IsAvailable)
+            {
+                await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+            }
         }
     }
 }
