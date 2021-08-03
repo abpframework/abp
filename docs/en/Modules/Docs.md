@@ -188,7 +188,7 @@ Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
   Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
 
   1. `yarn`
-  2. `gulp`
+  2. `abp install-libs`
 
 ### 4- Database Integration
 
