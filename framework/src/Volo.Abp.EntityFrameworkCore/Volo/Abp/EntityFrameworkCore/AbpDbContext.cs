@@ -149,6 +149,8 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             try
             {
+                var changeReport = ApplyAbpConcepts();
+
                 var auditLog = AuditingManager?.Current?.Log;
 
                 List<EntityChangeInfo> entityChangeList = null;
@@ -156,8 +158,6 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
                 }
-
-                var changeReport = ApplyAbpConcepts();
 
                 var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
