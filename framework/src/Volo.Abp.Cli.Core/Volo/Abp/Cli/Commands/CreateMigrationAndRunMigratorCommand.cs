@@ -71,7 +71,7 @@ namespace Volo.Abp.Cli.Commands
         private string FindTenantDbContextName(string dbMigrationsFolder)
         {
             var tenantDbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
+                .GetFiles(dbMigrationsFolder, "*TenantDbContext.cs", SearchOption.AllDirectories)
                 .FirstOrDefault();
 
             if (tenantDbContext == null)
@@ -85,8 +85,8 @@ namespace Volo.Abp.Cli.Commands
         private string FindDbContextName(string dbMigrationsFolder)
         {
             var dbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
-                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs"));
+                .GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
+                .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
 
             if (dbContext == null)
             {
