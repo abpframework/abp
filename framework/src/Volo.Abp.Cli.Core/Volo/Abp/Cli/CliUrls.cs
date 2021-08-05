@@ -2,15 +2,17 @@
 {
     public static class CliUrls
     {
-        public const string WwwAbpIo = WwwAbpIoProduction;
+#if DEBUG
+        public const string WwwAbpIo = WwwAbpIoDevelopment;
 
-        public const string AccountAbpIo = AccountAbpIoProduction;
+        public const string AccountAbpIo = AccountAbpIoDevelopment;
 
-        public const string NuGetRootPath = NuGetRootPathProduction;
-
+        public const string NuGetRootPath = NuGetRootPathDevelopment;
+#else
         public const string WwwAbpIoProduction = "https://abp.io/";
         public const string AccountAbpIoProduction = "https://account.abp.io/";
         public const string NuGetRootPathProduction = "https://nuget.abp.io/";
+#endif
 
         public const string WwwAbpIoDevelopment = "https://localhost:44328/";
         public const string AccountAbpIoDevelopment = "https://localhost:44333/";
