@@ -2,19 +2,11 @@
 {
     public static class CliUrls
     {
-#if DEBUG
-        public const string WwwAbpIo = WwwAbpIoDevelopment;
-
-        public const string AccountAbpIo = AccountAbpIoDevelopment;
-
-        public const string NuGetRootPath = NuGetRootPathDevelopment;
-#else
         public const string WwwAbpIo = WwwAbpIoProduction;
-        
+
         public const string AccountAbpIo = AccountAbpIoProduction;
-       
+
         public const string NuGetRootPath = NuGetRootPathProduction;
-#endif
 
         public const string WwwAbpIoProduction = "https://abp.io/";
         public const string AccountAbpIoProduction = "https://account.abp.io/";
