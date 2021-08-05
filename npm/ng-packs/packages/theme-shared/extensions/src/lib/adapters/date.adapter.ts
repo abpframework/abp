@@ -34,7 +34,7 @@ export class DateAdapter extends NgbDateAdapter<string> {
   }
 
   protected dateOf(value: string): Date {
-    let dateUtc = new Date(Date.parse(value));
+    const dateUtc = new Date(Date.parse(value));
     return new Date(dateUtc.getTime() + Math.abs(dateUtc.getTimezoneOffset() * 60000));
   }
 }
