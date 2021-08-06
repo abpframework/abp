@@ -149,7 +149,7 @@ export default `
 .ngx-datatable.material {
   box-shadow: none;
 }
-ngb-typeahead-window {
+ngb-typeahead-window, ngb-typeahead-window.dropdown-menu {
   max-height: 25em;
   overflow-y: scroll !important;
   z-index: 1050;

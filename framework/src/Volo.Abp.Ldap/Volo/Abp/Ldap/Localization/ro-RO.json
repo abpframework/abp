@@ -1,0 +1,19 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Server host",
+    "Description:Abp.Ldap.ServerHost": "Server host",
+
+    "DisplayName:Abp.Ldap.ServerPort": "Server port",
+    "Description:Abp.Ldap.ServerPort": "Server port",
+
+    "DisplayName:Abp.Ldap.BaseDc": "Componenta domeniului de bază",
+    "Description:Abp.Ldap.BaseDc": "Componenta domeniului de bază",
+
+    "DisplayName:Abp.Ldap.UserName": "Nume de utilizator",
+    "Description:Abp.Ldap.UserName": "Nume de utilizator",
+
+    "DisplayName:Abp.Ldap.Password": "Parola",
+    "Description:Abp.Ldap.Password": "Parola"
+  }
+}

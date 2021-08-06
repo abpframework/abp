@@ -42,6 +42,7 @@ namespace Volo.Abp.Cli.Commands.Services
                     SolutionName.Parse(moduleName),
                     moduleName,
                     version,
+                    outputFolder,
                     DatabaseProvider.NotSpecified,
                     DatabaseManagementSystem.NotSpecified,
                     UiFramework.NotSpecified,
@@ -106,7 +107,8 @@ namespace Volo.Abp.Cli.Commands.Services
                 new ProjectBuildArgs(
                     SolutionName.Parse(packageName),
                     packageName,
-                    version
+                    version,
+                    outputFolder
                 )
             );
 
@@ -156,7 +158,8 @@ namespace Volo.Abp.Cli.Commands.Services
                 new ProjectBuildArgs(
                     SolutionName.Parse(packageName),
                     packageName,
-                    version
+                    version,
+                    outputFolder
                 )
             );
 

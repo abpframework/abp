@@ -28,7 +28,7 @@
     "DisplayName:MinimumVersion": "Versione minima",
     "DisplayName:MainWebsiteUrl": "URL del sito web principale",
     "DisplayName:LatestVersionBranchName": "Nome del ramo della versione più recente",
-    "DisplayName:GitHubRootUrl": "URL radice di GitHub",
+    "DisplayName:GitHubRootUrl": "URL principale di GitHub",
     "DisplayName:GitHubAccessToken": "Token di accesso GitHub",
     "DisplayName:GitHubUserAgent": "GitHub user agent",
     "DisplayName:GithubVersionProviderSource": "GitHub version provider source",

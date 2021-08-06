@@ -15,7 +15,7 @@ The Basic Theme has RTL (Right-to-Left language) support.
 * Install the [Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) NuGet package to your web project.
 * Add `AbpAspNetCoreMvcUiBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../Module-Development-Basics.md) in the web project.
 * Install the [@abp/aspnetcore.mvc.ui.theme.basic](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.basic) NPM package to your web project (e.g. `npm install @abp/aspnetcore.mvc.ui.theme.basic` or `yarn add @abp/aspnetcore.mvc.ui.theme.basic`).
-* Run `gulp` command in a command line terminal in the web project's folder.
+* Run `abp install-libs` command in a command line terminal in the web project's folder.
 
 ## Layouts
 
@@ -85,7 +85,7 @@ See the [User Interface Customization Guide](Customization-User-Interface.md) to
 
 You can run the following [ABP CLI](../../CLI.md) command in **Web** project directory to copy the source code to your solution:
 
-`abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-code --add-to-solution-file`
+`abp add-module Volo.BasicTheme --with-source-code --add-to-solution-file`
 
 ----
 

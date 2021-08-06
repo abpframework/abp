@@ -32,6 +32,9 @@
     "SeeDocuments": "Vedi Documenti",
     "Samples": "Campioni",
     "Framework": "Framework",
-    "Support": "Supporto"
+    "Support": "Supporto",
+    "FreeDDDBook": "DDD E-Book Gratuito",
+    "New": "Nuovo",
+    "Volo.AbpIo.Domain:020005": "Estensione Licenza non può essere inferiore a {MinExtendLicenseYear} anno e maggiore di {MaxExtendLicenseYear} anni "
   }
 }

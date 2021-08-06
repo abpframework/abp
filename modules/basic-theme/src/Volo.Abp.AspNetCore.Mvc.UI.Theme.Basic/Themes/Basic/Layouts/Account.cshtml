@@ -57,7 +57,8 @@
         <abp-row>
             <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
-                  (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
+                  (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
+                   TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
                 {
                     <div class="card shadow-sm rounded mb-3">
                         <div class="card-body px-5">

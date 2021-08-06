@@ -8,11 +8,12 @@ import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/mul
 export class AbpTenantService {
   apiName = 'abp';
 
-  findTenantById = (id: string) =>
+  findTenantById = (id: string, headers: Record<string, string>) =>
     this.restService.request<any, FindTenantResultDto>(
       {
         method: 'GET',
         url: `/api/abp/multi-tenancy/tenants/by-id/${id}`,
+        headers,
       },
       { apiName: this.apiName },
     );

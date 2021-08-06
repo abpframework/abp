@@ -1,0 +1,10 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Features": "Caracteristici",
+    "NoFeatureFoundMessage": "Nu există nicio caracteristică disponibilă.",
+    "Permission:FeatureManagement": "Administrare caracteristici",
+    "Permission:FeatureManagement.ManageHostFeatures": "Gestionare caracteristici gazdă",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Valoarea {0} a caracteristicii nu este validă!"
+  }
+}

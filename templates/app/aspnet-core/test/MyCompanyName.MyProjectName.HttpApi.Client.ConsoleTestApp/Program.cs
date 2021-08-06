@@ -14,10 +14,7 @@ namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build =>
-                {
-                    build.AddJsonFile("appsettings.secrets.json", optional: true);
-                })
+                .AddAppSettingsSecretsJson()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<ConsoleTestAppHostedService>();

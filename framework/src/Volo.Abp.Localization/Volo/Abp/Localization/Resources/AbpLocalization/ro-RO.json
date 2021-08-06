@@ -1,0 +1,7 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Limba implicită",
+    "Description:Abp.Localization.DefaultLanguage": "Limba implicită a aplicaţiei."
+  }
+}

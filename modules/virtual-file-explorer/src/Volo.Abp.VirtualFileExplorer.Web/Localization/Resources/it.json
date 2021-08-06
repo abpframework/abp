@@ -8,7 +8,7 @@
     "VirtualFileName": "Nome del file virtuale",
     "FileContent": "Contenuto del file",
     "Size": "Dimensione",
-    "BackToRoot": "Torna alla radice",
+    "BackToRoot": "Torna al principale",
     "EmptyFileInfoList": "Non ci sono file virtuali"
   }
 }

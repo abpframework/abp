@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Shouldly;
+using Volo.Abp.AspNetCore.TestBase;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
-    public abstract class AbpAspNetCoreMvcUiBootstrapDemoTestBase : AbpAspNetCoreTestBase<TestStartup>
+    public abstract class AbpAspNetCoreMvcUiBootstrapDemoTestBase : AbpAspNetCoreIntegratedTestBase<TestStartup>
     {
         protected override IHostBuilder CreateHostBuilder()
         {
@@ -45,6 +50,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             return Directory
                 .GetFiles(currentDirectory, "*.*", SearchOption.TopDirectoryOnly)
                 .Any(f => Path.GetFileName(f) == projectFileName);
+        }
+
+
+        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+        {
+            using (var response = await GetResponseAsync(url, expectedStatusCode))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+        }
+
+        protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+        {
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
+            {
+                requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
+                var response = await Client.SendAsync(requestMessage);
+                response.StatusCode.ShouldBe(expectedStatusCode);
+                return response;
+            }
         }
     }
 }

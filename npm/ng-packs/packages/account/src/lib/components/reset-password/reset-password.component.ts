@@ -18,7 +18,6 @@ export class ResetPasswordComponent implements OnInit {
   inProgress = false;
 
   isPasswordReset = false;
-  tenantId = '';
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
@@ -35,8 +34,7 @@ export class ResetPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(({ userId, resetToken, tenantId }) => {
-      this.tenantId = tenantId;
+    this.route.queryParams.subscribe(({ userId, resetToken }) => {
       if (!userId || !resetToken) this.router.navigateByUrl('/account/login');
 
       this.form = this.fb.group(
@@ -63,7 +61,6 @@ export class ResetPasswordComponent implements OnInit {
         userId: this.form.get('userId').value,
         resetToken: this.form.get('resetToken').value,
         password: this.form.get('password').value,
-        tenantId: this.tenantId || undefined, // if this.tenantId is empty, we should not send it at all
       })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe(() => {

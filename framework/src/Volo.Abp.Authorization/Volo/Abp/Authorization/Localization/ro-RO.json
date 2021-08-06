@@ -1,0 +1,10 @@
+﻿{
+  "culture": "ro-RO",
+  "texts": {
+    "Volo.Authorization:010001": "Autorizare eşuată! Politica dată nu a fost acordată.",
+    "Volo.Authorization:010002": "Autorizare eşuată! Politica dată nu a acordat: {PolicyName}",
+    "Volo.Authorization:010003": "Autorizare eşuată! Politica dată nu a fost acordată pentru resursa dată: {ResourceName}",
+    "Volo.Authorization:010004": "Autorizare eşuată! Cerinţa dată nu a fost acordată pentru resursa dată: {ResourceName}",
+    "Volo.Authorization:010005": "Autorizare eşuată! Cerinţele date nu au fost acordate pentru resursa dată: {ResourceName}"
+  }
+}

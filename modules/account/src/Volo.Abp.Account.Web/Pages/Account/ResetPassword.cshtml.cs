@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
@@ -10,13 +9,8 @@ using Volo.Abp.Validation;
 namespace Volo.Abp.Account.Web.Pages.Account
 {
     //TODO: Implement live password complexity check on the razor view!
-
     public class ResetPasswordModel : AccountPageModel
     {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public Guid? TenantId { get; set; }
-
         [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -51,11 +45,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual Task<IActionResult> OnGetAsync()
         {
-            if (SwitchTenant(TenantId))
-            {
-                return Task.FromResult<IActionResult>(Redirect(HttpContext.Request.GetEncodedUrl()));
-            }
-
             return Task.FromResult<IActionResult>(Page());
         }
 
@@ -70,8 +59,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     {
                         UserId = UserId,
                         ResetToken = ResetToken,
-                        Password = Password,
-                        TenantId = TenantId
+                        Password = Password
                     }
                 );
             }

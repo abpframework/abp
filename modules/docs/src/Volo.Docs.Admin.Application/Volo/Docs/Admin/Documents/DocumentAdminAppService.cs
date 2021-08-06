@@ -188,7 +188,7 @@ namespace Volo.Docs.Admin.Documents
             return new PagedResultDto<DocumentDto>
             {
                 TotalCount = totalCount,
-                Items = ObjectMapper.Map<List<Document>, List<DocumentDto>>(docs)
+                Items = ObjectMapper.Map<List<DocumentWithoutContent>, List<DocumentDto>>(docs)
             };
         }
 

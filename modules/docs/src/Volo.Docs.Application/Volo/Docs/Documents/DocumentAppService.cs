@@ -65,8 +65,9 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
-
+            var inputVersionStringBuilder = new StringBuilder();
+            input.Version = inputVersionStringBuilder.Append(GetProjectVersionPrefixIfExist(project)).Append(input.Version).ToString();
+            
             return await GetDocumentWithDetailsDtoAsync(
                 project,
                 input.Name,
@@ -79,11 +80,14 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
-
+            var sb = new StringBuilder();
+            input.Version = sb.Append(GetProjectVersionPrefixIfExist(project)).Append(input.Version).ToString();
+            
+            sb.Clear();
+            
             return await GetDocumentWithDetailsDtoAsync(
                 project,
-                project.DefaultDocumentName + "." + project.Format,
+                sb.Append(project.DefaultDocumentName).Append(".").Append(project.Format).ToString(),
                 input.LanguageCode,
                 input.Version
             );
@@ -205,9 +209,9 @@ namespace Volo.Docs.Documents
 
             foreach (var project in projects)
             {
-                var documents = await _documentRepository.GetListByProjectId(project.Id);
+                var documentWithoutDetailsList = await _documentRepository.GetListWithoutDetailsByProjectId(project.Id);
 
-                foreach (var document in documents)
+                foreach (var document in documentWithoutDetailsList)
                 {
                     try
                     {
@@ -223,10 +227,10 @@ namespace Volo.Docs.Documents
             return documentUrls;
         }
 
-        private async Task AddDocumentToUrls(string prefix, Project project, Document document,
+        private async Task AddDocumentToUrls(string prefix, Project project, DocumentWithoutDetails document,
             List<string> documentUrls)
         {
-            var navigationNodes = await GetNavigationNodesAsync(prefix, project, document);
+            var navigationNodes = await GetNavigationNodesAsync(project, document);
             AddDocumentUrls(prefix, navigationNodes, documentUrls, project, document);
         }
 
@@ -234,7 +238,7 @@ namespace Volo.Docs.Documents
             List<NavigationNode> navigationNodes,
             List<string> documentUrls,
             Project project,
-            Document document)
+            DocumentWithoutDetails document)
         {
             navigationNodes?.ForEach(node =>
             {
@@ -244,8 +248,8 @@ namespace Volo.Docs.Documents
             });
         }
 
-        private async Task<List<NavigationNode>> GetNavigationNodesAsync(string prefix, Project project,
-            Document document)
+        private async Task<List<NavigationNode>> GetNavigationNodesAsync(Project project,
+            DocumentWithoutDetails document)
         {
             var version = GetProjectVersionPrefixIfExist(project) + document.Version;
             var navigationDocument = await GetDocumentWithDetailsDtoAsync(
@@ -266,7 +270,7 @@ namespace Volo.Docs.Documents
         }
 
         private List<string> GetDocumentLinks(NavigationNode node, List<string> documentUrls, string prefix,
-            string shortName, Document document)
+            string shortName, DocumentWithoutDetails document)
         {
             if (!IsExternalLink(node.Path))
             {
@@ -283,13 +287,15 @@ namespace Volo.Docs.Documents
             return documentUrls;
         }
 
-        private string NormalizePath(string prefix, string path, string shortName, Document document)
+        private string NormalizePath(string prefix, string path, string shortName, DocumentWithoutDetails document)
         {
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, document.Format);
-            var normalizedPath = prefix + document.LanguageCode + "/" + shortName + "/" + document.Version + "/" +
-                                 pathWithoutFileExtension;
+            
+            var normalizedPathStringBuilder = new StringBuilder();
+            normalizedPathStringBuilder.Append(prefix).Append(document.LanguageCode).Append("/").Append(shortName)
+                .Append("/").Append(document.Version).Append("/").Append(pathWithoutFileExtension);
 
-            return normalizedPath;
+            return normalizedPathStringBuilder.ToString();
         }
 
         private string RemoveFileExtensionFromPath(string path, string format)
@@ -374,21 +380,6 @@ namespace Volo.Docs.Documents
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
-
-            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
-                project,
-                document.Name,
-                document.LanguageCode,
-                document.Version
-            );
-
-            await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
-            {
-                Name = document.Name,
-                CreationTime = document.CreationTime,
-                LastUpdatedTime = document.LastUpdatedTime,
-                LastSignificantUpdateTime = document.LastSignificantUpdateTime
-            });
 
             return CreateDocumentWithDetailsDto(project, document);
         }

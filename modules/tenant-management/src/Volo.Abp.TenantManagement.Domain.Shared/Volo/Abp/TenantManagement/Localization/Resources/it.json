@@ -11,7 +11,7 @@
     "DisplayName:DefaultConnectionString": "Stringa di connessione predefinita",
     "DisplayName:UseSharedDatabase": "Usa il database condiviso",
     "ManageHostFeatures": "Gestisci le funzionalità dell'host",
-    "Permission:TenantManagement": "Gestione inquilini",
+    "Permission:TenantManagement": "Gestione Tenant",
     "Permission:Create": "Crea",
     "Permission:Edit": "Modifica",
     "Permission:Delete": "Elimina",

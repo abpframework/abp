@@ -33,6 +33,7 @@ import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { TENANT_KEY } from './tokens/tenant-key.token';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -178,6 +179,7 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
+        { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
       ],
     };
   }

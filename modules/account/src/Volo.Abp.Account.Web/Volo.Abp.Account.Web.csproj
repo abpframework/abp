@@ -35,7 +35,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\Volo.Abp.Account.HttpApi\Volo.Abp.Account.HttpApi.csproj" />
   </ItemGroup>

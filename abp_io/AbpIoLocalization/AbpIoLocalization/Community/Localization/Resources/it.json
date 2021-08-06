@@ -2,7 +2,7 @@
   "culture": "it",
   "texts": {
     "Permission:CommunityArticle": "Articolo della comunità",
-    "Permission:Edit": "modifica",
+    "Permission:Edit": "Modifica",
     "Waiting": "In attesa",
     "Approved": "Approvato",
     "Rejected": "Respinto",
@@ -80,7 +80,7 @@
     "LatestGithubAnnouncements": "Ultimi annunci su GitHub",
     "SeeAllAnnouncements": "Vedi tutti gli annunci",
     "LatestBlogPost": "Ultimo post sul blog",
-    "Edit": "modifica",
+    "Edit": "Modifica",
     "ProfileImageChange": "Cambia l'immagine del profilo",
     "BlogItemErrorMessage": "Impossibile ottenere i dettagli più recenti del post del blog da ABP.",
     "PlannedReleaseDate": "Data di rilascio prevista",

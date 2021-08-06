@@ -5,8 +5,9 @@ import {
   CurrentUserDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
+import { CoreTestingModule } from '@abp/ng.core/testing';
 
-export const CONFIG_STATE_DATA = ({
+export const CONFIG_STATE_DATA = {
   environment: {
     production: false,
     application: {
@@ -97,7 +98,7 @@ export const CONFIG_STATE_DATA = ({
     },
   },
   registerLocaleFn: () => Promise.resolve(),
-} as any) as ApplicationConfigurationDto;
+} as any as ApplicationConfigurationDto;
 
 describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigStateService>;
@@ -105,6 +106,7 @@ describe('ConfigState', () => {
 
   const createService = createServiceFactory({
     service: ConfigStateService,
+    imports: [CoreTestingModule.withConfig()],
   });
 
   beforeEach(() => {

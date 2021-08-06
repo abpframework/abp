@@ -45,10 +45,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build =>
-                {
-                    build.AddJsonFile("appsettings.secrets.json", optional: true);
-                })
+                .AddAppSettingsSecretsJson()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Risorsa non trovata!",
     "DefaultErrorMessage404Detail": "La risorsa richiesta non è stata trovata sul server!",
     "EntityNotFoundErrorMessage": "Non esiste un'entità {0} con id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "I dati che hai inviato sono già stati modificati da un altro utente/cliente. Per favore scarta le modifiche che hai fatto e riprova dall'inizio.",
     "Error": "Errore",
     "UnhandledException": "Eccezione non gestita!",
     "401Message": "Non autorizzato",

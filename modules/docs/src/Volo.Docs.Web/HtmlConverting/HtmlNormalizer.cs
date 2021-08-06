@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using Volo.Docs.Utils;
 
@@ -34,7 +35,12 @@ namespace Volo.Docs.HtmlConverting
 
         public static string ReplaceCodeBlocksLanguage(string content, string currentLanguage, string newLanguage)
         {
-            return Regex.Replace(content, "<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">", RegexOptions.IgnoreCase);
+            var sb = new StringBuilder();
+            var pattern = sb.Append("<code class=\"").Append(currentLanguage).Append("\">").ToString();
+            sb.Clear();
+            var replacement = sb.Append("<code class=\"").Append(newLanguage).Append("\">").ToString();
+
+            return Regex.Replace(content, pattern, replacement, RegexOptions.IgnoreCase);
         }
 
         /// <summary>

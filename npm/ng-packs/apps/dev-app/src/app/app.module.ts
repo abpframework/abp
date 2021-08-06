@@ -9,7 +9,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { InspectorModule } from '@ngneat/inspector';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from '../environments/environment';
@@ -17,10 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
-const INSPECTION_TOOLS = [
-  NgxsLoggerPluginModule.forRoot({ disabled: true }),
-  InspectorModule.forRoot(),
-];
+const INSPECTION_TOOLS = [NgxsLoggerPluginModule.forRoot({ disabled: true })];
 
 @NgModule({
   imports: [

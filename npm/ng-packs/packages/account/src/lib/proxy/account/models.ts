@@ -9,7 +9,6 @@ export interface RegisterDto extends ExtensibleObject {
 
 export interface ResetPasswordDto {
   userId?: string;
-  tenantId?: string;
   resetToken: string;
   password: string;
 }

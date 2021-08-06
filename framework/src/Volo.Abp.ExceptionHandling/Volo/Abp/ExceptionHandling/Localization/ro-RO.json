@@ -1,0 +1,26 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "InternalServerErrorMessage": "A intervenit o eroare internă în timpul solicitării dumneavoastră!",
+    "ValidationErrorMessage": "Solicitarea dumneavoastră este invalidă!",
+    "ValidationNarrativeErrorMessageTitle": "Următoarele erori au fost detectate în timpul validării",
+    "DefaultErrorMessage": "A intervenit o eroare!",
+    "DefaultErrorMessageDetail": "Detaliile erorii nu au fost trimise de către server.",
+    "DefaultErrorMessage401": "Nu sunteţi autentificat!",
+    "DefaultErrorMessage401Detail": "Ar trebui să vă autentificaţi pentru a efectua această operaţie.",
+    "DefaultErrorMessage403": "Nu sunteţi autorizat!",
+    "DefaultErrorMessage403Detail": "Nu sunteţi autorizat să efectuaţi această operaţie!",
+    "DefaultErrorMessage404": "Resursa nu a fost găsită!",
+    "DefaultErrorMessage404Detail": "Resursa solicitată nu a fost găsită pe server!",
+    "EntityNotFoundErrorMessage": "Nu există entitatea {0} cu id-ul {1}!",
+    "AbpDbConcurrencyErrorMessage": "Datele pe care le-aţi trimis au fost modificate deja de către alt utilizator/client. Vă rugăm să renunţaţi la modificările pe care le-aţi făcut şi să încercaţi de la început.",
+    "Error": "Eroare",
+    "UnhandledException": "Excepţie netratată!",
+    "401Message": "Neautorizat",
+    "403Message": "Interzis",
+    "404Message": "Pagina nu a fost găsită",
+    "500Message": "Eroare internă a serverului",
+    "403MessageDetail": "Nu sunteţi autorizat să efectuaţi această operaţie!",
+    "404MessageDetail": "Ne cerem scuze, nu este nimic la această adresă."
+  }
+}

@@ -11,9 +11,18 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
     {
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, x =>
-                x == this ||
-                x.GetType() == typeof(AbpHasExtraPropertiesJsonConverterFactory));
+            var newOptions = JsonSerializerOptionsHelper.Create(options, x => x == this);
+
+            var converterFactory = newOptions.Converters.FirstOrDefault(x => x is AbpHasExtraPropertiesJsonConverterFactory).As<AbpHasExtraPropertiesJsonConverterFactory>();
+            var newConverterFactory = new AbpHasExtraPropertiesJsonConverterFactory();
+            if (converterFactory != null)
+            {
+                newOptions.Converters.Remove(converterFactory);
+                newConverterFactory.AddExcludeTypes(converterFactory.GetExcludeTypes().ToArray());
+            }
+
+            newConverterFactory.AddExcludeTypes(typeToConvert);
+            newOptions.Converters.Add(newConverterFactory);
 
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
             if (rootElement.ValueKind == JsonValueKind.Object)

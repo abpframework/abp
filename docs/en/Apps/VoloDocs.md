@@ -49,7 +49,7 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
 - ### Configuring Website
 
-   Go to `Web` folder in your VoloDocs directory. Open `appsettings.json` in your text editor. Set your connection string (same as in the `Migrator`'s  `appsettings.json`). Set `title` of your website. This will be written on the left-upper corner of your website. That's it! Now you can publish your website.
+   Go to `Web` folder in your VoloDocs directory. Open `appsettings.json` in your text editor. Set your connection string (same as in the `Migrator`'s  `appsettings.json`). That's it! Now you can publish your website.
 
    If you want to run 
 
@@ -127,6 +127,8 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
    * **Navigation document name**: `docs-nav.json` ([see the sample navigation](https://github.com/abpframework/abp/blob/master/docs/en/docs-nav.json))
 
+   * **Parameters Document Name**: `docs-params.json` ([see the sample parameters](https://github.com/abpframework/abp/blob/dev/docs/en/docs-params.json))
+
    * **Minimum version**: *leave empty* *(hides the previous versions)*
 
    * **Main web site URL**: `/`
@@ -139,7 +141,11 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
    * **GitHub user agent**: [see how to learn your GitHub username](#learn-your-github-username)
 
-     ![Creating a new project](../images/docs-create-project.jpg)
+   * **GitHub version provider source**: `Releases` (other option is `Branches`)
+
+   * **Version branch prefix**: leave empty ()
+
+     ![Creating a new project](../images/docs-create-project-v4.4.0.png)
 
    ##### Retrieving GitHub Access Token
 

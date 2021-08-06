@@ -128,20 +128,6 @@ This is the integration project for the EF Core. It defines the `DbContext` and 
 
 > This project is available only if you are using EF Core as the database provider. If you select another database provider, its name will be different.
 
-#### .EntityFrameworkCore.DbMigrations Project
-
-Contains EF Core database migrations for the solution. It has a separated `DbContext` to dedicated to manage migrations.
-
-ABP is a modular framework and with an ideal design, each module has its own `DbContext` class. This is where the migration `DbContext` comes into play and unifies all `DbContext` configurations into a single model to maintain a single database schema. For more advanced scenarios, you can have multiple databases (each contains a single or a few module tables) and multiple migration `DbContext`s  (each maintains a different database schema).
-
-Notice that the migration `DbContext` is only used for database migrations and *not used on runtime*.
-
-* Depends on the `.EntityFrameworkCore` project since it re-uses the configuration defined for the `DbContext` of the application.
-
-> This project is available only if you are using EF Core as the database provider.
->
-> See the [Entity Framework Core Migrations Guide](../Entity-Framework-Core-Migrations.md) to understand this project in details.
-
 #### .DbMigrator Project
 
 This is a console application which simplifies to execute database migrations on development and production environments. When you run this application, it;
@@ -156,7 +142,7 @@ Especially, seeding initial data is important at this point. ABP has a modular d
 
 While creating database & applying migrations seems only necessary for relational databases, this projects comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds initial data which is necessary for the application.
 
-* Depends on the `.EntityFrameworkCore.DbMigrations` project (for EF Core) since it needs to access to the migrations.
+* Depends on the `.EntityFrameworkCore` project (for EF Core) since it needs to access to the migrations.
 * Depends on the `.Application.Contracts` project to be able to access permission definitions, because initial data seeder grants all permissions for the admin role by default.
 
 #### .HttpApi Project
@@ -187,7 +173,7 @@ This project contains the main `appsettings.json` file that contains the connect
 
 * Depends on the `.HttpApi` since UI layer needs to use APIs and application service interfaces of the solution.
 
-> If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore.DbMigrations` projects.
+> If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore` projects.
 >
 > These references are actually not needed while coding your UI layer, because UI layer normally doesn't depend on the EF Core or the Application layer's implementation. This startup templates are ready for the tiered deployment, where API layer is hosted in a separate server than the UI layer.
 >

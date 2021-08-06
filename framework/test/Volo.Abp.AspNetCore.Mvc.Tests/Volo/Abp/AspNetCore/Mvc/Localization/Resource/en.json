@@ -1,7 +1,10 @@
 {
   "culture": "en",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Birth date1",
+    "DisplayName:BirthDate2": "Birth date2",
+    "PersonModel:BirthDate3": "Birth date3",
     "BirthDate": "Birth date",
-    "Value1": "Value One" 
+    "Value1": "Value One"
   }
 }

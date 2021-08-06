@@ -1,0 +1,22 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Settings": "Setări",
+    "SuccessfullySaved": "Salvat cu succes",
+    "Permission:SettingManagement": "Administrarea setărilor",
+    "Permission:Emailing": "Emailing",
+    "Menu:Emailing": "Emailing",
+    "SmtpHost": "Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Nume de utilizator",
+    "SmtpPassword": "Parolă",
+    "SmtpDomain": "Domeniu",
+    "SmtpEnableSsl": "Activează SSL",
+    "SmtpUseDefaultCredentials": "Foloseşte credenţialele implicite",
+    "DefaultFromAddress": "Implicit de la adresa",
+    "DefaultFromDisplayName": "Implicit de la numele de afişare",
+    "Feature:SettingManagementGroup": "Administrarea setărilor",
+    "Feature:SettingManagementEnable": "Activează administrarea setărilor",
+    "Feature:SettingManagementEnableDescription": "Activează sistemul de administrare a setărilor în aplicaţie."
+  }
+}

@@ -38,7 +38,7 @@ You have two options two customize this theme:
 
 ### Overriding Styles / Components
 
-In this approach, you continue to use the the theme as NuGet and NPM packages and customize the parts you need to. There are several ways to customize it;
+In this approach, you continue to use the theme as NuGet and NPM packages and customize the parts you need to. There are several ways to customize it;
 
 #### Override the Styles
 

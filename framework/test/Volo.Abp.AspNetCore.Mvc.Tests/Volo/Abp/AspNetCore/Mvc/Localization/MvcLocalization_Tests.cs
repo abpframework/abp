@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
             var result = await GetResponseAsStringAsync("/LocalizationTest/HelloJohn");
             result.ShouldBe("Hello <b>John</b>.");
         }
-        
+
         [Fact]
         public async Task Should_Localize_Display_Attribute()
         {
@@ -38,12 +38,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
             {
                 var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
                 result.ShouldContain("<label for=\"BirthDate\">Birth date</label>");
+                result.ShouldContain("<label for=\"BirthDate1\">Birth date1</label>");
+                result.ShouldContain("<label for=\"BirthDate2\">Birth date2</label>");
+                result.ShouldContain("<label for=\"BirthDate3\">Birth date3</label>");
             }
 
             using (CultureHelper.Use("tr"))
             {
                 var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
                 result.ShouldContain("<label for=\"BirthDate\">Dogum gunu</label>");
+                result.ShouldContain("<label for=\"BirthDate1\">Dogum gunu1</label>");
+                result.ShouldContain("<label for=\"BirthDate2\">Dogum gunu2</label>");
+                result.ShouldContain("<label for=\"BirthDate3\">Dogum gunu3</label>");
             }
         }
     }

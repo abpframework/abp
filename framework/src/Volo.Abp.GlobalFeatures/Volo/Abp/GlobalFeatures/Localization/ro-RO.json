@@ -1,0 +1,6 @@
+﻿{
+  "culture": "ro-RO",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Serviciul '{ServiceName}' trebuie să activeze caracteristica '{GlobalFeatureName}'."
+  }
+}

@@ -10,6 +10,7 @@ export namespace ABP {
     registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
+    tenantKey?: string;
   }
 
   export interface HasPolicy {
@@ -74,7 +75,6 @@ export namespace ABP {
     [key: string]: T;
   }
 
-  export type ExtractFromOutput<
-    T extends EventEmitter<any> | Subject<any>
-  > = T extends EventEmitter<infer X> ? X : T extends Subject<infer Y> ? Y : never;
+  export type ExtractFromOutput<T extends EventEmitter<any> | Subject<any>> =
+    T extends EventEmitter<infer X> ? X : T extends Subject<infer Y> ? Y : never;
 }

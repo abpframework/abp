@@ -72,7 +72,7 @@
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul {
           font-size: 14px;
           list-style: none;
-          padding: 0 1rem;
+          padding: 0 1rem 1rem;
           margin: 0; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li {
             margin-left: 0px;

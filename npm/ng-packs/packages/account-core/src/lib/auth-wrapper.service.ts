@@ -17,14 +17,12 @@ export class AuthWrapperService {
   tenantBoxKey = 'Account.TenantBoxComponent';
   route: ActivatedRoute;
 
-  private _tenantBoxVisible = true;
-
-  private setTenantBoxVisibility = () => {
-    this._tenantBoxVisible = this.route.snapshot.firstChild.data.tenantBoxVisible ?? true;
-  };
+  get isTenantBoxVisibleForCurrentRoute() {
+    return this.getMostInnerChild().data.tenantBoxVisible ?? true;
+  }
 
   get isTenantBoxVisible() {
-    return this._tenantBoxVisible && this.multiTenancy.isTenantBoxVisible;
+    return this.isTenantBoxVisibleForCurrentRoute && this.multiTenancy.isTenantBoxVisible;
   }
 
   constructor(
@@ -33,6 +31,16 @@ export class AuthWrapperService {
     injector: Injector,
   ) {
     this.route = injector.get(ActivatedRoute);
-    this.setTenantBoxVisibility();
+  }
+
+  private getMostInnerChild() {
+    let child = this.route.snapshot;
+    let depth = 0;
+    const depthLimit = 10;
+    while (child.firstChild && depth < depthLimit) {
+      child = child.firstChild;
+      depth++;
+    }
+    return child;
   }
 }

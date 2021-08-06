@@ -19,6 +19,7 @@ import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
 import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
 import { noop } from '../utils/common-utils';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 export const oAuthStorage = localStorage;
 
@@ -32,6 +33,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthConfig: AuthConfig;
   protected sessionState: SessionStateService;
   protected appConfigService: AbpApplicationConfigurationService;
+  protected tenantKey: string;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
@@ -48,6 +50,7 @@ export abstract class AuthFlowStrategy {
     this.appConfigService = injector.get(AbpApplicationConfigurationService);
     this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
+    this.tenantKey = injector.get(TENANT_KEY);
 
     this.listenToOauthErrors();
   }
@@ -176,7 +179,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       this.oAuthService.fetchTokenUsingPasswordFlow(
         params.username,
         params.password,
-        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
+        new HttpHeaders({ ...(tenant && tenant.id && { [this.tenantKey]: tenant.id }) }),
       ),
     ).pipe(this.pipeToLogin(params));
   }

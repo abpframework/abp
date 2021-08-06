@@ -101,7 +101,7 @@ Now we need to add migration to see what has changed in our database. This for, 
 
 ![nuget-package-manager](./nuget-package-manager.png)
 
-Select the **CustomizeUserDemo.EntityFramework.DbMigrations** as the **default project** and execute the following command:
+Select the **CustomizeUserDemo.EntityFramework** as the **default project** and execute the following command:
 
 ```bash
 Add-Migration "Updated-User-Entity"
@@ -109,7 +109,7 @@ Add-Migration "Updated-User-Entity"
 
 ![added-new-migration](./added-new-migration.png)
 
-This will create a new migration class inside the `Migrations` folder of the **CustomizeUserDemo.EntityFrameworkCore.DbMigrations** project.
+This will create a new migration class inside the `Migrations` folder of the **CustomizeUserDemo.EntityFrameworkCore** project.
 
 > If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
 

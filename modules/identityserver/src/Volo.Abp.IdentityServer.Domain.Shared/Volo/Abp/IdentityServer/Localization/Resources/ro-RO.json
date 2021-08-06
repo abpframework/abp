@@ -1,0 +1,15 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Numele resursei de identitate există deja: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Numele resursei API există deja: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api Scope name already exist: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "Id-ul de client există deja: {ClientId}",
+    "UserLockedOut": "Contul de utilizator a fost blocat din cauza încercărilor de autentificare eşuate. Vă rugăm să aşteptaţi puţin şi după să încercaţi din nou.",
+    "InvalidUserNameOrPassword": "Nume de utilizator sau parolă invalidă!",
+    "LoginIsNotAllowed": "Nu vă este permisă autentificarea! Trebuie să vă confirmaţi emailul/numărul de telefon.",
+    "InvalidUsername": "Nume de utilizator sau parolă invalidă!",
+    "InvalidAuthenticatorCode": "Cod de autentificare invalid!",
+    "TheTargetUserIsNotLinkedToYou": "Utilizatorul ţintă nu este conectat la dumneavoastră!"
+  }
+}

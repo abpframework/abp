@@ -1,0 +1,23 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Menu:TenantManagement": "Administrarea clienţilor",
+    "Tenants": "Clienţi",
+    "NewTenant": "Client nou",
+    "TenantName": "Nume client",
+    "DisplayName:TenantName": "Nume client",
+    "TenantDeletionConfirmationMessage": "Clientul '{0}' va fi şters. Sunteţi sigur(ă)?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Connection String implicit",
+    "DisplayName:UseSharedDatabase": "Folosiţi baza de date partajată",
+    "ManageHostFeatures": "Administraţi caracteristicile de host",
+    "Permission:TenantManagement": "Administrarea clienţilor",
+    "Permission:Create": "Creează",
+    "Permission:Edit": "Editează",
+    "Permission:Delete": "Şterge",
+    "Permission:ManageConnectionStrings": "Administrează stringurile de conexiune",
+    "Permission:ManageFeatures": "Administrarea caracteristicilor",
+    "DisplayName:AdminEmailAddress": "Adresa de email admin",
+    "DisplayName:AdminPassword": "Parola admin"
+  }
+}

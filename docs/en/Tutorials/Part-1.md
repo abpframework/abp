@@ -142,28 +142,36 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 ### Map the Book Entity to a Database Table
 
-Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.EntityFrameworkCore` project and add the mapping code for the `Book` entity. The final class should be the following:
+Locate to `OnModelCreating` method in the `BookStoreDbContext` class and add the mapping code for the `Book` entity:
 
 ````csharp
 using Acme.BookStore.Books;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
+...
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
-    public static class BookStoreDbContextModelCreatingExtensions
+    public class BookStoreDbContext : 
+        AbpDbContext<BookStoreDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
     {
-        public static void ConfigureBookStore(this ModelBuilder builder)
+        ...
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            Check.NotNull(builder, nameof(builder));
+            base.OnModelCreating(builder);
+
+            /* Include modules to your migration db context */
+
+            builder.ConfigurePermissionManagement();
+            ...
 
             /* Configure your own tables/entities inside here */
 
             builder.Entity<Book>(b =>
             {
                 b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
-                          BookStoreConsts.DbSchema);
+                    BookStoreConsts.DbSchema);
                 b.ConfigureByConvention(); //auto configure for the base class props
                 b.Property(x => x.Name).IsRequired().HasMaxLength(128);
             });
@@ -179,7 +187,7 @@ namespace Acme.BookStore.EntityFrameworkCore
 
 The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and type the following command:
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore` project and type the following command:
 
 ```bash
 dotnet ef migrations add Created_Book_Entity
@@ -189,7 +197,7 @@ This will add a new migration class to the project:
 
 ![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-> If you are using Visual Studio, you may want to use `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 

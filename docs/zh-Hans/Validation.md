@@ -130,8 +130,8 @@ namespace Acme.BookStore
 
 除了自动验证你可能需要手动验证对象,这种情况下[注入](Dependency-Injection.md)并使用 `IObjectValidator` 服务:
 
-* `Validate` 方法根据验证​​规则验证给定对象,如果对象没有被验证通过会抛出 `AbpValidationException` 异常.
-* `GetErrors` 不会抛出异常,只返回验证错误.
+* `ValidateAsync` 方法根据验证​​规则验证给定对象,如果对象没有被验证通过会抛出 `AbpValidationException` 异常.
+* `GetErrorsAsync` 不会抛出异常,只返回验证错误.
 
 `IObjectValidator` 默认由 `ObjectValidator` 实现. `ObjectValidator`是可扩展的; 可以实现`IObjectValidationContributor`接口提供自定义逻辑.
 示例 :
@@ -140,13 +140,14 @@ namespace Acme.BookStore
 public class MyObjectValidationContributor
     : IObjectValidationContributor, ITransientDependency
 {
-    public void AddErrors(ObjectValidationContext context)
+    public Task AddErrorsAsync(ObjectValidationContext context)
     {
         //Get the validating object
         var obj = context.ValidatingObject;
 
         //Add the validation errors if available
         context.Errors.Add(...);
+        return Task.CompletedTask;
     }
 }
 ````

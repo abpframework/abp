@@ -39,7 +39,8 @@ namespace Volo.Abp.FluentValidation
                 },
                 MyMethodInput3 = new MyMethodInput3
                 {
-                    MyStringValue3 = "ccc"
+                    MyStringValue3 = "ccc",
+                    MyBoolValue3 = true
                 }
             });
 
@@ -62,12 +63,13 @@ namespace Volo.Abp.FluentValidation
                         },
                         MyMethodInput3 = new MyMethodInput3
                         {
-                            MyStringValue3 = "c"
+                            MyStringValue3 = "c",
+                            MyBoolValue3 = false
                         }
                     }
                 )
             );
-            
+
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
@@ -100,7 +102,7 @@ namespace Volo.Abp.FluentValidation
 
             output.ShouldBe("444");
         }
-        
+
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpFluentValidationModule))]
         public class TestModule : AbpModule
@@ -162,6 +164,8 @@ namespace Volo.Abp.FluentValidation
         {
 
             public string MyStringValue3 { get; set; }
+
+            public bool MyBoolValue3 { get; set; }
         }
 
         public class MyMethodInput4
@@ -175,7 +179,8 @@ namespace Volo.Abp.FluentValidation
             {
                 RuleFor(x => x.MyStringValue).Equal("aaa");
                 RuleFor(x => x.MyMethodInput2.MyStringValue2).Equal("bbb");
-                RuleFor(customer => customer.MyMethodInput3).SetValidator(new MyMethodInput3Validator());
+                RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3Validator());
+                RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3AsyncValidator());
             }
         }
 
@@ -192,6 +197,16 @@ namespace Volo.Abp.FluentValidation
             public MyMethodInput3Validator()
             {
                 RuleFor(x => x.MyStringValue3).Equal("ccc");
+            }
+        }
+
+        public class MyMethodInput3AsyncValidator : MethodInputBaseValidator
+        {
+            public MyMethodInput3AsyncValidator()
+            {
+                RuleFor(x => x.MyStringValue3).Equal("ccc");
+
+                RuleFor(x => x.MyBoolValue3).MustAsync((myBookValue3, cancellation) => Task.FromResult(myBookValue3));
             }
         }
     }

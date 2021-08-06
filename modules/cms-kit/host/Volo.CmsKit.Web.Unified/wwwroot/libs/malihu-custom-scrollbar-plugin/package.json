@@ -1,0 +1,37 @@
+{
+  "name": "malihu-custom-scrollbar-plugin",
+  "version": "3.1.5",
+  "author": "malihu (http://manos.malihu.gr)",
+  "description": "Highly customizable custom scrollbar jQuery plugin, featuring vertical/horizontal scrollbars, scrolling momentum, mouse-wheel, keyboard and touch support user defined callbacks etc.",
+  "license": "MIT",
+  "homepage": "http://manos.malihu.gr/jquery-custom-content-scroller",
+  "main": "./jquery.mCustomScrollbar.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malihu/malihu-custom-scrollbar-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/malihu/malihu-custom-scrollbar-plugin/issues"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "custom-scrollbar",
+    "scrollbar"
+  ],
+  "files": [
+    "jquery.mCustomScrollbar.js",
+    "jquery.mCustomScrollbar.concat.min.js",
+    "jquery.mCustomScrollbar.css",
+    "mCSB_buttons.png",
+    "readme.md"
+  ],
+  "jam": {
+    "dependencies": {
+      "jquery": ">=1.6",
+	    "jquery-mousewheel": ">=3.0.6"
+    }
+  },
+  "dependencies": {
+    "jquery-mousewheel": ">=3.0.6"
+  }
+}

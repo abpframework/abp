@@ -2,15 +2,15 @@
 
 namespace Volo.Abp.Threading
 {
-    public class NullCancellationTokenProvider : ICancellationTokenProvider
+    public class NullCancellationTokenProvider : CancellationTokenProviderBase
     {
         public static NullCancellationTokenProvider Instance { get; } = new NullCancellationTokenProvider();
 
-        public CancellationToken Token { get; } = CancellationToken.None;
+        public override CancellationToken Token => OverrideValue?.CancellationToken ?? CancellationToken.None;
 
         private NullCancellationTokenProvider()
+            : base(new AmbientDataContextAmbientScopeProvider<CancellationTokenOverride>(new AsyncLocalAmbientDataContext()))
         {
-            
         }
     }
 }

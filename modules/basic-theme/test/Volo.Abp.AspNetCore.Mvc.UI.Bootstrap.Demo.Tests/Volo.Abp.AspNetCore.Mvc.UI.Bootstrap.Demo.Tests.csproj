@@ -17,9 +17,17 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\test\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
   </ItemGroup>
 
   <!-- Below ItemGroup and Target tags are added according to https://github.com/aspnet/Hosting/issues/959#issuecomment-286351703 -->

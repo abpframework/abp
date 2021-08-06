@@ -67,7 +67,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
                             oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase) ||
-                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase))
+                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase)||
+                            oldNodeIncludeValue.EndsWith(".Demo", StringComparison.InvariantCultureIgnoreCase))
                         {
                             tempSourceFile = "test";
                         }

@@ -1,0 +1,6 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} nu poate fi mai mare decât {1}! Măriţi {2}.{3} pe partea de server pentru a permite mai multe rezultate."
+  }
+}

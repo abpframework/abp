@@ -25,18 +25,19 @@ namespace Volo.Abp.AspNetCore.Components.Server
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddServerSideBlazor();
-            
+            var serverSideBlazorBuilder = context.Services.AddServerSideBlazor();
+            context.Services.ExecutePreConfiguredActions(serverSideBlazorBuilder);
+
             Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
             {
                 options.IgnoredUrls.AddIfNotContains("/_blazor");
             });
-            
+
             Configure<AbpAspNetCoreAuditingOptions>(options =>
             {
                 options.IgnoredUrls.AddIfNotContains("/_blazor");
             });
-            
+
             Configure<AbpEndpointRouterOptions>(options =>
             {
                 options.EndpointConfigureActions.Add(endpointContext =>

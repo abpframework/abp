@@ -4,7 +4,7 @@
     "UserName": "Nome utente",
     "EmailAddress": "Indirizzo e-mail",
     "UserNameOrEmailAddress": "Username o Indirizzo Email",
-    "Password": "Parola d'ordine",
+    "Password": "Password",
     "RememberMe": "Ricordati di me",
     "UseAnotherServiceToLogin": "Usa un altro servizio per accedere",
     "UserLockedOutMessage": "L'account utente è stato bloccato a causa di tentativi di accesso non validi. Attendi qualche istante e riprova.",

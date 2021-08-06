@@ -149,8 +149,8 @@ Once ABP determines a validation error, it throws an exception of type `AbpValid
 
 In addition to the automatic validation, you may want to manually validate an object. In this case, [inject](Dependency-Injection.md) and use the `IObjectValidator` service:
 
-* `Validate` method validates the given object based on the validation rules and throws an `AbpValidationException` if it is not in a valid state.
-* `GetErrors` doesn't throw an exception, but only returns the validation errors.
+* `ValidateAsync` method validates the given object based on the validation rules and throws an `AbpValidationException` if it is not in a valid state.
+* `GetErrorsAsync` doesn't throw an exception, but only returns the validation errors.
 
 `IObjectValidator` is implemented by the `ObjectValidator` by default. `ObjectValidator` is extensible; you can implement `IObjectValidationContributor` interface to contribute a custom logic. Example:
 
@@ -158,13 +158,14 @@ In addition to the automatic validation, you may want to manually validate an ob
 public class MyObjectValidationContributor
     : IObjectValidationContributor, ITransientDependency
 {
-    public void AddErrors(ObjectValidationContext context)
+    public Task AddErrorsAsync(ObjectValidationContext context)
     {
         //Get the validating object
         var obj = context.ValidatingObject;
 
         //Add the validation errors if available
         context.Errors.Add(...);
+        return Task.CompletedTask;
     }
 }
 ````

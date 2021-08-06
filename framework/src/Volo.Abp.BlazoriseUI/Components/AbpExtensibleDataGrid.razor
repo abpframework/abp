@@ -10,6 +10,20 @@
           ShowPager="@ShowPager"
           CurrentPage="@CurrentPage"
           PageSize="@PageSize">
+    <LoadingTemplate>
+        <Row Class="w-100 align-items-center" Style="height: 150px;">
+            <Column>
+               <RadarSpinner />
+            </Column>
+        </Row>
+    </LoadingTemplate>
+    <EmptyTemplate>
+        <Row Class="w-100 align-items-center" Style="height: 150px;">
+            <Column>
+                <Heading Size="HeadingSize.Is4" Alignment="TextAlignment.Center">No data available</Heading>
+            </Column>
+        </Row>
+    </EmptyTemplate>
     <DataGridColumns>
         @if (Columns != null)
         {

@@ -1,0 +1,10 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Permissions": "Permisiuni",
+    "OnlyProviderPermissons": "Doar acest furnizor",
+    "All": "Toate",
+    "SelectAllInAllTabs": "Acordă toate permisiunile",
+    "SelectAllInThisTab": "Selectează toate"
+  }
+}

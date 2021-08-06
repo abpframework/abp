@@ -71,7 +71,7 @@ namespace Volo.Abp.Identity
             string filter = null, 
             CancellationToken cancellationToken = new CancellationToken())
         {
-            return await UserRepository.GetCountAsync(filter, cancellationToken);
+            return await UserRepository.GetCountAsync(filter, cancellationToken: cancellationToken);
         }
     }
 }

@@ -5,6 +5,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, timer } from 'rxjs';
 import { ApiInterceptor } from '../interceptors';
 import { HttpWaitService, SessionStateService } from '../services';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 describe('ApiInterceptor', () => {
   let spectator: SpectatorService<ApiInterceptor>;
@@ -13,9 +14,12 @@ describe('ApiInterceptor', () => {
   let sessionState: SpyObject<SessionStateService>;
   let httpWaitService: SpyObject<HttpWaitService>;
 
+  const testTenantKey = 'TEST_TENANT_KEY';
+
   const createService = createServiceFactory({
     service: ApiInterceptor,
     mocks: [OAuthService, SessionStateService],
+    providers: [{ provide: TENANT_KEY, useValue: testTenantKey }],
   });
 
   beforeEach(() => {
@@ -38,7 +42,7 @@ describe('ApiInterceptor', () => {
       handle: (req: HttpRequest<any>) => {
         expect(req.headers.get('Authorization')).toEqual('Bearer ey892mkwa8^2jk');
         expect(req.headers.get('Accept-Language')).toEqual('tr');
-        expect(req.headers.get('__tenant')).toEqual('Volosoft');
+        expect(req.headers.get(testTenantKey)).toEqual('Volosoft');
         done();
         return handleRes$;
       },
