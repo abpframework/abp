@@ -278,7 +278,7 @@ namespace Volo.Abp.Uow.MongoDB
             var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
             _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
 
-            return new MongoClient(mongoUrl);
+            return new MongoClient(mongoClientSettings);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
