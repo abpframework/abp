@@ -29,7 +29,7 @@ namespace Volo.Abp.Uow.MongoDB
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IOptions<AbpMongoDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -124,7 +124,10 @@ namespace Volo.Abp.Uow.MongoDB
 
         private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
         {
-            var client = new MongoClient(mongoUrl);
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
+
+            var client = new MongoClient(mongoClientSettings);
             var database = client.GetDatabase(databaseName);
 
             if (unitOfWork.Options.IsTransactional)
@@ -144,6 +147,9 @@ namespace Volo.Abp.Uow.MongoDB
             string databaseName,
             CancellationToken cancellationToken = default)
         {
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
+
             var client = new MongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
