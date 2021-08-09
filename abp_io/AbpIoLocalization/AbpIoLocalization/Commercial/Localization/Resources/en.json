@@ -358,6 +358,11 @@
     "WeWillSendYouADownloadLink": "A link to download the e-book has been sent to {0}.<br/> Check your inbox / junk / spam boxes!",
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
-    "FreeDDDEBook": "Free DDD E-Book"
+    "FreeDDDEBook": "Free DDD E-Book",
+    "SaveAndDownload": "Save And Download",
+    "CompanyNameValidationMessage": "Company Name is too long.",
+    "AddressValidationMessage": "Address is too long.",
+    "TaxNoValidationMessage": "TAX/VAT No is too long.",
+    "NotesValidationMessage": "Too many characters."
   }
 }
