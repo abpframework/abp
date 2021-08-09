@@ -363,6 +363,7 @@
     "CompanyNameValidationMessage": "Company Name is too long.",
     "AddressValidationMessage": "Address is too long.",
     "TaxNoValidationMessage": "TAX/VAT No is too long.",
-    "NotesValidationMessage": "Too many characters."
+    "NotesValidationMessage": "Too many characters.",
+    "CheckYourBillingInfo": "Check your billing info before creating your invoice. You can create your invoice only once!"
   }
 }
