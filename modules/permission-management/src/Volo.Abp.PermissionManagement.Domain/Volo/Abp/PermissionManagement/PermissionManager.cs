@@ -65,6 +65,12 @@ namespace Volo.Abp.PermissionManagement
             return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
         }
 
+        public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
+        {
+            var permissionDefinitions = permissionNames.Select(x => PermissionDefinitionManager.Get(x)).ToArray();
+            return await GetInternalAsync(permissionDefinitions, providerName, providerKey);
+        }
+
         public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
         {
             var results = new List<PermissionWithGrantedProviders>();
@@ -177,6 +183,45 @@ namespace Volo.Abp.PermissionManagement
             }
 
             return result;
+        }
+
+        protected virtual async Task<MultiplePermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition[] permissions, string providerName, string providerKey)
+        {
+            var permissionNames = permissions.Select(x => x.Name).ToArray();
+            var multiplePermissionWithGrantedProviders = new MultiplePermissionWithGrantedProviders(permissionNames);
+
+            var neededCheckPermissions = new List<PermissionDefinition>();
+
+            foreach (var permission in permissions
+                                        .Where(x => x.IsEnabled)
+                                        .Where(x => x.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+                                        .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName)))
+            {
+                if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
+                {
+                    neededCheckPermissions.Add(permission);
+                }
+            }
+
+            foreach (var provider in ManagementProviders)
+            {
+                permissionNames = neededCheckPermissions.Select(x => x.Name).ToArray();
+                var multiplePermissionValueProviderGrantInfo = await provider.CheckAsync(permissionNames, providerName, providerKey);
+
+                foreach (var providerResultDict in multiplePermissionValueProviderGrantInfo.Result)
+                {
+                    if (providerResultDict.Value.IsGranted)
+                    {
+                        var permissionWithGrantedProvider = multiplePermissionWithGrantedProviders.Result
+                            .First(x => x.Name == providerResultDict.Key);
+
+                        permissionWithGrantedProvider.IsGranted = true;
+                        permissionWithGrantedProvider.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResultDict.Value.ProviderKey));
+                    }
+                }
+            }
+
+            return multiplePermissionWithGrantedProviders;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -23,7 +24,7 @@ namespace Volo.Abp.PermissionManagement
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
         }
-        
+
         public virtual async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
             if (providerName != Name)
@@ -35,6 +36,27 @@ namespace Volo.Abp.PermissionManagement
                 await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
                 providerKey
             );
+        }
+
+        public virtual async Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
+        {
+            var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);
+            if (providerName != Name)
+            {
+                return multiplePermissionValueProviderGrantInfo;
+            }
+
+            var permissionGrants = await PermissionGrantRepository.GetListAsync(names, providerName, providerKey);
+
+            foreach (var permissionName in names)
+            {
+                if (permissionGrants.Any(x => x.Name == permissionName))
+                {
+                    multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(true, providerKey);
+                }
+            }
+
+            return multiplePermissionValueProviderGrantInfo;
         }
 
         public virtual Task SetAsync(string name, string providerKey, bool isGranted)
