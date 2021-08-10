@@ -1,14 +1,18 @@
 # LeptonX Alpha Release
 
-We are excited to announce that the alpha version of LeptonX has been released! As stated in this [blog post](https://volosoft.com/blog/introducing-the-lepton-theme-next-generation), LeptonX comes in different shapes. For this release, we introduce only ABP-related packages. So, if you are already using the ABP Framework and Angular as the frontend choice, you can integrate these packages into your project with ease. 
+We are excited to announce that the **alpha version** of the LeptonX theme has been released! As stated in [this blog post](https://volosoft.com/blog/introducing-the-lepton-theme-next-generation), LeptonX comes in different shapes. For this release, we introduce only ABP based projects with the Angular UI. So, if you are already using the ABP Framework and Angular as the frontend choice, you can integrate these packages into your project today.
 
-As we have announced in the blogpost, open-source ABP users will get to replace `ThemeBasic` with `LeptonX-lite`.
+The theme has been deployed with two versions: LeptonX-lite (free) and LeptonX (commercial).
+
+> **Note that this theme currently only works for the *Angular UI*. Please keep waiting for other UI options.**
 
 ## Open-Source
 
+This section shows how to replace the basic theme (that comes with open source ABP Framework startup template) with the new LeptonX-lite theme.
+
 To add `LeptonX-lite` into your project,
 
-* Install `@abp/ng.theme.lepton-x`
+* Install `@abp/ng.theme.lepton-x` NPM package
 
 `npm install @abp/ng.theme.lepton-x@preview` or 
 
@@ -88,11 +92,13 @@ To change the logos and brand color of the `LeptonX`, simply add the following C
 
 ![LeptonX-lite menu collapsed](./lepton-x-lite-menu-collapsed.png)
 
-## Commercial
+## ABP Commercial
+
+This section shows how to replace the lepton theme (that comes with the ABP Commercial startup template) with the new LeptonX theme.
 
 To add `LeptonX` into your existing projects, 
 
-* Firstly, install `@volosoft/abp.ng.theme.lepton-x`
+* Firstly, install `@volosoft/abp.ng.theme.lepton-x` NPM package
 
 `npm install @volosoft/abp.ng.theme.lepton-x@preview` or 
 
@@ -183,7 +189,6 @@ export class AppModule {}
 
 
 * At this point, `LeptonX` theme should be up and running within your application. However, you may need to overwrite some css variables based your needs for every theme available as follows:
-  
 ```scss
 :root {
   .lpx-theme-dark {
@@ -208,6 +213,8 @@ export class AppModule {}
 
 When the user selects a theme, the corresponding CSS class is added to the `body`, so you can write specific CSS rules to each theme.
 
-Please, keep in mind that this is an alpha version, and we will continue to work on `LeptonX`. The APIs are bound to change, and breaking changes may be introduced in future versions. 
+## Conclusion
 
-We would like you to try it out with the latest version of the ABP Framework and give us feedback at lepton{at}volosoft{dot}com and/or https://github.com/volosoft/lepton-theme
+In this blog post, I've explained how to use the alpha version of the new LeptonX theme for ABP-based solution.s Please, keep in mind that this is an alpha version, and we will continue to work on the LeptonX theme. The APIs are bound to change and breaking changes may be introduced in future versions. 
+
+We would like you to try it out with the latest version of the ABP Framework and give us feedback at lepton@volosoft.com or open an issue on this repository: https://github.com/volosoft/lepton-theme
