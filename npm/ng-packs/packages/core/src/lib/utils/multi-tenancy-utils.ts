@@ -46,10 +46,15 @@ export async function parseTenantFromUrl(injector: Injector) {
   const setEnvironmentWithDomainTenant = (tenant: FindTenantResultDto) => {
     hideTenantBox();
     setDomainTenant(tenant);
-    replaceTenantNameWithinEnvironment(injector, tenant.name);
   };
 
   if (tenancyName) {
+    /**
+     * We have to replace tenant name within the urls from environment,
+     * because the code below will make a http request to find information about the domain tenant.
+     * Before this request takes place, we need to replace placeholders aka "{0}".
+     */
+    replaceTenantNameWithinEnvironment(injector, tenancyName);
     return multiTenancyService
       .setTenantByName(tenancyName)
       .pipe(tap(setEnvironmentWithDomainTenant))
