@@ -20,19 +20,16 @@ namespace Volo.Abp.PermissionManagement
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
-        private readonly IPermissionChecker _permissionChecker;
-
         public PermissionAppService(
             IPermissionManager permissionManager,
             IPermissionDefinitionManager permissionDefinitionManager,
             IOptions<PermissionManagementOptions> options,
-            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager, IPermissionChecker permissionChecker)
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
         {
             Options = options.Value;
             PermissionManager = permissionManager;
             PermissionDefinitionManager = permissionDefinitionManager;
             SimpleStateCheckerManager = simpleStateCheckerManager;
-            _permissionChecker = permissionChecker;
         }
 
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
