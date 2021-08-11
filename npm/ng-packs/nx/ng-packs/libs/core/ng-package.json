@@ -3,5 +3,15 @@
   "dest": "../../dist/libs/core",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "@abp/utils",
+    "@angular/localize",
+    "@ngxs/store",
+    "angular-oauth2-oidc",
+    "just-compare",
+    "just-clone",
+    "snq",
+    "ts-toolbelt"
+  ]
 }
