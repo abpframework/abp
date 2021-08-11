@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace Volo.Abp.MongoDB
 {
@@ -7,11 +9,13 @@ namespace Volo.Abp.MongoDB
     {
         internal Dictionary<Type, Type> DbContextReplacements { get; }
 
+        public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
+
         public AbpMongoDbContextOptions()
         {
             DbContextReplacements = new Dictionary<Type, Type>();
         }
-        
+
         internal Type GetReplacedTypeOrSelf(Type dbContextType)
         {
             var replacementType = dbContextType;
@@ -26,7 +30,7 @@ namespace Volo.Abp.MongoDB
                             dbContextType.AssemblyQualifiedName
                         );
                     }
-                    
+
                     replacementType = foundType;
                 }
                 else
