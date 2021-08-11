@@ -73,14 +73,12 @@ namespace Volo.Abp.PermissionManagement
 
         public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
         {
-            var results = new List<PermissionWithGrantedProviders>();
+            var permissionDefinitions = PermissionDefinitionManager.GetPermissions().ToArray();
 
-            foreach (var permissionDefinition in PermissionDefinitionManager.GetPermissions())
-            {
-                results.Add(await GetInternalAsync(permissionDefinition, providerName, providerKey));
-            }
+            var multiplePermissionWithGrantedProviders = await GetInternalAsync(permissionDefinitions, providerName, providerKey);
 
-            return results;
+            return multiplePermissionWithGrantedProviders.Result;
+
         }
 
         public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
@@ -171,6 +169,11 @@ namespace Volo.Abp.PermissionManagement
                 {
                     neededCheckPermissions.Add(permission);
                 }
+            }
+
+            if (!neededCheckPermissions.Any())
+            {
+                return multiplePermissionWithGrantedProviders;
             }
 
             foreach (var provider in ManagementProviders)

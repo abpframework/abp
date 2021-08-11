@@ -38,11 +38,11 @@ namespace Volo.Abp.PermissionManagement.Identity
         public override async Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
         {
             var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);
-            List<PermissionGrant> permissionGrants = null;
+            var permissionGrants = new List<PermissionGrant>();
 
             if (providerName == Name)
             {
-                 permissionGrants = await PermissionGrantRepository.GetListAsync(names, providerName, providerKey);
+                 permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, providerName, providerKey));
 
             }
 
@@ -53,11 +53,12 @@ namespace Volo.Abp.PermissionManagement.Identity
 
                 foreach (var roleName in roleNames)
                 {
-                    permissionGrants = await PermissionGrantRepository.GetListAsync(names, Name, roleName);
+                    permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, roleName));
                 }
             }
 
-            if (permissionGrants == null)
+            permissionGrants = permissionGrants.Distinct().ToList();
+            if (!permissionGrants.Any())
             {
                 return multiplePermissionValueProviderGrantInfo;
             }

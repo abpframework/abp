@@ -44,10 +44,8 @@ namespace Volo.Abp.PermissionManagement
 
             foreach (var permissionName in names)
             {
-                if (permissionGrants.Any(x => x.Name == permissionName))
-                {
-                    multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(true, providerKey);
-                }
+                var isGrant = permissionGrants.Any(x => x.Name == permissionName);
+                multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(isGrant, providerKey);
             }
 
             return multiplePermissionValueProviderGrantInfo;

@@ -69,6 +69,11 @@ namespace Volo.Abp.PermissionManagement
                     }
                 }
 
+                if (!neededCheckPermissions.Any())
+                {
+                    return result;
+                }
+
                 var grantInfoDtos = neededCheckPermissions.Select(x => new PermissionGrantInfoDto
                 {
                     Name = x.Name,
