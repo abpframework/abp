@@ -211,6 +211,6 @@ When the user selects a theme, the corresponding CSS class is added to the `body
 
 ## Conclusion
 
-In this blog post, I've explained how to use the alpha version of the new LeptonX theme for ABP-based solution.s Please, keep in mind that this is an alpha version, and we will continue to work on the LeptonX theme. The APIs are bound to change and breaking changes may be introduced in future versions. 
+In this blog post, I've explained how to use the alpha version of the new LeptonX theme for ABP-based solutions. Please, keep in mind that this is an alpha version, and we will continue to work on the LeptonX theme. The APIs are bound to change and breaking changes may be introduced in future versions. 
 
 We would like you to try it out with the latest version of the ABP Framework and give us feedback at lepton@volosoft.com or open an issue on this repository: https://github.com/volosoft/lepton-theme
