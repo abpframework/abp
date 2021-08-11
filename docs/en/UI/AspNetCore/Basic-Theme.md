@@ -85,7 +85,7 @@ See the [User Interface Customization Guide](Customization-User-Interface.md) to
 
 You can run the following [ABP CLI](../../CLI.md) command in **Web** project directory to copy the source code to your solution:
 
-`abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-code --add-to-solution-file`
+`abp add-module Volo.BasicTheme --with-source-code --add-to-solution-file`
 
 ----
 

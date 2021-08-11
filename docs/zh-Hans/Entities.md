@@ -211,7 +211,7 @@ public class OrderLine : Entity
 
 > 如果你不想你的聚合根继承`AggregateRoot<TKey>`类,你可以直接实现`IAggregateRoot<TKey>`接口
 
-`Order`是一个具有`Guid`类型`Id`属性的 **聚合根**.它有一个`OrderLine`实体集合.`OrderLine`是一个具有组合键(`OrderLine`和 ` ProductId`)的实体.
+`Order`是一个具有`Guid`类型`Id`属性的 **聚合根**.它有一个`OrderLine`实体集合.`OrderLine`是一个具有组合键(`OrderId`和 ` ProductId`)的实体.
 
 虽然这个示例可能无法实现聚合根的所有最佳实践,但它仍然遵循良好的实践:
 
