@@ -1,7 +1,3 @@
-# theme-shared
+<h1> @abp/ng.theme.shared </h1>
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test theme-shared` to execute the unit tests.
+[docs.abp.io](https://docs.abp.io)
