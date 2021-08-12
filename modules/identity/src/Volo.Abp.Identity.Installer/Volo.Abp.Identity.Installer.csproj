@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Volo\Abp\Identity\Packages\abpmdl.json" />
-      <EmbeddedResource Include="Volo\Abp\Identity\Packages\abpmdl.json" />
+      <None Remove="..\..\Volo.Abp.Identity.abpmdl.json" />
+      <EmbeddedResource Include="..\..\Volo.Abp.Identity.abpmdl.json" />
     </ItemGroup>
 
 </Project>
