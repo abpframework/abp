@@ -15,11 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      // "@abp/ng.core": ["libs/core/src/public-api.ts"],
-      // "@abp/ng.theme.shared": ["libs/theme-shared/src/public-api.ts"]
-      "@abp/ng.core": ["dist/libs/core"],
-      "@abp/ng.theme.shared": ["dist/libs/theme-shared"],
-      "@abp/ng.theme.basic": ["dist/libs/theme-basic"]
+      // "@abp/ng.core": ["packages/core/src/public-api.ts"],
+      // "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"]
+      "@abp/ng.core": ["dist/packages/core"],
+      "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
+      "@abp/ng.theme.basic": ["dist/packages/theme-basic"]
     }
   },
   "exclude": ["node_modules", "tmp"]

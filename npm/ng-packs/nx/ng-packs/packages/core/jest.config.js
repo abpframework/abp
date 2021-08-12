@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'theme-shared',
+  displayName: 'core',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/libs/theme-shared',
+  coverageDirectory: '../../coverage/packages/core',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },
