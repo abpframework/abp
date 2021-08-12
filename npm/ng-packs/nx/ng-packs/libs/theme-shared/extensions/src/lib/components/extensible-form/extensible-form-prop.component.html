@@ -1,0 +1,138 @@
+<div class="form-group" *abpPermission="prop.permission" [ngSwitch]="getComponent(prop)">
+  <ng-template ngSwitchCase="input">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <input
+      #field
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [autocomplete]="prop.autocomplete"
+      [type]="getType(prop)"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
+      class="form-control"
+    />
+  </ng-template>
+
+  <ng-template ngSwitchCase="hidden">
+    <input [formControlName]="prop.name" type="hidden" />
+  </ng-template>
+
+  <ng-template ngSwitchCase="checkbox">
+    <div class="custom-checkbox custom-control" validationTarget>
+      <input
+        #field
+        [id]="prop.id"
+        [formControlName]="prop.name"
+        [abpDisabled]="disabled"
+        type="checkbox"
+        class="custom-control-input"
+      />
+      <ng-template
+        [ngTemplateOutlet]="label"
+        [ngTemplateOutletContext]="{ $implicit: 'custom-control-label' }"
+      ></ng-template>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="select">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <select
+      #field
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      class="custom-select form-control"
+    >
+      <option
+        *ngFor="let option of options$ | async; trackBy: track.by('value')"
+        [ngValue]="option.value"
+      >
+        {{ option.key }}
+      </option>
+    </select>
+  </ng-template>
+
+  <ng-template ngSwitchCase="multiselect">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <select
+      #field
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      multiple="multiple"
+      class="custom-select form-control"
+    >
+      <option
+        *ngFor="let option of options$ | async; trackBy: track.by('value')"
+        [ngValue]="option.value"
+      >
+        {{ option.key }}
+      </option>
+    </select>
+  </ng-template>
+
+  <ng-template ngSwitchCase="typeahead">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <div #typeahead class="position-relative" validationStyle validationTarget>
+      <input
+        #field
+        [id]="prop.id"
+        [autocomplete]="prop.autocomplete"
+        [abpDisabled]="disabled"
+        [ngbTypeahead]="search"
+        [editable]="false"
+        [inputFormatter]="typeaheadFormatter"
+        [resultFormatter]="typeaheadFormatter"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="typeaheadModel"
+        (selectItem)="setTypeaheadValue($event.item)"
+        (blur)="setTypeaheadValue(typeaheadModel)"
+        [class.is-invalid]="typeahead.classList.contains('is-invalid')"
+        class="form-control"
+      />
+      <input [formControlName]="prop.name" type="hidden" />
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="date">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <input
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      (click)="datepicker.open()"
+      (keyup.space)="datepicker.open()"
+      ngbDatepicker
+      #datepicker="ngbDatepicker"
+      type="text"
+      class="form-control"
+    />
+  </ng-template>
+
+  <ng-template ngSwitchCase="time">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <ngb-timepicker [formControlName]="prop.name"></ngb-timepicker>
+  </ng-template>
+
+  <ng-template ngSwitchCase="dateTime">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <abp-date-time-picker [prop]="prop" [meridian]="meridian"></abp-date-time-picker>
+  </ng-template>
+
+  <ng-template ngSwitchCase="textarea">
+    <ng-template [ngTemplateOutlet]="label"></ng-template>
+    <textarea
+      #field
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
+      class="form-control"
+    ></textarea>
+  </ng-template>
+</div>
+
+<ng-template #label let-classes>
+  <label [htmlFor]="prop.id" [ngClass]="classes"
+    >{{ prop.displayName | abpLocalization }} {{ asterisk }}</label
+  >
+</ng-template>

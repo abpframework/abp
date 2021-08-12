@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ng-packs/core": ["libs/core/src/index.ts"]
+      // "@abp/ng.core": ["libs/core/src/public-api.ts"],
+      // "@abp/ng.theme.shared": ["libs/theme-shared/src/public-api.ts"]
+      "@abp/ng.core": ["dist/libs/core"],
+      "@abp/ng.theme.shared": ["dist/libs/theme-shared"]
     }
   },
   "exclude": ["node_modules", "tmp"]

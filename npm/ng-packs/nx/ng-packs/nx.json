@@ -36,6 +36,12 @@
     "dev-app-e2e": {
       "tags": [],
       "implicitDependencies": ["dev-app"]
+    },
+    "theme-basic": {
+      "tags": []
+    },
+    "theme-shared": {
+      "tags": []
     }
   }
 }

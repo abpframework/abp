@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/libs/theme-shared",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "@abp/ng.core",
+    "@fortawesome/fontawesome-free",
+    "@ng-bootstrap/ng-bootstrap",
+    "@ngx-validate/core",
+    "@swimlane/ngx-datatable",
+    "bootstrap",
+    "chart.js"
+  ]
+}
