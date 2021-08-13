@@ -243,6 +243,47 @@
         }
       }
     },
+    "feature-management": {
+      "projectType": "library",
+      "root": "packages/feature-management",
+      "sourceRoot": "packages/feature-management/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/feature-management/tsconfig.lib.json",
+            "project": "packages/feature-management/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/feature-management/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/feature-management/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/feature-management"],
+          "options": {
+            "jestConfig": "packages/feature-management/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/feature-management/src/**/*.ts",
+              "packages/feature-management/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "theme-basic": {
       "projectType": "library",
       "root": "packages/theme-basic",

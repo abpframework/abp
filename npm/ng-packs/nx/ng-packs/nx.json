@@ -49,6 +49,10 @@
       "tags": [],
       "implicitDependencies": ["dev-app"]
     },
+    "feature-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
     "theme-basic": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "account-core"]
