@@ -62,7 +62,7 @@
     "@fortawesome/fontawesome-free": "^5.14.0",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngneat/spectator": "^8.0.3",
-    "@ngx-validate/core": "^0.1.1",
+    "@ngx-validate/core": "^0.0.13",
     "@ngxs/store": "^3.7.0",
     "@nrwl/angular": "12.6.5",
     "@nrwl/cli": "12.6.5",

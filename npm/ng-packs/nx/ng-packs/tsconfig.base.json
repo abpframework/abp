@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@abp/ng.feature-management": ["dist/packages/feature-management"],
+      "@abp/ng.account": ["dist/packages/account"],
+      "@abp/ng.account/config": ["dist/packages/account/config"],
       "@abp/ng.account.core": ["dist/packages/account-core"],
       "@abp/ng.components": ["dist/packages/components"],
       "@abp/ng.components/page": ["dist/packages/components/page"],
@@ -23,16 +24,19 @@
       "@abp/ng.core": ["dist/packages/core"],
       "@abp/ng.core/locale": ["dist/packages/core/locale"],
       "@abp/ng.core/testing": ["dist/packages/core/testing"],
+      "@abp/ng.feature-management": ["dist/packages/feature-management"],
+      "@abp/ng.permission-management": ["dist/packages/permission-management"],
+      "@abp/ng.setting-management": ["dist/packages/setting-management"],
+      "@abp/ng.setting-management/config": [
+        "dist/packages/setting-management/config"
+      ],
       "@abp/ng.theme.basic": ["dist/packages/theme-basic"],
       "@abp/ng.theme.basic/testing": ["dist/packages/theme-basic/testing"],
       "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
       "@abp/ng.theme.shared/extensions": [
         "dist/packages/theme-shared/extensions"
       ],
-      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"],
-      "@abp/ng.permission-management": ["dist/packages/permission-management"],
-      "@abp/ng.setting-management": ["dist/packages/setting-management"],
-      "@abp/ng.setting-management/config": ["dist/packages/setting-management/config"]
+      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"]
     }
   },
   "exclude": ["node_modules", "tmp"]
