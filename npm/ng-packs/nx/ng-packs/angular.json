@@ -448,6 +448,47 @@
         }
       }
     },
+    "tenant-management": {
+      "projectType": "library",
+      "root": "packages/tenant-management",
+      "sourceRoot": "packages/tenant-management/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/identity/tsconfig.lib.json",
+            "project": "packages/identity/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/tenant-management/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/tenant-management/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/tenant-management"],
+          "options": {
+            "jestConfig": "packages/tenant-management/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/tenant-management/src/**/*.ts",
+              "packages/tenant-management/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "theme-basic": {
       "projectType": "library",
       "root": "packages/theme-basic",

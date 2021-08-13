@@ -69,6 +69,10 @@
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "components"]
     },
+    "tenant-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "feature-management"]
+    },
     "theme-basic": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "account-core"]

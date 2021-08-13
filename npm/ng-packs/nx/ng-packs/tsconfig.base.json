@@ -15,8 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@abp/ng.identity": ["dist/packages/identity/"],
-      "@abp/ng.identity/config": ["dist/packages/identity/config"],
       "@abp/ng.account": ["dist/packages/account"],
       "@abp/ng.account.core": ["dist/packages/account-core"],
       "@abp/ng.account/config": ["dist/packages/account/config"],
@@ -27,6 +25,8 @@
       "@abp/ng.core/locale": ["dist/packages/core/locale"],
       "@abp/ng.core/testing": ["dist/packages/core/testing"],
       "@abp/ng.feature-management": ["dist/packages/feature-management"],
+      "@abp/ng.identity": ["dist/packages/identity/"],
+      "@abp/ng.identity/config": ["dist/packages/identity/config"],
       "@abp/ng.permission-management": ["dist/packages/permission-management"],
       "@abp/ng.setting-management": ["dist/packages/setting-management"],
       "@abp/ng.setting-management/config": [
@@ -38,7 +38,9 @@
       "@abp/ng.theme.shared/extensions": [
         "dist/packages/theme-shared/extensions"
       ],
-      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"]
+      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"],
+      "@abp/ng.tenant-management": ["dist/packages/tenant-management"],
+      "@abp/ng.tenant-management/config": ["dist/packages/tenant-management/config"]
     }
   },
   "exclude": ["node_modules", "tmp"]
