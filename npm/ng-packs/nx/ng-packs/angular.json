@@ -1,6 +1,47 @@
 {
   "version": 1,
   "projects": {
+    "account-core": {
+      "projectType": "library",
+      "root": "packages/account-core",
+      "sourceRoot": "packages/account-core/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/account-core/tsconfig.lib.json",
+            "project": "packages/account-core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/account-core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/account-core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/account-core"],
+          "options": {
+            "jestConfig": "packages/account-core/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/account-core/src/**/*.ts",
+              "packages/account-core/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "core": {
       "projectType": "library",
       "root": "packages/core",
@@ -46,7 +87,7 @@
       "projectType": "application",
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
-      "prefix": "ng-packs",
+      "prefix": "abp",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

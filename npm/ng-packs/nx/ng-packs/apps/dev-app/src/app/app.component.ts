@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ng-packs-root',
+  selector: 'abp-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

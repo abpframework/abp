@@ -1,7 +1,7 @@
 {
-  "npmScope": "ng-packs",
+  "npmScope": "abp",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "dev"
   },
   "implicitDependencies": {
     "package.json": {
@@ -26,7 +26,15 @@
       }
     ]
   },
+  "workspaceLayout": {
+    "libsDir": "packages",
+    "appsDir": ""
+  },
   "projects": {
+    "account-core": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
     "core": {
       "tags": []
     },
@@ -38,10 +46,12 @@
       "implicitDependencies": ["dev-app"]
     },
     "theme-basic": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "theme-shared": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["core"]
     }
   }
 }

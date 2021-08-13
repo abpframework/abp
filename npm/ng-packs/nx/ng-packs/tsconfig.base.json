@@ -15,10 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      // "@abp/ng.core": ["packages/core/src/public-api.ts"],
-      // "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"]
       "@abp/ng.core": ["dist/packages/core"],
       "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
+      "@abp/ng.account.core": ["dist/packages/account-core"],
       "@abp/ng.theme.basic": ["dist/packages/theme-basic"]
     }
   },
