@@ -42,6 +42,47 @@
         }
       }
     },
+    "components": {
+      "projectType": "library",
+      "root": "packages/components",
+      "sourceRoot": "packages/components/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/components/tsconfig.lib.json",
+            "project": "packages/components/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/components/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/components/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/components"],
+          "options": {
+            "jestConfig": "packages/components/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/components/src/**/*.ts",
+              "packages/components/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "core": {
       "projectType": "library",
       "root": "packages/core",

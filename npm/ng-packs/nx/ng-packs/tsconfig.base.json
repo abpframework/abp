@@ -16,9 +16,17 @@
     "baseUrl": ".",
     "paths": {
       "@abp/ng.core": ["dist/packages/core"],
+      "@abp/ng.core/locale": ["dist/packages/core/locale"],
+      "@abp/ng.core/testing": ["dist/packages/core/testing"],
       "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
+      "@abp/ng.theme.shared/extensions": ["dist/packages/theme-shared/extensions"],
+      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"],
+      "@abp/ng.components": ["dist/packages/components"],
+      "@abp/ng.components/page": ["dist/packages/components/page"],
+      "@abp/ng.components/tree": ["dist/packages/components/tree"],
       "@abp/ng.account.core": ["dist/packages/account-core"],
-      "@abp/ng.theme.basic": ["dist/packages/theme-basic"]
+      "@abp/ng.theme.basic": ["dist/packages/theme-basic"],
+      "@abp/ng.theme.basic/testing": ["dist/packages/theme-basic/testing"]
     }
   },
   "exclude": ["node_modules", "tmp"]

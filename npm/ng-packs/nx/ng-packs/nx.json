@@ -35,6 +35,10 @@
       "tags": [],
       "implicitDependencies": ["core", "theme-shared"]
     },
+    "components": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
     "core": {
       "tags": []
     },
