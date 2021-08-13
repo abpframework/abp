@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@abp/ng.identity": ["dist/packages/identity/"],
+      "@abp/ng.identity/config": ["dist/packages/identity/config"],
       "@abp/ng.account": ["dist/packages/account"],
-      "@abp/ng.account/config": ["dist/packages/account/config"],
       "@abp/ng.account.core": ["dist/packages/account-core"],
+      "@abp/ng.account/config": ["dist/packages/account/config"],
       "@abp/ng.components": ["dist/packages/components"],
       "@abp/ng.components/page": ["dist/packages/components/page"],
       "@abp/ng.components/tree": ["dist/packages/components/tree"],

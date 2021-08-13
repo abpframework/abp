@@ -325,6 +325,47 @@
         }
       }
     },
+    "identity": {
+      "projectType": "library",
+      "root": "packages/identity",
+      "sourceRoot": "packages/identity/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/identity/tsconfig.lib.json",
+            "project": "packages/identity/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/identity/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/identity/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/identity"],
+          "options": {
+            "jestConfig": "packages/identity/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/identity/src/**/*.ts",
+              "packages/identity/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "permission-management": {
       "projectType": "library",
       "root": "packages/permission-management",
