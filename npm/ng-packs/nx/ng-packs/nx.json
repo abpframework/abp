@@ -57,6 +57,10 @@
       "tags": [],
       "implicitDependencies": ["core", "theme-shared"]
     },
+    "setting-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "components"]
+    },
     "theme-basic": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "account-core"]
