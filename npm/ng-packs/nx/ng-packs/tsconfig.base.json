@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@abp/feature-management": ["dist/packages/feature-management"],
       "@abp/ng.account.core": ["dist/packages/account-core"],
       "@abp/ng.components": ["dist/packages/components"],
       "@abp/ng.components/page": ["dist/packages/components/page"],
@@ -29,7 +30,9 @@
         "dist/packages/theme-shared/extensions"
       ],
       "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"],
-      "@abp/feature-management": ["dist/packages/feature-management"]
+      "@abp/permission-management": [
+        "dist/packages/permission-management"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

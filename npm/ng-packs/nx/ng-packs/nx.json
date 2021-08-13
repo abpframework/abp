@@ -53,6 +53,10 @@
       "tags": [],
       "implicitDependencies": ["core", "theme-shared"]
     },
+    "permission-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
     "theme-basic": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "account-core"]
