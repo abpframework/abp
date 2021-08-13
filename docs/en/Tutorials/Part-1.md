@@ -441,7 +441,7 @@ namespace Acme.BookStore.Books
 
 In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
 
-ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../API/Auto-API-Controllers.md) configure your application services as MVC API Controllers by convention.
 
 ### Swagger UI
 
