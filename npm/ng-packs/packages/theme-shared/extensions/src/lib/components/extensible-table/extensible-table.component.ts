@@ -4,6 +4,7 @@ import {
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
+  PermissionService,
 } from '@abp/ng.core';
 import { formatDate } from '@angular/common';
 import {
@@ -65,6 +66,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
+  hasAtLeastOnePermittedAction: boolean;
+
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private config: ConfigStateService,
@@ -75,8 +78,14 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
-    this.actionList = (extensions['entityActions'].get(name)
-      .actions as unknown) as EntityActionList<R>;
+    this.actionList = extensions['entityActions'].get(name)
+      .actions as unknown as EntityActionList<R>;
+
+    const permissionService = injector.get(PermissionService);
+    this.hasAtLeastOnePermittedAction =
+      permissionService.filterItemsByPolicy(
+        this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
+      ).length > 0;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 

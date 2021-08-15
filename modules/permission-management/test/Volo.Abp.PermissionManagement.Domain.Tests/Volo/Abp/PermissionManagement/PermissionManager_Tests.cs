@@ -41,6 +41,37 @@ namespace Volo.Abp.PermissionManagement
         }
 
         [Fact]
+        public async Task Multiple_GetAsync()
+        {
+            await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+                Guid.NewGuid(),
+                "MyPermission1",
+                "Test",
+                "Test")
+            );
+            await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+                Guid.NewGuid(),
+                "MyPermission2",
+                "Test",
+                "Test")
+            );
+
+            var grantedProviders = await _permissionManager.GetAsync(
+                new[] {"MyPermission1", "MyPermission2"},
+                "Test",
+                "Test");
+
+            grantedProviders.Result.Count.ShouldBe(2);
+            grantedProviders.Result.First().IsGranted.ShouldBeTrue();
+            grantedProviders.Result.First().Name.ShouldBe("MyPermission1");
+            grantedProviders.Result.First().Providers.ShouldContain(x => x.Key == "Test");
+
+            grantedProviders.Result.Last().IsGranted.ShouldBeTrue();
+            grantedProviders.Result.Last().Name.ShouldBe("MyPermission2");
+            grantedProviders.Result.Last().Providers.ShouldContain(x => x.Key == "Test");
+        }
+
+        [Fact]
         public async Task Get_Should_Exception_When_Permission_Undefined()
         {
             await Assert.ThrowsAsync<AbpException>(async () => await _permissionManager.GetAsync(

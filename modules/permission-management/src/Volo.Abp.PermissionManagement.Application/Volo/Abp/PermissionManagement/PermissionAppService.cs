@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SimpleStateChecking;
 
@@ -52,38 +53,38 @@ namespace Volo.Abp.PermissionManagement
                     Permissions = new List<PermissionGrantInfoDto>()
                 };
 
-                foreach (var permission in group.GetPermissionsWithChildren())
+                var neededCheckPermissions = new List<PermissionDefinition>();
+
+                foreach (var permission in group.GetPermissionsWithChildren()
+                                                .Where(x => x.IsEnabled)
+                                                .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
+                                                .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide)))
                 {
-                    if (!permission.IsEnabled)
+                    if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
                     {
-                        continue;
+                        neededCheckPermissions.Add(permission);
                     }
+                }
 
-                    if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
-                    {
-                        continue;
-                    }
+                if (!neededCheckPermissions.Any())
+                {
+                    return result;
+                }
 
-                    if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
-                    {
-                        continue;
-                    }
+                var grantInfoDtos = neededCheckPermissions.Select(x => new PermissionGrantInfoDto
+                {
+                    Name = x.Name,
+                    DisplayName = x.DisplayName.Localize(StringLocalizerFactory),
+                    ParentName = x.Parent?.Name,
+                    AllowedProviders = x.Providers,
+                    GrantedProviders = new List<ProviderInfoDto>()
+                }).ToList();
 
-                    if (!permission.MultiTenancySide.HasFlag(multiTenancySide))
-                    {
-                        continue;
-                    }
+                var multipleGrantInfo = await PermissionManager.GetAsync(neededCheckPermissions.Select(x=>x.Name).ToArray(), providerName, providerKey);
 
-                    var grantInfoDto = new PermissionGrantInfoDto
-                    {
-                        Name = permission.Name,
-                        DisplayName = permission.DisplayName.Localize(StringLocalizerFactory),
-                        ParentName = permission.Parent?.Name,
-                        AllowedProviders = permission.Providers,
-                        GrantedProviders = new List<ProviderInfoDto>()
-                    };
-
-                    var grantInfo = await PermissionManager.GetAsync(permission.Name, providerName, providerKey);
+                foreach (var grantInfo in multipleGrantInfo.Result)
+                {
+                    var grantInfoDto = grantInfoDtos.First(x => x.Name == grantInfo.Name);
 
                     grantInfoDto.IsGranted = grantInfo.IsGranted;
 

@@ -1,6 +1,6 @@
 <ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
   <ngx-datatable-column
-    *ngIf="actionsTemplate || actionList.length"
+    *ngIf="actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)"
     [name]="actionsText | abpLocalization"
     [maxWidth]="columnWidths[0]"
     [width]="columnWidths[0]"

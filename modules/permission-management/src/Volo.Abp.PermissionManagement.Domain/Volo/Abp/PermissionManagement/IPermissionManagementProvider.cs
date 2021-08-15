@@ -15,6 +15,12 @@ namespace Volo.Abp.PermissionManagement
             [NotNull] string providerKey
         );
 
+        Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(
+            [NotNull] string[] names,
+            [NotNull] string providerName,
+            [NotNull] string providerKey
+        );
+
         Task SetAsync(
             [NotNull] string name,
             [NotNull] string providerKey,

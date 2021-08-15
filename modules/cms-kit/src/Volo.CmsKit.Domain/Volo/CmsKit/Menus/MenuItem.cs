@@ -39,7 +39,7 @@ namespace Volo.CmsKit.Menus
 
         public Guid? PageId { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get;  protected set; }
 
         public MenuItem(Guid id,
                         [NotNull] string displayName,
