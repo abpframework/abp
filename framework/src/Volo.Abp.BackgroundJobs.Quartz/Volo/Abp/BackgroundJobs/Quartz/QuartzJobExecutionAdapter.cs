@@ -9,6 +9,7 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.BackgroundJobs.Quartz
 {
+    [DisallowConcurrentExecution]
     public class QuartzJobExecutionAdapter<TArgs> : IJob
     {
         public ILogger<QuartzJobExecutionAdapter<TArgs>> Logger { get; set; }
