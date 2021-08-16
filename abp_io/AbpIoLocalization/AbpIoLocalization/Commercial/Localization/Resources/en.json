@@ -371,6 +371,12 @@
     "StartTrial": "Start My Free Trial",
     "ContactUsIssues": "Contact us if you have any issues",
     "TrialActivatedWarning": "Dear {0}, a user is entitled to have only 1 free trial period. You already used your trial period.",
-    "ActivationRequirement": "You are one step away from starting your free trial.<br>We have sent an email to <b>{0}</b> to activate your account. Check your inbox/junk/spam boxes!"
+    "ActivationRequirement": "You are one step away from starting your free trial.<br>We have sent an email to <b>{0}</b> to activate your account. Check your inbox/junk/spam boxes!",
+    "SaveAndDownload": "Save And Download",
+    "CompanyNameValidationMessage": "Company name is too long!",
+    "AddressValidationMessage": "Address is too long!",
+    "TaxNoValidationMessage": "TAX/VAT No is too long!",
+    "NotesValidationMessage": "Notes field is too long!",
+    "CheckYourBillingInfo": "You can create your invoice only once! Check your billing info before creating your invoice."
   }
 }
