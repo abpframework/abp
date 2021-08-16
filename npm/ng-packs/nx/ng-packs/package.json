@@ -25,7 +25,8 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "build-all-packages": "nx run-many --target=build --all --exclude=dev-app"
   },
   "private": true,
   "devDependencies": {

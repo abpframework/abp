@@ -407,6 +407,31 @@
         }
       }
     },
+    "schematics": {
+      "projectType": "library",
+      "root": "packages/schematics",
+      "sourceRoot": "packages/schematics/src",
+      "prefix": "abp",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/schematics"],
+          "options": {
+            "jestConfig": "packages/schematics/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/schematics/src/**/*.ts",
+              "packages/schematics/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "setting-management": {
       "projectType": "library",
       "root": "packages/setting-management",

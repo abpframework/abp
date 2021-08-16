@@ -32,15 +32,17 @@
       "@abp/ng.setting-management/config": [
         "dist/packages/setting-management/config"
       ],
+      "@abp/ng.tenant-management": ["dist/packages/tenant-management"],
+      "@abp/ng.tenant-management/config": [
+        "dist/packages/tenant-management/config"
+      ],
       "@abp/ng.theme.basic": ["dist/packages/theme-basic"],
       "@abp/ng.theme.basic/testing": ["dist/packages/theme-basic/testing"],
       "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
       "@abp/ng.theme.shared/extensions": [
         "dist/packages/theme-shared/extensions"
       ],
-      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"],
-      "@abp/ng.tenant-management": ["dist/packages/tenant-management"],
-      "@abp/ng.tenant-management/config": ["dist/packages/tenant-management/config"]
+      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -65,6 +65,9 @@
       "tags": [],
       "implicitDependencies": ["core", "theme-shared"]
     },
+    "schematics": {
+      "tags": []
+    },
     "setting-management": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared", "components"]

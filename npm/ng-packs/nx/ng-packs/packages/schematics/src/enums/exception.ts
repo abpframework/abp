@@ -1,0 +1,16 @@
+export const enum Exception {
+  DirRemoveFailed = '[Directory Remove Failed] Cannot remove "{0}".',
+  FileNotFound = '[File Not Found] There is no file at "{0}" path.',
+  FileWriteFailed = '[File Write Failed] Cannot write file at "{0}".',
+  InvalidModule = '[Invalid Module] Backend module "{0}" does not exist in API definition.',
+  InvalidApiDefinition = '[Invalid API Definition] The provided API definition is invalid.',
+  InvalidWorkspace = '[Invalid Workspace] The angular.json should be a valid JSON file.',
+  NoApi = '[API Not Available] Request to {0} is unsuccessful. Please double-check the URL in the source project environment and make sure your application is up and running.',
+  NoProject = '[Project Not Found] Either define a default project in your workspace or specify the project name in schematics options.',
+  NoProxyConfig = '[Proxy Config Not Found] There is no JSON file at "{0}".',
+  NoTypeDefinition = '[Type Definition Not Found] There is no type definition for "{0}".',
+  NoWorkspace = '[Workspace Not Found] Make sure you are running schematics at the root directory of your workspace and it has an angular.json file.',
+  NoEnvironment = '[Environment Not Found] An environment file cannot be located in "{0}" project.',
+  NoApiUrl = '[API URL Not Found] Cannot resolve API URL for "{1}" remote service name from "{0}" project.',
+  NoRootNamespace = '[Root Namespace Not Found] Cannot resolve root namespace for "{1}" api from "{0}" project.',
+}
