@@ -46,7 +46,9 @@ describe('ComponentProjectionStrategy', () => {
 
   beforeEach(() => {
     spectator = createComponent({});
-    containerStrategy = CONTAINER_STRATEGY.Clear(spectator.component.containerRef);
+    containerStrategy = CONTAINER_STRATEGY.Clear(
+      spectator.component.containerRef
+    );
   });
 
   afterEach(() => {
@@ -56,8 +58,11 @@ describe('ComponentProjectionStrategy', () => {
 
   describe('#injectContent', () => {
     it('should should insert content into container and return a ComponentRef', () => {
-      const strategy = new ComponentProjectionStrategy(TestComponent, containerStrategy);
-      componentRef = strategy.injectContent(spectator);
+      const strategy = new ComponentProjectionStrategy(
+        TestComponent,
+        containerStrategy
+      );
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -70,9 +75,9 @@ describe('ComponentProjectionStrategy', () => {
       const strategy = new ComponentProjectionStrategy(
         TestComponent,
         containerStrategy,
-        contextStrategy,
+        contextStrategy
       );
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -114,7 +119,7 @@ describe('RootComponentProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into body and return a ComponentRef', () => {
       const strategy = new RootComponentProjectionStrategy(TestComponent);
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');
@@ -126,8 +131,11 @@ describe('RootComponentProjectionStrategy', () => {
 
     it('should be able to map context to projected component', () => {
       const contextStrategy = CONTEXT_STRATEGY.Component({ bar: 'bar' });
-      const strategy = new RootComponentProjectionStrategy(TestComponent, contextStrategy);
-      componentRef = strategy.injectContent(spectator);
+      const strategy = new RootComponentProjectionStrategy(
+        TestComponent,
+        contextStrategy
+      );
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');
@@ -166,7 +174,9 @@ describe('TemplateProjectionStrategy', () => {
 
   beforeEach(() => {
     spectator = createComponent({});
-    containerStrategy = CONTAINER_STRATEGY.Clear(spectator.component.containerRef);
+    containerStrategy = CONTAINER_STRATEGY.Clear(
+      spectator.component.containerRef
+    );
   });
 
   afterEach(() => {
@@ -177,7 +187,10 @@ describe('TemplateProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into container and return an EmbeddedViewRef', () => {
       const templateRef = spectator.component.templateRef;
-      const strategy = new TemplateProjectionStrategy(templateRef, containerStrategy);
+      const strategy = new TemplateProjectionStrategy(
+        templateRef,
+        containerStrategy
+      );
       embeddedViewRef = strategy.injectContent();
       spectator.detectChanges();
 
@@ -194,11 +207,13 @@ describe('TemplateProjectionStrategy', () => {
 
     it('should be able to map context to projected template', () => {
       const templateRef = spectator.component.templateRef;
-      const contextStrategy = CONTEXT_STRATEGY.Template<typeof templateRef>({ $implicit: 'bar' });
+      const contextStrategy = CONTEXT_STRATEGY.Template<typeof templateRef>({
+        $implicit: 'bar',
+      });
       const strategy = new TemplateProjectionStrategy(
         templateRef,
         containerStrategy,
-        contextStrategy,
+        contextStrategy
       );
       embeddedViewRef = strategy.injectContent();
       spectator.detectChanges();
@@ -212,7 +227,7 @@ describe('TemplateProjectionStrategy', () => {
 
 describe('PROJECTION_STRATEGY', () => {
   const content = undefined;
-  const containerRef = ({ length: 0 } as any) as ViewContainerRef;
+  const containerRef = { length: 0 } as any as ViewContainerRef;
   let context: any;
 
   test.each`
@@ -227,9 +242,13 @@ describe('PROJECTION_STRATEGY', () => {
     'should successfully map $name to $Strategy.name with $containerStrategy.name container strategy and $contextStrategy.name context strategy',
     ({ name, Strategy, containerStrategy }) => {
       expect(PROJECTION_STRATEGY[name](content, containerRef, context)).toEqual(
-        new Strategy(content, containerStrategy(containerRef), CONTEXT_STRATEGY.None()),
+        new Strategy(
+          content,
+          containerStrategy(containerRef),
+          CONTEXT_STRATEGY.None()
+        )
       );
-    },
+    }
   );
   test.each`
     name                       | Strategy                           | domStrategy
@@ -238,9 +257,9 @@ describe('PROJECTION_STRATEGY', () => {
     'should successfully map $name to $Strategy.name with $domStrategy.name dom strategy',
     ({ name, Strategy, domStrategy }) => {
       expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
-        new Strategy(content, CONTEXT_STRATEGY.None(), domStrategy()),
+        new Strategy(content, CONTEXT_STRATEGY.None(), domStrategy())
       );
-    },
+    }
   );
 
   test.each`
@@ -256,9 +275,13 @@ describe('PROJECTION_STRATEGY', () => {
     ({ name, Strategy, containerStrategy, contextStrategy }) => {
       context = { x: true };
       expect(PROJECTION_STRATEGY[name](content, containerRef, context)).toEqual(
-        new Strategy(content, containerStrategy(containerRef), contextStrategy(context)),
+        new Strategy(
+          content,
+          containerStrategy(containerRef),
+          contextStrategy(context)
+        )
       );
-    },
+    }
   );
 
   test.each`
@@ -269,8 +292,8 @@ describe('PROJECTION_STRATEGY', () => {
     ({ name, Strategy, domStrategy, contextStrategy }) => {
       context = { x: true };
       expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
-        new Strategy(content, contextStrategy(context), domStrategy()),
+        new Strategy(content, contextStrategy(context), domStrategy())
       );
-    },
+    }
   );
 });

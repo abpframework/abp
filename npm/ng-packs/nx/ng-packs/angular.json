@@ -228,6 +228,7 @@
           },
           "configurations": {
             "production": {
+              "tsConfig": "apps/dev-app/tsconfig.prod.json",
               "budgets": [
                 {
                   "type": "initial",

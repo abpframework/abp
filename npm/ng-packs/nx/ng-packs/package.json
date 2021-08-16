@@ -7,7 +7,9 @@
     "nx": "nx",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "build:all": "nx run-many --target=build --all --exclude=dev-app,schematics",
+    "test": "ng test --detect-open-handles=true --run-in-band=true --watch-all=true",
+    "test:all": "nx run-many --target=test --all",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
@@ -25,7 +27,6 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "build-all-packages": "nx run-many --target=build --all --exclude=dev-app,schematics",
     "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules",
     "postinstall": "node ./decorate-angular-cli.js && yarn compile:ivy"
   },

@@ -1,11 +1,12 @@
+import { CoreTestingModule } from '@abp/ng.core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { ApplicationConfiguration } from '../models/application-configuration';
+import { Store } from '@ngxs/store';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
-import { CoreTestingModule } from '@abp/ng.core/testing';
+import { CORE_OPTIONS } from '../tokens';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -107,6 +108,10 @@ describe('ConfigState', () => {
   const createService = createServiceFactory({
     service: ConfigStateService,
     imports: [CoreTestingModule.withConfig()],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      { provide: Store, useValue: {} },
+    ],
   });
 
   beforeEach(() => {
@@ -119,29 +124,35 @@ describe('ConfigState', () => {
   describe('#getAll', () => {
     it('should return CONFIG_STATE_DATA', () => {
       expect(configState.getAll()).toEqual(CONFIG_STATE_DATA);
-      configState.getAll$().subscribe(data => expect(data).toEqual(CONFIG_STATE_DATA));
+      configState
+        .getAll$()
+        .subscribe((data) => expect(data).toEqual(CONFIG_STATE_DATA));
     });
   });
 
   describe('#getOne', () => {
     it('should return one property', () => {
-      expect(configState.getOne('localization')).toEqual(CONFIG_STATE_DATA.localization);
+      expect(configState.getOne('localization')).toEqual(
+        CONFIG_STATE_DATA.localization
+      );
       configState
         .getOne$('localization')
-        .subscribe(localization => expect(localization).toEqual(CONFIG_STATE_DATA.localization));
+        .subscribe((localization) =>
+          expect(localization).toEqual(CONFIG_STATE_DATA.localization)
+        );
     });
   });
 
   describe('#getDeep', () => {
     it('should return deeper', () => {
       expect(configState.getDeep('localization.languages')).toEqual(
-        CONFIG_STATE_DATA.localization.languages,
+        CONFIG_STATE_DATA.localization.languages
       );
 
       configState
         .getDeep$('localization.languages')
-        .subscribe(languages =>
-          expect(languages).toEqual(CONFIG_STATE_DATA.localization.languages),
+        .subscribe((languages) =>
+          expect(languages).toEqual(CONFIG_STATE_DATA.localization.languages)
         );
 
       expect(configState.getDeep('test')).toBeFalsy();
@@ -151,22 +162,30 @@ describe('ConfigState', () => {
   describe('#getFeature', () => {
     it('should return a setting', () => {
       expect(configState.getFeature('Chat.Enable')).toEqual(
-        CONFIG_STATE_DATA.features.values['Chat.Enable'],
+        CONFIG_STATE_DATA.features.values['Chat.Enable']
       );
       configState
         .getFeature$('Chat.Enable')
-        .subscribe(data => expect(data).toEqual(CONFIG_STATE_DATA.features.values['Chat.Enable']));
+        .subscribe((data) =>
+          expect(data).toEqual(CONFIG_STATE_DATA.features.values['Chat.Enable'])
+        );
     });
   });
 
   describe('#getSetting', () => {
     it('should return a setting', () => {
-      expect(configState.getSetting('Abp.Localization.DefaultLanguage')).toEqual(
-        CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage'],
+      expect(
+        configState.getSetting('Abp.Localization.DefaultLanguage')
+      ).toEqual(
+        CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']
       );
-      configState.getSetting$('Abp.Localization.DefaultLanguage').subscribe(data => {
-        expect(data).toEqual(CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']);
-      });
+      configState
+        .getSetting$('Abp.Localization.DefaultLanguage')
+        .subscribe((data) => {
+          expect(data).toEqual(
+            CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']
+          );
+        });
     });
   });
 
@@ -177,9 +196,14 @@ describe('ConfigState', () => {
       ${'Localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
       ${'X'}            | ${{}}
       ${'localization'} | ${{}}
-    `('should return $expected when keyword is given as $keyword', ({ keyword, expected }) => {
-      expect(configState.getSettings(keyword)).toEqual(expected);
-      configState.getSettings$(keyword).subscribe(data => expect(data).toEqual(expected));
-    });
+    `(
+      'should return $expected when keyword is given as $keyword',
+      ({ keyword, expected }) => {
+        expect(configState.getSettings(keyword)).toEqual(expected);
+        configState
+          .getSettings$(keyword)
+          .subscribe((data) => expect(data).toEqual(expected));
+      }
+    );
   });
 });

@@ -17,13 +17,17 @@ const mockInitialState = {
 
 type MockState = typeof mockInitialState;
 
-const deepPatch1: DeepPartial<MockState> = { foo: { bar: { baz: [() => {}] } } };
+const deepPatch1: DeepPartial<MockState> = {
+  foo: { bar: { baz: [() => {}] } },
+};
 const deepPatchExpected1: MockState = clone(mockInitialState);
 deepPatchExpected1.foo.bar.baz = deepPatch1.foo.bar.baz;
 
-const deepPatch2: DeepPartial<MockState> = { foo: { bar: { qux: Promise.resolve() } } };
+const deepPatch2: DeepPartial<MockState> = {
+  foo: { bar: { qux: Promise.resolve() } },
+};
 const deepPatchExpected2: MockState = clone(mockInitialState);
-deepPatchExpected2.foo.bar.qux = deepPatch2.foo.bar.qux;
+deepPatchExpected2.foo.bar.qux = deepPatch2.foo.bar.qux as any;
 
 const deepPatch3: DeepPartial<MockState> = { foo: { n: 1 } };
 const deepPatchExpected3: MockState = clone(mockInitialState);
@@ -49,7 +53,9 @@ const patch2: Partial<MockState> = {
 const patchExpected2: MockState = clone(mockInitialState);
 patchExpected2.foo = patch2.foo;
 
-const patch3: Partial<MockState> = { foo: { n: 1 } as typeof mockInitialState.foo };
+const patch3: Partial<MockState> = {
+  foo: { n: 1 } as typeof mockInitialState.foo,
+};
 const patchExpected3: MockState = clone(mockInitialState);
 patchExpected3.foo = patch3.foo;
 
@@ -76,10 +82,13 @@ describe('Internal Store', () => {
       async ({ selector, expected }) => {
         const store = new InternalStore(mockInitialState);
 
-        const value = await store.sliceState(selector).pipe(take(1)).toPromise();
+        const value = await store
+          .sliceState(selector)
+          .pipe(take(1))
+          .toPromise();
 
         expect(value).toEqual(expected);
-      },
+      }
     );
   });
 
@@ -91,13 +100,16 @@ describe('Internal Store', () => {
       ${deepPatch3} | ${deepPatchExpected3}
       ${deepPatch4} | ${deepPatchExpected4}
       ${deepPatch5} | ${deepPatchExpected5}
-    `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
-      const store = new InternalStore(mockInitialState);
+    `(
+      'should set state as $expected when patch is $patch',
+      ({ patch, expected }) => {
+        const store = new InternalStore(mockInitialState);
 
-      store.deepPatch(patch);
+        store.deepPatch(patch);
 
-      expect(store.state).toEqual(expected);
-    });
+        expect(store.state).toEqual(expected);
+      }
+    );
   });
 
   describe('patchState', () => {
@@ -108,22 +120,25 @@ describe('Internal Store', () => {
       ${patch3} | ${patchExpected3}
       ${patch4} | ${patchExpected4}
       ${patch5} | ${patchExpected5}
-    `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
-      const store = new InternalStore(mockInitialState);
+    `(
+      'should set state as $expected when patch is $patch',
+      ({ patch, expected }) => {
+        const store = new InternalStore(mockInitialState);
 
-      store.patch(patch);
+        store.patch(patch);
 
-      expect(store.state).toEqual(expected);
-    });
+        expect(store.state).toEqual(expected);
+      }
+    );
   });
 
   describe('sliceUpdate', () => {
-    it('should return slice of update$ based on selector', done => {
+    it('should return slice of update$ based on selector', (done) => {
       const store = new InternalStore(mockInitialState);
 
-      const onQux$ = store.sliceUpdate(state => state.foo.bar.qux);
+      const onQux$ = store.sliceUpdate((state) => state.foo.bar.qux);
 
-      onQux$.pipe(take(1)).subscribe(value => {
+      onQux$.pipe(take(1)).subscribe((value) => {
         expect(value).toEqual(deepPatch2.foo.bar.qux);
         done();
       });

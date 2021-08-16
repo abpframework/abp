@@ -1,4 +1,9 @@
-import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
+import {
+  createHttpFactory,
+  HttpMethod,
+  SpectatorHttp,
+  SpyObject,
+} from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { EnvironmentService, ProfileService, RestService } from '../services';
 import { CORE_OPTIONS } from '../tokens';
@@ -8,7 +13,7 @@ describe('ProfileService', () => {
   let environmentService: SpyObject<EnvironmentService>;
 
   const createHttp = createHttpFactory({
-    dataService: ProfileService,
+    service: ProfileService,
     providers: [
       RestService,
       { provide: CORE_OPTIONS, useValue: {} },
@@ -26,7 +31,10 @@ describe('ProfileService', () => {
 
   it('should send a GET to my-profile API', () => {
     spectator.service.get().subscribe();
-    spectator.expectOne('https://abp.io/api/identity/my-profile', HttpMethod.GET);
+    spectator.expectOne(
+      'https://abp.io/api/identity/my-profile',
+      HttpMethod.GET
+    );
   });
 
   it('should send a POST to change-password API', () => {
@@ -34,7 +42,7 @@ describe('ProfileService', () => {
     spectator.service.changePassword(mock).subscribe();
     const req = spectator.expectOne(
       'https://abp.io/api/identity/my-profile/change-password',
-      HttpMethod.POST,
+      HttpMethod.POST
     );
     expect(req.request.body).toEqual(mock);
   });
@@ -50,7 +58,10 @@ describe('ProfileService', () => {
       hasPassword: false,
     };
     spectator.service.update(mock).subscribe();
-    const req = spectator.expectOne('https://abp.io/api/identity/my-profile', HttpMethod.PUT);
+    const req = spectator.expectOne(
+      'https://abp.io/api/identity/my-profile',
+      HttpMethod.PUT
+    );
     expect(req.request.body).toEqual(mock);
   });
 });

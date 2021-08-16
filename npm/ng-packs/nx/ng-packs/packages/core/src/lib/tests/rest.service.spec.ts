@@ -1,4 +1,9 @@
-import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
+import {
+  createHttpFactory,
+  HttpMethod,
+  SpectatorHttp,
+  SpyObject,
+} from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, throwError } from 'rxjs';
@@ -15,8 +20,11 @@ describe('HttpClient testing', () => {
   const api = 'https://abp.io';
 
   const createHttp = createHttpFactory({
-    dataService: RestService,
-    providers: [EnvironmentService, { provide: CORE_OPTIONS, useValue: { environment: {} } }],
+    service: RestService,
+    providers: [
+      EnvironmentService,
+      { provide: CORE_OPTIONS, useValue: { environment: {} } },
+    ],
     mocks: [OAuthService, Store],
   });
 
@@ -57,7 +65,11 @@ describe('HttpClient testing', () => {
 
   test('should use the specific api', () => {
     spectator.service
-      .request({ method: HttpMethod.GET, url: '/test' }, null, 'http://test.api')
+      .request(
+        { method: HttpMethod.GET, url: '/test' },
+        null,
+        'http://test.api'
+      )
       .subscribe();
     spectator.expectOne('http://test.api' + '/test', HttpMethod.GET);
   });
@@ -70,10 +82,12 @@ describe('HttpClient testing', () => {
     spectator.expectOne('bar' + '/test', HttpMethod.GET);
   });
 
-  test('should complete upon successful request', done => {
+  test('should complete upon successful request', (done) => {
     const complete = jest.fn(done);
 
-    spectator.service.request({ method: HttpMethod.GET, url: '/test' }).subscribe({ complete });
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '/test' })
+      .subscribe({ complete });
 
     const req = spectator.expectOne(api + '/test', HttpMethod.GET);
     spectator.flushAll([req], [{}]);
@@ -83,13 +97,16 @@ describe('HttpClient testing', () => {
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
-      .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Events })
+      .request(
+        { method: HttpMethod.GET, url: '/test' },
+        { observe: Rest.Observe.Events }
+      )
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           expect(err).toBeTruthy();
           expect(spy).toHaveBeenCalled();
           return of(null);
-        }),
+        })
       )
       .subscribe();
 
@@ -103,14 +120,14 @@ describe('HttpClient testing', () => {
     spectator.service
       .request(
         { method: HttpMethod.GET, url: '/test' },
-        { observe: Rest.Observe.Events, skipHandleError: true },
+        { observe: Rest.Observe.Events, skipHandleError: true }
       )
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           expect(err).toBeTruthy();
           expect(spy).toHaveBeenCalledTimes(0);
           return of(null);
-        }),
+        })
       )
       .subscribe();
 

@@ -1,13 +1,19 @@
+import { CoreTestingModule } from '@abp/ng.core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import {
+  createServiceFactory,
+  SpectatorService,
+  SpyObject,
+} from '@ngneat/spectator/jest';
 import { Actions, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { RestOccurError } from '../actions';
 import { PermissionGuard } from '../guards/permission.guard';
-import { RoutesService } from '../services/routes.service';
 import { PermissionService } from '../services';
+import { RoutesService } from '../services/routes.service';
+import { CORE_OPTIONS } from '../tokens';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;
@@ -24,15 +30,19 @@ describe('PermissionGuard', () => {
     mocks: [PermissionService, Store],
     declarations: [DummyComponent],
     imports: [
-      RouterModule.forRoot([
-    {
-        path: 'test',
-        component: DummyComponent,
-        data: {
-            requiredPolicy: 'TestPolicy',
-        },
-    },
-], { relativeLinkResolution: 'legacy' }),
+      CoreTestingModule.withConfig(),
+      RouterModule.forRoot(
+        [
+          {
+            path: 'test',
+            component: DummyComponent,
+            data: {
+              requiredPolicy: 'TestPolicy',
+            },
+          },
+        ],
+        { relativeLinkResolution: 'legacy' }
+      ),
     ],
     providers: [
       {
@@ -47,6 +57,7 @@ describe('PermissionGuard', () => {
           },
         },
       },
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
     ],
   });
 
@@ -58,28 +69,34 @@ describe('PermissionGuard', () => {
     permissionService = spectator.inject(PermissionService);
   });
 
-  it('should return true when the grantedPolicy is true', done => {
+  it('should return true when the grantedPolicy is true', (done) => {
     permissionService.getGrantedPolicy$.andReturn(of(true));
     const spy = jest.spyOn(store, 'dispatch');
-    guard.canActivate({ data: { requiredPolicy: 'test' } } as any, null).subscribe(res => {
-      expect(res).toBe(true);
-      expect(spy.mock.calls).toHaveLength(0);
-      done();
-    });
+    guard
+      .canActivate({ data: { requiredPolicy: 'test' } } as any, null)
+      .subscribe((res) => {
+        expect(res).toBe(true);
+        expect(spy.mock.calls).toHaveLength(0);
+        done();
+      });
   });
 
-  it('should return false and dispatch RestOccurError when the grantedPolicy is false', done => {
+  it('should return false and dispatch RestOccurError when the grantedPolicy is false', (done) => {
     permissionService.getGrantedPolicy$.andReturn(of(false));
     const spy = jest.spyOn(store, 'dispatch');
-    guard.canActivate({ data: { requiredPolicy: 'test' } } as any, null).subscribe(res => {
-      expect(res).toBe(false);
-      expect(spy.mock.calls[0][0] instanceof RestOccurError).toBeTruthy();
-      expect((spy.mock.calls[0][0] as RestOccurError).payload).toEqual({ status: 403 });
-      done();
-    });
+    guard
+      .canActivate({ data: { requiredPolicy: 'test' } } as any, null)
+      .subscribe((res) => {
+        expect(res).toBe(false);
+        expect(spy.mock.calls[0][0] instanceof RestOccurError).toBeTruthy();
+        expect((spy.mock.calls[0][0] as RestOccurError).payload).toEqual({
+          status: 403,
+        });
+        done();
+      });
   });
 
-  it('should check the requiredPolicy from RoutesService', done => {
+  it('should check the requiredPolicy from RoutesService', (done) => {
     routes.add([
       {
         path: '/test',
@@ -87,23 +104,29 @@ describe('PermissionGuard', () => {
         requiredPolicy: 'TestPolicy',
       },
     ]);
-    permissionService.getGrantedPolicy$.mockImplementation(policy => of(policy === 'TestPolicy'));
-    guard.canActivate({ data: {} } as any, { url: 'test' } as any).subscribe(result => {
-      expect(result).toBe(true);
-      done();
-    });
+    permissionService.getGrantedPolicy$.mockImplementation((policy) =>
+      of(policy === 'TestPolicy')
+    );
+    guard
+      .canActivate({ data: {} } as any, { url: 'test' } as any)
+      .subscribe((result) => {
+        expect(result).toBe(true);
+        done();
+      });
   });
 
-  it('should return Observable<true> if RoutesService does not have requiredPolicy for given URL', done => {
+  it('should return Observable<true> if RoutesService does not have requiredPolicy for given URL', (done) => {
     routes.add([
       {
         path: '/test',
         name: 'Test',
       },
     ]);
-    guard.canActivate({ data: {} } as any, { url: 'test' } as any).subscribe(result => {
-      expect(result).toBe(true);
-      done();
-    });
+    guard
+      .canActivate({ data: {} } as any, { url: 'test' } as any)
+      .subscribe((result) => {
+        expect(result).toBe(true);
+        done();
+      });
   });
 });
