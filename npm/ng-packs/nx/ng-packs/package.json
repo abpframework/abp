@@ -4,7 +4,6 @@
   "license": "MIT",
   "scripts": {
     "ng": "nx",
-    "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
     "start": "ng serve",
     "build": "ng build",
@@ -26,7 +25,9 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "build-all-packages": "nx run-many --target=build --all --exclude=dev-app"
+    "build-all-packages": "nx run-many --target=build --all --exclude=dev-app,schematics",
+    "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules",
+    "postinstall": "node ./decorate-angular-cli.js && yarn compile:ivy"
   },
   "private": true,
   "devDependencies": {
@@ -74,7 +75,7 @@
     "@nrwl/tao": "12.6.5",
     "@nrwl/workspace": "12.6.5",
     "@schematics/angular": "~12.2.0",
-    "@swimlane/ngx-datatable": "^19.0.0",
+    "@swimlane/ngx-datatable": "^17.1.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.14.33",
     "@typescript-eslint/eslint-plugin": "~4.28.3",

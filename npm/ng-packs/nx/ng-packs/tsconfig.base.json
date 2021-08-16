@@ -15,34 +15,34 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@abp/ng.account": ["dist/packages/account"],
-      "@abp/ng.account.core": ["dist/packages/account-core"],
-      "@abp/ng.account/config": ["dist/packages/account/config"],
-      "@abp/ng.components": ["dist/packages/components"],
-      "@abp/ng.components/page": ["dist/packages/components/page"],
-      "@abp/ng.components/tree": ["dist/packages/components/tree"],
-      "@abp/ng.core": ["dist/packages/core"],
-      "@abp/ng.core/locale": ["dist/packages/core/locale"],
-      "@abp/ng.core/testing": ["dist/packages/core/testing"],
-      "@abp/ng.feature-management": ["dist/packages/feature-management"],
-      "@abp/ng.identity": ["dist/packages/identity/"],
-      "@abp/ng.identity/config": ["dist/packages/identity/config"],
-      "@abp/ng.permission-management": ["dist/packages/permission-management"],
-      "@abp/ng.setting-management": ["dist/packages/setting-management"],
+      "@abp/ng.account": ["packages/account/src/public-api.ts"],
+      "@abp/ng.account.core": ["packages/account-core/src/public-api.ts"],
+      "@abp/ng.account/config": ["packages/account/config/src/public-api.ts"],
+      "@abp/ng.components": ["packages/components/src/public-api.ts"],
+      "@abp/ng.components/page": ["packages/components/page/src/public-api.ts"],
+      "@abp/ng.components/tree": ["packages/components/tree/src/public-api.ts"],
+      "@abp/ng.core": ["packages/core/src/public-api.ts"],
+      "@abp/ng.core/locale": ["packages/core/locale/src/public-api.ts"],
+      "@abp/ng.core/testing": ["packages/core/testing/src/public-api.ts"],
+      "@abp/ng.feature-management": ["packages/feature-management/src/public-api.ts"],
+      "@abp/ng.identity": ["packages/identity//src/public-api.ts"],
+      "@abp/ng.identity/config": ["packages/identity/config/src/public-api.ts"],
+      "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
+      "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
       "@abp/ng.setting-management/config": [
-        "dist/packages/setting-management/config"
+        "packages/setting-management/config"
       ],
-      "@abp/ng.tenant-management": ["dist/packages/tenant-management"],
+      "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
       "@abp/ng.tenant-management/config": [
-        "dist/packages/tenant-management/config"
+        "packages/tenant-management/config"
       ],
-      "@abp/ng.theme.basic": ["dist/packages/theme-basic"],
-      "@abp/ng.theme.basic/testing": ["dist/packages/theme-basic/testing"],
-      "@abp/ng.theme.shared": ["dist/packages/theme-shared"],
+      "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
+      "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
+      "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": [
-        "dist/packages/theme-shared/extensions"
+        "packages/theme-shared/extensions"
       ],
-      "@abp/ng.theme.shared/testing": ["dist/packages/theme-shared/testing"]
+      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
