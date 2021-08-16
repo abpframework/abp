@@ -37,9 +37,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.Url).HasMaxLength(AuditLogConsts.MaxUrlLength).HasColumnName(nameof(AuditLog.Url));
                 b.Property(x => x.HttpStatusCode).HasColumnName(nameof(AuditLog.HttpStatusCode));
 
-                if (builder.IsUsingOracle()) { AuditLogConsts.MaxExceptionsLengthValue = 2000; }
-                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLengthValue).HasColumnName(nameof(AuditLog.Exceptions));
-
                 b.Property(x => x.Comments).HasMaxLength(AuditLogConsts.MaxCommentsLength).HasColumnName(nameof(AuditLog.Comments));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
                 b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));

@@ -110,7 +110,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                     {
                         postedFiles.Add(new RemoteStreamContent(file.OpenReadStream())
                         {
-                            ContentType = file.ContentType
+                            ContentType = file.ContentType,
+                            FileName = file.FileName
                         });
                     }
                 }

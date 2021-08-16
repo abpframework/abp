@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.EventBus.Local
 {
@@ -31,8 +33,9 @@ namespace Volo.Abp.EventBus.Local
         public LocalEventBus(
             IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory,
-            ICurrentTenant currentTenant)
-            : base(serviceScopeFactory, currentTenant)
+            ICurrentTenant currentTenant,
+            IEventErrorHandler errorHandler)
+            : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
@@ -119,19 +122,16 @@ namespace Volo.Abp.EventBus.Local
 
         public override async Task PublishAsync(Type eventType, object eventData)
         {
-            var exceptions = new List<Exception>();
+            await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
+        }
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
-
-            if (exceptions.Any())
+        public virtual async Task PublishAsync(LocalEventMessage localEventMessage)
+        {
+            await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData, errorContext =>
             {
-                if (exceptions.Count == 1)
-                {
-                    exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
-            }
+                errorContext.EventData = localEventMessage.EventData;
+                errorContext.SetProperty(nameof(LocalEventMessage.MessageId), localEventMessage.MessageId);
+            });
         }
 
         protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)

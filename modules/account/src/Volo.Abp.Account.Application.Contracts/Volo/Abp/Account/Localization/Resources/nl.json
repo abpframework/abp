@@ -36,7 +36,7 @@
     "PasswordChanged": "Wachtwoord veranderd",
     "NewPasswordConfirmFailed": "Bevestig het nieuwe wachtwoord a.u.b.",
     "Manage": "Beheer",
-    "ManageYourProfile": "Beheer uw profiel",
+    "MyAccount": "Mijn rekening",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Is zelfregistratie ingeschakeld",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Of een gebruiker het account zelf kan registreren.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Verifieer met een lokaal account",

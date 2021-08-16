@@ -36,7 +36,7 @@
     "PasswordChanged": "Password changed",
     "NewPasswordConfirmFailed": "Please confirm the new password.",
     "Manage": "Manage",
-    "ManageYourProfile": "Manage your profile",
+    "MyAccount": "My account",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Is self-registration enabled",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Whether a user can register the account by his or her self.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Authenticate with a local account",

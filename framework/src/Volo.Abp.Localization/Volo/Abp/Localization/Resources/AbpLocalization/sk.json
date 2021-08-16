@@ -1,0 +1,7 @@
+{
+  "culture": "sk",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Predvolený jazyk",
+    "Description:Abp.Localization.DefaultLanguage": "Predvolený jazyk aplikácie."
+  }
+}

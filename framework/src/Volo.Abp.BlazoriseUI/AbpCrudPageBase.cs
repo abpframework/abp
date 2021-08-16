@@ -494,17 +494,17 @@ namespace Volo.Abp.BlazoriseUI
                 await HandleErrorAsync(ex);
             }
         }
-            
+
         protected virtual Task OnDeletingEntityAsync()
         {
             return Task.CompletedTask;
         }
-            
+
         protected virtual async Task OnDeletedEntityAsync()
         {
             await GetEntitiesAsync();
             await InvokeAsync(StateHasChanged);
-        }     
+        }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
         {
@@ -596,7 +596,7 @@ namespace Volo.Abp.BlazoriseUI
                         if (propertyInfo.Type.IsEnum)
                         {
                             column.ValueConverter = (val) =>
-                                EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val, StringLocalizerFactory);
+                                EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], StringLocalizerFactory);
                         }
 
                         yield return column;

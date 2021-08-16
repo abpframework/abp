@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AlibabaCloud.OpenApiUtil" Version="1.0.10" />
         <PackageReference Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="1.0.2"/>
     </ItemGroup>
 

@@ -1,5 +1,5 @@
 <div class="row justify-content-end mx-n1" id="AbpContentToolbar">
-  <div class="col-auto px-1 pt-2" *ngFor="let action of actionList; trackBy: trackByFn">
+  <div class="col-auto px-1 pt-0 pt-md-2" *ngFor="let action of actionList; trackBy: trackByFn">
     <ng-container *ngIf="action.visible(data)">
       <ng-container *abpPermission="action.permission">
         <ng-container *ngIf="action.component as component; else button">

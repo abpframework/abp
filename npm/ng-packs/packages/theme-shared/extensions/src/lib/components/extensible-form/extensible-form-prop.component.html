@@ -2,6 +2,7 @@
   <ng-template ngSwitchCase="input">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <input
+      #field
       [id]="prop.id"
       [formControlName]="prop.name"
       [autocomplete]="prop.autocomplete"
@@ -19,6 +20,7 @@
   <ng-template ngSwitchCase="checkbox">
     <div class="custom-checkbox custom-control" validationTarget>
       <input
+        #field
         [id]="prop.id"
         [formControlName]="prop.name"
         [abpDisabled]="disabled"
@@ -35,6 +37,7 @@
   <ng-template ngSwitchCase="select">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <select
+      #field
       [id]="prop.id"
       [formControlName]="prop.name"
       [abpDisabled]="disabled"
@@ -52,6 +55,7 @@
   <ng-template ngSwitchCase="multiselect">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <select
+      #field
       [id]="prop.id"
       [formControlName]="prop.name"
       [abpDisabled]="disabled"
@@ -71,6 +75,7 @@
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <div #typeahead class="position-relative" validationStyle validationTarget>
       <input
+        #field
         [id]="prop.id"
         [autocomplete]="prop.autocomplete"
         [abpDisabled]="disabled"
@@ -116,6 +121,7 @@
   <ng-template ngSwitchCase="textarea">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <textarea
+      #field
       [id]="prop.id"
       [formControlName]="prop.name"
       [abpDisabled]="disabled"

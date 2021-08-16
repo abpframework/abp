@@ -30,6 +30,10 @@
                 {
                     if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                     {
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            Model.Role.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                        }
                         <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"

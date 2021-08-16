@@ -36,7 +36,7 @@
     "PasswordChanged": "Пароль изменен",
     "NewPasswordConfirmFailed": "Пожалуйста подтвердите новый пароль.",
     "Manage": "Управление учетной записью",
-    "ManageYourProfile": "Настройки",
+    "MyAccount": "Мой аккаунт",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Самостоятельная регистрация включена",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Позволяет новым пользователям регистрироваться самостоятельно.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Вход с помощью локальной учетной записи приложения",

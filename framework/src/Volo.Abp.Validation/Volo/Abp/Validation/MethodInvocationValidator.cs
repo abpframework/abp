@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 
@@ -16,7 +17,7 @@ namespace Volo.Abp.Validation
             _objectValidator = objectValidator;
         }
 
-        public virtual void Validate(MethodInvocationValidationContext context)
+        public virtual async Task ValidateAsync(MethodInvocationValidationContext context)
         {
             Check.NotNull(context, nameof(context));
 
@@ -46,7 +47,7 @@ namespace Volo.Abp.Validation
                 ThrowValidationError(context);
             }
 
-            AddMethodParameterValidationErrors(context);
+            await AddMethodParameterValidationErrorsAsync(context);
 
             if (context.Errors.Any())
             {
@@ -60,7 +61,7 @@ namespace Volo.Abp.Validation
             {
                 return false;
             }
-            
+
             if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Method) != null)
             {
                 return true;
@@ -82,22 +83,22 @@ namespace Volo.Abp.Validation
             );
         }
 
-        protected virtual void AddMethodParameterValidationErrors(MethodInvocationValidationContext context)
+        protected virtual async Task AddMethodParameterValidationErrorsAsync(MethodInvocationValidationContext context)
         {
             for (var i = 0; i < context.Parameters.Length; i++)
             {
-                AddMethodParameterValidationErrors(context, context.Parameters[i], context.ParameterValues[i]);
+                await AddMethodParameterValidationErrorsAsync(context, context.Parameters[i], context.ParameterValues[i]);
             }
         }
 
-        protected virtual void AddMethodParameterValidationErrors(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
+        protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
         {
             var allowNulls = parameterInfo.IsOptional ||
                              parameterInfo.IsOut ||
                              TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
             context.Errors.AddRange(
-                _objectValidator.GetErrors(
+                 await _objectValidator.GetErrorsAsync(
                     parameterValue,
                     parameterInfo.Name,
                     allowNulls

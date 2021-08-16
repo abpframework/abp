@@ -4,24 +4,14 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v4.4
-
-This version will focus on **documentation** and **improvements** of current features. In addition, the following features are planned:
-
-* Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
-* A new UI Theme alternative to the Basic Theme ([#6132](https://github.com/abpframework/abp/issues/6132))
-* Improvements and new features to the [CMS Kit](Modules/Cms-Kit.md) module ([#8380](https://github.com/abpframework/abp/issues/8380) [#8381](https://github.com/abpframework/abp/issues/8381))
-* Razor engine support for text templating ([#8373](https://github.com/abpframework/abp/issues/8373))
-
-**Planned release date**: End of Quarter 2, 2021. See the [4.4 milestone](https://github.com/abpframework/abp/milestone/52) to track the progress.
-
 ### v5.0
 
-We planned to focus on the ABP Framework v5.0 after the 4.4 release. This version will focus on the following works:
+This version will focus on the following works:
 
 * Upgrading to .NET 6.0 ([#9004](https://github.com/abpframework/abp/issues/9004))
 * Upgrading to Bootstrap 5.x ([#8922](https://github.com/abpframework/abp/issues/8922))
 * Alternative to IdentityServer4 ([#7221](https://github.com/abpframework/abp/issues/7221))
+* Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
 * Dapr integration ([#2183](https://github.com/abpframework/abp/issues/2183))
 * Publishing distributed events as transactional ([#6126](https://github.com/abpframework/abp/issues/6126))
 * Resource based authorization system ([#236](https://github.com/abpframework/abp/issues/236))

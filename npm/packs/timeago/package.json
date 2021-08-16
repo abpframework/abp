@@ -1,11 +1,11 @@
 {
-  "version": "4.3.2",
+  "version": "4.4.0",
   "name": "@abp/timeago",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~4.3.2",
+    "@abp/jquery": "~4.4.0",
     "timeago": "^1.6.7"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

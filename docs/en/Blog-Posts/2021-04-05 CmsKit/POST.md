@@ -28,13 +28,13 @@ If you're using the open-source version or adding the module to an existing proj
 You can run the following command to add the module to an open-source solution. 
 
 ```bash
-abp add-module Volo.CmsKit
+abp add-module Volo.CmsKit --skip-db-migrations true
 ```
 
 If you're a commercial user, run the following command to install the pro version of the module. 
 
 ```bash
-abp add-module Volo.CmsKit.Pro
+abp add-module Volo.CmsKit.Pro --skip-db-migrations true
 ```
 
 After adding the module to the solution, you need to configure features. The CMS Kit module uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all features. To enable the features in the CMS Kit module, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure` method to enable all features in the CMS kit module.

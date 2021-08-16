@@ -102,11 +102,7 @@
       "path": "CLI.md",
       "items": [
         {
-          "text": "Build Command",
-          "path": "CLI-BuildCommand.md"
-        },
-        {
-          "text": "Create Solution Sample Commands",
+          "text": "Examples for the new command",
           "path": "CLI-New-Command-Samples.md"
         }
       ]
@@ -369,8 +365,8 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
-          "text":"String Encryption",
-          "path":"String-Encryption.md"
+          "text": "String Encryption",
+          "path": "String-Encryption.md"
         },
         {
           "text": "Text Templating",
@@ -419,25 +415,12 @@
               "path": "PlugIn-Modules.md"
             },
             {
-              "text": "Customizing/Extending Modules",
-              "path": "Customizing-Application-Modules-Guide.md"
-            },
-            {
-              "text": "Customizing/Extending Entities",
-              "path": "Customizing-Application-Modules-Extending-Entities.md"
-            },
-            {
-              "text": "Customizing/Overriding Services",
-              "path": "Customizing-Application-Modules-Overriding-Services.md"
-            },
-            {
-              "text": "Module Entity Extensions",
-              "path": "Module-Entity-Extensions.md"
-            },
-            {
               "text": "Best Practices",
-              "path": "Best-Practices/Index.md",
               "items": [
+                {
+                  "text": "Overall",
+                  "path": "Best-Practices/Index.md"
+                },
                 {
                   "text": "Module Architecture",
                   "path": "Best-Practices/Module-Architecture.md"
@@ -486,6 +469,28 @@
                   ]
                 }
               ]
+            },
+            {
+              "text": "Customizing/Extending Modules",
+              "path": "Customizing-Application-Modules-Guide.md",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "Customizing-Application-Modules-Guide.md"
+                },
+                {
+                  "text": "Module Entity Extension System",
+                  "path": "Module-Entity-Extensions.md"
+                },
+                {
+                  "text": "Customizing/Extending Entities",
+                  "path": "Customizing-Application-Modules-Extending-Entities.md"
+                },
+                {
+                  "text": "Customizing/Overriding Services",
+                  "path": "Customizing-Application-Modules-Overriding-Services.md"
+                }
+              ]
             }
           ]
         },
@@ -502,10 +507,6 @@
                 {
                   "text": "Entities & Aggregate Roots",
                   "path": "Entities.md"
-                },
-                {
-                  "text": "Multi Lingual Entities",
-                  "path": "Multi-Lingual-Entities.md"
                 },
                 {
                   "text": "Value Objects",
@@ -577,6 +578,10 @@
               "path": "API/Application-Configuration.md"
             }
           ]
+        },
+        {
+          "text": "Swagger Integration",
+          "path": "API/Swagger-Integration.md"
         }
       ]
     },
@@ -733,19 +738,24 @@
             },
             {
               "text": "Customize/Extend the UI",
-              "path": "UI/AspNetCore/Customization-User-Interface.md"
-            },
-            {
-              "text": "Entity Action Extensions",
-              "path": "UI/AspNetCore/Entity-Action-Extensions.md"
-            },
-            {
-              "text": "Data Table Column Extensions",
-              "path": "UI/AspNetCore/Data-Table-Column-Extensions.md"
-            },
-            {
-              "text": "Page Toolbar Extensions",
-              "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/AspNetCore/Customization-User-Interface.md"
+                },
+                {
+                  "text": "Entity Action Extensions",
+                  "path": "UI/AspNetCore/Entity-Action-Extensions.md"
+                },
+                {
+                  "text": "Data Table Column Extensions",
+                  "path": "UI/AspNetCore/Data-Table-Column-Extensions.md"
+                },
+                {
+                  "text": "Page Toolbar Extensions",
+                  "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+                }
+              ]
             }
           ]
         },
@@ -1020,6 +1030,19 @@
                   "path": "UI/Angular/Customization-User-Interface.md"
                 },
                 {
+                  "text": "Theming",
+                  "items": [
+                    {
+                      "text": "Overall",
+                      "path": "UI/Angular/Theming.md"
+                    },
+                    {
+                      "text": "The Basic Theme",
+                      "path": "UI/Angular/Basic-Theme.md"
+                    }
+                  ]
+                },
+                {
                   "text": "Modifying the Menu",
                   "path": "UI/Angular/Modifying-the-Menu.md"
                 },
@@ -1122,11 +1145,11 @@
                   "path": "Entity-Framework-Core-Oracle.md",
                   "items": [
                     {
-                      "text": "Oracle",
+                      "text": "Oracle (Official)",
                       "path": "Entity-Framework-Core-Oracle-Official.md"
                     },
                     {
-                      "text": "Oracle Devart",
+                      "text": "Oracle (Devart)",
                       "path": "Entity-Framework-Core-Oracle-Devart.md"
                     }
                   ]
@@ -1257,56 +1280,7 @@
         },
         {
           "text": "Migration Guides",
-          "path": "Migration-Guides/Index.md",
-          "items": [
-            {
-              "text": "MVC / Razor Pages",
-              "items": [
-                {
-                  "text": "3.3 to 4.0",
-                  "path": "Migration-Guides/Abp-4_0-MVC-Razor-Pages.md"
-                }
-              ]
-            },
-            {
-              "text": "Blazor",
-              "items": [
-                {
-                  "text": "3.2 to 3.3",
-                  "path": "Migration-Guides/BlazorUI-3_3.md"
-                },
-                {
-                  "text": "3.3 to 4.0",
-                  "path": "Migration-Guides/Abp-4_0-Blazor.md"
-                }
-              ]
-            },
-            {
-              "text": "Angular",
-              "items": [
-                {
-                  "text": "3.3 to 4.0",
-                  "path": "Migration-Guides/Abp-4_0-Angular.md"
-                }
-              ]
-            },
-            {
-              "text": "3.3 to 4.0",
-              "path": "Migration-Guides/Abp-4_0.md"
-            },
-            {
-              "text": "4.2",
-              "path": "Migration-Guides/Abp-4_2.md"
-            },
-            {
-              "text": "4.x to 4.3",
-              "path": "Migration-Guides/Abp-4_3.md"
-            },
-            {
-              "text": "Upgrading the Startup Template",
-              "path": "Migration-Guides/Upgrading-Startup-Template.md"
-            }
-          ]
+          "path": "Migration-Guides/Index.md"
         }
       ]
     },

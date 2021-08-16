@@ -108,12 +108,12 @@
     "LicenseStartDate": "लाइसेंस शुरू होने की तारीख",
     "LicenseEndDate": "लाइसेंस की अंतिम तिथि",
     "OrganizationNamePlaceholder": "संगठन का नाम...",
-    "TotalQuestionCountPlaceholder": "कुल प्रश्न संख्या ...",
-    "RemainingQuestionCountPlaceholder": "शेष प्रश्न गणना ...",
+    "TotalQuestionCountPlaceholder": "कुल प्रश्न संख्या...",
+    "RemainingQuestionCountPlaceholder": "शेष प्रश्न गणना...",
     "LicenseTypePlaceholder": "लाइसेंस के प्रकार...",
     "CreationDatePlaceholder": "निर्माण तिथि...",
-    "LicenseStartDatePlaceholder": "लाइसेंस शुरू होने की तारीख ...",
-    "LicenseEndDatePlaceholder": "लाइसेंस की अंतिम तिथि ...",
+    "LicenseStartDatePlaceholder": "लाइसेंस शुरू होने की तारीख...",
+    "LicenseEndDatePlaceholder": "लाइसेंस की अंतिम तिथि...",
     "UsernameOrEmail": "उपयोगकर्ता का नाम या ईमेल",
     "UsernameOrEmailPlaceholder": "उपयोगकर्ता का नाम या ईमेल...",
     "Member": "सदस्य",
@@ -277,6 +277,6 @@
     "ThisExtensionIsNotAllowed": "इस एक्सटेंशन की अनुमति नहीं है।",
     "TheFileIsTooLarge": "फ़ाइल बहुत बड़ी है!",
     "ArticleDeletionConfirmationMessage": "क्या आप वाकई इस लेख को हटाना चाहते हैं?",
-    "ChooseCoverImage": "कवर छवि चुनें ..."
+    "ChooseCoverImage": "कवर छवि चुनें..."
   }
 }

@@ -88,12 +88,11 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
 
   get = () => {
     this.resetPageWhenUnchanged();
-    this._query$.next(({
-      filter: this._filter || undefined,
-      maxResultCount: this._maxResultCount,
-      skipCount: this._page * this._maxResultCount,
-      sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
-    } as any) as QueryParamsType);
+    this.next();
+  };
+
+  getWithoutPageReset = () => {
+    this.next();
   };
 
   private delay: MonoTypeOperatorFunction<QueryParamsType>;
@@ -129,6 +128,15 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
       this._page = 0;
       this._skipCount = 0;
     } else this._skipCount = skipCount;
+  }
+
+  private next() {
+    this._query$.next(({
+      filter: this._filter || undefined,
+      maxResultCount: this._maxResultCount,
+      skipCount: this._page * this._maxResultCount,
+      sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
+    } as any) as QueryParamsType);
   }
 }
 
