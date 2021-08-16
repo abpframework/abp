@@ -358,6 +358,19 @@
     "WeWillSendYouADownloadLink": "A link to download the e-book has been sent to {0}.<br/> Check your inbox / junk / spam boxes!",
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
-    "FreeDDDEBook": "Free DDD E-Book"
+    "FreeDDDEBook": "Free DDD E-Book",
+    "StartFree": "Start free",
+    "FreeTrial": "Free Trial",
+    "AcceptsMarketingCommunications": " Yes, I`d like to receive ABP Commercial marketing communications.",
+    "PurposeOfUsage": "Purpose of usage",
+    "Industry": "Industry",
+    "Choose": "- Choose -",
+    "CompanyOrganizationName": "Company / Organization Name",
+    "CompanySize": "Company Size",
+    "Next": "Next",
+    "StartTrial": "Start My Free Trial",
+    "ContactUsIssues": "Contact us if you have any issues",
+    "TrialActivatedWarning": "Dear {0}, a user is entitled to have only 1 free trial period. You already used your trial period.",
+    "ActivationRequirement": "You are one step away from starting your free trial.<br>We have sent an email to <b>{0}</b> to activate your account. Check your inbox/junk/spam boxes!"
   }
 }
