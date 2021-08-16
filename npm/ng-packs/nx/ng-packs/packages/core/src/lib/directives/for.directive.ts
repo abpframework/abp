@@ -11,23 +11,32 @@ import {
   TrackByFunction,
   ViewContainerRef,
 } from '@angular/core';
-import compare from 'just-compare';
 import clone from 'just-clone';
+import compare from 'just-compare';
 
 export type CompareFn<T = any> = (value: T, comparison: T) => boolean;
 
 class AbpForContext {
-  constructor(public $implicit: any, public index: number, public count: number, public list: any[]) {}
+  constructor(
+    public $implicit: any,
+    public index: number,
+    public count: number,
+    public list: any[]
+  ) {}
 }
 
 class RecordView {
-  constructor(public record: IterableChangeRecord<any>, public view: EmbeddedViewRef<AbpForContext>) {}
+  constructor(
+    public record: IterableChangeRecord<any>,
+    public view: EmbeddedViewRef<AbpForContext>
+  ) {}
 }
 
 @Directive({
   selector: '[abpFor]',
 })
 export class ForDirective implements OnChanges {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('abpForOf')
   items: any[];
 
@@ -61,36 +70,46 @@ export class ForDirective implements OnChanges {
   }
 
   get trackByFn(): TrackByFunction<any> {
-    return this.trackBy || ((index: number, item: any) => (item as any).id || index);
+    return (
+      this.trackBy || ((index: number, item: any) => (item as any).id || index)
+    );
   }
 
   constructor(
     private tempRef: TemplateRef<AbpForContext>,
     private vcRef: ViewContainerRef,
-    private differs: IterableDiffers,
+    private differs: IterableDiffers
   ) {}
 
   private iterateOverAppliedOperations(changes: IterableChanges<any>) {
     const rw: RecordView[] = [];
 
-    changes.forEachOperation((record: IterableChangeRecord<any>, previousIndex: number, currentIndex: number) => {
-      if (record.previousIndex == null) {
-        const view = this.vcRef.createEmbeddedView(
-          this.tempRef,
-          new AbpForContext(null, -1, -1, this.items),
-          currentIndex,
-        );
+    changes.forEachOperation(
+      (
+        record: IterableChangeRecord<any>,
+        previousIndex: number,
+        currentIndex: number
+      ) => {
+        if (record.previousIndex == null) {
+          const view = this.vcRef.createEmbeddedView(
+            this.tempRef,
+            new AbpForContext(null, -1, -1, this.items),
+            currentIndex
+          );
 
-        rw.push(new RecordView(record, view));
-      } else if (currentIndex == null) {
-        this.vcRef.remove(previousIndex);
-      } else {
-        const view = this.vcRef.get(previousIndex);
-        this.vcRef.move(view, currentIndex);
+          rw.push(new RecordView(record, view));
+        } else if (currentIndex == null) {
+          this.vcRef.remove(previousIndex);
+        } else {
+          const view = this.vcRef.get(previousIndex);
+          this.vcRef.move(view, currentIndex);
 
-        rw.push(new RecordView(record, view as EmbeddedViewRef<AbpForContext>));
+          rw.push(
+            new RecordView(record, view as EmbeddedViewRef<AbpForContext>)
+          );
+        }
       }
-    });
+    );
 
     for (let i = 0, l = rw.length; i < l; i++) {
       rw[i].view.context.$implicit = rw[i].record.item;
@@ -106,7 +125,9 @@ export class ForDirective implements OnChanges {
     }
 
     changes.forEachIdentityChange((record: IterableChangeRecord<any>) => {
-      const viewRef = this.vcRef.get(record.currentIndex) as EmbeddedViewRef<AbpForContext>;
+      const viewRef = this.vcRef.get(
+        record.currentIndex
+      ) as EmbeddedViewRef<AbpForContext>;
       viewRef.context.$implicit = record.item;
     });
   }
@@ -143,7 +164,13 @@ export class ForDirective implements OnChanges {
 
   private sortItems(items: any[]) {
     if (this.orderBy) {
-      items.sort((a, b) => (a[this.orderBy] > b[this.orderBy] ? 1 : a[this.orderBy] < b[this.orderBy] ? -1 : 0));
+      items.sort((a, b) =>
+        a[this.orderBy] > b[this.orderBy]
+          ? 1
+          : a[this.orderBy] < b[this.orderBy]
+          ? -1
+          : 0
+      );
     } else {
       items.sort();
     }
@@ -155,8 +182,14 @@ export class ForDirective implements OnChanges {
 
     const compareFn = this.compareFn;
 
-    if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
-      items = items.filter(item => compareFn(item[this.filterBy], this.filterVal));
+    if (
+      typeof this.filterBy !== 'undefined' &&
+      typeof this.filterVal !== 'undefined' &&
+      this.filterVal !== ''
+    ) {
+      items = items.filter((item) =>
+        compareFn(item[this.filterBy], this.filterVal)
+      );
     }
 
     switch (this.orderDir) {

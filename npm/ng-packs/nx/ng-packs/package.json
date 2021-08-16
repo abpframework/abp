@@ -11,6 +11,7 @@
     "test": "ng test --detect-open-handles=true --run-in-band=true --watch-all=true",
     "test:all": "nx run-many --target=test --all",
     "lint": "nx workspace-lint && ng lint",
+    "lint:all": "nx run-many --target=lint --all",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",

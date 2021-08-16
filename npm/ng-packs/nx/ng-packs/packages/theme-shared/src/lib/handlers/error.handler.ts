@@ -1,9 +1,4 @@
-import {
-  AuthService,
-  LocalizationParam,
-  RestOccurError,
-  RouterEvents,
-} from '@abp/ng.core';
+import { AuthService, LocalizationParam, RestOccurError, RouterEvents } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
@@ -32,8 +27,7 @@ export const DEFAULT_ERROR_MESSAGES = {
   },
   defaultError401: {
     title: 'You are not authenticated!',
-    details:
-      'You should be authenticated (sign in) in order to perform this operation.',
+    details: 'You should be authenticated (sign in) in order to perform this operation.',
   },
   defaultError403: {
     title: 'You are not authorized!',
@@ -76,9 +70,8 @@ export const DEFAULT_ERROR_LOCALIZATIONS = {
 export class ErrorHandler {
   componentRef: ComponentRef<HttpErrorWrapperComponent>;
 
-  protected httpErrorHandler = this.injector.get(
-    HTTP_ERROR_HANDLER,
-    (_, err: HttpErrorResponse) => throwError(err)
+  protected httpErrorHandler = this.injector.get(HTTP_ERROR_HANDLER, (_, err: HttpErrorResponse) =>
+    throwError(err),
   );
 
   constructor(
@@ -88,7 +81,7 @@ export class ErrorHandler {
     protected cfRes: ComponentFactoryResolver,
     protected rendererFactory: RendererFactory2,
     protected injector: Injector,
-    @Inject('HTTP_ERROR_CONFIG') protected httpErrorConfig: HttpErrorConfig
+    @Inject('HTTP_ERROR_CONFIG') protected httpErrorConfig: HttpErrorConfig,
   ) {
     this.listenToRestError();
     this.listenToRouterError();
@@ -116,21 +109,21 @@ export class ErrorHandler {
     this.actions
       .pipe(
         ofActionSuccessful(RestOccurError),
-        map((action) => action.payload),
+        map(action => action.payload),
         filter(this.filterRestErrors),
-        switchMap(this.executeErrorHandler)
+        switchMap(this.executeErrorHandler),
       )
       .subscribe();
   }
 
-  private executeErrorHandler = (error) => {
+  private executeErrorHandler = error => {
     const returnValue = this.httpErrorHandler(this.injector, error);
 
     return (returnValue instanceof Observable ? returnValue : of(null)).pipe(
-      catchError((err) => {
+      catchError(err => {
         this.handleError(err);
         return of(null);
-      })
+      }),
     );
   };
 
@@ -140,10 +133,7 @@ export class ErrorHandler {
       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
     };
 
-    if (
-      err instanceof HttpErrorResponse &&
-      err.headers.get('_AbpErrorFormat')
-    ) {
+    if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
       const confirmation$ = this.showError(null, null, body);
 
       if (err.status === 401) {
@@ -164,7 +154,7 @@ export class ErrorHandler {
                 {
                   key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
-                }
+                },
               ).subscribe(() => this.navigateToLogin());
           break;
         case 403:
@@ -191,7 +181,7 @@ export class ErrorHandler {
                 {
                   key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
-                }
+                },
               );
           break;
         case 500:
@@ -228,7 +218,7 @@ export class ErrorHandler {
             {
               key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
               defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-            }
+            },
           );
           break;
       }
@@ -258,7 +248,7 @@ export class ErrorHandler {
   protected showError(
     message?: LocalizationParam,
     title?: LocalizationParam,
-    body?: any
+    body?: any,
   ): Observable<Confirmation.Status> {
     if (body) {
       if (body.details) {
@@ -298,28 +288,23 @@ export class ErrorHandler {
 
     for (const key in instance) {
       /* istanbul ignore else */
-      if (this.componentRef.instance.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(this.componentRef.instance, key)) {
         this.componentRef.instance[key] = instance[key];
       }
     }
 
-    this.componentRef.instance.hideCloseIcon =
-      this.httpErrorConfig.errorScreen.hideCloseIcon;
+    this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
     const appRef = this.injector.get(ApplicationRef);
 
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
       this.componentRef.instance.appRef = appRef;
       this.componentRef.instance.injector = this.injector;
-      this.componentRef.instance.customComponent =
-        this.httpErrorConfig.errorScreen.component;
+      this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
     }
 
     appRef.attachView(this.componentRef.hostView);
-    renderer.appendChild(
-      host,
-      (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]
-    );
+    renderer.appendChild(host, (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
 
     const destroy$ = new Subject<void>();
     this.componentRef.instance.destroy$ = destroy$;
@@ -339,19 +324,13 @@ export class ErrorHandler {
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
     if (typeof status !== 'number') return false;
 
-    return (
-      this.httpErrorConfig.skipHandledErrorCodes.findIndex(
-        (code) => code === status
-      ) < 0
-    );
+    return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
   };
 
   protected filterRouteErrors = (navigationError: NavigationError): boolean => {
     return (
       navigationError.error?.message?.indexOf('Cannot match') > -1 &&
-      this.httpErrorConfig.skipHandledErrorCodes.findIndex(
-        (code) => code === 404
-      ) < 0
+      this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };
 }

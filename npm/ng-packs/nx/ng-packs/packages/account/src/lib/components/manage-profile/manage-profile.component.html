@@ -1,6 +1,6 @@
 <div id="AbpContentToolbar"></div>
 
-<div class="card border-0 shadow-sm min-h-400" [abpLoading]="!(profile$ | async)">
+<div class="card border-0 shadow-sm min-h-400" [abpLoading]="(profile$ | async)?.userName">
   <div class="card-body">
     <div class="row">
       <div class="col-12 col-md-3">

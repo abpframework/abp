@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

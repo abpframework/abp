@@ -1,12 +1,12 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   Output,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { chartJsLoaded$ } from '../../utils/widget-utils';
@@ -29,7 +29,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   @Input() responsive = true;
 
-  // tslint:disable-next-line: no-output-on-prefix
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() readonly onDataSelect: EventEmitter<any> = new EventEmitter();
 
   @Output() readonly initialized = new BehaviorSubject(this);
