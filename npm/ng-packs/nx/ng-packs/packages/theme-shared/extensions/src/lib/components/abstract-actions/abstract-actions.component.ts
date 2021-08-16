@@ -24,7 +24,7 @@ export abstract class AbstractActionsComponent<L extends ActionList<any>> extend
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     const type = injector.get(EXTENSIONS_ACTION_TYPE);
-    this.actionList = (extensions[type].get(name).actions as unknown) as L;
+    this.actionList = extensions[type].get(name).actions as unknown as L;
   }
 }
 

@@ -27,7 +27,7 @@ export class ToasterService implements ToasterContract {
     this.containerComponentRef = this.contentProjectionService.projectContent(
       PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent, {
         toasts$: this.toasts$,
-      })
+      }),
     );
 
     this.containerComponentRef.changeDetectorRef.detectChanges();
@@ -42,7 +42,7 @@ export class ToasterService implements ToasterContract {
   info(
     message: LocalizationParam,
     title?: LocalizationParam,
-    options?: Partial<Toaster.ToastOptions>
+    options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'info', options);
   }
@@ -56,7 +56,7 @@ export class ToasterService implements ToasterContract {
   success(
     message: LocalizationParam,
     title?: LocalizationParam,
-    options?: Partial<Toaster.ToastOptions>
+    options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'success', options);
   }
@@ -70,7 +70,7 @@ export class ToasterService implements ToasterContract {
   warn(
     message: LocalizationParam,
     title?: LocalizationParam,
-    options?: Partial<Toaster.ToastOptions>
+    options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'warning', options);
   }
@@ -84,7 +84,7 @@ export class ToasterService implements ToasterContract {
   error(
     message: LocalizationParam,
     title?: LocalizationParam,
-    options?: Partial<Toaster.ToastOptions>
+    options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'error', options);
   }
@@ -101,7 +101,7 @@ export class ToasterService implements ToasterContract {
     message: LocalizationParam,
     title: LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
-    options = {} as Partial<Toaster.ToastOptions>
+    options = {} as Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     if (!this.containerComponentRef) this.setContainer();
 
@@ -121,7 +121,7 @@ export class ToasterService implements ToasterContract {
    * @param id ID of the toast to be removed.
    */
   remove(id: number): void {
-    this.toasts = this.toasts.filter((toast) => toast.options?.id !== id);
+    this.toasts = this.toasts.filter(toast => toast.options?.id !== id);
     this.toasts$.next(this.toasts);
   }
 
@@ -131,9 +131,7 @@ export class ToasterService implements ToasterContract {
   clear(containerKey?: string): void {
     this.toasts = !containerKey
       ? []
-      : this.toasts.filter(
-          (toast) => toast.options?.containerKey !== containerKey
-        );
+      : this.toasts.filter(toast => toast.options?.containerKey !== containerKey);
     this.toasts$.next(this.toasts);
   }
 }

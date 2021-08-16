@@ -29,7 +29,8 @@ enum ValueTypes {
 export class FeatureManagementComponent
   implements
     FeatureManagement.FeatureManagementComponentInputs,
-    FeatureManagement.FeatureManagementComponentOutputs {
+    FeatureManagement.FeatureManagementComponentOutputs
+{
   @Input()
   providerKey: string;
 

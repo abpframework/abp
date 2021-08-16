@@ -34,7 +34,7 @@ export function fromLazyLoad<T extends Event>(
 
 function createErrorHandler(observer: Observer<Event>, element: HTMLElement) {
   /* tslint:disable-next-line:only-arrow-functions */
-  return function(event: Event | string) {
+  return function (event: Event | string) {
     clearCallbacks(element);
     element.parentNode.removeChild(element);
     observer.error(event);

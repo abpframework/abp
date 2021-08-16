@@ -82,13 +82,10 @@ describe('Internal Store', () => {
       async ({ selector, expected }) => {
         const store = new InternalStore(mockInitialState);
 
-        const value = await store
-          .sliceState(selector)
-          .pipe(take(1))
-          .toPromise();
+        const value = await store.sliceState(selector).pipe(take(1)).toPromise();
 
         expect(value).toEqual(expected);
-      }
+      },
     );
   });
 
@@ -100,16 +97,13 @@ describe('Internal Store', () => {
       ${deepPatch3} | ${deepPatchExpected3}
       ${deepPatch4} | ${deepPatchExpected4}
       ${deepPatch5} | ${deepPatchExpected5}
-    `(
-      'should set state as $expected when patch is $patch',
-      ({ patch, expected }) => {
-        const store = new InternalStore(mockInitialState);
+    `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
+      const store = new InternalStore(mockInitialState);
 
-        store.deepPatch(patch);
+      store.deepPatch(patch);
 
-        expect(store.state).toEqual(expected);
-      }
-    );
+      expect(store.state).toEqual(expected);
+    });
   });
 
   describe('patchState', () => {
@@ -120,25 +114,22 @@ describe('Internal Store', () => {
       ${patch3} | ${patchExpected3}
       ${patch4} | ${patchExpected4}
       ${patch5} | ${patchExpected5}
-    `(
-      'should set state as $expected when patch is $patch',
-      ({ patch, expected }) => {
-        const store = new InternalStore(mockInitialState);
+    `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
+      const store = new InternalStore(mockInitialState);
 
-        store.patch(patch);
+      store.patch(patch);
 
-        expect(store.state).toEqual(expected);
-      }
-    );
+      expect(store.state).toEqual(expected);
+    });
   });
 
   describe('sliceUpdate', () => {
-    it('should return slice of update$ based on selector', (done) => {
+    it('should return slice of update$ based on selector', done => {
       const store = new InternalStore(mockInitialState);
 
-      const onQux$ = store.sliceUpdate((state) => state.foo.bar.qux);
+      const onQux$ = store.sliceUpdate(state => state.foo.bar.qux);
 
-      onQux$.pipe(take(1)).subscribe((value) => {
+      onQux$.pipe(take(1)).subscribe(value => {
         expect(value).toEqual(deepPatch2.foo.bar.qux);
         done();
       });

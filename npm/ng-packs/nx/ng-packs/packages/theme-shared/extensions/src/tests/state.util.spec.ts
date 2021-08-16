@@ -18,27 +18,21 @@ describe('State Utils', () => {
     it('should return observable entities of an existing module', async () => {
       const entities = await getObjectExtensionEntitiesFromStore(
         configState,
-        'Identity'
+        'Identity',
       ).toPromise();
       expect('Role' in entities).toBe(true);
     });
 
     it('should return observable empty object if module does not exist', async () => {
-      const entities = await getObjectExtensionEntitiesFromStore(
-        configState,
-        'Saas'
-      ).toPromise();
+      const entities = await getObjectExtensionEntitiesFromStore(configState, 'Saas').toPromise();
       expect(entities).toEqual({});
     });
 
-    it('should not emit when object extensions do not exist', (done) => {
+    it('should not emit when object extensions do not exist', done => {
       const emptyConfigState = new ConfigStateService(null);
       const emit = jest.fn();
 
-      getObjectExtensionEntitiesFromStore(
-        emptyConfigState,
-        'Identity'
-      ).subscribe(emit);
+      getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);
 
       setTimeout(() => {
         expect(emit).not.toHaveBeenCalled();
@@ -54,7 +48,7 @@ describe('State Utils', () => {
         .toPromise();
 
       const propList = new EntityPropList();
-      contributors.prop.Role.forEach((callback) => callback(propList));
+      contributors.prop.Role.forEach(callback => callback(propList));
 
       expect(propList.length).toBe(4);
       expect(propList.head.value.name).toBe('Title');
@@ -63,9 +57,7 @@ describe('State Utils', () => {
       expect(propList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const createFormList = new FormPropList();
-      contributors.createForm.Role.forEach((callback) =>
-        callback(createFormList)
-      );
+      contributors.createForm.Role.forEach(callback => callback(createFormList));
 
       expect(createFormList.length).toBe(4);
       expect(createFormList.head.value.name).toBe('Title');
@@ -74,7 +66,7 @@ describe('State Utils', () => {
       expect(createFormList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const editFormList = new FormPropList();
-      contributors.editForm.Role.forEach((callback) => callback(editFormList));
+      contributors.editForm.Role.forEach(callback => callback(editFormList));
 
       expect(editFormList.length).toBe(4);
       expect(editFormList.head.value.name).toBe('Title');
@@ -126,10 +118,7 @@ function createMockState() {
   };
 }
 
-function createMockEntities(): Record<
-  string,
-  ObjectExtensions.EntityExtensionDto
-> {
+function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDto> {
   return {
     Role: {
       properties: {

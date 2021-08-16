@@ -34,10 +34,10 @@ export function appendPropertyInAstObject(
   const content = _stringifyContent(value, indentStr);
   recorder.insertRight(
     index,
-    (node.properties.length === 0 && indent ? '\n' : '')
-    + ' '.repeat(indent)
-    + `"${propertyName}":${indent ? ' ' : ''}${content}`
-    + indentStr.slice(0, -indent),
+    (node.properties.length === 0 && indent ? '\n' : '') +
+      ' '.repeat(indent) +
+      `"${propertyName}":${indent ? ' ' : ''}${content}` +
+      indentStr.slice(0, -indent),
   );
 }
 
@@ -48,7 +48,6 @@ export function insertPropertyInAstObjectInOrder(
   value: JsonValue,
   indent: number,
 ) {
-
   if (node.properties.length === 0) {
     appendPropertyInAstObject(recorder, node, propertyName, value, indent);
 
@@ -81,15 +80,12 @@ export function insertPropertyInAstObjectInOrder(
   }
 
   const indentStr = _buildIndent(indent);
-  const insertIndex = insertAfterProp === null
-    ? node.start.offset + 1
-    : insertAfterProp.end.offset + 1;
+  const insertIndex =
+    insertAfterProp === null ? node.start.offset + 1 : insertAfterProp.end.offset + 1;
   const content = _stringifyContent(value, indentStr);
   recorder.insertRight(
     insertIndex,
-    indentStr
-    + `"${propertyName}":${indent ? ' ' : ''}${content}`
-    + ',',
+    indentStr + `"${propertyName}":${indent ? ' ' : ''}${content}` + ',',
   );
 }
 
@@ -147,7 +143,6 @@ export function removePropertyInAstObject(
   }
 }
 
-
 export function appendValueInAstArray(
   recorder: UpdateRecorder,
   node: JsonAstArray,
@@ -167,10 +162,7 @@ export function appendValueInAstArray(
     if (isClosingOnSameLine && indent) {
       // Reformat the entire array
       recorder.remove(node.start.offset, node.end.offset - node.start.offset);
-      newNodes = [
-        ...node.elements.map(({ value }) => value),
-        value,
-      ];
+      newNodes = [...node.elements.map(({ value }) => value), value];
       index = node.start.offset;
       // In case we are generating the entire node we need to reduce the spacing as
       // otherwise we'd end up having incorrect double spacing
@@ -184,12 +176,11 @@ export function appendValueInAstArray(
 
   recorder.insertRight(
     index,
-    (newNodes ? '' : indentStr)
-    + _stringifyContent(newNodes || value, indentStr)
-    + (node.elements.length === 0 && indent ? indentStr.substr(0, -indent) + '\n' : ''),
+    (newNodes ? '' : indentStr) +
+      _stringifyContent(newNodes || value, indentStr) +
+      (node.elements.length === 0 && indent ? indentStr.substr(0, -indent) + '\n' : ''),
   );
 }
-
 
 export function findPropertyInAstObject(
   node: JsonAstObject,

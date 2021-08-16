@@ -8,11 +8,7 @@ import { NgxsModule, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import {
-  DEFAULT_ERROR_LOCALIZATIONS,
-  DEFAULT_ERROR_MESSAGES,
-  ErrorHandler,
-} from '../handlers';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
 
@@ -35,11 +31,7 @@ const CONFIRMATION_BUTTONS = {
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [
-      NgxsModule.forRoot([]),
-      CoreTestingModule.withConfig(),
-      MockModule,
-    ],
+    imports: [NgxsModule.forRoot([]), CoreTestingModule.withConfig(), MockModule],
     mocks: [OAuthService],
     providers: [
       { provide: APP_BASE_HREF, useValue: '/' },
@@ -146,7 +138,7 @@ describe('ErrorHandler', () => {
         key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
       },
-      CONFIRMATION_BUTTONS
+      CONFIRMATION_BUTTONS,
     );
   });
 
@@ -162,7 +154,7 @@ describe('ErrorHandler', () => {
         key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
       },
-      CONFIRMATION_BUTTONS
+      CONFIRMATION_BUTTONS,
     );
   });
 
@@ -178,7 +170,7 @@ describe('ErrorHandler', () => {
         key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
       },
-      CONFIRMATION_BUTTONS
+      CONFIRMATION_BUTTONS,
     );
   });
 
@@ -186,9 +178,7 @@ describe('ErrorHandler', () => {
     const headers: HttpHeaders = new HttpHeaders({
       _AbpErrorFormat: '_AbpErrorFormat',
     });
-    store.dispatch(
-      new RestOccurError(new HttpErrorResponse({ status: 401, headers }))
-    );
+    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401, headers })));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
@@ -196,7 +186,7 @@ describe('ErrorHandler', () => {
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
       },
       null,
-      CONFIRMATION_BUTTONS
+      CONFIRMATION_BUTTONS,
     );
   });
 
@@ -209,14 +199,14 @@ describe('ErrorHandler', () => {
           error: { error: { message: 'test message', details: 'test detail' } },
           status: 412,
           headers,
-        })
-      )
+        }),
+      ),
     );
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       'test detail',
       'test message',
-      CONFIRMATION_BUTTONS
+      CONFIRMATION_BUTTONS,
     );
   });
 });

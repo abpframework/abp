@@ -39,7 +39,8 @@ type PermissionWithStyle = PermissionGrantInfoDto & {
 export class PermissionManagementComponent
   implements
     PermissionManagement.PermissionManagementComponentInputs,
-    PermissionManagement.PermissionManagementComponentOutputs {
+    PermissionManagement.PermissionManagementComponentOutputs
+{
   @Input()
   readonly providerName: string;
 
@@ -105,11 +106,11 @@ export class PermissionManagementComponent
       map<PermissionGrantInfoDto[], PermissionWithStyle[]>(permissions =>
         permissions.map(
           permission =>
-            (({
+            ({
               ...permission,
               style: { [margin]: findMargin(permissions, permission) },
               isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
-            } as any) as PermissionWithStyle),
+            } as any as PermissionWithStyle),
         ),
       ),
     );

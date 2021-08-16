@@ -11,7 +11,7 @@ export abstract class ContextStrategy<T = any> {
 }
 
 export class NoContextStrategy<
-  T extends Type<any> | TemplateRef<any> = any
+  T extends Type<any> | TemplateRef<any> = any,
 > extends ContextStrategy<T> {
   constructor() {
     super(undefined);

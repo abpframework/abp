@@ -23,7 +23,7 @@ describe('Route Utils', () => {
       'should find $expected in $count turns when path is $path',
       async ({ path, expected, count }) => {
         const find = jest.fn(cb => (cb(node) ? node : null));
-        const routes = ({ find } as any) as RoutesService;
+        const routes = { find } as any as RoutesService;
         const route = findRoute(routes, path);
         expect(route).toBe(expected);
         expect(find).toHaveBeenCalledTimes(count);

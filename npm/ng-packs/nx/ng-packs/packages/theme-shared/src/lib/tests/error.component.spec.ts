@@ -28,7 +28,7 @@ describe('ErrorComponent', () => {
   });
 
   describe('#destroy', () => {
-    it('should be call when pressed the esc key', (done) => {
+    it('should be call when pressed the esc key', done => {
       spectator.component.destroy$.subscribe(() => {
         done();
       });
@@ -36,7 +36,7 @@ describe('ErrorComponent', () => {
       spectator.keyboard.pressEscape();
     });
 
-    it('should be call when clicked the close button', (done) => {
+    it('should be call when clicked the close button', done => {
       spectator.component.destroy$.subscribe(() => {
         done();
       });

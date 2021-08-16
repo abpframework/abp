@@ -4,9 +4,7 @@ import { ControlValueAccessor } from '@angular/forms';
 // Not an abstract class on purpose. Do not change!
 // tslint:disable-next-line: use-component-selector
 @Component({ template: '' })
-export class AbstractNgModelComponent<T = any, U = T>
-  implements ControlValueAccessor
-{
+export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {
   protected _value: T;
   protected cdRef: ChangeDetectorRef;
   onChange: (value: T) => void;
@@ -19,17 +17,16 @@ export class AbstractNgModelComponent<T = any, U = T>
   readonly: boolean;
 
   @Input()
-  valueFn: (value: U, previousValue?: T) => T = (value) => value as any as T;
+  valueFn: (value: U, previousValue?: T) => T = value => value as any as T;
 
   @Input()
-  valueLimitFn: (value: T, previousValue?: T) => any = (value) => false;
+  valueLimitFn: (value: T, previousValue?: T) => any = value => false;
 
   @Input()
   set value(value: T) {
     value = this.valueFn(value as any as U, this._value);
 
-    if (this.valueLimitFn(value, this._value) !== false || this.readonly)
-      return;
+    if (this.valueLimitFn(value, this._value) !== false || this.readonly) return;
 
     this._value = value;
     this.notifyValueChange();

@@ -44,9 +44,8 @@ export class DateParserFormatter extends NgbDateParserFormatter {
   format(date: NgbDateStruct): string {
     if (!date) return '';
 
-    const localization: ApplicationLocalizationConfigurationDto = this.configState.getOne(
-      'localization',
-    );
+    const localization: ApplicationLocalizationConfigurationDto =
+      this.configState.getOne('localization');
 
     const dateFormat =
       snq(() => localization.currentCulture.dateTimeFormat.shortDatePattern) || 'yyyy-MM-dd';

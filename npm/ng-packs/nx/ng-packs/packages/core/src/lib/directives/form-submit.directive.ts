@@ -35,7 +35,7 @@ export class FormSubmitDirective implements OnInit {
     @Self() private formGroupDirective: FormGroupDirective,
     private host: ElementRef<HTMLFormElement>,
     private cdRef: ChangeDetectorRef,
-    private subscription: SubscriptionService
+    private subscription: SubscriptionService,
   ) {}
 
   ngOnInit() {
@@ -44,19 +44,16 @@ export class FormSubmitDirective implements OnInit {
       this.executedNgSubmit = true;
     });
 
-    const keyup$ = fromEvent(
-      this.host.nativeElement as HTMLElement,
-      'keyup'
-    ).pipe(
+    const keyup$ = fromEvent(this.host.nativeElement as HTMLElement, 'keyup').pipe(
       debounceTime(this.debounce),
-      filter((event) => !(event.target instanceof HTMLTextAreaElement)),
-      filter((event: KeyboardEvent) => event && event.key === 'Enter')
+      filter(event => !(event.target instanceof HTMLTextAreaElement)),
+      filter((event: KeyboardEvent) => event && event.key === 'Enter'),
     );
 
     this.subscription.addOne(keyup$, () => {
       if (!this.executedNgSubmit) {
         this.host.nativeElement.dispatchEvent(
-          new Event('submit', { bubbles: true, cancelable: true })
+          new Event('submit', { bubbles: true, cancelable: true }),
         );
       }
 
@@ -76,13 +73,13 @@ export class FormSubmitDirective implements OnInit {
 
 function setDirty(controls: Controls) {
   if (Array.isArray(controls)) {
-    controls.forEach((group) => {
+    controls.forEach(group => {
       setDirty(group.controls as { [key: string]: FormControl });
     });
     return;
   }
 
-  Object.keys(controls).forEach((key) => {
+  Object.keys(controls).forEach(key => {
     controls[key].markAsDirty();
     controls[key].updateValueAndValidity();
   });

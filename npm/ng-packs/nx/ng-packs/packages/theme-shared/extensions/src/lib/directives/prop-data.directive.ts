@@ -13,8 +13,10 @@ import { PropData, PropList } from '../models/props';
   exportAs: 'abpPropData',
   selector: '[abpPropData]',
 })
-export class PropDataDirective<L extends PropList<any>> extends PropData<InferredData<L>>
-  implements OnChanges, OnDestroy {
+export class PropDataDirective<L extends PropList<any>>
+  extends PropData<InferredData<L>>
+  implements OnChanges, OnDestroy
+{
   /* tslint:disable:no-input-rename */
   @Input('abpPropDataFromList') readonly propList: L;
 

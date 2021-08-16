@@ -21,9 +21,7 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['http-error-wrapper.component.scss'],
   providers: [SubscriptionService],
 })
-export class HttpErrorWrapperComponent
-  implements AfterViewInit, OnDestroy, OnInit
-{
+export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
   appRef: ApplicationRef;
 
   cfRes: ComponentFactoryResolver;
@@ -57,9 +55,7 @@ export class HttpErrorWrapperComponent
 
   ngOnInit() {
     this.backgroundColor =
-      window
-        .getComputedStyle(document.body)
-        ?.getPropertyValue('background-color') || '#fff';
+      window.getComputedStyle(document.body)?.getPropertyValue('background-color') || '#fff';
   }
 
   ngAfterViewInit() {
@@ -71,14 +67,14 @@ export class HttpErrorWrapperComponent
       customComponentRef.instance.destroy$ = this.destroy$;
       this.appRef.attachView(customComponentRef.hostView);
       this.containerRef.nativeElement.appendChild(
-        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]
+        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
       );
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
     const keyup$ = fromEvent(document, 'keyup').pipe(
       debounceTime(150),
-      filter((key: KeyboardEvent) => key && key.key === 'Escape')
+      filter((key: KeyboardEvent) => key && key.key === 'Escape'),
     );
     this.subscription.addOne(keyup$, () => this.destroy());
   }
