@@ -31,9 +31,9 @@
   },
   "private": true,
   "devDependencies": {
-    "@abp/ng.core": "~4.4.0",
     "@abp/ng.account": "~4.4.0",
     "@abp/ng.account.core": "~4.4.0",
+    "@abp/ng.core": "~4.4.0",
     "@abp/ng.feature-management": "~4.4.0",
     "@abp/ng.identity": "~4.4.0",
     "@abp/ng.permission-management": "~4.4.0",
@@ -90,6 +90,7 @@
     "eslint-plugin-cypress": "^2.10.3",
     "got": "^11.5.2",
     "jest": "27.0.3",
+    "jest-canvas-mock": "^2.3.1",
     "jest-preset-angular": "9.0.4",
     "jsonc-parser": "^2.3.0",
     "just-clone": "^3.1.0",

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { ToasterService } from '../../services/toaster.service';
-import snq from 'snq';
 
 @Component({
   selector: 'abp-toast',
@@ -35,8 +34,10 @@ export class ToastComponent implements OnInit {
   constructor(private toasterService: ToasterService) {}
 
   ngOnInit() {
-    if (snq(() => this.toast.options.sticky)) return;
-    const timeout = snq(() => this.toast.options.life) || 5000;
+    const { sticky, life } = this.toast.options || {};
+
+    if (sticky) return;
+    const timeout = life || 5000;
     setTimeout(() => {
       this.close();
     }, timeout);

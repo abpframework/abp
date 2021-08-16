@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import snq from 'snq';
 
 @Component({
   selector: 'abp-http-error-wrapper',
@@ -22,7 +21,9 @@ import snq from 'snq';
   styleUrls: ['http-error-wrapper.component.scss'],
   providers: [SubscriptionService],
 })
-export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
+export class HttpErrorWrapperComponent
+  implements AfterViewInit, OnDestroy, OnInit
+{
   appRef: ApplicationRef;
 
   cfRes: ComponentFactoryResolver;
@@ -56,8 +57,9 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   ngOnInit() {
     this.backgroundColor =
-      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) ||
-      '#fff';
+      window
+        .getComputedStyle(document.body)
+        ?.getPropertyValue('background-color') || '#fff';
   }
 
   ngAfterViewInit() {
@@ -69,19 +71,21 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
       customComponentRef.instance.destroy$ = this.destroy$;
       this.appRef.attachView(customComponentRef.hostView);
       this.containerRef.nativeElement.appendChild(
-        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
+        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]
       );
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
     const keyup$ = fromEvent(document, 'keyup').pipe(
       debounceTime(150),
-      filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+      filter((key: KeyboardEvent) => key && key.key === 'Escape')
     );
     this.subscription.addOne(keyup$, () => this.destroy());
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.destroy();
+  }
 
   destroy() {
     this.destroy$.next();

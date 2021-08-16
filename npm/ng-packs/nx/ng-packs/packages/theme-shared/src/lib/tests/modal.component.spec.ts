@@ -5,7 +5,11 @@ import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { fromEvent, Subject, timer } from 'rxjs';
 import { delay, reduce, take } from 'rxjs/operators';
-import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';
+import {
+  ButtonComponent,
+  ConfirmationComponent,
+  ModalComponent,
+} from '../components';
 import { Confirmation } from '../models';
 import { ConfirmationService } from '../services';
 
@@ -65,7 +69,7 @@ describe('ModalComponent', () => {
           appearFn,
           disappearFn,
         },
-      },
+      }
     );
 
     await wait0ms();
@@ -157,7 +161,11 @@ describe('ModalComponent', () => {
 
   it('should close with esc key', async () => {
     await wait0ms();
-    spectator.dispatchKeyboardEvent(spectator.component.modalWindowRef, 'keyup', 'Escape');
+    spectator.dispatchKeyboardEvent(
+      spectator.component.modalWindowRef,
+      'keyup',
+      'Escape'
+    );
 
     await wait300ms();
 
@@ -175,12 +183,12 @@ describe('ModalComponent', () => {
     expect(disappearFn).not.toHaveBeenCalled();
   });
 
-  xit('should not let window unload when form is dirty', async done => {
+  xit('should not let window unload when form is dirty', (done) => {
     fromEvent(window, 'beforeunload')
       .pipe(
         take(2),
         delay(0),
-        reduce<Event[]>((acc, v) => acc.concat(v), []),
+        reduce<Event[]>((acc, v) => acc.concat(v), [])
       )
       .subscribe(([event1, event2]) => {
         expect(event1.returnValue).toBe(false);
@@ -192,11 +200,11 @@ describe('ModalComponent', () => {
     spectator.detectChanges();
     spectator.dispatchFakeEvent(window, 'beforeunload');
 
-    await wait0ms();
-
-    spectator.hostComponent.ngDirty = false;
-    spectator.detectChanges();
-    spectator.dispatchFakeEvent(window, 'beforeunload');
+    wait0ms().then(() => {
+      spectator.hostComponent.ngDirty = false;
+      spectator.detectChanges();
+      spectator.dispatchFakeEvent(window, 'beforeunload');
+    });
   });
 });
 

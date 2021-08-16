@@ -2,7 +2,11 @@ import { ConfigStateService, LocalizationService } from '@abp/ng.core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
-import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
+import {
+  createEnum,
+  createEnumOptions,
+  createEnumValueResolver,
+} from '../lib/utils/enum.util';
 
 const mockSessionState = {
   languageChange$: new BehaviorSubject('tr'),
@@ -49,9 +53,12 @@ describe('Enum Utils', () => {
       ${1}     | ${'foo'}
       ${2}     | ${'bar'}
       ${3}     | ${'baz'}
-    `('should create an enum that returns $expected when $key is accessed', ({ key, expected }) => {
-      expect(enumFromFields[key]).toBe(expected);
-    });
+    `(
+      'should create an enum that returns $expected when $key is accessed',
+      ({ key, expected }) => {
+        expect(enumFromFields[key]).toBe(expected);
+      }
+    );
   });
 
   describe('#createEnumValueResolver', () => {
@@ -71,15 +78,19 @@ describe('Enum Utils', () => {
             localizationResource: null,
             transformed: createEnum(fields),
           },
-          'EnumProp',
+          'EnumProp'
         );
-        const propData = new MockPropData({ extraProperties: { EnumProp: value } });
+        const propData = new MockPropData({
+          extraProperties: { EnumProp: value },
+        });
         propData.getInjected = () => service as any;
 
-        const resolved = await valueResolver(propData).pipe(take(1)).toPromise();
+        const resolved = await valueResolver(propData)
+          .pipe(take(1))
+          .toPromise();
 
         expect(resolved).toBe(expected);
-      },
+      }
     );
   });
 
@@ -107,8 +118,14 @@ describe('Enum Utils', () => {
 });
 
 function createMockLocalizationService() {
-  const configState = new ConfigStateService();
+  const configState = new ConfigStateService(null);
   configState.setState({ localization: mockL10n } as any);
 
-  return new LocalizationService(mockSessionState, null, null, configState, null);
+  return new LocalizationService(
+    mockSessionState,
+    null,
+    null,
+    configState,
+    null
+  );
 }
