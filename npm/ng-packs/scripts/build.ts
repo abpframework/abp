@@ -12,53 +12,17 @@ import execa from 'execa';
       await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
     }
 
-    // await execa(
-    //   'yarn',
-    //   [
-    //     'symlink',
-    //     'copy',
-    //     '--angular',
-    //     '--prod',
-    //     '--no-watch',
-    //     '--sync',
-    //     '--packages',
-    //     '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components',
-    //   ],
-    //   { stdout: 'inherit', cwd: '../' },
-    // );
-
-    // await execa(
-    //   'yarn',
-    //   [
-    //     'symlink',
-    //     'copy',
-    //     '--angular',
-    //     '--prod',
-    //     '--no-watch',
-    //     '--packages',
-    //     '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
-    //   ],
-    //   { stdout: 'inherit', cwd: '../' },
-    // );
-
-    // await execa(
-    //   'yarn',
-    //   [
-    //     'symlink',
-    //     'copy',
-    //     '--angular',
-    //     '--prod',
-    //     '--no-watch',
-    //     '--all-packages',
-    //     '--excluded-packages',
-    //     '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
-    //   ],
-    //   { stdout: 'inherit', cwd: '../' },
-    // );
-
     await execa(
       'yarn',
-      ['nx', 'run-many', '--target', 'build', '--projects', 'core,theme-shared,components'],
+      [
+        'nx',
+        'run-many',
+        '--target',
+        'build',
+        '--prod',
+        '--projects',
+        'core,theme-shared,components',
+      ],
       { stdout: 'inherit', cwd: '../' },
     );
 
@@ -69,6 +33,7 @@ import execa from 'execa';
         'run-many',
         '--target',
         'build',
+        '--prod',
         '--projects',
         'feature-management,permission-management,account-core',
         '--parallel',
@@ -83,6 +48,7 @@ import execa from 'execa';
         'run-many',
         '--target',
         'build',
+        '--prod',
         '--all',
         '--exclude',
         'schematics,core,theme-shared,components,feature-management,permission-management,account-core',
@@ -91,7 +57,7 @@ import execa from 'execa';
       { stdout: 'inherit', cwd: '../' },
     );
 
-    // if (!program.skipNgcc) await execa('yarn', ['compile:ivy'], { stdout: 'inherit', cwd: '../' });
+    if (!program.skipNgcc) await execa('yarn', ['compile:ivy'], { stdout: 'inherit', cwd: '../' });
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);

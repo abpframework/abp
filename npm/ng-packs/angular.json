@@ -437,8 +437,8 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "packages/identity/tsconfig.lib.json",
-            "project": "packages/identity/ng-package.json"
+            "tsConfig": "packages/tenant-management/tsconfig.lib.json",
+            "project": "packages/tenant-management/ng-package.json"
           },
           "configurations": {
             "production": {

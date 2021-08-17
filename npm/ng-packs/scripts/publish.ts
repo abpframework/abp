@@ -30,7 +30,7 @@ program.parse(process.argv);
   try {
     await fse.remove('../dist/packages');
 
-    await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
+    await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
 
     await updateVersion(program.nextVersion);
 
@@ -39,10 +39,9 @@ program.parse(process.argv);
     await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
   } catch (error) {
-    await updateVersion(oldVersion);
-
     console.error(error.stderr);
     console.error('\n\nAn error has occurred! Rolling back the changed package versions.');
+    await updateVersion(oldVersion);
     process.exit(1);
   }
 
@@ -66,6 +65,7 @@ program.parse(process.argv);
   } catch (error) {
     console.error(error.stderr);
     console.error('\n\nAn error has occurred while publishing to the NPM!');
+    await fse.rename('../lerna.json', '../lerna.publish.json');
     process.exit(1);
   }
 
