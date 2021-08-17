@@ -1,6 +1,6 @@
+import program from 'commander';
 import execa from 'execa';
 import fse from 'fs-extra';
-import program from 'commander';
 import replaceWithPreview from './replace-with-preview';
 
 program
@@ -18,6 +18,8 @@ program.parse(process.argv);
 (async () => {
   const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
 
+  const oldVersion = fse.readJSONSync('../lerna.version.json').version;
+
   if (!program.nextVersion) {
     console.error('Please provide a version with --nextVersion attribute');
     process.exit(1);
@@ -26,36 +28,25 @@ program.parse(process.argv);
   const registry = program.registry || 'https://registry.npmjs.org';
 
   try {
-    await fse.remove('../dist');
+    await fse.remove('../dist/packages');
 
     await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
 
-    await fse.rename('../lerna.version.json', '../lerna.json');
-
-    await execa(
-      'yarn',
-      [
-        'lerna',
-        'version',
-        program.nextVersion,
-        '--yes',
-        '--no-commit-hooks',
-        '--skip-git',
-        '--force-publish',
-      ],
-      { stdout: 'inherit', cwd: '../' },
-    );
-
-    await fse.rename('../lerna.json', '../lerna.version.json');
-
-    await execa('yarn', ['replace-with-tilde']);
+    await updateVersion(program.nextVersion);
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 
     await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
-
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
+  } catch (error) {
+    await updateVersion(oldVersion);
 
+    console.error(error.stderr);
+    console.error('\n\nAn error has occurred! Rolling back the changed package versions.');
+    process.exit(1);
+  }
+
+  try {
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
     let tag: string;
@@ -72,7 +63,13 @@ program.parse(process.argv);
     );
 
     await fse.rename('../lerna.json', '../lerna.publish.json');
+  } catch (error) {
+    console.error(error.stderr);
+    console.error('\n\nAn error has occurred while publishing to the NPM!');
+    process.exit(1);
+  }
 
+  try {
     if (!program.preview && !program.skipGit) {
       await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
         stdout: 'inherit',
@@ -88,3 +85,17 @@ program.parse(process.argv);
 
   process.exit(0);
 })();
+
+async function updateVersion(version: string) {
+  await fse.rename('../lerna.version.json', '../lerna.json');
+
+  await execa(
+    'yarn',
+    ['lerna', 'version', version, '--yes', '--no-commit-hooks', '--skip-git', '--force-publish'],
+    { stdout: 'inherit', cwd: '../' },
+  );
+
+  await fse.rename('../lerna.json', '../lerna.version.json');
+
+  await execa('yarn', ['replace-with-tilde']);
+}

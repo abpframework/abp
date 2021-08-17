@@ -22,8 +22,7 @@ export class VisibilityDirective implements AfterViewInit {
       this.focusedElement = this.elRef.nativeElement;
     }
 
-    let observer: MutationObserver;
-    observer = new MutationObserver(mutations => {
+    const observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
         if (!mutation.target) return;
 

@@ -8,7 +8,7 @@ describe('ProfileService', () => {
   let environmentService: SpyObject<EnvironmentService>;
 
   const createHttp = createHttpFactory({
-    dataService: ProfileService,
+    service: ProfileService,
     providers: [
       RestService,
       { provide: CORE_OPTIONS, useValue: {} },

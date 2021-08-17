@@ -1,1 +1,0 @@
-export * from './locale.provider';

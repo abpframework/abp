@@ -1,11 +1,12 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { ApplicationConfiguration } from '../models/application-configuration';
+import { Store } from '@ngxs/store';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
-import { CoreTestingModule } from '@abp/ng.core/testing';
+import { CORE_OPTIONS } from '../tokens';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -106,7 +107,11 @@ describe('ConfigState', () => {
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    imports: [CoreTestingModule.withConfig()],
+    imports: [HttpClientTestingModule],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      { provide: Store, useValue: {} },
+    ],
   });
 
   beforeEach(() => {

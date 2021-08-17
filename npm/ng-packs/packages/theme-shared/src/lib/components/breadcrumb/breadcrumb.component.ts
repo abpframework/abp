@@ -31,7 +31,6 @@ export class BreadcrumbComponent implements OnInit {
   ngOnInit(): void {
     this.subscription.addOne(
       this.routerEvents.getNavigationEvents('End').pipe(
-        // tslint:disable-next-line:deprecation
         startWith(null),
         map(() => this.routes.search({ path: getRoutePath(this.router) })),
       ),
