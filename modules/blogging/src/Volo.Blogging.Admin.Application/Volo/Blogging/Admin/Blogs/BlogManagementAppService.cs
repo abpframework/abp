@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Posts;
@@ -58,6 +59,7 @@ namespace Volo.Blogging.Admin.Blogs
             blog.SetName(input.Name);
             blog.SetShortName(input.ShortName);
             blog.Description = input.Description;
+            blog.SetConcurrencyStamp(input.ConcurrencyStamp);
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }

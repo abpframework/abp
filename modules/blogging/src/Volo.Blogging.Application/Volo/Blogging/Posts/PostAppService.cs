@@ -11,6 +11,7 @@ using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
 using Volo.Blogging.Users;
+using Volo.Abp.Data;
 
 namespace Volo.Blogging.Posts
 {
@@ -173,6 +174,7 @@ namespace Volo.Blogging.Posts
 
             post.SetTitle(input.Title);
             post.SetUrl(input.Url);
+            post.SetConcurrencyStamp(input.ConcurrencyStamp);
             post.Content = input.Content;
             post.Description = input.Description;
             post.CoverImage = input.CoverImage;
