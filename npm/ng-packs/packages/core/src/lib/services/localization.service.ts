@@ -1,10 +1,9 @@
 import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
 import { from, Observable, Subject } from 'rxjs';
-import { filter, map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
-import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
@@ -35,7 +34,6 @@ export class LocalizationService {
     @SkipSelf()
     otherInstance: LocalizationService,
     private configState: ConfigStateService,
-    private appConfigService: AbpApplicationConfigurationService,
   ) {
     if (otherInstance) throw new Error('LocalizationService should have only one instance.');
 
@@ -49,12 +47,7 @@ export class LocalizationService {
         filter(
           lang => this.configState.getDeep('localization.currentCulture.cultureName') !== lang,
         ),
-        switchMap(lang =>
-          this.appConfigService
-            .get()
-            .pipe(tap(res => this.configState.setState(res)))
-            .pipe(mapTo(lang)),
-        ),
+        switchMap(lang => this.configState.refreshAppState().pipe(mapTo(lang))),
         switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
       .subscribe(lang => this._languageChange$.next(lang));
