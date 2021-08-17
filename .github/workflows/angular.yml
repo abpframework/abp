@@ -12,9 +12,11 @@ on:
       - 'dev'
 jobs:
   build-test-lint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
@@ -31,17 +33,13 @@ jobs:
         working-directory: npm/ng-packs
 
       - name: Run lint
-        run: yarn affected:lint
+        run: yarn affected:lint --base ${{ github.base_ref }}
         working-directory: npm/ng-packs
 
       - name: Run build
-        run: yarn affected:build
+        run: yarn affected:build --base ${{ github.base_ref }}
         working-directory: npm/ng-packs
 
       - name: Run test
-        run: yarn affected:test
-        working-directory: npm/ng-packs
-
-      - name: Build dev-app
-        run: yarn build --prod
+        run: yarn affected:test --base ${{ github.base_ref }}
         working-directory: npm/ng-packs
