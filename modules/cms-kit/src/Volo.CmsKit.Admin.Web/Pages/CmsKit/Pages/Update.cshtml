@@ -40,6 +40,8 @@
         <form asp-page="/CmsKit/Pages/Update" id="form-page-update">
             <abp-input asp-for="@Model.Id" />
 
+            <abp-input asp-for="@Model.ViewModel.ConcurrencyStamp" />
+
             <abp-input asp-for="@Model.ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" title="@L["PageSlugInformation"]" data-toggle="tooltip" />

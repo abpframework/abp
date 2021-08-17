@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
@@ -86,6 +87,7 @@ namespace Volo.CmsKit.Public.Comments
             }
 
             comment.SetText(input.Text);
+            comment.SetConcurrencyStamp(input.ConcurrencyStamp);
 
             var updatedComment = await CommentRepository.UpdateAsync(comment);
 
