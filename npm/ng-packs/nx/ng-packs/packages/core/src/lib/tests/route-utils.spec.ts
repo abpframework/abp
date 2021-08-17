@@ -5,7 +5,6 @@ import { RouterOutletComponent } from '../components';
 import { RoutesService } from '../services/routes.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 
-// tslint:disable-next-line
 @Component({ template: '' })
 class DummyComponent {}
 

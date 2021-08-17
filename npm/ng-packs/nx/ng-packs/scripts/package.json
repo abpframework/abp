@@ -1,0 +1,30 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "description": "ABP helper scripts",
+  "main": "index.js",
+  "scripts": {
+    "build": "ts-node -r tsconfig-paths/register build.ts",
+    "build:prod": "ts-node -r tsconfig-paths/register prod-build.ts",
+    "build:schematics": "ts-node -r tsconfig-paths/register build-schematics.ts",
+    "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
+    "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts"
+  },
+  "author": "",
+  "dependencies": {
+    "babel-preset-node6": "^11.0.0",
+    "commander": "^4.1.1",
+    "execa": "^2.0.3",
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.6",
+    "prompt-confirm": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.1",
+    "@types/node": "^13.1.2",
+    "esm": "^3.2.25",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4"
+  }
+}

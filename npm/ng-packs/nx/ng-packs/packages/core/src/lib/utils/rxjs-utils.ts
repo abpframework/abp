@@ -1,4 +1,3 @@
-// tslint:disable: max-line-length
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

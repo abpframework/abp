@@ -100,7 +100,7 @@ export interface AppConfig {
     | string
     | {
         input?: string;
-        [name: string]: any; // tslint:disable-line:no-any
+        [name: string]: any;
       }
   )[];
   /**
@@ -119,7 +119,7 @@ export interface AppConfig {
     | string
     | {
         input: string;
-        [name: string]: any; // tslint:disable-line:no-any
+        [name: string]: any;
       }
   )[];
   /**
@@ -130,7 +130,7 @@ export interface AppConfig {
    * Name and corresponding file for environment config.
    */
   environments?: {
-    [name: string]: any; // tslint:disable-line:no-any
+    [name: string]: any;
   };
   appShell?: {
     app: string;

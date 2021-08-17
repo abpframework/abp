@@ -1,7 +1,7 @@
-/* tslint:disable:variable-name */
 import { Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { O } from 'ts-toolbelt';
+import { ActionCallback } from './actions';
 import {
   Prop,
   PropCallback,
@@ -11,7 +11,6 @@ import {
   Props,
   PropsFactory,
 } from './props';
-import { ActionCallback } from './actions';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 

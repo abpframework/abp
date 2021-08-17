@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, Injector, Input } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 // Not an abstract class on purpose. Do not change!
-// tslint:disable-next-line: use-component-selector
 @Component({ template: '' })
 export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {
   protected _value: T;
@@ -41,7 +40,6 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
   }
 
   constructor(public injector: Injector) {
-    // tslint:disable-next-line: deprecation
     this.cdRef = injector.get(ChangeDetectorRef);
   }
 

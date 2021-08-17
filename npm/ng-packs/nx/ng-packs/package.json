@@ -29,7 +29,11 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules",
-    "postinstall": "node ./decorate-angular-cli.js && yarn compile:ivy"
+    "postinstall": "node ./decorate-angular-cli.js && yarn compile:ivy",
+    "build:schematics": "cd scripts && yarn && yarn build:schematics && cd ..",
+    "dev:schematics": "tsc -p packages/schematics/tsconfig.json -w",
+    "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
+    "lerna": "lerna"
   },
   "private": true,
   "devDependencies": {
@@ -106,7 +110,6 @@
     "rxjs": "~6.6.0",
     "should-quote": "^1.0.0",
     "snq": "^1.0.3",
-    "symlink-manager": "^1.5.0",
     "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",
     "ts-toolbelt": "6.15.4",

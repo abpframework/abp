@@ -125,7 +125,6 @@ export class ForDirective implements OnChanges {
   private projectItems(items: any[]): void {
     if (!items.length && this.emptyRef) {
       this.vcRef.clear();
-      // tslint:disable-next-line: no-unused-expression
       this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
       this.isShowEmptyRef = true;
       this.differ = null;

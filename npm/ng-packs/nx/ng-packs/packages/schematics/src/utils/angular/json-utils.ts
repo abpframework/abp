@@ -151,7 +151,6 @@ export function appendValueInAstArray(
 ) {
   let indentStr = _buildIndent(indent);
   let index = node.start.offset + 1;
-  // tslint:disable-next-line: no-any
   let newNodes: any[] | undefined;
 
   if (node.elements.length > 0) {

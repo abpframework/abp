@@ -70,7 +70,6 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   testChartJs() {
     try {
-      // tslint:disable-next-line: no-unused-expression
       Chart;
     } catch (error) {
       throw new Error(`Chart is not found. Import the Chart from app.module like shown below:

@@ -175,6 +175,5 @@ export interface WorkspaceTargets<TProjectType extends ProjectType = ProjectType
   'app-shell'?: AppShellBuilderTarget;
   'extract-i18n'?: ExtractI18nBuilderTarget;
   // TODO(hans): change this any to unknown when google3 supports TypeScript 3.0.
-  // tslint:disable-next-line:no-any
   [key: string]: any;
 }

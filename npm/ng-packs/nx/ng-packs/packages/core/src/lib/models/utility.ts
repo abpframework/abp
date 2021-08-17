@@ -1,4 +1,3 @@
-/* tslint:disable:ban-types */
 import { TemplateRef, Type } from '@angular/core';
 
 export type DeepPartial<T> = Partible<T> extends never
