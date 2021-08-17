@@ -6,6 +6,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz
 {
+    [DisallowConcurrentExecution]
     public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWorkerBase,
         IQuartzBackgroundWorkerAdapter
         where TWorker : IBackgroundWorker
