@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -96,6 +97,7 @@ namespace Volo.Docs.Admin.Projects
             project.SetFormat(input.Format);
             project.SetNavigationDocumentName(input.NavigationDocumentName);
             project.SetDefaultDocumentName(input.DefaultDocumentName);
+            project.SetConcurrencyStamp(input.ConcurrencyStamp);
 
             project.MinimumVersion = input.MinimumVersion;
             project.MainWebsiteUrl = input.MainWebsiteUrl;
