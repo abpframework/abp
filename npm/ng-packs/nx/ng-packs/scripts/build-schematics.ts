@@ -56,6 +56,8 @@ async function* copyPackageFiles(packageName: string) {
   try {
     await fse.remove(`../dist/packages/${PACKAGE_TO_BUILD}`);
 
+    await execa('yarn', ['install'], { cwd: '../packages/schematics' });
+
     await execa(
       'tsc',
       [
