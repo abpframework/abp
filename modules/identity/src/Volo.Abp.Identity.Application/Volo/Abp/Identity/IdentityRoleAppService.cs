@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
@@ -72,8 +73,9 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Update)]
         public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            var role = await RoleManager.GetByIdAsync(id);
-            role.ConcurrencyStamp = input.ConcurrencyStamp;
+            var role = await RoleManager.GetByIdAsync(id); 
+            
+            role.SetConcurrencyStamp(input.ConcurrencyStamp);
 
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 
