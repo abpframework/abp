@@ -73,7 +73,7 @@ namespace Volo.CmsKit.Admin.Pages
             page.SetContent(input.Content);
             page.SetScript(input.Script);
             page.SetStyle(input.Style);
-            input.SetConcurrencyStamp(input.ConcurrencyStamp);
+            page.SetConcurrencyStamp(input.ConcurrencyStamp);
 
             await PageRepository.UpdateAsync(page);
             
