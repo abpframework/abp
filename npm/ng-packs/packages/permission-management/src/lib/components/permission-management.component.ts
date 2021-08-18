@@ -1,8 +1,4 @@
-import {
-  AbpApplicationConfigurationService,
-  ConfigStateService,
-  CurrentUserDto,
-} from '@abp/ng.core';
+import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
@@ -116,11 +112,7 @@ export class PermissionManagementComponent
     );
   }
 
-  constructor(
-    protected store: Store,
-    protected configState: ConfigStateService,
-    protected appConfigService: AbpApplicationConfigurationService,
-  ) {}
+  constructor(protected store: Store, protected configState: ConfigStateService) {}
 
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
@@ -254,9 +246,7 @@ export class PermissionManagementComponent
       )
       .pipe(
         switchMap(() =>
-          this.shouldFetchAppConfig()
-            ? this.appConfigService.get().pipe(tap(res => this.configState.setState(res)))
-            : of(null),
+          this.shouldFetchAppConfig() ? this.configState.refreshAppState() : of(null),
         ),
         finalize(() => (this.modalBusy = false)),
       )

@@ -1,17 +1,15 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import compare from 'just-compare';
 import { throwError } from 'rxjs';
-import { catchError, distinctUntilChanged, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged } from 'rxjs/operators';
 import snq from 'snq';
 import { GetAppConfiguration, PatchConfigState, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { Config } from '../models/config';
-import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
-import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
 
 /**
@@ -221,9 +219,7 @@ export class ConfigState {
   }
 
   constructor(
-    private http: HttpClient,
     private store: Store,
-    private sessionState: SessionStateService,
     private environmentService: EnvironmentService,
     private configState: ConfigStateService,
   ) {
@@ -249,15 +245,12 @@ export class ConfigState {
   addData({ patchState, dispatch }: StateContext<Config.State>) {
     const apiName = 'default';
     const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
-    return this.http
-      .get<ApplicationConfigurationDto>(`${api}/api/abp/application-configuration`)
-      .pipe(
-        tap(configuration => this.configState.setState(configuration)),
-        catchError((err: HttpErrorResponse) => {
-          dispatch(new RestOccurError(err));
-          return throwError(err);
-        }),
-      );
+    return this.configState.refreshAppState().pipe(
+      catchError((err: HttpErrorResponse) => {
+        dispatch(new RestOccurError(err));
+        return throwError(err);
+      }),
+    );
   }
 
   @Action(SetEnvironment)

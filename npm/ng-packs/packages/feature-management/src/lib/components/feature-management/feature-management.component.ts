@@ -1,12 +1,8 @@
-import {
-  AbpApplicationConfigurationService,
-  ConfigStateService,
-  TrackByService,
-} from '@abp/ng.core';
+import { ConfigStateService, TrackByService } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeaturesService } from '../../proxy/feature-management/features.service';
 import {
@@ -71,7 +67,6 @@ export class FeatureManagementComponent
     protected service: FeaturesService,
     protected store: Store,
     protected configState: ConfigStateService,
-    protected appConfigService: AbpApplicationConfigurationService,
   ) {}
 
   openModal() {
@@ -123,10 +118,7 @@ export class FeatureManagementComponent
 
         if (!this.providerKey) {
           // to refresh host's features
-          this.appConfigService
-            .get()
-            .pipe(tap(res => this.configState.setState(res)))
-            .subscribe();
+          this.configState.refreshAppState().subscribe();
         }
       });
   }
