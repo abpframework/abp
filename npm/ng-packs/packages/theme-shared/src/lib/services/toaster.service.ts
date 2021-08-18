@@ -27,6 +27,7 @@ export class ToasterService implements ToasterContract {
     this.containerComponentRef = this.contentProjectionService.projectContent(
       PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent, {
         toasts$: this.toasts$,
+        remove: this.remove,
       }),
     );
 
@@ -120,10 +121,10 @@ export class ToasterService implements ToasterContract {
    * Removes the toast with given id.
    * @param id ID of the toast to be removed.
    */
-  remove(id: number): void {
+  remove = (id: number) => {
     this.toasts = this.toasts.filter(toast => toast.options?.id !== id);
     this.toasts$.next(this.toasts);
-  }
+  };
 
   /**
    * Removes all open toasts at once.

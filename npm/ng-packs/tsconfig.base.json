@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -11,7 +10,7 @@
     "target": "es2015",
     "module": "esnext",
     "lib": ["es2017", "dom"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "paths": {
       "@abp/ng.account": ["packages/account/src/public-api.ts"],
@@ -34,7 +33,7 @@
       "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
-      "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions"],
+      "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
       "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
     }
   },

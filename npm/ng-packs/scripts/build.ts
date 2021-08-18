@@ -51,7 +51,7 @@ import execa from 'execa';
         '--prod',
         '--all',
         '--exclude',
-        'schematics,core,theme-shared,components,feature-management,permission-management,account-core',
+        'dev-app,schematics,core,theme-shared,components,feature-management,permission-management,account-core',
         '--parallel',
       ],
       { stdout: 'inherit', cwd: '../' },

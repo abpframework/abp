@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Toaster } from '../../models/toaster';
-import { ToasterService } from '../../services/toaster.service';
-
 @Component({
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
@@ -10,6 +8,8 @@ import { ToasterService } from '../../services/toaster.service';
 export class ToastComponent implements OnInit {
   @Input()
   toast: Toaster.Toast;
+
+  @Output() remove = new EventEmitter<number>();
 
   get severityClass(): string {
     if (!this.toast || !this.toast.severity) return '';
@@ -31,8 +31,6 @@ export class ToastComponent implements OnInit {
     }
   }
 
-  constructor(private toasterService: ToasterService) {}
-
   ngOnInit() {
     const { sticky, life } = this.toast.options || {};
 
@@ -44,7 +42,7 @@ export class ToastComponent implements OnInit {
   }
 
   close() {
-    this.toasterService.remove(this.toast.options.id);
+    this.remove.emit(this.toast.options.id);
   }
 
   tap() {
