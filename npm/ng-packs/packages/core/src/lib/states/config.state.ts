@@ -1,6 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
+import compare from 'just-compare';
 import { throwError } from 'rxjs';
 import { catchError, distinctUntilChanged } from 'rxjs/operators';
 import snq from 'snq';
@@ -9,9 +10,7 @@ import { RestOccurError } from '../actions/rest.actions';
 import { Config } from '../models/config';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
-import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
-import compare from 'just-compare';
 
 /**
  * @deprecated Use ConfigStateService instead. To be deleted in v5.0.

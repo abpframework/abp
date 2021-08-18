@@ -13,7 +13,7 @@ import {
   resolveProject,
 } from '../../utils';
 
-export default function(schema: GenerateProxySchema) {
+export default function (schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
 
   return async (host: Tree, _context: SchematicContext) => {
