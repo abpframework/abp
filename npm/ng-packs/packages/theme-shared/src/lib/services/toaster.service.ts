@@ -6,7 +6,6 @@ import {
 } from '@abp/ng.core';
 import { ComponentRef, Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import snq from 'snq';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 import { Toaster } from '../models';
 
@@ -26,7 +25,10 @@ export class ToasterService implements ToasterContract {
 
   private setContainer() {
     this.containerComponentRef = this.contentProjectionService.projectContent(
-      PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent, { toasts$: this.toasts$ }),
+      PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent, {
+        toasts$: this.toasts$,
+        remove: this.remove,
+      }),
     );
 
     this.containerComponentRef.changeDetectorRef.detectChanges();
@@ -119,10 +121,10 @@ export class ToasterService implements ToasterContract {
    * Removes the toast with given id.
    * @param id ID of the toast to be removed.
    */
-  remove(id: number): void {
-    this.toasts = this.toasts.filter(toast => snq(() => toast.options.id) !== id);
+  remove = (id: number) => {
+    this.toasts = this.toasts.filter(toast => toast.options?.id !== id);
     this.toasts$.next(this.toasts);
-  }
+  };
 
   /**
    * Removes all open toasts at once.
@@ -130,7 +132,7 @@ export class ToasterService implements ToasterContract {
   clear(containerKey?: string): void {
     this.toasts = !containerKey
       ? []
-      : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== containerKey);
+      : this.toasts.filter(toast => toast.options?.containerKey !== containerKey);
     this.toasts$.next(this.toasts);
   }
 }
