@@ -33,5 +33,13 @@ namespace Volo.Abp.ObjectExtending
                 .OfType<DataTypeAttribute>()
                 .FirstOrDefault()?.DataType;
         }
+
+        public static string GetDataFormatString(this IBasicObjectExtensionPropertyInfo property)
+        {
+            return property
+                .Attributes
+                .OfType<DisplayFormatAttribute>()
+                .FirstOrDefault()?.DataFormatString;
+        }
     }
 }
