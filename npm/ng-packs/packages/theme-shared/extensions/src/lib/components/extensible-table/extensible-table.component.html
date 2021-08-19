@@ -26,8 +26,8 @@
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
         <ng-container *abpPermission="prop.permission">
           <div
-            *ngIf="row['_' + prop.name].visible"
-            [innerHTML]="row['_' + prop.name].value | async"
+            *ngIf="row['_' + prop.name]?.visible"
+            [innerHTML]="row['_' + prop.name]?.value | async"
             (click)="
               prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
             "
