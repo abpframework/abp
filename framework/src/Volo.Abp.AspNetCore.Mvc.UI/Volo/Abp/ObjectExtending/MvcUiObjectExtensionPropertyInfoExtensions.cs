@@ -37,7 +37,7 @@ namespace Volo.Abp.ObjectExtending
 
         public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
         {
-            var formatString = property.GetDataFormatString();
+            var formatString = property.GetDataFormatStringOrNull();
 
             if (!formatString.IsNullOrWhiteSpace())
             {

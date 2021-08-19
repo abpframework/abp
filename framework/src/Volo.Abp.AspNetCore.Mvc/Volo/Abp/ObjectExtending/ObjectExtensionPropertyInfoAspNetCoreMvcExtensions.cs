@@ -34,7 +34,7 @@ namespace Volo.Abp.ObjectExtending
                 .FirstOrDefault()?.DataType;
         }
 
-        public static string GetDataFormatString(this IBasicObjectExtensionPropertyInfo property)
+        public static string GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
         {
             return property
                 .Attributes
