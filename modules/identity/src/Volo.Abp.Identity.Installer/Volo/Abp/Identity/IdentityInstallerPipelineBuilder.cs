@@ -1,11 +1,12 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.ModuleInstalling;
 
 namespace Volo.Abp.Identity
 {
     public class IdentityInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
     {
-        public ModuleInstallingPipeline Build(ModuleInstallingContext context)
+        public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
         {
             return GetBasePipeline(context);
         }
