@@ -26,7 +26,8 @@
       "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {
         "@typescript-eslint/no-namespace": "off",
-        "@typescript-eslint/no-empty-function": ["warn"]
+        "@typescript-eslint/no-empty-function": ["warn"],
+        "@typescript-eslint/no-empty-interface": ["warn"]
       }
     },
     {
