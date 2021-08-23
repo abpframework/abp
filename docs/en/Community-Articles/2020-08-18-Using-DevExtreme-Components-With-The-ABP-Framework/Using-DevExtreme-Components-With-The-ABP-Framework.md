@@ -77,7 +77,7 @@ module.exports = {
 };
 ```
 
-Open your `DevExtremeSample.Web` project folder with a command line and run the `abp install-libs` command. This command will copy the needed library files into the ``/wwwroot/libs/devextreme/` folder.
+Open your `DevExtremeSample.Web` project folder with a command line and run the `abp install-libs` command. This command will copy the needed library files into the `/wwwroot/libs/devextreme/` folder.
 
 ````bash
 abp install-libs
