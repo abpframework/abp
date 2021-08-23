@@ -3,6 +3,7 @@ import { camel } from '../utils/text';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
 export class Method {
@@ -60,6 +61,7 @@ export class Body {
         this.body = value;
         break;
       case eBindingSourceId.Path:
+        // eslint-disable-next-line no-case-declarations
         const regex = new RegExp('{(' + paramName + '|' + camelName + '|' + name + ')}', 'g');
         this.url = this.url.replace(regex, '${' + value + '}');
         break;

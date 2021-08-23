@@ -104,7 +104,7 @@ mappings: {
 
 Once you properly configure the `abp.resourcemapping.js` file, you can run the following ABP CLI command from the command line:
 
-````
+````bash
 abp install-libs
 ````
 

@@ -10,9 +10,9 @@
         public const string NuGetRootPath = NuGetRootPathDevelopment;
 #else
         public const string WwwAbpIo = WwwAbpIoProduction;
-        
+
         public const string AccountAbpIo = AccountAbpIoProduction;
-       
+
         public const string NuGetRootPath = NuGetRootPathProduction;
 #endif
 

@@ -37,6 +37,13 @@ namespace Volo.Abp.ObjectExtending
 
         public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
         {
+            var formatString = property.GetDataFormatStringOrNull();
+
+            if (!formatString.IsNullOrWhiteSpace())
+            {
+                return formatString;
+            }
+
             if (property.IsDate())
             {
                 return "{0:yyyy-MM-dd}";

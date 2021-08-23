@@ -3,14 +3,14 @@ import { Store } from '@ngxs/store';
 import { AbstractType, InjectFlags, InjectionToken, Injector, Type } from '@angular/core';
 
 export const mockActions = new Subject();
-export const mockStore = ({
+export const mockStore = {
   selectSnapshot() {
     return true;
   },
   select(): Observable<any> {
     return of(null);
   },
-} as unknown) as Store;
+} as unknown as Store;
 
 export class DummyInjector extends Injector {
   constructor(public payload: { [key: string]: any }) {
