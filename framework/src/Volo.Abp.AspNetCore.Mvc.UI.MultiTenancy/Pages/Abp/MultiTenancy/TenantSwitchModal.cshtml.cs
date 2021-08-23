@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.MultiTenancy;
@@ -63,6 +64,7 @@ namespace Pages.Abp.MultiTenancy
 
         public class TenantInfoModel
         {
+            [InputInfoText("SwitchTenantHint")]
             public string Name { get; set; }
         }
     }

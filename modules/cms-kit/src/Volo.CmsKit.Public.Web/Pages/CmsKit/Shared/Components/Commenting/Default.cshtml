@@ -20,7 +20,7 @@
         @((string.IsNullOrWhiteSpace(author.Name)
                 ? author.UserName
                 : author.Name + " " + author.Surname).Trim())
-        <small class="text-muted float-right" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
+        <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
     </span>;
 }
 @{
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="text-right">
+                    <div class="text-end">
                         <abp-button type="submit" button-type="Primary" size="Block">
                             <i class="fa fa-comment-alt mr-1"></i> @L["Send"]
                         </abp-button>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <div class="text-right">
+                        <div class="text-end">
                             <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
                             <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times mr-1"></i>  @L["Cancel"] </abp-button>
 
@@ -122,7 +122,7 @@
     }
     else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
     {
-        <div class="text-right">
+        <div class="text-end">
             <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
         </div>
     }

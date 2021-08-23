@@ -152,11 +152,11 @@
                             <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
                             @if (hasCommentingPermission)
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="#LeaveComment">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-end active" href="#LeaveComment">@L["LeaveComment"]</a>
                             }
                             else
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-end active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                             }
                         </abp-column>
                     </abp-row>
@@ -216,8 +216,8 @@
                                                         <div class="form-group">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                         </div>
-                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
-                                                        <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                        <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Comment"].Value" />
+                                                        <abp-button button-type="Danger" class="btn-rounded float-end replyCancelButton" text="@L["Cancel"].Value" />
                                                     </form>
                                                 </div>
                                             </div>
@@ -233,8 +233,8 @@
                                                         <div class="form-group">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                         </div>
-                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                        <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                        <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                        <abp-button button-type="Danger" class="btn-rounded float-end editCancelButton" text="@L["Cancel"].Value" />
                                                     </form>
                                                 </div>
                                             </div>
@@ -292,8 +292,8 @@
                                                                     <div class="form-group">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                                     </div>
-                                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                                    <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                                    <abp-button button-type="Danger" class="btn-rounded float-end replyCancelButton" text="@L["Cancel"].Value" />
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -309,8 +309,8 @@
                                                                     <div class="form-group">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
                                                                     </div>
-                                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                                    <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                                    <abp-button button-type="Danger" class="btn-rounded float-end editCancelButton" text="@L["Cancel"].Value" />
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -339,7 +339,7 @@
                                     <div class="form-group">
                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                     </div>
-                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
                                 </form>
                             </div>
                         </div>
@@ -347,7 +347,7 @@
                 }
                 else
                 {
-                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
+                    <a abp-button="Primary" class="btn-rounded float-end active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                 }
             </div>
         </div>

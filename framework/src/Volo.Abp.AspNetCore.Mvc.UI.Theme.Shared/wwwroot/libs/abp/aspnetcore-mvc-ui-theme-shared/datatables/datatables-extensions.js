@@ -139,7 +139,7 @@ var abp = abp || {};
 
             $dropdownButton
                 .addClass('btn btn-primary btn-sm dropdown-toggle')
-                .attr('data-toggle', 'dropdown')
+                .attr('data-bs-toggle', 'dropdown')
                 .attr('aria-haspopup', 'true')
                 .attr('aria-expanded', 'false');
 
@@ -168,7 +168,7 @@ var abp = abp || {};
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.appendTo($container);
+                $dropdownButton.prependTo($container);
             }
 
             if ($dropdownItemsContainer.children().length === 0) {

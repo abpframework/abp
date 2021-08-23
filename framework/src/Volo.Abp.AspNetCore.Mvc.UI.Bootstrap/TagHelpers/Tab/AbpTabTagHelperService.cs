@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 anchor.AddCssClass("dropdown-item " + classAttributesAsString);
                 anchor.Attributes.Add("id", id);
                 anchor.Attributes.Add("href", "#" + link);
-                anchor.Attributes.Add("data-toggle", "tab");
+                anchor.Attributes.Add("data-bs-toggle", "tab");
                 anchor.Attributes.Add("role", "tab");
                 anchor.Attributes.Add("aria-controls", control);
                 anchor.Attributes.Add("aria-selected", "false");
@@ -62,7 +62,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 var anchor = new TagBuilder("a");
                 anchor.AddCssClass("nav-link " + classAttributesAsString + " " + AbpTabItemActivePlaceholder);
                 anchor.Attributes.Add("id", id);
-                anchor.Attributes.Add("data-toggle", TabItemsDataTogglePlaceHolder);
+                anchor.Attributes.Add("data-bs-toggle", TabItemsDataTogglePlaceHolder);
                 anchor.Attributes.Add("href", "#" + link);
                 anchor.Attributes.Add("role", "tab");
                 anchor.Attributes.Add("aria-controls", control);

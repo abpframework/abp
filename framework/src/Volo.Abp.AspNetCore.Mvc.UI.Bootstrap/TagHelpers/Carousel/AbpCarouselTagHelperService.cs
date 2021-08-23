@@ -79,7 +79,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             prevAnchor.AddCssClass("carousel-control-prev");
             prevAnchor.Attributes.Add("href", "#" + TagHelper.Id);
             prevAnchor.Attributes.Add("role", "button");
-            prevAnchor.Attributes.Add("data-slide", "prev");
+            prevAnchor.Attributes.Add("data-bs-slide", "prev");
 
             prevAnchor.InnerHtml.AppendHtml(prevIcon);
             prevAnchor.InnerHtml.AppendHtml(prevText);
@@ -97,7 +97,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             nextAnchor.AddCssClass("carousel-control-next");
             nextAnchor.Attributes.Add("href", "#" + TagHelper.Id);
             nextAnchor.Attributes.Add("role", "button");
-            nextAnchor.Attributes.Add("data-slide", "next");
+            nextAnchor.Attributes.Add("data-bs-slide", "next");
 
             nextAnchor.InnerHtml.AppendHtml(nextIcon);
             nextAnchor.InnerHtml.AppendHtml(nextText);
@@ -120,8 +120,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             for (var i = 0; i < itemList.Count; i++)
             {
                 var listItem = new TagBuilder("li");
-                listItem.Attributes.Add("data-target", "#" + TagHelper.Id);
-                listItem.Attributes.Add("data-slide-to", i.ToString());
+                listItem.Attributes.Add("data-bs-target", "#" + TagHelper.Id);
+                listItem.Attributes.Add("data-bs-slide-to", i.ToString());
 
                 if (itemList[i].Active)
                 {
@@ -144,7 +144,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void AddBasicAttributes(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-ride", "carousel");
+            output.Attributes.Add("data-bs-ride", "carousel");
             output.Attributes.Add("id", TagHelper.Id);
             AddBasicClasses(context, output);
         }

@@ -31,7 +31,7 @@
             <abp-column size-md="_6">
                 <h2>@L["Projects"]</h2>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Create))
                 {
                     <abp-dropdown>

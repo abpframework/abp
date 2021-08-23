@@ -33,7 +33,7 @@
                     <abp-column>
                         <abp-input asp-for="LoginInput.RememberMe" class="mb-4"/>
                     </abp-column>
-                    <abp-column class="text-right">
+                    <abp-column class="text-end">
                         <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
                     </abp-column>
                 </abp-row>

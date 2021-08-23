@@ -54,9 +54,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.TagName = "div";
                 LeaveOnlyGroupAttributes(context, output);
-                output.Attributes.AddClass(isCheckBox ? "custom-checkbox" : "form-group");
-                output.Attributes.AddClass(isCheckBox ? "custom-control" : "");
-                output.Attributes.AddClass(isCheckBox ? "mb-2" : "");
+                output.Attributes.AddClass("mb-3");
+                if (isCheckBox)
+                {
+                    output.Attributes.AddClass("form-check");
+                }
                 output.Content.AppendHtml(innerHtml);
             }
         }
@@ -102,7 +104,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
         {
-            return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2" : "form-group") + "\">" +
+            return "<div class=\"" + (isCheckbox ? "mb-3 form-check" : "mb-3") + "\">" +
                    Environment.NewLine + innerHtml + Environment.NewLine +
                    "</div>";
         }
@@ -178,7 +180,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (isCheckbox)
             {
-                className = "custom-control-input";
+                className = "form-check-input";
             }
 
             inputTagHelperOutput.Attributes.AddClass(className + " " + GetSize(context, output));
@@ -267,10 +269,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             label.Attributes.Add("for", GetIdAttributeValue(inputTag));
             label.InnerHtml.AppendHtml(TagHelper.Label);
 
-            if (isCheckbox)
-            {
-                label.AddCssClass("custom-control-label");
-            }
+            label.AddCssClass(isCheckbox ? "form-check-label" : "form-label");
 
             return label.ToHtmlString();
         }
@@ -319,12 +318,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
             var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-            var small = new TagBuilder("small");
-            small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
-            small.AddCssClass("form-text text-muted");
-            small.InnerHtml.Append(localizedText);
+            var div = new TagBuilder("div");
+            div.Attributes.Add("id", idAttr?.Value + "InfoText");
+            div.AddCssClass("form-text");
+            div.InnerHtml.Append(localizedText);
 
-            return small.ToHtmlString();
+            inputTag.Attributes.Add("aria-describedby", idAttr?.Value + "InfoText");
+
+            return div.ToHtmlString();
         }
 
         protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output, bool isCheckbox)
@@ -337,10 +338,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList();
 
-            if (isCheckbox)
-            {
-                attributeList.AddClass("custom-control-label");
-            }
+            attributeList.AddClass(isCheckbox ? "form-check-label" : "form-label");
 
             return await labelTagHelper.RenderAsync(attributeList, context, _encoder, "label", TagMode.StartTagAndEndTag);
         }

@@ -50,7 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
                 return;
             }
 
-            output.Attributes.AddClass("no-gutters");
+            output.Attributes.AddClass("g-0");
         }
     }
 }
