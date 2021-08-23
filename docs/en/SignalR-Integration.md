@@ -70,10 +70,10 @@ This will add the `@abp/signalr` to the dependencies in the `package.json` of yo
 }
 ````
 
-Run the `gulp` in the root folder of your web project:
+Run the following [ABP CLI](CLI.md) command in the root folder of your web project:
 
 ````bash
-gulp
+abp install-libs
 ````
 
 This will copy the SignalR JavaScript files into your project:
