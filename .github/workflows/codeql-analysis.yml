@@ -7,7 +7,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [dev, rel-1.0, rel-1.1, rel-2.0, rel-2.1, rel-2.2, rel-2.3, rel-2.4, rel-2.5, rel-2.6, rel-2.7, rel-2.8, rel-2.9, rel-3.0, rel-3.1, rel-3.2, rel-4.4]
+    branches: [dev, rel-*]
     paths:
       - 'abp/**/*.js'
       - 'abp/**/*.cs'
