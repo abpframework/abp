@@ -244,6 +244,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.Blazor.Server",
     "modules/identity/src/Volo.Abp.Identity.Blazor.WebAssembly",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
+    "modules/identity/src/Volo.Abp.Identity.Installer",
     
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
