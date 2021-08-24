@@ -1,8 +1,8 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { ChartComponent } from '../components';
-import { chartJsLoaded$ } from '../utils/widget-utils';
 import { ReplaySubject } from 'rxjs';
+import { ChartComponent } from '../components';
 import * as widgetUtils from '../utils/widget-utils';
+import { chartJsLoaded$ } from '../utils/widget-utils';
 // import 'chart.js';
 declare const Chart;
 
@@ -44,14 +44,14 @@ describe('ChartComponent', () => {
     }
   });
 
-  test('should have a success class by default', async done => {
-    await import('chart.js');
-
-    chartJsLoaded$.next();
-    setTimeout(() => {
-      expect(spectator.component.chart).toBeTruthy();
-      done();
-    }, 0);
+  test('should have a success class by default', done => {
+    import('chart.js').then(() => {
+      chartJsLoaded$.next();
+      setTimeout(() => {
+        expect(spectator.component.chart).toBeTruthy();
+        done();
+      }, 0);
+    });
   });
 
   describe('#reinit', () => {
@@ -108,7 +108,9 @@ describe('ChartComponent', () => {
       });
 
       chartJsLoaded$.next();
-      jest.spyOn(spectator.component.chart, 'getElementAtEvent').mockReturnValue([document.createElement('div')]);
+      jest
+        .spyOn(spectator.component.chart, 'getElementAtEvent')
+        .mockReturnValue([document.createElement('div')]);
       spectator.click('canvas');
     });
   });
