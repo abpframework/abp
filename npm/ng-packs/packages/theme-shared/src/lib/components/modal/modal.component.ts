@@ -12,7 +12,7 @@ import {
   Optional,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';

@@ -18,7 +18,8 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
   exportAs: 'abpChangePasswordForm',
 })
 export class ChangePasswordComponent
-  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs {
+  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;

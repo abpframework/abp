@@ -60,9 +60,8 @@ export const IDENTITY_ENTITY_PROP_CONTRIBUTORS = new InjectionToken<EntityPropCo
   'IDENTITY_ENTITY_PROP_CONTRIBUTORS',
 );
 
-export const IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS = new InjectionToken<CreateFormPropContributors>(
-  'IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS',
-);
+export const IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS =
+  new InjectionToken<CreateFormPropContributors>('IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS');
 
 export const IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS = new InjectionToken<EditFormPropContributors>(
   'IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS',

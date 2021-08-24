@@ -16,7 +16,7 @@ import { SubscriptionService } from '../services/subscription.service';
 type Controls = { [key: string]: FormControl } | FormGroup[];
 
 @Directive({
-  // tslint:disable-next-line: directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'form[ngSubmit][formGroup]',
   providers: [SubscriptionService],
 })
