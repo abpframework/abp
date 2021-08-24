@@ -7,12 +7,22 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [dev, rel-1.0, rel-1.1, rel-2.0, rel-2.1, rel-2.2, rel-2.3, rel-2.4, rel-2.5, rel-2.6, rel-2.7, rel-2.8, rel-2.9, rel-3.0, rel-3.1, rel-3.2]
+    branches: [dev, rel-1.0, rel-1.1, rel-2.0, rel-2.1, rel-2.2, rel-2.3, rel-2.4, rel-2.5, rel-2.6, rel-2.7, rel-2.8, rel-2.9, rel-3.0, rel-3.1, rel-3.2, rel-4.4]
+    paths:
+      - 'abp/**/*.js'
+      - 'abp/**/*.cs'
+      - 'abp/**/*.cshtml'
+      - 'abp/**/*.csproj'
+      - 'abp/**/*.razor'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [dev]
-  schedule:
-    - cron: '0 8 * * 6'
+    paths:
+      - 'abp/**/*.js'
+      - 'abp/**/*.cs'
+      - 'abp/**/*.cshtml'
+      - 'abp/**/*.csproj'
+      - 'abp/**/*.razor'
 
 jobs:
   analyze:
