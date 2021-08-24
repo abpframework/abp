@@ -358,6 +358,25 @@
     "WeWillSendYouADownloadLink": "Un link per scaricare il libro e-book è stato spedito a {0}.<br/> Controlla nella posta in arrivo / indesiderata / spam!",
     "InvalidFormInputs": "Per favore, digita le informazioni valide specificate nel modulo",
     "DDDBookEmailBody": "Grazie. <br /> Per scaricare il tuo libro, <a href=\"{0}\">clicca qui</a>.",
-    "FreeDDDEBook": "E-Book Gratuito DDD"
+    "FreeDDDEBook": "E-Book Gratuito DDD",
+    "StartFree": "Inizia gratuitamente",
+    "FreeTrial": "Prova Gratuita",
+    "AcceptsMarketingCommunications": "Si desidero ricevere comunicazioni marketing riguardanti ABP Commercial",
+    "PurposeOfUsage": "Proposta di utilizzo",
+    "Industry": "Settore",
+    "Choose": "- Scegli -",
+    "CompanyOrganizationName": "Azienda / Nome organizzazione",
+    "CompanySize": "Dimensioni Azienda",
+    "Next": "Prossimo",
+    "StartTrial": "Inizia la mia prova gratuita",
+    "ContactUsIssues": "Contattaci per qualsiasi problema",
+    "TrialActivatedWarning": "Caro {0}, un utente ha diritto di avere 1 solo periodo di prova gratuito. Hai già utilizzato il tuo periodo di prova.",
+    "ActivationRequirement": "Ti manca un solo passo per iniziare il tuo periodo di prova gratuito.<br>Abbiamo inviato un'email a <b>{0}</b> per attivare il tuo account. Controlla la tua casella di posta e non dimenticare la cartella spam!",
+    "SaveAndDownload": "Salva e Scarica",
+    "CompanyNameValidationMessage": "Il nome dell'azienda è troppo lungo!",
+    "AddressValidationMessage": "L'indirizzo è troppo lungo!",
+    "TaxNoValidationMessage": "TAX/VAT (IVA) è troppo lungo!",
+    "NotesValidationMessage": "Il campo note è troppo lungo!",
+    "CheckYourBillingInfo": "Puoi creare una fattura solo una volta! Controlla i tuoi dati di fatturazione prima di creare una fattura."
   }
 }
