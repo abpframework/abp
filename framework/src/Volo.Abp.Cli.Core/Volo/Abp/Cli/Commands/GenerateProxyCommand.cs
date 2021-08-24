@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Options;
+using Volo.Abp.Cli.ServiceProxy;
+using Volo.Abp.DependencyInjection;
+
 namespace Volo.Abp.Cli.Commands
 {
     public class GenerateProxyCommand : ProxyCommandBase
@@ -6,10 +10,10 @@ namespace Volo.Abp.Cli.Commands
 
         protected override string CommandName => Name;
 
-        protected override string SchematicsCommandName => "proxy-add";
-
-        public GenerateProxyCommand(CliService cliService)
-            : base(cliService)
+        public GenerateProxyCommand(
+            IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
+            IHybridServiceScopeFactory serviceScopeFactory)
+            : base(serviceProxyOptions, serviceScopeFactory)
         {
         }
 

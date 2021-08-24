@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
+using Volo.Abp.Cli.ServiceProxy;
+using Volo.Abp.Cli.ServiceProxy.Angular;
+using Volo.Abp.Cli.ServiceProxy.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
@@ -57,6 +60,12 @@ namespace Volo.Abp.Cli
                 options.Commands["bundle"] = typeof(BundleCommand);
                 options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
                 options.Commands["install-libs"] = typeof(InstallLibsCommand);
+            });
+
+            Configure<AbpCliServiceProxyOptions>(options =>
+            {
+                options.Generators[JavaScriptServiceProxyGenerator.Name] = typeof(JavaScriptServiceProxyGenerator);
+                options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
             });
         }
     }

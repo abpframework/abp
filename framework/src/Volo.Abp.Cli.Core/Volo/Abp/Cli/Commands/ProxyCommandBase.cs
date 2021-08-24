@@ -1,121 +1,66 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json.Linq;
-using NuGet.Versioning;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Utils;
+using Volo.Abp.Cli.ServiceProxy;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
     public abstract class ProxyCommandBase : IConsoleCommand, ITransientDependency
     {
-        public CliService CliService { get; }
         public ILogger<HelpCommand> Logger { get; set; }
 
         protected abstract string CommandName { get; }
 
-        protected abstract string SchematicsCommandName { get; }
+        protected AbpCliServiceProxyOptions ServiceProxyOptions { get; }
 
-        public ProxyCommandBase(CliService cliService)
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+
+        public ProxyCommandBase(
+            IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            CliService = cliService;
+            ServiceScopeFactory = serviceScopeFactory;
+            ServiceProxyOptions = serviceProxyOptions.Value;
             Logger = NullLogger<HelpCommand>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            CheckAngularJsonFile();
-            await CheckNgSchematicsAsync();
+            var generateType = commandLineArgs.Options.GetOrNull(Options.GenerateType.Short, Options.GenerateType.Long)?.ToUpper();
 
-            var prompt = commandLineArgs.Options.ContainsKey("p") || commandLineArgs.Options.ContainsKey("prompt");
-            var defaultValue = prompt ? null : "__default";
-
-            var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ?? defaultValue;
-            var apiName = commandLineArgs.Options.GetOrNull(Options.ApiName.Short, Options.ApiName.Long) ?? defaultValue;
-            var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long) ?? defaultValue;
-            var target = commandLineArgs.Options.GetOrNull(Options.Target.Short, Options.Target.Long) ?? defaultValue;
-
-            var commandBuilder = new StringBuilder("npx ng g @abp/ng.schematics:" + SchematicsCommandName);
-
-            if (module != null)
+            if (string.IsNullOrWhiteSpace(generateType))
             {
-                commandBuilder.Append($" --module {module}");
-            }
-
-            if (apiName != null)
-            {
-                commandBuilder.Append($" --api-name {apiName}");
-            }
-
-            if (source != null)
-            {
-                commandBuilder.Append($" --source {source}");
-            }
-
-            if (target != null)
-            {
-                commandBuilder.Append($" --target {target}");
-            }
-
-            CmdHelper.RunCmd(commandBuilder.ToString());
-        }
-
-        private async Task CheckNgSchematicsAsync()
-        {
-            var packageJsonPath = $"package.json";
-
-            if (!File.Exists(packageJsonPath))
-            {
-                throw new CliUsageException(
-                    "package.json file not found" +
+                throw new CliUsageException("Option Type is required" +
                     Environment.NewLine +
-                    GetUsageInfo()
-                );
+                    GetUsageInfo());
             }
 
-            var schematicsVersion =
-                (string) JObject.Parse(File.ReadAllText(packageJsonPath))["devDependencies"]?["@abp/ng.schematics"];
-
-            if (schematicsVersion == null)
+            if (!ServiceProxyOptions.Generators.ContainsKey(generateType))
             {
-                throw new CliUsageException(
-                    "\"@abp/ng.schematics\" NPM package should be installed to the devDependencies before running this command!" +
+                throw new CliUsageException("Option Type value is invalid" +
                     Environment.NewLine +
-                    GetUsageInfo()
-                );
+                    GetUsageInfo());
             }
 
-            var parseError = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
-            if (parseError)
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                Logger.LogWarning("Couldn't determinate version of \"@abp/ng.schematics\" package.");
-                return;
-            }
+                var generatorType = ServiceProxyOptions.Generators[generateType];
+                var serviceProxyGenerator = scope.ServiceProvider.GetService(generatorType).As<IServiceProxyGenerator>();
 
-            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
-            if (semanticSchematicsVersion < cliVersion)
-            {
-                Logger.LogWarning("\"@abp/ng.schematics\" version is lower than ABP Cli version.");
-                return;
+                await serviceProxyGenerator.GenerateProxyAsync(BuildArgs(commandLineArgs));
             }
         }
 
-        private void CheckAngularJsonFile()
+        private GenerateProxyArgs BuildArgs(CommandLineArgs commandLineArgs)
         {
-            var angularPath = $"angular.json";
-            if (!File.Exists(angularPath))
-            {
-                throw new CliUsageException(
-                    "angular.json file not found. You must run this command in the angular folder." +
-                    Environment.NewLine + Environment.NewLine +
-                    GetUsageInfo()
-                );
-            }
+            var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long);
+            var url = commandLineArgs.Options.GetOrNull(Options.Url.Long);
+            return new GenerateProxyArgs(CommandName, module, url, commandLineArgs.Options);
         }
 
         public string GetUsageInfo()
@@ -132,7 +77,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-m|--module <module-name>          (default: 'app') The name of the backend module you wish to generate proxies for.");
             sb.AppendLine("-a|--api-name <module-name>        (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
             sb.AppendLine("-s|--source <source-name>          (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
-            sb.AppendLine("-t|--target <target-name>          (default: 'defaultProject') Angular project name to place generated code in.");
+            sb.AppendLine("-o|--output <output-name>          (default: 'defaultProject') Angular project name to place generated code in.");
             sb.AppendLine("-p|--prompt                        Asks the options from the command line prompt (for the missing options)");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
@@ -162,9 +107,20 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "source";
             }
 
-            public static class Target
+            public static class GenerateType
             {
                 public const string Short = "t";
+                public const string Long = "type";
+            }
+
+            public static class Output
+            {
+                public const string Short = "o";
+                public const string Long = "output";
+            }
+
+            public static class Target
+            {
                 public const string Long = "target";
             }
 
@@ -172,6 +128,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "p";
                 public const string Long = "prompt";
+            }
+
+            public static class Url
+            {
+                public const string Long = "url";
             }
         }
     }
