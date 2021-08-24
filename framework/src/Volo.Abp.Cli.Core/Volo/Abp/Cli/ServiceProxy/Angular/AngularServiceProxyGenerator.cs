@@ -16,7 +16,6 @@ namespace Volo.Abp.Cli.ServiceProxy.Angular
         public const string Name = "NG";
 
         public CliService CliService { get; }
-
         public ILogger<AngularServiceProxyGenerator> Logger { get; set; }
 
         public AngularServiceProxyGenerator(CliService cliService)
@@ -30,14 +29,14 @@ namespace Volo.Abp.Cli.ServiceProxy.Angular
             CheckAngularJsonFile();
             await CheckNgSchematicsAsync();
 
+            var schematicsCommandName = args.CommandName == RemoveProxyCommand.Name ? "proxy-remove" : "proxy-add";
             var prompt = args.ExtraProperties.ContainsKey("p") || args.ExtraProperties.ContainsKey("prompt");
             var defaultValue = prompt ? null : "__default";
 
             var module = args.Module ?? defaultValue;
-            var schematicsCommandName = args.CommandName == RemoveProxyCommand.Name ? "proxy-remove" : "proxy-add";
-            var apiName = args.ExtraProperties.GetOrNull(ProxyCommandBase.Options.ApiName.Short, ProxyCommandBase.Options.ApiName.Long) ?? defaultValue;
-            var source = args.ExtraProperties.GetOrNull(ProxyCommandBase.Options.Source.Short, ProxyCommandBase.Options.Source.Long) ?? defaultValue;
-            var target = args.ExtraProperties.GetOrNull(ProxyCommandBase.Options.Target.Long) ?? defaultValue;
+            var apiName = args.ApiName ?? defaultValue;
+            var source = args.Source ?? defaultValue;
+            var target = args.Target ?? defaultValue;
 
 
             var commandBuilder = new StringBuilder("npx ng g @abp/ng.schematics:" + schematicsCommandName);

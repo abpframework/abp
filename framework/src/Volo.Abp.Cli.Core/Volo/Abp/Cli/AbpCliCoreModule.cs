@@ -7,6 +7,7 @@ using Volo.Abp.Cli.ServiceProxy;
 using Volo.Abp.Cli.ServiceProxy.Angular;
 using Volo.Abp.Cli.ServiceProxy.JavaScript;
 using Volo.Abp.Domain;
+using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -19,7 +20,8 @@ namespace Volo.Abp.Cli
         typeof(AbpDddDomainModule),
         typeof(AbpJsonModule),
         typeof(AbpIdentityModelModule),
-        typeof(AbpMinifyModule)
+        typeof(AbpMinifyModule),
+        typeof(AbpHttpModule)
     )]
     public class AbpCliCoreModule : AbpModule
     {

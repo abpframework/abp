@@ -1,5 +1,5 @@
-﻿using JetBrains.Annotations;
-using Volo.Abp.Cli.Args;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Cli.ServiceProxy
 {
@@ -8,23 +8,44 @@ namespace Volo.Abp.Cli.ServiceProxy
         [NotNull]
         public string CommandName { get; }
 
+        [NotNull]
+        public string WorkDirectory { get; }
+
         public string Module { get; }
 
         public string Url { get; }
 
+        public string Output { get; }
+
+        public string Target { get; }
+
+        public string ApiName { get; }
+
+        public string Source { get; }
+
         [NotNull]
-        public AbpCommandLineOptions ExtraProperties { get; set; }
+        public Dictionary<string, string> ExtraProperties { get; set; }
 
         public GenerateProxyArgs(
             [NotNull] string commandName,
-             string module,
-             string url,
-            AbpCommandLineOptions extraProperties = null)
+            [NotNull] string workDirectory,
+            string module,
+            string url,
+            string output,
+            string target,
+            string apiName,
+            string source,
+            Dictionary<string, string> extraProperties = null)
         {
             CommandName = Check.NotNullOrWhiteSpace(commandName, nameof(commandName));
+            WorkDirectory = Check.NotNullOrWhiteSpace(workDirectory, nameof(workDirectory));
             Module = module;
             Url = url;
-            ExtraProperties = extraProperties ?? new AbpCommandLineOptions();
+            Output = output;
+            Target = target;
+            ApiName = apiName;
+            Source = source;
+            ExtraProperties = extraProperties ?? new Dictionary<string, string>();
         }
     }
 }

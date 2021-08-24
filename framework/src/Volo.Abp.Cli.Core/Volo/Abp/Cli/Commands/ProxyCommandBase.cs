@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -58,9 +59,15 @@ namespace Volo.Abp.Cli.Commands
 
         private GenerateProxyArgs BuildArgs(CommandLineArgs commandLineArgs)
         {
-            var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long);
             var url = commandLineArgs.Options.GetOrNull(Options.Url.Long);
-            return new GenerateProxyArgs(CommandName, module, url, commandLineArgs.Options);
+            var target = commandLineArgs.Options.GetOrNull(Options.Target.Long);
+            var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ??　"app";
+            var output = commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long);
+            var apiName = commandLineArgs.Options.GetOrNull(Options.ApiName.Short, Options.ApiName.Long);
+            var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
+            var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
+
+            return new GenerateProxyArgs(CommandName, workDirectory, module.ToLower(), url, output, target, apiName, source, commandLineArgs.Options);
         }
 
         public string GetUsageInfo()
@@ -133,6 +140,12 @@ namespace Volo.Abp.Cli.Commands
             public static class Url
             {
                 public const string Long = "url";
+            }
+
+            public static class WorkDirectory
+            {
+                public const string Short = "wd";
+                public const string Long = "working-directory";
             }
         }
     }
