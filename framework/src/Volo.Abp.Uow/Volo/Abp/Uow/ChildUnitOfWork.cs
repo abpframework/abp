@@ -76,16 +76,20 @@ namespace Volo.Abp.Uow
             _parent.OnCompleted(handler);
         }
 
-        public void AddLocalEvent(object eventData)
+        public void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord, 
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
         {
-            _parent.AddLocalEvent(eventData);
+            _parent.AddOrReplaceLocalEvent(eventRecord, replacementSelector);
         }
 
-        public void AddDistributedEvent(object eventData)
+        public void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
         {
-            _parent.AddDistributedEvent(eventData);
+            _parent.AddOrReplaceDistributedEvent(eventRecord, replacementSelector);
         }
-        
+
         public IDatabaseApi FindDatabaseApi(string key)
         {
             return _parent.FindDatabaseApi(key);

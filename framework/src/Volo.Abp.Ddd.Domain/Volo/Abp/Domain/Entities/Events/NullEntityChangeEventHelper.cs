@@ -27,11 +27,6 @@ namespace Volo.Abp.Domain.Entities.Events
             return Task.CompletedTask;
         }
 
-        public Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
         public Task TriggerEntityUpdatingEventAsync(object entity)
         {
             return Task.CompletedTask;
@@ -42,22 +37,12 @@ namespace Volo.Abp.Domain.Entities.Events
             return Task.CompletedTask;
         }
 
-        public Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
         public Task TriggerEntityDeletingEventAsync(object entity)
         {
             return Task.CompletedTask;
         }
 
         public Task TriggerEntityDeletedEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
         {
             return Task.CompletedTask;
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,8 +34,8 @@ namespace Volo.Abp.Uow
         public string ReservationName { get; set; }
 
         protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
-        protected ICollection<object> DistributedEvents { get; } = new Collection<object>();
-        protected ICollection<object> LocalEvents { get; } = new Collection<object>();
+        protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new List<UnitOfWorkEventRecord>();
+        protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new List<UnitOfWorkEventRecord>();
 
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
@@ -241,14 +240,41 @@ namespace Volo.Abp.Uow
             CompletedHandlers.Add(handler);
         }
 
-        public virtual void AddLocalEvent(object eventData)
+        public virtual void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
         {
-            LocalEvents.Add(eventData);
+            AddOrReplaceEvent(LocalEvents, eventRecord, replacementSelector);
         }
 
-        public virtual void AddDistributedEvent(object eventData)
+        public virtual void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
         {
-            DistributedEvents.Add(eventData);
+            AddOrReplaceEvent(DistributedEvents, eventRecord, replacementSelector);
+        }
+        
+        public virtual void AddOrReplaceEvent(
+            List<UnitOfWorkEventRecord> eventRecords,
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            if (replacementSelector == null)
+            {
+                eventRecords.Add(eventRecord);
+            }
+            else
+            {
+                var foundIndex = eventRecords.FindIndex(replacementSelector);
+                if (foundIndex < 0)
+                {
+                    eventRecords.Add(eventRecord);
+                }
+                else
+                {
+                    eventRecords[foundIndex] = eventRecord;
+                }
+            }
         }
         
         protected virtual async Task OnCompletedAsync()

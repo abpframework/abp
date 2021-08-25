@@ -43,8 +43,14 @@ namespace Volo.Abp.Uow
 
         void OnCompleted(Func<Task> handler);
 
-        void AddLocalEvent(object eventData);
+        void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        );
 
-        void AddDistributedEvent(object eventData);
+        void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        );
     }
 }

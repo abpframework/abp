@@ -579,14 +579,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         private async Task TriggerEntityCreateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityCreatingEventAsync(entity);
+            await EntityChangeEventHelper.TriggerEntityCreatedEventAsync(entity);
         }
 
         protected virtual async Task TriggerEntityUpdateEventsAsync(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
+            await EntityChangeEventHelper.TriggerEntityUpdatedEventAsync(entity);
         }
 
         protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
@@ -598,8 +598,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityDeletingEventAsync(entity);
+            await EntityChangeEventHelper.TriggerEntityDeletedEventAsync(entity);
         }
 
         protected virtual void CheckAndSetId(TEntity entity)

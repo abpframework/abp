@@ -5,7 +5,7 @@ namespace Volo.Abp.Uow
 {
     public interface IUnitOfWorkEventPublisher
     {
-        Task PublishLocalEventsAsync(IEnumerable<object> localEvents);
-        Task PublishDistributedEventsAsync(IEnumerable<object> distributedEvents);
+        Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents);
+        Task PublishDistributedEventsAsync(IEnumerable<UnitOfWorkEventRecord> distributedEvents);
     }
 }
