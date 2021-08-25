@@ -17,7 +17,7 @@ namespace DistDemoApp
 #else
                 .MinimumLevel.Information()
 #endif
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
                 .WriteTo.Async(c => c.Console())
