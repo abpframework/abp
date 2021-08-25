@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Modularity;
@@ -22,6 +23,12 @@ namespace DistDemoApp
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
+            });
+            
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.EtoMappings.Add<TodoItem, TodoItemEto>();
+                options.AutoEventSelectors.Add<TodoItem>();
             });
         }
     }

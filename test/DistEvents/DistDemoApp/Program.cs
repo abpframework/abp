@@ -19,8 +19,8 @@ namespace DistDemoApp
                 var demoService = application.ServiceProvider.GetRequiredService<DemoService>();
                 await demoService.CreateTodoItemAsync();
 
-                //Console.WriteLine("Press ENTER to exit");
-                //Console.ReadLine();
+                Console.WriteLine("Press ENTER to exit");
+                Console.ReadLine();
                 
                 application.Shutdown();
             }

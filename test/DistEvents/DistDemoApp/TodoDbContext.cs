@@ -7,6 +7,7 @@ namespace DistDemoApp
     public class TodoDbContext : AbpDbContext<TodoDbContext>
     {
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoSummary> TodoSummaries { get; set; }
 
         public TodoDbContext(DbContextOptions<TodoDbContext> options)
             : base(options)
