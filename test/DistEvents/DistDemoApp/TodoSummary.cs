@@ -35,7 +35,7 @@ namespace DistDemoApp
 
         public override string ToString()
         {
-            return $"{base.ToString()}, {Year}-{Month:2}-{Day:2}: {TotalCount}";
+            return $"{base.ToString()}, {Year}-{Month:00}-{Day:00}: {TotalCount}";
         }
     }
 }

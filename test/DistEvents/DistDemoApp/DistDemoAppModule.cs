@@ -15,6 +15,8 @@ namespace DistDemoApp
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddHostedService<MyProjectNameHostedService>();
+            
             context.Services.AddAbpDbContext<TodoDbContext>(options =>
             {
                 options.AddDefaultRepositories();

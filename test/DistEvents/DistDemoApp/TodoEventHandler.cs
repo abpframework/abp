@@ -32,7 +32,7 @@ namespace DistDemoApp
 
             if (todoSummary == null)
             {
-                await _todoSummaryRepository.InsertAsync(new TodoSummary(dateTime));
+                todoSummary = await _todoSummaryRepository.InsertAsync(new TodoSummary(dateTime));
             }
             else
             {

@@ -1,29 +1,57 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
 
 namespace DistDemoApp
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<DistDemoAppModule>(opts =>
-            {
-                opts.UseAutofac();
-            }))
-            {
-                application.Initialize();
+            Log.Logger = new LoggerConfiguration()
+#if DEBUG
+                .MinimumLevel.Debug()
+#else
+                .MinimumLevel.Information()
+#endif
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Async(c => c.File("Logs/logs.txt"))
+                .WriteTo.Async(c => c.Console())
+                .CreateLogger();
 
-                var demoService = application.ServiceProvider.GetRequiredService<DemoService>();
-                await demoService.CreateTodoItemAsync();
-
-                Console.WriteLine("Press ENTER to exit");
-                Console.ReadLine();
-                
-                application.Shutdown();
+            try
+            {
+                Log.Information("Starting console host.");
+                await CreateHostBuilder(args).RunConsoleAsync();
+                return 0;
             }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly!");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+
         }
+
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseAutofac()
+                .UseSerilog()
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    //setup your additional configuration sources
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddApplication<DistDemoAppModule>();
+                });
     }
 }
