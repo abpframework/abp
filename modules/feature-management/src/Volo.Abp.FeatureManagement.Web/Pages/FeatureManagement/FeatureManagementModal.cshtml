@@ -79,10 +79,10 @@
 
                                             @if (feature.ValueType is SelectionStringValueType selectType)
                                             {
-                                                <div data-feature-name="@feature.Name" data-parent-name="@(feature.ParentName ?? "")" style="margin-left: @(feature.Depth * 25)px" class="form-group">
-                                                    <label for="@feature.Name">@feature.DisplayName</label>
+                                                <div data-feature-name="@feature.Name" data-parent-name="@(feature.ParentName ?? "")" style="margin-left: @(feature.Depth * 25)px" class="mb-3">
+                                                    <label class="form-label" for="@feature.Name">@feature.DisplayName</label>
 
-                                                    <select id="@feature.Name" name="FeatureGroups[@i].Features[@j].Value" class="custom-select form-control">
+                                                    <select id="@feature.Name" name="FeatureGroups[@i].Features[@j].Value" class="form-select">
                                                         @foreach (var item in selectType.ItemSource.Items)
                                                         {
                                                             if (item.Value == feature.Value)

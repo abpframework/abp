@@ -8,7 +8,7 @@
 @inject IHtmlLocalizer<AbpUiResource> L
 @model ApplicationMenu
 <div class="dropdown">
-    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @if (CurrentUser.TenantId != null)
         {
             <small><i>@CurrentTenant.Name</i>\</small>@CurrentUser.UserName
@@ -21,7 +21,7 @@
 
     @if (Model.Items.Any())
     {
-        <div class="dropdown-menu dropdown-menu-right border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
             @foreach (var menuItem in Model.Items)
             {
                 var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";

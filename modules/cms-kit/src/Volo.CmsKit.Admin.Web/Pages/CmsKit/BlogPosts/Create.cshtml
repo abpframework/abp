@@ -44,14 +44,14 @@
 <abp-card>
     <abp-card-header title="@L["New"].Value"></abp-card-header>
     <abp-card-body>
-        <div class="form-group">
-            <label>@L["CoverImage"]</label>
+        <div class="mb-3">
+            <label class="form-label">@L["CoverImage"]</label>
             <input type="file" id="BlogPostCoverImage" class="form-control" />
         </div>
 
         <abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/BlogPosts/Create" id="form-blog-post-create">
-            <div class="form-group">
-                <label asp-for="ViewModel.BlogId"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="ViewModel.BlogId"></label>
                 <select asp-for="ViewModel.BlogId" id="BlogSelectionSelect" class="form-control"></select>
                 <span asp-validation-for="ViewModel.BlogId"></span>
             </div>

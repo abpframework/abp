@@ -30,9 +30,9 @@
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
-            <div class="form-row">
+            <div class="row">
                 <div class="col">
-                    <div class="form-group m-0">
+                    <div class="mb-3 m-0">
                         <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
                 </div>
@@ -94,9 +94,9 @@
         <div class="card bg-light p-3 mx-0 mt-3">
             <form class="cms-comment-update-form">
                 <input hidden value="@id.ToString()" name="id" />
-                <div class="form-row">
+                <div class="row">
                     <div class="col">
-                        <div class="form-group m-0">
+                        <div class="mb-3 m-0">
                             <textarea class="form-control" name="commentText" rows="3">@text</textarea>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
 
                 @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-                <div class="form-row mt-2">
+                <div class="row mt-2">
                     <div class="col">
                         <div class="my-2 ">
                             @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
@@ -165,7 +165,7 @@
 
                                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
-                                <div class="form-row mt-2">
+                                <div class="row mt-2">
                                     <div class="col">
                                         <div class="my-2 ">
                                             @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)

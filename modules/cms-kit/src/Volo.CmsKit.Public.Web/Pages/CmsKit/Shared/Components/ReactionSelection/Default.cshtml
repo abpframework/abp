@@ -6,7 +6,7 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewComponent.ReactionSelectionViewModel
 
 
-<div class="row form-row">
+<div class="row row">
         <div class="col">
             <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
@@ -33,7 +33,7 @@
                 }
                 else
                 {
-                    <span class="ms-reaction-select-icon text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><a href='@Model.LoginUrl' class='btn btn-primary btn-block'>@L["LoginToReact"]</a></div>">
+                    <span class="ms-reaction-select-icon text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><div class='d-grid gap-2'><a href='@Model.LoginUrl' class='btn btn-primary'>@L["LoginToReact"]</a</div>div>">
                         <i class="fa fa-smile-o"></i>
                     </span>
                 }

@@ -90,9 +90,11 @@
                                 <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
-                                <abp-button class="mt-md-4" size="Block" button-type="Primary" type="submit">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </abp-button>
+                                <div class="d-grid gap-2">
+                                    <abp-button class="mt-md-4" button-type="Primary" type="submit">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </abp-button>
+                                </div>
                             </abp-column>
                         </abp-row>
                     </form>

@@ -213,7 +213,7 @@
                                                         <input name="postId" value="@Model.Post.Id" hidden />
                                                         <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
-                                                        <div class="form-group">
+                                                        <div class="mb-3">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                         </div>
                                                         <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Comment"].Value" />
@@ -230,7 +230,7 @@
                                                 <div>
                                                     <form class="editFormClass">
                                                         <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                        <div class="form-group">
+                                                        <div class="mb-3">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                         </div>
                                                         <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
@@ -289,7 +289,7 @@
                                                                 <form method="post">
                                                                     <input name="postId" value="@Model.Post.Id" hidden />
                                                                     <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                                    <div class="form-group">
+                                                                    <div class="mb-3">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                                     </div>
                                                                     <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
@@ -306,7 +306,7 @@
                                                             <div>
                                                                 <form class="editFormClass">
                                                                     <input name="commentId" value="@reply.Id" hidden />
-                                                                    <div class="form-group">
+                                                                    <div class="mb-3">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
                                                                     </div>
                                                                     <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
@@ -336,7 +336,7 @@
                                 <form method="post">
                                     <input name="postId" value="@Model.Post.Id" hidden />
                                     <input name="repliedCommentId" id="repliedCommentId" hidden />
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                     </div>
                                     <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />

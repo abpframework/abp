@@ -19,13 +19,13 @@
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4">
-                <div class="form-group">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                <div class="mb-3">
+                    <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
                     <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control"/>
                     <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="LoginInput.Password"></label>
+                <div class="mb-3">
+                    <label asp-for="LoginInput.Password" class="form-label"></label>
                     <input asp-for="LoginInput.Password" class="form-control"/>
                     <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
                 </div>
@@ -37,11 +37,13 @@
                         <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
                     </abp-column>
                 </abp-row>
-                <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
-                @if (Model.ShowCancelButton)
-                {
-                    <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-block btn-lg mt-3">@L["Cancel"]</abp-button>
-                }
+                <div class="d-grid gap-2">
+                    <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                    @if (Model.ShowCancelButton)
+                    {
+                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                    }
+                </div>
             </form>
         }
 

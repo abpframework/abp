@@ -43,8 +43,8 @@
 
                             <abp-row>
                                 <abp-column size-sm="_9">
-                                    <div class="form-group">
-                                        <label for="CoverImageFile">@L["CoverImage"]</label>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="CoverImageFile">@L["CoverImage"]</label>
                                         <span> * </span>
                                         <input class="form-control" type="file" id="CoverImageFile" />
                                     </div>
@@ -61,7 +61,7 @@
                             <abp-input asp-for="Post.Id" />
                             <abp-input asp-for="Post.Content" />
 
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <div class="edit-post-editor">
                                     <div class="gradient-background-animation loading-cover"></div>
                                 </div>

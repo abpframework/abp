@@ -87,11 +87,9 @@
                             <div class="docs-version">
                                 <div class="version-select">
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text">
-                                                <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                            </label>
-                                        </div>
+                                        <span class="input-group-text">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
                                         <select asp-items="Model.ProjectSelectItems"
                                                 class="form-control"
@@ -109,11 +107,11 @@
                                     <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pr-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text">
-                                                        <i class="fas fa-code-branch" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
-                                                    </label>
-                                                </div>
+
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-code-branch" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                                </span>
+        
 
                                                 <select asp-items="Model.VersionSelectItems"
                                                         class="form-control"
@@ -131,11 +129,9 @@
                                     <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
-                                                @*<div class="input-group-prepend">
-                                                        <label class="input-group-text">
+                                                @*<span class="input-group-text">
                                                             <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
-                                                        </label>
-                                                    </div>*@
+                                                 </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
                                                         class="form-control"
                                                         onchange="window.location.replace(this.value)">
@@ -150,10 +146,7 @@
                         <div class="docs-version">
                             <div class="version-select">
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text"><i class="fa fa-filter"></i></label>
-                                    </div>
-
+                                    <span class="input-group-text"><i class="fa fa-filter"></i></span>
                                     <input class="form-control"
                                            id="filter"
                                            type="search"
@@ -197,9 +190,7 @@
                                 {
                                     <div class="search-area">
                                         <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text"><i class="fa fa-search"></i></label>
-                                            </div>
+                                            <span class="input-group-text"><i class="fa fa-search"></i></span>
 
                                             <input class="form-control"
                                                    id="fullsearch"
@@ -262,14 +253,12 @@
                                                 </p>
                                             </abp-column>
                                         </abp-row>
-                                        <abp-form-row>
+                                        <abp-row>
                                             @foreach (var parameter in Model.DocumentPreferences.Parameters)
                                             {
                                                 <abp-column size="_4">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
-                                                        </div>
+                                                        <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
                                                         <select class="doc-section-combobox form-control"
                                                                 aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
                                                                 id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
@@ -288,7 +277,7 @@
                                                     </div>
                                                 </abp-column>
                                             }
-                                        </abp-form-row>
+                                        </abp-row>
                                     </div>
                                 }
                             </div>
