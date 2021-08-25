@@ -76,6 +76,16 @@ namespace Volo.Abp.Uow
             _parent.OnCompleted(handler);
         }
 
+        public void AddLocalEvent(object eventData)
+        {
+            _parent.AddLocalEvent(eventData);
+        }
+
+        public void AddDistributedEvent(object eventData)
+        {
+            _parent.AddDistributedEvent(eventData);
+        }
+        
         public IDatabaseApi FindDatabaseApi(string key)
         {
             return _parent.FindDatabaseApi(key);
