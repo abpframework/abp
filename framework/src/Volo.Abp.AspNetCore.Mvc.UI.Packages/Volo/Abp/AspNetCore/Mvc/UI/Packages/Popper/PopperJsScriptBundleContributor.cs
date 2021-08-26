@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/popper.js/popper.min.js");
+            context.Files.AddIfNotContains("/libs/@popperjs/popper.min.js");
         }
     }
 }
