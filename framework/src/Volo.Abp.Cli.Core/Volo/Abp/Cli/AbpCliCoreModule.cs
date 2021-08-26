@@ -5,6 +5,7 @@ using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ServiceProxy;
 using Volo.Abp.Cli.ServiceProxy.Angular;
+using Volo.Abp.Cli.ServiceProxy.CSharp;
 using Volo.Abp.Cli.ServiceProxy.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
@@ -68,6 +69,7 @@ namespace Volo.Abp.Cli
             {
                 options.Generators[JavaScriptServiceProxyGenerator.Name] = typeof(JavaScriptServiceProxyGenerator);
                 options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
+                options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
             });
         }
     }
