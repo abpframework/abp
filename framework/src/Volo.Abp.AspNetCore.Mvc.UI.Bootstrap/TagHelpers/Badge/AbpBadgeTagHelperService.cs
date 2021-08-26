@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Badge
 
             if (TagHelper.BadgePillType != AbpBadgeType._)
             {
-                output.Attributes.AddClass("badge-pill");
+                output.Attributes.AddClass("rounded-pill");
             }
         }
 
