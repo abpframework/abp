@@ -1,4 +1,4 @@
-# Razor Integration
+# Scriban Integration
 
 ## Installation
 
