@@ -220,7 +220,8 @@ namespace Volo.Abp.Domain.Entities.Events
             {
                 await eventPublisher.PublishAsync(
                     eventType,
-                    eventData
+                    eventData,
+                    onUnitOfWorkComplete: false
                 );
 
                 return;

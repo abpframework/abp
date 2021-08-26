@@ -28,6 +28,35 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public virtual async Task Should_Publish_Events_In_Order()
+        {
+            bool entityCreatedEventHandled = false;
+            
+            LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
+            {
+                data.Entity.Name.ShouldBe("TestPerson1");
+                entityCreatedEventHandled = true;
+                return Task.CompletedTask;
+            });
+            
+            LocalEventBus.Subscribe<MyCustomEventData>(data =>
+            {
+                data.Value.ShouldBe("42");
+                entityCreatedEventHandled.ShouldBe(true);
+                return Task.CompletedTask;
+            });
+
+            await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions{IsTransactional = true}, async () =>
+            {
+                await PersonRepository.InsertAsync(
+                    new Person(Guid.NewGuid(), "TestPerson1", 42)
+                );
+                
+                await LocalEventBus.PublishAsync(new MyCustomEventData { Value = "42" });
+            });
+        }
+
+        [Fact]
         public virtual async Task Should_Rollback_Uow_If_Event_Handler_Throws_Exception()
         {
             (await PersonRepository.FindAsync(x => x.Name == "TestPerson1")).ShouldBeNull();
@@ -90,6 +119,11 @@ namespace Volo.Abp.TestApp.Testing
 
             isLocalEventTriggered.ShouldBeTrue();
             isDistributedEventTriggered.ShouldBeTrue();
+        }
+        
+        private class MyCustomEventData
+        {
+            public string Value { get; set; }
         }
     }
 }
