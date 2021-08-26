@@ -70,7 +70,7 @@ This will add the `@abp/signalr` to the dependencies in the `package.json` of yo
 }
 ````
 
-Run `abp install-libs` command in the root folder of your web project:
+Run the following [ABP CLI](CLI.md) command in the root folder of your web project:
 
 ````bash
 abp install-libs

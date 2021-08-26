@@ -118,18 +118,5 @@
     "tslint": "~6.1.0",
     "typescript": "~4.3.5",
     "zone.js": "~0.11.4"
-  },
-  "dependencies": {
-    "@angular/animations": "^12.1.0",
-    "@angular/common": "^12.1.0",
-    "@angular/compiler": "^12.1.0",
-    "@angular/core": "^12.1.0",
-    "@angular/forms": "^12.1.0",
-    "@angular/platform-browser": "^12.1.0",
-    "@angular/platform-browser-dynamic": "^12.1.0",
-    "@angular/router": "^12.1.0",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.11.4"
   }
 }

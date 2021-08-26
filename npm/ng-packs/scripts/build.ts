@@ -1,5 +1,6 @@
 import program from 'commander';
 import execa from 'execa';
+import fse from 'fs-extra';
 
 (async () => {
   program.option('-i, --noInstall', 'skip updating package.json and installation', false);
@@ -11,6 +12,8 @@ import execa from 'execa';
     if (!program.noInstall) {
       await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
     }
+
+    await fse.remove('../dist');
 
     await execa(
       'yarn',
