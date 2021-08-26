@@ -13,6 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.bundle.js");
+            context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.enable.tooltips.everywhere.js");
         }
     }
 }
