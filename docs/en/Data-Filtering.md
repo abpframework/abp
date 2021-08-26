@@ -239,15 +239,25 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 ### MongoDB
 
-ABP implements data filters directly in the [repository](Repositories.md) level for the [MongoDB Integration](MongoDB.md). So, it works only if you use the repositories properly. Otherwise, you should manually filter the data.
+ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](MongoDB.md), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
 
-Currently, the best way to implement a data filter for the MongoDB integration is to override the `AddGlobalFilters` in the repository derived from the `MongoDbRepository` class. Example:
+Currently, the best way to implement a data filter for the MongoDB integration is to override the `AddGlobalFilters` in the MongoDbRepositoryFilterer derived from the `MongoDbRepositoryFilterer` class. Example:
 
 ````csharp
-public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, Guid>
+[ExposeServices(typeof(IMongoDbRepositoryFilterer<Book, Guid>))]
+public class BookMongoDbRepositoryFilterer : MongoDbRepositoryFilterer<Book, Guid> , ITransientDependency
 {
-    protected override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    public BookMongoDbRepositoryFilterer(
+        IDataFilter dataFilter,
+        ICurrentTenant currentTenant) :
+        base(dataFilter, currentTenant)
     {
+    }
+
+    public override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    {
+        base.AddGlobalFilters(filters);
+
         if (DataFilter.IsEnabled<IIsActive>())
         {
             filters.Add(Builders<Book>.Filter.Eq(e => ((IIsActive)e).IsActive, true));
@@ -256,7 +266,7 @@ public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, G
 }
 ````
 
-This example implements it only for the `Book` entity. If you want to implement for all entities (those implement the `IIsActive` interface), create your own custom MongoDB repository base class and override the `AddGlobalFilters` as shown below:
+This example implements it only for the `Book` entity. If you want to implement for all entities (those implement the `IIsActive` interface), create your own custom MongoDB repository filterer base class and override the `AddGlobalFilters` as shown below:
 
 ````csharp
 public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity, TKey>
@@ -271,6 +281,8 @@ public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoD
 
     protected override void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
     {
+        base.AddGlobalFilters(filters);
+
         if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)) 
             && DataFilter.IsEnabled<IIsActive>())
         {
@@ -278,6 +290,15 @@ public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoD
         }
     }
 }
-````
 
-> See "Set Default Repository Classes" section of the [MongoDb Integration document](MongoDB.md) to learn how to replace default repository base with your custom class.
+
+public class MyMongoDbModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //.......
+        context.Services
+            .Replace(ServiceDescriptor.Transient(typeof(IMongoDbRepositoryFilterer<,>),typeof(MyMongoDbRepositoryFilterer<,>)));
+    }
+}
+````
