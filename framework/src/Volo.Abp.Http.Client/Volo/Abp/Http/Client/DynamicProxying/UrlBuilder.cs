@@ -139,7 +139,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return dateTimeValue.ToUniversalTime().ToString("O");
             }
 
-            return value.ToString();
+            return value?.ToString();
         }
     }
 }
