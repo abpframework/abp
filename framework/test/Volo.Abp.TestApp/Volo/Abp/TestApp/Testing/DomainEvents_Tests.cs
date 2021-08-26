@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
@@ -23,6 +25,32 @@ namespace Volo.Abp.TestApp.Testing
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
             LocalEventBus = GetRequiredService<ILocalEventBus>();
             DistributedEventBus = GetRequiredService<IDistributedEventBus>();
+        }
+
+        [Fact]
+        public virtual async Task Should_Rollback_Uow_If_Event_Handler_Throws_Exception()
+        {
+            (await PersonRepository.FindAsync(x => x.Name == "TestPerson1")).ShouldBeNull();
+            
+            LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
+            {
+                data.Entity.Name.ShouldBe("TestPerson1");
+                throw new ApplicationException("Just to rollback the UOW");
+            });
+
+            var exception = await Assert.ThrowsAsync<ApplicationException>(async () =>
+            {
+                await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions{IsTransactional = true}, async () =>
+                {
+                    await PersonRepository.InsertAsync(
+                        new Person(Guid.NewGuid(), "TestPerson1", 42)
+                    );
+                });
+            });
+            
+            exception.Message.ShouldBe("Just to rollback the UOW");
+
+            (await PersonRepository.FindAsync(x => x.Name == "TestPerson1")).ShouldBeNull();
         }
 
         [Fact]
