@@ -103,8 +103,8 @@
                         <div class="row">
                             @if (Model.VersionSelectItems.Any())
                             {
-                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pr-0":"")">
-                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pr-1":"")">
+                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pe-0":"")">
+                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pe-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
 
@@ -206,7 +206,7 @@
                                 <div class="cont-container">
                                     @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
                                     {
-                                        <span class="for-desktop mr-3">
+                                        <span class="for-desktop me-3">
                                             @(L["Contributors"].Value)
                                         </span>
                                         @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c=> c.CommitCount).ToList())

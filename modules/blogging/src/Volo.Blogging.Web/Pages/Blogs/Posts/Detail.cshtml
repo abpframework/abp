@@ -63,13 +63,13 @@
                                 <div class="article-infos">
                                     <div class="user-card mt-3 mb-4">
                                         <div class="row">
-                                            <div class="col-auto pr-1">
+                                            <div class="col-auto pe-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
                                                     <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                 }
                                             </div>
-                                            <div class="col pl-1">
+                                            <div class="col ps-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
                                                     <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
@@ -124,13 +124,13 @@
                 <hr />
                 <div class="mb-2 mt-1">
                     @(L["ShareOn"].Value + " :")
-                    <a href="#" target="_blank" class="mr-2" id="TwitterShareLink" title="Twitter">
+                    <a href="#" target="_blank" class="me-2" id="TwitterShareLink" title="Twitter">
                         Twitter <i class="fa fa-twitter"></i>
                     </a>
-                    <a href="#" target="_blank" class="mr-2" id="LinkedinShareLink" title="LinkedIn">
+                    <a href="#" target="_blank" class="me-2" id="LinkedinShareLink" title="LinkedIn">
                         Linkedin <i class="fa fa-linkedin"></i>
                     </a>
-                    <a href="#" target="_blank" class="mr-2" id="EmailShareLink" title="E-mail">
+                    <a href="#" target="_blank" class="me-2" id="EmailShareLink" title="E-mail">
                         E-mail <i class="fa fa-envelope-square"></i>
                     </a>
                 </div>
@@ -149,7 +149,7 @@
                 {
                     <abp-row v-align="Start">
                         <abp-column size-sm="_12">
-                            <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
+                            <p class="float-start"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
                             @if (hasCommentingPermission)
                             {
                                 <a abp-button="Primary" class="btn-rounded float-end active" href="#LeaveComment">@L["LeaveComment"]</a>
@@ -165,7 +165,7 @@
                         @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                         {
                             <div class="media">
-                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
                                 <div class="media-body">
                                     <h5 class="comment-owner">
                                         @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
@@ -244,7 +244,7 @@
                                     @foreach (var reply in commentWithRepliesDto.Replies)
                                     {
                                         <div class="media">
-                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
                                             <div class="media-body">
                                                 <h5 class="comment-owner">
                                                     @(reply.Writer == null ? "" : reply.Writer.UserName)

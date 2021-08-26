@@ -72,7 +72,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             prevIcon.Attributes.Add("aria-hidden", "true");
 
             var prevText = new TagBuilder("span");
-            prevText.AddCssClass("sr-only");
+            prevText.AddCssClass("visually-hidden");
             prevText.InnerHtml.Append(L["Previous"].Value);
 
             var prevAnchor = new TagBuilder("a");
@@ -90,7 +90,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             nextIcon.Attributes.Add("aria-hidden", "true");
 
             var nextText = new TagBuilder("span");
-            nextText.AddCssClass("sr-only");
+            nextText.AddCssClass("visually-hidden");
             nextText.InnerHtml.Append(L["Next"].Value);
 
             var nextAnchor = new TagBuilder("a");

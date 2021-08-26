@@ -12,7 +12,7 @@
 
                 @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
                 {
-                    <span class="ml-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
+                    <span class="ms-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
                         <i class="@reaction.Icon"></i>
                         <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
                     </span>
