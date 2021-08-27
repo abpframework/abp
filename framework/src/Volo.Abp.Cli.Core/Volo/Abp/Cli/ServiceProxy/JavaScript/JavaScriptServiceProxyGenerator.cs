@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
@@ -18,6 +20,8 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
 
         private readonly JQueryProxyScriptGenerator _jQueryProxyScriptGenerator;
 
+        public ILogger<JavaScriptServiceProxyGenerator> Logger { get; set; }
+
         public JavaScriptServiceProxyGenerator(
             CliHttpClientFactory cliHttpClientFactory,
             IJsonSerializer jsonSerializer,
@@ -25,6 +29,7 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
             base(cliHttpClientFactory, jsonSerializer)
         {
             _jQueryProxyScriptGenerator = jQueryProxyScriptGenerator;
+            Logger = NullLogger<JavaScriptServiceProxyGenerator>.Instance;
         }
 
         public override async Task GenerateProxyAsync(GenerateProxyArgs args)
@@ -39,7 +44,7 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
 
             if (args.CommandName == RemoveProxyCommand.Name)
             {
-                RemoveProxy(output);
+                RemoveProxy(args, output);
                 return;
             }
 
@@ -52,14 +57,18 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
             {
                 await writer.WriteAsync(script);
             }
+
+            Logger.LogInformation($"Create {output.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
         }
 
-        private void RemoveProxy(string filePath)
+        private void RemoveProxy(GenerateProxyArgs args, string filePath)
         {
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
+
+            Logger.LogInformation($"Delete {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
         }
 
         private static void CheckWorkDirectory(string directory)

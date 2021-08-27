@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
@@ -51,12 +53,14 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             "using Volo.Abp.Http.Modeling;"
         };
 
+        public ILogger<CSharpServiceProxyGenerator> Logger { get; set; }
+
         public CSharpServiceProxyGenerator(
             CliHttpClientFactory cliHttpClientFactory,
             IJsonSerializer jsonSerializer) :
             base(cliHttpClientFactory, jsonSerializer)
         {
-
+            Logger = NullLogger<CSharpServiceProxyGenerator>.Instance;
         }
 
         public override async Task GenerateProxyAsync(GenerateProxyArgs args)
@@ -97,6 +101,8 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             {
                 Directory.Delete(folderPath, true);
             }
+
+            Logger.LogInformation($"Delete {folderPath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
         }
 
         private async Task GenerateClientProxyFileAsync(
@@ -151,12 +157,17 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             using (var writer = new StreamWriter(filePath))
             {
                 await writer.WriteAsync(clientProxyBuilder.ToString());
+                Logger.LogInformation($"Create {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
             }
 
-            await GenerateClientProxyPartialFileAsync(clientProxyName, fileNamespace, filePath);
+            await GenerateClientProxyPartialFileAsync(args, clientProxyName, fileNamespace, filePath);
         }
 
-        private async Task GenerateClientProxyPartialFileAsync(string clientProxyName, string fileNamespace,  string filePath)
+        private async Task GenerateClientProxyPartialFileAsync(
+            GenerateProxyArgs args,
+            string clientProxyName,
+            string fileNamespace,
+            string filePath)
         {
             var clientProxyBuilder = new StringBuilder(_clientProxyPartialTemplate);
             clientProxyBuilder.Replace(ClassName, clientProxyName);
@@ -167,6 +178,8 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             {
                 await writer.WriteAsync(clientProxyBuilder.ToString());
             }
+
+            Logger.LogInformation($"Create {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
         }
 
         private void GenerateMethod(
