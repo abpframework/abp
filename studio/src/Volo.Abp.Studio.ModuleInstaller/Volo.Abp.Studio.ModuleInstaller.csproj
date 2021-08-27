@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.Studio.Domain.CommonServices\Volo.Abp.Studio.Domain.CommonServices.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Studio.ModuleInstaller.Abstractions\Volo.Abp.Studio.ModuleInstaller.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

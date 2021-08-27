@@ -336,4 +336,11 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi.Client",
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
     "modules/cms-kit/src/Volo.CmsKit.Web"
+	
+    # abp/studio
+    "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
+    "studio/src/Volo.Abp.Studio.Domain.CommonServices",
+    "studio/src/Volo.Abp.Studio.Domain.Shared",
+    "studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
+    "studio/src/Volo.Abp.Studio.ModuleInstaller"
 )

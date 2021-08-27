@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Cli.Core\Volo.Abp.Cli.Core.csproj" />
+    </ItemGroup>
+
+</Project>
