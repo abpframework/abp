@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -12,8 +13,8 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
     public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase, ITransientDependency
     {
         public const string Name = "JS";
-        public const string EventTriggerScript = "abp.event.trigger('abp.serviceProxyScriptInitialized');";
-        public const string DefaultOutput = "wwwroot/client-proxies";
+        private const string EventTriggerScript = "abp.event.trigger('abp.serviceProxyScriptInitialized');";
+        private const string DefaultOutput = "wwwroot/client-proxies";
 
         private readonly JQueryProxyScriptGenerator _jQueryProxyScriptGenerator;
 
@@ -30,20 +31,34 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
         {
             CheckWorkDirectory(args.WorkDirectory);
 
-            var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
-            var script = RemoveInitializedEventTrigger(_jQueryProxyScriptGenerator.CreateScript(applicationApiDescriptionModel));
-
-            var output = $"{args.WorkDirectory}/{DefaultOutput}/{args.Module}-proxy.js";
+            var output = Path.Combine(args.WorkDirectory, DefaultOutput, $"{args.Module}-proxy.js");
             if (!args.Output.IsNullOrWhiteSpace())
             {
-                output = !args.Output.EndsWith(".js") ? $"{Path.GetDirectoryName(args.Output)}/{args.Module}-proxy.js" : args.Output;
+                output = args.Output.EndsWith(".js") ? Path.Combine(args.WorkDirectory, args.Output) : Path.Combine(args.WorkDirectory, Path.GetDirectoryName(args.Output), $"{args.Module}-proxy.js");
             }
+
+            if (args.CommandName == RemoveProxyCommand.Name)
+            {
+                RemoveProxy(output);
+                return;
+            }
+
+            var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
+            var script = RemoveInitializedEventTrigger(_jQueryProxyScriptGenerator.CreateScript(applicationApiDescriptionModel));
 
             Directory.CreateDirectory(Path.GetDirectoryName(output));
 
             using (var writer = new StreamWriter(output))
             {
                 await writer.WriteAsync(script);
+            }
+        }
+
+        private void RemoveProxy(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
             }
         }
 

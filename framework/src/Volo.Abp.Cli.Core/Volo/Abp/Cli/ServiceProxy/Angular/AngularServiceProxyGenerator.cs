@@ -38,7 +38,6 @@ namespace Volo.Abp.Cli.ServiceProxy.Angular
             var source = args.Source ?? defaultValue;
             var target = args.Target ?? defaultValue;
 
-
             var commandBuilder = new StringBuilder("npx ng g @abp/ng.schematics:" + schematicsCommandName);
 
             if (module != null)

@@ -23,6 +23,8 @@ namespace Volo.Abp.Cli.ServiceProxy
 
         public string Source { get; }
 
+        public string Folder { get; }
+
         [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
 
@@ -35,6 +37,7 @@ namespace Volo.Abp.Cli.ServiceProxy
             string target,
             string apiName,
             string source,
+            string folder,
             Dictionary<string, string> extraProperties = null)
         {
             CommandName = Check.NotNullOrWhiteSpace(commandName, nameof(commandName));
@@ -45,6 +48,7 @@ namespace Volo.Abp.Cli.ServiceProxy
             Target = target;
             ApiName = apiName;
             Source = source;
+            Folder = folder;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
         }
     }

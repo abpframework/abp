@@ -64,7 +64,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 var result = (Task)MakeRequestAndGetResultAsyncMethod
                     .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                    .Invoke(this, new object[] { context });
+                    .Invoke(HttpProxyExecuter, new object[] { context });
 
                 invocation.ReturnValue = await GetResultAsync(
                     result,

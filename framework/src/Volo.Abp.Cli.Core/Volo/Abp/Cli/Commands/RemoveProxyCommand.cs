@@ -19,7 +19,7 @@ namespace Volo.Abp.Cli.Commands
 
         public override string GetShortDescription()
         {
-            return "Remove Angular service proxies and DTOs to consume HTTP APIs.";
+            return "Remove client service proxies and DTOs to consume HTTP APIs.";
         }
     }
 }

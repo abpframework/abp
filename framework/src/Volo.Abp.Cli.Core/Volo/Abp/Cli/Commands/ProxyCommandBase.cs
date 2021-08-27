@@ -66,11 +66,12 @@ namespace Volo.Abp.Cli.Commands
             var apiName = commandLineArgs.Options.GetOrNull(Options.ApiName.Short, Options.ApiName.Long);
             var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
             var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
+            var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
 
-            return new GenerateProxyArgs(CommandName, workDirectory, module.ToLower(), url, output, target, apiName, source, commandLineArgs.Options);
+            return new GenerateProxyArgs(CommandName, workDirectory, module.ToLower(), url, output, target, apiName, source, folder, commandLineArgs.Options);
         }
 
-        public string GetUsageInfo()
+        public virtual string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -81,11 +82,15 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
-            sb.AppendLine("-m|--module <module-name>          (default: 'app') The name of the backend module you wish to generate proxies for.");
-            sb.AppendLine("-a|--api-name <module-name>        (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
-            sb.AppendLine("-s|--source <source-name>          (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
-            sb.AppendLine("-o|--output <output-name>          (default: 'defaultProject') Angular project name to place generated code in.");
-            sb.AppendLine("-p|--prompt                        Asks the options from the command line prompt (for the missing options)");
+            sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
+            sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
+            sb.AppendLine("-wd|--working-directory <directory-path>          Execution directory.");
+            sb.AppendLine("-a|--api-name <module-name>                       (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
+            sb.AppendLine("-s|--source <source-name>                         (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
+            sb.AppendLine("-o|--output <output-name>                         JavaScript file path or folder to place generated code in.");
+            sb.AppendLine("-p|--prompt                                       Asks the options from the command line prompt (for the missing options)");
+            sb.AppendLine("--target <target-name>                            (default: 'defaultProject') Angular project name to place generated code in.");
+            sb.AppendLine("--folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -102,6 +107,12 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "module";
             }
 
+            public static class GenerateType
+            {
+                public const string Short = "t";
+                public const string Long = "type";
+            }
+
             public static class ApiName
             {
                 public const string Short = "a";
@@ -113,13 +124,6 @@ namespace Volo.Abp.Cli.Commands
                 public const string Short = "s";
                 public const string Long = "source";
             }
-
-            public static class GenerateType
-            {
-                public const string Short = "t";
-                public const string Long = "type";
-            }
-
             public static class Output
             {
                 public const string Short = "o";
@@ -135,6 +139,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "p";
                 public const string Long = "prompt";
+            }
+
+            public static class Folder
+            {
+                public const string Long = "folder";
             }
 
             public static class Url
