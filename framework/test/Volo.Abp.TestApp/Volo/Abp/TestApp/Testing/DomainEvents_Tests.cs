@@ -30,19 +30,65 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public virtual async Task Should_Publish_Events_In_Order()
         {
-            bool entityCreatedEventHandled = false;
+            bool testPersonCreateHandled = false;
+            bool douglesUpdateHandled = false;
+            bool douglesNameChangeHandled = false;
+            bool customEventHandled = false;
+            bool customEvent2Handled = false;
             
             LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
             {
                 data.Entity.Name.ShouldBe("TestPerson1");
-                entityCreatedEventHandled = true;
+                testPersonCreateHandled = true;
+                douglesUpdateHandled.ShouldBeFalse();
+                douglesNameChangeHandled.ShouldBeFalse();
+                customEventHandled.ShouldBeFalse();
+                customEvent2Handled.ShouldBeFalse();
                 return Task.CompletedTask;
             });
             
             LocalEventBus.Subscribe<MyCustomEventData>(data =>
             {
                 data.Value.ShouldBe("42");
-                entityCreatedEventHandled.ShouldBe(true);
+                customEventHandled = true;
+                testPersonCreateHandled.ShouldBeTrue();
+                douglesUpdateHandled.ShouldBeFalse();
+                douglesNameChangeHandled.ShouldBeFalse();
+                customEvent2Handled.ShouldBeFalse();
+                return Task.CompletedTask;
+            });
+            
+            LocalEventBus.Subscribe<PersonNameChangedEvent>(data =>
+            {
+                data.OldName.ShouldBe("Douglas");
+                data.Person.Name.ShouldBe("Douglas-Updated");
+                douglesNameChangeHandled = true;
+                testPersonCreateHandled.ShouldBeTrue();
+                customEventHandled.ShouldBeTrue();
+                douglesUpdateHandled.ShouldBeFalse();
+                customEvent2Handled.ShouldBeFalse();
+                return Task.CompletedTask;
+            });
+            
+            LocalEventBus.Subscribe<EntityUpdatedEventData<Person>>(data =>
+            {
+                data.Entity.Name.ShouldBe("Douglas-Updated");
+                douglesUpdateHandled = true;
+                testPersonCreateHandled.ShouldBeTrue();
+                customEventHandled.ShouldBeTrue();
+                douglesNameChangeHandled.ShouldBeTrue();
+                customEvent2Handled.ShouldBeFalse();
+                return Task.CompletedTask;
+            });
+            
+            LocalEventBus.Subscribe<MyCustomEventData2>(data =>
+            {
+                data.Value.ShouldBe("44");
+                customEvent2Handled = true;
+                testPersonCreateHandled.ShouldBeTrue();
+                customEventHandled.ShouldBeTrue();
+                douglesUpdateHandled.ShouldBeTrue();
+                douglesNameChangeHandled.ShouldBeTrue();
                 return Task.CompletedTask;
             });
 
@@ -53,6 +99,12 @@ namespace Volo.Abp.TestApp.Testing
                 );
                 
                 await LocalEventBus.PublishAsync(new MyCustomEventData { Value = "42" });
+
+                var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+                douglas.ChangeName("Douglas-Updated");
+                await PersonRepository.UpdateAsync(douglas);
+                
+                await LocalEventBus.PublishAsync(new MyCustomEventData2 { Value = "44" });
             });
         }
 
@@ -122,6 +174,11 @@ namespace Volo.Abp.TestApp.Testing
         }
         
         private class MyCustomEventData
+        {
+            public string Value { get; set; }
+        }
+        
+        private class MyCustomEventData2
         {
             public string Value { get; set; }
         }

@@ -9,6 +9,8 @@ namespace Volo.Abp.Uow
         
         public Type EventType { get; }
         
+        public long EventOrder { get; }
+        
         /// <summary>
         /// Extra properties can be used if needed.
         /// </summary>
@@ -16,10 +18,12 @@ namespace Volo.Abp.Uow
 
         public UnitOfWorkEventRecord(
             Type eventType,
-            object eventData)
+            object eventData,
+            long eventOrder)
         {
             EventType = eventType;
             EventData = eventData;
+            EventOrder = eventOrder;
         }
     }
 }

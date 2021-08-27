@@ -139,7 +139,7 @@ namespace Volo.Abp.Uow
                 {
                     if (LocalEvents.Any())
                     {
-                        var localEventsToBePublished = LocalEvents.ToArray();
+                        var localEventsToBePublished = LocalEvents.OrderBy(e => e.EventOrder).ToArray();
                         LocalEvents.Clear();
                         await UnitOfWorkEventPublisher.PublishLocalEventsAsync(
                             localEventsToBePublished
@@ -148,7 +148,7 @@ namespace Volo.Abp.Uow
                     
                     if (DistributedEvents.Any())
                     {
-                        var distributedEventsToBePublished = DistributedEvents.ToArray();
+                        var distributedEventsToBePublished = DistributedEvents.OrderBy(e => e.EventOrder).ToArray();
                         DistributedEvents.Clear();
                         await UnitOfWorkEventPublisher.PublishDistributedEventsAsync(
                             distributedEventsToBePublished

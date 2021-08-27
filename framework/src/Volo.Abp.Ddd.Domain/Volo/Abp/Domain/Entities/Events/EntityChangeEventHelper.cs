@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.DynamicProxy;
@@ -44,16 +42,9 @@ namespace Volo.Abp.Domain.Entities.Events
             Logger = NullLogger<EntityChangeEventHelper>.Instance;
         }
 
-        public async Task TriggerEventsAsync(EntityChangeReport changeReport)
+        public virtual void PublishEntityCreatingEvent(object entity)
         {
-            await TriggerEntityChangeEvents(changeReport.ChangedEntities);
-            await TriggerLocalEvents(changeReport.DomainEvents);
-            await TriggerDistributedEvents(changeReport.DistributedEvents);
-        }
-
-        public virtual async Task TriggerEntityCreatingEventAsync(object entity)
-        {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityCreatingEventData<>),
                 entity,
@@ -61,9 +52,9 @@ namespace Volo.Abp.Domain.Entities.Events
             );
         }
 
-        public virtual async Task TriggerEntityCreatedEventAsync(object entity)
+        public virtual void PublishEntityCreatedEvent(object entity)
         {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityCreatedEventData<>),
                 entity,
@@ -75,7 +66,7 @@ namespace Volo.Abp.Domain.Entities.Events
                 var eto = EntityToEtoMapper.Map(entity);
                 if (eto != null)
                 {
-                    await TriggerEventWithEntity(
+                    TriggerEventWithEntity(
                         DistributedEventBus,
                         typeof(EntityCreatedEto<>),
                         eto,
@@ -96,9 +87,9 @@ namespace Volo.Abp.Domain.Entities.Events
                 );
         }
 
-        public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
+        public virtual void PublishEntityUpdatingEvent(object entity)
         {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityUpdatingEventData<>),
                 entity,
@@ -106,9 +97,9 @@ namespace Volo.Abp.Domain.Entities.Events
             );
         }
 
-        public virtual async Task TriggerEntityUpdatedEventAsync(object entity)
+        public virtual void PublishEntityUpdatedEvent(object entity)
         {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityUpdatedEventData<>),
                 entity,
@@ -120,7 +111,7 @@ namespace Volo.Abp.Domain.Entities.Events
                 var eto = EntityToEtoMapper.Map(entity);
                 if (eto != null)
                 {
-                    await TriggerEventWithEntity(
+                    TriggerEventWithEntity(
                         DistributedEventBus,
                         typeof(EntityUpdatedEto<>),
                         eto,
@@ -130,9 +121,9 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        public virtual async Task TriggerEntityDeletingEventAsync(object entity)
+        public virtual void PublishEntityDeletingEvent(object entity)
         {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityDeletingEventData<>),
                 entity,
@@ -140,9 +131,9 @@ namespace Volo.Abp.Domain.Entities.Events
             );
         }
 
-        public virtual async Task TriggerEntityDeletedEventAsync(object entity)
+        public virtual void PublishEntityDeletedEvent(object entity)
         {
-            await TriggerEventWithEntity(
+            TriggerEventWithEntity(
                 LocalEventBus,
                 typeof(EntityDeletedEventData<>),
                 entity,
@@ -154,7 +145,7 @@ namespace Volo.Abp.Domain.Entities.Events
                 var eto = EntityToEtoMapper.Map(entity);
                 if (eto != null)
                 {
-                    await TriggerEventWithEntity(
+                    TriggerEventWithEntity(
                         DistributedEventBus,
                         typeof(EntityDeletedEto<>),
                         eto,
@@ -164,48 +155,7 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        protected virtual async Task TriggerEntityChangeEvents(List<EntityChangeEntry> changedEntities)
-        {
-            foreach (var changedEntity in changedEntities)
-            {
-                switch (changedEntity.ChangeType)
-                {
-                    case EntityChangeType.Created:
-                        await TriggerEntityCreatingEventAsync(changedEntity.Entity);
-                        await TriggerEntityCreatedEventAsync(changedEntity.Entity);
-                        break;
-                    case EntityChangeType.Updated:
-                        await TriggerEntityUpdatingEventAsync(changedEntity.Entity);
-                        await TriggerEntityUpdatedEventAsync(changedEntity.Entity);
-                        break;
-                    case EntityChangeType.Deleted:
-                        await TriggerEntityDeletingEventAsync(changedEntity.Entity);
-                        await TriggerEntityDeletedEventAsync(changedEntity.Entity);
-                        break;
-                    default:
-                        throw new AbpException("Unknown EntityChangeType: " + changedEntity.ChangeType);
-                }
-            }
-        }
-
-        protected virtual async Task TriggerLocalEvents(List<DomainEventEntry> localEvents)
-        {
-            foreach (var localEvent in localEvents)
-            {
-                await LocalEventBus.PublishAsync(localEvent.EventData.GetType(), localEvent.EventData);
-            }
-        }
-
-        protected virtual async Task TriggerDistributedEvents(List<DomainEventEntry> distributedEvents)
-        {
-            foreach (var distributedEvent in distributedEvents)
-            {
-                await DistributedEventBus.PublishAsync(distributedEvent.EventData.GetType(),
-                    distributedEvent.EventData);
-            }
-        }
-
-        protected virtual async Task TriggerEventWithEntity(
+        protected virtual void TriggerEventWithEntity(
             IEventBus eventPublisher,
             Type genericEventType,
             object entityOrEto,
@@ -218,16 +168,11 @@ namespace Volo.Abp.Domain.Entities.Events
             
             if (currentUow == null)
             {
-                await eventPublisher.PublishAsync(
-                    eventType,
-                    eventData,
-                    onUnitOfWorkComplete: false
-                );
-
+                Logger.LogWarning("UnitOfWorkManager.Current is null! Can not publish the event.");
                 return;
             }
             
-            var eventRecord = new UnitOfWorkEventRecord(eventType, eventData)
+            var eventRecord = new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
             {
                 Properties =
                 {

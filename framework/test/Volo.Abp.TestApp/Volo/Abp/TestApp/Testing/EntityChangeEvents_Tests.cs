@@ -88,11 +88,15 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Multiple_Update_Should_Result_With_Single_Updated_Event_In_The_Same_Uow()
         {
-            var personId = Guid.NewGuid();
-            await PersonRepository.InsertAsync(new Person(personId, Guid.NewGuid().ToString("D"), 42));
-
+            var createEventCount = 0;
             var updateEventCount = 0;
             var updatedAge = 0;
+            
+            DistributedEventBus.Subscribe<EntityCreatedEto<PersonEto>>(eto =>
+            {
+                createEventCount++;
+                return Task.CompletedTask;
+            });
             
             DistributedEventBus.Subscribe<EntityUpdatedEto<PersonEto>>(eto =>
             {
@@ -101,6 +105,9 @@ namespace Volo.Abp.TestApp.Testing
                 return Task.CompletedTask;
             });
             
+            var personId = Guid.NewGuid();
+            await PersonRepository.InsertAsync(new Person(personId, Guid.NewGuid().ToString("D"), 42));
+
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
                 var person = await PersonRepository.GetAsync(personId);
@@ -120,6 +127,7 @@ namespace Volo.Abp.TestApp.Testing
                 await uow.CompleteAsync();
             }
             
+            createEventCount.ShouldBe(1);
             updateEventCount.ShouldBe(1);
             updatedAge.ShouldBe(45);
         }

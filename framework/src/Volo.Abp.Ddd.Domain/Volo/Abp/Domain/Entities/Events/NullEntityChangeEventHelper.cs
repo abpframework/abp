@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Volo.Abp.Domain.Entities.Events
 {
     /// <summary>
@@ -14,42 +12,30 @@ namespace Volo.Abp.Domain.Entities.Events
 
         private NullEntityChangeEventHelper()
         {
-
         }
 
-        public Task TriggerEntityCreatingEventAsync(object entity)
+        public void PublishEntityCreatingEvent(object entity)
         {
-            return Task.CompletedTask;
         }
 
-        public Task TriggerEntityCreatedEventAsync(object entity)
+        public void PublishEntityCreatedEvent(object entity)
         {
-            return Task.CompletedTask;
         }
 
-        public Task TriggerEntityUpdatingEventAsync(object entity)
+        public void PublishEntityUpdatingEvent(object entity)
         {
-            return Task.CompletedTask;
         }
 
-        public Task TriggerEntityUpdatedEventAsync(object entity)
+        public void PublishEntityUpdatedEvent(object entity)
         {
-            return Task.CompletedTask;
         }
 
-        public Task TriggerEntityDeletingEventAsync(object entity)
+        public void PublishEntityDeletingEvent(object entity)
         {
-            return Task.CompletedTask;
         }
 
-        public Task TriggerEntityDeletedEventAsync(object entity)
+        public void PublishEntityDeletedEvent(object entity)
         {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEventsAsync(EntityChangeReport changeReport)
-        {
-            return Task.CompletedTask;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Volo.Abp.EventBus
             {
                 AddToUnitOfWork(
                     UnitOfWorkManager.Current,
-                    new UnitOfWorkEventRecord(eventType, eventData)
+                    new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
                 );
                 return;
             }
