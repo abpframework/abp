@@ -63,6 +63,8 @@ public class MyModule : AbpModule
 }
 ````
 
+Translation files' (en.json, tr.json, etc) `Build Action` should be set as `Embedded Resource`.
+
 In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
