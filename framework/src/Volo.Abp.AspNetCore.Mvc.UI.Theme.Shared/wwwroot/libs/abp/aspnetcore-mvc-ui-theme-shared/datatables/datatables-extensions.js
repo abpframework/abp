@@ -508,6 +508,6 @@ var abp = abp || {};
         };
     };
 
-    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto mr-auto"i><"col-auto"p>>';
+    datatables.defaultConfigurations.dom = '<"dataTable_filters row"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto me-auto"i><"col-auto"p>>';
 
 })(jQuery);
