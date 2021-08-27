@@ -87,13 +87,13 @@
                             var name = '<span>' + $.fn.dataTable.render.text().display(data) + '</span>'; //prevent against possible XSS
                             if (row.isDefault) {
                                 name +=
-                                    '<span class="badge badge-pill badge-success ml-1">' +
+                                    '<span class="badge rounded-pill bg-success ml-1">' +
                                     l('DisplayName:IsDefault') +
                                     '</span>';
                             }
                             if (row.isPublic) {
                                 name +=
-                                    '<span class="badge badge-pill badge-info ml-1">' +
+                                    '<span class="badge rounded-pill bg-info ml-1">' +
                                     l('DisplayName:IsPublic') +
                                     '</span>';
                             }
