@@ -1,3 +1,5 @@
+using Volo.Abp.Cli.Utils;
+
 namespace Volo.Abp.Cli.Commands
 {
     public class GenerateProxyCommand : ProxyCommandBase
@@ -8,8 +10,8 @@ namespace Volo.Abp.Cli.Commands
 
         protected override string SchematicsCommandName => "proxy-add";
 
-        public GenerateProxyCommand(CliService cliService)
-            : base(cliService)
+        public GenerateProxyCommand(CliService cliService, ICmdHelper cmdHelper)
+            : base(cliService, cmdHelper)
         {
         }
 

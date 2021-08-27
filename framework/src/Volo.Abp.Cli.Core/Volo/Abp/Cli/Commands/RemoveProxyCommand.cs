@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Cli.Commands
+﻿using Volo.Abp.Cli.Utils;
+
+namespace Volo.Abp.Cli.Commands
 {
     public class RemoveProxyCommand : ProxyCommandBase
     {
@@ -8,8 +10,10 @@
 
         protected override string SchematicsCommandName => "proxy-remove";
 
-        public RemoveProxyCommand(CliService cliService)
-            : base(cliService)
+        public RemoveProxyCommand(
+            CliService cliService,
+            ICmdHelper cmdHelper)
+            : base(cliService, cmdHelper)
         {
         }
 

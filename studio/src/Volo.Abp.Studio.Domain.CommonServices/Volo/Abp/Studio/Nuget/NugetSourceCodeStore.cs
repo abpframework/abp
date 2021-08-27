@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.NuGet;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.Helpers;
 

@@ -18,11 +18,13 @@ namespace Volo.Abp.Cli.Commands
     public abstract class ProjectCreationCommandBase
     {
         public ConnectionStringProvider ConnectionStringProvider { get; }
+        public ICmdHelper CmdHelper { get; }
         public ILogger<NewCommand> Logger { get; set; }
 
-        public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider)
+        public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, ICmdHelper cmdHelper)
         {
             ConnectionStringProvider = connectionStringProvider;
+            CmdHelper = cmdHelper;
 
             Logger = NullLogger<NewCommand>.Instance;
         }

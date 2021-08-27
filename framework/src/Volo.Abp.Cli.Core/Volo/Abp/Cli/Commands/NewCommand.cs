@@ -35,8 +35,9 @@ namespace Volo.Abp.Cli.Commands
 
         public NewCommand(TemplateProjectBuilder templateProjectBuilder
             , ITemplateInfoProvider templateInfoProvider,
-            ConnectionStringProvider connectionStringProvider)
-        : base(connectionStringProvider)
+            ConnectionStringProvider connectionStringProvider,
+            ICmdHelper cmdHelper)
+        : base(connectionStringProvider, cmdHelper)
         {
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;

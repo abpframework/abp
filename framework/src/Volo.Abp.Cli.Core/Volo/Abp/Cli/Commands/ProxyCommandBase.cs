@@ -15,15 +15,17 @@ namespace Volo.Abp.Cli.Commands
     public abstract class ProxyCommandBase : IConsoleCommand, ITransientDependency
     {
         public CliService CliService { get; }
+        public ICmdHelper CmdHelper { get; }
         public ILogger<HelpCommand> Logger { get; set; }
 
         protected abstract string CommandName { get; }
 
         protected abstract string SchematicsCommandName { get; }
 
-        public ProxyCommandBase(CliService cliService)
+        public ProxyCommandBase(CliService cliService, ICmdHelper cmdHelper)
         {
             CliService = cliService;
+            CmdHelper = cmdHelper;
             Logger = NullLogger<HelpCommand>.Instance;
         }
 
