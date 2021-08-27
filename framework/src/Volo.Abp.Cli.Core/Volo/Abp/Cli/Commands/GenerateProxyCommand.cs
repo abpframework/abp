@@ -26,8 +26,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Examples:");
             sb.AppendLine("");
             sb.AppendLine("  abp generate-proxy -t ng");
-            sb.AppendLine("  abp generate-proxy -t js -m identity -o Pages/Identity/client-proxies.js");
-            sb.AppendLine("  abp generate-proxy -t csharp --folder MyProxies/InnerFolder");
+            sb.AppendLine("  abp generate-proxy -t js -m identity -o Pages/Identity/client-proxies.js -url https://localhost:44302/");
+            sb.AppendLine("  abp generate-proxy -t csharp --folder MyProxies/InnerFolder -url https://localhost:44302/");
 
             return sb.ToString();
         }
