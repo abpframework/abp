@@ -79,7 +79,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 foreach (var localEvent in localEvents)
                 {
-                    UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(new UnitOfWorkEventRecord(localEvent.GetType(), localEvent, EventOrderGenerator.GetNext()));
+                    UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(
+                        new UnitOfWorkEventRecord(
+                            localEvent.EventData.GetType(),
+                            localEvent.EventData,
+                            localEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearLocalEvents();
@@ -90,7 +96,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 foreach (var distributedEvent in distributedEvents)
                 {
-                    UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(new UnitOfWorkEventRecord(distributedEvent.GetType(), distributedEvent, EventOrderGenerator.GetNext()));
+                    UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
+                        new UnitOfWorkEventRecord(
+                            distributedEvent.EventData.GetType(),
+                            distributedEvent.EventData,
+                            distributedEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearDistributedEvents();
