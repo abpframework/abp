@@ -38,7 +38,9 @@ namespace Volo.Abp.TestApp.Testing
 
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
+#pragma warning disable 618
                 LocalEventBus.Subscribe<EntityCreatingEventData<Person>>(data =>
+#pragma warning restore 618
                 {
                     creatingEventTriggered.ShouldBeFalse();
                     createdEventTriggered.ShouldBeFalse();

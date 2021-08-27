@@ -46,7 +46,9 @@ namespace Volo.Abp.Domain.Entities.Events
         {
             TriggerEventWithEntity(
                 LocalEventBus,
+#pragma warning disable 618
                 typeof(EntityCreatingEventData<>),
+#pragma warning restore 618
                 entity,
                 entity
             );
@@ -91,7 +93,9 @@ namespace Volo.Abp.Domain.Entities.Events
         {
             TriggerEventWithEntity(
                 LocalEventBus,
+#pragma warning disable 618
                 typeof(EntityUpdatingEventData<>),
+#pragma warning restore 618
                 entity,
                 entity
             );
@@ -125,7 +129,9 @@ namespace Volo.Abp.Domain.Entities.Events
         {
             TriggerEventWithEntity(
                 LocalEventBus,
+#pragma warning disable 618
                 typeof(EntityDeletingEventData<>),
+#pragma warning restore 618
                 entity,
                 entity
             );
