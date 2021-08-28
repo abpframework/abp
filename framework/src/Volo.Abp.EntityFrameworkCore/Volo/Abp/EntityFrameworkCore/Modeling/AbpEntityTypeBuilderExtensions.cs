@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Auditing;
@@ -7,6 +6,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
+using Volo.Abp.MultiLingualObjects;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -28,6 +28,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.TryConfigureLastModificationTime();
             b.TryConfigureModificationAudited();
             b.TryConfigureMultiTenant();
+            b.TryConfigureMultiLingualObjects();
         }
 
         public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
@@ -305,6 +306,25 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.As<EntityTypeBuilder>().TryConfigureFullAudited();
             b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
             b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
+        }
+        
+        public static void ConfigureMultiLingualObjects<TMultiLingualObject, TTranslation>(this EntityTypeBuilder<TMultiLingualObject> b)
+            where TTranslation : class, IObjectTranslation
+            where TMultiLingualObject : class, IMultiLingualObject
+        {
+            b.As<EntityTypeBuilder>().TryConfigureMultiLingualObjects();
+        }
+
+        public static void TryConfigureMultiLingualObjects(this EntityTypeBuilder b)
+        {
+            if (!b.Metadata.ClrType.IsAssignableTo<IMultiLingualObject>())
+            {
+                return;
+            }
+
+            b.Property<TranslationDictionary>(nameof(IMultiLingualObject.Translations))
+                .HasColumnName(nameof(IMultiLingualObject.Translations))
+                .HasConversion(new TranslationsValueConverter());
         }
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)

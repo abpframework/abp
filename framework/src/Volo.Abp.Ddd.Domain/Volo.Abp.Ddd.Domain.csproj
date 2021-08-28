@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
     <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
   </ItemGroup>
 
 </Project>

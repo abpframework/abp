@@ -8,7 +8,14 @@ namespace Volo.Abp.MultiLingualObjects
             TMultiLingual multiLingual,
             string culture = null,
             bool fallbackToParentCultures = true)
-            where TMultiLingual : IMultiLingualObject<TTranslation>
+            where TMultiLingual : IMultiLingualObject
+            where TTranslation : class, IObjectTranslation;
+        
+        TTranslation GetTranslation<TMultiLingual, TTranslation>(
+            TMultiLingual multiLingual,
+            string culture = null,
+            bool fallbackToParentCultures = true)
+            where TMultiLingual : IMultiLingualObject
             where TTranslation : class, IObjectTranslation;
     }
 }

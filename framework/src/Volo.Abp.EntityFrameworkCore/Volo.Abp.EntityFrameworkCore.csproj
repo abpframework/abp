@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
   </ItemGroup>
 
   <ItemGroup>

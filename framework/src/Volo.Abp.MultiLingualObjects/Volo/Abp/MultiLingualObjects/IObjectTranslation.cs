@@ -2,6 +2,6 @@
 {
     public interface IObjectTranslation
     {
-        string Language { get; set; }
+        string Culture { get; set; }
     }
 }
