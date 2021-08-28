@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
 
@@ -70,11 +69,6 @@ namespace Volo.Abp.MultiLingualObjects
                     cultureInfo = cultureInfo.Parent;
                     currentDepth += 1;
                 }
-            }
-
-            if (multiLingual.Translations.TryGetValue(multiLingual.DefaultCulture, out translation))
-            {
-                return (TTranslation) translation;
             }
 
             translation = multiLingual.Translations.FirstOrDefault().Value;
