@@ -28,7 +28,7 @@ In this dialog, you can grant permissions for the selected role. The tabs in the
 
 ## IPermissionManager
 
-`IPermissionManager` is the main service provided by this module. It is used to read and change the permission values. `IPermissionManager` is typically used by the *Feature Management Dialog*. However, you can inject it if you need to set a permission value.
+`IPermissionManager` is the main service provided by this module. It is used to read and change the permission values. `IPermissionManager` is typically used by the *Permission Management Dialog*. However, you can inject it if you need to set a permission value.
 
 > If you just want to read/check permission values for the current user, use the `IAuthorizationService` or the `[Authorize]` attribute as explained in the [Authorization document](../Authorization.md).
 
@@ -91,7 +91,7 @@ public class CustomPermissionManagementProvider : PermissionManagementProvider
 }
 ````
 
-`PermissionManagementProvider` base class makes the default implementation (using the `IPermissionGrantRepository`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
+`PermissionManagementProvider` base class makes the default implementation (using the `IPermissionGrantRepository`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each permission value record).
 
 Once you create your provider class, you should register it using the `PermissionManagementOptions` [options class](../Options.md):
 
