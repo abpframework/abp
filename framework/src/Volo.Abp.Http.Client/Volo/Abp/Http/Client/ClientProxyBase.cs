@@ -23,6 +23,8 @@ namespace Volo.Abp.Http.Client
 
         protected static readonly Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels = new Dictionary<string, ActionApiDescriptionModel>();
 
+        private static object SyncLock = new object();
+
         protected virtual async Task MakeRequestAsync<TService>(string methodName, params object[] arguments)
         {
             await HttpProxyExecuter.MakeRequestAsync(await BuildHttpProxyExecuterContext<TService>(methodName, arguments));
@@ -42,13 +44,19 @@ namespace Volo.Abp.Http.Client
                 var apiDescription = await ApiDescriptionCache.GetAsync(ApiDescriptionCacheKey, GetApplicationApiDescriptionModel);
                 var controllers = apiDescription.Modules.Select(x=>x.Value).SelectMany(x => x.Controllers.Values).ToList();
 
-                foreach (var controller in controllers.Where(x => x.Interfaces.Any()))
+                lock (SyncLock)
                 {
-                    var appServiceType = controller.Interfaces.Last().Type.Split('.').Last();
-
-                    foreach (var actionItem in controller.Actions.Values)
+                    foreach (var controller in controllers.Where(x => x.Interfaces.Any()))
                     {
-                        ActionApiDescriptionModels.Add($"{appServiceType}.{actionItem.Name}", actionItem);
+                        var appServiceType = controller.Interfaces.Last().Type.Split('.').Last();
+
+                        foreach (var actionItem in controller.Actions.Values)
+                        {
+                            if (!ActionApiDescriptionModels.ContainsKey($"{appServiceType}.{actionItem.Name}"))
+                            {
+                                ActionApiDescriptionModels.Add($"{appServiceType}.{actionItem.Name}", actionItem);
+                            }
+                        }
                     }
                 }
             }
