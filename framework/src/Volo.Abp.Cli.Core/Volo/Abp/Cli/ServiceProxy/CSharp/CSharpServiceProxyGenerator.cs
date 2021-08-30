@@ -33,7 +33,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                                                        $"{Environment.NewLine}" +
                                                        $"{Environment.NewLine}namespace <namespace>" +
                                                        $"{Environment.NewLine}{{" +
-                                                       $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
+                                                       $"{Environment.NewLine}    public partial class <className> : ClientProxyBase, <serviceInterface>" +
                                                        $"{Environment.NewLine}    {{" +
                                                        $"{Environment.NewLine}        <method placeholder>" +
                                                        $"{Environment.NewLine}    }}" +
@@ -65,6 +65,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
         public override async Task GenerateProxyAsync(GenerateProxyArgs args)
         {
+            CheckFolder(args.Folder);
             var projectFilePath = CheckWorkDirectory(args.WorkDirectory);
 
             if (args.CommandName == RemoveProxyCommand.Name)
@@ -89,6 +90,19 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 {
                     await GenerateClientProxyFileAsync(args, controller.Value, appServiceTypes, startupModule.Namespace);
                 }
+            }
+
+            await CreateGenerateProxyJsonFile(args, applicationApiDescriptionModel);
+        }
+
+        private async Task CreateGenerateProxyJsonFile(GenerateProxyArgs args, ApplicationApiDescriptionModel applicationApiDescriptionModel)
+        {
+            var folder = args.Folder.IsNullOrWhiteSpace()? DefaultNamespace : args.Folder;
+            var filePath = Path.Combine(args.WorkDirectory, folder, $"{args.Module}-generate-proxy.json");
+
+            using (var writer = new StreamWriter(filePath))
+            {
+                await writer.WriteAsync(JsonSerializer.Serialize(applicationApiDescriptionModel, indented: true));
             }
         }
 
@@ -140,7 +154,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                     continue;
                 }
 
-                GenerateMethod(actionApiDescription, method, clientProxyBuilder, usingNamespaceList);
+                GenerateMethod(actionApiDescription, appServiceType.Name, method, clientProxyBuilder, usingNamespaceList);
             }
 
             foreach (var usingNamespace in usingNamespaceList)
@@ -184,6 +198,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
         private void GenerateMethod(
             ActionApiDescriptionModel actionApiDescription,
+            string serviceName,
             MethodInfo method,
             StringBuilder clientProxyBuilder,
             List<string> usingNamespaceList)
@@ -199,7 +214,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 return;
             }
 
-            GenerateAsynchronousMethod(actionApiDescription, method, returnTypeName, methodBuilder, usingNamespaceList);
+            GenerateAsynchronousMethod(actionApiDescription, serviceName ,method, returnTypeName, methodBuilder, usingNamespaceList);
             clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder} {Environment.NewLine}        {MethodPlaceholder}");
         }
 
@@ -223,6 +238,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
         private void GenerateAsynchronousMethod(
             ActionApiDescriptionModel actionApiDescription,
+            string serviceName,
             MethodInfo method,
             string returnTypeName,
             StringBuilder methodBuilder,
@@ -239,20 +255,14 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             methodBuilder.Replace(", )", ")");
 
             methodBuilder.AppendLine("        {");
-            methodBuilder.AppendLine("            #region ActionApiDescriptionModel JSON");
-            methodBuilder.AppendLine($"            var actionApiDescription = \"{JsonSerializer.Serialize(actionApiDescription).Replace("\"","\\\"")}\";");
-            methodBuilder.AppendLine("            #endregion");
-            methodBuilder.AppendLine("");
-            methodBuilder.AppendLine("            var action = JsonSerializer.Deserialize<ActionApiDescriptionModel>(actionApiDescription);");
-            methodBuilder.AppendLine("");
 
             if (method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
-                methodBuilder.AppendLine("            await MakeRequestAsync(action,  <args>);");
+                methodBuilder.AppendLine($"            await MakeRequestAsync<{serviceName}>(\"{method.Name}\",  <args>);");
             }
             else
             {
-                methodBuilder.AppendLine($"            return await MakeRequestAsync<{returnTypeName.Replace("Task<", string.Empty)}(action, <args>);");
+                methodBuilder.AppendLine($"            return await MakeRequestAsync<{serviceName}, {returnTypeName.Replace("Task<", string.Empty)}(\"{method.Name}\", <args>);");
             }
 
             foreach (var parameter in method.GetParameters())
@@ -262,7 +272,6 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
             methodBuilder.Replace(", <args>", string.Empty);
             methodBuilder.Replace(", )", ")");
-            methodBuilder.AppendLine("");
             methodBuilder.AppendLine("        }");
         }
 
@@ -369,6 +378,14 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             }
 
             return projectFiles.First();
+        }
+
+        private static void CheckFolder(string folder)
+        {
+            if (!folder.IsNullOrWhiteSpace() && Path.HasExtension(folder))
+            {
+                throw new CliUsageException("Option folder should be a directory.");
+            }
         }
 
         private Type GetStartupModule(string assemblyPath)

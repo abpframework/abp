@@ -68,7 +68,7 @@ namespace Volo.Abp.Cli.Commands
             var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
             var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
 
-            return new GenerateProxyArgs(CommandName, workDirectory, module.ToLower(), url, output, target, apiName, source, folder, commandLineArgs.Options);
+            return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, commandLineArgs.Options);
         }
 
         public virtual string GetUsageInfo()
