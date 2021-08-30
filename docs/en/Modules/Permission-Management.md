@@ -93,7 +93,7 @@ public class CustomPermissionManagementProvider : PermissionManagementProvider
 
 `PermissionManagementProvider` base class makes the default implementation (using the `IPermissionGrantRepository`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
 
-Once you create your provider class, you should register it using the `FeatureManagementOptions` [options class](../Options.md):
+Once you create your provider class, you should register it using the `PermissionManagementOptions` [options class](../Options.md):
 
 ````csharp
 Configure<PermissionManagementOptions>(options =>
