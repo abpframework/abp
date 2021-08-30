@@ -19,7 +19,7 @@ namespace Volo.Abp.EventBus
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
-        
+
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
         protected IEventErrorHandler ErrorHandler { get; }
@@ -108,7 +108,7 @@ namespace Volo.Abp.EventBus
                 );
                 return;
             }
-            
+
             await PublishToEventBusAsync(eventType, eventData);
         }
 
@@ -154,7 +154,7 @@ namespace Volo.Abp.EventBus
                     var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    await PublishAsync(baseEventType, baseEventData);
+                    await PublishToEventBusAsync(baseEventType, baseEventData);
                 }
             }
         }
