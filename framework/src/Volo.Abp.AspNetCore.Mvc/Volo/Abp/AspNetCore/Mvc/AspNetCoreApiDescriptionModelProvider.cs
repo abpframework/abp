@@ -114,11 +114,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             var implementFrom = controllerType.FullName;
-            var interfaces = controllerType.GetInterfaces().ToList();
-            foreach (var interfaceType in interfaces.Where(interfaceType => interfaceType.GetMethods().Any(x => x.ToString() == method.ToString())))
+
+            var interfaceType = controllerType.GetInterfaces().FirstOrDefault(i => i.GetMethods().Any(x => x.ToString() == method.ToString()));
+            if (interfaceType != null)
             {
                 implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
-                break;
             }
 
             var actionModel = controllerModel.AddAction(
