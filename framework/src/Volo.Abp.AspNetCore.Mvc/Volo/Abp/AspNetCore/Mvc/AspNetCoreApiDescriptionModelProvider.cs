@@ -113,11 +113,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                 allowAnonymous = false;
             }
 
-            var declaringFrom = controllerType.FullName;
+            var implementFrom = controllerType.FullName;
             var interfaces = controllerType.GetInterfaces().ToList();
-            foreach (var interfaceType in interfaces.Where(interfaceType => interfaceType.GetMethods().Any(x => x.Name == method.Name)))
+            foreach (var interfaceType in interfaces.Where(interfaceType => interfaceType.GetMethods().Any(x => x.ToString() == method.ToString())))
             {
-                declaringFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
+                implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
                 break;
             }
 
@@ -130,7 +130,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     apiDescription.HttpMethod,
                     GetSupportedVersions(controllerType, method, setting),
                     allowAnonymous,
-                    declaringFrom
+                    implementFrom
                 )
             );
 

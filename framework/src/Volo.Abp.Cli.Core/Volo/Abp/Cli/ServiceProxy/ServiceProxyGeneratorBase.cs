@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Http;
@@ -33,7 +36,8 @@ namespace Volo.Abp.Cli.ServiceProxy
             var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url));
             var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
 
-            if (!apiDefinition.Modules.TryGetValue(args.Module, out var moduleDefinition))
+            var moduleDefinition = apiDefinition.Modules.FirstOrDefault(x => string.Equals(x.Key, args.Module, StringComparison.CurrentCultureIgnoreCase)).Value;
+            if (moduleDefinition == null)
             {
                 throw new CliUsageException($"Module name: {args.Module} is invalid");
             }
@@ -42,6 +46,11 @@ namespace Volo.Abp.Cli.ServiceProxy
             apiDescriptionModel.AddModule(moduleDefinition);
 
             return apiDescriptionModel;
+        }
+
+        protected string GetLoggerOutputPath(string path, string workDirectory)
+        {
+            return path.Replace(workDirectory, string.Empty).TrimStart(Path.DirectorySeparatorChar);
         }
     }
 }

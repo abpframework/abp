@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.DependencyInjection;
@@ -49,9 +50,19 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
                 foreach (var actionItem in controller.Actions.Values)
                 {
-                    if (!ActionApiDescriptionModels.ContainsKey($"{appServiceType}.{actionItem.Name}"))
+                    var stringBuilder = new StringBuilder($"{appServiceType}.{actionItem.Name}(");
+                    stringBuilder.Append("(");
+                    foreach (var parameter in actionItem.ParametersOnMethod)
                     {
-                        ActionApiDescriptionModels.Add($"{appServiceType}.{actionItem.Name}", actionItem);
+                        stringBuilder.Append($"{parameter.Type},");
+                    }
+                    stringBuilder.Append(")");
+                    stringBuilder.Replace(",)", ")");
+
+                    var actionKey = stringBuilder.ToString();
+                    if (!ActionApiDescriptionModels.ContainsKey(actionKey))
+                    {
+                        ActionApiDescriptionModels.Add(actionKey, actionItem);
                     }
                 }
             }

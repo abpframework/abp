@@ -54,7 +54,7 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
                 await writer.WriteAsync(script);
             }
 
-            Logger.LogInformation($"Create {output.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
+            Logger.LogInformation($"Create {GetLoggerOutputPath(output, args.WorkDirectory)}");
         }
 
         private void RemoveProxy(GenerateProxyArgs args, string filePath)
@@ -64,7 +64,7 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
                 File.Delete(filePath);
             }
 
-            Logger.LogInformation($"Delete {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
+            Logger.LogInformation($"Delete {GetLoggerOutputPath(filePath, args.WorkDirectory)}");
         }
 
         private static void CheckWorkDirectory(string directory)

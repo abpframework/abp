@@ -82,7 +82,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
             var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
 
-            foreach (var controller in applicationApiDescriptionModel.Modules[args.Module].Controllers)
+            foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers))
             {
                 if (ShouldGenerateProxy(controller.Value))
                 {
@@ -114,7 +114,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 Directory.Delete(folderPath, true);
             }
 
-            Logger.LogInformation($"Delete {folderPath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
+            Logger.LogInformation($"Delete {GetLoggerOutputPath(folderPath, args.WorkDirectory)}");
         }
 
         private async Task GenerateClientProxyFileAsync(
@@ -161,7 +161,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             using (var writer = new StreamWriter(filePath))
             {
                 await writer.WriteAsync(clientProxyBuilder.ToString());
-                Logger.LogInformation($"Create {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
+                Logger.LogInformation($"Create {GetLoggerOutputPath(filePath, args.WorkDirectory)}");
             }
 
             await GenerateClientProxyPartialFileAsync(args, clientProxyName, fileNamespace, filePath);
@@ -186,7 +186,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                     await writer.WriteAsync(clientProxyBuilder.ToString());
                 }
 
-                Logger.LogInformation($"Create {filePath.Replace(args.WorkDirectory, string.Empty).TrimStart('\\')}");
+                Logger.LogInformation($"Create {GetLoggerOutputPath(filePath, args.WorkDirectory)}");
             }
         }
 
@@ -212,7 +212,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
         private void GenerateSynchronizationMethod(ActionApiDescriptionModel action, string returnTypeName, StringBuilder methodBuilder, List<string> usingNamespaceList)
         {
-            methodBuilder.AppendLine($"public {returnTypeName} {action.Name}(<args>)");
+            methodBuilder.AppendLine($"public virtual {returnTypeName} {action.Name}(<args>)");
 
             foreach (var parameter in action.Parameters.GroupBy(x => x.Name).Select( x=> x.First()))
             {
@@ -236,7 +236,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
         {
             var returnSign = returnTypeName == "void" ? "Task": $"Task<{returnTypeName}>";
 
-            methodBuilder.AppendLine($"public async {returnSign} {action.Name}(<args>)");
+            methodBuilder.AppendLine($"public virtual async {returnSign} {action.Name}(<args>)");
 
             foreach (var parameter in action.ParametersOnMethod)
             {
@@ -280,7 +280,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
 
         private static bool ShouldGenerateMethod(string appServiceTypeName, ActionApiDescriptionModel action)
         {
-            return action.DeclaringFrom.StartsWith(AppServicePrefix) || action.DeclaringFrom.StartsWith(appServiceTypeName);
+            return action.ImplementFrom.StartsWith(AppServicePrefix) || action.ImplementFrom.StartsWith(appServiceTypeName);
         }
 
         private static string GetTypeNamespace(string typeFullName)
@@ -347,6 +347,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 "Boolean" => "bool",
                 "String" => "string",
                 "Int32" => "int",
+                "Int64" => "long",
                 _ => typeName
             };
 
