@@ -228,7 +228,7 @@ modelBuilder.Entity<TodoItem>(b =>
 
 ### 应用服务接口
 
-我们可以先从为应用程序服务定义接口开始.  在 *TodoAppp.Application.Contracts* 项目中创建新的 `ITodoAppService` 接口, 如下所示: 
+我们可以先从为应用程序服务定义接口开始.  在 *TodoApp.Application.Contracts* 项目中创建新的 `ITodoAppService` 接口, 如下所示: 
 
 ````csharp
 using System;
