@@ -8,6 +8,11 @@ namespace Volo.Abp.Studio.ModuleInstalling
         {
             var pipeline = new ModuleInstallingPipeline(context);
 
+            if (context.WithSourceCode)
+            {
+                pipeline.Steps.Add(new SourceCodeDownloadStep());
+            }
+
             pipeline.Steps.Add(new PackageReferencingStep());
 
             return pipeline;

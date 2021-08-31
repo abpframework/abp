@@ -7,6 +7,10 @@ namespace Volo.Abp.Studio.ModuleInstalling
 {
     public class ModuleInstallingContext
     {
+        public string ModuleName { get; set; }
+
+        public string TargetModule { get; set; }
+
         public bool WithSourceCode { get; set; }
 
         public bool AddToSolutionFile { get; set; }
@@ -22,12 +26,16 @@ namespace Volo.Abp.Studio.ModuleInstalling
         public IServiceProvider ServiceProvider { get; }
 
         public ModuleInstallingContext(
+            string moduleName,
+            string targetModule,
             bool withSourceCode,
             bool addToSolutionFile,
             string version,
             Dictionary<string,string> options,
             IServiceProvider serviceProvider)
         {
+            ModuleName = moduleName;
+            TargetModule = targetModule;
             WithSourceCode = withSourceCode;
             AddToSolutionFile = addToSolutionFile;
             Version = version;
@@ -45,7 +53,7 @@ namespace Volo.Abp.Studio.ModuleInstalling
 
             ReferenceModulePackages = referenceModulePackages;
         }
-        
+
         public void SetTargetModulePackages([NotNull] List<PackageInfo> targetModulePackages)
         {
             Check.NotNull(targetModulePackages, nameof(targetModulePackages));
