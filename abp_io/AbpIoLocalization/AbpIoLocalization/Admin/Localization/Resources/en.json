@@ -306,13 +306,13 @@
     "PaymentTimeCannotBeFutureTime": "Payment time cannot be future time",
     "SaveAndDownload": "Save And Download",
     "BillingInfo": "Billing Info",
-    "GenerateInvoice": "Generate Invoice",
+    "GenerateInvoice": "Create Invoice",
     "DeleteInvoice" : "Delete Invoice",
-    "SetAsUnRefunded": "Set as Un-Refunded",
-    "SetAsRefunded": "Set as Refunded",
+    "SetAsUnRefunded": "Set as unrefunded",
+    "SetAsRefunded": "Set as refunded",
     "SuccessfullyDeleted": "Successfully deleted!",
     "SuccessfullyRefunded" : "Successfully refunded!",
-    "SuccessfullyUnRefunded" : "Successfully un-refunded!",
+    "SuccessfullyUnRefunded" : "Successfully unrefunded!",
     "InvoiceActions": "Invoice Actions"
   }
 }
