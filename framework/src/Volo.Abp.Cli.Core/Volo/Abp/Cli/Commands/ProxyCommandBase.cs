@@ -11,9 +11,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public abstract class ProxyCommandBase : IConsoleCommand, ITransientDependency
+    public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependency where T: IConsoleCommand
     {
-        public ILogger<ProxyCommandBase> Logger { get; set; }
+        public ILogger<T> Logger { get; set; }
 
         protected abstract string CommandName { get; }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.Commands
         {
             ServiceScopeFactory = serviceScopeFactory;
             ServiceProxyOptions = serviceProxyOptions.Value;
-            Logger = NullLogger<ProxyCommandBase>.Instance;
+            Logger = NullLogger<T>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)

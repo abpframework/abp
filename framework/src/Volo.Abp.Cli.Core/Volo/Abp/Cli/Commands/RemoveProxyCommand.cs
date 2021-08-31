@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class RemoveProxyCommand : ProxyCommandBase
+    public class RemoveProxyCommand : ProxyCommandBase<RemoveProxyCommand>
     {
         public const string Name = "remove-proxy";
 

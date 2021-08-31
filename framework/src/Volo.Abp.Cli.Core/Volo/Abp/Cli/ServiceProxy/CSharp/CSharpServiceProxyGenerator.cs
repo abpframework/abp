@@ -348,6 +348,10 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 "String" => "string",
                 "Int32" => "int",
                 "Int64" => "long",
+                "Double" => "double",
+                "Object" => "object",
+                "Byte" => "byte",
+                "Char" => "char",
                 _ => typeName
             };
 

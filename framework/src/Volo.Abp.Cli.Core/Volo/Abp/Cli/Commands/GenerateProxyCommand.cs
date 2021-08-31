@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class GenerateProxyCommand : ProxyCommandBase
+    public class GenerateProxyCommand : ProxyCommandBase<GenerateProxyCommand>
     {
         public const string Name = "generate-proxy";
 
