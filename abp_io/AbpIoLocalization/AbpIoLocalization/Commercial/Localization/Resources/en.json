@@ -377,6 +377,7 @@
     "AddressValidationMessage": "Address is too long!",
     "TaxNoValidationMessage": "TAX/VAT No is too long!",
     "NotesValidationMessage": "Notes field is too long!",
-    "CheckYourBillingInfo": "You can create your invoice only once! Check your billing info before creating your invoice."
+    "CheckYourBillingInfo": "You can create your invoice only once! Check your billing info before creating your invoice.",
+    "Refunded": "Refunded"
   }
 }
