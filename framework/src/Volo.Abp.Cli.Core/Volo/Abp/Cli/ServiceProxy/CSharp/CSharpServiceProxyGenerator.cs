@@ -77,8 +77,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             }
 
             var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
-            var assemblyFilePath = Path.Combine(args.WorkDirectory, "bin", "Debug", GetTargetFrameworkVersion(projectFilePath), $"{projectName}.dll");
-            var startupModule = GetStartupModule(assemblyFilePath);
+            var rootNamespace = GetRootNamespace(projectFilePath);
 
             var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
 
@@ -86,7 +85,7 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
             {
                 if (ShouldGenerateProxy(controller.Value))
                 {
-                    await GenerateClientProxyFileAsync(args, controller.Value, startupModule.Namespace);
+                    await GenerateClientProxyFileAsync(args, controller.Value, rootNamespace);
                 }
             }
 
@@ -391,11 +390,11 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 .SingleOrDefault(AbpModule.IsAbpModule);
         }
 
-        private string GetTargetFrameworkVersion(string projectFilePath)
+        private string GetRootNamespace(string projectFilePath)
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
-            return document.SelectSingleNode("//TargetFramework").InnerText;
+            return document.SelectSingleNode("//RootNamespace").InnerText;
         }
     }
 }

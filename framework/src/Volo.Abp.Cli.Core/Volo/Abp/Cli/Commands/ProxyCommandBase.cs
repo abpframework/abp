@@ -59,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
 
         private GenerateProxyArgs BuildArgs(CommandLineArgs commandLineArgs)
         {
-            var url = commandLineArgs.Options.GetOrNull(Options.Url.Long);
+            var url = commandLineArgs.Options.GetOrNull(Options.Url.Short, Options.Url.Long);
             var target = commandLineArgs.Options.GetOrNull(Options.Target.Long);
             var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ??　"app";
             var output = commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long);
@@ -85,6 +85,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
             sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
             sb.AppendLine("-wd|--working-directory <directory-path>          Execution directory.");
+            sb.AppendLine("-u|--url <url>                                    API definition URL from.");
             sb.AppendLine("-a|--api-name <module-name>                       (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
             sb.AppendLine("-s|--source <source-name>                         (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
             sb.AppendLine("-o|--output <output-name>                         JavaScript file path or folder to place generated code in.");
@@ -148,6 +149,7 @@ namespace Volo.Abp.Cli.Commands
 
             public static class Url
             {
+                public const string Short = "u";
                 public const string Long = "url";
             }
 
