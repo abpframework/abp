@@ -47,16 +47,8 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
         private static string GetActionKey(string serviceTypeFullName, string methodName, params object[] arguments)
         {
-            var stringBuilder = new StringBuilder($"{serviceTypeFullName}.{methodName}(");
-            stringBuilder.Append("(");
-            foreach (var parameter in arguments)
-            {
-                stringBuilder.Append($"{parameter.GetType().FullName},");
-            }
-            stringBuilder.Append(")");
-            stringBuilder.Replace(",)", ")");
 
-            return stringBuilder.ToString();
+            return $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.GetType().FullName))}";
         }
     }
 }

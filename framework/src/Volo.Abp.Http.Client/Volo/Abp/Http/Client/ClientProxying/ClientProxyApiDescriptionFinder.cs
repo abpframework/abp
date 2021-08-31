@@ -29,9 +29,9 @@ namespace Volo.Abp.Http.Client.ClientProxying
             Initial();
         }
 
-        public Task<ActionApiDescriptionModel> FindActionAsync(string action)
+        public Task<ActionApiDescriptionModel> FindActionAsync(string methodName)
         {
-            return Task.FromResult(ActionApiDescriptionModels[action]);
+            return Task.FromResult(ActionApiDescriptionModels[methodName]);
         }
 
         public Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync()
@@ -50,16 +50,8 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
                 foreach (var actionItem in controller.Actions.Values)
                 {
-                    var stringBuilder = new StringBuilder($"{appServiceType}.{actionItem.Name}(");
-                    stringBuilder.Append("(");
-                    foreach (var parameter in actionItem.ParametersOnMethod)
-                    {
-                        stringBuilder.Append($"{parameter.Type},");
-                    }
-                    stringBuilder.Append(")");
-                    stringBuilder.Replace(",)", ")");
-
-                    var actionKey = stringBuilder.ToString();
+                    var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
+                    
                     if (!ActionApiDescriptionModels.ContainsKey(actionKey))
                     {
                         ActionApiDescriptionModels.Add(actionKey, actionItem);

@@ -39,14 +39,16 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                                                        $"{Environment.NewLine}    {{" +
                                                        $"{Environment.NewLine}        <method placeholder>" +
                                                        $"{Environment.NewLine}    }}" +
-                                                       $"{Environment.NewLine}}}";
+                                                       $"{Environment.NewLine}}}" +
+                                                       $"{Environment.NewLine}";
         private readonly string _clientProxyPartialTemplate = "// This file is part of <className>, you can customize it here" +
                                                               $"{Environment.NewLine}namespace <namespace>" +
                                                               $"{Environment.NewLine}{{" +
                                                               $"{Environment.NewLine}    public partial class <className>" +
                                                               $"{Environment.NewLine}    {{" +
                                                               $"{Environment.NewLine}    }}" +
-                                                              $"{Environment.NewLine}}}";
+                                                              $"{Environment.NewLine}}}" +
+                                                              $"{Environment.NewLine}";
         private readonly List<string> _usingNamespaceList = new()
         {
             "using System;",
@@ -76,7 +78,6 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
                 return;
             }
 
-            var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
             var rootNamespace = GetRootNamespace(projectFilePath);
 
             var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
@@ -394,7 +395,15 @@ namespace Volo.Abp.Cli.ServiceProxy.CSharp
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
-            return document.SelectSingleNode("//RootNamespace").InnerText;
+
+            var rootNamespace = document.SelectSingleNode("//RootNamespace")?.InnerText;
+
+            if(rootNamespace.IsNullOrWhiteSpace())
+            {
+                rootNamespace = Path.GetFileNameWithoutExtension(projectFilePath);
+            }
+
+            return rootNamespace;
         }
     }
 }
