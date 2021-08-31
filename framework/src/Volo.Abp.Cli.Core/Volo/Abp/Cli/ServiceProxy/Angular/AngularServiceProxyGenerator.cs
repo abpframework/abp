@@ -6,25 +6,29 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ServiceProxy.Angular
 {
-    public class AngularServiceProxyGenerator : IServiceProxyGenerator , ITransientDependency
+    public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularServiceProxyGenerator> , ITransientDependency
     {
         public const string Name = "NG";
 
-        public CliService CliService { get; }
-        public ILogger<AngularServiceProxyGenerator> Logger { get; set; }
+        private readonly CliService _cliService;
 
-        public AngularServiceProxyGenerator(CliService cliService)
+        public AngularServiceProxyGenerator(
+            CliHttpClientFactory cliHttpClientFactory,
+            IJsonSerializer jsonSerializer,
+            CliService cliService) :
+            base(cliHttpClientFactory, jsonSerializer)
         {
-            CliService = cliService;
-            Logger = NullLogger<AngularServiceProxyGenerator>.Instance;
+            _cliService = cliService;
         }
 
-        public async Task GenerateProxyAsync(GenerateProxyArgs args)
+        public override async Task GenerateProxyAsync(GenerateProxyArgs args)
         {
             CheckAngularJsonFile();
             await CheckNgSchematicsAsync();
@@ -91,14 +95,14 @@ namespace Volo.Abp.Cli.ServiceProxy.Angular
                 return;
             }
 
-            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+            var cliVersion = await _cliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
             if (semanticSchematicsVersion < cliVersion)
             {
                 Logger.LogWarning("\"@abp/ng.schematics\" version is lower than ABP Cli version.");
             }
         }
 
-        private void CheckAngularJsonFile()
+        private static void CheckAngularJsonFile()
         {
             var angularPath = $"angular.json";
             if (!File.Exists(angularPath))

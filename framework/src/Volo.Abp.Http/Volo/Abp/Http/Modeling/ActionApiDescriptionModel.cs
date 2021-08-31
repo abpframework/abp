@@ -28,12 +28,14 @@ namespace Volo.Abp.Http.Modeling
 
         public bool? AllowAnonymous { get; set; }
 
+        public string DeclaringFrom { get; set; }
+
         public ActionApiDescriptionModel()
         {
 
         }
 
-        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [CanBeNull] string httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null)
+        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [CanBeNull] string httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null, string declaringFrom = null)
         {
             Check.NotNull(uniqueName, nameof(uniqueName));
             Check.NotNull(method, nameof(method));
@@ -53,7 +55,8 @@ namespace Volo.Abp.Http.Modeling
                     .Select(MethodParameterApiDescriptionModel.Create)
                     .ToList(),
                 SupportedVersions = supportedVersions,
-                AllowAnonymous = allowAnonymous
+                AllowAnonymous = allowAnonymous,
+                DeclaringFrom = declaringFrom
             };
         }
 

@@ -1,20 +1,25 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ServiceProxy
 {
-    public abstract class ServiceProxyGeneratorBase : IServiceProxyGenerator
+    public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator where T: IServiceProxyGenerator
     {
         public IJsonSerializer JsonSerializer { get; }
 
         public CliHttpClientFactory CliHttpClientFactory { get; }
 
+        public ILogger<T> Logger { get; set; }
+
         protected ServiceProxyGeneratorBase(CliHttpClientFactory cliHttpClientFactory, IJsonSerializer jsonSerializer)
         {
             CliHttpClientFactory = cliHttpClientFactory;
             JsonSerializer = jsonSerializer;
+            Logger = NullLogger<T>.Instance;
         }
 
         public abstract Task GenerateProxyAsync(GenerateProxyArgs args);

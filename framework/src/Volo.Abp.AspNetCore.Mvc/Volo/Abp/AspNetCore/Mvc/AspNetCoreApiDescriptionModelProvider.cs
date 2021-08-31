@@ -113,6 +113,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 allowAnonymous = false;
             }
 
+            var declaringFrom = controllerType.FullName;
+            var interfaces = controllerType.GetInterfaces().ToList();
+            foreach (var interfaceType in interfaces.Where(interfaceType => interfaceType.GetMethods().Any(x => x.Name == method.Name)))
+            {
+                declaringFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
+                break;
+            }
+
             var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
                 ActionApiDescriptionModel.Create(
@@ -121,7 +129,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                     apiDescription.RelativePath,
                     apiDescription.HttpMethod,
                     GetSupportedVersions(controllerType, method, setting),
-                    allowAnonymous
+                    allowAnonymous,
+                    declaringFrom
                 )
             );
 

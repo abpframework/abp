@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
@@ -12,15 +11,13 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ServiceProxy.JavaScript
 {
-    public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase, ITransientDependency
+    public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase<JavaScriptServiceProxyGenerator>, ITransientDependency
     {
         public const string Name = "JS";
         private const string EventTriggerScript = "abp.event.trigger('abp.serviceProxyScriptInitialized');";
         private const string DefaultOutput = "wwwroot/client-proxies";
 
         private readonly JQueryProxyScriptGenerator _jQueryProxyScriptGenerator;
-
-        public ILogger<JavaScriptServiceProxyGenerator> Logger { get; set; }
 
         public JavaScriptServiceProxyGenerator(
             CliHttpClientFactory cliHttpClientFactory,
@@ -29,7 +26,6 @@ namespace Volo.Abp.Cli.ServiceProxy.JavaScript
             base(cliHttpClientFactory, jsonSerializer)
         {
             _jQueryProxyScriptGenerator = jQueryProxyScriptGenerator;
-            Logger = NullLogger<JavaScriptServiceProxyGenerator>.Instance;
         }
 
         public override async Task GenerateProxyAsync(GenerateProxyArgs args)
