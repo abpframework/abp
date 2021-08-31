@@ -63,8 +63,6 @@ public class MyModule : AbpModule
 }
 ````
 
-Translation files' (en.json, tr.json, etc) `Build Action` should be set as `Embedded Resource`.
-
 In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
@@ -155,6 +153,22 @@ services.Configure<AbpLocalizationOptions>(options =>
 ````
 
 * If an extension file defines the same localized string, it overrides the string.
+
+### Creating Localization Resource in a New Module
+
+If you have created a new module and would like to add localization resources to that module. There are some extra steps you should do in order to provide resources to abp. These steps are described in [Virtual File System](Virtual-File-System.md) documentation, in `Working with the Embedded Files` section.
+
+1. Localization recources' (en.json, tr.json, etc) `Build Action` should be set as `Embedded Resource`.
+2. Add [Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet package to the project that contains the embedded resource(s).
+3. Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyGroup>...</PropertyGroup>` section of your `.csproj` file.
+4. Add embedded files to the virtual file system. In the `ConfigureServices` method of your module:
+
+    ````csharp
+    Configure<AbpVirtualFileSystemOptions>(options =>
+    {
+        options.FileSets.AddEmbedded<MyModule>();
+    });
+    ````
 
 ## Getting the Localized Texts
 
