@@ -88,7 +88,7 @@ namespace Volo.CmsKit.Admin.Menus
             menuItem.Target = input.Target;
             menuItem.ElementId = input.ElementId;
             menuItem.CssClass = input.CssClass;
-            menuItem.SetConcurrencyStamp(input.ConcurrencyStamp);
+            menuItem.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await MenuItemRepository.UpdateAsync(menuItem);
 

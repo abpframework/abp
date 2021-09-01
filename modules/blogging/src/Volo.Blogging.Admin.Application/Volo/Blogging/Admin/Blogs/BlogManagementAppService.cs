@@ -59,7 +59,7 @@ namespace Volo.Blogging.Admin.Blogs
             blog.SetName(input.Name);
             blog.SetShortName(input.ShortName);
             blog.Description = input.Description;
-            blog.SetConcurrencyStamp(input.ConcurrencyStamp);
+            blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }

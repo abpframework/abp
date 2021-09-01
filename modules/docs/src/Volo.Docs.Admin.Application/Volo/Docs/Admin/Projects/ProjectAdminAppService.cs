@@ -97,7 +97,7 @@ namespace Volo.Docs.Admin.Projects
             project.SetFormat(input.Format);
             project.SetNavigationDocumentName(input.NavigationDocumentName);
             project.SetDefaultDocumentName(input.DefaultDocumentName);
-            project.SetConcurrencyStamp(input.ConcurrencyStamp);
+            project.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             project.MinimumVersion = input.MinimumVersion;
             project.MainWebsiteUrl = input.MainWebsiteUrl;

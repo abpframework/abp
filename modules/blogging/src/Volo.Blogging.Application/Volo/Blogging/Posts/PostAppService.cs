@@ -174,7 +174,7 @@ namespace Volo.Blogging.Posts
 
             post.SetTitle(input.Title);
             post.SetUrl(input.Url);
-            post.SetConcurrencyStamp(input.ConcurrencyStamp);
+            post.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             post.Content = input.Content;
             post.Description = input.Description;
             post.CoverImage = input.CoverImage;

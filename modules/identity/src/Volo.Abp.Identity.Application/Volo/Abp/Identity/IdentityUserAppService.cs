@@ -100,7 +100,7 @@ namespace Volo.Abp.Identity
 
             var user = await UserManager.GetByIdAsync(id);
 
-            user.SetConcurrencyStamp(input.ConcurrencyStamp);
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
 

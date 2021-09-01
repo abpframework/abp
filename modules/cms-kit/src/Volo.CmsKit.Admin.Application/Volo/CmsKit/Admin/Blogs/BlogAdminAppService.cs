@@ -68,7 +68,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
             blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
 
-            blog.SetConcurrencyStamp(input.ConcurrencyStamp);
+            blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await BlogRepository.UpdateAsync(blog);
 

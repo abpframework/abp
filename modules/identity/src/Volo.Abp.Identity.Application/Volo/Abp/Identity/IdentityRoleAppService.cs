@@ -75,7 +75,7 @@ namespace Volo.Abp.Identity
         {
             var role = await RoleManager.GetByIdAsync(id); 
             
-            role.SetConcurrencyStamp(input.ConcurrencyStamp);
+            role.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 

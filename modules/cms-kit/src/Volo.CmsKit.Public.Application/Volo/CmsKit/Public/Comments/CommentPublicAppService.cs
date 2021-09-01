@@ -87,7 +87,7 @@ namespace Volo.CmsKit.Public.Comments
             }
 
             comment.SetText(input.Text);
-            comment.SetConcurrencyStamp(input.ConcurrencyStamp);
+            comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             var updatedComment = await CommentRepository.UpdateAsync(comment);
 

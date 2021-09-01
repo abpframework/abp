@@ -101,7 +101,7 @@ namespace Volo.Abp.TenantManagement
 
             await TenantManager.ChangeNameAsync(tenant, input.Name);
 
-            tenant.SetConcurrencyStamp(input.ConcurrencyStamp);
+            tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             input.MapExtraPropertiesTo(tenant);
 
             await TenantRepository.UpdateAsync(tenant);

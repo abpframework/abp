@@ -63,7 +63,7 @@ namespace Volo.Abp.Identity
             user.Name = input.Name;
             user.Surname = input.Surname;
 
-            user.SetConcurrencyStamp(input.ConcurrencyStamp);
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             input.MapExtraPropertiesTo(user);
 

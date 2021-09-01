@@ -100,7 +100,7 @@ namespace Volo.Blogging.Comments
             await AuthorizationService.CheckAsync(comment, CommonOperations.Update);
 
             comment.SetText(input.Text);
-            comment.SetConcurrencyStamp(input.ConcurrencyStamp);
+            comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             comment = await _commentRepository.UpdateAsync(comment);
 

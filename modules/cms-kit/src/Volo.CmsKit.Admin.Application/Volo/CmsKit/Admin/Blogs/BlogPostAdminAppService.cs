@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Admin.Blogs
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
             blogPost.SetContent(input.Content);
-            blogPost.SetConcurrencyStamp(input.ConcurrencyStamp);
+            blogPost.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             blogPost.CoverImageMediaId = input.CoverImageMediaId;
 
             if (blogPost.Slug != input.Slug)

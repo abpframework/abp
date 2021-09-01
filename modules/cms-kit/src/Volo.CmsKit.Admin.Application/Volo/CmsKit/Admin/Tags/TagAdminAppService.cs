@@ -54,7 +54,7 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
-            tag.SetConcurrencyStamp(input.ConcurrencyStamp);
+            tag.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await Repository.UpdateAsync(tag);
 
