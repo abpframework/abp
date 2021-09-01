@@ -18,33 +18,16 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             var handlerOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpAuthorizationExceptionHandlerOptions>>().Value;
             if (handlerOptions.UseAuthenticationScheme)
             {
-                var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
-
-                if (!handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace())
-                {
-                    var handler = await handlers.GetHandlerAsync(httpContext, handlerOptions.AuthenticationScheme);
-                    if (handler != null)
-                    {
-                        if (isAuthenticated)
-                        {
-                            await handler.ForbidAsync(null);
-                        }
-                        else
-                        {
-                            await handler.ChallengeAsync(null);
-                        }
-
-                        return true;
-                    }
-                }
-
                 var authenticationSchemeProvider = httpContext.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
-                var scheme = isAuthenticated
-                    ? await authenticationSchemeProvider.GetDefaultForbidSchemeAsync()
-                    : await authenticationSchemeProvider.GetDefaultChallengeSchemeAsync();
+                var scheme = !handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace()
+                    ? await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme)
+                    : isAuthenticated
+                        ? await authenticationSchemeProvider.GetDefaultForbidSchemeAsync()
+                        : await authenticationSchemeProvider.GetDefaultChallengeSchemeAsync();
 
                 if (scheme != null)
                 {
+                    var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
                     var handler = await handlers.GetHandlerAsync(httpContext, scheme.Name);
                     if (handler != null)
                     {
