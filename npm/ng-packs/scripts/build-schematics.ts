@@ -37,7 +37,11 @@ async function* copyPackageFile(packageName: string, filecopy: FileCopy | string
   filecopy = new FileCopy(filecopy);
   const { src, dest, options = { overwrite: true } } = filecopy;
 
-  await fse.copy(`../packages/${packageName}/${src}`, `../dist/${packageName}/${dest}`, options);
+  await fse.copy(
+    `../packages/${packageName}/${src}`,
+    `../dist/packages/${packageName}/${dest}`,
+    options,
+  );
 
   yield filecopy;
 }
@@ -50,11 +54,18 @@ async function* copyPackageFiles(packageName: string) {
 
 (async () => {
   try {
-    await fse.remove(`../dist/${PACKAGE_TO_BUILD}`);
+    await fse.remove(`../dist/packages/${PACKAGE_TO_BUILD}`);
+
+    await execa('yarn', ['install'], { stdout: 'inherit', cwd: `../packages/${PACKAGE_TO_BUILD}` });
 
     await execa(
       'tsc',
-      ['-p', `packages/${PACKAGE_TO_BUILD}/tsconfig.json`, '--outDir', `dist/${PACKAGE_TO_BUILD}`],
+      [
+        '-p',
+        `packages/${PACKAGE_TO_BUILD}/tsconfig.json`,
+        '--outDir',
+        `dist/packages/${PACKAGE_TO_BUILD}`,
+      ],
       {
         stdout: 'inherit',
         cwd: '../',
