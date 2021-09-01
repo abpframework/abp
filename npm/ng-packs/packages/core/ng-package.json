@@ -10,7 +10,6 @@
     "angular-oauth2-oidc",
     "just-compare",
     "just-clone",
-    "snq",
     "ts-toolbelt"
   ]
 }

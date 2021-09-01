@@ -2,7 +2,6 @@ import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.c
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import snq from 'snq';
 
 @Component({
   selector: 'abp-languages',
@@ -53,10 +52,7 @@ export class LanguagesComponent {
     return this.languages$.pipe(
       map(
         languages =>
-          snq(
-            () => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName,
-          ),
-        '',
+          languages?.find(lang => lang.cultureName === this.selectedLangCulture).displayName || '',
       ),
     );
   }
@@ -64,9 +60,7 @@ export class LanguagesComponent {
   get dropdownLanguages$(): Observable<LanguageInfo[]> {
     return this.languages$.pipe(
       map(
-        languages =>
-          snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)),
-        [],
+        languages => languages?.filter(lang => lang.cultureName !== this.selectedLangCulture) || [],
       ),
     );
   }

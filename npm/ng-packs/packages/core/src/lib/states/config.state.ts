@@ -4,7 +4,6 @@ import { Action, createSelector, Selector, State, StateContext, Store } from '@n
 import compare from 'just-compare';
 import { throwError } from 'rxjs';
 import { catchError, distinctUntilChanged } from 'rxjs/operators';
-import snq from 'snq';
 import { GetAppConfiguration, PatchConfigState, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { Config } from '../models/config';
@@ -76,7 +75,7 @@ export class ConfigState {
 
   static getFeature(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return snq(() => state.features.values[key]);
+      return state.features.values[key];
     });
 
     return selector;
@@ -84,7 +83,7 @@ export class ConfigState {
 
   static getSetting(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return snq(() => state.setting.values[key]);
+      return state.setting.values[key];
     });
 
     return selector;
@@ -92,7 +91,7 @@ export class ConfigState {
 
   static getSettings(keyword?: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      const settings = snq(() => state.setting.values, {});
+      const settings = state.setting.values || {};
 
       if (!keyword) return settings;
 
@@ -113,7 +112,7 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
-      const getPolicy = (k: string) => snq(() => state.auth.grantedPolicies[k], false);
+      const getPolicy = (k: string) => state.auth.grantedPolicies[k] || false;
 
       const orRegexp = /\|\|/g;
       const andRegexp = /&&/g;
@@ -180,7 +179,7 @@ export class ConfigState {
 
       const sourceName =
         keys[0] ||
-        snq(() => state.environment.localization.defaultResourceName) ||
+        state.environment.localization?.defaultResourceName ||
         state.localization.defaultResourceName;
       const sourceKey = keys[1];
 
