@@ -1,9 +1,9 @@
 import {
-  ListService,
   ConfigStateService,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
+  ListService,
   PermissionService,
 } from '@abp/ng.core';
 import { formatDate } from '@angular/common';
@@ -11,25 +11,25 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  InjectFlags,
+  InjectionToken,
   Injector,
   Input,
   LOCALE_ID,
+  OnChanges,
+  SimpleChanges,
   TemplateRef,
   TrackByFunction,
   Type,
-  InjectionToken,
-  InjectFlags,
-  SimpleChanges,
-  OnChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ePropType } from '../../enums/props.enum';
+import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
-import { EntityActionList } from '../../models/entity-actions';
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
 @Component({
@@ -58,6 +58,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
 
+  hasAtLeastOnePermittedAction: boolean;
+
   readonly columnWidths: number[];
 
   readonly propList: EntityPropList<R>;
@@ -66,14 +68,11 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
-  hasAtLeastOnePermittedAction: boolean;
-
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private config: ConfigStateService,
     injector: Injector,
   ) {
-    // tslint:disable-next-line
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);

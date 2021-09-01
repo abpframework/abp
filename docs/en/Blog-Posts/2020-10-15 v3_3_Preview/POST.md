@@ -213,7 +213,7 @@ There are some breaking changes with the Blazor UI. If you've built an applicati
 When you create a new project, profile management doesn't work, you get an exception because it can't find the `/libs/cropperjs/css/cropper.min.css` file. To fix the issue;
 
 * Add `"@volo/account": "^3.3.0-rc.1"` to the `package.json` in the `.Host` project.
-* Run `yarn` (or `npm install`), then `gulp` on a command line terminal in the root folder of the `.Host` project.
+* Run `yarn` (or `npm install`), then `abp install-libs` on a command line terminal in the root folder of the `.Host` project.
 
 ### Multi-Tenant Social Logins
 
