@@ -13,11 +13,10 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
     {
         public virtual async Task<bool> HandleAsync(AbpAuthorizationException exception, HttpContext httpContext)
         {
-            var isAuthenticated = httpContext.User.Identity?.IsAuthenticated ?? false;
-
             var handlerOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpAuthorizationExceptionHandlerOptions>>().Value;
             if (handlerOptions.UseAuthenticationScheme)
             {
+                var isAuthenticated = httpContext.User.Identity?.IsAuthenticated ?? false;
                 var authenticationSchemeProvider = httpContext.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
                 var scheme = !handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace()
                     ? await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme)
