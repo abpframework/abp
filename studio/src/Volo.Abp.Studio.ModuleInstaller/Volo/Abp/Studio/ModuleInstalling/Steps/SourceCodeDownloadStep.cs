@@ -20,10 +20,9 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
                 SourceCodeTypes.Module,
                 context.Version);
 
-            var targetFolder =
-                Path.Combine(Path.GetDirectoryName(context.TargetModule), "modules", context.ModuleName);
+            var targetFolder = context.GetTargetSourceCodeFolder();
 
-            using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
+            using (var archive = ZipFile.OpenRead(zipFilePath))
             {
                 foreach (var entry in archive.Entries)
                 {

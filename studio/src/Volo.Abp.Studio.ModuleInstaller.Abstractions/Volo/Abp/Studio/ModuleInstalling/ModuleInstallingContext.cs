@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using JetBrains.Annotations;
 using Volo.Abp.Studio.Packages;
 
@@ -59,6 +60,11 @@ namespace Volo.Abp.Studio.ModuleInstalling
             Check.NotNull(targetModulePackages, nameof(targetModulePackages));
 
             TargetModulePackages = targetModulePackages;
+        }
+
+        public string GetTargetSourceCodeFolder()
+        {
+            return Path.Combine(Path.GetDirectoryName(TargetModule), "modules", ModuleName);
         }
     }
 }
