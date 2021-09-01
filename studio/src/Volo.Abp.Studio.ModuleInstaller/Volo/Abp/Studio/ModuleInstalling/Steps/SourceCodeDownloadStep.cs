@@ -13,10 +13,8 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
         {
             var _nugetSourceCodeStoreManager = context.ServiceProvider.GetRequiredService<INugetSourceCodeStore>();
 
-            var sourceCodePackageName = $"{context.ModuleName}.SourceCode";
-
             var zipFilePath = await _nugetSourceCodeStoreManager.GetCachedSourceCodeFilePathAsync(
-                sourceCodePackageName,
+                context.ModuleName,
                 SourceCodeTypes.Module,
                 context.Version);
 

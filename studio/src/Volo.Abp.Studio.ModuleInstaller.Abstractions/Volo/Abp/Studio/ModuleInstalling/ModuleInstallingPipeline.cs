@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.Studio.ModuleInstalling
@@ -21,6 +23,31 @@ namespace Volo.Abp.Studio.ModuleInstalling
             {
                 await step.ExecuteAsync(Context);
             }
+        }
+
+        public void Add(ModuleInstallingPipelineStep step)
+        {
+            Steps.Add(step);
+        }
+
+        public void Remove(Type stepType)
+        {
+            Steps.RemoveAll(step => step.GetType() == stepType);
+        }
+
+        public void Replace(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.ReplaceOne(step => step.GetType() == stepType , step);
+        }
+
+        public void InsertAfter(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.InsertAfter(step => step.GetType() == stepType , step);
+        }
+
+        public void InsertBefore(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.InsertBefore(step => step.GetType() == stepType , step);
         }
     }
 }

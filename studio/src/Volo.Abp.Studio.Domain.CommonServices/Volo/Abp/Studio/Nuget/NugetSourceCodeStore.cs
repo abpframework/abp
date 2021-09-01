@@ -34,10 +34,7 @@ namespace Volo.Abp.Studio.Nuget
             string templateSource = null,
             bool includePreReleases = false)
         {
-            if (type == SourceCodeTypes.Template)
-            {
-                name = TemplateNugetPackageInfoProvider.GetNugetPackageName(name);
-            }
+            name = GetNugetPackageName(name, type);
 
             var latestVersion =  await GetLatestVersionAsync(name, includePreReleases);
 
@@ -54,10 +51,7 @@ namespace Volo.Abp.Studio.Nuget
         public async Task<string> GetCachedSourceCodeFilePathAsync(string name, string type, string version = null,
             bool includePreReleases = false)
         {
-            if (type == SourceCodeTypes.Template)
-            {
-                name = TemplateNugetPackageInfoProvider.GetNugetPackageName(name);
-            }
+            name = GetNugetPackageName(name, type);
 
             if (version == null)
             {
@@ -147,6 +141,21 @@ namespace Volo.Abp.Studio.Nuget
                         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         ".nuget",
                         "packages");
+        }
+
+        private string GetNugetPackageName(string name, string type)
+        {
+            if (type == SourceCodeTypes.Template)
+            {
+                return TemplateNugetPackageInfoProvider.GetNugetPackageName(name);
+            }
+
+            if (type == SourceCodeTypes.Module)
+            {
+                return $"{name}.SourceCode";
+            }
+
+            return name;
         }
     }
 }
