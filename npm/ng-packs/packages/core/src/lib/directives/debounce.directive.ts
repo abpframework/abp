@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
-  // tslint:disable-next-line: directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[input.debounce]',
   providers: [SubscriptionService],
 })

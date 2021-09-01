@@ -18,8 +18,8 @@ describe('Routes Handler', () => {
 
       const routes = [];
       const add = jest.fn(routes.push.bind(routes));
-      const mockRoutesService = ({ add } as unknown) as RoutesService;
-      const mockRouter = ({ config } as unknown) as Router;
+      const mockRoutesService = { add } as unknown as RoutesService;
+      const mockRouter = { config } as unknown as Router;
 
       const handler = new RoutesHandler(mockRoutesService, mockRouter);
 
@@ -30,7 +30,7 @@ describe('Routes Handler', () => {
     it('should not add routes when there is no router', () => {
       const routes = [];
       const add = jest.fn(routes.push.bind(routes));
-      const mockRoutesService = ({ add } as unknown) as RoutesService;
+      const mockRoutesService = { add } as unknown as RoutesService;
 
       const handler = new RoutesHandler(mockRoutesService, null);
 

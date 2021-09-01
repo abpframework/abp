@@ -1,4 +1,3 @@
-
 export interface EmailSettingsDto {
   smtpHost?: string;
   smtpPort: number;

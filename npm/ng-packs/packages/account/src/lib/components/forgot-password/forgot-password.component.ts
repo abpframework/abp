@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { AccountService } from '../../proxy/account/account.service';
@@ -26,7 +26,10 @@ export class ForgotPasswordComponent {
     this.inProgress = true;
 
     this.accountService
-      .sendPasswordResetCode({ email: this.form.get('email').value, appName: 'Angular' })
+      .sendPasswordResetCode({
+        email: this.form.get('email').value,
+        appName: 'Angular',
+      })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe(() => {
         this.isEmailSent = true;

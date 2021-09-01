@@ -54,7 +54,29 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             displayMetadata.DisplayName = () =>
             {
-                var localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+                /*
+                 * DisplayName:ClassName:PropertyName
+                 * DisplayName:PropertyName
+                 * ClassName:PropertyName
+                 * PropertyName
+                 */
+
+                LocalizedString localizedString = null;
+
+                if (context.Key.ContainerType != null)
+                {
+                    localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
+                }
+
+                if (localizedString == null || localizedString.ResourceNotFound)
+                {
+                    localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+                }
+
+                if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
+                {
+                    localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
+                }
 
                 if (localizedString.ResourceNotFound)
                 {

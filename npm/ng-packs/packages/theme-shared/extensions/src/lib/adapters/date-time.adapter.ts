@@ -10,7 +10,7 @@ export class DateTimeAdapter {
 
     const date = new Date(value);
 
-    if (isNaN((date as unknown) as number)) return null;
+    if (isNaN(date as unknown as number)) return null;
 
     this.value = {
       year: date.getFullYear(),

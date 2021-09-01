@@ -15,7 +15,7 @@ describe('HttpClient testing', () => {
   const api = 'https://abp.io';
 
   const createHttp = createHttpFactory({
-    dataService: RestService,
+    service: RestService,
     providers: [EnvironmentService, { provide: CORE_OPTIONS, useValue: { environment: {} } }],
     mocks: [OAuthService, Store],
   });
