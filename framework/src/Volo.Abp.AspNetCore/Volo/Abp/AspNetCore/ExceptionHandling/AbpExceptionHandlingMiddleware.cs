@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
@@ -58,6 +59,22 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             _logger.LogException(exception);
 
+            await httpContext
+                .RequestServices
+                .GetRequiredService<IExceptionNotifier>()
+                .NotifyAsync(
+                    new ExceptionNotificationContext(exception)
+                );
+
+            if (exception is AbpAuthorizationException)
+            {
+                if (await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                    .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext))
+                {
+                    return;
+                }
+            }
+
             var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
@@ -75,13 +92,6 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                     )
                 )
             );
-
-            await httpContext
-                .RequestServices
-                .GetRequiredService<IExceptionNotifier>()
-                .NotifyAsync(
-                    new ExceptionNotificationContext(exception)
-                );
         }
 
         private Task ClearCacheHeaders(object state)

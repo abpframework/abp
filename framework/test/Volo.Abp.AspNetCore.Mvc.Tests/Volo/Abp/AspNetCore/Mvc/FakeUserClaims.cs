@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Authorization
+namespace Volo.Abp.AspNetCore.Mvc
 {
     public class FakeUserClaims : ISingletonDependency
     {
