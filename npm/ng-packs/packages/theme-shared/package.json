@@ -13,7 +13,7 @@
     "@ngx-validate/core": "^0.0.13",
     "@swimlane/ngx-datatable": "^19.0.0",
     "bootstrap": "~4.6.0",
-    "chart.js": "^3.5.1",
+    "chart.js": "^2.9.3",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
