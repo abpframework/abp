@@ -308,11 +308,8 @@
     "BillingInfo": "Billing Info",
     "GenerateInvoice": "Create Invoice",
     "DeleteInvoice" : "Delete Invoice",
-    "SetAsUnRefunded": "Set as unrefunded",
-    "SetAsRefunded": "Set as refunded",
     "SuccessfullyDeleted": "Successfully deleted!",
-    "SuccessfullyRefunded" : "Successfully refunded!",
-    "SuccessfullyUnRefunded" : "Successfully unrefunded!",
-    "InvoiceActions": "Invoice Actions"
+    "PaymentStateSetTo" : "Payment state set to {0}",
+    "ChangeState": "Change State"
   }
 }
