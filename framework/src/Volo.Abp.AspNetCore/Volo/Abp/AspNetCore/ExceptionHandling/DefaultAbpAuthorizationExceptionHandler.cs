@@ -18,30 +18,54 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 var isAuthenticated = httpContext.User.Identity?.IsAuthenticated ?? false;
                 var authenticationSchemeProvider = httpContext.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
-                var scheme = !handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace()
-                    ? await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme)
-                    : isAuthenticated
-                        ? await authenticationSchemeProvider.GetDefaultForbidSchemeAsync()
-                        : await authenticationSchemeProvider.GetDefaultChallengeSchemeAsync();
 
-                if (scheme != null)
+                AuthenticationScheme scheme = null;
+
+                if (!handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace())
                 {
-                    var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
-                    var handler = await handlers.GetHandlerAsync(httpContext, scheme.Name);
-                    if (handler != null)
+                    scheme = await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme);
+                    if (scheme == null)
                     {
-                        if (isAuthenticated)
-                        {
-                            await handler.ForbidAsync(null);
-                        }
-                        else
-                        {
-                            await handler.ChallengeAsync(null);
-                        }
-
-                        return true;
+                        throw new AbpException($"No authentication scheme named {handlerOptions.AuthenticationScheme} was found.");
                     }
                 }
+                else
+                {
+                    if (isAuthenticated)
+                    {
+                        scheme = await authenticationSchemeProvider.GetDefaultForbidSchemeAsync();
+                        if (scheme == null)
+                        {
+                            throw new AbpException($"There was no DefaultForbidScheme found.");
+                        }
+                    }
+                    else
+                    {
+                        scheme = await authenticationSchemeProvider.GetDefaultChallengeSchemeAsync();
+                        if (scheme == null)
+                        {
+                            throw new AbpException($"There was no DefaultChallengeScheme found.");
+                        }
+                    }
+                }
+
+                var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+                var handler = await handlers.GetHandlerAsync(httpContext, scheme.Name);
+                if (handler == null)
+                {
+                    throw new AbpException($"No handler of {scheme.Name} was found.");
+                }
+
+                if (isAuthenticated)
+                {
+                    await handler.ForbidAsync(null);
+                }
+                else
+                {
+                    await handler.ChallengeAsync(null);
+                }
+
+                return true;
             }
 
             return false;
