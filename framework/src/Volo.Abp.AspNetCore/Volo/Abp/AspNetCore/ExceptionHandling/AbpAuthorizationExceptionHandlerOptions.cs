@@ -4,9 +4,6 @@
     {
         public bool UseAuthenticationScheme { get; set; }
 
-        /// <summary>
-        /// Use default forbid/challenge scheme if this is not specified.
-        /// </summary>
         public string AuthenticationScheme { get; set; }
 
         public AbpAuthorizationExceptionHandlerOptions()
