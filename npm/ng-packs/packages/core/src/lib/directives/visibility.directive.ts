@@ -26,7 +26,9 @@ export class VisibilityDirective implements AfterViewInit {
         if (!mutation.target) return;
 
         const htmlNodes =
-          Array.from(mutation.target.childNodes || []).filter(node => node instanceof HTMLElement) || [];
+          Array.from(mutation.target.childNodes || []).filter(
+            node => node instanceof HTMLElement,
+          ) || [];
 
         if (!htmlNodes.length) {
           this.removeFromDOM();
@@ -40,8 +42,9 @@ export class VisibilityDirective implements AfterViewInit {
 
     setTimeout(() => {
       const htmlNodes =
-        Array.from(this.focusedElement.childNodes || []).filter(node => node instanceof HTMLElement) ||
-        [];
+        Array.from(this.focusedElement.childNodes || []).filter(
+          node => node instanceof HTMLElement,
+        ) || [];
 
       if (!htmlNodes.length) this.removeFromDOM();
     }, 0);
