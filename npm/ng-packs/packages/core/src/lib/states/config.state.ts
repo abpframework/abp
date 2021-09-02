@@ -75,7 +75,7 @@ export class ConfigState {
 
   static getFeature(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return state.features.values[key];
+      return state.features.values?.[key];
     });
 
     return selector;
@@ -83,7 +83,7 @@ export class ConfigState {
 
   static getSetting(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return state.setting.values[key];
+      return state.setting.values?.[key];
     });
 
     return selector;
