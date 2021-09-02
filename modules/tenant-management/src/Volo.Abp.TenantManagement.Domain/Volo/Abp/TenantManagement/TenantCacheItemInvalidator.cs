@@ -17,8 +17,8 @@ namespace Volo.Abp.TenantManagement
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<Tenant> eventData)
         {
-            await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, null));
-            await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(null, eventData.Entity.Name));
+            await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, null), considerUow: true);
+            await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(null, eventData.Entity.Name), considerUow: true);
         }
     }
 }
