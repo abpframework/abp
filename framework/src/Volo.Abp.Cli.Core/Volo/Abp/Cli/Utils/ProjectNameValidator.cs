@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.Utils
         {
             foreach (var illegalKeyword in IllegalKeywords)
             {
-                if (projectName.Contains(illegalKeyword))
+                if (projectName.Equals(illegalKeyword, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
