@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
@@ -44,11 +45,14 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags
 
         [AutoMap(typeof(TagDto))]
         [AutoMap(typeof(TagUpdateDto), ReverseMap = true)]
-        public class TagEditViewModel
+        public class TagEditViewModel : IHasConcurrencyStamp
         {
             [Required]
             [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxNameLength))]
             public string Name { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }
