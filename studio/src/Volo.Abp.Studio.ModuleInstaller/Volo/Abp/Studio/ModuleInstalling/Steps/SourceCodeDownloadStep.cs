@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,8 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
 
             var targetFolder = context.GetTargetSourceCodeFolder();
 
+            CreateTargetDirectory(targetFolder);
+
             using (var archive = ZipFile.OpenRead(zipFilePath))
             {
                 foreach (var entry in archive.Entries)
@@ -27,6 +30,11 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
                     entry.ExtractToFile(Path.Combine(targetFolder, entry.FullName));
                 }
             }
+        }
+
+        private void CreateTargetDirectory(string targetFolder)
+        {
+            Directory.CreateDirectory(targetFolder);
         }
     }
 }
