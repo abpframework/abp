@@ -36,9 +36,9 @@ namespace Volo.Docs.Projects
 
         [HttpGet]
         [Route("{shortName}/defaultLanguage")]
-        public Task<string> GetDefaultLanguageCode(string shortName,string version)
+        public Task<string> GetDefaultLanguageCodeAsync(string shortName,string version)
         {
-            return ProjectAppService.GetDefaultLanguageCode(shortName, version);
+            return ProjectAppService.GetDefaultLanguageCodeAsync(shortName, version);
         }
 
         [HttpGet]
