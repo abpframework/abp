@@ -22,9 +22,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public string ProviderKeyDisplayName { get; set; }
-
         [BindProperty]
         public List<FeatureGroupViewModel> FeatureGroups { get; set; }
 
