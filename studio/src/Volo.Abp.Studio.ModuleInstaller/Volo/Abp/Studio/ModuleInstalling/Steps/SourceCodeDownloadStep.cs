@@ -21,20 +21,9 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
 
             var targetFolder = context.GetTargetSourceCodeFolder();
 
-            CreateTargetDirectory(targetFolder);
-
-            using (var archive = ZipFile.OpenRead(zipFilePath))
-            {
-                foreach (var entry in archive.Entries)
-                {
-                    entry.ExtractToFile(Path.Combine(targetFolder, entry.FullName));
-                }
-            }
-        }
-
-        private void CreateTargetDirectory(string targetFolder)
-        {
             Directory.CreateDirectory(targetFolder);
+
+            ZipFile.ExtractToDirectory(zipFilePath, targetFolder);
         }
     }
 }
