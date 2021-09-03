@@ -22,6 +22,9 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string ProviderKeyDisplayName { get; set; }
+
         [BindProperty]
         public List<PermissionGroupViewModel> Groups { get; set; }
 
@@ -51,7 +54,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
             var result = await PermissionAppService.GetAsync(ProviderName, ProviderKey);
 
-            EntityDisplayName = result.EntityDisplayName;
+            EntityDisplayName = ProviderKeyDisplayName ?? result.EntityDisplayName;
 
             Groups = ObjectMapper
                 .Map<List<PermissionGroupDto>, List<PermissionGroupViewModel>>(result.Groups)
