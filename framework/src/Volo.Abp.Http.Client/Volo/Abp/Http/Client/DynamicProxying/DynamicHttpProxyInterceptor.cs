@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -19,7 +20,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected AbpHttpClientOptions ClientOptions { get; }
         protected IHttpProxyExecuter HttpProxyExecuter { get; }
-        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
+        protected IProxyHttpClientFactory HttpClientFactory { get; }
         protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
 
@@ -35,7 +36,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IHttpProxyExecuter httpProxyExecuter,
             IOptions<AbpHttpClientOptions> clientOptions,
-            IDynamicProxyHttpClientFactory httpClientFactory,
+            IProxyHttpClientFactory httpClientFactory,
             IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider,
             IApiDescriptionFinder apiDescriptionFinder)
         {

@@ -1,6 +1,6 @@
 using System.Text;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Cli.ServiceProxy;
+using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands

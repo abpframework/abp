@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.ServiceProxy;
+using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands

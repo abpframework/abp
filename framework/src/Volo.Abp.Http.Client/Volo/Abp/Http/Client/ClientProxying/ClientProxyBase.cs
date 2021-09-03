@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Http.Client.ClientProxying
@@ -26,7 +26,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
         protected virtual async Task<HttpProxyExecuterContext> BuildHttpProxyExecuterContext(string methodName, params object[] arguments)
         {
-            var actionKey = GetActionKey(typeof(TService).FullName, methodName, arguments);
+            var actionKey = GetActionKey(methodName, arguments);
             var action = await ClientProxyApiDescriptionFinder.FindActionAsync(actionKey);
 
             return new HttpProxyExecuterContext(action, BuildArguments(action, arguments), typeof(TService));
@@ -45,9 +45,8 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return dict;
         }
 
-        private static string GetActionKey(string serviceTypeFullName, string methodName, params object[] arguments)
+        private static string GetActionKey(string methodName, params object[] arguments)
         {
-
             return $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.GetType().FullName))}";
         }
     }

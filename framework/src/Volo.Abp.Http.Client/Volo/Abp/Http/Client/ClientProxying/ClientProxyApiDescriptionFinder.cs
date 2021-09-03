@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.DependencyInjection;
@@ -26,7 +25,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
             JsonSerializer = jsonSerializer;
             ActionApiDescriptionModels = new Dictionary<string, ActionApiDescriptionModel>();
 
-            Initial();
+            Initialize();
         }
 
         public Task<ActionApiDescriptionModel> FindActionAsync(string methodName)
@@ -39,7 +38,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return Task.FromResult(ApplicationApiDescriptionModel);
         }
 
-        private void Initial()
+        private void Initialize()
         {
             ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
             var controllers = ApplicationApiDescriptionModel.Modules.Select(x=>x.Value).SelectMany(x => x.Controllers.Values).ToList();
@@ -51,7 +50,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 foreach (var actionItem in controller.Actions.Values)
                 {
                     var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
-                    
+
                     if (!ActionApiDescriptionModels.ContainsKey(actionKey))
                     {
                         ActionApiDescriptionModels.Add(actionKey, actionItem);
