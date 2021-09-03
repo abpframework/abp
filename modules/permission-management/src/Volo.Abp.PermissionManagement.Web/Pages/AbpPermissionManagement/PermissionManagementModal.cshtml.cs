@@ -54,7 +54,9 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
             var result = await PermissionAppService.GetAsync(ProviderName, ProviderKey);
 
-            EntityDisplayName = ProviderKeyDisplayName ?? result.EntityDisplayName;
+            EntityDisplayName = !string.IsNullOrWhiteSpace(ProviderKeyDisplayName)
+                ? ProviderKeyDisplayName
+                : result.EntityDisplayName;
 
             Groups = ObjectMapper
                 .Map<List<PermissionGroupDto>, List<PermissionGroupViewModel>>(result.Groups)
