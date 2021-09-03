@@ -42,7 +42,7 @@ namespace Volo.Blogging.Posts
             _localEventBus = localEventBus;
         }
         
-        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
+        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagNameAsync(Guid id, string tagName)
         {
             var posts = await _postRepository.GetPostsByBlogId(id);
             var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
