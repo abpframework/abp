@@ -63,6 +63,10 @@ The account module defines a `Login.cshtml` file under the `Pages/Account` folde
 
 You typically want to copy the original `.cshtml` file of the module, then make the necessary changes. You can find the original file [here](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml). Do not copy the `Login.cshtml.cs` file which is the code behind file for the razor page and we don't want to override it yet (see the next section).
 
+Also IF NOT exist you need to create _ViewImports.cshtml with content to load js files. https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/_ViewImports.cshtml
+
+
+
 That's all, you can change the file content however you like.
 
 ### Completely Overriding a Razor Page
