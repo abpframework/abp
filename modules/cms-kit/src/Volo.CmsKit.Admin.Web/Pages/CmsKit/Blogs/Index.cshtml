@@ -17,12 +17,13 @@
 }
 
 @section scripts {
-<abp-script-bundle>
-    <abp-script src="/Pages/CmsKit/Blogs/index.js" />
-    <abp-script src="/Pages/CmsKit/Blogs/createModal.js" />
-    <abp-script src="/Pages/CmsKit/Blogs/updateModal.js" />
-    <abp-script type="typeof(SlugifyScriptContributor)"/>
-</abp-script-bundle>
+    <abp-script-bundle>
+        <abp-script src="/client-proxies/cms-kit-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/Blogs/index.js"/>
+        <abp-script src="/Pages/CmsKit/Blogs/createModal.js"/>
+        <abp-script src="/Pages/CmsKit/Blogs/updateModal.js"/>
+        <abp-script type="typeof(SlugifyScriptContributor)"/>
+    </abp-script-bundle>
 }
 
 @section content_toolbar {

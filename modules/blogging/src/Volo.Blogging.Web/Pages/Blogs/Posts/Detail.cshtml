@@ -36,8 +36,9 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
-        <abp-script src="/Pages/Blogs/Posts/detail.js" />
+        <abp-script src="/client-proxies/blogging-proxy.js" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+        <abp-script src="/Pages/Blogs/Posts/detail.js"/>
     </abp-script-bundle>
 }
 @section styles {

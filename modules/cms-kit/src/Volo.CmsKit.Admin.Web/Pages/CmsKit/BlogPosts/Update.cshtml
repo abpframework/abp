@@ -26,6 +26,7 @@
         <abp-script type="typeof(TuiEditorScriptContributor)"/>
         <abp-script type="typeof(UppyScriptContributor)"/>
         <abp-script type="typeof(SlugifyScriptContributor)"/>
+        <abp-script src="/client-proxies/cms-kit-proxy.js"/>
         <abp-script src="/Pages/CmsKit/BlogPosts/update.js"/>
     </abp-script-bundle>
 }
@@ -63,13 +64,13 @@
             <abp-input asp-for="ViewModel.Slug" />
 
             <abp-form-content />
-        
-            <div class="content-editor cms-kit-editor" 
-                 id="ContentEditor" 
+
+            <div class="content-editor cms-kit-editor"
+                 id="ContentEditor"
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
             </div>
-            
+
         </abp-dynamic-form>
 
         @if (Model.TagsFeature?.IsEnabled == true)

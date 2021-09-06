@@ -2,7 +2,7 @@
   "modules": {
     "docs": {
       "rootPath": "docs",
-      "remoteServiceName": "Default",
+      "remoteServiceName": "AbpDocsAdmin",
       "controllers": {
         "Volo.Docs.Admin.DocumentsAdminController": {
           "controllerName": "DocumentsAdmin",

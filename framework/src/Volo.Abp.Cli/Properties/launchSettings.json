@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Volo.Abp.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "generate-proxy -t csharp -m blogging -u https://localhost:40017 -wd C:\\Users\\liangshiwei\\Documents\\Code\\abp\\modules\\blogging\\src\\Volo.Blogging.HttpApi.Client"
-    }
-  }
-}
