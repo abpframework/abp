@@ -127,7 +127,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
             }
 
-            GetControllers(application).RemoveAll(controllerModelsToRemove);
+            application.Controllers.RemoveAll(controllerModelsToRemove);
         }
 
         protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
