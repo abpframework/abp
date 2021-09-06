@@ -28,14 +28,14 @@ namespace Volo.Abp.Http.Client.ClientProxying
             Initialize();
         }
 
-        public Task<ActionApiDescriptionModel> FindActionAsync(string methodName)
+        public ActionApiDescriptionModel FindAction(string methodName)
         {
-            return Task.FromResult(ActionApiDescriptionModels[methodName]);
+            return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
         }
 
-        public Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync()
+        public ApplicationApiDescriptionModel GetApiDescription()
         {
-            return Task.FromResult(ApplicationApiDescriptionModel);
+            return ApplicationApiDescriptionModel;
         }
 
         private void Initialize()

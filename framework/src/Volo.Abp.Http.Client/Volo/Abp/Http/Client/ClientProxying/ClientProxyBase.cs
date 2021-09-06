@@ -16,19 +16,18 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
         protected virtual async Task RequestAsync(string methodName, params object[] arguments)
         {
-            await HttpProxyExecuter.MakeRequestAsync(await BuildHttpProxyExecuterContext(methodName, arguments));
+            await HttpProxyExecuter.MakeRequestAsync(BuildHttpProxyExecuterContext(methodName, arguments));
         }
 
         protected virtual async Task<T> RequestAsync<T>(string methodName, params object[] arguments)
         {
-            return await HttpProxyExecuter.MakeRequestAndGetResultAsync<T>(await BuildHttpProxyExecuterContext(methodName, arguments));
+            return await HttpProxyExecuter.MakeRequestAndGetResultAsync<T>(BuildHttpProxyExecuterContext(methodName, arguments));
         }
 
-        protected virtual async Task<HttpProxyExecuterContext> BuildHttpProxyExecuterContext(string methodName, params object[] arguments)
+        protected virtual HttpProxyExecuterContext BuildHttpProxyExecuterContext(string methodName, params object[] arguments)
         {
             var actionKey = GetActionKey(methodName, arguments);
-            var action = await ClientProxyApiDescriptionFinder.FindActionAsync(actionKey);
-
+            var action = ClientProxyApiDescriptionFinder.FindAction(actionKey);
             return new HttpProxyExecuterContext(action, BuildArguments(action, arguments), typeof(TService));
         }
 
