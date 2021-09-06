@@ -14,7 +14,6 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
     {
         public override async Task ExecuteAsync(ModuleInstallingContext context)
         {
-            var _csprojFileManager = context.ServiceProvider.GetRequiredService<ICsprojFileManager>();
             var _abpModuleFileManager = context.ServiceProvider.GetRequiredService<IAbpModuleFileManager>();
 
             foreach (var referencePackage in context.ReferenceModulePackages)
@@ -23,15 +22,38 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
 
                 foreach (var targetPackage in targetPackages)
                 {
-                    await _csprojFileManager.AddPackageReferenceAsync(
-                        targetPackage.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj",
-                        referencePackage.Name,
-                        context.Version);
+                    await AddReferenceAsync(context, targetPackage, referencePackage);
 
                     var targetAbpModulePath = FindAbpModuleFile(targetPackage.Path);
 
                     await _abpModuleFileManager.AddDependency(targetAbpModulePath, FindAbpModuleName(referencePackage));
                 }
+            }
+        }
+
+        private async Task AddReferenceAsync(
+            ModuleInstallingContext context,
+            PackageInfo targetPackage,
+            PackageInfoWithAnalyze referencePackage)
+        {
+            var _csprojFileManager = context.ServiceProvider.GetRequiredService<ICsprojFileManager>();
+            var csprojFilePath = targetPackage.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj";
+
+            if (context.WithSourceCode)
+            {
+                var referenceProjectPath = Directory.GetFiles(context.GetTargetSourceCodeFolder(),
+                    $"{referencePackage.Name}.csproj").FirstOrDefault();
+
+                await _csprojFileManager.AddProjectReferenceAsync(
+                    csprojFilePath,
+                    referenceProjectPath);
+            }
+            else
+            {
+                await _csprojFileManager.AddPackageReferenceAsync(
+                    csprojFilePath,
+                    referencePackage.Name,
+                    context.Version);
             }
         }
 

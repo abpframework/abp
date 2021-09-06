@@ -11,6 +11,11 @@ namespace Volo.Abp.Studio.ModuleInstalling
             if (context.WithSourceCode)
             {
                 pipeline.Add(new SourceCodeDownloadStep());
+
+                if (context.AddToSolutionFile)
+                {
+                    pipeline.Add(new AddToSolutionFileStep());
+                }
             }
 
             pipeline.Add(new PackageReferencingStep());
