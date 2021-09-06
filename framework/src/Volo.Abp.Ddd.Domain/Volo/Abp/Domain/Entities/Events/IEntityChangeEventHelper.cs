@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Volo.Abp.Domain.Entities.Events
 {
     /// <summary>
@@ -7,15 +5,13 @@ namespace Volo.Abp.Domain.Entities.Events
     /// </summary>
     public interface IEntityChangeEventHelper
     {
-        Task TriggerEventsAsync(EntityChangeReport changeReport);
+        void PublishEntityCreatingEvent(object entity);
+        void PublishEntityCreatedEvent(object entity);
 
-        Task TriggerEntityCreatingEventAsync(object entity);
-        Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity);
+        void PublishEntityUpdatingEvent(object entity);
+        void PublishEntityUpdatedEvent(object entity);
 
-        Task TriggerEntityUpdatingEventAsync(object entity);
-        Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity);
-
-        Task TriggerEntityDeletingEventAsync(object entity);
-        Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity);
+        void PublishEntityDeletingEvent(object entity);
+        void PublishEntityDeletedEvent(object entity);
     }
 }

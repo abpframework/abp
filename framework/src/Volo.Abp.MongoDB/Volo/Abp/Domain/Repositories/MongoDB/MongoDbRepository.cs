@@ -17,6 +17,7 @@ using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
@@ -182,14 +183,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
             {
                 SetDeletionAuditProperties(entity);
-                await TriggerEntityDeleteEventsAsync(entity);
+                TriggerEntityDeleteEvents(entity);
             }
             else
             {
-                await TriggerEntityUpdateEventsAsync(entity);
+                TriggerEntityUpdateEvents(entity);
             }
 
-            await TriggerDomainEventsAsync(entity);
+            TriggerDomainEvents(entity);
 
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
             ReplaceOneResult result;
@@ -235,14 +236,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 if (isSoftDeleteEntity)
                 {
                     SetDeletionAuditProperties(entity);
-                    await TriggerEntityDeleteEventsAsync(entity);
+                    TriggerEntityDeleteEvents(entity);
                 }
                 else
                 {
-                    await TriggerEntityUpdateEventsAsync(entity);
+                    TriggerEntityUpdateEvents(entity);
                 }
 
-                await TriggerDomainEventsAsync(entity);
+                TriggerDomainEvents(entity);
 
                 SetNewConcurrencyStamp(entity);
             }
@@ -295,7 +296,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
                 ((ISoftDelete)entity).IsDeleted = true;
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
 
                 ReplaceOneResult result;
 
@@ -324,7 +325,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
             else
             {
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
 
                 DeleteResult result;
 
@@ -374,7 +375,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     hardDeletedEntities.Add(entity);
                 }
 
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
             }
 
             var dbContext = await GetDbContextAsync(cancellationToken);
@@ -573,33 +574,33 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
-            await TriggerEntityCreateEvents(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityCreateEvents(entity);
+            TriggerDomainEvents(entity);
         }
 
-        private async Task TriggerEntityCreateEvents(TEntity entity)
+        private void TriggerEntityCreateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityCreatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
         }
 
-        protected virtual async Task TriggerEntityUpdateEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityUpdateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
         }
 
-        protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
+        protected virtual void ApplyAbpConceptsForDeletedEntity(TEntity entity)
         {
             SetDeletionAuditProperties(entity);
-            await TriggerEntityDeleteEventsAsync(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityDeleteEvents(entity);
+            TriggerDomainEvents(entity);
         }
 
-        protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityDeleteEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityDeletingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
+            EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
         }
 
         protected virtual void CheckAndSetId(TEntity entity)
@@ -639,7 +640,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             AuditPropertySetter.SetDeletionProperties(entity);
         }
 
-        protected virtual async Task TriggerDomainEventsAsync(object entity)
+        protected virtual void TriggerDomainEvents(object entity)
         {
             var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
             if (generatesDomainEventsEntity == null)
@@ -652,7 +653,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 foreach (var localEvent in localEvents)
                 {
-                    await LocalEventBus.PublishAsync(localEvent.GetType(), localEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(
+                        new UnitOfWorkEventRecord(
+                            localEvent.EventData.GetType(),
+                            localEvent.EventData,
+                            localEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearLocalEvents();
@@ -663,7 +670,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 foreach (var distributedEvent in distributedEvents)
                 {
-                    await DistributedEventBus.PublishAsync(distributedEvent.GetType(), distributedEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
+                        new UnitOfWorkEventRecord(
+                            distributedEvent.EventData.GetType(),
+                            distributedEvent.EventData,
+                            distributedEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearDistributedEvents();

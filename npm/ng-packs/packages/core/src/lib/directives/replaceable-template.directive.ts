@@ -13,7 +13,6 @@ import {
 import compare from 'just-compare';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import snq from 'snq';
 import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
@@ -99,7 +98,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (snq(() => changes.data.currentValue.inputs) && this.defaultComponentRef) {
+    if (changes?.data?.currentValue?.inputs && this.defaultComponentRef) {
       this.setDefaultComponentInputs();
     }
   }

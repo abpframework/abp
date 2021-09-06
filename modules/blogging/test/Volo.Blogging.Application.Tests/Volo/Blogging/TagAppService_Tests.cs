@@ -23,7 +23,7 @@ namespace Volo.Blogging
         [Fact]
         public async Task Should_Get_Popular_Tags()
         {
-            var tags = await _tagAppService.GetPopularTags(_bloggingTestData.Blog1Id, new GetPopularTagsInput() {ResultCount = 5, MinimumPostCount = 0 });
+            var tags = await _tagAppService.GetPopularTagsAsync(_bloggingTestData.Blog1Id, new GetPopularTagsInput() {ResultCount = 5, MinimumPostCount = 0 });
 
             tags.Count.ShouldBeGreaterThan(0);
         }
