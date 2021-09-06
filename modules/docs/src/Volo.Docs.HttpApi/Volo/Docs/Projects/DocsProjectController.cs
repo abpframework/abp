@@ -7,7 +7,7 @@ using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
-    [RemoteService]
+    [RemoteService(Name = DocsRemoteServiceConsts.RemoteServiceName)]
     [Area("docs")]
     [ControllerName("Project")]
     [Route("api/docs/projects")]
