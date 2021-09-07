@@ -15,8 +15,8 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
             var moduleSrcFolder = Path.Combine(context.GetTargetSourceCodeFolder(), "src");
             var moduleTestFolder = Path.Combine(context.GetTargetSourceCodeFolder(), "test");
 
-            await AddProjectsUnderDirectoryToSolutionFile(context, slnFile, moduleSrcFolder, $"modules/{context.ModuleName}/src");
-            await AddProjectsUnderDirectoryToSolutionFile(context, slnFile, moduleTestFolder, $"test/{context.ModuleName}");
+            await AddProjectsUnderDirectoryToSolutionFile(context, slnFile, moduleSrcFolder, $"modules/{context.ModuleName}");
+            await AddProjectsUnderDirectoryToSolutionFile(context, slnFile, moduleTestFolder, $"test/{context.ModuleName}.Tests");
         }
 
         private static async Task AddProjectsUnderDirectoryToSolutionFile(

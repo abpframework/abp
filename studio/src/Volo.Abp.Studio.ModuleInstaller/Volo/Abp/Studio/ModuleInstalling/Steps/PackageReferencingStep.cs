@@ -42,7 +42,8 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
             if (context.WithSourceCode)
             {
                 var referenceProjectPath = Directory.GetFiles(context.GetTargetSourceCodeFolder(),
-                    $"{referencePackage.Name}.csproj").FirstOrDefault();
+                    $"*{referencePackage.Name}.csproj",
+                    SearchOption.AllDirectories).FirstOrDefault();
 
                 await _csprojFileManager.AddProjectReferenceAsync(
                     csprojFilePath,

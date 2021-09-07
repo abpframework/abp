@@ -75,6 +75,7 @@ namespace Volo.Abp.Studio.Solution
             if (folderName.Contains("/") && parentFolderId == null)
             {
                 var parents = folderName.Split("/").SkipLast(1).JoinAsString("/");
+                folderName = folderName.Split("/").Last();
 
                 parentFolderId = await GetOrAddFolderIdAsync(solutionFile, parents);
             }
