@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
@@ -72,6 +73,7 @@ namespace Volo.CmsKit.Admin.Pages
             page.SetContent(input.Content);
             page.SetScript(input.Script);
             page.SetStyle(input.Style);
+            page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await PageRepository.UpdateAsync(page);
             

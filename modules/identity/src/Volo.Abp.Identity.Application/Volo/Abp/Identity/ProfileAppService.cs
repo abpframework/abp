@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
@@ -61,6 +62,8 @@ namespace Volo.Abp.Identity
 
             user.Name = input.Name;
             user.Surname = input.Surname;
+
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             input.MapExtraPropertiesTo(user);
 

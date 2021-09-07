@@ -7,6 +7,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <IsPackable>true</IsPackable>
         <OutputType>Library</OutputType>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <RootNamespace />
     </PropertyGroup>
 
