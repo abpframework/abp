@@ -17,7 +17,8 @@ export class PersonalSettingsComponent
   implements
     OnInit,
     Account.PersonalSettingsComponentInputs,
-    Account.PersonalSettingsComponentOutputs {
+    Account.PersonalSettingsComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;

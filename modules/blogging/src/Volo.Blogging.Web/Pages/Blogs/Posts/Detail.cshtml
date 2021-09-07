@@ -210,7 +210,7 @@
                                                 </h3>
                                                 <div>
                                                     <form method="post">
-                                                        <input name="postId" value="@Model.Post.Id" hidden />
+                                                        <input name="postId" value="@Model.Post.Id" type="hidden" />
                                                         <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
                                                         <div class="form-group">
@@ -230,6 +230,7 @@
                                                 <div>
                                                     <form class="editFormClass">
                                                         <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                        <input name="concurrencyStamp" value="@commentWithRepliesDto.Comment.ConcurrencyStamp" hidden />
                                                         <div class="form-group">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                         </div>

@@ -60,8 +60,9 @@
 
   然后在 `Acme.MyProject.Web` 项目目录打开命令行终端运行以下命令:
 
-  1. `yarn`
-  2. `gulp`
+````bash
+abp install-libs
+````
 
 这就是全部,运行应用程序导航到 `/VirtualFileExplorer`. 你会看到虚拟文件浏览器页面:
 

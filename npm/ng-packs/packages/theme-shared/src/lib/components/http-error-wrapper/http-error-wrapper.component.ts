@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import snq from 'snq';
 
 @Component({
   selector: 'abp-http-error-wrapper',
@@ -56,8 +55,7 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   ngOnInit() {
     this.backgroundColor =
-      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) ||
-      '#fff';
+      window.getComputedStyle(document.body)?.getPropertyValue('background-color') || '#fff';
   }
 
   ngAfterViewInit() {
@@ -81,7 +79,9 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
     this.subscription.addOne(keyup$, () => this.destroy());
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.destroy();
+  }
 
   destroy() {
     this.destroy$.next();

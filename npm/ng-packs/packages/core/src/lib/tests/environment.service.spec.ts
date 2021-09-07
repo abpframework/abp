@@ -3,7 +3,7 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { Environment } from '../models';
 import { EnvironmentService } from '../services';
 
-export const ENVIRONMENT_DATA = ({
+export const ENVIRONMENT_DATA = {
   production: false,
   application: {
     name: 'MyProjectName',
@@ -23,7 +23,7 @@ export const ENVIRONMENT_DATA = ({
   localization: {
     defaultResourceName: 'MyProjectName',
   },
-} as any) as Environment;
+} as any as Environment;
 
 describe('ConfigState', () => {
   let spectator: SpectatorService<EnvironmentService>;

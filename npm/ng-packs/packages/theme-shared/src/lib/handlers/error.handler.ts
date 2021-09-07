@@ -14,7 +14,6 @@ import { NavigationError, ResolveEnd } from '@angular/router';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
@@ -129,10 +128,10 @@ export class ErrorHandler {
   };
 
   private handleError(err: any) {
-    const body = snq(() => err.error.error, {
+    const body = err?.error?.error || {
       key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-    });
+    };
 
     if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
       const confirmation$ = this.showError(null, null, body);
@@ -289,7 +288,7 @@ export class ErrorHandler {
 
     for (const key in instance) {
       /* istanbul ignore else */
-      if (this.componentRef.instance.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(this.componentRef.instance, key)) {
         this.componentRef.instance[key] = instance[key];
       }
     }
@@ -316,10 +315,9 @@ export class ErrorHandler {
   }
 
   canCreateCustomError(status: ErrorScreenErrorCodes): boolean {
-    return snq(
-      () =>
-        this.httpErrorConfig.errorScreen.component &&
-        this.httpErrorConfig.errorScreen.forWhichErrors.indexOf(status) > -1,
+    return (
+      this.httpErrorConfig?.errorScreen?.component &&
+      this.httpErrorConfig?.errorScreen?.forWhichErrors?.indexOf(status) > -1
     );
   }
 
@@ -331,7 +329,7 @@ export class ErrorHandler {
 
   protected filterRouteErrors = (navigationError: NavigationError): boolean => {
     return (
-      snq(() => navigationError.error.message.indexOf('Cannot match') > -1) &&
+      navigationError.error?.message?.indexOf('Cannot match') > -1 &&
       this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };

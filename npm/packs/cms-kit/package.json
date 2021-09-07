@@ -1,12 +1,12 @@
 {
-  "version": "4.4.0",
+  "version": "4.4.1",
   "name": "@abp/cms-kit",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/cms-kit.admin": "~4.4.0",
-    "@abp/cms-kit.public": "~4.4.0"
+    "@abp/cms-kit.admin": "~4.4.1",
+    "@abp/cms-kit.public": "~4.4.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

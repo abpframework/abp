@@ -1022,7 +1022,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 </Modal>
 ````
 
-* This code is similar to the `Books.razor`, except it doesn't inherit from the `BlazorisePageBase`, but uses its own implementation.
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
 * Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../API/Dynamic-CSharp-API-Clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
 * Injects the `IAuthorizationService` to check [permissions](../Authorization.md).
 * Injects the `IObjectMapper` for [object to object mapping](../Object-To-Object-Mapping.md).

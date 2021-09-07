@@ -1,13 +1,12 @@
-import { ConfigState, ConfigStateService } from '@abp/ng.core';
-import { Component, Injector } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { NgxValidateCoreModule, validatePassword } from '@ngx-validate/core';
-import { NgxsModule, Store } from '@ngxs/store';
+import { ConfigStateService } from '@abp/ng.core';
+import { CoreTestingModule } from '@abp/ng.core/testing';
 import { HttpClient } from '@angular/common/http';
-import { getPasswordValidators } from '../utils';
+import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { NgxValidateCoreModule, validatePassword } from '@ngx-validate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-
+import { getPasswordValidators } from '../utils';
 @Component({ template: '', selector: 'abp-dummy' })
 class DummyComponent {}
 
@@ -15,7 +14,7 @@ describe('ValidationUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    imports: [NgxValidateCoreModule.forRoot()],
+    imports: [CoreTestingModule.withConfig(), NgxValidateCoreModule.forRoot()],
     mocks: [HttpClient, OAuthService],
   });
 
