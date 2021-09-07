@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.Helpers;
 
 namespace Volo.Abp.Studio.Solution
 {
-    public class DotnetSlnFileModifierService : IDotnetSlnFileModifierService
+    public class DotnetSlnFileModifierService : IDotnetSlnFileModifierService, ITransientDependency
     {
+        public IFileSystem FileSystem { get; }
+
+        public DotnetSlnFileModifierService(IFileSystem fileSystem)
+        {
+            FileSystem = fileSystem;
+        }
+
         public async Task AddProjectAsync(string slnFilePath, string projectPath, string slnTargetFolder = "src")
         {
-            var projectName = Path.GetFileName(projectPath).RemovePostFix(".csproj");
+            var projectName = FileSystem.Path.GetFileName(projectPath).RemovePostFix(".csproj");
             var folderId = await GetOrAddFolderIdAsync(slnFilePath, slnTargetFolder);
-            var slnFileLines = (await File.ReadAllTextAsync(slnFilePath))
+            var slnFileLines = (await FileSystem.File.ReadAllTextAsync(slnFilePath))
                 .Split(Environment.NewLine).ToList();
 
             if (slnFileLines.Any(l => l.Contains($"\"{projectName}\"")))
@@ -58,7 +67,7 @@ namespace Volo.Abp.Studio.Solution
 
             slnFileLines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
 
-            await File.WriteAllTextAsync(slnFilePath, string.Join(Environment.NewLine, slnFileLines));
+            await FileSystem.File.WriteAllTextAsync(slnFilePath, string.Join(Environment.NewLine, slnFileLines));
         }
 
         private async Task<string> GetOrAddFolderIdAsync(string solutionFile, string folderName, string parentFolderId = null)
@@ -70,7 +79,7 @@ namespace Volo.Abp.Studio.Solution
                 parentFolderId = await GetOrAddFolderIdAsync(solutionFile, parents);
             }
 
-            var file = await File.ReadAllTextAsync(solutionFile);
+            var file = await FileSystem.File.ReadAllTextAsync(solutionFile);
             var lines = file.Split(Environment.NewLine).ToList();
             string folderId;
 
@@ -102,7 +111,7 @@ namespace Volo.Abp.Studio.Solution
                         newPreSolutionLine);
                 }
 
-                await File.WriteAllTextAsync(solutionFile, string.Join(Environment.NewLine, lines));
+                await FileSystem.File.WriteAllTextAsync(solutionFile, string.Join(Environment.NewLine, lines));
             }
             else
             {
