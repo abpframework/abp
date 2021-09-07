@@ -16,7 +16,7 @@ namespace Volo.Abp.EventBus.Rebus
 {
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(RebusDistributedEventBus))]
-    public class RebusDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
+    public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected IBus Rebus { get; }
 
@@ -120,11 +120,6 @@ namespace Volo.Abp.EventBus.Rebus
         {
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
             Rebus.Unsubscribe(eventType);
-        }
-
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
         }
 
         protected override async Task PublishToEventBusAsync(Type eventType, object eventData)

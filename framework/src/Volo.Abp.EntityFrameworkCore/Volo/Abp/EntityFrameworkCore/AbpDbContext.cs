@@ -201,7 +201,7 @@ namespace Volo.Abp.EntityFrameworkCore
             foreach (var distributedEvent in changeReport.DistributedEvents)
             {
                 UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
-                    new UnitOfWorkEventRecord(distributedEvent.EventData.GetType(), distributedEvent.EventData, distributedEvent.EventOrder)
+                    new UnitOfWorkEventRecord(distributedEvent.EventData.GetType(), distributedEvent.EventData, distributedEvent.EventOrder, useOutbox: true)
                 );
             }
         }

@@ -18,7 +18,7 @@ namespace Volo.Abp.EventBus.Kafka
 {
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(KafkaDistributedEventBus))]
-    public class KafkaDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
+    public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected AbpEventBusOptions AbpEventBusOptions { get; }
         protected AbpKafkaEventBusOptions AbpKafkaEventBusOptions { get; }
@@ -94,11 +94,6 @@ namespace Volo.Abp.EventBus.Kafka
             });
         }
 
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
-        }
-
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             var handlerFactories = GetOrCreateHandlerFactories(eventType);
@@ -169,7 +164,15 @@ namespace Volo.Abp.EventBus.Kafka
 
         protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
-            await PublishAsync(eventType, eventData, new Headers {{"messageId", Serializer.Serialize(Guid.NewGuid())}}, null);
+            await PublishAsync(
+                eventType,
+                eventData,
+                new Headers
+                {
+                    { "messageId", Serializer.Serialize(Guid.NewGuid()) }
+                },
+                null
+            );
         }
 
         protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -179,7 +182,13 @@ namespace Volo.Abp.EventBus.Kafka
 
         public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)
         {
-            await PublishAsync(AbpKafkaEventBusOptions.TopicName, eventType, eventData, headers, headersArguments);
+            await PublishAsync(
+                AbpKafkaEventBusOptions.TopicName,
+                eventType,
+                eventData,
+                headers,
+                headersArguments
+            );
         }
 
         public virtual async Task PublishToDeadLetterAsync(Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)

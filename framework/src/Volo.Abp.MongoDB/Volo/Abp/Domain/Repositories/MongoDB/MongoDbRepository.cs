@@ -674,7 +674,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                         new UnitOfWorkEventRecord(
                             distributedEvent.EventData.GetType(),
                             distributedEvent.EventData,
-                            distributedEvent.EventOrder
+                            distributedEvent.EventOrder,
+                            useOutbox: true
                         )
                     );
                 }

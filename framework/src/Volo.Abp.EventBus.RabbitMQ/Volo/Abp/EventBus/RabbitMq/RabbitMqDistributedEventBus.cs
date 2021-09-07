@@ -23,7 +23,7 @@ namespace Volo.Abp.EventBus.RabbitMq
      */
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
-    public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
+    public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
@@ -111,11 +111,6 @@ namespace Volo.Abp.EventBus.RabbitMq
                 errorContext.SetProperty(EventErrorHandlerBase.HeadersKey, ea.BasicProperties);
                 errorContext.SetProperty(EventErrorHandlerBase.RetryAttemptKey, retryAttempt);
             });
-        }
-
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
         }
 
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)

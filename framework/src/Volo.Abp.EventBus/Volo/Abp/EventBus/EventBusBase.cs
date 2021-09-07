@@ -92,13 +92,17 @@ namespace Volo.Abp.EventBus
         public abstract void UnsubscribeAll(Type eventType);
 
         /// <inheritdoc/>
-        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
+        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
+            where TEvent : class
         {
             return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
         }
 
         /// <inheritdoc/>
-        public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+        public async Task PublishAsync(
+            Type eventType,
+            object eventData,
+            bool onUnitOfWorkComplete = true)
         {
             if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
             {
