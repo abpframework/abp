@@ -73,7 +73,9 @@ describe('Enum Utils', () => {
           },
           'EnumProp',
         );
-        const propData = new MockPropData({ extraProperties: { EnumProp: value } });
+        const propData = new MockPropData({
+          extraProperties: { EnumProp: value },
+        });
         propData.getInjected = () => service as any;
 
         const resolved = await valueResolver(propData).pipe(take(1)).toPromise();
@@ -107,8 +109,8 @@ describe('Enum Utils', () => {
 });
 
 function createMockLocalizationService() {
-  const configState = new ConfigStateService();
+  const configState = new ConfigStateService(null);
   configState.setState({ localization: mockL10n } as any);
 
-  return new LocalizationService(mockSessionState, null, null, configState, null);
+  return new LocalizationService(mockSessionState, null, null, configState);
 }

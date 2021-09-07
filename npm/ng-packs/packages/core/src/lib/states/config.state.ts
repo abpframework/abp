@@ -1,19 +1,15 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
-import { of, throwError } from 'rxjs';
-import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
-import snq from 'snq';
+import compare from 'just-compare';
+import { throwError } from 'rxjs';
+import { catchError, distinctUntilChanged } from 'rxjs/operators';
 import { GetAppConfiguration, PatchConfigState, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
-import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
-import compare from 'just-compare';
-import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 
 /**
  * @deprecated Use ConfigStateService instead. To be deleted in v5.0.
@@ -79,7 +75,7 @@ export class ConfigState {
 
   static getFeature(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return snq(() => state.features.values[key]);
+      return state.features.values?.[key];
     });
 
     return selector;
@@ -87,7 +83,7 @@ export class ConfigState {
 
   static getSetting(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return snq(() => state.setting.values[key]);
+      return state.setting.values?.[key];
     });
 
     return selector;
@@ -95,7 +91,7 @@ export class ConfigState {
 
   static getSettings(keyword?: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      const settings = snq(() => state.setting.values, {});
+      const settings = state.setting.values || {};
 
       if (!keyword) return settings;
 
@@ -116,7 +112,7 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
-      const getPolicy = (k: string) => snq(() => state.auth.grantedPolicies[k], false);
+      const getPolicy = (k: string) => state.auth.grantedPolicies[k] || false;
 
       const orRegexp = /\|\|/g;
       const andRegexp = /&&/g;
@@ -143,11 +139,16 @@ export class ConfigState {
   }
 
   static getLocalizationResource(resourceName: string) {
-    const selector = createSelector([ConfigState], (state: Config.State): {
-      [key: string]: string;
-    } => {
-      return state.localization.values[resourceName];
-    });
+    const selector = createSelector(
+      [ConfigState],
+      (
+        state: Config.State,
+      ): {
+        [key: string]: string;
+      } => {
+        return state.localization.values[resourceName];
+      },
+    );
 
     return selector;
   }
@@ -178,7 +179,7 @@ export class ConfigState {
 
       const sourceName =
         keys[0] ||
-        snq(() => state.environment.localization.defaultResourceName) ||
+        state.environment.localization?.defaultResourceName ||
         state.localization.defaultResourceName;
       const sourceKey = keys[1];
 
@@ -217,9 +218,7 @@ export class ConfigState {
   }
 
   constructor(
-    private http: HttpClient,
     private store: Store,
-    private sessionState: SessionStateService,
     private environmentService: EnvironmentService,
     private configState: ConfigStateService,
   ) {
@@ -245,15 +244,12 @@ export class ConfigState {
   addData({ patchState, dispatch }: StateContext<Config.State>) {
     const apiName = 'default';
     const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
-    return this.http
-      .get<ApplicationConfigurationDto>(`${api}/api/abp/application-configuration`)
-      .pipe(
-        tap(configuration => this.configState.setState(configuration)),
-        catchError((err: HttpErrorResponse) => {
-          dispatch(new RestOccurError(err));
-          return throwError(err);
-        }),
-      );
+    return this.configState.refreshAppState().pipe(
+      catchError((err: HttpErrorResponse) => {
+        dispatch(new RestOccurError(err));
+        return throwError(err);
+      }),
+    );
   }
 
   @Action(SetEnvironment)

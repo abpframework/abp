@@ -1,4 +1,9 @@
-import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import type {
+  ExtensibleEntityDto,
+  ExtensibleFullAuditedEntityDto,
+  ExtensibleObject,
+  PagedAndSortedResultRequestDto,
+} from '@abp/ng.core';
 
 export interface ChangePasswordInput {
   currentPassword: string;
@@ -9,9 +14,8 @@ export interface GetIdentityUsersInput extends PagedAndSortedResultRequestDto {
   filter: string;
 }
 
-// tslint:disable-next-line: no-empty-interface
-export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {}
 
 export interface IdentityRoleCreateOrUpdateDtoBase extends ExtensibleObject {
   name: string;

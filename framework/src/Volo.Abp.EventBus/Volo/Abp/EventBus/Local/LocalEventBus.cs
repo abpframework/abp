@@ -12,6 +12,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Json;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Local
 {
@@ -34,8 +35,9 @@ namespace Volo.Abp.EventBus.Local
             IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler)
-            : base(serviceScopeFactory, currentTenant, errorHandler)
+            : base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
         {
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
@@ -120,9 +122,14 @@ namespace Volo.Abp.EventBus.Local
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
+        }
+
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceLocalEvent(eventRecord);
         }
 
         public virtual async Task PublishAsync(LocalEventMessage localEventMessage)

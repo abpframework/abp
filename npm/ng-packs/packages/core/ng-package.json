@@ -1,18 +1,15 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/core",
+  "dest": "../../dist/packages/core",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "deleteDestPath": false,
   "allowedNonPeerDependencies": [
     "@abp/utils",
-    "@angular/localize",
     "@ngxs/store",
     "angular-oauth2-oidc",
     "just-compare",
     "just-clone",
-    "snq",
     "ts-toolbelt"
   ]
 }

@@ -31,7 +31,7 @@ namespace Volo.Abp.IdentityServer
         public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
         {
             var clientCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Client>>();
-            await clientCache.RemoveAsync(eventData.Entity.ClientId);
+            await clientCache.RemoveAsync(eventData.Entity.ClientId, considerUow: true);
 
             var corsCache =  ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
             await corsCache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);

@@ -60,8 +60,9 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
   Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
 
-  1. `yarn`
-  2. `abp install-libs`
+````bash
+abp install-libs
+````
 
 That's all,Now run the application and Navigate to `/VirtualFileExplorer`. You will see virtual file explorer page:
 
