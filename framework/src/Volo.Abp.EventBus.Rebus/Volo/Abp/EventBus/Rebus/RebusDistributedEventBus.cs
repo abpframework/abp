@@ -23,7 +23,6 @@ namespace Volo.Abp.EventBus.Rebus
         //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
 
         public RebusDistributedEventBus(
@@ -34,11 +33,15 @@ namespace Volo.Abp.EventBus.Rebus
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
             IEventErrorHandler errorHandler) :
-            base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
+            base(
+                serviceScopeFactory,
+                currentTenant,
+                unitOfWorkManager,
+                errorHandler,
+                abpDistributedEventBusOptions)
         {
             Rebus = rebus;
             AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
-            AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();

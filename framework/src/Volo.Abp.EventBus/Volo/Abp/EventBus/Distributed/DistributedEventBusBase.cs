@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
@@ -8,17 +9,21 @@ namespace Volo.Abp.EventBus.Distributed
 {
     public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus
     {
+        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+
         protected DistributedEventBusBase(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant, 
             IUnitOfWorkManager unitOfWorkManager,
-            IEventErrorHandler errorHandler
+            IEventErrorHandler errorHandler,
+            IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions
             ) : base(
             serviceScopeFactory, 
             currentTenant,
             unitOfWorkManager,
             errorHandler)
         {
+            AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class

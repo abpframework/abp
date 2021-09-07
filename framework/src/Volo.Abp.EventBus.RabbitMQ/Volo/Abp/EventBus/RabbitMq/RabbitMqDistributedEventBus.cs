@@ -26,7 +26,6 @@ namespace Volo.Abp.EventBus.RabbitMq
     public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected AbpEventBusOptions AbpEventBusOptions { get; }
         protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
@@ -48,13 +47,17 @@ namespace Volo.Abp.EventBus.RabbitMq
             IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler,
             IOptions<AbpEventBusOptions> abpEventBusOptions)
-            : base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
+            : base(
+                serviceScopeFactory, 
+                currentTenant,
+                unitOfWorkManager,
+                errorHandler,
+                distributedEventBusOptions)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             MessageConsumerFactory = messageConsumerFactory;
             AbpEventBusOptions = abpEventBusOptions.Value;
-            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             AbpRabbitMqEventBusOptions = options.Value;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();

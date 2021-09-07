@@ -22,7 +22,6 @@ namespace Volo.Abp.EventBus.Kafka
     {
         protected AbpEventBusOptions AbpEventBusOptions { get; }
         protected AbpKafkaEventBusOptions AbpKafkaEventBusOptions { get; }
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IKafkaMessageConsumerFactory MessageConsumerFactory { get; }
         protected IKafkaSerializer Serializer { get; }
         protected IProducerPool ProducerPool { get; }
@@ -42,10 +41,14 @@ namespace Volo.Abp.EventBus.Kafka
             IProducerPool producerPool,
             IEventErrorHandler errorHandler,
             IOptions<AbpEventBusOptions> abpEventBusOptions)
-            : base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
+            : base(
+                serviceScopeFactory,
+                currentTenant,
+                unitOfWorkManager,
+                errorHandler,
+                abpDistributedEventBusOptions)
         {
             AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
-            AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
             AbpEventBusOptions = abpEventBusOptions.Value;
             MessageConsumerFactory = messageConsumerFactory;
             Serializer = serializer;
