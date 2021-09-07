@@ -68,30 +68,29 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             if (exception is AbpAuthorizationException)
             {
-                if (await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
-                    .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext))
-                {
-                    return;
-                }
+                await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                    .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext);
             }
+            else
+            {
+                var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
+                var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
+                var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
+                var options = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
-            var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
-            var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
-            var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
-            var options = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+                httpContext.Response.Clear();
+                httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
+                httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
+                httpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
 
-            httpContext.Response.Clear();
-            httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
-            httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
-            httpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-
-            await httpContext.Response.WriteAsync(
-                jsonSerializer.Serialize(
-                    new RemoteServiceErrorResponse(
-                        errorInfoConverter.Convert(exception, options.SendExceptionsDetailsToClients)
+                await httpContext.Response.WriteAsync(
+                    jsonSerializer.Serialize(
+                        new RemoteServiceErrorResponse(
+                            errorInfoConverter.Convert(exception, options.SendExceptionsDetailsToClients)
+                        )
                     )
-                )
-            );
+                );
+            }
         }
 
         private Task ClearCacheHeaders(object state)

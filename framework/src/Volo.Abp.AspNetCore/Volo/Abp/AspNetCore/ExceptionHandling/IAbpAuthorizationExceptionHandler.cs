@@ -6,6 +6,6 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public interface IAbpAuthorizationExceptionHandler
     {
-        Task<bool> HandleAsync(AbpAuthorizationException exception, HttpContext httpContext);
+        Task HandleAsync(AbpAuthorizationException exception, HttpContext httpContext);
     }
 }

@@ -34,7 +34,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             services.Configure<AbpAuthorizationExceptionHandlerOptions>(options =>
             {
-                options.UseAuthenticationScheme = true;
                 options.AuthenticationScheme = "Cookie";
             });
         }

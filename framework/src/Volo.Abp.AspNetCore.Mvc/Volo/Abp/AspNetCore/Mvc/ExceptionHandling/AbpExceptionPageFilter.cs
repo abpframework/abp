@@ -88,20 +88,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             if (context.Exception is AbpAuthorizationException)
             {
-                if (await context.HttpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
-                    .HandleAsync(context.Exception.As<AbpAuthorizationException>(), context.HttpContext))
-                {
-                    context.Exception = null; //Handled!
-                    return;
-                }
+                await context.HttpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                    .HandleAsync(context.Exception.As<AbpAuthorizationException>(), context.HttpContext);
             }
+            else
+            {
+                context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+                context.HttpContext.Response.StatusCode = (int) context
+                    .GetRequiredService<IHttpExceptionStatusCodeFinder>()
+                    .GetStatusCode(context.HttpContext, context.Exception);
 
-            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            context.HttpContext.Response.StatusCode = (int) context
-                .GetRequiredService<IHttpExceptionStatusCodeFinder>()
-                .GetStatusCode(context.HttpContext, context.Exception);
-
-            context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
+                context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
+            }
 
             context.Exception = null; //Handled!
         }
