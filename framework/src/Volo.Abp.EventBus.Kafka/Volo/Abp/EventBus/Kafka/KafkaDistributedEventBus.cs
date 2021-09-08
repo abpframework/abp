@@ -182,6 +182,11 @@ namespace Volo.Abp.EventBus.Kafka
         {
             unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
+        
+        protected override byte[] Serialize(object eventData)
+        {
+            return Serializer.Serialize(eventData);
+        }
 
         public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)
         {

@@ -19,9 +19,12 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             this.SetDefaultsForExtraProperties();
         }
 
-        public OutgoingEventRecord(Guid id)
+        public OutgoingEventRecord(Guid id, string eventName, byte[] eventData)
             : base(id)
         {
+            EventName = eventName;
+            EventData = eventData;
+            
             ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }

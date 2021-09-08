@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.EntityFrameworkCore;
 
@@ -26,6 +27,7 @@ namespace Volo.Abp.EntityFrameworkCore
             });
 
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+            context.Services.AddTransient(typeof(DbContextEventOutbox<>));
         }
     }
 }

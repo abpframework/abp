@@ -99,7 +99,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public async Task PublishAsync(
+        public virtual async Task PublishAsync(
             Type eventType,
             object eventData,
             bool onUnitOfWorkComplete = true)

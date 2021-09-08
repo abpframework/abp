@@ -19,6 +19,7 @@ namespace Volo.Abp.EventBus.Rebus
     public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected IBus Rebus { get; }
+        protected IRebusSerializer Serializer { get; }
 
         //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
@@ -32,7 +33,8 @@ namespace Volo.Abp.EventBus.Rebus
             IBus rebus,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
-            IEventErrorHandler errorHandler) :
+            IEventErrorHandler errorHandler,
+            IRebusSerializer serializer) :
             base(
                 serviceScopeFactory,
                 currentTenant,
@@ -41,6 +43,7 @@ namespace Volo.Abp.EventBus.Rebus
                 abpDistributedEventBusOptions)
         {
             Rebus = rebus;
+            Serializer = serializer;
             AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -177,6 +180,11 @@ namespace Volo.Abp.EventBus.Rebus
             }
 
             return false;
+        }
+
+        protected override byte[] Serialize(object eventData)
+        {
+            return Serializer.Serialize(eventData);
         }
     }
 }

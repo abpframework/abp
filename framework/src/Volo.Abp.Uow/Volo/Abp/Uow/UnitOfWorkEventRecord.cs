@@ -22,7 +22,7 @@ namespace Volo.Abp.Uow
             Type eventType,
             object eventData,
             long eventOrder,
-            bool useOutbox = false)
+            bool useOutbox = true)
         {
             EventType = eventType;
             EventData = eventData;

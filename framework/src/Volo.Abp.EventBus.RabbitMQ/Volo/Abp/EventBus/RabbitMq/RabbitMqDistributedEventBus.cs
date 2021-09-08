@@ -198,6 +198,11 @@ namespace Volo.Abp.EventBus.RabbitMq
         {
             unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
+        
+        protected override byte[] Serialize(object eventData)
+        {
+            return Serializer.Serialize(eventData);
+        }
 
         public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties, Dictionary<string, object> headersArguments = null)
         {

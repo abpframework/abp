@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,11 @@ namespace Volo.Abp.EventBus.Distributed
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
         {
             return Subscribe(typeof(TEvent), handler);
+        }
+
+        public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+        {
+            return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
         }
 
         public Task PublishAsync<TEvent>(
@@ -68,7 +74,29 @@ namespace Volo.Abp.EventBus.Distributed
         
         private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
         {
+            var unitOfWork = UnitOfWorkManager.Current;
+            if (unitOfWork == null)
+            {
+                return false;
+            }
+
+            foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes)
+            {
+                if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
+                {
+                    var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+                    var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                    await eventOutbox.EnqueueAsync(
+                        eventName,
+                        Serialize(eventData)
+                    );
+                    return true;
+                }
+            }
+            
             return false;
         }
+
+        protected abstract byte[] Serialize(object eventData);
     }
 }
