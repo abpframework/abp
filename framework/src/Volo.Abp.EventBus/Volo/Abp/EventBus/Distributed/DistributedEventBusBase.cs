@@ -80,7 +80,7 @@ namespace Volo.Abp.EventBus.Distributed
                 return false;
             }
 
-            foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes)
+            foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
             {
                 if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
                 {

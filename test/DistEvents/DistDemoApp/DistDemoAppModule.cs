@@ -39,9 +39,10 @@ namespace DistDemoApp
             
             Configure<AbpDistributedEventBusOptions>(options =>
             {
-                options.Outboxes.Add(
-                    new OutboxConfig("Default", typeof(DbContextEventOutbox<TodoDbContext>))
-                );
+                options.Outboxes.Configure("Default", config =>
+                {
+                    config.UseDbContext<TodoDbContext>();
+                });
             });
         }
     }
