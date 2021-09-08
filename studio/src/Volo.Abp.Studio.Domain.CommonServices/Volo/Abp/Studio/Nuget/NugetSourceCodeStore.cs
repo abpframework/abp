@@ -36,7 +36,7 @@ namespace Volo.Abp.Studio.Nuget
         {
             name = GetNugetPackageName(name, type);
 
-            var latestVersion =  await GetLatestVersionAsync(name, includePreReleases);
+           var latestVersion =  await GetLatestVersionAsync(name, includePreReleases);
 
             if (version == null)
             {
@@ -45,7 +45,7 @@ namespace Volo.Abp.Studio.Nuget
 
             var localCachedFilePath = await GetLocalCacheSourceCodeFilePathInternal(name, version);
 
-            return new TemplateFile(await File.ReadAllBytesAsync(localCachedFilePath), version, latestVersion, latestVersion);
+            return new TemplateFile(await File.ReadAllBytesAsync(localCachedFilePath), version, latestVersion, version);
         }
 
         public async Task<string> GetCachedSourceCodeFilePathAsync(string name, string type, string version = null,
