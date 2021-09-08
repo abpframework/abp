@@ -172,7 +172,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 * `--with-source-code`: Downloads the source code of the package to your solution folder and uses local project references instead of NuGet/NPM packages.
 * `--add-to-solution-file`: Adds the downloaded package to your solution file, so you will also see the package when you open the solution on a IDE. (only available when `--with-source-code` is True)
 
-> Currently only the source code of theme packages can be downloaded.
+> Currently only the source code of the basic theme packages([MVC](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme) and [Blazor](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme)) can be downloaded.
 > - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 > - Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 > - Volo.Abp.AspNetCore.Components.Web.BasicTheme
