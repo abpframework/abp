@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Boxes
 {
@@ -54,7 +53,7 @@ namespace Volo.Abp.EventBus.Boxes
         {
             while (true)
             {
-                var waitingEvents = await Outbox.GetWaitingEventsAsync(100);
+                var waitingEvents = await Outbox.GetWaitingEventsAsync(1000); //TODO: Config?
                 if (waitingEvents.Count <= 0)
                 {
                     break;
