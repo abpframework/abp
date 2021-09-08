@@ -94,7 +94,7 @@ namespace Volo.Docs.Projects
             return await GetLanguageListInternalAsync(shortName, version);
         }
 
-        public async Task<string> GetDefaultLanguageCode(string shortName, string version)
+        public async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
         {
             var languageList = await GetLanguageListInternalAsync(shortName, version);
 

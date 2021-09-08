@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/theme-shared",
+  "dest": "../../dist/packages/theme-shared",
   "assets": ["./styles/**/*"],
   "lib": {
     "entryFile": "src/public-api.ts"
@@ -12,7 +12,6 @@
     "@ngx-validate/core",
     "@swimlane/ngx-datatable",
     "bootstrap",
-    "font-awesome",
     "chart.js"
   ]
 }

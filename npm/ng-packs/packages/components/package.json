@@ -12,7 +12,7 @@
     "@ng-bootstrap/ng-bootstrap": ">=6.0.0"
   },
   "dependencies": {
-    "ng-zorro-antd": "^11.0.0",
+    "ng-zorro-antd": "^12.0.1",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Pages;
 using Volo.CmsKit.Pages;
@@ -44,7 +45,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
 
         [AutoMap(typeof(PageDto))]
         [AutoMap(typeof(UpdatePageInputDto), ReverseMap = true)]
-        public class UpdatePageViewModel
+        public class UpdatePageViewModel : IHasConcurrencyStamp
         {
             [Required]
             [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
@@ -65,6 +66,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
             [TextArea(Rows = 6)]
             [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
             public string Style { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }

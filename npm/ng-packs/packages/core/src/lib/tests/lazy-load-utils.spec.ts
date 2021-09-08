@@ -55,7 +55,7 @@ describe('Lazy Load Utils', () => {
     it('should emit error event on fail and clear callbacks', done => {
       const error = new CustomEvent('error');
       const parentNode = { removeChild: jest.fn() };
-      const element = ({ parentNode } as any) as HTMLLinkElement;
+      const element = { parentNode } as any as HTMLLinkElement;
 
       fromLazyLoad(
         element,
@@ -84,7 +84,7 @@ describe('Lazy Load Utils', () => {
     it('should emit load event on success and clear callbacks', done => {
       const success = new CustomEvent('load');
       const parentNode = { removeChild: jest.fn() };
-      const element = ({ parentNode } as any) as HTMLLinkElement;
+      const element = { parentNode } as any as HTMLLinkElement;
 
       fromLazyLoad(
         element,

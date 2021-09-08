@@ -106,7 +106,8 @@
                     volo.cmsKit.public.comments.commentPublic.update(
                         formAsObject.id,
                         {
-                            text: formAsObject.commentText
+                            text: formAsObject.commentText,
+                            concurrencyStamp: formAsObject.commentConcurrencyStamp
                         }
                     ).then(function () {
                         widgetManager.refresh($widget);

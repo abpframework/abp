@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 
 export interface EntityExtensionDto {
   properties: Record<string, ExtensionPropertyDto>;

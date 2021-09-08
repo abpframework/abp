@@ -106,7 +106,10 @@ describe('ErrorHandler', () => {
 
   test('should display HttpErrorWrapperComponent when unknown error occurs', () => {
     const createComponent = jest.spyOn(service, 'createErrorComponent');
-    const error = new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' });
+    const error = new HttpErrorResponse({
+      status: 0,
+      statusText: 'Unknown Error',
+    });
     const params = {
       title: {
         key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,

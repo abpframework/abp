@@ -113,12 +113,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 /* returning a class that holds a reference to response
                  * content just to be sure that GC does not dispose of
                  * it before we finish doing our work with the stream */
-                return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
-                {
-                    ContentType = responseContent.Headers.ContentType?.ToString(),
-                    FileName = responseContent.Headers?.ContentDisposition?.FileNameStar ??
-                               RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString()
-                };
+                return (T) (object) new RemoteStreamContent(
+                    await responseContent.ReadAsStreamAsync(),
+                    responseContent.Headers?.ContentDisposition?.FileNameStar ?? RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString(),
+                    responseContent.Headers?.ContentType?.ToString(),
+                    responseContent.Headers?.ContentLength);
             }
 
             var stringContent = await responseContent.ReadAsStringAsync();
@@ -174,7 +173,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var response = await client.SendAsync(
                 requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken()
+                GetCancellationToken(invocation)
             );
 
             if (!response.IsSuccessStatusCode)
@@ -306,8 +305,18 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return input;
         }
 
-        protected virtual CancellationToken GetCancellationToken()
+        protected virtual CancellationToken GetCancellationToken(IAbpMethodInvocation invocation)
         {
+            var cancellationTokenArg = invocation.Arguments.LastOrDefault(x => x is CancellationToken);
+            if (cancellationTokenArg != null)
+            {
+                var cancellationToken = (CancellationToken) cancellationTokenArg;
+                if (cancellationToken != default)
+                {
+                    return cancellationToken;
+                }
+            }
+
             return CancellationTokenProvider.Token;
         }
     }
