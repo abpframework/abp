@@ -1,29 +1,59 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Guids;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public class DbContextEventOutbox<TDbContext> : IEventOutbox 
+    public class DbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext> 
         where TDbContext : IHasEventOutbox
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
-        protected IGuidGenerator GuidGenerator { get; }
 
         public DbContextEventOutbox(
-            IDbContextProvider<TDbContext> dbContextProvider,
-            IGuidGenerator guidGenerator)
+            IDbContextProvider<TDbContext> dbContextProvider)
         {
             DbContextProvider = dbContextProvider;
-            GuidGenerator = guidGenerator;
         }
         
-        public async Task EnqueueAsync(string eventName, byte[] eventData)
+        [UnitOfWork]
+        public virtual async Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
         {
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
             dbContext.OutgoingEventRecords.Add(
-                new OutgoingEventRecord(GuidGenerator.Create(), eventName, eventData)
+                new OutgoingEventRecord(outgoingEvent)
             );
+        }
+
+        [UnitOfWork]
+        public virtual async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount)
+        {
+            var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
+            
+            var outgoingEventRecords = await dbContext
+                .OutgoingEventRecords
+                .AsNoTracking()
+                .OrderBy(x => x.CreationTime)
+                .Take(maxCount)
+                .ToListAsync();
+            
+            return outgoingEventRecords
+                .Select(x => x.ToOutgoingEventInfo())
+                .ToList();
+        }
+
+        [UnitOfWork]
+        public virtual async Task DeleteAsync(Guid id)
+        {
+            var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
+            var outgoingEvent = await dbContext.OutgoingEventRecords.FindAsync(id);
+            if (outgoingEvent != null)
+            {
+                dbContext.Remove(outgoingEvent);
+            }
         }
     }
 }

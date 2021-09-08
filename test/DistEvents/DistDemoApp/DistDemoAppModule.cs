@@ -4,6 +4,7 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Modularity;
@@ -13,7 +14,8 @@ namespace DistDemoApp
     [DependsOn(
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAutofacModule),
-        typeof(AbpEventBusRabbitMqModule)
+        typeof(AbpEventBusRabbitMqModule),
+        typeof(AbpEventBusBoxesModule)
     )]
     public class DistDemoAppModule : AbpModule
     {

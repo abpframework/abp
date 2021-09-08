@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed
 {
-    public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus
+    public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus, IRawEventPublisher
     {
+        protected IGuidGenerator GuidGenerator { get; }
+        protected IClock Clock { get; }
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
 
         protected DistributedEventBusBase(
@@ -17,13 +20,17 @@ namespace Volo.Abp.EventBus.Distributed
             ICurrentTenant currentTenant, 
             IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler,
-            IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions
+            IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
+            IGuidGenerator guidGenerator,
+            IClock clock
             ) : base(
             serviceScopeFactory, 
             currentTenant,
             unitOfWorkManager,
             errorHandler)
         {
+            GuidGenerator = guidGenerator;
+            Clock = clock;
             AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
         }
 
@@ -71,7 +78,9 @@ namespace Volo.Abp.EventBus.Distributed
 
             await PublishToEventBusAsync(eventType, eventData);
         }
-        
+
+        public abstract Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData);
+
         private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
         {
             var unitOfWork = UnitOfWorkManager.Current;
@@ -87,8 +96,12 @@ namespace Volo.Abp.EventBus.Distributed
                     var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
                     var eventName = EventNameAttribute.GetNameOrDefault(eventType);
                     await eventOutbox.EnqueueAsync(
-                        eventName,
-                        Serialize(eventData)
+                        new OutgoingEventInfo(
+                            GuidGenerator.Create(),
+                            eventName,
+                            Serialize(eventData),
+                            Clock.Now
+                        )
                     );
                     return true;
                 }

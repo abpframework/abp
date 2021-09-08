@@ -17,6 +17,7 @@
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.RabbitMQ\Volo.Abp.EventBus.RabbitMQ.csproj" />
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.Boxes\Volo.Abp.EventBus.Boxes.csproj" />
     </ItemGroup>
 
     <ItemGroup>

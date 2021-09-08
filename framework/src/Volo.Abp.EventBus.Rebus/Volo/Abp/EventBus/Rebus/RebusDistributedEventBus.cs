@@ -8,8 +8,10 @@ using Microsoft.Extensions.Options;
 using Rebus.Bus;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Rebus
@@ -34,13 +36,17 @@ namespace Volo.Abp.EventBus.Rebus
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
             IEventErrorHandler errorHandler,
-            IRebusSerializer serializer) :
+            IRebusSerializer serializer,
+            IGuidGenerator guidGenerator,
+            IClock clock) :
             base(
                 serviceScopeFactory,
                 currentTenant,
                 unitOfWorkManager,
                 errorHandler,
-                abpDistributedEventBusOptions)
+                abpDistributedEventBusOptions,
+                guidGenerator,
+                clock)
         {
             Rebus = rebus;
             Serializer = serializer;
@@ -180,6 +186,12 @@ namespace Volo.Abp.EventBus.Rebus
             }
 
             return false;
+        }
+
+        public override Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData)
+        {
+            /* TODO: IMPLEMENT! */
+            throw new NotImplementedException();
         }
 
         protected override byte[] Serialize(object eventData)

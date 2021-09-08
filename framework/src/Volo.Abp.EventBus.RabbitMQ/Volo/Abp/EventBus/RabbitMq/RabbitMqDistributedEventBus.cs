@@ -10,9 +10,11 @@ using RabbitMQ.Client.Events;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.RabbitMq
@@ -46,13 +48,17 @@ namespace Volo.Abp.EventBus.RabbitMq
             ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler,
-            IOptions<AbpEventBusOptions> abpEventBusOptions)
+            IOptions<AbpEventBusOptions> abpEventBusOptions,
+            IGuidGenerator guidGenerator,
+            IClock clock)
             : base(
                 serviceScopeFactory, 
                 currentTenant,
                 unitOfWorkManager,
                 errorHandler,
-                distributedEventBusOptions)
+                distributedEventBusOptions,
+                guidGenerator,
+                clock)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
@@ -198,7 +204,12 @@ namespace Volo.Abp.EventBus.RabbitMq
         {
             unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
-        
+
+        public override Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData)
+        {
+            return PublishAsync(eventName, eventData, null, eventId: eventId);
+        }
+
         protected override byte[] Serialize(object eventData)
         {
             return Serializer.Serialize(eventData);
@@ -209,6 +220,16 @@ namespace Volo.Abp.EventBus.RabbitMq
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
+            return PublishAsync(eventName, body, properties, headersArguments);
+        }
+        
+        protected Task PublishAsync(
+            string eventName,
+            byte[] body,
+            IBasicProperties properties,
+            Dictionary<string, object> headersArguments = null,
+            Guid? eventId = null)
+        {
             using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
             {
                 channel.ExchangeDeclare(
@@ -221,7 +242,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                 {
                     properties = channel.CreateBasicProperties();
                     properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-                    properties.MessageId = Guid.NewGuid().ToString("N");
+                    properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
                 }
 
                 SetEventMessageHeaders(properties, headersArguments);

@@ -7,7 +7,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public static void UseDbContext<TDbContext>(this OutboxConfig outboxConfig)
             where TDbContext : IHasEventOutbox
         {
-            outboxConfig.ImplementationType = typeof(DbContextEventOutbox<TDbContext>);
+            outboxConfig.ImplementationType = typeof(IDbContextEventOutbox<TDbContext>);
         }
     }
 }
