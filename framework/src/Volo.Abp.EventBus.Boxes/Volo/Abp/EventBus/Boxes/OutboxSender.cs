@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Medallion.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,17 +38,17 @@ namespace Volo.Abp.EventBus.Boxes
             Logger = NullLogger<OutboxSender>.Instance;
         }
 
-        public virtual Task StartAsync(OutboxConfig outboxConfig)
+        public virtual Task StartAsync(OutboxConfig outboxConfig, CancellationToken cancellationToken = default)
         {
             OutboxConfig = outboxConfig;
             Outbox = (IEventOutbox)ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-            Timer.Start();
+            Timer.Start(cancellationToken);
             return Task.CompletedTask;
         }
 
-        public virtual Task StopAsync()
+        public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
-            Timer.Stop();
+            Timer.Stop(cancellationToken);
             return Task.CompletedTask;
         }
         
@@ -85,12 +86,11 @@ namespace Volo.Abp.EventBus.Boxes
                             Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
                         }
                     }
-
-                    await Task.Delay(30000);
                 }
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
+                    await Task.Delay(7000); //TODO: Can we pass a cancellation token to cancel on shutdown? (Config?)
                 }
             }
         }
