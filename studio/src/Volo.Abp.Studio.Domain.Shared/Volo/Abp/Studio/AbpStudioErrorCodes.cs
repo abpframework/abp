@@ -25,6 +25,7 @@
         public const string DllNotFound = "AbpStudio:DllNotFound";
         public const string PackageNotFound = "AbpStudio:PackageNotFound";
         public const string FileNotFound = "AbpStudio:FileNotFound";
-        public const string IncorrectFolderName  = "AbpStudio:IncorrectFolderName ";
+        public const string IncorrectFolderName  = "AbpStudio:IncorrectFolderName";
+        public const string ModuleAlreadyInstalled = "AbpStudio:ModuleAlreadyInstalled";
     }
 }
