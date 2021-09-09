@@ -25,6 +25,7 @@
     "DisplayName:Email": "電子信箱地址",
     "DisplayName:PhoneNumber": "手機號碼",
     "DisplayName:TwoFactorEnabled": "二次認證",
+    "DisplayName:IsActive": "啟用",
     "DisplayName:LockoutEnabled": "登入失敗,帳號被鎖定",
     "NewRole": "新角色",
     "RoleName": "角色名稱",

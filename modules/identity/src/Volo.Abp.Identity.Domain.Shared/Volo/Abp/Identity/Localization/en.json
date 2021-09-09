@@ -25,6 +25,7 @@
     "DisplayName:Email": "Email address",
     "DisplayName:PhoneNumber": "Phone number",
     "DisplayName:TwoFactorEnabled": "Two factor verification",
+    "DisplayName:IsActive": "Active",
     "DisplayName:LockoutEnabled": "Lock account after failed login attempts",
     "NewRole": "New role",
     "RoleName": "Role name",

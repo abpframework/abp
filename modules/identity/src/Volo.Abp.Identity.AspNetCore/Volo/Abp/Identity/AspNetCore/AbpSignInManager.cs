@@ -33,7 +33,7 @@ namespace Volo.Abp.Identity.AspNetCore
             AbpOptions = options.Value;
         }
 
-        public async override Task<SignInResult> PasswordSignInAsync(
+        public override async Task<SignInResult> PasswordSignInAsync(
             string userName,
             string password,
             bool isPersistent,
@@ -61,6 +61,17 @@ namespace Volo.Abp.Identity.AspNetCore
             }
 
             return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        }
+
+        protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
+        {
+            if (!user.IsActive)
+            {
+                Logger.LogWarning("User is currently inactive.");
+                return SignInResult.NotAllowed;
+            }
+
+            return await base.PreSignInCheck(user);
         }
     }
 }

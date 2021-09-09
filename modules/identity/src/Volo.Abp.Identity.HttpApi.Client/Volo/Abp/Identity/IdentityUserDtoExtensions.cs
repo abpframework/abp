@@ -15,7 +15,8 @@ namespace Volo.Abp.Identity
                 user.EmailConfirmed,
                 user.PhoneNumber,
                 user.PhoneNumberConfirmed,
-                user.TenantId
+                user.TenantId,
+                user.IsActive
             );
         }
     }

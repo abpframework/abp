@@ -7,7 +7,7 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId už existuje: {ClientId}",
     "UserLockedOut": "Používateľské konto bolo uzamknuté z dôvodu viacerých neplatných pokusov o prihlásenie. Chvíľu počkajte a skúste sa prihlásiť znova.",
     "InvalidUserNameOrPassword": "Nesprávne používateľské meno alebo heslo!",
-    "LoginIsNotAllowed": "Nemáte povolené prihlásiť sa! Musíte potvrdiť svoj email/telefónne číslo.",
+    "LoginIsNotAllowed": "Nemáte povolenie sa prihlásiť! Váš účet je neaktívny alebo potrebuje potvrdiť váš e -mail/telefónne číslo.",
     "InvalidUsername": "Nesprávne používateľské meno alebo heslo!",
     "TheTargetUserIsNotLinkedToYou": "Cieľový používateľ nie je s vami prepojený!"
   }
