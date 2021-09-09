@@ -380,7 +380,6 @@
     "CheckYourBillingInfo": "You can create your invoice only once! Check your billing information before creating your invoice.",
     "Volo.AbpIo.Commercial:030000": "You already used your trial period.",
     "Volo.AbpIo.Commercial:030001": "There is already an organization called \"{CompanyName}\"",
-    "Volo.AbpIo.Commercial:030002": "You already own an organization that has a license.",
     "StartYourFreeTrial": "Start your free trial",
     "TrialLicenseModelInvalidErrorMessage": "One of the following fields are invalid: Country Name, Company Size, Industry or Purpose Of Usage.",
     "Trial": "Trial",
