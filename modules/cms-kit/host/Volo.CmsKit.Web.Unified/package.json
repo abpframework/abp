@@ -3,12 +3,12 @@
   "name": "my-app",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.4.0",
-    "@abp/cms-kit": "4.4.0",
-    "@abp/tui-editor": "^4.4.0",
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.4.2",
+    "@abp/cms-kit": "4.4.2",
+    "@abp/tui-editor": "^4.4.2",
     "tui-code-snippet": "1.5.2",
-    "@abp/uppy": "^4.4.0",
+    "@abp/uppy": "^4.4.2",
     "slugify": "1.4.6",
-    "@abp/jstree": "4.4.0"
+    "@abp/jstree": "4.4.2"
   }
 }

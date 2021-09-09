@@ -42,5 +42,15 @@ namespace Volo.Abp.Uow
         Task RollbackAsync(CancellationToken cancellationToken = default);
 
         void OnCompleted(Func<Task> handler);
+
+        void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        );
+
+        void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        );
     }
 }

@@ -12,6 +12,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Kafka;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Kafka
 {
@@ -33,6 +34,7 @@ namespace Volo.Abp.EventBus.Kafka
         public KafkaDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IOptions<AbpKafkaEventBusOptions> abpKafkaEventBusOptions,
             IKafkaMessageConsumerFactory messageConsumerFactory,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
@@ -40,7 +42,7 @@ namespace Volo.Abp.EventBus.Kafka
             IProducerPool producerPool,
             IEventErrorHandler errorHandler,
             IOptions<AbpEventBusOptions> abpEventBusOptions)
-            : base(serviceScopeFactory, currentTenant, errorHandler)
+            : base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
         {
             AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
             AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
@@ -165,9 +167,14 @@ namespace Volo.Abp.EventBus.Kafka
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await PublishAsync(eventType, eventData, new Headers {{"messageId", Serializer.Serialize(Guid.NewGuid())}}, null);
+        }
+
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
 
         public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)

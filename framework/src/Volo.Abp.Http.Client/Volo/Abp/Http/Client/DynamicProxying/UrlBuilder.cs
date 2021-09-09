@@ -132,14 +132,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return true;
         }
 
-        private static string ConvertValueToString([NotNull] object value)
+        private static string ConvertValueToString([CanBeNull] object value)
         {
             if (value is DateTime dateTimeValue)
             {
                 return dateTimeValue.ToUniversalTime().ToString("O");
             }
 
-            return value.ToString();
+            return value?.ToString();
         }
     }
 }
