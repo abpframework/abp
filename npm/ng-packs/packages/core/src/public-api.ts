@@ -24,7 +24,6 @@ export * from './lib/proxy/volo/abp/http/modeling';
 export * from './lib/proxy/volo/abp/localization';
 export * from './lib/proxy/volo/abp/models';
 export * from './lib/services';
-export * from './lib/states';
 export * from './lib/strategies';
 export * from './lib/tokens';
 export * from './lib/utils';

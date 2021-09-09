@@ -1,9 +1,9 @@
+import { InternalStore, ProfileDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import { InternalStore, Profile } from '@abp/ng.core';
 import { Observable } from 'rxjs';
 
 export interface ManageProfileState {
-  profile: Profile.Response;
+  profile: ProfileDto;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,15 +14,15 @@ export class ManageProfileStateService {
     return this.store.sliceUpdate;
   }
 
-  getProfile$(): Observable<Profile.Response> {
+  getProfile$(): Observable<ProfileDto> {
     return this.store.sliceState(state => state.profile);
   }
 
-  getProfile(): Profile.Response {
+  getProfile(): ProfileDto {
     return this.store.state.profile;
   }
 
-  setProfile(profile: Profile.Response) {
+  setProfile(profile: ProfileDto) {
     this.store.patch({ profile });
   }
 }
