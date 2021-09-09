@@ -1,27 +1,17 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
-import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, pluck, switchMap, take } from 'rxjs/operators';
-import {
-  CreateTenant,
-  DeleteTenant,
-  GetTenantById,
-  GetTenants,
-  UpdateTenant,
-} from '../../actions/tenant-management.actions';
-import { GetTenantsInput, TenantDto } from '../../proxy/models';
-import { TenantService } from '../../proxy/tenant.service';
-import { TenantManagementState } from '../../states/tenant-management.state';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { finalize, take } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
+import { GetTenantsInput, TenantDto } from '../../proxy/models';
+import { TenantService } from '../../proxy/tenant.service';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -41,11 +31,7 @@ interface SelectedModalContent {
   ],
 })
 export class TenantsComponent implements OnInit {
-  @Select(TenantManagementState.get)
-  data$: Observable<PagedResultDto<TenantDto>>;
-
-  @Select(TenantManagementState.getTenantsTotalCount)
-  totalCount$: Observable<number>;
+  data: PagedResultDto<TenantDto>;
 
   selected: TenantDto;
 
@@ -112,9 +98,8 @@ export class TenantsComponent implements OnInit {
     public readonly list: ListService<GetTenantsInput>,
     private injector: Injector,
     private confirmationService: ConfirmationService,
-    private tenantService: TenantService,
+    private service: TenantService,
     private fb: FormBuilder,
-    private store: Store,
   ) {}
 
   ngOnInit() {
@@ -150,14 +135,11 @@ export class TenantsComponent implements OnInit {
   }
 
   editTenant(id: string) {
-    this.store
-      .dispatch(new GetTenantById(id))
-      .pipe(pluck('TenantManagementState', 'selectedItem'))
-      .subscribe(selected => {
-        this.selected = selected;
-        this.createTenantForm();
-        this.openModal('AbpTenantManagement::Edit', this.tenantModalTemplate, 'saveTenant');
-      });
+    this.service.get(id).subscribe(res => {
+      this.selected = res;
+      this.createTenantForm();
+      this.openModal('AbpTenantManagement::Edit', this.tenantModalTemplate, 'saveTenant');
+    });
   }
 
   save() {
@@ -172,7 +154,7 @@ export class TenantsComponent implements OnInit {
 
     this.modalBusy = true;
     if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
-      this.tenantService
+      this.service
         .deleteDefaultConnectionString(this.selected.id)
         .pipe(
           take(1),
@@ -182,7 +164,7 @@ export class TenantsComponent implements OnInit {
           this.isModalVisible = false;
         });
     } else {
-      this.tenantService
+      this.service
         .updateDefaultConnectionString(this.selected.id, this.connectionString)
         .pipe(
           take(1),
@@ -198,12 +180,12 @@ export class TenantsComponent implements OnInit {
     if (!this.tenantForm.valid || this.modalBusy) return;
     this.modalBusy = true;
 
-    this.store
-      .dispatch(
-        this.selected.id
-          ? new UpdateTenant({ ...this.selected, ...this.tenantForm.value, id: this.selected.id })
-          : new CreateTenant(this.tenantForm.value),
-      )
+    const { id } = this.selected;
+
+    (id
+      ? this.service.update(id, { ...this.selected, ...this.tenantForm.value })
+      : this.service.create(this.tenantForm.value)
+    )
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
@@ -222,13 +204,13 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => this.list.get());
         }
       });
   }
 
   hookToQuery() {
-    this.list.hookToQuery(query => this.store.dispatch(new GetTenants(query))).subscribe();
+    this.list.hookToQuery(query => this.service.getList(query)).subscribe();
   }
 
   onSharedDatabaseChange(value: boolean) {
