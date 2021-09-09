@@ -32,28 +32,30 @@
 
 <abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
-    <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
+    <h3>
+      {{
+        selected?.id
+          ? 'AbpTenantManagement::Edit'
+          : ('AbpTenantManagement::NewTenant' | abpLocalization)
+      }}
+    </h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <ng-container *ngTemplateOutlet="selectedModalContent?.template"></ng-container>
+    <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
+      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+    </form>
   </ng-template>
 
   <ng-template #abpFooter>
     <button abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="isDisabledSaveButton">{{
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="tenantForm?.invalid">{{
       'AbpTenantManagement::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
 </abp-modal>
-
-<ng-template #tenantModalTemplate>
-  <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
-    <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
-  </form>
-</ng-template>
 
 <abp-feature-management
   *abpReplaceableTemplate="{

@@ -6,18 +6,12 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
-import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, take } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
 import { GetTenantsInput, TenantDto } from '../../proxy/models';
 import { TenantService } from '../../proxy/tenant.service';
-
-interface SelectedModalContent {
-  type: 'saveConnStr' | 'saveTenant';
-  title: string;
-  template: TemplateRef<any>;
-}
 
 @Component({
   selector: 'abp-tenants',
@@ -31,19 +25,13 @@ interface SelectedModalContent {
   ],
 })
 export class TenantsComponent implements OnInit {
-  data: PagedResultDto<TenantDto>;
+  data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
   selected: TenantDto;
 
   tenantForm: FormGroup;
 
-  defaultConnectionStringForm: FormGroup;
-
-  defaultConnectionString: string;
-
   isModalVisible: boolean;
-
-  selectedModalContent = {} as SelectedModalContent;
 
   visibleFeatures = false;
 
@@ -57,37 +45,6 @@ export class TenantsComponent implements OnInit {
 
   get hasSelectedTenant(): boolean {
     return Boolean(this.selected.id);
-  }
-
-  get useSharedDatabase(): boolean {
-    return this.defaultConnectionStringForm.get('useSharedDatabase').value;
-  }
-
-  get connectionString(): string {
-    return this.defaultConnectionStringForm.get('defaultConnectionString').value;
-  }
-
-  @ViewChild('tenantModalTemplate')
-  tenantModalTemplate: TemplateRef<any>;
-
-  get isDisabledSaveButton(): boolean {
-    if (!this.selectedModalContent) return false;
-
-    if (
-      this.selectedModalContent.type === 'saveConnStr' &&
-      this.defaultConnectionStringForm &&
-      this.defaultConnectionStringForm.invalid
-    ) {
-      return true;
-    } else if (
-      this.selectedModalContent.type === 'saveTenant' &&
-      this.tenantForm &&
-      this.tenantForm.invalid
-    ) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   onVisibleFeaturesChange = (value: boolean) => {
@@ -111,72 +68,21 @@ export class TenantsComponent implements OnInit {
     this.tenantForm = generateFormFromProps(data);
   }
 
-  private createDefaultConnectionStringForm() {
-    this.defaultConnectionStringForm = this.fb.group({
-      useSharedDatabase: this._useSharedDatabase,
-      defaultConnectionString: [this.defaultConnectionString || ''],
-    });
-  }
-
-  openModal(title: string, template: TemplateRef<any>, type: 'saveConnStr' | 'saveTenant') {
-    this.selectedModalContent = {
-      title,
-      template,
-      type,
-    };
-
-    this.isModalVisible = true;
-  }
-
   addTenant() {
     this.selected = {} as TenantDto;
     this.createTenantForm();
-    this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
+    this.isModalVisible = true;
   }
 
   editTenant(id: string) {
     this.service.get(id).subscribe(res => {
       this.selected = res;
       this.createTenantForm();
-      this.openModal('AbpTenantManagement::Edit', this.tenantModalTemplate, 'saveTenant');
+      this.isModalVisible = true;
     });
   }
 
   save() {
-    const { type } = this.selectedModalContent;
-    if (!type) return;
-    if (type === 'saveTenant') this.saveTenant();
-    else if (type === 'saveConnStr') this.saveConnectionString();
-  }
-
-  saveConnectionString() {
-    if (this.modalBusy) return;
-
-    this.modalBusy = true;
-    if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
-      this.service
-        .deleteDefaultConnectionString(this.selected.id)
-        .pipe(
-          take(1),
-          finalize(() => (this.modalBusy = false)),
-        )
-        .subscribe(() => {
-          this.isModalVisible = false;
-        });
-    } else {
-      this.service
-        .updateDefaultConnectionString(this.selected.id, this.connectionString)
-        .pipe(
-          take(1),
-          finalize(() => (this.modalBusy = false)),
-        )
-        .subscribe(() => {
-          this.isModalVisible = false;
-        });
-    }
-  }
-
-  saveTenant() {
     if (!this.tenantForm.valid || this.modalBusy) return;
     this.modalBusy = true;
 
@@ -210,7 +116,11 @@ export class TenantsComponent implements OnInit {
   }
 
   hookToQuery() {
-    this.list.hookToQuery(query => this.service.getList(query)).subscribe();
+    this.list
+      .hookToQuery(query => this.service.getList(query))
+      .subscribe(res => {
+        this.data = res;
+      });
   }
 
   onSharedDatabaseChange(value: boolean) {
