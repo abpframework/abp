@@ -23,7 +23,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public virtual async Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
         {
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
-            dbContext.OutgoingEventRecords.Add(
+            dbContext.OutgoingEvents.Add(
                 new OutgoingEventRecord(outgoingEvent)
             );
         }
@@ -34,7 +34,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
             
             var outgoingEventRecords = await dbContext
-                .OutgoingEventRecords
+                .OutgoingEvents
                 .AsNoTracking()
                 .OrderBy(x => x.CreationTime)
                 .Take(maxCount)
@@ -49,7 +49,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public virtual async Task DeleteAsync(Guid id)
         {
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
-            var outgoingEvent = await dbContext.OutgoingEventRecords.FindAsync(id);
+            var outgoingEvent = await dbContext.OutgoingEvents.FindAsync(id);
             if (outgoingEvent != null)
             {
                 dbContext.Remove(outgoingEvent);

@@ -86,6 +86,11 @@ namespace Volo.Abp.EventBus.Kafka
             {
                 return;
             }
+            
+            if (await AddToInboxAsync(eventName, eventType, message.Value))
+            {
+                return;
+            }
 
             var eventData = Serializer.Deserialize(message.Value, eventType);
 

@@ -3,7 +3,7 @@ using Volo.Abp.Data;
 
 namespace Volo.Abp.EventBus.Distributed
 {
-    public class OutgoingEventInfo : IHasExtraProperties 
+    public class IncomingEventInfo : IHasExtraProperties
     {
         public static int MaxEventNameLength { get; set; } = 256;
 
@@ -16,14 +16,14 @@ namespace Volo.Abp.EventBus.Distributed
         public byte[] EventData { get; }
         
         public DateTime CreationTime { get; }
-
-        protected OutgoingEventInfo()
+        
+        protected IncomingEventInfo()
         {
             ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }
 
-        public OutgoingEventInfo(
+        public IncomingEventInfo(
             Guid id, 
             string eventName,
             byte[] eventData,
@@ -36,4 +36,5 @@ namespace Volo.Abp.EventBus.Distributed
             ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }
-    }}
+    }
+}

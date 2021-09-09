@@ -4,6 +4,6 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
     public interface IHasEventOutbox : IEfCoreDbContext
     {
-        DbSet<OutgoingEventRecord> OutgoingEventRecords { get; set; }
+        DbSet<OutgoingEventRecord> OutgoingEvents { get; set; }
     }
 }

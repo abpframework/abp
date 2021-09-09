@@ -5,11 +5,12 @@ using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 
 namespace DistDemoApp
 {
-    public class TodoDbContext : AbpDbContext<TodoDbContext>, IHasEventOutbox
+    public class TodoDbContext : AbpDbContext<TodoDbContext>, IHasEventOutbox, IHasEventInbox
     {
         public DbSet<TodoItem> TodoItems { get; set; }
         public DbSet<TodoSummary> TodoSummaries { get; set; }
-        public DbSet<OutgoingEventRecord> OutgoingEventRecords { get; set; }
+        public DbSet<OutgoingEventRecord> OutgoingEvents { get; set; }
+        public DbSet<IncomingEventRecord> IncomingEvents { get; set; }
 
         public TodoDbContext(DbContextOptions<TodoDbContext> options)
             : base(options)
@@ -22,6 +23,7 @@ namespace DistDemoApp
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.ConfigureEventOutbox();
+            modelBuilder.ConfigureEventInbox();
 
             modelBuilder.Entity<TodoItem>(b =>
             {

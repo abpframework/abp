@@ -46,7 +46,12 @@ namespace DistDemoApp
             
             Configure<AbpDistributedEventBusOptions>(options =>
             {
-                options.Outboxes.Configure("Default", config =>
+                options.Outboxes.Configure(config =>
+                {
+                    config.UseDbContext<TodoDbContext>();
+                });
+                
+                options.Inboxes.Configure(config =>
                 {
                     config.UseDbContext<TodoDbContext>();
                 });

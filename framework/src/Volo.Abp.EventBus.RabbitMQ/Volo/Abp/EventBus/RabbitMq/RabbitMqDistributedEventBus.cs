@@ -105,7 +105,14 @@ namespace Volo.Abp.EventBus.RabbitMq
                 return;
             }
 
-            var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
+            var eventBytes = ea.Body.ToArray();
+
+            if (await AddToInboxAsync(eventName, eventType, eventBytes))
+            {
+                return;
+            }
+            
+            var eventData = Serializer.Deserialize(eventBytes, eventType);
 
             await TriggerHandlersAsync(eventType, eventData, errorContext =>
             {

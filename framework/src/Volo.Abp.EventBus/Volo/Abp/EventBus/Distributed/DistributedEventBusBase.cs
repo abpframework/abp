@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -17,14 +18,14 @@ namespace Volo.Abp.EventBus.Distributed
 
         protected DistributedEventBusBase(
             IServiceScopeFactory serviceScopeFactory,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IGuidGenerator guidGenerator,
             IClock clock
-            ) : base(
-            serviceScopeFactory, 
+        ) : base(
+            serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             errorHandler)
@@ -67,7 +68,7 @@ namespace Volo.Abp.EventBus.Distributed
                 );
                 return;
             }
-            
+
             if (useOutbox)
             {
                 if (await AddToOutboxAsync(eventType, eventData))
@@ -106,8 +107,40 @@ namespace Volo.Abp.EventBus.Distributed
                     return true;
                 }
             }
-            
+
             return false;
+        }
+
+        protected async Task<bool> AddToInboxAsync(
+            string eventName,
+            Type eventType,
+            byte[] eventBytes)
+        {
+            if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
+            {
+                return false;
+            }
+
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values)
+                {
+                    if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
+                    {
+                        var eventInbox = (IEventInbox) scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+                        await eventInbox.EnqueueAsync(
+                            new IncomingEventInfo(
+                                GuidGenerator.Create(),
+                                eventName,
+                                eventBytes,
+                                Clock.Now
+                            )
+                        );
+                    }
+                }
+            }
+
+            return true;
         }
 
         protected abstract byte[] Serialize(object eventData);
