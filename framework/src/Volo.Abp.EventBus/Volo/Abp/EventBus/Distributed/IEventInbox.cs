@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Distributed
@@ -8,5 +9,7 @@ namespace Volo.Abp.EventBus.Distributed
         Task EnqueueAsync(IncomingEventInfo incomingEvent);
         
         Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount);
+        
+        Task MarkAsProcessedAsync(Guid id);
     }
 }

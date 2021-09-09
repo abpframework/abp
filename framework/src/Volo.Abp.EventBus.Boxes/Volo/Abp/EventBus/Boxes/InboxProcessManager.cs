@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,39 +9,39 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.EventBus.Boxes
 {
-    public class OutboxSenderManager : IBackgroundWorker
+    public class InboxProcessManager : IBackgroundWorker
     {
         protected AbpDistributedEventBusOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
-        protected List<IOutboxSender> Senders { get; }
+        protected List<IInboxProcessor> Processors { get; }
 
-        public OutboxSenderManager(
+        public InboxProcessManager(
             IOptions<AbpDistributedEventBusOptions> options,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
             Options = options.Value;
-            Senders = new List<IOutboxSender>();
+            Processors = new List<IInboxProcessor>();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var outboxConfig in Options.Outboxes.Values)
+            foreach (var inboxConfig in Options.Inboxes.Values)
             {
-                if (outboxConfig.IsSendingEnabled)
+                if (inboxConfig.IsProcessingEnabled)
                 {
-                    var sender = ServiceProvider.GetRequiredService<IOutboxSender>();
-                    await sender.StartAsync(outboxConfig, cancellationToken);
-                    Senders.Add(sender);
+                    var processor = ServiceProvider.GetRequiredService<IInboxProcessor>();
+                    await processor.StartAsync(inboxConfig, cancellationToken);
+                    Processors.Add(processor);
                 }
             }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var sender in Senders)
+            foreach (var processor in Processors)
             {
-                await sender.StopAsync(cancellationToken);
+                await processor.StopAsync(cancellationToken);
             }
         }
     }

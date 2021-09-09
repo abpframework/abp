@@ -12,6 +12,7 @@ namespace Volo.Abp.EventBus.Boxes
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context.AddBackgroundWorker<OutboxSenderManager>();
+            context.AddBackgroundWorker<InboxProcessManager>();
         }
     }
 }

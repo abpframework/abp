@@ -162,6 +162,19 @@ namespace Volo.Abp.EventBus
                 }
             }
         }
+        
+        protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)
+        {
+            if (exceptions.Count == 1)
+            {
+                exceptions[0].ReThrow();
+            }
+
+            throw new AggregateException(
+                "More than one error has occurred while triggering the event: " + eventType,
+                exceptions
+            );
+        }
 
         protected virtual void SubscribeHandlers(ITypeList<IEventHandler> handlers)
         {

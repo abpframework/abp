@@ -194,6 +194,12 @@ namespace Volo.Abp.EventBus.Rebus
             throw new NotImplementedException();
         }
 
+        public override Task ProcessRawAsync(string eventName, byte[] eventDataBytes)
+        {
+            /* TODO: IMPLEMENT! */
+            throw new NotImplementedException();
+        }
+
         protected override byte[] Serialize(object eventData)
         {
             return Serializer.Serialize(eventData);

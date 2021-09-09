@@ -81,6 +81,7 @@ namespace Volo.Abp.EventBus.Distributed
         }
 
         public abstract Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData);
+        public abstract Task ProcessRawAsync(string eventName, byte[] eventDataBytes);
 
         private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
         {
@@ -128,6 +129,7 @@ namespace Volo.Abp.EventBus.Distributed
                     if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
                     {
                         var eventInbox = (IEventInbox) scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+                        //TODO: Check if event was received before!!
                         await eventInbox.EnqueueAsync(
                             new IncomingEventInfo(
                                 GuidGenerator.Create(),

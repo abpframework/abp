@@ -20,6 +20,10 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public byte[] EventData { get; private set; }
         
         public DateTime CreationTime { get; private set; }
+        
+        public bool Processed { get; set; }
+        
+        public DateTime? ProcessedTime { get; set; }
 
         protected IncomingEventRecord()
         {
@@ -47,6 +51,12 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
                 EventData,
                 CreationTime
             );
+        }
+
+        public void MarkAsProcessed(DateTime processedTime)
+        {
+            Processed = true;
+            ProcessedTime = processedTime;
         }
     }
 }

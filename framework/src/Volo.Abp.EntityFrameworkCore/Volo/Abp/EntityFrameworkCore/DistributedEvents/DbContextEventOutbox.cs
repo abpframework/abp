@@ -48,6 +48,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public virtual async Task DeleteAsync(Guid id)
         {
+            //TODO: Optimize?
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
             var outgoingEvent = await dbContext.OutgoingEvents.FindAsync(id);
             if (outgoingEvent != null)

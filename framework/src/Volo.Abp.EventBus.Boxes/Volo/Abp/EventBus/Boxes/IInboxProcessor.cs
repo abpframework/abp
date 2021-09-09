@@ -4,9 +4,9 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.EventBus.Boxes
 {
-    public interface IOutboxSender
+    public interface IInboxProcessor
     {
-        Task StartAsync(OutboxConfig outboxConfig, CancellationToken cancellationToken = default);
+        Task StartAsync(InboxConfig inboxConfig, CancellationToken cancellationToken = default);
         
         Task StopAsync(CancellationToken cancellationToken = default);
     }

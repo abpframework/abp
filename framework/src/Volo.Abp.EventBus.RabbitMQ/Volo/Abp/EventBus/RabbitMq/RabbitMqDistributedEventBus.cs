@@ -123,7 +123,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                     retryAttempt = (int)ea.BasicProperties.Headers[EventErrorHandlerBase.RetryAttemptKey];
                 }
 
-                errorContext.EventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
+                errorContext.EventData = Serializer.Deserialize(eventBytes, eventType);
                 errorContext.SetProperty(EventErrorHandlerBase.HeadersKey, ea.BasicProperties);
                 errorContext.SetProperty(EventErrorHandlerBase.RetryAttemptKey, retryAttempt);
             });
@@ -217,6 +217,25 @@ namespace Volo.Abp.EventBus.RabbitMq
             return PublishAsync(eventName, eventData, null, eventId: eventId);
         }
 
+        public override async Task ProcessRawAsync(string eventName, byte[] eventDataBytes)
+        {
+            //TODO: We have a duplication in logic and also with the kafka side!
+            
+            var eventType = EventTypes.GetOrDefault(eventName);
+            if (eventType == null)
+            {
+                return;
+            }
+            
+            var eventData = Serializer.Deserialize(eventDataBytes, eventType);
+            var exceptions = new List<Exception>();
+            await TriggerHandlersAsync(eventType, eventData, exceptions);
+            if (exceptions.Any())
+            {
+                ThrowOriginalExceptions(eventType, exceptions);
+            }
+        }
+        
         protected override byte[] Serialize(object eventData)
         {
             return Serializer.Serialize(eventData);

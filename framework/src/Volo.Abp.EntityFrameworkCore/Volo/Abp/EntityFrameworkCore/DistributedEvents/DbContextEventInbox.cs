@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
@@ -11,11 +13,14 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         where TDbContext : IHasEventInbox
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
+        protected IClock Clock { get; }
 
         public DbContextEventInbox(
-            IDbContextProvider<TDbContext> dbContextProvider)
+            IDbContextProvider<TDbContext> dbContextProvider,
+            IClock clock)
         {
             DbContextProvider = dbContextProvider;
+            Clock = clock;
         }
 
         [UnitOfWork]
@@ -35,6 +40,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             var outgoingEventRecords = await dbContext
                 .IncomingEvents
                 .AsNoTracking()
+                .Where(x => !x.Processed)
                 .OrderBy(x => x.CreationTime)
                 .Take(maxCount)
                 .ToListAsync();
@@ -42,6 +48,17 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             return outgoingEventRecords
                 .Select(x => x.ToIncomingEventInfo())
                 .ToList();
+        }
+
+        public async Task MarkAsProcessedAsync(Guid id)
+        {
+            //TODO: Optimize?
+            var dbContext = (IHasEventInbox) await DbContextProvider.GetDbContextAsync();
+            var incomingEvent = await dbContext.IncomingEvents.FindAsync(id);
+            if (incomingEvent != null)
+            {
+                incomingEvent.MarkAsProcessed(Clock.Now);
+            }
         }
     }
 }
