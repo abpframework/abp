@@ -55,7 +55,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var jsonRoot = JObject.Parse(abpmdlFile.Content);
             var packagesObj = (JObject) jsonRoot["packages"];
 
-            packagesObj.Remove(_projectName);
+            packagesObj?.Remove(_projectName);
 
             abpmdlFile.SetContent(jsonRoot.ToString(Formatting.Indented));
         }
