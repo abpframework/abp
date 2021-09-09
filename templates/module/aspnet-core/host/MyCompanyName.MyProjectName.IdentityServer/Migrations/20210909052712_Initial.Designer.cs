@@ -11,7 +11,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(IdentityServerHostMigrationsDbContext))]
-    [Migration("20210528093513_Initial")]
+    [Migration("20210909052712_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace MyCompanyName.MyProjectName.Migrations
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -579,6 +579,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
