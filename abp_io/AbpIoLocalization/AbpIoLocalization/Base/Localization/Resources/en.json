@@ -35,8 +35,8 @@
     "Support": "Support",
     "FreeDDDBook": "Free DDD E-book",
     "New": "New",
-    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years ",
-    "TrialLicensePeriodHasExpired": "Your trial license period has expired {0} days ago.",
+    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year(s) and greater than {MaxExtendLicenseYear} year(s) ",
+    "TrialLicensePeriodHasExpired": "Your trial license period expired {0} days ago.",
     "TrialLicensePeriodWillExpire": "Your trial license period will be expired in {0} days.",
     "TrialLicensePeriodExpireToday": "Your trial license period will be expired today.",
     "PurchaseNow":  "Purchase Now!"
