@@ -192,7 +192,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             }
 
             clientProxyBuilder.Replace($"{Environment.NewLine}{UsingPlaceholder}", string.Empty);
-            clientProxyBuilder.Replace($"{Environment.NewLine}        {MethodPlaceholder}", string.Empty);
+            clientProxyBuilder.Replace($"{Environment.NewLine}{Environment.NewLine}        {MethodPlaceholder}", string.Empty);
 
             var filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.Generated.cs");
 
@@ -215,12 +215,12 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             if(!action.Name.EndsWith("Async"))
             {
                 GenerateSynchronizationMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
-                clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder} {Environment.NewLine}        {MethodPlaceholder}");
+                clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}        {MethodPlaceholder}");
                 return;
             }
 
             GenerateAsynchronousMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
-            clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder} {Environment.NewLine}        {MethodPlaceholder}");
+            clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}        {MethodPlaceholder}");
         }
 
         private void GenerateSynchronizationMethod(ActionApiDescriptionModel action, string returnTypeName, StringBuilder methodBuilder, List<string> usingNamespaceList)
