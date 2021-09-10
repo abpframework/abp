@@ -162,7 +162,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
                 }
 
-                HandleExtraPropertiesOnSave();
+                HandlePropertiesBeforeSave();
                 
                 var eventReport = CreateEventReport();
                 
@@ -320,11 +320,16 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
-        protected virtual void HandleExtraPropertiesOnSave()
+        protected virtual void HandlePropertiesBeforeSave()
         {
             foreach (var entry in ChangeTracker.Entries().ToList())
             {
                 HandleExtraPropertiesOnSave(entry);
+
+                if (entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
+                {
+                    UpdateConcurrencyStamp(entry);
+                }
             }
         }
         
@@ -458,7 +463,6 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
             {
-                UpdateConcurrencyStamp(entry);
                 SetModificationAuditProperties(entry);
 
                 if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -470,7 +474,19 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry)
         {
-            TryCancelDeletionForSoftDelete(entry);
+            if (!(entry.Entity is ISoftDelete))
+            {
+                return;
+            }
+
+            if (IsHardDeleted(entry))
+            {
+                return;
+            }
+
+            entry.Reload();
+            entry.Entity.As<ISoftDelete>().IsDeleted = true;
+            entry.State = EntityState.Modified;
         }
 
         protected virtual bool IsHardDeleted(EntityEntry entry)
@@ -510,24 +526,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
-        }
-
-        protected virtual bool TryCancelDeletionForSoftDelete(EntityEntry entry)
-        {
-            if (!(entry.Entity is ISoftDelete))
-            {
-                return false;
-            }
-
-            if (IsHardDeleted(entry))
-            {
-                return false;
-            }
-
-            entry.Reload();
-            entry.Entity.As<ISoftDelete>().IsDeleted = true;
-            entry.State = EntityState.Modified;
-            return true;
         }
 
         protected virtual void CheckAndSetId(EntityEntry entry)
