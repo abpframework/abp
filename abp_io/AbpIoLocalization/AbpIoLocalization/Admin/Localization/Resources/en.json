@@ -303,6 +303,13 @@
     "ProductPrice": "Product Price",
     "AdditionalDeveloper": "Additional developer",
     "ThisPaymentHasBeenAlreadyUsed": "This payment has been already used",
-    "PaymentTimeCannotBeFutureTime": "Payment time cannot be future time"
+    "PaymentTimeCannotBeFutureTime": "Payment time cannot be a future time!",
+    "SaveAndDownload": "Save and Download",
+    "BillingInfo": "Billing Info",
+    "GenerateInvoice": "Create Invoice",
+    "DeleteInvoice" : "Delete Invoice",
+    "SuccessfullyDeleted": "Successfully deleted!",
+    "PaymentStateSetTo" : "Payment state set to {0}",
+    "ChangeState": "Change State"
   }
 }

@@ -1,11 +1,11 @@
 {
-  "version": "4.4.1",
+  "version": "4.4.2",
   "name": "@abp/bootstrap",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.4.1",
+    "@abp/core": "~4.4.2",
     "bootstrap": "^4.6.0",
     "bootstrap-v4-rtl": "4.6.0-1"
   },
