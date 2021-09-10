@@ -6,13 +6,13 @@ using Volo.Abp;
 
 namespace DistDemoApp
 {
-    public class MyProjectNameHostedService : IHostedService
+    public class DistDemoAppHostedService : IHostedService
     {
         private readonly IAbpApplicationWithExternalServiceProvider _application;
         private readonly IServiceProvider _serviceProvider;
         private readonly DemoService _demoService;
 
-        public MyProjectNameHostedService(
+        public DistDemoAppHostedService(
             IAbpApplicationWithExternalServiceProvider application,
             IServiceProvider serviceProvider,
             DemoService demoService)

@@ -11,8 +11,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace DistDemoApp.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20210909182251_Added_Inbox_Process_Columns")]
-    partial class Added_Inbox_Process_Columns
+    [Migration("20210910152547_Added_Boxes_Initial")]
+    partial class Added_Boxes_Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -112,6 +112,9 @@ namespace DistDemoApp.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("Processed")
                         .HasColumnType("bit");
 
@@ -119,6 +122,10 @@ namespace DistDemoApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("Processed", "CreationTime");
 
                     b.ToTable("AbpEventInbox");
                 });

@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>DistDemoApp</RootNamespace>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="DistributedLock.Redis" Version="1.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.*" />
@@ -13,25 +13,11 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
-
+    
     <ItemGroup>
-        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.RabbitMQ\Volo.Abp.EventBus.RabbitMQ.csproj" />
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.Boxes\Volo.Abp.EventBus.Boxes.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.*">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-            <PrivateAssets>compile; contentFiles; build; buildMultitargeting; buildTransitive; analyzers; native</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>

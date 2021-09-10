@@ -51,7 +51,7 @@ namespace DistDemoApp
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddApplication<DistDemoAppModule>();
+                    services.AddApplication<DistDemoAppEfCoreRabbitMqModule>();
                 });
     }
 }

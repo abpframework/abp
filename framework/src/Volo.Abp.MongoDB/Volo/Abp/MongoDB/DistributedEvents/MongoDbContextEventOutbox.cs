@@ -6,8 +6,8 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.MongoDB.DistributedEvents
 {
-    public class DbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext> 
-        where TDbContext : IHasEventOutbox
+    public class MongoDbContextEventOutbox<TMongoDbContext> : IMongoDbContextEventOutbox<TMongoDbContext> 
+        where TMongoDbContext : IHasEventOutbox
     {
         public Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
         {

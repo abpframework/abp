@@ -35,13 +35,13 @@ namespace Volo.Abp.MongoDB
             );
 
             context.Services.AddTransient(
-                typeof(IDbContextEventOutbox<>),
-                typeof(DbContextEventOutbox<>)
+                typeof(IMongoDbContextEventOutbox<>),
+                typeof(MongoDbContextEventOutbox<>)
             );
             
             context.Services.AddTransient(
-                typeof(IDbContextEventInbox<>),
-                typeof(DbContextEventInbox<>)
+                typeof(IMongoDbContextEventInbox<>),
+                typeof(MongoDbContextEventInbox<>)
             );
         }
     }

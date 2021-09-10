@@ -2,7 +2,7 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.MongoDB.DistributedEvents
 {
-    public interface IDbContextEventInbox<TDbContext> : IEventInbox
+    public interface IMongoDbContextEventInbox<TDbContext> : IEventInbox
         where TDbContext : IHasEventInbox
     {
         
