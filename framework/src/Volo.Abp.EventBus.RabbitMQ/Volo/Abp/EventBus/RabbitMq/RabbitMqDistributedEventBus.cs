@@ -13,6 +13,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.RabbitMq
 {
@@ -44,9 +45,10 @@ namespace Volo.Abp.EventBus.RabbitMq
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory,
             ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IEventErrorHandler errorHandler,
             IOptions<AbpEventBusOptions> abpEventBusOptions)
-            : base(serviceScopeFactory, currentTenant, errorHandler)
+            : base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
@@ -189,14 +191,18 @@ namespace Volo.Abp.EventBus.RabbitMq
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await PublishAsync(eventType, eventData, null);
         }
 
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
+        }
+
         public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties, Dictionary<string, object> headersArguments = null)
         {
-
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 

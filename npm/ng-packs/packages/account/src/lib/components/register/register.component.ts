@@ -4,7 +4,6 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
 import { AccountService } from '../../proxy/account/account.service';
 import { RegisterDto } from '../../proxy/account/models';
@@ -88,11 +87,13 @@ export class RegisterComponent implements OnInit {
         ),
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
+            err.error?.error_description ||
+              err.error?.error.message ||
+              'AbpAccount::DefaultErrorMessage',
+            null,
             { life: 7000 },
           );
+
           return throwError(err);
         }),
         finalize(() => (this.inProgress = false)),

@@ -18,7 +18,6 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/for
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
-import snq from 'snq';
 import {
   CreateUser,
   DeleteUser,
@@ -83,7 +82,7 @@ export class UsersComponent implements OnInit {
   };
 
   get roleGroups(): FormGroup[] {
-    return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
+    return ((this.form.get('roleNames') as FormArray)?.controls as FormGroup[]) || [];
   }
 
   constructor(
@@ -112,7 +111,7 @@ export class UsersComponent implements OnInit {
             this.fb.group({
               [role.name]: [
                 this.selected.id
-                  ? !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))
+                  ? !!this.selectedUserRoles?.find(userRole => userRole.id === role.id)
                   : role.isDefault,
               ],
             }),
@@ -152,12 +151,10 @@ export class UsersComponent implements OnInit {
     if (!this.form.valid || this.modalBusy) return;
     this.modalBusy = true;
 
-    const { roleNames } = this.form.value;
-    const mappedRoleNames = snq(
-      () =>
-        roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]),
-      [],
-    );
+    const { roleNames = [] } = this.form.value;
+    const mappedRoleNames =
+      roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]) ||
+      [];
 
     this.store
       .dispatch(

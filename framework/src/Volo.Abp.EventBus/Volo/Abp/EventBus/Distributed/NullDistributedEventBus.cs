@@ -77,12 +77,12 @@ namespace Volo.Abp.EventBus.Distributed
             
         }
 
-        public Task PublishAsync<TEvent>(TEvent eventData) where TEvent : class
+        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
         {
             return Task.CompletedTask;
         }
 
-        public Task PublishAsync(Type eventType, object eventData)
+        public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
         {
             return Task.CompletedTask;
         }
