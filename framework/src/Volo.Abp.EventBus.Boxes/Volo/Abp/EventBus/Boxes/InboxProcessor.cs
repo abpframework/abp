@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Boxes
@@ -19,8 +20,11 @@ namespace Volo.Abp.EventBus.Boxes
         protected IDistributedEventBus DistributedEventBus { get; }
         protected IDistributedLockProvider DistributedLockProvider { get; }
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        protected IClock Clock { get; }
         protected IEventInbox Inbox { get; private set; }
         protected InboxConfig InboxConfig { get; private set; }
+        
+        protected DateTime? LastCleanTime { get; set; }
         
         protected string DistributedLockName => "Inbox_" + InboxConfig.Name;
         public ILogger<InboxProcessor> Logger { get; set; }
@@ -30,13 +34,15 @@ namespace Volo.Abp.EventBus.Boxes
             AbpTimer timer,
             IDistributedEventBus distributedEventBus, 
             IDistributedLockProvider distributedLockProvider,
-            IUnitOfWorkManager unitOfWorkManager)
+            IUnitOfWorkManager unitOfWorkManager,
+            IClock clock)
         {
             ServiceProvider = serviceProvider;
             Timer = timer;
             DistributedEventBus = distributedEventBus;
             DistributedLockProvider = distributedLockProvider;
             UnitOfWorkManager = unitOfWorkManager;
+            Clock = clock;
             Timer.Period = 2000; //TODO: Config?
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
@@ -69,6 +75,8 @@ namespace Volo.Abp.EventBus.Boxes
                 {
                     Logger.LogDebug("Obtained the distributed lock: " + DistributedLockName);
                     
+                    await DeleteOldEventsAsync();
+            
                     while (true)
                     {
                         var waitingEvents = await Inbox.GetWaitingEventsAsync(1000); //TODO: Config?
@@ -87,12 +95,8 @@ namespace Volo.Abp.EventBus.Boxes
                                     .AsRawEventPublisher()
                                     .ProcessRawAsync(InboxConfig, waitingEvent.EventName, waitingEvent.EventData);
                                 
-                                /*
-                                await DistributedEventBus
-                                    .AsRawEventPublisher()
-                                    .PublishRawAsync(waitingEvent.Id, waitingEvent.EventName, waitingEvent.EventData);
-                                */
                                 await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
+                                
                                 await uow.CompleteAsync();
                             }
                             
@@ -106,6 +110,18 @@ namespace Volo.Abp.EventBus.Boxes
                     await Task.Delay(7000); //TODO: Can we pass a cancellation token to cancel on shutdown? (Config?)
                 }
             }
+        }
+
+        protected virtual async Task DeleteOldEventsAsync()
+        {
+            if (LastCleanTime != null && LastCleanTime > Clock.Now.AddHours(6)) //TODO: Config?
+            {
+                return;
+            }
+
+            await Inbox.DeleteOldEventsAsync();
+            
+            LastCleanTime = DateTime.Now;
         }
     }
 }

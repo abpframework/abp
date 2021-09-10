@@ -26,7 +26,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public virtual async Task EnqueueAsync(IncomingEventInfo incomingEvent)
         {
-            var dbContext = await GetDbContextAsync();
+            var dbContext = await DbContextProvider.GetDbContextAsync();
 
             dbContext.IncomingEvents.Add(
                 new IncomingEventRecord(incomingEvent)
@@ -36,7 +36,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount)
         {
-            var dbContext = await GetDbContextAsync();
+            var dbContext = await DbContextProvider.GetDbContextAsync();
 
             var outgoingEventRecords = await dbContext
                 .IncomingEvents
@@ -55,7 +55,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public async Task MarkAsProcessedAsync(Guid id)
         {
             //TODO: Optimize?
-            var dbContext = await GetDbContextAsync();
+            var dbContext = await DbContextProvider.GetDbContextAsync();
             var incomingEvent = await dbContext.IncomingEvents.FindAsync(id);
             if (incomingEvent != null)
             {
@@ -66,18 +66,21 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public async Task<bool> ExistsByMessageIdAsync(string messageId)
         {
-            var dbContext = await GetDbContextAsync();
+            //TODO: Optimize
+            var dbContext = await DbContextProvider.GetDbContextAsync();
             return await dbContext.IncomingEvents.AnyAsync(x => x.MessageId == messageId);
         }
 
-        private async Task<IHasEventInbox> GetDbContextAsync()
+        [UnitOfWork]
+        public async Task DeleteOldEventsAsync()
         {
-            return (IHasEventInbox)await DbContextProvider.GetDbContextAsync();
-        }
-
-        public Task DeleteOldEventsAsync()
-        {
-            throw new NotImplementedException();
+            //TODO: Optimize
+            var dbContext = await DbContextProvider.GetDbContextAsync();
+            var timeToKeepEvents = Clock.Now.AddHours(-2); //TODO: Config?
+            var oldEvents = await dbContext.IncomingEvents
+                .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
+                .ToListAsync();
+            dbContext.IncomingEvents.RemoveRange(oldEvents);
         }
     }
 }
