@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.TenantManagement.TenantController": {
           "controllerName": "Tenant",
+          "controllerGroupName": "Tenant",
           "type": "Volo.Abp.TenantManagement.TenantController",
           "interfaces": [
             {

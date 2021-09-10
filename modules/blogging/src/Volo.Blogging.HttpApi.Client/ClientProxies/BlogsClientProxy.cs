@@ -1,3 +1,4 @@
+// This file is part of BlogsClientProxy, you can customize it here
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Blogs;

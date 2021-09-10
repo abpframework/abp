@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Blogging.Admin.BlogManagementController": {
           "controllerName": "BlogManagement",
+          "controllerGroupName": "BlogManagement",
           "type": "Volo.Blogging.Admin.BlogManagementController",
           "interfaces": [
             {

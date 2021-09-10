@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.PermissionManagement.PermissionsController": {
           "controllerName": "Permissions",
+          "controllerGroupName": "Permissions",
           "type": "Volo.Abp.PermissionManagement.PermissionsController",
           "interfaces": [
             {

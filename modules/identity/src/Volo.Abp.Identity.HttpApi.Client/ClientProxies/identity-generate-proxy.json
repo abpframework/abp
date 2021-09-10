@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.Identity.IdentityRoleController": {
           "controllerName": "IdentityRole",
+          "controllerGroupName": "Role",
           "type": "Volo.Abp.Identity.IdentityRoleController",
           "interfaces": [
             {
@@ -273,6 +274,7 @@
         },
         "Volo.Abp.Identity.IdentityUserController": {
           "controllerName": "IdentityUser",
+          "controllerGroupName": "User",
           "type": "Volo.Abp.Identity.IdentityUserController",
           "interfaces": [
             {
@@ -708,6 +710,7 @@
         },
         "Volo.Abp.Identity.IdentityUserLookupController": {
           "controllerName": "IdentityUserLookup",
+          "controllerGroupName": "UserLookup",
           "type": "Volo.Abp.Identity.IdentityUserLookupController",
           "interfaces": [
             {
@@ -903,6 +906,7 @@
         },
         "Volo.Abp.Identity.ProfileController": {
           "controllerName": "Profile",
+          "controllerGroupName": "Profile",
           "type": "Volo.Abp.Identity.ProfileController",
           "interfaces": [
             {

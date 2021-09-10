@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
           "controllerName": "Account",
+          "controllerGroupName": "Login",
           "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
           "interfaces": [],
           "actions": {
@@ -102,6 +103,7 @@
         },
         "Volo.Abp.Account.AccountController": {
           "controllerName": "Account",
+          "controllerGroupName": "Account",
           "type": "Volo.Abp.Account.AccountController",
           "interfaces": [
             {

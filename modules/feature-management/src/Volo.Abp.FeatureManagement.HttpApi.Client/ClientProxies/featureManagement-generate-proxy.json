@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.FeatureManagement.FeaturesController": {
           "controllerName": "Features",
+          "controllerGroupName": "Features",
           "type": "Volo.Abp.FeatureManagement.FeaturesController",
           "interfaces": [
             {

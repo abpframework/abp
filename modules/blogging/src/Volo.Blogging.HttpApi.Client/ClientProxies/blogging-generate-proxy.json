@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Blogging.BlogFilesController": {
           "controllerName": "BlogFiles",
+          "controllerGroupName": "BlogFiles",
           "type": "Volo.Blogging.BlogFilesController",
           "interfaces": [
             {
@@ -165,6 +166,7 @@
         },
         "Volo.Blogging.BlogsController": {
           "controllerName": "Blogs",
+          "controllerGroupName": "Blogs",
           "type": "Volo.Blogging.BlogsController",
           "interfaces": [
             {
@@ -265,6 +267,7 @@
         },
         "Volo.Blogging.CommentsController": {
           "controllerName": "Comments",
+          "controllerGroupName": "Comments",
           "type": "Volo.Blogging.CommentsController",
           "interfaces": [
             {
@@ -444,6 +447,7 @@
         },
         "Volo.Blogging.PostsController": {
           "controllerName": "Posts",
+          "controllerGroupName": "Posts",
           "type": "Volo.Blogging.PostsController",
           "interfaces": [
             {
@@ -766,6 +770,7 @@
         },
         "Volo.Blogging.TagsController": {
           "controllerName": "Tags",
+          "controllerGroupName": "Tags",
           "type": "Volo.Blogging.TagsController",
           "interfaces": [
             {

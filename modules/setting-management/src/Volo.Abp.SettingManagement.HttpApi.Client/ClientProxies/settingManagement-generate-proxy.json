@@ -6,6 +6,7 @@
       "controllers": {
         "Volo.Abp.SettingManagement.EmailSettingsController": {
           "controllerName": "EmailSettings",
+          "controllerGroupName": "EmailSettings",
           "type": "Volo.Abp.SettingManagement.EmailSettingsController",
           "interfaces": [
             {
