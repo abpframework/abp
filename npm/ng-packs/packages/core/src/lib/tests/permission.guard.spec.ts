@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Actions, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { PermissionGuard } from '../guards/permission.guard';
 import { HttpErrorReporterService, PermissionService } from '../services';
@@ -43,14 +42,6 @@ describe('PermissionGuard', () => {
       {
         provide: APP_BASE_HREF,
         useValue: '/',
-      },
-      {
-        provide: Actions,
-        useValue: {
-          pipe() {
-            return of(null);
-          },
-        },
       },
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
     ],

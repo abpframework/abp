@@ -1,7 +1,6 @@
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
