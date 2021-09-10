@@ -85,7 +85,7 @@ namespace Volo.Abp.EventBus.Boxes
                             {
                                 await DistributedEventBus
                                     .AsRawEventPublisher()
-                                    .ProcessRawAsync(waitingEvent.EventName, waitingEvent.EventData);
+                                    .ProcessRawAsync(InboxConfig, waitingEvent.EventName, waitingEvent.EventData);
                                 
                                 /*
                                 await DistributedEventBus

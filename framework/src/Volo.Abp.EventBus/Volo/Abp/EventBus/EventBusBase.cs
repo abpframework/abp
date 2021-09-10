@@ -134,7 +134,7 @@ namespace Volo.Abp.EventBus
             }
         }
 
-        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData , List<Exception> exceptions)
+        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData, List<Exception> exceptions, InboxConfig inboxConfig = null)
         {
             await new SynchronizationContextRemover();
 
@@ -142,7 +142,7 @@ namespace Volo.Abp.EventBus
             {
                 foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions);
+                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions, inboxConfig);
                 }
             }
 
@@ -199,13 +199,20 @@ namespace Volo.Abp.EventBus
 
         protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
 
-        protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType, object eventData, List<Exception> exceptions)
+        protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType,
+            object eventData, List<Exception> exceptions, InboxConfig inboxConfig = null)
         {
             using (var eventHandlerWrapper = asyncHandlerFactory.GetHandler())
             {
                 try
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
+
+                    if (inboxConfig?.HandlerSelector != null &&
+                        !inboxConfig.HandlerSelector(handlerType))
+                    {
+                        return;
+                    }
 
                     using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                     {

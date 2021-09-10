@@ -11,8 +11,8 @@ namespace Volo.Abp.EventBus.Distributed
             byte[] eventData);
 
         Task ProcessRawAsync(
+            InboxConfig inboxConfig,
             string eventName,
-            byte[] eventDataBytes
-        );
+            byte[] eventDataBytes);
     }
 }

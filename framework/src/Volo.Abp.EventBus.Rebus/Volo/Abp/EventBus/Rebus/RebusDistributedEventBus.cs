@@ -194,7 +194,7 @@ namespace Volo.Abp.EventBus.Rebus
             throw new NotImplementedException();
         }
 
-        public override Task ProcessRawAsync(string eventName, byte[] eventDataBytes)
+        public override Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes)
         {
             /* TODO: IMPLEMENT! */
             throw new NotImplementedException();

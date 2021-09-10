@@ -211,7 +211,7 @@ namespace Volo.Abp.EventBus.Kafka
             );
         }
 
-        public override async Task ProcessRawAsync(string eventName, byte[] eventDataBytes)
+        public override async Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes)
         {
             var eventType = EventTypes.GetOrDefault(eventName);
             if (eventType == null)
@@ -221,7 +221,7 @@ namespace Volo.Abp.EventBus.Kafka
             
             var eventData = Serializer.Deserialize(eventDataBytes, eventType);
             var exceptions = new List<Exception>();
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
+            await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
             if (exceptions.Any())
             {
                 ThrowOriginalExceptions(eventType, exceptions);

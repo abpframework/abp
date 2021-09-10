@@ -217,7 +217,7 @@ namespace Volo.Abp.EventBus.RabbitMq
             return PublishAsync(eventName, eventData, null, eventId: eventId);
         }
 
-        public override async Task ProcessRawAsync(string eventName, byte[] eventDataBytes)
+        public override async Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes)
         {
             //TODO: We have a duplication in logic and also with the kafka side!
             
@@ -229,7 +229,7 @@ namespace Volo.Abp.EventBus.RabbitMq
             
             var eventData = Serializer.Deserialize(eventDataBytes, eventType);
             var exceptions = new List<Exception>();
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
+            await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
             if (exceptions.Any())
             {
                 ThrowOriginalExceptions(eventType, exceptions);

@@ -81,7 +81,7 @@ namespace Volo.Abp.EventBus.Distributed
         }
 
         public abstract Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData);
-        public abstract Task ProcessRawAsync(string eventName, byte[] eventDataBytes);
+        public abstract Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes);
 
         private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
         {
