@@ -570,12 +570,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
           );
         }
 
-        protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
+        protected virtual Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
             TriggerEntityCreateEvents(entity);
             TriggerDomainEvents(entity);
+            return Task.CompletedTask;
         }
 
         private void TriggerEntityCreateEvents(TEntity entity)

@@ -5,6 +5,7 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB.DependencyInjection;
 using Volo.Abp.Uow.MongoDB;
+using Volo.Abp.MongoDB.DistributedEvents;
 
 namespace Volo.Abp.MongoDB
 {
@@ -31,6 +32,16 @@ namespace Volo.Abp.MongoDB
             context.Services.TryAddTransient(
                 typeof(IMongoDbRepositoryFilterer<,>),
                 typeof(MongoDbRepositoryFilterer<,>)
+            );
+
+            context.Services.AddTransient(
+                typeof(IDbContextEventOutbox<>),
+                typeof(DbContextEventOutbox<>)
+            );
+            
+            context.Services.AddTransient(
+                typeof(IDbContextEventInbox<>),
+                typeof(DbContextEventInbox<>)
             );
         }
     }
