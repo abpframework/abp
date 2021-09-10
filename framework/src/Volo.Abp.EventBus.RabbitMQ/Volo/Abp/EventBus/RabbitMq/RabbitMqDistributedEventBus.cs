@@ -106,8 +106,8 @@ namespace Volo.Abp.EventBus.RabbitMq
             }
 
             var eventBytes = ea.Body.ToArray();
-
-            if (await AddToInboxAsync(eventName, eventType, eventBytes))
+            
+            if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventBytes))
             {
                 return;
             }
@@ -268,9 +268,13 @@ namespace Volo.Abp.EventBus.RabbitMq
                 {
                     properties = channel.CreateBasicProperties();
                     properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-                    properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
                 }
 
+                if (properties.MessageId.IsNullOrEmpty())
+                {
+                    properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
+                }
+                
                 SetEventMessageHeaders(properties, headersArguments);
 
                 channel.BasicPublish(

@@ -86,8 +86,15 @@ namespace Volo.Abp.EventBus.Kafka
             {
                 return;
             }
+
+            string messageId = null;
             
-            if (await AddToInboxAsync(eventName, eventType, message.Value))
+            if (message.Headers.TryGetLastBytes("messageId", out var messageIdBytes))
+            {
+                messageId = System.Text.Encoding.UTF8.GetString(messageIdBytes);
+            }
+            
+            if (await AddToInboxAsync(messageId, eventName, eventType, message.Value))
             {
                 return;
             }
@@ -183,7 +190,7 @@ namespace Volo.Abp.EventBus.Kafka
                 eventData,
                 new Headers
                 {
-                    { "messageId", Serializer.Serialize(Guid.NewGuid()) }
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N")) }
                 },
                 null
             );
@@ -205,7 +212,7 @@ namespace Volo.Abp.EventBus.Kafka
                 eventData,
                 new Headers
                 {
-                    { "messageId", Serializer.Serialize(eventId) }
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(eventId.ToString("N")) }
                 },
                 null
             );

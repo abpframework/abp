@@ -11,5 +11,9 @@ namespace Volo.Abp.EventBus.Distributed
         Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount);
         
         Task MarkAsProcessedAsync(Guid id);
+        
+        Task<bool> ExistsByMessageIdAsync(string messageId);
+
+        Task DeleteOldEventsAsync();
     }
 }

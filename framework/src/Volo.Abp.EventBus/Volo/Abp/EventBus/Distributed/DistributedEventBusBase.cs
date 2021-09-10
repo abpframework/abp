@@ -113,6 +113,7 @@ namespace Volo.Abp.EventBus.Distributed
         }
 
         protected async Task<bool> AddToInboxAsync(
+            string messageId,
             string eventName,
             Type eventType,
             byte[] eventBytes)
@@ -129,10 +130,19 @@ namespace Volo.Abp.EventBus.Distributed
                     if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
                     {
                         var eventInbox = (IEventInbox) scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
-                        //TODO: Check if event was received before!!
+
+                        if (!messageId.IsNullOrEmpty())
+                        {
+                            if (await eventInbox.ExistsByMessageIdAsync(messageId))
+                            {
+                                continue;
+                            }
+                        }
+                        
                         await eventInbox.EnqueueAsync(
                             new IncomingEventInfo(
                                 GuidGenerator.Create(),
+                                messageId,
                                 eventName,
                                 eventBytes,
                                 Clock.Now

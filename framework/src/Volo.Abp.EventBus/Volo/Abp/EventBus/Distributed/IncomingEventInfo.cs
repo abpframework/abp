@@ -11,6 +11,8 @@ namespace Volo.Abp.EventBus.Distributed
 
         public Guid Id { get; }
         
+        public string MessageId { get; }
+        
         public string EventName { get; }
         
         public byte[] EventData { get; }
@@ -25,11 +27,13 @@ namespace Volo.Abp.EventBus.Distributed
 
         public IncomingEventInfo(
             Guid id, 
+            string messageId,
             string eventName,
             byte[] eventData,
             DateTime creationTime)
         {
             Id = id;
+            MessageId = messageId;
             EventName = Check.NotNullOrWhiteSpace(eventName, nameof(eventName), MaxEventNameLength);
             EventData = eventData;
             CreationTime = creationTime;

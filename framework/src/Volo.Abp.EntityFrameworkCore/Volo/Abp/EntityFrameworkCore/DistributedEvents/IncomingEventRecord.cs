@@ -15,6 +15,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         
         public ExtraPropertyDictionary ExtraProperties { get; private set; }
 
+        public string MessageId { get; private set; }
+
         public string EventName { get; private set; }
         
         public byte[] EventData { get; private set; }
@@ -35,6 +37,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             IncomingEventInfo eventInfo)
             : base(eventInfo.Id)
         {
+            MessageId = eventInfo.MessageId;
             EventName = eventInfo.EventName;
             EventData = eventInfo.EventData;
             CreationTime = eventInfo.CreationTime;
@@ -47,6 +50,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         {
             return new IncomingEventInfo(
                 Id,
+                MessageId,
                 EventName,
                 EventData,
                 CreationTime

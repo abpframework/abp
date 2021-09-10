@@ -26,7 +26,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public virtual async Task EnqueueAsync(IncomingEventInfo incomingEvent)
         {
-            var dbContext = (IHasEventInbox) await DbContextProvider.GetDbContextAsync();
+            var dbContext = await GetDbContextAsync();
+
             dbContext.IncomingEvents.Add(
                 new IncomingEventRecord(incomingEvent)
             );
@@ -35,8 +36,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         [UnitOfWork]
         public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount)
         {
-            var dbContext = (IHasEventInbox) await DbContextProvider.GetDbContextAsync();
-            
+            var dbContext = await GetDbContextAsync();
+
             var outgoingEventRecords = await dbContext
                 .IncomingEvents
                 .AsNoTracking()
@@ -50,15 +51,33 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
                 .ToList();
         }
 
+        [UnitOfWork]
         public async Task MarkAsProcessedAsync(Guid id)
         {
             //TODO: Optimize?
-            var dbContext = (IHasEventInbox) await DbContextProvider.GetDbContextAsync();
+            var dbContext = await GetDbContextAsync();
             var incomingEvent = await dbContext.IncomingEvents.FindAsync(id);
             if (incomingEvent != null)
             {
                 incomingEvent.MarkAsProcessed(Clock.Now);
             }
+        }
+
+        [UnitOfWork]
+        public async Task<bool> ExistsByMessageIdAsync(string messageId)
+        {
+            var dbContext = await GetDbContextAsync();
+            return await dbContext.IncomingEvents.AnyAsync(x => x.MessageId == messageId);
+        }
+
+        private async Task<IHasEventInbox> GetDbContextAsync()
+        {
+            return (IHasEventInbox)await DbContextProvider.GetDbContextAsync();
+        }
+
+        public Task DeleteOldEventsAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
