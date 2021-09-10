@@ -162,7 +162,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
                 }
 
-                ApplyAbpConcepts();
+                HandleExtraPropertiesOnSave();
                 
                 var eventReport = CreateEventReport();
                 
@@ -291,10 +291,12 @@ namespace Volo.Abp.EntityFrameworkCore
             switch (entry.State)
             { 
                 case EntityState.Added:
+                    ApplyAbpConceptsForAddedEntity(entry);
                     EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
                     EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                     break;
                 case EntityState.Modified:
+                    ApplyAbpConceptsForModifiedEntity(entry);
                     if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
                     {
                         if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -311,17 +313,18 @@ namespace Volo.Abp.EntityFrameworkCore
                     
                     break;
                 case EntityState.Deleted:
+                    ApplyAbpConceptsForDeletedEntity(entry);
                     EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                     EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                     break;
             }
         }
 
-        protected virtual void ApplyAbpConcepts()
+        protected virtual void HandleExtraPropertiesOnSave()
         {
             foreach (var entry in ChangeTracker.Entries().ToList())
             {
-                ApplyAbpConcepts(entry);
+                HandleExtraPropertiesOnSave(entry);
             }
         }
         
@@ -368,24 +371,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             return eventReport;
-        }
-        
-        protected virtual void ApplyAbpConcepts(EntityEntry entry)
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    ApplyAbpConceptsForAddedEntity(entry);
-                    break;
-                case EntityState.Modified:
-                    ApplyAbpConceptsForModifiedEntity(entry);
-                    break;
-                case EntityState.Deleted:
-                    ApplyAbpConceptsForDeletedEntity(entry);
-                    break;
-            }
-
-            HandleExtraPropertiesOnSave(entry);
         }
 
         protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
@@ -485,11 +470,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry)
         {
-            if (TryCancelDeletionForSoftDelete(entry))
-            {
-                UpdateConcurrencyStamp(entry);
-                SetDeletionAuditProperties(entry);
-            }
+            TryCancelDeletionForSoftDelete(entry);
         }
 
         protected virtual bool IsHardDeleted(EntityEntry entry)
@@ -510,7 +491,7 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 return;
             }
-
+            
             Entry(entity).Property(x => x.ConcurrencyStamp).OriginalValue = entity.ConcurrencyStamp;
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
@@ -544,8 +525,8 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             entry.Reload();
-            entry.State = EntityState.Modified;
             entry.Entity.As<ISoftDelete>().IsDeleted = true;
+            entry.State = EntityState.Modified;
             return true;
         }
 
