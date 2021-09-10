@@ -9,7 +9,7 @@ import {
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
-import { eThemeSharedRouteNames } from '../../enums';
+import { eThemeSharedRouteNames } from '../../enums/route-names';
 
 @Component({
   selector: 'abp-breadcrumb',

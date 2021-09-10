@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
 import { Environment, RemoteEnv } from '../models/environment';
-import { HttpErrorReporterService } from '../services';
 import { EnvironmentService } from '../services/environment.service';
+import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { deepMerge } from './object-utils';
 
 export function getRemoteEnv(injector: Injector, environment: Partial<Environment>) {

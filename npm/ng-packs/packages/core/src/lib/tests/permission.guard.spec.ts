@@ -21,7 +21,7 @@ describe('PermissionGuard', () => {
 
   const createService = createServiceFactory({
     service: PermissionGuard,
-    mocks: [PermissionService, Store],
+    mocks: [PermissionService],
     declarations: [DummyComponent],
     imports: [
       HttpClientTestingModule,

@@ -15,8 +15,12 @@ describe('HttpClient testing', () => {
 
   const createHttp = createHttpFactory({
     service: RestService,
-    providers: [EnvironmentService, { provide: CORE_OPTIONS, useValue: { environment: {} } }],
-    mocks: [OAuthService, HttpErrorReporterService],
+    providers: [
+      EnvironmentService,
+      HttpErrorReporterService,
+      { provide: CORE_OPTIONS, useValue: { environment: {} } },
+    ],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {

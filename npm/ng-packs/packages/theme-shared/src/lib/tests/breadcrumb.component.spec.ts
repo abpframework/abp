@@ -8,6 +8,8 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
 
 const mockRoutes: ABP.Route[] = [
@@ -75,6 +77,3 @@ describe('BreadcrumbComponent', () => {
     expect(spectator.query('ol.breadcrumb')).toBeFalsy();
   });
 });
-function mockRoutesService() {
-  throw new Error('Function not implemented.');
-}

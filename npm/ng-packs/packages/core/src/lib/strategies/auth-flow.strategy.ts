@@ -11,9 +11,9 @@ import {
 import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { LoginParams } from '../models/auth';
-import { HttpErrorReporterService } from '../services';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { SessionStateService } from '../services/session-state.service';
 import { TENANT_KEY } from '../tokens/tenant-key.token';
 import { removeRememberMe, setRememberMe } from '../utils/auth-utils';

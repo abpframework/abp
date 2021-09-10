@@ -5,11 +5,13 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
+
+const reporter$ = new Subject();
 
 @NgModule({
   exports: [HttpErrorWrapperComponent],
@@ -33,6 +35,15 @@ describe('ErrorHandler', () => {
     imports: [CoreTestingModule.withConfig(), MockModule],
     mocks: [OAuthService],
     providers: [
+      {
+        provide: HttpErrorReporterService,
+        useValue: {
+          reportError: err => {
+            reporter$.next(err);
+          },
+          reporter$: reporter$.asObservable(),
+        },
+      },
       { provide: APP_BASE_HREF, useValue: '/' },
       {
         provide: 'HTTP_ERROR_CONFIG',
@@ -116,8 +127,6 @@ describe('ErrorHandler', () => {
       details: error.message,
       isHomeShow: false,
     };
-
-    expect(selectHtmlErrorWrapper()).toBeNull();
 
     httpErrorReporter.reportError(error);
 

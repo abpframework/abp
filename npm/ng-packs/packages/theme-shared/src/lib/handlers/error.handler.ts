@@ -10,7 +10,6 @@ import {
   ComponentFactoryResolver,
   ComponentRef,
   EmbeddedViewRef,
-  Inject,
   Injectable,
   Injector,
   RendererFactory2,
@@ -78,15 +77,21 @@ export class ErrorHandler {
     throwError(err),
   );
 
-  constructor(
-    protected httpErrorReporter: HttpErrorReporterService,
-    protected routerEvents: RouterEvents,
-    protected confirmationService: ConfirmationService,
-    protected cfRes: ComponentFactoryResolver,
-    protected rendererFactory: RendererFactory2,
-    protected injector: Injector,
-    @Inject('HTTP_ERROR_CONFIG') protected httpErrorConfig: HttpErrorConfig,
-  ) {
+  protected httpErrorReporter: HttpErrorReporterService;
+  protected routerEvents: RouterEvents;
+  protected confirmationService: ConfirmationService;
+  protected cfRes: ComponentFactoryResolver;
+  protected rendererFactory: RendererFactory2;
+  protected httpErrorConfig: HttpErrorConfig;
+
+  constructor(protected injector: Injector) {
+    this.httpErrorReporter = injector.get(HttpErrorReporterService);
+    this.routerEvents = injector.get(RouterEvents);
+    this.confirmationService = injector.get(ConfirmationService);
+    this.cfRes = injector.get(ComponentFactoryResolver);
+    this.rendererFactory = injector.get(RendererFactory2);
+    this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
+
     this.listenToRestError();
     this.listenToRouterError();
     this.listenToRouterDataResolved();
