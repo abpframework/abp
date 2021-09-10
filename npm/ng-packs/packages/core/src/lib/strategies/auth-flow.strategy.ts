@@ -1,7 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import {
   AuthConfig,
   OAuthErrorEvent,
@@ -11,21 +10,21 @@ import {
 } from 'angular-oauth2-oidc';
 import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { RestOccurError } from '../actions/rest.actions';
 import { LoginParams } from '../models/auth';
+import { HttpErrorReporterService } from '../services';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
 import { noop } from '../utils/common-utils';
-import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 export const oAuthStorage = localStorage;
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
 
-  protected store: Store;
+  protected httpErrorReporter: HttpErrorReporterService;
   protected environment: EnvironmentService;
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
@@ -38,10 +37,10 @@ export abstract class AuthFlowStrategy {
   abstract logout(queryParams?: Params): Observable<any>;
   abstract login(params?: LoginParams | Params): Observable<any>;
 
-  private catchError = err => this.store.dispatch(new RestOccurError(err));
+  private catchError = err => this.httpErrorReporter.reportError(err);
 
   constructor(protected injector: Injector) {
-    this.store = injector.get(Store);
+    this.httpErrorReporter = injector.get(HttpErrorReporterService);
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);

@@ -1,4 +1,9 @@
-import { AuthService, LocalizationParam, RestOccurError, RouterEvents } from '@abp/ng.core';
+import {
+  AuthService,
+  HttpErrorReporterService,
+  LocalizationParam,
+  RouterEvents,
+} from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
@@ -11,9 +16,8 @@ import {
   RendererFactory2,
 } from '@angular/core';
 import { NavigationError, ResolveEnd } from '@angular/router';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable, of, Subject, throwError } from 'rxjs';
-import { catchError, filter, map, switchMap } from 'rxjs/operators';
+import { catchError, filter, switchMap } from 'rxjs/operators';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
@@ -75,7 +79,7 @@ export class ErrorHandler {
   );
 
   constructor(
-    protected actions: Actions,
+    protected httpErrorReporter: HttpErrorReporterService,
     protected routerEvents: RouterEvents,
     protected confirmationService: ConfirmationService,
     protected cfRes: ComponentFactoryResolver,
@@ -106,13 +110,8 @@ export class ErrorHandler {
   }
 
   protected listenToRestError() {
-    this.actions
-      .pipe(
-        ofActionSuccessful(RestOccurError),
-        map(action => action.payload),
-        filter(this.filterRestErrors),
-        switchMap(this.executeErrorHandler),
-      )
+    this.httpErrorReporter.reporter$
+      .pipe(filter(this.filterRestErrors), switchMap(this.executeErrorHandler))
       .subscribe();
   }
 

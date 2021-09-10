@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
-import { RestOccurError } from '../actions/rest.actions';
 import { Environment, RemoteEnv } from '../models/environment';
+import { HttpErrorReporterService } from '../services';
 import { EnvironmentService } from '../services/environment.service';
 import { deepMerge } from './object-utils';
 
@@ -15,12 +14,12 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Environmen
   if (!url) return Promise.resolve();
 
   const http = injector.get(HttpClient);
-  const store = injector.get(Store);
+  const httpErrorReporter = injector.get(HttpErrorReporterService);
 
   return http
     .request<Environment>(method, url, { headers })
     .pipe(
-      catchError(err => store.dispatch(new RestOccurError(err))), // TODO: Condiser get handle function from a provider
+      catchError(err => httpErrorReporter.reportError(err)), // TODO: Condiser get handle function from a provider
       tap(env => environmentService.setState(mergeEnvironments(environment, env, remoteEnv))),
     )
     .toPromise();
