@@ -15,7 +15,7 @@ namespace Volo.CmsKit.Admin.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
     [Route("api/cms-kit-admin/tags")]
     public class TagAdminController : CmsKitAdminController, ITagAdminAppService
