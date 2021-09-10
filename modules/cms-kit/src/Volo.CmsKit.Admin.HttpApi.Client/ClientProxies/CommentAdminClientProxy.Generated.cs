@@ -15,16 +15,15 @@ namespace Volo.CmsKit.Admin.Comments.ClientProxies
         {
             return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetListAsync), input);
         }
- 
+
         public virtual async Task<CommentWithAuthorDto> GetAsync(Guid id)
         {
             return await RequestAsync<CommentWithAuthorDto>(nameof(GetAsync), id);
         }
- 
+
         public virtual async Task DeleteAsync(Guid id)
         {
             await RequestAsync(nameof(DeleteAsync), id);
         }
- 
     }
 }

@@ -15,26 +15,25 @@ namespace Volo.CmsKit.Admin.Blogs.ClientProxies
         {
             return await RequestAsync<BlogDto>(nameof(GetAsync), id);
         }
- 
+
         public virtual async Task<PagedResultDto<BlogDto>> GetListAsync(BlogGetListInput input)
         {
             return await RequestAsync<PagedResultDto<BlogDto>>(nameof(GetListAsync), input);
         }
- 
+
         public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
             return await RequestAsync<BlogDto>(nameof(CreateAsync), input);
         }
- 
+
         public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             return await RequestAsync<BlogDto>(nameof(UpdateAsync), id, input);
         }
- 
+
         public virtual async Task DeleteAsync(Guid id)
         {
             await RequestAsync(nameof(DeleteAsync), id);
         }
- 
     }
 }

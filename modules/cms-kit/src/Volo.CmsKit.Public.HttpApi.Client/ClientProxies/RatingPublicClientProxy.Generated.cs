@@ -16,16 +16,15 @@ namespace Volo.CmsKit.Public.Ratings.ClientProxies
         {
             return await RequestAsync<RatingDto>(nameof(CreateAsync), entityType, entityId, input);
         }
- 
+
         public virtual async Task DeleteAsync(string entityType, string entityId)
         {
             await RequestAsync(nameof(DeleteAsync), entityType, entityId);
         }
- 
+
         public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
         {
             return await RequestAsync<List<RatingWithStarCountDto>>(nameof(GetGroupedStarCountsAsync), entityType, entityId);
         }
- 
     }
 }

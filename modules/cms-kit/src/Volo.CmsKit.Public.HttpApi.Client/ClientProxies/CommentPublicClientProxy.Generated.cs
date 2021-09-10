@@ -15,21 +15,20 @@ namespace Volo.CmsKit.Public.Comments.ClientProxies
         {
             return await RequestAsync<ListResultDto<CommentWithDetailsDto>>(nameof(GetListAsync), entityType, entityId);
         }
- 
+
         public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
             return await RequestAsync<CommentDto>(nameof(CreateAsync), entityType, entityId, input);
         }
- 
+
         public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             return await RequestAsync<CommentDto>(nameof(UpdateAsync), id, input);
         }
- 
+
         public virtual async Task DeleteAsync(Guid id)
         {
             await RequestAsync(nameof(DeleteAsync), id);
         }
- 
     }
 }

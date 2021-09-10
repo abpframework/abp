@@ -15,16 +15,15 @@ namespace Volo.CmsKit.Public.Reactions.ClientProxies
         {
             return await RequestAsync<ListResultDto<ReactionWithSelectionDto>>(nameof(GetForSelectionAsync), entityType, entityId);
         }
- 
+
         public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
             await RequestAsync(nameof(CreateAsync), entityType, entityId, reaction);
         }
- 
+
         public virtual async Task DeleteAsync(string entityType, string entityId, string reaction)
         {
             await RequestAsync(nameof(DeleteAsync), entityType, entityId, reaction);
         }
- 
     }
 }

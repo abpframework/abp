@@ -15,11 +15,10 @@ namespace Volo.CmsKit.Admin.MediaDescriptors.ClientProxies
         {
             return await RequestAsync<MediaDescriptorDto>(nameof(CreateAsync), entityType, inputStream);
         }
- 
+
         public virtual async Task DeleteAsync(Guid id)
         {
             await RequestAsync(nameof(DeleteAsync), id);
         }
- 
     }
 }

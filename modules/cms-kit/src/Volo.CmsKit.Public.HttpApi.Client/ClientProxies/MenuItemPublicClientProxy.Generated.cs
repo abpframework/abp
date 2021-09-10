@@ -17,6 +17,5 @@ namespace Volo.CmsKit.Public.Menus.ClientProxies
         {
             return await RequestAsync<List<MenuItemDto>>(nameof(GetListAsync));
         }
- 
     }
 }

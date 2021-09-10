@@ -16,16 +16,15 @@ namespace Volo.Blogging.ClientProxies
         {
             return await RequestAsync<ListResultDto<BlogDto>>(nameof(GetListAsync));
         }
- 
+
         public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
             return await RequestAsync<BlogDto>(nameof(GetByShortNameAsync), shortName);
         }
- 
+
         public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             return await RequestAsync<BlogDto>(nameof(GetAsync), id);
         }
- 
     }
 }

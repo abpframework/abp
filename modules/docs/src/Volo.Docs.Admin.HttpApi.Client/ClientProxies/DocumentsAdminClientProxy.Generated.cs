@@ -15,31 +15,30 @@ namespace Volo.Docs.Admin.ClientProxies
         {
             await RequestAsync(nameof(ClearCacheAsync), input);
         }
- 
+
         public virtual async Task PullAllAsync(PullAllDocumentInput input)
         {
             await RequestAsync(nameof(PullAllAsync), input);
         }
- 
+
         public virtual async Task PullAsync(PullDocumentInput input)
         {
             await RequestAsync(nameof(PullAsync), input);
         }
- 
+
         public virtual async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
         {
             return await RequestAsync<PagedResultDto<DocumentDto>>(nameof(GetAllAsync), input);
         }
- 
+
         public virtual async Task RemoveFromCacheAsync(Guid documentId)
         {
             await RequestAsync(nameof(RemoveFromCacheAsync), documentId);
         }
- 
+
         public virtual async Task ReindexAsync(Guid documentId)
         {
             await RequestAsync(nameof(ReindexAsync), documentId);
         }
- 
     }
 }

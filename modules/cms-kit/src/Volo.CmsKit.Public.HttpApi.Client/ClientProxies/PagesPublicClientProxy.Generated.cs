@@ -15,6 +15,5 @@ namespace Volo.CmsKit.Public.Pages.ClientProxies
         {
             return await RequestAsync<PageDto>(nameof(FindBySlugAsync), slug);
         }
- 
     }
 }

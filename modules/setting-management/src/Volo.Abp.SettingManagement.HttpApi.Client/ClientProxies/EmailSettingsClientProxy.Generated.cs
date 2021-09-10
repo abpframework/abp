@@ -15,11 +15,10 @@ namespace Volo.Abp.SettingManagement.ClientProxies
         {
             return await RequestAsync<EmailSettingsDto>(nameof(GetAsync));
         }
- 
+
         public virtual async Task UpdateAsync(UpdateEmailSettingsDto input)
         {
             await RequestAsync(nameof(UpdateAsync), input);
         }
- 
     }
 }

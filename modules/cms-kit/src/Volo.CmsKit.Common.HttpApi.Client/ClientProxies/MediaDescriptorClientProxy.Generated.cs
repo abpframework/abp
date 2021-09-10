@@ -16,6 +16,5 @@ namespace Volo.CmsKit.MediaDescriptors.ClientProxies
         {
             return await RequestAsync<RemoteStreamContent>(nameof(DownloadAsync), id);
         }
- 
     }
 }

@@ -16,6 +16,5 @@ namespace Volo.CmsKit.Public.Tags.ClientProxies
         {
             return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), entityType, entityId);
         }
- 
     }
 }

@@ -15,6 +15,5 @@ namespace Volo.CmsKit.Blogs.ClientProxies
         {
             return await RequestAsync<BlogFeatureDto>(nameof(GetOrDefaultAsync), blogId, featureName);
         }
- 
     }
 }

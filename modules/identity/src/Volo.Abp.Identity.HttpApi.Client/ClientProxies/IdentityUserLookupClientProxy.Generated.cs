@@ -16,21 +16,20 @@ namespace Volo.Abp.Identity.ClientProxies
         {
             return await RequestAsync<UserData>(nameof(FindByIdAsync), id);
         }
- 
+
         public virtual async Task<UserData> FindByUserNameAsync(string userName)
         {
             return await RequestAsync<UserData>(nameof(FindByUserNameAsync), userName);
         }
- 
+
         public virtual async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
         {
             return await RequestAsync<ListResultDto<UserData>>(nameof(SearchAsync), input);
         }
- 
+
         public virtual async Task<long> GetCountAsync(UserLookupCountInputDto input)
         {
             return await RequestAsync<long>(nameof(GetCountAsync), input);
         }
- 
     }
 }

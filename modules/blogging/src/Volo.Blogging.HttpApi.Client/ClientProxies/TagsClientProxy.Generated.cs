@@ -17,6 +17,5 @@ namespace Volo.Blogging.ClientProxies
         {
             return await RequestAsync<List<TagDto>>(nameof(GetPopularTagsAsync), blogId, input);
         }
- 
     }
 }

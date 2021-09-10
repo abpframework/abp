@@ -15,11 +15,10 @@ namespace Volo.Abp.PermissionManagement.ClientProxies
         {
             return await RequestAsync<GetPermissionListResultDto>(nameof(GetAsync), providerName, providerKey);
         }
- 
+
         public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             await RequestAsync(nameof(UpdateAsync), providerName, providerKey, input);
         }
- 
     }
 }

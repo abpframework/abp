@@ -17,21 +17,20 @@ namespace Volo.Blogging.ClientProxies
         {
             return await RequestAsync<List<CommentWithRepliesDto>>(nameof(GetHierarchicalListOfPostAsync), postId);
         }
- 
+
         public virtual async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
             return await RequestAsync<CommentWithDetailsDto>(nameof(CreateAsync), input);
         }
- 
+
         public virtual async Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             return await RequestAsync<CommentWithDetailsDto>(nameof(UpdateAsync), id, input);
         }
- 
+
         public virtual async Task DeleteAsync(Guid id)
         {
             await RequestAsync(nameof(DeleteAsync), id);
         }
- 
     }
 }

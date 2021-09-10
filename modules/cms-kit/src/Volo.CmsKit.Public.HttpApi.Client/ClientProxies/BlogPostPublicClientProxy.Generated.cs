@@ -15,11 +15,10 @@ namespace Volo.CmsKit.Public.Blogs.ClientProxies
         {
             return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), blogSlug, blogPostSlug);
         }
- 
+
         public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
         {
             return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), blogSlug, input);
         }
- 
     }
 }

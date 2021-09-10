@@ -15,11 +15,10 @@ namespace Volo.Abp.FeatureManagement.ClientProxies
         {
             return await RequestAsync<GetFeatureListResultDto>(nameof(GetAsync), providerName, providerKey);
         }
- 
+
         public virtual async Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
         {
             await RequestAsync(nameof(UpdateAsync), providerName, providerKey, input);
         }
- 
     }
 }
