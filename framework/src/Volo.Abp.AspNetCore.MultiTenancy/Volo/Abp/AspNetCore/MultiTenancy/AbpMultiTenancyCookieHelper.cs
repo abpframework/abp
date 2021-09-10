@@ -19,7 +19,8 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                     {
                         Path = "/",
                         HttpOnly = false,
-                        Expires = DateTimeOffset.Now.AddYears(10)
+                        Expires = DateTimeOffset.Now.AddYears(10),
+                        IsEssential = true
                     }
                 );
             }
