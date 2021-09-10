@@ -25,7 +25,6 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
       sendNullsAsQueryParam: false,
       skipGetAppConfiguration: false,
     }),
-    NgxsModule.forRoot(),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot(),
     IdentityConfigModule.forRoot(),
