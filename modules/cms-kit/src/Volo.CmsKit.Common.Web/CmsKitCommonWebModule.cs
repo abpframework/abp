@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Web
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(CmsKitCommonHttpApplicationContractsModule),
+        typeof(CmsKitCommonApplicationContractsModule),
         typeof(AbpAutoMapperModule)
         )]
     public class CmsKitCommonWebModule : AbpModule
