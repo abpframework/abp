@@ -9,7 +9,7 @@ namespace Volo.Abp.Studio.Nuget
             switch (template)
             {
                 case "app":
-                    return "Cotur.Basic.Template"; // todo: replace with real template!
+                    return "Cotur.Abp.Basic.Template"; // todo: replace with real template!
                 default:
                     return null;
             }
