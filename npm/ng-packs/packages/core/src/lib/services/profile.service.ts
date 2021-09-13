@@ -37,5 +37,5 @@ export class ProfileService {
       { apiName: this.apiName },
     );
 
-  constructor(private restService: RestService) {}
+  constructor(protected restService: RestService) {}
 }
