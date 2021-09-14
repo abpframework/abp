@@ -16,23 +16,23 @@ namespace Volo.Abp.EventBus.Boxes
     public class InboxProcessor : IInboxProcessor, ITransientDependency
     {
         protected IServiceProvider ServiceProvider { get; }
-        protected AbpTimer Timer { get; }
+        protected AbpAsyncTimer Timer { get; }
         protected IDistributedEventBus DistributedEventBus { get; }
         protected IDistributedLockProvider DistributedLockProvider { get; }
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected IClock Clock { get; }
         protected IEventInbox Inbox { get; private set; }
         protected InboxConfig InboxConfig { get; private set; }
-        
+
         protected DateTime? LastCleanTime { get; set; }
-        
+
         protected string DistributedLockName => "Inbox_" + InboxConfig.Name;
         public ILogger<InboxProcessor> Logger { get; set; }
 
         public InboxProcessor(
             IServiceProvider serviceProvider,
-            AbpTimer timer,
-            IDistributedEventBus distributedEventBus, 
+            AbpAsyncTimer timer,
+            IDistributedEventBus distributedEventBus,
             IDistributedLockProvider distributedLockProvider,
             IUnitOfWorkManager unitOfWorkManager,
             IClock clock)
@@ -47,18 +47,18 @@ namespace Volo.Abp.EventBus.Boxes
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
         }
-        
-        private void TimerOnElapsed(object sender, EventArgs e)
+
+        private async Task TimerOnElapsed(AbpAsyncTimer arg)
         {
-            AsyncHelper.RunSync(RunAsync);
+            await RunAsync();
         }
-        
+
         public Task StartAsync(InboxConfig inboxConfig, CancellationToken cancellationToken = default)
         {
             InboxConfig = inboxConfig;
             Inbox = (IEventInbox)ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
             Timer.Start(cancellationToken);
-            return Task.CompletedTask;    
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)
@@ -66,7 +66,7 @@ namespace Volo.Abp.EventBus.Boxes
             Timer.Stop(cancellationToken);
             return Task.CompletedTask;
         }
-        
+
         protected virtual async Task RunAsync()
         {
             await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName))
@@ -74,9 +74,9 @@ namespace Volo.Abp.EventBus.Boxes
                 if (handle != null)
                 {
                     Logger.LogDebug("Obtained the distributed lock: " + DistributedLockName);
-                    
+
                     await DeleteOldEventsAsync();
-            
+
                     while (true)
                     {
                         var waitingEvents = await Inbox.GetWaitingEventsAsync(1000); //TODO: Config?
@@ -86,7 +86,7 @@ namespace Volo.Abp.EventBus.Boxes
                         }
 
                         Logger.LogInformation($"Found {waitingEvents.Count} events in the inbox.");
-                
+
                         foreach (var waitingEvent in waitingEvents)
                         {
                             using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
@@ -94,12 +94,12 @@ namespace Volo.Abp.EventBus.Boxes
                                 await DistributedEventBus
                                     .AsRawEventPublisher()
                                     .ProcessRawAsync(InboxConfig, waitingEvent.EventName, waitingEvent.EventData);
-                                
+
                                 await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
-                                
+
                                 await uow.CompleteAsync();
                             }
-                            
+
                             Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
                         }
                     }
@@ -120,7 +120,7 @@ namespace Volo.Abp.EventBus.Boxes
             }
 
             await Inbox.DeleteOldEventsAsync();
-            
+
             LastCleanTime = DateTime.Now;
         }
     }

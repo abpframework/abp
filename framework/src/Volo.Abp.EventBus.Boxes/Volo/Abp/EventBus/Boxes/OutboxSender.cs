@@ -15,7 +15,7 @@ namespace Volo.Abp.EventBus.Boxes
     public class OutboxSender : IOutboxSender, ITransientDependency
     {
         protected IServiceProvider ServiceProvider { get; }
-        protected AbpTimer Timer { get; }
+        protected AbpAsyncTimer Timer { get; }
         protected IDistributedEventBus DistributedEventBus { get; }
         protected IDistributedLockProvider DistributedLockProvider { get; }
         protected IEventOutbox Outbox { get; private set; }
@@ -25,8 +25,8 @@ namespace Volo.Abp.EventBus.Boxes
 
         public OutboxSender(
             IServiceProvider serviceProvider,
-            AbpTimer timer,
-            IDistributedEventBus distributedEventBus, 
+            AbpAsyncTimer timer,
+            IDistributedEventBus distributedEventBus,
             IDistributedLockProvider distributedLockProvider)
         {
             ServiceProvider = serviceProvider;
@@ -51,10 +51,10 @@ namespace Volo.Abp.EventBus.Boxes
             Timer.Stop(cancellationToken);
             return Task.CompletedTask;
         }
-        
-        private void TimerOnElapsed(object sender, EventArgs e)
+
+        private async Task TimerOnElapsed(AbpAsyncTimer arg)
         {
-            AsyncHelper.RunSync(RunAsync);
+            await RunAsync();
         }
 
         protected virtual async Task RunAsync()
@@ -64,7 +64,7 @@ namespace Volo.Abp.EventBus.Boxes
                 if (handle != null)
                 {
                     Logger.LogDebug("Obtained the distributed lock: " + DistributedLockName);
-                    
+
                     while (true)
                     {
                         var waitingEvents = await Outbox.GetWaitingEventsAsync(1000); //TODO: Config?
@@ -74,7 +74,7 @@ namespace Volo.Abp.EventBus.Boxes
                         }
 
                         Logger.LogInformation($"Found {waitingEvents.Count} events in the outbox.");
-                
+
                         foreach (var waitingEvent in waitingEvents)
                         {
                             await DistributedEventBus
@@ -82,7 +82,7 @@ namespace Volo.Abp.EventBus.Boxes
                                 .PublishRawAsync(waitingEvent.Id, waitingEvent.EventName, waitingEvent.EventData);
 
                             await Outbox.DeleteAsync(waitingEvent.Id);
-                    
+
                             Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
                         }
                     }
