@@ -11,7 +11,6 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus.Boxes
 {
-    //TODO: use distributed lock!
     public class OutboxSender : IOutboxSender, ITransientDependency
     {
         protected IServiceProvider ServiceProvider { get; }
