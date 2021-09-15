@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Data
@@ -11,98 +11,167 @@ namespace Volo.Abp.Data
     //TODO: Create a Volo.Abp.Data.Filtering namespace?
     public class DataFilter : IDataFilter, ISingletonDependency
     {
-        private readonly ConcurrentDictionary<Type, object> _filters;
+        public IReadOnlyDictionary<Type, IBasicDataFilter> ReadOnlyFilters => Filters;
 
-        private readonly IServiceProvider _serviceProvider;
+        protected readonly ConcurrentDictionary<Type, IBasicDataFilter> Filters = new();
+
+        protected readonly IServiceProvider ServiceProvider;
 
         public DataFilter(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _filters = new ConcurrentDictionary<Type, object>();
+            ServiceProvider = serviceProvider;
         }
 
-        public IDisposable Enable<TFilter>()
+        public virtual IDisposable Enable<TFilter>()
             where TFilter : class
         {
-            return GetFilter<TFilter>().Enable();
+            return GetOrAddFilter<TFilter>().Enable();
         }
 
-        public IDisposable Disable<TFilter>()
+        public virtual IDisposable Disable<TFilter>()
             where TFilter : class
         {
-            return GetFilter<TFilter>().Disable();
+            return GetOrAddFilter<TFilter>().Disable();
         }
 
-        public bool IsEnabled<TFilter>()
+        public virtual bool IsActive<TFilter>()
             where TFilter : class
         {
-            return GetFilter<TFilter>().IsEnabled;
+            return GetOrAddFilter<TFilter>().IsActive;
         }
 
-        private IDataFilter<TFilter> GetFilter<TFilter>()
+        public virtual bool IsActive(Type filterType)
+        {
+            return GetOrAddFilter(filterType).IsActive;
+        }
+
+        public virtual bool IsEnabled<TFilter>()
             where TFilter : class
         {
-            return _filters.GetOrAdd(
+            return GetOrAddFilter<TFilter>().IsEnabled;
+        }
+
+        public virtual bool IsEnabled(Type filterType)
+        {
+            return GetOrAddFilter(filterType).IsEnabled;
+        }
+
+        public virtual IDataFilter<TFilter> GetOrAddFilter<TFilter>()
+            where TFilter : class
+        {
+            return Filters.GetOrAdd(
                 typeof(TFilter),
-                () => _serviceProvider.GetRequiredService<IDataFilter<TFilter>>()
+                () => ServiceProvider.GetRequiredService<IDataFilter<TFilter>>()
             ) as IDataFilter<TFilter>;
+        }
+
+        public virtual IBasicDataFilter GetOrAddFilter(Type filterType)
+        {
+            if (filterType == null
+                // Should have no more than 1 interface type argument
+                || filterType.GenericTypeArguments.Length > 1
+                // Should be a generic filter interface e.g. ISoftDelete without unbound generic parameters e.g. ISoftDelete<>
+                || (filterType.GenericTypeArguments.Length == 0 && (!filterType.IsInterface || filterType.ContainsGenericParameters))
+                // Should be a filter interface with a concrete parameter e.g. Blog (filter == ISoftDelete<Blog>)
+                || (filterType.GenericTypeArguments.Length == 1 && filterType.GenericTypeArguments[0].IsGenericType))
+            {
+                throw new AbpException($"The {nameof(filterType)} \"{(filterType == null ? "<null>" : filterType.GetFriendlyName())}\"" +
+                    " is not a valid data filter type");
+            }
+
+            return Filters.GetOrAdd(
+                filterType,
+                (type) => ServiceProvider.GetRequiredService(
+                    typeof(IDataFilter<>).MakeGenericType(type)) as IBasicDataFilter
+            );
         }
     }
 
     public class DataFilter<TFilter> : IDataFilter<TFilter>
         where TFilter : class
     {
-        public bool IsEnabled
+        public virtual bool IsActive => Filter.Value != null && Filter.Value.IsActive;
+
+        public virtual bool IsEnabled
         {
             get
             {
                 EnsureInitialized();
-                return _filter.Value.IsEnabled;
+                return Filter.Value.IsEnabled;
             }
         }
 
-        private readonly AbpDataFilterOptions _options;
+        protected readonly AbpDataFilterOptions Options;
 
-        private readonly AsyncLocal<DataFilterState> _filter;
+        protected readonly AsyncLocal<DataFilterState> Filter;
 
         public DataFilter(IOptions<AbpDataFilterOptions> options)
         {
-            _options = options.Value;
-            _filter = new AsyncLocal<DataFilterState>();
+            Options = options.Value;
+            Filter = new AsyncLocal<DataFilterState>();
         }
 
-        public IDisposable Enable()
+        public virtual IDisposable Enable()
         {
-            if (IsEnabled)
-            {
-                return NullDisposable.Instance;
-            }
+            EnsureInitialized();
 
-            _filter.Value.IsEnabled = true;
-
-            return new DisposeAction(() => Disable());
-        }
-
-        public IDisposable Disable()
-        {
             if (!IsEnabled)
             {
-                return NullDisposable.Instance;
+                Filter.Value.IsEnabled = true;
             }
 
-            _filter.Value.IsEnabled = false;
+            if (IsActive)
+            {
+                return new DisposeAction(() => {
+                    if (IsEnabled) Filter.Value.IsEnabled = false;
+                });
+            }
+            else
+            {
+                Filter.Value.IsActive = true;
 
-            return new DisposeAction(() => Enable());
+                return new DisposeAction(() => {
+                    Filter.Value.IsActive = false;
+                    if (IsEnabled) Filter.Value.IsEnabled = false;
+                });
+            }
         }
 
-        private void EnsureInitialized()
+        public virtual IDisposable Disable()
         {
-            if (_filter.Value != null)
+            EnsureInitialized();
+
+            if (IsEnabled)
+            {
+                Filter.Value.IsEnabled = false;
+            }
+
+            if (IsActive)
+            {
+                return new DisposeAction(() => {
+                    if (!IsEnabled) Filter.Value.IsEnabled = true;
+                });
+            }
+            else
+            {
+                Filter.Value.IsActive = true;
+
+                return new DisposeAction(() => {
+                    Filter.Value.IsActive = false;
+                    if (!IsEnabled) Filter.Value.IsEnabled = true;
+                });
+            }
+        }
+
+        protected virtual void EnsureInitialized()
+        {
+            if (Filter.Value != null)
             {
                 return;
             }
 
-            _filter.Value = _options.DefaultStates.GetOrDefault(typeof(TFilter))?.Clone() ?? new DataFilterState(true);
+            Filter.Value = Options.DefaultStates.GetOrDefault(typeof(TFilter))?.Clone()
+                ?? new DataFilterState(Options.DefaultFilterState, false);
         }
     }
 }
