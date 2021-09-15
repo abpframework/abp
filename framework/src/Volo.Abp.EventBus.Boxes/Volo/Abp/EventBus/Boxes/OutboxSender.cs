@@ -82,11 +82,13 @@ namespace Volo.Abp.EventBus.Boxes
                         foreach (var waitingEvent in waitingEvents)
                         {
                             await DistributedEventBus
-                                .AsRawEventPublisher()
-                                .PublishRawAsync(waitingEvent.Id, waitingEvent.EventName, waitingEvent.EventData);
+                                .AsSupportsEventBoxes()
+                                .PublishFromOutboxAsync(
+                                    waitingEvent,
+                                    OutboxConfig
+                                );
 
                             await Outbox.DeleteAsync(waitingEvent.Id);
-
                             Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
                         }
                     }

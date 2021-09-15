@@ -103,8 +103,8 @@ namespace Volo.Abp.EventBus.Boxes
                             using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
                             {
                                 await DistributedEventBus
-                                    .AsRawEventPublisher()
-                                    .ProcessRawAsync(InboxConfig, waitingEvent.EventName, waitingEvent.EventData);
+                                    .AsSupportsEventBoxes()
+                                    .ProcessFromInboxAsync(waitingEvent, InboxConfig);
 
                                 await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
 

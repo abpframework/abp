@@ -188,13 +188,17 @@ namespace Volo.Abp.EventBus.Rebus
             return false;
         }
 
-        public override Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData)
+        public override Task PublishFromOutboxAsync(
+            OutgoingEventInfo outgoingEvent,
+            OutboxConfig outboxConfig)
         {
             /* TODO: IMPLEMENT! */
             throw new NotImplementedException();
         }
 
-        public override Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes)
+        public override Task ProcessFromInboxAsync(
+            IncomingEventInfo incomingEvent,
+            InboxConfig inboxConfig)
         {
             /* TODO: IMPLEMENT! */
             throw new NotImplementedException();

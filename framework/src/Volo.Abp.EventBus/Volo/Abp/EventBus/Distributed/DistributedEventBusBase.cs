@@ -10,7 +10,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed
 {
-    public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus, IRawEventPublisher
+    public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus, ISupportsEventBoxes
     {
         protected IGuidGenerator GuidGenerator { get; }
         protected IClock Clock { get; }
@@ -80,8 +80,14 @@ namespace Volo.Abp.EventBus.Distributed
             await PublishToEventBusAsync(eventType, eventData);
         }
 
-        public abstract Task PublishRawAsync(Guid eventId, string eventName, byte[] eventData);
-        public abstract Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes);
+        public abstract Task PublishFromOutboxAsync(
+            OutgoingEventInfo outgoingEvent,
+            OutboxConfig outboxConfig
+        );
+        
+        public abstract Task ProcessFromInboxAsync(
+            IncomingEventInfo incomingEvent,
+            InboxConfig inboxConfig);
 
         private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
         {

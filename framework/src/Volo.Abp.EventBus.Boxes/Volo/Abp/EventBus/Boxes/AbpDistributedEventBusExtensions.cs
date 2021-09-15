@@ -4,12 +4,12 @@ namespace Volo.Abp.EventBus.Boxes
 {
     public static class AbpDistributedEventBusExtensions
     {
-        public static IRawEventPublisher AsRawEventPublisher(this IDistributedEventBus eventBus)
+        public static ISupportsEventBoxes AsSupportsEventBoxes(this IDistributedEventBus eventBus)
         {
-            var rawPublisher = eventBus as IRawEventPublisher;
+            var rawPublisher = eventBus as ISupportsEventBoxes;
             if (rawPublisher == null)
             {
-                throw new AbpException($"Given type ({eventBus.GetType().AssemblyQualifiedName}) should implement {nameof(IRawEventPublisher)}!");
+                throw new AbpException($"Given type ({eventBus.GetType().AssemblyQualifiedName}) should implement {nameof(ISupportsEventBoxes)}!");
             }
             
             return rawPublisher;

@@ -201,32 +201,33 @@ namespace Volo.Abp.EventBus.Kafka
             unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
 
-        public override Task PublishRawAsync(
-            Guid eventId,
-            string eventName,
-            byte[] eventData)
+        public override Task PublishFromOutboxAsync(
+            OutgoingEventInfo outgoingEvent,
+            OutboxConfig outboxConfig)
         {
             return PublishAsync(
                 AbpKafkaEventBusOptions.TopicName,
-                eventName,
-                eventData,
+                outgoingEvent.EventName,
+                outgoingEvent.EventData,
                 new Headers
                 {
-                    { "messageId", System.Text.Encoding.UTF8.GetBytes(eventId.ToString("N")) }
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(outgoingEvent.Id.ToString("N")) }
                 },
                 null
             );
         }
 
-        public override async Task ProcessRawAsync(InboxConfig inboxConfig, string eventName, byte[] eventDataBytes)
+        public override async Task ProcessFromInboxAsync(
+            IncomingEventInfo incomingEvent,
+            InboxConfig inboxConfig)
         {
-            var eventType = EventTypes.GetOrDefault(eventName);
+            var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
             if (eventType == null)
             {
                 return;
             }
             
-            var eventData = Serializer.Deserialize(eventDataBytes, eventType);
+            var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
             var exceptions = new List<Exception>();
             await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
             if (exceptions.Any())
