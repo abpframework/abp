@@ -31,7 +31,7 @@ namespace Volo.Abp.Json.SystemTextJson
             options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 
             // Remove after this PR.
-            // https://github.com/dotnet/runtime/pull/51739
+            // https://github.com/dotnet/runtime/pull/57525
             options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
         }
     }
