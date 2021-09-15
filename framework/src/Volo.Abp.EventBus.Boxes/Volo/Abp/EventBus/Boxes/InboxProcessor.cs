@@ -84,8 +84,6 @@ namespace Volo.Abp.EventBus.Boxes
             {
                 if (handle != null)
                 {
-                    Logger.LogDebug("Obtained the distributed lock: " + DistributedLockName);
-
                     await DeleteOldEventsAsync();
 
                     while (true)
