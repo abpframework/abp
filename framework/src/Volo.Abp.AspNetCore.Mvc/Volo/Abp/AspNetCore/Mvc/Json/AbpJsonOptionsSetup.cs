@@ -30,6 +30,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
             options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
             options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
+
+            // Remove after this PR.
+            // https://github.com/dotnet/runtime/pull/57525
+            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
         }
     }
 }
