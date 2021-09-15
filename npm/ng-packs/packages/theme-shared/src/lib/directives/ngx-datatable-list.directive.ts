@@ -19,7 +19,7 @@ import {
 } from '../tokens/ngx-datatable-messages.token';
 
 @Directive({
-  // tslint:disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[list]',
   exportAs: 'ngxDatatableList',
 })

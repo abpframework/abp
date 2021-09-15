@@ -1,6 +1,10 @@
 {
   "items": [
     {
+      "text": "快速入门",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
       "text": "入门",
       "items": [
         {

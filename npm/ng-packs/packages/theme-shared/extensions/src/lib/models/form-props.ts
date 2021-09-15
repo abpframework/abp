@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { ABP } from '@abp/ng.core';
 import { Injector, Type } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
@@ -76,7 +75,6 @@ export class FormPropData<R = any> extends PropData<R> {
   constructor(injector: Injector, public readonly record: R) {
     super();
 
-    // tslint:disable-next-line
     this.getInjected = injector.get.bind(injector);
   }
 }

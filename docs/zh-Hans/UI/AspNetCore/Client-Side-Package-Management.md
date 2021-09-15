@@ -18,7 +18,7 @@ ABP是一个模块化平台. 每个开发人员都可以创建模块, 模块应�
 **标准包**的好处是:
 
 * 它取决于包装的**标准版本**. 取决于此包是**安全**,因为所有模块都依赖于相同的版本.
-* 它包含将库资源(js,css,img...文件)从**node_modules**文件夹复制到**wwwroot/libs**文件夹的gulp任务. 有关更多信息, 请参阅 *映射库资源* 部分.
+* 它包含将库资源(js,css,img...文件)从**node_modules**文件夹复制到**wwwroot/libs**文件夹. 有关更多信息, 请参阅 *映射库资源* 部分.
 
 依赖标准包装很容易. 只需像往常一样将它添加到**package.json**文件中. 例如:
 
@@ -61,7 +61,7 @@ yarn
 
 下一个挑战是将所需的资源(js,css,img ...文件)从`node_modules`复制到**wwwroot**文件夹内的文件夹中,以使其可供客户端/浏览器访问.
 
-ABP将基于[Gulp](https://gulpjs.com/)的任务定义为**将资源**从**node_modules**复制到**wwwroot/libs**文件夹. 每个**标准包**(参见*@ABP NPM Packages*部分)定义了自己文件的映射. 因此, 大多数情况你只配置依赖项.
+ABP的 `install-libs` 命令**将资源**从**node_modules**复制到**wwwroot/libs**文件夹. 每个**标准包**(参见*@ABP NPM Packages*部分)定义了自己文件的映射. 因此, 大多数情况你只配置依赖项.
 
 **启动模板**已经配置为开箱即用的所有这些. 本节将介绍配置选项.
 
@@ -97,17 +97,15 @@ mappings: {
 }
 ````
 
-#### 使用 Gulp
+#### install-libs 命令
 
-正确配置`abp.resourcemapping.js`文件后, 可以从命令行运行gulp命令:
+正确配置`abp.resourcemapping.js`文件后, 可以从命令行运行ABP CLI命令:
 
+````bash
+abp install-libs
 ````
-gulp
-````
 
-当你运行`gulp`时,所有包都会将自己的资源复制到**wwwroot/libs**文件夹中. 只有在**package.json**文件中对依赖项进行更改时, 才需要运行`yarn＆gulp`.
-
-> 运行Gulp命令时, 使用package.json文件解析应用程序的依赖关系. Gulp任务自动发现并映射来自所有依赖项的所有资源(递归).
+当你运行这个命令时,所有包都会将自己的资源复制到**wwwroot/libs**文件夹中. 只有在**package.json**文件中对依赖项进行更改时, 才需要运行`abp install-libs`.
 
 #### 参见
 

@@ -1,6 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, Input, Optional, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
-import snq from 'snq';
 
 /**
  *
@@ -22,15 +21,14 @@ export class VisibilityDirective implements AfterViewInit {
       this.focusedElement = this.elRef.nativeElement;
     }
 
-    let observer: MutationObserver;
-    observer = new MutationObserver(mutations => {
+    const observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
         if (!mutation.target) return;
 
-        const htmlNodes = snq(
-          () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
-          [],
-        );
+        const htmlNodes =
+          Array.from(mutation.target.childNodes || []).filter(
+            node => node instanceof HTMLElement,
+          ) || [];
 
         if (!htmlNodes.length) {
           this.removeFromDOM();
@@ -43,11 +41,10 @@ export class VisibilityDirective implements AfterViewInit {
     });
 
     setTimeout(() => {
-      const htmlNodes = snq(
-        () =>
-          Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
-        [],
-      );
+      const htmlNodes =
+        Array.from(this.focusedElement.childNodes || []).filter(
+          node => node instanceof HTMLElement,
+        ) || [];
 
       if (!htmlNodes.length) this.removeFromDOM();
     }, 0);

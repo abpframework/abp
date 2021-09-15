@@ -28,6 +28,9 @@
                 <div class="card">
                     <div class="card-body">
                         <form method="post" id="edit-post-form">
+
+                            <abp-input asp-for="Post.ConcurrencyStamp" />
+
                             <abp-input asp-for="Post.Title" auto-focus="true" />
 
                             <abp-alert

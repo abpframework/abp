@@ -18,7 +18,7 @@ namespace Volo.Abp.Cli
         }
 
         [Fact]
-        public async Task IllegalProjectName_Test()
+        public async Task Illegal_ProjectName_Test()
         {
             var illegalProjectNames = new[]
             {
@@ -39,21 +39,19 @@ namespace Volo.Abp.Cli
         }
 
         [Fact]
-        public async Task ParentDirectoryContain_Test()
+        public async Task Parent_Directory_Char_Contains_Test()
         {
 
             var args = new CommandLineArgs("new", "Test..Test");
             await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
         }
 
-
         [Fact]
-        public async Task Has_Illegel_Keyword_Test()
+        public async Task Contains_Illegal_Keyword_Test()
         {
             var illegalKeywords = new[]
             {
-               "Acme.Blazor",
-               "MyBlazor",
+               "Blazor"
             };
 
             foreach (var illegalKeyword in illegalKeywords)

@@ -1,13 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[abp-table-empty-message]',
   template: `
     <td class="text-center" [attr.colspan]="colspan">
       {{ emptyMessage | abpLocalization }}
     </td>
-  `
+  `,
 })
 export class TableEmptyMessageComponent {
   @Input()

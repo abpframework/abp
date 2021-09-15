@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -32,13 +33,11 @@ namespace Volo.Abp.PermissionManagement
         {
             using (CurrentTenant.Change(tenantId))
             {
-                foreach (var permissionName in grantedPermissions)
-                {
-                    if (await PermissionGrantRepository.FindAsync(permissionName, providerName, providerKey) != null)
-                    {
-                        continue;
-                    }
+                var names = grantedPermissions.ToArray();
+                var existsPermissionGrants = (await PermissionGrantRepository.GetListAsync(names, providerName, providerKey)).Select(x => x.Name).ToList();
 
+                foreach (var permissionName in names.Except(existsPermissionGrants))
+                {
                     await PermissionGrantRepository.InsertAsync(
                         new PermissionGrant(
                             GuidGenerator.Create(),

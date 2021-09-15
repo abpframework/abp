@@ -5,8 +5,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-    <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
-    <PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
