@@ -2,7 +2,7 @@
   <PropertyGroup>
 
     <!-- All Microsoft packages -->
-    <MicrosoftPackageVersion>6.0.0-preview.*</MicrosoftPackageVersion>
+    <MicrosoftPackageVersion>6.0.0-rc.*</MicrosoftPackageVersion>
 
     <!-- Microsoft.NET.Test.Sdk https://www.nuget.org/packages/Microsoft.NET.Test.Sdk -->
     <MicrosoftNETTestSdkPackageVersion>16.9.1</MicrosoftNETTestSdkPackageVersion>
