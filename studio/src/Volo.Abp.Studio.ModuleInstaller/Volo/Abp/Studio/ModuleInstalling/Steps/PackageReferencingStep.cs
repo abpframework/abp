@@ -45,6 +45,11 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
                     $"*{referencePackage.Name}.csproj",
                     SearchOption.AllDirectories).FirstOrDefault();
 
+                if (referenceProjectPath == null)
+                {
+                    return;
+                }
+
                 await _csprojFileManager.AddProjectReferenceAsync(
                     csprojFilePath,
                     referenceProjectPath);
