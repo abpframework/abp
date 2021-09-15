@@ -53,6 +53,12 @@ namespace Volo.Abp.AspNetCore.Mvc
                     .EnableAll();
             });
 
+            context.Services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultForbidScheme = "Cookie";
+            }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
+
             context.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyClaimTestPolicy", policy =>
@@ -116,6 +122,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAbpClaimsMap();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();

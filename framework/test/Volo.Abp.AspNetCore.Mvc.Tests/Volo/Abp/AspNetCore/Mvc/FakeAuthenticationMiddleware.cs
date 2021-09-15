@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Authorization
+namespace Volo.Abp.AspNetCore.Mvc
 {
     public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
     {
