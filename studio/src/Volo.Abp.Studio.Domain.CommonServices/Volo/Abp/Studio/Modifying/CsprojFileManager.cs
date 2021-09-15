@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using Volo.Abp.DependencyInjection;
@@ -13,10 +14,19 @@ namespace Volo.Abp.Studio.Packages.Modifying
         {
             var document = await GetXmlDocumentAsync(filePath);
 
-            if (document.SelectNodes($"/Project/ItemGroup/ProjectReference[starts-with(@Include, '{projectToReference}')]").Count > 0)
+            /*if (document.SelectNodes($"/Project/ItemGroup/ProjectReference[ends-with(@Include, '{Path.GetFileName(projectToReference)}')]").Count > 0)
             {
-                // Project reference is already added.
                 return;
+            }*/
+
+            var packageReferenceToSameProject =
+                document.SelectNodes(
+                    $"/Project/ItemGroup/PackageReference[starts-with(@Include, '{Path.GetFileName(projectToReference).RemovePostFix(".csproj")}')]"
+                    );
+
+            if (packageReferenceToSameProject.Count > 0)
+            {
+                packageReferenceToSameProject[0].ParentNode.RemoveChild(packageReferenceToSameProject[0]);
             }
 
             var relativePath = PathHelper.GetRelativePath(filePath, projectToReference);
