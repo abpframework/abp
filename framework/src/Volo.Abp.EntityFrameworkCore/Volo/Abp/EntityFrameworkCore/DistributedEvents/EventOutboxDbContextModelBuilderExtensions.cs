@@ -15,6 +15,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
                 b.ConfigureByConvention();
                 b.Property(x => x.EventName).IsRequired().HasMaxLength(OutgoingEventRecord.MaxEventNameLength);
                 b.Property(x => x.EventData).IsRequired();
+
+                b.HasIndex(x => x.CreationTime);
             });
         }
     }
