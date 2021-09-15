@@ -19,7 +19,7 @@
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-        <ProjectReference Include="..\Volo.Blogging.Admin.HttpApi\Volo.Blogging.Admin.HttpApi.csproj" />
+        <ProjectReference Include="..\Volo.Blogging.Admin.Application.Contracts\Volo.Blogging.Admin.Application.Contracts.csproj" />
         <PackageReference Include="Markdig.Signed" Version="0.20.0" />
     </ItemGroup>
 
@@ -32,10 +32,14 @@
         <EmbeddedResource Include="Pages\**\*.css" />
         <EmbeddedResource Include="Components\**\*.js" />
         <EmbeddedResource Include="Components\**\*.css" />
+        <EmbeddedResource Include="wwwroot\**\*.js" />
+        <EmbeddedResource Include="wwwroot\**\*.css" />
         <Content Remove="Pages\**\*.js" />
         <Content Remove="Pages\**\*.css" />
         <Content Remove="Components\**\*.js" />
         <Content Remove="Components\**\*.css" />
+        <Content Remove="wwwroot\**\*.js" />
+        <Content Remove="wwwroot\**\*.css" />
         <Content Remove="compilerconfig.json" />
     </ItemGroup>
 

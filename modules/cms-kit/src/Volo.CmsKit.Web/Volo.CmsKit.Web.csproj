@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Admin.Web\Volo.CmsKit.Admin.Web.csproj" />
-    <ProjectReference Include="..\Volo.CmsKit.HttpApi\Volo.CmsKit.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
