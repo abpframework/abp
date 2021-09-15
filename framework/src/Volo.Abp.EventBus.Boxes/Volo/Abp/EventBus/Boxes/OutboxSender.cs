@@ -21,6 +21,9 @@ namespace Volo.Abp.EventBus.Boxes
         protected OutboxConfig OutboxConfig { get; private set; }
         protected string DistributedLockName => "Outbox_" + OutboxConfig.Name;
         public ILogger<OutboxSender> Logger { get; set; }
+        
+        protected CancellationTokenSource StoppingTokenSource { get; }
+        protected CancellationToken StoppingToken { get; }
 
         public OutboxSender(
             IServiceProvider serviceProvider,
@@ -35,6 +38,8 @@ namespace Volo.Abp.EventBus.Boxes
             Timer.Period = 2000; //TODO: Config?
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<OutboxSender>.Instance;
+            StoppingTokenSource = new CancellationTokenSource();
+            StoppingToken = StoppingTokenSource.Token;
         }
 
         public virtual Task StartAsync(OutboxConfig outboxConfig, CancellationToken cancellationToken = default)
@@ -47,7 +52,9 @@ namespace Volo.Abp.EventBus.Boxes
 
         public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
+            StoppingTokenSource.Cancel();
             Timer.Stop(cancellationToken);
+            StoppingTokenSource.Dispose();
             return Task.CompletedTask;
         }
 
@@ -62,8 +69,6 @@ namespace Volo.Abp.EventBus.Boxes
             {
                 if (handle != null)
                 {
-                    Logger.LogDebug("Obtained the distributed lock: " + DistributedLockName);
-
                     while (true)
                     {
                         var waitingEvents = await Outbox.GetWaitingEventsAsync(1000); //TODO: Config?
@@ -89,7 +94,7 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await Task.Delay(7000); //TODO: Can we pass a cancellation token to cancel on shutdown? (Config?)
+                    await TaskDelayHelper.DelayAsync(15000, StoppingToken); //TODO: Config?
                 }
             }
         }

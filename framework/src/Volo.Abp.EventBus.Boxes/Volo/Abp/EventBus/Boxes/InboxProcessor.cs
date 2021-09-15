@@ -28,6 +28,8 @@ namespace Volo.Abp.EventBus.Boxes
 
         protected string DistributedLockName => "Inbox_" + InboxConfig.Name;
         public ILogger<InboxProcessor> Logger { get; set; }
+        protected CancellationTokenSource StoppingTokenSource { get; }
+        protected CancellationToken StoppingToken { get; }
 
         public InboxProcessor(
             IServiceProvider serviceProvider,
@@ -46,6 +48,8 @@ namespace Volo.Abp.EventBus.Boxes
             Timer.Period = 2000; //TODO: Config?
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
+            StoppingTokenSource = new CancellationTokenSource();
+            StoppingToken = StoppingTokenSource.Token;
         }
 
         private async Task TimerOnElapsed(AbpAsyncTimer arg)
@@ -63,13 +67,20 @@ namespace Volo.Abp.EventBus.Boxes
 
         public Task StopAsync(CancellationToken cancellationToken = default)
         {
+            StoppingTokenSource.Cancel();
             Timer.Stop(cancellationToken);
+            StoppingTokenSource.Dispose();
             return Task.CompletedTask;
         }
 
         protected virtual async Task RunAsync()
         {
-            await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName))
+            if (StoppingToken.IsCancellationRequested)
+            {
+                return;
+            }
+            
+            await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName, cancellationToken: StoppingToken))
             {
                 if (handle != null)
                 {
@@ -79,7 +90,7 @@ namespace Volo.Abp.EventBus.Boxes
 
                     while (true)
                     {
-                        var waitingEvents = await Inbox.GetWaitingEventsAsync(1000); //TODO: Config?
+                        var waitingEvents = await Inbox.GetWaitingEventsAsync(1000); //TODO: Config? Pass StoppingToken!
                         if (waitingEvents.Count <= 0)
                         {
                             break;
@@ -107,7 +118,7 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await Task.Delay(7000); //TODO: Can we pass a cancellation token to cancel on shutdown? (Config?)
+                    await TaskDelayHelper.DelayAsync(15000, StoppingToken); //TODO: Config?
                 }
             }
         }

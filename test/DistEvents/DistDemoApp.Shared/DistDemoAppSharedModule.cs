@@ -14,7 +14,7 @@ namespace DistDemoApp
         typeof(AbpAutofacModule),
         typeof(AbpDddDomainModule),
         typeof(AbpEventBusBoxesModule)
-        )]
+        )] 
     public class DistDemoAppSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
