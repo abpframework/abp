@@ -19,7 +19,7 @@
     <PackageReference Include="NuGet.Versioning" Version="5.9.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="System.Security.Permissions" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-4.final" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />

@@ -34,7 +34,7 @@ namespace Volo.Abp.Cli.Commands.Services
         public async Task DownloadModuleAsync(string moduleName, string outputFolder, string version, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath, AbpCommandLineOptions options)
         {
             Logger.LogInformation("Downloading source code of " + moduleName);
-            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation("Version: " + (version ?? "Latest"));
             Logger.LogInformation("Output folder: " + outputFolder);
 
             var result = await ModuleProjectBuilder.BuildAsync(
@@ -100,7 +100,7 @@ namespace Volo.Abp.Cli.Commands.Services
         public async Task DownloadNugetPackageAsync(string packageName, string outputFolder, string version)
         {
             Logger.LogInformation("Downloading source code of " + packageName);
-            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation("Version: " + (version ?? "Latest"));
             Logger.LogInformation("Output folder: " + outputFolder);
 
             var result = await NugetPackageProjectBuilder.BuildAsync(
@@ -151,7 +151,7 @@ namespace Volo.Abp.Cli.Commands.Services
         public async Task DownloadNpmPackageAsync(string packageName, string outputFolder, string version)
         {
             Logger.LogInformation("Downloading source code of " + packageName);
-            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation("Version: " + (version ?? "Latest"));
             Logger.LogInformation("Output folder: " + outputFolder);
 
             var result = await NpmPackageProjectBuilder.BuildAsync(
