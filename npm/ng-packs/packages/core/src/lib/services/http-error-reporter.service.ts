@@ -11,7 +11,7 @@ export class HttpErrorReporterService {
     return this._reporter$.asObservable();
   }
 
-  get erros$() {
+  get errors$() {
     return this._errors$.asObservable();
   }
 
@@ -24,6 +24,4 @@ export class HttpErrorReporterService {
     this._errors$.next([...this.errors, error]);
     return of();
   };
-
-  constructor() {}
 }
