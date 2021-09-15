@@ -6,13 +6,13 @@ namespace Volo.Abp.EventBus.Boxes
     {
         public static ISupportsEventBoxes AsSupportsEventBoxes(this IDistributedEventBus eventBus)
         {
-            var rawPublisher = eventBus as ISupportsEventBoxes;
-            if (rawPublisher == null)
+            var supportsEventBoxes = eventBus as ISupportsEventBoxes;
+            if (supportsEventBoxes == null)
             {
                 throw new AbpException($"Given type ({eventBus.GetType().AssemblyQualifiedName}) should implement {nameof(ISupportsEventBoxes)}!");
             }
             
-            return rawPublisher;
+            return supportsEventBoxes;
         } 
     }
 }
