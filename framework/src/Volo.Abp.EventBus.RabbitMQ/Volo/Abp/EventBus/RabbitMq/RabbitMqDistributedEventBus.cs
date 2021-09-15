@@ -20,8 +20,6 @@ using Volo.Abp.Uow;
 namespace Volo.Abp.EventBus.RabbitMq
 {
     /* TODO: How to handle unsubscribe to unbind on RabbitMq (may not be possible for)
-     * TODO: Implement Retry system
-     * TODO: Should be improved
      */
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
@@ -223,8 +221,6 @@ namespace Volo.Abp.EventBus.RabbitMq
             IncomingEventInfo incomingEvent,
             InboxConfig inboxConfig)
         {
-            //TODO: We have a duplication in logic and also with the kafka side!
-            
             var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
             if (eventType == null)
             {
