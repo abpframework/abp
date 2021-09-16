@@ -31,23 +31,19 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
                                                        $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
                                                        $"{Environment.NewLine}namespace <namespace>" +
                                                        $"{Environment.NewLine}{{" +
-                                                       $"{Environment.NewLine}    public partial class <className>" +
+                                                       $"{Environment.NewLine}    [Dependency(ReplaceServices = true)]" +
+                                                       $"{Environment.NewLine}    [ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
+                                                       $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
                                                        $"{Environment.NewLine}    {{" +
                                                        $"{Environment.NewLine}        <method placeholder>" +
                                                        $"{Environment.NewLine}    }}" +
                                                        $"{Environment.NewLine}}}" +
                                                        $"{Environment.NewLine}";
         private readonly string _clientProxyTemplate = "// This file is part of <className>, you can customize it here" +
-                                                        $"{Environment.NewLine}using Volo.Abp.DependencyInjection;" +
-                                                        $"{Environment.NewLine}using Volo.Abp.Http.Client.ClientProxying;" +
-                                                        $"{Environment.NewLine}<using placeholder>" +
-                                                        $"{Environment.NewLine}" +
                                                         $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
                                                         $"{Environment.NewLine}namespace <namespace>" +
                                                         $"{Environment.NewLine}{{" +
-                                                        $"{Environment.NewLine}    [Dependency(ReplaceServices = true)]" +
-                                                        $"{Environment.NewLine}    [ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
-                                                        $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
+                                                        $"{Environment.NewLine}    public partial class <className>" +
                                                         $"{Environment.NewLine}    {{" +
                                                         $"{Environment.NewLine}    }}" +
                                                         $"{Environment.NewLine}}}" +
@@ -58,7 +54,9 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             "using System.Threading.Tasks;",
             "using Volo.Abp.Application.Dtos;",
             "using Volo.Abp.Http.Client;",
-            "using Volo.Abp.Http.Modeling;"
+            "using Volo.Abp.Http.Modeling;",
+            "using Volo.Abp.DependencyInjection;",
+            "using Volo.Abp.Http.Client.ClientProxying;"
         };
 
         public CSharpServiceProxyGenerator(
@@ -130,8 +128,6 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             var clientProxyBuilder = new StringBuilder(_clientProxyTemplate);
             clientProxyBuilder.Replace(ClassName, clientProxyName);
             clientProxyBuilder.Replace(Namespace, rootNamespace);
-            clientProxyBuilder.Replace(ServiceInterface, appServiceTypeName);
-            clientProxyBuilder.Replace(UsingPlaceholder, $"using {GetTypeNamespace(appServiceTypeFullName)};");
 
             var filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.cs");
             Directory.CreateDirectory(Path.GetDirectoryName(filePath));

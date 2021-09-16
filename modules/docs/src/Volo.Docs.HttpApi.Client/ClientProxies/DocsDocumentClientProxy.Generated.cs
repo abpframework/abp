@@ -4,13 +4,17 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Docs.Documents;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Docs.Documents.ClientProxies
 {
-    public partial class DocsDocumentClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IDocumentAppService), typeof(DocsDocumentClientProxy))]
+    public partial class DocsDocumentClientProxy : ClientProxyBase<IDocumentAppService>, IDocumentAppService
     {
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
         {

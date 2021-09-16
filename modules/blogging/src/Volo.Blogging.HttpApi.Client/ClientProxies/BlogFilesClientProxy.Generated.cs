@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Files;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Blogging.ClientProxies
 {
-    public partial class BlogFilesClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IFileAppService), typeof(BlogFilesClientProxy))]
+    public partial class BlogFilesClientProxy : ClientProxyBase<IFileAppService>, IFileAppService
     {
         public virtual async Task<RawFileDto> GetAsync(string name)
         {

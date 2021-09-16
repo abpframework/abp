@@ -4,13 +4,17 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Menus;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.Menus.ClientProxies
 {
-    public partial class MenuItemAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IMenuItemAdminAppService), typeof(MenuItemAdminClientProxy))]
+    public partial class MenuItemAdminClientProxy : ClientProxyBase<IMenuItemAdminAppService>, IMenuItemAdminAppService
     {
         public virtual async Task<ListResultDto<MenuItemDto>> GetListAsync()
         {

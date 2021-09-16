@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Abp.Identity.ClientProxies
 {
-    public partial class ProfileClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IProfileAppService), typeof(ProfileClientProxy))]
+    public partial class ProfileClientProxy : ClientProxyBase<IProfileAppService>, IProfileAppService
     {
         public virtual async Task<ProfileDto> GetAsync()
         {

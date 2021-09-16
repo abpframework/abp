@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp //TODO: Change namespace to Volo.Abp.Data
+﻿namespace Volo.Abp
 {
     /// <summary>
     /// Used to standardize soft deleting entities.

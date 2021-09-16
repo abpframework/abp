@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Comments;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.Comments.ClientProxies
 {
-    public partial class CommentAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ICommentAdminAppService), typeof(CommentAdminClientProxy))]
+    public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppService>, ICommentAdminAppService
     {
         public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
         {

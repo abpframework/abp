@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.FeatureManagement;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Abp.FeatureManagement.ClientProxies
 {
-    public partial class FeaturesClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IFeatureAppService), typeof(FeaturesClientProxy))]
+    public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, IFeatureAppService
     {
         public virtual async Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
         {
