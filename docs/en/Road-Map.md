@@ -10,12 +10,8 @@ This version will focus on the following works:
 
 * Upgrading to .NET 6.0 ([#9004](https://github.com/abpframework/abp/issues/9004))
 * Upgrading to Bootstrap 5.x ([#8922](https://github.com/abpframework/abp/issues/8922))
-* Alternative to IdentityServer4 ([#7221](https://github.com/abpframework/abp/issues/7221))
 * Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
-* Dapr integration ([#2183](https://github.com/abpframework/abp/issues/2183))
 * Publishing distributed events as transactional ([#6126](https://github.com/abpframework/abp/issues/6126))
-* Resource based authorization system ([#236](https://github.com/abpframework/abp/issues/236))
-* API Versioning system: finalize & document ([#497](https://github.com/abpframework/abp/issues/497))
 * Performance optimizations; Enabling .NET Trimming, using source generators and reducing reflection, etc.
 * Improving the abp.io platform and work more on contents and documents
 
@@ -27,6 +23,10 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 Here, a list of major items in the backlog we are considering to work on in the next versions.
 
+* ([#497](https://github.com/abpframework/abp/issues/497)) API Versioning system: finalize & document
+* ([#7221](https://github.com/abpframework/abp/issues/7221)) Alternative to IdentityServer4
+* ([#2183](https://github.com/abpframework/abp/issues/2183)) Dapr integration
+* ([#236](https://github.com/abpframework/abp/issues/236)) Resource based authorization system
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#1754](https://github.com/abpframework/abp/issues/1754) / Multi-lingual entities
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
