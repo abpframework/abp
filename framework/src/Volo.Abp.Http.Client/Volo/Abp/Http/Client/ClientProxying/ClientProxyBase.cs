@@ -52,15 +52,13 @@ namespace Volo.Abp.Http.Client.ClientProxying
         {
             var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.GetType().FullName))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
-            return new ClientProxyRequestContext(action, BuildActionArguments(action, arguments), typeof(TService));
-        }
-
-        protected virtual Dictionary<string, object> BuildActionArguments(ActionApiDescriptionModel action, object[] arguments)
-        {
-            return action.Parameters
-                .GroupBy(x => x.NameOnMethod)
-                .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments[i]))
-                .ToDictionary(x => x.Key, x => x.Value);
+            return new ClientProxyRequestContext(
+                action,
+                action.Parameters
+                    .GroupBy(x => x.NameOnMethod)
+                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments[i]))
+                    .ToDictionary(x => x.Key, x => x.Value),
+                typeof(TService));
         }
 
         protected virtual async Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
