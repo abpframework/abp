@@ -57,15 +57,10 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
         protected virtual Dictionary<string, object> BuildActionArguments(ActionApiDescriptionModel action, object[] arguments)
         {
-            var parameters = action.Parameters.GroupBy(x => x.NameOnMethod).Select(x => x.Key).ToList();
-            var dict = new Dictionary<string, object>();
-
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                dict[parameters[i]] = arguments[i];
-            }
-
-            return dict;
+            return action.Parameters
+                .GroupBy(x => x.NameOnMethod)
+                .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments[i]))
+                .ToDictionary(x => x.Key, x => x.Value);
         }
 
         protected virtual async Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
