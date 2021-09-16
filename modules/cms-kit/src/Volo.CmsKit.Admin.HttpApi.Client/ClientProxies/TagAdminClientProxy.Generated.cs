@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
 using System.Collections.Generic;
@@ -11,7 +13,9 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.Tags.ClientProxies
 {
-    public partial class TagAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ITagAdminAppService), typeof(TagAdminClientProxy))]
+    public partial class TagAdminClientProxy : ClientProxyBase<ITagAdminAppService>, ITagAdminAppService
     {
         public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
         {

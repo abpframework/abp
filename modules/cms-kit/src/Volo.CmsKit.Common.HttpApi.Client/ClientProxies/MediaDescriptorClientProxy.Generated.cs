@@ -4,13 +4,17 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.Abp.Content;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.MediaDescriptors.ClientProxies
 {
-    public partial class MediaDescriptorClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IMediaDescriptorAppService), typeof(MediaDescriptorClientProxy))]
+    public partial class MediaDescriptorClientProxy : ClientProxyBase<IMediaDescriptorAppService>, IMediaDescriptorAppService
     {
         public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id)
         {

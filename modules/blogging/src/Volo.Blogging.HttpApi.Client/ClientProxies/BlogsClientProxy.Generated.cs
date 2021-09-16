@@ -4,13 +4,17 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Blogging.ClientProxies
 {
-    public partial class BlogsClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IBlogAppService), typeof(BlogsClientProxy))]
+    public partial class BlogsClientProxy : ClientProxyBase<IBlogAppService>, IBlogAppService
     {
         public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
         {

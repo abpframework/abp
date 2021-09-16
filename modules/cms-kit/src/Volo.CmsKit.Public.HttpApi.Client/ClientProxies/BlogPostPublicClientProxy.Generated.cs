@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Public.Blogs;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Public.Blogs.ClientProxies
 {
-    public partial class BlogPostPublicClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
+    public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
     {
         public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
         {
