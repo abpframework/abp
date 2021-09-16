@@ -1,6 +1,11 @@
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { EnvironmentService, ProfileService, RestService } from '../services';
+import { UpdateProfileDto } from '../models';
+import {
+  EnvironmentService,
+  HttpErrorReporterService,
+  ProfileService,
+  RestService,
+} from '../services';
 import { CORE_OPTIONS } from '../tokens';
 
 describe('ProfileService', () => {
@@ -8,12 +13,8 @@ describe('ProfileService', () => {
   let environmentService: SpyObject<EnvironmentService>;
 
   const createHttp = createHttpFactory({
-    dataService: ProfileService,
-    providers: [
-      RestService,
-      { provide: CORE_OPTIONS, useValue: {} },
-      { provide: Store, useValue: {} },
-    ],
+    service: ProfileService,
+    providers: [RestService, HttpErrorReporterService, { provide: CORE_OPTIONS, useValue: {} }],
     mocks: [EnvironmentService],
   });
 
@@ -48,7 +49,9 @@ describe('ProfileService', () => {
       phoneNumber: '+123456',
       isExternal: false,
       hasPassword: false,
-    };
+      extraProperties: {},
+    } as UpdateProfileDto;
+
     spectator.service.update(mock).subscribe();
     const req = spectator.expectOne('https://abp.io/api/identity/my-profile', HttpMethod.PUT);
     expect(req.request.body).toEqual(mock);

@@ -20,4 +20,9 @@
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.HttpApi.Client\Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="**\*generate-proxy.json" />
+    <Content Remove="**\*generate-proxy.json" />
+  </ItemGroup>
+
 </Project>

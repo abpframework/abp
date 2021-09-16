@@ -4,14 +4,13 @@ import { InferredContextOf, InferredInstanceOf } from '../models';
 export abstract class ContextStrategy<T = any> {
   constructor(public context: Partial<ContextType<T>>) {}
 
-  /* tslint:disable-next-line:no-unused-variable */
   setContext(componentRef?: ComponentRef<InferredInstanceOf<T>>): Partial<ContextType<T>> {
     return this.context;
   }
 }
 
 export class NoContextStrategy<
-  T extends Type<any> | TemplateRef<any> = any
+  T extends Type<any> | TemplateRef<any> = any,
 > extends ContextStrategy<T> {
   constructor() {
     super(undefined);

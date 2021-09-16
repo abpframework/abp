@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.CmsKit.Public
 {
@@ -11,10 +12,15 @@ namespace Volo.CmsKit.Public
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(
+            context.Services.AddStaticHttpClientProxies(
                 typeof(CmsKitPublicApplicationContractsModule).Assembly,
                 CmsKitPublicRemoteServiceConsts.RemoteServiceName
             );
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<CmsKitPublicHttpApiClientModule>();
+            });
         }
     }
 }

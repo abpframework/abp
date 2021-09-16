@@ -188,15 +188,25 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 ### MongoDB
 
-ABP直接在[仓储](Repositories.md)级别实现数据过滤用于[MongoDB 集成](MongoDB.md). 所以只有正确的使用仓储,它才会工作. 否则你需要手动过滤数据.
+ABP抽象了 `IMongoDbRepositoryFilterer` 接口为[MongoDB 集成](MongoDB.md)实现数据过滤, 只有正确的使用仓储,它才会工作. 否则你需要手动过滤数据.
 
-目前为MongoDB集成实现数据过滤的最佳方法是重写派生自 `MongoDbRepository` 仓储的 `AddGlobalFilters` 方法:
+目前为MongoDB集成实现数据过滤的最佳方法是重写派生自 `MongoDbRepositoryFilterer` 基类的 `AddGlobalFilters` 方法:
 
 ````csharp
-public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, Guid>
+[ExposeServices(typeof(IMongoDbRepositoryFilterer<Book, Guid>))]
+public class BookMongoDbRepositoryFilterer : MongoDbRepositoryFilterer<Book, Guid> , ITransientDependency
 {
-    protected override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    public BookMongoDbRepositoryFilterer(
+        IDataFilter dataFilter,
+        ICurrentTenant currentTenant) :
+        base(dataFilter, currentTenant)
     {
+    }
+
+    public override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    {
+        base.AddGlobalFilters(filters);
+
         if (DataFilter.IsEnabled<IIsActive>())
         {
             filters.Add(Builders<Book>.Filter.Eq(e => ((IIsActive)e).IsActive, true));
@@ -205,7 +215,7 @@ public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, G
 }
 ````
 
-示例中仅为 `Book` 实体实现了过滤. 如果你想要为所有的实体实现过滤 (实现了 `IIsActive` 接口的实体),可以创建自己的MongoDB仓储基类并重 写 `AddGlobalFilters` 方法. 如下所示:
+示例中仅为 `Book` 实体实现了过滤. 如果你想要为所有的实体实现过滤 (实现了 `IIsActive` 接口的实体),可以创建自己的 `MongoDbRepositoryFilterer` 基类并重 写 `AddGlobalFilters` 方法. 如下所示:
 
 ````csharp
 public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity, TKey>
@@ -220,11 +230,24 @@ public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoD
 
     protected override void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
     {
+        base.AddGlobalFilters(filters);
+
         if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)) 
             && DataFilter.IsEnabled<IIsActive>())
         {
             filters.Add(Builders<TEntity>.Filter.Eq(e => ((IIsActive)e).IsActive, true));
         }
+    }
+}
+
+
+public class MyMongoDbModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //.......
+        context.Services
+            .Replace(ServiceDescriptor.Transient(typeof(IMongoDbRepositoryFilterer<,>),typeof(MyMongoDbRepositoryFilterer<,>)));
     }
 }
 ````

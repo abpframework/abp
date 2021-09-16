@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
@@ -75,7 +76,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
         }
     }
 
-    public class EditPostViewModel
+    public class EditPostViewModel : IHasConcurrencyStamp
+
     {
         [Required]
         [HiddenInput]
@@ -106,5 +108,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public string Description { get; set; }
 
         public string Tags { get; set; }
+
+        [HiddenInput]
+        public string ConcurrencyStamp { get; set; }
     }
 }

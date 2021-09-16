@@ -4,7 +4,6 @@ import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { LoginParams } from '../models/auth';
-import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 
 const cookieKey = 'rememberMe';
@@ -15,13 +14,11 @@ export function pipeToLogin(
   injector: Injector,
 ) {
   const configState = injector.get(ConfigStateService);
-  const appConfigService = injector.get(AbpApplicationConfigurationService);
   const router = injector.get(Router);
 
   return pipe(
-    switchMap(() => appConfigService.get()),
-    tap(res => {
-      configState.setState(res);
+    switchMap(() => configState.refreshAppState()),
+    tap(() => {
       setRememberMe(params.rememberMe);
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),

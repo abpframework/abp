@@ -5,37 +5,27 @@
 Run the following command in `angular` folder to create a new component called `PermissionManagementComponent`.
 
 ```bash
-yarn ng generate component permission-management --entryComponent --inlineStyle
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component permission-management --inlineStyle
 ```
 
 Open the generated `permission-management.component.ts` in `src/app/permission-management` folder and replace the content with the following:
 
 ```js
+import { ConfigStateService, CurrentUserDto, ReplaceableComponents } from '@abp/ng.core';
+import {
+  GetPermissionListResultDto,
+  PermissionGrantInfoDto, PermissionGroupDto, PermissionManagement, PermissionsService, ProviderInfoDto, UpdatePermissionDto
+} from '@abp/ng.permission-management';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 import {
   Component,
-  EventEmitter,
-  Input,
-  Output,
-  Renderer2,
-  TrackByFunction,
-  Inject,
-  Optional,
+  EventEmitter, Inject, Input, Optional, Output, TrackByFunction
 } from '@angular/core';
-import { ReplaceableComponents } from '@abp/ng.core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, map, pluck, take, tap } from 'rxjs/operators';
-import {
-  GetPermissions,
-  UpdatePermissions,
-  PermissionManagement,
-  PermissionManagementState,
-} from '@abp/ng.permission-management';
+import { of } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 
-type PermissionWithMargin = PermissionManagement.Permission & {
-  margin: number;
+type PermissionWithStyle = PermissionGrantInfoDto & {
+  style: string;
 };
 
 @Component({
@@ -52,8 +42,8 @@ type PermissionWithMargin = PermissionManagement.Permission & {
 })
 export class PermissionManagementComponent
   implements
-    PermissionManagement.PermissionManagementComponentInputs,
-    PermissionManagement.PermissionManagementComponentOutputs {
+  PermissionManagement.PermissionManagementComponentInputs,
+  PermissionManagement.PermissionManagementComponentOutputs {
   protected _providerName: string;
   @Input()
   get providerName(): string {
@@ -115,15 +105,11 @@ export class PermissionManagementComponent
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Select(PermissionManagementState.getPermissionGroups)
-  groups$: Observable<PermissionManagement.Group[]>;
+  data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
 
-  @Select(PermissionManagementState.getEntityDisplayName)
-  entityName$: Observable<string>;
+  selectedGroup: PermissionGroupDto;
 
-  selectedGroup: PermissionManagement.Group;
-
-  permissions: PermissionManagement.Permission[] = [];
+  permissions: PermissionGrantInfoDto[] = [];
 
   selectThisTab = false;
 
@@ -131,25 +117,26 @@ export class PermissionManagementComponent
 
   modalBusy = false;
 
-  trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
+  trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
-  get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
-    return this.groups$.pipe(
-      map((groups) =>
-        this.selectedGroup
-          ? groups.find((group) => group.name === this.selectedGroup.name).permissions
-          : []
-      ),
-      map<PermissionManagement.Permission[], PermissionWithMargin[]>((permissions) =>
-        permissions.map(
-          (permission) =>
-            (({
-              ...permission,
-              margin: findMargin(permissions, permission),
-              isGranted: this.permissions.find((per) => per.name === permission.name).isGranted,
-            } as any) as PermissionWithMargin)
-        )
-      )
+  get selectedGroupPermissions(): PermissionWithStyle[] {
+    if (!this.selectedGroup) return [];
+
+    const margin = `margin-${
+      (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
+    }.px`;
+
+    const permissions = this.data.groups.find(
+      group => group.name === this.selectedGroup.name,
+    ).permissions;
+
+    return permissions.map(
+      permission =>
+        ({
+          ...permission,
+          style: { [margin]: findMargin(permissions, permission) },
+          isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
+        } as unknown as PermissionWithStyle),
     );
   }
 
@@ -166,21 +153,22 @@ export class PermissionManagementComponent
       PermissionManagement.PermissionManagementComponentInputs,
       PermissionManagement.PermissionManagementComponentOutputs
     >,
-    private store: Store
+    private service: PermissionsService,
+    private configState: ConfigStateService
   ) {}
 
   getChecked(name: string) {
-    return (this.permissions.find((per) => per.name === name) || { isGranted: false }).isGranted;
+    return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
-  isGrantedByOtherProviderName(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
+  isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
     if (grantedProviders.length) {
-      return grantedProviders.findIndex((p) => p.providerName !== this.providerName) > -1;
+      return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
     }
     return false;
   }
 
-  onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
+  onClickCheckbox(clickedPermission: PermissionGrantInfoDto, value) {
     if (
       clickedPermission.isGranted &&
       this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
@@ -188,7 +176,7 @@ export class PermissionManagementComponent
       return;
 
     setTimeout(() => {
-      this.permissions = this.permissions.map((per) => {
+      this.permissions = this.permissions.map(per => {
         if (clickedPermission.name === per.name) {
           return { ...per, isGranted: !per.isGranted };
         } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
@@ -206,24 +194,22 @@ export class PermissionManagementComponent
   }
 
   setTabCheckboxState() {
-    this.selectedGroupPermissions$.pipe(take(1)).subscribe((permissions) => {
-      const selectedPermissions = permissions.filter((per) => per.isGranted);
-      const element = document.querySelector('#select-all-in-this-tabs') as any;
+    const selectedPermissions = this.selectedGroupPermissions.filter(per => per.isGranted);
+    const element = document.querySelector('#select-all-in-this-tabs') as any;
 
-      if (selectedPermissions.length === permissions.length) {
-        element.indeterminate = false;
-        this.selectThisTab = true;
-      } else if (selectedPermissions.length === 0) {
-        element.indeterminate = false;
-        this.selectThisTab = false;
-      } else {
-        element.indeterminate = true;
-      }
-    });
+    if (selectedPermissions.length === this.selectedGroupPermissions.length) {
+      element.indeterminate = false;
+      this.selectThisTab = true;
+    } else if (selectedPermissions.length === 0) {
+      element.indeterminate = false;
+      this.selectThisTab = false;
+    } else {
+      element.indeterminate = true;
+    }
   }
 
   setGrantCheckboxState() {
-    const selectedAllPermissions = this.permissions.filter((per) => per.isGranted);
+    const selectedAllPermissions = this.permissions.filter(per => per.isGranted);
     const checkboxElement = document.querySelector('#select-all-in-all-tabs') as any;
 
     if (selectedAllPermissions.length === this.permissions.length) {
@@ -238,26 +224,24 @@ export class PermissionManagementComponent
   }
 
   onClickSelectThisTab() {
-    this.selectedGroupPermissions$.pipe(take(1)).subscribe((permissions) => {
-      permissions.forEach((permission) => {
-        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
-          return;
+    this.selectedGroupPermissions.forEach(permission => {
+      if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
+        return;
 
-        const index = this.permissions.findIndex((per) => per.name === permission.name);
+      const index = this.permissions.findIndex(per => per.name === permission.name);
 
-        this.permissions = [
-          ...this.permissions.slice(0, index),
-          { ...this.permissions[index], isGranted: !this.selectThisTab },
-          ...this.permissions.slice(index + 1),
-        ];
-      });
+      this.permissions = [
+        ...this.permissions.slice(0, index),
+        { ...this.permissions[index], isGranted: !this.selectThisTab },
+        ...this.permissions.slice(index + 1),
+      ];
     });
 
     this.setGrantCheckboxState();
   }
 
   onClickSelectAll() {
-    this.permissions = this.permissions.map((permission) => ({
+    this.permissions = this.permissions.map(permission => ({
       ...permission,
       isGranted:
         this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
@@ -266,43 +250,41 @@ export class PermissionManagementComponent
     this.selectThisTab = !this.selectAllTab;
   }
 
-  onChangeGroup(group: PermissionManagement.Group) {
+  onChangeGroup(group: PermissionGroupDto) {
     this.selectedGroup = group;
     this.setTabCheckboxState();
   }
 
-  submit() {
-    this.modalBusy = true;
-    const unchangedPermissions = getPermissions(
-      this.store.selectSnapshot(PermissionManagementState.getPermissionGroups)
-    );
 
-    const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
-      .filter((per) =>
-        unchangedPermissions.find((unchanged) => unchanged.name === per.name).isGranted ===
+  submit() {
+    const unchangedPermissions = getPermissions(this.data.groups);
+
+    const changedPermissions: UpdatePermissionDto[] = this.permissions
+      .filter(per =>
+        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
         per.isGranted
           ? false
-          : true
+          : true,
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
-    if (changedPermissions.length) {
-      this.store
-        .dispatch(
-          new UpdatePermissions({
-            providerKey: this.providerKey,
-            providerName: this.providerName,
-            permissions: changedPermissions,
-          })
-        )
-        .pipe(finalize(() => (this.modalBusy = false)))
-        .subscribe(() => {
-          this.visible = false;
-        });
-    } else {
-      this.modalBusy = false;
+    if (!changedPermissions.length) {
       this.visible = false;
+      return;
     }
+
+    this.modalBusy = true;
+    this.service
+      .update(this.providerName, this.providerKey, { permissions: changedPermissions })
+      .pipe(
+        switchMap(() =>
+          this.shouldFetchAppConfig() ? this.configState.refreshAppState() : of(null),
+        ),
+        finalize(() => (this.modalBusy = false)),
+      )
+      .subscribe(() => {
+        this.visible = false;
+      });
   }
 
   openModal() {
@@ -310,25 +292,25 @@ export class PermissionManagementComponent
       throw new Error('Provider Key and Provider Name are required.');
     }
 
-    return this.store
-      .dispatch(
-        new GetPermissions({
-          providerKey: this.providerKey,
-          providerName: this.providerName,
-        })
-      )
-      .pipe(
-        pluck('PermissionManagementState', 'permissionRes'),
-        tap((permissionRes: PermissionManagement.Response) => {
-          this.selectedGroup = permissionRes.groups[0];
-          this.permissions = getPermissions(permissionRes.groups);
-        })
-      );
+    return this.service.get(this.providerName, this.providerKey).pipe(
+      tap((permissionRes: GetPermissionListResultDto) => {
+        this.data = permissionRes;
+        this.selectedGroup = permissionRes.groups[0];
+        this.permissions = getPermissions(permissionRes.groups);
+      }),
+    );
   }
 
   initModal() {
     this.setTabCheckboxState();
     this.setGrantCheckboxState();
+  }
+
+  getAssignedCount(groupName: string) {
+    return this.permissions.reduce(
+      (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
+      0,
+    );
   }
 
   onVisibleChange(visible: boolean) {
@@ -339,13 +321,20 @@ export class PermissionManagementComponent
       this.replaceableData.outputs.visibleChange(visible);
     }
   }
+  
+  shouldFetchAppConfig() {
+    const currentUser = this.configState.getOne('currentUser') as CurrentUserDto;
+
+    if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
+
+    if (this.providerName === 'U') return currentUser.id === this.providerKey;
+
+    return false;
+  }
 }
 
-function findMargin(
-  permissions: PermissionManagement.Permission[],
-  permission: PermissionManagement.Permission
-) {
-  const parentPermission = permissions.find((per) => per.name === permission.parentName);
+function findMargin(permissions: PermissionGrantInfoDto[], permission: PermissionGrantInfoDto) {
+  const parentPermission = permissions.find(per => per.name === permission.parentName);
 
   if (parentPermission && parentPermission.parentName) {
     let margin = 20;
@@ -355,7 +344,7 @@ function findMargin(
   return parentPermission ? 20 : 0;
 }
 
-function getPermissions(groups: PermissionManagement.Group[]): PermissionManagement.Permission[] {
+function getPermissions(groups: PermissionGroupDto[]): PermissionGrantInfoDto[] {
   return groups.reduce((acc, val) => [...acc, ...val.permissions], []);
 }
 ```
@@ -363,16 +352,12 @@ function getPermissions(groups: PermissionManagement.Group[]): PermissionManagem
 Open the generated `permission-management.component.html` in `src/app/permission-management` folder and replace the content with the below:
 
 ```html
-<abp-modal
-  [visible]="isVisible"
-  (visibleChange)="onVisibleChange($event)"
-  (init)="initModal()"
-  [busy]="modalBusy"
->
-  <ng-container *ngIf="{ entityName: entityName$ | async } as data">
+<abp-modal [visible]="isVisible" (visibleChange)="onVisibleChange($event)" [busy]="modalBusy">
+  <ng-container *ngIf="data.entityDisplayName">
     <ng-template #abpHeader>
       <h4>
-        {%{{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}}%} - {%{{{ data.entityName }}}%}
+        {%{{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}}%} -
+        {%{{{ data.entityDisplayName }}}%}
       </h4>
     </ng-template>
     <ng-template #abpBody>
@@ -394,13 +379,18 @@ Open the generated `permission-management.component.html` in `src/app/permission
       <div class="row">
         <div class="overflow-scroll col-md-4">
           <ul class="nav nav-pills flex-column">
-            <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
+            <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
               <a
+                *ngIf="{ assignedCount: getAssignedCount(group.name) } as count"
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
-                >{%{{{ group?.displayName }}}%}</a
               >
+                <div [class.font-weight-bold]="count.assignedCount">
+                  {%{{{ group?.displayName }}}%}
+                  <span>({%{{{ count.assignedCount }}}%})</span>
+                </div>
+              </a>
             </li>
           </ul>
         </div>
@@ -423,12 +413,8 @@ Open the generated `permission-management.component.html` in `src/app/permission
             </div>
             <hr class="mb-3" />
             <div
-              *ngFor="
-                let permission of selectedGroupPermissions$ | async;
-                let i = index;
-                trackBy: trackByFn
-              "
-              [style.margin-left]="permission.margin + 'px'"
+              *ngFor="let permission of selectedGroupPermissions; let i = index; trackBy: trackByFn"
+              [ngStyle]="permission.style"
               class="custom-checkbox custom-control mb-2"
             >
               <input

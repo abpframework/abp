@@ -17,6 +17,7 @@ import {
   extendsSelf,
   removeTypeModifiers,
 } from './type';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
 export interface ModelGeneratorParams {

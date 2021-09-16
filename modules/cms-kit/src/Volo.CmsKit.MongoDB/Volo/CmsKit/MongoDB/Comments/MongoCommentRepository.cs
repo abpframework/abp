@@ -156,6 +156,11 @@ namespace Volo.CmsKit.MongoDB.Comments
                 .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
+            await base.DeleteAsync(
+                comment,
+                cancellationToken: GetCancellationToken(cancellationToken)
+            );
+
             foreach (var reply in replies)
             {
                 await base.DeleteAsync(
@@ -163,11 +168,6 @@ namespace Volo.CmsKit.MongoDB.Comments
                     cancellationToken: GetCancellationToken(cancellationToken)
                 );
             }
-
-            await base.DeleteAsync(
-                comment,
-                cancellationToken: GetCancellationToken(cancellationToken)
-            );
         }
         
         protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(

@@ -13,21 +13,23 @@ import {
 import compare from 'just-compare';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import snq from 'snq';
 import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 import { SubscriptionService } from '../services/subscription.service';
 
-@Directive({ selector: '[abpReplaceableTemplate]', providers: [SubscriptionService] })
+@Directive({
+  selector: '[abpReplaceableTemplate]',
+  providers: [SubscriptionService],
+})
 export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   @Input('abpReplaceableTemplate')
   data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
-  providedData = { inputs: {}, outputs: {} } as ReplaceableComponents.ReplaceableTemplateData<
-    any,
-    any
-  >;
+  providedData = {
+    inputs: {},
+    outputs: {},
+  } as ReplaceableComponents.ReplaceableTemplateData<any, any>;
 
   context = {} as any;
 
@@ -96,7 +98,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (snq(() => changes.data.currentValue.inputs) && this.defaultComponentRef) {
+    if (changes?.data?.currentValue?.inputs && this.defaultComponentRef) {
       this.setDefaultComponentInputs();
     }
   }
@@ -106,7 +108,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
 
     if (this.data.inputs) {
       for (const key in this.data.inputs) {
-        if (this.data.inputs.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(this.data.inputs, key)) {
           if (!compare(this.defaultComponentRef[key], this.data.inputs[key].value)) {
             this.defaultComponentRef[key] = this.data.inputs[key].value;
           }
@@ -116,7 +118,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
 
     if (this.data.outputs) {
       for (const key in this.data.outputs) {
-        if (this.data.outputs.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(this.data.outputs, key)) {
           if (!this.defaultComponentSubscriptions[key]) {
             this.defaultComponentSubscriptions[key] = this.defaultComponentRef[key].subscribe(
               value => {

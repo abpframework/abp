@@ -1,7 +1,6 @@
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { NgModule } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { NgxsModule } from '@ngxs/store';
 import { timer } from 'rxjs';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 import { ToastComponent } from '../components/toast/toast.component';
@@ -21,7 +20,7 @@ describe('ToasterService', () => {
   let service: ToasterService;
   const createService = createServiceFactory({
     service: ToasterService,
-    imports: [NgxsModule.forRoot(), CoreTestingModule.withConfig(), MockModule],
+    imports: [CoreTestingModule.withConfig(), MockModule],
   });
 
   beforeEach(() => {

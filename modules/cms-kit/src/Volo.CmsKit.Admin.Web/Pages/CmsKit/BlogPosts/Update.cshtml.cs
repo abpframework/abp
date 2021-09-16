@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -56,7 +57,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 
         [AutoMap(typeof(BlogPostDto))]
         [AutoMap(typeof(UpdateBlogPostDto), ReverseMap = true)]
-        public class UpdateBlogPostViewModel
+        public class UpdateBlogPostViewModel : IHasConcurrencyStamp
         {
             [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
             [Required]
@@ -79,6 +80,8 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 
             [HiddenInput]
             public Guid? CoverImageMediaId { get; set; }
+
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }
