@@ -32,7 +32,7 @@ namespace Volo.Abp.Json.SystemTextJson
 
             // Remove after this PR.
             // https://github.com/dotnet/runtime/pull/57525
-            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
         }
     }
 }
