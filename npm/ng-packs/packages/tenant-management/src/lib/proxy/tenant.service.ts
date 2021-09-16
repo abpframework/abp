@@ -1,7 +1,7 @@
-import type { GetTenantsInput, TenantCreateDto, TenantDto, TenantUpdateDto } from './models';
-import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
+import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { GetTenantsInput, TenantCreateDto, TenantDto, TenantUpdateDto } from './models';
 
 @Injectable({
   providedIn: 'root',

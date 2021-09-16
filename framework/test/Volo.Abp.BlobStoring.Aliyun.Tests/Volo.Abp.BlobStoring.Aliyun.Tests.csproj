@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace />
     <UserSecretsId>9f0d2c00-80c1-435b-bfab-2c39c8249091</UserSecretsId>
   </PropertyGroup>

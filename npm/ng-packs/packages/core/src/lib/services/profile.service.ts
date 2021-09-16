@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangePasswordInput, ProfileDto, UpdateProfileDto } from '../models/profile';
 import { RestService } from './rest.service';
-import { Profile, Rest } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -9,42 +8,34 @@ import { Profile, Rest } from '../models';
 export class ProfileService {
   apiName = 'AbpIdentity';
 
-  constructor(private rest: RestService) {}
+  changePassword = (input: ChangePasswordInput, skipHandleError = false) =>
+    this.restService.request<ChangePasswordInput, void>(
+      {
+        method: 'POST',
+        url: '/api/identity/my-profile/change-password',
+        body: input,
+      },
+      { apiName: this.apiName, skipHandleError },
+    );
 
-  get(): Observable<Profile.Response> {
-    const request: Rest.Request<null> = {
-      method: 'GET',
-      url: '/api/identity/my-profile',
-    };
+  get = () =>
+    this.restService.request<null, ProfileDto>(
+      {
+        method: 'GET',
+        url: '/api/identity/my-profile',
+      },
+      { apiName: this.apiName },
+    );
 
-    return this.rest.request<null, Profile.Response>(request, { apiName: this.apiName });
-  }
+  update = (input: UpdateProfileDto) =>
+    this.restService.request<UpdateProfileDto, ProfileDto>(
+      {
+        method: 'PUT',
+        url: '/api/identity/my-profile',
+        body: input,
+      },
+      { apiName: this.apiName },
+    );
 
-  update(body: Profile.Response): Observable<Profile.Response> {
-    const request: Rest.Request<Profile.Response> = {
-      method: 'PUT',
-      url: '/api/identity/my-profile',
-      body,
-    };
-
-    return this.rest.request<Profile.Response, Profile.Response>(request, {
-      apiName: this.apiName,
-    });
-  }
-
-  changePassword(
-    body: Profile.ChangePasswordRequest,
-    skipHandleError: boolean = false,
-  ): Observable<null> {
-    const request: Rest.Request<Profile.ChangePasswordRequest> = {
-      method: 'POST',
-      url: '/api/identity/my-profile/change-password',
-      body,
-    };
-
-    return this.rest.request<Profile.ChangePasswordRequest, null>(request, {
-      skipHandleError,
-      apiName: this.apiName,
-    });
-  }
+  constructor(protected restService: RestService) {}
 }

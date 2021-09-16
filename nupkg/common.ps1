@@ -58,6 +58,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Serilog",
     "framework/src/Volo.Abp.AspNetCore.SignalR",
     "framework/src/Volo.Abp.AspNetCore.TestBase",
+    "framework/src/Volo.Abp.Auditing.Contracts",
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
     "framework/src/Volo.Abp.Authorization.Abstractions",

@@ -1,0 +1,856 @@
+{
+  "modules": {
+    "blogging": {
+      "rootPath": "blogging",
+      "remoteServiceName": "Blogging",
+      "controllers": {
+        "Volo.Blogging.BlogFilesController": {
+          "controllerName": "BlogFiles",
+          "controllerGroupName": "BlogFiles",
+          "type": "Volo.Blogging.BlogFilesController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Files.IFileAppService"
+            }
+          ],
+          "actions": {
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/files/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Files.RawFileDto",
+                "typeSimple": "Volo.Blogging.Files.RawFileDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Files.IFileAppService"
+            },
+            "GetForWebAsyncByName": {
+              "uniqueName": "GetForWebAsyncByName",
+              "name": "GetForWebAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/files/www/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Microsoft.AspNetCore.Mvc.FileResult",
+                "typeSimple": "Microsoft.AspNetCore.Mvc.FileResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.BlogFilesController"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/blogging/files",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Files.FileUploadInputDto, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Files.FileUploadInputDto",
+                  "typeSimple": "Volo.Blogging.Files.FileUploadInputDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Files.FileUploadInputDto",
+                  "typeSimple": "Volo.Blogging.Files.FileUploadInputDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Files.FileUploadOutputDto",
+                "typeSimple": "Volo.Blogging.Files.FileUploadOutputDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Files.IFileAppService"
+            },
+            "UploadImageByFile": {
+              "uniqueName": "UploadImageByFile",
+              "name": "UploadImage",
+              "httpMethod": "POST",
+              "url": "api/blogging/files/images/upload",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "file",
+                  "typeAsString": "Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features",
+                  "type": "Microsoft.AspNetCore.Http.IFormFile",
+                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "file",
+                  "name": "file",
+                  "jsonName": null,
+                  "type": "Microsoft.AspNetCore.Http.IFormFile",
+                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Microsoft.AspNetCore.Mvc.JsonResult",
+                "typeSimple": "Microsoft.AspNetCore.Mvc.JsonResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.BlogFilesController"
+            }
+          }
+        },
+        "Volo.Blogging.BlogsController": {
+          "controllerName": "Blogs",
+          "controllerGroupName": "Blogs",
+          "type": "Volo.Blogging.BlogsController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Blogs.IBlogAppService"
+            }
+          ],
+          "actions": {
+            "GetListAsync": {
+              "uniqueName": "GetListAsync",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Blogs.IBlogAppService"
+            },
+            "GetByShortNameAsyncByShortName": {
+              "uniqueName": "GetByShortNameAsyncByShortName",
+              "name": "GetByShortNameAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs/by-shortname/{shortName}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "shortName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "shortName",
+                  "name": "shortName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Blogs.IBlogAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Blogs.IBlogAppService"
+            }
+          }
+        },
+        "Volo.Blogging.CommentsController": {
+          "controllerName": "Comments",
+          "controllerGroupName": "Comments",
+          "type": "Volo.Blogging.CommentsController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Comments.ICommentAppService"
+            }
+          ],
+          "actions": {
+            "GetHierarchicalListOfPostAsyncByPostId": {
+              "uniqueName": "GetHierarchicalListOfPostAsyncByPostId",
+              "name": "GetHierarchicalListOfPostAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/comments/hierarchical/{postId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "postId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "postId",
+                  "name": "postId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Blogging.Comments.Dtos.CommentWithRepliesDto>",
+                "typeSimple": "[Volo.Blogging.Comments.Dtos.CommentWithRepliesDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Comments.ICommentAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/blogging/comments",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Comments.Dtos.CreateCommentDto, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                  "typeSimple": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                  "typeSimple": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Comments.ICommentAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/blogging/comments/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Comments.Dtos.UpdateCommentDto, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                  "typeSimple": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                  "typeSimple": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Comments.ICommentAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/blogging/comments/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Comments.ICommentAppService"
+            }
+          }
+        },
+        "Volo.Blogging.PostsController": {
+          "controllerName": "Posts",
+          "controllerGroupName": "Posts",
+          "type": "Volo.Blogging.PostsController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Posts.IPostAppService"
+            }
+          ],
+          "actions": {
+            "GetListByBlogIdAndTagNameAsyncByBlogIdAndTagName": {
+              "uniqueName": "GetListByBlogIdAndTagNameAsyncByBlogIdAndTagName",
+              "name": "GetListByBlogIdAndTagNameAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/{blogId}/all",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "blogId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "tagName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "blogId",
+                  "name": "blogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "tagName",
+                  "name": "tagName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "GetTimeOrderedListAsyncByBlogId": {
+              "uniqueName": "GetTimeOrderedListAsyncByBlogId",
+              "name": "GetTimeOrderedListAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/{blogId}/all/by-time",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "blogId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "blogId",
+                  "name": "blogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "GetForReadingAsyncByInput": {
+              "uniqueName": "GetForReadingAsyncByInput",
+              "name": "GetForReadingAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/read",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Posts.GetPostInput, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Posts.GetPostInput",
+                  "typeSimple": "Volo.Blogging.Posts.GetPostInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Url",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BlogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/blogging/posts",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Posts.CreatePostDto, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Posts.CreatePostDto",
+                  "typeSimple": "Volo.Blogging.Posts.CreatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Posts.CreatePostDto",
+                  "typeSimple": "Volo.Blogging.Posts.CreatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/blogging/posts/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Posts.UpdatePostDto, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Posts.UpdatePostDto",
+                  "typeSimple": "Volo.Blogging.Posts.UpdatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Posts.UpdatePostDto",
+                  "typeSimple": "Volo.Blogging.Posts.UpdatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/blogging/posts/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            }
+          }
+        },
+        "Volo.Blogging.TagsController": {
+          "controllerName": "Tags",
+          "controllerGroupName": "Tags",
+          "type": "Volo.Blogging.TagsController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Tagging.ITagAppService"
+            }
+          ],
+          "actions": {
+            "GetPopularTagsAsyncByBlogIdAndInput": {
+              "uniqueName": "GetPopularTagsAsyncByBlogIdAndInput",
+              "name": "GetPopularTagsAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/tags/popular/{blogId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "blogId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput, Volo.Blogging.Application.Contracts",
+                  "type": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput",
+                  "typeSimple": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "blogId",
+                  "name": "blogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MinimumPostCount",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Blogging.Tagging.Dtos.TagDto>",
+                "typeSimple": "[Volo.Blogging.Tagging.Dtos.TagDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Tagging.ITagAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}
