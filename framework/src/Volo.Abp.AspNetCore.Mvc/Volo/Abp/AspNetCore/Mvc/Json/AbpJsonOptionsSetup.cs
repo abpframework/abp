@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
             // Remove after this PR.
             // https://github.com/dotnet/runtime/pull/57525
-            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
         }
     }
 }
