@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Abp.Identity.ClientProxies
 {
-    public partial class IdentityRoleClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IIdentityRoleAppService), typeof(IdentityRoleClientProxy))]
+    public partial class IdentityRoleClientProxy : ClientProxyBase<IIdentityRoleAppService>, IIdentityRoleAppService
     {
         public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
         {

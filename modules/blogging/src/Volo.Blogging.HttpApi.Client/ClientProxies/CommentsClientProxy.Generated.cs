@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Comments;
 using System.Collections.Generic;
 using Volo.Blogging.Comments.Dtos;
@@ -11,7 +13,9 @@ using Volo.Blogging.Comments.Dtos;
 // ReSharper disable once CheckNamespace
 namespace Volo.Blogging.ClientProxies
 {
-    public partial class CommentsClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ICommentAppService), typeof(CommentsClientProxy))]
+    public partial class CommentsClientProxy : ClientProxyBase<ICommentAppService>, ICommentAppService
     {
         public virtual async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
         {

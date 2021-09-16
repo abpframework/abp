@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.TenantManagement;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Abp.TenantManagement.ClientProxies
 {
-    public partial class TenantClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ITenantAppService), typeof(TenantClientProxy))]
+    public partial class TenantClientProxy : ClientProxyBase<ITenantAppService>, ITenantAppService
     {
         public virtual async Task<TenantDto> GetAsync(Guid id)
         {

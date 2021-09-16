@@ -4,103 +4,6 @@
       "rootPath": "account",
       "remoteServiceName": "AbpAccount",
       "controllers": {
-        "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
-          "controllerName": "Account",
-          "controllerGroupName": "Login",
-          "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
-          "interfaces": [],
-          "actions": {
-            "LoginByLogin": {
-              "uniqueName": "LoginByLogin",
-              "name": "Login",
-              "httpMethod": "POST",
-              "url": "api/account/login",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "login",
-                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
-                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "login",
-                  "name": "login",
-                  "jsonName": null,
-                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
-                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
-            },
-            "Logout": {
-              "uniqueName": "Logout",
-              "name": "Logout",
-              "httpMethod": "GET",
-              "url": "api/account/logout",
-              "supportedVersions": [],
-              "parametersOnMethod": [],
-              "parameters": [],
-              "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
-            },
-            "CheckPasswordByLogin": {
-              "uniqueName": "CheckPasswordByLogin",
-              "name": "CheckPassword",
-              "httpMethod": "POST",
-              "url": "api/account/check-password",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "login",
-                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
-                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "login",
-                  "name": "login",
-                  "jsonName": null,
-                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
-                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
-            }
-          }
-        },
         "Volo.Abp.Account.AccountController": {
           "controllerName": "Account",
           "controllerGroupName": "Account",
@@ -221,6 +124,103 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            }
+          }
+        },
+        "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
+          "controllerName": "Account",
+          "controllerGroupName": "Login",
+          "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
+          "interfaces": [],
+          "actions": {
+            "LoginByLogin": {
+              "uniqueName": "LoginByLogin",
+              "name": "Login",
+              "httpMethod": "POST",
+              "url": "api/account/login",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "Logout": {
+              "uniqueName": "Logout",
+              "name": "Logout",
+              "httpMethod": "GET",
+              "url": "api/account/logout",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "CheckPasswordByLogin": {
+              "uniqueName": "CheckPasswordByLogin",
+              "name": "CheckPassword",
+              "httpMethod": "POST",
+              "url": "api/account/check-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
             }
           }
         }

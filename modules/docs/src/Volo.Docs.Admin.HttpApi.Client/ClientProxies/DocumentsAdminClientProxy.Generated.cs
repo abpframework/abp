@@ -4,12 +4,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Docs.Admin.Documents;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Docs.Admin.ClientProxies
 {
-    public partial class DocumentsAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IDocumentAdminAppService), typeof(DocumentsAdminClientProxy))]
+    public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminAppService>, IDocumentAdminAppService
     {
         public virtual async Task ClearCacheAsync(ClearCacheInput input)
         {

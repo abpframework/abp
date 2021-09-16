@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Tagging;
 using System.Collections.Generic;
 using Volo.Blogging.Tagging.Dtos;
@@ -11,7 +13,9 @@ using Volo.Blogging.Tagging.Dtos;
 // ReSharper disable once CheckNamespace
 namespace Volo.Blogging.ClientProxies
 {
-    public partial class TagsClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ITagAppService), typeof(TagsClientProxy))]
+    public partial class TagsClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
     {
         public virtual async Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
         {
