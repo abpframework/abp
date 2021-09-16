@@ -16,6 +16,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
+
+        // ReSharper disable once StaticMemberInGenericType
+        protected static MethodInfo CallRequestAsyncMethod { get; }
+
+        static DynamicHttpProxyInterceptor()
+        {
+            CallRequestAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .First(m => m.Name == nameof(CallRequestAsync) && m.IsGenericMethodDefinition);
+        }
+
         public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
         protected DynamicHttpProxyInterceptorClientProxy<TService> InterceptorClientProxy { get; }
         protected AbpHttpClientOptions ClientOptions { get; }
@@ -52,25 +63,19 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
             else
             {
-                var result = (Task)InterceptorClientProxy
-                    .GetType()
-                    .GetMethods()
-                    .Single(m => m.Name == nameof(InterceptorClientProxy.CallRequestAsync) &&
-                                 m.IsGenericMethod &&
-                                 m.GetParameters().Any(x => x.ParameterType == typeof(ClientProxyRequestContext)))
-                    .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                    .Invoke(InterceptorClientProxy, new object[] { context });
+                var returnType = invocation.Method.ReturnType.GenericTypeArguments[0];
+                var result = (Task)CallRequestAsyncMethod
+                    .MakeGenericMethod(returnType)
+                    .Invoke(this, new object[] { context });
 
-                invocation.ReturnValue = await GetResultAsync(
-                    result,
-                    invocation.Method.ReturnType.GetGenericArguments()[0]
-                );
+                invocation.ReturnValue = await GetResultAsync(result, returnType);
             }
         }
 
         protected virtual async Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(IAbpMethodInvocation invocation)
         {
-            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ??
+                               throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
             var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
@@ -80,6 +85,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 typeof(TService),
                 invocation.Method
             );
+        }
+
+        protected virtual async Task<T> CallRequestAsync<T>(ClientProxyRequestContext context)
+        {
+            return await InterceptorClientProxy.CallRequestAsync<T>(context);
         }
 
         protected virtual async Task<object> GetResultAsync(Task task, Type resultType)
