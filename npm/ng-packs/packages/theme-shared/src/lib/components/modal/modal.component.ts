@@ -1,4 +1,4 @@
-import { SubscriptionService } from '@abp/ng.core';
+import { SubscriptionService, uuid } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
@@ -6,13 +6,13 @@ import {
   EventEmitter,
   Inject,
   Input,
+  isDevMode,
   OnDestroy,
+  OnInit,
   Optional,
   Output,
   TemplateRef,
   ViewChild,
-  isDevMode,
-  OnInit,
 } from '@angular/core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';
@@ -21,7 +21,7 @@ import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
-import { DismissableModal, ModalRefService, ModalDismissMode } from './modal-ref.service';
+import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref.service';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -105,10 +105,16 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   destroy$ = new Subject<void>();
 
+  modalIdentifier = `modal-${uuid()}`;
+
   private toggle$ = new Subject<boolean>();
 
+  get modalWindowRef() {
+    return document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
+  }
+
   get isFormDirty(): boolean {
-    return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
+    return Boolean(this.modalWindowRef.querySelector('.ng-dirty'));
   }
 
   constructor(
@@ -160,7 +166,6 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this.modalRef = this.modal.open(this.modalContent, {
       // TODO: set size to 'lg' when removed the size variable
       size: this.size,
-      windowClass: this.modalClass,
       centered: this.centered,
       keyboard: false,
       scrollable: true,
@@ -171,6 +176,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         return !this.visible;
       },
       ...this.options,
+      windowClass: `${this.modalClass} ${this.options.windowClass || ''} ${this.modalIdentifier}`,
     });
 
     this.appear.emit();
@@ -193,6 +199,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         .warn(
           'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
           'AbpAccount::AreYouSure',
+          { dismissible: false },
         )
         .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
@@ -206,7 +213,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   }
 
   listen() {
-    fromEvent(document, 'keyup')
+    fromEvent(this.modalWindowRef, 'keyup')
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),

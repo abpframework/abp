@@ -60,7 +60,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 foreach (XmlNode node in importNodes)
                 {
-                    if (!(node.Attributes?["Project"]?.Value?.EndsWith("\\common.props") ?? false))
+                    var value = node.Attributes?["Project"]?.Value;
+
+                    if (value == null || (!value.EndsWith("\\common.props") && !value.EndsWith("\\common.test.props")))
                     {
                         continue;
                     }

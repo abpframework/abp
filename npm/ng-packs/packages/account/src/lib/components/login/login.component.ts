@@ -1,11 +1,9 @@
-import { ConfigStateService, AuthService } from '@abp/ng.core';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
 import { getRedirectUrl } from '../../utils/auth-utils';
 
@@ -66,9 +64,10 @@ export class LoginComponent implements OnInit {
       .pipe(
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
+            err.error?.error_description ||
+              err.error?.error.message ||
+              'AbpAccount::DefaultErrorMessage',
+            null,
             { life: 7000 },
           );
           return throwError(err);

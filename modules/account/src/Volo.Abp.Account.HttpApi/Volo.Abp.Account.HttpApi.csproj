@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.HttpApi</AssemblyName>
     <PackageId>Volo.Abp.Account.HttpApi</PackageId>
     <RootNamespace />

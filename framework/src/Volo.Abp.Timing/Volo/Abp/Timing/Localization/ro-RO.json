@@ -1,0 +1,7 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Fus orar",
+    "Description:Abp.Timing.Timezone": "Fusul orar al aplicaţiei"
+  }
+}

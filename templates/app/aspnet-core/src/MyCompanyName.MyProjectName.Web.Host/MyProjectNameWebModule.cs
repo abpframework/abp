@@ -44,7 +44,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName.Web
 {
     [DependsOn(
-        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),

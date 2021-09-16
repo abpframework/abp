@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Volo.Abp.Bundling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Minify;
@@ -33,7 +34,7 @@ namespace Volo.Abp.Cli.Bundling
                 $"{options.BundleName}{FileExtension}");
             var bundleFileDefinitions = context.BundleDefinitions.Where(t => t.ExcludeFromBundle == false).ToList();
             var fileDefinitionsExcludingFromBundle = context.BundleDefinitions.Where(t => t.ExcludeFromBundle).ToList();
-            
+
             var bundledContent = BundleFiles(options, bundleFileDefinitions);
             File.WriteAllText(bundleFilePath, bundledContent);
 
@@ -56,56 +57,61 @@ namespace Volo.Abp.Cli.Bundling
         private string BundleFiles(BundleOptions options, List<BundleDefinition> bundleDefinitions)
         {
             var staticAssetsFilePath = Path.Combine(options.Directory, "bin", "Debug", options.FrameworkVersion,
-                $"{options.ProjectFileName}.StaticWebAssets.xml");
+                $"{options.ProjectFileName}.staticwebassets.runtime.json");
+
             if (!File.Exists(staticAssetsFilePath))
             {
                 throw new BundlingException(
                     "Unable to find static web assets file. You need to build the project to generate static web assets file.");
             }
 
-            var staticAssetsDefinitions = new XmlDocument();
-            staticAssetsDefinitions.Load(staticAssetsFilePath);
-
-            var builder = new StringBuilder();
-            foreach (var definition in bundleDefinitions)
+            using (var file = File.OpenRead(staticAssetsFilePath))
             {
-                string content;
-                if (definition.Source.StartsWith("_content"))
+                var jsonDocument = JsonDocument.Parse(file);
+                var contentRoots = jsonDocument.RootElement.GetProperty("ContentRoots").EnumerateArray()
+                    .Select(x => x.GetString())
+                    .ToList();
+
+                var builder = new StringBuilder();
+                foreach (var definition in bundleDefinitions)
                 {
-                    var pathFragments = definition.Source.Split('/').ToList();
-                    var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
-                    var node = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']");
-                    if (node?.Attributes == null)
+                    string content;
+                    if (definition.Source.StartsWith("_content"))
                     {
-                        throw new AbpException("Not found: " + definition.Source);
+                        var pathFragments = definition.Source.Split('/').ToList();
+                        var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
+                        var path = contentRoots.FirstOrDefault(x => x.IndexOf($"\\{pathFragments[1]}\\", StringComparison.OrdinalIgnoreCase) > 0);
+                        if (path == null)
+                        {
+                            throw new AbpException("Not found: " + definition.Source);
+                        }
+                        var absolutePath = definition.Source.Replace(basePath, path);
+                        content = GetFileContent(absolutePath, options.Minify);
                     }
-                    
-                    var path = node.Attributes["Path"].Value;
-                    var absolutePath = definition.Source.Replace(basePath, path);
-                    content = GetFileContent(absolutePath, options.Minify);
-                }
-                else if (definition.Source.StartsWith("_framework"))
-                {
-                    var slashIndex = definition.Source.IndexOf('/');
-                    var fileName =
-                        definition.Source.Substring(slashIndex + 1, definition.Source.Length - slashIndex - 1);
-                    var filePath =
-                        Path.Combine(PathHelper.GetFrameworkFolderPath(options.Directory, options.FrameworkVersion),
-                            fileName);
-                    content = GetFileContent(filePath, false);
-                }
-                else
-                {
-                    var filePath = Path.Combine(PathHelper.GetWwwRootPath(options.Directory), definition.Source);
-                    content = GetFileContent(filePath, options.Minify);
+                    else if (definition.Source.StartsWith("_framework"))
+                    {
+                        var slashIndex = definition.Source.IndexOf('/');
+                        var fileName =
+                            definition.Source.Substring(slashIndex + 1, definition.Source.Length - slashIndex - 1);
+                        var filePath =
+                            Path.Combine(PathHelper.GetFrameworkFolderPath(options.Directory, options.FrameworkVersion),
+                                fileName);
+                        content = GetFileContent(filePath, false);
+                    }
+                    else
+                    {
+                        var filePath = Path.Combine(PathHelper.GetWwwRootPath(options.Directory), definition.Source);
+                        content = GetFileContent(filePath, options.Minify);
+                    }
+
+                    content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
+                        content);
+
+                    builder.AppendLine(content);
                 }
 
-                content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
-                    content);
-                builder.AppendLine(content);
+                return builder.ToString();
             }
-
-            return builder.ToString();
         }
 
         private string GetFileContent(string filePath, bool minify)

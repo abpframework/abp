@@ -25,6 +25,12 @@ namespace Volo.Docs.Documents
             string version,
             CancellationToken cancellationToken = default);
 
+        Task<List<Document>> GetListAsync(
+            Guid? projectId,
+            string version,
+            string name,
+            CancellationToken cancellationToken = default);
+
         Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
@@ -57,10 +58,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim("MyCustomClaimType", "43")
             });
 
-            //TODO: We can get a real exception if we properly configure authentication schemas for this project
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest")
-            );
+            await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest", HttpStatusCode.Redirect);
         }
 
         [Fact]

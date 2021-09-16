@@ -22,70 +22,50 @@ namespace Volo.Abp.Cli.Utils
             "Blazor"
         };
 
-        private static bool HasParentDirectoryString(string projectName)
+        private static void ValidateParentDirectoryString(string projectName)
         {
-            return projectName.Contains("..");
+            if (projectName.Contains(".."))
+            {
+                throw new CliUsageException("Project name cannot contain \"..\"! Specify a different name.");
+            }
         }
 
-        private static bool HasSurrogateOrControlChar(string projectName)
+        private static void ValidateSurrogateOrControlChar(string projectName)
         {
-            return projectName.Any(chr => char.IsControl(chr) || char.IsSurrogate(chr));
+            if (projectName.Any(chr => char.IsControl(chr) || char.IsSurrogate(chr)))
+            {
+                throw new CliUsageException("Project name cannot contain surrogate or control characters! Specify a different name.");
+            }
         }
 
-        private static bool IsIllegalProjectName(string projectName)
+        private static void ValidateIllegalProjectName(string projectName)
         {
             foreach (var illegalProjectName in IllegalProjectNames)
             {
                 if (projectName.Equals(illegalProjectName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return true;
+                    throw new CliUsageException("Project name cannot be \"" + illegalProjectName + "\"! Specify a different name.");
                 }
             }
-
-            return false;
         }
 
-        private static bool HasIllegalKeywords(string projectName)
+        private static void ValidateIllegalKeywords(string projectName)
         {
             foreach (var illegalKeyword in IllegalKeywords)
             {
                 if (projectName.Contains(illegalKeyword))
                 {
-                    return true;
+                    throw new CliUsageException("Project name cannot contain the word \"" + illegalKeyword + "\". Specify a different name.");
                 }
             }
-
-            return false;
         }
 
-        public static bool IsValid(string projectName)
+        public static void Validate(string projectName)
         {
-            if (projectName == null)
-            {
-                throw new CliUsageException("Project name cannot be empty!");
-            }
-
-            if (HasSurrogateOrControlChar(projectName))
-            {
-                return false;
-            }
-
-            if (HasParentDirectoryString(projectName))
-            {
-                return false;
-            }
-
-            if (IsIllegalProjectName(projectName))
-            {
-                return false;
-            }
-
-            if (HasIllegalKeywords(projectName))
-            {
-                return false;
-            }
-
-            return true;
+            ValidateSurrogateOrControlChar(projectName);
+            ValidateParentDirectoryString(projectName);
+            ValidateIllegalProjectName(projectName);
+            ValidateIllegalKeywords(projectName);
         }
     }
 }
