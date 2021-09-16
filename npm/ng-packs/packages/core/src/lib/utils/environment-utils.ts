@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
+import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Environment, RemoteEnv } from '../models/environment';
 import { EnvironmentService } from '../services/environment.service';
@@ -19,7 +20,10 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Environmen
   return http
     .request<Environment>(method, url, { headers })
     .pipe(
-      catchError(err => httpErrorReporter.reportError(err)), // TODO: Condiser get handle function from a provider
+      catchError(err => {
+        httpErrorReporter.reportError(err);
+        return of(null);
+      }), // TODO: Consider get handle function from a provider
       tap(env => environmentService.setState(mergeEnvironments(environment, env, remoteEnv))),
     )
     .toPromise();
