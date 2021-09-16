@@ -23,7 +23,7 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Environmen
       catchError(err => {
         httpErrorReporter.reportError(err);
         return of(null);
-      }), // TODO: Condiser get handle function from a provider
+      }), // TODO: Consider get handle function from a provider
       tap(env => environmentService.setState(mergeEnvironments(environment, env, remoteEnv))),
     )
     .toPromise();
