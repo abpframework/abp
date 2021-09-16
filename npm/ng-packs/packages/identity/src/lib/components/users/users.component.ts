@@ -1,4 +1,4 @@
-import { ListService } from '@abp/ng.core';
+import { ListService, PagedResultDto } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
@@ -15,26 +15,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, pluck, switchMap, take } from 'rxjs/operators';
-import {
-  CreateUser,
-  DeleteUser,
-  GetUserById,
-  GetUserRoles,
-  GetUsers,
-  UpdateUser,
-} from '../../actions/identity.actions';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
-import { Identity } from '../../models/identity';
 import { IdentityUserService } from '../../proxy/identity/identity-user.service';
 import {
   GetIdentityUsersInput,
   IdentityRoleDto,
   IdentityUserDto,
 } from '../../proxy/identity/models';
-import { IdentityState } from '../../states/identity.state';
 
 @Component({
   selector: 'abp-users',
@@ -48,11 +36,7 @@ import { IdentityState } from '../../states/identity.state';
   ],
 })
 export class UsersComponent implements OnInit {
-  @Select(IdentityState.getUsers)
-  data$: Observable<IdentityUserDto[]>;
-
-  @Select(IdentityState.getUsersTotalCount)
-  totalCount$: Observable<number>;
+  data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
@@ -88,9 +72,8 @@ export class UsersComponent implements OnInit {
   constructor(
     public readonly list: ListService<GetIdentityUsersInput>,
     protected confirmationService: ConfirmationService,
-    protected userService: IdentityUserService,
+    protected service: IdentityUserService,
     protected fb: FormBuilder,
-    protected store: Store,
     protected injector: Injector,
   ) {}
 
@@ -102,7 +85,7 @@ export class UsersComponent implements OnInit {
     const data = new FormPropData(this.injector, this.selected);
     this.form = generateFormFromProps(data);
 
-    this.userService.getAssignableRoles().subscribe(({ items }) => {
+    this.service.getAssignableRoles().subscribe(({ items }) => {
       this.roles = items;
       this.form.addControl(
         'roleNames',
@@ -133,16 +116,14 @@ export class UsersComponent implements OnInit {
   }
 
   edit(id: string) {
-    this.store
-      .dispatch(new GetUserById(id))
+    this.service
+      .get(id)
       .pipe(
-        switchMap(() => this.store.dispatch(new GetUserRoles(id))),
-        pluck('IdentityState'),
-        take(1),
+        tap(user => (this.selected = user)),
+        switchMap(() => this.service.getRoles(id)),
       )
-      .subscribe((state: Identity.State) => {
-        this.selected = state.selectedUser;
-        this.selectedUserRoles = state.selectedUserRoles || [];
+      .subscribe(userRole => {
+        this.selectedUserRoles = userRole.items || [];
         this.openModal();
       });
   }
@@ -156,20 +137,16 @@ export class UsersComponent implements OnInit {
       roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]) ||
       [];
 
-    this.store
-      .dispatch(
-        this.selected.id
-          ? new UpdateUser({
-              ...this.selected,
-              ...this.form.value,
-              id: this.selected.id,
-              roleNames: mappedRoleNames,
-            })
-          : new CreateUser({
-              ...this.form.value,
-              roleNames: mappedRoleNames,
-            }),
-      )
+    const { id } = this.selected;
+
+    (id
+      ? this.service.update(id, {
+          ...this.selected,
+          ...this.form.value,
+          roleNames: mappedRoleNames,
+        })
+      : this.service.create({ ...this.form.value, roleNames: mappedRoleNames })
+    )
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
@@ -184,7 +161,7 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => this.list.get());
         }
       });
   }
@@ -196,7 +173,7 @@ export class UsersComponent implements OnInit {
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.store.dispatch(new GetUsers(query))).subscribe();
+    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
   }
 
   openPermissionsModal(providerKey: string) {

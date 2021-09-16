@@ -5,11 +5,9 @@ import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxsModule } from '@ngxs/store';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementExtensionsGuard } from './guards/extensions.guard';
 import { TenantManagementConfigOptions } from './models/config-options';
-import { TenantManagementState } from './states/tenant-management.state';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
 import {
   TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS,
@@ -24,7 +22,6 @@ import {
   exports: [TenantsComponent],
   imports: [
     TenantManagementRoutingModule,
-    NgxsModule.forFeature([TenantManagementState]),
     NgxValidateCoreModule,
     CoreModule,
     ThemeSharedModule,
