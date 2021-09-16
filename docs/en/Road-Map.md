@@ -10,6 +10,7 @@ This version will focus on the following works:
 
 * Upgrading to .NET 6.0 ([#9004](https://github.com/abpframework/abp/issues/9004))
 * Upgrading to Bootstrap 5.x ([#8922](https://github.com/abpframework/abp/issues/8922))
+* C# and JavaScript Static Client Proxy Generation ([#9864](https://github.com/abpframework/abp/issues/9864))
 * Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
 * Publishing distributed events as transactional ([#6126](https://github.com/abpframework/abp/issues/6126))
 * Performance optimizations; Enabling .NET Trimming, using source generators and reducing reflection, etc.
