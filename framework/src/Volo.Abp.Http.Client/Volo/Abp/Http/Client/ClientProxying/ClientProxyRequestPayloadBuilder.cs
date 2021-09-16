@@ -6,17 +6,18 @@ using System.Net.Http.Headers;
 using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Content;
-using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.Http.Client.Proxying
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    public static class RequestPayloadBuilder
+    public class ClientProxyRequestPayloadBuilder : ITransientDependency
     {
         [CanBeNull]
-        public static HttpContent BuildContent(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
+        public virtual HttpContent BuildContent(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
         {
             var body = GenerateBody(action, methodArguments, jsonSerializer);
             if (body != null)
@@ -29,7 +30,7 @@ namespace Volo.Abp.Http.Client.Proxying
             return body;
         }
 
-        private static HttpContent GenerateBody(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
+        protected virtual HttpContent GenerateBody(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
         {
             var parameters = action
                 .Parameters
@@ -57,7 +58,7 @@ namespace Volo.Abp.Http.Client.Proxying
             return new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json);
         }
 
-        private static HttpContent GenerateFormPostData(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
+        protected virtual HttpContent GenerateFormPostData(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
         {
             var parameters = action
                 .Parameters

@@ -5,16 +5,25 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
-using Volo.Abp.Http.Client.DynamicProxying;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.Http.Client.Proxying
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    internal static class UrlBuilder
+    public class ClientProxyUrlBuilder : ITransientDependency
     {
-        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected IServiceScopeFactory ServiceProviderFactory { get; }
+
+        public ClientProxyUrlBuilder(IServiceScopeFactory serviceProviderFactory)
+        {
+            ServiceProviderFactory = serviceProviderFactory;
+        }
+
+        public string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             // The ASP.NET Core route value provider and query string value provider:
             //  Treat values as invariant culture.
@@ -30,7 +39,7 @@ namespace Volo.Abp.Http.Client.Proxying
             }
         }
 
-        private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected virtual void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var pathParameters = actionParameters
                 .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -72,7 +81,7 @@ namespace Volo.Abp.Http.Client.Proxying
             }
         }
 
-        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected virtual void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var queryStringParameters = actionParameters
                 .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
@@ -100,7 +109,7 @@ namespace Volo.Abp.Http.Client.Proxying
             }
         }
 
-        private static bool AddQueryStringParameter(
+        protected virtual bool AddQueryStringParameter(
             StringBuilder urlBuilder,
             bool isFirstParam,
             string name,
@@ -133,7 +142,7 @@ namespace Volo.Abp.Http.Client.Proxying
             return true;
         }
 
-        private static string ConvertValueToString([CanBeNull] object value)
+        protected virtual string ConvertValueToString([CanBeNull] object value)
         {
             if (value is DateTime dateTimeValue)
             {

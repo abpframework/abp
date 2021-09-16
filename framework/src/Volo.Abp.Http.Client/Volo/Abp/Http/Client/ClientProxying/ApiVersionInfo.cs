@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.Http.Client.Proxying
+namespace Volo.Abp.Http.Client.ClientProxying
 {
     public class ApiVersionInfo  //TODO: Rename to not conflict with api versioning apis
     {
