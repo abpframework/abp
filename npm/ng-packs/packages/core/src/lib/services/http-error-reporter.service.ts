@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class HttpErrorReporterService {
@@ -22,6 +22,5 @@ export class HttpErrorReporterService {
   reportError = (error: HttpErrorResponse) => {
     this._reporter$.next(error);
     this._errors$.next([...this.errors, error]);
-    return of();
   };
 }
