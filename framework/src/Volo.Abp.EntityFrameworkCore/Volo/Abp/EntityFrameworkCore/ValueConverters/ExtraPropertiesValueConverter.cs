@@ -53,7 +53,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
             // Remove after this PR.
             // https://github.com/dotnet/runtime/pull/57525
-            deserializeOptions.NumberHandling = JsonNumberHandling.Strict;
+            deserializeOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
 
             var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
                              new ExtraPropertyDictionary();
