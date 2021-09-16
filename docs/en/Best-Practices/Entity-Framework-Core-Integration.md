@@ -75,6 +75,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
 {
+    public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
 
