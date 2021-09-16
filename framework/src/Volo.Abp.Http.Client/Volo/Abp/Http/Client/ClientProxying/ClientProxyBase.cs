@@ -68,7 +68,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return dict;
         }
 
-        public virtual async Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
+        protected virtual async Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
         {
             var responseContent = await RequestAsync(requestContext);
 
@@ -100,7 +100,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return JsonSerializer.Deserialize<T>(stringContent);
         }
 
-        public virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
+        protected virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
         {
             var clientConfig = ClientOptions.Value.HttpClientProxies.GetOrDefault(requestContext.ServiceType) ?? throw new AbpException($"Could not get HttpClientProxyConfig for {requestContext.ServiceType.FullName}.");
             var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);

@@ -48,14 +48,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
-                await InterceptorClientProxy.RequestAsync(context);
+                await InterceptorClientProxy.CallRequestAsync(context);
             }
             else
             {
                 var result = (Task)InterceptorClientProxy
                     .GetType()
                     .GetMethods()
-                    .Single(m => m.Name == nameof(InterceptorClientProxy.RequestAsync) &&
+                    .Single(m => m.Name == nameof(InterceptorClientProxy.CallRequestAsync) &&
                                  m.IsGenericMethod &&
                                  m.GetParameters().Any(x => x.ParameterType == typeof(ClientProxyRequestContext)))
                     .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
