@@ -2,6 +2,6 @@
 {
     public class MyProjectNameRemoteServiceConsts
     {
-        public const string RemoteServiceName = "AbpAccount";
+        public const string RemoteServiceName = "MyProjectName";
     }
 }
