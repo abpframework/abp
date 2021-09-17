@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.Features;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup;
@@ -34,9 +36,29 @@ namespace Volo.Abp.SettingManagement.Web.Settings
 
         private async Task<bool> CheckPermissionsInternalAsync(SettingPageCreationContext context)
         {
+            if (!await CheckFeatureAsync(context))
+            {
+                return false;
+            }
+
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
 
             return await authorizationService.IsGrantedAsync(SettingManagementPermissions.Emailing);
+        }
+
+        private async Task<bool> CheckFeatureAsync(SettingPageCreationContext context)
+        {
+            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+
+            if (!currentTenant.IsAvailable)
+            {
+                return true;
+            }
+
+            var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+
+            return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+
         }
     }
 }

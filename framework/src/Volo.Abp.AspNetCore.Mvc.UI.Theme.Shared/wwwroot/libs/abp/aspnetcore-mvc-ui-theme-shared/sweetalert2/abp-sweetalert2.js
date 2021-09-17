@@ -1,6 +1,6 @@
 ﻿var abp = abp || {};
 (function ($) {
-    if (!sweetAlert || !$) {
+    if (!Swal || !$) {
         return;
     }
 
@@ -27,7 +27,8 @@
             confirm: {
                 icon: 'warning',
                 title: 'Are you sure?',
-                buttons: ['Cancel', 'Yes']
+                showCancelButton: true,
+                reverseButtons: true
             }
         }
     };
@@ -51,7 +52,7 @@
         );
 
         return $.Deferred(function ($dfd) {
-            sweetAlert(opts).then(function () {
+            Swal.fire(opts).then(function () {
                 $dfd.resolve();
             });
         });
@@ -73,7 +74,7 @@
         return showMessage('error', message, title);
     };
 
-    abp.message.confirm = function (message, titleOrCallback, callback, closeOnEsc) {
+    abp.message.confirm = function (message, titleOrCallback, callback) {
 
         var userOpts = {
             text: message
@@ -86,8 +87,6 @@
             userOpts.title = titleOrCallback;
         };
 
-        userOpts.closeOnEsc = closeOnEsc;
-
         var opts = $.extend(
             {},
             abp.libs.sweetAlert.config['default'],
@@ -96,10 +95,10 @@
         );
 
         return $.Deferred(function ($dfd) {
-            sweetAlert(opts).then(function (isConfirmed) {
-                callback && callback(isConfirmed);
-                $dfd.resolve(isConfirmed);
-            });
+            Swal.fire(opts).then(result  => {
+                callback && callback(result.value);
+                $dfd.resolve(result.value);
+            })
         });
     };
 
@@ -107,7 +106,8 @@
         var l = abp.localization.getResource('AbpUi');
 
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
-        abp.libs.sweetAlert.config.confirm.buttons = [l('Cancel'), l('Yes')];
+        abp.libs.sweetAlert.config.confirm.showCancelButton = true;
+        abp.libs.sweetAlert.config.confirm.reverseButtons = true;
     });
 
 })(jQuery);

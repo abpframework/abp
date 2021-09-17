@@ -10,13 +10,11 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpHttpClientModule))]
     public class MyProjectNameHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "MyProjectName";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
-                RemoteServiceName
+                MyProjectNameRemoteServiceConsts.RemoteServiceName
             );
 
             Configure<AbpVirtualFileSystemOptions>(options =>

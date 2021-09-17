@@ -34,9 +34,8 @@
   <ng-template #abpHeader>
     <h3>
       {{
-        selected?.id
-          ? 'AbpTenantManagement::Edit'
-          : ('AbpTenantManagement::NewTenant' | abpLocalization)
+        (selected?.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant') 
+          | abpLocalization
       }}
     </h3>
   </ng-template>
