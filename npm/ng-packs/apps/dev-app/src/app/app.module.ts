@@ -1,4 +1,5 @@
 import { AccountConfigModule } from '@abp/ng.account/config';
+import { ChartModule } from '@abp/ng.components/chart.js';
 import { CoreModule } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
@@ -31,6 +32,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     TenantManagementConfigModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
     ThemeBasicModule.forRoot(),
+    ChartModule.forRoot()
   ],
   providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],
