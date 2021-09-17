@@ -24,8 +24,10 @@
     <ProjectReference Include="..\Volo.BloggingTestApp.EntityFrameworkCore\Volo.BloggingTestApp.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Blogging.HttpApi\Volo.Blogging.HttpApi.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Admin.Application\Volo.Blogging.Admin.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Admin.Web\Volo.Blogging.Admin.Web.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Blogging.Admin.HttpApi\Volo.Blogging.Admin.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />

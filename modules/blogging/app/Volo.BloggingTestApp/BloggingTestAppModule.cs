@@ -44,8 +44,10 @@ namespace Volo.BloggingTestApp
 {
     [DependsOn(
         typeof(BloggingWebModule),
+        typeof(BloggingHttpApiModule),
         typeof(BloggingApplicationModule),
         typeof(BloggingAdminWebModule),
+        typeof(BloggingAdminHttpApiModule),
         typeof(BloggingAdminApplicationModule),
 #if MONGODB
                typeof(BloggingTestAppMongoDbModule),
