@@ -1,11 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { ChartComponent } from './chart.component';
 
 declare const Chart: any
 
 @NgModule({
-    imports: [],
-    exports: [],
+    imports: [CommonModule],
+    exports: [ChartComponent],
     declarations: [ChartComponent],
     providers: [],
 })

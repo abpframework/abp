@@ -1,23 +1,41 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
-  Output
+  Output,
+  SimpleChanges
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { chartJsLoaded$ } from './widget-utils';
-declare const Chart: any;
+
+let Chart: any;
 
 @Component({
   selector: 'abp-chart',
-  templateUrl: './chart.component.html',
+  template: `
+    <div
+      style="position:relative"
+      [style.width]="responsive && !width ? null : width"
+      [style.height]="responsive && !height ? null : height"
+    >
+      <canvas
+        [attr.width]="responsive && !width ? null : width"
+        [attr.height]="responsive && !height ? null : height"
+        (click)="onCanvasClick($event)"
+      ></canvas>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs: 'abpChart',
 })
-export class ChartComponent implements AfterViewInit, OnDestroy {
+export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() type: string;
+
+  @Input() data: any = {};
 
   @Input() options: any = {};
 
@@ -29,68 +47,43 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   @Input() responsive = true;
 
-  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
-  @Output() readonly onDataSelect: EventEmitter<any> = new EventEmitter();
+  @Output() dataSelect = new EventEmitter();
 
-  @Output() readonly initialized = new BehaviorSubject(this);
+  initialized: boolean
 
-  private _initialized: boolean;
-
-  _data: any;
 
   chart: any;
 
-  constructor(public el: ElementRef, private cdRef: ChangeDetectorRef) {}
-
-  @Input() get data(): any {
-    return this._data;
-  }
-
-  set data(val: any) {
-    this._data = val;
-    this.reinit();
-  }
-
-  get canvas() {
-    return this.el.nativeElement.children[0].children[0];
-  }
-
-  get base64Image() {
-    return this.chart.toBase64Image();
-  }
+  constructor(public el: ElementRef, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    chartJsLoaded$.subscribe(() => {
-      this.testChartJs();
-
+    import('chart.js/auto').then(module => {
+      Chart = module.default;
       this.initChart();
-      this._initialized = true;
+      this.initialized = true;
     });
   }
 
-  testChartJs() {
-    try {
-      Chart;
-    } catch (error) {
-      throw new Error(`Chart is not found. Import the Chart from app.module like shown below:
-      import('chart.js');
-      `);
-    }
-  }
-
-  onCanvasClick = event => {
+  onCanvasClick(event) {
     if (this.chart) {
-      const element = this.chart.getElementAtEvent(event);
-      const dataset = this.chart.getDatasetAtEvent(event);
-      if (element && element.length && dataset) {
-        this.onDataSelect.emit({
-          originalEvent: event,
-          element: element[0],
-          dataset,
-        });
+      const element = this.chart.getElementsAtEventForMode(
+        event,
+        'nearest',
+        { intersect: true },
+        false,
+      );
+      const dataset = this.chart.getElementsAtEventForMode(
+        event,
+        'dataset',
+        { intersect: true },
+        false,
+      );
+
+      if (element && element[0] && dataset) {
+        this.dataSelect.emit({ originalEvent: event, element: element[0], dataset: dataset });
       }
     }
-  };
+  }
 
   initChart = () => {
     const opts = this.options || {};
@@ -101,15 +94,20 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       opts.maintainAspectRatio = false;
     }
 
-    this.chart = new Chart(this.canvas, {
-      type: this.type,
+    this.chart = new Chart(this.el.nativeElement.children[0].children[0], {
+      type: this.type as any,
       data: this.data,
       options: this.options,
-      plugins: this.plugins,
     });
+  }
 
-    this.cdRef.detectChanges();
-  };
+  getCanvas = () => {
+    return this.el.nativeElement.children[0].children[0];
+  }
+
+  getBase64Image = () => {
+    return this.chart.toBase64Image();
+  }
 
   generateLegend = () => {
     if (this.chart) {
@@ -120,22 +118,28 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   refresh = () => {
     if (this.chart) {
       this.chart.update();
-      this.cdRef.detectChanges();
+      this.cdr.detectChanges();
     }
   };
 
   reinit = () => {
-    if (this.chart) {
+    if (!this.chart) return;
       this.chart.destroy();
       this.initChart();
-    }
   };
 
   ngOnDestroy() {
     if (this.chart) {
       this.chart.destroy();
-      this._initialized = false;
+      this.initialized = false;
       this.chart = null;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data?.currentValue || changes.options?.currentValue) {
+      this.chart.destroy();
+      this.initChart();
     }
   }
 }
