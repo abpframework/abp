@@ -33,6 +33,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxDuration = null,
             int? minDuration = null,
@@ -49,6 +50,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 userId,
                 userName,
                 applicationName,
+                clientIpAddress,
                 correlationId,
                 maxDuration,
                 minDuration,
@@ -73,6 +75,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxDuration = null,
             int? minDuration = null,
@@ -88,6 +91,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 userId,
                 userName,
                 applicationName,
+                clientIpAddress,
                 correlationId,
                 maxDuration,
                 minDuration,
@@ -110,6 +114,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxDuration = null,
             int? minDuration = null,
@@ -128,6 +133,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 .WhereIf(userId != null, auditLog => auditLog.UserId == userId)
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
                 .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
+                .WhereIf(clientIpAddress != null, auditLog => auditLog.ClientIpAddress == clientIpAddress)
                 .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
                 .WhereIf(maxDuration != null && maxDuration > 0, auditLog => auditLog.ExecutionDuration <= maxDuration)

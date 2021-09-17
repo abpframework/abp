@@ -30,7 +30,7 @@ If you want to make it in your solution with today, follow the steps in this art
 
 > There is one **drawback** with the new design (everything in software development is a trade-off). We need to remove the `AppUser` entity, because EF Core can't map two classes to single table without an inheritance relation. I will cover this later in this article and provide suggestions to deal with it.
 
-> If you are using **ABP Commercial**, ABP Suite code generation won't work correctly with the new design. In this case, we suggest to wait for the next version.
+> If you are using **ABP Commercial**, ABP Suite code generation won't work correctly before the version 4.4. Please upgrade to v4.4 if you are using a previous version.
 
 ## The Steps
 

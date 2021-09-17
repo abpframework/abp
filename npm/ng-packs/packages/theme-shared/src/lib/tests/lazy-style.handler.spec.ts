@@ -50,7 +50,7 @@ describe('LazyStyleHandler', () => {
 
 describe('initLazyStyleHandler', () => {
   it('should return a LazyStyleHandler factory', () => {
-    const generator = (function*() {
+    const generator = (function* () {
       yield undefined; // LAZY_STYLES
       yield { loaded: new Map() }; // LazyLoadService
       yield { currentLang: 'en', languageChange$: EMPTY }; // LocalizationService

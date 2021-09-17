@@ -74,7 +74,6 @@ describe('LocalizationService', () => {
           spectator.inject(Injector),
           null,
           null,
-          {} as any,
         );
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');

@@ -244,7 +244,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var projectToRemove in projectsToRemove)
             {
-                if (IsReferencedByAnotherModuleProject(moduleDirectory, projectsToRemove, projectToRemove))
+                if (IsReferencedByAnotherProject(solutionDirectory, projectsToRemove, projectToRemove))
                 {
                     continue;
                 }
@@ -253,10 +253,10 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private bool IsReferencedByAnotherModuleProject(string moduleDirectory, List<string> projectsToRemove, string projectToRemove)
+        private bool IsReferencedByAnotherProject(string solutionDirectory, List<string> projectsToRemove, string projectToRemove)
         {
-            var moduleProjects = Directory.GetFiles(moduleDirectory, "*.csproj", SearchOption.AllDirectories);
-            var projectsToKeep = moduleProjects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
+            var projects = Directory.GetFiles(solutionDirectory, "*.csproj", SearchOption.AllDirectories);
+            var projectsToKeep = projects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
             return projectsToKeep.Select(File.ReadAllText).Any(content => content.Contains($"\"{projectToRemove}\""));
         }
 
@@ -576,11 +576,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
+            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"))
+                ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj")) ;
 
             if (dbMigrationsProject == null)
             {
-                Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
+                Logger.LogDebug("Solution doesn't have a Migrations project.");
 
                 if (!skipDbMigrations)
                 {
