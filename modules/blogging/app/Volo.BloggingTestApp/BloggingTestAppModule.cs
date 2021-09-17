@@ -57,6 +57,7 @@ namespace Volo.BloggingTestApp
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),
