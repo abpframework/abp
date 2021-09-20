@@ -1,10 +1,8 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import Chart from 'chart.js/auto';
 import { ReplaySubject } from 'rxjs';
 import { ChartComponent } from './chart.component';
 import * as widgetUtils from './widget-utils';
 
-Chart
 
 Object.defineProperty(window, 'getComputedStyle', {
   value: () => ({
