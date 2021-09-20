@@ -9,7 +9,8 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 
 let Chart: any;
@@ -23,6 +24,7 @@ let Chart: any;
       [style.height]="responsive && !height ? null : height"
     >
       <canvas
+        #canvas
         [attr.width]="responsive && !width ? null : width"
         [attr.height]="responsive && !height ? null : height"
         (click)="onCanvasClick($event)"
@@ -50,6 +52,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Output() dataSelect = new EventEmitter();
 
   @Output() initialized = new EventEmitter<boolean>();
+
+  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
   chart: any;
 
@@ -93,7 +97,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
       opts.maintainAspectRatio = false;
     }
 
-    this.chart = new Chart(this.el.nativeElement.children[0].children[0], {
+    this.chart = new Chart(this.canvas.nativeElement, {
       type: this.type as any,
       data: this.data,
       options: this.options,
@@ -101,7 +105,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   };
 
   getCanvas = () => {
-    return this.el.nativeElement.children[0].children[0];
+    return this.canvas.nativeElement;
   };
 
   getBase64Image = () => {
@@ -136,7 +140,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.chart) return;
-    
+
     if (changes.data?.currentValue || changes.options?.currentValue) {
       this.chart.destroy();
       this.initChart();
