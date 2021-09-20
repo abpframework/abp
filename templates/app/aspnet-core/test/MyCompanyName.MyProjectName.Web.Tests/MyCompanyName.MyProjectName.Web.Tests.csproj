@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.32" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Application.Tests\MyCompanyName.MyProjectName.Application.Tests.csproj" />
     <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.Web\MyCompanyName.MyProjectName.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj" />
