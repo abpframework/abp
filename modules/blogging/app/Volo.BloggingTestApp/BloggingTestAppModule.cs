@@ -44,8 +44,10 @@ namespace Volo.BloggingTestApp
 {
     [DependsOn(
         typeof(BloggingWebModule),
+        typeof(BloggingHttpApiModule),
         typeof(BloggingApplicationModule),
         typeof(BloggingAdminWebModule),
+        typeof(BloggingAdminHttpApiModule),
         typeof(BloggingAdminApplicationModule),
 #if MONGODB
                typeof(BloggingTestAppMongoDbModule),
@@ -55,6 +57,7 @@ namespace Volo.BloggingTestApp
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),

@@ -29,10 +29,6 @@ namespace Volo.Abp.Json.SystemTextJson
 
             // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
             options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-
-            // Remove after this PR.
-            // https://github.com/dotnet/runtime/pull/57525
-            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
         }
     }
 }

@@ -51,10 +51,6 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             var deserializeOptions = new JsonSerializerOptions();
             deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
 
-            // Remove after this PR.
-            // https://github.com/dotnet/runtime/pull/57525
-            deserializeOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-
             var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
                              new ExtraPropertyDictionary();
 

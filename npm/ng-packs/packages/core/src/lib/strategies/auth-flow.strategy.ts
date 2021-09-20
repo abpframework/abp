@@ -6,7 +6,7 @@ import {
   OAuthErrorEvent,
   OAuthInfoEvent,
   OAuthService,
-  OAuthStorage,
+  OAuthStorage
 } from 'angular-oauth2-oidc';
 import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
@@ -37,7 +37,10 @@ export abstract class AuthFlowStrategy {
   abstract logout(queryParams?: Params): Observable<any>;
   abstract login(params?: LoginParams | Params): Observable<any>;
 
-  private catchError = err => this.httpErrorReporter.reportError(err);
+  private catchError = err => {
+    this.httpErrorReporter.reportError(err);
+    return of(null);
+  };
 
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
