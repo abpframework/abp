@@ -9,7 +9,7 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 
 let Chart: any;
@@ -49,8 +49,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Output() dataSelect = new EventEmitter();
 
-  initialized: boolean
-
+  @Output() initialized = new EventEmitter<boolean>();
 
   chart: any;
 
@@ -60,7 +59,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     import('chart.js/auto').then(module => {
       Chart = module.default;
       this.initChart();
-      this.initialized = true;
+      this.initialized.emit(true);
     });
   }
 
@@ -99,15 +98,15 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
       data: this.data,
       options: this.options,
     });
-  }
+  };
 
   getCanvas = () => {
     return this.el.nativeElement.children[0].children[0];
-  }
+  };
 
   getBase64Image = () => {
     return this.chart.toBase64Image();
-  }
+  };
 
   generateLegend = () => {
     if (this.chart) {
@@ -124,14 +123,13 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   reinit = () => {
     if (!this.chart) return;
-      this.chart.destroy();
-      this.initChart();
+    this.chart.destroy();
+    this.initChart();
   };
 
   ngOnDestroy() {
     if (this.chart) {
       this.chart.destroy();
-      this.initialized = false;
       this.chart = null;
     }
   }
