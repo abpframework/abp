@@ -151,13 +151,19 @@ Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *To
 public DbSet<TodoItem> TodoItems { get; set; }
 ````
 
-Then open the `TodoAppDbContextModelCreatingExtensions` class in the same folder and add a mapping configuration for the `TodoItem` class as shown below:
+Then locate  to `OnModelCreating` method in the `TodoAppDbContext` class and add the mapping code for the `TodoItem ` entity:
 
 ````csharp
-public static void ConfigureTodoApp(this ModelBuilder builder)
+protected override void OnModelCreating(ModelBuilder builder)
 {
-    Check.NotNull(builder, nameof(builder));
+    base.OnModelCreating(builder);
 
+    /* Include modules to your migration db context */
+
+    builder.ConfigurePermissionManagement();
+    ...
+
+    /* Configure your own tables/entities inside here */
     builder.Entity<TodoItem>(b =>
     {
         b.ToTable("TodoItems");
@@ -171,7 +177,7 @@ We've mapped `TodoItem` entity to a `TodoItems` table in the database.
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore.DbMigrations* project and type the following command:
+Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore* project and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
@@ -187,7 +193,7 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
@@ -612,7 +618,7 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
 
 ### Index.razor.css
 
-As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace with the following content:
 
 ````css
 #TodoList{

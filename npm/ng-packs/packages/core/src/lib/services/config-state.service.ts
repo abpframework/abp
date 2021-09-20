@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, take, switchMap } from 'rxjs/operators';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { InternalStore } from '../utils/internal-store-utils';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,29 @@ export class ConfigStateService {
     return this.store.sliceUpdate;
   }
 
+  private updateSubject = new Subject();
+
+  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+    this.initUpdateStream();
+  }
+
+  private initUpdateStream() {
+    this.updateSubject
+      .pipe(switchMap(() => this.abpConfigService.get()))
+      .subscribe(res => this.setState(res));
+  }
+
+  /**
+   * @deprecated do not use this method directly, instead call refreshAppState
+   * This method will be private in v5.0
+   */
   setState(state: ApplicationConfigurationDto) {
     this.store.set(state);
+  }
+
+  refreshAppState() {
+    this.updateSubject.next();
+    return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
   getOne$(key: string) {

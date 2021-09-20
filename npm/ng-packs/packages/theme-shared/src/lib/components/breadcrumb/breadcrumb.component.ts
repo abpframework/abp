@@ -9,7 +9,7 @@ import {
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
-import { eThemeSharedRouteNames } from '../../enums';
+import { eThemeSharedRouteNames } from '../../enums/route-names';
 
 @Component({
   selector: 'abp-breadcrumb',
@@ -31,7 +31,6 @@ export class BreadcrumbComponent implements OnInit {
   ngOnInit(): void {
     this.subscription.addOne(
       this.routerEvents.getNavigationEvents('End').pipe(
-        // tslint:disable-next-line:deprecation
         startWith(null),
         map(() => this.routes.search({ path: getRoutePath(this.router) })),
       ),

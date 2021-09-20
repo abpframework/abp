@@ -137,7 +137,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                     }
                     else if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        var updBadge = sb.Append("<span class='badge badge-light ml-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>");
+                        var updBadge = sb.Append("<span class='badge badge-light ml-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>").ToString();
                         badgeStringBuilder.Append(updBadge);
                     }
                 }
@@ -147,7 +147,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
-                        : sb.Append(node.Text).Append(badgeStringBuilder).ToString());
+                        : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());
             }
 
             sb.Clear();
