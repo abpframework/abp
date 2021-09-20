@@ -43,7 +43,7 @@ describe('ChartComponent', () => {
   });
 
   test('should have a success class by default', done => {
-    import('chart.js').then(() => {
+    import('chart.js/auto').then(() => {
       setTimeout(() => {
         expect(spectator.component.chart).toBeTruthy();
         done();
