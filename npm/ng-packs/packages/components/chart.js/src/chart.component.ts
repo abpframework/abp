@@ -9,7 +9,7 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 
 let Chart: any;
@@ -135,6 +135,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.chart) return;
+    
     if (changes.data?.currentValue || changes.options?.currentValue) {
       this.chart.destroy();
       this.initChart();
