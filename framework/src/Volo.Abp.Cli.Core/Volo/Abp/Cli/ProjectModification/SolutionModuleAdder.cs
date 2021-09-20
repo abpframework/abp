@@ -81,8 +81,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
-        public virtual async Task AddAsync(
-            [NotNull] string solutionFile,
+        public virtual async Task<ModuleWithMastersInfo> AddAsync([NotNull] string solutionFile,
             [NotNull] string moduleName,
             string version,
             bool skipDbMigrations = false,
@@ -97,8 +96,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
             module = RemoveIncompatiblePackages(module, version);
 
-            Logger.LogInformation(
-                $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
+            Logger.LogInformation($"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
@@ -140,6 +138,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 CmdHelper.OpenWebPage(documentationLink);
             }
+
+            return module;
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
@@ -149,7 +149,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return module;
         }
 
-        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
+        private static bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
