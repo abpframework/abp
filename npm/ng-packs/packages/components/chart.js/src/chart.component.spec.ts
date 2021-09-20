@@ -1,10 +1,10 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import Chart from 'chart.js/auto';
 import { ReplaySubject } from 'rxjs';
-import { ChartComponent } from '../components';
-import * as widgetUtils from '../utils/widget-utils';
-import { chartJsLoaded$ } from '../utils/widget-utils';
-// import 'chart.js';
-declare const Chart;
+import { ChartComponent } from './chart.component';
+import * as widgetUtils from './widget-utils';
+
+Chart
 
 Object.defineProperty(window, 'getComputedStyle', {
   value: () => ({
@@ -34,19 +34,18 @@ describe('ChartComponent', () => {
         },
       },
     });
-  });
 
-  test('should throw error when chart.js is not loaded', () => {
-    try {
-      spectator.component.testChartJs();
-    } catch (error) {
-      expect(error.message).toContain('Chart is not found');
-    }
+    window.ResizeObserver =
+    window.ResizeObserver ||
+    jest.fn().mockImplementation(() => ({
+        disconnect: jest.fn(),
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+    }));
   });
 
   test('should have a success class by default', done => {
     import('chart.js').then(() => {
-      chartJsLoaded$.next();
       setTimeout(() => {
         expect(spectator.component.chart).toBeTruthy();
         done();
@@ -56,7 +55,6 @@ describe('ChartComponent', () => {
 
   describe('#reinit', () => {
     it('should call the destroy method', done => {
-      chartJsLoaded$.next();
       const spy = jest.spyOn(spectator.component.chart, 'destroy');
       spectator.setHostInput({
         data: {
@@ -79,7 +77,6 @@ describe('ChartComponent', () => {
 
   describe('#refresh', () => {
     it('should call the update method', done => {
-      chartJsLoaded$.next();
       const spy = jest.spyOn(spectator.component.chart, 'update');
       spectator.component.refresh();
       setTimeout(() => {
@@ -89,38 +86,11 @@ describe('ChartComponent', () => {
     });
   });
 
-  describe('#generateLegend', () => {
-    it('should call the generateLegend method', done => {
-      chartJsLoaded$.next();
-      const spy = jest.spyOn(spectator.component.chart, 'generateLegend');
-      spectator.component.generateLegend();
-      setTimeout(() => {
-        expect(spy).toHaveBeenCalled();
-        done();
-      }, 0);
-    });
-  });
-
-  describe('#onCanvasClick', () => {
-    it('should emit the onDataSelect', done => {
-      spectator.component.onDataSelect.subscribe(() => {
-        done();
-      });
-
-      chartJsLoaded$.next();
-      jest
-        .spyOn(spectator.component.chart, 'getElementAtEvent')
-        .mockReturnValue([document.createElement('div')]);
-      spectator.click('canvas');
-    });
-  });
-
   describe('#base64Image', () => {
     it('should return the base64 image', done => {
-      chartJsLoaded$.next();
 
       setTimeout(() => {
-        expect(spectator.component.base64Image).toContain('base64');
+        expect(spectator.component.getBase64Image()).toContain('base64');
         done();
       }, 0);
     });
