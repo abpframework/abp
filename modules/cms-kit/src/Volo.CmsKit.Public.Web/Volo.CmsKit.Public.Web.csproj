@@ -16,7 +16,7 @@
     <ProjectReference Include="..\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Public.Application.Contracts\Volo.CmsKit.Public.Application.Contracts.csproj" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Markdig.Signed" Version="0.24.0" />
+    <PackageReference Include="Markdig.Signed" Version="0.26.0" />
   </ItemGroup>
 
   <ItemGroup>
