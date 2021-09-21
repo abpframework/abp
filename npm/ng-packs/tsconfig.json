@@ -36,6 +36,7 @@
       "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
       "@abp/ng.setting-management/config": ["packages/setting-management/config/src/public-api.ts"],
       "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
+      "@abp/ng.tenant-management/proxy": ["packages/tenant-management/proxy/src/public-api.ts"],
       "@abp/ng.tenant-management/config": ["packages/tenant-management/config/src/public-api.ts"],
       "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
