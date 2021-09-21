@@ -51,7 +51,7 @@ namespace Volo.Abp.Cli
         {
             var illegalKeywords = new[]
             {
-               "Blazor"
+                "Blazor"
             };
 
             foreach (var illegalKeyword in illegalKeywords)
