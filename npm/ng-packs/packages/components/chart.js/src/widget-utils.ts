@@ -1,5 +1,3 @@
-import { ReplaySubject } from 'rxjs';
-
 export function getRandomBackgroundColor(count) {
   const colors = [];
 
@@ -12,5 +10,3 @@ export function getRandomBackgroundColor(count) {
 
   return colors;
 }
-
-export const chartJsLoaded$ = new ReplaySubject(1);

@@ -12,7 +12,6 @@ import {
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
-import { ChartComponent } from './components/chart/chart.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { HttpErrorWrapperComponent } from './components/http-error-wrapper/http-error-wrapper.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
@@ -43,7 +42,6 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 const declarationsWithExports = [
   BreadcrumbComponent,
   ButtonComponent,
-  ChartComponent,
   ConfirmationComponent,
   LoaderBarComponent,
   LoadingComponent,
