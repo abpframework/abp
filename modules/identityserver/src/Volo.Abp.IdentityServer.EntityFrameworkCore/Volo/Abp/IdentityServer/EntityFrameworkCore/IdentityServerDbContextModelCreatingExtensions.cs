@@ -79,7 +79,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ClientId, x.RedirectUri});
 
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql))
                 {
                     ClientRedirectUriConsts.RedirectUriMaxLengthValue = 300;
                 }
@@ -97,7 +97,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ClientId, x.PostLogoutRedirectUri});
 
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql))
                 {
                     ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLengthValue = 300;
                 }
@@ -131,7 +131,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Type, x.Value});
 
                 b.Property(x => x.Type).HasMaxLength(ClientSecretConsts.TypeMaxLength).IsRequired();
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     ClientSecretConsts.ValueMaxLength = 300;
                 }
@@ -190,7 +190,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql))
                 {
                     ClientPropertyConsts.ValueMaxLength = 300;
                 }
@@ -241,7 +241,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.IdentityResourceId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(IdentityResourcePropertyConsts.KeyMaxLength).IsRequired();
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     IdentityResourcePropertyConsts.ValueMaxLength = 300;
                 }
@@ -283,7 +283,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.Property(x => x.Type).HasMaxLength(ApiResourceSecretConsts.TypeMaxLength).IsRequired();
 
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     ApiResourceSecretConsts.ValueMaxLength = 300;
                 }
@@ -329,7 +329,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiResourceId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ApiResourcePropertyConsts.KeyMaxLength).IsRequired();
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     ApiResourcePropertyConsts.ValueMaxLength = 300;
                 }
@@ -380,7 +380,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiScopeId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ApiScopePropertyConsts.KeyMaxLength).IsRequired();
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     ApiScopePropertyConsts.ValueMaxLength = 300;
                 }
@@ -407,7 +407,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Description).HasMaxLength(PersistedGrantConsts.DescriptionMaxLength);
                 b.Property(x => x.CreationTime).IsRequired();
 
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql))
                 {
                     PersistedGrantConsts.DataMaxLengthValue = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
                 }
@@ -442,7 +442,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.CreationTime).IsRequired();
                 b.Property(x => x.Expiration).IsRequired();
 
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                if (IsDatabaseProvider(builder, EfCoreDatabaseProvider.MySql))
                 {
                     DeviceFlowCodesConsts.DataMaxLength = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
                 }
@@ -462,13 +462,11 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
         private static bool IsDatabaseProvider(
             ModelBuilder modelBuilder,
-            IdentityServerModelBuilderConfigurationOptions options,
             params EfCoreDatabaseProvider[] providers)
         {
             foreach (var provider in providers)
             {
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql ||
-                    modelBuilder.GetDatabaseProvider() == provider)
+                if (modelBuilder.GetDatabaseProvider() == provider)
                 {
                     return true;
                 }
