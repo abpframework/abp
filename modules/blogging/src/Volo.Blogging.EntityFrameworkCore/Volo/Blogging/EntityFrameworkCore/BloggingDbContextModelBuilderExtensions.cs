@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -15,8 +14,7 @@ namespace Volo.Blogging.EntityFrameworkCore
     public static class BloggingDbContextModelBuilderExtensions
     {
         public static void ConfigureBlogging(
-            [NotNull] this ModelBuilder builder,
-            Action<BloggingModelBuilderConfigurationOptions> optionsAction = null)
+            [NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -25,16 +23,9 @@ namespace Volo.Blogging.EntityFrameworkCore
                 return;
             }
 
-            var options = new BloggingModelBuilderConfigurationOptions(
-                BloggingDbProperties.DbTablePrefix,
-                BloggingDbProperties.DbSchema
-                );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<BlogUser>(b =>
             {
-                b.ToTable(options.TablePrefix + "Users", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Users", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
@@ -44,7 +35,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Blog>(b =>
             {
-                b.ToTable(options.TablePrefix + "Blogs", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Blogs", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -57,7 +48,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Post>(b =>
             {
-                b.ToTable(options.TablePrefix + "Posts", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Posts", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -77,7 +68,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Comment>(b =>
             {
-                b.ToTable(options.TablePrefix + "Comments", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Comments", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -93,7 +84,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Tag>(b =>
             {
-                b.ToTable(options.TablePrefix + "Tags", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Tags", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -108,7 +99,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<PostTag>(b =>
             {
-                b.ToTable(options.TablePrefix + "PostTags", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "PostTags", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
