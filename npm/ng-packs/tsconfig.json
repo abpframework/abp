@@ -30,6 +30,9 @@
       "@abp/ng.identity/config": ["packages/identity/config/src/public-api.ts"],
       "@abp/ng.identity/proxy": ["packages/identity/proxy/src/public-api.ts"],
       "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
+      "@abp/ng.permission-management/proxy": [
+        "packages/permission-management/proxy/src/public-api.ts"
+      ],
       "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
       "@abp/ng.setting-management/config": ["packages/setting-management/config/src/public-api.ts"],
       "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
