@@ -61,10 +61,7 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            if (!ProjectNameValidator.IsValid(projectName))
-            {
-                throw new CliUsageException("The project name is invalid! Please specify a different name.");
-            }
+            ProjectNameValidator.Validate(projectName);
 
             Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + projectName);
