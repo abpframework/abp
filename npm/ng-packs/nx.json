@@ -33,7 +33,7 @@
   "projects": {
     "account": {
       "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
+      "implicitDependencies": ["core", "theme-shared", "identity"]
     },
     "account-core": {
       "tags": [],
