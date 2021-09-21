@@ -15,6 +15,7 @@
     "paths": {
       "@abp/ng.account": ["packages/account/src/public-api.ts"],
       "@abp/ng.account.core": ["packages/account-core/src/public-api.ts"],
+      "@abp/ng.account.core/proxy": ["packages/account-core/proxy/src/public-api.ts"],
       "@abp/ng.account/config": ["packages/account/config/src/public-api.ts"],
       "@abp/ng.components": ["packages/components/src/public-api.ts"],
       "@abp/ng.components/chart.js": ["packages/components/chart.js/src/public-api.ts"],
