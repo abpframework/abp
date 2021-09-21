@@ -29,7 +29,7 @@ namespace Pages.Abp.MultiTenancy
             LocalizationResourceType = typeof(AbpUiMultiTenancyResource);
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task OnGetAsync()
         {
             Input = new TenantInfoModel();
 
@@ -40,7 +40,7 @@ namespace Pages.Abp.MultiTenancy
             }
         }
 
-        public async Task OnPostAsync()
+        public virtual async Task OnPostAsync()
         {
             Guid? tenantId = null;
             if (!Input.Name.IsNullOrEmpty())

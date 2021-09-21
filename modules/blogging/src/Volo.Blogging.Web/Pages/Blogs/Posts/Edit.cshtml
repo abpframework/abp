@@ -17,8 +17,9 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(EditModel).FullName">
-        <abp-script type="@typeof(TuiEditorScriptContributor)" />
-        <abp-script src="/Pages/Blogs/Posts/edit.js" />
+        <abp-script src="/client-proxies/blogging-proxy.js" />
+        <abp-script type="@typeof(TuiEditorScriptContributor)"/>
+        <abp-script src="/Pages/Blogs/Posts/edit.js"/>
     </abp-script-bundle>
 }
 <div id="edit-post-container">
@@ -28,6 +29,9 @@
                 <div class="card">
                     <div class="card-body">
                         <form method="post" id="edit-post-form">
+
+                            <abp-input asp-for="Post.ConcurrencyStamp" />
+
                             <abp-input asp-for="Post.Title" auto-focus="true" />
 
                             <abp-alert

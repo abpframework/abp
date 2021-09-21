@@ -1,19 +1,22 @@
-import { AuthService, LocalizationParam, RestOccurError, RouterEvents } from '@abp/ng.core';
+import {
+  AuthService,
+  HttpErrorReporterService,
+  LocalizationParam,
+  RouterEvents,
+} from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
   EmbeddedViewRef,
-  Inject,
   Injectable,
   Injector,
   RendererFactory2,
 } from '@angular/core';
 import { NavigationError, ResolveEnd } from '@angular/router';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable, of, Subject, throwError } from 'rxjs';
-import { catchError, filter, map, switchMap } from 'rxjs/operators';
+import { catchError, filter, switchMap } from 'rxjs/operators';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
@@ -74,15 +77,21 @@ export class ErrorHandler {
     throwError(err),
   );
 
-  constructor(
-    protected actions: Actions,
-    protected routerEvents: RouterEvents,
-    protected confirmationService: ConfirmationService,
-    protected cfRes: ComponentFactoryResolver,
-    protected rendererFactory: RendererFactory2,
-    protected injector: Injector,
-    @Inject('HTTP_ERROR_CONFIG') protected httpErrorConfig: HttpErrorConfig,
-  ) {
+  protected httpErrorReporter: HttpErrorReporterService;
+  protected routerEvents: RouterEvents;
+  protected confirmationService: ConfirmationService;
+  protected cfRes: ComponentFactoryResolver;
+  protected rendererFactory: RendererFactory2;
+  protected httpErrorConfig: HttpErrorConfig;
+
+  constructor(protected injector: Injector) {
+    this.httpErrorReporter = injector.get(HttpErrorReporterService);
+    this.routerEvents = injector.get(RouterEvents);
+    this.confirmationService = injector.get(ConfirmationService);
+    this.cfRes = injector.get(ComponentFactoryResolver);
+    this.rendererFactory = injector.get(RendererFactory2);
+    this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
+
     this.listenToRestError();
     this.listenToRouterError();
     this.listenToRouterDataResolved();
@@ -106,13 +115,8 @@ export class ErrorHandler {
   }
 
   protected listenToRestError() {
-    this.actions
-      .pipe(
-        ofActionSuccessful(RestOccurError),
-        map(action => action.payload),
-        filter(this.filterRestErrors),
-        switchMap(this.executeErrorHandler),
-      )
+    this.httpErrorReporter.reporter$
+      .pipe(filter(this.filterRestErrors), switchMap(this.executeErrorHandler))
       .subscribe();
   }
 

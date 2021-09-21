@@ -19,5 +19,18 @@ namespace Volo.Abp.Uow
         {
             _currentUow.Value = unitOfWork;
         }
+        
+        public IUnitOfWork GetCurrentByChecking()
+        {
+            var uow = UnitOfWork;
+
+            //Skip reserved unit of work
+            while (uow != null && (uow.IsReserved || uow.IsDisposed || uow.IsCompleted))
+            {
+                uow = uow.Outer;
+            }
+
+            return uow;
+        }
     }
 }

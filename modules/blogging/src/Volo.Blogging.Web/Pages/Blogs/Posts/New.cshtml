@@ -17,8 +17,9 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(NewModel).FullName">
-        <abp-script type="@typeof(TuiEditorScriptContributor)" />
-        <abp-script src="/Pages/Blogs/Posts/new.js" />
+        <abp-script src="/client-proxies/blogging-proxy.js" />
+        <abp-script type="@typeof(TuiEditorScriptContributor)"/>
+        <abp-script src="/Pages/Blogs/Posts/new.js"/>
     </abp-script-bundle>
 }
 <div id="qa-new-post-container">

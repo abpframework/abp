@@ -8,8 +8,8 @@ using Volo.Docs.Admin.Projects;
 
 namespace Volo.Docs.Admin
 {
-    [RemoteService]
-    [Area("docs")]
+    [RemoteService(Name = DocsAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area("docs-admin")]
     [ControllerName("ProjectsAdmin")]
     [Route("api/docs/admin/projects")]
     public class ProjectsAdminController : AbpController, IProjectAdminAppService

@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
     [Route("api/cms-kit-admin/blogs/blog-posts")]
     public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppService

@@ -3,7 +3,7 @@ import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/co
 import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { ABP } from '../models/common';
-import { Config } from '../models/config';
+import { LocalizationWithDefault } from '../models/localization';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
@@ -67,10 +67,7 @@ export class LocalizationService {
    * @param key Localizaton key to replace with localized text
    * @param interpolateParams Values to interpolate
    */
-  get(
-    key: string | Config.LocalizationWithDefault,
-    ...interpolateParams: string[]
-  ): Observable<string> {
+  get(key: string | LocalizationWithDefault, ...interpolateParams: string[]): Observable<string> {
     return this.configState
       .getAll$()
       .pipe(map(state => getLocalization(state, key, ...interpolateParams)));
@@ -89,7 +86,7 @@ export class LocalizationService {
    * @param key Localization key to replace with localized text
    * @param interpolateParams Values to intepolate.
    */
-  instant(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]): string {
+  instant(key: string | LocalizationWithDefault, ...interpolateParams: string[]): string {
     return getLocalization(this.configState.getAll(), key, ...interpolateParams);
   }
 
@@ -124,7 +121,7 @@ export class LocalizationService {
 
 function getLocalization(
   state: ApplicationConfigurationDto,
-  key: string | Config.LocalizationWithDefault,
+  key: string | LocalizationWithDefault,
   ...interpolateParams: string[]
 ) {
   if (!key) key = '';

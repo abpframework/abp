@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <UserSecretsId>aspnet-Volo.Abp.VirtualFileExplorer.DemoApp-234AF9E1-C3E0-4F8F-BD7D-840627CC8E46</UserSecretsId>
     </PropertyGroup>
 

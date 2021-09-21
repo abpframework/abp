@@ -38,6 +38,7 @@
                             _permissionsModal.open({
                                 providerName: 'R',
                                 providerKey: data.record.name,
+                                providerKeyDisplayName: data.record.name
                             });
                         },
                     },
