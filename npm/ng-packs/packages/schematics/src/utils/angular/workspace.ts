@@ -35,18 +35,16 @@ function createHost(tree: Tree): workspaces.WorkspaceHost {
 export function updateWorkspace(
   updater: (workspace: workspaces.WorkspaceDefinition) => void | PromiseLike<void>,
 ): Rule;
+export function updateWorkspace(workspace: workspaces.WorkspaceDefinition): Rule;
 export function updateWorkspace(
-  workspace: workspaces.WorkspaceDefinition,
-): Rule;
-export function updateWorkspace(
-  updaterOrWorkspace: workspaces.WorkspaceDefinition
+  updaterOrWorkspace:
+    | workspaces.WorkspaceDefinition
     | ((workspace: workspaces.WorkspaceDefinition) => void | PromiseLike<void>),
 ): Rule {
   return async (tree: Tree) => {
     const host = createHost(tree);
 
     if (typeof updaterOrWorkspace === 'function') {
-
       const { workspace } = await workspaces.readWorkspace('/', host);
 
       const result = updaterOrWorkspace(workspace);
@@ -75,7 +73,8 @@ export async function getWorkspace(tree: Tree, path = '/') {
  */
 export function buildDefaultPath(project: workspaces.ProjectDefinition): string {
   const root = project.sourceRoot ? `/${project.sourceRoot}/` : `/${project.root}/src/`;
-  const projectDirName = project.extensions['projectType'] === ProjectType.Application ? 'app' : 'lib';
+  const projectDirName =
+    project.extensions['projectType'] === ProjectType.Application ? 'app' : 'lib';
 
   return `${root}${projectDirName}`;
 }

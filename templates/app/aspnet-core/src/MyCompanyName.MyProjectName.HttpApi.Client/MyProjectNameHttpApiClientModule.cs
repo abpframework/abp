@@ -6,6 +6,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -28,6 +29,11 @@ namespace MyCompanyName.MyProjectName
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<MyProjectNameHttpApiClientModule>();
+            });
         }
     }
 }

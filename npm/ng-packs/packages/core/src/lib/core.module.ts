@@ -3,7 +3,6 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angu
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgxsModule } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
@@ -27,13 +26,12 @@ import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
-import { ProfileState } from './states/profile.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
+import { TENANT_KEY } from './tokens/tenant-key.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
-import { TENANT_KEY } from './tokens/tenant-key.token';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -111,7 +109,6 @@ export class BaseCoreModule {}
   imports: [
     BaseCoreModule,
     LocalizationModule,
-    NgxsModule.forFeature([ProfileState]),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: 'XSRF-TOKEN',

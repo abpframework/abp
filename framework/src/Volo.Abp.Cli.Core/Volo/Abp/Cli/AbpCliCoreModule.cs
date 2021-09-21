@@ -3,7 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
+using Volo.Abp.Cli.ServiceProxying;
+using Volo.Abp.Cli.ServiceProxying.Angular;
+using Volo.Abp.Cli.ServiceProxying.CSharp;
+using Volo.Abp.Cli.ServiceProxying.JavaScript;
 using Volo.Abp.Domain;
+using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -16,7 +21,8 @@ namespace Volo.Abp.Cli
         typeof(AbpDddDomainModule),
         typeof(AbpJsonModule),
         typeof(AbpIdentityModelModule),
-        typeof(AbpMinifyModule)
+        typeof(AbpMinifyModule),
+        typeof(AbpHttpModule)
     )]
     public class AbpCliCoreModule : AbpModule
     {
@@ -57,6 +63,13 @@ namespace Volo.Abp.Cli
                 options.Commands["bundle"] = typeof(BundleCommand);
                 options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
                 options.Commands["install-libs"] = typeof(InstallLibsCommand);
+            });
+
+            Configure<AbpCliServiceProxyOptions>(options =>
+            {
+                options.Generators[JavaScriptServiceProxyGenerator.Name] = typeof(JavaScriptServiceProxyGenerator);
+                options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
+                options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
             });
         }
     }

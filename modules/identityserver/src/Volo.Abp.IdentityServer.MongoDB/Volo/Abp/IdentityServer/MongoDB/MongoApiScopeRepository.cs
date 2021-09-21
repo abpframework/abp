@@ -20,7 +20,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
-        public async Task<ApiScope> GetByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x => x.Name == scopeName)

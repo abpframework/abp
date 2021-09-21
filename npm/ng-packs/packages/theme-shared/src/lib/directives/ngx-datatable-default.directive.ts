@@ -5,7 +5,7 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
-  // tslint:disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[default]',
   exportAs: 'ngxDatatableDefault',
 })

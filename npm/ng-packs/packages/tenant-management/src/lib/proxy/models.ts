@@ -1,7 +1,7 @@
 import type { ExtensibleEntityDto, ExtensibleObject, PagedAndSortedResultRequestDto } from '@abp/ng.core';
 
 export interface GetTenantsInput extends PagedAndSortedResultRequestDto {
-  filter: string;
+  filter?: string;
 }
 
 export interface TenantCreateDto extends TenantCreateOrUpdateDtoBase {
@@ -14,9 +14,10 @@ export interface TenantCreateOrUpdateDtoBase extends ExtensibleObject {
 }
 
 export interface TenantDto extends ExtensibleEntityDto<string> {
-  name: string;
+  name?: string;
+  concurrencyStamp?: string;
 }
 
-// tslint:disable-next-line: no-empty-interface
 export interface TenantUpdateDto extends TenantCreateOrUpdateDtoBase {
+  concurrencyStamp?: string;
 }

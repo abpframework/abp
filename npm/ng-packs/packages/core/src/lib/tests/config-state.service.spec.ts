@@ -1,11 +1,11 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
-import { CoreTestingModule } from '@abp/ng.core/testing';
+import { CORE_OPTIONS } from '../tokens';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -100,13 +100,14 @@ export const CONFIG_STATE_DATA = {
   registerLocaleFn: () => Promise.resolve(),
 } as any as ApplicationConfigurationDto;
 
-describe('ConfigState', () => {
+describe('ConfigStateService', () => {
   let spectator: SpectatorService<ConfigStateService>;
   let configState: ConfigStateService;
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    imports: [CoreTestingModule.withConfig()],
+    imports: [HttpClientTestingModule],
+    providers: [{ provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } }],
   });
 
   beforeEach(() => {

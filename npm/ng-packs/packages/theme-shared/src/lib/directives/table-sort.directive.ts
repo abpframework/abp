@@ -10,7 +10,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import clone from 'just-clone';
-import snq from 'snq';
 import { TableComponent } from '../components/table/table.component';
 
 export interface TableSortOptions {
@@ -35,7 +34,7 @@ export class TableSortDirective implements OnChanges {
 
   get table(): TableComponent | any {
     return (
-      this.abpTable || snq(() => this.cdRef['_view'].component) || snq(() => this.cdRef['context']) // 'context' for ivy
+      this.abpTable || this.cdRef['_view'].component || this.cdRef['context'] // 'context' for ivy
     );
   }
 

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
-using Volo.Docs.Projects;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Admin.Projects
 {
     [Serializable]
-    public class ProjectDto : EntityDto<Guid>
+    public class ProjectDto : EntityDto<Guid>, IHasConcurrencyStamp
     {
         public string Name { get; set; }
 
@@ -29,5 +29,7 @@ namespace Volo.Docs.Admin.Projects
         public string DocumentStoreType { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }
