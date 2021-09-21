@@ -2,6 +2,7 @@ import program from 'commander';
 import execa from 'execa';
 import fse from 'fs-extra';
 import replaceWithPreview from './replace-with-preview';
+const semverParse = require('semver/functions/parse');
 
 program
   .option(
@@ -50,7 +51,7 @@ program.parse(process.argv);
 
     let tag: string;
     if (program.preview) tag = 'preview';
-    if (program.rc) tag = 'next';
+    else if (program.rc || semverParse(program.nextVersion).prerelease?.length) tag = 'next';
 
     await execa(
       'yarn',
