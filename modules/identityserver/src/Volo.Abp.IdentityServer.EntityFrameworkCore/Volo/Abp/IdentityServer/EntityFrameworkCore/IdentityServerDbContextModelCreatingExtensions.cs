@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.IdentityServer.ApiResources;
@@ -14,8 +13,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
     public static class IdentityServerDbContextModelCreatingExtensions
     {
         public static void ConfigureIdentityServer(
-            this ModelBuilder builder,
-            Action<IdentityServerModelBuilderConfigurationOptions> optionsAction = null)
+            this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -24,18 +22,11 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 return;
             }
 
-            var options = new IdentityServerModelBuilderConfigurationOptions(
-                AbpIdentityServerDbProperties.DbTablePrefix,
-                AbpIdentityServerDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             #region Client
 
             builder.Entity<Client>(b =>
             {
-                b.ToTable(options.TablePrefix + "Clients", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "Clients", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -69,7 +60,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientGrantType>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientGrantTypes", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientGrantTypes", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -82,7 +73,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientRedirectUri>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientRedirectUris", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientRedirectUris", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -100,7 +91,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientPostLogoutRedirectUri>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientPostLogoutRedirectUris", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientPostLogoutRedirectUris", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -120,7 +111,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientScope>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientScopes", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientScopes", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -133,7 +124,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientSecret>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientSecrets", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientSecrets", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -152,7 +143,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientClaims", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientClaims", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -166,7 +157,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientIdPRestriction>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientIdPRestrictions", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientIdPRestrictions", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -179,7 +170,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientCorsOrigin>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientCorsOrigins", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientCorsOrigins", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -192,7 +183,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientProperty>(b =>
             {
-                b.ToTable(options.TablePrefix + "ClientProperties", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientProperties", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -214,7 +205,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<IdentityResource>(b =>
             {
-                b.ToTable(options.TablePrefix + "IdentityResources", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResources", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -230,7 +221,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<IdentityResourceClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "IdentityResourceClaims", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResourceClaims", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -243,7 +234,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<IdentityResourceProperty>(b =>
             {
-                b.ToTable(options.TablePrefix + "IdentityResourceProperties", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResourceProperties", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -265,7 +256,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
              builder.Entity<ApiResource>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiResources", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResources", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -284,7 +275,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResourceSecret>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiResourceSecrets", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceSecrets", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -305,7 +296,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResourceClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiResourceClaims", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceClaims", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -318,7 +309,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResourceScope>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiResourceScopes", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceScopes", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -331,7 +322,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResourceProperty>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiResourceProperties", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceProperties", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -353,7 +344,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiScope>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiScopes", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopes", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -369,7 +360,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiScopeClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiScopeClaims", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopeClaims", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -382,7 +373,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiScopeProperty>(b =>
             {
-                b.ToTable(options.TablePrefix + "ApiScopeProperties", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopeProperties", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -404,7 +395,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<PersistedGrant>(b =>
             {
-                b.ToTable(options.TablePrefix + "PersistedGrants", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "PersistedGrants", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -438,7 +429,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<DeviceFlowCodes>(b =>
             {
-                b.ToTable(options.TablePrefix + "DeviceFlowCodes", options.Schema);
+                b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "DeviceFlowCodes", AbpIdentityServerDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
