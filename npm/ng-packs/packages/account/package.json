@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@abp/ng.theme.shared": "~4.4.2",
+    "@abp/ng.identity": "~4.4.2",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
