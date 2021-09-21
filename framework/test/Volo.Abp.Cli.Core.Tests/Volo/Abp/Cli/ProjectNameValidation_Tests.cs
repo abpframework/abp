@@ -58,6 +58,9 @@ namespace Volo.Abp.Cli
             {
                 var args = new CommandLineArgs("new", illegalKeyword);
                 await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+
+                args = new CommandLineArgs("new", "Acme." + illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
             }
         }
 
