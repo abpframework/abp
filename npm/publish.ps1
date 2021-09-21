@@ -23,8 +23,6 @@ $UpdateNgPacksCommand = "yarn update --registry $Registry"
 
 $IsRc = $(node publish-utils.js --rc --customVersion $Version) -eq "true";
 
-
-
 if ($IsRc) {
   $NgPacksPublishCommand += " --rc"
   $UpdateGulpCommand += " -- --rc"
