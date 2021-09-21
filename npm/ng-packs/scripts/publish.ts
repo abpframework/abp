@@ -11,7 +11,6 @@ program
   )
   .option('-r, --registry <registry>', 'target npm server registry')
   .option('-p, --preview', 'publishes with preview tag')
-  .option('-r, --rc', 'publishes with next tag')
   .option('-g, --skipGit', 'skips git push');
 
 program.parse(process.argv);
@@ -51,7 +50,7 @@ program.parse(process.argv);
 
     let tag: string;
     if (program.preview) tag = 'preview';
-    else if (program.rc || semverParse(program.nextVersion).prerelease?.length) tag = 'next';
+    else if (semverParse(program.nextVersion).prerelease?.length) tag = 'next';
 
     await execa(
       'yarn',
