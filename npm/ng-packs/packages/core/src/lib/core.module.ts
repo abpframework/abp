@@ -32,6 +32,7 @@ import { TENANT_KEY } from './tokens/tenant-key.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { CookieLanguageProvider } from './providers/cookie-language.provider';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -131,6 +132,7 @@ export class CoreModule {
       ngModule: RootCoreModule,
       providers: [
         LocaleProvider,
+        CookieLanguageProvider,
         {
           provide: 'CORE_OPTIONS',
           useValue: options,
