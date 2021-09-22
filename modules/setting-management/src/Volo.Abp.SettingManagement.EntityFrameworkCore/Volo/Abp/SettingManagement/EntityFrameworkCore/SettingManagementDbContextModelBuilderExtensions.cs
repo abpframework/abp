@@ -1,29 +1,14 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    public class SettingManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
-    {
-        public SettingManagementModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix,
-            [CanBeNull] string schema)
-            : base(
-                tablePrefix,
-                schema)
-        {
-
-        }
-    }
-
     public static class SettingManagementDbContextModelBuilderExtensions
     {
         //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
         public static void ConfigureSettingManagement(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<SettingManagementModelBuilderConfigurationOptions> optionsAction = null)
+            [NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -32,16 +17,9 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
                 return;
             }
 
-            var options = new SettingManagementModelBuilderConfigurationOptions(
-                AbpSettingManagementDbProperties.DbTablePrefix,
-                AbpSettingManagementDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<Setting>(b =>
             {
-                b.ToTable(options.TablePrefix + "Settings", options.Schema);
+                b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "Settings", AbpSettingManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
