@@ -5,7 +5,6 @@ import {
   EventEmitter,
   Inject,
   Input,
-  isDevMode,
   OnDestroy,
   OnInit,
   Optional,
@@ -144,9 +143,8 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
     setTimeout(() => this.listen(), 0);
     this.modalRef = this.modal.open(this.modalContent, {
-      // TODO: set size to 'lg' when removed the size variable
-      size: this.size,
-      centered: this.centered,
+      size: 'lg',
+      centered: true,
       keyboard: false,
       scrollable: true,
       beforeDismiss: () => {
@@ -156,7 +154,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         return !this.visible;
       },
       ...this.options,
-      windowClass: `${this.modalClass} ${this.options.windowClass || ''} ${this.modalIdentifier}`,
+      windowClass: `${this.options.windowClass || ''} ${this.modalIdentifier}`,
     });
 
     this.appear.emit();
@@ -212,22 +210,6 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         }
       });
 
-    setTimeout(() => {
-      if (!this.abpClose) return;
-      this.warnForDeprecatedClose();
-      fromEvent(this.abpClose.nativeElement, 'click')
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.close());
-    }, 0);
-
     this.init.emit();
-  }
-
-  private warnForDeprecatedClose() {
-    if (isDevMode()) {
-      console.warn(
-        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
-      );
-    }
   }
 }
