@@ -1,5 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { of } from 'rxjs';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
@@ -107,14 +109,20 @@ describe('ConfigStateService', () => {
   const createService = createServiceFactory({
     service: ConfigStateService,
     imports: [HttpClientTestingModule],
-    providers: [{ provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } }],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => of(CONFIG_STATE_DATA) },
+      },
+    ],
   });
 
   beforeEach(() => {
     spectator = createService();
     configState = spectator.service;
 
-    configState.setState(CONFIG_STATE_DATA);
+    configState.refreshAppState();
   });
 
   describe('#getAll', () => {
