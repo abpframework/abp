@@ -1,4 +1,4 @@
-const glob = require('glob');
+const glob = require('fast-glob');
 var path = require('path');
 const childProcess = require('child_process');
 const execa = require('execa');
@@ -18,6 +18,7 @@ const gulp = (folderPath) => {
   }
 
   try {
+    fse.removeSync(`${folderPath}/wwwroot/libs`);
     execa.sync('yarn', ['install'], { cwd: folderPath, stdio: 'inherit' });
     execa.sync('yarn', ['gulp'], { cwd: folderPath, stdio: 'inherit' });
   } catch (error) {
@@ -40,8 +41,9 @@ const updatePackages = (pkgJsonPath) => {
   }
 };
 
-console.time();
-glob('../**/package.json', {}, (er, files) => {
+(async () => {
+  console.time();
+  let files = await glob('../**/package.json');
   files = files.filter(
     (f) =>
       f &&
@@ -53,7 +55,9 @@ glob('../**/package.json', {}, (er, files) => {
 
   files.forEach((file) => {
     updatePackages(file);
-    gulp(file.replace('package.json', ''));
+    const folderPath = file.replace('package.json', '');
+    gulp(folderPath);
   });
+
   console.timeEnd();
-});
+})();
