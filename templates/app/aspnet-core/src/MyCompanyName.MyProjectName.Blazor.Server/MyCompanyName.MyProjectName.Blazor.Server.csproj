@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.4.1" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.Bootstrap5" Version="0.9.5-preview2.1" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.5-preview2.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
   </ItemGroup>

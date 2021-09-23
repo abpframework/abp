@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -243,7 +243,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBootstrapProviders()
+                .AddBootstrap5Providers()
                 .AddFontAwesomeIcons();
         }
 
