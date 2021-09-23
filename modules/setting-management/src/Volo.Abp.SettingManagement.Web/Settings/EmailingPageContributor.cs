@@ -48,17 +48,18 @@ namespace Volo.Abp.SettingManagement.Web.Settings
 
         private async Task<bool> CheckFeatureAsync(SettingPageCreationContext context)
         {
-            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
-
-            if (!currentTenant.IsAvailable)
+            var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            if (!await featureCheck.IsEnabledAsync(SettingManagementFeatures.Enable))
             {
-                return true;
+                return false;
             }
 
-            var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            if (context.ServiceProvider.GetRequiredService<ICurrentTenant>().IsAvailable)
+            {
+                return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+            }
 
-            return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
-
+            return true;
         }
     }
 }
