@@ -1,5 +1,5 @@
 import { ConfigStateService, LocalizationService } from '@abp/ng.core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
@@ -109,8 +109,9 @@ describe('Enum Utils', () => {
 });
 
 function createMockLocalizationService() {
-  const configState = new ConfigStateService(null);
-  configState.setState({ localization: mockL10n } as any);
+  const fakeAppConfigService = { get: () => of({ localization: mockL10n }) } as any;
+  const configState = new ConfigStateService(fakeAppConfigService);
+  configState.refreshAppState();
 
   return new LocalizationService(mockSessionState, null, null, configState);
 }

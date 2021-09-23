@@ -1,4 +1,3 @@
-export * from './application-configuration.service';
 export * from './auth.service';
 export * from './config-state.service';
 export * from './content-projection.service';
