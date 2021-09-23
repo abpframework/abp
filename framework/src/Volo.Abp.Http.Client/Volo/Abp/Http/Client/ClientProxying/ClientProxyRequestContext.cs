@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.Client.Proxying
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    public class HttpProxyExecuterContext
+    public class ClientProxyRequestContext
     {
         [NotNull]
         public ActionApiDescriptionModel Action { get; }
@@ -16,7 +16,7 @@ namespace Volo.Abp.Http.Client.Proxying
         [NotNull]
         public Type ServiceType { get; }
 
-        public HttpProxyExecuterContext(
+        public ClientProxyRequestContext(
             [NotNull] ActionApiDescriptionModel action,
             [NotNull] IReadOnlyDictionary<string, object> arguments,
             [NotNull] Type serviceType)

@@ -24,7 +24,7 @@
       "@abp/ng.core/locale": ["packages/core/locale/src/public-api.ts"],
       "@abp/ng.core/testing": ["packages/core/testing/src/public-api.ts"],
       "@abp/ng.feature-management": ["packages/feature-management/src/public-api.ts"],
-      "@abp/ng.identity": ["packages/identity//src/public-api.ts"],
+      "@abp/ng.identity": ["packages/identity/src/public-api.ts"],
       "@abp/ng.identity/config": ["packages/identity/config/src/public-api.ts"],
       "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
       "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
