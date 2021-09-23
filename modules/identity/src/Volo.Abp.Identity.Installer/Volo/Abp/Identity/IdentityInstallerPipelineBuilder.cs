@@ -11,6 +11,13 @@ namespace Volo.Abp.Identity
     {
         public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
         {
+            context.AddEfCoreConfigurationMethodDeclaration(
+                new EfCoreConfigurationMethodDeclaration(
+                    "Volo.Abp.Identity.EntityFrameworkCore",
+                    "ConfigureIdentity"
+                    )
+                );
+
             return GetBasePipeline(context);
         }
     }

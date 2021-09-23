@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Studio.ModuleInstalling.Steps;
+﻿using System.Linq;
+using Volo.Abp.Studio.ModuleInstalling.Steps;
 
 namespace Volo.Abp.Studio.ModuleInstalling
 {
@@ -19,6 +20,11 @@ namespace Volo.Abp.Studio.ModuleInstalling
             }
 
             pipeline.Add(new PackageReferencingStep());
+
+            if (context.EfCoreConfigurationMethodDeclarations.Any())
+            {
+                pipeline.Add(new AddEfCoreConfigurationMethodStep());
+            }
 
             return pipeline;
         }

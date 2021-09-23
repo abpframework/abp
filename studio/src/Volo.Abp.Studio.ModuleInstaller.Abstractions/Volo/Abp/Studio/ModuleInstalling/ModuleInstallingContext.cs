@@ -18,6 +18,8 @@ namespace Volo.Abp.Studio.ModuleInstalling
 
         public string Version { get; set; }
 
+        public List<EfCoreConfigurationMethodDeclaration> EfCoreConfigurationMethodDeclarations { get; }
+
         public List<PackageInfo> TargetModulePackages { get; protected set; }
 
         public List<PackageInfoWithAnalyze> ReferenceModulePackages { get; protected set; }
@@ -45,7 +47,19 @@ namespace Volo.Abp.Studio.ModuleInstalling
             TargetModulePackages = new List<PackageInfo>();
             ReferenceModulePackages = new List<PackageInfoWithAnalyze>();
 
+            EfCoreConfigurationMethodDeclarations = new List<EfCoreConfigurationMethodDeclaration>();
+
             ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
+        }
+
+        public void AddEfCoreConfigurationMethodDeclaration(params EfCoreConfigurationMethodDeclaration[] methodNames)
+        {
+            foreach (var methodName in methodNames)
+            {
+                Check.NotNull(methodName, nameof(methodName));
+
+                EfCoreConfigurationMethodDeclarations.Add(methodName);
+            }
         }
 
         public void SetReferenceModulePackages([NotNull] List<PackageInfoWithAnalyze> referenceModulePackages)
