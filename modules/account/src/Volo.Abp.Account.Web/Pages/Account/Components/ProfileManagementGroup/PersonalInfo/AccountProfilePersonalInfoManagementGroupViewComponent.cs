@@ -9,9 +9,6 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo
 {
-    [Widget(
-        ScriptTypes = new[] { typeof(ProfileManagementScriptBundleContributor) }
-    )]
     public class AccountProfilePersonalInfoManagementGroupViewComponent : AbpViewComponent
     {
         private readonly IProfileAppService _profileAppService;

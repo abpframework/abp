@@ -9,9 +9,6 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password
 {
-    [Widget(
-        ScriptTypes = new[] { typeof(ProfileManagementScriptBundleContributor) }
-    )]
     public class AccountProfilePasswordManagementGroupViewComponent : AbpViewComponent
     {
         private readonly IProfileAppService _profileAppService;
