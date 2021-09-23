@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -16,13 +15,6 @@ namespace Volo.Abp.Http.Client.ClientProxying
 {
     public class ClientProxyUrlBuilder : ITransientDependency
     {
-        protected IServiceScopeFactory ServiceProviderFactory { get; }
-
-        public ClientProxyUrlBuilder(IServiceScopeFactory serviceProviderFactory)
-        {
-            ServiceProviderFactory = serviceProviderFactory;
-        }
-
         public string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             // The ASP.NET Core route value provider and query string value provider:

@@ -52,6 +52,10 @@ namespace Volo.Abp.Http.Client.ClientProxying
         {
             var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.GetType().FullName))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
+            if (action == null)
+            {
+                throw new AbpException($"The API description of the {typeof(TService).FullName}.{methodName} method was not found!");
+            }
             return new ClientProxyRequestContext(
                 action,
                 action.Parameters
