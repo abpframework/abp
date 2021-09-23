@@ -143,8 +143,8 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
     setTimeout(() => this.listen(), 0);
     this.modalRef = this.modal.open(this.modalContent, {
-      size: 'lg',
-      centered: true,
+      size: 'md',
+      centered: false,
       keyboard: false,
       scrollable: true,
       beforeDismiss: () => {
