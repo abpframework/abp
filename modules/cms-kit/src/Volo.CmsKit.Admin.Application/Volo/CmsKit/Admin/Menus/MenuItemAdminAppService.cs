@@ -67,10 +67,6 @@ namespace Volo.CmsKit.Admin.Menus
             {
                 MenuManager.SetPageUrl(menuItem, await PageRepository.GetAsync(input.PageId.Value));
             }
-            else
-            {
-                menuItem.SetUrl(input.Url);
-            }
             
             await MenuItemRepository.InsertAsync(menuItem);
 
