@@ -59,7 +59,8 @@ namespace Volo.CmsKit.Admin.Menus
                     input.Order,
                     input.Target,
                     input.ElementId,
-                    input.CssClass
+                    input.CssClass,
+                    CurrentTenant.Id
                 );
 
             await MenuItemRepository.InsertAsync(menuItem);
