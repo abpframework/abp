@@ -2,12 +2,16 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo
 {
+    [Widget(
+        ScriptTypes = new[] { typeof(ProfileManagementScriptBundleContributor) }
+    )]
     public class AccountProfilePersonalInfoManagementGroupViewComponent : AbpViewComponent
     {
         private readonly IProfileAppService _profileAppService;

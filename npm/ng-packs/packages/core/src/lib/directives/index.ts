@@ -6,4 +6,3 @@ export * from './init.directive';
 export * from './permission.directive';
 export * from './replaceable-template.directive';
 export * from './stop-propagation.directive';
-export * from './visibility.directive';

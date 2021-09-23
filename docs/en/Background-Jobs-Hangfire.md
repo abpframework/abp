@@ -88,17 +88,21 @@ To make it secure by default, only local requests are allowed, however you can c
 You can integrate the Hangfire dashboard to [ABP authorization system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
-    app.UseHangfireDashboard("/hangfire", new DashboardOptions
-    {
-        AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
-    });
+```csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
+});
+```
 
 If you want to require an additional permission, you can pass it into the constructor as below:
 
-    app.UseHangfireDashboard("/hangfire", new DashboardOptions
-    {
-        AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
-    });
+```csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
+});
+```
 
-**Important**: `UseHangfireDashboard` should be called after the authentication middleware in your `Startup` class (probably at the last line). Otherwise,
+**Important**: `UseHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
 authorization will always fail!
