@@ -18,7 +18,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         {
         }
 
-        public async Task<ApiScope> GetByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .OrderBy(x=>x.Id)

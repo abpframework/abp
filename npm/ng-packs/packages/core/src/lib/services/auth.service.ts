@@ -42,13 +42,6 @@ export class AuthService {
     return this.strategy.logout(queryParams);
   }
 
-  /**
-   * @deprecated Use navigateToLogin method instead. To be deleted in v5.0
-   */
-  initLogin() {
-    this.strategy.navigateToLogin();
-  }
-
   navigateToLogin(queryParams?: Params) {
     this.strategy.navigateToLogin(queryParams);
   }
