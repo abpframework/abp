@@ -59,8 +59,9 @@ namespace Volo.Abp.SettingManagement
             await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.DefaultFromDisplayName, input.DefaultFromDisplayName);
         }
 
-        private async Task CheckFeatureAsync()
+        protected virtual async Task CheckFeatureAsync()
         {
+            await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
             if (CurrentTenant.IsAvailable)
             {
                 await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);

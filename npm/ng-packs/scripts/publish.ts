@@ -2,6 +2,7 @@ import program from 'commander';
 import execa from 'execa';
 import fse from 'fs-extra';
 import replaceWithPreview from './replace-with-preview';
+const semverParse = require('semver/functions/parse');
 
 program
   .option(
@@ -10,7 +11,6 @@ program
   )
   .option('-r, --registry <registry>', 'target npm server registry')
   .option('-p, --preview', 'publishes with preview tag')
-  .option('-r, --rc', 'publishes with next tag')
   .option('-g, --skipGit', 'skips git push');
 
 program.parse(process.argv);
@@ -50,7 +50,7 @@ program.parse(process.argv);
 
     let tag: string;
     if (program.preview) tag = 'preview';
-    if (program.rc) tag = 'next';
+    else if (semverParse(program.nextVersion).prerelease?.length) tag = 'next';
 
     await execa(
       'yarn',

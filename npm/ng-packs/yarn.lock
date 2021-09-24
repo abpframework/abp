@@ -118,7 +118,7 @@
     chart.js "^2.9.3"
     tslib "^2.0.0"
 
-"@abp/utils@^4.4.2":
+"@abp/utils@^4.4.2", "@abp/utils@~4.4.2":
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.4.2.tgz#33d1a8c1199241e0c926fb3fd2f439d2925d5db1"
   integrity sha512-o/1XGKSOPB+yQH6c+yyMNSr/r8rzb3PoHkxKqDNEGEf79L6EwJ8Wm+4wKaoHjVrYQtn+d/40PLEdvGEwQxVvCw==

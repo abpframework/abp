@@ -1,4 +1,4 @@
-<abp-modal *ngIf="visible" size="lg" [(visible)]="visible" [busy]="modalBusy">
+<abp-modal *ngIf="visible" [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
   <ng-template #abpHeader>
     <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
