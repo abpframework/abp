@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -21,6 +21,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
                 .OrderBy(x=>x.Id)
                 .FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
         }
