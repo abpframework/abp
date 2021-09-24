@@ -55,7 +55,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 arguments = new ClientProxyRequestTypeValue();
             }
 
-            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.Key.FullName))}";
+            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => x.Key.FullName))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
             if (action == null)
             {
@@ -65,7 +65,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 action,
                 action.Parameters
                     .GroupBy(x => x.NameOnMethod)
-                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values.Skip(i).FirstOrDefault()))
+                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
                     .ToDictionary(x => x.Key, x => x.Value),
                 typeof(TService));
         }
