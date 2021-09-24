@@ -40,11 +40,11 @@ namespace Volo.Abp.IdentityServer.ApiScopes
             bool required = false,
             bool emphasize = false,
             bool showInDiscoveryDocument = true,
-            bool enabled = true)
+            bool enabled = true
+        ) : base(id)
         {
             Check.NotNull(name, nameof(name));
 
-            Id = id;
             Name = name;
             DisplayName = displayName ?? name;
             Description = description;

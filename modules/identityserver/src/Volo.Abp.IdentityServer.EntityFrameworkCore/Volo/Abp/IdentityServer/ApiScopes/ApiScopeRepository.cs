@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -29,12 +29,11 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from scope in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                where scopeNames.Contains(scope.Name)
-                orderby scope.Id
-                select scope;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(scope => scopeNames.Contains(scope.Name))
+                .OrderBy(scope => scope.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)

@@ -39,11 +39,11 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             bool enabled = true,
             bool required = false,
             bool emphasize = false,
-            bool showInDiscoveryDocument = true)
+            bool showInDiscoveryDocument = true
+        ) : base(id)
         {
             Check.NotNull(name, nameof(name));
 
-            Id = id;
             Name = name;
             DisplayName = displayName;
             Description = description;
@@ -56,9 +56,8 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             Properties = new List<IdentityResourceProperty>();
         }
 
-        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource) : base(id)
         {
-            Id = id;
             Name = resource.Name;
             DisplayName = resource.DisplayName;
             Description = resource.Description;

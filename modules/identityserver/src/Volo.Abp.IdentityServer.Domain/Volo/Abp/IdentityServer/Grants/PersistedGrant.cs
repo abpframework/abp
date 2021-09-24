@@ -5,6 +5,14 @@ namespace Volo.Abp.IdentityServer.Grants
 {
     public class PersistedGrant : AggregateRoot<Guid>
     {
+        protected PersistedGrant()
+        {
+        }
+
+        public PersistedGrant(Guid id) : base(id)
+        {
+        }
+
         public virtual string Key { get; set; }
 
         public virtual string Type { get; set; }
@@ -24,15 +32,5 @@ namespace Volo.Abp.IdentityServer.Grants
         public virtual DateTime? ConsumedTime { get; set; }
 
         public virtual string Data { get; set; }
-
-        protected PersistedGrant()
-        {
-
-        }
-
-        public PersistedGrant(Guid id)
-        {
-            Id = id;
-        }
     }
 }

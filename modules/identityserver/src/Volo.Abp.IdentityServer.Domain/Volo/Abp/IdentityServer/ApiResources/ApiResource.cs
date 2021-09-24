@@ -35,11 +35,9 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         }
 
-        public ApiResource(Guid id, [NotNull] string name, string displayName = null, string description = null)
+        public ApiResource(Guid id, [NotNull] string name, string displayName = null, string description = null) : base(id)
         {
             Check.NotNull(name, nameof(name));
-
-            Id = id;
 
             Name = name;
 
