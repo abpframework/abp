@@ -22,12 +22,18 @@ namespace Volo.Abp.Identity.ClientProxies
 
         public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
         {
-            return await RequestAsync<ProfileDto>(nameof(UpdateAsync), input);
+            return await RequestAsync<ProfileDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(UpdateProfileDto), input }
+            });
         }
 
         public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
         {
-            await RequestAsync(nameof(ChangePasswordAsync), input);
+            await RequestAsync(nameof(ChangePasswordAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(ChangePasswordInput), input }
+            });
         }
     }
 }

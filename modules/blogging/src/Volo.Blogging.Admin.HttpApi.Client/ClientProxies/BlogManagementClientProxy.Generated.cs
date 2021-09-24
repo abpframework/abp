@@ -23,27 +23,43 @@ namespace Volo.Blogging.Admin.ClientProxies
 
         public virtual async Task<BlogDto> GetAsync(Guid id)
         {
-            return await RequestAsync<BlogDto>(nameof(GetAsync), id);
+            return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
-            return await RequestAsync<BlogDto>(nameof(CreateAsync), input);
+            return await RequestAsync<BlogDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(CreateBlogDto), input }
+            });
         }
 
         public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
-            return await RequestAsync<BlogDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<BlogDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(UpdateBlogDto), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task ClearCacheAsync(Guid id)
         {
-            await RequestAsync(nameof(ClearCacheAsync), id);
+            await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }

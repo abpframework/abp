@@ -17,17 +17,31 @@ namespace Volo.CmsKit.Public.Reactions.ClientProxies
     {
         public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
         {
-            return await RequestAsync<ListResultDto<ReactionWithSelectionDto>>(nameof(GetForSelectionAsync), entityType, entityId);
+            return await RequestAsync<ListResultDto<ReactionWithSelectionDto>>(nameof(GetForSelectionAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
 
         public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            await RequestAsync(nameof(CreateAsync), entityType, entityId, reaction);
+            await RequestAsync(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId },
+                { typeof(string), reaction }
+            });
         }
 
         public virtual async Task DeleteAsync(string entityType, string entityId, string reaction)
         {
-            await RequestAsync(nameof(DeleteAsync), entityType, entityId, reaction);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId },
+                { typeof(string), reaction }
+            });
         }
     }
 }

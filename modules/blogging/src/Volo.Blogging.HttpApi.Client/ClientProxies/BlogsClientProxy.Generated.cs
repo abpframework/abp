@@ -23,12 +23,18 @@ namespace Volo.Blogging.ClientProxies
 
         public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
-            return await RequestAsync<BlogDto>(nameof(GetByShortNameAsync), shortName);
+            return await RequestAsync<BlogDto>(nameof(GetByShortNameAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), shortName }
+            });
         }
 
         public virtual async Task<BlogDto> GetAsync(Guid id)
         {
-            return await RequestAsync<BlogDto>(nameof(GetAsync), id);
+            return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }
