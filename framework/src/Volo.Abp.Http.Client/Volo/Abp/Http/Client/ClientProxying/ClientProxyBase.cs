@@ -38,19 +38,24 @@ namespace Volo.Abp.Http.Client.ClientProxying
         protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
         protected ClientProxyUrlBuilder ClientProxyUrlBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
 
-        protected virtual async Task RequestAsync(string methodName, params object[] arguments)
+        protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
         {
             await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments));
         }
 
-        protected virtual async Task<T> RequestAsync<T>(string methodName, params object[] arguments)
+        protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue arguments = null)
         {
             return await RequestAsync<T>(BuildHttpProxyClientProxyContext(methodName, arguments));
         }
 
-        protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, params object[] arguments)
+        protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, ClientProxyRequestTypeValue arguments = null)
         {
-            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.GetType().FullName))}";
+            if (arguments == null)
+            {
+                arguments = new ClientProxyRequestTypeValue();
+            }
+
+            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Select(x => x.Key.FullName))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
             if (action == null)
             {
@@ -60,7 +65,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 action,
                 action.Parameters
                     .GroupBy(x => x.NameOnMethod)
-                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments[i]))
+                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values.Skip(i).Take(1)))
                     .ToDictionary(x => x.Key, x => x.Value),
                 typeof(TService));
         }

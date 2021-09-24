@@ -17,12 +17,18 @@ namespace Volo.Blogging.ClientProxies
     {
         public virtual async Task<RawFileDto> GetAsync(string name)
         {
-            return await RequestAsync<RawFileDto>(nameof(GetAsync), name);
+            return await RequestAsync<RawFileDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), name }
+            });
         }
 
         public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
-            return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), input);
+            return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(FileUploadInputDto), input }
+            });
         }
     }
 }

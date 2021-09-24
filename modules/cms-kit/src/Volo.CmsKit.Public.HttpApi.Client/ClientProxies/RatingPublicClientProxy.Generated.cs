@@ -18,17 +18,30 @@ namespace Volo.CmsKit.Public.Ratings.ClientProxies
     {
         public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
         {
-            return await RequestAsync<RatingDto>(nameof(CreateAsync), entityType, entityId, input);
+            return await RequestAsync<RatingDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId },
+                { typeof(CreateUpdateRatingInput), input }
+            });
         }
 
         public virtual async Task DeleteAsync(string entityType, string entityId)
         {
-            await RequestAsync(nameof(DeleteAsync), entityType, entityId);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
 
         public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
         {
-            return await RequestAsync<List<RatingWithStarCountDto>>(nameof(GetGroupedStarCountsAsync), entityType, entityId);
+            return await RequestAsync<List<RatingWithStarCountDto>>(nameof(GetGroupedStarCountsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
     }
 }

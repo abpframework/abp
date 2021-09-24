@@ -23,32 +23,52 @@ namespace Volo.CmsKit.Admin.Menus.ClientProxies
 
         public virtual async Task<MenuItemDto> GetAsync(Guid id)
         {
-            return await RequestAsync<MenuItemDto>(nameof(GetAsync), id);
+            return await RequestAsync<MenuItemDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<MenuItemDto> CreateAsync(MenuItemCreateInput input)
         {
-            return await RequestAsync<MenuItemDto>(nameof(CreateAsync), input);
+            return await RequestAsync<MenuItemDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(MenuItemCreateInput), input }
+            });
         }
 
         public virtual async Task<MenuItemDto> UpdateAsync(Guid id, MenuItemUpdateInput input)
         {
-            return await RequestAsync<MenuItemDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<MenuItemDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(MenuItemUpdateInput), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input)
         {
-            await RequestAsync(nameof(MoveMenuItemAsync), id, input);
+            await RequestAsync(nameof(MoveMenuItemAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(MenuItemMoveInput), input }
+            });
         }
 
         public virtual async Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input)
         {
-            return await RequestAsync<PagedResultDto<PageLookupDto>>(nameof(GetPageLookupAsync), input);
+            return await RequestAsync<PagedResultDto<PageLookupDto>>(nameof(GetPageLookupAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(PageLookupInputDto), input }
+            });
         }
     }
 }
