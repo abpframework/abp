@@ -1,4 +1,4 @@
-import { ProfileService } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.identity/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';

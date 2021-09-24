@@ -64,6 +64,11 @@ namespace Volo.CmsKit.Admin.Menus
                     CurrentTenant.Id
                 );
 
+            if (input.PageId.HasValue)
+            {
+                MenuManager.SetPageUrl(menuItem, await PageRepository.GetAsync(input.PageId.Value));
+            }
+            
             await MenuItemRepository.InsertAsync(menuItem);
 
             return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);

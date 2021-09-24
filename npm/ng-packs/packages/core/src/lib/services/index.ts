@@ -10,7 +10,6 @@ export * from './list.service';
 export * from './localization.service';
 export * from './multi-tenancy.service';
 export * from './permission.service';
-export * from './profile.service';
 export * from './replaceable-components.service';
 export * from './resource-wait.service';
 export * from './rest.service';
