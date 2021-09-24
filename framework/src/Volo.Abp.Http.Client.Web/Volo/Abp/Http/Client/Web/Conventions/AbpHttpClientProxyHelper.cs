@@ -3,9 +3,9 @@ using System.Linq;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Http.Client.ClientProxying;
 
-namespace Volo.Abp.Swashbuckle.Conventions
+namespace Volo.Abp.Http.Client.Web.Conventions
 {
-    public static class AbpSwaggerClientProxyHelper
+    public static class AbpHttpClientProxyHelper
     {
         public static bool IsClientProxyService(Type type)
         {

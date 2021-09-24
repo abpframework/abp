@@ -14,15 +14,15 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Swashbuckle.Conventions
+namespace Volo.Abp.Http.Client.Web.Conventions
 {
     [DisableConventionalRegistration]
-    public class AbpSwaggerServiceConvention : AbpServiceConvention
+    public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     {
         protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
         protected readonly List<ActionModel> ActionWithAttributeRoute;
 
-        public AbpSwaggerServiceConvention(
+        public AbpHttpClientProxyServiceConvention(
             IOptions<AbpAspNetCoreMvcOptions> options,
             IConventionalRouteBuilder conventionalRouteBuilder,
             IClientProxyApiDescriptionFinder clientProxyApiDescriptionFinder)
@@ -34,12 +34,12 @@ namespace Volo.Abp.Swashbuckle.Conventions
 
         protected override IList<ControllerModel> GetControllers(ApplicationModel application)
         {
-            return application.Controllers.Where(c => !AbpSwaggerClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
+            return application.Controllers.Where(c => !AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
         }
 
         protected virtual IList<ControllerModel> GetClientProxyControllers(ApplicationModel application)
         {
-            return application.Controllers.Where(c => AbpSwaggerClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
+            return application.Controllers.Where(c => AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
         }
 
         protected override void ApplyForControllers(ApplicationModel application)

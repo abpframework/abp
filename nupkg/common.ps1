@@ -112,6 +112,7 @@ $projects = (
     "framework/src/Volo.Abp.HangFire",
     "framework/src/Volo.Abp.Http.Abstractions",
     "framework/src/Volo.Abp.Http.Client",
+	"framework/src/Volo.Abp.Http.Client.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
