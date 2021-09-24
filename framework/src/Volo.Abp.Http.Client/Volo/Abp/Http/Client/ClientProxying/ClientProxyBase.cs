@@ -65,7 +65,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 action,
                 action.Parameters
                     .GroupBy(x => x.NameOnMethod)
-                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values.Skip(i).First().Value))
+                    .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
                     .ToDictionary(x => x.Key, x => x.Value),
                 typeof(TService));
         }
