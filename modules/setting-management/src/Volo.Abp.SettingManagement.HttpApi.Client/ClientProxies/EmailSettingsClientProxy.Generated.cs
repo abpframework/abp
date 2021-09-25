@@ -22,7 +22,10 @@ namespace Volo.Abp.SettingManagement.ClientProxies
 
         public virtual async Task UpdateAsync(UpdateEmailSettingsDto input)
         {
-            await RequestAsync(nameof(UpdateAsync), input);
+            await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(UpdateEmailSettingsDto), input }
+            });
         }
     }
 }

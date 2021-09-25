@@ -17,7 +17,10 @@ namespace Volo.CmsKit.Public.Pages.ClientProxies
     {
         public virtual async Task<PageDto> FindBySlugAsync(string slug)
         {
-            return await RequestAsync<PageDto>(nameof(FindBySlugAsync), slug);
+            return await RequestAsync<PageDto>(nameof(FindBySlugAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), slug }
+            });
         }
     }
 }

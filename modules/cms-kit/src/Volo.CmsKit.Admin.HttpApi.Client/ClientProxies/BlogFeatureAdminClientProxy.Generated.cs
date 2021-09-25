@@ -19,12 +19,19 @@ namespace Volo.CmsKit.Admin.Blogs.ClientProxies
     {
         public virtual async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
         {
-            return await RequestAsync<List<BlogFeatureDto>>(nameof(GetListAsync), blogId);
+            return await RequestAsync<List<BlogFeatureDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), blogId }
+            });
         }
 
         public virtual async Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
         {
-            await RequestAsync(nameof(SetAsync), blogId, dto);
+            await RequestAsync(nameof(SetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), blogId },
+                { typeof(BlogFeatureInputDto), dto }
+            });
         }
     }
 }

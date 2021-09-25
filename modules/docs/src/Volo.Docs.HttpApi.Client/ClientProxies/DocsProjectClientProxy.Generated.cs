@@ -23,22 +23,36 @@ namespace Volo.Docs.Projects.ClientProxies
 
         public virtual async Task<ProjectDto> GetAsync(string shortName)
         {
-            return await RequestAsync<ProjectDto>(nameof(GetAsync), shortName);
+            return await RequestAsync<ProjectDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), shortName }
+            });
         }
 
         public virtual async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
         {
-            return await RequestAsync<string>(nameof(GetDefaultLanguageCodeAsync), shortName, version);
+            return await RequestAsync<string>(nameof(GetDefaultLanguageCodeAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), shortName },
+                { typeof(string), version }
+            });
         }
 
         public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
-            return await RequestAsync<ListResultDto<VersionInfoDto>>(nameof(GetVersionsAsync), shortName);
+            return await RequestAsync<ListResultDto<VersionInfoDto>>(nameof(GetVersionsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), shortName }
+            });
         }
 
         public virtual async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
         {
-            return await RequestAsync<LanguageConfig>(nameof(GetLanguageListAsync), shortName, version);
+            return await RequestAsync<LanguageConfig>(nameof(GetLanguageListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), shortName },
+                { typeof(string), version }
+            });
         }
     }
 }
