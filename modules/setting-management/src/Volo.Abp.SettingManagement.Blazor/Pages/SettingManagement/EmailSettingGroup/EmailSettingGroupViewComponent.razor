@@ -83,7 +83,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                <FieldLabel>@L["SmtpPassword"]</FieldLabel>
-                                <TextEdit @bind-Text="@EmailSettings.SmtpPassword">
+                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
