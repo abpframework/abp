@@ -3,9 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Reflection;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.MongoDB
 {
@@ -20,10 +24,12 @@ namespace Volo.Abp.MongoDB
             _entityModelBuilders = new Dictionary<Type, object>();
         }
 
-        public MongoDbContextModel Build(AbpMongoDbContext dbContext)
+        public virtual MongoDbContextModel Build(AbpMongoDbContext dbContext)
         {
             lock (SyncObj)
             {
+                var clockOptions = dbContext.LazyServiceProvider?.LazyGetService<IOptions<AbpClockOptions>>();
+
                 var entityModels = _entityModelBuilders
                     .Select(x => x.Value)
                     .Cast<IMongoEntityModel>()
@@ -34,6 +40,33 @@ namespace Volo.Abp.MongoDB
                 foreach (var entityModel in entityModels.Values)
                 {
                     var map = entityModel.As<IHasBsonClassMap>().GetMap();
+
+                    if (clockOptions != null)
+                    {
+                        var dateTimePropertyInfos = entityModel.EntityType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                            .Where(property =>
+                                (property.PropertyType == typeof(DateTime) ||
+                                 property.PropertyType == typeof(DateTime?)) &&
+                                property.CanWrite
+                            ).ToList();
+
+                        dateTimePropertyInfos.ForEach(property =>
+                        {
+                            var disableDateTimeNormalization =
+                                entityModel.EntityType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) ||
+                                ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) != null;
+
+                            if (property.PropertyType == typeof(DateTime?))
+                            {
+                                map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, disableDateTimeNormalization)));
+                            }
+                            else
+                            {
+                                map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, disableDateTimeNormalization));
+                            }
+                        });
+                    }
+
                     if (!BsonClassMap.IsClassMapRegistered(map.ClassType))
                     {
                         BsonClassMap.RegisterClassMap(map);
@@ -52,6 +85,29 @@ namespace Volo.Abp.MongoDB
                     {
                         var map = new BsonClassMap(baseClass);
                         map.ConfigureAbpConventions();
+
+                        if (clockOptions != null)
+                        {
+                            var dateTimePropertyInfos = baseClass.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                                .Where(property =>
+                                    (property.PropertyType == typeof(DateTime) ||
+                                     property.PropertyType == typeof(DateTime?)) &&
+                                    property.CanWrite
+                                ).ToList();
+
+                            dateTimePropertyInfos.ForEach(property =>
+                            {
+                                if (property.PropertyType == typeof(DateTime?))
+                                {
+                                    map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, false)));
+                                }
+                                else
+                                {
+                                    map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, false));
+                                }
+                            });
+                        }
+
                         BsonClassMap.RegisterClassMap(map);
                     }
                 }

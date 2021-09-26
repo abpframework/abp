@@ -61,9 +61,9 @@ namespace Volo.Abp.EntityFrameworkCore
         public IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
         public IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
-        
+
         public IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
-        
+
         public ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
         public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
@@ -167,9 +167,9 @@ namespace Volo.Abp.EntityFrameworkCore
                 }
 
                 var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-                
+
                 PublishEntityEvents(eventReport);
-                
+
                 if (entityChangeList != null)
                 {
                     EntityHistoryHelper.UpdateChangeList(entityChangeList);
@@ -285,11 +285,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 }
             }
         }
-        
+
         private void PublishEventsForTrackedEntity(EntityEntry entry)
         {
             switch (entry.State)
-            { 
+            {
                 case EntityState.Added:
                     EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
                     EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
@@ -308,7 +308,7 @@ namespace Volo.Abp.EntityFrameworkCore
                             EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                         }
                     }
-                    
+
                     break;
                 case EntityState.Deleted:
                     EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
@@ -324,11 +324,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 ApplyAbpConcepts(entry);
             }
         }
-        
+
         protected virtual EntityEventReport CreateEventReport()
         {
             var eventReport = new EntityEventReport();
-            
+
             foreach (var entry in ChangeTracker.Entries().ToList())
             {
                 var generatesDomainEventsEntity = entry.Entity as IGeneratesDomainEvents;
@@ -369,7 +369,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             return eventReport;
         }
-        
+
         protected virtual void ApplyAbpConcepts(EntityEntry entry)
         {
             switch (entry.State)
@@ -638,7 +638,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
-                if (LazyServiceProvider == null || Clock == null || !Clock.SupportsMultipleTimezone)
+                if (LazyServiceProvider == null || Clock == null)
                 {
                     return;
                 }
@@ -650,7 +650,7 @@ namespace Volo.Abp.EntityFrameworkCore
                         (property.PropertyType == typeof(DateTime) ||
                          property.PropertyType == typeof(DateTime?)) &&
                         property.CanWrite &&
-                        !property.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true)
+                        ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
                     ).ToList();
 
                 dateTimePropertyInfos.ForEach(property =>
