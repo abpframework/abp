@@ -79,7 +79,15 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 
         public virtual void AddProperty([NotNull] string key, string value)
         {
-            Properties.Add(new ApiScopeProperty(Id, key, value));
+            var property = FindProperty(key);
+            if (property == null)
+            {
+                Properties.Add(new ApiScopeProperty(Id, key, value));
+            }
+            else
+            {
+                property.Value = value;
+            }
         }
 
         public virtual void RemoveAllProperties()

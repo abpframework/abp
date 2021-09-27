@@ -56,7 +56,8 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             Properties = new List<IdentityResourceProperty>();
         }
 
-        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource) : base(id)
+        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+            : base(id)
         {
             Name = resource.Name;
             DisplayName = resource.DisplayName;
@@ -91,7 +92,15 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public virtual void AddProperty([NotNull] string key, string value)
         {
-            Properties.Add(new IdentityResourceProperty(Id, key, value));
+            var property = FindProperty(key);
+            if (property == null)
+            {
+                Properties.Add(new IdentityResourceProperty(Id, key, value));
+            }
+            else
+            {
+                property.Value = value;
+            }
         }
 
         public virtual void RemoveAllProperties()

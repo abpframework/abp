@@ -266,7 +266,15 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual void AddProperty([NotNull] string key, [NotNull] string value)
         {
-            Properties.Add(new ClientProperty(Id, key,value));
+            var property = FindProperty(key);
+            if (property == null)
+            {
+                Properties.Add(new ClientProperty(Id, key, value));
+            }
+            else
+            {
+                property.Value = value;
+            }
         }
 
         public virtual void RemoveAllProperties()
