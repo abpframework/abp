@@ -56,14 +56,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         public virtual async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
-            ValidateElasticSearchEnabled();
-
             var client = _clientProvider.GetClient();
-
-            var existsResponse = await client.DocumentExistsAsync(DocumentPath<EsDocument>.Id(document.Id),
-                x => x.Index(_options.IndexName), cancellationToken);
-
-            HandleError(existsResponse);
 
             var esDocument = new EsDocument
             {
@@ -76,25 +69,13 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 Version = NormalizeField(document.Version)
             };
 
-            if (!existsResponse.Exists)
-            {
-                HandleError(await client.IndexAsync(esDocument,
-                    x => x.Id(document.Id).Index(_options.IndexName), cancellationToken));
-            }
-            else
-            {
-                HandleError(await client.UpdateAsync(DocumentPath<EsDocument>.Id(document.Id),
-                    x => x.Doc(esDocument).Index(_options.IndexName), cancellationToken));
-            }
-
+            await client.IndexAsync(esDocument, x => x.Index(_options.IndexName), cancellationToken);
         }
 
         public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            ValidateElasticSearchEnabled();
-
             HandleError(await _clientProvider.GetClient()
-                .DeleteAsync(DocumentPath<Document>.Id(id), x => x.Index(_options.IndexName), cancellationToken));
+                .DeleteAsync(DocumentPath<Document>.Id(NormalizeField(id)), x => x.Index(_options.IndexName), cancellationToken));
         }
 
         public virtual async Task DeleteAllAsync(CancellationToken cancellationToken = default)
@@ -225,7 +206,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             }
         }
 
-        protected virtual void ValidateElasticSearchEnabled()
+        public virtual void ValidateElasticSearchEnabled()
         {
             if (!_options.Enable)
             {

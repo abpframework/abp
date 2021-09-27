@@ -1,12 +1,15 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit
 {
     public class CmsKitTestData : ISingletonDependency
     {
         public Guid User1Id { get; } = Guid.NewGuid();
+
+        public string User1UserName => "fake.user";
 
         public Guid User2Id { get; } = Guid.NewGuid();
 
@@ -43,9 +46,7 @@ namespace Volo.CmsKit
 
         public string Page_1_Title { get; } = "Imagine Dragons - Believer Lyrics";
 
-        public string Page_1_Url { get; } = "imagine-dragons-believer-lyrics";
-
-        public string Page_1_Description { get; } = "You can get the lyrics of the music.";
+        public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
 
         public Guid Page_1_Id { get; } = Guid.NewGuid();
 
@@ -53,9 +54,7 @@ namespace Volo.CmsKit
 
         public string Page_2_Title { get; } = "Imagine Dragons - Believer Lyrics (Page 2)";
 
-        public string Page_2_Url { get; } = "imagine-dragons-believer-lyrics-2";
-
-        public string Page_2_Description { get; } = "You can get the lyrics of the music.";
+        public string Page_2_Slug { get; } = "imagine-dragons-believer-lyrics-2";
 
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
@@ -70,5 +69,63 @@ namespace Volo.CmsKit
         public Guid TagId_2 { get; } = Guid.NewGuid();
 
         public string TagName_2 => "News";
+
+        public Guid Blog_Id { get; set; } = Guid.NewGuid();
+
+        public string BlogName => "Cms Blog";
+
+        public string BlogSlug => "cms-blog";
+
+        public Guid BlogPost_1_Id { get; internal set; }
+
+        public string BlogPost_1_Title => "How to install CmsKit?";
+
+        public string BlogPost_1_Slug => "how-to-install-cms-kit";
+
+        public Guid BlogPost_2_Id { get; internal set; }
+
+        public string BlogPost_2_Title => "How to use CmsKit";
+
+        public string BlogPost_2_Slug => "how-to-use-cms-kit";
+
+        public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_1_FeatureName => "Analytics";
+
+        public bool BlogFeature_1_Enabled => true;
+
+        public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_2_FeatureName => "Hotjar";
+
+        public bool BlogFeature_2_Enabled => false;
+
+        public Guid Media_1_Id { get; } = Guid.NewGuid();
+
+        public string Media_1_EntityType => nameof(Blog);
+
+        public string Media_1_Content { get; } = "Hi, this is text file";
+
+        public string Media_1_Name { get; } = "hello.txt";
+
+        public string Media_1_ContentType { get; } = "text/plain";
+
+        public Guid MenuItem_1_Id { get; } = Guid.NewGuid();
+        
+        public string MenuItem_1_Name { get; } = "About Us";
+        
+        public string MenuItem_1_Url { get; } = "/about-us";
+
+        public Guid MenuItem_2_Id { get; } = Guid.NewGuid();
+        
+        public string MenuItem_2_Name { get; } = "Our Team";
+        
+        public string MenuItem_2_Url { get; } = "/team";
+        
+        public Guid MenuItem_3_Id { get; } = Guid.NewGuid();
+        
+        public string MenuItem_3_Name { get; } = "Products";
+        
+        public string MenuItem_3_Url { get; } = "/products";
     }
 }

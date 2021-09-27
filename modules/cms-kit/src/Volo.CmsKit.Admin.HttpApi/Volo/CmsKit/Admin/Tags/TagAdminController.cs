@@ -14,8 +14,8 @@ using Volo.CmsKit.Tags;
 namespace Volo.CmsKit.Admin.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
     [Route("api/cms-kit-admin/tags")]
     public class TagAdminController : CmsKitAdminController, ITagAdminAppService
@@ -62,6 +62,8 @@ namespace Volo.CmsKit.Admin.Tags
             return TagAdminAppService.UpdateAsync(id, input);
         }
 
+        [HttpGet]
+        [Route("tag-definitions")]
         public Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
             return TagAdminAppService.GetTagDefinitionsAsync();

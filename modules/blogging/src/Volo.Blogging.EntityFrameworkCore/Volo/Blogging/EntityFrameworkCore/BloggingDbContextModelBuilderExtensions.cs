@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -15,40 +14,41 @@ namespace Volo.Blogging.EntityFrameworkCore
     public static class BloggingDbContextModelBuilderExtensions
     {
         public static void ConfigureBlogging(
-            [NotNull] this ModelBuilder builder,
-            Action<BloggingModelBuilderConfigurationOptions> optionsAction = null)
+            [NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BloggingModelBuilderConfigurationOptions(
-                BloggingDbProperties.DbTablePrefix,
-                BloggingDbProperties.DbSchema
-                );
-
-            optionsAction?.Invoke(options);
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
 
             builder.Entity<BlogUser>(b =>
             {
-                b.ToTable(options.TablePrefix + "Users", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Users", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Blog>(b =>
             {
-                b.ToTable(options.TablePrefix + "Blogs", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Blogs", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
                 b.Property(x => x.Description).IsRequired(false).HasMaxLength(BlogConsts.MaxDescriptionLength).HasColumnName(nameof(Blog.Description));
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Post>(b =>
             {
-                b.ToTable(options.TablePrefix + "Posts", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Posts", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -62,11 +62,13 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.HasMany(p => p.Tags).WithOne().HasForeignKey(qt => qt.PostId);
 
                 b.HasOne<Blog>().WithMany().IsRequired().HasForeignKey(p => p.BlogId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Comment>(b =>
             {
-                b.ToTable(options.TablePrefix + "Comments", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Comments", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -76,11 +78,13 @@ namespace Volo.Blogging.EntityFrameworkCore
 
                 b.HasOne<Comment>().WithMany().HasForeignKey(p => p.RepliedCommentId);
                 b.HasOne<Post>().WithMany().IsRequired().HasForeignKey(p => p.PostId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Tag>(b =>
             {
-                b.ToTable(options.TablePrefix + "Tags", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "Tags", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -89,11 +93,13 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.UsageCount).HasColumnName(nameof(Tag.UsageCount));
 
                 b.HasMany<PostTag>().WithOne().HasForeignKey(qt => qt.TagId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<PostTag>(b =>
             {
-                b.ToTable(options.TablePrefix + "PostTags", options.Schema);
+                b.ToTable(BloggingDbProperties.DbTablePrefix + "PostTags", BloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -101,7 +107,11 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.TagId).HasColumnName(nameof(PostTag.TagId));
 
                 b.HasKey(x => new { x.PostId, x.TagId });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BloggingDbContext>();
         }
     }
 }

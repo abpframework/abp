@@ -12,6 +12,7 @@
     "Permission:Posts": "Posts",
     "Permission:Tags": "Tags",
     "Permission:Comments": "Comments",
+    "Permission:ClearCache": "Clear cache",
     "Title": "Title",
     "Delete": "Delete",
     "Reply": "Reply",
@@ -53,6 +54,8 @@
     "Blogs": "Blogs",
     "Tags": "Tags",
     "ShareOn": "Share on",
-    "TitleLengthWarning": "Keep your title size under 60 characters to be SEO friendly!"
+    "TitleLengthWarning": "Keep your title size under 60 characters to be SEO friendly!",
+    "ClearCache": "Clear cache",
+    "ClearCacheConfirmationMessage": "Are you sure you want to clear the cache?"
   }
 }

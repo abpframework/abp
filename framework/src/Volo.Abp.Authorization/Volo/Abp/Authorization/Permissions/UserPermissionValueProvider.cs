@@ -32,7 +32,8 @@ namespace Volo.Abp.Authorization.Permissions
 
         public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
         {
-            var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
+            var permissionNames = context.Permissions.Select(x => x.Name).Distinct().ToArray();
+            Check.NotNullOrEmpty(permissionNames, nameof(permissionNames));
 
             var userId = context.Principal?.FindFirst(AbpClaimTypes.UserId)?.Value;
             if (userId == null)

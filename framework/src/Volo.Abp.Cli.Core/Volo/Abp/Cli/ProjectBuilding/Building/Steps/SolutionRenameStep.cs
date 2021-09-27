@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -8,13 +9,42 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            new SolutionRenamer(
-                context.Files,
-                "MyCompanyName",
-                "MyProjectName",
-                context.BuildArgs.SolutionName.CompanyName,
-                context.BuildArgs.SolutionName.ProjectName
-            ).Run();
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(context.BuildArgs.TemplateName))
+            {
+                new SolutionRenamer(
+                    context.Files,
+                    "MyCompanyName.MyProjectName",
+                    "MicroserviceName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
+                    "myCompanyName.myProjectName",
+                    "MicroserviceName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
+                    null,
+                    "MyProjectName",
+                    null,
+                    SolutionName.Parse(context.BuildArgs.SolutionName.CompanyName).ProjectName
+                ).Run();
+            }
+            else
+            {
+                new SolutionRenamer(
+                    context.Files,
+                    "MyCompanyName",
+                    "MyProjectName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+            }
         }
 
         private class SolutionRenamer
@@ -55,17 +85,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), _companyName.ToCamelCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase(), _companyName.ToKebabCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToLowerInvariant(), _companyName.ToLowerInvariant());
                     }
                     else
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase() + "." + _projectNamePlaceHolder.ToCamelCase(), _projectNamePlaceHolder.ToCamelCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToLowerInvariant() + "." + _projectNamePlaceHolder.ToLowerInvariant(), _projectNamePlaceHolder.ToLowerInvariant());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase() + "/" + _projectNamePlaceHolder.ToKebabCase(), _projectNamePlaceHolder.ToKebabCase());
                     }
                 }
 
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), _projectName.ToCamelCase());
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToLowerInvariant(), _projectName.ToLowerInvariant());
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpper(), _projectName.ToSnakeCase().ToUpper());
             }
         }

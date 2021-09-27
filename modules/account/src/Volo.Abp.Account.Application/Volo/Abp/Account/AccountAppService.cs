@@ -6,6 +6,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Account
@@ -42,6 +43,8 @@ namespace Volo.Abp.Account
 
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
 
+            input.MapExtraPropertiesTo(user);
+
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
             await UserManager.SetEmailAsync(user,input.EmailAddress);
@@ -52,7 +55,7 @@ namespace Volo.Abp.Account
 
         public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
         {
-            var user = await GetUserByEmail(input.Email);
+            var user = await GetUserByEmailAsync(input.Email);
             var resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             await AccountEmailer.SendPasswordResetLinkAsync(user, resetToken, input.AppName, input.ReturnUrl, input.ReturnUrlHash);
         }
@@ -71,7 +74,7 @@ namespace Volo.Abp.Account
             });
         }
 
-        protected virtual async Task<IdentityUser> GetUserByEmail(string email)
+        protected virtual async Task<IdentityUser> GetUserByEmailAsync(string email)
         {
             var user = await UserManager.FindByEmailAsync(email);
             if (user == null)

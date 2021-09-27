@@ -66,6 +66,26 @@ Defining multiple connections is allowed. In this case, you can use different co
 }
 ````
 
+If you need to connect to the RabbitMQ cluster, you can use the `;` character to separate the host names.
+
+**Example: Connect to the RabbitMQ cluster**
+
+```json
+{
+  "RabbitMQ": {
+    "Connections": {
+      "Default": {
+        "HostName": "123.123.123.123;234.234.234.234"
+      }
+    },
+    "EventBus": {
+      "ClientName": "MyClientName",
+      "ExchangeName": "MyExchangeName"
+    }
+  }
+}
+```
+
 #### AbpRabbitMqOptions
 
 `AbpRabbitMqOptions` class can be used to configure the connection strings for the RabbitMQ. You can configure this options inside the `ConfigureServices` of your [module](Module-Development-Basics.md).

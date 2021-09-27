@@ -52,6 +52,21 @@ public class MyToolbarContributor : IToolbarContributor
 }
 ````
 
+You can use the [authorization](../../Authorization.md) to decide whether to add a `ToolbarItem`.
+
+````csharp
+if (await context.IsGrantedAsync("MyPermissionName"))
+{
+    //...add Toolbar items
+}
+````
+
+You can use `RequirePermissions` extension method as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
+
+````csharp
+context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(NotificationViewComponent)).RequirePermissions("MyPermissionName"));
+````
+
 This class adds the `NotificationViewComponent` as the first item in the `Main` toolbar.
 
 Finally, you need to add this contributor to the `AbpToolbarOptions`, in the `ConfigureServices` of your [module](../../Module-Development-Basics.md):

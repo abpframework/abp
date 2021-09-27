@@ -6,6 +6,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using RabbitMQ.Client.Exceptions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
@@ -90,29 +91,30 @@ namespace Volo.Abp.RabbitMQ
 
                     lock (ChannelSendSyncLock)
                     {
-                        QueueBindCommands.TryPeek(out var command);
-
-                        switch (command.Type)
+                        if (QueueBindCommands.TryPeek(out var command))
                         {
-                            case QueueBindType.Bind:
-                                Channel.QueueBind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            case QueueBindType.Unbind:
-                                Channel.QueueUnbind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            default:
-                                throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
-                        }
+                            switch (command.Type)
+                            {
+                                case QueueBindType.Bind:
+                                    Channel.QueueBind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                case QueueBindType.Unbind:
+                                    Channel.QueueUnbind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                default:
+                                    throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
+                            }
 
-                        QueueBindCommands.TryDequeue(out command);
+                            QueueBindCommands.TryDequeue(out command);
+                        }
                     }
                 }
             }
@@ -146,6 +148,7 @@ namespace Volo.Abp.RabbitMQ
                 Channel = ConnectionPool
                     .Get(ConnectionName)
                     .CreateModel();
+
                 Channel.ExchangeDeclare(
                     exchange: Exchange.ExchangeName,
                     type: Exchange.Type,
@@ -154,7 +157,29 @@ namespace Volo.Abp.RabbitMQ
                     arguments: Exchange.Arguments
                 );
 
-                Channel.QueueDeclare(
+                if (!Exchange.DeadLetterExchangeName.IsNullOrWhiteSpace() &&
+                    !Queue.DeadLetterQueueName.IsNullOrWhiteSpace())
+                {
+                    Channel.ExchangeDeclare(
+                        Exchange.DeadLetterExchangeName,
+                        Exchange.Type,
+                        Exchange.Durable,
+                        Exchange.AutoDelete
+                    );
+
+                    Channel.QueueDeclare(
+                        Queue.DeadLetterQueueName,
+                        Queue.Durable,
+                        Queue.Exclusive,
+                        Queue.AutoDelete);
+
+                    Queue.Arguments["x-dead-letter-exchange"] = Exchange.DeadLetterExchangeName;
+                    Queue.Arguments["x-dead-letter-routing-key"] = Queue.DeadLetterQueueName;
+
+                    Channel.QueueBind(Queue.DeadLetterQueueName, Exchange.DeadLetterExchangeName, Queue.DeadLetterQueueName);
+                }
+
+                var result = Channel.QueueDeclare(
                     queue: Queue.QueueName,
                     durable: Queue.Durable,
                     exclusive: Queue.Exclusive,
@@ -173,6 +198,17 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                if (ex is OperationInterruptedException operationInterruptedException &&
+                    operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
+                    operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
+                {
+                    Exchange.DeadLetterExchangeName = null;
+                    Queue.DeadLetterQueueName = null;
+                    Queue.Arguments.Remove("x-dead-letter-exchange");
+                    Queue.Arguments.Remove("x-dead-letter-routing-key");
+                    Logger.LogWarning("Unable to bind the dead letter queue to an existing queue. You can delete the queue or add policy. See: https://www.rabbitmq.com/parameters.html");
+                }
+
                 Logger.LogException(ex, LogLevel.Warning);
                 await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }
@@ -191,6 +227,12 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                try
+                {
+                    Channel.BasicReject(basicDeliverEventArgs.DeliveryTag, false);
+                }
+                catch { }
+
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }

@@ -1,0 +1,55 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {
+        "items": {
+          "BlobStoring.Database.Host.ConsoleApp": {
+            "items": {
+              "src": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "packages": {
+    "Volo.Abp.BlobStoring.Database.Domain.Shared": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Domain.Shared/Volo.Abp.BlobStoring.Database.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Database.Domain": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Domain/Volo.Abp.BlobStoring.Database.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Database.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Database.MongoDB": {
+      "path": "src/Volo.Abp.BlobStoring.Database.MongoDB/Volo.Abp.BlobStoring.Database.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Database.TestBase": {
+      "path": "test/Volo.Abp.BlobStoring.Database.TestBase/Volo.Abp.BlobStoring.Database.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Database.MongoDB.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.MongoDB.Tests/Volo.Abp.BlobStoring.Database.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Database.Domain.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.Domain.Tests/Volo.Abp.BlobStoring.Database.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "BlobStoring.Database.Host.ConsoleApp.ConsoleApp": {
+      "path": "host/BlobStoring.Database.Host.ConsoleApp/src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.abppkg.json",
+      "folder": "host/BlobStoring.Database.Host.ConsoleApp/src"
+    }
+  }
+}

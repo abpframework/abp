@@ -27,15 +27,18 @@ namespace Volo.Abp.Cli.ProjectModification
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
         private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
         private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public NpmPackagesUpdater(
             PackageJsonFileFinder packageJsonFileFinder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
             _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
             CancellationTokenProvider = cancellationTokenProvider;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }
 
@@ -151,16 +154,14 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(1)))
+                var client = _cliHttpClientFactory.CreateClient();
+                using (var response = await client.GetHttpResponseMessageWithRetryAsync(
+                    url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
+                    cancellationToken: CancellationTokenProvider.Token,
+                    logger: Logger
+                ))
                 {
-                    using (var response = await client.GetHttpResponseMessageWithRetryAsync(
-                        url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                        cancellationToken: CancellationTokenProvider.Token,
-                        logger: Logger
-                    ))
-                    {
-                        return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
-                    }
+                    return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
                 }
             }
             catch (Exception)
@@ -356,7 +357,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual string ExtractVersions(string output)
         {
             var arrayStart = output.IndexOf('[');
-            return output.Substring(arrayStart,  output.IndexOf(']') - arrayStart + 1);
+            return output.Substring(arrayStart, output.IndexOf(']') - arrayStart + 1);
         }
 
         protected virtual bool SpecifiedVersionExists(string version, JProperty package)

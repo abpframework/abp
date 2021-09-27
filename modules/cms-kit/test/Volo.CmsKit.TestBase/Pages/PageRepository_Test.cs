@@ -53,25 +53,25 @@ namespace Volo.CmsKit.Pages
         [Fact]
         public async Task ShouldGetByUrlAsync()
         {
-            var page = await _pageRepository.GetByUrlAsync(_cmsKitTestData.Page_1_Url);
+            var page = await _pageRepository.GetBySlugAsync(_cmsKitTestData.Page_1_Slug);
 
             page.ShouldNotBeNull();
-            page.Description.ShouldBe(_cmsKitTestData.Page_1_Description);
+            page.Title.ShouldBe(_cmsKitTestData.Page_1_Title);
         }
         
         [Fact]
         public async Task ShouldFindByUrlAsync()
         {
-            var page = await _pageRepository.FindByUrlAsync(_cmsKitTestData.Page_1_Url);
+            var page = await _pageRepository.FindBySlugAsync(_cmsKitTestData.Page_1_Slug);
 
             page.ShouldNotBeNull();
-            page.Description.ShouldBe(_cmsKitTestData.Page_1_Description);
+            page.Title.ShouldBe(_cmsKitTestData.Page_1_Title);
         }
         
         [Fact]
         public async Task ShouldNotFindByUrlAsync()
         {
-            var page = await _pageRepository.FindByUrlAsync("not-exist-lyrics");
+            var page = await _pageRepository.FindBySlugAsync("not-exist-lyrics");
 
             page.ShouldBeNull();
         }
@@ -79,7 +79,7 @@ namespace Volo.CmsKit.Pages
         [Fact]
         public async Task ShouldBeExistAsync()
         {
-            var page = await _pageRepository.ExistsAsync(_cmsKitTestData.Page_1_Url);
+            var page = await _pageRepository.ExistsAsync(_cmsKitTestData.Page_1_Slug);
 
             page.ShouldBeTrue();
         }

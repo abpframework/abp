@@ -53,6 +53,12 @@ namespace Volo.Abp.AspNetCore.Mvc
                     .EnableAll();
             });
 
+            context.Services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultForbidScheme = "Cookie";
+            }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
+
             context.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyClaimTestPolicy", policy =>
@@ -88,6 +94,8 @@ namespace Volo.Abp.AspNetCore.Mvc
 
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
 
@@ -108,11 +116,13 @@ namespace Volo.Abp.AspNetCore.Mvc
             var app = context.GetApplicationBuilder();
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseAbpRequestLocalization();
+            app.UseAbpSecurityHeaders();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAbpClaimsMap();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();

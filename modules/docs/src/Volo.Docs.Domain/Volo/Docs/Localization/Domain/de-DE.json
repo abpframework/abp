@@ -34,6 +34,8 @@
     "NewExplanation": "In den letzten zwei Wochen erstellt.",
     "UpdatedExplanation": "In den letzten zwei Wochen aktualisiert.",
     "Volo.Docs.Domain:010002": "Kurzname {ShortName} existiert bereits.",
-    "Preview": "Vorschau"
+    "Preview": "Vorschau",
+    "Search": "Suchen",
+    "SearchResults": "Suchergebnisse"
   }
 }

@@ -16,10 +16,12 @@
 [ConnectionStringName("AbpIdentity")]
 public interface IIdentityDbContext : IEfCoreDbContext
 {
-    DbSet<IdentityUser> Users { get; set; }
-    DbSet<IdentityRole> Roles { get; set; }
+    DbSet<IdentityUser> Users { get; }
+    DbSet<IdentityRole> Roles { get; }
 }
 ````
+
+* **Do not** define `set;` for the properties in this interface.
 
 ### DbContext class
 
@@ -64,12 +66,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 protected override void OnModelCreating(ModelBuilder builder)
 {
     base.OnModelCreating(builder);
-
-    builder.ConfigureIdentity(options =>
-    {
-        options.TablePrefix = TablePrefix;
-        options.Schema = Schema;
-    });
+    builder.ConfigureIdentity();
 }
 ````
 
@@ -78,25 +75,20 @@ protected override void OnModelCreating(ModelBuilder builder)
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
 {
-    public static void ConfigureIdentity(
-        [NotNull] this ModelBuilder builder,
-        Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+    public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
 
-        var options = new IdentityModelBuilderConfigurationOptions();
-        optionsAction?.Invoke(options);
-
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema);
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users", AbpIdentityDbProperties.DbSchema);
             b.ConfigureByConvention();
             //code omitted for brevity
         });
 
         builder.Entity<IdentityUserClaim>(b =>
         {
-            b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserClaims", AbpIdentityDbProperties.DbSchema);
             b.ConfigureByConvention();
             //code omitted for brevity
         });
@@ -107,17 +99,6 @@ public static class IdentityDbContextModelBuilderExtensions
 ````
 
 * **Do** call `b.ConfigureByConvention();` for each entity mapping (as shown above).
-* **Do** create a **configuration options** class by inheriting from the `AbpModelBuilderConfigurationOptions`. Example:
-
-````C#
-public class IdentityModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
-{
-    public IdentityModelBuilderConfigurationOptions()
-        : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)
-    {
-    }
-}
-````
 
 ### Repository Implementation
 

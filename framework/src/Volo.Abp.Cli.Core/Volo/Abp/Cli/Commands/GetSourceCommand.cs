@@ -59,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
-            await _sourceCodeDownloadService.DownloadAsync(
+            await _sourceCodeDownloadService.DownloadModuleAsync(
                 commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
         }
 

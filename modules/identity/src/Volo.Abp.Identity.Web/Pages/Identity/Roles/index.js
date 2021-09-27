@@ -38,6 +38,7 @@
                             _permissionsModal.open({
                                 providerName: 'R',
                                 providerKey: data.record.name,
+                                providerKeyDisplayName: data.record.name
                             });
                         },
                     },
@@ -84,7 +85,7 @@
                         title: l('RoleName'),
                         data: 'name',
                         render: function (data, type, row) {
-                            var name = '<span>' + data + '</span>';
+                            var name = '<span>' + $.fn.dataTable.render.text().display(data) + '</span>'; //prevent against possible XSS
                             if (row.isDefault) {
                                 name +=
                                     '<span class="badge badge-pill badge-success ml-1">' +

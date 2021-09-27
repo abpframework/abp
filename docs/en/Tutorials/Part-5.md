@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -117,7 +122,7 @@ Finally, edit the localization file (`en.json` under the `Localization/BookStore
 "Permission:Books.Delete": "Deleting the books"
 ````
 
-> Localization key names are arbitrary and no forcing rule. But we prefer the convention used above.
+> Localization key names are arbitrary and there is no forcing rule. But we prefer the convention used above.
 
 ### Permission Management UI
 
@@ -516,7 +521,7 @@ Wrap the *New Book* button by an `if` block as shown below:
 
 #### Hide the Edit/Delete Actions
 
-`EntityAction` component defines `RequiredPolicy` attribute (parameter) to conditionally show the action based on the user permissions.
+`EntityAction` component defines `Visible` attribute (parameter) to conditionally show the action.
 
 Update the `EntityActions` section as shown below:
 
@@ -524,11 +529,11 @@ Update the `EntityActions` section as shown below:
 <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
     <EntityAction TItem="BookDto"
                   Text="@L["Edit"]"
-                  RequiredPolicy="@UpdatePolicyName"
+                  Visible=HasUpdatePermission
                   Clicked="() => OpenEditModalAsync(context)" />
     <EntityAction TItem="BookDto"
                   Text="@L["Delete"]"
-                  RequiredPolicy="@DeletePolicyName"
+                  Visible=HasDeletePermission
                   Clicked="() => DeleteEntityAsync(context)"
                   ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
 </EntityActions>

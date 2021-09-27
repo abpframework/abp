@@ -17,14 +17,38 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<EfCoreMigrationManager>.Instance;
         }
 
-        public void AddMigration(string dbMigrationsCsprojFile, string module, string startupProject)
+        public void AddMigration(string dbMigrationsCsprojFile, string module)
         {
+            var dbMigrationsProjectFolder = Path.GetDirectoryName(dbMigrationsCsprojFile);
             var moduleName = ParseModuleName(module);
             var migrationName = "Added_" + moduleName + "_Module" + GetUniquePostFix();
 
-            CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigrationsCsprojFile) +
-                             "\" && dotnet ef migrations add " + migrationName +
-                             GetStartupProjectOption(startupProject));
+            var tenantDbContextName = FindTenantDbContextName(dbMigrationsProjectFolder);
+            var dbContextName = tenantDbContextName != null ?
+                FindDbContextName(dbMigrationsProjectFolder)
+                : null;
+
+            if (!string.IsNullOrEmpty(tenantDbContextName))
+            {
+                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, tenantDbContextName, "TenantMigrations");
+            }
+
+            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextName, "Migrations");
+        }
+
+        protected virtual void RunAddMigrationCommand(
+            string dbMigrationsProjectFolder,
+            string migrationName,
+            string dbContext,
+            string outputDirectory)
+        {
+            var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
+                ? string.Empty
+                : $"--context {dbContext}";
+
+            CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName}" +
+                             $" --output-dir {outputDirectory}" +
+                             $" {dbContextOption}");
         }
 
         protected virtual string ParseModuleName(string fullModuleName)
@@ -43,9 +67,34 @@ namespace Volo.Abp.Cli.ProjectModification
             return "_" + new Random().Next(1, 99999);
         }
 
-        protected virtual string GetStartupProjectOption(string startupProject)
+        protected virtual string FindDbContextName(string dbMigrationsFolder)
         {
-            return startupProject.IsNullOrWhiteSpace() ? "" : $" -s {startupProject}";
+            var dbContext = Directory.GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs")) ??
+                            Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
+
+            if (dbContext == null)
+            {
+                return null;
+            }
+
+            return Path.GetFileName(dbContext).RemovePostFix(".cs");
+        }
+
+        protected virtual string FindTenantDbContextName(string dbMigrationsFolder)
+        {
+            var tenantDbContext = Directory.GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault() ??
+                                  Directory.GetFiles(dbMigrationsFolder, "*TenantDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault();
+
+            if (tenantDbContext == null)
+            {
+                return null;
+            }
+
+            return Path.GetFileName(tenantDbContext).RemovePostFix(".cs");
         }
     }
 }

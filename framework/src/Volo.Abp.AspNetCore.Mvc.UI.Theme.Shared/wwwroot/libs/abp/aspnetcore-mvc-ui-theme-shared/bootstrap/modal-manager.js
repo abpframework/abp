@@ -39,7 +39,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _$modal = null;
             var _$form = null;
 
-            var _modalId = 'Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
+            var _modalId = 'Abp_Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
             var _modalObject = null;
 
             var _publicApi = null;
@@ -56,7 +56,12 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             function _createContainer() {
                 _removeContainer();
                 _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
-                $('body').prepend(_$modalContainer);
+                var existsModals = $('[id^="Abp_Modal_"]');
+                if (existsModals.length) {
+                    existsModals.last().after(_$modalContainer)
+                } else {
+                    $('body').prepend(_$modalContainer);
+                }
                 return _$modalContainer;
             }
 

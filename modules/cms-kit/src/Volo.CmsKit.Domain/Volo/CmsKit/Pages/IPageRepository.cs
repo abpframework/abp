@@ -17,10 +17,10 @@ namespace Volo.CmsKit.Pages
             string sorting = null,
             CancellationToken cancellationToken = default);
         
-        Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default);
+        Task<Page> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
 
-        Task<Page> FindByUrlAsync(string url, CancellationToken cancellationToken = default);
+        Task<Page> FindBySlugAsync(string slug, CancellationToken cancellationToken = default);
 
-        Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(string slug, CancellationToken cancellationToken = default);
     }
 }

@@ -159,7 +159,7 @@
 
     abp.dom.initializers.initializeDatepickers = function ($rootElement) {
         $rootElement
-            .findWithSelf('input.datepicker,input[type=date]')
+            .findWithSelf('input.datepicker,input[type=date][abp-data-datepicker!=false]')
             .each(function () {
                 var $input = $(this);
                 $input

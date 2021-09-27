@@ -1,0 +1,7 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "पासवर्ड की लंबाई {0} वर्णों से अधिक होनी चाहिए।",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "पासवर्ड में कम से कम एक गैर-अल्फ़ान्यूमेरिक वर्ण होना चाहिए।"
+  }
+}

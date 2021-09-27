@@ -29,7 +29,7 @@ Configure<AbpBlobStoringOptions>(options =>
         {
             azure.ConnectionString = "your azure connection string";
             azure.ContainerName = "your azure container name";
-            azure.CreateContainerIfNotExists = false;
+            azure.CreateContainerIfNotExists = true;
         });
     });
 });

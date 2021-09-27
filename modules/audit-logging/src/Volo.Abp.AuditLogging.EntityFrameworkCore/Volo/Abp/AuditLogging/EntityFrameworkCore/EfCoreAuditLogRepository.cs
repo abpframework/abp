@@ -29,8 +29,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
+            Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
@@ -44,8 +46,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 endTime,
                 httpMethod,
                 url,
+                userId,
                 userName,
                 applicationName,
+                clientIpAddress,
                 correlationId,
                 maxExecutionDuration,
                 minExecutionDuration,
@@ -54,7 +58,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 includeDetails
             );
 
-            var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
+            var auditLogs = await query
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -66,8 +71,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
+            Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
@@ -80,8 +87,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 endTime,
                 httpMethod,
                 url,
+                userId,
                 userName,
                 applicationName,
+                clientIpAddress,
                 correlationId,
                 maxExecutionDuration,
                 minExecutionDuration,
@@ -99,8 +108,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
+            Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
@@ -117,8 +128,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions == "")
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod == httpMethod)
                 .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+                .WhereIf(userId != null, auditLog => auditLog.UserId == userId)
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
                 .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
+                .WhereIf(clientIpAddress != null, auditLog => auditLog.ClientIpAddress != null && auditLog.ClientIpAddress == clientIpAddress)
                 .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == nHttpStatusCode)
                 .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
@@ -185,7 +198,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
 
-            return await query.OrderBy(sorting ?? "changeTime desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

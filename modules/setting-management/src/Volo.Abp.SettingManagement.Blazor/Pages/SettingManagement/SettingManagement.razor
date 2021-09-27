@@ -1,4 +1,6 @@
 ﻿@page "/setting-management"
+@using Volo.Abp.Features
+@attribute [RequiresFeature(SettingManagementFeatures.Enable)]
 
 @* ************************* PAGE HEADER ************************* *@
 <PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems">

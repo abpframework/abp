@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -34,6 +34,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
+
 {{if UI == "MVC" && DB == "EF"}}
 
 ### Video Tutorial
@@ -48,13 +53,13 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the image below:
 
-![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
 
 ### Create the Modal Form
 
 Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
 
-![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
+![bookstore-add-create-dialog](images/bookstore-add-create-dialog-v2.png)
 
 #### CreateModal.cshtml.cs
 
@@ -186,7 +191,7 @@ The final content of the `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](./images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
 
 Open the `Pages/Books/Index.js` and add the following code just after the `Datatable` configuration:
 
@@ -281,7 +286,7 @@ Now, you can **run the application** and add some new books using the new modal 
 
 Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 
-![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
+![bookstore-add-edit-dialog](images/bookstore-add-edit-dialog.png)
 
 ### EditModal.cshtml.cs
 
@@ -484,7 +489,7 @@ You can run the application and edit any book by selecting the edit action on a 
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](./images/bookstore-edit-button-2.png)
+![bookstore-books-table-actions](images/bookstore-edit-button-2.png)
 
 ## Deleting a Book
 
@@ -709,7 +714,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
   </ng-template>
@@ -721,7 +726,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
 
 You can open your browser and click **New book** button to see the new modal.
 
-![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
+![Empty modal for new book](images/bookstore-empty-new-book-modal.png)
 
 ### Create a Reactive Form
 
@@ -732,8 +737,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-// import bookTypeOptions from @proxy/books
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
@@ -845,7 +849,7 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
 ````html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
   </button>
 
@@ -959,7 +963,7 @@ export class BookComponent implements OnInit {
 
 Now, you can open your browser to see the changes:
 
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
+![Save button to the modal](images/bookstore-new-book-form-v2.png)
 
 ## Updating a Book
 
@@ -1087,7 +1091,7 @@ Open the `/src/app/book/book.component.html`  and add the following `ngx-datata
 
 Added an "Actions" dropdown as the first column of the table that is shown below:
 
-![Action buttons](./images/bookstore-actions-buttons.png)
+![Action buttons](images/bookstore-actions-buttons.png)
 
 Also, change the `ng-template #abpHeader` section as shown below:
 
@@ -1151,15 +1155,15 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 The final actions dropdown UI looks like below:
 
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
 
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
+![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## Creating a New Book
 
@@ -1409,6 +1413,7 @@ Here the complete code to create the book management CRUD page, that has been de
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject IStringLocalizer<BookStoreResource> L
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>

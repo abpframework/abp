@@ -11,7 +11,7 @@ using Volo.Blogging.Localization;
 namespace Volo.Blogging.Admin
 {
     [DependsOn(
-        typeof(BloggingAdminHttpApiModule),
+        typeof(BloggingAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiBundlingModule),
         typeof(AbpAutoMapperModule)

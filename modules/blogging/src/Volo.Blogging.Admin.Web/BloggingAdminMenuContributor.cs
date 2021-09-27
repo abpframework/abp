@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Blogging.Localization;
 
 namespace Volo.Blogging.Admin
@@ -14,22 +15,17 @@ namespace Volo.Blogging.Admin
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var l = context.GetLocalizer<BloggingResource>();
 
-            if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
-            {
-                var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"]);
+            var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"]).RequirePermissions(BloggingPermissions.Blogs.Management);
 
-                //TODO: Using the same permission. Reconsider.
-                if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
-                {
-                    managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs"));
-                }
+            managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs").RequirePermissions(BloggingPermissions.Blogs.Management));
 
-                context.Menu.GetAdministration().AddItem(managementRootMenuItem);
-            }
+            context.Menu.GetAdministration().AddItem(managementRootMenuItem);
+
+            return Task.CompletedTask;
         }
     }
 }

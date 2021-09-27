@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "Debug schematics",
+          "runtimeExecutable": "yarn",
+          "runtimeArgs": ["ng", "g", "./packages/schematics/src/collection.json:proxy-add", "--debug=true"],
+          "console": "integratedTerminal"
+        }
+      ]
+}

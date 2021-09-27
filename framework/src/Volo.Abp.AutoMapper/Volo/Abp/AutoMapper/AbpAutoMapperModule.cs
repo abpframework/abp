@@ -25,7 +25,7 @@ namespace Volo.Abp.AutoMapper
         {
             context.Services.AddAutoMapperObjectMapper();
 
-            context.Services.AddSingleton<MapperAccessor>(provider => CreateMappings(provider));
+            context.Services.AddSingleton<MapperAccessor>(CreateMappings);
             context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
         }
 
@@ -42,6 +42,8 @@ namespace Volo.Abp.AutoMapper
                         configurator(ctx);
                     }
                 }
+
+                options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
 
                 void ValidateAll(IConfigurationProvider config)
                 {
@@ -60,7 +62,7 @@ namespace Volo.Abp.AutoMapper
 
                 return new MapperAccessor
                 {
-                    Mapper = new Mapper(mapperConfiguration, serviceProvider.GetService)
+                    Mapper = new Mapper(mapperConfiguration)
                 };
             }
         }

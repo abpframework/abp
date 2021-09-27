@@ -15,6 +15,7 @@ namespace Volo.Abp.Identity.AspNetCore
             {
                 builder
                     .AddDefaultTokenProviders()
+                    .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
                     .AddSignInManager<AbpSignInManager>();
             });
         }

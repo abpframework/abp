@@ -31,6 +31,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
@@ -38,34 +39,48 @@ using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Public.Web;
+using System;
+using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Ratings;
 
 namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitWebModule),
         typeof(CmsKitApplicationModule),
+        typeof(CmsKitHttpApiModule),
         typeof(CmsKitEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementWebModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
+        typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+        typeof(AbpSwashbuckleModule)
     )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
@@ -78,6 +93,8 @@ namespace Volo.CmsKit
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            ConfigureCmsKit(context);
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -116,8 +133,14 @@ namespace Volo.CmsKit
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
@@ -126,6 +149,40 @@ namespace Volo.CmsKit
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+        }
+
+        private void ConfigureCmsKit(ServiceConfigurationContext context)
+        {
+            Configure<CmsKitTagOptions>(options =>
+            {
+                options.EntityTypes.Add(new TagEntityTypeDefiniton("quote"));
+            });
+
+            Configure<CmsKitCommentOptions>(options =>
+            {
+                options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
+            });
+
+            Configure<CmsKitMediaOptions>(options =>
+            {
+                options.EntityTypes.Add(new MediaDescriptorDefinition("quote"));
+            });
+
+            Configure<CmsKitReactionOptions>(options =>
+            {
+                options.EntityTypes.Add(
+                    new ReactionEntityTypeDefinition("quote",
+                    reactions: new[]
+                    {
+                        new ReactionDefinition(StandardReactions.ThumbsUp),
+                        new ReactionDefinition(StandardReactions.ThumbsDown),
+                    }));
+            });
+
+            Configure<CmsKitRatingOptions>(options =>
+            {
+                options.EntityTypes.Add(new RatingEntityTypeDefinition("quote"));
             });
         }
 
@@ -145,7 +202,7 @@ namespace Volo.CmsKit
             }
 
             app.UseHttpsRedirection();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
 
@@ -158,7 +215,7 @@ namespace Volo.CmsKit
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });

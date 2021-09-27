@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import snq from 'snq';
+import { ABP } from '../models/common';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from './config-state.service';
 
@@ -17,6 +17,23 @@ export class PermissionService {
   getGrantedPolicy(key: string) {
     const policies = this.getSnapshot();
     return this.isPolicyGranted(key, policies);
+  }
+
+  filterItemsByPolicy<T extends ABP.HasPolicy>(items: Array<T>) {
+    const policies = this.getSnapshot();
+    return items.filter(
+      item => !item.requiredPolicy || this.isPolicyGranted(item.requiredPolicy, policies),
+    );
+  }
+
+  filterItemsByPolicy$<T extends ABP.HasPolicy>(items: Array<T>) {
+    return this.getStream().pipe(
+      map(policies =>
+        items.filter(
+          item => !item.requiredPolicy || this.isPolicyGranted(item.requiredPolicy, policies),
+        ),
+      ),
+    );
   }
 
   protected isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {
@@ -52,10 +69,10 @@ export class PermissionService {
   }
 
   protected mapToPolicies(applicationConfiguration: ApplicationConfigurationDto) {
-    return snq(() => applicationConfiguration.auth.grantedPolicies, {});
+    return applicationConfiguration?.auth?.grantedPolicies || {};
   }
 
   protected getPolicy(key: string, grantedPolicies: Record<string, boolean>) {
-    return snq(() => grantedPolicies[key], false);
+    return grantedPolicies[key] || false;
   }
 }

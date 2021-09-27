@@ -49,7 +49,7 @@ namespace Volo.Abp.Identity.MongoDB
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(IdentityClaimType.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
                 .As<IMongoQueryable<IdentityClaimType>>()
                 .PageBy<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

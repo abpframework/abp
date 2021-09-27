@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -88,12 +86,15 @@ namespace Volo.Abp.BlobStoring
 
         protected IServiceProvider ServiceProvider { get; }
 
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
+
         public BlobContainer(
             string containerName,
             BlobContainerConfiguration configuration,
             IBlobProvider provider,
             ICurrentTenant currentTenant,
             ICancellationTokenProvider cancellationTokenProvider,
+            IBlobNormalizeNamingService blobNormalizeNamingService,
             IServiceProvider serviceProvider)
         {
             ContainerName = containerName;
@@ -101,6 +102,7 @@ namespace Volo.Abp.BlobStoring
             Provider = provider;
             CurrentTenant = currentTenant;
             CancellationTokenProvider = cancellationTokenProvider;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
             ServiceProvider = serviceProvider;
         }
 
@@ -112,13 +114,13 @@ namespace Volo.Abp.BlobStoring
         {
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
-                var (normalizedContainerName, normalizedBlobName) = NormalizeNaming(ContainerName, name);
+                var blobNormalizeNaming = BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
                 await Provider.SaveAsync(
                     new BlobProviderSaveArgs(
-                        normalizedContainerName,
+                        blobNormalizeNaming.ContainerName,
                         Configuration,
-                        normalizedBlobName,
+                        blobNormalizeNaming.BlobName,
                         stream,
                         overrideExisting,
                         CancellationTokenProvider.FallbackToProvider(cancellationToken)
@@ -133,14 +135,14 @@ namespace Volo.Abp.BlobStoring
         {
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
-                var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeNaming(ContainerName, name);
+                var blobNormalizeNaming =
+                    BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
                 return await Provider.DeleteAsync(
                     new BlobProviderDeleteArgs(
-                        normalizedContainerName,
+                        blobNormalizeNaming.ContainerName,
                         Configuration,
-                        normalizedBlobName,
+                        blobNormalizeNaming.BlobName,
                         CancellationTokenProvider.FallbackToProvider(cancellationToken)
                     )
                 );
@@ -153,14 +155,14 @@ namespace Volo.Abp.BlobStoring
         {
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
-                var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeNaming(ContainerName, name);
+                var blobNormalizeNaming =
+                    BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
                 return await Provider.ExistsAsync(
                     new BlobProviderExistsArgs(
-                        normalizedContainerName,
+                        blobNormalizeNaming.ContainerName,
                         Configuration,
-                        normalizedBlobName,
+                        blobNormalizeNaming.BlobName,
                         CancellationTokenProvider.FallbackToProvider(cancellationToken)
                     )
                 );
@@ -189,14 +191,14 @@ namespace Volo.Abp.BlobStoring
         {
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
-                var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeNaming(ContainerName, name);
+                var blobNormalizeNaming =
+                    BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
                 return await Provider.GetOrNullAsync(
                     new BlobProviderGetArgs(
-                        normalizedContainerName,
+                        blobNormalizeNaming.ContainerName,
                         Configuration,
-                        normalizedBlobName,
+                        blobNormalizeNaming.BlobName,
                         CancellationTokenProvider.FallbackToProvider(cancellationToken)
                     )
                 );
@@ -211,29 +213,6 @@ namespace Volo.Abp.BlobStoring
             }
 
             return CurrentTenant.Id;
-        }
-        
-        protected virtual (string, string) NormalizeNaming(string containerName,  string blobName)
-        {
-            if (!Configuration.NamingNormalizers.Any())
-            {
-                return (containerName, blobName);
-            }
-
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                foreach (var normalizerType in Configuration.NamingNormalizers)
-                {
-                    var normalizer = scope.ServiceProvider
-                        .GetRequiredService(normalizerType)
-                        .As<IBlobNamingNormalizer>();
-
-                    containerName = normalizer.NormalizeContainerName(containerName);
-                    blobName = normalizer.NormalizeBlobName(blobName);
-                }
-
-                return (containerName, blobName);
-            }
         }
     }
 }

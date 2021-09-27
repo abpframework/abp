@@ -23,8 +23,8 @@
     "PasswordChangedMessage": "Su contraseña ha sido cambiada con éxito.",
     "DisplayName:UserName": "Nombre de usuario",
     "DisplayName:Email": "Correo electrónico",
-    "DisplayName:Name": "Nombre",
-    "DisplayName:Surname": "Apellido",
+    "DisplayName:Name": "Nombres",
+    "DisplayName:Surname": "Apellidos",
     "DisplayName:Password": "Contraseña",
     "DisplayName:EmailAddress": "Dirección de correo electrónico",
     "DisplayName:PhoneNumber": "Número de teléfono",
@@ -33,6 +33,6 @@
     "PasswordChanged": "Cambia la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
     "Manage": "Administrar",
-    "ManageYourProfile": "Gestionar tu perfil"
+    "MyAccount": "Mi cuenta"
   }
 }

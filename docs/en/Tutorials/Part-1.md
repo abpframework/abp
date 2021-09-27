@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -142,28 +147,36 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 ### Map the Book Entity to a Database Table
 
-Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.EntityFrameworkCore` project and add the mapping code for the `Book` entity. The final class should be the following:
+Locate to `OnModelCreating` method in the `BookStoreDbContext` class and add the mapping code for the `Book` entity:
 
 ````csharp
 using Acme.BookStore.Books;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
+...
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
-    public static class BookStoreDbContextModelCreatingExtensions
+    public class BookStoreDbContext : 
+        AbpDbContext<BookStoreDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
     {
-        public static void ConfigureBookStore(this ModelBuilder builder)
+        ...
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            Check.NotNull(builder, nameof(builder));
+            base.OnModelCreating(builder);
+
+            /* Include modules to your migration db context */
+
+            builder.ConfigurePermissionManagement();
+            ...
 
             /* Configure your own tables/entities inside here */
 
             builder.Entity<Book>(b =>
             {
                 b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
-                          BookStoreConsts.DbSchema);
+                    BookStoreConsts.DbSchema);
                 b.ConfigureByConvention(); //auto configure for the base class props
                 b.Property(x => x.Name).IsRequired().HasMaxLength(128);
             });
@@ -177,23 +190,19 @@ namespace Acme.BookStore.EntityFrameworkCore
 
 ### Add Database Migration
 
-The startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** under the menu *Tools > NuGet Package Manager*.
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-![Open Package Manager Console](images/bookstore-open-package-manager-console.png)
-
-Select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore` project and type the following command:
 
 ```bash
-Add-Migration "Created_Book_Entity"
+dotnet ef migrations add Created_Book_Entity
 ```
 
-![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
+This will add a new migration class to the project:
 
-This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
+![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-Before updating the database, read the section below to learn how to seed some initial data to the database.
-
-> If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
+> If you are using Visual Studio, you may want to use `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 

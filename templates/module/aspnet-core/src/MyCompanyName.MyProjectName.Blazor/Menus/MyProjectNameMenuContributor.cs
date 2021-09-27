@@ -16,7 +16,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Menus
         private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //Add main menu items.
-            context.Menu.AddItem(new ApplicationMenuItem(MyProjectNameMenus.Prefix, displayName: "MyProjectName", "~/MyProjectName", icon: "fa fa-globe"));
+            context.Menu.AddItem(new ApplicationMenuItem(MyProjectNameMenus.Prefix, displayName: "MyProjectName", "/MyProjectName", icon: "fa fa-globe"));
             
             return Task.CompletedTask;
         }

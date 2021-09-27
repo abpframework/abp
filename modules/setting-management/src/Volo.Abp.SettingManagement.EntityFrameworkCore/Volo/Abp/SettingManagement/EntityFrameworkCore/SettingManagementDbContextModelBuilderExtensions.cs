@@ -1,42 +1,25 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    public class SettingManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
-    {
-        public SettingManagementModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix,
-            [CanBeNull] string schema)
-            : base(
-                tablePrefix,
-                schema)
-        {
-
-        }
-    }
-
     public static class SettingManagementDbContextModelBuilderExtensions
     {
         //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
         public static void ConfigureSettingManagement(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<SettingManagementModelBuilderConfigurationOptions> optionsAction = null)
+            [NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new SettingManagementModelBuilderConfigurationOptions(
-                AbpSettingManagementDbProperties.DbTablePrefix,
-                AbpSettingManagementDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
 
             builder.Entity<Setting>(b =>
             {
-                b.ToTable(options.TablePrefix + "Settings", options.Schema);
+                b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "Settings", AbpSettingManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -44,12 +27,16 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
                 if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
                 b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLengthValue).IsRequired();
-                
+
                 b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
                 b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
         }
     }
 }

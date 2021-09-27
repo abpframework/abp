@@ -38,12 +38,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public string ConnectionString { get; set; }
 
         [NotNull]
+        public string OutputFolder { get; set; }
+
+        [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
 
         public ProjectBuildArgs(
             [NotNull] SolutionName solutionName,
             [CanBeNull] string templateName = null,
             [CanBeNull] string version = null,
+            string outputFolder = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
             DatabaseManagementSystem databaseManagementSystem = DatabaseManagementSystem.NotSpecified,
             UiFramework uiFramework = UiFramework.NotSpecified,
@@ -58,6 +62,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
             TemplateName = templateName;
             Version = version;
+            OutputFolder = outputFolder;
             DatabaseProvider = databaseProvider;
             DatabaseManagementSystem = databaseManagementSystem;
             UiFramework = uiFramework;

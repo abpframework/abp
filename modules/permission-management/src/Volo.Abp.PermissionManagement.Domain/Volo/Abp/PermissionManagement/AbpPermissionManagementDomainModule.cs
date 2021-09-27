@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Authorization;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Json;
@@ -13,6 +16,6 @@ namespace Volo.Abp.PermissionManagement
     [DependsOn(typeof(AbpJsonModule))]
     public class AbpPermissionManagementDomainModule : AbpModule
     {
-        
+
     }
 }

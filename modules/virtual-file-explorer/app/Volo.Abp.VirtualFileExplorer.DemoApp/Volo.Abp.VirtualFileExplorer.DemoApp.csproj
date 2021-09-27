@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <UserSecretsId>aspnet-Volo.Abp.VirtualFileExplorer.DemoApp-234AF9E1-C3E0-4F8F-BD7D-840627CC8E46</UserSecretsId>
     </PropertyGroup>
 
@@ -14,7 +14,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Volo.Abp.VirtualFileExplorer.Web\Volo.Abp.VirtualFileExplorer.Web.csproj" />
       <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-      <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
+      <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     </ItemGroup>
 
     <ItemGroup>

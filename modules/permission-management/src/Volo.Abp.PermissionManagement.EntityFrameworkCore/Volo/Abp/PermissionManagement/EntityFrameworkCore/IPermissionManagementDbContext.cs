@@ -7,6 +7,6 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
     [ConnectionStringName(AbpPermissionManagementDbProperties.ConnectionStringName)]
     public interface IPermissionManagementDbContext : IEfCoreDbContext
     {
-        DbSet<PermissionGrant> PermissionGrants { get; set; }
+        DbSet<PermissionGrant> PermissionGrants { get; }
     }
 }

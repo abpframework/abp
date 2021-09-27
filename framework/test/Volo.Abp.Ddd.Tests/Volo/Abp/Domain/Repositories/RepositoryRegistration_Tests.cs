@@ -189,6 +189,60 @@ namespace Volo.Abp.Domain.Repositories
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestCustomBaseRepository<MyTestEntityWithInt32Pk, int>));
         }
 
+        [Fact]
+        public void Should_Register_Default_Repository()
+        {
+            //Arrange
+
+            var services = new ServiceCollection();
+
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext), services);
+            options.AddDefaultRepository<MyTestAggregateRootWithGuidPk>();
+
+            //Act
+
+            new MyTestRepositoryRegistrar(options).AddRepositories();
+
+            //MyTestAggregateRootWithoutPk
+            services.ShouldNotContainService(typeof(IReadOnlyRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldNotContainService(typeof(IBasicRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldNotContainService(typeof(IRepository<MyTestAggregateRootWithoutPk>));
+
+            //MyTestAggregateRootWithGuidPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+        }
+
+        [Fact]
+        public void Should_Not_Register_Default_Repository_If_Registered_Custom_Repository()
+        {
+            //Arrange
+
+            var services = new ServiceCollection();
+
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext), services);
+            options
+                .AddDefaultRepository<MyTestAggregateRootWithGuidPk>()
+                .AddRepository<MyTestAggregateRootWithGuidPk, MyTestAggregateRootWithDefaultPkCustomRepository>();;
+
+            //Act
+
+            new MyTestRepositoryRegistrar(options).AddRepositories();
+
+            //MyTestAggregateRootWithGuidPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IReadOnlyBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+        }
+
         public class MyTestRepositoryRegistrar : RepositoryRegistrarBase<AbpCommonDbContextRegistrationOptions>
         {
             public MyTestRepositoryRegistrar(AbpCommonDbContextRegistrationOptions options)
@@ -279,6 +333,11 @@ namespace Volo.Abp.Domain.Repositories
             }
 
             public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }

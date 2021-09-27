@@ -7,7 +7,10 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBundlingModule))]
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiBundlingAbstractionsModule),
+        typeof(AbpLocalizationModule)
+        )]
     public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

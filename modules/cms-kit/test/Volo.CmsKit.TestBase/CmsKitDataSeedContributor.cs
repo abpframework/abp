@@ -1,14 +1,18 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Contents;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -26,12 +30,24 @@ namespace Volo.CmsKit
         private readonly ReactionManager _reactionManager;
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
-        private readonly IContentRepository _contentRepository;
-        private readonly IEntityTagManager _entityTagManager;
-        private readonly ITagManager _tagManager;
+        private readonly EntityTagManager _entityTagManager;
+        private readonly TagManager _tagManager;
+        private readonly ITagRepository _tagRepository;
+        private readonly IEntityTagRepository _entityTagRepository;
         private readonly IPageRepository _pageRepository;
-        private readonly IOptions<CmsKitOptions> _options;
+        private readonly IBlogRepository _blogRepository;
+        private readonly IBlogFeatureRepository _blogFeatureRepository;
+        private readonly IBlogPostRepository _blogPostRepository;
+        private readonly BlogPostManager _blogPostManager;
+        private readonly IOptions<CmsKitReactionOptions> _reactionOptions;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
+        private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
+        private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
+        private readonly BlogManager _blogManager;
+        private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
+        private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
+        private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
+        private readonly IMenuItemRepository _menuItemRepository;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -41,12 +57,24 @@ namespace Volo.CmsKit
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant,
-            IContentRepository contentRepository,
-            ITagManager tagManager,
-            IEntityTagManager entityTagManager,
+            TagManager tagManager,
+            ITagRepository tagRepository,
+            IEntityTagRepository entityTagRepository,
             IPageRepository pageRepository,
-            IOptions<CmsKitOptions> options,
-            IOptions<CmsKitTagOptions> tagOptions)
+            IBlogRepository blogRepository,
+            IBlogPostRepository blogPostRepository,
+            BlogPostManager blogPostmanager,
+            IBlogFeatureRepository blogFeatureRepository,
+            EntityTagManager entityTagManager,
+            IOptions<CmsKitReactionOptions> reactionOptions,
+            IOptions<CmsKitTagOptions> tagOptions,
+            IMediaDescriptorRepository mediaDescriptorRepository,
+            IBlobContainer<MediaContainer> mediaBlobContainer,
+            BlogManager blogManager,
+            IOptions<CmsKitMediaOptions> cmsMediaOptions,
+            IOptions<CmsKitCommentOptions> commentsOptions,
+            IOptions<CmsKitRatingOptions> ratingOptions,
+            IMenuItemRepository menuItemRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -55,12 +83,24 @@ namespace Volo.CmsKit
             _reactionManager = reactionManager;
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
-            _contentRepository = contentRepository;
             _tagManager = tagManager;
+            _tagRepository = tagRepository;
             _entityTagManager = entityTagManager;
+            _entityTagRepository = entityTagRepository;
             _pageRepository = pageRepository;
-            _options = options;
+            _blogRepository = blogRepository;
+            _blogPostRepository = blogPostRepository;
+            _blogPostManager = blogPostmanager;
+            _blogFeatureRepository = blogFeatureRepository;
+            _reactionOptions = reactionOptions;
             _tagOptions = tagOptions;
+            _mediaDescriptorRepository = mediaDescriptorRepository;
+            _mediaBlobContainer = mediaBlobContainer;
+            _blogManager = blogManager;
+            _mediaOptions = cmsMediaOptions;
+            _commentsOptions = commentsOptions;
+            _ratingOptions = ratingOptions;
+            _menuItemRepository = menuItemRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -77,21 +117,58 @@ namespace Volo.CmsKit
 
                 await SeedRatingsAsync();
 
-                await SeedContentsAsync();
-
                 await SeedTagsAsync();
 
                 await SeedPagesAsync();
+
+                await SeedBlogsAsync();
+
+                await SeedBlogFeaturesAsync();
+
+                await SeedMediaAsync();
+
+                await SeedMenusAsync();
             }
         }
 
         private Task ConfigureCmsKitOptionsAsync()
-        {            
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType1);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType2);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
+        {
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType1));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType2));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_1_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_2_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.TagDefinition_1_EntityType));
+
+            _mediaOptions.Value.EntityTypes.AddIfNotContains(
+                new MediaDescriptorDefinition(
+                    _cmsKitTestData.Media_1_EntityType,
+                    createPolicies: new[] { "SomeCreatePolicy" },
+                    deletePolicies: new[] { "SomeDeletePolicy" }));
+
+            _commentsOptions.Value.EntityTypes.Add(
+                new CommentEntityTypeDefinition(_cmsKitTestData.EntityType1));
+
+            List<ReactionDefinition> reactions = new()
+            {
+                new ReactionDefinition(StandardReactions.Smile),
+                new ReactionDefinition(StandardReactions.ThumbsUp),
+                new ReactionDefinition(StandardReactions.ThumbsDown),
+                new ReactionDefinition(StandardReactions.Confused),
+                new ReactionDefinition(StandardReactions.Eyes),
+                new ReactionDefinition(StandardReactions.Heart),
+                new ReactionDefinition(StandardReactions.HeartBroken),
+                new ReactionDefinition(StandardReactions.Wink),
+                new ReactionDefinition(StandardReactions.Pray),
+                new ReactionDefinition(StandardReactions.Rocket),
+                new ReactionDefinition(StandardReactions.Victory),
+                new ReactionDefinition(StandardReactions.Rock),
+            };
+
+            _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType1, reactions));
+            _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType2, reactions));
+
+            _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType1));
+            _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType2));
 
             return Task.CompletedTask;
         }
@@ -100,10 +177,13 @@ namespace Volo.CmsKit
         {
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1",
                 "user1@volo.com",
-                "user", "1")));
+                "user", "1")),
+                autoSave: true);
+
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2",
                 "user2@volo.com",
-                "user", "2")));
+                "user", "2")),
+                autoSave: true);
         }
 
         private async Task SeedCommentsAsync()
@@ -159,31 +239,31 @@ namespace Volo.CmsKit
 
         private async Task SeedReactionsAsync()
         {
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.Confused);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.ThumbsUp);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId2,
                 StandardReactions.Heart);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType2,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.Rocket);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User2Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
@@ -221,57 +301,42 @@ namespace Volo.CmsKit
             ));
         }
 
-        private async Task SeedContentsAsync()
-        {
-            var content1 = new Content(
-                _cmsKitTestData.Content_1_Id,
-                _cmsKitTestData.Content_1_EntityType,
-                _cmsKitTestData.Content_1_EntityId,
-                _cmsKitTestData.Content_1
-                );
-
-            var content2 = new Content(
-                _cmsKitTestData.Content_2_Id,
-                _cmsKitTestData.Content_2_EntityType,
-                _cmsKitTestData.Content_2_EntityId,
-                _cmsKitTestData.Content_2
-            );
-
-            var content3 = new Content(
-                Guid.NewGuid(),
-                "deleted_entity_type",
-                "deleted_entity_id",
-                "Content"
-            )
-            {
-                IsDeleted = true,
-            };
-
-            await _contentRepository.InsertAsync(content1);
-            await _contentRepository.InsertAsync(content2);
-            await _contentRepository.InsertAsync(content3);
-        }
-
         private async Task SeedTagsAsync()
         {
-            var created1 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_1, _cmsKitTestData.EntityType1, _cmsKitTestData.TagName_1);
+            var created1 = await _tagRepository.InsertAsync(
+                await _tagManager.CreateAsync(
+                    _cmsKitTestData.TagId_1,
+                    _cmsKitTestData.EntityType1,
+                    _cmsKitTestData.TagName_1));
 
             await _entityTagManager.AddTagToEntityAsync(created1.Id, created1.EntityType, _cmsKitTestData.EntityId1);
 
-            var created2 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_2, _cmsKitTestData.EntityType2, _cmsKitTestData.TagName_2);
+            var created2 = await _tagRepository.InsertAsync(
+                await _tagManager.CreateAsync(
+                    _cmsKitTestData.TagId_2,
+                    _cmsKitTestData.EntityType2,
+                    _cmsKitTestData.TagName_2));
 
             await _entityTagManager.AddTagToEntityAsync(created2.Id, created2.EntityType, _cmsKitTestData.EntityId2);
 
             foreach (var tag in _cmsKitTestData.Content_1_Tags)
             {
-                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
+                var tagEntity = await _tagRepository.InsertAsync(
+                    await _tagManager.CreateAsync(
+                        _guidGenerator.Create(),
+                        _cmsKitTestData.Content_1_EntityType,
+                        tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
             }
 
             foreach (var tag in _cmsKitTestData.Content_2_Tags)
             {
-                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
+                var tagEntity = await _tagRepository.InsertAsync(
+                    await _tagManager.CreateAsync(
+                        _guidGenerator.Create(),
+                        _cmsKitTestData.Content_2_EntityType,
+                        tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_2_EntityType, _cmsKitTestData.Content_2_EntityId);
             }
@@ -279,17 +344,92 @@ namespace Volo.CmsKit
 
         private async Task SeedPagesAsync()
         {
-            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
-            var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
-
+            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Content_1);
             await _pageRepository.InsertAsync(page1);
-            await _contentRepository.InsertAsync(page1Content);
 
-            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
-            var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
-
+            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Content_2);
             await _pageRepository.InsertAsync(page2);
-            await _contentRepository.InsertAsync(page2Content);
+        }
+
+        private async Task SeedBlogsAsync()
+        {
+            var blog = await _blogRepository.InsertAsync(
+                await _blogManager.CreateAsync(_cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug), autoSave: true);
+
+            _cmsKitTestData.Blog_Id = blog.Id;
+
+            var author = await _cmsUserRepository.GetAsync(_cmsKitTestData.User1Id);
+
+            _cmsKitTestData.BlogPost_1_Id =
+                (await _blogPostRepository.InsertAsync(
+                    await _blogPostManager.CreateAsync(
+                        author,
+                        blog,
+                        _cmsKitTestData.BlogPost_1_Title,
+                        _cmsKitTestData.BlogPost_1_Slug,
+                        "Short desc 1",
+                        "Blog Post 1 Content"))).Id;
+
+            _cmsKitTestData.BlogPost_2_Id =
+                (await _blogPostRepository.InsertAsync(
+                    await _blogPostManager.CreateAsync(
+                        author,
+                        blog,
+                        _cmsKitTestData.BlogPost_2_Title,
+                        _cmsKitTestData.BlogPost_2_Slug,
+                        "Short desc 2",
+                        "Blog Post 2 Content"))).Id;
+        }
+
+        private async Task SeedBlogFeaturesAsync()
+        {
+            var blogFeature1 = await _blogFeatureRepository.InsertAsync(
+                    new BlogFeature(
+                        _cmsKitTestData.Blog_Id,
+                        _cmsKitTestData.BlogFeature_1_FeatureName,
+                        _cmsKitTestData.BlogFeature_1_Enabled));
+
+            _cmsKitTestData.BlogFeature_1_Id = blogFeature1.Id;
+
+            var blogFeature2 = await _blogFeatureRepository.InsertAsync(
+                    new BlogFeature(
+                        _cmsKitTestData.Blog_Id,
+                        _cmsKitTestData.BlogFeature_2_FeatureName,
+                        _cmsKitTestData.BlogFeature_2_Enabled));
+
+            _cmsKitTestData.BlogFeature_2_Id = blogFeature2.Id;
+        }
+
+        private async Task SeedMediaAsync()
+        {
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(_cmsKitTestData.Media_1_Content)))
+            {
+                var media = new MediaDescriptor(_cmsKitTestData.Media_1_Id, _cmsKitTestData.Media_1_EntityType, _cmsKitTestData.Media_1_Name, _cmsKitTestData.Media_1_ContentType, stream.Length);
+
+                await _mediaDescriptorRepository.InsertAsync(media);
+
+                await _mediaBlobContainer.SaveAsync(media.Id.ToString(), stream);
+            }
+        }
+
+        private async Task SeedMenusAsync()
+        {
+            await _menuItemRepository.InsertManyAsync(new[]
+            {
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_1_Id,
+                    _cmsKitTestData.MenuItem_1_Name,
+                    _cmsKitTestData.MenuItem_1_Url),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_2_Id,
+                    _cmsKitTestData.MenuItem_2_Name,
+                    _cmsKitTestData.MenuItem_2_Url),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_3_Id,
+                    _cmsKitTestData.MenuItem_3_Name,
+                    _cmsKitTestData.MenuItem_3_Url)
+
+            });
         }
     }
 }

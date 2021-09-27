@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function ($) {
 
     var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
@@ -78,7 +78,7 @@
                     return "";
                 }
 
-                var $button = $('<button type="button" class="btn btn-primary"></button>');
+                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
                     $button.html(firstItem.text);
@@ -119,7 +119,7 @@
 
             var $container = $('<div/>')
                 .addClass('dropdown')
-                .addClass('action-button');
+                .addClass('abp-action-button');
 
             var $dropdownButton = $('<button/>');
 
@@ -132,7 +132,7 @@
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(fieldItem.text));
+                $dropdownButton.append(htmlEncode(field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
@@ -236,9 +236,11 @@
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".action-button");
-                    if ($actionButton.length === 0) {
-                        $(cells[colIndex]).append($actionContainer);
+                    if ($actionContainer) {
+                        var $actionButton = $(cells[colIndex]).find(".abp-action-button");
+                        if ($actionButton.length === 0) {
+                            $(cells[colIndex]).empty().append($actionContainer);
+                        }
                     }
                 }
             }
@@ -325,7 +327,7 @@
      * AJAX extension for datatables                                         *
      *************************************************************************/
     (function () {
-        datatables.createAjax = function (serverMethod, inputAction, responseCallback) {
+        datatables.createAjax = function (serverMethod, inputAction, responseCallback, cancelPreviousRequest) {
             responseCallback = responseCallback || function(result) {
                 return {
                     recordsTotal: result.totalCount,
@@ -333,8 +335,12 @@
                     data: result.items
                 };
             }
+            var promise = null;
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction(requestData, settings) : {};
+                var input = typeof inputAction === 'function'
+                    ? inputAction(requestData, settings)
+                    : (typeof inputAction === 'object' && inputAction)
+                        ? inputAction : {};
 
                 //Paging
                 if (settings.oInit.paging) {
@@ -365,7 +371,13 @@
                 }
 
                 if (callback) {
-                    serverMethod(input).then(function (result) {
+                    if(cancelPreviousRequest && promise && promise.jqXHR) {
+                        promise.jqXHR.abort();
+                    }
+                    promise = serverMethod(input);
+                    promise.always(function () {
+                        promise = null;
+                    }).then(function (result) {
                         callback(responseCallback(result));
                     });
                 }
@@ -403,6 +415,10 @@
                     if (render) {
                         column.render = render;
                     }
+                }
+
+                if (!column.render) {
+                    column.render = $.fn.dataTable.render.text();
                 }
 
                 if (column.rowAction) {
@@ -448,11 +464,19 @@
     };
 
     datatables.defaultRenderers['date'] = function (value) {
-        return (ISOStringToDateTimeLocaleString())(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString())(value);
+        }
     };
 
     datatables.defaultRenderers['datetime'] = function (value) {
-        return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        }
     };
 
     /************************************************************************

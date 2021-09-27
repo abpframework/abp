@@ -1,26 +1,29 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Pages
 {
+    [RequiresGlobalFeature(typeof(PagesFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
-    [Route("api/cms-kit-public/comments")]
-    public class PagesPublicController : IPageAppService
+    [Route("api/cms-kit-public/pages")]
+    public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppService
     {
-        protected readonly IPageAppService PageAppService;
+        protected IPagePublicAppService PageAppService { get; }
 
-        public PagesPublicController(IPageAppService pageAppService)
+        public PagesPublicController(IPagePublicAppService pageAppService)
         {
             PageAppService = pageAppService;
         }
 
         [HttpGet]
-        [Route("url/{url}")]
-        public Task<PageDto> FindByUrlAsync(string url)
+        [Route("{slug}")]
+        public virtual Task<PageDto> FindBySlugAsync(string slug)
         {
-            return PageAppService.FindByUrlAsync(url);
+            return PageAppService.FindBySlugAsync(slug);
         }
     }
 }

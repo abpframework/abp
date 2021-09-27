@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.4.2",
+    "@abp/prismjs": "^4.4.2"
+  },
+  "devDependencies": {}
+}

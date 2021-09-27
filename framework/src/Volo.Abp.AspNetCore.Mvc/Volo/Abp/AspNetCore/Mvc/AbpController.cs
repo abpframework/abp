@@ -108,12 +108,12 @@ namespace Volo.Abp.AspNetCore.Mvc
             return localizer;
         }
 
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {
             return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
         }
 
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+        protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
@@ -125,7 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return returnUrl;
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
+        protected virtual string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {
@@ -142,7 +142,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual string GetAppHomeUrl()
         {
-            return "~/";
+            return Url.Content("~/");
         }
     }
 }

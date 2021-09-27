@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -85,6 +90,8 @@ acme.bookStore.books.book.create({
     });
 ````
 
+> If you downloaded the source code of the tutorial and following the steps from the sample, you should also pass the `authorId` parameter to the create method for **creating a new book**.
+
 You should see a message in the console something like that:
 
 ````text
@@ -103,7 +110,7 @@ Before starting to the UI development, we first want to prepare the localization
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
-![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
+![bookstore-localization-files](images/bookstore-localization-files-v2.png)
 
 Open the `en.json` (*the English translations*) file and change the content as below:
 
@@ -157,7 +164,7 @@ It's time to create something visible and usable! Instead of classic MVC, we wil
 
 Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
 
-![bookstore-add-index-page](./images/bookstore-add-index-page-v2.png)
+![bookstore-add-index-page](images/bookstore-add-index-page-v2.png)
 
 Open the `Index.cshtml` and change the whole content as shown below:
 
@@ -208,7 +215,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
 
-![bookstore-menu-items](./images/bookstore-new-menu-item.png)
+![bookstore-menu-items](images/bookstore-new-menu-item.png)
 
 When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
 
@@ -250,7 +257,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 Create an `Index.js` file under the `Pages/Books` folder:
 
-![bookstore-index-js-file](./images/bookstore-index-js-file-v3.png)
+![bookstore-index-js-file](images/bookstore-index-js-file-v3.png)
 
 The content of the file is shown below:
 
@@ -343,8 +350,6 @@ It's time to create something visible and usable! There are some tools that we w
 
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
 - [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
-
-### BookModule
 
 Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
 
@@ -449,7 +454,11 @@ For more information, see the [RoutesService document](../UI/Angular/Modifying-t
 
 [ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
-Run the following command in the `angular` folder:
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+
+![vs-run-without-iisexpress](images/vs-run-without-iisexpress.png)
+
+Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
 abp generate-proxy
@@ -457,7 +466,7 @@ abp generate-proxy
 
 This command will create the following files under the `/src/app/proxy/books` folder:
 
-![Generated files](./images/generated-proxies-3.png)
+![Generated files](images/generated-proxies-3.png)
 
 ### BookComponent
 
@@ -490,7 +499,7 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../UI/Angular/List-Service.md), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
 
 Open the `/src/app/book/book.component.html` and replace the content as below:
 
@@ -531,9 +540,9 @@ Open the `/src/app/book/book.component.html` and replace the content as below:
 
 Now you can see the final result on your browser:
 
-![Book list final result](./images/bookstore-book-list.png)
+![Book list final result](images/bookstore-book-list.png)
 
-{{else if UI == "Blazor"}}
+{{else if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## Create a Books Page
 

@@ -17,7 +17,7 @@
   <div id="abp-modal-body" class="modal-body">
     <ng-container *ngTemplateOutlet="abpBody"></ng-container>
   </div>
-  <div id="abp-modal-footer" class="modal-footer">
+  <div *ngIf="abpFooter" id="abp-modal-footer" class="modal-footer">
     <ng-container *ngTemplateOutlet="abpFooter"></ng-container>
   </div>
 </ng-template>

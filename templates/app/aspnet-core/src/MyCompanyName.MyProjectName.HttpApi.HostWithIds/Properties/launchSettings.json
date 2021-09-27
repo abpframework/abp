@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MyCompanyName.MyProjectName.HttpApi.Host": {
+    "MyCompanyName.MyProjectName.HttpApi.HostWithIds": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:44305",

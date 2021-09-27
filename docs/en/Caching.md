@@ -242,12 +242,15 @@ In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<
 
 ## Batch Operations
 
-ABP's distributed cache interfaces provide methods to perform batch get/set methods those improves the performance when you want to get or set multiple cache items in a single method call.
+ABP's distributed cache interfaces provide methods to perform batch methods those improves the performance when you want to batch operation multiple cache items in a single method call.
 
 * `SetManyAsync` and `SetMany` methods can be used to set multiple values to the cache.
 * `GetManyAsync` and `GetMany` methods can be used to retrieve multiple values from the cache.
+* `GetOrAddManyAsync` and `GetOrAddMany` methods can be used to retrieve multiple values and set missing values from the cache
+* `RefreshManyAsync` and `RefreshMany` methods can be used to resets the sliding expiration timeout of multiple values from the cache
+* `RemoveManyAsync` and `RemoveMany` methods can be used to remove multiple values from the cache
 
-> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` methods (called once for each item).
+> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` ... methods (called once for each item).
 
 ## Advanced Topics
 
@@ -259,7 +262,7 @@ Distributed cache service provides an interesting feature. Assume that you've up
 
 ### IDistributedCacheSerializer
 
-`IDistributedCacheSerializer` service is used to serialize and deserialize the cache items. Default implementation is the `Utf8JsonDistributedCacheSerializer` class that uses `IJsonSerializer` service to convert objects to [JSON](Json.md) and vice verse. Then it uses UTC8 encoding to convert the JSON string to a byte array which is accepted by the distributed cache.
+`IDistributedCacheSerializer` service is used to serialize and deserialize the cache items. Default implementation is the `Utf8JsonDistributedCacheSerializer` class that uses `IJsonSerializer` service to convert objects to [JSON](Json-Serialization.md) and vice verse. Then it uses UTC8 encoding to convert the JSON string to a byte array which is accepted by the distributed cache.
 
 You can [replace](Dependency-Injection.md) this service by your own implementation if you want to implement your own serialization logic.
 

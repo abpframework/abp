@@ -82,7 +82,7 @@ namespace Volo.Abp.BlobStoring.Aws
         public string ContainerName
         {
             get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ContainerName);
-            set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ContainerName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+            set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ContainerName, value);
         }
 
         /// <summary>

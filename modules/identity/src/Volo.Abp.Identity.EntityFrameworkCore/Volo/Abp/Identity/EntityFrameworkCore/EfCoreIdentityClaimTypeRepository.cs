@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? "name desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 

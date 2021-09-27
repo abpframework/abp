@@ -5,7 +5,6 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.IdentityModel
 {
     [Serializable]
-    [IgnoreMultiTenancy]
     public class IdentityModelTokenCacheItem
     {
         public string AccessToken { get; set; }

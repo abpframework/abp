@@ -1,32 +1,47 @@
 ﻿using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp;
-using Volo.Abp.Localization;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit
+namespace Volo.CmsKit
 {
-    public abstract class PolicySpecifiedDefinition
+    public abstract class PolicySpecifiedDefinition : EntityTypeDefinition, IEquatable<PolicySpecifiedDefinition>
     {
-        protected PolicySpecifiedDefinition()
-        {
-        }
-
         public PolicySpecifiedDefinition(
-            [CanBeNull] string createPolicy = null,
-            [CanBeNull] string updatePolicy = null,
-            [CanBeNull] string deletePolicy = null)
+            [NotNull] string entityType,
+            IEnumerable<string> createPolicies = null,
+            IEnumerable<string> updatePolicies = null,
+            IEnumerable<string> deletePolicies = null) : base(entityType)
         {
-            CreatePolicy = createPolicy;
-            DeletePolicy = deletePolicy;
-            UpdatePolicy = updatePolicy;
+            if (createPolicies != null)
+            {
+                CreatePolicies = CreatePolicies.Concat(createPolicies).ToList();
+            }
+
+            if (updatePolicies != null)
+            {
+                UpdatePolicies = UpdatePolicies.Concat(updatePolicies).ToList();
+            }
+
+            if (deletePolicies != null)
+            {
+                DeletePolicies = DeletePolicies.Concat(deletePolicies).ToList();
+            }
         }
 
-        [CanBeNull]
-        public virtual string CreatePolicy { get; set; }
+        [NotNull]
+        public virtual ICollection<string> CreatePolicies { get; } = new List<string>();
 
-        [CanBeNull]
-        public virtual string UpdatePolicy { get; set; }
+        [NotNull]
+        public virtual ICollection<string> UpdatePolicies { get; } = new List<string>();
 
-        [CanBeNull]
-        public virtual string DeletePolicy { get; set; }
+        [NotNull]
+        public virtual ICollection<string> DeletePolicies { get; } = new List<string>();
+
+        public bool Equals(PolicySpecifiedDefinition other)
+        {
+            return other?.EntityType == EntityType;
+        }
     }
 }

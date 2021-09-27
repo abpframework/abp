@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Pages
 {
     [RequiresGlobalFeature(typeof(PagesFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     [Route("api/cms-kit-admin/pages")]
     public class PageAdminController : CmsKitAdminController, IPageAdminAppService

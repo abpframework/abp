@@ -136,6 +136,12 @@
     "GitHubUserNameValidationMessage": "Your Github username can not include whitespace, please be sure your Github username is correct.",
     "PersonalSiteUrlValidationMessage": "Your personal site URL can not include whitespace, please be sure your personal site URL is correct.",
     "TwitterUserNameValidationMessage": "Your Twitter username can not include whitespace, please be sure your Twitter username is correct.",
-    "LinkedinUrlValidationMessage": "Your Linkedin URL can not include whitespace, please be sure your Linkedin URL is correct."
+    "LinkedinUrlValidationMessage": "Your Linkedin URL can not include whitespace, please be sure your Linkedin URL is correct.",
+    "NoPostsFound": "No posts found!",
+    "SearchInPosts": "Search in posts...",
+    "MinimumSearchContent": "You must enter at least 3 characters!",
+    "Volo.AbpIo.Domain:060001": "Source URL(\"{ArticleUrl}\") is not Github URL",
+    "Volo.AbpIo.Domain:060002": "Article Content is not available from Github(\"{ArticleUrl}\") resource.",
+    "Volo.AbpIo.Domain:060003": "No article content found!"
   }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.EntityFrameworkCore.Domain
@@ -29,7 +31,37 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                         "Established"
                     ).MapEfCoreProperty<City, Guid>(
                         "Guid"
-                    );
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color?>(
+                        "EnumNumber"
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color>(
+                        "EnumNumberString"
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color>(
+                        "EnumLiteral"
+                    ).MapEfCoreEntity<City>(b =>
+                    {
+                        b.As<EntityTypeBuilder<City>>()
+                            .Property(x=>x.Name).IsRequired();
+
+                    }).MapEfCoreEntity<City>(b =>
+                    {
+                        b.As<EntityTypeBuilder<City>>()
+                            .Property(x=>x.Name).HasMaxLength(200);
+
+                    }).MapEfCoreEntity(typeof(Person), b =>
+                    {
+                        b.As<EntityTypeBuilder<Person>>()
+                            .HasIndex(x=>x.Birthday);
+                    });
+
+                ObjectExtensionManager.Instance.MapEfCoreDbContext<TestAppDbContext>(b =>
+                {
+                    b.Entity<City>().Property(x => x.Name).IsRequired();
+                });
+
+                ObjectExtensionManager.Instance.MapEfCoreDbContext<TestAppDbContext>(b =>
+                {
+                    b.Entity<Author>().Property(x => x.Name).IsRequired();
+                });
             });
         }
     }

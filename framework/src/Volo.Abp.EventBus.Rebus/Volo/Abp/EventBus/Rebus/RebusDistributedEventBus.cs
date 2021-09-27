@@ -10,6 +10,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Rebus
 {
@@ -28,10 +29,12 @@ namespace Volo.Abp.EventBus.Rebus
         public RebusDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IBus rebus,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
-            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions) :
-            base(serviceScopeFactory, currentTenant)
+            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
+            IEventErrorHandler errorHandler) :
+            base(serviceScopeFactory, currentTenant, unitOfWorkManager, errorHandler)
         {
             Rebus = rebus;
             AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
@@ -124,9 +127,14 @@ namespace Volo.Abp.EventBus.Rebus
             return Subscribe(typeof(TEvent), handler);
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+        }
+
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)

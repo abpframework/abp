@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
@@ -10,8 +12,25 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public string EfCoreConfigureMethodName { get; set; }
 
+        public string DocumentationLinks { get; set; }
+
         public List<NugetPackageInfo> NugetPackages { get; set; }
 
         public List<NpmPackageInfo> NpmPackages { get; set; }
+
+        public string InstallationCompleteMessage { get; set; }
+
+        public string GetFirstDocumentationLinkOrNull()
+        {
+            if (string.IsNullOrWhiteSpace(DocumentationLinks))
+            {
+                return null;
+            }
+
+            var docs = DocumentationLinks.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            return docs.Any() ?
+                docs.First() :
+                null;
+        }
     }
 }

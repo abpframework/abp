@@ -25,5 +25,12 @@ namespace Volo.Abp.TestApp.Application
         Task<IRemoteStreamContent> DownloadAsync();
 
         Task<string> UploadAsync(IRemoteStreamContent streamContent);
+
+        Task<string> UploadMultipleAsync(IEnumerable<IRemoteStreamContent> streamContents);
+
+        Task<string> CreateFileAsync(CreateFileInput input);
+
+        Task<string> CreateMultipleFileAsync(CreateMultipleFileInput input);
+
     }
 }

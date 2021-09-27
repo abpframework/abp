@@ -9,11 +9,18 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
+using Volo.Abp.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
+using Volo.Abp.BlazoriseUI.Components.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -186,6 +193,8 @@ namespace Volo.Abp.BlazoriseUI
         protected Validations EditValidationsRef;
         protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
         protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
+        protected EntityActionDictionary EntityActions { get; set; }
+        protected TableColumnDictionary TableColumns { get; set; }
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -199,13 +208,29 @@ namespace Volo.Abp.BlazoriseUI
         {
             NewEntity = new TCreateViewModel();
             EditingEntity = new TUpdateViewModel();
+            TableColumns = new TableColumnDictionary();
+            EntityActions = new EntityActionDictionary();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
+            await SetEntityActionsAsync();
+            await SetTableColumnsAsync();
+            await InvokeAsync(StateHasChanged);
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await base.OnAfterRenderAsync(firstRender);
+                await SetToolbarItemsAsync();
+                await SetBreadcrumbItemsAsync();
+            }
+        }
+
+
 
         protected virtual async Task SetPermissionsAsync()
         {
@@ -227,10 +252,17 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
-            await UpdateGetListInputAsync();
-            var result = await AppService.GetListAsync(GetListInput);
-            Entities = MapToListViewModel(result.Items);
-            TotalCount = (int?)result.TotalCount;
+            try
+            {
+                await UpdateGetListInputAsync();
+                var result = await AppService.GetListAsync(GetListInput);
+                Entities = MapToListViewModel(result.Items);
+                TotalCount = (int?)result.TotalCount;
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         private IReadOnlyList<TListViewModel> MapToListViewModel(IReadOnlyList<TGetListOutputDto> dtos)
@@ -287,39 +319,62 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenCreateModalAsync()
         {
-            CreateValidationsRef?.ClearAll();
+            try
+            {
+                CreateValidationsRef?.ClearAll();
 
-            await CheckCreatePolicyAsync();
+                await CheckCreatePolicyAsync();
 
-            NewEntity = new TCreateViewModel();
+                NewEntity = new TCreateViewModel();
 
-            // Mapper will not notify Blazor that binded values are changed
-            // so we need to notify it manually by calling StateHasChanged
-            await InvokeAsync(StateHasChanged);
-
-            CreateModal.Show();
+                // Mapper will not notify Blazor that binded values are changed
+                // so we need to notify it manually by calling StateHasChanged
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                    CreateModal?.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual Task CloseCreateModalAsync()
         {
-            CreateModal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(CreateModal.Hide);
+        }
+
+        protected virtual void ClosingCreateModal(ModalClosingEventArgs eventArgs)
+        {
+            // cancel close if clicked outside of modal area
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
 
         protected virtual async Task OpenEditModalAsync(TListViewModel entity)
         {
-            EditValidationsRef?.ClearAll();
+            try
+            {
+                EditValidationsRef?.ClearAll();
 
-            await CheckUpdatePolicyAsync();
+                await CheckUpdatePolicyAsync();
 
-            var entityDto = await AppService.GetAsync(entity.Id);
+                var entityDto = await AppService.GetAsync(entity.Id);
 
-            EditingEntityId = entity.Id;
-            EditingEntity = MapToEditingEntity(entityDto);
+                EditingEntityId = entity.Id;
+                EditingEntity = MapToEditingEntity(entityDto);
 
-            await InvokeAsync(StateHasChanged);
-
-            EditModal.Show();
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                    EditModal?.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
@@ -349,21 +404,34 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual Task CloseEditModalAsync()
         {
-            EditModal.Hide();
+            InvokeAsync(EditModal.Hide);
             return Task.CompletedTask;
+        }
+
+        protected virtual void ClosingEditModal(ModalClosingEventArgs eventArgs)
+        {
+            // cancel close if clicked outside of modal area
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
 
         protected virtual async Task CreateEntityAsync()
         {
-            if (CreateValidationsRef?.ValidateAll() ?? true)
+            try
             {
-                await OnCreatingEntityAsync();
+                if (CreateValidationsRef?.ValidateAll() ?? true)
+                {
+                    await OnCreatingEntityAsync();
 
-                await CheckCreatePolicyAsync();
-                var createInput = MapToCreateInput(NewEntity);
-                await AppService.CreateAsync(createInput);
+                    await CheckCreatePolicyAsync();
+                    var createInput = MapToCreateInput(NewEntity);
+                    await AppService.CreateAsync(createInput);
 
-                await OnCreatedEntityAsync();
+                    await OnCreatedEntityAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
             }
         }
 
@@ -376,20 +444,27 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
 
-            CreateModal.Hide();
+            await InvokeAsync(CreateModal.Hide);
         }
 
         protected virtual async Task UpdateEntityAsync()
         {
-            if (EditValidationsRef?.ValidateAll() ?? true)
+            try
             {
-                await OnUpdatingEntityAsync();
+                if (EditValidationsRef?.ValidateAll() ?? true)
+                {
+                    await OnUpdatingEntityAsync();
 
-                await CheckUpdatePolicyAsync();
-                var updateInput = MapToUpdateInput(EditingEntity);
-                await AppService.UpdateAsync(EditingEntityId, updateInput);
+                    await CheckUpdatePolicyAsync();
+                    var updateInput = MapToUpdateInput(EditingEntity);
+                    await AppService.UpdateAsync(EditingEntityId, updateInput);
 
-                await OnUpdatedEntityAsync();
+                    await OnUpdatedEntityAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
             }
         }
 
@@ -402,15 +477,33 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
 
-            EditModal.Hide();
+            await InvokeAsync(EditModal.Hide);
         }
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
-            await CheckDeletePolicyAsync();
+            try
+            {
+                await CheckDeletePolicyAsync();
+                await OnDeletingEntityAsync();
+                await AppService.DeleteAsync(entity.Id);
+                await OnDeletedEntityAsync();
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
+        }
 
-            await AppService.DeleteAsync(entity.Id);
+        protected virtual Task OnDeletingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual async Task OnDeletedEntityAsync()
+        {
             await GetEntitiesAsync();
+            await InvokeAsync(StateHasChanged);
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
@@ -453,6 +546,63 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual ValueTask SetBreadcrumbItemsAsync()
         {
             return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetEntityActionsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetTableColumnsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetToolbarItemsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual IEnumerable<TableColumn> GetExtensionTableColumns(string moduleName, string entityType)
+        {
+            var properties = ModuleExtensionConfigurationHelper.GetPropertyConfigurations(moduleName, entityType);
+            foreach (var propertyInfo in properties)
+            {
+                if (propertyInfo.IsAvailableToClients && propertyInfo.UI.OnTable.IsVisible)
+                {
+                    if (propertyInfo.Name.EndsWith("_Text"))
+                    {
+                        var lookupPropertyName = propertyInfo.Name.RemovePostFix("_Text");
+                        var lookupPropertyDefinition = properties.SingleOrDefault(t => t.Name == lookupPropertyName);
+                        yield return new TableColumn
+                        {
+                            Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+                    }
+                    else
+                    {
+                        var column = new TableColumn
+                        {
+                            Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+
+                        if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
+                        {
+                            column.DisplayFormat = propertyInfo.GetDateEditInputFormatOrNull();
+                        }
+
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            column.ValueConverter = (val) =>
+                                EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], StringLocalizerFactory);
+                        }
+
+                        yield return column;
+                    }
+                }
+            }
         }
     }
 }

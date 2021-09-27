@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 
-namespace Volo.FileManagement
+namespace Volo.CmsKit
 {
     public class FakeBlobProvider : IBlobProvider
     {

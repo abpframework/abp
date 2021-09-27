@@ -43,7 +43,7 @@ namespace Volo.Abp.Settings
             return value;
         }
 
-        public async Task<List<SettingValue>> GetAllAsync(string[] names)
+        public virtual async Task<List<SettingValue>> GetAllAsync(string[] names)
         {
             var result = new Dictionary<string, SettingValue>();
             var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => names.Contains(x.Name)).ToList();

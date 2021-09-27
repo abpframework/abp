@@ -1,0 +1,22 @@
+﻿@model TagEditorViewComponent.TagEditorViewModel
+
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CmsKitResource> L
+
+    <form class="tag-editor-form" data-entity-id="@Model.EntityId" data-entity-type="@Model.EntityType">
+
+        <div class="form-group">
+            <label>@L["Tags"]</label>
+            <input name="tags" value="@string.Join(',', Model.Tags.Select(s => s.Name))" class="form-control"/>
+        </div>
+
+        @if (Model.DisplaySubmitButton)
+        {
+            <abp-form-row>
+                <abp-button type="submit" text="@L["Submit"]" />
+            </abp-form-row>
+        }
+    </form>

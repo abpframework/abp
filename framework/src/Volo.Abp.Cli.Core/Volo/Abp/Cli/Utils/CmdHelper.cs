@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Volo.Abp.Cli.Utils
@@ -103,14 +104,28 @@ namespace Volo.Abp.Cli.Utils
 
         public static string GetFileName()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                //TODO: Test this. it should work for both operation systems.
+                //Windows
+                return "cmd.exe";
+            }
+
+            //Linux or OSX
+            if (File.Exists("/bin/bash"))
+            {
                 return "/bin/bash";
             }
 
-            //Windows default.
-            return "cmd.exe";
+            if (File.Exists("/bin/sh"))
+            {
+                return "/bin/sh"; //some Linux distributions like Alpine doesn't have bash
+            }
+
+            throw new AbpException($"Cannot determine shell command for this OS! " +
+                                   $"Running on OS: {System.Runtime.InteropServices.RuntimeInformation.OSDescription} | " +
+                                   $"OS Architecture: {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} | " +
+                                   $"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription} | " +
+                                   $"Process Architecture{System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}");
         }
     }
 }

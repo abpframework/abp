@@ -12,25 +12,25 @@ namespace Volo.CmsKit.Tags
         Task<Tag> GetAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default);
 
         Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default);
 
         Task<Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default);
+
+        Task<List<Tag>> GetListAsync(string filter);
+
+        Task<int> GetCountAsync(string filter);
 
         Task<List<Tag>> GetAllRelatedTagsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default); 
     }
 }

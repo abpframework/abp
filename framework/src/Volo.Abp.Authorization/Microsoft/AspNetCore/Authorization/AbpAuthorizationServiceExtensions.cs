@@ -65,6 +65,23 @@ namespace Microsoft.AspNetCore.Authorization
         {
             return (await authorizationService.AuthorizeAsync(policyName)).Succeeded;
         }
+        
+        public static async Task<bool> IsGrantedAnyAsync(
+            this IAuthorizationService authorizationService,
+            params string[] policyNames)
+        {
+            Check.NotNullOrEmpty(policyNames, nameof(policyNames));
+
+            foreach (var policyName in policyNames)
+            {
+                if ((await authorizationService.AuthorizeAsync(policyName)).Succeeded)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
         {

@@ -7,9 +7,11 @@ using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public interface IAbpIdentityServerMongoDbContext : IAbpMongoDbContext
     {

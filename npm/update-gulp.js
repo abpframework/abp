@@ -1,4 +1,4 @@
-const glob = require('glob');
+const glob = require('fast-glob');
 var path = require('path');
 const childProcess = require('child_process');
 const execa = require('execa');
@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const { program } = require('commander');
 
 program.version('0.0.1');
-program.option('-r, --rc', 'whether version is rc');
+program.option('-pr, --prerelase', 'whether version is prerelase');
 program.parse(process.argv);
 
 const gulp = (folderPath) => {
@@ -18,8 +18,9 @@ const gulp = (folderPath) => {
   }
 
   try {
-    execa.sync(`yarn`, ['install'], { cwd: folderPath, stdio: 'inherit' });
-    execa.sync(`yarn`, ['gulp'], { cwd: folderPath, stdio: 'inherit' });
+    fse.removeSync(`${folderPath}/wwwroot/libs`);
+    execa.sync('yarn', ['install'], { cwd: folderPath, stdio: 'inherit' });
+    execa.sync('yarn', ['gulp'], { cwd: folderPath, stdio: 'inherit' });
   } catch (error) {
     console.log('\x1b[31m', 'Error: ' + error.message);
   }
@@ -30,7 +31,7 @@ const updatePackages = (pkgJsonPath) => {
     const result = childProcess
       .execSync(
         `ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u${
-          program.rc ? ' --greatest' : ''
+          program.prerelase ? ' --target greatest' : ''
         }`
       )
       .toString();
@@ -40,8 +41,9 @@ const updatePackages = (pkgJsonPath) => {
   }
 };
 
-console.time();
-glob('../**/package.json', {}, (er, files) => {
+(async () => {
+  console.time();
+  let files = await glob('../**/package.json');
   files = files.filter(
     (f) =>
       f &&
@@ -53,7 +55,9 @@ glob('../**/package.json', {}, (er, files) => {
 
   files.forEach((file) => {
     updatePackages(file);
-    gulp(file.replace('package.json', ''));
+    const folderPath = file.replace('package.json', '');
+    gulp(folderPath);
   });
+
   console.timeEnd();
-});
+})();

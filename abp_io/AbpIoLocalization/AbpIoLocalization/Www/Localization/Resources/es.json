@@ -185,6 +185,8 @@
     "SeeCliDocumentForMoreInformation": "Ver el <a href=\"{0}\">documento ABP CLI </a> para más opciones o selecciona la \"Direct Download\" pestaña de arriba.",
     "Optional": "Opcional",
     "LocalFrameworkRef": "Mantén la referencia al proyecto local para los paquetes del framework.",
-    "SelectLanguage": "Vali keel"
+    "SelectLanguage": "Vali keel",
+	"LatestArticleOnCommunity": "Último artículo sobre la comunidad ABP",
+	"Register": "Registrarse"
   }
 }

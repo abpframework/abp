@@ -10,6 +10,7 @@ using Volo.Abp.Collections;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus
 {
@@ -19,10 +20,20 @@ namespace Volo.Abp.EventBus
 
         protected ICurrentTenant CurrentTenant { get; }
 
-        protected EventBusBase(IServiceScopeFactory serviceScopeFactory, ICurrentTenant currentTenant)
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
+        protected IEventErrorHandler ErrorHandler { get; }
+
+        protected EventBusBase(
+            IServiceScopeFactory serviceScopeFactory,
+            ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
+            IEventErrorHandler errorHandler)
         {
             ServiceScopeFactory = serviceScopeFactory;
             CurrentTenant = currentTenant;
+            UnitOfWorkManager = unitOfWorkManager;
+            ErrorHandler = errorHandler;
         }
 
         /// <inheritdoc/>
@@ -81,15 +92,31 @@ namespace Volo.Abp.EventBus
         public abstract void UnsubscribeAll(Type eventType);
 
         /// <inheritdoc/>
-        public virtual Task PublishAsync<TEvent>(TEvent eventData) where TEvent : class
+        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
         {
-            return PublishAsync(typeof(TEvent), eventData);
+            return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
         }
 
         /// <inheritdoc/>
-        public abstract Task PublishAsync(Type eventType, object eventData);
+        public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+        {
+            if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+            {
+                AddToUnitOfWork(
+                    UnitOfWorkManager.Current,
+                    new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
+                );
+                return;
+            }
 
-        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
+            await PublishToEventBusAsync(eventType, eventData);
+        }
+
+        protected abstract Task PublishToEventBusAsync(Type eventType, object eventData);
+
+        protected abstract void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord);
+
+        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, Action<EventExecutionErrorContext> onErrorAction = null)
         {
             var exceptions = new List<Exception>();
 
@@ -97,16 +124,13 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                if (exceptions.Count == 1)
-                {
-                    exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
+                var context = new EventExecutionErrorContext(exceptions, eventType, this);
+                onErrorAction?.Invoke(context);
+                await ErrorHandler.HandleAsync(context);
             }
         }
 
-        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData, List<Exception> exceptions)
+        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData , List<Exception> exceptions)
         {
             await new SynchronizationContextRemover();
 
@@ -130,7 +154,7 @@ namespace Volo.Abp.EventBus
                     var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    await PublishAsync(baseEventType, baseEventData);
+                    await PublishToEventBusAsync(baseEventType, baseEventData);
                 }
             }
         }

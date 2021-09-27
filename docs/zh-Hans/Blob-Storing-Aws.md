@@ -39,7 +39,7 @@ Configure<AbpBlobStoringOptions>(options =>
             Aws.Policy = "policy";
             Aws.DurationSeconds = "expiration date";
             Aws.ContainerName = "your Aws container name";
-            Aws.CreateContainerIfNotExists = false;
+            Aws.CreateContainerIfNotExists = true;
         });
     });
 });

@@ -1,8 +1,10 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
-import { camel } from '../utils';
+import { camel } from '../utils/text';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const shouldQuote = require('should-quote');
 
 export class Method {
   body: Body;
@@ -41,20 +43,26 @@ export class Body {
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {
-    const { bindingSourceId, descriptorName, name, nameOnMethod } = param;
+    const { bindingSourceId, descriptorName, jsonName, name, nameOnMethod } = param;
     const camelName = camel(name);
-    const value = descriptorName ? `${descriptorName}.${camelName}` : nameOnMethod;
+    const paramName = jsonName || camelName;
+    const value = descriptorName
+      ? shouldQuote(paramName)
+        ? `${descriptorName}['${paramName}']`
+        : `${descriptorName}.${paramName}`
+      : nameOnMethod;
 
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
-        this.params.push(`${camelName}: ${value}`);
+        this.params.push(paramName === value ? value : `${paramName}: ${value}`);
         break;
       case eBindingSourceId.Body:
         this.body = value;
         break;
       case eBindingSourceId.Path:
-        const regex = new RegExp('{(' + camelName + '|' + name + ')}', 'g');
+        // eslint-disable-next-line no-case-declarations
+        const regex = new RegExp('{(' + paramName + '|' + camelName + '|' + name + ')}', 'g');
         this.url = this.url.replace(regex, '${' + value + '}');
         break;
       default:
@@ -64,6 +72,11 @@ export class Body {
 
   constructor(options: BodyOptions) {
     Object.assign(this, options);
+    this.setUrlQuotes();
+  }
+
+  private setUrlQuotes() {
+    this.url = /{/.test(this.url) ? `\`/${this.url}\`` : `'/${this.url}'`;
   }
 }
 

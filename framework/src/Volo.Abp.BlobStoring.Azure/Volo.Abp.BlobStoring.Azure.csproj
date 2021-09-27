@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.7.0" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     </ItemGroup>
 
 </Project>

@@ -1,22 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
-using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Autofac;
-using Volo.Abp.MemoryDb;
-using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpMemoryDbTestModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule)
-    )]
     public class AuthTestController_Tests : AspNetCoreMvcTestBase
     {
         private readonly FakeUserClaims _fakeRequiredService;
@@ -67,10 +58,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim("MyCustomClaimType", "43")
             });
 
-            //TODO: We can get a real exception if we properly configure authentication schemas for this project
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest")
-            );
+            await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest", HttpStatusCode.Redirect);
         }
 
         [Fact]

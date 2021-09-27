@@ -27,6 +27,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
+        protected virtual void CheckCurrentTenant(Guid? tenantId)
+        {
+            if (CurrentTenant.Id != tenantId)
+            {
+                throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
+            }
+        }
+
         protected virtual void CheckIdentityErrors(IdentityResult identityResult)
         {
             if (!identityResult.Succeeded)
@@ -35,14 +43,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
 
             //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
-        }
-
-        protected virtual void CheckCurrentTenant(Guid? tenantId)
-        {
-            if (CurrentTenant.Id != tenantId)
-            {
-                throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
-            }
         }
 
         protected virtual string GetLocalizeExceptionMessage(Exception exception)

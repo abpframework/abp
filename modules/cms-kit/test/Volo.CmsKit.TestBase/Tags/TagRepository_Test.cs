@@ -112,5 +112,22 @@ namespace Volo.CmsKit.Tags
             
             tags.Count.ShouldBe(0);
         }
+
+        [Fact]
+        public async Task Should_GetList_With_Filter()
+        {
+            var tags = await _tagRepository.GetListAsync(_cmsKitTestData.TagName_1);
+
+            tags.ShouldNotBeNull();
+            tags.Count.ShouldBe(1);
+        }
+
+        [Fact]
+        public async Task Should_GetCount_With_Filter()
+        {
+            var count = await _tagRepository.GetCountAsync(_cmsKitTestData.TagName_1);
+
+            count.ShouldBe(1);
+        }
     }
 }

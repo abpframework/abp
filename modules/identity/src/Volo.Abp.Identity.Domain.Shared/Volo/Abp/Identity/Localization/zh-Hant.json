@@ -78,12 +78,6 @@
     "Permission:ChangePermissions": "更改權限",
     "Permission:UserManagement": "使用者管理",
     "Permission:UserLookup": "使用者查詢",
-    "Feature:IdentityGroup": "身份識別",
-    "Feature:TwoFactor": "雙因素身份驗證行為",
-    "Feature:TwoFactorDescription": "設置雙因素身份驗證行為. 可選值:可選,禁用,強制啟用",
-    "Feature:TwoFactor.Optional": "選用",
-    "Feature:TwoFactor.Disabled": "關閉",
-    "Feature:TwoFactor.Forced": "強制啟用",
     "DisplayName:Abp.Identity.Password.RequiredLength": "長度需符合",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "需最小特殊字元數",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "需包含非數字字母",
@@ -111,10 +105,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "是否啟用電話認證.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "決定使用者是否需電話認證後才能登入.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "決定使用者是否能更新帳號.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱.",
-    "DisplayName:Abp.Identity.TwoFactorBehaviour": "雙因素認證行為",
-    "Description:Abp.Identity.TwoFactorBehaviour": "雙因素認證行為",
-    "DisplayName:Abp.Identity.UsersCanChange": "允許使用者變更雙因素認證.",
-    "Description:Abp.Identity.UsersCanChange": "允許使用者變更雙因素認證."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱."
   }
 }

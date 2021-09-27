@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
+    [OutputElementHint("select")]
     public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagHelperService>
     {
         public ModelExpression AspFor { get; set; }
 
         public string Label { get; set; }
+
+        public bool SuppressLabel { get; set; }
 
         public IEnumerable<SelectListItem> AspItems { get; set; }
 

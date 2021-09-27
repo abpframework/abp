@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
@@ -14,11 +17,16 @@ namespace Volo.CmsKit.Admin.Pages
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
-        protected readonly IPageRepository PageRepository;
-        
-        public PageAdminAppService(IPageRepository pageRepository)
+        protected IPageRepository PageRepository { get; }
+
+        protected PageManager PageManager { get; }
+
+        public PageAdminAppService(
+            IPageRepository pageRepository,
+            PageManager pageManager)
         {
             PageRepository = pageRepository;
+            PageManager = pageManager;
         }
 
         public virtual async Task<PageDto> GetAsync(Guid id)
@@ -47,9 +55,7 @@ namespace Volo.CmsKit.Admin.Pages
         [Authorize(CmsKitAdminPermissions.Pages.Create)]
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            await CheckPageUrlAsync(input.Url);
-
-            var page = new Page(GuidGenerator.Create(), input.Title, input.Url, input.Description, CurrentTenant?.Id);
+            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
 
             await PageRepository.InsertAsync(page);
             
@@ -61,14 +67,13 @@ namespace Volo.CmsKit.Admin.Pages
         {
             var page = await PageRepository.GetAsync(id);
 
-            if (page.Url != input.Url)
-            {
-                await CheckPageUrlAsync(input.Url);
-            }
+            await PageManager.SetSlugAsync(page, input.Slug);
 
-            page.Title = input.Title;
-            page.Url = input.Url;
-            page.Description = input.Description;
+            page.SetTitle(input.Title);
+            page.SetContent(input.Content);
+            page.SetScript(input.Script);
+            page.SetStyle(input.Style);
+            page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await PageRepository.UpdateAsync(page);
             
@@ -79,14 +84,6 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual async Task DeleteAsync(Guid id)
         {
             await PageRepository.DeleteAsync(id);
-        }
-
-        protected virtual async Task CheckPageUrlAsync(string url)
-        {
-            if (await PageRepository.ExistsAsync(url))
-            {
-                throw new PageUrlAlreadyExistException(url);
-            }
         }
     }
 }

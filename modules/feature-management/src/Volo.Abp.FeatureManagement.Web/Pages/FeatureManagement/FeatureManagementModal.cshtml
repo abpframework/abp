@@ -44,14 +44,13 @@
                                         var disabled = Model.IsDisabled(feature.Provider.Name);
                                         <div class="mt-2">
 
-                                            <input type="text" name="FeatureGroups[@i].Features[@j].ProviderName" value="@feature.Provider.Name" hidden/>
-                                            <input type="text" name="FeatureGroups[@i].Features[@j].Type" value="@feature.ValueType?.Name" hidden/>
+                                            <input type="text" abp-id-name="@Model.FeatureGroups[i].Features[j].Type" value="@feature.ValueType?.Name" hidden/>
 
                                             @if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <abp-input asp-for="@feature.Value"
                                                            type="checkbox"
-                                                           name="FeatureGroups[@i].Features[@j].BoolValue"
+                                                           abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
                                                            label="@feature.DisplayName"
                                                            disabled="@disabled"
                                                            group-data-feature-name="@feature.Name"
@@ -70,7 +69,7 @@
 
                                                 <abp-input asp-for="@feature.Value"
                                                            label="@feature.DisplayName"
-                                                           name="featureGroups[@i].Features[@j].Value"
+                                                           abp-id-name="@Model.FeatureGroups[i].Features[j].Value"
                                                            disabled="@disabled"
                                                            type="@type"
                                                            group-data-feature-name="@feature.Name"
@@ -99,7 +98,7 @@
                                                 </div>
                                             }
 
-                                            <input value="@feature.Name" name="FeatureGroups[@i].Features[@j].Name" hidden=""/>
+                                            <input value="@feature.Name" abp-id-name="@Model.FeatureGroups[i].Features[j].Name" hidden/>
                                         </div>
                                     }
                                 </div>

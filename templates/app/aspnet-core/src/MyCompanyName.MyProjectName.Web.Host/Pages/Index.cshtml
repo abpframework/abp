@@ -6,18 +6,14 @@
 @inject IHtmlLocalizer<MyProjectNameResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-    <abp-style-bundle>
-        <abp-style src="/Pages/Index.css" />
-    </abp-style-bundle>
+    <abp-style src="/Pages/Index.css" />
 }
 @section scripts {
-    <abp-script-bundle>
-        <abp-script src="/Pages/Index.js" />
-    </abp-script-bundle>
+    <abp-script src="/Pages/Index.js" />
 }
 <div class="container">
     <div class="p-5 text-center">
-        <div class="badge badge-success h5 rounded mb-4 " role="alert">
+        <div class="d-inline-block bg-success text-white p-1 h5 rounded mb-4 " role="alert">
             <h5 class="m-1"> <i class="fas fa-rocket"></i> Congratulations, <strong>MyProjectName</strong> is successfully running!</h5>
         </div>
         <h1>Welcome to the Application</h1>

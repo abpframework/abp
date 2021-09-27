@@ -19,7 +19,7 @@
   "RoleDeletionConfirmationMessage": "Le rôle '{0}' sera supprimé. Vous le confirmez ?",
   "DisplayName:RoleName": "Nom du rôle",
   "DisplayName:UserName": "Nom d’utilisateur",
-  "DisplayName:Name": "Nom",
+  "DisplayName:Name": "Prénom",
   "DisplayName:Surname": "Nom",
   "DisplayName:Password": "mot de passe",
   "DisplayName:Email": "Adresse e-mail",

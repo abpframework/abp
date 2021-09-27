@@ -1,4 +1,6 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
@@ -16,10 +18,10 @@ namespace Volo.CmsKit.Tags
         {
         }
 
-        internal EntityTag(Guid tagId, string entityId, Guid? tenantId = null)
+        internal EntityTag(Guid tagId, [NotNull] string entityId, Guid? tenantId = null)
         {
             TagId = tagId;
-            EntityId = entityId;
+            EntityId = Check.NotNullOrEmpty(entityId,nameof(entityId));
             TenantId = tenantId;
         }
 

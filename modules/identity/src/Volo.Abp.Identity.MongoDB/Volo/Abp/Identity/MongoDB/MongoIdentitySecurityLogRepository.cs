@@ -48,7 +48,7 @@ namespace Volo.Abp.Identity.MongoDB
                 cancellationToken
             );
 
-            return await query.OrderBy(sorting ?? nameof(IdentitySecurityLog.CreationTime) + " desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
                 .As<IMongoQueryable<IdentitySecurityLog>>()
                 .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
