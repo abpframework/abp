@@ -78,8 +78,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
-        public virtual async Task AddAsync(
-            [NotNull] string solutionFile,
+        public virtual async Task<ModuleWithMastersInfo> AddAsync([NotNull] string solutionFile,
             [NotNull] string moduleName,
             string version,
             bool skipDbMigrations = false,
@@ -94,8 +93,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
             module = RemoveIncompatiblePackages(module, version);
 
-            Logger.LogInformation(
-                $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
+            Logger.LogInformation($"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
@@ -137,6 +135,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 CmdHelper.OpenWebPage(documentationLink);
             }
+
+            return module;
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
@@ -146,7 +146,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return module;
         }
 
-        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
+        private static bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
@@ -244,7 +244,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var projectToRemove in projectsToRemove)
             {
-                if (IsReferencedByAnotherModuleProject(moduleDirectory, projectsToRemove, projectToRemove))
+                if (IsReferencedByAnotherProject(solutionDirectory, projectsToRemove, projectToRemove))
                 {
                     continue;
                 }
@@ -253,10 +253,10 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private bool IsReferencedByAnotherModuleProject(string moduleDirectory, List<string> projectsToRemove, string projectToRemove)
+        private bool IsReferencedByAnotherProject(string solutionDirectory, List<string> projectsToRemove, string projectToRemove)
         {
-            var moduleProjects = Directory.GetFiles(moduleDirectory, "*.csproj", SearchOption.AllDirectories);
-            var projectsToKeep = moduleProjects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
+            var projects = Directory.GetFiles(solutionDirectory, "*.csproj", SearchOption.AllDirectories);
+            var projectsToKeep = projects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
             return projectsToKeep.Select(File.ReadAllText).Any(content => content.Contains($"\"{projectToRemove}\""));
         }
 
@@ -576,11 +576,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
+            var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"))
+                ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj")) ;
 
             if (dbMigrationsProject == null)
             {
-                Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
+                Logger.LogDebug("Solution doesn't have a Migrations project.");
 
                 if (!skipDbMigrations)
                 {

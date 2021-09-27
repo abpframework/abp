@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
@@ -37,6 +38,8 @@ namespace Volo.Abp.Identity
             await IdentityOptions.SetAsync();
 
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             if (!string.Equals(user.UserName, input.UserName, StringComparison.InvariantCultureIgnoreCase))
             {

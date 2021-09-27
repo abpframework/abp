@@ -20,11 +20,11 @@ First, create your logo and place under a folder in your web application. We use
 
 ![bookstore-logo-blazor](../../images/bookstore-logo-blazor.png)
 
-The next step is to create a razor component, like `MyBlazor.razor`, in your application:
+The next step is to create a razor component, like `MyBranding.razor`, in your application:
 
 ![bookstore-logo-blazor](../../images/bookstore-branding-blazor.png)
 
-The content of the `MyBlazor.razor` is shown below:
+The content of the `MyBranding.razor` is shown below:
 
 ````html
 @using Volo.Abp.DependencyInjection

@@ -53,14 +53,16 @@ public class PersonDapperRepository : DapperRepository<MyAppDbContext>, ITransie
 
     public virtual async Task<List<string>> GetAllPersonNames()
     {
-        return (await DbConnection.QueryAsync<string>("select Name from People", transaction: DbTransaction))
+        var dbConnection = await GetDbConnectionAsync();
+        return (await dbConnection.QueryAsync<string>("select Name from People", transaction:  await GetDbTransactionAsync()))
             .ToList();
     }
 
     public virtual async Task<int> UpdatePersonNames(string name)
     {
-        return await DbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
-            DbTransaction);
+        var dbConnection = await GetDbConnectionAsync();
+        return await dbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
+             await GetDbTransactionAsync());
     }
 }
 ```

@@ -1,6 +1,6 @@
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { EntityAction } from '@abp/ng.theme.shared/extensions';
 import { UsersComponent } from '../components/users/users.component';
-import { IdentityUserDto } from '../proxy/identity/models';
 
 export const DEFAULT_USERS_ENTITY_ACTIONS = EntityAction.createMany<IdentityUserDto>([
   {

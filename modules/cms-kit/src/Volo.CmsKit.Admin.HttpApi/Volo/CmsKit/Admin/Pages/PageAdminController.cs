@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Pages
 {
     [RequiresGlobalFeature(typeof(PagesFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     [Route("api/cms-kit-admin/pages")]
     public class PageAdminController : CmsKitAdminController, IPageAdminAppService

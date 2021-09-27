@@ -1,10 +1,11 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.CmsKit.Admin.Pages
 {
     [Serializable]
-    public class PageDto : AuditedEntityDto<Guid>
+    public class PageDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
         public string Title { get; set; }
 
@@ -15,5 +16,7 @@ namespace Volo.CmsKit.Admin.Pages
         public string Script { get; set; }
 
         public string Style { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

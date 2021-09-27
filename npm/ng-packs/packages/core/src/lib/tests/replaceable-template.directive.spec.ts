@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { BehaviorSubject } from 'rxjs';
@@ -11,7 +11,7 @@ import { ReplaceableComponentsService } from '../services/replaceable-components
   template: ' <p>default</p> ',
   exportAs: 'abpDefaultComponent',
 })
-class DefaultComponent implements OnInit {
+class DefaultComponent {
   @Input()
   oneWay;
 
@@ -23,8 +23,6 @@ class DefaultComponent implements OnInit {
 
   @Output()
   readonly someOutput = new EventEmitter<string>();
-
-  ngOnInit() {}
 
   setTwoWay(value) {
     this.twoWay = value;

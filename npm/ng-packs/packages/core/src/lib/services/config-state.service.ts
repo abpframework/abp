@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { InternalStore } from '../utils/internal-store-utils';
-import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +15,21 @@ export class ConfigStateService {
     return this.store.sliceUpdate;
   }
 
-  constructor(private abpConfigService: AbpApplicationConfigurationService) {}
+  private updateSubject = new Subject();
 
-  setState(state: ApplicationConfigurationDto) {
-    this.store.set(state);
+  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+    this.initUpdateStream();
+  }
+
+  private initUpdateStream() {
+    this.updateSubject
+      .pipe(switchMap(() => this.abpConfigService.get()))
+      .subscribe(res => this.store.set(res));
   }
 
   refreshAppState() {
-    return this.abpConfigService.get().pipe(tap(res => this.setState(res)));
+    this.updateSubject.next();
+    return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
   getOne$(key: string) {

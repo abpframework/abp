@@ -31,7 +31,6 @@ namespace Volo.Abp.TestApp.Testing
                 using (var uow = uowManager.Begin(options))
                 {
                     await action();
-
                     await uow.CompleteAsync();
                 }
             }
