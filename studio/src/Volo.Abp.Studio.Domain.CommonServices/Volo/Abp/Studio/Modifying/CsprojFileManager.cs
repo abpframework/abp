@@ -72,6 +72,37 @@ namespace Volo.Abp.Studio.Packages.Modifying
             await SaveXmlDocumentAsync(filePath, document);
         }
 
+        public async Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference)
+        {
+            var document = await GetXmlDocumentAsync(filePath);
+
+            var packageName = Path.GetFileName(projectToReference).RemovePostFix(".csproj");
+
+            var matchedNodes = document.SelectNodes($"/Project/ItemGroup/PackageReference[starts-with(@Include, '{packageName}')]");
+
+            if (matchedNodes.Count == 0)
+            {
+                return;
+            }
+
+            var targetNode = matchedNodes[0];
+            var targetNodeParent = targetNode.ParentNode;
+
+            targetNodeParent.RemoveChild(targetNode);
+
+            var relativePath = PathHelper.GetRelativePath(filePath, projectToReference);
+
+            var newNode = document.CreateElement("ProjectReference");
+
+            var includeAttr = document.CreateAttribute("Include");
+            includeAttr.Value = relativePath;
+            newNode.Attributes.Append(includeAttr);
+
+            targetNodeParent.AppendChild(newNode);
+
+            await SaveXmlDocumentAsync(filePath, document);
+        }
+
         private XmlNode GetOrCreateItemGroupNode(XmlDocument document)
         {
             var nodes = document["Project"].SelectNodes("ItemGroup");
