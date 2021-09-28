@@ -41,8 +41,6 @@ namespace DistDemoApp
             }
             
             Console.WriteLine("Increased total count: " + todoSummary);
-
-            //throw new ApplicationException("Thrown to rollback the UOW!");
         }
 
         public async Task HandleEventAsync(EntityDeletedEto<TodoItemEto> eventData)
