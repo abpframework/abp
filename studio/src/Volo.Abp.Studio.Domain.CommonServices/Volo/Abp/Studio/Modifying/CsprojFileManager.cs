@@ -103,6 +103,20 @@ namespace Volo.Abp.Studio.Packages.Modifying
             await SaveXmlDocumentAsync(filePath, document);
         }
 
+        public async Task<string> GetTargetFrameworkAsync(string filePath)
+        {
+            var document = await GetXmlDocumentAsync(filePath);
+
+            var nodes = document["PropertyGroup"].SelectNodes("TargetFramework");
+
+            if (nodes.Count == 0)
+            {
+                return null;
+            }
+
+            return nodes[0].InnerText.Trim();
+        }
+
         private XmlNode GetOrCreateItemGroupNode(XmlDocument document)
         {
             var nodes = document["Project"].SelectNodes("ItemGroup");

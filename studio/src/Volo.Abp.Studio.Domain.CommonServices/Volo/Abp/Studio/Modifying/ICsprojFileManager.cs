@@ -9,5 +9,7 @@ namespace Volo.Abp.Studio.Packages.Modifying
         Task AddPackageReferenceAsync(string filePath, string packageName, string version);
 
         Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference);
+
+        Task<string> GetTargetFrameworkAsync(string filePath);
     }
 }
