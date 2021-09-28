@@ -20,7 +20,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
-      <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
       <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     </ItemGroup>
 

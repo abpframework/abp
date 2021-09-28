@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel.Web\Volo.Abp.Http.Client.IdentityModel.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj" />
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Web\Volo.Abp.FeatureManagement.Web.csproj" />
