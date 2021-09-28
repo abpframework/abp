@@ -57,35 +57,31 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         }
 
         [UnitOfWork]
-        public async Task MarkAsProcessedAsync(Guid id)
+        public virtual async Task MarkAsProcessedAsync(Guid id)
         {
-            //TODO: Optimize?
             var dbContext = await DbContextProvider.GetDbContextAsync();
-            var incomingEvent = await dbContext.IncomingEvents.FindAsync(id);
-            if (incomingEvent != null)
-            {
-                incomingEvent.MarkAsProcessed(Clock.Now);
-            }
+            var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
+
+            var sql = $"UPDATE {tableName} SET Processed = 1, ProcessedTime = '{Clock.Now}' WHERE Id = '{id}'";
+            await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
 
         [UnitOfWork]
-        public async Task<bool> ExistsByMessageIdAsync(string messageId)
+        public virtual async Task<bool> ExistsByMessageIdAsync(string messageId)
         {
-            //TODO: Optimize
             var dbContext = await DbContextProvider.GetDbContextAsync();
             return await dbContext.IncomingEvents.AnyAsync(x => x.MessageId == messageId);
         }
 
         [UnitOfWork]
-        public async Task DeleteOldEventsAsync()
+        public virtual async Task DeleteOldEventsAsync()
         {
-            //TODO: Optimize
             var dbContext = await DbContextProvider.GetDbContextAsync();
+            var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
             var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
-            var oldEvents = await dbContext.IncomingEvents
-                .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
-                .ToListAsync();
-            dbContext.IncomingEvents.RemoveRange(oldEvents);
+
+            var sql = $"DELETE FROM {tableName} WHERE Processed = 1 AND CreationTime < '{timeToKeepEvents}'";
+            await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
     }
 }

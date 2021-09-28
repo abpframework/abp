@@ -21,7 +21,7 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         }
 
         [UnitOfWork]
-        public async Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
+        public virtual async Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
         {
             var dbContext = (IHasEventOutbox) await MongoDbContextProvider.GetDbContextAsync();
             if (dbContext.SessionHandle != null)
@@ -40,7 +40,7 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         }
 
         [UnitOfWork]
-        public async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default)
+        public virtual async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default)
         {
             var dbContext = (IHasEventOutbox) await MongoDbContextProvider.GetDbContextAsync(cancellationToken);
 
@@ -56,7 +56,7 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         }
 
         [UnitOfWork]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var dbContext = (IHasEventOutbox) await MongoDbContextProvider.GetDbContextAsync();
             if (dbContext.SessionHandle != null)

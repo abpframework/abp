@@ -68,34 +68,32 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         }
 
         [UnitOfWork]
-        public async Task MarkAsProcessedAsync(Guid id)
+        public virtual async Task MarkAsProcessedAsync(Guid id)
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
-            var incomingEvent = await dbContext.IncomingEvents.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
-            if (incomingEvent != null)
-            {
-                incomingEvent.MarkAsProcessed(Clock.Now);
 
-                if (dbContext.SessionHandle != null)
-                {
-                    await dbContext.IncomingEvents.ReplaceOneAsync(dbContext.SessionHandle, Builders<IncomingEventRecord>.Filter.Eq(e => e.Id, incomingEvent.Id), incomingEvent);
-                }
-                else
-                {
-                    await dbContext.IncomingEvents.ReplaceOneAsync(Builders<IncomingEventRecord>.Filter.Eq(e => e.Id, incomingEvent.Id), incomingEvent);
-                }
+            var filter = Builders<IncomingEventRecord>.Filter.Eq(x => x.Id, id);
+            var update = Builders<IncomingEventRecord>.Update.Set(x => x.Processed, true).Set(x => x.ProcessedTime, Clock.Now);
+
+            if (dbContext.SessionHandle != null)
+            {
+                await dbContext.IncomingEvents.UpdateOneAsync(dbContext.SessionHandle, filter, update);
+            }
+            else
+            {
+                await dbContext.IncomingEvents.UpdateOneAsync(filter, update);
             }
         }
 
         [UnitOfWork]
-        public async Task<bool> ExistsByMessageIdAsync(string messageId)
+        public virtual async Task<bool> ExistsByMessageIdAsync(string messageId)
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
             return await dbContext.IncomingEvents.AsQueryable().AnyAsync(x => x.MessageId == messageId);
         }
 
         [UnitOfWork]
-        public async Task DeleteOldEventsAsync()
+        public virtual async Task DeleteOldEventsAsync()
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
