@@ -1,8 +1,9 @@
-import { eLayoutType, RoutesService, SettingTabsService } from '@abp/ng.core';
+import { eLayoutType, RoutesService } from '@abp/ng.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
 import { eSettingManagementRouteNames } from '../enums/route-names';
+import { SettingTabsService } from '../services/settings-tab.service';
 
 export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
   { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
