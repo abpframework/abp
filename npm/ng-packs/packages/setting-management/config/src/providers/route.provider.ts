@@ -3,7 +3,7 @@ import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
 import { eSettingManagementRouteNames } from '../enums/route-names';
-import { SettingTabsService } from '../services/settings-tab.service';
+import { SettingTabsService } from '../services/settings-tabs.service';
 
 export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
   { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },

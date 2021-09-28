@@ -1,1 +1,1 @@
-export * from './settings-tab.service';
+export * from './settings-tabs.service';

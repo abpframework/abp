@@ -1,7 +1,7 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { EmailSettingGroupComponent } from '../components/email-setting-group/email-setting-group.component';
 import { eSettingManamagementSettingTabNames } from '../enums/setting-tab-names';
-import { SettingTabsService } from '../services/settings-tab.service';
+import { SettingTabsService } from '../services/settings-tabs.service';
 
 export const SETTING_MANAGEMENT_SETTING_TAB_PROVIDERS = [
   {
