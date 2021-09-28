@@ -336,7 +336,7 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi",
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi.Client",
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
-    "modules/cms-kit/src/Volo.CmsKit.Web"
+    "modules/cms-kit/src/Volo.CmsKit.Web",
 	
     # abp/studio
     "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
