@@ -217,7 +217,7 @@ namespace Volo.Abp.Swashbuckle.Conventions
             var key =
                 $"{appServiceType.FullName}." +
                 $"{action.ActionMethod.Name}." +
-                $"{string.Join("-", action.Parameters.Select(x => x.ParameterType.FullName))}";
+                $"{string.Join("-", action.Parameters.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.ParameterType)))}";
 
             var actionApiDescriptionModel = ClientProxyApiDescriptionFinder.FindAction(key);
             if (actionApiDescriptionModel == null)

@@ -17,12 +17,21 @@ namespace Volo.Abp.PermissionManagement.ClientProxies
     {
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
-            return await RequestAsync<GetPermissionListResultDto>(nameof(GetAsync), providerName, providerKey);
+            return await RequestAsync<GetPermissionListResultDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), providerName },
+                { typeof(string), providerKey }
+            });
         }
 
         public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
-            await RequestAsync(nameof(UpdateAsync), providerName, providerKey, input);
+            await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), providerName },
+                { typeof(string), providerKey },
+                { typeof(UpdatePermissionsDto), input }
+            });
         }
     }
 }

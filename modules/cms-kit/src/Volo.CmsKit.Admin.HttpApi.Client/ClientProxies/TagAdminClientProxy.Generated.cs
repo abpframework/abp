@@ -19,27 +19,43 @@ namespace Volo.CmsKit.Admin.Tags.ClientProxies
     {
         public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
         {
-            return await RequestAsync<TagDto>(nameof(CreateAsync), input);
+            return await RequestAsync<TagDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(TagCreateDto), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<TagDto> GetAsync(Guid id)
         {
-            return await RequestAsync<TagDto>(nameof(GetAsync), id);
+            return await RequestAsync<TagDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
         {
-            return await RequestAsync<PagedResultDto<TagDto>>(nameof(GetListAsync), input);
+            return await RequestAsync<PagedResultDto<TagDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(TagGetListInput), input }
+            });
         }
 
         public virtual async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
         {
-            return await RequestAsync<TagDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<TagDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(TagUpdateDto), input }
+            });
         }
 
         public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()

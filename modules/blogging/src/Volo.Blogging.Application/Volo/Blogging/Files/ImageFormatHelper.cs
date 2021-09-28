@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Volo.Blogging.Areas.Blog.Helpers
 {
@@ -16,8 +17,14 @@ namespace Volo.Blogging.Areas.Blog.Helpers
 
         public static bool IsValidImage(byte[] fileBytes, ICollection<ImageFormat> validFormats)
         {
-            var imageFormat = GetImageRawFormat(fileBytes);
-            return validFormats.Contains(imageFormat);
+            // System.Drawing only works on windows => https://docs.microsoft.com/en-us/dotnet/api/system.drawing.image?view=net-5.0#remarks
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var imageFormat = GetImageRawFormat(fileBytes);
+                return validFormats.Contains(imageFormat);
+            }
+
+            return true;
         }
     }
 }

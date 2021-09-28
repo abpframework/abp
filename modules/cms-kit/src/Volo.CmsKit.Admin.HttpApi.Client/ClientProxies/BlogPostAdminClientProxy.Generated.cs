@@ -17,27 +17,43 @@ namespace Volo.CmsKit.Admin.Blogs.ClientProxies
     {
         public virtual async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {
-            return await RequestAsync<BlogPostDto>(nameof(CreateAsync), input);
+            return await RequestAsync<BlogPostDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(CreateBlogPostDto), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<BlogPostDto> GetAsync(Guid id)
         {
-            return await RequestAsync<BlogPostDto>(nameof(GetAsync), id);
+            return await RequestAsync<BlogPostDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
         {
-            return await RequestAsync<PagedResultDto<BlogPostListDto>>(nameof(GetListAsync), input);
+            return await RequestAsync<PagedResultDto<BlogPostListDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(BlogPostGetListInput), input }
+            });
         }
 
         public virtual async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
         {
-            return await RequestAsync<BlogPostDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<BlogPostDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(UpdateBlogPostDto), input }
+            });
         }
     }
 }

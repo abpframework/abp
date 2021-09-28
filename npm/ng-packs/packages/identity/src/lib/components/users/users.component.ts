@@ -1,4 +1,10 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
+import {
+  GetIdentityUsersInput,
+  IdentityRoleDto,
+  IdentityUserDto,
+  IdentityUserService,
+} from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
@@ -17,12 +23,6 @@ import {
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
-import { IdentityUserService } from '../../proxy/identity/identity-user.service';
-import {
-  GetIdentityUsersInput,
-  IdentityRoleDto,
-  IdentityUserDto,
-} from '../../proxy/identity/models';
 
 @Component({
   selector: 'abp-users',

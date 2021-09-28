@@ -18,17 +18,26 @@ namespace Volo.Abp.Account.ClientProxies
     {
         public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
         {
-            return await RequestAsync<IdentityUserDto>(nameof(RegisterAsync), input);
+            return await RequestAsync<IdentityUserDto>(nameof(RegisterAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(RegisterDto), input }
+            });
         }
 
         public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
         {
-            await RequestAsync(nameof(SendPasswordResetCodeAsync), input);
+            await RequestAsync(nameof(SendPasswordResetCodeAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(SendPasswordResetCodeDto), input }
+            });
         }
 
         public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
         {
-            await RequestAsync(nameof(ResetPasswordAsync), input);
+            await RequestAsync(nameof(ResetPasswordAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(ResetPasswordDto), input }
+            });
         }
     }
 }
