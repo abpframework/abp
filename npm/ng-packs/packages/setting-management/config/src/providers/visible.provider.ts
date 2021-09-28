@@ -17,12 +17,12 @@ export const SETTING_MANAGEMENT_VISIBLE_PROVIDERS = [
 export function setSettingManagementVisibility(injector: Injector) {
   return () => {
     const settingManagementHasSetting$ = injector.get(SETTING_MANAGEMENT_HAS_SETTING);
-    const isSettingManagementFeatureOpen$ = injector.get(SETTING_MANAGEMENT_ROUTE_VISIBILITY);
+    const isSettingManagementFeatureEnable$ = injector.get(SETTING_MANAGEMENT_ROUTE_VISIBILITY);
     const routes = injector.get(RoutesService);
-    combineLatest([settingManagementHasSetting$, isSettingManagementFeatureOpen$]).subscribe(
-      ([settingManagementHasSetting, isSettingManagementFeatureOpen]) => {
+    combineLatest([settingManagementHasSetting$, isSettingManagementFeatureEnable$]).subscribe(
+      ([settingManagementHasSetting, isSettingManagementFeatureEnable]) => {
         routes.patch(eSettingManagementRouteNames.Settings, {
-          invisible: !(settingManagementHasSetting && isSettingManagementFeatureOpen),
+          invisible: !(settingManagementHasSetting && isSettingManagementFeatureEnable),
         });
       },
     );
