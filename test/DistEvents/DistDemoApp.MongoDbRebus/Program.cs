@@ -51,7 +51,7 @@ namespace DistDemoApp
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddApplication<DistDemoAppMongoDbKafkaModule>();
+                    services.AddApplication<DistDemoAppMongoDbRebusModule>();
                 });
     }
 }

@@ -5,6 +5,7 @@ using Medallion.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
@@ -23,6 +24,7 @@ namespace Volo.Abp.EventBus.Boxes
         protected IClock Clock { get; }
         protected IEventInbox Inbox { get; private set; }
         protected InboxConfig InboxConfig { get; private set; }
+        protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
 
         protected DateTime? LastCleanTime { get; set; }
 
@@ -37,7 +39,8 @@ namespace Volo.Abp.EventBus.Boxes
             IDistributedEventBus distributedEventBus,
             IDistributedLockProvider distributedLockProvider,
             IUnitOfWorkManager unitOfWorkManager,
-            IClock clock)
+            IClock clock,
+            IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
         {
             ServiceProvider = serviceProvider;
             Timer = timer;
@@ -45,7 +48,8 @@ namespace Volo.Abp.EventBus.Boxes
             DistributedLockProvider = distributedLockProvider;
             UnitOfWorkManager = unitOfWorkManager;
             Clock = clock;
-            Timer.Period = 2000; //TODO: Config?
+            EventBusBoxesOptions = eventBusBoxesOptions.Value;
+            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Seconds;
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
             StoppingTokenSource = new CancellationTokenSource();
@@ -79,7 +83,7 @@ namespace Volo.Abp.EventBus.Boxes
             {
                 return;
             }
-            
+
             await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName, cancellationToken: StoppingToken))
             {
                 if (handle != null)
@@ -88,7 +92,7 @@ namespace Volo.Abp.EventBus.Boxes
 
                     while (true)
                     {
-                        var waitingEvents = await Inbox.GetWaitingEventsAsync(1000); //TODO: Config? Pass StoppingToken!
+                        var waitingEvents = await Inbox.GetWaitingEventsAsync(EventBusBoxesOptions.InboxWaitingEventMaxCount, StoppingToken);
                         if (waitingEvents.Count <= 0)
                         {
                             break;
@@ -116,14 +120,14 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(15000, StoppingToken); //TODO: Config?
+                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DelayTimeSpan.Milliseconds, StoppingToken);
                 }
             }
         }
 
         protected virtual async Task DeleteOldEventsAsync()
         {
-            if (LastCleanTime != null && LastCleanTime > Clock.Now.AddHours(6)) //TODO: Config?
+            if (LastCleanTime != null && LastCleanTime > Clock.Now.Add(EventBusBoxesOptions.CleanOldEventTimeIntervalSpan))
             {
                 return;
             }

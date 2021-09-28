@@ -5,6 +5,7 @@ using Medallion.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
@@ -19,9 +20,10 @@ namespace Volo.Abp.EventBus.Boxes
         protected IDistributedLockProvider DistributedLockProvider { get; }
         protected IEventOutbox Outbox { get; private set; }
         protected OutboxConfig OutboxConfig { get; private set; }
+        protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
         protected string DistributedLockName => "Outbox_" + OutboxConfig.Name;
         public ILogger<OutboxSender> Logger { get; set; }
-        
+
         protected CancellationTokenSource StoppingTokenSource { get; }
         protected CancellationToken StoppingToken { get; }
 
@@ -29,13 +31,15 @@ namespace Volo.Abp.EventBus.Boxes
             IServiceProvider serviceProvider,
             AbpAsyncTimer timer,
             IDistributedEventBus distributedEventBus,
-            IDistributedLockProvider distributedLockProvider)
+            IDistributedLockProvider distributedLockProvider,
+           IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
         {
             ServiceProvider = serviceProvider;
             Timer = timer;
             DistributedEventBus = distributedEventBus;
             DistributedLockProvider = distributedLockProvider;
-            Timer.Period = 2000; //TODO: Config?
+            EventBusBoxesOptions = eventBusBoxesOptions.Value;
+            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Seconds;
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<OutboxSender>.Instance;
             StoppingTokenSource = new CancellationTokenSource();
@@ -65,13 +69,13 @@ namespace Volo.Abp.EventBus.Boxes
 
         protected virtual async Task RunAsync()
         {
-            await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName))
+            await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName, cancellationToken: StoppingToken))
             {
                 if (handle != null)
                 {
                     while (true)
                     {
-                        var waitingEvents = await Outbox.GetWaitingEventsAsync(1000); //TODO: Config?
+                        var waitingEvents = await Outbox.GetWaitingEventsAsync(EventBusBoxesOptions.OutboxWaitingEventMaxCount, StoppingToken);
                         if (waitingEvents.Count <= 0)
                         {
                             break;
@@ -96,7 +100,7 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(15000, StoppingToken); //TODO: Config?
+                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DelayTimeSpan.Milliseconds, StoppingToken);
                 }
             }
         }

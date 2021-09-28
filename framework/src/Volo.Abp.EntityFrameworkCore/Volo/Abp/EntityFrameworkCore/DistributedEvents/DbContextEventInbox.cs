@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext> 
+    public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
         where TDbContext : IHasEventInbox
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
+        protected AbpDistributedEventBusOptions DistributedEventsOptions { get; }
         protected IClock Clock { get; }
 
         public DbContextEventInbox(
             IDbContextProvider<TDbContext> dbContextProvider,
-            IClock clock)
+            IClock clock,
+           IOptions<AbpDistributedEventBusOptions> distributedEventsOptions)
         {
             DbContextProvider = dbContextProvider;
             Clock = clock;
+            DistributedEventsOptions = distributedEventsOptions.Value;
         }
 
         [UnitOfWork]
@@ -34,7 +39,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         }
 
         [UnitOfWork]
-        public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount)
+        public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default)
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
 
@@ -44,8 +49,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
                 .Where(x => !x.Processed)
                 .OrderBy(x => x.CreationTime)
                 .Take(maxCount)
-                .ToListAsync();
-            
+                .ToListAsync(cancellationToken: cancellationToken);
+
             return outgoingEventRecords
                 .Select(x => x.ToIncomingEventInfo())
                 .ToList();
@@ -76,7 +81,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         {
             //TODO: Optimize
             var dbContext = await DbContextProvider.GetDbContextAsync();
-            var timeToKeepEvents = Clock.Now.AddHours(-2); //TODO: Config?
+            var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
             var oldEvents = await dbContext.IncomingEvents
                 .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
                 .ToListAsync();
