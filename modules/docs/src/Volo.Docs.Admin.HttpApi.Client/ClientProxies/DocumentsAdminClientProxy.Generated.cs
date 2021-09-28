@@ -17,32 +17,50 @@ namespace Volo.Docs.Admin.ClientProxies
     {
         public virtual async Task ClearCacheAsync(ClearCacheInput input)
         {
-            await RequestAsync(nameof(ClearCacheAsync), input);
+            await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(ClearCacheInput), input }
+            });
         }
 
         public virtual async Task PullAllAsync(PullAllDocumentInput input)
         {
-            await RequestAsync(nameof(PullAllAsync), input);
+            await RequestAsync(nameof(PullAllAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(PullAllDocumentInput), input }
+            });
         }
 
         public virtual async Task PullAsync(PullDocumentInput input)
         {
-            await RequestAsync(nameof(PullAsync), input);
+            await RequestAsync(nameof(PullAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(PullDocumentInput), input }
+            });
         }
 
         public virtual async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
         {
-            return await RequestAsync<PagedResultDto<DocumentDto>>(nameof(GetAllAsync), input);
+            return await RequestAsync<PagedResultDto<DocumentDto>>(nameof(GetAllAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(GetAllInput), input }
+            });
         }
 
         public virtual async Task RemoveFromCacheAsync(Guid documentId)
         {
-            await RequestAsync(nameof(RemoveFromCacheAsync), documentId);
+            await RequestAsync(nameof(RemoveFromCacheAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), documentId }
+            });
         }
 
         public virtual async Task ReindexAsync(Guid documentId)
         {
-            await RequestAsync(nameof(ReindexAsync), documentId);
+            await RequestAsync(nameof(ReindexAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), documentId }
+            });
         }
     }
 }

@@ -17,27 +17,43 @@ namespace Volo.Docs.Admin.ClientProxies
     {
         public virtual async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            return await RequestAsync<PagedResultDto<ProjectDto>>(nameof(GetListAsync), input);
+            return await RequestAsync<PagedResultDto<ProjectDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(PagedAndSortedResultRequestDto), input }
+            });
         }
 
         public virtual async Task<ProjectDto> GetAsync(Guid id)
         {
-            return await RequestAsync<ProjectDto>(nameof(GetAsync), id);
+            return await RequestAsync<ProjectDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<ProjectDto> CreateAsync(CreateProjectDto input)
         {
-            return await RequestAsync<ProjectDto>(nameof(CreateAsync), input);
+            return await RequestAsync<ProjectDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(CreateProjectDto), input }
+            });
         }
 
         public virtual async Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
         {
-            return await RequestAsync<ProjectDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<ProjectDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(UpdateProjectDto), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task ReindexAllAsync()
@@ -47,7 +63,10 @@ namespace Volo.Docs.Admin.ClientProxies
 
         public virtual async Task ReindexAsync(ReindexInput input)
         {
-            await RequestAsync(nameof(ReindexAsync), input);
+            await RequestAsync(nameof(ReindexAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(ReindexInput), input }
+            });
         }
     }
 }

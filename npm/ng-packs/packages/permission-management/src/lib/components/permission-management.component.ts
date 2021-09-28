@@ -1,17 +1,17 @@
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
+import {
+  GetPermissionListResultDto,
+  PermissionGrantInfoDto,
+  PermissionGroupDto,
+  PermissionsService,
+  ProviderInfoDto,
+  UpdatePermissionDto,
+} from '@abp/ng.permission-management/proxy';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
 import { of } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PermissionManagement } from '../models/permission-management';
-import {
-  GetPermissionListResultDto,
-  PermissionGrantInfoDto,
-  PermissionGroupDto,
-  ProviderInfoDto,
-  UpdatePermissionDto,
-} from '../proxy/models';
-import { PermissionsService } from '../proxy/permissions.service';
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
   style: string;
