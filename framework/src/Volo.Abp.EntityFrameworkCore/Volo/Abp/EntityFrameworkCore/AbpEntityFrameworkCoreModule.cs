@@ -5,6 +5,7 @@ using Volo.Abp.Domain;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 using Volo.Abp.Uow.EntityFrameworkCore;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -26,14 +27,12 @@ namespace Volo.Abp.EntityFrameworkCore
                 });
             });
 
-            Configure<AbpEfCoreDistributedEventBusOptions>(options =>
-            {
-                options.SqlAdapters.Add(DefaultSqlAdapter.Name, new DefaultSqlAdapter());
-            });
-
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
             context.Services.AddTransient(typeof(IDbContextEventOutbox<>), typeof(DbContextEventOutbox<>));
             context.Services.AddTransient(typeof(IDbContextEventInbox<>), typeof(DbContextEventInbox<>));
+
+            context.Services.AddTransient(typeof(ISqlRawDbContextEventOutbox<>), typeof(SqlRawDbContextEventOutbox<>));
+            context.Services.AddTransient(typeof(ISqlRawDbContextEventInbox<>), typeof(SqlRawDbContextEventInbox<>));
         }
     }
 }

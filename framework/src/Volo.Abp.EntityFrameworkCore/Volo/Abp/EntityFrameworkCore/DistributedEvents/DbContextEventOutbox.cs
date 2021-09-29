@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Uow;
 
@@ -14,14 +13,11 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         where TDbContext : IHasEventOutbox
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
-        protected AbpEfCoreDistributedEventBusOptions EfCoreDistributedEventBusOptions { get; }
 
         public DbContextEventOutbox(
-            IDbContextProvider<TDbContext> dbContextProvider,
-            IOptions<AbpEfCoreDistributedEventBusOptions> efCoreDistributedEventBusOptions)
+            IDbContextProvider<TDbContext> dbContextProvider)
         {
             DbContextProvider = dbContextProvider;
-            EfCoreDistributedEventBusOptions = efCoreDistributedEventBusOptions.Value;
         }
 
         [UnitOfWork]
@@ -54,14 +50,11 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public virtual async Task DeleteAsync(Guid id)
         {
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
-            var tableName = dbContext.OutgoingEvents.EntityType.GetSchemaQualifiedTableName();
-            var connectionName = dbContext.Database.GetDbConnection().GetType().Name.ToLower();
-            var sqlAdapter = EfCoreDistributedEventBusOptions.GetSqlAdapter(connectionName);
-
-            var sql = $"DELETE FROM {sqlAdapter.NormalizeTableName(tableName)} WHERE " +
-                      $"{sqlAdapter.NormalizeColumnNameEqualsValue("Id", id)}";
-
-            await dbContext.Database.ExecuteSqlRawAsync(sql);
+            var outgoingEvent = await dbContext.OutgoingEvents.FindAsync(id);
+            if (outgoingEvent != null)
+            {
+                dbContext.Remove(outgoingEvent);
+            }
         }
     }
 }
