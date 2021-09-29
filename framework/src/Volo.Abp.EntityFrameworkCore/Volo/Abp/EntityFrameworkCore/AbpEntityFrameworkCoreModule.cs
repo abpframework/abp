@@ -26,6 +26,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 });
             });
 
+            Configure<AbpEfCoreDistributedEventBusOptions>(options =>
+            {
+                options.SqlAdapters.Add(DefaultSqlAdapter.Name, new DefaultSqlAdapter());
+            });
+
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
             context.Services.AddTransient(typeof(IDbContextEventOutbox<>), typeof(DbContextEventOutbox<>));
             context.Services.AddTransient(typeof(IDbContextEventInbox<>), typeof(DbContextEventInbox<>));

@@ -16,15 +16,18 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
         protected AbpDistributedEventBusOptions DistributedEventsOptions { get; }
+        protected AbpEfCoreDistributedEventBusOptions EfCoreDistributedEventBusOptions { get; }
         protected IClock Clock { get; }
 
         public DbContextEventInbox(
             IDbContextProvider<TDbContext> dbContextProvider,
             IClock clock,
-           IOptions<AbpDistributedEventBusOptions> distributedEventsOptions)
+            IOptions<AbpDistributedEventBusOptions> distributedEventsOptions,
+            IOptions<AbpEfCoreDistributedEventBusOptions> efCoreDistributedEventBusOptions)
         {
             DbContextProvider = dbContextProvider;
             Clock = clock;
+            EfCoreDistributedEventBusOptions = efCoreDistributedEventBusOptions.Value;
             DistributedEventsOptions = distributedEventsOptions.Value;
         }
 
@@ -61,8 +64,14 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
+            var connectionName = dbContext.Database.GetDbConnection().GetType().Name.ToLower();
+            var sqlAdapter = EfCoreDistributedEventBusOptions.GetSqlAdapter(connectionName);
 
-            var sql = $"UPDATE {tableName} SET Processed = 1, ProcessedTime = '{Clock.Now}' WHERE Id = '{id}'";
+            var sql = $"UPDATE {sqlAdapter.NormalizeTableName(tableName)} SET " +
+                      $"{sqlAdapter.NormalizeColumnNameEqualsValue("Processed", 1)}, " +
+                      $"{sqlAdapter.NormalizeColumnNameEqualsValue("ProcessedTime", Clock.Now)} WHERE " +
+                      $"{sqlAdapter.NormalizeColumnNameEqualsValue("Id", id)}";
+
             await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
 
@@ -79,8 +88,13 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
             var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
+            var connectionName = dbContext.Database.GetDbConnection().GetType().Name.ToLower();
+            var sqlAdapter = EfCoreDistributedEventBusOptions.GetSqlAdapter(connectionName);
 
-            var sql = $"DELETE FROM {tableName} WHERE Processed = 1 AND CreationTime < '{timeToKeepEvents}'";
+            var sql = $"DELETE FROM {sqlAdapter.NormalizeTableName(tableName)} WHERE " +
+                      $"{sqlAdapter.NormalizeColumnNameEqualsValue("Processed", 1)} AND " +
+                      $"{sqlAdapter.NormalizeColumnName("CreationTime")} < {sqlAdapter.NormalizeValue(timeToKeepEvents)}";
+
             await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
     }
