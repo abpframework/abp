@@ -18,8 +18,8 @@
         <ProjectReference Include="..\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
     </ItemGroup>
 
-    <ItemGroup>        
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="5.21.1" />
+    <ItemGroup>
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="5.21.3" />
     </ItemGroup>
 
 </Project>
