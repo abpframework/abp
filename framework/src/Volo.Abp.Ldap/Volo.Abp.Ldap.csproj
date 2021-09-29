@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LdapForNet" Version="2.7.11" />
+    <PackageReference Include="LdapForNet" Version="2.7.13" />
   </ItemGroup>
 
   <ItemGroup>

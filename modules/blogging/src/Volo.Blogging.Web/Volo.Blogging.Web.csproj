@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
-    <PackageReference Include="Markdig.Signed" Version="0.20.0" />
+    <PackageReference Include="Markdig.Signed" Version="0.26.0" />
   </ItemGroup>
 
   <ItemGroup>
