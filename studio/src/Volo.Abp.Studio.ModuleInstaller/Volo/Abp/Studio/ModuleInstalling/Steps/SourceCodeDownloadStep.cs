@@ -21,6 +21,11 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
 
             var targetFolder = context.GetTargetSourceCodeFolder();
 
+            if (Directory.Exists(targetFolder))
+            {
+                return;
+            }
+
             Directory.CreateDirectory(targetFolder);
 
             ZipFile.ExtractToDirectory(zipFilePath, targetFolder);
