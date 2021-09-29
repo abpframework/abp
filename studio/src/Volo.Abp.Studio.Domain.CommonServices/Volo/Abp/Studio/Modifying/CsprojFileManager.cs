@@ -107,9 +107,9 @@ namespace Volo.Abp.Studio.Packages.Modifying
         {
             var document = await GetXmlDocumentAsync(filePath);
 
-            var nodes = document["PropertyGroup"].SelectNodes("TargetFramework");
+            var nodes = document["Project"]?["PropertyGroup"]?.SelectNodes("TargetFramework");
 
-            if (nodes.Count == 0)
+            if (nodes == null || nodes.Count == 0)
             {
                 return null;
             }
