@@ -66,11 +66,11 @@ export function addTsConfigProjectReferences(paths: string[]): Rule {
  * Throws an exception when the base tsconfig doesn't exists.
  */
 export function verifyBaseTsConfigExists(host: Tree): void {
-  if (host.exists('tsconfig.base.json')) {
+  if (host.exists('tsconfig.json')) {
     return;
   }
 
   throw new SchematicsException(
-    `Cannot find base TypeScript configuration file 'tsconfig.base.json'.`,
+    `Cannot find base TypeScript configuration file 'tsconfig.json'.`,
   );
 }

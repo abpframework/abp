@@ -1,5 +1,6 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
+import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
@@ -10,8 +11,6 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
-import { GetTenantsInput, TenantDto } from '../../proxy/models';
-import { TenantService } from '../../proxy/tenant.service';
 
 @Component({
   selector: 'abp-tenants',

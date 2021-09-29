@@ -30,9 +30,8 @@ namespace Volo.Abp.IdentityServer.Grants
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Where(x => x.Key == key)
                 .OrderBy(x => x.Id)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(

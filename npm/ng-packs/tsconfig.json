@@ -1,0 +1,49 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@abp/ng.account": ["packages/account/src/public-api.ts"],
+      "@abp/ng.account.core": ["packages/account-core/src/public-api.ts"],
+      "@abp/ng.account.core/proxy": ["packages/account-core/proxy/src/public-api.ts"],
+      "@abp/ng.account/config": ["packages/account/config/src/public-api.ts"],
+      "@abp/ng.components": ["packages/components/src/public-api.ts"],
+      "@abp/ng.components/chart.js": ["packages/components/chart.js/src/public-api.ts"],
+      "@abp/ng.components/page": ["packages/components/page/src/public-api.ts"],
+      "@abp/ng.components/tree": ["packages/components/tree/src/public-api.ts"],
+      "@abp/ng.core": ["packages/core/src/public-api.ts"],
+      "@abp/ng.core/locale": ["packages/core/locale/src/public-api.ts"],
+      "@abp/ng.core/testing": ["packages/core/testing/src/public-api.ts"],
+      "@abp/ng.feature-management": ["packages/feature-management/src/public-api.ts"],
+      "@abp/ng.feature-management/proxy": ["packages/feature-management/proxy/src/public-api.ts"],
+      "@abp/ng.identity": ["packages/identity/src/public-api.ts"],
+      "@abp/ng.identity/config": ["packages/identity/config/src/public-api.ts"],
+      "@abp/ng.identity/proxy": ["packages/identity/proxy/src/public-api.ts"],
+      "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
+      "@abp/ng.permission-management/proxy": [
+        "packages/permission-management/proxy/src/public-api.ts"
+      ],
+      "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
+      "@abp/ng.setting-management/config": ["packages/setting-management/config/src/public-api.ts"],
+      "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
+      "@abp/ng.tenant-management/proxy": ["packages/tenant-management/proxy/src/public-api.ts"],
+      "@abp/ng.tenant-management/config": ["packages/tenant-management/config/src/public-api.ts"],
+      "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
+      "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
+      "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
+      "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
+      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

@@ -31,13 +31,13 @@
     "appsDir": ""
   },
   "projects": {
-    "account": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
-    },
     "account-core": {
       "tags": [],
       "implicitDependencies": ["core", "theme-shared"]
+    },
+    "account": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core", "identity"]
     },
     "components": {
       "tags": [],

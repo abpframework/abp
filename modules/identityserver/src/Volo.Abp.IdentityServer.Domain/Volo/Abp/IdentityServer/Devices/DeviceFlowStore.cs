@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;
@@ -38,7 +38,7 @@ namespace Volo.Abp.IdentityServer.Devices
                         DeviceCode = deviceCode,
                         UserCode = userCode,
                         ClientId = data.ClientId,
-                        SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value,
+                        SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject)?.Value,
                         CreationTime = data.CreationTime,
                         Expiration = data.CreationTime.AddSeconds(data.Lifetime),
                         Data = Serialize(data)
@@ -93,7 +93,7 @@ namespace Volo.Abp.IdentityServer.Devices
                 throw new InvalidOperationException($"Could not update device code by the given userCode: {userCode}");
             }
 
-            deviceCodes.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value;
+            deviceCodes.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject)?.Value;
             deviceCodes.Data = Serialize(data);
 
             await DeviceFlowCodesRepository

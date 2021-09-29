@@ -18,7 +18,10 @@ namespace Volo.CmsKit.MediaDescriptors.ClientProxies
     {
         public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id)
         {
-            return await RequestAsync<RemoteStreamContent>(nameof(DownloadAsync), id);
+            return await RequestAsync<RemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }

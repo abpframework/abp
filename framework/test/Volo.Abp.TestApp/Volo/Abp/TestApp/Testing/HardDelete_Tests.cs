@@ -55,6 +55,19 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task Should_HardDelete_Entities_With_IEnumerable()
+        {
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                var persons = await PersonRepository.GetListAsync();
+                await PersonRepository.HardDeleteAsync(persons);
+
+                var personCount = await PersonRepository.GetCountAsync();
+                personCount.ShouldBe(0);
+            }
+        }
+
+        [Fact]
         public async Task Should_HardDelete_Soft_Deleted_Entities()
         {
             var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
