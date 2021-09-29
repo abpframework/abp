@@ -19,7 +19,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             var dbContext = (IHasEventOutbox) await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.OutgoingEvents.EntityType.GetSchemaQualifiedTableName();
 
-            var sql = $"DELETE FROM {tableName} WHERE Id = '{id}'";
+            var sql = $"DELETE FROM {tableName} WHERE Id = '{id.ToString().ToUpper()}'";
             await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
     }

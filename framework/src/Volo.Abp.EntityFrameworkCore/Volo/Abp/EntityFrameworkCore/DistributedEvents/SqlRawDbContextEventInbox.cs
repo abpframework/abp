@@ -25,7 +25,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
 
-            var sql = $"UPDATE {tableName} SET Processed = '1', ProcessedTime = '{Clock.Now}' WHERE Id = '{id}'";
+            var sql = $"UPDATE {tableName} SET Processed = '1', ProcessedTime = '{Clock.Now}' WHERE Id = '{id.ToString().ToUpper()}'";
             await dbContext.Database.ExecuteSqlRawAsync(sql);
         }
 
