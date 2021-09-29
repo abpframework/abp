@@ -7,15 +7,15 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class SolutionAbpVersionFinder : ITransientDependency
+    public class SolutionPackageVersionFinder : ITransientDependency
     {
-        public string Find(string solutionFile)
+        public string Find(string solutionFile, string packagePrefix = "Volo.Abp")
         {
             var projectFilesUnderSrc = GetProjectFilesOfSolution(solutionFile);
             foreach (var projectFile in projectFilesUnderSrc)
             {
                 var content = File.ReadAllText(projectFile);
-                if (TryParseVersionFromCsprojViaXmlDocument(content, out var s))
+                if (TryParseVersionFromCsprojViaXmlDocument(content, out var s, packagePrefix))
                 {
                     return s;
                 }
@@ -24,13 +24,13 @@ namespace Volo.Abp.Cli.ProjectModification
             return null;
         }
 
-        private static bool TryParseVersionFromCsprojViaXmlDocument(string content, out string version)
+        private static bool TryParseVersionFromCsprojViaXmlDocument(string content, out string version, string packagePrefix)
         {
             var doc = new XmlDocument() { PreserveWhitespace = true };
             using (var stream = StreamHelper.GenerateStreamFromString(content))
             {
                 doc.Load(stream);
-                var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.Abp')]");
+                var nodes = doc.SelectNodes($"/Project/ItemGroup/PackageReference[starts-with(@Include, '{packagePrefix}')]");
                 var value = nodes?[0]?.Attributes?["Version"]?.Value;
                 if (value == null)
                 {
@@ -43,12 +43,12 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        public static bool TryParseVersionFromCsprojFile(string csprojContent, out string version)
+        public static bool TryParseVersionFromCsprojFile(string csprojContent, out string version, string packagePrefix = "Volo.Abp")
         {
             try
             {
                 var matches = Regex.Matches(csprojContent,
-                      @"PackageReference\s*Include\s*=\s*\""Volo.Abp(.*?)\""\s*Version\s*=\s*\""(.*?)\""",
+                      @"PackageReference\s*Include\s*=\s*\""" + packagePrefix + @"(.*?)\""\s*Version\s*=\s*\""(.*?)\""",
                       RegexOptions.IgnoreCase |
                       RegexOptions.IgnorePatternWhitespace |
                       RegexOptions.Singleline | RegexOptions.Multiline);
@@ -72,11 +72,11 @@ namespace Volo.Abp.Cli.ProjectModification
         }
 
 
-        public static bool TryParseSemanticVersionFromCsprojFile(string csprojContent, out SemanticVersion version)
+        public static bool TryParseSemanticVersionFromCsprojFile(string csprojContent, out SemanticVersion version, string packagePrefix = "Volo.Abp")
         {
             try
             {
-                if (TryParseVersionFromCsprojFile(csprojContent, out var versionText))
+                if (TryParseVersionFromCsprojFile(csprojContent, out var versionText, packagePrefix))
                 {
                     return SemanticVersion.TryParse(versionText, out version);
                 }
@@ -90,13 +90,13 @@ namespace Volo.Abp.Cli.ProjectModification
             return false;
         }
 
-        public static bool TryFind(string solutionFile, out string version)
+        public static bool TryFind(string solutionFile, out string version, string packagePrefix = "Volo.Abp")
         {
             var projectFiles = GetProjectFilesOfSolution(solutionFile);
             foreach (var projectFile in projectFiles)
             {
                 var csprojContent = File.ReadAllText(projectFile);
-                if (TryParseVersionFromCsprojFile(csprojContent, out var parsedVersion))
+                if (TryParseVersionFromCsprojFile(csprojContent, out var parsedVersion, packagePrefix))
                 {
                     version = parsedVersion;
                     return true;
@@ -107,13 +107,13 @@ namespace Volo.Abp.Cli.ProjectModification
             return false;
         }
 
-        public static bool TryFindSemanticVersion(string solutionFile, out SemanticVersion version)
+        public static bool TryFindSemanticVersion(string solutionFile, out SemanticVersion version, string packagePrefix = "Volo.Abp")
         {
             var projectFiles = GetProjectFilesOfSolution(solutionFile);
             foreach (var projectFile in projectFiles)
             {
                 var csprojContent = File.ReadAllText(projectFile);
-                if (TryParseSemanticVersionFromCsprojFile(csprojContent, out var parsedVersion))
+                if (TryParseSemanticVersionFromCsprojFile(csprojContent, out var parsedVersion, packagePrefix))
                 {
                     version = parsedVersion;
                     return true;
