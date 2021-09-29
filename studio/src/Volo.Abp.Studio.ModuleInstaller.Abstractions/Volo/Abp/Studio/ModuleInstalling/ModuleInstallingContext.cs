@@ -78,7 +78,12 @@ namespace Volo.Abp.Studio.ModuleInstalling
 
         public string GetTargetSourceCodeFolder()
         {
-            return Path.Combine(Path.GetDirectoryName(TargetModule), "modules", ModuleName);
+            return CalculateTargetSourceCodeFolder(TargetModule, ModuleName);
+        }
+
+        public static string CalculateTargetSourceCodeFolder(string targetModule, string moduleName)
+        {
+            return Path.Combine(Path.GetDirectoryName(targetModule), "modules", moduleName);
         }
     }
 }
