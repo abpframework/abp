@@ -35,7 +35,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
-            var timeToKeepEvents = Clock.Now.Add(- EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents);
+            var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
 
             var sql = $"DELETE FROM \"{tableName}\" WHERE \"Processed\" = '1' AND \"CreationTime\" < TO_DATE('{timeToKeepEvents}', 'yyyy-mm-dd hh24:mi:ss')";
             await dbContext.Database.ExecuteSqlRawAsync(sql);
