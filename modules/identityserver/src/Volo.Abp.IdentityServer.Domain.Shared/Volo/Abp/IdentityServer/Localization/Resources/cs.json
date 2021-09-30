@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "cs",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Název Identity Resource již existuje: {Name}",

@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource adı zaten mevcut: {Name}",
