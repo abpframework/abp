@@ -100,7 +100,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
                         new UnitOfWorkEventRecord(
                             distributedEvent.EventData.GetType(),
                             distributedEvent.EventData,
-                            distributedEvent.EventOrder
+                            distributedEvent.EventOrder,
+                            useOutbox: true
                         )
                     );
                 }
