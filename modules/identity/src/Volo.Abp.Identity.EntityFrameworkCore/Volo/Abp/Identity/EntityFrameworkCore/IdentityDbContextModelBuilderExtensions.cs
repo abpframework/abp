@@ -41,6 +41,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     .If(!builder.IsUsingOracle(), p => p.HasDefaultValue(0))
                     .HasColumnName(nameof(IdentityUser.AccessFailedCount));
 
+                b.Property(u => u.IsActive).HasDefaultValue(true)
+                    .HasColumnName(nameof(IdentityUser.IsActive));
+
                 b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();

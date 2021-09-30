@@ -232,7 +232,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     IsExternal = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
