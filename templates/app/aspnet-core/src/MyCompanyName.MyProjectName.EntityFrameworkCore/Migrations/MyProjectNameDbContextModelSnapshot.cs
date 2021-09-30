@@ -637,6 +637,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true)
                         .HasColumnName("IsActive");
