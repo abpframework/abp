@@ -25,7 +25,7 @@ import { ChartDemoComponent } from './chart-demo.component';
 export class YourFeatureModule {}
 ```
 
-Then, `abp-chart` component can be used:
+Then, `abp-chart` component can be used. See an example:
 
 ```ts
 // chart-demo.component.ts
@@ -50,7 +50,7 @@ export class ChartDemoComponent {
 }
 ```
 
-> **Important Note**: Changing the data without creating a new data instance does not trigger change detection. In order to chart to redraw itself, a new data object needs to be created.
+> **Important Note**: Changing the chart data without creating a new data instance does not trigger change detection. In order to chart to redraw itself, a new data object needs to be created.
 
 See the result:
 
