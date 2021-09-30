@@ -6,7 +6,7 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId již existuje: {ClientId}",
     "UserLockedOut": "Tento uživatelský účet byl zablokován kvůli neplatným pokusům o přihlášení. Chvilku počkejte a zkuste to znovu.",
     "InvalidUserNameOrPassword": "Neplatné uživatelské jméno či heslo!",
-    "LoginIsNotAllowed": "Nemáte oprávnění se přihlásit! Musíte potvrdit svůj email/telefonní číslo.",
+    "LoginIsNotAllowed": "Nemáte oprávnění se přihlásit! Váš účet je neaktivní nebo potřebuje potvrdit váš e -mail/telefonní číslo.",
     "InvalidUsername": "Neplatné uživatelské jméno či heslo!"
   }
 }
