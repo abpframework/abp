@@ -4,6 +4,6 @@ namespace Volo.Abp.MongoDB.DistributedEvents
 {
     public interface IHasEventInbox : IAbpMongoDbContext
     {
-        IMongoCollection<IncomingEventRecord> IncomingEvents { get; set; }
+        IMongoCollection<IncomingEventRecord> IncomingEvents { get; }
     }
 }

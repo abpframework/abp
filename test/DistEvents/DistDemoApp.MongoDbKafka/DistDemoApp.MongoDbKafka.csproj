@@ -6,4 +6,16 @@
         <RootNamespace>DistDemoApp</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.Kafka\Volo.Abp.EventBus.Kafka.csproj" />
+        <ProjectReference Include="..\DistDemoApp.Shared\DistDemoApp.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

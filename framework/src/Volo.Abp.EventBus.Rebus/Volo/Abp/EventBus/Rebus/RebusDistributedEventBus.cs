@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
+using Rebus.Pipeline;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
@@ -134,6 +135,19 @@ namespace Volo.Abp.EventBus.Rebus
             Rebus.Unsubscribe(eventType);
         }
 
+        public async Task ProcessEventAsync(Type eventType, object eventData)
+        {
+            var messageId = MessageContext.Current.TransportMessage.GetMessageId();
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+
+            if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body))
+            {
+                return;
+            }
+
+            await TriggerHandlersAsync(eventType, eventData);
+        }
+
         protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
@@ -192,16 +206,29 @@ namespace Volo.Abp.EventBus.Rebus
             OutgoingEventInfo outgoingEvent,
             OutboxConfig outboxConfig)
         {
-            /* TODO: IMPLEMENT! */
-            throw new NotImplementedException();
+            var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+            var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
+
+            return PublishToEventBusAsync(eventType, eventData);
         }
 
-        public override Task ProcessFromInboxAsync(
+        public override async Task ProcessFromInboxAsync(
             IncomingEventInfo incomingEvent,
             InboxConfig inboxConfig)
         {
-            /* TODO: IMPLEMENT! */
-            throw new NotImplementedException();
+            var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+            if (eventType == null)
+            {
+                return;
+            }
+
+            var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+            var exceptions = new List<Exception>();
+            await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+            if (exceptions.Any())
+            {
+                ThrowOriginalExceptions(eventType, exceptions);
+            }
         }
 
         protected override byte[] Serialize(object eventData)
