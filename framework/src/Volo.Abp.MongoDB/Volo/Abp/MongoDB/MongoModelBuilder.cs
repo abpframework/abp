@@ -28,7 +28,7 @@ namespace Volo.Abp.MongoDB
         {
             lock (SyncObj)
             {
-                var clockOptions = dbContext.LazyServiceProvider?.LazyGetService<IOptions<AbpClockOptions>>();
+                var useAbpClockHandleDateTime = dbContext.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpMongoDbOptions>>().Value.UseAbpClockHandleDateTime;
 
                 var entityModels = _entityModelBuilders
                     .Select(x => x.Value)
@@ -41,7 +41,7 @@ namespace Volo.Abp.MongoDB
                 {
                     var map = entityModel.As<IHasBsonClassMap>().GetMap();
 
-                    if (clockOptions != null)
+                    if (useAbpClockHandleDateTime)
                     {
                         var dateTimePropertyInfos = entityModel.EntityType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                             .Where(property =>
@@ -58,11 +58,11 @@ namespace Volo.Abp.MongoDB
 
                             if (property.PropertyType == typeof(DateTime?))
                             {
-                                map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, disableDateTimeNormalization)));
+                                map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(GetDateTimeKind(dbContext), disableDateTimeNormalization)));
                             }
                             else
                             {
-                                map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, disableDateTimeNormalization));
+                                map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(GetDateTimeKind(dbContext), disableDateTimeNormalization));
                             }
                         });
                     }
@@ -86,7 +86,7 @@ namespace Volo.Abp.MongoDB
                         var map = new BsonClassMap(baseClass);
                         map.ConfigureAbpConventions();
 
-                        if (clockOptions != null)
+                        if (useAbpClockHandleDateTime)
                         {
                             var dateTimePropertyInfos = baseClass.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                                 .Where(property =>
@@ -99,11 +99,11 @@ namespace Volo.Abp.MongoDB
                             {
                                 if (property.PropertyType == typeof(DateTime?))
                                 {
-                                    map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, false)));
+                                    map.MapProperty(property.Name).SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new AbpMongoDbDateTimeSerializer(GetDateTimeKind(dbContext), false)));
                                 }
                                 else
                                 {
-                                    map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(clockOptions.Value.Kind, false));
+                                    map.MapProperty(property.Name).SetSerializer(new AbpMongoDbDateTimeSerializer(GetDateTimeKind(dbContext), false));
                                 }
                             });
                         }
@@ -114,6 +114,11 @@ namespace Volo.Abp.MongoDB
 
                 return new MongoDbContextModel(entityModels);
             }
+        }
+
+        private DateTimeKind GetDateTimeKind(AbpMongoDbContext dbContext)
+        {
+            return dbContext.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpClockOptions>>().Value.Kind;
         }
 
         public virtual void Entity<TEntity>(Action<IMongoEntityModelBuilder<TEntity>> buildAction = null)
