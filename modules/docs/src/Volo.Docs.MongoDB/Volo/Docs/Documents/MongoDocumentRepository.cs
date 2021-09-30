@@ -57,6 +57,16 @@ namespace Volo.Docs.Documents
                 x.Version == version, cancellationToken: cancellationToken);
         }
 
+        public async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .WhereIf(version != null, x => x.Version == version)
+                .WhereIf(name != null, x => x.Name == name)
+                .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
+                .As<IMongoQueryable<Document>>()
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,

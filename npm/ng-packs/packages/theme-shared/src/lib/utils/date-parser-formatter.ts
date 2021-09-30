@@ -2,7 +2,6 @@ import { ApplicationLocalizationConfigurationDto, ConfigStateService } from '@ab
 import { formatDate } from '@angular/common';
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import snq from 'snq';
 
 function isNumber(value: any): boolean {
   return !isNaN(toInteger(value));
@@ -44,12 +43,11 @@ export class DateParserFormatter extends NgbDateParserFormatter {
   format(date: NgbDateStruct): string {
     if (!date) return '';
 
-    const localization: ApplicationLocalizationConfigurationDto = this.configState.getOne(
-      'localization',
-    );
+    const localization: ApplicationLocalizationConfigurationDto =
+      this.configState.getOne('localization');
 
     const dateFormat =
-      snq(() => localization.currentCulture.dateTimeFormat.shortDatePattern) || 'yyyy-MM-dd';
+      localization.currentCulture?.dateTimeFormat?.shortDatePattern || 'yyyy-MM-dd';
 
     return formatDate(new Date(date.year, date.month - 1, date.day), dateFormat, this.locale);
   }

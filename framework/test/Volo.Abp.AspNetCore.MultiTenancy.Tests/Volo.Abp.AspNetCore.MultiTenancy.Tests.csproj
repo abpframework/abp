@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.MultiTenancy.Tests</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.MultiTenancy.Tests</PackageId>
     <RootNamespace />

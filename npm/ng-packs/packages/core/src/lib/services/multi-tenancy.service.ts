@@ -1,53 +1,45 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ABP } from '../models/common';
+import { Inject, Injectable } from '@angular/core';
+import { map, switchMap } from 'rxjs/operators';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy';
 import {
   CurrentTenantDto,
   FindTenantResultDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
+import { ConfigStateService } from './config-state.service';
 import { RestService } from './rest.service';
 import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
-  private _domainTenant: CurrentTenantDto = null;
-
-  set domainTenant(value: CurrentTenantDto) {
-    this._domainTenant = value;
-    this.sessionState.setTenant(value);
-  }
-
-  get domainTenant() {
-    return this._domainTenant;
-  }
+  domainTenant: CurrentTenantDto = null;
 
   isTenantBoxVisible = true;
 
   apiName = 'abp';
 
-  constructor(private restService: RestService, private sessionState: SessionStateService) {}
+  private setTenantToState = (tenant: FindTenantResultDto) => {
+    this.sessionState.setTenant({ id: tenant.tenantId, name: tenant.name, isAvailable: true });
+    return this.configStateService.refreshAppState().pipe(map(_ => tenant));
+  };
 
-  /**
-   * @deprecated Use AbpTenantService.findTenantByName method instead. To be deleted in v5.0.
-   */
-  findTenantByName(name: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      {
-        url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
-        method: 'GET',
-        headers,
-      },
-      { apiName: this.apiName },
-    );
+  constructor(
+    private restService: RestService,
+    private sessionState: SessionStateService,
+    private tenantService: AbpTenantService,
+    private configStateService: ConfigStateService,
+    @Inject(TENANT_KEY) public tenantKey: string,
+  ) {}
+
+  setTenantByName(tenantName: string) {
+    return this.tenantService
+      .findTenantByName(tenantName, { [this.tenantKey]: '' })
+      .pipe(switchMap(this.setTenantToState));
   }
 
-  /**
-   * @deprecated Use AbpTenantService.findTenantById method instead. To be deleted in v5.0.
-   */
-  findTenantById(id: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      { url: `/api/abp/multi-tenancy/tenants/by-id/${id}`, method: 'GET', headers },
-      { apiName: this.apiName },
-    );
+  setTenantById(tenantId: string) {
+    return this.tenantService
+      .findTenantById(tenantId, { [this.tenantKey]: '' })
+      .pipe(switchMap(this.setTenantToState));
   }
 }

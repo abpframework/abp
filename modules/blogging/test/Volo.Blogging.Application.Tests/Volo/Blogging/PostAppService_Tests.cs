@@ -25,7 +25,7 @@ namespace Volo.Blogging
         public async Task Should_Get_List_Of_Posts()
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
-            var posts = await _postAppService.GetListByBlogIdAndTagName(blogId, null);
+            var posts = await _postAppService.GetListByBlogIdAndTagNameAsync(blogId, null);
             posts.Items.Count.ShouldBeGreaterThan(0);
         }
 

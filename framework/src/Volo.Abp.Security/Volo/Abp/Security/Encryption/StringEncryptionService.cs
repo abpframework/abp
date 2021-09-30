@@ -91,8 +91,25 @@ namespace Volo.Abp.Security.Encryption
                             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                             {
                                 var plainTextBytes = new byte[cipherTextBytes.Length];
-                                var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-                                return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                                var totalReadCount = 0;
+                                while (totalReadCount < cipherTextBytes.Length)
+                                {
+                                    var buffer = new byte[cipherTextBytes.Length];
+                                    var readCount = cryptoStream.Read(buffer, 0, buffer.Length);
+                                    if (readCount == 0)
+                                    {
+                                        break;
+                                    }
+
+                                    for (var i = 0; i < readCount; i++)
+                                    {
+                                        plainTextBytes[i + totalReadCount] = buffer[i];
+                                    }
+
+                                    totalReadCount += readCount;
+                                }
+
+                                return Encoding.UTF8.GetString(plainTextBytes, 0, totalReadCount);
                             }
                         }
                     }

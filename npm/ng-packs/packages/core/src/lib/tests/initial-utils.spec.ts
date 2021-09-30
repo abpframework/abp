@@ -54,7 +54,6 @@ describe('InitialUtils', () => {
       const environmentService = spectator.inject(EnvironmentService);
       const configStateService = spectator.inject(ConfigStateService);
       const sessionStateService = spectator.inject(SessionStateService);
-      const applicationConfigurationService = spectator.inject(AbpApplicationConfigurationService);
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
@@ -64,11 +63,9 @@ describe('InitialUtils', () => {
         currentTenant: { id: 'test', name: 'testing' },
       } as ApplicationConfigurationDto;
 
-      const getConfigurationSpy = jest.spyOn(applicationConfigurationService, 'get');
-      getConfigurationSpy.mockReturnValue(of(appConfigRes));
-
       const environmentSetStateSpy = jest.spyOn(environmentService, 'setState');
-      const configSetStateSpy = jest.spyOn(configStateService, 'setState');
+      const configRefreshAppStateSpy = jest.spyOn(configStateService, 'refreshAppState');
+      configRefreshAppStateSpy.mockReturnValue(of(appConfigRes));
       const sessionSetTenantSpy = jest.spyOn(sessionStateService, 'setTenant');
 
       const configStateGetOneSpy = jest.spyOn(configStateService, 'getOne');
@@ -81,9 +78,8 @@ describe('InitialUtils', () => {
       await getInitialData(mockInjector)();
 
       expect(typeof getInitialData(mockInjector)).toBe('function');
+      expect(configRefreshAppStateSpy).toHaveBeenCalled();
       expect(environmentSetStateSpy).toHaveBeenCalledWith(environment);
-      expect(getConfigurationSpy).toHaveBeenCalled();
-      expect(configSetStateSpy).toHaveBeenCalledWith(appConfigRes);
       expect(sessionSetTenantSpy).toHaveBeenCalledWith(appConfigRes.currentTenant);
     });
   });

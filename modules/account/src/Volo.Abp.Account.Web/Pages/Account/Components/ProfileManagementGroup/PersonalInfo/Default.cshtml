@@ -19,6 +19,8 @@
 
 <h4>@L["PersonalSettings"]</h4><hr/>
 <form method="post" id="PersonalSettingsForm">
+    
+    <abp-input asp-for="ConcurrencyStamp" />
 
     <abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled"/>
 

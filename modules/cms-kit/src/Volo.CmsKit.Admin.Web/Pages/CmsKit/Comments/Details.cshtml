@@ -21,17 +21,19 @@
 @section styles{
     <abp-style-bundle>
         <abp-style src="/Pages/CmsKit/Comments/details.css" />
-    </abp-style-bundle>    
+    </abp-style-bundle>
 }
 
 @section scripts {
     <abp-script-bundle>
-        <abp-script src="/Pages/CmsKit/Comments/details.js" />
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/Comments/details.js"/>
     </abp-script-bundle>
 }
 
 <div id="CmsKitCommentsWrapper">
-    
+
     <abp-card>
         <abp-card-body>
             <abp-row>
@@ -69,7 +71,7 @@
             </abp-row>
         </abp-card-body>
     </abp-card>
-    
+
     <abp-card>
         <abp-card-body>
             <abp-row>

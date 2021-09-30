@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'abp-loading',
@@ -33,8 +33,4 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
     `,
   ],
 })
-export class LoadingComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class LoadingComponent {}

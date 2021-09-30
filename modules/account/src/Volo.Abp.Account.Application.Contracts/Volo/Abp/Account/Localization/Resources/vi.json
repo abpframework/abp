@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Sử dụng dịch vụ khác để đăng nhập",
     "UserLockedOutMessage": "Tài khoản người dùng đã bị khóa do các nỗ lực đăng nhập không hợp lệ. Xin vui lòng chờ một lúc và thử lại.",
     "InvalidUserNameOrPassword": "Sai tên tài khoản hoặc mật khẩu!",
-    "LoginIsNotAllowed": "Bạn không được phép đăng nhập! Bạn cần xác nhận email/số điện thoại của bạn.",
+    "LoginIsNotAllowed": "Bạn không được phép đăng nhập! Tài khoản của bạn không hoạt động hoặc cần xác nhận email / số điện thoại của bạn.",
     "SelfRegistrationDisabledMessage": "Tự đăng ký người dùng bị vô hiệu hóa cho ứng dụng này. Liên hệ với quản trị viên ứng dụng để đăng ký người dùng mới.",
     "Login": "Đăng nhập",
     "Cancel": "Hủy bỏ",

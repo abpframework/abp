@@ -23,7 +23,7 @@ namespace Volo.CmsKit.Menus
         public string DisplayName { get; protected set; }
 
         public bool IsActive { get; set; }
-        
+
         [NotNull]
         public string Url { get; protected set; }
 
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.Menus
 
         public Guid? PageId { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; protected set; }
 
         public MenuItem(Guid id,
                         [NotNull] string displayName,
@@ -50,8 +50,9 @@ namespace Volo.CmsKit.Menus
                         int order = 0,
                         [CanBeNull] string target = null,
                         [CanBeNull] string elementId = null,
-                        [CanBeNull] string cssClass = null) 
-            :base(id)
+                        [CanBeNull] string cssClass = null,
+                        [CanBeNull] Guid? tenantId = null)
+            : base(id)
         {
             SetDisplayName(displayName);
             IsActive = isActive;
@@ -62,6 +63,7 @@ namespace Volo.CmsKit.Menus
             Target = target;
             ElementId = elementId;
             CssClass = cssClass;
+            TenantId = tenantId;
         }
 
         public void SetDisplayName([NotNull] string displayName)
@@ -69,7 +71,7 @@ namespace Volo.CmsKit.Menus
             DisplayName = Check.NotNullOrEmpty(displayName, nameof(displayName), MenuItemConsts.MaxDisplayNameLength);
         }
 
-        public void SetUrl([NotNull]string url)
+        public void SetUrl([NotNull] string url)
         {
             Url = Check.NotNullOrEmpty(url, nameof(url), MenuItemConsts.MaxUrlLength);
         }

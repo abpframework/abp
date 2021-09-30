@@ -38,6 +38,15 @@ namespace Volo.Docs.Documents
             return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
         }
 
+        public async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(version != null, x => x.Version == version)
+                .WhereIf(name != null, x => x.Name == name)
+                .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
+                .ToListAsync(cancellationToken: cancellationToken);
+        }
+
         public async Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,

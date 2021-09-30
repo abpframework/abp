@@ -2,6 +2,7 @@ using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Validation;
 
@@ -17,7 +18,7 @@ namespace Volo.Abp.FluentValidation
             _serviceProvider = serviceProvider;
         }
 
-        public void AddErrors(ObjectValidationContext context)
+        public virtual async Task AddErrorsAsync(ObjectValidationContext context)
         {
             var serviceType = typeof(IValidator<>).MakeGenericType(context.ValidatingObject.GetType());
             var validator = _serviceProvider.GetService(serviceType) as IValidator;
@@ -26,7 +27,7 @@ namespace Volo.Abp.FluentValidation
                 return;
             }
 
-            var result = validator.Validate((IValidationContext) Activator.CreateInstance(
+            var result = await validator.ValidateAsync((IValidationContext) Activator.CreateInstance(
                 typeof(ValidationContext<>).MakeGenericType(context.ValidatingObject.GetType()),
                 context.ValidatingObject));
 

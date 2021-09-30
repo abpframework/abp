@@ -49,6 +49,7 @@ namespace Volo.CmsKit
     [DependsOn(
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
@@ -110,6 +111,7 @@ namespace Volo.CmsKit
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
                 options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));

@@ -23,9 +23,9 @@ namespace Volo.Blogging
 
         [HttpGet]
         [Route("popular/{blogId}")]
-        public Task<List<TagDto>> GetPopularTags(Guid blogId, GetPopularTagsInput input)
+        public Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
         {
-            return _tagAppService.GetPopularTags(blogId, input);
+            return _tagAppService.GetPopularTagsAsync(blogId, input);
         }
     }
 }

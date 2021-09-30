@@ -7,8 +7,9 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId già esistente: {ClientId}",
     "UserLockedOut": "L'account utente è stato bloccato a causa di tentativi di accesso non validi. Attendi qualche istante e riprova.",
     "InvalidUserNameOrPassword": "Username o password non validi!",
-    "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Devi confermare la tua email/numero di telefono.",
+    "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Il tuo account non è attivo o deve confermare la tua email/numero di telefono.",
     "InvalidUsername": "Username o password non validi!",
+    "InvalidAuthenticatorCode": "Codice autenticatore non valido!",
     "TheTargetUserIsNotLinkedToYou": "L'utente di destinazione non è collegato a te!"
   }
 }

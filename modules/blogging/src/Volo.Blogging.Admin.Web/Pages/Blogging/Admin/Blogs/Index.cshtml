@@ -15,9 +15,10 @@
 
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/Pages/Blogging/Admin/Blogs/index.js" />
-        <abp-script src="/Pages/Blogging/Admin/Blogs/create.js" />
-        <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js" />
+        <abp-script src="/client-proxies/bloggingAdmin-proxy.js"/>
+        <abp-script src="/Pages/Blogging/Admin/Blogs/index.js"/>
+        <abp-script src="/Pages/Blogging/Admin/Blogs/create.js"/>
+        <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js"/>
     </abp-script-bundle>
 }
 

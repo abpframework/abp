@@ -168,7 +168,7 @@ namespace SignalRTieredDemo.Web
     {
 ````
 
-Also, we need to add [@abp/signalr](https://www.npmjs.com/package/@abp/signalr) npm package to package.json in ***.Web** project, then run **yarn** and **gulp** commands.
+Also, we need to add [@abp/signalr](https://www.npmjs.com/package/@abp/signalr) npm package to package.json in ***.Web** project, then run **abp install-libs** command.
 
 `````json
 {

@@ -369,8 +369,8 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
-          "text":"String Encryption",
-          "path":"String-Encryption.md"
+          "text": "String Encryption",
+          "path": "String-Encryption.md"
         },
         {
           "text": "Text Templating",
@@ -582,6 +582,10 @@
               "path": "API/Application-Configuration.md"
             }
           ]
+        },
+        {
+          "text": "Swagger Integration",
+          "path": "API/Swagger-Integration.md"
         }
       ]
     },
@@ -1028,6 +1032,19 @@
                 {
                   "text": "Customization Guide",
                   "path": "UI/Angular/Customization-User-Interface.md"
+                },
+                {
+                  "text": "Theming",
+                  "items": [
+                    {
+                      "text": "Overall",
+                      "path": "UI/Angular/Theming.md"
+                    },
+                    {
+                      "text": "The Basic Theme",
+                      "path": "UI/Angular/Basic-Theme.md"
+                    }
+                  ]
                 },
                 {
                   "text": "Modifying the Menu",

@@ -8,7 +8,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public interface IApiScopeRepository : IBasicRepository<ApiScope, Guid>
     {
-        Task<ApiScope> GetByNameAsync(
+        Task<ApiScope> FindByNameAsync(
             string scopeName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default
