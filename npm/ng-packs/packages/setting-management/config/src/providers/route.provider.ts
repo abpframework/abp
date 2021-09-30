@@ -3,7 +3,18 @@ import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER, inject, InjectionToken } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
 import { eSettingManagementRouteNames } from '../enums/route-names';
+import { SettingTabsService } from '../services/settings-tabs.service';
 import { Observable } from 'rxjs';
+
+export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  {
+    provide: APP_INITIALIZER,
+    useFactory: hideRoutes,
+    deps: [RoutesService, SettingTabsService],
+    multi: true,
+  },
+];
 
 export function configureRoutes(routesService: RoutesService) {
   return () => {
@@ -19,6 +30,7 @@ export function configureRoutes(routesService: RoutesService) {
     ]);
   };
 }
+
 export const SETTING_MANAGEMENT_HAS_SETTING = new InjectionToken<Observable<boolean>>(
   'SETTING_MANAGEMENT_HAS_SETTING',
   {

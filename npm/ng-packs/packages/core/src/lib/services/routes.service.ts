@@ -181,6 +181,3 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
-
-@Injectable({ providedIn: 'root' })
-export class SettingTabsService extends AbstractNavTreeService<ABP.Tab> {}
