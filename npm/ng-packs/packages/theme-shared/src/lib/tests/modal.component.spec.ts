@@ -2,7 +2,6 @@ import { LocalizationPipe } from '@abp/ng.core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { fromEvent, Subject, timer } from 'rxjs';
 import { delay, reduce, take } from 'rxjs/operators';
 import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';
@@ -32,7 +31,6 @@ describe('ModalComponent', () => {
         },
       },
     ],
-    mocks: [Store],
   });
 
   beforeEach(async () => {
@@ -105,7 +103,7 @@ describe('ModalComponent', () => {
   xit('should close with the abpClose', async () => {
     await wait0ms();
 
-    spectator.dispatchMouseEvent(spectator.component.abpClose, 'click');
+    spectator.dispatchMouseEvent(spectator.query('[abpClose]'), 'click');
 
     await wait0ms();
 

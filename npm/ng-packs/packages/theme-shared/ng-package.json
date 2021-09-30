@@ -11,7 +11,6 @@
     "@ng-bootstrap/ng-bootstrap",
     "@ngx-validate/core",
     "@swimlane/ngx-datatable",
-    "bootstrap",
-    "chart.js"
+    "bootstrap"
   ]
 }

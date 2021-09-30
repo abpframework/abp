@@ -1,4 +1,4 @@
-import { Config, SubscriptionService } from '@abp/ng.core';
+import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -30,9 +30,9 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   status = 0;
 
-  title: Config.LocalizationParam = 'Oops!';
+  title: LocalizationParam = 'Oops!';
 
-  details: Config.LocalizationParam = 'Sorry, an error has occured.';
+  details: LocalizationParam = 'Sorry, an error has occured.';
 
   customComponent: Type<any> = null;
 

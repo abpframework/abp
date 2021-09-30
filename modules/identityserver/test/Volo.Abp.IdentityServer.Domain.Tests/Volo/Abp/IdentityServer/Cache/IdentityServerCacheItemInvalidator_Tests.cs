@@ -121,7 +121,7 @@ namespace Volo.Abp.IdentityServer.Cache
             await _resourceStore.FindApiScopesByNameAsync(testApiScopeNames);
             (await _apiScopeCache.GetAsync(testApiScopeName)).ShouldNotBeNull();
 
-            var testApiScope = await _apiScopeRepository.GetByNameAsync(testApiScopeName);
+            var testApiScope = await _apiScopeRepository.FindByNameAsync(testApiScopeName);
             await _apiScopeRepository.DeleteAsync(testApiScope);
             (await _apiScopeCache.GetAsync(testApiScopeName)).ShouldBeNull();
 

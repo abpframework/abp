@@ -15,7 +15,7 @@ using Volo.Abp.AutoMapper;
 namespace Volo.CmsKit.Admin.Web
 {
     [DependsOn(
-        typeof(CmsKitAdminHttpApiModule),
+        typeof(CmsKitAdminApplicationContractsModule),
         typeof(CmsKitCommonWebModule)
         )]
     public class CmsKitAdminWebModule : AbpModule

@@ -39,6 +39,8 @@ namespace Volo.Abp.Identity
 
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+
             if (!string.Equals(user.UserName, input.UserName, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
@@ -62,8 +64,6 @@ namespace Volo.Abp.Identity
 
             user.Name = input.Name;
             user.Surname = input.Surname;
-
-            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             input.MapExtraPropertiesTo(user);
 

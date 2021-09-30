@@ -1,16 +1,17 @@
-import { RestOccurError } from '@abp/ng.core';
+import { HttpErrorReporterService } from '@abp/ng.core';
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
+
+const reporter$ = new Subject();
 
 @NgModule({
   exports: [HttpErrorWrapperComponent],
@@ -22,7 +23,7 @@ class MockModule {}
 
 let spectator: SpectatorService<ErrorHandler>;
 let service: ErrorHandler;
-let store: Store;
+let httpErrorReporter: HttpErrorReporterService;
 const errorConfirmation: jest.Mock = jest.fn(() => of(null));
 const CONFIRMATION_BUTTONS = {
   hideCancelBtn: true,
@@ -31,9 +32,18 @@ const CONFIRMATION_BUTTONS = {
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [NgxsModule.forRoot([]), CoreTestingModule.withConfig(), MockModule],
+    imports: [CoreTestingModule.withConfig(), MockModule],
     mocks: [OAuthService],
     providers: [
+      {
+        provide: HttpErrorReporterService,
+        useValue: {
+          reportError: err => {
+            reporter$.next(err);
+          },
+          reporter$: reporter$.asObservable(),
+        },
+      },
       { provide: APP_BASE_HREF, useValue: '/' },
       {
         provide: 'HTTP_ERROR_CONFIG',
@@ -51,8 +61,7 @@ describe('ErrorHandler', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.inject(Store);
-    store.selectSnapshot = jest.fn(() => '/x');
+    httpErrorReporter = spectator.inject(HttpErrorReporterService);
   });
 
   afterEach(() => {
@@ -77,7 +86,7 @@ describe('ErrorHandler', () => {
 
     expect(selectHtmlErrorWrapper()).toBeNull();
 
-    store.dispatch(new RestOccurError(error));
+    httpErrorReporter.reportError(error);
 
     expect(createComponent).toHaveBeenCalledWith(params);
   });
@@ -99,7 +108,7 @@ describe('ErrorHandler', () => {
 
     expect(selectHtmlErrorWrapper()).toBeNull();
 
-    store.dispatch(new RestOccurError(error));
+    httpErrorReporter.reportError(error);
 
     expect(createComponent).toHaveBeenCalledWith(params);
   });
@@ -119,15 +128,13 @@ describe('ErrorHandler', () => {
       isHomeShow: false,
     };
 
-    expect(selectHtmlErrorWrapper()).toBeNull();
-
-    store.dispatch(new RestOccurError(error));
+    httpErrorReporter.reportError(error);
 
     expect(createComponent).toHaveBeenCalledWith(params);
   });
 
   test('should call error method of ConfirmationService when not found error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 404 })));
+    httpErrorReporter.reportError(new HttpErrorResponse({ status: 404 }));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
@@ -143,7 +150,7 @@ describe('ErrorHandler', () => {
   });
 
   test('should call error method of ConfirmationService when default error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 412 })));
+    httpErrorReporter.reportError(new HttpErrorResponse({ status: 412 }));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
@@ -159,7 +166,7 @@ describe('ErrorHandler', () => {
   });
 
   test('should call error method of ConfirmationService when authenticated error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401 })));
+    httpErrorReporter.reportError(new HttpErrorResponse({ status: 401 }));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
@@ -178,7 +185,7 @@ describe('ErrorHandler', () => {
     const headers: HttpHeaders = new HttpHeaders({
       _AbpErrorFormat: '_AbpErrorFormat',
     });
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401, headers })));
+    httpErrorReporter.reportError(new HttpErrorResponse({ status: 401, headers }));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
@@ -193,14 +200,12 @@ describe('ErrorHandler', () => {
   test('should call error method of ConfirmationService when error occurs with _AbpErrorFormat header', () => {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('_AbpErrorFormat', '_AbpErrorFormat');
-    store.dispatch(
-      new RestOccurError(
-        new HttpErrorResponse({
-          error: { error: { message: 'test message', details: 'test detail' } },
-          status: 412,
-          headers,
-        }),
-      ),
+    httpErrorReporter.reportError(
+      new HttpErrorResponse({
+        error: { error: { message: 'test message', details: 'test detail' } },
+        status: 412,
+        headers,
+      }),
     );
 
     expect(errorConfirmation).toHaveBeenCalledWith(

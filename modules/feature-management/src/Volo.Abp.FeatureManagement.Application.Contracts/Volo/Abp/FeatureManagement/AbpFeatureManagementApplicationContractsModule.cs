@@ -2,6 +2,7 @@
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
 using Volo.Abp.FeatureManagement.JsonConverters;
+using Volo.Abp.Json;
 using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Modularity;
@@ -12,7 +13,8 @@ namespace Volo.Abp.FeatureManagement
     [DependsOn(
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpDddApplicationContractsModule),
-        typeof(AbpAuthorizationAbstractionsModule)
+        typeof(AbpAuthorizationAbstractionsModule),
+        typeof(AbpJsonModule)
         )]
     public class AbpFeatureManagementApplicationContractsModule : AbpModule
     {
