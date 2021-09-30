@@ -20,11 +20,16 @@ All features are individually usable. If you disable a feature, it completely di
 
 ## How to Install
 
+> This module is depends on [BlobStoring](../../Blob-Storing.md) module, please install `BlobStoring` module first and add a provider. For more information, check the [documentation](../../Blob-Storing.md).
+
 [ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
-abp add-module Volo.CmsKit
+abp add-module Volo.CmsKit --skip-db-migrations
 ```
+
+> By default, Cms-Kit is disabled by `GlobalFeature`. Because of that the initial migration will be empty. So you can skip the migraiton when installing if you are using Entity Framework Core. After enabling Cms-Kit global feture, please add new migration.
+
 After the installation process, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project of your solution and place the following code into the `Configure` method to enable all the features in the CMS Kit module.
 
 ```csharp
