@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Użyj innej usługi do zalogowania się",
     "UserLockedOutMessage": "Konto użytkownika zostało zablokowane po nieudanych próbach zalogowania. Odczekaj chwilę i spróbuj ponownie.",
     "InvalidUserNameOrPassword": "Niepoprawna nazwa użytkownika lub hasło!",
-    "LoginIsNotAllowed": "Nie jesteś uprawniony do logowania! Musisz potwierdzić swój email/numer telefonu.",
+    "LoginIsNotAllowed": "Nie możesz się zalogować! Twoje konto jest nieaktywne lub wymaga potwierdzenia adresu e-mail/numeru telefonu.",
     "SelfRegistrationDisabledMessage": "Rejestracja użytkowników jest wyłączona dla tej aplikacji. Skontaktuj się z administratorem aplikacji w celu rejestracji nowego użytkownika.",
     "Login": "Zaloguj",
     "Cancel": "Anuluj",

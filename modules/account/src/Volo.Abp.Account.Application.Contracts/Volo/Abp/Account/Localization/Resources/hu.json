@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Használjon másik szolgáltatást a bejelentkezéshez",
     "UserLockedOutMessage": "A felhasználói fiókot érvénytelen bejelentkezési kísérletek miatt zároltuk. Kérjük, várjon egy kicsit, és próbálja újra.",
     "InvalidUserNameOrPassword": "Érvénytelen felhasználónév vagy jelszó!",
-    "LoginIsNotAllowed": "Ön nem léphet be! Meg kell erősítenie e-mail címét / telefonszámát.",
+    "LoginIsNotAllowed": "A bejelentkezés nem engedélyezett! Fiókja inaktív, vagy meg kell erősítenie e -mail címét/telefonszámát.",
     "SelfRegistrationDisabledMessage": "Ennél az alkalmazásnál az önregisztráció le van tiltva. Új felhasználó regisztrálásához vegye fel a kapcsolatot az alkalmazás rendszergazdájával.",
     "LocalLoginDisabledMessage": "A helyi bejelentkezés le van tiltva ennél az alkalmazásnál.",
     "Login": "Bejelntkezés",
