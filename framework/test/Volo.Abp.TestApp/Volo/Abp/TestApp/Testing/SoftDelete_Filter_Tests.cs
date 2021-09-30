@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class SoftDelete_Filter_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+    public abstract class SoftDelete_Filter_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
@@ -25,9 +25,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Not_Get_Deleted_Entities_Linq()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var person = PersonRepository.FirstOrDefault(p => p.Name == "John-Deleted");
+                var person = await PersonRepository.FirstOrDefaultAsync(p => p.Name == "John-Deleted");
                 person.ShouldBeNull();
                 return Task.CompletedTask;
             });
@@ -46,9 +46,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Not_Get_Deleted_Entities_By_Default_ToList()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var people = PersonRepository.ToList();
+                var people = await PersonRepository.ToListAsync();
                 people.Count.ShouldBe(1);
                 people.Any(p => p.Name == "Douglas").ShouldBeTrue();
                 return Task.CompletedTask;
@@ -58,36 +58,36 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Get_Deleted_Entities_When_Filter_Is_Disabled()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
                 //Soft delete is enabled by default
-                var people = PersonRepository.ToList();
+                var people = await PersonRepository.ToListAsync();
                 people.Any(p => !p.IsDeleted).ShouldBeTrue();
                 people.Any(p => p.IsDeleted).ShouldBeFalse();
 
                 using (DataFilter.Disable<ISoftDelete>())
                 {
                     //Soft delete is disabled
-                    people = PersonRepository.ToList();
+                    people = await PersonRepository.ToListAsync();
                     people.Any(p => !p.IsDeleted).ShouldBeTrue();
                     people.Any(p => p.IsDeleted).ShouldBeTrue();
 
                     using (DataFilter.Enable<ISoftDelete>())
                     {
                         //Soft delete is enabled again
-                        people = PersonRepository.ToList();
+                        people = await PersonRepository.ToListAsync();
                         people.Any(p => !p.IsDeleted).ShouldBeTrue();
                         people.Any(p => p.IsDeleted).ShouldBeFalse();
                     }
 
                     //Soft delete is disabled (restored previous state)
-                    people = PersonRepository.ToList();
+                    people = await PersonRepository.ToListAsync();
                     people.Any(p => !p.IsDeleted).ShouldBeTrue();
                     people.Any(p => p.IsDeleted).ShouldBeTrue();
                 }
 
                 //Soft delete is enabled (restored previous state)
-                people = PersonRepository.ToList();
+                people = await PersonRepository.ToListAsync();
                 people.Any(p => !p.IsDeleted).ShouldBeTrue();
                 people.Any(p => p.IsDeleted).ShouldBeFalse();
 
