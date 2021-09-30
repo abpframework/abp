@@ -1,15 +1,14 @@
 import { ConfigStateService, TrackByService } from '@abp/ng.core';
-import { LocaleDirection } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { finalize } from 'rxjs/operators';
-import { FeatureManagement } from '../../models/feature-management';
-import { FeaturesService } from '../../proxy/feature-management/features.service';
 import {
   FeatureDto,
   FeatureGroupDto,
+  FeaturesService,
   UpdateFeatureDto,
-} from '../../proxy/feature-management/models';
+} from '@abp/ng.feature-management/proxy';
+import { LocaleDirection } from '@abp/ng.theme.shared';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { finalize } from 'rxjs/operators';
+import { FeatureManagement } from '../../models/feature-management';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',
@@ -65,7 +64,6 @@ export class FeatureManagementComponent
   constructor(
     public readonly track: TrackByService,
     protected service: FeaturesService,
-    protected store: Store,
     protected configState: ConfigStateService,
   ) {}
 

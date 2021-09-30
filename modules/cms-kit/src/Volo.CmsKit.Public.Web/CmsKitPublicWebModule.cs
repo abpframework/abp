@@ -16,7 +16,7 @@ using Volo.CmsKit.Web;
 namespace Volo.CmsKit.Public.Web
 {
     [DependsOn(
-        typeof(CmsKitPublicHttpApiModule),
+        typeof(CmsKitPublicApplicationContractsModule),
         typeof(CmsKitCommonWebModule)
     )]
     public class CmsKitPublicWebModule : AbpModule

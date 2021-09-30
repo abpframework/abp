@@ -32,6 +32,7 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.Validation.Localization;
 using Volo.Docs.Documents.FullSearch.Elastic;
 
@@ -41,15 +42,20 @@ namespace VoloDocs.Web
         typeof(DocsWebModule),
         typeof(DocsAdminWebModule),
         typeof(DocsApplicationModule),
+        typeof(DocsHttpApiModule),
         typeof(DocsAdminApplicationModule),
+        typeof(DocsAdminHttpApiModule),
         typeof(VoloDocsEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
     public class VoloDocsWebModule : AbpModule
@@ -113,7 +119,7 @@ namespace VoloDocs.Web
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
-            
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");
@@ -170,7 +176,7 @@ namespace VoloDocs.Web
             });
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-           
+
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseConfiguredEndpoints();

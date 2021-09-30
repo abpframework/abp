@@ -1,3 +1,4 @@
+import { IdentityRoleDto, IdentityUserDto } from '@abp/ng.identity/proxy';
 import {
   CreateFormPropContributorCallback,
   EditFormPropContributorCallback,
@@ -21,7 +22,6 @@ import {
 } from '../defaults/default-users-form-props';
 import { DEFAULT_USERS_TOOLBAR_ACTIONS } from '../defaults/default-users-toolbar-actions';
 import { eIdentityComponents } from '../enums/components';
-import { IdentityRoleDto, IdentityUserDto } from '../proxy/identity/models';
 
 export const DEFAULT_IDENTITY_ENTITY_ACTIONS = {
   [eIdentityComponents.Roles]: DEFAULT_ROLES_ENTITY_ACTIONS,

@@ -25,7 +25,7 @@ export const ENVIRONMENT_DATA = {
   },
 } as any as Environment;
 
-describe('ConfigState', () => {
+describe('Environment', () => {
   let spectator: SpectatorService<EnvironmentService>;
   let environment: EnvironmentService;
 
@@ -64,20 +64,4 @@ describe('ConfigState', () => {
       }),
     );
   });
-
-  // TODO: create permission.service.spec.ts
-  // describe('#getGrantedPolicy', () => {
-  //   it('should return a granted policy', () => {
-  //     expect(ConfigState.getGrantedPolicy('Abp.Identity')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('Abp.Identity || Abp.Account')(CONFIG_STATE_DATA)).toBe(
-  //       true,
-  //     );
-  //     expect(ConfigState.getGrantedPolicy('Abp.Account && Abp.Identity')(CONFIG_STATE_DATA)).toBe(
-  //       false,
-  //     );
-  //     expect(ConfigState.getGrantedPolicy('Abp.Account &&')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('|| Abp.Account')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('')(CONFIG_STATE_DATA)).toBe(true);
-  //   });
-  // });
 });

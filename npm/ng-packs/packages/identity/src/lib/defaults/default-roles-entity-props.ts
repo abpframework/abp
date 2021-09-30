@@ -1,7 +1,7 @@
 import { LocalizationService } from '@abp/ng.core';
+import { IdentityRoleDto } from '@abp/ng.identity/proxy';
 import { EntityProp, ePropType } from '@abp/ng.theme.shared/extensions';
 import { of } from 'rxjs';
-import { IdentityRoleDto } from '../proxy/identity/models';
 
 export const DEFAULT_ROLES_ENTITY_PROPS = EntityProp.createMany<IdentityRoleDto>([
   {

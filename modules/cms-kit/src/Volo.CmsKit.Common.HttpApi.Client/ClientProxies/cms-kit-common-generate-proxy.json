@@ -1,0 +1,129 @@
+{
+  "modules": {
+    "cms-kit-common": {
+      "rootPath": "cms-kit-common",
+      "remoteServiceName": "CmsKitCommon",
+      "controllers": {
+        "Volo.CmsKit.MediaDescriptors.MediaDescriptorController": {
+          "controllerName": "MediaDescriptor",
+          "controllerGroupName": "MediaDescriptor",
+          "type": "Volo.CmsKit.MediaDescriptors.MediaDescriptorController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
+            }
+          ],
+          "actions": {
+            "DownloadAsyncById": {
+              "uniqueName": "DownloadAsyncById",
+              "name": "DownloadAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit/media/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.RemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.RemoteStreamContent"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
+            }
+          }
+        },
+        "Volo.CmsKit.Blogs.BlogFeatureController": {
+          "controllerName": "BlogFeature",
+          "controllerGroupName": "BlogFeature",
+          "type": "Volo.CmsKit.Blogs.BlogFeatureController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+            }
+          ],
+          "actions": {
+            "GetOrDefaultAsyncByBlogIdAndFeatureName": {
+              "uniqueName": "GetOrDefaultAsyncByBlogIdAndFeatureName",
+              "name": "GetOrDefaultAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit/blogs/{blogId}/features/{featureName}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "blogId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "featureName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "blogId",
+                  "name": "blogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "featureName",
+                  "name": "featureName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.CmsKit.Blogs.BlogFeatureDto",
+                "typeSimple": "Volo.CmsKit.Blogs.BlogFeatureDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}
