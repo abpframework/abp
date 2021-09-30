@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
@@ -14,7 +14,8 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public OracleDbContextEventInbox(
             IDbContextProvider<TDbContext> dbContextProvider,
             IClock clock,
-            IOptions<AbpDistributedEventBusOptions> distributedEventsOptions) : base(dbContextProvider, clock, distributedEventsOptions)
+            IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
+            : base(dbContextProvider, clock, eventBusBoxesOptions)
         {
         }
 
@@ -33,7 +34,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
             var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
-            var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
+            var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
 
             var sql = $"DELETE FROM \"{tableName}\" WHERE \"Processed\" = '1' AND \"CreationTime\" < TO_DATE('{timeToKeepEvents}', 'yyyy-mm-dd hh24:mi:ss')";
             await dbContext.Database.ExecuteSqlRawAsync(sql);

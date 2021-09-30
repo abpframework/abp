@@ -49,7 +49,7 @@ namespace Volo.Abp.EventBus.Boxes
             UnitOfWorkManager = unitOfWorkManager;
             Clock = clock;
             EventBusBoxesOptions = eventBusBoxesOptions.Value;
-            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Seconds;
+            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Milliseconds;
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
             StoppingTokenSource = new CancellationTokenSource();
@@ -120,21 +120,21 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DelayTimeSpan.Milliseconds, StoppingToken);
+                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DistributedLockWaitDuration.Milliseconds, StoppingToken);
                 }
             }
         }
 
         protected virtual async Task DeleteOldEventsAsync()
         {
-            if (LastCleanTime != null && LastCleanTime > Clock.Now.Add(EventBusBoxesOptions.CleanOldEventTimeIntervalSpan))
+            if (LastCleanTime != null && LastCleanTime + EventBusBoxesOptions.CleanOldEventTimeIntervalSpan > Clock.Now)
             {
                 return;
             }
 
             await Inbox.DeleteOldEventsAsync();
 
-            LastCleanTime = DateTime.Now;
+            LastCleanTime = Clock.Now;
         }
     }
 }

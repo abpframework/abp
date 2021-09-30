@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -16,17 +17,17 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         where TMongoDbContext : IHasEventInbox
     {
         protected IMongoDbContextProvider<TMongoDbContext> DbContextProvider { get; }
-        protected AbpDistributedEventBusOptions DistributedEventsOptions { get; }
+        protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
         protected IClock Clock { get; }
 
         public MongoDbContextEventInbox(
             IMongoDbContextProvider<TMongoDbContext> dbContextProvider,
             IClock clock,
-            IOptions<AbpDistributedEventBusOptions> distributedEventsOptions)
+            IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
         {
             DbContextProvider = dbContextProvider;
             Clock = clock;
-            DistributedEventsOptions = distributedEventsOptions.Value;
+            EventBusBoxesOptions = eventBusBoxesOptions.Value;
         }
 
 
@@ -96,7 +97,7 @@ namespace Volo.Abp.MongoDB.DistributedEvents
         public virtual async Task DeleteOldEventsAsync()
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
-            var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
+            var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
 
             if (dbContext.SessionHandle != null)
             {

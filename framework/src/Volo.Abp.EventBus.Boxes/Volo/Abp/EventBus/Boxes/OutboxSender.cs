@@ -39,7 +39,7 @@ namespace Volo.Abp.EventBus.Boxes
             DistributedEventBus = distributedEventBus;
             DistributedLockProvider = distributedLockProvider;
             EventBusBoxesOptions = eventBusBoxesOptions.Value;
-            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Seconds;
+            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Milliseconds;
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<OutboxSender>.Instance;
             StoppingTokenSource = new CancellationTokenSource();
@@ -100,7 +100,7 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DelayTimeSpan.Milliseconds, StoppingToken);
+                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DistributedLockWaitDuration.Milliseconds, StoppingToken);
                 }
             }
         }

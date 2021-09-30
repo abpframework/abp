@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -15,17 +16,17 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         where TDbContext : IHasEventInbox
     {
         protected IDbContextProvider<TDbContext> DbContextProvider { get; }
-        protected AbpDistributedEventBusOptions DistributedEventsOptions { get; }
+        protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
         protected IClock Clock { get; }
 
         public DbContextEventInbox(
             IDbContextProvider<TDbContext> dbContextProvider,
             IClock clock,
-           IOptions<AbpDistributedEventBusOptions> distributedEventsOptions)
+           IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
         {
             DbContextProvider = dbContextProvider;
             Clock = clock;
-            DistributedEventsOptions = distributedEventsOptions.Value;
+            EventBusBoxesOptions = eventBusBoxesOptions.Value;
         }
 
         [UnitOfWork]
@@ -78,7 +79,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
         public virtual async Task DeleteOldEventsAsync()
         {
             var dbContext = await DbContextProvider.GetDbContextAsync();
-            var timeToKeepEvents = Clock.Now.Add(DistributedEventsOptions.InboxKeepEventTimeSpan);
+            var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
             var oldEvents = await dbContext.IncomingEvents
                 .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
                 .ToListAsync();

@@ -11,16 +11,9 @@ namespace DistDemoApp
         public IMongoCollection<TodoItem> TodoItems => Collection<TodoItem>();
         public IMongoCollection<TodoSummary> TodoSummaries => Collection<TodoSummary>();
 
-        public IMongoCollection<OutgoingEventRecord> OutgoingEvents
-        {
-            get => Collection<OutgoingEventRecord>();
-            set {}
-        }
-        public IMongoCollection<IncomingEventRecord> IncomingEvents
-        {
-            get => Collection<IncomingEventRecord>();
-            set {}
-        }
+        public IMongoCollection<OutgoingEventRecord> OutgoingEvents => Collection<OutgoingEventRecord>();
+
+        public IMongoCollection<IncomingEventRecord> IncomingEvents => Collection<IncomingEventRecord>();
     }
 
 }

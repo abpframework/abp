@@ -26,10 +26,14 @@ namespace Volo.Abp.EventBus.Boxes
         public TimeSpan PeriodTimeSpan { get; set; }
 
         /// <summary>
-        /// Delay time of <see cref="InboxProcessor"/> and <see cref="OutboxSender"/>
         /// Default: 15 seconds
         /// </summary>
-        public TimeSpan DelayTimeSpan { get; set; }
+        public TimeSpan DistributedLockWaitDuration { get; set; }
+
+        /// <summary>
+        /// Default: 2 hours
+        /// </summary>
+        public TimeSpan WaitTimeToDeleteProcessedInboxEvents { get; set; }
 
         public AbpEventBusBoxesOptions()
         {
@@ -37,7 +41,8 @@ namespace Volo.Abp.EventBus.Boxes
             InboxWaitingEventMaxCount = 1000;
             OutboxWaitingEventMaxCount = 1000;
             PeriodTimeSpan = TimeSpan.FromSeconds(2);
-            DelayTimeSpan = TimeSpan.FromSeconds(15);
+            DistributedLockWaitDuration = TimeSpan.FromSeconds(15);
+            WaitTimeToDeleteProcessedInboxEvents = TimeSpan.FromHours(2);
         }
     }
 }
