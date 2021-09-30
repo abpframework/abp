@@ -85,7 +85,7 @@ Following proxies have been affected:
 
 ### ChartComponent
 
-`ChartComponent` has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
+[`ChartComponent`](../UI/Angular/Chart-Component.md) has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
 
 ```ts
 import { ChartModule } from '@abp/ng.components/chart.js';
