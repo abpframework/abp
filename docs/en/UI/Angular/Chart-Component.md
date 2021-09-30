@@ -61,7 +61,6 @@ See the result:
 ### Doughnut
 
 ```ts
-import { getRandomBackgroundColor } from '@abp/ng.components/chart.js';
 import { Component } from '@angular/core';
 
 @Component({
@@ -83,7 +82,7 @@ export class ChartDemoComponent {
       {
         label: 'Dataset 1',
         data: [40, 15, 45],
-        backgroundColor: getRandomBackgroundColor(3),
+        backgroundColor: ['#a0e6c3', '#f0ea4c', '#5b9dc3'],
       },
     ],
   };
