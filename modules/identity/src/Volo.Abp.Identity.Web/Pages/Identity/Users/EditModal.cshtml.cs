@@ -87,6 +87,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
             public string PhoneNumber { get; set; }
 
+            public bool IsActive { get; set; }
+
             public bool LockoutEnabled { get; set; }
         }
 

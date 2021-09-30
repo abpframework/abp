@@ -25,6 +25,7 @@
     "DisplayName:Email": "邮箱地址",
     "DisplayName:PhoneNumber": "手机号码",
     "DisplayName:TwoFactorEnabled": "二次认证",
+    "DisplayName:IsActive": "启用",
     "DisplayName:LockoutEnabled": "登录失败,账户被锁定",
     "NewRole": "新角色",
     "RoleName": "角色名称",
