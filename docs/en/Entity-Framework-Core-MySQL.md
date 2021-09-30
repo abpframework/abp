@@ -1,4 +1,4 @@
-﻿# Switch to EF Core MySQL Provider
+# Switch to EF Core MySQL Provider
 
 This document explains how to switch to the **MySQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 

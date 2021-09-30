@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var $container = $('#edit-post-container');
     var $editorContainer = $container.find('.edit-post-editor');
     var $submitButton = $container.find('button[type=submit]');

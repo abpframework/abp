@@ -1,4 +1,4 @@
-﻿# Module Startup Template
+# Module Startup Template
 
 This template can be used to create a **reusable [application module](../Modules/Index.md)** based on the [module development best practices & conventions](../Best-Practices/Index.md). It is also suitable for creating **microservices** (with or without UI).
 

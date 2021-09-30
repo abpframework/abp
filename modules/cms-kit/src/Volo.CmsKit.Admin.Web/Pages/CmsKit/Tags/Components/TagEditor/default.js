@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 
     var $tagEditorForms = $('.tag-editor-form');
 

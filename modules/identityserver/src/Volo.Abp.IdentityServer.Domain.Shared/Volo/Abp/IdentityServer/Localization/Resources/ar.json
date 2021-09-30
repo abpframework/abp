@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "اسم مورد الهوية موجود بالفعل: {Name}",

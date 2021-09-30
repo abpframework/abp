@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "zh-Hans",
   "texts": {
     "Volo.Authorization:010001": "授权失败! 提供的策略尚未授予.",
