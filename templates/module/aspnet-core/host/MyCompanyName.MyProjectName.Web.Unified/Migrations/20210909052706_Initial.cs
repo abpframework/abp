@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     public partial class Initial : Migration
     {
@@ -232,6 +232,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                     IsExternal = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),

@@ -178,7 +178,7 @@ namespace Volo.Abp.Identity
             user.Name = input.Name;
             user.Surname = input.Surname;
             (await UserManager.UpdateAsync(user)).CheckErrors();
-
+            user.SetIsActive(input.IsActive);
             if (input.RoleNames != null)
             {
                 (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
