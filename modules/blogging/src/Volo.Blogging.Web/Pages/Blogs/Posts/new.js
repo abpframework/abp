@@ -13,8 +13,8 @@ $(function () {
     var $postFormSubmitButton = $('#PostFormSubmitButton');
 
     var setCoverImage = function (file) {
-        $postCoverImage.val(file.fileUrl);
-        $coverImage.attr('src', file.fileUrl);
+        $postCoverImage.val(file.webUrl);
+        $coverImage.attr('src', file.webUrl);
         $coverImage.show();
         $postFormSubmitButton.removeAttr('disabled');
     };
@@ -22,7 +22,7 @@ $(function () {
     var uploadCoverImage = function (file) {
         var formData = new FormData();
         formData.append('file', file);
-
+        formData.append('name', file.name);
         $.ajax({
             type: 'POST',
             url: '/api/blogging/files/images/upload',
@@ -47,7 +47,7 @@ $(function () {
     var uploadImage = function (file, callbackFn) {
         var formData = new FormData();
         formData.append('file', file);
-
+        formData.append('name', file.name);
         $.ajax({
             type: 'POST',
             url: '/api/blogging/files/images/upload',
@@ -55,7 +55,7 @@ $(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                callbackFn(response.fileUrl);
+                callbackFn(response.webUrl);
             },
         });
     };
@@ -70,8 +70,8 @@ $(function () {
             addImageBlobHook: function (blob, callback, source) {
                 var imageAltText = blob.name;
 
-                uploadImage(blob, function (fileUrl) {
-                    callback(fileUrl, imageAltText);
+                uploadImage(blob, function (webUrl) {
+                    callback(webUrl, imageAltText);
                 });
             },
         },
