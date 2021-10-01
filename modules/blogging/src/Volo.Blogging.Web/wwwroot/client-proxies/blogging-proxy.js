@@ -18,7 +18,7 @@
       }, ajaxParams));
     };
 
-    volo.blogging.blogFiles.getForWeb = function(name, ajaxParams) {
+    volo.blogging.blogFiles.getFile = function(name, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/blogging/files/www/' + name + '',
         type: 'GET'
@@ -27,15 +27,7 @@
 
     volo.blogging.blogFiles.create = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/blogging/files',
-        type: 'POST',
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.blogging.blogFiles.uploadImage = function(file, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/blogging/files/images/upload',
+        url: abp.appPath + 'api/blogging/files/images/upload' + abp.utils.buildQueryString([{ name: 'name', value: input.name }]) + '',
         type: 'POST'
       }, ajaxParams));
     };
