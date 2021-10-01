@@ -85,7 +85,22 @@ namespace Volo.Abp.Studio.Packages.Modifying
                 return;
             }
 
-            var targetNode = matchedNodes[0];
+            XmlNode targetNode = null;
+
+            foreach (XmlNode matchedNode in matchedNodes)
+            {
+                if (matchedNode.Attributes["Include"].Value == packageName)
+                {
+                    targetNode = matchedNode;
+                    break;
+                }
+            }
+
+            if (targetNode == null)
+            {
+                return;
+            }
+
             var targetNodeParent = targetNode.ParentNode;
 
             targetNodeParent.RemoveChild(targetNode);
