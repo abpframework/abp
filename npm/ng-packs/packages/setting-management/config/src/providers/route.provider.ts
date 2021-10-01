@@ -1,20 +1,10 @@
-import { eLayoutType, noop, RoutesService, SettingTabsService } from '@abp/ng.core';
+import { eLayoutType, noop, RoutesService } from '@abp/ng.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER, inject, InjectionToken } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
 import { eSettingManagementRouteNames } from '../enums/route-names';
 import { SettingTabsService } from '../services/settings-tabs.service';
 import { Observable } from 'rxjs';
-
-export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
-  {
-    provide: APP_INITIALIZER,
-    useFactory: hideRoutes,
-    deps: [RoutesService, SettingTabsService],
-    multi: true,
-  },
-];
 
 export function configureRoutes(routesService: RoutesService) {
   return () => {
