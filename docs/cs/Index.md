@@ -1,4 +1,4 @@
-﻿# ABP dokumentace
+# ABP dokumentace
 
 ABP je **open source aplikační framework** se zaměřením na vývoj webových aplikací založených na ASP.NET Core, zároveň ho však lze využít i k vývoji jiných typů aplikací.
 

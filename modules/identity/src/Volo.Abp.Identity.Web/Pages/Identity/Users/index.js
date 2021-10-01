@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityUserAppService = volo.abp.identity.identityUser;
