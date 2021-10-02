@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity
     [Area("identity")]
     [ControllerName("Role")]
     [Route("api/identity/roles")]
-    public class IdentityRoleController : AbpController, IIdentityRoleAppService
+    public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
     {
         protected IIdentityRoleAppService RoleAppService { get; }
 
