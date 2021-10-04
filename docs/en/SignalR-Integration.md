@@ -118,7 +118,7 @@ public class MessagingHub : Hub
 The hub route will be `/signalr-hubs/messaging` for the `MessagingHub`:
 
 * Adding a standard `/signalr-hubs/` prefix
-* Continue with the **camel case** hub name, without the `Hub` suffix.
+* Continue with the **kebab-case** hub name, without the `Hub` suffix.
 
 If you want to specify the route, you can use the `HubRoute` attribute:
 
