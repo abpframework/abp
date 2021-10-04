@@ -266,6 +266,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             var label = new TagBuilder("label");
+            label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(inputTag));
             label.InnerHtml.AppendHtml(TagHelper.Label);
 
