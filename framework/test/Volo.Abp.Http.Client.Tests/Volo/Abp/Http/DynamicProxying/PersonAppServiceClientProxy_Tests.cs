@@ -276,5 +276,32 @@ namespace Volo.Abp.Http.DynamicProxying
             });
             result.ShouldBe("123.rtf:File1:application/rtf:1-1.rtf123.rtf:File2:application/rtf2:1-2.rtf789.rtf:File3:application/rtf3:i-789.rtf");
         }
+
+        [Fact]
+        public async Task GetParamsFromQueryAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsFromQueryInput()
+            {
+                NameValues = new List<GetParamsFromQueryInputNameValue>()
+                {
+                    new GetParamsFromQueryInputNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsFromQueryInputNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsFromQueryInputNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        }
     }
 }

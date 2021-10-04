@@ -156,9 +156,9 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
         }
 
-        protected virtual Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+        protected virtual async Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
         {
-            return Task.FromResult(ClientProxyUrlBuilder.GenerateUrlWithParameters(requestContext.Action, requestContext.Arguments, apiVersion));
+            return await ClientProxyUrlBuilder.GenerateUrlWithParametersAsync(requestContext.Action, requestContext.Arguments, apiVersion);
         }
 
         protected virtual Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)

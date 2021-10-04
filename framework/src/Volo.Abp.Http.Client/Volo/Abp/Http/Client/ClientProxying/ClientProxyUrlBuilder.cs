@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -15,7 +18,23 @@ namespace Volo.Abp.Http.Client.ClientProxying
 {
     public class ClientProxyUrlBuilder : ITransientDependency
     {
-        public string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected static MethodInfo CallObjectToQueryStringAsyncMethod { get; }
+
+        static ClientProxyUrlBuilder()
+        {
+            CallObjectToQueryStringAsyncMethod = typeof(ClientProxyUrlBuilder)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .First(m => m.Name == nameof(ObjectToQueryStringAsync) && m.IsGenericMethodDefinition);
+        }
+
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+
+        public ClientProxyUrlBuilder(IServiceScopeFactory serviceScopeFactory)
+        {
+            ServiceScopeFactory = serviceScopeFactory;
+        }
+
+        public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             // The ASP.NET Core route value provider and query string value provider:
             //  Treat values as invariant culture.
@@ -24,14 +43,14 @@ namespace Volo.Abp.Http.Client.ClientProxying
             {
                 var urlBuilder = new StringBuilder(action.Url);
 
-                ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
-                AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                await ReplacePathVariablesAsync(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                await AddQueryStringParametersAsync(urlBuilder, action.Parameters, methodArguments, apiVersion);
 
                 return urlBuilder.ToString();
             }
         }
 
-        protected virtual void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected virtual Task ReplacePathVariablesAsync(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var pathParameters = actionParameters
                 .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -39,7 +58,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
             if (!pathParameters.Any())
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (pathParameters.Any(p => p.Name == "apiVersion"))
@@ -71,9 +90,11 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", value.ToString());
                 }
             }
+
+            return Task.CompletedTask;
         }
 
-        protected virtual void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var queryStringParameters = actionParameters
                 .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
@@ -89,7 +110,26 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     continue;
                 }
 
-                if (AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value))
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    var objectToQuery = scope.ServiceProvider.GetService(typeof(IObjectToQueryString<>).MakeGenericType(value.GetType()));
+                    if (objectToQuery != null)
+                    {
+                        var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
+                            .MakeGenericMethod(value.GetType())
+                            .Invoke(this, new object[] { value });
+
+                        if (!queryString.IsNullOrWhiteSpace())
+                        {
+                            urlBuilder.Append(isFirstParam ? "?" : "&");
+                            urlBuilder.Append(queryString);
+                            isFirstParam = false;
+                            continue;
+                        }
+                    }
+                }
+
+                if (await AddQueryStringParameterAsync(urlBuilder, isFirstParam, queryStringParameter.Name, value))
                 {
                     isFirstParam = false;
                 }
@@ -97,11 +137,24 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
             if (apiVersion.ShouldSendInQueryString())
             {
-                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
+                await AddQueryStringParameterAsync(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
             }
         }
 
-        protected virtual bool AddQueryStringParameter(
+        protected virtual async Task<string> ObjectToQueryStringAsync<T>(T value)
+        {
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var objectToQueryString = scope.ServiceProvider.GetService<IObjectToQueryString<T>>();
+                if (objectToQueryString != null)
+                {
+                    return await objectToQueryString.ConvertAsync(value);
+                }
+            }
+            return null;
+        }
+
+        protected virtual async Task<bool> AddQueryStringParameterAsync(
             StringBuilder urlBuilder,
             bool isFirstParam,
             string name,
@@ -116,7 +169,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     {
                         urlBuilder.Append(isFirstParam ? "?" : "&");
                     }
-                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
+                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(await ConvertValueToStringAsync(item)) + "&");
                 }
 
                 if (index > 0)
@@ -130,18 +183,18 @@ namespace Volo.Abp.Http.Client.ClientProxying
             }
 
             urlBuilder.Append(isFirstParam ? "?" : "&");
-            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(await ConvertValueToStringAsync(value)));
             return true;
         }
 
-        protected virtual string ConvertValueToString([CanBeNull] object value)
+        protected virtual Task<string> ConvertValueToStringAsync([CanBeNull] object value)
         {
             if (value is DateTime dateTimeValue)
             {
-                return dateTimeValue.ToUniversalTime().ToString("O");
+                return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"));
             }
 
-            return value?.ToString();
+            return Task.FromResult(value?.ToString());
         }
     }
 }

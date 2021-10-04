@@ -125,5 +125,13 @@ namespace Volo.Abp.TestApp.Application
 
             return str;
         }
+
+        public Task<string> GetParamsFromQueryAsync(GetParamsFromQueryInput input)
+        {
+            return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
+                                   input.NameValues?.FirstOrDefault()?.Value + ":" +
+                                   input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value  + ":" +
+                                   input.NameValue?.Name + "-" + input.NameValue?.Value);
+        }
     }
 }
