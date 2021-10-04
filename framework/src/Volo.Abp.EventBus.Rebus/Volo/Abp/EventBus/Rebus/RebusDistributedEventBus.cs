@@ -36,7 +36,6 @@ namespace Volo.Abp.EventBus.Rebus
             IBus rebus,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
-            IEventErrorHandler errorHandler,
             IRebusSerializer serializer,
             IGuidGenerator guidGenerator,
             IClock clock) :
@@ -44,7 +43,6 @@ namespace Volo.Abp.EventBus.Rebus
                 serviceScopeFactory,
                 currentTenant,
                 unitOfWorkManager,
-                errorHandler,
                 abpDistributedEventBusOptions,
                 guidGenerator,
                 clock)

@@ -25,14 +25,6 @@ namespace Volo.Abp.EventBus
             AddEventHandlers(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpEventBusOptions>(options =>
-            {
-                context.Services.ExecutePreConfiguredActions(options);
-            });
-        }
-
         private static void AddEventHandlers(IServiceCollection services)
         {
             var localHandlers = new List<Type>();
