@@ -19,9 +19,14 @@ namespace Volo.Abp.AzureServiceBus
             return Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(obj));
         }
 
-        public object Deserialize(BinaryData value, Type type)
+        public object Deserialize(byte[] value, Type type)
         {
-            return _jsonSerializer.Deserialize(type, Encoding.UTF8.GetString(value.ToArray()));
+            return _jsonSerializer.Deserialize(type, Encoding.UTF8.GetString(value));
+        }
+
+        public T Deserialize<T>(byte[] value)
+        {
+            return _jsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(value));
         }
     }
 }

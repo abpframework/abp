@@ -6,6 +6,8 @@ namespace Volo.Abp.AzureServiceBus
     {
         byte[] Serialize(object obj);
 
-        object Deserialize(BinaryData value, Type type);
+        object Deserialize(byte[] value, Type type);
+
+        T Deserialize<T>(byte[] value);
     }
 }
