@@ -1,6 +1,5 @@
-import { ReplaceableComponentsService, CONTENT_STRATEGY, DomInsertionService } from '@abp/ng.core';
+import { CONTENT_STRATEGY, DomInsertionService, ReplaceableComponentsService } from '@abp/ng.core';
 import { APP_INITIALIZER } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { AccountLayoutComponent } from '../components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from '../components/application-layout/application-layout.component';
 import { EmptyLayoutComponent } from '../components/empty-layout/empty-layout.component';

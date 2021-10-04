@@ -1,4 +1,4 @@
-﻿var _menuItem = {};
+var _menuItem = {};
 $(function () {
     var l = abp.localization.getResource("CmsKit");
 

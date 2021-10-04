@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿## 数据传输对象最佳实践 & 约定
+## 数据传输对象最佳实践 & 约定
 
 * **推荐** 在 **application.contracts** 层中定义DTO.
 * **推荐** 在可能和必要的情况下从预构建的 **基础DTO类** 继承 (如 `EntityDto<TKey>`, `CreationAuditedEntityDto<TKey>`, `AuditedEntityDto<TKey>`, `FullAuditedEntityDto<TKey>` 等).

@@ -20,23 +20,20 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var query = from apiResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                where apiResource.Name == apiResourceName
-                orderby apiResource.Id
-                select apiResource;
-
-            return await query.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .OrderBy(apiResource => apiResource.Id)
+                .FirstOrDefaultAsync(apiResource => apiResource.Name == apiResourceName, GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            var query = from apiResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                where apiResourceNames.Contains(apiResource.Name)
-                orderby apiResource.Name
-                select apiResource;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(apiResource => apiResourceNames.Contains(apiResource.Name))
+                .OrderBy(apiResource => apiResource.Name)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(
@@ -44,11 +41,10 @@ namespace Volo.Abp.IdentityServer.ApiResources
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from api in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                        where api.Scopes.Any(x => scopeNames.Contains(x.Scope))
-                        select api;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(api => api.Scopes.Any(x => scopeNames.Contains(x.Scope)))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(

@@ -1,19 +1,19 @@
 import { APP_BASE_HREF } from '@angular/common';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Actions, Store } from '@ngxs/store';
 import { of } from 'rxjs';
-import { RestOccurError } from '../actions';
 import { PermissionGuard } from '../guards/permission.guard';
+import { HttpErrorReporterService, PermissionService } from '../services';
 import { RoutesService } from '../services/routes.service';
-import { PermissionService } from '../services';
+import { CORE_OPTIONS } from '../tokens';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;
   let guard: PermissionGuard;
   let routes: SpyObject<RoutesService>;
-  let store: SpyObject<Store>;
+  let httpErrorReporter: SpyObject<HttpErrorReporterService>;
   let permissionService: SpyObject<PermissionService>;
 
   @Component({ template: '' })
@@ -21,32 +21,29 @@ describe('PermissionGuard', () => {
 
   const createService = createServiceFactory({
     service: PermissionGuard,
-    mocks: [PermissionService, Store],
+    mocks: [PermissionService],
     declarations: [DummyComponent],
     imports: [
-      RouterModule.forRoot([
-    {
-        path: 'test',
-        component: DummyComponent,
-        data: {
-            requiredPolicy: 'TestPolicy',
-        },
-    },
-], { relativeLinkResolution: 'legacy' }),
+      HttpClientTestingModule,
+      RouterModule.forRoot(
+        [
+          {
+            path: 'test',
+            component: DummyComponent,
+            data: {
+              requiredPolicy: 'TestPolicy',
+            },
+          },
+        ],
+        { relativeLinkResolution: 'legacy' },
+      ),
     ],
     providers: [
       {
         provide: APP_BASE_HREF,
         useValue: '/',
       },
-      {
-        provide: Actions,
-        useValue: {
-          pipe() {
-            return of(null);
-          },
-        },
-      },
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
     ],
   });
 
@@ -54,13 +51,13 @@ describe('PermissionGuard', () => {
     spectator = createService();
     guard = spectator.service;
     routes = spectator.inject(RoutesService);
-    store = spectator.inject(Store);
+    httpErrorReporter = spectator.inject(HttpErrorReporterService);
     permissionService = spectator.inject(PermissionService);
   });
 
   it('should return true when the grantedPolicy is true', done => {
     permissionService.getGrantedPolicy$.andReturn(of(true));
-    const spy = jest.spyOn(store, 'dispatch');
+    const spy = jest.spyOn(httpErrorReporter, 'reportError');
     guard.canActivate({ data: { requiredPolicy: 'test' } } as any, null).subscribe(res => {
       expect(res).toBe(true);
       expect(spy.mock.calls).toHaveLength(0);
@@ -68,13 +65,14 @@ describe('PermissionGuard', () => {
     });
   });
 
-  it('should return false and dispatch RestOccurError when the grantedPolicy is false', done => {
+  it('should return false and report an error when the grantedPolicy is false', done => {
     permissionService.getGrantedPolicy$.andReturn(of(false));
-    const spy = jest.spyOn(store, 'dispatch');
+    const spy = jest.spyOn(httpErrorReporter, 'reportError');
     guard.canActivate({ data: { requiredPolicy: 'test' } } as any, null).subscribe(res => {
       expect(res).toBe(false);
-      expect(spy.mock.calls[0][0] instanceof RestOccurError).toBeTruthy();
-      expect((spy.mock.calls[0][0] as RestOccurError).payload).toEqual({ status: 403 });
+      expect(spy.mock.calls[0][0]).toEqual({
+        status: 403,
+      });
       done();
     });
   });

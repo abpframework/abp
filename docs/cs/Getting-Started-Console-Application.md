@@ -1,4 +1,4 @@
-﻿# Začínáme s konzolovou aplikací
+# Začínáme s konzolovou aplikací
 
 Tento tutoriál vysvětluje jak začít s ABP z ničeho s minimem závislostí. Obvykle chcete začít se **[startovací šablonou](https://abp.io/Templates)**.
 

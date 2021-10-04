@@ -1,30 +1,22 @@
-﻿using System;
-using Volo.Abp.MongoDB;
+﻿using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     public static class BlobStoringMongoDbContextExtensions
     {
         public static void ConfigureBlobStoring(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+            this IMongoModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BlobStoringMongoModelBuilderConfigurationOptions(
-                BlobStoringDatabaseDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<DatabaseBlobContainer>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "BlobContainers";
+                b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers";
             });
 
             builder.Entity<DatabaseBlob>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "Blobs";
+                b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs";
             });
         }
     }

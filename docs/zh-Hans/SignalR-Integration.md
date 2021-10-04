@@ -70,10 +70,10 @@ yarn add @abp/signalr
 }
 ````
 
-在你的Web项目的根文件夹中运行 `gulp`:
+在你的Web项目的根文件夹中运行 `abp install-libs`:
 
 ````bash
-gulp
+abp install-libs
 ````
 
 它会将SignalR JavaScript文件拷贝到你的项目:

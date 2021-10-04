@@ -55,7 +55,7 @@ namespace Volo.Abp.Account
 
         public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
         {
-            var user = await GetUserByEmail(input.Email);
+            var user = await GetUserByEmailAsync(input.Email);
             var resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             await AccountEmailer.SendPasswordResetLinkAsync(user, resetToken, input.AppName, input.ReturnUrl, input.ReturnUrlHash);
         }
@@ -74,7 +74,7 @@ namespace Volo.Abp.Account
             });
         }
 
-        protected virtual async Task<IdentityUser> GetUserByEmail(string email)
+        protected virtual async Task<IdentityUser> GetUserByEmailAsync(string email)
         {
             var user = await UserManager.FindByEmailAsync(email);
             if (user == null)

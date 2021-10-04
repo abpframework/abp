@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { toastInOut } from '../../animations/toast.animations';
 import { Toaster } from '../../models/toaster';
-import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'abp-toast-container',
@@ -11,6 +11,8 @@ import { ReplaySubject } from 'rxjs';
 })
 export class ToastContainerComponent implements OnInit {
   toasts$: ReplaySubject<Toaster.Toast[]>;
+
+  remove: (toastId: number) => void;
 
   toasts = [] as Toaster.Toast[];
 

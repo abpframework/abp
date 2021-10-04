@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
     [Serializable]
-    public class UpdateBlogPostDto
+    public class UpdateBlogPostDto : IHasConcurrencyStamp
     {
         [Required]
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
@@ -23,5 +24,7 @@ namespace Volo.CmsKit.Admin.Blogs
         public string Content { get; set; }
 
         public Guid? CoverImageMediaId { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

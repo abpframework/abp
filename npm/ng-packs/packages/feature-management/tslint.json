@@ -1,8 +1,0 @@
-{
-  "extends": "../../tslint.json",
-  "rules": {
-    "interface-name": false,
-    "directive-selector": [true, "attribute", "abp", "camelCase"],
-    "component-selector": [true, "element", "abp", "kebab-case"]
-  }
-}

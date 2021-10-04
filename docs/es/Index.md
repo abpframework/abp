@@ -1,4 +1,4 @@
-﻿# Documentación de ABP
+# Documentación de ABP
 
 ABP es un **marco de desarrollo de código abierto** enfocado en el desarrollo de aplicaciones web basadas en ASP.NET Core, pero tambien soporta el desarrollo de otro tipo de aplicaciones.
 

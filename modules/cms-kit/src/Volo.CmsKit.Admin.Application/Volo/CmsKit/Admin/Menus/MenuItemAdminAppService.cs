@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
@@ -59,9 +60,15 @@ namespace Volo.CmsKit.Admin.Menus
                     input.Order,
                     input.Target,
                     input.ElementId,
-                    input.CssClass
+                    input.CssClass,
+                    CurrentTenant.Id
                 );
 
+            if (input.PageId.HasValue)
+            {
+                MenuManager.SetPageUrl(menuItem, await PageRepository.GetAsync(input.PageId.Value));
+            }
+            
             await MenuItemRepository.InsertAsync(menuItem);
 
             return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
@@ -87,6 +94,7 @@ namespace Volo.CmsKit.Admin.Menus
             menuItem.Target = input.Target;
             menuItem.ElementId = input.ElementId;
             menuItem.CssClass = input.CssClass;
+            menuItem.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await MenuItemRepository.UpdateAsync(menuItem);
 

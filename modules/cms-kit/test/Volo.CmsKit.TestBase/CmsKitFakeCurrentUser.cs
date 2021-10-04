@@ -32,22 +32,22 @@ namespace Volo.CmsKit
 
         public Claim FindClaim(string claimType)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Claim[] FindClaims(string claimType)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Claim[] GetAllClaims()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool IsInRole(string roleName)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

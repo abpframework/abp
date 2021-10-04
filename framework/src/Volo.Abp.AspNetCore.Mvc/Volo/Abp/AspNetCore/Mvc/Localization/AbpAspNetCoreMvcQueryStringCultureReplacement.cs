@@ -16,12 +16,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 {
                     context.ReturnUrl = Regex.Replace(
                         context.ReturnUrl,
-                        "culture=[A-Za-z-]+?&",
-                        $"culture={context.RequestCulture.Culture}&",
+                        "culture=[A-Za-z-]+",
+                        $"culture={context.RequestCulture.Culture}",
                         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
                     context.ReturnUrl = Regex.Replace(
-                        context.ReturnUrl, "ui-culture=[A-Za-z-]+?$",
+                        context.ReturnUrl,
+                        "ui-culture=[A-Za-z-]+",
                         $"ui-culture={context.RequestCulture.UICulture}",
                         RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 }

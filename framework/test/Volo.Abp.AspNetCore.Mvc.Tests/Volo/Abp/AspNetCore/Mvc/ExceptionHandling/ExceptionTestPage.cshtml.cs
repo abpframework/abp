@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
@@ -31,5 +32,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             throw new UserFriendlyException("This is a sample exception!");
         }
 
+        public Task<JsonResult> OnGetAbpAuthorizationException()
+        {
+            throw new AbpAuthorizationException("This is a sample exception!");
+        }
     }
 }

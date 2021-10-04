@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Einen anderen Dienst zum Anmelden verwenden",
     "UserLockedOutMessage": "Das Benutzerkonto wurde aufgrund fehlgeschlagener Anmeldeversuche gesperrt. Bitte warten Sie eine Weile und versuchen Sie es erneut.",
     "InvalidUserNameOrPassword": "Ungültiger Benutzername oder Passwort!",
-    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Sie müssen Ihre E-Mail/Telefonnummer bestätigen.",
+    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder muss Ihre E-Mail-/Telefonnummer bestätigen.",
     "SelfRegistrationDisabledMessage": "Die Selbstregistrierung ist für diese Anwendung deaktiviert. Bitte wenden Sie sich an den Anwendungsadministrator, um einen neuen Benutzer zu registrieren.",
     "LocalLoginDisabledMessage": "Die lokale Anmeldung ist für diese Anwendung deaktiviert.",
     "Login": "Anmelden",

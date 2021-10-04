@@ -14,7 +14,7 @@ import {
   resolveProject,
 } from '../../utils';
 
-export default function(schema: GenerateProxySchema) {
+export default function (schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
   const moduleName = params.module || 'app';
 

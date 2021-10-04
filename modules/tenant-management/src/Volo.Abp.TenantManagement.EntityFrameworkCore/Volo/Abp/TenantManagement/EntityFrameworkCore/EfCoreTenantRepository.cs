@@ -69,7 +69,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
         public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await this
+            return await (await GetQueryableAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>

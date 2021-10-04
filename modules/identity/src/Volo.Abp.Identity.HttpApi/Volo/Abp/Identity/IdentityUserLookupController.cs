@@ -11,7 +11,7 @@ namespace Volo.Abp.Identity
     [Area("identity")]
     [ControllerName("UserLookup")]
     [Route("api/identity/users/lookup")]
-    public class IdentityUserLookupController : AbpController, IIdentityUserLookupAppService
+    public class IdentityUserLookupController : AbpControllerBase, IIdentityUserLookupAppService
     {
         protected IIdentityUserLookupAppService LookupAppService { get; }
 

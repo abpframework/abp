@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource('Blogging');
     var _createModal = new abp.ModalManager(
         abp.appPath + 'Blogging/Admin/Blogs/Create'

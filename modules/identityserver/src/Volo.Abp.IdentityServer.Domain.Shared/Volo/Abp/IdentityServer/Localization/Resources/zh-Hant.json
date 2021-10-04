@@ -6,7 +6,7 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId已經存在: {ClientId}",
     "UserLockedOut": "登錄失敗,用戶賬戶已被鎖定.請稍後再試.",
     "InvalidUserNameOrPassword": "用戶名或密碼錯誤!",
-    "LoginIsNotAllowed": "無法登錄!妳需要驗證郵箱地址/手機號.",
+    "LoginIsNotAllowed": "無法登入!你的賬號未激活或者需要驗證郵箱地址/手機號碼.",
     "InvalidUsername": "用戶名或密碼錯誤!"
   }
 }

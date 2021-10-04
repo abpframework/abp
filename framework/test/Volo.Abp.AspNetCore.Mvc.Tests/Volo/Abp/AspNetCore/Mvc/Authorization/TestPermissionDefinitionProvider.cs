@@ -9,6 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
             var testGroup = context.AddGroup("TestGroup");
 
             testGroup.AddPermission("TestPermission1");
+            testGroup.AddPermission("TestPermission2");
         }
     }
 }

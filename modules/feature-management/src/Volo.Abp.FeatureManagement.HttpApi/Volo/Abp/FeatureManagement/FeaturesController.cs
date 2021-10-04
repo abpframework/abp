@@ -7,7 +7,7 @@ namespace Volo.Abp.FeatureManagement
     [RemoteService(Name = FeatureManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("featureManagement")]
     [Route("api/feature-management/features")]
-    public class FeaturesController : AbpController, IFeatureAppService
+    public class FeaturesController : AbpControllerBase, IFeatureAppService
     {
         protected IFeatureAppService FeatureAppService { get; }
 

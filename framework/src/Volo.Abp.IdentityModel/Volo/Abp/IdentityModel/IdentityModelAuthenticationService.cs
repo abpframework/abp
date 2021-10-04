@@ -66,7 +66,7 @@ namespace Volo.Abp.IdentityModel
 
         protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
         {
-            var configuration = GetClientConfiguration(identityClientName);
+            var configuration = ClientOptions.GetClientConfiguration(CurrentTenant, identityClientName);
             if (configuration == null)
             {
                 Logger.LogWarning($"Could not find {nameof(IdentityClientConfiguration)} for {identityClientName}. Either define a configuration for {identityClientName} or set a default configuration.");
@@ -112,17 +112,6 @@ namespace Volo.Abp.IdentityModel
         {
             //TODO: "Bearer" should be configurable
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        }
-
-        private IdentityClientConfiguration GetClientConfiguration(string identityClientName = null)
-        {
-            if (identityClientName.IsNullOrEmpty())
-            {
-                return ClientOptions.IdentityClients.Default;
-            }
-
-            return ClientOptions.IdentityClients.GetOrDefault(identityClientName) ??
-                   ClientOptions.IdentityClients.Default;
         }
 
         protected virtual async Task<string> GetTokenEndpoint(IdentityClientConfiguration configuration)
@@ -205,6 +194,7 @@ namespace Volo.Abp.IdentityModel
                 UserName = configuration.UserName,
                 Password = configuration.UserPassword
             };
+
             IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
 
             AddParametersToRequestAsync(configuration, request);

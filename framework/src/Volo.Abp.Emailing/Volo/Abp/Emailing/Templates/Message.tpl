@@ -1,1 +1,1 @@
-﻿{{model.message}}
+{{model.message}}

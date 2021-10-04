@@ -1,4 +1,4 @@
-﻿# Options
+# Options
 
 Microsoft has introduced [the options pattern](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options) that is used to configure a group of settings used by the framework services. This pattern is implemented by the [Microsoft.Extensions.Options](https://www.nuget.org/packages/Microsoft.Extensions.Options) NuGet package, so it is usable by any type of applications in addition to ASP.NET Core based applications.
 

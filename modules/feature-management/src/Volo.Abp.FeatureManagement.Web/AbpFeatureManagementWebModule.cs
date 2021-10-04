@@ -10,7 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpAutoMapperModule)
         )]

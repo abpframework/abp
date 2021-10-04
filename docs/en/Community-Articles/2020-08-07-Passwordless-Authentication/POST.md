@@ -194,16 +194,11 @@ We implemented token generation infrastructure, now it's time validate the token
 
 ```csharp
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
-using Volo.Abp.Security.Claims;
-using Volo.Abp.Users;
+using Volo.Abp.Identity.AspNetCore;
 
 namespace PasswordlessAuthentication.Web.Controllers
 {
@@ -211,9 +206,12 @@ namespace PasswordlessAuthentication.Web.Controllers
     {
         protected IdentityUserManager UserManager { get; }
 
-        public PasswordlessController(IdentityUserManager userManager)
+        protected AbpSignInManager SignInManager { get; }
+
+        public PasswordlessController(IdentityUserManager userManager, AbpSignInManager signInManager)
         {
             UserManager = userManager;
+            SignInManager = signInManager;
         }
 
         public virtual async Task<IActionResult> Login(string token, string userId)
@@ -228,45 +226,15 @@ namespace PasswordlessAuthentication.Web.Controllers
 
             await UserManager.UpdateSecurityStampAsync(user);
 
-            var roles = await UserManager.GetRolesAsync(user);
-
-            var principal = new ClaimsPrincipal(
-                new ClaimsIdentity(CreateClaims(user, roles), IdentityConstants.ApplicationScheme)
-            );
-
-            await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+            await SignInManager.SignInAsync(user, isPersistent: false);
 
             return Redirect("/");
-        }
-
-        private static IEnumerable<Claim> CreateClaims(IUser user, IEnumerable<string> roles)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim("sub", user.Id.ToString()),
-                new Claim(AbpClaimTypes.UserId, user.Id.ToString()),
-                new Claim(AbpClaimTypes.Email, user.Email),
-                new Claim(AbpClaimTypes.UserName, user.UserName),
-                new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString().ToLower()),
-            };
-
-            if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
-            {
-                claims.Add(new Claim(AbpClaimTypes.PhoneNumber, user.PhoneNumber));
-            }
-
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(AbpClaimTypes.Role, role));
-            }
-
-            return claims;
         }
     }
 }
 ```
 
-We created an endpoint for `/Passwordless/Login` that gets the token and the user Id.  In this action, we find the user via repository and validate the token via `UserManager.VerifyUserTokenAsync()` method. If it's valid, we create claims of the user then call `HttpContext.SignInAsync` to be able to create an encrypted cookie and add it to the current response.  Finally we redirect the page to the root URL.
+We created an endpoint for `/Passwordless/Login` that gets the token and the user Id.  In this action, we find the user via repository and validate the token via `UserManager.VerifyUserTokenAsync()` method. If it's valid, we call `SignInManager.SignInAsync` to be able to create an encrypted cookie and add it to the current response.  Finally we redirect the page to the root URL.
 
 That's all! We created a passwordless login with 7 steps.
 

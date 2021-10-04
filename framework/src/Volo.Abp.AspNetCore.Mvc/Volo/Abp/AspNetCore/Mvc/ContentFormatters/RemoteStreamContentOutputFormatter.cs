@@ -33,14 +33,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                     context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
                 }
 
-                using (var stream = remoteStream.GetStream())
+                using (remoteStream)
                 {
-                    if (stream.CanSeek)
-                    {
-                        stream.Position = 0;
-                    }
-
-                    await stream.CopyToAsync(context.HttpContext.Response.Body);
+                    await remoteStream.GetStream().CopyToAsync(context.HttpContext.Response.Body);
                 }
             }
         }

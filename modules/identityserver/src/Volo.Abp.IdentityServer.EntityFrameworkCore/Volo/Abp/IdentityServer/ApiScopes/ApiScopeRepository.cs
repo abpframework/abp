@@ -18,9 +18,10 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         {
         }
 
-        public async Task<ApiScope> GetByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
                 .OrderBy(x=>x.Id)
                 .FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
         }
@@ -28,12 +29,11 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from scope in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                where scopeNames.Contains(scope.Name)
-                orderby scope.Id
-                select scope;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(scope => scopeNames.Contains(scope.Name))
+                .OrderBy(scope => scope.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)

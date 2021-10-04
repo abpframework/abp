@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SimpleStateChecking;
 
@@ -68,7 +67,7 @@ namespace Volo.Abp.PermissionManagement
 
                 if (!neededCheckPermissions.Any())
                 {
-                    return result;
+                    continue;
                 }
 
                 var grantInfoDtos = neededCheckPermissions.Select(x => new PermissionGrantInfoDto

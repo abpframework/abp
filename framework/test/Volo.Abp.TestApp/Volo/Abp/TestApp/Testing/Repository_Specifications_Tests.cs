@@ -24,9 +24,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task SpecificationWithRepository_Test()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                CityRepository.Count(new CitySpecification().ToExpression()).ShouldBe(1);
+                (await CityRepository.CountAsync(new CitySpecification().ToExpression())).ShouldBe(1);
                 return Task.CompletedTask;
             });
         }

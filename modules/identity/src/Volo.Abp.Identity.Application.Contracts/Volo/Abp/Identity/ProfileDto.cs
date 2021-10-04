@@ -1,8 +1,9 @@
-﻿using Volo.Abp.ObjectExtending;
+﻿using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
-    public class ProfileDto : ExtensibleObject
+    public class ProfileDto : ExtensibleObject, IHasConcurrencyStamp
     {
         public string UserName { get; set; }
 
@@ -17,5 +18,7 @@ namespace Volo.Abp.Identity
         public bool IsExternal { get; set; }
 
         public bool HasPassword { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

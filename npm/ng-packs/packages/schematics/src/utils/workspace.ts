@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { strings, workspaces } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';

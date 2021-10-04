@@ -18,6 +18,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public List<NpmPackageInfo> NpmPackages { get; set; }
 
+        public string InstallationCompleteMessage { get; set; }
+
         public string GetFirstDocumentationLinkOrNull()
         {
             if (string.IsNullOrWhiteSpace(DocumentationLinks))
@@ -26,8 +28,8 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var docs = DocumentationLinks.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            return docs.Any() ? 
-                docs.First() : 
+            return docs.Any() ?
+                docs.First() :
                 null;
         }
     }

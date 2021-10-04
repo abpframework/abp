@@ -1,5 +1,5 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { Config } from '../models';
+import { LocalizationWithDefault } from '../models/localization';
 import { LocalizationService } from '../services/localization.service';
 
 @Injectable()
@@ -9,10 +9,7 @@ import { LocalizationService } from '../services/localization.service';
 export class LocalizationPipe implements PipeTransform {
   constructor(private localization: LocalizationService) {}
 
-  transform(
-    value: string | Config.LocalizationWithDefault = '',
-    ...interpolateParams: string[]
-  ): string {
+  transform(value: string | LocalizationWithDefault = '', ...interpolateParams: string[]): string {
     return this.localization.instant(
       value,
       ...interpolateParams.reduce(

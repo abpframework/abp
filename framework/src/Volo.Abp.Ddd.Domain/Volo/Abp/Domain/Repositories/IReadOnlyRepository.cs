@@ -10,7 +10,7 @@ using Volo.Abp.Linq;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public interface IReadOnlyRepository<TEntity> : IQueryable<TEntity>, IReadOnlyBasicRepository<TEntity>
+    public interface IReadOnlyRepository<TEntity>: IReadOnlyBasicRepository<TEntity>
         where TEntity : class, IEntity
     {
         IAsyncQueryableExecuter AsyncExecuter { get; }
@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Repositories
         Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors); //TODO: CancellationToken
 
         Task<IQueryable<TEntity>> GetQueryableAsync(); //TODO: CancellationToken
-        
+
         /// <summary>
         /// Gets a list of entities by the given <paramref name="predicate"/>.
         /// </summary>

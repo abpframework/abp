@@ -38,5 +38,19 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
             CurrentUser.Id.ShouldBe(FakeUserId);
             return Content("OK");
         }
+
+        [Authorize("TestPermission1_And_TestPermission2")]
+        public ActionResult Custom_And_PolicyTest()
+        {
+            CurrentUser.Id.ShouldBe(FakeUserId);
+            return Content("OK");
+        }
+
+        [Authorize("TestPermission1_Or_TestPermission2")]
+        public ActionResult Custom_Or_PolicyTest()
+        {
+            CurrentUser.Id.ShouldBe(FakeUserId);
+            return Content("OK");
+        }
     }
 }

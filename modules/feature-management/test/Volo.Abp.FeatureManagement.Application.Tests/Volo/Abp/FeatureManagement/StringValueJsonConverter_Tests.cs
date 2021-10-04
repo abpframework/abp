@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using Shouldly;
 using Volo.Abp.Json;
 using Volo.Abp.Validation.StringValues;
@@ -8,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
+    public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
     {
         private readonly IJsonSerializer _jsonSerializer;
 

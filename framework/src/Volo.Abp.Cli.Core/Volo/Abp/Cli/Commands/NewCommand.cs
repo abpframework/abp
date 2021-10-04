@@ -47,20 +47,12 @@ namespace Volo.Abp.Cli.Commands
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
-
-            if (projectName == null)
+            if (string.IsNullOrWhiteSpace(projectName))
             {
-                throw new CliUsageException(
-                    "Project name is missing!" +
-                    Environment.NewLine + Environment.NewLine +
-                    GetUsageInfo()
-                );
+                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
             }
 
-            if (!ProjectNameValidator.IsValid(projectName))
-            {
-                throw new CliUsageException("The project name is invalid! Please specify a different name.");
-            }
+            ProjectNameValidator.Validate(projectName);
 
             Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + projectName);

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
@@ -38,7 +39,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             return NoContent();
         }
 
-        public class TenantInfoModel : ExtensibleObject
+        public class TenantInfoModel : ExtensibleObject, IHasConcurrencyStamp
         {
             [HiddenInput]
             public Guid Id { get; set; }
@@ -47,6 +48,9 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
             [Display(Name = "DisplayName:TenantName")]
             public string Name { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }

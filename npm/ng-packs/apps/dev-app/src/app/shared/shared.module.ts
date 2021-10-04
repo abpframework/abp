@@ -6,18 +6,8 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CoreModule,
-    ThemeSharedModule,
-    NgbDropdownModule,
-    NgxValidateCoreModule,
-  ],
-  exports: [
-    CoreModule,
-    ThemeSharedModule,
-    NgbDropdownModule,
-    NgxValidateCoreModule,
-  ],
+  imports: [CoreModule, ThemeSharedModule, NgbDropdownModule, NgxValidateCoreModule],
+  exports: [CoreModule, ThemeSharedModule, NgbDropdownModule, NgxValidateCoreModule],
   providers: [],
 })
 export class SharedModule {}

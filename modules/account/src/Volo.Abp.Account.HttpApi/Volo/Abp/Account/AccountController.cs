@@ -8,7 +8,7 @@ namespace Volo.Abp.Account
     [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
     [Route("api/account")]
-    public class AccountController : AbpController, IAccountAppService
+    public class AccountController : AbpControllerBase, IAccountAppService
     {
         protected IAccountAppService AccountAppService { get; }
 

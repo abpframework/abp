@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Menus
 {
     [RequiresGlobalFeature(typeof(MenuFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area("cms-kit-admin")]
     [Authorize(CmsKitAdminPermissions.Menus.Default)]
     [Route("api/cms-kit-admin/menu-items")]
     public class MenuItemAdminController : CmsKitAdminController, IMenuItemAdminAppService

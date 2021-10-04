@@ -1,4 +1,4 @@
-﻿## Data Transfer Objects Best Practices & Conventions
+## Data Transfer Objects Best Practices & Conventions
 
 * **Do** define DTOs in the **application contracts** package.
 * **Do** inherit from the pre-built **base DTO classes** where possible and necessary (like `EntityDto<TKey>`, `CreationAuditedEntityDto<TKey>`, `AuditedEntityDto<TKey>`, `FullAuditedEntityDto<TKey>` and so on).

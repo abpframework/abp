@@ -16,11 +16,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         {
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
-
-            return new RemoteStreamContent(memoryStream, "download.rtf")
-            {
-                ContentType = "application/rtf"
-            };
+            memoryStream.Position = 0;
+            return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
         }
 
         [HttpPost]
@@ -30,6 +27,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
             using (var reader = new StreamReader(file.GetStream()))
             {
                 return await reader.ReadToEndAsync() + ":" + file.ContentType + ":" + file.FileName;
+            }
+        }
+
+        [HttpPost]
+        [Route("Upload-Raw")]
+        public async Task<string> UploadRawAsync(IRemoteStreamContent file)
+        {
+            using (var reader = new StreamReader(file.GetStream()))
+            {
+                return await reader.ReadToEndAsync() + ":" + file.ContentType;
             }
         }
     }

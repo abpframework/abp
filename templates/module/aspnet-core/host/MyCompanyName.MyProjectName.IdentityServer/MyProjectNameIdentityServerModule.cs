@@ -52,6 +52,7 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),

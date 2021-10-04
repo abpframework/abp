@@ -5,7 +5,7 @@
         <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
       </div>
       <div class="text-right col col-md-6">
-        <abp-page-toolbar [record]="data$ | async"></abp-page-toolbar>
+        <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
       </div>
     </div>
   </div>
@@ -22,14 +22,14 @@
     </div>
 
     <abp-extensible-table
-      [data]="data$ | async"
-      [recordsTotal]="totalCount$ | async"
+      [data]="data.items"
+      [recordsTotal]="data.totalCount"
       [list]="list"
     ></abp-extensible-table>
   </div>
 </div>
 
-<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>

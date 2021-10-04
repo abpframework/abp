@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';

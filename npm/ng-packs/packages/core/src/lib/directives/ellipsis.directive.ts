@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostBinding, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  HostBinding,
+  Input,
+} from '@angular/core';
 
 @Directive({
   selector: '[abpEllipsis]',

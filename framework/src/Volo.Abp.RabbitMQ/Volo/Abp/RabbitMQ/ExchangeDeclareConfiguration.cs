@@ -6,8 +6,6 @@ namespace Volo.Abp.RabbitMQ
     {
         public string ExchangeName { get; }
 
-        public string DeadLetterExchangeName { get; set; }
-
         public string Type { get; }
 
         public bool Durable { get; set; }
@@ -20,11 +18,9 @@ namespace Volo.Abp.RabbitMQ
             string exchangeName,
             string type,
             bool durable = false,
-            bool autoDelete = false,
-            string deadLetterExchangeName = null)
+            bool autoDelete = false)
         {
             ExchangeName = exchangeName;
-            DeadLetterExchangeName = deadLetterExchangeName;
             Type = type;
             Durable = durable;
             AutoDelete = autoDelete;

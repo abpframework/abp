@@ -7,8 +7,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Application
 {
     [DependsOn(
-        typeof(AbpAuditingModule),
-        typeof(AbpLocalizationModule)
+        typeof(AbpLocalizationModule),
+        typeof(AbpAuditingContractsModule)
         )]
     public class AbpDddApplicationContractsModule : AbpModule
     {

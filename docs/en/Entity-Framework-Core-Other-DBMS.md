@@ -1,4 +1,4 @@
-﻿# Switch to Another DBMS for Entity Framework Core
+# Switch to Another DBMS for Entity Framework Core
 
 **[The application startup template](Startup-Templates/Application.md)** comes with **SQL Server provider pre-configured** for the Entity Framework Core. However, EF Core supports [many other DBMSs](https://docs.microsoft.com/en-us/ef/core/providers/) and you can use any of them within your ABP based applications.
 

@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
 
 namespace Volo.CmsKit.Public.Web.Controllers
 {
-    public class CmsKitPublicWidgetsController : CmsKitPublicControllerBase
+    public class CmsKitPublicWidgetsController : AbpController
     {
         public Task<IActionResult> ReactionSelection(string entityType, string entityId)
         {

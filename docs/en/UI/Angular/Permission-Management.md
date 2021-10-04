@@ -4,8 +4,6 @@ A permission is a simple policy that is granted or prohibited for a particular u
 
 You can get permission of authenticated user using `getGrantedPolicy` or `getGrantedPolicy$` method of `PermissionService`.
 
-> ConfigState's getGrantedPolicy selector and ConfigStateService's getGrantedPolicy method deprecated. Use permission service's `getGrantedPolicy$` or `getGrantedPolicy`methods instead 
-
 You can get permission as boolean value:
 
 ```js
@@ -77,4 +75,46 @@ const routes: Routes = [
 ];
 ```
 
-Granted Policies are stored in the `auth` property of `ConfigState`.
+## Customization
+
+In some cases, a custom permission management may be needed. All you need to do is to replace the service with your own. Here is how to achieve this:
+
+- First, create a service of your own. Let's call it `CustomPermissionService` and extend `PermissionService` from `@abp/ng.core` as follows:
+
+```js
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CustomPermissionService extends PermissionService {
+  constructor(configStateService: ConfigStateService) {
+    super(configStateService);
+  }
+
+  // This is an example to show how to override the methods
+  getGrantedPolicy$(key: string) {
+    return super.getGrantedPolicy$(key);
+  }
+}
+```
+
+- Then, in `app.module.ts`, provide this service as follows: 
+
+```js
+@NgModule({
+  // ...
+  providers: [
+    // ...
+    {
+      provide: PermissionService,
+      useExisting: CustomPermissionService,
+    },
+  ],
+  // ...
+})
+export class AppModule {}
+```
+
+That's it. Now, when a directive/guard asks for `PermissionService` from angular, it will inject your service.

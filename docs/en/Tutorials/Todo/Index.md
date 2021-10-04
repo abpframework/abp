@@ -618,7 +618,7 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
 
 ### Index.razor.css
 
-As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace with the following content:
 
 ````css
 #TodoList{

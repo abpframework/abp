@@ -1,3 +1,4 @@
+import { TenantCreateDto, TenantDto, TenantUpdateDto } from '@abp/ng.tenant-management/proxy';
 import {
   CreateFormPropContributorCallback,
   EditFormPropContributorCallback,
@@ -6,7 +7,6 @@ import {
   ToolbarActionContributorCallback,
 } from '@abp/ng.theme.shared/extensions';
 import { eTenantManagementComponents } from '../enums/components';
-import { TenantCreateDto, TenantDto, TenantUpdateDto } from '../proxy/models';
 
 export type TenantManagementEntityActionContributors = Partial<{
   [eTenantManagementComponents.Tenants]: EntityActionContributorCallback<TenantDto>[];

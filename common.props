@@ -28,4 +28,9 @@
     </None>
   </ItemGroup>
   
+  <ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
+    <EmbeddedResource Include="**\*generate-proxy.json" />
+    <Content Remove="**\*generate-proxy.json" />
+  </ItemGroup>
+
 </Project>

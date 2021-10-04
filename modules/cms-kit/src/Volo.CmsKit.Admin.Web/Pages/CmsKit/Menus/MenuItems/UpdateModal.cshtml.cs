@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Menus;
 
@@ -43,7 +44,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         
         [AutoMap(typeof(MenuItemDto))]
         [AutoMap(typeof(MenuItemUpdateInput), ReverseMap = true)]
-        public class MenuItemUpdateViewModel
+        public class MenuItemUpdateViewModel : IHasConcurrencyStamp
         {
             [Required]
             public string DisplayName { get; set; }
@@ -61,6 +62,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
             public string CssClass { get; set; }
 
             public Guid? PageId { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }

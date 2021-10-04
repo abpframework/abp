@@ -1,4 +1,4 @@
-﻿# MailKit Integration
+# MailKit Integration
 
 [MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP Framework provides an integration package to use the MailKit as the [email sender](Emailing.md).
 

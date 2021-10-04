@@ -58,9 +58,9 @@ export class GenericsCollector {
 }
 
 export function generateRefWithPlaceholders(sourceType: string) {
+  // eslint-disable-next-line prefer-const
   let { identifier, generics } = extractGenerics(sourceType);
 
-  identifier = identifier;
   generics = generics.map((_, i) => `T${i}`);
 
   return generics.length ? `${identifier}<${generics}>` : identifier;

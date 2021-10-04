@@ -2,6 +2,6 @@
 {
     public interface IAmbientUnitOfWork : IUnitOfWorkAccessor
     {
-
+        IUnitOfWork GetCurrentByChecking();
     }
 }

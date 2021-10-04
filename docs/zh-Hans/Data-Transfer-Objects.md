@@ -210,15 +210,15 @@ namespace AbpDemo
         {
             //Create the query
             var query = _productRepository
-                .OrderBy(input.Sorting)
-                .Skip(input.SkipCount)
-                .Take(input.MaxResultCount);
+                .OrderBy(input.Sorting);
 
             //Get total count from the repository
             var totalCount = await query.CountAsync();
             
             //Get entities from the repository
-            List<Product> products = await query.ToListAsync();
+            List<Product> products = await query
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount);.ToListAsync();
 
             //Map entities to DTOs
             List<ProductDto> productDtos =

@@ -1,5 +1,4 @@
-﻿using System;
-using Volo.Abp;
+﻿using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
@@ -16,16 +15,9 @@ namespace Volo.CmsKit.MongoDB
     public static class CmsKitMongoDbContextExtensions
     {
         public static void ConfigureCmsKit(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+            this IMongoModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
-
-            var options = new CmsKitMongoModelBuilderConfigurationOptions(
-                CmsKitDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
 
             builder.Entity<CmsUser>(x =>
             {

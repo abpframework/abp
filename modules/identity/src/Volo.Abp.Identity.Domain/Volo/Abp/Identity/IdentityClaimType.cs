@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
 
         public virtual string Description { get; set; }
 
-        public virtual IdentityClaimValueType ValueType { get; protected set; }
+        public virtual IdentityClaimValueType ValueType { get; set; }
 
         protected IdentityClaimType()
         {
@@ -36,13 +36,18 @@ namespace Volo.Abp.Identity
             IdentityClaimValueType valueType = IdentityClaimValueType.String)
         {
             Id = id;
-            Name = Check.NotNull(name, nameof(name));
+            SetName(name);
             Required = required;
             IsStatic = isStatic;
             Regex = regex;
             RegexDescription = regexDescription;
             Description = description;
             ValueType = valueType;
+        }
+
+        public void SetName([NotNull] string name)
+        {
+            Name = Check.NotNull(name, nameof(name));
         }
     }
 }

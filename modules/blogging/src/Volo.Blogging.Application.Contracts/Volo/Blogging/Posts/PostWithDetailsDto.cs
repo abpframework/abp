@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Posts
 {
-    public class PostWithDetailsDto : FullAuditedEntityDto<Guid>
+    public class PostWithDetailsDto : FullAuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
         public Guid BlogId { get; set; }
 
@@ -28,5 +29,7 @@ namespace Volo.Blogging.Posts
         public BlogUserDto Writer { get; set; }
 
         public List<TagDto> Tags { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

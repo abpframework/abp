@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 {
     public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     {
-        protected DateTimeKind DateTimeKind { get; set; }
+        protected DateTimeKind Kind { get; set; }
 
         protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe(DateTimeKind.ToString().ToLower());
+            resultAsString.ShouldBe(Kind.ToString().ToLower());
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe(DateTimeKind.ToString().ToLower());
+            resultAsString.ShouldBe(Kind.ToString().ToLower());
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
             var resultAsString = await response.Content.ReadAsStringAsync();
             //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
             //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
-            resultAsString.ShouldBe($"utc_{DateTimeKind.ToString().ToLower()}_{DateTimeKind.ToString().ToLower()}_utc");
+            resultAsString.ShouldBe($"utc_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_utc");
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe($"local_{DateTimeKind.ToString().ToLower()}_{DateTimeKind.ToString().ToLower()}_local");
+            resultAsString.ShouldBe($"local_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_local");
         }
     }
 
@@ -119,8 +119,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
     {
         protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            DateTimeKind = DateTimeKind.Utc;
-            services.Configure<AbpClockOptions>(x => x.Kind = DateTimeKind);
+            Kind = DateTimeKind.Utc;
+            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
 
             base.ConfigureServices(context, services);
         }
@@ -130,8 +130,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
     {
         protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            DateTimeKind = DateTimeKind.Local;
-            services.Configure<AbpClockOptions>(x => x.Kind = DateTimeKind);
+            Kind = DateTimeKind.Local;
+            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
 
             base.ConfigureServices(context, services);
         }

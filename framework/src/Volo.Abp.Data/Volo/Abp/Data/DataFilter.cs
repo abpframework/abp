@@ -44,7 +44,7 @@ namespace Volo.Abp.Data
         {
             return _filters.GetOrAdd(
                 typeof(TFilter),
-                () => _serviceProvider.GetRequiredService<IDataFilter<TFilter>>()
+                 factory:() => _serviceProvider.GetRequiredService<IDataFilter<TFilter>>()
             ) as IDataFilter<TFilter>;
         }
     }

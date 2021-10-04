@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,9 +27,8 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
-                .Where(x => x.ClientId == clientId)
                 .OrderBy(x => x.Id)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Client>> GetListAsync(
@@ -69,7 +68,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
-                .AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+                .AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
     }
 }

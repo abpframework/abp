@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -52,6 +53,8 @@ namespace Volo.CmsKit.Admin.Tags
             var tag = await TagManager.UpdateAsync(
                 id,
                 input.Name);
+
+            tag.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await Repository.UpdateAsync(tag);
 

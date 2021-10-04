@@ -24,7 +24,9 @@ export function addTsConfigProjectReferences(paths: string[]): Rule {
       const source = host.read(SOLUTION_TSCONFIG_PATH);
       if (!source) {
         // Solution tsconfig doesn't exist.
-        logger.warn(`Cannot add reference '${path}' in '${SOLUTION_TSCONFIG_PATH}'. File doesn't exists.`);
+        logger.warn(
+          `Cannot add reference '${path}' in '${SOLUTION_TSCONFIG_PATH}'. File doesn't exists.`,
+        );
 
         return;
       }
@@ -45,14 +47,16 @@ export function addTsConfigProjectReferences(paths: string[]): Rule {
         filesAst.elements.length !== 0 ||
         referencesAst?.kind !== 'array'
       ) {
-        logger.warn(`Cannot add reference '${path}' in '${SOLUTION_TSCONFIG_PATH}'. It appears to be an invalid solution style tsconfig.`);
+        logger.warn(
+          `Cannot add reference '${path}' in '${SOLUTION_TSCONFIG_PATH}'. It appears to be an invalid solution style tsconfig.`,
+        );
 
         return;
       }
 
       // Append new paths
       const recorder = host.beginUpdate(SOLUTION_TSCONFIG_PATH);
-      appendValueInAstArray(recorder, referencesAst, { 'path': `./${path}` }, 4);
+      appendValueInAstArray(recorder, referencesAst, { path: `./${path}` }, 4);
       host.commitUpdate(recorder);
     }
   };
@@ -62,9 +66,11 @@ export function addTsConfigProjectReferences(paths: string[]): Rule {
  * Throws an exception when the base tsconfig doesn't exists.
  */
 export function verifyBaseTsConfigExists(host: Tree): void {
-  if (host.exists('tsconfig.base.json')) {
+  if (host.exists('tsconfig.json')) {
     return;
   }
 
-  throw new SchematicsException(`Cannot find base TypeScript configuration file 'tsconfig.base.json'.`);
+  throw new SchematicsException(
+    `Cannot find base TypeScript configuration file 'tsconfig.json'.`,
+  );
 }

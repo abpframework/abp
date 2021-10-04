@@ -1,4 +1,4 @@
-﻿## MongoDB Integration
+## MongoDB Integration
 
 * Do define a separated `MongoDbContext` interface and class for each module.
 
@@ -55,10 +55,7 @@ protected override void CreateModel(IMongoModelBuilder modelBuilder)
 {
     base.CreateModel(modelBuilder);
 
-    modelBuilder.ConfigureIdentity(options =>
-    {
-        options.CollectionPrefix = CollectionPrefix;
-    });
+    modelBuilder.ConfigureIdentity();
 }
 ```
 
@@ -73,32 +70,15 @@ public static class AbpIdentityMongoDbContextExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
-        var options = new IdentityMongoModelBuilderConfigurationOptions();
-
-        optionsAction?.Invoke(options);
-
         builder.Entity<IdentityUser>(b =>
         {
-            b.CollectionName = options.CollectionPrefix + "Users";
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Users";
         });
 
         builder.Entity<IdentityRole>(b =>
         {
-            b.CollectionName = options.CollectionPrefix + "Roles";
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Roles";
         });
-    }
-}
-```
-
-- **Do** create a **configuration options** class by inheriting from the `AbpMongoModelBuilderConfigurationOptions`. Example:
-
-```c#
-public class IdentityMongoModelBuilderConfigurationOptions
-    : AbpMongoModelBuilderConfigurationOptions
-{
-    public IdentityMongoModelBuilderConfigurationOptions()
-        : base(AbpIdentityConsts.DefaultDbTablePrefix)
-    {
     }
 }
 ```

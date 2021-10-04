@@ -31,7 +31,7 @@ import {
 } from '../../utils';
 import * as cases from '../../utils/text';
 
-export default function(schema: GenerateProxySchema) {
+export default function (schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
   const moduleName = params.module || 'app';
 
@@ -40,6 +40,7 @@ export default function(schema: GenerateProxySchema) {
       const getRootNamespace = createRootNamespaceGetter(params);
       const solution = await getRootNamespace(tree);
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const target = await resolveProject(tree, params.target!);
       const targetPath = buildDefaultPath(target.definition);
       const readProxyConfig = createProxyConfigReader(targetPath);

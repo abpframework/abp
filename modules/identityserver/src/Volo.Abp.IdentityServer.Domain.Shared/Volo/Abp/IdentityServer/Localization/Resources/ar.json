@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "اسم مورد الهوية موجود بالفعل: {Name}",
@@ -6,7 +6,7 @@
     "Volo.IdentityServer:DuplicateClientId": "موجود بالفعل: {ClientId}",
     "UserLockedOut": "تم قفل حساب المستخدم بسبب محاولات تسجيل الدخول غير الصالحة. يرجى الانتظار بعض الوقت والمحاولة مرة أخرى.",
     "InvalidUserNameOrPassword": "اسم مستخدم أو كلمة مرور غير صالحة!",
-    "LoginIsNotAllowed": "غير مسموح لك بتسجيل الدخول! أنت بحاجة إلى تأكيد بريدك الإلكتروني / رقم هاتفك.",
+    "LoginIsNotAllowed": "لا يسمح لك بتسجيل الدخول! حسابك غير نشط أو يحتاج إلى تأكيد بريدك الإلكتروني / رقم هاتفك.",
     "InvalidUsername": "اسم المستخدم أو كلمة المرور غير صالحة!"
   }
 }

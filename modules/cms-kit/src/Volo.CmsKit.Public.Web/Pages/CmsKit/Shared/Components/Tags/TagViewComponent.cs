@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Public.Tags;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags

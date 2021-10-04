@@ -51,9 +51,12 @@ describe('ForDirective', () => {
   describe('trackBy', () => {
     const trackByFn = (_, item) => item;
     beforeEach(() => {
-      spectator = createDirective('<ul><li  *abpFor="let item of items; trackBy: trackByFn">{{ item }}</li></ul>', {
-        hostProps: { items, trackByFn },
-      });
+      spectator = createDirective(
+        '<ul><li  *abpFor="let item of items; trackBy: trackByFn">{{ item }}</li></ul>',
+        {
+          hostProps: { items, trackByFn },
+        },
+      );
       directive = spectator.directive;
     });
 

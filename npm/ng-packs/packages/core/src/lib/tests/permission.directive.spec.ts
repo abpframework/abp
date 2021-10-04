@@ -17,7 +17,7 @@ describe('PermissionDirective', () => {
   describe('with condition', () => {
     beforeEach(() => {
       spectator = createDirective(
-        `<div id="test-element" [abpPermission]="'test'">Testing Permission Directive</div>`,
+        `<div id="test-element" *abpPermission="'test'">Testing Permission Directive</div>`,
       );
       directive = spectator.directive;
     });

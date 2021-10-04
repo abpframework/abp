@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Auditing.Contracts\Volo.Abp.Auditing.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 

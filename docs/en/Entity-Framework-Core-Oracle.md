@@ -1,4 +1,4 @@
-﻿# Switch to EF Core Oracle Provider
+# Switch to EF Core Oracle Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 

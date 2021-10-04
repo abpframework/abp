@@ -1,8 +1,8 @@
 ﻿using System;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 using Volo.Abp.PermissionManagement.MongoDB;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity.MongoDB
 {
@@ -23,6 +23,11 @@ namespace Volo.Abp.Identity.MongoDB
             Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connectionString;
+            });
+
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
             });
         }
     }

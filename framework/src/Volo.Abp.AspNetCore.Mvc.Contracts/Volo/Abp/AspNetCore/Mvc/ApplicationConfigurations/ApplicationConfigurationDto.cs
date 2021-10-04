@@ -1,7 +1,6 @@
 ﻿using System;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
-using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {

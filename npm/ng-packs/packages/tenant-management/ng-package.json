@@ -1,8 +1,11 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/tenant-management",
+  "dest": "../../dist/packages/tenant-management",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "allowedNonPeerDependencies": ["@abp/ng.theme.shared", "@abp/ng.feature-management"]
+  "allowedNonPeerDependencies": [
+    "@abp/ng.theme.shared",
+    "@abp/ng.feature-management"
+  ]
 }

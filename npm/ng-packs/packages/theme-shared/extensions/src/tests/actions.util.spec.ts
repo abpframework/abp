@@ -16,8 +16,8 @@ describe('Entity Action Utils', () => {
 
     it('should merge default actions with action contributors', () => {
       const defaults: EntityActionDefaults = {
-        x: [(1 as any) as EntityAction, (2 as any) as EntityAction, (3 as any) as EntityAction],
-        y: [(1 as any) as EntityAction, (2 as any) as EntityAction, (3 as any) as EntityAction],
+        x: [1 as any as EntityAction, 2 as any as EntityAction, 3 as any as EntityAction],
+        y: [1 as any as EntityAction, 2 as any as EntityAction, 3 as any as EntityAction],
       };
 
       const contributors1: EntityActionContributorCallbacks = {

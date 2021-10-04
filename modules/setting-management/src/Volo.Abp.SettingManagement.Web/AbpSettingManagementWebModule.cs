@@ -12,7 +12,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.SettingManagement.Web
 {
     [DependsOn(
-        typeof(AbpSettingManagementHttpApiModule),
+        typeof(AbpSettingManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpSettingManagementDomainSharedModule)
         )]

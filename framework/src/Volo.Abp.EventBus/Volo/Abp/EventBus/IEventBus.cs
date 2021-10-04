@@ -10,8 +10,9 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="eventData">Related data for the event</param>
+        /// <param name="onUnitOfWorkComplete">True, to publish the event at the end of the current unit of work, if available</param>
         /// <returns>The task to handle async operation</returns>
-        Task PublishAsync<TEvent>(TEvent eventData)
+        Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
             where TEvent : class;
 
         /// <summary>
@@ -19,8 +20,9 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <param name="eventType">Event type</param>
         /// <param name="eventData">Related data for the event</param>
+        /// <param name="onUnitOfWorkComplete">True, to publish the event at the end of the current unit of work, if available</param>
         /// <returns>The task to handle async operation</returns>
-        Task PublishAsync(Type eventType, object eventData);
+        Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true);
 
         /// <summary>
         /// Registers to an event.

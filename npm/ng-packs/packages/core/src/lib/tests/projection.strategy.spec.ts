@@ -57,7 +57,7 @@ describe('ComponentProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into container and return a ComponentRef', () => {
       const strategy = new ComponentProjectionStrategy(TestComponent, containerStrategy);
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -72,7 +72,7 @@ describe('ComponentProjectionStrategy', () => {
         containerStrategy,
         contextStrategy,
       );
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -114,7 +114,7 @@ describe('RootComponentProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into body and return a ComponentRef', () => {
       const strategy = new RootComponentProjectionStrategy(TestComponent);
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');
@@ -127,7 +127,7 @@ describe('RootComponentProjectionStrategy', () => {
     it('should be able to map context to projected component', () => {
       const contextStrategy = CONTEXT_STRATEGY.Component({ bar: 'bar' });
       const strategy = new RootComponentProjectionStrategy(TestComponent, contextStrategy);
-      componentRef = strategy.injectContent(spectator);
+      componentRef = strategy.injectContent({ get: spectator.inject });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');
@@ -194,7 +194,9 @@ describe('TemplateProjectionStrategy', () => {
 
     it('should be able to map context to projected template', () => {
       const templateRef = spectator.component.templateRef;
-      const contextStrategy = CONTEXT_STRATEGY.Template<typeof templateRef>({ $implicit: 'bar' });
+      const contextStrategy = CONTEXT_STRATEGY.Template<typeof templateRef>({
+        $implicit: 'bar',
+      });
       const strategy = new TemplateProjectionStrategy(
         templateRef,
         containerStrategy,
@@ -212,7 +214,7 @@ describe('TemplateProjectionStrategy', () => {
 
 describe('PROJECTION_STRATEGY', () => {
   const content = undefined;
-  const containerRef = ({ length: 0 } as any) as ViewContainerRef;
+  const containerRef = { length: 0 } as any as ViewContainerRef;
   let context: any;
 
   test.each`

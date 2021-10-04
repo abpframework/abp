@@ -40,5 +40,11 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 await base.IsActiveAsync(context);
             }
         }
+
+        [UnitOfWork]
+        public override Task<bool> IsUserActiveAsync(IdentityUser user)
+        {
+            return Task.FromResult(user.IsActive);
+        }
     }
 }

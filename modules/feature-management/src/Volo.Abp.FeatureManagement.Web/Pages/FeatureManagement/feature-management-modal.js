@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function ($) {
     abp.modals = abp.modals || {};
 

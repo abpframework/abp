@@ -37,5 +37,15 @@ namespace Volo.Abp.SettingManagement
         {
             return settingManager.SetAsync(name, value, TenantSettingValueProvider.ProviderName, null, forceToSet);
         }
+
+        public static Task SetForTenantOrGlobalAsync(this ISettingManager settingManager, Guid? tenantId, [NotNull] string name, [CanBeNull] string value, bool forceToSet = false)
+        {
+            if (tenantId.HasValue)
+            {
+                return settingManager.SetForTenantAsync(tenantId.Value, name, value, forceToSet);
+            }
+
+            return settingManager.SetGlobalAsync(name, value);
+        }
     }
 }

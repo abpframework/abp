@@ -10,7 +10,7 @@ namespace Volo.Abp.TestApp.Application
     //This is especially used to test the AbstractKeyCrudAppService
     public class DistrictAppService : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
     {
-        public DistrictAppService(IRepository<District> repository) 
+        public DistrictAppService(IRepository<District> repository)
             : base(repository)
         {
         }
@@ -23,7 +23,7 @@ namespace Volo.Abp.TestApp.Application
         protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
         {
             return await AsyncExecuter.FirstOrDefaultAsync(
-                Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+                 (await Repository.GetQueryableAsync()).Where(d => d.CityId == id.CityId && d.Name == id.Name)
             );
         }
     }

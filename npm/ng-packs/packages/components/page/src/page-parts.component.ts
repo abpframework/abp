@@ -8,27 +8,21 @@ export enum PageParts {
 
 @Component({
   selector: 'abp-page-title-container',
-  template: `
-    <ng-content></ng-content>
-  `,
+  template: ` <ng-content></ng-content> `,
   encapsulation: ViewEncapsulation.None,
 })
 export class PageTitleContainerComponent {}
 
 @Component({
   selector: 'abp-page-breadcrumb-container',
-  template: `
-    <ng-content></ng-content>
-  `,
+  template: ` <ng-content></ng-content> `,
   encapsulation: ViewEncapsulation.None,
 })
 export class PageBreadcrumbContainerComponent {}
 
 @Component({
   selector: 'abp-page-toolbar-container',
-  template: `
-    <ng-content></ng-content>
-  `,
+  template: ` <ng-content></ng-content> `,
   encapsulation: ViewEncapsulation.None,
 })
 export class PageToolbarContainerComponent {}

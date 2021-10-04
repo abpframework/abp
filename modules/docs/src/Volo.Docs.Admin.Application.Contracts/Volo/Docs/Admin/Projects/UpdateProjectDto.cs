@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Volo.Docs.Projects;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Admin.Projects
 {
-    public class UpdateProjectDto
+    public class UpdateProjectDto : IHasConcurrencyStamp
     {
         public string Name { get; set; }
 
@@ -22,5 +22,7 @@ namespace Volo.Docs.Admin.Projects
         public string LatestVersionBranchName { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

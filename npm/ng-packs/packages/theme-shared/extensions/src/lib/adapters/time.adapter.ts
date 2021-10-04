@@ -11,7 +11,7 @@ export class TimeAdapter extends NgbTimeAdapter<string> {
       ? new Date(0, 0, 1, ...value.split(':').map(Number))
       : new Date(value);
 
-    if (isNaN((date as unknown) as number)) return null;
+    if (isNaN(date as unknown as number)) return null;
 
     return {
       hour: date.getHours(),

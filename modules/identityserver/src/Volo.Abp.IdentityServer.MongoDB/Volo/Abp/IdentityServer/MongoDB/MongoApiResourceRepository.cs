@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -21,9 +21,8 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
-                .Where(ar => ar.Name == apiResourceName)
                 .OrderBy(ar => ar.Id)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(ar => ar.Name == apiResourceName, GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,

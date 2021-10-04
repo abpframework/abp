@@ -6,10 +6,10 @@ import {
 } from '../strategies';
 
 describe('ClearContainerStrategy', () => {
-  const containerRef = ({
+  const containerRef = {
     clear: jest.fn(),
     length: 7,
-  } as any) as ViewContainerRef;
+  } as any as ViewContainerRef;
 
   describe('#getIndex', () => {
     it('should return 0', () => {
@@ -29,10 +29,10 @@ describe('ClearContainerStrategy', () => {
 });
 
 describe('InsertIntoContainerStrategy', () => {
-  const containerRef = ({
+  const containerRef = {
     clear: jest.fn(),
     length: 7,
-  } as any) as ViewContainerRef;
+  } as any as ViewContainerRef;
 
   describe('#getIndex', () => {
     test.each`
@@ -61,10 +61,10 @@ describe('InsertIntoContainerStrategy', () => {
 });
 
 describe('CONTAINER_STRATEGY', () => {
-  const containerRef = ({
+  const containerRef = {
     clear: jest.fn(),
     length: 7,
-  } as any) as ViewContainerRef;
+  } as any as ViewContainerRef;
 
   test.each`
     name         | Strategy                       | index

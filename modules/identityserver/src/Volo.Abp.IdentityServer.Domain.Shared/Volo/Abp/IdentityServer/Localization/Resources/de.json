@@ -6,7 +6,7 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId bereits vorhanden: {ClientId}",
     "UserLockedOut": "Das Benutzerkonto wurde aufgrund ungültiger Anmeldeversuche ausgesperrt. Bitte warten Sie eine Weile und versuchen Sie es erneut.",
     "InvalidUserNameOrPassword": "Ungültiger Benutzername oder Passwort!",
-    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Sie müssen Ihre E-Mail/Telefonnummer bestätigen.",
+    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder muss Ihre E-Mail-/Telefonnummer bestätigen.",
     "InvalidUsername": "Ungültiger Benutzername oder Passwort!"
   }
 }

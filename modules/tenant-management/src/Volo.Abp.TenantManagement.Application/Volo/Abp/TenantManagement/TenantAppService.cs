@@ -98,9 +98,14 @@ namespace Volo.Abp.TenantManagement
         public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             var tenant = await TenantRepository.GetAsync(id);
+
             await TenantManager.ChangeNameAsync(tenant, input.Name);
+
+            tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             input.MapExtraPropertiesTo(tenant);
+
             await TenantRepository.UpdateAsync(tenant);
+
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 

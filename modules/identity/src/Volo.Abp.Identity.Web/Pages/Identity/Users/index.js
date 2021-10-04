@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityUserAppService = volo.abp.identity.identityUser;
@@ -38,6 +38,7 @@
                             _permissionsModal.open({
                                 providerName: 'U',
                                 providerKey: data.record.id,
+                                providerKeyDisplayName: data.record.userName
                             });
                         },
                     },

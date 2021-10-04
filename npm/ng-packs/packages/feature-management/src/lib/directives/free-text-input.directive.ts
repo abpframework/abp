@@ -1,4 +1,4 @@
-import { Directive, Input, HostBinding } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 
 // TODO: improve this type
 export interface FreeTextType {
@@ -20,6 +20,7 @@ export const INPUT_TYPES = {
 })
 export class FreeTextInputDirective {
   _feature: FreeTextType;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('abpFeatureManagementFreeText') set feature(val: FreeTextType) {
     this._feature = val;
     this.setInputType();

@@ -40,26 +40,10 @@ export class PermissionDirective implements OnDestroy, OnChanges {
       .getGrantedPolicy$(this.condition)
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
-        if (this.templateRef) this.initStructural(isGranted);
-        else this.initAttribute(isGranted);
-
+        this.vcRef.clear();
+        if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
         this.cdRef.detectChanges();
       });
-  }
-
-  private initStructural(isGranted: boolean) {
-    this.vcRef.clear();
-
-    if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
-  }
-
-  /**
-   * @deprecated Will be deleted in v5.0
-   */
-  private initAttribute(isGranted: boolean) {
-    if (!isGranted) {
-      this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
-    }
   }
 
   ngOnDestroy(): void {

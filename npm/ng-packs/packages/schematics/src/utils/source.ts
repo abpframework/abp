@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import {

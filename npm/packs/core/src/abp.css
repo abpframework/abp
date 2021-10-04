@@ -1,4 +1,4 @@
-﻿@keyframes spin {
+@keyframes spin {
     0% {
         transform: translateZ(0) rotate(0deg);
     }

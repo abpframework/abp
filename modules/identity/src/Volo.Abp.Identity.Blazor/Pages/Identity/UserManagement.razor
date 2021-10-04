@@ -111,6 +111,9 @@
                                         </Field>
                                     </Validation>
                                     <Field>
+                                        <Check TValue="bool" @bind-Checked="@NewEntity.IsActive">@L["DisplayName:IsActive"]</Check>
+                                    </Field>
+                                    <Field>
                                         <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
                                     </Field>
                                     <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
@@ -221,6 +224,9 @@
                                             </TextEdit>
                                         </Field>
                                     </Validation>
+                                    <Field>
+                                        <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
+                                    </Field>
                                     <Field>
                                         <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
                                     </Field>

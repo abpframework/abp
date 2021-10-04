@@ -10,6 +10,8 @@ namespace Volo.Abp.Http.Modeling
     {
         public string ControllerName { get; set; }
 
+        public string ControllerGroupName { get; set; }
+
         public string Type { get; set; }
 
         public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
@@ -21,11 +23,12 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ControllerApiDescriptionModel Create(string controllerName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+        public static ControllerApiDescriptionModel Create(string controllerName, string groupName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
         {
             return new ControllerApiDescriptionModel
             {
                 ControllerName = controllerName,
+                ControllerGroupName = groupName,
                 Type = type.FullName,
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type

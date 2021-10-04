@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.BackgroundJobs.Tests</AssemblyName>
     <PackageId>Volo.Abp.BackgroundJobs.Tests</PackageId>
     <RootNamespace />

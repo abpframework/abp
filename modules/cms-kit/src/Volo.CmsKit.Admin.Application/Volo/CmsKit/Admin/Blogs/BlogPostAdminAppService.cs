@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
@@ -63,6 +63,7 @@ namespace Volo.CmsKit.Admin.Blogs
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
             blogPost.SetContent(input.Content);
+            blogPost.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             blogPost.CoverImageMediaId = input.CoverImageMediaId;
 
             if (blogPost.Slug != input.Slug)

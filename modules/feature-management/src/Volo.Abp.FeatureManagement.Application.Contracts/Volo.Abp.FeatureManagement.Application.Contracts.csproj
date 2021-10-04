@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Json\Volo.Abp.Json.csproj" />
   </ItemGroup>
 
   <ItemGroup>

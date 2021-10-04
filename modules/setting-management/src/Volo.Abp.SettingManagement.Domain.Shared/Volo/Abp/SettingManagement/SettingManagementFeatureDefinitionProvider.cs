@@ -5,18 +5,27 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.SettingManagement
 {
-    public class SettingManagementFeatureDefinitionProvider: FeatureDefinitionProvider
+    public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvider
     {
         public override void Define(IFeatureDefinitionContext context)
         {
             var group = context.AddGroup(SettingManagementFeatures.GroupName,
                 L("Feature:SettingManagementGroup"));
 
-            group.AddFeature(SettingManagementFeatures.Enable,
+            var settingEnableFeature = group.AddFeature(
+                SettingManagementFeatures.Enable,
                 "true",
                 L("Feature:SettingManagementEnable"),
                 L("Feature:SettingManagementEnableDescription"),
                 new ToggleStringValueType());
+
+            settingEnableFeature.CreateChild(
+                SettingManagementFeatures.AllowTenantsToChangeEmailSettings,
+                "false",
+                L("Feature:AllowTenantsToChangeEmailSettings"),
+                L("AllowTenantsToChangeEmailSettingsDescription"),
+                new ToggleStringValueType(),
+                isAvailableToHost: false);
         }
 
         private static LocalizableString L(string name)

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
   isLeaf = true;

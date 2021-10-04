@@ -160,32 +160,8 @@ namespace Volo.Abp.Application.Services
         /// methods.
         /// </summary>
         /// <param name="input">The input.</param>
-        [Obsolete("Override the CreateFilteredQueryAsync method instead.")]
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
-        {
-            return ReadOnlyRepository;
-        }
-
-        /// <summary>
-        /// This method should create <see cref="IQueryable{TEntity}"/> based on given input.
-        /// It should filter query if needed, but should not do sorting or paging.
-        /// Sorting should be done in <see cref="ApplySorting"/> and paging should be done in <see cref="ApplyPaging"/>
-        /// methods.
-        /// </summary>
-        /// <param name="input">The input.</param>
         protected virtual async Task<IQueryable<TEntity>> CreateFilteredQueryAsync(TGetListInput input)
         {
-            /* If user has overridden the CreateFilteredQuery method,
-             * we don't want to make breaking change in this point.
-             */
-#pragma warning disable 618
-            var query = CreateFilteredQuery(input);
-#pragma warning restore 618
-            if (!ReferenceEquals(query, ReadOnlyRepository))
-            {
-                return query;
-            }
-
             return await ReadOnlyRepository.GetQueryableAsync();
         }
 

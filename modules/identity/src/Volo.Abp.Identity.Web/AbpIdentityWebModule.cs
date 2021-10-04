@@ -17,7 +17,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.Web
 {
-    [DependsOn(typeof(AbpIdentityHttpApiModule))]
+    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpPermissionManagementWebModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]

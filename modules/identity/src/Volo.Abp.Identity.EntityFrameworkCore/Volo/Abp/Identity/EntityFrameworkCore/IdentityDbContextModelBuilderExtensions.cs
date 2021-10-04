@@ -8,22 +8,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public static class IdentityDbContextModelBuilderExtensions
     {
-        public static void ConfigureIdentity(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+        public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityModelBuilderConfigurationOptions(
-                AbpIdentityDbProperties.DbTablePrefix,
-                AbpIdentityDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<IdentityUser>(b =>
             {
-                b.ToTable(options.TablePrefix + "Users", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
@@ -66,7 +57,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUserClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserClaims", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -82,7 +73,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUserRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserRoles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserRoles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -98,7 +89,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUserLogin>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserLogins", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserLogins", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -118,7 +109,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUserToken>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserTokens", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserTokens", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -133,7 +124,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "Roles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Roles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -152,7 +143,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityRoleClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "RoleClaims", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "RoleClaims", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -170,7 +161,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 builder.Entity<IdentityClaimType>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "ClaimTypes", options.Schema);
+                    b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes", AbpIdentityDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -186,7 +177,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<OrganizationUnit>(b =>
             {
-                b.ToTable(options.TablePrefix + "OrganizationUnits", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -205,7 +196,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<OrganizationUnitRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "OrganizationUnitRoles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnitRoles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -220,7 +211,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUserOrganizationUnit>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserOrganizationUnits", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserOrganizationUnits", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -235,7 +226,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentitySecurityLog>(b =>
             {
-                b.ToTable(options.TablePrefix + "SecurityLogs", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -264,7 +255,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 builder.Entity<IdentityLinkUser>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "LinkUsers", options.Schema);
+                    b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "LinkUsers", AbpIdentityDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 

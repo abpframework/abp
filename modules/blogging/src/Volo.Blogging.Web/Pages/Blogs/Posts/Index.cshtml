@@ -15,6 +15,7 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/client-proxies/blogging-proxy.js" />
         <abp-script type="@typeof(OwlCarouselScriptContributor)" />
         <abp-script src="/Pages/Blogs/Shared/Scripts/blog.js" />
     </abp-script-bundle>

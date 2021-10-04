@@ -1,4 +1,4 @@
-﻿# Specifications
+# Specifications
 
 Specification Pattern is used to define **named, reusable, combinable and testable filters** for entities and other business objects.
 

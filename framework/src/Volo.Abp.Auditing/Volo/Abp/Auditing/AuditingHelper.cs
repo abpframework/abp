@@ -136,8 +136,8 @@ namespace Volo.Abp.Auditing
                 UserName = CurrentUser.UserName,
                 ClientId = CurrentClient.Id,
                 CorrelationId = CorrelationIdProvider.Get(),
-                //ImpersonatorUserId = AbpSession.ImpersonatorUserId, //TODO: Impersonation system is not available yet!
-                //ImpersonatorTenantId = AbpSession.ImpersonatorTenantId,
+                ImpersonatorUserId = CurrentUser.FindImpersonatorUserId(),
+                ImpersonatorTenantId = CurrentUser.FindImpersonatorTenantId(),
                 ExecutionTime = Clock.Now
             };
 

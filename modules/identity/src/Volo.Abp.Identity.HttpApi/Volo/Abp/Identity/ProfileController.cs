@@ -8,7 +8,7 @@ namespace Volo.Abp.Identity
     [Area("identity")]
     [ControllerName("Profile")]
     [Route("/api/identity/my-profile")]
-    public class ProfileController : AbpController, IProfileAppService
+    public class ProfileController : AbpControllerBase, IProfileAppService
     {
         protected IProfileAppService ProfileAppService { get; }
 

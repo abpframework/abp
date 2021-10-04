@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -17,13 +18,13 @@ using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public class MongoDbRepository<TMongoDbContext, TEntity>
         : RepositoryBase<TEntity>,
-        IMongoDbRepository<TEntity>,
-        IMongoQueryable<TEntity>
+        IMongoDbRepository<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
@@ -182,14 +183,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
             {
                 SetDeletionAuditProperties(entity);
-                await TriggerEntityDeleteEventsAsync(entity);
+                TriggerEntityDeleteEvents(entity);
             }
             else
             {
-                await TriggerEntityUpdateEventsAsync(entity);
+                TriggerEntityUpdateEvents(entity);
             }
 
-            await TriggerDomainEventsAsync(entity);
+            TriggerDomainEvents(entity);
 
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
             ReplaceOneResult result;
@@ -235,14 +236,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 if (isSoftDeleteEntity)
                 {
                     SetDeletionAuditProperties(entity);
-                    await TriggerEntityDeleteEventsAsync(entity);
+                    TriggerEntityDeleteEvents(entity);
                 }
                 else
                 {
-                    await TriggerEntityUpdateEventsAsync(entity);
+                    TriggerEntityUpdateEvents(entity);
                 }
 
-                await TriggerDomainEventsAsync(entity);
+                TriggerDomainEvents(entity);
 
                 SetNewConcurrencyStamp(entity);
             }
@@ -295,7 +296,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
                 ((ISoftDelete)entity).IsDeleted = true;
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
 
                 ReplaceOneResult result;
 
@@ -324,7 +325,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
             else
             {
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
 
                 DeleteResult result;
 
@@ -374,7 +375,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     hardDeletedEntities.Add(entity);
                 }
 
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                ApplyAbpConceptsForDeletedEntity(entity);
             }
 
             var dbContext = await GetDbContextAsync(cancellationToken);
@@ -569,37 +570,38 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
           );
         }
 
-        protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
+        protected virtual Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
-            await TriggerEntityCreateEvents(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityCreateEvents(entity);
+            TriggerDomainEvents(entity);
+            return Task.CompletedTask;
         }
 
-        private async Task TriggerEntityCreateEvents(TEntity entity)
+        private void TriggerEntityCreateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityCreatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
         }
 
-        protected virtual async Task TriggerEntityUpdateEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityUpdateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
         }
 
-        protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
+        protected virtual void ApplyAbpConceptsForDeletedEntity(TEntity entity)
         {
             SetDeletionAuditProperties(entity);
-            await TriggerEntityDeleteEventsAsync(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityDeleteEvents(entity);
+            TriggerDomainEvents(entity);
         }
 
-        protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityDeleteEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityDeletingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
+            EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
         }
 
         protected virtual void CheckAndSetId(TEntity entity)
@@ -639,7 +641,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             AuditPropertySetter.SetDeletionProperties(entity);
         }
 
-        protected virtual async Task TriggerDomainEventsAsync(object entity)
+        protected virtual void TriggerDomainEvents(object entity)
         {
             var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
             if (generatesDomainEventsEntity == null)
@@ -652,7 +654,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 foreach (var localEvent in localEvents)
                 {
-                    await LocalEventBus.PublishAsync(localEvent.GetType(), localEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(
+                        new UnitOfWorkEventRecord(
+                            localEvent.EventData.GetType(),
+                            localEvent.EventData,
+                            localEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearLocalEvents();
@@ -663,7 +671,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 foreach (var distributedEvent in distributedEvents)
                 {
-                    await DistributedEventBus.PublishAsync(distributedEvent.GetType(), distributedEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
+                        new UnitOfWorkEventRecord(
+                            distributedEvent.EventData.GetType(),
+                            distributedEvent.EventData,
+                            distributedEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearDistributedEvents();
@@ -706,24 +720,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return aggregate;
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public QueryableExecutionModel GetExecutionModel()
-        {
-            return GetMongoQueryable().GetExecutionModel();
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public IAsyncCursor<TEntity> ToCursor(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursor(GetCancellationToken(cancellationToken));
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public Task<IAsyncCursor<TEntity>> ToCursorAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursorAsync(GetCancellationToken(cancellationToken));
         }
     }
 

@@ -12,6 +12,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MemoryDb;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
@@ -65,7 +66,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return ApplyDataFilters((await GetCollectionAsync()).AsQueryable());
         }
 
-        protected virtual async Task TriggerDomainEventsAsync(object entity)
+        protected virtual void TriggerDomainEvents(object entity)
         {
             var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
             if (generatesDomainEventsEntity == null)
@@ -78,7 +79,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 foreach (var localEvent in localEvents)
                 {
-                    await LocalEventBus.PublishAsync(localEvent.GetType(), localEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(
+                        new UnitOfWorkEventRecord(
+                            localEvent.EventData.GetType(),
+                            localEvent.EventData,
+                            localEvent.EventOrder
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearLocalEvents();
@@ -89,7 +96,14 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 foreach (var distributedEvent in distributedEvents)
                 {
-                    await DistributedEventBus.PublishAsync(distributedEvent.GetType(), distributedEvent);
+                    UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
+                        new UnitOfWorkEventRecord(
+                            distributedEvent.EventData.GetType(),
+                            distributedEvent.EventData,
+                            distributedEvent.EventOrder,
+                            useOutbox: true
+                        )
+                    );
                 }
 
                 generatesDomainEventsEntity.ClearDistributedEvents();
@@ -143,37 +157,37 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             AuditPropertySetter.SetDeletionProperties(entity);
         }
 
-        protected virtual async Task TriggerEntityCreateEvents(TEntity entity)
+        protected virtual void TriggerEntityCreateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityCreatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
         }
 
-        protected virtual async Task TriggerEntityUpdateEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityUpdateEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
+            EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
         }
 
-        protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
+        protected virtual void TriggerEntityDeleteEvents(TEntity entity)
         {
-            await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
-            await EntityChangeEventHelper.TriggerEntityDeletingEventAsync(entity);
+            EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
+            EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
         }
 
-        protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
+        protected virtual void ApplyAbpConceptsForAddedEntity(TEntity entity)
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
-            await TriggerEntityCreateEvents(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityCreateEvents(entity);
+            TriggerDomainEvents(entity);
         }
 
-        protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
+        protected virtual void ApplyAbpConceptsForDeletedEntity(TEntity entity)
         {
             SetDeletionAuditProperties(entity);
-            await TriggerEntityDeleteEventsAsync(entity);
-            await TriggerDomainEventsAsync(entity);
+            TriggerEntityDeleteEvents(entity);
+            TriggerDomainEvents(entity);
         }
 
         public override async Task<TEntity> FindAsync(
@@ -199,7 +213,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            await ApplyAbpConceptsForAddedEntityAsync(entity);
+            ApplyAbpConceptsForAddedEntity(entity);
 
             (await GetCollectionAsync()).Add(entity);
 
@@ -216,14 +230,14 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
             {
                 SetDeletionAuditProperties(entity);
-                await TriggerEntityDeleteEventsAsync(entity);
+                TriggerEntityDeleteEvents(entity);
             }
             else
             {
-                await TriggerEntityUpdateEventsAsync(entity);
+                TriggerEntityUpdateEvents(entity);
             }
 
-            await TriggerDomainEventsAsync(entity);
+            TriggerDomainEvents(entity);
 
             (await GetCollectionAsync()).Update(entity);
 
@@ -235,7 +249,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            await ApplyAbpConceptsForDeletedEntityAsync(entity);
+            ApplyAbpConceptsForDeletedEntity(entity);
 
             if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {

@@ -1,4 +1,4 @@
-﻿﻿<h3>{{L "PasswordReset"}}</h3>
+﻿<h3>{{L "PasswordReset"}}</h3>
 
 <p>{{L "PasswordResetInfoInEmail"}}</p>
 

@@ -6,9 +6,14 @@ namespace Volo.Abp.EventBus.Distributed
     {
         public ITypeList<IEventHandler> Handlers { get; }
 
+        public OutboxConfigDictionary Outboxes { get; }
+
+        public InboxConfigDictionary Inboxes { get; }
         public AbpDistributedEventBusOptions()
         {
             Handlers = new TypeList<IEventHandler>();
+            Outboxes = new OutboxConfigDictionary();
+            Inboxes = new InboxConfigDictionary();
         }
     }
 }

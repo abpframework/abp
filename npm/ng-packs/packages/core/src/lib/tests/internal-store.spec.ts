@@ -17,13 +17,17 @@ const mockInitialState = {
 
 type MockState = typeof mockInitialState;
 
-const deepPatch1: DeepPartial<MockState> = { foo: { bar: { baz: [() => {}] } } };
+const deepPatch1: DeepPartial<MockState> = {
+  foo: { bar: { baz: [() => {}] } },
+};
 const deepPatchExpected1: MockState = clone(mockInitialState);
 deepPatchExpected1.foo.bar.baz = deepPatch1.foo.bar.baz;
 
-const deepPatch2: DeepPartial<MockState> = { foo: { bar: { qux: Promise.resolve() } } };
+const deepPatch2: DeepPartial<MockState> = {
+  foo: { bar: { qux: Promise.resolve() } },
+};
 const deepPatchExpected2: MockState = clone(mockInitialState);
-deepPatchExpected2.foo.bar.qux = deepPatch2.foo.bar.qux;
+deepPatchExpected2.foo.bar.qux = deepPatch2.foo.bar.qux as any;
 
 const deepPatch3: DeepPartial<MockState> = { foo: { n: 1 } };
 const deepPatchExpected3: MockState = clone(mockInitialState);
@@ -49,7 +53,9 @@ const patch2: Partial<MockState> = {
 const patchExpected2: MockState = clone(mockInitialState);
 patchExpected2.foo = patch2.foo;
 
-const patch3: Partial<MockState> = { foo: { n: 1 } as typeof mockInitialState.foo };
+const patch3: Partial<MockState> = {
+  foo: { n: 1 } as typeof mockInitialState.foo,
+};
 const patchExpected3: MockState = clone(mockInitialState);
 patchExpected3.foo = patch3.foo;
 

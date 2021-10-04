@@ -1,6 +1,6 @@
+import { IdentityRoleDto } from '@abp/ng.identity/proxy';
 import { ePropType, FormProp, PropData } from '@abp/ng.theme.shared/extensions';
 import { Validators } from '@angular/forms';
-import { IdentityRoleDto } from '../proxy/identity/models';
 
 export const DEFAULT_ROLES_CREATE_FORM_PROPS = FormProp.createMany<IdentityRoleDto>([
   {

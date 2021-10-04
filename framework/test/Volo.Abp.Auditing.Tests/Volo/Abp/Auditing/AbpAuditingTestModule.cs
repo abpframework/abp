@@ -43,6 +43,12 @@ namespace Volo.Abp.Auditing
                         "AppEntityWithSelector",
                         type => type == typeof(AppEntityWithSelector))
                 );
+
+                options.EntityHistorySelectors.Add(
+                    new NamedTypeSelector(
+                        "AppEntityWithSoftDelete",
+                        type => type == typeof(AppEntityWithSoftDelete))
+                );
             });
 
             context.Services.AddType<Auditing_Tests.MyAuditedObject1>();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -33,11 +34,14 @@ namespace Volo.Abp.Uow
         public string ReservationName { get; set; }
 
         protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
+        protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new List<UnitOfWorkEventRecord>();
+        protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new List<UnitOfWorkEventRecord>();
 
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         public IServiceProvider ServiceProvider { get; }
+        protected IUnitOfWorkEventPublisher UnitOfWorkEventPublisher { get; }
 
         [NotNull]
         public Dictionary<string, object> Items { get; }
@@ -50,9 +54,13 @@ namespace Volo.Abp.Uow
         private bool _isCompleting;
         private bool _isRolledback;
 
-        public UnitOfWork(IServiceProvider serviceProvider, IOptions<AbpUnitOfWorkDefaultOptions> options)
+        public UnitOfWork(
+            IServiceProvider serviceProvider,
+            IUnitOfWorkEventPublisher unitOfWorkEventPublisher,
+            IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             ServiceProvider = serviceProvider;
+            UnitOfWorkEventPublisher = unitOfWorkEventPublisher;
             _defaultOptions = options.Value;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
@@ -103,12 +111,12 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
+        public virtual IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
         {
             return _databaseApis.Values.ToImmutableList();
         }
 
-        public IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
+        public virtual IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
         {
             return _transactionApis.Values.ToImmutableList();
         }
@@ -126,6 +134,30 @@ namespace Volo.Abp.Uow
             {
                 _isCompleting = true;
                 await SaveChangesAsync(cancellationToken);
+
+                while (LocalEvents.Any() || DistributedEvents.Any())
+                {
+                    if (LocalEvents.Any())
+                    {
+                        var localEventsToBePublished = LocalEvents.OrderBy(e => e.EventOrder).ToArray();
+                        LocalEvents.Clear();
+                        await UnitOfWorkEventPublisher.PublishLocalEventsAsync(
+                            localEventsToBePublished
+                        );
+                    }
+                    
+                    if (DistributedEvents.Any())
+                    {
+                        var distributedEventsToBePublished = DistributedEvents.OrderBy(e => e.EventOrder).ToArray();
+                        DistributedEvents.Clear();
+                        await UnitOfWorkEventPublisher.PublishDistributedEventsAsync(
+                            distributedEventsToBePublished
+                        );
+                    }
+
+                    await SaveChangesAsync(cancellationToken);
+                }
+                
                 await CommitTransactionsAsync();
                 IsCompleted = true;
                 await OnCompletedAsync();
@@ -149,12 +181,12 @@ namespace Volo.Abp.Uow
             await RollbackAllAsync(cancellationToken);
         }
 
-        public IDatabaseApi FindDatabaseApi(string key)
+        public virtual IDatabaseApi FindDatabaseApi(string key)
         {
             return _databaseApis.GetOrDefault(key);
         }
 
-        public void AddDatabaseApi(string key, IDatabaseApi api)
+        public virtual void AddDatabaseApi(string key, IDatabaseApi api)
         {
             Check.NotNull(key, nameof(key));
             Check.NotNull(api, nameof(api));
@@ -167,7 +199,7 @@ namespace Volo.Abp.Uow
             _databaseApis.Add(key, api);
         }
 
-        public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
+        public virtual IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
         {
             Check.NotNull(key, nameof(key));
             Check.NotNull(factory, nameof(factory));
@@ -175,14 +207,14 @@ namespace Volo.Abp.Uow
             return _databaseApis.GetOrAdd(key, factory);
         }
 
-        public ITransactionApi FindTransactionApi(string key)
+        public virtual ITransactionApi FindTransactionApi(string key)
         {
             Check.NotNull(key, nameof(key));
 
             return _transactionApis.GetOrDefault(key);
         }
 
-        public void AddTransactionApi(string key, ITransactionApi api)
+        public virtual void AddTransactionApi(string key, ITransactionApi api)
         {
             Check.NotNull(key, nameof(key));
             Check.NotNull(api, nameof(api));
@@ -195,7 +227,7 @@ namespace Volo.Abp.Uow
             _transactionApis.Add(key, api);
         }
 
-        public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
+        public virtual ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
         {
             Check.NotNull(key, nameof(key));
             Check.NotNull(factory, nameof(factory));
@@ -203,11 +235,48 @@ namespace Volo.Abp.Uow
             return _transactionApis.GetOrAdd(key, factory);
         }
 
-        public void OnCompleted(Func<Task> handler)
+        public virtual void OnCompleted(Func<Task> handler)
         {
             CompletedHandlers.Add(handler);
         }
 
+        public virtual void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            AddOrReplaceEvent(LocalEvents, eventRecord, replacementSelector);
+        }
+
+        public virtual void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            AddOrReplaceEvent(DistributedEvents, eventRecord, replacementSelector);
+        }
+        
+        public virtual void AddOrReplaceEvent(
+            List<UnitOfWorkEventRecord> eventRecords,
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            if (replacementSelector == null)
+            {
+                eventRecords.Add(eventRecord);
+            }
+            else
+            {
+                var foundIndex = eventRecords.FindIndex(replacementSelector);
+                if (foundIndex < 0)
+                {
+                    eventRecords.Add(eventRecord);
+                }
+                else
+                {
+                    eventRecords[foundIndex] = eventRecord;
+                }
+            }
+        }
+        
         protected virtual async Task OnCompletedAsync()
         {
             foreach (var handler in CompletedHandlers)

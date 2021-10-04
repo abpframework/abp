@@ -1,4 +1,4 @@
-﻿# SMS Sending
+# SMS Sending
 
 The ABP Framework provides an abstraction to sending SMS. Having such an abstraction has some benefits;
 

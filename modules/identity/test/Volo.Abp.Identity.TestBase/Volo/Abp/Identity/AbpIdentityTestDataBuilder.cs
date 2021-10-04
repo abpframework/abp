@@ -12,6 +12,7 @@ namespace Volo.Abp.Identity
     {
         private readonly IGuidGenerator _guidGenerator;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IdentityUserManager _userManager;
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IOrganizationUnitRepository _organizationUnitRepository;
@@ -32,6 +33,7 @@ namespace Volo.Abp.Identity
         public AbpIdentityTestDataBuilder(
             IGuidGenerator guidGenerator,
             IIdentityUserRepository userRepository,
+            IdentityUserManager userManager,
             IIdentityClaimTypeRepository identityClaimTypeRepository,
             IIdentityRoleRepository roleRepository,
             IOrganizationUnitRepository organizationUnitRepository,
@@ -44,6 +46,7 @@ namespace Volo.Abp.Identity
         {
             _guidGenerator = guidGenerator;
             _userRepository = userRepository;
+            _userManager = userManager;
             _identityClaimTypeRepository = identityClaimTypeRepository;
             _roleRepository = roleRepository;
             _lookupNormalizer = lookupNormalizer;
@@ -133,6 +136,10 @@ namespace Volo.Abp.Identity
             neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
             neo.AddOrganizationUnit(_ou111.Id);
             await _userRepository.InsertAsync(neo);
+
+            var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");
+            bob.SetIsActive(false);
+            await _userManager.CreateAsync(bob, "1q2w3E*");
         }
 
         private async Task AddLinkUsers()

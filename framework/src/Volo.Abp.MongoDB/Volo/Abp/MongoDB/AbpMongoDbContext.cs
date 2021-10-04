@@ -6,6 +6,8 @@ namespace Volo.Abp.MongoDB
 {
     public abstract class AbpMongoDbContext : IAbpMongoDbContext, ITransientDependency
     {
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         public IMongoModelSource ModelSource { get; set; }
 
         public IMongoClient Client { get; private set; }

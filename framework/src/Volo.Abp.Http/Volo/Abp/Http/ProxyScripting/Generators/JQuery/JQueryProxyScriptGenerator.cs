@@ -208,6 +208,8 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
                     .Trim()
                     .RemovePostFix(AppServiceCommonPostfixes)
                     .RemovePostFix("Controller")
+                    .Replace(".ClientProxies", string.Empty)
+                    .RemovePostFix("ClientProxy")
             );
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Authorization;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
@@ -17,6 +18,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         public ActionResult UserFriendlyException2()
         {
             throw new UserFriendlyException("This is a sample exception!");
+        }
+
+        [HttpGet]
+        [Route("AbpAuthorizationException")]
+        public void AbpAuthorizationException()
+        {
+            throw new AbpAuthorizationException("This is a sample exception!");
         }
     }
 }

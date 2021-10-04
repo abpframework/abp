@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Blogging.Posts
 {
-    public class UpdatePostDto
+    public class UpdatePostDto : IHasConcurrencyStamp
     {
         public Guid BlogId { get; set; }
 
@@ -23,5 +23,7 @@ namespace Volo.Blogging.Posts
         public string Description { get; set; }
 
         public string Tags { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

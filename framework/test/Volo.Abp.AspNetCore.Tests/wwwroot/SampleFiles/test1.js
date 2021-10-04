@@ -1,1 +1,1 @@
-﻿test1.js-content
+test1.js-content

@@ -314,5 +314,27 @@ namespace Volo.Abp.Auditing
                                                                           && x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithAudited.Name)));
 #pragma warning restore 4014
         }
+
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_For_Soft_Deleted_Entity()
+        {
+            var entity = new AppEntityWithSoftDelete(Guid.NewGuid(), "test name");
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithSoftDelete, Guid>>();
+            await repository.InsertAsync(entity);
+
+            using (var scope = _auditingManager.BeginScope())
+            {
+                await repository.DeleteAsync(entity.Id);
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                          x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
+                                                                          x.EntityChanges[0].PropertyChanges.Count == 0));
+#pragma warning restore 4014
+
+        }
     }
 }

@@ -1,10 +1,10 @@
+import { AccountService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
-import { AccountService } from '../../proxy/account/account.service';
 
 const PASSWORD_FIELDS = ['password', 'confirmPassword'];
 

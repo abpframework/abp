@@ -1,7 +1,10 @@
 {
   "recommendations": [
     "angular.ng-template",
+    "nrwl.angular-console",
     "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "dbaeumer.vscode-eslint",
     "ms-vscode.vscode-typescript-tslint-plugin",
     "visualstudioexptteam.vscodeintellicode",
     "christian-kohler.path-intellisense",

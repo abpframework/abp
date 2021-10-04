@@ -17,6 +17,7 @@
         <abp-modal-header title="@L["New"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Id"/>
+            <abp-input asp-for="ViewModel.ConcurrencyStamp"/>
 
             <abp-tabs tab-style="Tab">
                 <abp-tab name="url" title="@L["Url"]">

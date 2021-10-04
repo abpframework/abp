@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.CmsKit.Admin.Menus
 {
     [Serializable]
-    public class MenuItemUpdateInput
+    public class MenuItemUpdateInput : IHasConcurrencyStamp
     {
         [Required]
         public string DisplayName { get; set; }
@@ -22,5 +23,7 @@ namespace Volo.CmsKit.Admin.Menus
         public string CssClass { get; set; }
 
         public Guid? PageId { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

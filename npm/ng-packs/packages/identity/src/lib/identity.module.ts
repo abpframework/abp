@@ -5,13 +5,11 @@ import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxsModule } from '@ngxs/store';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
 import { IdentityExtensionsGuard } from './guards/extensions.guard';
 import { IdentityRoutingModule } from './identity-routing.module';
 import { IdentityConfigOptions } from './models/config-options';
-import { IdentityState } from './states/identity.state';
 import {
   IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS,
   IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS,
@@ -24,7 +22,6 @@ import {
   declarations: [RolesComponent, UsersComponent],
   exports: [RolesComponent, UsersComponent],
   imports: [
-    NgxsModule.forFeature([IdentityState]),
     CoreModule,
     IdentityRoutingModule,
     NgbNavModule,

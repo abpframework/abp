@@ -1,4 +1,4 @@
-﻿# Timing
+# Timing
 
 Working with times & [time zones](https://en.wikipedia.org/wiki/Time_zone) is always tricky, especially if you need to build a **global system** that is used by users in **different time zones**.
 

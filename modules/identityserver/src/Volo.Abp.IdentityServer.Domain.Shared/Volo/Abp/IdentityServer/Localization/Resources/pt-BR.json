@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "pt-BR",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "O nome da Identity Resource já existe: {Name}",

@@ -83,6 +83,11 @@ namespace Volo.Abp.Identity
         public virtual bool PhoneNumberConfirmed { get; protected internal set; }
 
         /// <summary>
+        /// Gets or sets a flag indicating if the user is active.
+        /// </summary>
+        public virtual bool IsActive { get; protected internal set; }
+
+        /// <summary>
         /// Gets or sets a flag indicating if two factor authentication is enabled for this user.
         /// </summary>
         /// <value>True if 2fa is enabled, otherwise false.</value>
@@ -155,6 +160,7 @@ namespace Volo.Abp.Identity
             NormalizedEmail = email.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
+            IsActive = true;
 
             Roles = new Collection<IdentityUserRole>();
             Claims = new Collection<IdentityUserClaim>();
@@ -338,11 +344,6 @@ namespace Volo.Abp.Identity
             PhoneNumberConfirmed = confirmed;
         }
 
-        public override string ToString()
-        {
-            return $"{base.ToString()}, UserName = {UserName}";
-        }
-
         /// <summary>
         /// Normally use <see cref="IdentityUserManager.ChangePhoneNumberAsync"/> to change the phone number
         /// in the application code.
@@ -355,6 +356,16 @@ namespace Volo.Abp.Identity
         {
             PhoneNumber = phoneNumber;
             PhoneNumberConfirmed = !phoneNumber.IsNullOrWhiteSpace() && confirmed;
+        }
+
+        public virtual void SetIsActive(bool isActive)
+        {
+            IsActive = isActive;
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, UserName = {UserName}";
         }
     }
 }

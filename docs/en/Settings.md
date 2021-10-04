@@ -1,4 +1,4 @@
-﻿# Settings
+# Settings
 
 [Configuration system](Configuration.md) is a good way to configure the application on startup. In addition to the configurations, ABP provides another way to set and get some application settings.
 

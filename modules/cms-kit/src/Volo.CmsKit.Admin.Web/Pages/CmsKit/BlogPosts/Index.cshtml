@@ -17,12 +17,14 @@
 }
 
 @section scripts {
-    <abp-script src="/Pages/CmsKit/BlogPosts/index.js" />
+    <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+    <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+    <abp-script src="/Pages/CmsKit/BlogPosts/index.js"/>
 }
 
 
 @section content_toolbar {
-    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new {pageName = typeof(IndexModel).FullName})
 }
 
 <abp-card class="mb-4">
@@ -36,7 +38,7 @@
         </div>
     </abp-card-body>
 </abp-card>
- 
+
 <abp-card>
     <abp-card-body>
         <abp-table striped-rows="true" id="BlogPostsTable" class="nowrap"></abp-table>

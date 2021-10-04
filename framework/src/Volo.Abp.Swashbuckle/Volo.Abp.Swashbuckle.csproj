@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Abp.Swashbuckle</AssemblyName>
         <PackageId>Volo.Abp.Swashbuckle</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
     </ItemGroup>
 
     <ItemGroup>

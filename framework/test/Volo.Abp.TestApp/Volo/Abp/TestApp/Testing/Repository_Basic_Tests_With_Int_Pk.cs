@@ -22,9 +22,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public virtual async Task FirstOrDefault()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var entity = EntityWithIntPkRepository.FirstOrDefault(e => e.Name == "Entity1");
+                var entity = await EntityWithIntPkRepository.FirstOrDefaultAsync(e => e.Name == "Entity1");
                 entity.ShouldNotBeNull();
                 entity.Name.ShouldBe("Entity1");
                 return Task.CompletedTask;

@@ -15,7 +15,7 @@ using Volo.Blogging.Localization;
 namespace Volo.Blogging
 {
     [DependsOn(
-        typeof(BloggingHttpApiModule),
+        typeof(BloggingApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiBundlingModule),
         typeof(AbpAutoMapperModule)

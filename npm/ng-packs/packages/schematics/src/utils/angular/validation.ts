@@ -26,7 +26,6 @@ export function validateHtmlSelector(selector: string): void {
   }
 }
 
-
 export function validateProjectName(projectName: string) {
   const errorIndex = getRegExpFailPosition(projectName);
   const unsupportedProjectNames: string[] = [];
@@ -45,7 +44,8 @@ export function validateProjectName(projectName: string) {
     throw new SchematicsException(msg);
   } else if (unsupportedProjectNames.indexOf(projectName) !== -1) {
     throw new SchematicsException(
-      `Project name ${JSON.stringify(projectName)} is not a supported name.`);
+      `Project name ${JSON.stringify(projectName)} is not a supported name.`,
+    );
   } else if (!packageNameRegex.test(projectName)) {
     throw new SchematicsException(`Project name ${JSON.stringify(projectName)} is invalid.`);
   }
@@ -73,5 +73,5 @@ function getRegExpFailPosition(str: string): number | null {
 
   const compare = matched.join('-');
 
-  return (str !== compare) ? compare.length : null;
+  return str !== compare ? compare.length : null;
 }

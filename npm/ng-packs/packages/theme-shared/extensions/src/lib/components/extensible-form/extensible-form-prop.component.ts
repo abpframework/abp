@@ -22,7 +22,6 @@ import {
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
@@ -171,7 +170,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges({ prop }: SimpleChanges) {
-    const currentProp = snq<FormProp>(() => prop.currentValue);
+    const currentProp = prop?.currentValue;
     const { options, readonly, disabled, validators } = currentProp || {};
 
     if (options) this.options$ = options(this.data);

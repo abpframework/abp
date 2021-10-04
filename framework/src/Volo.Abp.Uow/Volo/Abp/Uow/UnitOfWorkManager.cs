@@ -10,7 +10,7 @@ namespace Volo.Abp.Uow
         [Obsolete("This will be removed in next versions.")]
         public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
 
-        public IUnitOfWork Current => GetCurrentUnitOfWork();
+        public IUnitOfWork Current => _ambientUnitOfWork.GetCurrentByChecking();
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;
@@ -84,19 +84,6 @@ namespace Volo.Abp.Uow
             uow.Initialize(options);
 
             return true;
-        }
-
-        private IUnitOfWork GetCurrentUnitOfWork()
-        {
-            var uow = _ambientUnitOfWork.UnitOfWork;
-
-            //Skip reserved unit of work
-            while (uow != null && (uow.IsReserved || uow.IsDisposed || uow.IsCompleted))
-            {
-                uow = uow.Outer;
-            }
-
-            return uow;
         }
 
         private IUnitOfWork CreateNewUnitOfWork()

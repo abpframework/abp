@@ -1,6 +1,5 @@
 using System;
 using Volo.Abp.Auditing;
-using Volo.Abp.Data;
 
 namespace Volo.Abp.Application.Dtos
 {

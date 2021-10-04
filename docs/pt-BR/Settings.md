@@ -1,3 +1,3 @@
-﻿# Settings
+# Settings
 
 Façam!

@@ -1,5 +1,5 @@
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { EntityProp, ePropType } from '@abp/ng.theme.shared/extensions';
-import { IdentityUserDto } from '../proxy/identity/models';
 
 export const DEFAULT_USERS_ENTITY_PROPS = EntityProp.createMany<IdentityUserDto>([
   {

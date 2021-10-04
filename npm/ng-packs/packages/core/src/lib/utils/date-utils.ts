@@ -1,4 +1,3 @@
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { DateTimeFormatDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
 

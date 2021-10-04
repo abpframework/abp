@@ -27,7 +27,7 @@ namespace Volo.Abp.MongoDB.Repositories
         [Fact]
         public async Task CanExecuteAsync()
         {
-            _mongoDbAsyncQueryableProvider.CanExecute(_personRepository).ShouldBeTrue();
+            _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.GetQueryableAsync()).ShouldBeTrue();
             _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.WithDetailsAsync()).ShouldBeTrue();
         }
 
@@ -36,7 +36,7 @@ namespace Volo.Abp.MongoDB.Repositories
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                (await _mongoDbAsyncQueryableProvider.FirstOrDefaultAsync(_personRepository.Where(p => p.Name == "Douglas"))).ShouldNotBeNull();
+                (await _mongoDbAsyncQueryableProvider.FirstOrDefaultAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldNotBeNull();
                 await uow.CompleteAsync();
             }
         }
@@ -46,7 +46,7 @@ namespace Volo.Abp.MongoDB.Repositories
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                (await _mongoDbAsyncQueryableProvider.AnyAsync(_personRepository, p => p.Name == "Douglas")).ShouldBeTrue();
+                (await _mongoDbAsyncQueryableProvider.AnyAsync(await _personRepository.GetQueryableAsync(), p => p.Name == "Douglas")).ShouldBeTrue();
                 await uow.CompleteAsync();
             }
         }
@@ -56,7 +56,7 @@ namespace Volo.Abp.MongoDB.Repositories
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                (await _mongoDbAsyncQueryableProvider.CountAsync(_personRepository.Where(p => p.Name == "Douglas"))).ShouldBeGreaterThan(0);
+                (await _mongoDbAsyncQueryableProvider.CountAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldBeGreaterThan(0);
                 await uow.CompleteAsync();
             }
         }
@@ -66,7 +66,7 @@ namespace Volo.Abp.MongoDB.Repositories
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                (await _mongoDbAsyncQueryableProvider.LongCountAsync(_personRepository)).ShouldBeGreaterThan(0);
+                (await _mongoDbAsyncQueryableProvider.LongCountAsync(await _personRepository.GetQueryableAsync())).ShouldBeGreaterThan(0);
                 await uow.CompleteAsync();
             }
         }

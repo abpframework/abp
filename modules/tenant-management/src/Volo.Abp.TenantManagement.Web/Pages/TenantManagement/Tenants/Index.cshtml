@@ -19,8 +19,9 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
-        <abp-script src="/Pages/TenantManagement/Tenants/Index.js" />
+        <abp-script src="/client-proxies/multi-tenancy-proxy.js" />
+        <abp-script src="/Pages/FeatureManagement/feature-management-modal.js"/>
+        <abp-script src="/Pages/TenantManagement/Tenants/Index.js"/>
     </abp-script-bundle>
 }
 <abp-card id="TenantsWrapper">

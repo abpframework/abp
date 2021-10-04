@@ -157,29 +157,7 @@ namespace Volo.Abp.RabbitMQ
                     arguments: Exchange.Arguments
                 );
 
-                if (!Exchange.DeadLetterExchangeName.IsNullOrWhiteSpace() &&
-                    !Queue.DeadLetterQueueName.IsNullOrWhiteSpace())
-                {
-                    Channel.ExchangeDeclare(
-                        Exchange.DeadLetterExchangeName,
-                        Exchange.Type,
-                        Exchange.Durable,
-                        Exchange.AutoDelete
-                    );
-
-                    Channel.QueueDeclare(
-                        Queue.DeadLetterQueueName,
-                        Queue.Durable,
-                        Queue.Exclusive,
-                        Queue.AutoDelete);
-
-                    Queue.Arguments["x-dead-letter-exchange"] = Exchange.DeadLetterExchangeName;
-                    Queue.Arguments["x-dead-letter-routing-key"] = Queue.DeadLetterQueueName;
-
-                    Channel.QueueBind(Queue.DeadLetterQueueName, Exchange.DeadLetterExchangeName, Queue.DeadLetterQueueName);
-                }
-
-                var result = Channel.QueueDeclare(
+                Channel.QueueDeclare(
                     queue: Queue.QueueName,
                     durable: Queue.Durable,
                     exclusive: Queue.Exclusive,
@@ -202,11 +180,8 @@ namespace Volo.Abp.RabbitMQ
                     operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
                     operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
                 {
-                    Exchange.DeadLetterExchangeName = null;
-                    Queue.DeadLetterQueueName = null;
-                    Queue.Arguments.Remove("x-dead-letter-exchange");
-                    Queue.Arguments.Remove("x-dead-letter-routing-key");
-                    Logger.LogWarning("Unable to bind the dead letter queue to an existing queue. You can delete the queue or add policy. See: https://www.rabbitmq.com/parameters.html");
+                    Logger.LogException(ex, LogLevel.Warning);
+                    await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
                 }
 
                 Logger.LogException(ex, LogLevel.Warning);
@@ -229,8 +204,13 @@ namespace Volo.Abp.RabbitMQ
             {
                 try
                 {
-                    Channel.BasicReject(basicDeliverEventArgs.DeliveryTag, false);
+                    Channel.BasicNack(
+                        basicDeliverEventArgs.DeliveryTag,
+                        multiple: false,
+                        requeue: true
+                    );
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch { }
 
                 Logger.LogException(ex);

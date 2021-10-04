@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     abp.widgets = abp.widgets || {};
 
     abp.WidgetManager = function (opts) {

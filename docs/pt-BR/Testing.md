@@ -1,3 +1,3 @@
-﻿# Testing
+# Testing
 
 Façam!

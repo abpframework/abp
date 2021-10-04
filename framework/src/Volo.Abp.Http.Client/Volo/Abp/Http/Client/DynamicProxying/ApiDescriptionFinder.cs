@@ -37,7 +37,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public async Task<ActionApiDescriptionModel> FindActionAsync(HttpClient client, string baseUrl, Type serviceType, MethodInfo method)
+        public async Task<ActionApiDescriptionModel> FindActionAsync(
+            HttpClient client,
+            string baseUrl,
+            Type serviceType,
+            MethodInfo method)
         {
             var apiDescription = await GetApiDescriptionAsync(client, baseUrl);
 
@@ -114,7 +118,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return (ApplicationApiDescriptionModel)result;
+            return result;
         }
 
         protected virtual void AddHeaders(HttpRequestMessage requestMessage)

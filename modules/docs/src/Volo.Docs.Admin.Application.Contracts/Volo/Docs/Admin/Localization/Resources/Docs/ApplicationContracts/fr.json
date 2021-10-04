@@ -20,7 +20,7 @@
     "DocumentStoreType": "DocumentStoreType",
     "Format": "Format",
     "ShortNameInfoText": "Sera utilisé pour une URL unique.",
-    "DisplayName:Name": "Nom",
+    "DisplayName:Name": "Prénom",
     "DisplayName:ShortName": "Nom court",
     "DisplayName:Format": "Format",
     "DisplayName:DefaultDocumentName": "Nom du document par défaut",

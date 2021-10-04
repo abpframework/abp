@@ -20,12 +20,7 @@ namespace Volo.Abp.BackgroundJobs
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
             if (options.IsJobExecutionEnabled)
             {
-                context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .Add(
-                        context.ServiceProvider
-                            .GetRequiredService<IBackgroundJobWorker>()
-                    );
+                context.AddBackgroundWorker<IBackgroundJobWorker>();
             }
         }
     }

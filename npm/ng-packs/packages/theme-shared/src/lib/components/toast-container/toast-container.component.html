@@ -7,5 +7,9 @@
   [style.display]="toasts.length ? 'flex' : 'none'"
   [@toastInOut]="toasts.length"
 >
-  <abp-toast [toast]="toast" *ngFor="let toast of toasts; trackBy: trackByFunc"></abp-toast>
+  <abp-toast
+    [toast]="toast"
+    *ngFor="let toast of toasts; trackBy: trackByFunc"
+    (remove)="remove($event)"
+  ></abp-toast>
 </div>

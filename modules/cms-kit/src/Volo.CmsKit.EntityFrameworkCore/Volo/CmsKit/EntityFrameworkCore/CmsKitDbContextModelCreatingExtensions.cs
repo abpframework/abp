@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.GlobalFeatures;
@@ -20,23 +19,15 @@ namespace Volo.CmsKit.EntityFrameworkCore
     public static class CmsKitDbContextModelCreatingExtensions
     {
         public static void ConfigureCmsKit(
-            this ModelBuilder builder,
-            Action<CmsKitModelBuilderConfigurationOptions> optionsAction = null)
+            this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
-
-            var options = new CmsKitModelBuilderConfigurationOptions(
-                CmsKitDbProperties.DbTablePrefix,
-                CmsKitDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
 
             if (GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
             {
                 builder.Entity<CmsUser>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Users", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "Users", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
                     b.ConfigureAbpUser();
@@ -56,7 +47,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<UserReaction>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "UserReactions", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "UserReactions", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -79,7 +70,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<Comment>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Comments", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "Comments", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -103,7 +94,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<Rating>(r =>
                 {
-                    r.ToTable(options.TablePrefix + "Ratings", options.Schema);
+                    r.ToTable(CmsKitDbProperties.DbTablePrefix + "Ratings", CmsKitDbProperties.DbSchema);
 
                     r.ConfigureByConvention();
 
@@ -125,7 +116,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<Tag>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Tags", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "Tags", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -143,7 +134,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                 builder.Entity<EntityTag>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "EntityTags", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -167,7 +158,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<Page>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Pages", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "Pages", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -189,7 +180,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<Blog>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Blogs", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "Blogs", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -202,7 +193,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                 builder.Entity<BlogPost>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "BlogPosts", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "BlogPosts", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -219,7 +210,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                 builder.Entity<BlogFeature>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "BlogFeatures", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "BlogFeatures", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -239,7 +230,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<MediaDescriptor>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "MediaDescriptors", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "MediaDescriptors", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -260,7 +251,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Entity<MenuItem>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "MenuItems", options.Schema);
+                    b.ToTable(CmsKitDbProperties.DbTablePrefix + "MenuItems", CmsKitDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 

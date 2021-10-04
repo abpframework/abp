@@ -17,7 +17,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement.Web
 {
-    [DependsOn(typeof(AbpTenantManagementHttpApiModule))]
+    [DependsOn(typeof(AbpTenantManagementApplicationContractsModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpFeatureManagementWebModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]

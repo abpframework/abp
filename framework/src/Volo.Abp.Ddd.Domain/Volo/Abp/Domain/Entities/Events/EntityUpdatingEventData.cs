@@ -7,6 +7,7 @@ namespace Volo.Abp.Domain.Entities.Events
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     [Serializable]
+    [Obsolete("This event is no longer needed and identical to EntityUpdatedEventData. Please use EntityUpdatedEventData instead.")]
     public class EntityUpdatingEventData<TEntity> : EntityChangingEventData<TEntity>
     {
         /// <summary>

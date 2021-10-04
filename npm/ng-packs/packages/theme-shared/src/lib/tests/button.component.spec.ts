@@ -8,9 +8,12 @@ describe('ButtonComponent', () => {
 
   beforeEach(
     () =>
-      (spectator = createHost('<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>', {
-        hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
-      })),
+      (spectator = createHost(
+        '<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>',
+        {
+          hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
+        },
+      )),
   );
 
   it('should display the button', () => {

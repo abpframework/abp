@@ -22,7 +22,6 @@ function isValidCreditCard(value: string): boolean {
 
   for (let i = value.length; i > 0; i--) {
     const digit = Number(value[i - 1]) * multiplier;
-    /* tslint:disable-next-line:no-bitwise */
     checksum += (digit % 10) + ~~(digit / 10);
 
     multiplier = (multiplier * 2) % 3;

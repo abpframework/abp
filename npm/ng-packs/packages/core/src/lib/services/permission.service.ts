@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import snq from 'snq';
+import { ABP } from '../models/common';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from './config-state.service';
-import { ABP } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
@@ -70,10 +69,10 @@ export class PermissionService {
   }
 
   protected mapToPolicies(applicationConfiguration: ApplicationConfigurationDto) {
-    return snq(() => applicationConfiguration.auth.grantedPolicies, {});
+    return applicationConfiguration?.auth?.grantedPolicies || {};
   }
 
   protected getPolicy(key: string, grantedPolicies: Record<string, boolean>) {
-    return snq(() => grantedPolicies[key], false);
+    return grantedPolicies[key] || false;
   }
 }

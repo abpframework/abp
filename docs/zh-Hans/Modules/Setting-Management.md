@@ -249,7 +249,7 @@ yarn ng generate component my-settings
 
 ```js
 import { Component } from '@angular/core';
-import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { SettingTabsService } from '@abp/ng.setting-management/config'; // imported SettingTabsService
 import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
 
 @Component(/* component metadata */)

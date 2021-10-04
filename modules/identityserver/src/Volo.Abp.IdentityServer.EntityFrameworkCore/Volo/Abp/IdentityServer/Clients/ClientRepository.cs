@@ -58,7 +58,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 
         public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)

@@ -16,6 +16,8 @@
   "dependencies": {
     "commander": "^6.0.0",
     "execa": "^3.4.0",
-    "fs-extra": "^8.1.0"
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^8.1.0",
+    "semver": "^7.3.5"
   }
 }

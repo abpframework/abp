@@ -1,1 +1,1 @@
-﻿*BEGIN*{{content}}*END*
+*BEGIN*{{content}}*END*

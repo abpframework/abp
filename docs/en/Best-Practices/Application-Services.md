@@ -1,4 +1,4 @@
-﻿## Application Services Best Practices & Conventions
+## Application Services Best Practices & Conventions
 
 * **Do** create an application service for each **aggregate root**.
 

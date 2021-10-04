@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import {

@@ -1,4 +1,4 @@
-﻿# Swagger Integration
+# Swagger Integration
 
 [Swagger (OpenAPI)](https://swagger.io/) is a language-agnostic specification for describing REST APIs. It allows both computers and humans to understand the capabilities of a REST API without direct access to the source code. Its main goals are to:
 

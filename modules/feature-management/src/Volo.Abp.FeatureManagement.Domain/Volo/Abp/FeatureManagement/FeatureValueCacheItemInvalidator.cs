@@ -6,7 +6,7 @@ using Volo.Abp.EventBus;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class FeatureValueCacheItemInvalidator : 
+    public class FeatureValueCacheItemInvalidator :
         ILocalEventHandler<EntityChangedEventData<FeatureValue>>,
         ITransientDependency
     {
@@ -25,7 +25,7 @@ namespace Volo.Abp.FeatureManagement
                 eventData.Entity.ProviderKey
             );
 
-            await Cache.RemoveAsync(cacheKey);
+            await Cache.RemoveAsync(cacheKey, considerUow: true);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

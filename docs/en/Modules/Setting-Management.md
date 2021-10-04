@@ -99,7 +99,7 @@ public class CustomSettingProvider : SettingManagementProvider
 }
 ````
 
-`SettingManagementProvider` base class makes the default implementation (using the `ISettingManagementStore`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
+`SettingManagementProvider` base class makes the default implementation (using the `ISettingManagementStore`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each setting value record).
 
 Once you create your provider class, you should register it using the `SettingManagementOptions` [options class](../Options.md):
 
@@ -278,7 +278,7 @@ Open the `app.component.ts` and modify the file as shown below:
 
 ```js
 import { Component } from '@angular/core';
-import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { SettingTabsService } from '@abp/ng.setting-management/config'; // imported SettingTabsService
 import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
 
 @Component(/* component metadata */)

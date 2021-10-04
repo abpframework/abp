@@ -15,7 +15,8 @@ namespace Volo.Abp.Auditing
         typeof(AbpTimingModule),
         typeof(AbpSecurityModule),
         typeof(AbpThreadingModule),
-        typeof(AbpMultiTenancyModule)
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpAuditingContractsModule)
         )]
     public class AbpAuditingModule : AbpModule
     {

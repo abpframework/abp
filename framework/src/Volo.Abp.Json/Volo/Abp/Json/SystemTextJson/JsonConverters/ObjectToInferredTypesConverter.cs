@@ -9,50 +9,24 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
     /// </summary>
     public class ObjectToInferredTypesConverter : JsonConverter<object>
     {
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override object Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options) => reader.TokenType switch
         {
-            if (reader.TokenType == JsonTokenType.True)
-            {
-                return true;
-            }
+            JsonTokenType.True => true,
+            JsonTokenType.False => false,
+            JsonTokenType.Number when reader.TryGetInt64(out long l) => l,
+            JsonTokenType.Number => reader.GetDouble(),
+            JsonTokenType.String when reader.TryGetDateTime(out DateTime datetime) => datetime,
+            JsonTokenType.String => reader.GetString(),
+            _ => JsonDocument.ParseValue(ref reader).RootElement.Clone()
+        };
 
-            if (reader.TokenType == JsonTokenType.False)
-            {
-                return false;
-            }
-
-            if (reader.TokenType == JsonTokenType.Number)
-            {
-                if (reader.TryGetInt64(out var l))
-                {
-                    return l;
-                }
-
-                return reader.GetDouble();
-            }
-
-            if (reader.TokenType == JsonTokenType.String)
-            {
-                if (reader.TryGetDateTime(out var datetime))
-                {
-                    return datetime;
-                }
-
-                return reader.GetString();
-            }
-
-            // Use JsonElement as fallback.
-            // Newtonsoft uses JArray or JObject.
-            using (var document = JsonDocument.ParseValue(ref reader))
-            {
-                return document.RootElement.Clone();
-            }
-        }
-
-        public override void Write(Utf8JsonWriter writer, object objectToWrite, JsonSerializerOptions options)
-        {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-            JsonSerializer.Serialize(writer, objectToWrite, newOptions);
-        }
+        public override void Write(
+            Utf8JsonWriter writer,
+            object objectToWrite,
+            JsonSerializerOptions options) =>
+            JsonSerializer.Serialize(writer, objectToWrite, objectToWrite.GetType(), options);
     }
 }

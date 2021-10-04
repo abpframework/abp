@@ -192,7 +192,7 @@ function createPropertiesToContributorsMapper<T = any>(
 }
 
 function getTypeFromProperty(property: ObjectExtensions.ExtensionPropertyDto): ePropType {
-  return (property.typeSimple.replace(/\?$/, '') as string) as ePropType;
+  return property.typeSimple.replace(/\?$/, '') as string as ePropType;
 }
 
 function isUndefined(obj: any): obj is undefined {

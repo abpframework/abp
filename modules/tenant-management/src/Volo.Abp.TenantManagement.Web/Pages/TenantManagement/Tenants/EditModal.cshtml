@@ -18,6 +18,7 @@
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <input asp-for="Tenant.Id" />
+            <input asp-for="Tenant.ConcurrencyStamp" />
             <abp-input asp-for="Tenant.Name" label="@L["TenantName"].Value" />
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.TenantInfoModel>())
             {

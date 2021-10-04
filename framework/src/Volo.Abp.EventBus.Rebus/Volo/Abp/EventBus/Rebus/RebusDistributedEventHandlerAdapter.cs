@@ -14,7 +14,7 @@ namespace Volo.Abp.EventBus.Rebus
 
         public async Task Handle(TEventData message)
         {
-            await RebusDistributedEventBus.TriggerHandlersAsync(typeof(TEventData), message);
+            await RebusDistributedEventBus.ProcessEventAsync(message.GetType(), message);
         }
     }
 }

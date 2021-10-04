@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
 
     var pagesService = volo.cmsKit.admin.pages.pageAdmin;

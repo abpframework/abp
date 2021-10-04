@@ -82,6 +82,8 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
 
   private destroy$ = new Subject();
 
+  private delay: MonoTypeOperatorFunction<QueryParamsType>;
+
   get isLoading$(): Observable<boolean> {
     return this._isLoading$.asObservable();
   }
@@ -94,8 +96,6 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
   getWithoutPageReset = () => {
     this.next();
   };
-
-  private delay: MonoTypeOperatorFunction<QueryParamsType>;
 
   constructor(injector: Injector) {
     const delay = injector.get(LIST_QUERY_DEBOUNCE_TIME, 300);
@@ -131,12 +131,12 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
   }
 
   private next() {
-    this._query$.next(({
+    this._query$.next({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
       skipCount: this._page * this._maxResultCount,
       sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
-    } as any) as QueryParamsType);
+    } as any as QueryParamsType);
   }
 }
 

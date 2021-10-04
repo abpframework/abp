@@ -1,6 +1,6 @@
-import { Type, EventEmitter } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
+import { Subject } from 'rxjs';
 import { ABP } from './common';
-import { Subject, BehaviorSubject } from 'rxjs';
 
 export namespace ReplaceableComponents {
   export interface State {
@@ -14,7 +14,7 @@ export namespace ReplaceableComponents {
 
   export interface ReplaceableTemplateDirectiveInput<
     I,
-    O extends { [K in keyof O]: EventEmitter<any> | Subject<any> }
+    O extends { [K in keyof O]: EventEmitter<any> | Subject<any> },
   > {
     inputs: { -readonly [K in keyof I]: { value: I[K]; twoWay?: boolean } };
     outputs: { -readonly [K in keyof O]: (value: ABP.ExtractFromOutput<O[K]>) => void };
@@ -23,7 +23,7 @@ export namespace ReplaceableComponents {
 
   export interface ReplaceableTemplateData<
     I,
-    O extends { [K in keyof O]: EventEmitter<any> | Subject<any> }
+    O extends { [K in keyof O]: EventEmitter<any> | Subject<any> },
   > {
     inputs: ReplaceableTemplateInputs<I>;
     outputs: ReplaceableTemplateOutputs<O>;
@@ -35,7 +35,7 @@ export namespace ReplaceableComponents {
   };
 
   export type ReplaceableTemplateOutputs<
-    T extends { [K in keyof T]: EventEmitter<any> | Subject<any> }
+    T extends { [K in keyof T]: EventEmitter<any> | Subject<any> },
   > = {
     [K in keyof T]: (value: ABP.ExtractFromOutput<T[K]>) => void;
   };

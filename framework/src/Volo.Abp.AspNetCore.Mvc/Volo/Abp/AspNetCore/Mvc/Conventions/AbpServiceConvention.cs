@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         {
             RemoveDuplicateControllers(application);
 
-            foreach (var controller in application.Controllers)
+            foreach (var controller in GetControllers(application))
             {
                 var controllerType = controller.ControllerType.AsType();
 
@@ -71,11 +71,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             }
         }
 
+        protected virtual IList<ControllerModel> GetControllers(ApplicationModel application)
+        {
+            return application.Controllers;
+        }
+
         protected virtual void RemoveDuplicateControllers(ApplicationModel application)
         {
             var controllerModelsToRemove = new List<ControllerModel>();
 
-            foreach (var controllerModel in application.Controllers)
+            foreach (var controllerModel in GetControllers(application))
             {
                 if (!controllerModel.ControllerType.IsDefined(typeof(ExposeServicesAttribute), false))
                 {
@@ -90,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 var exposeServicesAttr = ReflectionHelper.GetSingleAttributeOrDefault<ExposeServicesAttribute>(controllerModel.ControllerType);
                 if (exposeServicesAttr.IncludeSelf)
                 {
-                    var exposedControllerModels = application.Controllers
+                    var exposedControllerModels = GetControllers(application)
                         .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
                         .ToArray();
 
@@ -109,7 +114,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                     continue;
                 }
 
-                var baseControllerModels = application.Controllers
+                var baseControllerModels = GetControllers(application)
                     .Where(cm => baseControllerTypes.Contains(cm.ControllerType))
                     .ToArray();
 

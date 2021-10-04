@@ -1,4 +1,4 @@
-﻿.custom-scroll-container > .col-4 {
+.custom-scroll-container > .col-4 {
     overflow: hidden;
     overflow-y: auto;
     max-height: 499px;

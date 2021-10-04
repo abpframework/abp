@@ -166,7 +166,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             foreach (var property in properties)
             {
                 var propertyEntry = entityEntry.Property(property.Name);
-                if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted))
+                if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !IsSoftDeleted(entityEntry))
                 {
                     propertyChanges.Add(new EntityPropertyChangeInfo
                     {
@@ -188,11 +188,11 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
 
         protected virtual bool IsDeleted(EntityEntry entityEntry)
         {
-            if (entityEntry.State == EntityState.Deleted)
-            {
-                return true;
-            }
+            return entityEntry.State == EntityState.Deleted || IsSoftDeleted(entityEntry);
+        }
 
+        protected virtual bool IsSoftDeleted(EntityEntry entityEntry)
+        {
             var entity = entityEntry.Entity;
             return entity is ISoftDelete && entity.As<ISoftDelete>().IsDeleted;
         }

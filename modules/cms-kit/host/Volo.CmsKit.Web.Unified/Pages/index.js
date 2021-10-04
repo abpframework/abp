@@ -1,4 +1,4 @@
-﻿$(function(){
+$(function(){
     var fileUploadUri = "/api/cms-kit-admin/media";
     var fileUriPrefix = "/api/cms-kit/media/"
     

@@ -26,9 +26,9 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
         [Fact]
         public async Task GetBookList()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                _bookRepository.Any().ShouldBeTrue();
+                (await _bookRepository.AnyAsync()).ShouldBeTrue();
                 return Task.CompletedTask;
             });
         }
@@ -36,9 +36,9 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
         [Fact]
         public async Task GetPhoneInSecondDbContextList()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
+                (await _phoneInSecondDbContextRepository.AnyAsync()).ShouldBeTrue();
                 return Task.CompletedTask;
             });
         }
@@ -46,9 +46,9 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
         [Fact]
         public async Task EfCore_Include_Extension()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var person = PersonRepository.Include(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                var person = await (await PersonRepository.GetDbSetAsync()).Include(p => p.Phones).SingleAsync(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
                 return Task.CompletedTask;

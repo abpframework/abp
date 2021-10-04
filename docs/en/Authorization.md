@@ -256,7 +256,7 @@ myGroup.AddPermission("Book_Creation")
 
 #### Depending on a Global Feature
 
-Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+Use the `RequireGlobalFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
 
 ````csharp
 myGroup.AddPermission("Book_Creation")

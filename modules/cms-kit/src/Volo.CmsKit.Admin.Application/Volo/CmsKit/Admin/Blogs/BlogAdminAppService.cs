@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
@@ -66,6 +67,8 @@ namespace Volo.CmsKit.Admin.Blogs
             var blog = await BlogRepository.GetAsync(id);
 
             blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
+
+            blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await BlogRepository.UpdateAsync(blog);
 

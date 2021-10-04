@@ -1,4 +1,4 @@
-﻿# Přepnutí na EF Core PostgreSQL providera
+# Přepnutí na EF Core PostgreSQL providera
 
 Tento dokument vysvětluje, jak přepnout na poskytovatele databáze **PostgreSQL** pro **[spouštěcí šablonu aplikace](Startup-Templates/Application.md)**, která je dodávána s předem nakonfigurovaným SQL poskytovatelem.
 
