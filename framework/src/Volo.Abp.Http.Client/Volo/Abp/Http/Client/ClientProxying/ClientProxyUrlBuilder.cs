@@ -110,23 +110,16 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     continue;
                 }
 
-                using (var scope = ServiceScopeFactory.CreateScope())
-                {
-                    var objectToQuery = scope.ServiceProvider.GetService(typeof(IObjectToQueryString<>).MakeGenericType(value.GetType()));
-                    if (objectToQuery != null)
-                    {
-                        var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
-                            .MakeGenericMethod(value.GetType())
-                            .Invoke(this, new object[] { value });
+                var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
+                    .MakeGenericMethod(value.GetType())
+                    .Invoke(this, new object[] { value });
 
-                        if (!queryString.IsNullOrWhiteSpace())
-                        {
-                            urlBuilder.Append(isFirstParam ? "?" : "&");
-                            urlBuilder.Append(queryString);
-                            isFirstParam = false;
-                            continue;
-                        }
-                    }
+                if (!queryString.IsNullOrWhiteSpace())
+                {
+                    urlBuilder.Append(isFirstParam ? "?" : "&");
+                    urlBuilder.Append(queryString);
+                    isFirstParam = false;
+                    continue;
                 }
 
                 if (await AddQueryStringParameterAsync(urlBuilder, isFirstParam, queryStringParameter.Name, value))
