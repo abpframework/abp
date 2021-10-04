@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Guids;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.DistributedEvents;
+using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.Oracle
@@ -15,6 +17,9 @@ namespace Volo.Abp.EntityFrameworkCore.Oracle
                     options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsBinary;
                 }
             });
+
+            context.Services.AddTransient(typeof(IOracleDbContextEventOutbox<>), typeof(OracleDbContextEventOutbox<>));
+            context.Services.AddTransient(typeof(IOracleDbContextEventInbox<>), typeof(OracleDbContextEventInbox<>));
         }
     }
 }

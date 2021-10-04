@@ -86,5 +86,15 @@ namespace Volo.Abp.EventBus.Distributed
         {
             return Task.CompletedTask;
         }
+        
+        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

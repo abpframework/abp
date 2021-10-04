@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     mappings: {
         "@node_modules/select2/dist/css/select2.min.css": "@libs/select2/css/",
         "@node_modules/select2/dist/js/select2.min.js": "@libs/select2/js/",
