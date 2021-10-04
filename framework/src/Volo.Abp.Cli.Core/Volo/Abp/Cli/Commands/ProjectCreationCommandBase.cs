@@ -206,6 +206,10 @@ namespace Volo.Abp.Cli.Commands
             bool isTiered,
             CommandLineArgs commandLineArgs)
         {
+
+#if DEBUG
+            return;
+#endif
             if (AppTemplateBase.IsAppTemplate(template))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;

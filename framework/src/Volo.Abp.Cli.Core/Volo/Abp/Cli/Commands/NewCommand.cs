@@ -84,9 +84,7 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
-#if !DEBUG
             OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
-#endif
         }
 
         public string GetUsageInfo()
