@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -16,7 +15,6 @@ namespace Volo.Abp.Kafka
 
         public IKafkaMessageConsumer Create(
             string topicName,
-            string deadLetterTopicName,
             string groupId,
             string connectionName = null)
         {
