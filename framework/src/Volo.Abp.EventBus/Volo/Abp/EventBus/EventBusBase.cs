@@ -22,18 +22,14 @@ namespace Volo.Abp.EventBus
 
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        protected IEventErrorHandler ErrorHandler { get; }
-
         protected EventBusBase(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IEventErrorHandler errorHandler)
+            IUnitOfWorkManager unitOfWorkManager)
         {
             ServiceScopeFactory = serviceScopeFactory;
             CurrentTenant = currentTenant;
             UnitOfWorkManager = unitOfWorkManager;
-            ErrorHandler = errorHandler;
         }
 
         /// <inheritdoc/>
@@ -120,7 +116,7 @@ namespace Volo.Abp.EventBus
 
         protected abstract void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord);
 
-        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, Action<EventExecutionErrorContext> onErrorAction = null)
+        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
         {
             var exceptions = new List<Exception>();
 
@@ -128,9 +124,7 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                var context = new EventExecutionErrorContext(exceptions, eventType, this);
-                onErrorAction?.Invoke(context);
-                await ErrorHandler.HandleAsync(context);
+                ThrowOriginalExceptions(eventType, exceptions);
             }
         }
 
@@ -162,7 +156,7 @@ namespace Volo.Abp.EventBus
                 }
             }
         }
-        
+
         protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)
         {
             if (exceptions.Count == 1)
