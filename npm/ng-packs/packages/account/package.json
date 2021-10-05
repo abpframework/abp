@@ -7,9 +7,9 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.theme.shared": "~4.4.2",
-    "@abp/ng.identity": "~4.4.2",
-    "@abp/ng.account.core": "~4.4.2",
+    "@abp/ng.account.core": "~4.4.3",
+    "@abp/ng.identity": "~4.4.3",
+    "@abp/ng.theme.shared": "~4.4.3",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

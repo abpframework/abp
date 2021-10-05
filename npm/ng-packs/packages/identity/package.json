@@ -7,8 +7,8 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.permission-management": "~4.4.2",
-    "@abp/ng.theme.shared": "~4.4.2",
+    "@abp/ng.permission-management": "~4.4.3",
+    "@abp/ng.theme.shared": "~4.4.3",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

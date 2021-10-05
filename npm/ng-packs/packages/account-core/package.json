@@ -7,8 +7,8 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": "~4.4.2",
-    "@abp/ng.theme.shared": "~4.4.2",
+    "@abp/ng.core": "~4.4.3",
+    "@abp/ng.theme.shared": "~4.4.3",
     "@angular/common": ">=12.0.0",
     "@angular/core": ">=12.0.0"
   },
