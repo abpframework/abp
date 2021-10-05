@@ -114,7 +114,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     .MakeGenericMethod(value.GetType())
                     .Invoke(this, new object[] { value });
 
-                if (!queryString.IsNullOrWhiteSpace())
+                if (queryString != null)
                 {
                     urlBuilder.Append(isFirstParam ? "?" : "&");
                     urlBuilder.Append(queryString);

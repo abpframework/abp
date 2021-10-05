@@ -280,22 +280,49 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetParamsFromQueryAsync()
         {
-            var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsFromQueryInput()
+            var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsInput()
             {
-                NameValues = new List<GetParamsFromQueryInputNameValue>()
+                NameValues = new List<GetParamsNameValue>()
                 {
-                    new GetParamsFromQueryInputNameValue()
+                    new GetParamsNameValue()
                     {
                         Name = "name1",
                         Value = "value1"
                     },
-                    new GetParamsFromQueryInputNameValue()
+                    new GetParamsNameValue()
                     {
                         Name = "name2",
                         Value = "value2"
                     }
                 },
-                NameValue = new GetParamsFromQueryInputNameValue()
+                NameValue = new GetParamsNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        }
+
+        [Fact]
+        public async Task GetParamsFromFormAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromFormAsync(new GetParamsInput()
+            {
+                NameValues = new List<GetParamsNameValue>()
+                {
+                    new GetParamsNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsNameValue()
                 {
                     Name = "name3",
                     Value = "value3"
