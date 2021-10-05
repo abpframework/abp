@@ -45,6 +45,11 @@ namespace Volo.Abp.Studio.Nuget
 
             var localCachedFilePath = await GetLocalCacheSourceCodeFilePathInternal(name, version);
 
+            if (localCachedFilePath == null)
+            {
+                return null;
+            }
+
             return new TemplateFile(await File.ReadAllBytesAsync(localCachedFilePath), version, latestVersion, version);
         }
 
@@ -107,7 +112,7 @@ namespace Volo.Abp.Studio.Nuget
                 return null;
             }
 
-            return Directory.GetFiles(localDllFolder, $"{name}.dll", SearchOption.AllDirectories).First();
+            return Directory.GetFiles(localDllFolder, $"{name}.dll", SearchOption.AllDirectories).FirstOrDefault();
         }
 
         private async Task<string> GetLatestVersionAsync(string nugetPackage, bool includePreReleases)
@@ -130,6 +135,11 @@ namespace Volo.Abp.Studio.Nuget
             if (!File.Exists(localCacheFile))
             {
                 await _nugetPackageCacheManager.CachePackageAsync(name, version);
+
+                if (!File.Exists(localCacheFile))
+                {
+                    return null;
+                }
             }
 
             return localCacheFile;
