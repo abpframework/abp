@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.ModuleInstalling;
 
-namespace Volo.Abp.Identity
+namespace MyCompany.MyProjectName
 {
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
     [ExposeServices(typeof(IModuleInstallingPipelineBuilder))]

@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="..\..\MyCompanyName.MyProjectName.Installer.abpmdl.json" />
-      <EmbeddedResource Include="..\..\MyCompanyName.MyProjectName.Installer.abpmdl.json" />
+      <None Remove="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
+      <EmbeddedResource Include="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
     </ItemGroup>
 
 </Project>
