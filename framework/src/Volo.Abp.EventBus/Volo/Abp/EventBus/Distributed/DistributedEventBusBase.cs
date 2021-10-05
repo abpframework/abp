@@ -20,15 +20,13 @@ namespace Volo.Abp.EventBus.Distributed
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
-            IEventErrorHandler errorHandler,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IGuidGenerator guidGenerator,
             IClock clock
         ) : base(
             serviceScopeFactory,
             currentTenant,
-            unitOfWorkManager,
-            errorHandler)
+            unitOfWorkManager)
         {
             GuidGenerator = guidGenerator;
             Clock = clock;
@@ -84,7 +82,7 @@ namespace Volo.Abp.EventBus.Distributed
             OutgoingEventInfo outgoingEvent,
             OutboxConfig outboxConfig
         );
-        
+
         public abstract Task ProcessFromInboxAsync(
             IncomingEventInfo incomingEvent,
             InboxConfig inboxConfig);
@@ -144,7 +142,7 @@ namespace Volo.Abp.EventBus.Distributed
                                 continue;
                             }
                         }
-                        
+
                         await eventInbox.EnqueueAsync(
                             new IncomingEventInfo(
                                 GuidGenerator.Create(),
