@@ -100,6 +100,10 @@ Configure<FeatureManagementOptions>(options =>
 
 The order of the providers are important. Providers are executed in the reverse order. That means the `CustomFeatureProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
 
+## Connection string
+
+This module uses `AbpFeatureManagement` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string. See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+
 ## See Also
 
 * [Features](../Features.md)
