@@ -6,14 +6,14 @@
   padding: 1em;
   overflow-y: hidden;
   background: #fff;
-  box-shadow: 0 0 0.625em #d9d9d9;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.075), 0 1px 2px rgba(0, 0, 0, 0.075), 1px 2px 4px rgba(0, 0, 0, 0.075), 1px 3px 8px rgba(0, 0, 0, 0.075), 2px 4px 16px rgba(0, 0, 0, 0.075);
   pointer-events: all;
 }
 .swal2-popup.swal2-toast > * {
   grid-column: 2;
 }
 .swal2-popup.swal2-toast .swal2-title {
-  margin: 1em;
+  margin: 0.5em 1em;
   padding: 0;
   font-size: 1em;
   text-align: initial;
@@ -44,7 +44,7 @@
   font-size: 2em;
 }
 .swal2-popup.swal2-toast .swal2-html-container {
-  margin: 1em;
+  margin: 0.5em 1em;
   padding: 0;
   font-size: 1em;
   text-align: initial;
@@ -93,16 +93,13 @@
   justify-content: flex-start;
   height: auto;
   margin: 0;
-  margin-top: 0.3125em;
-  padding: 0;
+  margin-top: 0.5em;
+  padding: 0 0.5em;
 }
 .swal2-popup.swal2-toast .swal2-styled {
   margin: 0.25em 0.5em;
   padding: 0.4em 0.6em;
   font-size: 1em;
-}
-.swal2-popup.swal2-toast .swal2-styled:focus {
-  box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(100, 150, 200, 0.5);
 }
 .swal2-popup.swal2-toast .swal2-success {
   border-color: #a5dc86;
