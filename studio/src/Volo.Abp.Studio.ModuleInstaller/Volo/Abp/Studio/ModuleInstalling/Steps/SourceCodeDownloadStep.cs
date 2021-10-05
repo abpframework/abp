@@ -19,6 +19,11 @@ namespace Volo.Abp.Studio.ModuleInstalling.Steps
                 SourceCodeTypes.Module,
                 context.Version);
 
+            if (zipFilePath == null)
+            {
+                throw new AbpStudioException(message: $"Source code not found for {context.ModuleName} (v{context.Version})");
+            }
+
             var targetFolder = context.GetTargetSourceCodeFolder();
 
             if (Directory.Exists(targetFolder))
