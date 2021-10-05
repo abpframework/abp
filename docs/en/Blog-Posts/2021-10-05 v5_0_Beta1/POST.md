@@ -32,16 +32,14 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 ### Migration Notes & Breaking Changes
 
-This is a major version and there are some breaking changes and upgrade steps. Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details.
-
-Here, a list of important breaking changes in this version:
+This is a major version and there are some breaking changes and upgrade steps. Here, a list of important breaking changes in this version:
 
 * Upgraded to .NET 6.0-rc.1, so you need to move your solution to .NET 6.0 if you want to use the ABP 5.0.
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was already made obsolete in 4.2.
 * Removed NGXS and states from the Angular UI.
 * Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of ABP CLI.
 
-You can see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
+Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
 
 ## What's new with Beta 1?
 
@@ -173,5 +171,32 @@ That's all. You can continue to publishing and consuming events just as before. 
 
 ### Publishing events in transaction
 
+The previous feature (outbox & inbox) solves the transactional event publishing problem for distributed systems. This feature, publishing events in transaction, solves the problem of executing event handlers in the same transaction that the events are published in for non-distributed applications. With 5.0, all events (local or distributed) are handled in the same transaction. If any handler fails, the transaction is rolled back. If you don't want that, you should use try/catch and ignore the exception inside your event handler.
+
+Remember that if you don't install a real distributed event provider (like [RabbitMQ](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus-RabbitMQ-Integration) or [Kafka](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus-Kafka-Integration)), the [distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) are actually executed in-process, just like the [local events](https://docs.abp.io/en/abp/latest/Local-Event-Bus). So, with this development, all the events become transactional, even if your system is distributed or not.
+
+No action needed to take. It will just work by default. There is a [deprecation note](https://github.com/abpframework/abp/issues/9897) related to this change (some pre-defined events [will be removed](https://github.com/abpframework/abp/issues/9908) in the next major version since they are not needed anymore)
+
+### Inactivating a user
+
 TODO
 
+### Overriding email settings per tenant
+
+TODO
+
+### Handfire dashboard permission
+
+TODO
+
+### Introducing AbpControllerBase
+
+TODO
+
+## Ongoing Works
+
+TODO
+
+## Other News
+
+TODO
