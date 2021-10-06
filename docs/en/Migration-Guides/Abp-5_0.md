@@ -36,7 +36,7 @@ For document base databases like MongoDB, you need to manually update the `IsAct
 
 ABP Framework will serialize the datetime based on [AbpClockOptions](https://docs.abp.io/en/abp/latest/Timing#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
 
-You can disable this behavior with `AbpMongoDbOptions`:
+To revert back this feature, set `UseAbpClockHandleDateTime = false` in `AbpMongoDbOptions`:
 
 ```cs
 services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
