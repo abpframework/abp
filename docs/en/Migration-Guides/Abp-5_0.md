@@ -2,9 +2,12 @@
 
 ## IdentityUser
 
-We added an `IsActive(bool)` property to `IdentityUser` to [control whether it is available](https://github.com/abpframework/abp/pull/10185). **Please set it to `true` of the old user after the upgrade.**
+`IsActive <bool>` property is added to the `IdentityUser`. This flag will be checked during the authentication of the users. See the related [PR](https://github.com/abpframework/abp/pull/10185). 
+**After the migration, set this property to `true` for the existing users: `UPDATE AbpUsers SET IsActive=1`**
 
-For EF Core you can change `defaultValue` to `true` in the migration class:
+For EFCore you can set `defaultValue` to `true` in the migration class:
+(This will add the column with `true` value for the existing records.)
+
 ```cs
 public partial class AddIsActiveToIdentityUser : Migration
 {
@@ -27,16 +30,18 @@ public partial class AddIsActiveToIdentityUser : Migration
 }
 ```
 
-
+For document base databases like MongoDB, you need to manually update the `IsActive` field for the existing user records.
+ 
 ## MongoDB
 
-ABP Framework will serialize the datetime based on [AbpClockOptions](https://docs.abp.io/en/abp/latest/Timing#clock-options) start from 5.0, before `DateTime` values in MongoDB are [always saved as UTC](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
+ABP Framework will serialize the datetime based on [AbpClockOptions](https://docs.abp.io/en/abp/latest/Timing#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
 
-You can disable this behavior by configure `AbpMongoDbOptions`.
+To revert back this feature, set `UseAbpClockHandleDateTime = false` in `AbpMongoDbOptions`:
+
 ```cs
 services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 ```
 
 ## Angular UI
 
-See the [Angular UI Migration Guide](Abp-5_0-Angular.md).
+See the [Angular UI 5.0 Migration Guide](Abp-5_0-Angular.md).
