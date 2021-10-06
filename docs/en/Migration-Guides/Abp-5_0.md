@@ -2,7 +2,8 @@
 
 ## IdentityUser
 
-`IsActive <bool>` property is added to the `IdentityUser`. This flag will be checked during the authentication of the users. See [PR](https://github.com/abpframework/abp/pull/10185). **After the migration, set this property to `true` for the existing users: `UPDATE AbpUsers SET IsActive=1`**
+`IsActive <bool>` property is added to the `IdentityUser`. This flag will be checked during the authentication of the users. See the related [PR](https://github.com/abpframework/abp/pull/10185). 
+**After the migration, set this property to `true` for the existing users: `UPDATE AbpUsers SET IsActive=1`**
 
 For EFCore you can change `defaultValue` to `true` in the migration class:
 (This will add the column with `true` value for the existing records.)
