@@ -4,9 +4,11 @@ Today, we are excited to release the [ABP Framework](https://abp.io/) and the [A
 
 > **The planned release date for the [5.0.0 Release Candidate](https://github.com/abpframework/abp/milestone/51) version is November, 2021**.
 
+Please try the beta 1 version and provide feedback for a more stable ABP version 5.0! Thank you all.
+
 ## Get Started with the 5.0 Beta 1
 
-If you want to try the version 5.0.0 today, follow the steps below;
+follow the steps below to try the version 5.0.0 beta 1 today;
 
 1) **Upgrade** the ABP CLI to the version `5.0.0-beta.1` using a command line terminal:
 
@@ -87,15 +89,13 @@ Then you can consume the server-side APIs from your JavaScript code just like th
 
 #### Creating Angular client proxies
 
-Angular developers already knows that the generate-proxy command was already available in ABP's previous versions to create client-side proxy services in the Angular UI. The same functionality continues to be available and already [documented here](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies).
+Angular developers knows that the generate-proxy command was already available in ABP's previous versions to create client-side proxy services in the Angular UI. The same functionality continues to be available and already [documented here](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies).
 
-Example usage:
+**Example usage:**
 
 ````bash
-abp generate-proxy -t ng
+abp generate-proxy -t ng -u https://localhost:44305
 ````
-
-URL is not required here. It gets the URL from the application's configuration by default. See [the documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies) for more information.
 
 ### Transactional Outbox & Inbox for the Distributed Event Bus
 
@@ -179,24 +179,99 @@ No action needed to take. It will just work by default. There is a [deprecation 
 
 ### Inactivating a user
 
-TODO
+The [Identity module](https://docs.abp.io/en/abp/latest/Modules/Identity) has a new feature to make a user active or inactive. Inactive users can not login to the system. In this way, you can disable a user account without deleting it. An *Active* checkbox is added to the user create/edit dialog to control it on the UI:
+
+![user-active](user-active.png)
+
+EF Core developers should add a new database migration since this brings a new field to the `AbpUsers` table.
 
 ### Overriding email settings per tenant
 
-TODO
+If you're building a multi-tenant application, it is now possible to override email sending settings per tenant. To make this possible, you should first enable that [feature](https://docs.abp.io/en/abp/latest/Features) to the tenant you want, by clicking the *Actions -> Features* for the tenant.
 
-### Handfire dashboard permission
+![tenant-features](tenant-features.png)
 
-TODO
+Enable the feature using the checkbox as shown in the following modal:
+
+![enable-email-tenant](enable-email-tenant.png)
+
+Then the tenant admin can open the email settings page under the Administration -> Settings menu (on development environment, logout, switch to the tenant and re-login with the tenant admin):
+
+![email-settings](email-settings.png)
+
+### Hangfire dashboard permission
+
+ABP allows to use Hangfire as the background job manager when you install the integration package [as documented](https://docs.abp.io/en/abp/5.0/Background-Jobs-Hangfire). Hangfire's dashboard is used to monitor and control the background job queues. Here, a screenshot from the dashboard:
+
+![hangfire-dashboard](hangfire-dashboard.png)
+
+Hangfire's dashboard is not authorized by default, so any user can navigate to the `/hangfire` URL and see/control the jobs. With the ABP version 5.0, we've added a built-in authorization implementation for the Hangfire dashboard. Instead of `app.UseHangfireDashboard();`, you can use the following middleware configuration:
+
+````csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
+});
+````
+
+In this way, only the authenticated users can see the dashboard. However, we suggest to set a permission name, so only the users with that permission can see the dashboard:
+
+````csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] {
+        new AbpHangfireAuthorizationFilter("MyPermissionName")
+    }
+});     
+````
+
+You can define the permission (`MyPermissionName` in this example) using the standard [permission system](https://docs.abp.io/en/abp/5.0/Authorization#permission-system).
 
 ### Introducing AbpControllerBase
 
-TODO
+ABP provides an `AbpController` class that you can inherit your MVC controllers from. It provides some pre-injected services to simplify your controllers. With v5.0, we are adding a second base controller class, `AbpControllerBase`, which is more proper to create API controllers (without view features). It is suggested to inherit from the `AbpControllerBase` class to create API controllers, instead of the `AbpController` class.
 
-## Ongoing Works
+**Example:**
 
-TODO
+````csharp
+[Route("api/products")]
+public class ProductController : AbpControllerBase
+{
+    // TODO: ...
+}
+````
 
-## Other News
+## Ongoing Works & Next Release
 
-TODO
+We'd published important features and changes with this beta 1 release. However, there are still some major works in development. The most important work is the **Bootstrap 5 upgrade**. ABP 5.0 will work on Bootstrap 5, which is an important change for existing applications. We suggest to prepare for this change from now.
+
+The next release will be 5.0.0-beta.2. It will include the Bootstrap 5 upgrade. We don't plan make another big work for the version 5.0. After the beta.2, we will work on tests, feedbacks and documentation to prepare a stable final release.
+
+## Community News
+
+### ABP was on ASP.NET Community Startup!
+
+It was great for us to be invited to Microsoft's [ASP.NET Community Weekly Standup](https://dotnet.microsoft.com/live/community-standup) show, at September 28. There was a very high attention and that made us very happy. Thanks to the ABP Community and all the watchers :) If you've missed the talk, [you can watch it here](https://www.youtube.com/watch?v=vMWM-_ihjwM).
+
+### Upcoming ABP Book!
+
+I am currently authoring the first official book for the ABP Framework and it is on [pre-sale on Amazon](https://www.amazon.com/Mastering-ABP-Framework-maintainable-implementing-dp-1801079242/dp/1801079242) now.
+
+![abp-book-cover](abp-book-cover.png)
+
+This books is a complete guide to start working with the ABP Framework, explore the ABP features and concepts. It also contains chapters for DDD, modular application development and multi-tenancy to learn and practically work with the ABP architecture to build maintainable software solutions and create SaaS applications. The book will be based on ABP 5.0 and published in the beginning of 2022. You can [pre-order now](https://www.amazon.com/Mastering-ABP-Framework-maintainable-implementing-dp-1801079242/dp/1801079242)!
+
+### New ABP Community posts
+
+Here, the latest posts added to the [ABP community](https://community.abp.io/):
+
+* [Deploy ABP Framework .NET Core tiered application to docker swarm](https://community.abp.io/articles/deploy-abp-framework-dotnet-core-tiered-app-to-docker-swarm-kcrjbjec)
+* [How to override localization strings of depending modules](https://community.abp.io/articles/how-to-override-localization-strings-of-depending-modules-ba1oy03l)
+* [Centralized logging for .NET Core ABP microservices application using Seq](https://community.abp.io/articles/centralized-logging-for-.net-core-abp-microservices-app-using-seq-g1xe7e7y)
+* [Extend Tenant management and add custom host to your ABP application](https://community.abp.io/articles/extend-tenant-management-and-add-custom-host-to-your-abp-app-lwmi9lr5)
+
+Thanks to the ABP Community for all the contents they have published. You can also post your ABP and .NET related (text or video) contents to the ABP Community.
+
+## Conclusion
+
+The ABP version 5.0 is coming with important changes (like .NET 6 and Bootstrap 5) and features. In this blog post, I summarized the news about that new version. Please try it and provide feedback by opening issues on [the GitHub repository](https://github.com/abpframework/abp). Thank you all!
