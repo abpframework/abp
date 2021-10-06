@@ -121,8 +121,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                             .MakeGenericMethod(value.GetType())
                             .Invoke(this, new object[]
                             {
-                                scope.ServiceProvider.GetRequiredService(
-                                    typeof(IObjectToQueryString<>).MakeGenericType(value.GetType())),
+                                scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.QueryStringConverts[value.GetType()]),
                                 value
                             });
 

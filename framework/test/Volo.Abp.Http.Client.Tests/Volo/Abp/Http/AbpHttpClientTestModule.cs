@@ -55,7 +55,6 @@ namespace Volo.Abp.Http
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
             });
 
-
             Configure<AbpHttpClientProxyingOptions>(options =>
             {
                 options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));

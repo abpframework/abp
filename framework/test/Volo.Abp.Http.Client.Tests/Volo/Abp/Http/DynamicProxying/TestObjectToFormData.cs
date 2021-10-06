@@ -8,7 +8,6 @@ using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
-    [ExposeServices(typeof(IObjectToFormData<List<GetParamsNameValue>>))]
     public class TestObjectToFormData : IObjectToFormData<List<GetParamsNameValue>>, ITransientDependency
     {
         public Task<List<KeyValuePair<string, HttpContent>>> ConvertAsync(List<GetParamsNameValue> values)
