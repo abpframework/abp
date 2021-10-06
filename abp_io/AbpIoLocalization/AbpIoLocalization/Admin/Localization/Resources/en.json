@@ -346,9 +346,12 @@
     "Volo.AbpIo.Commercial:030002": "Once activated, trial license cannot be set to requested!",
     "Volo.AbpIo.Commercial:030003": "There is no such status!",
     "Volo.AbpIo.Commercial:030004": "Status could not be changed due to an unexpected error!",
-    "Volo.AbpIo.Commercial:030005": "Start date and end date cannot be given when the trial license is in the requested state!",
+    "Volo.AbpIo.Commercial:030005": "Start date and end date only can be given when the trial license is in the activated state!",
     "Volo.AbpIo.Commercial:030006": "End date must always be greater than start date!",
     "Volo.AbpIo.Commercial:030007": "This trial license has already been activated once!",
     "Volo.AbpIo.Commercial:030008": "Purchase date can be set only when status is Purchased!",
+    "Volo.AbpIo.Commercial:030009": "User not found!",
+    "Volo.AbpIo.Commercial:030010": "To purchase the trial license, you need to activate the trial license!",
+    "Volo.AbpIo.Commercial:030011": "Trial license cannot be deleted if Purchased!"
   }
 }
