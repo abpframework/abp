@@ -2,7 +2,7 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Account
+namespace Volo.Abp.AuditLogging
 {
     [DependsOn(
         typeof(AbpStudioModuleInstallerModule),

@@ -3,18 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.ModuleInstalling;
 
-namespace Volo.Abp.Account
+namespace Volo.Abp.BackgroundJobs
 {
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
     [ExposeServices(typeof(IModuleInstallingPipelineBuilder))]
-    public class AuditLogingInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
+    public class BackgroundJobsInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
     {
         public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
         {
             context.AddEfCoreConfigurationMethodDeclaration(
                 new EfCoreConfigurationMethodDeclaration(
-                    "Volo.Abp.AuditLogging.EntityFrameworkCore",
-                    "ConfigureAuditLogging"
+                    "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
+                    "ConfigureBackgroundJobs"
                 )
             );
             
