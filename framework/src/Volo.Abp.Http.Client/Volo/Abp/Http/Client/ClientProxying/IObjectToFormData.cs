@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Http
+namespace Volo.Abp.Http.Client.ClientProxying
 {
     public interface IObjectToFormData<in TValue>
     {
