@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+	
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Volo.Abp.BlobStoring.Database.SourceCode.zip" />
+        <Content Include="Volo.Abp.BlobStoring.Database.SourceCode.zip">
+            <Pack>true</Pack>
+            <PackagePath>content\</PackagePath>
+        </Content>
+    </ItemGroup>
+</Project>
