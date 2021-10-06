@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -28,10 +29,12 @@ namespace Volo.Abp.Http.Client.ClientProxying
         }
 
         protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpHttpClientProxyingOptions HttpClientProxyingOptions { get; }
 
-        public ClientProxyUrlBuilder(IServiceScopeFactory serviceScopeFactory)
+        public ClientProxyUrlBuilder(IServiceScopeFactory serviceScopeFactory, IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions)
         {
             ServiceScopeFactory = serviceScopeFactory;
+            HttpClientProxyingOptions = httpClientProxyingOptions.Value;
         }
 
         public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
@@ -110,16 +113,27 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     continue;
                 }
 
-                var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
-                    .MakeGenericMethod(value.GetType())
-                    .Invoke(this, new object[] { value });
-
-                if (queryString != null)
+                if (HttpClientProxyingOptions.QueryStringConverts.ContainsKey(value.GetType()))
                 {
-                    urlBuilder.Append(isFirstParam ? "?" : "&");
-                    urlBuilder.Append(queryString);
-                    isFirstParam = false;
-                    continue;
+                    using (var scope = ServiceScopeFactory.CreateScope())
+                    {
+                        var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
+                            .MakeGenericMethod(value.GetType())
+                            .Invoke(this, new object[]
+                            {
+                                scope.ServiceProvider.GetRequiredService(
+                                    typeof(IObjectToQueryString<>).MakeGenericType(value.GetType())),
+                                value
+                            });
+
+                        if (queryString != null)
+                        {
+                            urlBuilder.Append(isFirstParam ? "?" : "&");
+                            urlBuilder.Append(queryString);
+                            isFirstParam = false;
+                            continue;
+                        }
+                    }
                 }
 
                 if (await AddQueryStringParameterAsync(urlBuilder, isFirstParam, queryStringParameter.Name, value))
@@ -134,17 +148,9 @@ namespace Volo.Abp.Http.Client.ClientProxying
             }
         }
 
-        protected virtual async Task<string> ObjectToQueryStringAsync<T>(T value)
+        protected virtual async Task<string> ObjectToQueryStringAsync<T>(IObjectToQueryString<T> converter, T value)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var objectToQueryString = scope.ServiceProvider.GetService<IObjectToQueryString<T>>();
-                if (objectToQueryString != null)
-                {
-                    return await objectToQueryString.ConvertAsync(value);
-                }
-            }
-            return null;
+            return await converter.ConvertAsync(value);
         }
 
         protected virtual async Task<bool> AddQueryStringParameterAsync(

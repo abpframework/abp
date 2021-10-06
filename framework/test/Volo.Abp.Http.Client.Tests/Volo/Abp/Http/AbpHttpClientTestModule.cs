@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.DynamicProxying;
 using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
@@ -51,6 +53,13 @@ namespace Volo.Abp.Http
             {
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateFileInput));
                 options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
+            });
+
+
+            Configure<AbpHttpClientProxyingOptions>(options =>
+            {
+                options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));
+                options.FormDataConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToFormData));
             });
         }
     }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Proxying;
@@ -30,9 +31,12 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        public ClientProxyRequestPayloadBuilder(IServiceScopeFactory serviceScopeFactory)
+        protected AbpHttpClientProxyingOptions HttpClientProxyingOptions { get; }
+
+        public ClientProxyRequestPayloadBuilder(IServiceScopeFactory serviceScopeFactory, IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions)
         {
             ServiceScopeFactory = serviceScopeFactory;
+            HttpClientProxyingOptions = httpClientProxyingOptions.Value;
         }
 
         [CanBeNull]
@@ -99,18 +103,28 @@ namespace Volo.Abp.Http.Client.ClientProxying
                     continue;
                 }
 
-                var formDataContents = await (Task<List<KeyValuePair<string, HttpContent>>>)CallObjectToFormDataAsyncMethod
-                    .MakeGenericMethod(value.GetType())
-                    .Invoke(this, new object[] { value });
-
-                if (formDataContents != null)
+                if (HttpClientProxyingOptions.FormDataConverts.ContainsKey(value.GetType()))
                 {
-                    foreach (var content in formDataContents)
+                    using (var scope = ServiceScopeFactory.CreateScope())
                     {
-                        formData.Add(content.Value, content.Key);
-                    }
+                        var formDataContents = await (Task<List<KeyValuePair<string, HttpContent>>>)CallObjectToFormDataAsyncMethod
+                            .MakeGenericMethod(value.GetType())
+                            .Invoke(this, new object[]
+                            {
+                                scope.ServiceProvider.GetRequiredService(
+                                    typeof(IObjectToFormData<>).MakeGenericType(value.GetType())),
+                                value
+                            });
 
-                    continue;
+                        if (formDataContents != null)
+                        {
+                            foreach (var content in formDataContents)
+                            {
+                                formData.Add(content.Value, content.Key);
+                            }
+                            continue;
+                        }
+                    }
                 }
 
                 if (value is IRemoteStreamContent remoteStreamContent)
@@ -147,17 +161,9 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return formData;
         }
 
-        protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(T value)
+        protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, T value)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var objectToFormData = scope.ServiceProvider.GetService<IObjectToFormData<T>>();
-                if (objectToFormData != null)
-                {
-                    return await objectToFormData.ConvertAsync(value);
-                }
-            }
-            return null;
+            return await converter.ConvertAsync(value);
         }
     }
 }
