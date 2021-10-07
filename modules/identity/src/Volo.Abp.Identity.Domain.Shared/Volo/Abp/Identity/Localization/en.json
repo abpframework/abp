@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
     "Volo.Abp.Identity:010008": "It's not allowed to change two factor setting.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
+    "ThisUserIsNotActiveMessage": "This user is not active.",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
     "Permission:Create": "Create",
