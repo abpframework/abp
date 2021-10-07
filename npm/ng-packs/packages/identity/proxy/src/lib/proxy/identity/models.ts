@@ -44,6 +44,7 @@ export interface IdentityUserCreateOrUpdateDtoBase extends ExtensibleObject {
   surname?: string;
   email: string;
   phoneNumber?: string;
+  isActive: boolean;
   lockoutEnabled: boolean;
   roleNames: string[];
 }
@@ -57,6 +58,7 @@ export interface IdentityUserDto extends ExtensibleFullAuditedEntityDto<string> 
   emailConfirmed: boolean;
   phoneNumber?: string;
   phoneNumberConfirmed: boolean;
+  isActive: boolean;
   lockoutEnabled: boolean;
   lockoutEnd?: string;
   concurrencyStamp?: string;

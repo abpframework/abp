@@ -49,6 +49,13 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
   {
     type: ePropType.Boolean,
+    name: 'isActive',
+    displayName: 'AbpIdentity::DisplayName:IsActive',
+    id: 'active-checkbox',
+    defaultValue: true,
+  },
+  {
+    type: ePropType.Boolean,
     name: 'lockoutEnabled',
     displayName: 'AbpIdentity::DisplayName:LockoutEnabled',
     id: 'lockout-checkbox',
