@@ -81,7 +81,6 @@
                         data: 'userName',
                         render: function (data, type, row) {
                             row.userName = $.fn.dataTable.render.text().display(row.userName);
-                            var roleHtml = row.userName;
                             if (!row.isActive) {
                                 return  '<i data-toggle="tooltip" data-placement="top" title="' +
                                     l('ThisUserIsNotActiveMessage') +
@@ -89,7 +88,7 @@
                                     '<span class="opc-65">' + row.userName + '</span>';
                             }
 
-                            return roleHtml;
+                            return row.userName;
                         }
                     },
                     {
