@@ -82,7 +82,7 @@
                         render: function (data, type, row) {
                             row.userName = $.fn.dataTable.render.text().display(row.userName);
                             if (!row.isActive) {
-                                return '<i class="fa fa-lock"></i> <span class="opc-65">' + row.userName + '</span>';
+                                return '<i class="fa fa-ban"></i> <span class="opc-65">' + row.userName + '</span>';
                             }
 
                             return row.userName ;
