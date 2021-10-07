@@ -25,7 +25,7 @@ namespace Volo.Abp.Studio.Solution
             var slnFileLines = (await FileSystem.File.ReadAllTextAsync(slnFilePath))
                 .Split(Environment.NewLine).ToList();
 
-            if (slnFileLines.Any(l => l.Contains($"\"{projectName}\"")))
+            if (slnFileLines.Any(l => l.Contains($"\"{projectName}\"") && l.Contains("9A19103F-16F7-4668-BE54-9A1E7A4F7556")))
             {
                 throw new AbpStudioException(AbpStudioErrorCodes.ProjectWithSameNameAlreadyExistInTheSolutionFile)
                     .WithData("Solution Path", slnFilePath)
