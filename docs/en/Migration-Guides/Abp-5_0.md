@@ -42,6 +42,10 @@ To revert back this feature, set `UseAbpClockHandleDateTime = false` in `AbpMong
 services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 ```
 
+## IApiScopeRepository
+
+`GetByNameAsync` method renamed as `FindByNameAsync`.
+
 ## Angular UI
 
 See the [Angular UI 5.0 Migration Guide](Abp-5_0-Angular.md).
