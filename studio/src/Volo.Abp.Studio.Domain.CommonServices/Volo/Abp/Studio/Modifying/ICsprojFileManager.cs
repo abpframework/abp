@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Studio.Package;
 
 namespace Volo.Abp.Studio.Packages.Modifying
 {
@@ -11,5 +13,7 @@ namespace Volo.Abp.Studio.Packages.Modifying
         Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference);
 
         Task<string> GetTargetFrameworkAsync(string filePath);
+
+        Task<List<PackageDependency>> GetDependencyListAsync(string filePath);
     }
 }

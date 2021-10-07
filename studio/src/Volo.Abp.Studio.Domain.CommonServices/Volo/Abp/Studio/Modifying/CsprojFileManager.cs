@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.Helpers;
+using Volo.Abp.Studio.Package;
 using Volo.Abp.Studio.Xml;
 
 namespace Volo.Abp.Studio.Packages.Modifying
@@ -130,6 +132,37 @@ namespace Volo.Abp.Studio.Packages.Modifying
             }
 
             return nodes[0].InnerText.Trim();
+        }
+
+        public async Task<List<PackageDependency>> GetDependencyListAsync(string filePath)
+        {
+            var result = new List<PackageDependency>();
+
+            var document = await GetXmlDocumentAsync(filePath);
+
+            var packageReferenceNodes = document.SelectNodes($"/Project/ItemGroup/PackageReference");
+            var projectReferenceNodes = document.SelectNodes($"/Project/ItemGroup/ProjectReference");
+
+            foreach (XmlNode packageReferenceNode in packageReferenceNodes)
+            {
+                result.Add(
+                        new PackageDependency(
+                                packageReferenceNode.Attributes["Include"].Value,
+                                packageReferenceNode.Attributes["Version"].Value
+                            )
+                    );
+            }
+
+            foreach (XmlNode projectReferenceNode in projectReferenceNodes)
+            {
+                result.Add(
+                        new PackageDependency(
+                            Path.GetFullPath(Path.Combine(Path.GetDirectoryName(filePath), projectReferenceNode.Attributes["Include"].Value))
+                            )
+                    );
+            }
+
+            return result;
         }
 
         private XmlNode GetOrCreateItemGroupNode(XmlDocument document)
