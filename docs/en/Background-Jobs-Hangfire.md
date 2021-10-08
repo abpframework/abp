@@ -95,12 +95,21 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 });
 ```
 
+* `AbpHangfireAuthorizationFilter` is an implementation of an authorization filter.
+
+#### AbpHangfireAuthorizationFilter
+
+`AbpHangfireAuthorizationFilter` class has the following fields:
+
+* **`enableTenant`  (`bool`, default: `false`):** Enables/disables hiding the Hangfire dashboard on tenant users.
+* **`requiredPermissionName`  (`string`, default: `null`):** Accessible only if the current user has the specified permission. In this case, if we specify a permission name, we don't need to set `enableTenant` `true` because the permission system already does it.
+
 If you want to require an additional permission, you can pass it into the constructor as below:
 
 ```csharp
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") }
 });
 ```
 
