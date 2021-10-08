@@ -101,7 +101,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 
 `AbpHangfireAuthorizationFilter` class has the following fields:
 
-* **`enableTenant`  (`bool`, default: `false`):** Enables/disables hiding the Hangfire dashboard on tenant users.
+* **`enableTenant`  (`bool`, default: `false`):** Enables/disables accessing the Hangfire dashboard on tenant users.
 * **`requiredPermissionName`  (`string`, default: `null`):** Hangfire dashboard is accessible only if the current user has the specified permission. In this case, if we specify a permission name, we don't need to set `enableTenant` `true` because the permission system already does it.
 
 If you want to require an additional permission, you can pass it into the constructor as below:
