@@ -11,6 +11,7 @@ import {
 } from '@ngx-validate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { BreadcrumbItemsComponent } from './components/breadcrumb-items/breadcrumb-items.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { HttpErrorWrapperComponent } from './components/http-error-wrapper/http-error-wrapper.component';
@@ -36,6 +37,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
+  BreadcrumbItemsComponent,
   ButtonComponent,
   ConfirmationComponent,
   LoaderBarComponent,

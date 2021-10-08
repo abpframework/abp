@@ -22,3 +22,4 @@ The `dev-app` project is the same as the Angular UI template project. `dev-app` 
 For more information, see the [docs.abp.io](https://docs.abp.io)
 
 If would you like contribute, see the [contribution guideline](./CONTRIBUTING.md).
+ 

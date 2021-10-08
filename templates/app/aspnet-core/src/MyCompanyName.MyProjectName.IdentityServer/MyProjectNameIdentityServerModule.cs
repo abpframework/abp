@@ -39,6 +39,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreSerilogModule)

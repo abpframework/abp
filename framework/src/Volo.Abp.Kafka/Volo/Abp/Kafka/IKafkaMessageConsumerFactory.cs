@@ -8,13 +8,11 @@
         /// not disposed until end of the application.
         /// </summary>
         /// <param name="topicName"></param>
-        /// <param name="deadLetterTopicName"></param>
         /// <param name="groupId"></param>
         /// <param name="connectionName"></param>
         /// <returns></returns>
         IKafkaMessageConsumer Create(
             string topicName,
-            string deadLetterTopicName,
             string groupId,
             string connectionName = null);
     }
