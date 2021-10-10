@@ -32,6 +32,14 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
 
+### Visual Studio Upgrade
+
+As .NET 6 is a preview version you need to make changes on your current Visual Studio. If you want to run a .NET 6 project on Visual Studio 2019, you need to enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
+
+![Enable Using Previews of the .NET SDK ](use-preview-visual-studio.png)
+
+Alternatively you can download the latest Visual Studio 2022 preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
+
 ### Migration Notes & Breaking Changes
 
 This is a major version and there are some breaking changes and upgrade steps. Here, a list of important breaking changes in this version:
