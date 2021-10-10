@@ -18,7 +18,7 @@
                     }
                     if (Model.Ratings != null)
                     {
-                        <a href="#" class="text-muted ms-1" data-toggle="modal" data-target="#ratingDetail">
+                        <a href="#" class="text-muted ms-1" data-bs-toggle="modal" data-bs-target="#ratingDetail">
                             <i class="far fa-question-circle"></i>
                         </a>
 
@@ -55,7 +55,7 @@
                 }
                 else
                 {
-                    <span class="my-rating text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><div class='d-grid gap-2'><a href='@Model.LoginUrl' class='btn btn-primary'>@L["LoginToRate"]</a></div></div>"></span>
+                    <span class="my-rating text-dark p-1" data-authenticated="True" data-bs-toggle="popover" data-bs-placement="right" data-html="true" data-content="<div class='text-center'><div class='d-grid gap-2'><a href='@Model.LoginUrl' class='btn btn-primary'>@L["LoginToRate"]</a></div></div>"></span>
                     <span class="rating-login"></span>
                 }
             </div>

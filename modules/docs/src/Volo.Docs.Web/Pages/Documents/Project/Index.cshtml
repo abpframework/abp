@@ -46,7 +46,7 @@
 }
 @if (Model.LoadSuccess)
 {
-    <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
+    <div class="docs-page" data-spy="scroll" data-bs-target="#docs-sticky-index">
         <div class="row justify-content-end">
             <div class="col-md-3 docs-sidebar dark-sidebar">
                 <div class="docs-sidebar-wrapper">
@@ -110,7 +110,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-text">
-                                                    <i class="fas fa-code-branch" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                                    <i class="fas fa-code-branch" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Version"]"></i>
                                                 </span>
         
 
@@ -131,7 +131,7 @@
                                         <div class="version-select">
                                             <div class="input-group">
                                                 @*<span class="input-group-text">
-                                                            <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
+                                                            <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
                                                  </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
                                                         class="form-control"
@@ -283,7 +283,7 @@
                                 }
                             </div>
 
-                            <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
+                            <div data-spy="scroll" data-bs-target="#docs-sticky-index" data-offset="0">
                                 <article class="docs-body">
 
                                     @if (Model.DocumentLanguageCode != Model.LanguageCode)
