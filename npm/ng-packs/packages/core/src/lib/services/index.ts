@@ -1,4 +1,3 @@
-export * from './application-configuration.service';
 export * from './auth.service';
 export * from './config-state.service';
 export * from './content-projection.service';
@@ -11,7 +10,6 @@ export * from './list.service';
 export * from './localization.service';
 export * from './multi-tenancy.service';
 export * from './permission.service';
-export * from './profile.service';
 export * from './replaceable-components.service';
 export * from './resource-wait.service';
 export * from './rest.service';

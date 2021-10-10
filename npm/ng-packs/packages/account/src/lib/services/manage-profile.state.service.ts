@@ -1,4 +1,5 @@
-import { InternalStore, ProfileDto } from '@abp/ng.core';
+import { InternalStore } from '@abp/ng.core';
+import { ProfileDto } from '@abp/ng.identity/proxy';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 

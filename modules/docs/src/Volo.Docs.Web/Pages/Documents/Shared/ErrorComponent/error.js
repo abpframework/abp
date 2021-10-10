@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     $(function () {
         var errorPageRedirect = function () {
             var second = 3;

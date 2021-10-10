@@ -1,14 +1,14 @@
 import { ConfigStateService, TrackByService } from '@abp/ng.core';
+import {
+  FeatureDto,
+  FeatureGroupDto,
+  FeaturesService,
+  UpdateFeatureDto,
+} from '@abp/ng.feature-management/proxy';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
-import { FeaturesService } from '../../proxy/feature-management/features.service';
-import {
-  FeatureDto,
-  FeatureGroupDto,
-  UpdateFeatureDto,
-} from '../../proxy/feature-management/models';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',

@@ -31,6 +31,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
@@ -44,8 +45,8 @@ namespace Volo.BloggingTestApp
 {
     [DependsOn(
         typeof(BloggingWebModule),
-        typeof(BloggingHttpApiModule),
         typeof(BloggingApplicationModule),
+        typeof(BloggingHttpApiModule),
         typeof(BloggingAdminWebModule),
         typeof(BloggingAdminHttpApiModule),
         typeof(BloggingAdminApplicationModule),
@@ -55,12 +56,14 @@ namespace Volo.BloggingTestApp
         typeof(BloggingTestAppEntityFrameworkCoreModule),
 #endif
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(BlobStoringDatabaseDomainModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)

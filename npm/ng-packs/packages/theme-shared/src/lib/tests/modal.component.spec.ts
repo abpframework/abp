@@ -103,7 +103,7 @@ describe('ModalComponent', () => {
   xit('should close with the abpClose', async () => {
     await wait0ms();
 
-    spectator.dispatchMouseEvent(spectator.component.abpClose, 'click');
+    spectator.dispatchMouseEvent(spectator.query('[abpClose]'), 'click');
 
     await wait0ms();
 

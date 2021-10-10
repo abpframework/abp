@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Volo.Abp.EventBus.Abstractions;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Guids;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -14,20 +15,14 @@ namespace Volo.Abp.EventBus
     [DependsOn(
         typeof(AbpEventBusAbstractionsModule),
         typeof(AbpMultiTenancyModule),
-        typeof(AbpJsonModule))]
+        typeof(AbpJsonModule),
+        typeof(AbpGuidsModule)
+        )]
     public class AbpEventBusModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             AddEventHandlers(context.Services);
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpEventBusOptions>(options =>
-            {
-                context.Services.ExecutePreConfiguredActions(options);
-            });
         }
 
         private static void AddEventHandlers(IServiceCollection services)

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Validation;
 using Volo.Blogging.Areas.Blog.Helpers;
 
@@ -30,26 +32,61 @@ namespace Volo.Blogging.Files
             };
         }
 
+        public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
+        {
+            var fileStream = await BlobContainer.GetAsync(name);
+            return new RemoteStreamContent(fileStream, name, GetByExtension(Path.GetExtension(name)), disposeStream: true);
+        }
+
+        private static string GetByExtension(string extension)
+        {
+            extension = extension.RemovePreFix(".").ToLowerInvariant();
+
+            switch (extension)
+            {
+                case "png":
+                    return "image/png";
+                case "gif":
+                    return "image/gif";
+                case "jpg":
+                case "jpeg":
+                    return "image/jpeg";
+
+                //TODO: Add other extensions too..
+
+                default:
+                    return "application/octet-stream";
+            }
+        }
+
         public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
-            if (input.Bytes.IsNullOrEmpty())
+            if (input.File == null)
             {
-                ThrowValidationException("Bytes of file can not be null or empty!", "Bytes");
+                ThrowValidationException("Bytes of file can not be null or empty!", nameof(input.File));
             }
 
-            if (input.Bytes.Length > BloggingWebConsts.FileUploading.MaxFileSize)
+            if (input.File.ContentLength > BloggingWebConsts.FileUploading.MaxFileSize)
             {
                 throw new UserFriendlyException($"File exceeds the maximum upload size ({BloggingWebConsts.FileUploading.MaxFileSizeAsMegabytes} MB)!");
             }
 
-            if (!ImageFormatHelper.IsValidImage(input.Bytes, FileUploadConsts.AllowedImageUploadFormats))
+            var position = input.File.GetStream().Position;
+
+            if (!ImageFormatHelper.IsValidImage(input.File.GetStream(), FileUploadConsts.AllowedImageUploadFormats))
             {
                 throw new UserFriendlyException("Invalid image format!");
             }
 
+            // IsValidImage may change the position of the stream
+            if (input.File.GetStream().CanSeek)
+            {
+                input.File.GetStream().Position = position;
+            }
+
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
 
-            await BlobContainer.SaveAsync(uniqueFileName, input.Bytes);
+            await BlobContainer.SaveAsync(uniqueFileName, input.File.GetStream());
 
             return new FileUploadOutputDto
             {

@@ -11,6 +11,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
+using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
@@ -64,6 +65,16 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.AddPolicy("MyClaimTestPolicy", policy =>
                 {
                     policy.RequireClaim("MyCustomClaimType", "42");
+                });
+
+                options.AddPolicy("TestPermission1_And_TestPermission2", policy =>
+                {
+                    policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: true));
+                });
+
+                options.AddPolicy("TestPermission1_Or_TestPermission2", policy =>
+                {
+                    policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: false));
                 });
             });
 

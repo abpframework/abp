@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;

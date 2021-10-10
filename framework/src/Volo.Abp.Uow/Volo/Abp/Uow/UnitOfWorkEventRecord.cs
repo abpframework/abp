@@ -11,6 +11,8 @@ namespace Volo.Abp.Uow
         
         public long EventOrder { get; }
         
+        public bool UseOutbox { get; }
+
         /// <summary>
         /// Extra properties can be used if needed.
         /// </summary>
@@ -19,11 +21,13 @@ namespace Volo.Abp.Uow
         public UnitOfWorkEventRecord(
             Type eventType,
             object eventData,
-            long eventOrder)
+            long eventOrder,
+            bool useOutbox = true)
         {
             EventType = eventType;
             EventData = eventData;
             EventOrder = eventOrder;
+            UseOutbox = useOutbox;
         }
     }
 }

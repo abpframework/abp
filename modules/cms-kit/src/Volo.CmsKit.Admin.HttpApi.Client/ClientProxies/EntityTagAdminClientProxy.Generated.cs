@@ -17,17 +17,26 @@ namespace Volo.CmsKit.Admin.Tags.ClientProxies
     {
         public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
         {
-            await RequestAsync(nameof(AddTagToEntityAsync), input);
+            await RequestAsync(nameof(AddTagToEntityAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagCreateDto), input }
+            });
         }
 
         public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
         {
-            await RequestAsync(nameof(RemoveTagFromEntityAsync), input);
+            await RequestAsync(nameof(RemoveTagFromEntityAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagRemoveDto), input }
+            });
         }
 
         public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
         {
-            await RequestAsync(nameof(SetEntityTagsAsync), input);
+            await RequestAsync(nameof(SetEntityTagsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagSetDto), input }
+            });
         }
     }
 }

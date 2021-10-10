@@ -10,8 +10,9 @@ import {
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
 
-const configState = new ConfigStateService(null);
-configState.setState(createMockState() as any);
+const fakeAppConfigService = { get: () => of(createMockState()) } as any;
+const configState = new ConfigStateService(fakeAppConfigService);
+configState.refreshAppState();
 
 describe('State Utils', () => {
   describe('#getObjectExtensionEntitiesFromStore', () => {

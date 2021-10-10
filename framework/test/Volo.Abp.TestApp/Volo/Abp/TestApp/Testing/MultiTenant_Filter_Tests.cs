@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class MultiTenant_Filter_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+    public abstract class MultiTenant_Filter_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         private ICurrentTenant _fakeCurrentTenant;
@@ -36,13 +36,13 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Get_Person_For_Current_Tenant()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
                 //TenantId = null
 
                 _fakeCurrentTenant.Id.Returns((Guid?)null);
 
-                var people = _personRepository.ToList();
+                var people = await _personRepository.ToListAsync();
                 people.Count.ShouldBe(1);
                 people.Any(p => p.Name == "Douglas").ShouldBeTrue();
 
@@ -50,7 +50,7 @@ namespace Volo.Abp.TestApp.Testing
 
                 _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
 
-                people = _personRepository.ToList();
+                people = await _personRepository.ToListAsync();
                 people.Count.ShouldBe(2);
                 people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person1").ShouldBeTrue();
                 people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person2").ShouldBeTrue();
@@ -59,7 +59,7 @@ namespace Volo.Abp.TestApp.Testing
 
                 _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId2);
 
-                people = _personRepository.ToList();
+                people = await _personRepository.ToListAsync();
                 people.Count.ShouldBe(0);
 
                 return Task.CompletedTask;
@@ -69,19 +69,19 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Get_All_People_When_MultiTenant_Filter_Is_Disabled()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
                 List<Person> people;
 
                 using (_multiTenantFilter.Disable())
                 {
                     //Filter disabled manually
-                    people = _personRepository.ToList();
+                    people = await _personRepository.ToListAsync();
                     people.Count.ShouldBe(3);
                 }
 
                 //Filter re-enabled automatically
-                people = _personRepository.ToList();
+                people = await _personRepository.ToListAsync();
                 people.Count.ShouldBe(1);
 
                 return Task.CompletedTask;

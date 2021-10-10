@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -23,20 +23,17 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
-                .Where(x => x.Name == scopeName)
                 .OrderBy(x => x.Id)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from scope in (await GetMongoQueryableAsync(cancellationToken))
-                where scopeNames.Contains(scope.Name)
-                orderby scope.Id
-                select scope;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(scope => scopeNames.Contains(scope.Name))
+                .OrderBy(scope => scope.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false,
