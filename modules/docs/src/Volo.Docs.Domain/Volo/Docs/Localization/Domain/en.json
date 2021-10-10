@@ -16,7 +16,7 @@
     "ReIndexProjectConfirmationMessage": "Are you sure to reindex for project \"{0}\"",
     "SuccessfullyReIndexProject": "Successfully reindexed: \"{0}\"",
     "ReIndexAllProjectConfirmationMessage": "Are you sure to reindex all project?",
-    "SuccessfullyReIndexAllProject": "Successfully reindex for all projects",
+    "SuccessfullyReIndexAllProject": "Successfully reindexed all projects",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
     "Projects": "Project(s)",
