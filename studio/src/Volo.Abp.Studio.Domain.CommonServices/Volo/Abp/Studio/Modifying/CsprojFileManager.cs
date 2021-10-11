@@ -143,23 +143,29 @@ namespace Volo.Abp.Studio.Packages.Modifying
             var packageReferenceNodes = document.SelectNodes($"/Project/ItemGroup/PackageReference");
             var projectReferenceNodes = document.SelectNodes($"/Project/ItemGroup/ProjectReference");
 
-            foreach (XmlNode packageReferenceNode in packageReferenceNodes)
+            if (packageReferenceNodes != null && packageReferenceNodes.Count > 0)
             {
-                result.Add(
+                foreach (XmlNode packageReferenceNode in packageReferenceNodes)
+                {
+                    result.Add(
                         new PackageDependency(
-                                packageReferenceNode.Attributes["Include"].Value,
-                                packageReferenceNode.Attributes["Version"].Value
-                            )
+                            packageReferenceNode.Attributes["Include"].Value,
+                            packageReferenceNode.Attributes["Version"].Value
+                        )
                     );
+                }
             }
 
-            foreach (XmlNode projectReferenceNode in projectReferenceNodes)
+            if (projectReferenceNodes != null && projectReferenceNodes.Count > 0)
             {
-                result.Add(
+                foreach (XmlNode projectReferenceNode in projectReferenceNodes)
+                {
+                    result.Add(
                         new PackageDependency(
                             Path.GetFullPath(Path.Combine(Path.GetDirectoryName(filePath), projectReferenceNode.Attributes["Include"].Value))
-                            )
+                        )
                     );
+                }
             }
 
             return result;

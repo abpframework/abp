@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Studio.Packages
+﻿using System.Collections.Generic;
+
+namespace Volo.Abp.Studio.Packages
 {
     public static class PackageTypes
     {
@@ -94,6 +96,150 @@
                 BlazorServer => HostBlazorServer,
                 _ => null
             };
+        }
+
+        // TODO: Rename this method, or (maybe and) write a summary. Also consider other suggestions
+        public static List<string> GetDddTargetProjectRole(string packageType)
+        {
+            if (packageType == DomainShared)
+            {
+                return new List<string>()
+                {
+                    Domain,
+                    ApplicationContracts
+                };
+            }
+
+            if (packageType == Domain)
+            {
+                return new List<string>()
+                {
+                    Application
+                };
+            }
+
+            if (packageType == ApplicationContracts)
+            {
+                return new List<string>()
+                {
+                    Application,
+                    Mvc,
+                    Blazor,
+                    BlazorServer,
+                    BlazorWebAssembly,
+                    HttpApi
+                };
+            }
+
+            if (packageType == Application)
+            {
+                return new List<string>()
+                {
+                    Application,
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == EntityFrameworkCore)
+            {
+                return new List<string>()
+                {
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == MongoDB)
+            {
+                return new List<string>()
+                {
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == HttpApi)
+            {
+                return new List<string>()
+                {
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == HttpApiClient)
+            {
+                return new List<string>()
+                {
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == HttpApiClient)
+            {
+                return new List<string>()
+                {
+                    HostMvc,
+                    HostBlazorServer,
+                    HostBlazorWebAssembly,
+                    HostHttpApi
+                };
+            }
+
+            if (packageType == Mvc)
+            {
+                return new List<string>()
+                {
+                    HostMvc
+                };
+            }
+
+            if (packageType == Blazor)
+            {
+                return new List<string>()
+                {
+                    BlazorServer,
+                    BlazorWebAssembly
+                };
+            }
+
+            if (packageType == BlazorServer)
+            {
+                return new List<string>()
+                {
+                    HostBlazorServer
+                };
+            }
+
+            if (packageType == BlazorWebAssembly)
+            {
+                return new List<string>()
+                {
+                    HostBlazorWebAssembly
+                };
+            }
+
+            if (packageType == Test)
+            {
+                return new List<string>()
+                {
+                    Test
+                };
+            }
+
+            return new List<string>();
         }
     }
 }
