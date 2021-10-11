@@ -8,6 +8,8 @@ namespace Volo.Abp.Settings
     {
         Task<string> GetOrNullAsync([NotNull]string name);
 
+        Task<List<SettingValue>> GetAllAsync([NotNull]string[] names);
+
         Task<List<SettingValue>> GetAllAsync();
     }
 }

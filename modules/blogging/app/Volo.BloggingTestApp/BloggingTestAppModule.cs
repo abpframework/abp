@@ -23,12 +23,15 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
@@ -37,14 +40,15 @@ using Volo.Blogging;
 using Volo.Blogging.Admin;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
-using Volo.BloggingTestApp.MongoDB;
 
 namespace Volo.BloggingTestApp
 {
     [DependsOn(
         typeof(BloggingWebModule),
         typeof(BloggingApplicationModule),
+        typeof(BloggingHttpApiModule),
         typeof(BloggingAdminWebModule),
+        typeof(BloggingAdminHttpApiModule),
         typeof(BloggingAdminApplicationModule),
 #if MONGODB
                typeof(BloggingTestAppMongoDbModule),
@@ -52,11 +56,15 @@ namespace Volo.BloggingTestApp
         typeof(BloggingTestAppEntityFrameworkCoreModule),
 #endif
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
+        typeof(BlobStoringDatabaseDomainModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
@@ -96,7 +104,7 @@ namespace Volo.BloggingTestApp
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BloggingDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Blogging.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BloggingWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Blogging.Web", Path.DirectorySeparatorChar)));
                 });
@@ -130,9 +138,12 @@ namespace Volo.BloggingTestApp
                 options.DefaultThemeName = BasicTheme.Name;
             });
 
-            Configure<BlogFileOptions>(options =>
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
+                options.Containers.ConfigureDefault(container =>
+                {
+                    container.UseDatabase();
+                });
             });
         }
 
@@ -149,7 +160,7 @@ namespace Volo.BloggingTestApp
                 app.UseErrorPage();
             }
 
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -160,8 +171,9 @@ namespace Volo.BloggingTestApp
             });
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
 
             app.UseConfiguredEndpoints();
 

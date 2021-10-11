@@ -44,7 +44,6 @@ namespace Volo.Abp.Identity.AspNetCore
             user.Name.ShouldBe("Test Name");
             user.Surname.ShouldBe("Test Surname");
             user.EmailConfirmed.ShouldBeTrue();
-            user.TwoFactorEnabled.ShouldBeFalse();
             user.PhoneNumber.ShouldBe("123");
             user.PhoneNumberConfirmed.ShouldBeFalse();
             user.IsExternal.ShouldBeTrue();

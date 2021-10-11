@@ -1,9 +1,5 @@
-import {
-  ConfigStateService,
-  getShortDateFormat,
-  getShortDateShortTimeFormat,
-  getShortTimeFormat,
-} from '@abp/ng.core';
+import { ConfigStateService } from '../services';
+import { getShortDateFormat, getShortDateShortTimeFormat, getShortTimeFormat } from '../utils';
 
 const dateTimeFormat = {
   calendarAlgorithmType: 'SolarCalendar',
@@ -19,11 +15,11 @@ describe('Date Utils', () => {
   let config: ConfigStateService;
 
   beforeEach(() => {
-    config = new ConfigStateService(undefined);
+    config = new ConfigStateService(null);
   });
 
   describe('#getShortDateFormat', () => {
-    test('should get the short date format from ConfigState and return it', () => {
+    test('should get the short date format from ConfigStateService and return it', () => {
       const getDeepSpy = jest.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
@@ -33,7 +29,7 @@ describe('Date Utils', () => {
   });
 
   describe('#getShortTimeFormat', () => {
-    test('should get the short time format from ConfigState and return it', () => {
+    test('should get the short time format from ConfigStateService and return it', () => {
       const getDeepSpy = jest.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
@@ -43,7 +39,7 @@ describe('Date Utils', () => {
   });
 
   describe('#getShortDateShortTimeFormat', () => {
-    test('should get the short date time format from ConfigState and return it', () => {
+    test('should get the short date time format from ConfigStateService and return it', () => {
       const getDeepSpy = jest.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 

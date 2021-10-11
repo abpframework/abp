@@ -1,52 +1,27 @@
 ﻿using System;
-using System.Reflection;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
     public class Utf8JsonMemoryDbSerializer : IMemoryDbSerializer, ITransientDependency
     {
-        private static readonly JsonSerializerSettings MemoryDbSerializerSettings;
+        protected Utf8JsonMemoryDbSerializerOptions Options { get; }
 
-        static Utf8JsonMemoryDbSerializer()
+        public Utf8JsonMemoryDbSerializer(IOptions<Utf8JsonMemoryDbSerializerOptions> options)
         {
-            MemoryDbSerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new ResolverWithPrivateSetters(),
-                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
-            };
+            Options = options.Value;
         }
 
         byte[] IMemoryDbSerializer.Serialize(object obj)
         {
-            var jsonString = JsonConvert.SerializeObject(obj, MemoryDbSerializerSettings);
-            return Encoding.UTF8.GetBytes(jsonString);
+            return JsonSerializer.SerializeToUtf8Bytes(obj, Options.JsonSerializerOptions);
         }
 
         public object Deserialize(byte[] value, Type type)
         {
-            var jsonString = Encoding.UTF8.GetString(value);
-            return JsonConvert.DeserializeObject(jsonString, type, MemoryDbSerializerSettings);
-        }
-
-        public class ResolverWithPrivateSetters : DefaultContractResolver
-        {
-            protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-            {
-                var prop = base.CreateProperty(member, memberSerialization);
-                if (prop.Writable)
-                {
-                    return prop;
-                }
-
-                prop.Writable = member.As<PropertyInfo>()?.GetSetMethod(true) != null;
-
-                return prop;
-            }
+            return JsonSerializer.Deserialize(value, type, Options.JsonSerializerOptions);
         }
     }
 }

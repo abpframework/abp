@@ -48,7 +48,7 @@ namespace Volo.Abp.Auditing
 
             if (objectWithCreationTime.CreationTime == default)
             {
-                objectWithCreationTime.CreationTime = Clock.Now;
+                ObjectHelper.TrySetProperty(objectWithCreationTime, x => x.CreationTime, () => Clock.Now);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Volo.Abp.Auditing
                     return;
                 }
 
-                mayHaveCreatorObject.CreatorId = CurrentUser.Id;
+                ObjectHelper.TrySetProperty(mayHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id);
             }
             else if (targetObject is IMustHaveCreator mustHaveCreatorObject)
             {
@@ -91,7 +91,7 @@ namespace Volo.Abp.Auditing
                     return;
                 }
 
-                mustHaveCreatorObject.CreatorId = CurrentUser.Id.Value;
+                ObjectHelper.TrySetProperty(mustHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id.Value);
             }
         }
 

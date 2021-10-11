@@ -26,7 +26,7 @@ namespace Volo.Abp.Identity
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
         public string PhoneNumber { get; set; }
 
-        public bool TwoFactorEnabled { get; set; }
+        public bool IsActive { get; set; }
 
         public bool LockoutEnabled { get; set; }
 
@@ -35,7 +35,7 @@ namespace Volo.Abp.Identity
 
         protected IdentityUserCreateOrUpdateDtoBase() : base(false)
         {
-            
+
         }
     }
 }

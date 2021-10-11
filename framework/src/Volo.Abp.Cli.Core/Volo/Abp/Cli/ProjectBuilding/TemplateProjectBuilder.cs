@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
@@ -49,7 +50,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
-            var templateInfo = GetTemplateInfo(args);
+            var templateInfo = await GetTemplateInfoAsync(args);
 
             NormalizeArgs(args, templateInfo);
 
@@ -105,9 +106,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var context = new ProjectBuildContext(
                 templateInfo,
                 null,
+                null,
+                null,
                 templateFile,
                 args
             );
+
+            if (context.Template is AppTemplateBase appTemplateBase)
+            {
+                appTemplateBase.HasDbMigrations = SemanticVersion.Parse(templateFile.Version) < new SemanticVersion(4, 3, 99);
+            }
 
             TemplateProjectBuildPipelineBuilder.Build(context).Execute();
 
@@ -175,11 +183,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
         }
 
-        private TemplateInfo GetTemplateInfo(ProjectBuildArgs args)
+        private async Task<TemplateInfo> GetTemplateInfoAsync(ProjectBuildArgs args)
         {
             if (args.TemplateName.IsNullOrWhiteSpace())
             {
-                return TemplateInfoProvider.GetDefault();
+                return await TemplateInfoProvider.GetDefaultAsync();
             }
             else
             {

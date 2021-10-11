@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending
     [Serializable]
     public class ExtensibleObject : IHasExtraProperties, IValidatableObject
     {
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
+        public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         public ExtensibleObject()
             : this(true)
@@ -19,7 +19,7 @@ namespace Volo.Abp.ObjectExtending
 
         public ExtensibleObject(bool setDefaultsForExtraProperties)
         {
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
 
             if (setDefaultsForExtraProperties)
             {

@@ -1,33 +1,39 @@
 import { HttpRequest } from '@angular/common/http';
 import { SpyObject } from '@ngneat/spectator';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, timer } from 'rxjs';
 import { ApiInterceptor } from '../interceptors';
-import { StartLoader, StopLoader } from '../actions';
+import { HttpWaitService, SessionStateService } from '../services';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 describe('ApiInterceptor', () => {
   let spectator: SpectatorService<ApiInterceptor>;
   let interceptor: ApiInterceptor;
-  let store: SpyObject<Store>;
   let oauthService: SpyObject<OAuthService>;
+  let sessionState: SpyObject<SessionStateService>;
+  let httpWaitService: SpyObject<HttpWaitService>;
+
+  const testTenantKey = 'TEST_TENANT_KEY';
 
   const createService = createServiceFactory({
     service: ApiInterceptor,
-    mocks: [OAuthService, Store],
+    mocks: [OAuthService, SessionStateService],
+    providers: [{ provide: TENANT_KEY, useValue: testTenantKey }],
   });
 
   beforeEach(() => {
     spectator = createService();
     interceptor = spectator.service;
-    store = spectator.inject(Store);
+    sessionState = spectator.inject(SessionStateService);
     oauthService = spectator.inject(OAuthService);
+    httpWaitService = spectator.inject(HttpWaitService);
   });
 
   it('should add headers to http request', done => {
     oauthService.getAccessToken.andReturn('ey892mkwa8^2jk');
-    store.selectSnapshot.andReturn({ id: 'test' });
+    sessionState.getLanguage.andReturn('tr');
+    sessionState.getTenant.andReturn({ id: 'Volosoft', name: 'Volosoft' });
 
     const request = new HttpRequest('GET', 'https://abp.io');
     const handleRes$ = new Subject();
@@ -35,8 +41,8 @@ describe('ApiInterceptor', () => {
     const handler = {
       handle: (req: HttpRequest<any>) => {
         expect(req.headers.get('Authorization')).toEqual('Bearer ey892mkwa8^2jk');
-        expect(req.headers.get('Accept-Language')).toEqual({ id: 'test' } as any);
-        expect(req.headers.get('__tenant')).toEqual('test');
+        expect(req.headers.get('Accept-Language')).toEqual('tr');
+        expect(req.headers.get(testTenantKey)).toEqual('Volosoft');
         done();
         return handleRes$;
       },
@@ -48,8 +54,9 @@ describe('ApiInterceptor', () => {
     handleRes$.complete();
   });
 
-  it('should dispatch the loader', done => {
-    const spy = jest.spyOn(store, 'dispatch');
+  it('should call http wait services add request and delete request', done => {
+    const spyAddRequest = jest.spyOn(httpWaitService, 'addRequest');
+    const spyDeleteRequest = jest.spyOn(httpWaitService, 'deleteRequest');
 
     const request = new HttpRequest('GET', 'https://abp.io');
     const handleRes$ = new Subject();
@@ -66,8 +73,8 @@ describe('ApiInterceptor', () => {
     handleRes$.complete();
 
     timer(0).subscribe(() => {
-      expect(spy.mock.calls[0][0] instanceof StartLoader).toBeTruthy();
-      expect(spy.mock.calls[1][0] instanceof StopLoader).toBeTruthy();
+      expect(spyAddRequest).toHaveBeenCalled();
+      expect(spyDeleteRequest).toHaveBeenCalled();
       done();
     });
   });

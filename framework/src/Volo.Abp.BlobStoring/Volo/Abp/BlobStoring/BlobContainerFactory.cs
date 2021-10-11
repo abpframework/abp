@@ -17,18 +17,22 @@ namespace Volo.Abp.BlobStoring
 
         protected IServiceProvider ServiceProvider { get; }
 
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
+
         public BlobContainerFactory(
             IBlobContainerConfigurationProvider configurationProvider,
             ICurrentTenant currentTenant,
             ICancellationTokenProvider cancellationTokenProvider,
             IBlobProviderSelector providerSelector,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             ConfigurationProvider = configurationProvider;
             CurrentTenant = currentTenant;
             CancellationTokenProvider = cancellationTokenProvider;
             ProviderSelector = providerSelector;
             ServiceProvider = serviceProvider;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
         public virtual IBlobContainer Create(string name)
@@ -41,6 +45,7 @@ namespace Volo.Abp.BlobStoring
                 ProviderSelector.Get(name),
                 CurrentTenant,
                 CancellationTokenProvider,
+                BlobNormalizeNamingService,
                 ServiceProvider
             );
         }

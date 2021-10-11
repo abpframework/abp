@@ -1,0 +1,10 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.Authorization:010001": "授权失败! 提供的策略尚未授予.",
+    "Volo.Authorization:010002": "授权失败! 提供的策略尚未授予: {PolicyName}",
+    "Volo.Authorization:010003": "授权失败! 提供的策略未授予提供的资源: {ResourceName}",
+    "Volo.Authorization:010004": "授权失败! 提供的要求未授予提供的资源: {ResourceName}",
+    "Volo.Authorization:010005": "授权失败! 提供的要求未授予提供的资源: {ResourceName}"
+  }
+}

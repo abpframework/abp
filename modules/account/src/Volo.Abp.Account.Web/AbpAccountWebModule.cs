@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -16,10 +17,11 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Account.Web
 {
     [DependsOn(
-        typeof(AbpAccountHttpApiModule),
+        typeof(AbpAccountApplicationContractsModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpExceptionHandlingModule)
         )]
     public class AbpAccountWebModule : AbpModule
     {

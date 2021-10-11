@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Text.Formatting;
 
 namespace Volo.Abp.SettingManagement
 {
@@ -7,6 +9,8 @@ namespace Volo.Abp.SettingManagement
     [IgnoreMultiTenancy]
     public class SettingCacheItem
     {
+        private const string CacheKeyFormat = "pn:{0},pk:{1},n:{2}";
+
         public string Value { get; set; }
 
         public SettingCacheItem()
@@ -21,7 +25,13 @@ namespace Volo.Abp.SettingManagement
 
         public static string CalculateCacheKey(string name, string providerName, string providerKey)
         {
-            return "pn:" + providerName + ",pk:" + providerKey + ",n:" + name;
+            return string.Format(CacheKeyFormat, providerName, providerKey, name);
+        }
+
+        public static string GetSettingNameFormCacheKeyOrNull(string cacheKey)
+        {
+            var result = FormattedStringValueExtracter.Extract(cacheKey, CacheKeyFormat, true);
+            return result.IsMatch ? result.Matches.Last().Value : null;
         }
     }
 }

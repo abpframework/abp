@@ -10,7 +10,7 @@ services:
 
   volo-docs:
     environment:
-      - ConnectionString=Server=sqlserver;Database=VoloDocs;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionString=Server=sqlserver;Database=VoloDocs;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Title=VoloDocs
       - LogoUrl=/assets/images/Logo.png
     ports:

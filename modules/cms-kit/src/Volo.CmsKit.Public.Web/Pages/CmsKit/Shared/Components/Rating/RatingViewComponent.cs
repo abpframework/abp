@@ -15,7 +15,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
     [Widget(
         StyleTypes = new[] {typeof(RatingStyleBundleContributor)},
         ScriptTypes = new[] {typeof(RatingScriptBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/Rating"
+        RefreshUrl = "/CmsKitPublicWidgets/Rating",
+        AutoInitialize = true
     )]
     public class RatingViewComponent : AbpViewComponent
     {
@@ -29,7 +30,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
             AbpMvcUiOptions = options.Value;
             CurrentUser = currentUser;
         }
-        
+
         public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
         {
             var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
@@ -40,7 +41,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
             {
                 currentUserRating = ratings.Find(x => x.IsSelectedByCurrentUser)?.StarCount;
             }
-            
+
             var loginUrl =
                 $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-rating_{entityType}_{entityId}";
 
@@ -53,7 +54,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
                 CurrentRating = currentUserRating,
                 TotalRating = totalRating
             };
-            
+
             return View("~/Pages/CmsKit/Shared/Components/Rating/Default.cshtml", viewModel);
         }
     }

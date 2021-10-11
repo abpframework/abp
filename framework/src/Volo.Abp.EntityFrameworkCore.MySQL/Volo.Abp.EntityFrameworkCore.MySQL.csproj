@@ -2,9 +2,9 @@
 
   <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
-   
+
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.EntityFrameworkCore.MySQL</AssemblyName>
     <PackageId>Volo.Abp.EntityFrameworkCore.MySQL</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0-preview.5" />
   </ItemGroup>
-   
+
 </Project>

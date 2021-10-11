@@ -69,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         }
 
         /// <summary>
-        /// Gets first two, previous & current & next, last two pages
+        /// Gets first two, previous, current, next, last two pages
         /// </summary>
         private List<PageItem> GetPagesWithGaps()
         {

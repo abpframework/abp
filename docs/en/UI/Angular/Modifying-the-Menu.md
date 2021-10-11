@@ -271,8 +271,3 @@ export class AppComponent {
 
 * Patched the languages dropdown element with new `requiredPolicy` and new `order`.
 * Removed the current user dropdown element.
-
-
-## What's Next
-
-* [Component Replacement](./Component-Replacement.md)

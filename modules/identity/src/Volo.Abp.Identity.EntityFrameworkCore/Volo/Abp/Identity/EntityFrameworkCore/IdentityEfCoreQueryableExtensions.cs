@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore

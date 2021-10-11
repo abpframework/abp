@@ -1,0 +1,13 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Azonosító erőforrás neve már létezik: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Az Api erőforrás neve már létezik: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId már létezik: {ClientId}",
+    "UserLockedOut": "A felhasználói fiókot érvénytelen bejelentkezési kísérletek miatt zároltuk. Kérjük, várjon egy kicsit, és próbálja újra.",
+    "InvalidUserNameOrPassword": "Érvénytelen felhasználónév vagy jelszó!",
+    "LoginIsNotAllowed": "A bejelentkezés nem engedélyezett! Fiókja inaktív, vagy meg kell erősítenie e -mail címét/telefonszámát.",
+    "InvalidUsername": "Érvénytelen felhasználónév vagy jelszó!",
+    "TheTargetUserIsNotLinkedToYou": "A célfelhasználó nincs hozzád kapcsolódva!"
+  }
+}

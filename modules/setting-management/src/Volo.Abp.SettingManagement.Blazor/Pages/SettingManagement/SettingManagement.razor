@@ -1,0 +1,42 @@
+﻿@page "/setting-management"
+@using Volo.Abp.Features
+@attribute [RequiresFeature(SettingManagementFeatures.Enable)]
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems">
+
+</PageHeader>
+
+<Card>
+    <CardBody>
+        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true">
+            <Items>
+                @foreach (var group in SettingComponentCreationContext.Groups)
+                {
+                    <Tab Name="@GetNormalizedString(group.Id)">
+                        @group.DisplayName
+                    </Tab>
+                }
+            </Items>
+            <Content>
+                @foreach (var group in SettingComponentCreationContext.Groups)
+                {
+                    <TabPanel Name="@GetNormalizedString(group.Id)">
+                        <h2>@group.DisplayName</h2>
+                        <Divider />
+
+                        @{
+                            SettingItemRenders.Add(builder =>
+                            {
+                                builder.OpenComponent(0, group.ComponentType);
+                                builder.CloseComponent();
+                            });
+                        }
+
+                        @SettingItemRenders.Last()
+                    </TabPanel>
+                }
+            </Content>
+        </Tabs>
+    </CardBody>
+</Card>

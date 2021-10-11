@@ -59,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Target culture: " + targetCulture);
                 Logger.LogInformation("Reference culture: " + referenceCulture);
                 Logger.LogInformation("Output file: " + outputFile);
-                
+
                 if (allValues)
                 {
                     Logger.LogInformation("Include all keys");
@@ -195,8 +195,11 @@ namespace Volo.Abp.Cli.Commands
                     var targetText = targetLocalizationInfo.Texts.FirstOrDefault(x => x.Name == text.LocalizationKey);
                     if (targetText != null)
                     {
-                        Logger.LogInformation($"Update translation: {targetText.Name} => " + text.Target);
-                        targetText.Value = text.Target;
+                        if (!text.Target.IsNullOrEmpty())
+                        {
+                            Logger.LogInformation($"Update translation: {targetText.Name} => " + text.Target);
+                            targetText.Value = text.Target;
+                        }
                     }
                     else
                     {
@@ -255,8 +258,8 @@ namespace Volo.Abp.Cli.Commands
                 return null;
             }
 
-            var culture = jObject.GetValue("culture");
-            var texts = jObject.GetValue("texts");
+            var culture = jObject.GetValue("culture") ?? jObject.GetValue("Culture") ;
+            var texts = jObject.GetValue("texts") ?? jObject.GetValue("Texts") ;
             if (culture == null || texts == null)
             {
                 return null;

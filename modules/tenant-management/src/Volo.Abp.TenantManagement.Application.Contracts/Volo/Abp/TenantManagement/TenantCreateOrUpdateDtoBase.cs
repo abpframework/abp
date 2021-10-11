@@ -8,11 +8,12 @@ namespace Volo.Abp.TenantManagement
     {
         [Required]
         [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
+        [Display(Name = "TenantName")]
         public string Name { get; set; }
 
         public TenantCreateOrUpdateDtoBase() : base(false)
         {
-            
+
         }
     }
 }

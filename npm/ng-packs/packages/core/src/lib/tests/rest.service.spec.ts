@@ -1,39 +1,39 @@
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Rest } from '../models';
+import { EnvironmentService, HttpErrorReporterService } from '../services';
 import { RestService } from '../services/rest.service';
-import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens';
-import { OAuthService } from 'angular-oauth2-oidc';
 
 describe('HttpClient testing', () => {
   let spectator: SpectatorHttp<RestService>;
-  let store: SpyObject<Store>;
+  let environmentService: SpyObject<EnvironmentService>;
+  let httpErrorReporter: SpyObject<HttpErrorReporterService>;
   const api = 'https://abp.io';
 
   const createHttp = createHttpFactory({
-    dataService: RestService,
-    imports: [NgxsModule.forRoot([ConfigState])],
-    providers: [{ provide: CORE_OPTIONS, useValue: { environment: {} } }],
+    service: RestService,
+    providers: [
+      EnvironmentService,
+      HttpErrorReporterService,
+      { provide: CORE_OPTIONS, useValue: { environment: {} } },
+    ],
     mocks: [OAuthService],
   });
 
   beforeEach(() => {
     spectator = createHttp();
-    store = spectator.inject(Store);
-    store.reset({
-      ConfigState: {
-        environment: {
-          apis: {
-            default: {
-              url: api,
-            },
-            foo: {
-              url: 'bar',
-            },
-          },
+    environmentService = spectator.inject(EnvironmentService);
+    httpErrorReporter = spectator.inject(HttpErrorReporterService);
+    environmentService.setState({
+      apis: {
+        default: {
+          url: api,
+        },
+        foo: {
+          url: 'bar',
         },
       },
     });
@@ -83,7 +83,7 @@ describe('HttpClient testing', () => {
   });
 
   test('should handle the error', () => {
-    const spy = jest.spyOn(store, 'dispatch');
+    const spy = jest.spyOn(httpErrorReporter, 'reportError');
 
     spectator.service
       .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Events })
@@ -101,7 +101,7 @@ describe('HttpClient testing', () => {
   });
 
   test('should not handle the error when skipHandleError is true', () => {
-    const spy = jest.spyOn(store, 'dispatch');
+    const spy = jest.spyOn(httpErrorReporter, 'reportError');
 
     spectator.service
       .request(

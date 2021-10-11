@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity
     [Area("identity")]
     [ControllerName("User")]
     [Route("api/identity/users")]
-    public class IdentityUserController : AbpController, IIdentityUserAppService
+    public class IdentityUserController : AbpControllerBase, IIdentityUserAppService
     {
         protected IIdentityUserAppService UserAppService { get; }
 
@@ -75,9 +75,9 @@ namespace Volo.Abp.Identity
 
         [HttpGet]
         [Route("by-username/{userName}")]
-        public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
+        public virtual Task<IdentityUserDto> FindByUsernameAsync(string userName)
         {
-            return UserAppService.FindByUsernameAsync(username);
+            return UserAppService.FindByUsernameAsync(userName);
         }
 
         [HttpGet]

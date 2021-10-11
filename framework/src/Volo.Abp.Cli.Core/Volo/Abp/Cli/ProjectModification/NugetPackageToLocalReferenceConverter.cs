@@ -12,19 +12,19 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class NugetPackageToLocalReferenceConverter : ITransientDependency
     {
-        public async Task Convert(ModuleWithMastersInfo module, string solutionFile)
+        public async Task Convert(ModuleWithMastersInfo module, string solutionFile,  string modulePrefix = "Volo.")
         {
             var nugetPackageList = GetNugetPackages(module);
             var modulesFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
             var srcFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "src");
             var testFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "test");
 
-            ConvertToLocalReference(modulesFolder, nugetPackageList, "..\\..\\..\\");
-            ConvertToLocalReference(srcFolder, nugetPackageList, "..\\..\\modules\\");
-            ConvertToLocalReference(testFolder, nugetPackageList, "..\\..\\modules\\", "test");
+            ConvertToLocalReference(modulesFolder, nugetPackageList, "..\\..\\..\\", "src", modulePrefix);
+            ConvertToLocalReference(srcFolder, nugetPackageList, "..\\..\\modules\\", "src", modulePrefix);
+            ConvertToLocalReference(testFolder, nugetPackageList, "..\\..\\modules\\", "test", modulePrefix);
         }
 
-        private void ConvertToLocalReference(string folder, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
+        private void ConvertToLocalReference(string folder, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile,  string modulePrefix)
         {
             var projectFiles = GetProjectFilesUnder(folder);
 
@@ -35,15 +35,15 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 doc.Load(StreamHelper.GenerateStreamFromString(content));
 
-                var convertedProject = ProcessReferenceNodes(folder, doc, nugetPackageList, localPathPrefix, sourceFile);
+                var convertedProject = ProcessReferenceNodes(folder, doc, nugetPackageList, localPathPrefix, sourceFile, modulePrefix);
 
                 File.WriteAllText(projectFile, convertedProject);
             }
         }
 
-        private string ProcessReferenceNodes(string folder, XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
+        private string ProcessReferenceNodes(string folder, XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile,  string modulePrefix)
         {
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
+            var nodes = doc.SelectNodes($"/Project/ItemGroup/PackageReference[starts-with(@Include, '{modulePrefix}')]");
 
             if (nodes == null)
             {
@@ -67,7 +67,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
                             oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase) ||
-                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase))
+                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase)||
+                            oldNodeIncludeValue.EndsWith(".Demo", StringComparison.InvariantCultureIgnoreCase))
                         {
                             tempSourceFile = "test";
                         }

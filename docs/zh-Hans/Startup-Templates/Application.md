@@ -1,4 +1,4 @@
-﻿# 应用程序启动模板
+# 应用程序启动模板
 
 ## 介绍
 
@@ -56,20 +56,6 @@ abp new Acme.BookStore -u angular
 ````bash
 abp new Acme.BookStore -d mongodb
 ````
-
-### 指定移动应用程序框架
-
-此模板支持以下移动应用程序框架:
-
-- `react-native`: React Native
-
-使用 `-m` (或 `--mobile`) 选项指定移动应用程序框架:
-
-````bash
-abp new Acme.BookStore -m react-native
-````
-
-如果未指定,不会创建移动应用程序.
 
 ### 指定移动应用程序框架
 

@@ -1,17 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Hangfire.SqlServer" Version="1.7.11" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.7.*" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BackgroundJobs.HangFire\Volo.Abp.BackgroundJobs.HangFire.csproj" />
     <ProjectReference Include="..\Volo.Abp.BackgroundJobs.DemoApp.Shared\Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

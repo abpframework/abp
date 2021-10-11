@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:4.0
+    container_name: 'verdaccio'
+    networks:
+      - docker_network
+    environment:
+      - VERDACCIO_PORT=4873
+    ports:
+      - '4873:4873'
+    expose:
+      - '4873/tcp'
+  publish:
+    build:
+      context: ./publish-packages
+      dockerfile: Dockerfile
+      args:
+        next_version: ''
+    container_name: 'verdaccio_publish'
+    networks:
+      - docker_network
+    depends_on:
+      - verdaccio
+    expose:
+      - '4872'
+  app:
+    build: ./serve-app
+    container_name: 'verdaccio_app'
+    networks:
+      - docker_network
+    depends_on:
+      - publish
+    ports:
+      - '4200:4200'
+    expose:
+      - '4200/tcp'
+networks:
+  docker_network:
+    driver: bridge

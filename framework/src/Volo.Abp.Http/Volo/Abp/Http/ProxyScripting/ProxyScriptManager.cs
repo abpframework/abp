@@ -20,7 +20,7 @@ namespace Volo.Abp.Http.ProxyScripting
         private readonly AbpApiProxyScriptingOptions _options;
 
         public ProxyScriptManager(
-            IApiDescriptionModelProvider modelProvider, 
+            IApiDescriptionModelProvider modelProvider,
             IServiceProvider serviceProvider,
             IJsonSerializer jsonSerializer,
             IProxyScriptManagerCache cache,
@@ -64,13 +64,23 @@ namespace Volo.Abp.Http.ProxyScripting
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                return scope.ServiceProvider.GetRequiredService(generatorType).As<IProxyScriptGenerator>().CreateScript(apiModel);
+                return scope.ServiceProvider
+                    .GetRequiredService(generatorType)
+                    .As<IProxyScriptGenerator>()
+                    .CreateScript(apiModel);
             }
         }
 
         private string CreateCacheKey(ProxyScriptingModel model)
         {
-            return _jsonSerializer.Serialize(model).ToMd5();
+            return _jsonSerializer.Serialize(new
+            {
+                model.GeneratorType,
+                model.Modules,
+                model.Controllers,
+                model.Actions,
+                model.Properties
+            }).ToMd5();
         }
     }
 }

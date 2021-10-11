@@ -22,9 +22,9 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public virtual bool ShowInDiscoveryDocument { get; set; }
 
-        public virtual List<IdentityClaim> UserClaims { get; set; }
+        public virtual List<IdentityResourceClaim> UserClaims { get; set; }
 
-        public virtual Dictionary<string, string> Properties { get; set; }
+        public virtual List<IdentityResourceProperty> Properties { get; set; }
 
         protected IdentityResource()
         {
@@ -32,18 +32,18 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         }
 
         public IdentityResource(
-            Guid id, 
-            [NotNull] string name, 
-            string displayName = null, 
-            string description = null, 
-            bool enabled = true, 
-            bool required = false, 
-            bool emphasize = false, 
-            bool showInDiscoveryDocument = true)
+            Guid id,
+            [NotNull] string name,
+            string displayName = null,
+            string description = null,
+            bool enabled = true,
+            bool required = false,
+            bool emphasize = false,
+            bool showInDiscoveryDocument = true
+        ) : base(id)
         {
             Check.NotNull(name, nameof(name));
 
-            Id = id;
             Name = name;
             DisplayName = displayName;
             Description = description;
@@ -51,14 +51,14 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             Required = required;
             Emphasize = emphasize;
             ShowInDiscoveryDocument = showInDiscoveryDocument;
-            
-            UserClaims = new List<IdentityClaim>();
-            Properties = new Dictionary<string, string>();
+
+            UserClaims = new List<IdentityResourceClaim>();
+            Properties = new List<IdentityResourceProperty>();
         }
 
         public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+            : base(id)
         {
-            Id = id;
             Name = resource.Name;
             DisplayName = resource.DisplayName;
             Description = resource.Description;
@@ -66,13 +66,13 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             Required = resource.Required;
             Emphasize = resource.Emphasize;
             ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument;
-            UserClaims = resource.UserClaims.Select(claimType => new IdentityClaim(id, claimType)).ToList();
-            Properties = resource.Properties.ToDictionary(x => x.Key, x => x.Value);
+            UserClaims = resource.UserClaims.Select(claimType => new IdentityResourceClaim(id, claimType)).ToList();
+            Properties = resource.Properties.Select(x => new IdentityResourceProperty(Id, x.Key, x.Value)).ToList();
         }
 
         public virtual void AddUserClaim([NotNull] string type)
         {
-            UserClaims.Add(new IdentityClaim(Id, type));
+            UserClaims.Add(new IdentityResourceClaim(Id, type));
         }
 
         public virtual void RemoveAllUserClaims()
@@ -85,9 +85,37 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             UserClaims.RemoveAll(c => c.Type == type);
         }
 
-        public virtual IdentityClaim FindUserClaim(string type)
+        public virtual IdentityResourceClaim FindUserClaim(string type)
         {
             return UserClaims.FirstOrDefault(c => c.Type == type);
+        }
+
+        public virtual void AddProperty([NotNull] string key, string value)
+        {
+            var property = FindProperty(key);
+            if (property == null)
+            {
+                Properties.Add(new IdentityResourceProperty(Id, key, value));
+            }
+            else
+            {
+                property.Value = value;
+            }
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key)
+        {
+            Properties.RemoveAll(r => r.Key == key);
+        }
+
+        public virtual IdentityResourceProperty FindProperty(string key)
+        {
+            return Properties.FirstOrDefault(r => r.Key == key);
         }
     }
 }

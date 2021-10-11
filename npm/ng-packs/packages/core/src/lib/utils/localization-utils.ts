@@ -1,4 +1,4 @@
-import { ApplicationConfiguration } from '../models/application-configuration';
+import { ApplicationLocalizationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 
 // This will not be necessary when only Angukar 9.1+ is supported
 export function getLocaleDirection(locale: string): 'ltr' | 'rtl' {
@@ -9,11 +9,11 @@ export function getLocaleDirection(locale: string): 'ltr' | 'rtl' {
     : 'ltr';
 }
 
-export function createLocalizer(localization: ApplicationConfiguration.Localization) {
+export function createLocalizer(localization: ApplicationLocalizationConfigurationDto) {
   return (resourceName: string, key: string, defaultValue: string) => {
     if (resourceName === '_') return key;
 
-    const resource = localization.values[resourceName];
+    const resource = localization?.values?.[resourceName];
 
     if (!resource) return defaultValue;
 
@@ -21,7 +21,7 @@ export function createLocalizer(localization: ApplicationConfiguration.Localizat
   };
 }
 
-export function createLocalizerWithFallback(localization: ApplicationConfiguration.Localization) {
+export function createLocalizerWithFallback(localization: ApplicationLocalizationConfigurationDto) {
   const findLocalization = createLocalizationFinder(localization);
 
   return (resourceNames: string[], keys: string[], defaultValue: string) => {
@@ -31,7 +31,7 @@ export function createLocalizerWithFallback(localization: ApplicationConfigurati
 }
 
 export function createLocalizationPipeKeyGenerator(
-  localization: ApplicationConfiguration.Localization,
+  localization: ApplicationLocalizationConfigurationDto,
 ) {
   const findLocalization = createLocalizationFinder(localization);
 
@@ -41,7 +41,7 @@ export function createLocalizationPipeKeyGenerator(
   };
 }
 
-function createLocalizationFinder(localization: ApplicationConfiguration.Localization) {
+function createLocalizationFinder(localization: ApplicationLocalizationConfigurationDto) {
   const localize = createLocalizer(localization);
 
   return (resourceNames: string[], keys: string[]) => {

@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````csharp
+````html
 <abp-button-group>
     <abp-button button-type="Secondary">Left</abp-button>
     <abp-button button-type="Secondary">Middle</abp-button>

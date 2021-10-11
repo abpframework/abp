@@ -398,7 +398,7 @@ namespace Acme.BookStore.Web
 
 我们将为表格每行添加下拉按钮 ("Actions"):
 
-打开 `Pages/Books/Index.cshtml` 页面,并按下方所示修改表格部分的代码:
+打开 `Pages/Books/Index.js` 页面,并按下方所示修改表格部分的代码:
 
 ````js
 $(function () {
@@ -718,7 +718,7 @@ export class BookComponent implements OnInit {
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
   </ng-template>
@@ -859,7 +859,7 @@ export class BookComponent implements OnInit {
 
 ````html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
   </button>
 

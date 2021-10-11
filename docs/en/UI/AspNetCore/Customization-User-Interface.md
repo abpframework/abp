@@ -1,6 +1,6 @@
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
-This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) for ASP.NET Core MVC / Razor Page applications.
+This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) or [theme](Theming.md) for ASP.NET Core MVC / Razor Page applications.
 
 ## Overriding a Page
 
@@ -28,15 +28,15 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
     public class MyEditModalModel : EditModalModel
     {
         public MyEditModalModel(
-            IIdentityUserAppService identityUserAppService, 
+            IIdentityUserAppService identityUserAppService,
             IIdentityRoleAppService identityRoleAppService
             ) : base(
-                identityUserAppService, 
+                identityUserAppService,
                 identityRoleAppService)
         {
         }
 
-        public override async Task<IActionResult> OnPostAsync()
+        public async override Task<IActionResult> OnPostAsync()
         {
             //TODO: Additional logic
             await base.OnPostAsync();
@@ -84,10 +84,10 @@ Create a page model class deriving from the ` LoginModel ` (defined in the ` Vol
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
-        IAuthenticationSchemeProvider schemeProvider, 
+        IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions
         ) : base(
-        schemeProvider, 
+        schemeProvider,
         accountOptions)
     {
 
@@ -128,13 +128,13 @@ The ABP Framework, pre-built themes and modules define some **re-usable view com
 
 ### Example
 
-The screenshot below was taken from the **basic theme** comes with the application startup template.
+The screenshot below was taken from the [Basic Theme](Basic-Theme.md) comes with the application startup template.
 
 ![bookstore-brand-area-highlighted](../../images/bookstore-brand-area-highlighted.png)
 
-[The basic theme](../../Themes/Basic.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
+The [Basic Theme](Basic-Theme.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
 
-First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
+First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
 
 ![bookstore-added-brand-files](../../images/bookstore-added-brand-files.png)
 
@@ -150,7 +150,7 @@ Now, you can run the application to see the result:
 
 ![bookstore-added-logo](../../images/bookstore-added-logo.png)
 
-If you need, you can also replace [the code behind c# class](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs) of the component just using the dependency injection system.
+If you need, you can also replace [the code behind c# class](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs) of the component just using the dependency injection system.
 
 ### Overriding the Theme
 
@@ -376,7 +376,7 @@ Assume that you need to add the Google Analytics script to the layout (that will
 
 ![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
 
-**NotificationViewComponent.cs**
+**GoogleAnalyticsViewComponent.cs**
 
 ````csharp
 public class GoogleAnalyticsViewComponent : AbpViewComponent
@@ -437,15 +437,15 @@ See the layouts section below to learn more about the layout system.
 
 Layout system allows themes to define standard, named layouts and allows any page to select a proper layout for its purpose. There are three pre-defined layouts:
 
-* "**Application**": The main (and the default) layout for an application. It typically contains header, menu (sidebar), footer, toolbar... etc. 
+* "**Application**": The main (and the default) layout for an application. It typically contains header, menu (sidebar), footer, toolbar... etc.
 * "**Account**": This layout is used by login, register and other similar pages. It is used for the pages under the `/Pages/Account` folder by default.
 * "**Empty**": Empty and minimal layout.
 
-These names are defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but these are standard layout names and implemented by all the themes out of the box.
+These names are defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but these are the standard layout names and implemented by all the themes out of the box.
 
 #### Layout Location
 
-You can find the layout files [here](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts) for the basic theme. You can take them as references to build your own layouts or you can override them if necessary.
+You can find the layout files [here](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts) for the basic theme. You can take them as references to build your own layouts or you can override them if necessary.
 
 #### ITheme
 

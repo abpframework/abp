@@ -41,7 +41,7 @@ namespace Volo.Abp.FeatureManagement
         }
 
         [Fact]
-        public async Task FindAAllsync()
+        public async Task FindAllAsync()
         {
             var featureValues = await Repository.FindAllAsync(
                 TestFeatureDefinitionProvider.ProjectCount,

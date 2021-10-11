@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyCompanyName.MyProjectName.Users;
 using Shouldly;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
@@ -17,11 +17,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
     [Collection(MyProjectNameTestConsts.CollectionDefinitionName)]
     public class SampleRepositoryTests : MyProjectNameEntityFrameworkCoreTestBase
     {
-        private readonly IRepository<AppUser, Guid> _appUserRepository;
+        private readonly IRepository<IdentityUser, Guid> _appUserRepository;
 
         public SampleRepositoryTests()
         {
-            _appUserRepository = GetRequiredService<IRepository<AppUser, Guid>>();
+            _appUserRepository = GetRequiredService<IRepository<IdentityUser, Guid>>();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
             await WithUnitOfWorkAsync(async () =>
             {
                 //Act
-                var adminUser = await _appUserRepository
+                var adminUser = await (await _appUserRepository.GetQueryableAsync())
                     .Where(u => u.UserName == "admin")
                     .FirstOrDefaultAsync();
 

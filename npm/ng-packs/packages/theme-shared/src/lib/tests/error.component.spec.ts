@@ -1,19 +1,23 @@
-import { SpectatorHost, createHostFactory } from '@ngneat/spectator/jest';
-import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { LocalizationPipe } from '@abp/ng.core';
-import { Store } from '@ngxs/store';
-import { Renderer2, ElementRef } from '@angular/core';
+import { CORE_OPTIONS, LocalizationPipe } from '@abp/ng.core';
+import { HttpClient } from '@angular/common/http';
+import { ElementRef, Renderer2 } from '@angular/core';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Subject } from 'rxjs';
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 
 describe('ErrorComponent', () => {
   let spectator: SpectatorHost<HttpErrorWrapperComponent>;
   const createHost = createHostFactory({
     component: HttpErrorWrapperComponent,
     declarations: [LocalizationPipe],
-    mocks: [Store],
+    mocks: [HttpClient],
     providers: [
+      { provide: CORE_OPTIONS, useValue: {} },
       { provide: Renderer2, useValue: { removeChild: () => null } },
-      { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } },
+      {
+        provide: ElementRef,
+        useValue: { nativeElement: document.createElement('div') },
+      },
     ],
   });
 
@@ -24,7 +28,7 @@ describe('ErrorComponent', () => {
 
   describe('#destroy', () => {
     it('should be call when pressed the esc key', done => {
-      spectator.component.destroy$.subscribe(res => {
+      spectator.component.destroy$.subscribe(() => {
         done();
       });
 
@@ -32,7 +36,7 @@ describe('ErrorComponent', () => {
     });
 
     it('should be call when clicked the close button', done => {
-      spectator.component.destroy$.subscribe(res => {
+      spectator.component.destroy$.subscribe(() => {
         done();
       });
 

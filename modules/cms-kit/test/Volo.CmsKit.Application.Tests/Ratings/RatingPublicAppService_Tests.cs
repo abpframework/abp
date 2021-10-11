@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
@@ -44,7 +43,7 @@ namespace Volo.CmsKit.Ratings
             UsingDbContext(context =>
             {
                 var ratings = context.Set<Rating>().Where(x =>
-                    x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
+                    x.EntityId == _cmsKitTestData.EntityId2 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
 
                 ratings
                     .Any(c => c.Id == newRating.Id && c.CreatorId == newRating.CreatorId &&
@@ -52,16 +51,16 @@ namespace Volo.CmsKit.Ratings
                     .ShouldBeTrue();
             });
         }
-
+        
         [Fact]
         public async Task CreateAsync_Should_Update_If_Rating_Is_Exist()
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
             var entity =
-                await _ratingAppService.GetCurrentUserRatingAsync(_cmsKitTestData.EntityType1,
-                    _cmsKitTestData.EntityId1);
-
+                (await _ratingAppService.GetGroupedStarCountsAsync(_cmsKitTestData.EntityType1,
+                    _cmsKitTestData.EntityId1)).FirstOrDefault();
+        
             var updatedEntity = await _ratingAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
@@ -69,32 +68,8 @@ namespace Volo.CmsKit.Ratings
                 {
                     StarCount = 5
                 });
-
-            entity.Id.ShouldBe(updatedEntity.Id);
-            entity.EntityId.ShouldBe(updatedEntity.EntityId);
-            entity.EntityType.ShouldBe(updatedEntity.EntityType);
+        
             entity.StarCount.ShouldBe(updatedEntity.StarCount);
-        }
-
-        [Fact]
-        public async Task GetCurrentUserRatingAsync()
-        {
-            _currentUser.Id.Returns(_cmsKitTestData.User1Id);
-
-            var rating = await _ratingAppService.GetCurrentUserRatingAsync(
-                _cmsKitTestData.EntityType1,
-                _cmsKitTestData.EntityId1
-            );
-
-            UsingDbContext(context =>
-            {
-                var ratings = context.Set<Rating>().Where(x =>
-                    x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
-
-                ratings
-                    .Any(c => c.Id == rating.Id && c.EntityId == rating.EntityId && c.EntityType == rating.EntityType)
-                    .ShouldBeTrue();
-            });
         }
 
         [Fact]

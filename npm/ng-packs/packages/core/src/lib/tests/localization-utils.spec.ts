@@ -55,6 +55,8 @@ describe('Localization Utils', () => {
       defaultResourceName: 'x',
       currentCulture: null,
       languages: [],
+      languageFilesMap: null,
+      languagesMap: null,
     });
 
     test.each`
@@ -96,6 +98,8 @@ describe('Localization Utils', () => {
       defaultResourceName: 'x',
       currentCulture: null,
       languages: [],
+      languageFilesMap: null,
+      languagesMap: null,
     });
 
     test.each`
@@ -142,6 +146,8 @@ describe('Localization Utils', () => {
       defaultResourceName: 'x',
       currentCulture: null,
       languages: [],
+      languageFilesMap: null,
+      languagesMap: null,
     });
 
     test.each`

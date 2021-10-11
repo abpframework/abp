@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Local
 {
@@ -31,8 +32,9 @@ namespace Volo.Abp.EventBus.Local
         public LocalEventBus(
             IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory,
-            ICurrentTenant currentTenant)
-            : base(serviceScopeFactory, currentTenant)
+            ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager)
+            : base(serviceScopeFactory, currentTenant, unitOfWorkManager)
         {
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
@@ -117,21 +119,19 @@ namespace Volo.Abp.EventBus.Local
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
-            var exceptions = new List<Exception>();
+            await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
+        }
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceLocalEvent(eventRecord);
+        }
 
-            if (exceptions.Any())
-            {
-                if (exceptions.Count == 1)
-                {
-                    exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
-            }
+        public virtual async Task PublishAsync(LocalEventMessage localEventMessage)
+        {
+            await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
         }
 
         protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)

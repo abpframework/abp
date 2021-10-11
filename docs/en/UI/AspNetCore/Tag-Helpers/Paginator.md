@@ -12,7 +12,7 @@ Basic usage:
 
 Model:
 
-````xml
+````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 

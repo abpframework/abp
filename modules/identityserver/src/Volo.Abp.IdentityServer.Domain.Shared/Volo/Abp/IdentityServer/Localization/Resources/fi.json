@@ -1,0 +1,14 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identiteettiresurssin nimi on jo olemassa: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api-resurssin nimi on jo olemassa: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api Scope -nimi on jo olemassa: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId on jo olemassa: {ClientId}",
+    "UserLockedOut": "Käyttäjätili on lukittu virheellisten kirjautumisyritysten vuoksi. Odota hetki ja yritä uudelleen.",
+    "InvalidUserNameOrPassword": "Väärä käyttäjänimi tai salasana!",
+    "LoginIsNotAllowed": "Et saa kirjautua sisään! Tilisi on passiivinen tai sinun on vahvistettava sähköpostiosoitteesi/puhelinnumerosi.",
+    "InvalidUsername": "Väärä käyttäjänimi tai salasana!",
+    "TheTargetUserIsNotLinkedToYou": "Kohdekäyttäjä ei ole linkitetty sinuun!"
+  }
+}

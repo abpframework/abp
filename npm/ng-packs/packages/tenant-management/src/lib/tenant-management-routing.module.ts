@@ -9,13 +9,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { eTenantManagementComponents } from './enums/components';
+import { TenantManagementExtensionsGuard } from './guards';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
   {
     path: '',
     component: DynamicLayoutComponent,
-    canActivate: [AuthGuard, PermissionGuard],
+    canActivate: [AuthGuard, PermissionGuard, TenantManagementExtensionsGuard],
     children: [
       {
         path: 'tenants',

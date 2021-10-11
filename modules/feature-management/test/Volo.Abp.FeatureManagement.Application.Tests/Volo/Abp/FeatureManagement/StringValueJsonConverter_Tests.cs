@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Shouldly;
 using Volo.Abp.Json;
 using Volo.Abp.Validation.StringValues;
@@ -8,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
+    public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
     {
         private readonly IJsonSerializer _jsonSerializer;
 
@@ -60,6 +59,14 @@ namespace Volo.Abp.FeatureManagement
                                         MinValue = 10
                                     }
                                 }
+                            },
+                            new FeatureDto
+                            {
+                                Provider = new FeatureProviderDto
+                                {
+                                    Name = "FeatureName",
+                                    Key = "FeatureKey"
+                                }
                             }
                         }
                     }
@@ -67,8 +74,10 @@ namespace Volo.Abp.FeatureManagement
             };
 
             var serialized = _jsonSerializer.Serialize(featureListDto, indented: true);
+
             var featureListDto2 = _jsonSerializer.Deserialize<GetFeatureListResultDto>(serialized);
 
+            featureListDto2.ShouldNotBeNull();
             featureListDto2.Groups[0].Features[0].ValueType.ShouldBeOfType<FreeTextStringValueType>();
             featureListDto2.Groups[0].Features[0].ValueType.Validator.ShouldBeOfType<BooleanValueValidator>();
 
@@ -83,6 +92,9 @@ namespace Volo.Abp.FeatureManagement
             featureListDto2.Groups[0].Features[2].ValueType.Validator.ShouldBeOfType<NumericValueValidator>();
             featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MaxValue.ShouldBe(1000);
             featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MinValue.ShouldBe(10);
+
+            featureListDto2.Groups[0].Features[3].Provider.Name.ShouldBe("FeatureName");
+            featureListDto2.Groups[0].Features[3].Provider.Key.ShouldBe("FeatureKey");
         }
     }
 }

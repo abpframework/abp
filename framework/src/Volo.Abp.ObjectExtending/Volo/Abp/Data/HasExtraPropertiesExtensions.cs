@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
-using Volo.Abp.DynamicProxy;
+using System.Linq;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -32,15 +33,26 @@ namespace Volo.Abp.Data
 
             if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
             {
-                return (TProperty)Convert.ChangeType(value, typeof(TProperty), CultureInfo.InvariantCulture);
+                var conversionType = typeof(TProperty);
+                if (TypeHelper.IsNullable(conversionType))
+                {
+                    conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+                }
+
+                if (conversionType == typeof(Guid))
+                {
+                    return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                }
+
+                return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
             }
 
             throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
         }
 
         public static TSource SetProperty<TSource>(
-            this TSource source, 
-            string name, 
+            this TSource source,
+            string name,
             object value,
             bool validate = true)
             where TSource : IHasExtraProperties
@@ -93,7 +105,21 @@ namespace Volo.Abp.Data
                 throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
             }
 
-            ((IHasExtraProperties) source).SetDefaultsForExtraProperties(objectType);
+            ((IHasExtraProperties)source).SetDefaultsForExtraProperties(objectType);
+        }
+
+        public static void SetExtraPropertiesToRegularProperties(this IHasExtraProperties source)
+        {
+            var properties = source.GetType().GetProperties()
+                .Where(x => source.ExtraProperties.ContainsKey(x.Name)
+                            && x.GetSetMethod(true) != null)
+                .ToList();
+
+            foreach (var property in properties)
+            {
+                property.SetValue(source, source.ExtraProperties[property.Name]);
+                source.RemoveProperty(property.Name);
+            }
         }
     }
 }

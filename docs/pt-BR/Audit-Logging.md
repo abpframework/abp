@@ -1,3 +1,3 @@
-﻿# Audit Logging
+# Audit Logging
 
 Façam

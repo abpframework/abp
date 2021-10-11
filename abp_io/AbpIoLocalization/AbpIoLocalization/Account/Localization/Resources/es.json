@@ -1,0 +1,14 @@
+{
+  "culture": "es",
+  "texts": {
+    "Account": "Cuenta de ABP - Iniciar sesión y registrarse | ABP.IO",
+    "Welcome": "Bienvenido",
+    "UseOneOfTheFollowingLinksToContinue": "Usa uno de los siguientes links para continuar",
+    "FrameworkHomePage": "Página de inicio del framework",
+    "FrameworkDocumentation": "Documentación del framework",
+    "OfficialBlog": "Blog Oficial",
+    "CommercialHomePage": "Página de inicio comercial",
+    "CommercialSupportWebSite": "Sitio web de soporte comercial",
+    "CommunityWebSite": "Sitio web comunidad ABP"
+  }
+}

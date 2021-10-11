@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -28,6 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
+
+            if (isCheckBox)
+            {
+                TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode;
+            }
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
@@ -51,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.AddClass(isCheckBox ? "custom-checkbox" : "form-group");
                 output.Attributes.AddClass(isCheckBox ? "custom-control" : "");
                 output.Attributes.AddClass(isCheckBox ? "mb-2" : "");
-                output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
+                output.Content.AppendHtml(innerHtml);
             }
         }
 
@@ -96,7 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
         {
-            return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control" : "form-group") + "\">" +
+            return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2" : "form-group") + "\">" +
                    Environment.NewLine + innerHtml + Environment.NewLine +
                    "</div>";
         }
@@ -249,7 +255,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
             {
-                return "";
+                return string.Empty;
             }
 
             if (string.IsNullOrEmpty(TagHelper.Label))
@@ -257,11 +263,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
             }
 
-            var checkboxClass = isCheckbox ? "class=\"custom-control-label\" " : "";
+            var label = new TagBuilder("label");
+            label.Attributes.Add("for", GetIdAttributeValue(inputTag));
+            label.InnerHtml.AppendHtml(TagHelper.Label);
 
-            return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
-                   + TagHelper.Label +
-                   "</label>" + GetRequiredSymbol(context, output);
+            if (isCheckbox)
+            {
+                label.AddCssClass("custom-control-label");
+            }
+
+            return label.ToHtmlString();
         }
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
@@ -308,9 +319,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
             var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-            return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
-                   localizedText +
-                   "</small>";
+            var small = new TagBuilder("small");
+            small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
+            small.AddCssClass("form-text text-muted");
+            small.InnerHtml.Append(localizedText);
+
+            return small.ToHtmlString();
         }
 
         protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output, bool isCheckbox)
@@ -426,11 +440,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden");
         }
 
-        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
         {
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
+            return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        }
+
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var id = GetIdAttributeValue(inputTag);
+
+            return !string.IsNullOrWhiteSpace(id) ? "for=\"" + id + "\"" : string.Empty;
         }
 
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)

@@ -15,7 +15,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public virtual TUser Creator { get; set; }
+        public virtual TUser Creator { get; protected set; }
 
         /// <inheritdoc />
         public virtual TUser LastModifier { get; set; }
@@ -34,7 +34,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public virtual TUser Creator { get; set; }
+        public virtual TUser Creator { get; protected set; }
 
         /// <inheritdoc />
         public virtual TUser LastModifier { get; set; }

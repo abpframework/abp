@@ -1,20 +1,7 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
-    "InternalServerErrorMessage": "Sayfa işlenirken sunucu tarafında beklenmedik bir hata oluştu!",
-    "ValidationErrorMessage": "İşleminiz geçerli değil!",
-    "ValidationNarrativeErrorMessageTitle": "Aşağıdaki hatalar doğrulama sırasında tespit edilmiştir.",
-    "DefaultErrorMessage": "Bir hata oluştu!",
-    "DefaultErrorMessageDetail": "Hatanın ne olduğu sunucu tarafından gönderilmedi.",
-    "DefaultErrorMessage401": "Giriş yapılmamış!",
-    "DefaultErrorMessage401Detail": "Bu işlemi gerçekleştirmek için uygulamaya giriş yapmalısınız.",
-    "DefaultErrorMessage403": "İzinsiz işlem!",
-    "DefaultErrorMessage403Detail": "Bu işlemi gerçekleştirmek için gereken izne sahip değilsiniz.",
-    "DefaultErrorMessage404": "Kaynak bulunamadı!",
-    "DefaultErrorMessage404Detail": "İstenilen kaynak sunucuda bulunamadı.",
-    "EntityNotFoundErrorMessage": "Id değeri {1} olan {0} türünden bir nesne bulunamadı!",
     "Languages": "Diller",
-    "Error": "Hata",
     "AreYouSure": "Emin misiniz?",
     "Cancel": "Vazgeç",
     "Clear": "Temizle",
@@ -55,15 +42,11 @@
     "ChangePassword": "Şifre değiştir",
     "PersonalInfo": "Profilim",
     "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var.",
-    "UnhandledException": "Yakalanmamış hata!",
-    "401Message": "Yetkisiz",
-    "403Message": "Yasak",
-    "404Message": "Sayfa bulunamadı",
-    "500Message": "Sunucu tarafında hata",
     "GoHomePage": "Ana sayfaya git",
     "GoBack": "Geri dön",
     "Search": "Arama",
     "ItemWillBeDeletedMessageWithFormat": "{0} silinecektir!",
-    "ItemWillBeDeletedMessage": "Bu nesne silinecektir!"
+    "ItemWillBeDeletedMessage": "Bu nesne silinecektir!",
+    "ManageYourAccount": "Hesap yönetimi"
   }
 }

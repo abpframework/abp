@@ -1,5 +1,9 @@
-import { ABP, ApplicationConfiguration } from '@abp/ng.core';
-import { createSelector, Store } from '@ngxs/store';
+import {
+  ABP,
+  ApplicationLocalizationConfigurationDto,
+  ConfigStateService,
+  ExtensionPropertyUiLookupDto,
+} from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -10,63 +14,78 @@ import { PropCallback } from '../models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
 import { createExtraPropertyValueResolver } from './props.util';
+import {
+  createTypeaheadDisplayNameGenerator,
+  createTypeaheadOptions,
+  getTypeaheadType,
+  hasTypeaheadTextSuffix,
+} from './typeahead.util';
 import { getValidatorsFromProperty } from './validation.util';
 
-const selectConfig = (state: any) => state.ConfigState;
+function selectObjectExtensions(
+  configState: ConfigStateService,
+): Observable<ObjectExtensions.ObjectExtensionsDto> {
+  return configState.getOne$('objectExtensions');
+}
 
-const selectObjectExtensions = createSelector(
-  [selectConfig],
-  (config: ObjectExtensions.Config) => config.objectExtensions,
-);
+function selectLocalization(
+  configState: ConfigStateService,
+): Observable<ApplicationLocalizationConfigurationDto> {
+  return configState.getOne$('localization');
+}
 
-const selectLocalization = createSelector(
-  [selectConfig],
-  (config: ApplicationConfiguration.Response) => config.localization,
-);
+function selectEnums(
+  configState: ConfigStateService,
+): Observable<Record<string, ObjectExtensions.ExtensionEnumDto>> {
+  return selectObjectExtensions(configState).pipe(
+    map((extensions: ObjectExtensions.ObjectExtensionsDto) =>
+      Object.keys(extensions.enums).reduce((acc, key) => {
+        const { fields, localizationResource } = extensions.enums[key];
+        acc[key] = {
+          fields,
+          localizationResource,
+          transformed: createEnum(fields),
+        };
+        return acc;
+      }, {} as Record<string, ObjectExtensions.ExtensionEnumDto>),
+    ),
+  );
+}
 
-const selectEnums = createSelector(
-  [selectObjectExtensions, selectLocalization],
-  (extensions: ObjectExtensions.Item) =>
-    Object.keys(extensions.enums).reduce((acc, key) => {
-      const { fields, localizationResource } = extensions.enums[key];
-      acc[key] = {
-        fields,
-        localizationResource,
-        transformed: createEnum(fields),
-      };
-      return acc;
-    }, {} as ObjectExtensions.Enums),
-);
+export function getObjectExtensionEntitiesFromStore(
+  configState: ConfigStateService,
+  moduleKey: string,
+) {
+  return selectObjectExtensions(configState).pipe(
+    map(extensions => {
+      if (!extensions) return null;
 
-const createObjectExtensionEntitiesSelector = (moduleKey: ModuleKey) =>
-  createSelector([selectObjectExtensions], (extensions: ObjectExtensions.Item) => {
-    if (!extensions) return null;
-
-    return (extensions.modules[moduleKey] || ({} as ObjectExtensions.Module)).entities;
-  });
-
-export function getObjectExtensionEntitiesFromStore(store: Store, moduleKey: ModuleKey) {
-  return store.select(createObjectExtensionEntitiesSelector(moduleKey)).pipe(
+      return (extensions.modules[moduleKey] || ({} as ObjectExtensions.ModuleExtensionDto))
+        .entities;
+    }),
     map(entities => (isUndefined(entities) ? {} : entities)),
-    filter<ObjectExtensions.Entities>(Boolean),
+    filter<ObjectExtensions.EntityExtensions>(Boolean),
     take(1),
   );
 }
 
-export function mapEntitiesToContributors<T = any>(store: Store, resource: string) {
+export function mapEntitiesToContributors<T = any>(
+  configState: ConfigStateService,
+  resource: string,
+) {
   return pipe(
     switchMap(entities =>
-      zip(store.select(selectLocalization), store.select(selectEnums)).pipe(
+      zip(selectLocalization(configState), selectEnums(configState)).pipe(
         map(([localization, enums]) => {
           const generateDisplayName = createDisplayNameLocalizationPipeKeyGenerator(localization);
 
           return Object.keys(entities).reduce(
-            (acc, key: keyof ObjectExtensions.Entities) => {
+            (acc, key: keyof ObjectExtensions.EntityExtensions) => {
               acc.prop[key] = [];
               acc.createForm[key] = [];
               acc.editForm[key] = [];
 
-              const entity: ObjectExtensions.Entity = entities[key];
+              const entity: ObjectExtensions.EntityExtensionDto = entities[key];
               if (!entity) return acc;
 
               const properties = entity.properties;
@@ -94,33 +113,42 @@ export function mapEntitiesToContributors<T = any>(store: Store, resource: strin
 }
 
 function createPropertiesToContributorsMapper<T = any>(
-  generateDisplayName: DisplayNameGeneratorFn,
+  generateDisplayName: ObjectExtensions.DisplayNameGeneratorFn,
   resource: string,
-  enums: Record<string, ObjectExtensions.Enum>,
+  enums: Record<string, ObjectExtensions.ExtensionEnumDto>,
 ) {
   return (
-    properties: Record<string, ObjectExtensions.Property>,
+    properties: ObjectExtensions.EntityExtensionProperties,
     contributors: ObjectExtensions.PropContributors<T>,
     key: string,
   ) => {
     const isExtra = true;
+    const generateTypeaheadDisplayName = createTypeaheadDisplayNameGenerator(
+      generateDisplayName,
+      properties,
+    );
 
     Object.keys(properties).forEach((name: string) => {
       const property = properties[name];
-      const type = getTypeFromProperty(property);
-      const displayName = generateDisplayName(property.displayName, { name, resource });
+      const propName = name;
+      const lookup = property.ui.lookup || ({} as ExtensionPropertyUiLookupDto);
+      const type = getTypeaheadType(lookup, name) || getTypeFromProperty(property);
+      const generateDN = hasTypeaheadTextSuffix(name)
+        ? generateTypeaheadDisplayName
+        : generateDisplayName;
+      const displayName = generateDN(property.displayName, { name, resource });
 
       if (property.ui.onTable.isVisible) {
         const sortable = Boolean(property.ui.onTable.isSortable);
         const columnWidth = type === ePropType.Boolean ? 150 : 250;
         const valueResolver =
           type === ePropType.Enum
-            ? createEnumValueResolver(property.type, enums[property.type], name)
-            : createExtraPropertyValueResolver<T>(name);
+            ? createEnumValueResolver(property.type, enums[property.type], propName)
+            : createExtraPropertyValueResolver<T>(propName);
 
         const entityProp = new EntityProp<T>({
           type,
-          name,
+          name: propName,
           displayName,
           sortable,
           columnWidth,
@@ -139,11 +167,12 @@ function createPropertiesToContributorsMapper<T = any>(
         const defaultValue = property.defaultValue;
         const validators = () => getValidatorsFromProperty(property);
         let options: PropCallback<any, Observable<ABP.Option<any>[]>>;
-        if (type === ePropType.Enum) options = createEnumOptions(name, enums[property.type]);
+        if (type === ePropType.Enum) options = createEnumOptions(propName, enums[property.type]);
+        else if (type === ePropType.Typeahead) options = createTypeaheadOptions(lookup);
 
         const formProp = new FormProp({
           type,
-          name,
+          name: propName,
           displayName,
           options,
           defaultValue,
@@ -162,13 +191,10 @@ function createPropertiesToContributorsMapper<T = any>(
   };
 }
 
-function getTypeFromProperty(property: ObjectExtensions.Property): ePropType {
-  return (property.typeSimple.replace(/\?$/, '') as string) as ePropType;
+function getTypeFromProperty(property: ObjectExtensions.ExtensionPropertyDto): ePropType {
+  return property.typeSimple.replace(/\?$/, '') as string as ePropType;
 }
 
 function isUndefined(obj: any): obj is undefined {
   return typeof obj === 'undefined';
 }
-
-type DisplayNameGeneratorFn = ReturnType<typeof createDisplayNameLocalizationPipeKeyGenerator>;
-type ModuleKey = keyof ObjectExtensions.Modules;

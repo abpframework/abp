@@ -22,11 +22,19 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             if (context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseNpgsql(context.ExistingConnection, postgreSqlOptionsAction);
+                return context.DbContextOptions.UseNpgsql(context.ExistingConnection, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    postgreSqlOptionsAction?.Invoke(optionsBuilder);
+                });
             }
             else
             {
-                return context.DbContextOptions.UseNpgsql(context.ConnectionString, postgreSqlOptionsAction);
+                return context.DbContextOptions.UseNpgsql(context.ConnectionString, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    postgreSqlOptionsAction?.Invoke(optionsBuilder);
+                });
             }
         }
     }

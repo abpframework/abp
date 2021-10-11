@@ -5,7 +5,7 @@ export class ListResultDto<T> {
 
   constructor(initialValues: Partial<ListResultDto<T>> = {}) {
     for (const key in initialValues) {
-      if (initialValues.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(initialValues, key)) {
         this[key] = initialValues[key];
       }
     }
@@ -25,7 +25,10 @@ export class LimitedResultRequestDto {
 
   constructor(initialValues: Partial<LimitedResultRequestDto> = {}) {
     for (const key in initialValues) {
-      if (initialValues.hasOwnProperty(key)) {
+      if (
+        Object.prototype.hasOwnProperty.call(initialValues, key) &&
+        initialValues[key] !== undefined
+      ) {
         this[key] = initialValues[key];
       }
     }
@@ -53,7 +56,7 @@ export class EntityDto<TKey = string> {
 
   constructor(initialValues: Partial<EntityDto<TKey>> = {}) {
     for (const key in initialValues) {
-      if (initialValues.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(initialValues, key)) {
         this[key] = initialValues[key];
       }
     }
@@ -71,7 +74,7 @@ export class CreationAuditedEntityDto<TPrimaryKey = string> extends EntityDto<TP
 
 export class CreationAuditedEntityWithUserDto<
   TUserDto,
-  TPrimaryKey = string
+  TPrimaryKey = string,
 > extends CreationAuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
 
@@ -91,9 +94,10 @@ export class AuditedEntityDto<TPrimaryKey = string> extends CreationAuditedEntit
   }
 }
 
-export class AuditedEntityWithUserDto<TUserDto, TPrimaryKey = string> extends AuditedEntityDto<
-  TPrimaryKey
-> {
+export class AuditedEntityWithUserDto<
+  TUserDto,
+  TPrimaryKey = string,
+> extends AuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
   lastModifier?: TUserDto;
 
@@ -114,7 +118,7 @@ export class FullAuditedEntityDto<TPrimaryKey = string> extends AuditedEntityDto
 
 export class FullAuditedEntityWithUserDto<
   TUserDto,
-  TPrimaryKey = string
+  TPrimaryKey = string,
 > extends FullAuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
   lastModifier?: TUserDto;
@@ -130,7 +134,7 @@ export class ExtensibleObject {
 
   constructor(initialValues: Partial<ExtensibleObject> = {}) {
     for (const key in initialValues) {
-      if (initialValues.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(initialValues, key)) {
         this[key] = initialValues[key];
       }
     }
@@ -145,9 +149,9 @@ export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
   }
 }
 
-export class ExtensibleCreationAuditedEntityDto<TPrimaryKey = string> extends ExtensibleEntityDto<
-  TPrimaryKey
-> {
+export class ExtensibleCreationAuditedEntityDto<
+  TPrimaryKey = string,
+> extends ExtensibleEntityDto<TPrimaryKey> {
   creationTime: Date | string;
   creatorId?: string;
 
@@ -157,7 +161,7 @@ export class ExtensibleCreationAuditedEntityDto<TPrimaryKey = string> extends Ex
 }
 
 export class ExtensibleAuditedEntityDto<
-  TPrimaryKey = string
+  TPrimaryKey = string,
 > extends ExtensibleCreationAuditedEntityDto<TPrimaryKey> {
   lastModificationTime?: Date | string;
   lastModifierId?: string;
@@ -169,7 +173,7 @@ export class ExtensibleAuditedEntityDto<
 
 export class ExtensibleAuditedEntityWithUserDto<
   TPrimaryKey = string,
-  TUserDto = any
+  TUserDto = any,
 > extends ExtensibleAuditedEntityDto<TPrimaryKey> {
   creator: TUserDto;
   lastModifier: TUserDto;
@@ -181,7 +185,7 @@ export class ExtensibleAuditedEntityWithUserDto<
 
 export class ExtensibleCreationAuditedEntityWithUserDto<
   TPrimaryKey = string,
-  TUserDto = any
+  TUserDto = any,
 > extends ExtensibleCreationAuditedEntityDto<TPrimaryKey> {
   creator: TUserDto;
 
@@ -193,7 +197,7 @@ export class ExtensibleCreationAuditedEntityWithUserDto<
 }
 
 export class ExtensibleFullAuditedEntityDto<
-  TPrimaryKey = string
+  TPrimaryKey = string,
 > extends ExtensibleAuditedEntityDto<TPrimaryKey> {
   isDeleted: boolean;
   deleterId?: string;
@@ -206,7 +210,7 @@ export class ExtensibleFullAuditedEntityDto<
 
 export class ExtensibleFullAuditedEntityWithUserDto<
   TPrimaryKey = string,
-  TUserDto = any
+  TUserDto = any,
 > extends ExtensibleFullAuditedEntityDto<TPrimaryKey> {
   creator: TUserDto;
   lastModifier: TUserDto;

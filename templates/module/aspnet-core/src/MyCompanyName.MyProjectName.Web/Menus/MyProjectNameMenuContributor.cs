@@ -9,13 +9,14 @@ namespace MyCompanyName.MyProjectName.Web.Menus
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private Task ConfigureMainMenu(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //Add main menu items.
+            context.Menu.AddItem(new ApplicationMenuItem(MyProjectNameMenus.Prefix, displayName: "MyProjectName", "~/MyProjectName", icon: "fa fa-globe"));
 
             return Task.CompletedTask;
         }

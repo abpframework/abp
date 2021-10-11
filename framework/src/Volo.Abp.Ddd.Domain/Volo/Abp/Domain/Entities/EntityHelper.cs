@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -15,8 +13,16 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
-        private static readonly ConcurrentDictionary<string, PropertyInfo> CachedIdProperties =
-            new ConcurrentDictionary<string, PropertyInfo>();
+        public static bool IsMultiTenant<TEntity>()
+            where TEntity : IEntity
+        {
+            return IsMultiTenant(typeof(TEntity));
+        }
+
+        public static bool IsMultiTenant(Type type)
+        {
+            return typeof(IMultiTenant).IsAssignableFrom(type);
+        }
 
         public static bool EntityEquals(IEntity entity1, IEntity entity2)
         {
@@ -77,7 +83,7 @@ namespace Volo.Abp.Domain.Entities
             {
                 var entity1Key = entity1Keys[i];
                 var entity2Key = entity2Keys[i];
-                
+
                 if (entity1Key == null)
                 {
                     if (entity2Key == null)
@@ -89,13 +95,13 @@ namespace Volo.Abp.Domain.Entities
                     //entity2Key is not null!
                     return false;
                 }
-                
+
                 if (entity2Key == null)
                 {
                     //entity1Key was not null!
                     return false;
                 }
-                
+
                 if (TypeHelper.IsDefaultValue(entity1Key) && TypeHelper.IsDefaultValue(entity2Key))
                 {
                     return false;
@@ -112,7 +118,17 @@ namespace Volo.Abp.Domain.Entities
 
         public static bool IsEntity([NotNull] Type type)
         {
+            Check.NotNull(type, nameof(type));
             return typeof(IEntity).IsAssignableFrom(type);
+        }
+
+        public static void CheckEntity([NotNull] Type type)
+        {
+            Check.NotNull(type, nameof(type));
+            if (!IsEntity(type))
+            {
+                throw new AbpException($"Given {nameof(type)} is not an entity: {type.AssemblyQualifiedName}. It must implement {typeof(IEntity).AssemblyQualifiedName}.");
+            }
         }
 
         public static bool IsEntityWithId([NotNull] Type type)
@@ -241,30 +257,13 @@ namespace Volo.Abp.Domain.Entities
             Func<TKey> idFactory,
             bool checkForDisableIdGenerationAttribute = false)
         {
-            var property = CachedIdProperties.GetOrAdd(
-                $"{entity.GetType().FullName}-{checkForDisableIdGenerationAttribute}", () =>
-                {
-                    var idProperty = entity
-                        .GetType()
-                        .GetProperties()
-                        .FirstOrDefault(x => x.Name == nameof(entity.Id) &&
-                                             x.GetSetMethod(true) != null);
-
-                    if (idProperty == null)
-                    {
-                        return null;
-                    }
-
-                    if (checkForDisableIdGenerationAttribute &&
-                        idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
-                    {
-                        return null;
-                    }
-
-                    return idProperty;
-                });
-
-            property?.SetValue(entity, idFactory());
+            ObjectHelper.TrySetProperty(
+                entity,
+                x => x.Id,
+                idFactory,
+                checkForDisableIdGenerationAttribute
+                    ? new Type[] { typeof(DisableIdGenerationAttribute) }
+                    : new Type[] { });
         }
     }
 }

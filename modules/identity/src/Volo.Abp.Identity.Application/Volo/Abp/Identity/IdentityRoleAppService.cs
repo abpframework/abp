@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
@@ -37,10 +38,10 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
-            var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
-            var totalCount = await RoleRepository.GetCountAsync();
+            var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var totalCount = await RoleRepository.GetCountAsync(input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(
                 totalCount,
@@ -57,7 +58,7 @@ namespace Volo.Abp.Identity
                 CurrentTenant.Id
             )
             {
-                IsDefault = input.IsDefault, 
+                IsDefault = input.IsDefault,
                 IsPublic = input.IsPublic
             };
 
@@ -72,8 +73,9 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Update)]
         public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            var role = await RoleManager.GetByIdAsync(id);
-            role.ConcurrencyStamp = input.ConcurrencyStamp;
+            var role = await RoleManager.GetByIdAsync(id); 
+            
+            role.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 

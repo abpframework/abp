@@ -15,7 +15,7 @@ namespace Pages.Abp.MultiTenancy
             TenantStore = tenantStore;
         }
 
-        public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
+        public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
             var tenant = await TenantStore.FindAsync(name);
 
@@ -28,11 +28,12 @@ namespace Pages.Abp.MultiTenancy
             {
                 Success = true,
                 TenantId = tenant.Id,
-                Name = tenant.Name
+                Name = tenant.Name,
+                IsActive = tenant.IsActive
             };
         }
-        
-        public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
+
+        public virtual async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
         {
             var tenant = await TenantStore.FindAsync(id);
 
@@ -45,7 +46,8 @@ namespace Pages.Abp.MultiTenancy
             {
                 Success = true,
                 TenantId = tenant.Id,
-                Name = tenant.Name
+                Name = tenant.Name,
+                IsActive = tenant.IsActive
             };
         }
     }

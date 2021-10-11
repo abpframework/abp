@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Volo.Abp.ObjectExtending
 {

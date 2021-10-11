@@ -16,7 +16,7 @@ ABP.IO Platform is rapidly growing and we are getting more and more contribution
 
 ### Object Extending System
 
-In the last few releases, we've mostly focused on providing ways to extend existing modules when you use them as NuGet/NPM Packages. 
+In the last few releases, we've mostly focused on providing ways to extend existing modules when you use them as NuGet/NPM Packages.
 
 The Object Extending System allows module developers to create extensible modules and allows application developers to customize and extend a module easily.
 
@@ -43,7 +43,7 @@ ObjectExtensionManager.Instance
             options.Attributes.Add(new RequiredAttribute());
             options.Attributes.Add(
                 new StringLengthAttribute(32) {
-                    MinimumLength = 6 
+                    MinimumLength = 6
                 }
             );
         });
@@ -121,7 +121,7 @@ Just create a class derived from the `ExceptionSubscriber` class in your applica
 ````csharp
 public class MyExceptionSubscriber : ExceptionSubscriber
 {
-    public override async Task HandleAsync(ExceptionNotificationContext context)
+    public async override Task HandleAsync(ExceptionNotificationContext context)
     {
         //TODO...
     }

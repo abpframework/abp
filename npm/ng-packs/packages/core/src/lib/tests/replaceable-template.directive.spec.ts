@@ -1,20 +1,17 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives';
 import { ReplaceableComponents } from '../models';
-import { Router } from '@angular/router';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
 @Component({
   selector: 'abp-default-component',
-  template: `
-    <p>default</p>
-  `,
+  template: ' <p>default</p> ',
   exportAs: 'abpDefaultComponent',
 })
-class DefaultComponent implements OnInit {
+class DefaultComponent {
   @Input()
   oneWay;
 
@@ -27,8 +24,6 @@ class DefaultComponent implements OnInit {
   @Output()
   readonly someOutput = new EventEmitter<string>();
 
-  ngOnInit() {}
-
   setTwoWay(value) {
     this.twoWay = value;
     this.twoWayChange.emit(value);
@@ -37,9 +32,7 @@ class DefaultComponent implements OnInit {
 
 @Component({
   selector: 'abp-external-component',
-  template: `
-    <p>external</p>
-  `,
+  template: ' <p>external</p> ',
 })
 class ExternalComponent {
   constructor(

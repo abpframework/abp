@@ -1,14 +1,16 @@
 import {
-  DynamicLayoutComponent,
   AuthGuard,
+  DynamicLayoutComponent,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { LoginComponent } from './components/login/login.component';
 import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 
@@ -41,7 +43,30 @@ const routes: Routes = [
         },
       },
       {
-        path: 'manage-profile',
+        path: 'forgot-password',
+        component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthenticationFlowGuard],
+        data: {
+          replaceableComponent: {
+            key: eAccountComponents.ForgotPassword,
+            defaultComponent: ForgotPasswordComponent,
+          } as ReplaceableComponents.RouteData<ForgotPasswordComponent>,
+        },
+      },
+      {
+        path: 'reset-password',
+        component: ReplaceableRouteContainerComponent,
+        canActivate: [],
+        data: {
+          tenantBoxVisible: false,
+          replaceableComponent: {
+            key: eAccountComponents.ResetPassword,
+            defaultComponent: ResetPasswordComponent,
+          } as ReplaceableComponents.RouteData<ResetPasswordComponent>,
+        },
+      },
+      {
+        path: 'manage',
         component: ReplaceableRouteContainerComponent,
         canActivate: [AuthGuard],
         data: {

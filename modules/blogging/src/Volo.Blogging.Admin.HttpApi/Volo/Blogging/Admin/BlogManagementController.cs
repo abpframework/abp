@@ -5,13 +5,15 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Blogging.Admin.Blogs;
+using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Admin
 {
     [RemoteService(Name = BloggingAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("bloggingAdmin")]
     [Route("api/blogging/blogs/admin")]
-    public class BlogManagementController : AbpController, IBlogManagementAppService
+    public class BlogManagementController : AbpControllerBase, IBlogManagementAppService
     {
         private readonly IBlogManagementAppService _blogManagementAppService;
 
@@ -51,6 +53,13 @@ namespace Volo.Blogging.Admin
         public async Task DeleteAsync(Guid id)
         {
             await _blogManagementAppService.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [Route("clear-cache/{id}")]
+        public async Task ClearCacheAsync(Guid id)
+        {
+            await _blogManagementAppService.ClearCacheAsync(id);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Volo.Abp.Identity
     {
         private readonly IGuidGenerator _guidGenerator;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IdentityUserManager _userManager;
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IOrganizationUnitRepository _organizationUnitRepository;
@@ -19,6 +20,8 @@ namespace Volo.Abp.Identity
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityTestData _testData;
         private readonly OrganizationUnitManager _organizationUnitManager;
+        private readonly IIdentityLinkUserRepository _identityLinkUserRepository;
+        private readonly IdentityLinkUserManager _identityLinkUserManager;
 
         private IdentityRole _adminRole;
         private IdentityRole _moderatorRole;
@@ -30,22 +33,28 @@ namespace Volo.Abp.Identity
         public AbpIdentityTestDataBuilder(
             IGuidGenerator guidGenerator,
             IIdentityUserRepository userRepository,
+            IdentityUserManager userManager,
             IIdentityClaimTypeRepository identityClaimTypeRepository,
             IIdentityRoleRepository roleRepository,
             IOrganizationUnitRepository organizationUnitRepository,
             IIdentitySecurityLogRepository identitySecurityLogRepository,
             ILookupNormalizer lookupNormalizer,
             IdentityTestData testData,
-            OrganizationUnitManager organizationUnitManager)
+            OrganizationUnitManager organizationUnitManager,
+            IIdentityLinkUserRepository identityLinkUserRepository,
+            IdentityLinkUserManager identityLinkUserManager)
         {
             _guidGenerator = guidGenerator;
             _userRepository = userRepository;
+            _userManager = userManager;
             _identityClaimTypeRepository = identityClaimTypeRepository;
             _roleRepository = roleRepository;
             _lookupNormalizer = lookupNormalizer;
             _testData = testData;
             _organizationUnitRepository = organizationUnitRepository;
             _organizationUnitManager = organizationUnitManager;
+            _identityLinkUserRepository = identityLinkUserRepository;
+            _identityLinkUserManager = identityLinkUserManager;
             _identitySecurityLogRepository = identitySecurityLogRepository;
         }
 
@@ -54,6 +63,7 @@ namespace Volo.Abp.Identity
             await AddRoles();
             await AddOrganizationUnits();
             await AddUsers();
+            await AddLinkUsers();
             await AddClaimTypes();
             await AddSecurityLogs();
         }
@@ -126,8 +136,23 @@ namespace Volo.Abp.Identity
             neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
             neo.AddOrganizationUnit(_ou111.Id);
             await _userRepository.InsertAsync(neo);
+
+            var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");
+            bob.SetIsActive(false);
+            await _userManager.CreateAsync(bob, "1q2w3E*");
         }
 
+        private async Task AddLinkUsers()
+        {
+            var john = await _userRepository.GetAsync(_testData.UserJohnId);
+            var david = await _userRepository.GetAsync(_testData.UserDavidId);
+            var neo = await _userRepository.GetAsync(_testData.UserNeoId);
+
+            await _identityLinkUserManager.LinkAsync(new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId));
+            await _identityLinkUserManager.LinkAsync(new IdentityLinkUserInfo(david.Id, david.TenantId),
+                new IdentityLinkUserInfo(neo.Id, neo.TenantId));
+        }
 
         private async Task AddClaimTypes()
         {

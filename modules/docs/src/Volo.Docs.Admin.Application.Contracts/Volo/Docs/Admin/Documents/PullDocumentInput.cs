@@ -5,17 +5,9 @@ using Volo.Docs.Documents;
 
 namespace Volo.Docs.Admin.Documents
 {
-    public class PullDocumentInput
+    public class PullDocumentInput : PullAllDocumentInput
     {
-        public Guid ProjectId { get; set; }
-
         [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxNameLength))]
         public string Name { get; set; }
-
-        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxLanguageCodeNameLength))]
-        public string LanguageCode { get; set; }
-
-        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxVersionNameLength))]
-        public string Version { get; set; }
     }
 }

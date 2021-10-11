@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.ExceptionHandling;
@@ -22,8 +22,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected BackgroundJobConfiguration JobConfiguration { get; }
         protected JobQueueConfiguration QueueConfiguration { get; }
         protected IChannelAccessor ChannelAccessor { get; private set; }
-        protected EventingBasicConsumer Consumer { get; private set; }
-        
+        protected AsyncEventingBasicConsumer Consumer { get; private set; }
+
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
         protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
@@ -65,7 +65,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             return AbpRabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
                    new JobQueueConfiguration(
                        typeof(TArgs),
-                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
+                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName,
+                       AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName
                    );
         }
 
@@ -95,7 +96,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return;
             }
 
-            using (await SyncObj.LockAsync())
+            using (await SyncObj.LockAsync(cancellationToken))
             {
                 await EnsureInitializedAsync();
             }
@@ -134,9 +135,12 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
             Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
 
+            // Declare delayed queue
+            QueueConfiguration.DeclareDelayed(ChannelAccessor.Channel);
+
             if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
-                Consumer = new EventingBasicConsumer(ChannelAccessor.Channel);
+                Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
                 Consumer.Received += MessageReceived;
 
                 //TODO: What BasicConsume returns?
@@ -151,16 +155,25 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         }
 
         protected virtual Task PublishAsync(
-            TArgs args, 
+            TArgs args,
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            //TODO: How to handle priority & delay?
+            //TODO: How to handle priority
+
+            var routingKey = QueueConfiguration.QueueName;
+            var basicProperties = CreateBasicPropertiesToPublish();
+
+            if (delay.HasValue)
+            {
+                routingKey = QueueConfiguration.DelayedQueueName;
+                basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
+            }
 
             ChannelAccessor.Channel.BasicPublish(
                 exchange: "",
-                routingKey: QueueConfiguration.QueueName,
-                basicProperties: CreateBasicPropertiesToPublish(),
+                routingKey: routingKey,
+                basicProperties: basicProperties,
                 body: Serializer.Serialize(args)
             );
 
@@ -174,7 +187,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             return properties;
         }
 
-        protected virtual void MessageReceived(object sender, BasicDeliverEventArgs ea)
+        protected virtual async Task MessageReceived(object sender, BasicDeliverEventArgs ea)
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
@@ -186,7 +199,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
                 try
                 {
-                    AsyncHelper.RunSync(() => JobExecuter.ExecuteAsync(context));
+                    await JobExecuter.ExecuteAsync(context);
                     ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 }
                 catch (BackgroundJobExecutionException)

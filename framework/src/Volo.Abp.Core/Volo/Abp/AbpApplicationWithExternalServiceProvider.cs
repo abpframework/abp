@@ -18,7 +18,24 @@ namespace Volo.Abp
             services.AddSingleton<IAbpApplicationWithExternalServiceProvider>(this);
         }
 
-        public void Initialize(IServiceProvider serviceProvider)
+        void IAbpApplicationWithExternalServiceProvider.SetServiceProvider([NotNull] IServiceProvider serviceProvider)
+        {
+            Check.NotNull(serviceProvider, nameof(serviceProvider));
+            
+            if (ServiceProvider != null)
+            {
+                if (ServiceProvider != serviceProvider)
+                {
+                    throw new AbpException("Service provider was already set before to another service provider instance.");
+                }
+                
+                return;
+            }
+            
+            SetServiceProvider(serviceProvider);
+        }
+
+        public void Initialize([NotNull] IServiceProvider serviceProvider)
         {
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 

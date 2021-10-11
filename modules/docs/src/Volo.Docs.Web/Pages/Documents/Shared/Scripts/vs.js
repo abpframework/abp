@@ -8,6 +8,11 @@
         $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(
             function () {
                 var $element = $(this).parent();
+                var $filter = $('.docs-version #filter');
+
+                if ($filter && $filter.val() != ''){
+                    return;
+                }
 
                 $element.parent().children('ul.tree').toggle(100);
                 $element.closest('li').toggleClass('selected-tree');

@@ -1,0 +1,14 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Account": "ABP Benutzerkonto - Anmeldung & Registrierung | ABP.IO",
+    "Welcome": "Willkommen",
+    "UseOneOfTheFollowingLinksToContinue": "Nutzen Sie einen der nachfolgenden Links um fortzusetzen",
+    "FrameworkHomePage": "Framework Website",
+    "FrameworkDocumentation": "Framework Dokumentation",
+    "OfficialBlog": "Offizieller Blog",
+    "CommercialHomePage": "Commercial Website",
+    "CommercialSupportWebSite": "Commercial Support-Website",
+    "CommunityWebSite": "ABP Community-Website"
+  }
+}

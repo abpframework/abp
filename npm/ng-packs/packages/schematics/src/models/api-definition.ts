@@ -16,8 +16,10 @@ export interface Type {
 
 export interface PropertyDef {
   name: string;
+  jsonName: string | null;
   type: string;
   typeSimple: string;
+  isRequired: boolean;
 }
 
 export interface Module {
@@ -60,6 +62,7 @@ export interface ParameterInSignature {
 export interface ParameterInBody {
   nameOnMethod: string;
   name: string;
+  jsonName: string | null;
   type: string;
   typeSimple: string;
   isOptional: boolean;

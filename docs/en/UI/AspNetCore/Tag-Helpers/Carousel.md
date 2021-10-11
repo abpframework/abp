@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````csharp
+````html
 <abp-carousel>
     <abp-carousel-item src=""></abp-carousel-item>
     <abp-carousel-item src=""></abp-carousel-item>

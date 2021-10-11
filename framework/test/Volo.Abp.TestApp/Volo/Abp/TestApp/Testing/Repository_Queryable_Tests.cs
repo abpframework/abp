@@ -23,9 +23,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Any()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                PersonRepository.Any().ShouldBeTrue();
+                (await PersonRepository.AnyAsync()).ShouldBeTrue();
                 return Task.CompletedTask;
             });
         }
@@ -33,9 +33,9 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Single()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var person = PersonRepository.Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                var person = await PersonRepository.SingleAsync(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 return Task.CompletedTask;
             });
@@ -44,24 +44,22 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task WithDetails()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var person = PersonRepository.WithDetails().Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                var person = (await PersonRepository.WithDetailsAsync()).Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
-                return Task.CompletedTask;
             });
         }
 
         [Fact]
         public async Task WithDetails_Explicit()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var person = PersonRepository.WithDetails(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                var person = (await PersonRepository.WithDetailsAsync(p => p.Phones)).Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
-                return Task.CompletedTask;
             });
         }
     }

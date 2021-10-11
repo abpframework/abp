@@ -4,11 +4,12 @@
 
 ## 提供程序
 
-分布式事件总线系统提供了一个可以被任何提供程序实现的**抽象**. 有两种开箱即用的提供程序:
+分布式事件总线系统提供了一个可以被任何提供程序实现的**抽象**. 有四种开箱即用的提供程序:
 
 * `LocalDistributedEventBus` 是默认实现,实现作为进程内工作的分布式事件总线. 是的!如果没有配置真正的分布式提供程序,**默认实现的工作方式与[本地事件总线](Local-Event-Bus.md)一样**.
 * `RabbitMqDistributedEventBus` 通过[RabbitMQ](https://www.rabbitmq.com/)实现分布式事件总线. 请参阅[RabbitMQ集成文档](Distributed-Event-Bus-RabbitMQ-Integration.md)了解如何配置它.
 * `KafkaDistributedEventBus` 通过[Kafka](https://kafka.apache.org/)实现分布式事件总线. 请参阅[Kafka集成文档](Distributed-Event-Bus-Kafka-Integration.md)了解如何配置它.
+* `RebusDistributedEventBus` 通过[Rebus](http://mookid.dk/category/rebus/)实现分布式事件总线. 请参阅[Rebus集成文档](Distributed-Event-Bus-Rebus-Integration.md)了解如何配置它.
 
 使用本地事件总线作为默认具有一些重要的优点. 最重要的是:它允许你编写与分布式体系结构兼容的代码. 您现在可以编写一个整体应用程序,以后可以拆分成微服务. 最好通过分布式事件而不是本地事件在边界上下文之间(或在应用程序模块之间)进行通信.
 
@@ -299,3 +300,54 @@ namespace AbpDemo
 ````
 
 此示例使用AutoMapper的 `AutoMap` 属性配置的映射. 你可以创建一个配置文件类代替. 请参阅AutoMapper文档了解更多选项.
+
+## 异常处理
+
+ABP提供了异常处理, 它会进行重试并且重试失败后移动到死信队列.
+
+启用异常处理:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpEventBusOptions>(options =>
+    {
+        options.EnabledErrorHandle = true;
+        options.UseRetryStrategy();
+    });
+}
+```
+
+* `EnabledErrorHandle` 用于启用异常处理.
+* `UseRetryStrategy` 用于启用重试.
+
+当一个异常抛出,它会每3秒重试一次直到最大重试次数(默认是3)并且移动到错误队列, 你可以更改重试次数,重试间隔和死信队列名称:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.DeadLetterName = "dead_queue";
+    options.UseRetryStrategy(retryStrategyOptions =>
+    {
+        retryStrategyOptions.IntervalMillisecond = 0;
+        retryStrategyOptions.MaxRetryAttempts = 1;
+    });
+});
+```
+
+### 错误处理选择器
+
+默认所有的事件类型都会被处理, 你可以使用 `AbpEventBusOptions` 的 `ErrorHandleSelector` 来更改它:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
+});
+```
+
+`options.ErrorHandleSelector` 实际上是一个类型类型谓词列表. 你可以编写lambda来定义你的过滤.
+
+### 自定义异常处理
+
+ABP定义了 `IEventErrorHandler` 接口并且由提供程序实现, 你可以通过[依赖注入](Dependency-Injection.md)替换它.

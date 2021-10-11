@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource('Docs');
     var service = window.volo.docs.admin.documentsAdmin;
 
@@ -18,15 +18,18 @@
             creationTimeMax: getFormattedDate($('#CreationTimeMax')),
             lastUpdatedTimeMin: getFormattedDate($('#LastUpdatedTimeMin')),
             lastUpdatedTimeMax: getFormattedDate($('#LastUpdatedTimeMax')),
-            lastSignificantUpdateTimeMin: getFormattedDate(
-                $('#LastSignificantUpdateTimeMin')
-            ),
-            lastSignificantUpdateTimeMax: getFormattedDate(
-                $('#LastSignificantUpdateTimeMax')
-            ),
+            lastSignificantUpdateTimeMin: getFormattedDate($('#LastSignificantUpdateTimeMin')),
+            lastSignificantUpdateTimeMax: getFormattedDate($('#LastSignificantUpdateTimeMax')),
             lastCachedTimeMin: getFormattedDate($('#LastCachedTimeMin')),
             lastCachedTimeMax: getFormattedDate($('#LastCachedTimeMax')),
         };
+    };
+
+    var parseDateToLocaleDateString = function (date) {
+        var parsedDate = Date.parse(date);
+        return new Date(parsedDate).toLocaleDateString(
+            abp.localization.currentCulture.name
+        );
     };
 
     var dataTable = $('#DocumentsTable').DataTable(
@@ -48,16 +51,11 @@
                                 visible: abp.auth.isGranted(
                                     'Docs.Admin.Documents'
                                 ),
-                                confirmMessage: function (data) {
-                                    return l('RemoveFromCacheConfirmation');
-                                },
                                 action: function (data) {
                                     service
                                         .removeFromCache(data.record.id)
                                         .then(function () {
-                                            abp.message.success(
-                                                l('RemovedFromCache')
-                                            );
+                                            abp.notify.success(l('RemovedFromCache'));
                                             dataTable.ajax.reload();
                                         });
                                 },
@@ -74,32 +72,11 @@
                                     service
                                         .reindex(data.record.id)
                                         .then(function () {
-                                            abp.message.success(
-                                                l('ReindexCompleted')
-                                            );
+                                            abp.message.success(l('ReindexCompleted'));
                                             dataTable.ajax.reload();
                                         });
                                 },
-                            },
-                            {
-                                text: l('DeleteFromDatabase'),
-                                visible: abp.auth.isGranted(
-                                    'Docs.Admin.Documents'
-                                ),
-                                confirmMessage: function (data) {
-                                    return l(
-                                        'DeleteDocumentFromDbConfirmation'
-                                    );
-                                },
-                                action: function (data) {
-                                    service
-                                        .deleteFromDatabase(data.record.id)
-                                        .then(function () {
-                                            abp.message.success(l('Deleted'));
-                                            dataTable.ajax.reload();
-                                        });
-                                },
-                            },
+                            }
                         ],
                     },
                 },
@@ -131,10 +108,7 @@
                             return '';
                         }
 
-                        var date = Date.parse(creationTime);
-                        return new Date(date).toLocaleDateString(
-                            abp.localization.currentCulture.name
-                        );
+                        return parseDateToLocaleDateString(creationTime);
                     },
                 },
                 {
@@ -145,10 +119,7 @@
                             return '';
                         }
 
-                        var date = Date.parse(lastUpdatedTime);
-                        return new Date(date).toLocaleDateString(
-                            abp.localization.currentCulture.name
-                        );
+                        return parseDateToLocaleDateString(lastUpdatedTime);
                     },
                 },
                 {
@@ -159,10 +130,7 @@
                             return '';
                         }
 
-                        var date = Date.parse(lastSignificantUpdateTime);
-                        return new Date(date).toLocaleDateString(
-                            abp.localization.currentCulture.name
-                        );
+                        return parseDateToLocaleDateString(lastSignificantUpdateTime);
                     },
                 },
                 {
@@ -173,10 +141,7 @@
                             return '';
                         }
 
-                        var date = Date.parse(lastCachedTime);
-                        return new Date(date).toLocaleDateString(
-                            abp.localization.currentCulture.name
-                        );
+                        return parseDateToLocaleDateString(lastCachedTime);
                     },
                 },
             ],

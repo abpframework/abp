@@ -1,10 +1,10 @@
-﻿# Getting Started ABP With AspNet Core MVC Web Application
+# Getting Started ABP With AspNet Core MVC Web Application
 
 This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
 ## Create A New Project
 
-1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.4.0+):
+1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.8.0+):
 
 ![](images/create-new-aspnet-core-application-v2.png)
 

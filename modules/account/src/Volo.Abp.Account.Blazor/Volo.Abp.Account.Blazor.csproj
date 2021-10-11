@@ -1,27 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Volo.Abp.Account.Blazor</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Account.HttpApi.Client\Volo.Abp.Account.HttpApi.Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Pages\Account\Manage.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    <ProjectReference Include="..\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

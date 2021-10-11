@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity</returns>
         Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default);
-
+        
         /// <summary>
         /// Gets total count of all entities.
         /// </summary>
@@ -28,8 +28,6 @@ namespace Volo.Abp.Domain.Repositories
             string sorting,
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
-
-
     }
 
     public interface IReadOnlyBasicRepository<TEntity, TKey> : IReadOnlyBasicRepository<TEntity>

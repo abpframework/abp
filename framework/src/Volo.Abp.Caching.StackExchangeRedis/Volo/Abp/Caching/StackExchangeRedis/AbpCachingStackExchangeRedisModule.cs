@@ -14,17 +14,21 @@ namespace Volo.Abp.Caching.StackExchangeRedis
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                var redisConfiguration = configuration["Redis:Configuration"];
-                if (!redisConfiguration.IsNullOrEmpty())
-                {
-                    options.Configuration = configuration["Redis:Configuration"];
-                }
-            });
 
-            context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, AbpRedisCache>());
+            var redisEnabled = configuration["Redis:IsEnabled"];
+            if (redisEnabled.IsNullOrEmpty() || bool.Parse(redisEnabled))
+            {
+                context.Services.AddStackExchangeRedisCache(options =>
+                {
+                    var redisConfiguration = configuration["Redis:Configuration"];
+                    if (!redisConfiguration.IsNullOrEmpty())
+                    {
+                        options.Configuration = redisConfiguration;
+                    }
+                });
+
+                context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, AbpRedisCache>());
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
             {
                 var cardTitle = new TagBuilder(AbpCardTitleTagHelper.DefaultHeading.ToHtmlTag());
                 cardTitle.AddCssClass("card-title");
-                cardTitle.InnerHtml.Append(TagHelper.Title);
+                cardTitle.InnerHtml.AppendHtml(TagHelper.Title);
                 output.PreContent.AppendHtml(cardTitle);
             }
         }
@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
             {
                 var cardSubtitle = new TagBuilder(AbpCardSubtitleTagHelper.DefaultHeading.ToHtmlTag());
                 cardSubtitle.AddCssClass("card-subtitle text-muted mb-2");
-                cardSubtitle.InnerHtml.Append(TagHelper.Subtitle);
+                cardSubtitle.InnerHtml.AppendHtml(TagHelper.Subtitle);
                 output.PreContent.AppendHtml(cardSubtitle);
             }
         }

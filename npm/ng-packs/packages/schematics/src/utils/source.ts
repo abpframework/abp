@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import {
@@ -36,7 +37,7 @@ async function getApiDefinition(sourceUrl: string) {
   } catch ({ response }) {
     // handle redirects
     if (!response?.body || response.statusCode >= 400)
-      throw new SchematicsException(Exception.NoApi);
+      throw new SchematicsException(interpolate(Exception.NoApi, url));
 
     body = response.body;
   }

@@ -1,23 +1,35 @@
-import { ABP, TrackByService } from '@abp/ng.core';
+import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
+  OnChanges,
   Optional,
   SimpleChanges,
   SkipSelf,
-  OnChanges,
+  ViewChild,
 } from '@angular/core';
-import { ControlContainer, Validators, ValidatorFn } from '@angular/forms';
+import {
+  ControlContainer,
+  FormGroup,
+  FormGroupDirective,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
+import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { ePropType } from '../../enums/props.enum';
 import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
+import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -33,10 +45,16 @@ import { selfFactory } from '../../utils/factory.util';
     { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
-export class ExtensibleFormPropComponent implements OnChanges {
+export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @Input() data: PropData;
 
   @Input() prop: FormProp;
+
+  @Input() first: boolean;
+
+  @ViewChild('field') private fieldRef: ElementRef<HTMLElement>;
+
+  asterisk = '';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 
@@ -46,15 +64,71 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   disabled: boolean;
 
-  constructor(public readonly cdRef: ChangeDetectorRef, public readonly track: TrackByService) {}
+  private readonly form: FormGroup;
 
-  get asterisk(): string {
-    return this.validators.some(validator => validator === Validators.required) ? '*' : '';
+  typeaheadModel: any;
+
+  setTypeaheadValue(selectedOption: ABP.Option<string>) {
+    this.typeaheadModel = selectedOption || { key: null, value: null };
+    const { key, value } = this.typeaheadModel;
+    const [keyControl, valueControl] = this.getTypeaheadControls();
+    if (valueControl.value && !value) valueControl.markAsDirty();
+    keyControl.setValue(key);
+    valueControl.setValue(value);
+  }
+
+  search = (text$: Observable<string>) =>
+    text$
+      ? text$.pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap(text => this.prop.options(this.data, text)),
+        )
+      : of([]);
+
+  typeaheadFormatter = (option: ABP.Option<any>) => option.key;
+
+  get meridian() {
+    return (
+      this.configState.getDeep('localization.currentCulture.dateTimeFormat.shortTimePattern') || ''
+    ).includes('tt');
+  }
+
+  get isInvalid() {
+    const control = this.form.get(this.prop.name);
+    return control.touched && control.invalid;
+  }
+
+  constructor(
+    public readonly cdRef: ChangeDetectorRef,
+    public readonly track: TrackByService,
+    protected configState: ConfigStateService,
+    groupDirective: FormGroupDirective,
+  ) {
+    this.form = groupDirective.form;
+  }
+
+  private getTypeaheadControls() {
+    const { name } = this.prop;
+    const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
+    const keyControl =
+      this.form.get(addTypeaheadTextSuffix(extraPropName)) ||
+      this.form.get(addTypeaheadTextSuffix(name));
+    const valueControl = this.form.get(extraPropName) || this.form.get(name);
+    return [keyControl, valueControl];
+  }
+
+  private setAsterisk() {
+    this.asterisk = this.validators.some(isRequired) ? '*' : '';
+  }
+
+  ngAfterViewInit() {
+    if (this.first && this.fieldRef) {
+      this.fieldRef.nativeElement.focus();
+    }
   }
 
   getComponent(prop: FormProp): string {
-    if (prop.options) return 'select';
-
     switch (prop.type) {
       case ePropType.Boolean:
         return 'checkbox';
@@ -62,12 +136,18 @@ export class ExtensibleFormPropComponent implements OnChanges {
         return 'date';
       case ePropType.DateTime:
         return 'dateTime';
+      case ePropType.Hidden:
+        return 'hidden';
+      case ePropType.MultiSelect:
+        return 'multiselect';
       case ePropType.Text:
         return 'textarea';
       case ePropType.Time:
         return 'time';
+      case ePropType.Typeahead:
+        return 'typeahead';
       default:
-        return 'input';
+        return prop.options ? 'select' : 'input';
     }
   }
 
@@ -90,14 +170,23 @@ export class ExtensibleFormPropComponent implements OnChanges {
   }
 
   ngOnChanges({ prop }: SimpleChanges) {
-    const options = prop.currentValue.options;
-    const readonly = prop.currentValue.readonly;
-    const disabled = prop.currentValue.disabled;
-    const validators = prop.currentValue.validators;
+    const currentProp = prop?.currentValue;
+    const { options, readonly, disabled, validators } = currentProp || {};
 
     if (options) this.options$ = options(this.data);
     if (readonly) this.readonly = readonly(this.data);
     if (disabled) this.disabled = disabled(this.data);
-    if (validators) this.validators = validators(this.data);
+    if (validators) {
+      this.validators = validators(this.data);
+      this.setAsterisk();
+    }
+
+    const [keyControl, valueControl] = this.getTypeaheadControls();
+    if (keyControl && valueControl)
+      this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
   }
+}
+
+function isRequired(validator: ValidatorFn) {
+  return validator === Validators.required || validator === AbpValidators.required;
 }

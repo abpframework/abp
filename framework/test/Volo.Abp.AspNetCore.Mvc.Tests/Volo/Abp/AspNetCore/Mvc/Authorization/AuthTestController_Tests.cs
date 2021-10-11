@@ -1,22 +1,12 @@
-﻿using System;
+﻿using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
-using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Autofac;
-using Volo.Abp.MemoryDb;
-using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpMemoryDbTestModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule)
-    )]
     public class AuthTestController_Tests : AspNetCoreMvcTestBase
     {
         private readonly FakeUserClaims _fakeRequiredService;
@@ -67,10 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim("MyCustomClaimType", "43")
             });
 
-            //TODO: We can get a real exception if we properly configure authentication schemas for this project
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest")
-            );
+            await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest", HttpStatusCode.Redirect);
         }
 
         [Fact]
@@ -82,6 +69,30 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
             });
 
             var result = await GetResponseAsStringAsync("/AuthTest/PermissionTest");
+            result.ShouldBe("OK");
+        }
+
+        [Fact]
+        public async Task Custom_And_Policy_Should_Not_Work_When_Permissions_Not_Granted()
+        {
+            _fakeRequiredService.Claims.AddRange(new[]
+            {
+                new Claim(AbpClaimTypes.UserId, AuthTestController.FakeUserId.ToString())
+            });
+
+            var response = await GetResponseAsync("/AuthTest/Custom_And_PolicyTest", HttpStatusCode.Forbidden, xmlHttpRequest: true);
+            response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task Custom_Or_Policy_Should_Work_When_Permissions_Are_Granted()
+        {
+            _fakeRequiredService.Claims.AddRange(new[]
+            {
+                new Claim(AbpClaimTypes.UserId, AuthTestController.FakeUserId.ToString())
+            });
+
+            var result = await GetResponseAsStringAsync("/AuthTest/Custom_Or_PolicyTest");
             result.ShouldBe("OK");
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Blogging.Blogs;
@@ -24,7 +25,7 @@ namespace Volo.Blogging
         public async Task Should_Get_List_Of_Posts()
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
-            var posts = await _postAppService.GetListByBlogIdAndTagName(blogId, null);
+            var posts = await _postAppService.GetListByBlogIdAndTagNameAsync(blogId, null);
             posts.Items.Count.ShouldBeGreaterThan(0);
         }
 
@@ -55,7 +56,7 @@ namespace Volo.Blogging
                 Url = title.Replace(" ", "-")
             });
 
-            newPostDto.Id.ShouldNotBeNull();
+            newPostDto.Id.ShouldNotBe(Guid.Empty);
 
             UsingDbContext(context =>
             {
@@ -87,7 +88,7 @@ namespace Volo.Blogging
                 Content = newContent,
                 Url = newTitle.Replace(" ", "-")
             });
-            
+
             UsingDbContext(context =>
             {
                 var post = context.Posts.FirstOrDefault(q => q.Id == oldPost.Id);

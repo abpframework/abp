@@ -18,8 +18,10 @@ namespace Volo.Abp.AuditLogging
             DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
+            Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
@@ -33,8 +35,10 @@ namespace Volo.Abp.AuditLogging
             DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
+            Guid? userId = null,
             string userName = null,
             string applicationName = null,
+            string clientIpAddress = null,
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
@@ -44,9 +48,10 @@ namespace Volo.Abp.AuditLogging
 
         Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
             DateTime startDate,
-            DateTime endDate);
+            DateTime endDate,
+            CancellationToken cancellationToken = default);
 
-        Task<EntityChange> GetEntityChange(Guid entityChangeId);
+        Task<EntityChange> GetEntityChange(Guid entityChangeId, CancellationToken cancellationToken = default);
 
         Task<List<EntityChange>> GetEntityChangeListAsync(
             string sorting = null,
@@ -70,8 +75,8 @@ namespace Volo.Abp.AuditLogging
             string entityTypeFullName = null,
             CancellationToken cancellationToken = default);
 
-        Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId);
+        Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId, CancellationToken cancellationToken = default);
 
-        Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName);
+        Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName, CancellationToken cancellationToken = default);
     }
 }

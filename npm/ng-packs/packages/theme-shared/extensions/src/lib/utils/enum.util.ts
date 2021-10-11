@@ -5,11 +5,11 @@ import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
 
-export function createEnum(members: ObjectExtensions.EnumMember[]) {
+export function createEnum(members: ObjectExtensions.ExtensionEnumFieldDto[]) {
   const enumObject: any = {};
 
   members.forEach(({ name, value }) => {
-    enumObject[(enumObject[name] = value)] = name;
+    enumObject[(enumObject[name] = value as any)] = name;
   });
 
   return enumObject;
@@ -17,7 +17,7 @@ export function createEnum(members: ObjectExtensions.EnumMember[]) {
 
 export function createEnumValueResolver<T = any>(
   enumType: string,
-  lookupEnum: ObjectExtensions.Enum,
+  lookupEnum: ObjectExtensions.ExtensionEnumDto,
   propName: string,
 ): PropCallback<T, Observable<string>> {
   return data => {
@@ -32,7 +32,7 @@ export function createEnumValueResolver<T = any>(
 
 export function createEnumOptions<T = any>(
   enumType: string,
-  lookupEnum: ObjectExtensions.Enum,
+  lookupEnum: ObjectExtensions.ExtensionEnumDto,
 ): PropCallback<T, Observable<ABP.Option<any>[]>> {
   return data => {
     const l10n = data.getInjected(LocalizationService);
@@ -49,13 +49,13 @@ export function createEnumOptions<T = any>(
 }
 
 function createLocalizationStream(l10n: LocalizationService, mapTarget: any) {
-  return merge(of(null), l10n.languageChange).pipe(map(() => mapTarget));
+  return merge(of(null), l10n.languageChange$).pipe(map(() => mapTarget));
 }
 
 function createEnumLocalizer(
   l10n: LocalizationService,
   enumType: string,
-  lookupEnum: ObjectExtensions.Enum,
+  lookupEnum: ObjectExtensions.ExtensionEnumDto,
 ): (key: string) => string {
   const resource = lookupEnum.localizationResource;
   const shortType = getShortEnumType(enumType);

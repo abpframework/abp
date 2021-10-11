@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
         }
 
-        public async Task<List<IdentitySecurityLog>> GetListAsync(
+        public virtual async Task<List<IdentitySecurityLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -35,7 +35,7 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(
+            var query = await GetListQueryAsync(
                 startTime,
                 endTime,
                 applicationName,
@@ -44,16 +44,17 @@ namespace Volo.Abp.Identity.MongoDB
                 userId,
                 userName,
                 clientId,
-                correlationId
+                correlationId,
+                cancellationToken
             );
 
-            return await query.OrderBy(sorting ?? nameof(IdentitySecurityLog.CreationTime) + " desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
                 .As<IMongoQueryable<IdentitySecurityLog>>()
                 .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string applicationName = null,
@@ -65,7 +66,7 @@ namespace Volo.Abp.Identity.MongoDB
             string correlationId = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(
+            var query = await GetListQueryAsync(
                 startTime,
                 endTime,
                 applicationName,
@@ -74,7 +75,8 @@ namespace Volo.Abp.Identity.MongoDB
                 userId,
                 userName,
                 clientId,
-                correlationId
+                correlationId,
+                cancellationToken
             );
 
             return await query.As<IMongoQueryable<IdentitySecurityLog>>()
@@ -82,14 +84,14 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
 
-        public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
+        public virtual async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
+            return await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
                 GetCancellationToken(cancellationToken));
         }
 
-        protected virtual IQueryable<IdentitySecurityLog> GetListQuery(
+        protected virtual async Task<IQueryable<IdentitySecurityLog>> GetListQueryAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string applicationName = null,
@@ -98,9 +100,10 @@ namespace Volo.Abp.Identity.MongoDB
             Guid? userId = null,
             string userName = null,
             string clientId = null,
-            string correlationId = null)
+            string correlationId = null,
+            CancellationToken cancellationToken = default)
         {
-            return GetMongoQueryable()
+            return (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
                 .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
                 .WhereIf(!applicationName.IsNullOrWhiteSpace(),

@@ -65,6 +65,23 @@ namespace Microsoft.AspNetCore.Authorization
         {
             return (await authorizationService.AuthorizeAsync(policyName)).Succeeded;
         }
+        
+        public static async Task<bool> IsGrantedAnyAsync(
+            this IAuthorizationService authorizationService,
+            params string[] policyNames)
+        {
+            Check.NotNullOrEmpty(policyNames, nameof(policyNames));
+
+            foreach (var policyName in policyNames)
+            {
+                if ((await authorizationService.AuthorizeAsync(policyName)).Succeeded)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
         {
@@ -95,7 +112,8 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(policyName))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given policy has not granted: " + policyName);
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenPolicyHasNotGrantedWithPolicyName)
+                    .WithData("PolicyName", policyName);
             }
         }
 
@@ -103,7 +121,8 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(resource, requirement))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given requirement has not granted for given resource: " + resource);
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenRequirementHasNotGrantedForGivenResource)
+                    .WithData("ResourceName", resource);
             }
         }
 
@@ -111,7 +130,8 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(resource, policy))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given policy has not granted for given resource: " + resource);
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenPolicyHasNotGrantedForGivenResource)
+                    .WithData("ResourceName", resource);
             }
         }
 
@@ -119,7 +139,7 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(policy))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given policy has not granted.");
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenPolicyHasNotGranted);
             }
         }
 
@@ -127,7 +147,8 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(resource, requirements))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given requirements have not granted for given resource: " + resource);
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenRequirementsHasNotGrantedForGivenResource)
+                    .WithData("ResourceName", resource);
             }
         }
 
@@ -135,7 +156,8 @@ namespace Microsoft.AspNetCore.Authorization
         {
             if (!await authorizationService.IsGrantedAsync(resource, policyName))
             {
-                throw new AbpAuthorizationException("Authorization failed! Given polist has not granted for given resource: " + resource);
+                throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenPolicyHasNotGrantedForGivenResource)
+                    .WithData("ResourceName", resource);
             }
         }
 

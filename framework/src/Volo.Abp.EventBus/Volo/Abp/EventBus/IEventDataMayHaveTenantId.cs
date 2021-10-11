@@ -16,8 +16,8 @@ namespace Volo.Abp.EventBus
     {
         /// <summary>
         /// Returns true if this event data has a Tenant Id information.
-        /// If so, it should set the <see cref="tenantId"/> our parameter.
-        /// Otherwise, the <see cref="tenantId"/> our parameter value should not be informative
+        /// If so, it should set the <paramref name="tenantId"/> our parameter.
+        /// Otherwise, the <paramref name="tenantId"/> our parameter value should not be informative
         /// (it will be null as expected, but doesn't indicate a tenant with null tenant id).
         /// </summary>
         /// <param name="tenantId">

@@ -1,12 +1,11 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
@@ -99,7 +98,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
             catch (BusinessException e)
             {
-                Alerts.Danger(e.Message);
+                Alerts.Danger(GetLocalizeExceptionMessage(e));
                 return Page();
             }
         }
@@ -124,6 +123,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
         {
+            await IdentityOptions.SetAsync();
+
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
 
             (await UserManager.CreateAsync(user)).CheckErrors();

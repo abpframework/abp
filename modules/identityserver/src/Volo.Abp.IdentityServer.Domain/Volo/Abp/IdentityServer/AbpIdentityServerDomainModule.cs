@@ -9,6 +9,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.IdentityResources;
@@ -17,7 +18,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Validation;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -32,6 +35,8 @@ namespace Volo.Abp.IdentityServer
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
@@ -47,6 +52,14 @@ namespace Volo.Abp.IdentityServer
                 options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
                 options.EtoMappings.Add<DeviceFlowCodes, DeviceFlowCodesEto>(typeof(AbpIdentityServerDomainModule));
                 options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
+            });
+
+            Configure<AbpClaimsServiceOptions>(options =>
+            {
+                options.RequestedClaims.AddRange(new []{
+                    AbpClaimTypes.TenantId,
+                    AbpClaimTypes.EditionId
+                });
             });
 
             AddIdentityServer(context.Services);
@@ -67,7 +80,7 @@ namespace Volo.Abp.IdentityServer
 
             if (builderOptions.AddDeveloperSigningCredential)
             {
-                identityServerBuilder = identityServerBuilder.AddAbpDeveloperSigningCredential();
+                identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
             }
 
             identityServerBuilder.AddAbpIdentityServer(builderOptions);
@@ -98,23 +111,26 @@ namespace Volo.Abp.IdentityServer
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.Client,
-                typeof(Client)
-            );
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.Client,
+                    typeof(Client)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
-                typeof(IdentityResource)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
+                    typeof(IdentityResource)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
-                typeof(ApiResource)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
+                    typeof(ApiResource)
+                );
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

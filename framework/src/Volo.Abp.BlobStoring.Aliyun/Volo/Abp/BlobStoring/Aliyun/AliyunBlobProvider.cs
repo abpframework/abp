@@ -10,13 +10,16 @@ namespace Volo.Abp.BlobStoring.Aliyun
     {
         protected IOssClientFactory OssClientFactory { get; }
         protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
         public AliyunBlobProvider(
             IOssClientFactory ossClientFactory,
-            IAliyunBlobNameCalculator aliyunBlobNameCalculator)
+            IAliyunBlobNameCalculator aliyunBlobNameCalculator,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             OssClientFactory = ossClientFactory;
             AliyunBlobNameCalculator = aliyunBlobNameCalculator;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
         protected virtual IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
@@ -37,7 +40,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var aliyunConfig = args.Configuration.GetAliyunConfiguration();
             var ossClient = GetOssClient(aliyunConfig);
-            if (!args.OverrideExisting && BlobExistsAsync(ossClient, containerName, blobName))
+            if (!args.OverrideExisting && BlobExists(ossClient, containerName, blobName))
             {
                 throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{containerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
@@ -57,7 +60,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var ossClient = GetOssClient(args.Configuration);
-            if(!BlobExistsAsync(ossClient, containerName, blobName))
+            if(!BlobExists(ossClient, containerName, blobName))
             {
                 return Task.FromResult(false);
             }
@@ -70,7 +73,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var ossClient = GetOssClient(args.Configuration);
-            return Task.FromResult(BlobExistsAsync(ossClient, containerName, blobName));
+            return Task.FromResult(BlobExists(ossClient, containerName, blobName));
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
@@ -78,7 +81,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var ossClient = GetOssClient(args.Configuration);
-            if (!BlobExistsAsync(ossClient, containerName, blobName))
+            if (!BlobExists(ossClient, containerName, blobName))
             {
                 return null;
             }
@@ -88,15 +91,15 @@ namespace Volo.Abp.BlobStoring.Aliyun
             return memoryStream;
         }
 
-        private static string GetContainerName(BlobProviderArgs args)
+        protected virtual string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAliyunConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : configuration.ContainerName;
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
 
-        private bool BlobExistsAsync(IOss ossClient,string containerName, string blobName)
+        protected  virtual bool BlobExists(IOss ossClient,string containerName, string blobName)
         {
             // Make sure Blob Container exists.
             return ossClient.DoesBucketExist(containerName) &&

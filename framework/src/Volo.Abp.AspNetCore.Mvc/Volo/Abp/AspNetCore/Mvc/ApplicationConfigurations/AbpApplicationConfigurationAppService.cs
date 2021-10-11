@@ -5,12 +5,14 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -26,6 +28,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly AbpMultiTenancyOptions _multiTenancyOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
+        private readonly IPermissionDefinitionManager _permissionDefinitionManager;
+        private readonly DefaultAuthorizationPolicyProvider _defaultAuthorizationPolicyProvider;
+        private readonly IPermissionChecker _permissionChecker;
         private readonly IAuthorizationService _authorizationService;
         private readonly ICurrentUser _currentUser;
         private readonly ISettingProvider _settingProvider;
@@ -41,6 +46,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
+            IPermissionDefinitionManager permissionDefinitionManager,
+            DefaultAuthorizationPolicyProvider defaultAuthorizationPolicyProvider,
+            IPermissionChecker permissionChecker,
             IAuthorizationService authorizationService,
             ICurrentUser currentUser,
             ISettingProvider settingProvider,
@@ -53,6 +61,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+            _permissionDefinitionManager = permissionDefinitionManager;
+            _defaultAuthorizationPolicyProvider = defaultAuthorizationPolicyProvider;
+            _permissionChecker = permissionChecker;
             _authorizationService = authorizationService;
             _currentUser = currentUser;
             _settingProvider = settingProvider;
@@ -116,6 +127,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 IsAuthenticated = _currentUser.IsAuthenticated,
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
+                ImpersonatorUserId = _currentUser.FindImpersonatorUserId(),
+                ImpersonatorTenantId = _currentUser.FindImpersonatorTenantId(),
                 UserName = _currentUser.UserName,
                 SurName = _currentUser.SurName,
                 Name = _currentUser.Name,
@@ -132,14 +145,38 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             var authConfig = new ApplicationAuthConfigurationDto();
 
             var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
+            var abpPolicyNames = new List<string>();
+            var otherPolicyNames = new List<string>();
 
             foreach (var policyName in policyNames)
+            {
+                if(await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNull(policyName) != null)
+                {
+                    abpPolicyNames.Add(policyName);
+                }
+                else
+                {
+                    otherPolicyNames.Add(policyName);
+                }
+            }
+
+            foreach (var policyName in otherPolicyNames)
             {
                 authConfig.Policies[policyName] = true;
 
                 if (await _authorizationService.IsGrantedAsync(policyName))
                 {
                     authConfig.GrantedPolicies[policyName] = true;
+                }
+            }
+
+            var result = await _permissionChecker.IsGrantedAsync(abpPolicyNames.ToArray());
+            foreach (var (key, value) in result.Result)
+            {
+                authConfig.Policies[key] = true;
+                if (value == PermissionGrantResult.Granted)
+                {
+                    authConfig.GrantedPolicies[key] = true;
                 }
             }
 
@@ -216,14 +253,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Values = new Dictionary<string, string>()
             };
 
-            foreach (var settingDefinition in _settingDefinitionManager.GetAll())
-            {
-                if (!settingDefinition.IsVisibleToClients)
-                {
-                    continue;
-                }
+            var settingDefinitions = _settingDefinitionManager.GetAll().Where(x => x.IsVisibleToClients);
 
-                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
+            var settingValues = await _settingProvider.GetAllAsync(settingDefinitions.Select(x => x.Name).ToArray());
+
+            foreach (var settingValue in settingValues)
+            {
+                result.Values[settingValue.Name] = settingValue.Value;
             }
 
             return result;

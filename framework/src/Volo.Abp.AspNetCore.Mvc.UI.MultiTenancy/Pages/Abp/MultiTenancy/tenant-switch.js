@@ -1,4 +1,4 @@
-﻿(function($) {
+(function($) {
 
     var tenantSwitchModal = new abp.ModalManager(abp.appPath + 'Abp/MultiTenancy/TenantSwitchModal');
 
@@ -9,7 +9,7 @@
         });
 
         tenantSwitchModal.onResult(function() {
-            location.reload();
+            location.assign(location.href);
         });
     });
 

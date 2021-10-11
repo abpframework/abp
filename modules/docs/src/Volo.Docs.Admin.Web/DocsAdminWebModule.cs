@@ -11,7 +11,7 @@ using Volo.Docs.Localization;
 namespace Volo.Docs.Admin
 {
     [DependsOn(
-        typeof(DocsAdminHttpApiModule),
+        typeof(DocsAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
         )]
     public class DocsAdminWebModule : AbpModule
@@ -31,7 +31,6 @@ namespace Volo.Docs.Admin
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DocsMenuContributor());

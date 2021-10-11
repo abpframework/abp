@@ -4,22 +4,13 @@ import { getEnvVars } from '../../Environment';
 const { oAuthConfig } = getEnvVars();
 
 export const login = ({ username, password }) => {
-  // eslint-disable-next-line no-undef
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('password', password);
-  formData.append('grant_type', 'password');
-  formData.append('scope', `${oAuthConfig.scope} offline_access`);
-  formData.append('client_id', oAuthConfig.clientId);
-  formData.append('client_secret', oAuthConfig.clientSecret);
-
   return api({
     method: 'POST',
     url: '/connect/token',
-    headers: { 'Content-Type': 'multipart/form-data' },
-    data: formData,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: `grant_type=password&scope=${oAuthConfig.scope}&username=${username}&password=${password}&client_id=${oAuthConfig.clientId}&client_secret=${oAuthConfig.clientSecret}`,
     baseURL: oAuthConfig.issuer,
-  }).then(({ data }) => data);
+  }).then(({ data }) => data)
 };
 
 export const logout = () =>

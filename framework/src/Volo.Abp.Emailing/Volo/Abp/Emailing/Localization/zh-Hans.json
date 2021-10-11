@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "凭据关联的用户名的密码.",
     "Description:Abp.Mailing.Smtp.Domain": "验证凭据的域名或计算机名.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "指定 SmtpClient 是否使用安全套接字层 (SSL) 加密连接.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "控制默认凭据是否随请求一起发送."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "控制默认凭据是否随请求一起发送.",
+    "TextTemplate:StandardEmailTemplates.Layout": "默认电子邮件模板",
+    "TextTemplate:StandardEmailTemplates.Message": "电子邮件的简单消息模板"
   }
 }

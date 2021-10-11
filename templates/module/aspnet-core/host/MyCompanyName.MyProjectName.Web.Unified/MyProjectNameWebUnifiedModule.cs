@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,8 +29,10 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
@@ -41,27 +44,34 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameApplicationModule),
+        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpFeatureManagementWebModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
+        typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {
@@ -87,7 +97,7 @@ namespace MyCompanyName.MyProjectName
                 });
             }
 
-            context.Services.AddSwaggerGen(
+            context.Services.AddAbpSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
@@ -97,13 +107,24 @@ namespace MyCompanyName.MyProjectName
 
             Configure<AbpLocalizationOptions>(options =>
             {
+                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
+                options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             });
 
             Configure<AbpMultiTenancyOptions>(options =>
@@ -128,7 +149,7 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseHttpsRedirection();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
 
@@ -141,7 +162,7 @@ namespace MyCompanyName.MyProjectName
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });

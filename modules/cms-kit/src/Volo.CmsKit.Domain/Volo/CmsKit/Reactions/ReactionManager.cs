@@ -22,8 +22,10 @@ namespace Volo.CmsKit.Reactions
         }
 
         public virtual async Task<List<ReactionDefinition>> GetReactionsAsync(
-            [CanBeNull] string entityType = null)
+            [NotNull] string entityType)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+
             return await ReactionDefinitionStore.GetReactionsAsync(entityType);
         }
 
@@ -51,7 +53,7 @@ namespace Volo.CmsKit.Reactions
                 .ToList();
         }
 
-        public virtual async Task<UserReaction> CreateAsync(
+        public virtual async Task<UserReaction> GetOrCreateAsync(
             Guid creatorId,
             [NotNull] string entityType,
             [NotNull] string entityId,
@@ -65,6 +67,11 @@ namespace Volo.CmsKit.Reactions
             if (existingReaction != null)
             {
                 return existingReaction;
+            }
+
+            if (!await ReactionDefinitionStore.IsDefinedAsync(entityType))
+            {
+                throw new EntityCantHaveReactionException(entityType);
             }
 
             return await UserReactionRepository.InsertAsync(

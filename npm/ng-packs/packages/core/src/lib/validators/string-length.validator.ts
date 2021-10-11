@@ -19,8 +19,6 @@ export function validateStringLength({
   minimumLength = 0,
 }: StringLengthOptions = {}): ValidatorFn {
   return (control: AbstractControl): StringLengthError | null => {
-    if (control.pristine) return null;
-
     if (['', null, undefined].indexOf(control.value) > -1) return null;
 
     const value = String(control.value);

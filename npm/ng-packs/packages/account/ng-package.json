@@ -1,8 +1,8 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/account",
+  "dest": "../../dist/packages/account",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@abp/ng.theme.shared"]
+  "allowedNonPeerDependencies": ["@abp/ng.theme.shared", "@abp/ng.identity", "@abp/ng.account.core"]
 }

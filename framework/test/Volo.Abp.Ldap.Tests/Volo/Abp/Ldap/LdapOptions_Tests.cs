@@ -15,7 +15,7 @@ namespace Volo.Abp.Ldap
         [Fact]
         public void Should_Resolve_AbpAbpLdapOptionsFactory()
         {
-            GetRequiredService<IOptionsFactory<AbpLdapOptions>>().ShouldBeOfType(typeof(AbpAbpLdapOptionsFactory));
+            GetRequiredService<IOptions<AbpLdapOptions>>().ShouldBeOfType(typeof(AbpAbpLdapOptionsManager));
         }
     }
 }

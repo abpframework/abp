@@ -19,20 +19,20 @@ namespace Volo.Abp.IdentityServer.Clients
         }
 
         [Fact]
-        public async Task FindApiResourceAsync_Should_Return_Null_If_Not_Found()
+        public async Task FindApiResourceAsync_Should_Return_Empty_If_Not_Found()
         {
             //Act
-            var resource = await _resourceStore.FindApiResourceAsync("non-existing-name");
+            var resource = await _resourceStore.FindApiResourcesByNameAsync(new []{"non-existing-name"});
 
             //Assert
-            resource.ShouldBeNull();
+            resource.ShouldBeEmpty();
         }
 
         [Fact]
         public async Task FindApiResourceAsync_Should_Return_If_Found()
         {
             //Act
-            var apiResource = await _resourceStore.FindApiResourceAsync("Test-ApiResource-Name-1");
+            var apiResource = (await _resourceStore.FindApiResourcesByNameAsync(new []{"Test-ApiResource-Name-1"})).FirstOrDefault();
 
             //Assert
             apiResource.ShouldNotBe(null);
@@ -45,7 +45,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindApiResourcesByScopeAsync_Should_Return_If_Found()
         {
             //Act
-            var apiResources = (await _resourceStore.FindApiResourcesByScopeAsync(new List<string>
+            var apiResources = (await _resourceStore.FindApiResourcesByScopeNameAsync(new List<string>
             {
                 "Test-ApiResource-ApiScope-Name-1"
             })).ToList();
@@ -53,24 +53,23 @@ namespace Volo.Abp.IdentityServer.Clients
             //Assert
             apiResources.ShouldNotBe(null);
 
-            apiResources[0].Scopes.Count.ShouldBe(2);
+            apiResources[0].Scopes.Count.ShouldBe(3);
         }
 
         [Fact]
         public async Task FindIdentityResourcesByScopeAsync_Should_Return_For_Given_Scopes()
         {
             //Act
-            var identityResourcesByScope = await _resourceStore.FindIdentityResourcesByScopeAsync(new List<string>
+            var identityResourcesByScope = (await _resourceStore.FindIdentityResourcesByScopeNameAsync(new List<string>
             {
                 "Test-Identity-Resource-Name-1"
-            });
+            })).ToArray();
 
             //Assert
-            var resourcesByScope = identityResourcesByScope as IdentityResource[] ?? identityResourcesByScope.ToArray();
-            resourcesByScope.Length.ShouldBe(1);
-            resourcesByScope.First().DisplayName.ShouldBe("Test-Identity-Resource-DisplayName-1");
-            resourcesByScope.First().Description.ShouldBe("Test-Identity-Resource-Description-1");
-            resourcesByScope.First().Required.ShouldBe(true);
+            identityResourcesByScope.Length.ShouldBe(1);
+            identityResourcesByScope.First().DisplayName.ShouldBe("Test-Identity-Resource-DisplayName-1");
+            identityResourcesByScope.First().Description.ShouldBe("Test-Identity-Resource-Description-1");
+            identityResourcesByScope.First().Required.ShouldBe(true);
         }
 
         [Fact]

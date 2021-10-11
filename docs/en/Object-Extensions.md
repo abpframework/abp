@@ -1,4 +1,4 @@
-﻿# Object Extensions
+# Object Extensions
 
 ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](Modules/Index.md), especially when you want to [extend entities](Customizing-Application-Modules-Extending-Entities.md) and [DTOs](Customizing-Application-Modules-Overriding-Services.md) defined by the module.
 
@@ -410,3 +410,7 @@ ObjectExtensionManager.Instance
 ````
 
 See the [Entity Framework Core Integration document](Entity-Framework-Core.md) for more.
+
+## See Also
+
+* [Module Entity Extensions](Module-Entity-Extensions.md)

@@ -1,45 +1,45 @@
-import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { SetTenant } from '../actions/session.actions';
-import { ABP } from '../models/common';
-import { FindTenantResultDto } from '../models/find-tenant-result-dto';
+import { Inject, Injectable } from '@angular/core';
+import { map, switchMap } from 'rxjs/operators';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy';
+import {
+  CurrentTenantDto,
+  FindTenantResultDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
+import { ConfigStateService } from './config-state.service';
 import { RestService } from './rest.service';
+import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
-  private _domainTenant: ABP.BasicItem = null;
-
-  set domainTenant(value: ABP.BasicItem) {
-    this._domainTenant = value;
-    this.store.dispatch(new SetTenant(value));
-  }
-
-  get domainTenant() {
-    return this._domainTenant;
-  }
+  domainTenant: CurrentTenantDto = null;
 
   isTenantBoxVisible = true;
 
   apiName = 'abp';
 
-  constructor(private restService: RestService, private store: Store) {}
+  private setTenantToState = (tenant: FindTenantResultDto) => {
+    this.sessionState.setTenant({ id: tenant.tenantId, name: tenant.name, isAvailable: true });
+    return this.configStateService.refreshAppState().pipe(map(_ => tenant));
+  };
 
-  findTenantByName(name: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      {
-        url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
-        method: 'GET',
-        headers,
-      },
-      { apiName: this.apiName },
-    );
+  constructor(
+    private restService: RestService,
+    private sessionState: SessionStateService,
+    private tenantService: AbpTenantService,
+    private configStateService: ConfigStateService,
+    @Inject(TENANT_KEY) public tenantKey: string,
+  ) {}
+
+  setTenantByName(tenantName: string) {
+    return this.tenantService
+      .findTenantByName(tenantName, { [this.tenantKey]: '' })
+      .pipe(switchMap(this.setTenantToState));
   }
 
-  findTenantById(id: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      { url: `/api/abp/multi-tenancy/tenants/by-id/${id}`, method: 'GET', headers },
-      { apiName: this.apiName },
-    );
+  setTenantById(tenantId: string) {
+    return this.tenantService
+      .findTenantById(tenantId, { [this.tenantKey]: '' })
+      .pipe(switchMap(this.setTenantToState));
   }
 }

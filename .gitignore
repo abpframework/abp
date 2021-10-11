@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.editorconfig
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -152,6 +153,7 @@ PublishScripts/
 
 # NuGet Packages
 *.nupkg
+*.snupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
 # except build/, which is used as an MSBuild target.
@@ -267,7 +269,9 @@ modules/blog/app/Volo.BlogTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
+modules/setting-management/app/Volo.Abp.SettingManagement.DemoApp/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
+templates/module/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 
 
@@ -304,3 +308,13 @@ modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /templates/app/angular/package-lock.json
 /modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
 abp-build-config.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/Test/
+
+# Identity Server temp signature file
+tempkey.jwk
+
+# ABP Analyzing files
+*.abppkg.analyze.json
+
+# appsettings.secrets.json
+appsettings.secrets.json

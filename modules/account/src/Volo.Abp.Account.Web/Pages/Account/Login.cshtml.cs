@@ -51,14 +51,17 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public bool ShowCancelButton { get; set; }
 
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions)
+            IOptions<AbpAccountOptions> accountOptions,
+            IOptions<IdentityOptions> identityOptions)
         {
             SchemeProvider = schemeProvider;
+            IdentityOptions = identityOptions;
             AccountOptions = accountOptions.Value;
         }
 
@@ -90,6 +93,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
+
+            await IdentityOptions.SetAsync();
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
@@ -181,6 +186,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./Login");
             }
 
+            await IdentityOptions.SetAsync();
+
             var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -206,7 +213,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (result.IsLockedOut)
             {
+                Logger.LogWarning($"External login callback error: user is locked out!");
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
+            }
+
+            if (result.IsNotAllowed)
+            {
+                Logger.LogWarning($"External login callback error: user is not allowed!");
+                throw new UserFriendlyException("Cannot proceed because user is not allowed!");
             }
 
             if (result.Succeeded)
@@ -216,24 +230,29 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             //TODO: Handle other cases for result!
 
-            // Get the information about the user from the external login provider
-            var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
-            if (externalLoginInfo == null)
-            {
-                throw new ApplicationException("Error loading external login information during confirmation.");
-            }
-
-            if (!IsEmailRetrievedFromExternalLogin(externalLoginInfo))
+            var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
+            if (email.IsNullOrWhiteSpace())
             {
                 return RedirectToPage("./Register", new
                 {
                     IsExternalLogin = true,
-                    ExternalLoginAuthSchema = externalLoginInfo.LoginProvider,
+                    ExternalLoginAuthSchema = loginInfo.LoginProvider,
                     ReturnUrl = returnUrl
                 });
             }
 
-            var user = await CreateExternalUserAsync(externalLoginInfo);
+            var user = await UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = await CreateExternalUserAsync(loginInfo);
+            }
+            else
+            {
+                if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
+                {
+                    CheckIdentityErrors(await UserManager.AddLoginAsync(user, loginInfo));
+                }
+            }
 
             await SignInManager.SignInAsync(user, false);
 
@@ -247,13 +266,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return RedirectSafely(returnUrl, returnUrlHash);
         }
 
-        private static bool IsEmailRetrievedFromExternalLogin(ExternalLoginInfo externalLoginInfo)
-        {
-            return externalLoginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) != null;
-        }
-
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
         {
+            await IdentityOptions.SetAsync();
+
             var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);

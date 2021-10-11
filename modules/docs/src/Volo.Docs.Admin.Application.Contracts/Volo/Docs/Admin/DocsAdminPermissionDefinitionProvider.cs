@@ -16,7 +16,6 @@ namespace Volo.Docs.Admin
             projects.AddChild(DocsAdminPermissions.Projects.Create, L("Permission:Create"));
 
             group.AddPermission(DocsAdminPermissions.Documents.Default, L("Permission:Documents"));
-
         }
 
         private static LocalizableString L(string name)

@@ -49,12 +49,13 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Initializes a new instance of the <see cref="OrganizationUnit"/> class.
         /// </summary>
-        /// <param name="tenantId">Tenant's Id or null for host.</param>
+        /// <param name="id">id</param>
         /// <param name="displayName">Display name.</param>
         /// <param name="parentId">Parent's Id or null if OU is a root.</param>
+        /// <param name="tenantId">Tenant's Id or null for host.</param>
         public OrganizationUnit(Guid id, string displayName, Guid? parentId = null, Guid? tenantId = null)
+            : base(id)
         {
-            Id = id;
             TenantId = tenantId;
             DisplayName = displayName;
             ParentId = parentId;

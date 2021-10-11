@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Uporabi drugo storitev za prijavo",
     "UserLockedOutMessage": "Uporabniški račun je bil zaklenjen zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
     "InvalidUserNameOrPassword": "Napačno uporabniško ime ali geslo!",
-    "LoginIsNotAllowed": "Nimate dovoljenja za prijavo! Potrditi morate e-poštni naslov/telefonsko številko.",
+    "LoginIsNotAllowed": "Ne smete se prijaviti! Vaš račun je neaktiven ali mora potrditi vaš e -poštni naslov/telefonsko številko.",
     "SelfRegistrationDisabledMessage": "Možnost lastne registracije uporabnika je onemogočena za to aplikacijo. Kontaktirajte skrbnika aplikacije, da registrirate novega uporabnika.",
     "LocalLoginDisabledMessage": "Lokalna prijava za to aplikacijo je onemogočena.",
     "Login": "Prijava",
@@ -36,7 +36,7 @@
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "Manage": "Upravljaj",
-    "ManageYourProfile": "Upravljaj svoj profil",
+    "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Ali lahko uporabnik sam registrira račun.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Avtenticirajte se z lokalnim računom",
@@ -48,6 +48,10 @@
     "ConfirmPassword": "Potrditev (ponovitev) gesla",
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
-    "BackToLogin": "Nazaj na prijavo"
+    "BackToLogin": "Nazaj na prijavo",
+    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}",
+    "PasswordReset": "Ponastavitev gesla",
+    "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
+    "ResetMyPassword": "Ponastavi geslo"
   }
 }

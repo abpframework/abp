@@ -8,7 +8,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 {
     public interface IIdentityResourceRepository : IBasicRepository<IdentityResource, Guid>
     {
-        Task<List<IdentityResource>> GetListByScopesAsync(
+        Task<List<IdentityResource>> GetListByScopeNameAsync(
             string[] scopeNames,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
@@ -20,6 +20,11 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             int maxResultCount,
             string filter = null,
             bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<long> GetCountAsync(
+            string filter = null,
             CancellationToken cancellationToken = default
         );
 

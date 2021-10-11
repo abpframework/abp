@@ -15,16 +15,16 @@ namespace Volo.Blogging.Users
         {
         }
 
-        public async Task<List<BlogUser>> GetUsersAsync(int maxCount, string filter, CancellationToken cancellationToken)
+        public async Task<List<BlogUser>> GetUsersAsync(int maxCount, string filter, CancellationToken cancellationToken = default)
         {
-            var query = GetMongoQueryable();
+            var query = await GetMongoQueryableAsync(cancellationToken);
 
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 query = query.Where(x => x.UserName.Contains(filter));
             }
 
-            return await query.Take(maxCount).ToListAsync(cancellationToken);
+            return await query.Take(maxCount).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

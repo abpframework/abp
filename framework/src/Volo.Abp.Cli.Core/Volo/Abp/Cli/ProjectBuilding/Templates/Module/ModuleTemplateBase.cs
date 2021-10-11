@@ -19,6 +19,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
             DeleteUnrelatedProjects(context, steps);
             RandomizeSslPorts(context, steps);
             UpdateNuGetConfig(context, steps);
+            ChangeConnectionString(context, steps);
             CleanupFolderHierarchy(context, steps);
 
             return steps;
@@ -36,6 +37,28 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
             ));
 
             steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.Server"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.WebAssembly"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.Host",
+                projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.Server.Host",
+                projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
                 "MyCompanyName.MyProjectName.Web.Host",
                 projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
             ));
@@ -50,6 +73,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
         private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
+            {
+                return;
+            }
+
             steps.Add(new TemplateRandomSslPortStep(new List<string>
             {
                 "https://localhost:44300",
@@ -62,8 +90,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
         private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
+            steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
         }
-        
+
+        private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ConnectionString != null)
+            {
+                steps.Add(new ConnectionStringChangeStep());
+            }
+        }
+
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));

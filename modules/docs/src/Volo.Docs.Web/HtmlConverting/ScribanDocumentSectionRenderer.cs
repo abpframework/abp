@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Scriban;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -63,7 +62,7 @@ namespace Volo.Docs.HtmlConverting
 
                 var pureJson = insideJsonSection.Replace(DocsParam, "").Trim();
 
-                if (!JsonConvertExtensions.TryDeserializeObject<Dictionary<string, List<string>>>(pureJson, out var availableParameters))
+                if (!DocsJsonSerializerHelper.TryDeserialize<Dictionary<string, List<string>>>(pureJson, out var availableParameters))
                 {
                     throw new UserFriendlyException("ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
                 }
@@ -159,7 +158,7 @@ namespace Volo.Docs.HtmlConverting
 
                 var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length);
 
-                if (!JsonConvertExtensions.TryDeserializeObject<DocumentPartialTemplateWithValuesDto>(json, out var template))
+                if (!DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json, out var template))
                 {
                     throw new UserFriendlyException($"ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
                 }
@@ -202,7 +201,7 @@ namespace Volo.Docs.HtmlConverting
                     betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length
                 );
 
-                if (JsonConvertExtensions.TryDeserializeObject<DocumentPartialTemplateWithValuesDto>(json, out var documentPartialTemplateWithValuesDto))
+                if (DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json, out var documentPartialTemplateWithValuesDto))
                 {
                     var template = templates.FirstOrDefault(t => t.Path == documentPartialTemplateWithValuesDto.Path);
 

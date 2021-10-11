@@ -15,9 +15,9 @@ namespace Volo.Abp.RabbitMQ
         public IDictionary<string, object> Arguments { get; }
 
         public ExchangeDeclareConfiguration(
-            string exchangeName, 
-            string type, 
-            bool durable = false, 
+            string exchangeName,
+            string type,
+            bool durable = false,
             bool autoDelete = false)
         {
             ExchangeName = exchangeName;

@@ -9,11 +9,11 @@ using Volo.Docs.Admin.Documents;
 
 namespace Volo.Docs.Admin
 {
-    [RemoteService]
-    [Area("docs")]
+    [RemoteService(Name = DocsAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area("docs-admin")]
     [ControllerName("DocumentsAdmin")]
     [Route("api/docs/admin/documents")]
-    public class DocumentsAdminController : AbpController, IDocumentAdminAppService
+    public class DocumentsAdminController : AbpControllerBase, IDocumentAdminAppService
     {
         private readonly IDocumentAdminAppService _documentAdminAppService;
 
@@ -62,13 +62,6 @@ namespace Volo.Docs.Admin
         public async Task ReindexAsync(Guid documentId)
         {
             await _documentAdminAppService.ReindexAsync(documentId);
-        }
-
-        [HttpDelete]
-        [Route("DeleteDocumentFromDatabase")]
-        public async Task DeleteFromDatabaseAsync(Guid documentId)
-        {
-            await _documentAdminAppService.DeleteFromDatabaseAsync(documentId);
         }
     }
 }

@@ -1,0 +1,126 @@
+﻿@page "/tenant-management/tenants"
+@attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.FeatureManagement.Blazor.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@using Volo.Abp.AspNetCore.Components.Web
+@inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
+@inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
+
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <PageHeader Title="@L["Tenants"]"
+                    BreadcrumbItems="@BreadcrumbItems"
+                    Toolbar="@Toolbar">
+        </PageHeader>
+    </CardHeader>
+    <CardBody>
+        @* ************************* DATA GRID ************************* *@
+        <AbpExtensibleDataGrid TItem="TenantDto"
+                               Data="@Entities"
+                               ReadData="@OnDataGridReadAsync"
+                               TotalItems="@TotalCount"
+                               ShowPager="true"
+                               PageSize="@PageSize"
+                               CurrentPage="@CurrentPage"
+                               Columns="@TenantManagementTableColumns">
+        </AbpExtensibleDataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+@if ( HasCreatePermission )
+{
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
+        <ModalContent Centered="true">
+            <Form>
+                <ModalHeader>
+                    <ModalTitle>@L["NewTenant"]</ModalTitle>
+                    <CloseButton Clicked="CloseCreateModalAsync"/>
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:AdminEmailAddress"]</FieldLabel>
+                                <TextEdit Role="@TextRole.Email" @bind-Text="@NewEntity.AdminEmailAddress">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:AdminPassword"]</FieldLabel>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH"/>
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Clicked="@CreateEntityAsync"/>
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}
+
+@* ************************* EDIT MODAL ************************* *@
+@if ( HasUpdatePermission )
+{
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
+        <ModalContent Centered="true">
+            <Form>
+                <ModalHeader>
+                    <ModalTitle>@L["Edit"]</ModalTitle>
+                    <CloseButton Clicked="CloseEditModalAsync"/>
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                    </Validations>
+                    <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@LH"/>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Clicked="@UpdateEntityAsync"/>
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}
+
+@if (HasManageFeaturesPermission)
+{
+    <FeatureManagementModal @ref="FeatureManagementModal"/>
+}

@@ -13,7 +13,7 @@ using MyCompanyName.MyProjectName.Permissions;
 namespace MyCompanyName.MyProjectName.Web
 {
     [DependsOn(
-        typeof(MyProjectNameHttpApiModule),
+        typeof(MyProjectNameApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpAutoMapperModule)
         )]

@@ -35,7 +35,7 @@ namespace Volo.Abp.Settings
             //TODO: How to implement setting.IsInherited?
 
             var value = await GetOrNullValueFromProvidersAsync(providers, setting);
-            if (setting.IsEncrypted)
+            if (value != null && setting.IsEncrypted)
             {
                 value = SettingEncryptionService.Decrypt(setting, value);
             }
@@ -43,29 +43,52 @@ namespace Volo.Abp.Settings
             return value;
         }
 
-        public virtual async Task<List<SettingValue>> GetAllAsync()
+        public virtual async Task<List<SettingValue>> GetAllAsync(string[] names)
         {
-            var settingValues = new Dictionary<string, SettingValue>();
-            var settingDefinitions = SettingDefinitionManager.GetAll();
+            var result = new Dictionary<string, SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => names.Contains(x.Name)).ToList();
 
-            foreach (var provider in SettingValueProviderManager.Providers)
+            foreach (var definition in settingDefinitions)
             {
-                foreach (var setting in settingDefinitions)
-                {
-                    var value = await provider.GetOrNullAsync(setting);
-                    if (value != null)
-                    {
-                        if (setting.IsEncrypted)
-                        {
-                            value = SettingEncryptionService.Decrypt(setting, value);
-                        }
-
-                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
-                    }
-                }
+                result.Add(definition.Name, new SettingValue(definition.Name, null));
             }
 
-            return settingValues.Values.ToList();
+            foreach (var provider in Enumerable.Reverse(SettingValueProviderManager.Providers))
+            {
+                var settingValues = await provider.GetAllAsync(settingDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToArray());
+
+                var notNullValues = settingValues.Where(x => x.Value != null).ToList();
+                foreach (var settingValue in notNullValues)
+                {
+                    var settingDefinition = settingDefinitions.First(x => x.Name == settingValue.Name);
+                    if (settingDefinition.IsEncrypted)
+                    {
+                        settingValue.Value = SettingEncryptionService.Decrypt(settingDefinition, settingValue.Value);
+                    }
+
+                    if (result.ContainsKey(settingValue.Name) && result[settingValue.Name].Value == null)
+                    {
+                        result[settingValue.Name].Value = settingValue.Value;
+                    }
+                }
+
+                settingDefinitions.RemoveAll(x => notNullValues.Any(v => v.Name == x.Name));
+            }
+
+            return result.Values.ToList();
+        }
+
+        public virtual async Task<List<SettingValue>> GetAllAsync()
+        {
+            var settingValues = new List<SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll();
+
+            foreach (var setting in settingDefinitions)
+            {
+                settingValues.Add(new SettingValue(setting.Name, await GetOrNullAsync(setting.Name)));
+            }
+
+            return settingValues;
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(

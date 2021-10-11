@@ -32,6 +32,8 @@ namespace Acme.BookStore
 
 > `ISoftDelete` filter is enabled by default and you can not get deleted entities from database unless you explicitly disable it. See the `IDataFilter` service below.
 
+> Soft-delete entities can be hard-deleted when you use `HardDeleteAsync` method on the repositories.
+
 ### IMultiTenant
 
 [Multi-tenancy](Multi-Tenancy.md) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".
@@ -102,9 +104,58 @@ namespace Acme.BookStore
 ````
 
 * [Inject](Dependency-Injection.md) the `IDataFilter` service to your class.
-* Use the `Disable` method within a `using` statement to create a code block where the `ISoftDelete` filter is disabled inside it (Always use it inside a `using` block to guarantee that the filter is reset to its previous state).
+* Use the `Disable` method within a `using` statement to create a code block where the `ISoftDelete` filter is disabled inside it.
 
-`IDataFilter.Enable` method can be used to enable a filter. `Enable` and `Disable` methods can be used in a nested way to define inner scopes.
+In addition to the `Disable<T>()` method;
+
+* `IDataFilter.Enable<T>()` method can be used to enable a filter. `Enable` and `Disable` methods can be used in a **nested** way to define inner scopes.
+
+* `IDataFilter.IsEnabled<T>()` can be used to check whether a filter is currently enabled or not.
+
+> Always use the `Disable` and `Enable` methods it inside a `using` block to guarantee that the filter is reset to its previous state.
+
+### The Generic IDataFilter Service
+
+`IDataFilter` service has a generic version, `IDataFilter<TFilter>` that injects a more restricted and explicit data filter based on the filter type.
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore
+{
+    public class MyBookService : ITransientDependency
+    {
+        private readonly IDataFilter<ISoftDelete> _softDeleteFilter;
+        private readonly IRepository<Book, Guid> _bookRepository;
+
+        public MyBookService(
+            IDataFilter<ISoftDelete> softDeleteFilter,
+            IRepository<Book, Guid> bookRepository)
+        {
+            _softDeleteFilter = softDeleteFilter;
+            _bookRepository = bookRepository;
+        }
+
+        public async Task<List<Book>> GetAllBooksIncludingDeletedAsync()
+        {
+            //Temporary disable the ISoftDelete filter
+            using (_softDeleteFilter.Disable())
+            {
+                return await _bookRepository.GetListAsync();
+            }
+        }
+    }
+}
+````
+
+* This usage determines the filter type while injecting the `IDataFilter<T>` service.
+* In this case you can use the `Disable()` and `Enable()` methods without specifying the filter type.
 
 ## AbpDataFilterOptions
 
@@ -188,15 +239,25 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 ### MongoDB
 
-ABP implements data filters directly in the [repository](Repositories.md) level for the [MongoDB Integration](MongoDB.md). So, it works only if you use the repositories properly. Otherwise, you should manually filter the data.
+ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](MongoDB.md), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
 
-Currently, the best way to implement a data filter for the MongoDB integration is to override the `AddGlobalFilters` in the repository derived from the `MongoDbRepository` class. Example:
+Currently, the best way to implement a data filter for the MongoDB integration is to create a derived class of `MongoDbRepositoryFilterer` and override `AddGlobalFilters`. Example:
 
 ````csharp
-public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, Guid>
+[ExposeServices(typeof(IMongoDbRepositoryFilterer<Book, Guid>))]
+public class BookMongoDbRepositoryFilterer : MongoDbRepositoryFilterer<Book, Guid> , ITransientDependency
 {
-    protected override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    public BookMongoDbRepositoryFilterer(
+        IDataFilter dataFilter,
+        ICurrentTenant currentTenant) :
+        base(dataFilter, currentTenant)
     {
+    }
+
+    public override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    {
+        base.AddGlobalFilters(filters);
+
         if (DataFilter.IsEnabled<IIsActive>())
         {
             filters.Add(Builders<Book>.Filter.Eq(e => ((IIsActive)e).IsActive, true));
@@ -205,7 +266,7 @@ public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, G
 }
 ````
 
-This example implements it only for the `Book` entity. If you want to implement for all entities (those implement the `IIsActive` interface), create your own custom MongoDB repository base class and override the `AddGlobalFilters` as shown below:
+This example implements it only for the `Book` entity. If you want to implement for all entities (those implement the `IIsActive` interface), create your own custom MongoDB repository filterer base class and override the `AddGlobalFilters` as shown below:
 
 ````csharp
 public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity, TKey>
@@ -220,6 +281,8 @@ public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoD
 
     protected override void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
     {
+        base.AddGlobalFilters(filters);
+
         if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)) 
             && DataFilter.IsEnabled<IIsActive>())
         {
@@ -227,6 +290,15 @@ public abstract class MyMongoRepository<TMongoDbContext, TEntity, TKey> : MongoD
         }
     }
 }
-````
 
-> See "Set Default Repository Classes" section of the [MongoDb Integration document](MongoDB.md) to learn how to replace default repository base with your custom class.
+
+public class MyMongoDbModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //.......
+        context.Services
+            .Replace(ServiceDescriptor.Transient(typeof(IMongoDbRepositoryFilterer<,>),typeof(MyMongoDbRepositoryFilterer<,>)));
+    }
+}
+````

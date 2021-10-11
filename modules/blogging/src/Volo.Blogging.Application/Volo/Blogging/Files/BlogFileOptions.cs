@@ -1,4 +1,6 @@
-﻿namespace Volo.Blogging.Files
+﻿using System;
+
+namespace Volo.Blogging.Files
 {
     /* TODO:
      * - It is not to have different options for all different modules. We should find a more generic way.
@@ -6,6 +8,7 @@
      */
     public class BlogFileOptions
     {
+        [Obsolete("Now store using blob storing system, will be deleted in a next version")]
         public string FileUploadLocalFolder { get; set; }
     }
 }

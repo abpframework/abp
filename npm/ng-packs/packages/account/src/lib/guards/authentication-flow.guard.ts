@@ -9,7 +9,7 @@ export class AuthenticationFlowGuard implements CanActivate {
   canActivate() {
     if (this.authService.isInternalAuth) return true;
 
-    this.authService.initLogin();
+    this.authService.navigateToLogin();
     return false;
   }
 }

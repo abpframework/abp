@@ -1,43 +1,97 @@
 import { Import } from './import';
-import { Omissible } from './util';
+import { Options } from './util';
 
 export class Model {
-  imports: Import[] = [];
-  interfaces: Interface[] = [];
-  namespace: string;
-  path: string;
+  readonly imports: Import[] = [];
+  readonly interfaces: Interface[] = [];
+  readonly namespace: string;
+  readonly path: string;
 
   constructor(options: ModelOptions) {
     Object.assign(this, options);
   }
 }
 
-export type ModelOptions = Omissible<Model, 'imports' | 'interfaces'>;
+export type ModelOptions = Options<Model, 'imports' | 'interfaces'>;
 
 export class Interface {
-  base: string | null;
-  identifier: string;
-  namespace: string;
-  properties: Property[] = [];
-  ref: string;
+  readonly base: string | null;
+  readonly identifier: string;
+  readonly namespace: string;
+  readonly generics: Generic[] = [];
+  readonly properties: Property[] = [];
+  readonly ref: string;
 
   constructor(options: InterfaceOptions) {
     Object.assign(this, options);
   }
 }
 
-export type InterfaceOptions = Omissible<Interface, 'properties'>;
+export type InterfaceOptions = Options<Interface, 'generics' | 'properties'>;
 
-export class Property {
-  name: string;
-  type: string;
-  default = '';
-  optional: '' | '?' = '';
-  refs: string[] = [];
+abstract class TypeRef {
+  readonly refs: string[] = [];
 
-  constructor(options: PropertyOptions) {
+  protected _type = '';
+  get type() {
+    return this._type;
+  }
+  set type(value: string) {
+    if (!value) return;
+    this._type = value;
+  }
+
+  protected _default = '';
+  get default() {
+    return this._default;
+  }
+  set default(value: string) {
+    if (!value) return;
+    this._default = ` = ${value}`;
+  }
+
+  constructor(options: TypeRefOptions) {
     Object.assign(this, options);
+  }
+
+  setDefault(value: string) {
+    this.default = value;
+  }
+
+  setType(value: string) {
+    this.type = value;
   }
 }
 
-export type PropertyOptions = Omissible<Property, 'default' | 'optional' | 'refs'>;
+type TypeRefOptionalKeys = 'default' | 'refs';
+type TypeRefOptions = Options<TypeRef, TypeRefOptionalKeys>;
+
+export class Generic extends TypeRef {
+  constructor(options: GenericOptions) {
+    super(options);
+  }
+}
+
+export type GenericOptions = Options<Generic, TypeRefOptionalKeys>;
+
+export class Property extends TypeRef {
+  readonly name: string;
+  private _optional: '' | '?' = '';
+  get optional() {
+    return this.default ? '' : this._optional;
+  }
+
+  set optional(value: '' | '?') {
+    this._optional = value;
+  }
+
+  constructor(options: PropertyOptions) {
+    super(options);
+  }
+
+  setOptional(isOptional: boolean) {
+    this.optional = isOptional ? '?' : '';
+  }
+}
+
+export type PropertyOptions = Options<Property, TypeRefOptionalKeys | 'optional'>;

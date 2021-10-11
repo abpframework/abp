@@ -1,0 +1,6 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.GlobalFeature:010001": "'{ServiceName}'服务需要启用'{GlobalFeatureName}'功能."
+  }
+}

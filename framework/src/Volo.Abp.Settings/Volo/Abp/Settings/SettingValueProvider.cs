@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
@@ -15,5 +16,7 @@ namespace Volo.Abp.Settings
         }
 
         public abstract Task<string> GetOrNullAsync(SettingDefinition setting);
+
+        public abstract Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings);
     }
 }

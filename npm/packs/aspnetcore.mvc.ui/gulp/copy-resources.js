@@ -1,10 +1,12 @@
-﻿"use strict";
+"use strict";
 
 (function () {
 
     var gulp = require("gulp"),
         merge = require("merge-stream"),
-        rimraf = require("rimraf"),
+        fs = require('fs'),
+        glob = require('glob'),
+        micromatch = require('micromatch'),
         path = require("path"),
         extendObject = require('extend-object');
 
@@ -41,13 +43,51 @@
             return undefined;
         } 
     }
-    
-    function cleanFiles() {
-        if (resourceMapping.clean) {
-            for (var i = 0; i < resourceMapping.clean.length; i++) {
-                rimraf.sync(replaceAliases(resourceMapping.clean[i]) + '/**/*', { force: true });
-            }
-        }
+
+    function cleanDirsAndFiles(patterns) {
+        const { dirs, files } = findDirsAndFiles(patterns);
+
+        files.forEach(file => {
+            try {
+                fs.unlinkSync(file);
+            } catch (_) {}
+        });
+
+        dirs.sort((a, b) => a < b ? 1 : -1);
+
+        dirs.forEach(dir => {
+            if (fs.readdirSync(dir).length) return;
+
+            try {
+                fs.rmdirSync(dir, {});
+            } catch (_) {}
+        });
+    }
+
+    function findDirsAndFiles(patterns) {
+        const dirs = [];
+        const files = [];
+
+        const list = glob.sync('**/*', { dot: true });
+
+        const matches = micromatch(list, normalizeGlob(patterns), {
+            dot: true,
+        });
+
+        matches.forEach(match => {
+            if (!fs.existsSync(match)) return;
+
+            (fs.statSync(match).isDirectory() ? dirs : files).push(match);
+        });
+
+        return { dirs, files };
+    }
+
+    function normalizeGlob(patterns) {
+        return patterns.map(pattern => {
+            const prefix = /\*$/.test(pattern) ? '' : '/**';
+            return replaceAliases(pattern).replace(/(!?)\.\//, '$1') + prefix;
+        });
     }
     
     function normalizeResourceMapping(resourcemapping) {
@@ -64,13 +104,7 @@
         extendObject(defaultSettings.aliases, resourcemapping.aliases);
         resourcemapping.aliases = defaultSettings.aliases;
         
-        if (!resourcemapping.clean) {
-            resourcemapping.clean = [];
-        }
-        
-        for (var i = 0; i < defaultSettings.clean.length; ++i) {
-            resourcemapping.clean.push(defaultSettings.clean[i]);
-        }
+        resourcemapping.clean = resourcemapping.clean || defaultSettings.clean;
         
         return resourcemapping;
     }
@@ -112,15 +146,17 @@
         rootPath = path;
         resourceMapping = normalizeResourceMapping(buildResourceMapping(rootPath));
     
-        cleanFiles();
+        cleanDirsAndFiles(resourceMapping.clean);
 
         var tasks = [];
 
         if (resourceMapping.mappings) {
             for (var mapping in resourceMapping.mappings) {
                 if (resourceMapping.mappings.hasOwnProperty(mapping)) {
-                    var source = replaceAliases(mapping);
                     var destination = replaceAliases(resourceMapping.mappings[mapping]);
+                    if (fs.existsSync(destination)) continue;
+
+                    var source = replaceAliases(mapping);
                     tasks.push(
                         gulp.src(source).pipe(gulp.dest(destination))
                     );

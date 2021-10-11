@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -9,18 +10,18 @@ namespace Volo.Abp.Validation
 {
     public class ObjectValidator : IObjectValidator, ITransientDependency
     {
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpValidationOptions Options { get; }
 
-        public ObjectValidator(IOptions<AbpValidationOptions> options, IHybridServiceScopeFactory serviceScopeFactory)
+        public ObjectValidator(IOptions<AbpValidationOptions> options, IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
         }
 
-        public virtual void Validate(object validatingObject, string name = null, bool allowNull = false)
+        public virtual async Task ValidateAsync(object validatingObject, string name = null, bool allowNull = false)
         {
-            var errors = GetErrors(validatingObject, name, allowNull);
+            var errors = await GetErrorsAsync(validatingObject, name, allowNull);
 
             if (errors.Any())
             {
@@ -31,7 +32,7 @@ namespace Volo.Abp.Validation
             }
         }
 
-        public virtual List<ValidationResult> GetErrors(object validatingObject, string name = null, bool allowNull = false)
+        public virtual async Task<List<ValidationResult>> GetErrorsAsync(object validatingObject, string name = null, bool allowNull = false)
         {
             if (validatingObject == null)
             {
@@ -56,9 +57,9 @@ namespace Volo.Abp.Validation
             {
                 foreach (var contributorType in Options.ObjectValidationContributors)
                 {
-                    var contributor = (IObjectValidationContributor) 
+                    var contributor = (IObjectValidationContributor)
                         scope.ServiceProvider.GetRequiredService(contributorType);
-                    contributor.AddErrors(context);
+                    await contributor.AddErrorsAsync(context);
                 }
             }
 

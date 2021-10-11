@@ -8,6 +8,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
@@ -29,6 +30,11 @@ namespace MyCompanyName.MyProjectName.MongoDB
             context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories();
+            });
+
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
             });
         }
     }

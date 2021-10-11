@@ -40,7 +40,7 @@ public class MyDbContext : AbpMongoDbContext
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
         base.CreateModel(modelBuilder);
-        
+
         //Customize the configuration for your collections.
     }
 }
@@ -62,7 +62,7 @@ So, most of times you don't need to explicitly configure registration for your e
 protected override void CreateModel(IMongoModelBuilder modelBuilder)
 {
     base.CreateModel(modelBuilder);
-    
+
     modelBuilder.Entity<Question>(b =>
     {
         b.CollectionName = "MyQuestions"; //Sets the collection name
@@ -88,7 +88,7 @@ If you have multiple databases in your application, you can configure the connec
 [ConnectionStringName("MySecondConnString")]
 public class MyDbContext : AbpMongoDbContext
 {
-    
+
 }
 ````
 
@@ -149,7 +149,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-(`BookType` is a simple enum here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple `enum` here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
 
 ```csharp
 public class BookManager : DomainService
@@ -202,7 +202,7 @@ You generally want to derive from the `IRepository` to inherit standard reposito
 Example implementation of the `IBookRepository` interface:
 
 ```csharp
-public class BookRepository : 
+public class BookRepository :
     MongoDbRepository<BookStoreMongoDbContext, Book, Guid>,
     IBookRepository
 {
@@ -215,7 +215,8 @@ public class BookRepository :
         BookType type,
         CancellationToken cancellationToken = default(CancellationToken))
     {
-        await Collection.DeleteManyAsync(
+        var collection = await GetCollectionAsync(cancellationToken);
+        await collection.DeleteManyAsync(
             Builders<Book>.Filter.Eq(b => b.Type, type),
             cancellationToken
         );
@@ -242,9 +243,9 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 This is especially important when you want to **override a base repository method** to customize it. For instance, you may want to override `DeleteAsync` method to delete an entity in a more efficient way:
 
 ```csharp
-public override async Task DeleteAsync(
-    Guid id, 
-    bool autoSave = false, 
+public async override Task DeleteAsync(
+    Guid id,
+    bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
     //TODO: Custom implementation of the delete method
@@ -253,7 +254,7 @@ public override async Task DeleteAsync(
 
 ### Access to the MongoDB API
 
-In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabase()` or `GetCollection()` extension methods. Example:
+In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()`, `GetCollectionAsync()` or `GetAggregateAsync()` extension methods. Example:
 
 ```csharp
 public class BookService
@@ -265,30 +266,49 @@ public class BookService
         _bookRepository = bookRepository;
     }
 
-    public void Foo()
+    public async Task FooAsync()
     {
-        IMongoDatabase database = _bookRepository.GetDatabase();
-        IMongoCollection<Book> books = _bookRepository.GetCollection();
+        IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
+        IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
+        IAggregateFluent<Book> bookAggregate = await _bookRepository.GetAggregateAsync();
     }
 }
 ```
 
 > Important: You must reference to the `Volo.Abp.MongoDB` package from the project you want to access to the MongoDB API. This breaks encapsulation, but this is what you want in that case.
 
-#### Transaction
+### Transactions
 
-Starting from version 4.0, MongoDB supports transactions. ABP added support for MongoDB transactions in version 3.2. If you upgrade the project to version 3.2. You need add [MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs) to your `.MongoDB` project.
-
-If you are using MongoDB server version less then v4.0, you need disabled the `transaction` of unit of work manually:
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
 });
 ```
 
+> Or you can delete this code since this is already the default behavior.
+
 ### Advanced Topics
+
+### Controlling the Multi-Tenancy
+
+If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+
+**Example:**
+
+````csharp
+[IgnoreMultiTenancy]
+public class MyDbContext : AbpMongoDbContext
+{
+    ...
+}
+````
+
+Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+
+> When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
 #### Set Default Repository Classes
 
@@ -371,7 +391,19 @@ One advantage of using interface for a MongoDbContext is then it becomes replace
 
 #### Replace Other DbContextes
 
-Once you properly define and use an interface for a MongoDbContext , then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for a MongoDbContext , then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
@@ -382,3 +414,53 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 ```
 
 In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+
+### Customize Bulk Operations
+
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
+
+- You may use example template below:
+
+```csharp
+public class MyCustomMongoDbBulkOperationProvider
+    : IMongoDbBulkOperationProvider, ITransientDependency
+{
+    public async Task DeleteManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task InsertManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task UpdateManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+}
+```
+
+## See Also
+
+* [Entities](Entities.md)
+* [Repositories](Repositories.md)

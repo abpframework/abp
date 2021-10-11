@@ -1,4 +1,4 @@
-﻿# Modularity
+# Modularity
 
 ## Introduction
 
@@ -57,7 +57,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See Configuration (TODO: link) document for more about the configuration system.
+See the [Configuration](Configuration.md) document for more about the configuration system.
 
 #### Pre & Post Configure Services
 

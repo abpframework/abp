@@ -1,12 +1,11 @@
-import { ChangePassword, ProfileState } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.identity/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, Injector, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
-import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { Account } from '../../models/account';
+import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
 const { required } = Validators;
 
@@ -18,7 +17,8 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
   exportAs: 'abpChangePasswordForm',
 })
 export class ChangePasswordComponent
-  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs {
+  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;
@@ -33,14 +33,16 @@ export class ChangePasswordComponent
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
+    private injector: Injector,
     private toasterService: ToasterService,
+    private profileService: ProfileService,
+    private manageProfileState: ManageProfileStateService,
   ) {}
 
   ngOnInit(): void {
-    this.hideCurrentPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
+    this.hideCurrentPassword = !this.manageProfileState.getProfile()?.hasPassword;
 
-    const passwordValidations = getPasswordValidators(this.store);
+    const passwordValidations = getPasswordValidators(this.injector);
 
     this.form = this.fb.group(
       {
@@ -69,13 +71,11 @@ export class ChangePasswordComponent
   onSubmit() {
     if (this.form.invalid) return;
     this.inProgress = true;
-    this.store
-      .dispatch(
-        new ChangePassword({
-          ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
-          newPassword: this.form.get('newPassword').value,
-        }),
-      )
+    this.profileService
+      .changePassword({
+        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
+        newPassword: this.form.get('newPassword').value,
+      })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe({
         next: () => {
@@ -90,9 +90,7 @@ export class ChangePasswordComponent
           }
         },
         error: err => {
-          this.toasterService.error(
-            snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-          );
+          this.toasterService.error(err.error?.error?.message || 'AbpAccount::DefaultErrorMessage');
         },
       });
   }

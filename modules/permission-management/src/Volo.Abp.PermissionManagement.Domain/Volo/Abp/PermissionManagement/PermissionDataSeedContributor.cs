@@ -10,7 +10,6 @@ namespace Volo.Abp.PermissionManagement
     public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }
-
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         protected IPermissionDataSeeder PermissionDataSeeder { get; }
 

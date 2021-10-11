@@ -1,6 +1,6 @@
 # How to Customize the SignIn Manager for ABP Applications
 
-After creating a new application using the [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application), you may want extend or change the default behavior of the SignIn Manager for your authentication and registration flow needs. ABP [Account Module](https://docs.abp.io/en/abp/latest/Modules/Account) uses the [Identity Management Module](https://docs.abp.io/en/abp/latest/Modules/Identity) for SignIn Manager and the [Identity Management Module](https://docs.abp.io/en/abp/latest/Modules/Identity) uses default [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) ([see here](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/identity/src/Volo.Abp.Identity.AspNetCore/Volo/Abp/Identity/AspNetCore/AbpIdentityAspNetCoreModule.cs#L17)). 
+After creating a new application using the [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application), you may want extend or change the default behavior of the SignIn Manager for your authentication and registration flow needs. ABP [Account Module](https://docs.abp.io/en/abp/latest/Modules/Account) uses the [Identity Management Module](https://docs.abp.io/en/abp/latest/Modules/Identity) for SignIn Manager and the [Identity Management Module](https://docs.abp.io/en/abp/latest/Modules/Identity) uses default [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) ([see here](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/identity/src/Volo.Abp.Identity.AspNetCore/Volo/Abp/Identity/AspNetCore/AbpIdentityAspNetCoreModule.cs#L17)).
 
 To write your Custom SignIn Manager, you need to extend [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) class and register it to the DI container.
 
@@ -27,7 +27,7 @@ public class CustomSignInManager : Microsoft.AspNetCore.Identity.SignInManager<V
 }
 ````
 
-> It is important to use **Volo.Abp.Identity.IdentityUser** type for SignInManager to inherit, not the AppUser of your application. 
+> It is important to use **Volo.Abp.Identity.IdentityUser** type for SignInManager to inherit, not the AppUser of your application.
 
 Afterwards you can override any of the SignIn Manager methods you need and add new methods and properties needed for your authentication or registration flow.
 
@@ -38,7 +38,7 @@ In this case we'll be overriding the `GetExternalLoginInfoAsync` method which is
 A good way to override a method is  copying its [source code](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Identity/Core/src/SignInManager.cs#L638-L674). In this case, we will be using a minorly modified version of the source code which explicitly shows the namespaces of the methods and properties to help better understanding of the concept.
 
 ````csharp
-public override async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
+public async override Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
 {
     var auth = await Context.AuthenticateAsync(Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme);
     var items = auth?.Properties?.Items;
@@ -71,7 +71,8 @@ public override async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetE
         ?? provider;
     return new Microsoft.AspNetCore.Identity.ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
     {
-        AuthenticationTokens = auth.Properties.GetTokens()
+        AuthenticationTokens = auth.Properties.GetTokens(),
+        AuthenticationProperties = auth.Properties
     };
 }
 ````

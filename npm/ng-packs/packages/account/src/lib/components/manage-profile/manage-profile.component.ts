@@ -1,9 +1,9 @@
+import { ProfileService } from '@abp/ng.identity/proxy';
 import { fadeIn } from '@abp/ng.theme.shared';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { eAccountComponents } from '../../enums/components';
-import { Store } from '@ngxs/store';
-import { GetProfile, ProfileState } from '@abp/ng.core';
+import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
 @Component({
   selector: 'abp-manage-profile',
@@ -24,16 +24,19 @@ export class ManageProfileComponent implements OnInit {
 
   personalSettingsKey = eAccountComponents.PersonalSettings;
 
-  isProfileLoaded: boolean;
+  profile$ = this.manageProfileState.getProfile$();
 
   hideChangePasswordTab: boolean;
 
-  constructor(private store: Store) {}
+  constructor(
+    protected profileService: ProfileService,
+    protected manageProfileState: ManageProfileStateService,
+  ) {}
 
   ngOnInit() {
-    this.store.dispatch(new GetProfile()).subscribe(() => {
-      this.isProfileLoaded = true;
-      if (this.store.selectSnapshot(ProfileState.getProfile).isExternal) {
+    this.profileService.get().subscribe(profile => {
+      this.manageProfileState.setProfile(profile);
+      if (profile.isExternal) {
         this.hideChangePasswordTab = true;
         this.selectedTab = 1;
       }

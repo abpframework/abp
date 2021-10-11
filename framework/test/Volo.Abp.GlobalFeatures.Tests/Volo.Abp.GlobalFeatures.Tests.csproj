@@ -3,14 +3,17 @@
     <Import Project="..\..\..\common.test.props" />
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+        <ProjectReference Include="..\..\src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
+        <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     </ItemGroup>
 
 </Project>

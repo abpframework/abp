@@ -9,8 +9,8 @@ namespace Volo.Abp.Features
     public static class FeatureCheckerExtensions
     {
         public static async Task<T> GetAsync<T>(
-            [NotNull] this IFeatureChecker featureChecker, 
-            [NotNull] string name, 
+            [NotNull] this IFeatureChecker featureChecker,
+            [NotNull] string name,
             T defaultValue = default)
             where T : struct
         {
@@ -56,10 +56,11 @@ namespace Volo.Abp.Features
         {
             if (!(await featureChecker.IsEnabledAsync(featureName)))
             {
-                throw new AbpAuthorizationException("Feature is not enabled: " + featureName);
+                throw new AbpAuthorizationException(code: AbpFeatureErrorCodes.FeatureIsNotEnabled).WithData(
+                    "FeatureName", featureName);
             }
         }
-        
+
         public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
         {
             if (featureNames.IsNullOrEmpty())
@@ -73,10 +74,8 @@ namespace Volo.Abp.Features
                 {
                     if (!(await featureChecker.IsEnabledAsync(featureName)))
                     {
-                        throw new AbpAuthorizationException(
-                            "Required features are not enabled. All of these features must be enabled: " +
-                            string.Join(", ", featureNames)
-                        );
+                        throw new AbpAuthorizationException(code: AbpFeatureErrorCodes.AllOfTheseFeaturesMustBeEnabled)
+                            .WithData("FeatureNames", string.Join(", ", featureNames));
                     }
                 }
             }
@@ -90,10 +89,8 @@ namespace Volo.Abp.Features
                     }
                 }
 
-                throw new AbpAuthorizationException(
-                    "Required features are not enabled. At least one of these features must be enabled: " +
-                    string.Join(", ", featureNames)
-                );
+                throw new AbpAuthorizationException(code: AbpFeatureErrorCodes.AtLeastOneOfTheseFeaturesMustBeEnabled)
+                    .WithData("FeatureNames", string.Join(", ", featureNames));
             }
         }
     }

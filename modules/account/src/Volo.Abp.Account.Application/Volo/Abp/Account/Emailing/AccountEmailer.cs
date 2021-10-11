@@ -48,7 +48,8 @@ namespace Volo.Abp.Account.Emailing
 
             var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
 
-            var link = $"{url}?userId={user.Id}&tenantId={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
+            //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+            var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
 
             if (!returnUrl.IsNullOrEmpty())
             {
@@ -72,7 +73,7 @@ namespace Volo.Abp.Account.Emailing
             );
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
+        protected virtual string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {

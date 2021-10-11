@@ -12,7 +12,8 @@ namespace Volo.Abp.Cli.Licensing
         public string LicenseCode { get; set; }
         public string ErrorMessage { get; set; }
         public LicenseErrorType? ErrorType { get; set; }
-        
+        public LicenseType LicenseType { get; set; }
+
         public enum LicenseErrorType
         {
             NotAuthenticated = 1,

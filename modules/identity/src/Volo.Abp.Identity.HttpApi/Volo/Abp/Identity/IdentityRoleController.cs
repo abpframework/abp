@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity
     [Area("identity")]
     [ControllerName("Role")]
     [Route("api/identity/roles")]
-    public class IdentityRoleController : AbpController, IIdentityRoleAppService
+    public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
     {
         protected IIdentityRoleAppService RoleAppService { get; }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity
         }
 
         [HttpGet]
-        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
             return RoleAppService.GetListAsync(input);
         }

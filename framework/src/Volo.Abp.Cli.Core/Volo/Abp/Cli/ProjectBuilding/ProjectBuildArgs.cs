@@ -17,9 +17,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public DatabaseProvider DatabaseProvider { get; set; }
 
+        public DatabaseManagementSystem DatabaseManagementSystem { get; set; }
+
         public UiFramework UiFramework { get; set; }
 
         public MobileApp? MobileApp { get; set; }
+
+        public bool PublicWebSite { get; set; }
 
         [CanBeNull]
         public string AbpGitHubLocalRepositoryPath { get; set; }
@@ -34,15 +38,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public string ConnectionString { get; set; }
 
         [NotNull]
+        public string OutputFolder { get; set; }
+
+        [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
 
         public ProjectBuildArgs(
             [NotNull] SolutionName solutionName,
             [CanBeNull] string templateName = null,
             [CanBeNull] string version = null,
+            string outputFolder = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
+            DatabaseManagementSystem databaseManagementSystem = DatabaseManagementSystem.NotSpecified,
             UiFramework uiFramework = UiFramework.NotSpecified,
             MobileApp? mobileApp = null,
+            bool publicWebSite = false,
             [CanBeNull] string abpGitHubLocalRepositoryPath = null,
             [CanBeNull] string voloGitHubLocalRepositoryPath = null,
             [CanBeNull] string templateSource = null,
@@ -52,9 +62,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
             TemplateName = templateName;
             Version = version;
+            OutputFolder = outputFolder;
             DatabaseProvider = databaseProvider;
+            DatabaseManagementSystem = databaseManagementSystem;
             UiFramework = uiFramework;
             MobileApp = mobileApp;
+            PublicWebSite = publicWebSite;
             AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
             VoloGitHubLocalRepositoryPath = voloGitHubLocalRepositoryPath;
             TemplateSource = templateSource;

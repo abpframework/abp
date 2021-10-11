@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Usar otro servicio para iniciar sesión",
     "UserLockedOutMessage": "La cuenta de usuario ha sido bloqueada debido a los intentos de inicio de sesión no válido. Por favor, espere un rato y vuelve a intentarlo.",
     "InvalidUserNameOrPassword": "No válido nombre de usuario o la contraseña!",
-    "LoginIsNotAllowed": "No está permitido el inicio de sesión! Usted tendrá que confirmar su correo electrónico\/número de teléfono.",
+    "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico / número de teléfono.",
     "SelfRegistrationDisabledMessage": "El autoregistro de usuario está deshabilitado para esta aplicación. Póngase en contacto con el administrador de la aplicación para registrar un nuevo usuario.",
     "Login": "Iniciar sesión",
     "Cancel": "Cancelar",
@@ -23,8 +23,8 @@
     "PasswordChangedMessage": "Su contraseña ha sido cambiada con éxito.",
     "DisplayName:UserName": "Nombre de usuario",
     "DisplayName:Email": "Correo electrónico",
-    "DisplayName:Name": "Nombre",
-    "DisplayName:Surname": "Apellido",
+    "DisplayName:Name": "Nombres",
+    "DisplayName:Surname": "Apellidos",
     "DisplayName:Password": "Contraseña",
     "DisplayName:EmailAddress": "Dirección de correo electrónico",
     "DisplayName:PhoneNumber": "Número de teléfono",
@@ -33,6 +33,6 @@
     "PasswordChanged": "Cambia la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
     "Manage": "Administrar",
-    "ManageYourProfile": "Gestionar tu perfil"
+    "MyAccount": "Mi cuenta"
   }
 }

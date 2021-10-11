@@ -2,12 +2,23 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <Version>0.1.0</Version>
-    <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
-	<AbpProjectType>module</AbpProjectType>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <AbpProjectType>module</AbpProjectType>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
+    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.1" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.5.3">
+      <PrivateAssets>All</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
+
+  <Target Name="NoWarnOnRazorViewImportedTypeConflicts" BeforeTargets="RazorCoreCompile">
+    <PropertyGroup>
+      <NoWarn>$(NoWarn);0436</NoWarn>
+    </PropertyGroup>
+  </Target>
 
 </Project>

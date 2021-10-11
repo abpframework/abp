@@ -1,0 +1,25 @@
+{
+ "culture": "fr",
+ "texts": {
+  "DisplayName:Abp.Mailing.DefaultFromAddress": "Adresse par défaut",
+  "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Valeur par défaut du nom d'affichage",
+  "DisplayName:Abp.Mailing.Smtp.Host": "Hôte",
+  "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+  "DisplayName:Abp.Mailing.Smtp.UserName": "Nom d'utilisateur",
+  "DisplayName:Abp.Mailing.Smtp.Password": "Mot de passe",
+  "DisplayName:Abp.Mailing.Smtp.Domain": "Domaine",
+  "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Activer SSL",
+  "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Utiliser les informations d'identification par défaut",
+  "Description:Abp.Mailing.DefaultFromAddress": "L'adresse d'expédition par défaut",
+  "Description:Abp.Mailing.DefaultFromDisplayName": "La valeur par défaut du nom d'affichage",
+  "Description:Abp.Mailing.Smtp.Host": "Le nom ou l'adresse IP de l'hôte utilisé pour les transactions SMTP.",
+  "Description:Abp.Mailing.Smtp.Port": "Le port utilisé pour les transactions SMTP.",
+  "Description:Abp.Mailing.Smtp.UserName": "Nom d'utilisateur associé aux informations d'identification.",
+  "Description:Abp.Mailing.Smtp.Password": "Le mot de passe du nom d'utilisateur associé aux informations d'identification.",
+  "Description:Abp.Mailing.Smtp.Domain": "Le nom de domaine ou d'ordinateur qui vérifie les informations d'identification.",
+  "Description:Abp.Mailing.Smtp.EnableSsl": "Si SmtpClient utilise SSL (Secure Sockets Layer) pour crypter la connexion.",
+  "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Si les DefaultCredentials sont envoyés avec les demandes.",
+  "TextTemplate:StandardEmailTemplates.Layout": "Modèle de mise en page d'e-mail par défaut",
+  "TextTemplate:StandardEmailTemplates.Message": "Modèle de message simple pour les e-mails"
+ }
+}

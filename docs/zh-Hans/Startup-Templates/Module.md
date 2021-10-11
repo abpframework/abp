@@ -1,4 +1,4 @@
-﻿# MVC模块启动模板
+# MVC模块启动模板
 
 可用此模板开发基于[模块开发最佳实践和约定](../Best-Practices/Index.md)的可**复用 [应用程序模块](../Modules/Index.md)** . 它同样适用于开发**微服务**.
 
@@ -133,7 +133,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 ##### 如何运行?
 
-将其设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
+将`host/YourProjectName.Web.Unified`设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
 
 #### 分离部署&数据库 场景
 

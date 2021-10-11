@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
@@ -128,6 +128,14 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             return Task.FromResult(id + 1);
         }
+
+        [HttpGet]
+        [Route("abort-request")]
+        public async Task<string> AbortRequestAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(100, cancellationToken);
+            return "AbortRequestAsync";
+        }
     }
 
     public class Car
@@ -140,5 +148,13 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [FromQuery]
         public DateTime FirstReleaseDate { get; set; }
+
+        [FromQuery]
+        public List<string> Colors { get; set; }
+
+        public Car()
+        {
+            Colors = new List<string>();
+        }
     }
 }

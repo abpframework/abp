@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -55,56 +56,58 @@ namespace Volo.Abp.AuditLogging
 
         protected AuditLog()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
-        public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
+        public AuditLog(
+            Guid id,
+            string applicationName,
+            Guid? tenantId,
+            string tenantName,
+            Guid? userId,
+            string userName,
+            DateTime executionTime,
+            int executionDuration,
+            string clientIpAddress,
+            string clientName,
+            string clientId,
+            string correlationId,
+            string browserInfo,
+            string httpMethod,
+            string url,
+            int? httpStatusCode,
+            Guid? impersonatorUserId,
+            Guid? impersonatorTenantId,
+            ExtraPropertyDictionary extraPropertyDictionary,
+            List<EntityChange> entityChanges,
+            List<AuditLogAction> actions,
+            string exceptions,
+            string comments)
+            : base(id)
         {
-            Id = guidGenerator.Create();
-            ApplicationName = auditInfo.ApplicationName.Truncate(AuditLogConsts.MaxApplicationNameLength);
-            TenantId = auditInfo.TenantId;
-            TenantName = auditInfo.TenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
-            UserId = auditInfo.UserId;
-            UserName = auditInfo.UserName.Truncate(AuditLogConsts.MaxUserNameLength);
-            ExecutionTime = auditInfo.ExecutionTime;
-            ExecutionDuration = auditInfo.ExecutionDuration;
-            ClientIpAddress = auditInfo.ClientIpAddress.Truncate(AuditLogConsts.MaxClientIpAddressLength);
-            ClientName = auditInfo.ClientName.Truncate(AuditLogConsts.MaxClientNameLength);
-            ClientId = auditInfo.ClientId.Truncate(AuditLogConsts.MaxClientIdLength);
-            CorrelationId = auditInfo.CorrelationId.Truncate(AuditLogConsts.MaxCorrelationIdLength);
-            BrowserInfo = auditInfo.BrowserInfo.Truncate(AuditLogConsts.MaxBrowserInfoLength);
-            HttpMethod = auditInfo.HttpMethod.Truncate(AuditLogConsts.MaxHttpMethodLength);
-            Url = auditInfo.Url.Truncate(AuditLogConsts.MaxUrlLength);
-            HttpStatusCode = auditInfo.HttpStatusCode;
-            ImpersonatorUserId = auditInfo.ImpersonatorUserId;
-            ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
+            ApplicationName = applicationName.Truncate(AuditLogConsts.MaxApplicationNameLength);
+            TenantId = tenantId;
+            TenantName = tenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
+            UserId = userId;
+            UserName = userName.Truncate(AuditLogConsts.MaxUserNameLength);
+            ExecutionTime = executionTime;
+            ExecutionDuration = executionDuration;
+            ClientIpAddress = clientIpAddress.Truncate(AuditLogConsts.MaxClientIpAddressLength);
+            ClientName = clientName.Truncate(AuditLogConsts.MaxClientNameLength);
+            ClientId = clientId.Truncate(AuditLogConsts.MaxClientIdLength);
+            CorrelationId = correlationId.Truncate(AuditLogConsts.MaxCorrelationIdLength);
+            BrowserInfo = browserInfo.Truncate(AuditLogConsts.MaxBrowserInfoLength);
+            HttpMethod = httpMethod.Truncate(AuditLogConsts.MaxHttpMethodLength);
+            Url = url.Truncate(AuditLogConsts.MaxUrlLength);
+            HttpStatusCode = httpStatusCode;
+            ImpersonatorUserId = impersonatorUserId;
+            ImpersonatorTenantId = impersonatorTenantId;
 
-            ExtraProperties = auditInfo
-                                  .ExtraProperties?
-                                  .ToDictionary(pair => pair.Key, pair => pair.Value)
-                              ?? new Dictionary<string, object>();
-
-            EntityChanges = auditInfo
-                                .EntityChanges?
-                                .Select(entityChangeInfo => new EntityChange(guidGenerator, Id, entityChangeInfo, tenantId: auditInfo.TenantId))
-                                .ToList()
-                            ?? new List<EntityChange>();
-
-            Actions = auditInfo
-                          .Actions?
-                          .Select(auditLogActionInfo => new AuditLogAction(guidGenerator.Create(), Id, auditLogActionInfo, tenantId: auditInfo.TenantId))
-                          .ToList()
-                      ?? new List<AuditLogAction>();
-
-            Exceptions = auditInfo
-                .Exceptions?
-                .JoinAsString(Environment.NewLine)
-                .Truncate(AuditLogConsts.MaxExceptionsLengthValue);
-
-            Comments = auditInfo
-                .Comments?
-                .JoinAsString(Environment.NewLine)
-                .Truncate(AuditLogConsts.MaxCommentsLength);
+            ExtraProperties = extraPropertyDictionary;
+            EntityChanges = entityChanges;
+            Actions = actions;
+            Exceptions = exceptions;
+            Comments = comments.Truncate(AuditLogConsts.MaxCommentsLength);
         }
     }
 }

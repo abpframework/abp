@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -19,18 +20,21 @@ namespace Volo.Abp.Auditing
         {
             var property = base.CreateProperty(member, memberSerialization);
 
+            if (_ignoredTypes.Any(ignoredType => ignoredType.GetTypeInfo().IsAssignableFrom(property.PropertyType)))
+            {
+                property.ShouldSerialize = instance => false;
+                return property;
+            }
+
+            if (member.DeclaringType != null && (member.DeclaringType.IsDefined(typeof(DisableAuditingAttribute)) || member.DeclaringType.IsDefined(typeof(JsonIgnoreAttribute))))
+            {
+                property.ShouldSerialize = instance => false;
+                return property;
+            }
+
             if (member.IsDefined(typeof(DisableAuditingAttribute)) || member.IsDefined(typeof(JsonIgnoreAttribute)))
             {
                 property.ShouldSerialize = instance => false;
-            }
-
-            foreach (var ignoredType in _ignoredTypes)
-            {
-                if (ignoredType.GetTypeInfo().IsAssignableFrom(property.PropertyType))
-                {
-                    property.ShouldSerialize = instance => false;
-                    break;
-                }
             }
 
             return property;

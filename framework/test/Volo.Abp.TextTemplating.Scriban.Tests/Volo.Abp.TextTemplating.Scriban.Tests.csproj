@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\common.test.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Volo\Abp\TextTemplating\Scriban\SampleTemplates\**\*.tpl">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <None Remove="Volo\Abp\TextTemplating\Scriban\SampleTemplates\**\*.tpl" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    </ItemGroup>
+
+</Project>

@@ -10,6 +10,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class ManageModel : AccountPageModel
     {
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
+        
         public ProfileManagementPageCreationContext ProfileManagementPageCreationContext { get; private set; }
 
         protected ProfileManagementPageOptions Options { get; }

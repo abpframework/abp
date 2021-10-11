@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Admin.Blogs
 {
@@ -16,5 +18,7 @@ namespace Volo.Blogging.Admin.Blogs
         Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input);
 
         Task DeleteAsync(Guid id);
+
+        Task ClearCacheAsync(Guid id);
     }
 }

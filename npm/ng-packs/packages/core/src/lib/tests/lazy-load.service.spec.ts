@@ -2,10 +2,12 @@ import { of, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { LazyLoadService } from '../services/lazy-load.service';
 import { ScriptLoadingStrategy } from '../strategies';
+import { ResourceWaitService } from '../services';
 
 describe('LazyLoadService', () => {
   describe('#load', () => {
-    const service = new LazyLoadService();
+    const resourceWaitService = new ResourceWaitService();
+    const service = new LazyLoadService(resourceWaitService);
     const strategy = new ScriptLoadingStrategy('http://example.com/');
 
     afterEach(() => {
@@ -58,7 +60,8 @@ describe('LazyLoadService', () => {
   });
 
   describe('#remove', () => {
-    const service = new LazyLoadService();
+    const resourceWaitService = new ResourceWaitService();
+    const service = new LazyLoadService(resourceWaitService);
 
     it('should remove an already lazy loaded element and return true', () => {
       const script = document.createElement('script');

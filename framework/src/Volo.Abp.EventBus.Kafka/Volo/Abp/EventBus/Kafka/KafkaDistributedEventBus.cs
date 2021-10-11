@@ -8,18 +8,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Guids;
 using Volo.Abp.Kafka;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Kafka
 {
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(KafkaDistributedEventBus))]
-    public class KafkaDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
+    public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         protected AbpKafkaEventBusOptions AbpKafkaEventBusOptions { get; }
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IKafkaMessageConsumerFactory MessageConsumerFactory { get; }
         protected IKafkaSerializer Serializer { get; }
         protected IProducerPool ProducerPool { get; }
@@ -30,15 +32,23 @@ namespace Volo.Abp.EventBus.Kafka
         public KafkaDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IOptions<AbpKafkaEventBusOptions> abpKafkaEventBusOptions,
             IKafkaMessageConsumerFactory messageConsumerFactory,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IKafkaSerializer serializer,
-            IProducerPool producerPool)
-            : base(serviceScopeFactory, currentTenant)
+            IProducerPool producerPool,
+            IGuidGenerator guidGenerator,
+            IClock clock)
+            : base(
+                serviceScopeFactory,
+                currentTenant,
+                unitOfWorkManager,
+                abpDistributedEventBusOptions,
+                guidGenerator,
+                clock)
         {
             AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
-            AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
             MessageConsumerFactory = messageConsumerFactory;
             Serializer = serializer;
             ProducerPool = producerPool;
@@ -53,7 +63,6 @@ namespace Volo.Abp.EventBus.Kafka
                 AbpKafkaEventBusOptions.TopicName,
                 AbpKafkaEventBusOptions.GroupId,
                 AbpKafkaEventBusOptions.ConnectionName);
-
             Consumer.OnMessageReceived(ProcessEventAsync);
 
             SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
@@ -68,14 +77,21 @@ namespace Volo.Abp.EventBus.Kafka
                 return;
             }
 
+            string messageId = null;
+
+            if (message.Headers.TryGetLastBytes("messageId", out var messageIdBytes))
+            {
+                messageId = System.Text.Encoding.UTF8.GetString(messageIdBytes);
+            }
+
+            if (await AddToInboxAsync(messageId, eventName, eventType, message.Value))
+            {
+                return;
+            }
+
             var eventData = Serializer.Deserialize(message.Value, eventType);
 
             await TriggerHandlersAsync(eventType, eventData);
-        }
-
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
         }
 
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
@@ -146,19 +162,109 @@ namespace Volo.Abp.EventBus.Kafka
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+        {
+            await PublishAsync(
+                eventType,
+                eventData,
+                new Headers
+                {
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N")) }
+                },
+                null
+            );
+        }
+
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
+        }
+
+        public override Task PublishFromOutboxAsync(
+            OutgoingEventInfo outgoingEvent,
+            OutboxConfig outboxConfig)
+        {
+            return PublishAsync(
+                AbpKafkaEventBusOptions.TopicName,
+                outgoingEvent.EventName,
+                outgoingEvent.EventData,
+                new Headers
+                {
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(outgoingEvent.Id.ToString("N")) }
+                },
+                null
+            );
+        }
+
+        public override async Task ProcessFromInboxAsync(
+            IncomingEventInfo incomingEvent,
+            InboxConfig inboxConfig)
+        {
+            var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+            if (eventType == null)
+            {
+                return;
+            }
+
+            var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+            var exceptions = new List<Exception>();
+            await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+            if (exceptions.Any())
+            {
+                ThrowOriginalExceptions(eventType, exceptions);
+            }
+        }
+
+        protected override byte[] Serialize(object eventData)
+        {
+            return Serializer.Serialize(eventData);
+        }
+
+        public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)
+        {
+            await PublishAsync(
+                AbpKafkaEventBusOptions.TopicName,
+                eventType,
+                eventData,
+                headers,
+                headersArguments
+            );
+        }
+
+        private Task PublishAsync(string topicName, Type eventType, object eventData, Headers headers, Dictionary<string, object> headersArguments)
         {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
+            return PublishAsync(topicName, eventName, body, headers, headersArguments);
+        }
+
+        private async Task PublishAsync(string topicName, string eventName, byte[] body, Headers headers, Dictionary<string, object> headersArguments)
+        {
             var producer = ProducerPool.Get(AbpKafkaEventBusOptions.ConnectionName);
 
+            SetEventMessageHeaders(headers, headersArguments);
+
             await producer.ProduceAsync(
-                AbpKafkaEventBusOptions.TopicName,
+                topicName,
                 new Message<string, byte[]>
                 {
-                    Key = eventName, Value = body
+                    Key = eventName, Value = body, Headers = headers
                 });
+        }
+
+        private void SetEventMessageHeaders(Headers headers, Dictionary<string, object> headersArguments)
+        {
+            if (headersArguments == null)
+            {
+                return;
+            }
+
+            foreach (var header in headersArguments)
+            {
+                headers.Remove(header.Key);
+                headers.Add(header.Key, Serializer.Serialize(header.Value));
+            }
         }
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)

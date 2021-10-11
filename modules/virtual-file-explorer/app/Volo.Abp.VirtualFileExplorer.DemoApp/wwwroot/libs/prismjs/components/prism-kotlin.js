@@ -59,4 +59,6 @@
 		interpolation: interpolation
 	};
 
+	Prism.languages.kt = Prism.languages.kotlin;
+	Prism.languages.kts = Prism.languages.kotlin;
 }(Prism));

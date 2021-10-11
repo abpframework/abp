@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc</PackageId>
@@ -21,15 +21,16 @@
     <ProjectReference Include="..\Volo.Abp.ApiVersioning.Abstractions\Volo.Abp.ApiVersioning.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
     <ProjectReference Include="..\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-    <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
+    <ProjectReference Include="..\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

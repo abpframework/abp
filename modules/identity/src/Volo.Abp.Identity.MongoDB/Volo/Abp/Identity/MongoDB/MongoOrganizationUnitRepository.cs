@@ -1,16 +1,14 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
-using Volo.Abp.Uow;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity.MongoDB
 {
@@ -29,7 +27,7 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(ou => ou.ParentId == parentId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -40,7 +38,7 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -50,7 +48,7 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(t => ids.Contains(t.Id))
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -62,8 +60,8 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
-                    .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                    .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.DisplayName) : sorting)
                     .As<IMongoQueryable<OrganizationUnit>>()
                     .PageBy<OrganizationUnit, IMongoQueryable<OrganizationUnit>>(skipCount, maxResultCount)
                     .ToListAsync(GetCancellationToken(cancellationToken));
@@ -74,7 +72,8 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     ou => ou.DisplayName == displayName,
                     GetCancellationToken(cancellationToken)
@@ -90,8 +89,11 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityRole>, IdentityRole>(
+                    dbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
+                )
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
                 .As<IMongoQueryable<IdentityRole>>()
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
@@ -102,12 +104,15 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityRole>, IdentityRole>(
+                    dbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
+                )
                 .As<IMongoQueryable<IdentityRole>>()
                 .CountAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityRole>> GetUnaddedRolesAsync(
+        public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
             int maxResultCount = int.MaxValue,
@@ -117,22 +122,24 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityRole>, IdentityRole>(dbContext.Roles.AsQueryable())
                 .Where(r => !roleIds.Contains(r.Id))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
                 .As<IMongoQueryable<IdentityRole>>()
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<int> GetUnaddedRolesCountAsync(
+        public virtual async Task<int> GetUnaddedRolesCountAsync(
             OrganizationUnit organizationUnit,
             string filter = null,
             CancellationToken cancellationToken = default)
         {
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityRole>, IdentityRole>(dbContext.Roles.AsQueryable())
                 .Where(r => !roleIds.Contains(r.Id))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
                 .As<IMongoQueryable<IdentityRole>>()
@@ -148,13 +155,13 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
-
+            cancellationToken = GetCancellationToken(cancellationToken);
+            var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter, cancellationToken);
             return await query
-                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
         }
 
         public virtual async Task<int> GetMembersCountAsync(
@@ -162,12 +169,12 @@ namespace Volo.Abp.Identity.MongoDB
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
-
-            return await query.CountAsync(GetCancellationToken(cancellationToken));
+            cancellationToken = GetCancellationToken(cancellationToken);
+            var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter, cancellationToken);
+            return await query.CountAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
+        public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
             int maxResultCount = int.MaxValue,
@@ -176,7 +183,8 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityUser>, IdentityUser>(dbContext.Users.AsQueryable())
                 .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
@@ -185,16 +193,17 @@ namespace Volo.Abp.Identity.MongoDB
                         u.Email.Contains(filter) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
-                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
+        public virtual async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return await ApplyDataFilters<IMongoQueryable<IdentityUser>, IdentityUser>(dbContext.Users.AsQueryable())
                 .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
@@ -215,7 +224,8 @@ namespace Volo.Abp.Identity.MongoDB
 
         public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
         {
-            var users = await DbContext.Users.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            var users = await ApplyDataFilters<IMongoQueryable<IdentityUser>, IdentityUser>(dbContext.Users.AsQueryable())
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .As<IMongoQueryable<IdentityUser>>()
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -223,13 +233,17 @@ namespace Volo.Abp.Identity.MongoDB
             foreach (var user in users)
             {
                 user.RemoveOrganizationUnit(organizationUnit.Id);
-                DbContext.Users.ReplaceOne(u => u.Id == user.Id, user);
+                await dbContext.Users.ReplaceOneAsync(u => u.Id == user.Id, user, cancellationToken: cancellationToken);
             }
         }
 
-        protected virtual IMongoQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        protected virtual async Task<IMongoQueryable<IdentityUser>> CreateGetMembersFilteredQueryAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
         {
-            return DbContext.Users.AsQueryable()
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            return ApplyDataFilters<IMongoQueryable<IdentityUser>, IdentityUser>(dbContext.Users.AsQueryable())
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                     !filter.IsNullOrWhiteSpace(),
@@ -238,6 +252,24 @@ namespace Volo.Abp.Identity.MongoDB
                         u.Email.Contains(filter) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 );
+        }
+
+        //TODO: Should improve!
+        private TQueryable ApplyDataFilters<TQueryable,TEntity>(TQueryable query)
+            where TQueryable : IQueryable<TEntity>
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
         }
     }
 }

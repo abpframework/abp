@@ -47,7 +47,7 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
   }
 }
 ```
@@ -186,8 +186,9 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
   然后在 `Acme.MyProject.Web` 项目目录打开命令行终端运行以下命令:
 
-  1. `yarn`
-  2. `gulp`
+````bash
+abp install-libs
+````
 
 ### 4- 数据库集成
 

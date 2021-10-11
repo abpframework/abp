@@ -23,20 +23,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
             {
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
-            else
-            {
-                return Challenge(
-                    new AuthenticationProperties
-                    {
-                        Parameters =
-                        {
-                            {"returnUrl", returnUrl},
-                            {"returnUrlHash", returnUrlHash}
-                        }
-                    },
-                    ChallengeAuthenticationSchemas
-                );
-            }
+
+            return Challenge(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
         }
 
         [HttpGet]
@@ -44,20 +32,20 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
         {
             await HttpContext.SignOutAsync();
 
-            if (HttpContext.User.Identity.AuthenticationType == AuthenticationType)
+            if (HttpContext.User.Identity?.AuthenticationType == AuthenticationType)
             {
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
 
-            return new SignOutResult(ChallengeAuthenticationSchemas);
+            return SignOut(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
         }
 
         [HttpGet]
         public async Task<IActionResult> FrontChannelLogout(string sid)
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var currentSid = User.FindFirst("sid").Value ?? string.Empty;
+                var currentSid = User.FindFirst("sid")?.Value ?? string.Empty;
                 if (string.Equals(currentSid, sid, StringComparison.Ordinal))
                 {
                     await Logout();
@@ -65,43 +53,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
             }
 
             return NoContent();
-        }
-
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
-        {
-            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
-        }
-
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
-        {
-            returnUrl = NormalizeReturnUrl(returnUrl);
-
-            if (!returnUrlHash.IsNullOrWhiteSpace())
-            {
-                returnUrl = returnUrl + returnUrlHash;
-            }
-
-            return returnUrl;
-        }
-
-        private string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return GetAppHomeUrl();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return GetAppHomeUrl();
-        }
-
-        protected virtual string GetAppHomeUrl()
-        {
-            return "~/";
         }
     }
 }

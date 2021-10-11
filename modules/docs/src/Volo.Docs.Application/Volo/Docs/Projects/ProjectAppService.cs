@@ -94,7 +94,7 @@ namespace Volo.Docs.Projects
             return await GetLanguageListInternalAsync(shortName, version);
         }
 
-        public async Task<string> GetDefaultLanguageCode(string shortName, string version)
+        public async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
         {
             var languageList = await GetLanguageListInternalAsync(shortName, version);
 
@@ -125,12 +125,13 @@ namespace Volo.Docs.Projects
 
         private string GetProjectVersionPrefixIfExist(Project project)
         {
-            if (GetGithubVersionProviderSource(project) == GithubVersionProviderSource.Branches)
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
             {
-                return project.ExtraProperties["VersionBranchPrefix"].ToString();
+                return string.Empty;
             }
 
-            return "";
+            return project.ExtraProperties["VersionBranchPrefix"].ToString();
+
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)

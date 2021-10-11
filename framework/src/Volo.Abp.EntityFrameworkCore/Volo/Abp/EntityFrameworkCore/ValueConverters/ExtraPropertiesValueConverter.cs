@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Newtonsoft.Json;
+using Volo.Abp.Data;
+using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 {
-    public class ExtraPropertiesValueConverter : ValueConverter<Dictionary<string, object>, string>
+    public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDictionary, string>
     {
         public ExtraPropertiesValueConverter(Type entityType)
             : base(
@@ -17,7 +19,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
         }
 
-        private static string SerializeObject(Dictionary<string, object> extraProperties, Type entityType)
+        private static string SerializeObject(ExtraPropertyDictionary extraProperties, Type entityType)
         {
             var copyDictionary = new Dictionary<string, object>(extraProperties);
 
@@ -36,12 +38,21 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
                 }
             }
 
-            return JsonConvert.SerializeObject(copyDictionary, Formatting.None);
+            return JsonSerializer.Serialize(copyDictionary);
         }
 
-        private static Dictionary<string, object> DeserializeObject(string extraPropertiesAsJson, Type entityType)
+        private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(extraPropertiesAsJson);
+            if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
+            {
+                return new ExtraPropertyDictionary();
+            }
+
+            var deserializeOptions = new JsonSerializerOptions();
+            deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
+
+            var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
+                             new ExtraPropertyDictionary();
 
             if (entityType != null)
             {
@@ -59,7 +70,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
         }
 
         private static object GetNormalizedValue(
-            Dictionary<string, object> dictionary, 
+            Dictionary<string, object> dictionary,
             ObjectExtensionPropertyInfo property)
         {
             var value = dictionary.GetOrDefault(property.Name);

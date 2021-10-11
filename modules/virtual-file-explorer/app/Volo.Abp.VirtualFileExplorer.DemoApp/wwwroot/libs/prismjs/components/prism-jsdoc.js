@@ -40,17 +40,22 @@
 		},
 		'class-name': [
 			{
-				pattern: RegExp('(@[a-z]+\\s+)' + type),
-				lookbehind: true,
-				inside: {
-					'punctuation': /[.,:?=<>|{}()[\]]/
-				}
-			},
-			{
-				pattern: /(@(?:augments|extends|class|interface|memberof!?|this)\s+)[A-Z]\w*(?:\.[A-Z]\w*)*/,
+				pattern: RegExp(/(@(?:augments|extends|class|interface|memberof!?|template|this|typedef)\s+(?:<TYPE>\s+)?)[A-Z]\w*(?:\.[A-Z]\w*)*/.source.replace(/<TYPE>/g, function () { return type; })),
 				lookbehind: true,
 				inside: {
 					'punctuation': /\./
+				}
+			},
+			{
+				pattern: RegExp('(@[a-z]+\\s+)' + type),
+				lookbehind: true,
+				inside: {
+					'string': javascript.string,
+					'number': javascript.number,
+					'boolean': javascript.boolean,
+					'keyword': Prism.languages.typescript.keyword,
+					'operator': /=>|\.\.\.|[&|?:*]/,
+					'punctuation': /[.,;=<>{}()[\]]/
 				}
 			}
 		],

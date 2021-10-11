@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
@@ -21,18 +22,20 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
     [ControllerName("Login")]
     [Area("account")]
     [Route("api/account")]
-    public class AccountController : AbpController
+    public class AccountController : AbpControllerBase
     {
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentityUserManager UserManager { get; }
         protected ISettingProvider SettingProvider { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public AccountController(
             SignInManager<IdentityUser> signInManager,
             IdentityUserManager userManager,
             ISettingProvider settingProvider,
-            IdentitySecurityLogManager identitySecurityLogManager)
+            IdentitySecurityLogManager identitySecurityLogManager,
+            IOptions<IdentityOptions> identityOptions)
         {
             LocalizationResource = typeof(AccountResource);
 
@@ -40,6 +43,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             UserManager = userManager;
             SettingProvider = settingProvider;
             IdentitySecurityLogManager = identitySecurityLogManager;
+            IdentityOptions = identityOptions;
         }
 
         [HttpPost]
@@ -83,6 +87,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         [HttpPost]
         [Route("checkPassword")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
+        {
+            return CheckPassword(login);
+        }
+
+        [HttpPost]
+        [Route("check-password")]
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);
@@ -96,6 +108,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
+            await IdentityOptions.SetAsync();
             return GetAbpLoginResult(await SignInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
         }
 

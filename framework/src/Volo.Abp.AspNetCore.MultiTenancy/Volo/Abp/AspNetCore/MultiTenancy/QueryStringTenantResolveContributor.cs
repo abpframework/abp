@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
@@ -9,14 +11,25 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public override string Name => ContributorName;
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            if (httpContext.Request == null || !httpContext.Request.QueryString.HasValue)
+            if (httpContext.Request.QueryString.HasValue)
             {
-                return null;
+                var tenantKey = context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey;
+                if (httpContext.Request.Query.ContainsKey(tenantKey))
+                {
+                    var tenantValue = httpContext.Request.Query[tenantKey].ToString();
+                    if (tenantValue.IsNullOrWhiteSpace())
+                    {
+                        context.Handled = true;
+                        return Task.FromResult<string>(null);
+                    }
+
+                    return Task.FromResult(tenantValue);
+                }
             }
 
-            return httpContext.Request.Query[context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey];
+            return Task.FromResult<string>(null);
         }
     }
 }

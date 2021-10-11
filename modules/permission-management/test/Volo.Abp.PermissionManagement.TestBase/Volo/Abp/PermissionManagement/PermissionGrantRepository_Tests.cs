@@ -32,5 +32,14 @@ namespace Volo.Abp.PermissionManagement
 
             permissionGrants.ShouldContain(p => p.Name == "MyPermission1");
         }
+
+        [Fact]
+        public async Task GetList_With_Names()
+        {
+            var permissionGrants = await PermissionGrantRepository.GetListAsync(new []{"MyPermission1", "MyPermission3"},UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString());
+
+            permissionGrants.ShouldContain(p => p.Name == "MyPermission1");
+            permissionGrants.ShouldContain(p => p.Name == "MyPermission3");
+        }
     }
 }

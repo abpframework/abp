@@ -160,7 +160,7 @@ public interface IBookRepository : IRepository<Book, Guid>
 实现`IBookRepository`接口的例子:
 
 ```csharp
-public class BookRepository : 
+public class BookRepository :
     MongoDbRepository<BookStoreMongoDbContext, Book, Guid>,
     IBookRepository
 {
@@ -200,9 +200,9 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 当你想**重写基础仓储方法**时,这一点尤为重要.例如,你想要重写`DeleteAsync`方法,以便更有效的删除实体:
 
 ```csharp
-public override async Task DeleteAsync(
-    Guid id, 
-    bool autoSave = false, 
+public async override Task DeleteAsync(
+    Guid id,
+    bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
     //TODO: 自定义实现删除方法
@@ -211,7 +211,7 @@ public override async Task DeleteAsync(
 
 #### 访问MongoDB API
 
-大多数情况下,你想要将MongoDB API隐藏在仓储后面(这是仓储的主要目的).如果你想在仓储之上访问MongoDB API,你可以使用`GetDatabase()`或`GetCollection()`方法.例如:
+大多数情况下,你想要将MongoDB API隐藏在仓储后面(这是仓储的主要目的).如果你想在仓储之上访问MongoDB API,你可以使用`GetDatabaseAsync()`, `GetAggregateAsync()` 或`GetCollectionAsync()`方法.例如:
 
 ```csharp
 public class BookService
@@ -223,10 +223,11 @@ public class BookService
         _bookRepository = bookRepository;
     }
 
-    public void Foo()
+    public async Task FooAsync()
     {
-        IMongoDatabase database = _bookRepository.GetDatabase();
-        IMongoCollection<Book> books = _bookRepository.GetCollection();
+        IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
+        IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
+        IAggregateFluent<Book> bookAggregate = await _bookRepository.GetAggregateAsync();
     }
 }
 ```
@@ -237,12 +238,12 @@ public class BookService
 
 MongoDB在4.0版本开始支持事务, ABP在3.2版本加入了对MongoDb事务的支持. 如果你升级到3.2版本,需要将[MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs)添加到你的 `.MongoDB` 项目中.
 
-如果你在使用4.0版本之前的MongdoDB数据库,你需要手动禁用工作单元的事务:
+[启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
 });
 ```
 
@@ -328,7 +329,19 @@ public class BookRepository
 
 ##### 替换其他的DbContexts
 
-一旦你正确定义并为MongoDbContext使用了接口,其他的实现就可以使用`ReplaceDbContext`来替换:
+一旦你正确定义并为MongoDbContext使用了接口,任何其他实现都可以使用以下方法替换它:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>

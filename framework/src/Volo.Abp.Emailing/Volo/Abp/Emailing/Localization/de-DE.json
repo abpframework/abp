@@ -1,0 +1,25 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Standard-Absenderadresse",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Standard-Absendername",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Host",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Benutzername",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Passwort",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domain",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL aktivieren",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Standard-Anmeldeinformationen verwenden",
+    "Description:Abp.Mailing.DefaultFromAddress": "Die Standard-Absenderadresse",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Der Standard-Absendername",
+    "Description:Abp.Mailing.Smtp.Host": "Der Name oder die IP-Adresse des Hosts, der für SMTP-Transaktionen verwendet wird.",
+    "Description:Abp.Mailing.Smtp.Port": "Der Port, der für SMTP-Transaktionen verwendete wird.",
+    "Description:Abp.Mailing.Smtp.UserName": "Der Benutzername, der den Anmeldeinformationen zugeordnet ist.",
+    "Description:Abp.Mailing.Smtp.Password": "Das Kennwort für den Benutzernamen, der den Anmeldeinformationen zugeordnet ist.",
+    "Description:Abp.Mailing.Smtp.Domain": "Der Domänen- oder Computername, der die Anmeldeinformationen überprüft.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Gibt an, ob der SmtpClient SSL (Secure Sockets Layer) zum Verschlüsseln der Verbindung verwendet.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Gibt an, ob die DefaultCredentials mit Anforderungen mitgesendet werden.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Standard-E-Mail-Layoutvorlage",
+    "TextTemplate:StandardEmailTemplates.Message": "Einfache Nachrichtenvorlage für E-Mails"
+  }
+}

@@ -69,7 +69,7 @@ namespace Volo.Abp.BlobStoring.Aws
 
         private async Task DeleteBucketAsync(ApplicationShutdownContext context)
         {
-            var amazonS3Client = await context.ServiceProvider.GetService<IAmazonS3ClientFactory>()
+            var amazonS3Client = await context.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>()
                 .GetAmazonS3Client(_configuration);
 
             if (await AmazonS3Util.DoesS3BucketExistV2Async(amazonS3Client, _randomContainerName))

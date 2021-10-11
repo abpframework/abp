@@ -1,0 +1,13 @@
+{
+ "culture": "fr",
+ "texts": {
+  "GivenTenantIsNotExist": "Adott bérlő nem létezik: {0}",
+  "GivenTenantIsNotAvailable": "Le Tenant donné n'est pas disponible: {0}",
+  "Tenant": "Tenant",
+  "Switch": "Changer",
+  "Name": "Nom",
+  "SwitchTenantHint": "Laissez le champ de nom vide pour passer du côté hôte.",
+  "SwitchTenant": "Changer le Tenant",
+  "NotSelected": "Non séléctionné"
+ }
+}

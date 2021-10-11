@@ -34,11 +34,12 @@ dotnet tool update -g Volo.Abp.Cli
 * **`generate-proxy`**: 生成客户端代理以使用HTTP API端点.
 * **`remove-proxy`**: 移除以前生成的客户端代理.
 * **`switch-to-preview`**: 切换到ABP框架的最新预览版本。
-* **`switch-to-preview`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
+* **`switch-to-nightly`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
 * **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`logout`**: 在你的计算机注销认证.
+* **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
 
@@ -103,7 +104,7 @@ abp new Acme.BookStore
 * `--preview`: 使用最新的预览版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D:\local-templat` 或 `https://.../my-template-file.zip`).
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
-* `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
+* `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
 * `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
 
 ### update
@@ -125,7 +126,8 @@ abp update [options]
 * `--nuget`: 仅更新的NuGet包
 * `--solution-path` 或 `-sp`: 指定解决方案路径/目录. 默认使用当前目录
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
-*`--check-all`: 分别检查每个包的新版本. 默认是 `false`.
+* `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
+* `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
 
 ### add-package
 
@@ -153,6 +155,8 @@ abp add-package Volo.Abp.MongoDB
 #### Options
 
 * `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
+* `--with-source-code`: 下载包的源码到你的解决方案文件夹，而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的包添加到解决方案文件中,你在IDE中打开解决方案时也会看到包的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### add-module
 
@@ -180,6 +184,7 @@ abp add-module Volo.Blogging
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 * `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
 * `--with-source-code`: 添加模块的源代码,而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的模块添加到解决方案文件中,你在IDE中打开解决方案时也会看到模块的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### generate-proxy
 
@@ -335,3 +340,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 ```
 abp logout
 ```
+
+### install-libs
+
+为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包, 它的 **执行目录** 或者传递的 ```--working-directory``` 目录必须包含一个项目文件(*.csproj).
+
+`install-libs` 命令读取 `abp.resourcemapping.js` 来管理包. 参阅[客户端包管理](UI/AspNetCore/Client-Side-Package-Management.md)了解更多细节.
+
+用法:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定工作目录, 当执行目录不包含项目文件时会很有用.

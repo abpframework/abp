@@ -28,16 +28,16 @@ namespace Volo.Abp.AuditLogging
 
         public virtual ICollection<EntityPropertyChange> PropertyChanges { get; protected set; }
 
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         protected EntityChange()
         {
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
         }
 
         public EntityChange(
-            IGuidGenerator guidGenerator, 
-            Guid auditLogId, 
+            IGuidGenerator guidGenerator,
+            Guid auditLogId,
             EntityChangeInfo entityChangeInfo,
             Guid? tenantId = null)
         {
@@ -55,10 +55,14 @@ namespace Volo.Abp.AuditLogging
                                   .ToList()
                               ?? new List<EntityPropertyChange>();
 
-            ExtraProperties = entityChangeInfo
-                                  .ExtraProperties?
-                                  .ToDictionary(pair => pair.Key, pair => pair.Value)
-                              ?? new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
+            if (entityChangeInfo.ExtraProperties != null)
+            {
+                foreach (var pair in entityChangeInfo.ExtraProperties)
+                {
+                    ExtraProperties.Add(pair.Key, pair.Value);
+                }
+            }
         }
     }
 }

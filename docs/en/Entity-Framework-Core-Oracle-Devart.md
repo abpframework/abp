@@ -1,4 +1,4 @@
-﻿# Switch to EF Core Oracle Devart Provider
+# Switch to EF Core Oracle Devart Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
@@ -19,20 +19,20 @@ Also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Ab
 Find `UseSqlServer()` calls in your solution, replace with `UseOracle()`. Check the following files:
 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
+* *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project.
 
 
-In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFactory.cs, replace the following code block
+In the `CreateDbContext()` method of the *YourProjectName*DbContextFactory.cs, replace the following code block
 
 ```csharp
-var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 ```
 
 with this one
 ```csharp
-var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
-	new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>().UseOracle
+var builder = (DbContextOptionsBuilder<YourProjectNameDbContext>)
+	new DbContextOptionsBuilder<YourProjectNameDbContext>().UseOracle
 	(
 		configuration.GetConnectionString("Default")
 	);
@@ -51,8 +51,8 @@ You typically will change the `appsettings.json` inside the `.DbMigrator` and `.
 The startup template uses [Entity Framework Core's Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) by default. 
 EF Core Migrations depend on the selected DBMS provider. Changing the DBMS provider, may not work with the existing migrations.
 
-* Delete the `Migrations` folder under the `.EntityFrameworkCore.DbMigrations` project and re-build the solution.
-* Run `Add-Migration "Initial"` on the Package Manager Console window (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore.DbMigrations` project as the default project in the Package Manager Console).
+* Delete the `Migrations` folder under the `.EntityFrameworkCore` project and re-build the solution.
+* Run `Add-Migration "Initial"` on the Package Manager Console window (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore` project as the default project in the Package Manager Console).
 
 This will scaffold a new migration for Oracle.
 

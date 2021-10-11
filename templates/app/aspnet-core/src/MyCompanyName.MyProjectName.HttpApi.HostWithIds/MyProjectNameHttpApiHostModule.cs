@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -12,15 +13,19 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
@@ -31,28 +36,39 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreSerilogModule)
-        )]
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule)
+    )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
-        private const string DefaultCorsPolicyName = "Default";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
             var hostingEnvironment = context.Services.GetHostingEnvironment();
 
+            ConfigureBundles();
             ConfigureUrls(configuration);
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureCors(context, configuration);
-            ConfigureSwaggerServices(context);
+            ConfigureSwaggerServices(context, configuration);
+        }
+
+        private void ConfigureBundles()
+        {
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles.Configure(
+                    BasicThemeBundles.Styles.Global,
+                    bundle => { bundle.AddFiles("/global-styles.css"); }
+                );
+            });
         }
 
         private void ConfigureUrls(IConfiguration configuration)
@@ -60,6 +76,10 @@ namespace MyCompanyName.MyProjectName
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+
+                options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
+                options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
             });
         }
 
@@ -71,10 +91,18 @@ namespace MyCompanyName.MyProjectName
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application.Contracts"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain.Shared"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application.Contracts"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application"));
                 });
             }
         }
@@ -93,22 +121,29 @@ namespace MyCompanyName.MyProjectName
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = "MyProjectName";
-                    options.BackchannelHttpHandler = new HttpClientHandler()
+                    options.BackchannelHttpHandler = new HttpClientHandler
                     {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                        ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     };
                 });
         }
 
-        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            context.Services.AddSwaggerGen(
+            context.Services.AddAbpSwaggerGenWithOAuth(
+                configuration["AuthServer:Authority"],
+                new Dictionary<string, string>
+                {
+                    {"MyProjectName", "MyProjectName API"}
+                },
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 
@@ -119,11 +154,21 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+                options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
             });
         }
 
@@ -131,7 +176,7 @@ namespace MyCompanyName.MyProjectName
         {
             context.Services.AddCors(options =>
             {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                options.AddDefaultPolicy( builder =>
                 {
                     builder
                         .WithOrigins(
@@ -167,9 +212,9 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
+            app.UseCors();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -178,13 +223,19 @@ namespace MyCompanyName.MyProjectName
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(c =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+
+                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+                c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                c.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
+                c.OAuthScopes("MyProjectName");
             });
 
             app.UseAuditing();

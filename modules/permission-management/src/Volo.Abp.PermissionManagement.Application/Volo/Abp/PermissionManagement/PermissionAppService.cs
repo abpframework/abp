@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -15,18 +15,20 @@ namespace Volo.Abp.PermissionManagement
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         protected PermissionManagementOptions Options { get; }
-
         protected IPermissionManager PermissionManager { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
         public PermissionAppService(
-            IPermissionManager permissionManager, 
+            IPermissionManager permissionManager,
             IPermissionDefinitionManager permissionDefinitionManager,
-            IOptions<PermissionManagementOptions> options)
+            IOptions<PermissionManagementOptions> options,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
         {
             Options = options.Value;
             PermissionManager = permissionManager;
             PermissionDefinitionManager = permissionDefinitionManager;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
@@ -50,33 +52,38 @@ namespace Volo.Abp.PermissionManagement
                     Permissions = new List<PermissionGrantInfoDto>()
                 };
 
-                foreach (var permission in group.GetPermissionsWithChildren())
+                var neededCheckPermissions = new List<PermissionDefinition>();
+
+                foreach (var permission in group.GetPermissionsWithChildren()
+                                                .Where(x => x.IsEnabled)
+                                                .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
+                                                .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide)))
                 {
-                    if (!permission.IsEnabled)
+                    if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
                     {
-                        continue;
+                        neededCheckPermissions.Add(permission);
                     }
+                }
 
-                    if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
-                    {
-                        continue;
-                    }
+                if (!neededCheckPermissions.Any())
+                {
+                    continue;
+                }
 
-                    if (!permission.MultiTenancySide.HasFlag(multiTenancySide))
-                    {
-                        continue;
-                    }
+                var grantInfoDtos = neededCheckPermissions.Select(x => new PermissionGrantInfoDto
+                {
+                    Name = x.Name,
+                    DisplayName = x.DisplayName.Localize(StringLocalizerFactory),
+                    ParentName = x.Parent?.Name,
+                    AllowedProviders = x.Providers,
+                    GrantedProviders = new List<ProviderInfoDto>()
+                }).ToList();
 
-                    var grantInfoDto = new PermissionGrantInfoDto
-                    {
-                        Name = permission.Name,
-                        DisplayName = permission.DisplayName.Localize(StringLocalizerFactory),
-                        ParentName = permission.Parent?.Name,
-                        AllowedProviders = permission.Providers,
-                        GrantedProviders = new List<ProviderInfoDto>()
-                    };
+                var multipleGrantInfo = await PermissionManager.GetAsync(neededCheckPermissions.Select(x=>x.Name).ToArray(), providerName, providerKey);
 
-                    var grantInfo = await PermissionManager.GetAsync(permission.Name, providerName, providerKey);
+                foreach (var grantInfo in multipleGrantInfo.Result)
+                {
+                    var grantInfoDto = grantInfoDtos.First(x => x.Name == grantInfo.Name);
 
                     grantInfoDto.IsGranted = grantInfo.IsGranted;
 
@@ -116,7 +123,7 @@ namespace Volo.Abp.PermissionManagement
             var policyName = Options.ProviderPolicies.GetOrDefault(providerName);
             if (policyName.IsNullOrEmpty())
             {
-                throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
+                throw new AbpException($"No policy defined to get/set permissions for the provider '{providerName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
             }
 
             await AuthorizationService.CheckAsync(policyName);

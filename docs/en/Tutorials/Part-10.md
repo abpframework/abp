@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,16 +28,22 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 ## Introduction
 
 We have created `Book` and `Author` functionalities for the book store application. However, currently there is no relation between these entities.
 
-In this tutorial, we will establish a **1 to N** relation between the `Book` and the `Author`.
+In this tutorial, we will establish a **1 to N** relation between the `Author` and the `Book` entities.
 
 ## Add Relation to The Book Entity
 
@@ -66,27 +55,27 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their entities (just like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will done below) which makes your application code simpler.
 
 {{end}}
 
 ## Database & Data Migration
 
-Added a new, required `AuthorId` property to the `Book` entity. But, what about the existing books on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
+Added a new, required `AuthorId` property to the `Book` entity. But, **what about the existing books** on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
 
-This is a typical migration problem and the decision depends on your case;
+This is a **typical migration problem** and the decision depends on your case;
 
 * If you haven't published your application to the production yet, you can just delete existing books in the database, or you can even delete the entire database in your development environment.
-* You can do it programmatically on data migration or seed phase.
+* You can update the existing data programmatically on data migration or seed phase.
 * You can manually handle it on the database.
 
-We prefer to **delete the database** {{if DB=="EF"}}(run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
+We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
 
 {{if DB=="EF"}}
 
 ### Update the EF Core Mapping
 
-Open the `BookStoreDbContextModelCreatingExtensions` class under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
+Locate to `OnModelCreating` method in the `BookStoreDbContext` class that under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
 
 ````csharp
 builder.Entity<Book>(b =>
@@ -94,7 +83,7 @@ builder.Entity<Book>(b =>
     b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
     b.ConfigureByConvention(); //auto configure for the base class props
     b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-    
+
     // ADD THE MAPPING FOR THE RELATION
     b.HasOne<Author>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
 });
@@ -102,10 +91,12 @@ builder.Entity<Book>(b =>
 
 ### Add New EF Core Migration
 
-Run the following command in the Package Manager Console (of the Visual Studio) to add a new database migration:
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore` project and type the following command:
 
 ````bash
-Add-Migration "Added_AuthorId_To_Book"
+dotnet ef migrations add Added_AuthorId_To_Book
 ````
 
 This should create a new migration class with the following code in its `Up` method:
@@ -134,6 +125,8 @@ migrationBuilder.AddForeignKey(
 * Adds an `AuthorId` field to the `AppBooks` table.
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -222,6 +215,8 @@ namespace Acme.BookStore
 
 The only change is that we set the `AuthorId` properties of the `Book` entities.
 
+> Delete existing books or delete the database before executing the `DbMigrator`. See the *Database & Data Migration* section above for more info.
+
 {{if DB=="EF"}}
 
 You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
@@ -299,7 +294,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-This will be used in a new method will be added to the `IBookAppService`.
+This will be used in a new method that will be added to the `IBookAppService`.
 
 ### IBookAppService
 
@@ -338,6 +333,7 @@ Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Acme.BookStore.Permissions;
@@ -376,10 +372,11 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
                 where book.Id == id
                 select new { book, author };
@@ -396,18 +393,19 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>>
-            GetListAsync(PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
-                orderby input.Sorting
                 select new {book, author};
 
+            //Paging
             query = query
+                .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
 
@@ -439,6 +437,25 @@ namespace Acme.BookStore.Books
                 ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
             );
         }
+
+        private static string NormalizeSorting(string sorting)
+        {
+            if (sorting.IsNullOrEmpty())
+            {
+                return $"book.{nameof(Book.Name)}";
+            }
+
+            if (sorting.Contains("authorName", StringComparison.OrdinalIgnoreCase))
+            {
+                return sorting.Replace(
+                    "authorName",
+                    "author.Name", 
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            return $"book.{sorting}";
+        }
     }
 }
 ```
@@ -449,7 +466,7 @@ Let's see the changes we've done:
 * Injected `IAuthorRepository` to query from the authors.
 * Overrode the `GetAsync` method of the base `CrudAppService`, which returns a single `BookDto` object with the given `id`.
   * Used a simple LINQ expression to join books and authors and query them together for the given book id.
-  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. `AsyncExecuter` was previously used in the `AuthorAppService`. Check the [repository documentation](../Repositories.md) to understand why we've used it.
+  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. It is a way to use asynchronous LINQ extensions without depending on the database provider API. Check the [repository documentation](../Repositories.md) to understand why we've used it.
   * Throws an `EntityNotFoundException` which results an `HTTP 404` (not found) result if requested book was not present in the database.
   * Finally, created a `BookDto` object using the `ObjectMapper`, then assigning the `AuthorName` manually.
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
@@ -497,10 +514,8 @@ namespace Acme.BookStore.Books
             DeletePolicyName = BookStorePermissions.Books.Create;
         }
 
-        public override async Task<BookDto> GetAsync(Guid id)
+        public async override Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
-
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -510,20 +525,21 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>> 
+        public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
-
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
                 input.Sorting = nameof(Book.Name);
             }
+            
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Get the books
             var books = await AsyncExecuter.ToListAsync(
-                Repository
+                queryable
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount)
@@ -536,7 +552,7 @@ namespace Acme.BookStore.Books
             var authorDictionary = await GetAuthorDictionaryAsync(books);
 
             //Set AuthorName for the DTOs
-            bookDtos.ForEach(bookDto => bookDto.AuthorName = 
+            bookDtos.ForEach(bookDto => bookDto.AuthorName =
                              authorDictionary[bookDto.AuthorId].Name);
 
             //Get the total count with another query (required for the paging)
@@ -565,8 +581,10 @@ namespace Acme.BookStore.Books
                 .Distinct()
                 .ToArray();
 
+            var queryable = await _authorRepository.GetQueryableAsync();
+            
             var authors = await AsyncExecuter.ToListAsync(
-                _authorRepository.Where(a => authorIds.Contains(a.Id))
+                queryable.Where(a => authorIds.Contains(a.Id))
             );
 
             return authors.ToDictionary(x => x.Id, x => x);
@@ -634,7 +652,7 @@ namespace Acme.BookStore.Books
             result.Items.ShouldContain(b => b.Name == "1984" &&
                                        b.AuthorName == "George Orwell");
         }
-        
+
         [Fact]
         public async Task Should_Create_A_Valid_Book()
         {
@@ -657,7 +675,7 @@ namespace Acme.BookStore.Books
             result.Id.ShouldNotBe(Guid.Empty);
             result.Name.ShouldBe("New test book 42");
         }
-        
+
         [Fact]
         public async Task Should_Not_Create_A_Book_Without_Name()
         {
@@ -923,14 +941,26 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
+### Service Proxy Generation
+
+Since the HTTP APIs have been changed, you need to update Angular client side [service proxies](../UI/Angular/Service-Proxies.md). Before running `generate-proxy` command, your host must be up and running.
+
+Run the following command in the `angular` folder (you may need to stop the angular application):
+
+```bash
+abp generate-proxy
+```
+This command will update the service proxy files under the `/src/app/proxy/` folder.
+
 ### The Book List
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
 
-````js
+````html
 <ngx-datatable-column
   [name]="'::Author' | abpLocalization"
   prop="authorName"
+  [sortable]="false"
 ></ngx-datatable-column>
 ````
 
@@ -1067,5 +1097,114 @@ Open the `/src/app/book/book.component.html` and add the following form group ju
 ````
 
 That's all. Just run the application and try to create or edit an author.
+
+{{end}}
+
+{{if UI == "Blazor" || UI == "BlazorServer"}}
+
+### The Book List
+
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+
+````xml
+<DataGridColumn TItem="BookDto"
+                Field="@nameof(BookDto.AuthorName)"
+                Caption="@L["Author"]"></DataGridColumn>
+````
+
+When you run the application, you can see the *Author* column on the table:
+
+![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors.png)
+
+### Create Book Modal
+
+Add the following field to the `@code` section of the `Books.razor` file:
+
+````csharp
+IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+````
+
+Override the `OnInitializedAsync` method and adding the following code:
+
+````csharp
+protected override async Task OnInitializedAsync()
+{
+    await base.OnInitializedAsync();
+    authorList = (await AppService.GetAuthorLookupAsync()).Items;
+}
+````
+
+* It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
+
+The final `@code` block should be the following:
+
+````csharp
+@code
+{
+    //ADDED A NEW FIELD
+    IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+
+    public Books() // Constructor
+    {
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
+    }
+
+    //GET AUTHORS ON INITIALIZATION
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        authorList = (await AppService.GetAuthorLookupAsync()).Items;
+    }
+}
+````
+
+Finally, add the following `Field` definition into the `ModalBody` of the *Create* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@NewEntity.AuthorId">
+        <SelectItem TValue="Guid" Value="Guid.Empty">@L["PickAnAuthor"]</SelectItem>
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+        </Select>
+</Field>
+````
+
+This requires to add a new localization key to the `en.json` file:
+
+````js
+"PickAnAuthor": "Pick an author"
+````
+
+You can run the application to see the *Author Selection* while creating a new book:
+
+![book-create-modal-with-author](images/book-create-modal-with-author.png)
+
+### Edit Book Modal
+
+Add the following `Field` definition into the `ModalBody` of the *Edit* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@EditingEntity.AuthorId">
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+    </Select>
+</Field>
+````
+
+That's all. We are reusing the `authorList` defined for the *Create* modal.
 
 {{end}}

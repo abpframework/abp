@@ -1,15 +1,13 @@
-import { AuthService, SetRemember, ConfigState } from '@abp/ng.core';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
+import { getRedirectUrl } from '../../utils/auth-utils';
 
-const { maxLength, minLength, required } = Validators;
+const { maxLength, required } = Validators;
 
 @Component({
   selector: 'abp-login',
@@ -25,25 +23,30 @@ export class LoginComponent implements OnInit {
   authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
-    private fb: FormBuilder,
-    private oauthService: OAuthService,
-    private store: Store,
-    private toasterService: ToasterService,
-    private authService: AuthService,
+    protected injector: Injector,
+    protected fb: FormBuilder,
+    protected toasterService: ToasterService,
+    protected authService: AuthService,
+    protected configState: ConfigStateService,
   ) {}
 
   ngOnInit() {
+    this.init();
+    this.buildForm();
+  }
+
+  protected init() {
     this.isSelfRegistrationEnabled =
       (
-        (this.store.selectSnapshot(
-          ConfigState.getSetting('Abp.Account.IsSelfRegistrationEnabled'),
-        ) as string) || ''
+        (this.configState.getSetting('Abp.Account.IsSelfRegistrationEnabled') as string) || ''
       ).toLowerCase() !== 'false';
+  }
 
+  protected buildForm() {
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
       password: ['', [required, maxLength(128)]],
-      remember: [false],
+      rememberMe: [false],
     });
   }
 
@@ -51,22 +54,26 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.inProgress = true;
+
+    const { username, password, rememberMe } = this.form.value;
+
+    const redirectUrl = getRedirectUrl(this.injector);
+
     this.authService
-      .login(this.form.get('username').value, this.form.get('password').value)
+      .login({ username, password, rememberMe, redirectUrl })
       .pipe(
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
+            err.error?.error_description ||
+              err.error?.error.message ||
+              'AbpAccount::DefaultErrorMessage',
+            null,
             { life: 7000 },
           );
           return throwError(err);
         }),
         finalize(() => (this.inProgress = false)),
       )
-      .subscribe(() => {
-        this.store.dispatch(new SetRemember(this.form.get('remember').value));
-      });
+      .subscribe();
   }
 }

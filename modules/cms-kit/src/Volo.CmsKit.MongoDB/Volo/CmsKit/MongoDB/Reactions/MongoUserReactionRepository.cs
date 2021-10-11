@@ -18,7 +18,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
         {
         }
 
-        public async Task<UserReaction> FindAsync(
+        public virtual async Task<UserReaction> FindAsync(
             Guid userId,
             string entityType,
             string entityId,
@@ -29,7 +29,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
             Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -38,7 +38,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<UserReaction>> GetListForUserAsync(
+        public virtual async Task<List<UserReaction>> GetListForUserAsync(
             Guid userId,
             string entityType,
             string entityId,
@@ -47,7 +47,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -55,7 +55,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
+        public virtual async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
             string entityType,
             string entityId,
             CancellationToken cancellationToken = default)
@@ -63,7 +63,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId)

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="aliyun-net-sdk-sts" Version="3.0.4" />
-    <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.10.0" />
+    <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -25,26 +26,40 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.ClaimActions.MapAbpClaimTypes();
 
-                options.Events = new OpenIdConnectEvents
+                configureOptions?.Invoke(options);
+
+                options.Events ??= new OpenIdConnectEvents();
+                var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
+
+                options.Events.OnAuthorizationCodeReceived = receivedContext =>
                 {
-                    OnAuthorizationCodeReceived = receivedContext =>
-                    {
-                        var tenantKey = receivedContext.HttpContext.RequestServices
-                            .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
-
-                        if (receivedContext.HttpContext.Request != null &&
-                            receivedContext.Request.Cookies.ContainsKey(tenantKey))
-                        {
-                            receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
-                                receivedContext.Request.Cookies[tenantKey]);
-                        }
-
-                        return Task.CompletedTask;
-                    }
+                    SetAbpTenantId(receivedContext);
+                    return authorizationCodeReceived.Invoke(receivedContext);
                 };
 
-                configureOptions?.Invoke(options);
+                options.Events.OnRemoteFailure = remoteFailureContext =>
+                {
+                    if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
+                        remoteFailureContext.Failure.Message.Contains("access_denied"))
+                    {
+                        remoteFailureContext.HandleResponse();
+                        remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
+                    }
+                    return Task.CompletedTask;
+                };
             });
+        }
+
+        private static void SetAbpTenantId(AuthorizationCodeReceivedContext receivedContext)
+        {
+            var tenantKey = receivedContext.HttpContext.RequestServices
+                .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+
+            if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
+            {
+                receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
+                    receivedContext.Request.Cookies[tenantKey]);
+            }
         }
     }
 }

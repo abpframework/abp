@@ -1,8 +1,9 @@
-import { experimental, strings, workspaces } from '@angular-devkit/core';
+/* eslint-disable no-empty */
+import { strings, workspaces } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
 import { Project } from '../models';
-import { getWorkspace, ProjectType } from './angular';
+import { getWorkspace, getWorkspaceSchema, ProjectType, WorkspaceSchema } from './angular';
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
 
@@ -20,13 +21,12 @@ export function readEnvironment(tree: Tree, project: workspaces.ProjectDefinitio
 }
 
 export function readWorkspaceSchema(tree: Tree) {
-  const workspaceBuffer = tree.read('/angular.json') || tree.read('/workspace.json');
-  if (!workspaceBuffer) throw new SchematicsException(Exception.NoWorkspace);
+  if (!tree.exists('/angular.json')) throw new SchematicsException(Exception.NoWorkspace);
 
-  let workspaceSchema: experimental.workspace.WorkspaceSchema;
+  let workspaceSchema: WorkspaceSchema;
 
   try {
-    workspaceSchema = JSON.parse(workspaceBuffer.toString());
+    workspaceSchema = getWorkspaceSchema(tree);
   } catch (_) {
     throw new SchematicsException(Exception.InvalidWorkspace);
   }

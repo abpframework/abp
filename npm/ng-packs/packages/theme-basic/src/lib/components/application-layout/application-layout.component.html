@@ -1,40 +1,40 @@
 <nav
   class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
   id="main-navbar"
-  style="min-height: 4rem;"
+  style="min-height: 4rem"
 >
   <div class="container">
-    <abp-logo *abpReplaceableTemplate="{ componentKey: logoComponentKey }"></abp-logo>
+    <abp-logo *abpReplaceableTemplate="{ componentKey: service.logoComponentKey }"></abp-logo>
     <button
       class="navbar-toggler"
       type="button"
-      [attr.aria-expanded]="!isCollapsed"
-      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!service.isCollapsed"
+      (click)="service.isCollapsed = !service.isCollapsed"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse" [class.overflow-hidden]="smallScreen" id="main-navbar-collapse">
-      <ng-container *ngTemplateOutlet="!smallScreen ? navigations : null"></ng-container>
+    <div class="navbar-collapse" [class.overflow-hidden]="service.smallScreen" id="main-navbar-collapse">
+      <ng-container *ngTemplateOutlet="!service.smallScreen ? navigations : null"></ng-container>
 
-      <div *ngIf="smallScreen" [@collapseWithMargin]="isCollapsed ? 'collapsed' : 'expanded'">
+      <div *ngIf="service.smallScreen" [@collapseWithMargin]="service.isCollapsed ? 'collapsed' : 'expanded'">
         <ng-container *ngTemplateOutlet="navigations"></ng-container>
       </div>
 
       <ng-template #navigations>
         <abp-routes
           *abpReplaceableTemplate="{
-            componentKey: routesComponentKey,
+            componentKey: service.routesComponentKey,
             inputs: {
-              smallScreen: { value: smallScreen }
+              smallScreen: { value: service.smallScreen }
             }
           }"
           class="mx-auto"
-          [smallScreen]="smallScreen"
+          [smallScreen]="service.smallScreen"
         ></abp-routes>
 
         <abp-nav-items
           *abpReplaceableTemplate="{
-            componentKey: navItemsComponentKey
+            componentKey: service.navItemsComponentKey
           }"
         ></abp-nav-items>
       </ng-template>
@@ -44,5 +44,7 @@
 
 <!-- [@slideFromBottom]="outlet.isActivated && outlet.activatedRoute?.routeConfig?.path" TODO: throws ExpressionChangedAfterItHasBeenCheck when animation is active. It should be fixed -->
 <div class="container">
+  <abp-page-alert-container></abp-page-alert-container>
+
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

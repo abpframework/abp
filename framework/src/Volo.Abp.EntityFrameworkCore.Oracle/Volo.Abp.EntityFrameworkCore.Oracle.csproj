@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Abp.EntityFrameworkCore.Oracle</AssemblyName>
         <PackageId>Volo.Abp.EntityFrameworkCore.Oracle</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.80" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="5.21.3" />
     </ItemGroup>
 
 </Project>

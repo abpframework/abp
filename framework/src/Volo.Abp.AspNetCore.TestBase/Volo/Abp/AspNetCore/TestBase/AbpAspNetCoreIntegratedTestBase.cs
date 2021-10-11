@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.TestBase
 {
-    public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWithServiceProvider
+    public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartup : class
     {
         protected TestServer Server { get; }
@@ -20,15 +19,17 @@ namespace Volo.Abp.AspNetCore.TestBase
 
         protected override IServiceProvider ServiceProvider { get; }
 
+        private readonly IHost _host;
+
         protected AbpAspNetCoreIntegratedTestBase()
         {
             var builder = CreateHostBuilder();
 
-            var host = builder.Build();
-            host.Start();
+            _host = builder.Build();
+            _host.Start();
 
-            Server = host.GetTestServer();
-            Client = host.GetTestClient();
+            Server = _host.GetTestServer();
+            Client = _host.GetTestClient();
 
             ServiceProvider = Server.Services;
 
@@ -49,7 +50,7 @@ namespace Volo.Abp.AspNetCore.TestBase
 
         protected virtual void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            
+
         }
 
         #region GetUrl
@@ -90,5 +91,10 @@ namespace Volo.Abp.AspNetCore.TestBase
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            _host?.Dispose();
+        }
     }
 }

@@ -1,24 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <RootNamespace />
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.1.2" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.1.2" />
+        <PackageReference Include="Blazorise" Version="0.9.4.1" />
+        <PackageReference Include="Blazorise.DataGrid" Version="0.9.4.1" />
+        <PackageReference Include="Blazorise.Snackbar" Version="0.9.4.1" />
+        <PackageReference Include="Blazorise.Components" Version="0.9.4.1" />
     </ItemGroup>
 
 </Project>

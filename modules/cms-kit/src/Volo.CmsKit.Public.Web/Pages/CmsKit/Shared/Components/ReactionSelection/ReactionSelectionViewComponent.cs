@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Reactions;
 using Volo.CmsKit.Web;
@@ -14,7 +15,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelectio
     [Widget(
         ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)},
         StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection"
+        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection",
+        AutoInitialize = true
     )]
     public class ReactionSelectionViewComponent : AbpViewComponent
     {
@@ -22,12 +24,16 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelectio
 
         protected CmsKitUiOptions Options { get; }
 
+        public AbpMvcUiOptions AbpMvcUiOptions { get; }
+
         public ReactionSelectionViewComponent(
             IReactionPublicAppService reactionPublicAppService,
-            IOptions<CmsKitUiOptions> options)
+            IOptions<CmsKitUiOptions> options,
+            IOptions<AbpMvcUiOptions> abpMvcUiOptions)
         {
             ReactionPublicAppService = reactionPublicAppService;
             Options = options.Value;
+            AbpMvcUiOptions = abpMvcUiOptions.Value;
         }
 
         public virtual async Task<IViewComponentResult> InvokeAsync(
@@ -36,11 +42,15 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelectio
         {
             var result = await ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
 
+            var loginUrl =
+                $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-rating_{entityType}_{entityId}";
+
             var viewModel = new ReactionSelectionViewModel
             {
                 EntityType = entityType,
                 EntityId = entityId,
-                Reactions = new List<ReactionViewModel>()
+                Reactions = new List<ReactionViewModel>(),
+                LoginUrl = loginUrl
             };
 
             foreach (var reactionDto in result.Items)
@@ -66,6 +76,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelectio
             public string EntityId { get; set; }
 
             public List<ReactionViewModel> Reactions { get; set; }
+
+            public string LoginUrl { get; set; }
         }
 
         public class ReactionViewModel

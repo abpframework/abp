@@ -36,6 +36,8 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual bool AllowPlainTextPkce { get; set; }
 
+        public virtual bool RequireRequestObject { get; set; }
+
         public virtual bool AllowAccessTokensViaBrowser { get; set; }
 
         public virtual string FrontChannelLogoutUri { get; set; }
@@ -49,6 +51,8 @@ namespace Volo.Abp.IdentityServer.Clients
         public virtual bool AllowOfflineAccess { get; set; }
 
         public virtual int IdentityTokenLifetime { get; set; }
+
+        public virtual string AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public virtual int AccessTokenLifetime { get; set; }
 
@@ -118,8 +122,9 @@ namespace Volo.Abp.IdentityServer.Clients
 
             ProtocolType = IdentityServerConstants.ProtocolTypes.OpenIdConnect;
             RequireClientSecret = true;
-            RequireConsent = true;
+            RequireConsent = false;
             AllowRememberConsent = true;
+            RequirePkce = true;
             FrontChannelLogoutSessionRequired = true;
             BackChannelLogoutSessionRequired = true;
             IdentityTokenLifetime = 300;
@@ -261,7 +266,15 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual void AddProperty([NotNull] string key, [NotNull] string value)
         {
-            Properties.Add(new ClientProperty(Id, key,value));
+            var property = FindProperty(key);
+            if (property == null)
+            {
+                Properties.Add(new ClientProperty(Id, key, value));
+            }
+            else
+            {
+                property.Value = value;
+            }
         }
 
         public virtual void RemoveAllProperties()
@@ -269,17 +282,17 @@ namespace Volo.Abp.IdentityServer.Clients
             Properties.Clear();
         }
 
-        public virtual void RemoveProperty(string key, string value)
+        public virtual void RemoveProperty(string key)
         {
-            Properties.RemoveAll(c => c.Value == value && c.Key == key);
+            Properties.RemoveAll(c => c.Key == key);
         }
 
-        public virtual ClientProperty FindProperty(string key, string value)
+        public virtual ClientProperty FindProperty(string key)
         {
-            return Properties.FirstOrDefault(c => c.Key == key && c.Value == value);
+            return Properties.FirstOrDefault(c => c.Key == key);
         }
 
-        public virtual void AddClaim([NotNull] string value, string type)
+        public virtual void AddClaim([NotNull] string type, [NotNull] string value)
         {
             Claims.Add(new ClientClaim(Id, type, value));
         }
@@ -289,12 +302,22 @@ namespace Volo.Abp.IdentityServer.Clients
             Claims.Clear();
         }
 
-        public virtual void RemoveClaim(string value, string type)
+        public virtual void RemoveClaim(string type)
         {
-            Claims.RemoveAll(c => c.Value == value && c.Type == type);
+            Claims.RemoveAll(c => c.Type == type);
         }
 
-        public virtual ClientClaim FindClaim(string value, string type)
+        public virtual void RemoveClaim(string type, string value)
+        {
+            Claims.RemoveAll(c => c.Type == type && c.Value == value);
+        }
+
+        public virtual List<ClientClaim> FindClaims(string type)
+        {
+            return Claims.Where(c => c.Type == type).ToList();
+        }
+
+        public virtual ClientClaim FindClaim(string type, string value)
         {
             return Claims.FirstOrDefault(c => c.Type == type && c.Value == value);
         }

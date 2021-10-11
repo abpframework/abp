@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
@@ -15,11 +15,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Admin.Web\Volo.CmsKit.Admin.Web.csproj" />
-    <ProjectReference Include="..\Volo.CmsKit.HttpApi\Volo.CmsKit.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

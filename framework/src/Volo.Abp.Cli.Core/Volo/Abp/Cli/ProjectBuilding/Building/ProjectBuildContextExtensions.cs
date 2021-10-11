@@ -16,5 +16,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             return file;
         }
+
+        public static FileEntry FindFile(this ProjectBuildContext context, string filePath)
+        {
+            return context.Files.FirstOrDefault(f => f.Name == filePath);
+        }
     }
 }

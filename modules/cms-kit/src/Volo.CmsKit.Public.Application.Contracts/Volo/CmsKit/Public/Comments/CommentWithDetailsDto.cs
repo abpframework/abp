@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.CmsKit.Public.Comments
 {
-    public class CommentWithDetailsDto
+    [Serializable]
+    public class CommentWithDetailsDto : IHasConcurrencyStamp
     {
         public Guid Id { get; set; }
 
@@ -20,5 +22,7 @@ namespace Volo.CmsKit.Public.Comments
         public List<CommentDto> Replies { get; set; }
 
         public CmsUserDto Author { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

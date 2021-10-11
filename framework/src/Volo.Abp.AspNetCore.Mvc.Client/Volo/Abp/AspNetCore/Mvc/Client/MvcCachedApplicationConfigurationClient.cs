@@ -12,6 +12,11 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
+    [ExposeServices(
+        typeof(MvcCachedApplicationConfigurationClient),
+        typeof(ICachedApplicationConfigurationClient),
+        typeof(IAsyncInitialize)
+        )]
     public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }
@@ -51,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
                 async () => await Proxy.Service.GetAsync(),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(120) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
                 }
             );
 
@@ -78,7 +83,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         protected virtual string CreateCacheKey()
         {
-            return $"ApplicationConfiguration_{CurrentUser.Id?.ToString("N") ?? "Anonymous"}_{CultureInfo.CurrentUICulture.Name}";
+            return MvcCachedApplicationConfigurationClientHelper.CreateCacheKey(CurrentUser);
         }
     }
 }

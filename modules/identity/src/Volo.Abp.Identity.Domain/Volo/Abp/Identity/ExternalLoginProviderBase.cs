@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -14,23 +15,28 @@ namespace Volo.Abp.Identity
         protected ICurrentTenant CurrentTenant { get; }
         protected IdentityUserManager UserManager { get; }
         protected IIdentityUserRepository IdentityUserRepository { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         protected ExternalLoginProviderBase(
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            IIdentityUserRepository identityUserRepository)
+            IIdentityUserRepository identityUserRepository,
+            IOptions<IdentityOptions> identityOptions)
         {
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
             UserManager = userManager;
             IdentityUserRepository = identityUserRepository;
+            IdentityOptions = identityOptions;
         }
 
         public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
 
         public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
         {
+            await IdentityOptions.SetAsync();
+
             var externalUser = await GetUserInfoAsync(userName);
             NormalizeExternalLoginUserInfo(externalUser, userName);
 
@@ -72,6 +78,8 @@ namespace Volo.Abp.Identity
 
         public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
         {
+            await IdentityOptions.SetAsync();
+
             var externalUser = await GetUserInfoAsync(user);
             NormalizeExternalLoginUserInfo(externalUser, user.UserName);
 

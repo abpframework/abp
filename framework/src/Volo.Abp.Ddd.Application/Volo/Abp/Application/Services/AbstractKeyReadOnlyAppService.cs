@@ -62,7 +62,7 @@ namespace Volo.Abp.Application.Services
         {
             await CheckGetListPolicyAsync();
 
-            var query = CreateFilteredQuery(input);
+            var query = await CreateFilteredQueryAsync(input);
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
@@ -160,13 +160,13 @@ namespace Volo.Abp.Application.Services
         /// methods.
         /// </summary>
         /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
+        protected virtual async Task<IQueryable<TEntity>> CreateFilteredQueryAsync(TGetListInput input)
         {
-            return ReadOnlyRepository;
+            return await ReadOnlyRepository.GetQueryableAsync();
         }
 
         /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetOutputDto"/>.
         /// It internally calls the <see cref="MapToGetOutputDto"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToGetOutputDto"/>
@@ -177,7 +177,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
@@ -187,7 +187,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps a list of <see cref="TEntity"/> to <see cref="TGetListOutputDto"/> objects.
+        /// Maps a list of <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/> objects.
         /// It uses <see cref="MapToGetListOutputDtoAsync"/> method for each item in the list.
         /// </summary>
         protected virtual async Task<List<TGetListOutputDto>> MapToGetListOutputDtosAsync(List<TEntity> entities)
@@ -203,7 +203,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/>.
         /// It internally calls the <see cref="MapToGetListOutputDto"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToGetListOutputDto"/>
@@ -214,7 +214,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>

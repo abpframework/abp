@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.ClientSimulation.Web</AssemblyName>
     <PackageId>Volo.ClientSimulation.Web</PackageId>
     <OutputType>Library</OutputType>

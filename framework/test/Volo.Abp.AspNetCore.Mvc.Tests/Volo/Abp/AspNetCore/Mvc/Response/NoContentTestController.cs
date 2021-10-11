@@ -47,5 +47,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
             Response.Redirect("/");
             await Task.CompletedTask;
         }
+
+        [HttpGet]
+        [Route("TestAsyncMethodWithResultFilter")]
+        [TestResultFilter]
+        public async Task TestAsyncMethodWithResultFilter()
+        {
+            await Task.CompletedTask;
+        }
     }
 }

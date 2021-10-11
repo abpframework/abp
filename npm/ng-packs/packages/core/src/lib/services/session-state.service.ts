@@ -1,44 +1,87 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import {
-  SetLanguage,
-  SetRemember,
-  SetTenant,
-  ModifyOpenedTabCount,
-} from '../actions/session.actions';
-import { SessionState } from '../states';
+import compare from 'just-compare';
+import { filter, take } from 'rxjs/operators';
+import { Session } from '../models/session';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { InternalStore } from '../utils/internal-store-utils';
+import { ConfigStateService } from './config-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionStateService {
-  constructor(private store: Store) {}
+  private readonly store = new InternalStore({} as Session.State);
+
+  private updateLocalStorage = () => {
+    localStorage.setItem('abpSession', JSON.stringify(this.store.state));
+  };
+
+  constructor(private configState: ConfigStateService) {
+    this.init();
+    this.setInitialLanguage();
+  }
+
+  private init() {
+    const session = localStorage.getItem('abpSession');
+    if (session) {
+      this.store.set(JSON.parse(session));
+    }
+
+    this.store.sliceUpdate(state => state).subscribe(this.updateLocalStorage);
+  }
+
+  private setInitialLanguage() {
+    if (this.getLanguage()) return;
+
+    this.configState
+      .getDeep$('localization.currentCulture.cultureName')
+      .pipe(
+        filter(cultureName => !!cultureName),
+        take(1),
+      )
+      .subscribe(lang => {
+        if (lang.includes(';')) {
+          lang = lang.split(';')[0];
+        }
+
+        this.setLanguage(lang);
+      });
+  }
+
+  onLanguageChange$() {
+    return this.store.sliceUpdate(state => state.language);
+  }
+
+  onTenantChange$() {
+    return this.store.sliceUpdate(state => state.tenant);
+  }
 
   getLanguage() {
-    return this.store.selectSnapshot(SessionState.getLanguage);
+    return this.store.state.language;
+  }
+
+  getLanguage$() {
+    return this.store.sliceState(state => state.language);
   }
 
   getTenant() {
-    return this.store.selectSnapshot(SessionState.getTenant);
+    return this.store.state.tenant;
   }
 
-  getSessionDetail() {
-    return this.store.selectSnapshot(SessionState.getSessionDetail);
+  getTenant$() {
+    return this.store.sliceState(state => state.tenant);
   }
 
-  dispatchSetLanguage(...args: ConstructorParameters<typeof SetLanguage>) {
-    return this.store.dispatch(new SetLanguage(...args));
+  setTenant(tenant: CurrentTenantDto) {
+    if (compare(tenant, this.store.state.tenant)) return;
+
+    this.store.set({ ...this.store.state, tenant });
   }
 
-  dispatchSetTenant(...args: ConstructorParameters<typeof SetTenant>) {
-    return this.store.dispatch(new SetTenant(...args));
-  }
+  setLanguage(language: string) {
+    if (language === this.store.state.language) return;
 
-  dispatchSetRemember(...args: ConstructorParameters<typeof SetRemember>) {
-    return this.store.dispatch(new SetRemember(...args));
-  }
-
-  dispatchModifyOpenedTabCount(...args: ConstructorParameters<typeof ModifyOpenedTabCount>) {
-    return this.store.dispatch(new ModifyOpenedTabCount(...args));
+    this.store.patch({ language });
+    document.documentElement.setAttribute('lang', language);
   }
 }

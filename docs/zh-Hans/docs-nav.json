@@ -1,6 +1,10 @@
 {
   "items": [
     {
+      "text": "快速入门",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
       "text": "入门",
       "items": [
         {
@@ -12,14 +16,42 @@
           "path": "Startup-Templates/Console.md"
         },
         {
-          "text": "空Web应用程序t",
+          "text": "WPF应用程序",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "空Web应用程序",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
     {
+      "text": "启动模板",
+      "items": [
+        {
+          "text": "概述",
+          "path": "Startup-Templates/Index.md"
+        },
+        {
+          "text": "应用程序",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "模块",
+          "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "控制台",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
+        }
+      ]
+    },
+    {
       "text": "教程",
-      "path": "Tutorials/Index.md",
       "items": [
         {
           "text": "应用开发",
@@ -37,46 +69,14 @@
               "path": "Tutorials/Part-3.md"
             }
           ]
-        }
-      ]
-    },
-    {
-      "text": "指南",
-      "items": [
+        },
         {
-          "text": "自定义应用模块",
-          "path": "Customizing-Application-Modules-Guide.md",
-          "items": [
-            {
-              "text": "扩展实体",
-              "path": "Customizing-Application-Modules-Extending-Entities.md"
-            },
-            {
-              "text": "重写服务",
-              "path": "Customizing-Application-Modules-Overriding-Services.md"
-            },
-            {
-              "text": "重写用户界面",
-              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
-            }
-          ]
+          "text": "社区文章",
+          "path": "https://community.abp.io/articles"
         },
         {
           "text": "从ASP.NET Boilerplate迁移",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
-        }
-      ]
-    },
-    {
-      "text": "CLI",
-      "path": "CLI.md"
-    },
-    {
-      "text": "认证",
-      "items": [
-        {
-          "text": "社交/外部登录",
-          "path": "Authentication/Social-External-Logins.md"
         }
       ]
     },
@@ -100,10 +100,6 @@
               "path": "Autofac-Integration.md"
             }
           ]
-        },
-        {
-          "text": "虚拟文件系统",
-          "path": "Virtual-File-System.md"
         },
         {
           "text": "本地化",
@@ -136,16 +132,12 @@
           "path": "Logging.md"
         },
         {
-          "text": "审计日志",
-          "path": "Audit-Logging.md"
-        },
-        {
           "text": "设置管理",
           "path": "Settings.md"
         },
         {
-          "text": "数据过滤",
-          "path": "Data-Filtering.md"
+          "text": "连接字符串",
+          "path": "Connection-Strings.md"
         },
         {
           "text": "对象扩展",
@@ -154,35 +146,88 @@
       ]
     },
     {
-      "text": "事件总线",
-      "items": [
+      "text": "基础设施",
+      "items":[
         {
-          "text": "概述",
-          "path": "Event-Bus.md"
-        },
-        {
-          "text": "本地 Event Bus",
-          "path": "Local-Event-Bus.md"
-        },
-        {
-          "text": "分布式 Event Bus",
-          "path": "Distributed-Event-Bus.md",
+          "text": "后台服务",
           "items": [
             {
-              "text": "RabbitMQ 集成",
-              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+              "text": "后台作业",
+              "path": "Background-Jobs.md",
+              "items": [
+                {
+                  "text": "Hangfire 集成",
+                  "path": "Background-Jobs-Hangfire.md"
+                },
+                {
+                  "text": "RabbitMQ 集成",
+                  "path": "Background-Jobs-RabbitMq.md"
+                },
+                {
+                  "text": "Quartz 集成",
+                  "path": "Background-Jobs-Quartz.md"
+                }
+              ]
             },
             {
-              "text": "Kafka 集成",
-              "path": "Distributed-Event-Bus-Kafka-Integration.md"
+              "text": "后台工作者",
+              "path": "Background-Workers.md",
+              "items": [
+                {
+                  "text": "Quartz 集成",
+                  "path": "Background-Workers-Quartz.md"
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "text": "服务",
-      "items": [
+        },
+        {
+          "text": "事件总线",
+          "items": [
+            {
+              "text": "概述",
+              "path": "Event-Bus.md"
+            },
+            {
+              "text": "本地 Event Bus",
+              "path": "Local-Event-Bus.md"
+            },
+            {
+              "text": "分布式 Event Bus",
+              "path": "Distributed-Event-Bus.md",
+              "items": [
+                {
+                  "text": "RabbitMQ 集成",
+                  "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+                },
+                {
+                  "text": "Kafka 集成",
+                  "path": "Distributed-Event-Bus-Kafka-Integration.md"
+                },
+                {
+                  "text": "Rebus 集成",
+                  "path": "Distributed-Event-Bus-Rebus-Integration.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "种子数据",
+          "path": "Data-Seeding.md"
+        },
+        {
+          "text": "虚拟文件系统",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "审计日志",
+          "path": "Audit-Logging.md"
+        },
+        {
+          "text": "数据过滤",
+          "path": "Data-Filtering.md"
+        },
         {
           "text": "当前用户",
           "path": "CurrentUser.md"
@@ -262,71 +307,103 @@
       ]
     },
     {
-      "text": "多租户",
-      "path": "Multi-Tenancy.md"
-    },
-    {
-      "text": "模块开发",
-      "items": [
+      "text": "架构",
+      "items":[
         {
-          "text": "基础",
-          "path": "Module-Development-Basics.md"
-        },
-        {
-          "text": "模块插件"
-        },
-        {
-          "text": "最佳实践",
-          "path": "Best-Practices/Index.md"
-        }
-      ]
-    },
-    {
-      "text": "领域驱动设计",
-      "items": [
-        {
-          "text": "概述",
-          "path": "Domain-Driven-Design.md"
-        },
-        {
-          "text": "领域层",
+          "text": "模块化",
           "items": [
             {
-              "text": "实体&聚合根",
-              "path": "Entities.md"
+              "text": "基础",
+              "path": "Module-Development-Basics.md"
             },
             {
-              "text": "值对象"
+              "text": "模块插件",
+              "path": "PlugIn-Modules.md"
             },
             {
-              "text": "仓储",
-              "path": "Repositories.md"
+              "text": "自定义应用模块",
+              "path": "Customizing-Application-Modules-Guide.md",
+              "items": [
+                {
+                  "text": "扩展实体",
+                  "path": "Customizing-Application-Modules-Extending-Entities.md"
+                },
+                {
+                  "text": "重写服务",
+                  "path": "Customizing-Application-Modules-Overriding-Services.md"
+                },
+                {
+                  "text": "重写用户界面",
+                  "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+                }
+              ]
             },
             {
-              "text": "领域服务"
-            },
-            {
-              "text": "规约",
-              "path": "Specifications.md"
+              "text": "最佳实践",
+              "path": "Best-Practices/Index.md"
             }
           ]
         },
         {
-          "text": "应用服务层",
+          "text": "领域驱动设计",
           "items": [
             {
-              "text": "应用服务",
-              "path": "Application-Services.md"
+              "text": "概述",
+              "path": "Domain-Driven-Design.md"
             },
             {
-              "text": "数据传输对象(DTO)",
-              "path": "Data-Transfer-Objects.md"
+              "text": "领域层",
+              "items": [
+                {
+                  "text": "实体&聚合根",
+                  "path": "Entities.md"
+                },
+                {
+                  "text": "值对象"
+                },
+                {
+                  "text": "仓储",
+                  "path": "Repositories.md"
+                },
+                {
+                  "text": "领域服务"
+                },
+                {
+                  "text": "规约",
+                  "path": "Specifications.md"
+                }
+              ]
             },
             {
-              "text": "工作单元",
-              "path": "Unit-Of-Work.md"
+              "text": "应用服务层",
+              "items": [
+                {
+                  "text": "应用服务",
+                  "path": "Application-Services.md"
+                },
+                {
+                  "text": "数据传输对象(DTO)",
+                  "path": "Data-Transfer-Objects.md"
+                },
+                {
+                  "text": "工作单元",
+                  "path": "Unit-Of-Work.md"
+                }
+              ]
+            },
+            {
+              "text": "指南: 实现DDD",
+              "path": "Domain-Driven-Design-Implementation-Guide.md"
             }
           ]
+        },
+        {
+          "text": "多租户",
+          "path": "Multi-Tenancy.md"
+        },    
+        {
+          "text": "微服务架构",
+          "path": "Microservice-Architecture.md"
         }
       ]
     },
@@ -446,10 +523,6 @@
               "path": "UI/Angular/Component-Replacement.md"
             },
             {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
-            },
-            {
               "text": "懒加载Scripts与Styles",
               "path": "UI/Angular/Lazy-Load-Service.md"
             },
@@ -508,58 +581,45 @@
           "path": "Data-Access.md"
         },
         {
-          "text": "连接字符串",
-          "path": "Connection-Strings.md"
-        },
-        {
-          "text": "数据库提供程序",
+          "text": "Entity Framework Core",
+          "path": "Entity-Framework-Core.md",
           "items": [
             {
-              "text": "Entity Framework Core",
-              "path": "Entity-Framework-Core.md",
-              "items": [
+              "text": "数据库迁移",
+              "path": "Entity-Framework-Core-Migrations.md"
+            },
+            {
+              
+              "text": "切换DMBS",
+              "path": "Entity-Framework-Core-Other-DBMS.md",
+              "items":[
                 {
-                  "text": "数据库迁移",
-                  "path": "Entity-Framework-Core-Migrations.md"
+                  "text": "到MySql",
+                  "path": "Entity-Framework-Core-MySQL.md"
                 },
                 {
-                  
-                  "text": "切换DMBS",
-                  "path": "Entity-Framework-Core-Other-DBMS.md",
-                  "items":[
-                    {
-                      "text": "到MySql",
-                      "path": "Entity-Framework-Core-MySQL.md"
-                    },
-                    {
-                      "text": "到PostgreSQL",
-                      "path": "Entity-Framework-Core-PostgreSQL.md"
-                    },
-                    {
-                      "text": " Oracle",
-                      "path": "Entity-Framework-Core-Oracle.md"
-                    },
-                    {
-                      "text": "到SQLite",
-                      "path": "Entity-Framework-Core-SQLite.md"
-                    }
-                  ]
+                  "text": "到PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
+                },
+                {
+                  "text": " Oracle",
+                  "path": "Entity-Framework-Core-Oracle.md"
+                },
+                {
+                  "text": "到SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
                 }
               ]
-            },
-            {
-              "text": "MongoDB",
-              "path": "MongoDB.md"
-            },
-            {
-              "text": "Dapper",
-              "path": "Dapper.md"
             }
           ]
         },
         {
-          "text": "种子数据",
-          "path": "Data-Seeding.md"
+          "text": "MongoDB",
+          "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper",
+          "path": "Dapper.md"
         }
       ]
     },
@@ -569,60 +629,6 @@
         {
           "text": "SignalR集成",
           "path": "SignalR-Integration.md"
-        }
-      ]
-    },
-    {
-      "text": "后台服务",
-      "items": [
-        {
-          "text": "后台作业",
-          "path": "Background-Jobs.md",
-          "items": [
-            {
-              "text": "Hangfire 集成",
-              "path": "Background-Jobs-Hangfire.md"
-            },
-            {
-              "text": "RabbitMQ 集成",
-              "path": "Background-Jobs-RabbitMq.md"
-            },
-            {
-              "text": "Quartz 集成",
-              "path": "Background-Jobs-Quartz.md"
-            }
-          ]
-        },
-        {
-          "text": "后台工作者",
-          "path": "Background-Workers.md",
-          "items": [
-            {
-              "text": "Quartz 集成",
-              "path": "Background-Workers-Quartz.md"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "启动模板",
-      "items": [
-        {
-          "text": "概述",
-          "path": "Startup-Templates/Index.md"
-        },
-        {
-          "text": "应用程序",
-          "path": "Startup-Templates/Application.md"
-        },
-        {
-          "text": "模块",
-          "path": "Startup-Templates/Module.md"
-        },
-        {
-          "text": "控制台",
-          "path": "Startup-Templates/Console.md"
         }
       ]
     },
@@ -638,42 +644,117 @@
           "path": "Samples/Microservice-Demo.md"
         }
       ]
-    },
+    },  
     {
       "text": "应用模块",
-      "path": "Modules/Index.md"
+      "items":[
+        {
+          "text": "概述",
+          "path": "Modules/Index.md"
+        },
+        {
+          "text": "账户",
+          "path": "Modules/Account.md"
+        },
+        {
+          "text": "审计日志",
+          "path": "Modules/Audit-Logging.md"
+        },
+        {
+          "text": "后台作业",
+          "path": "Modules/Background-Jobs.md"
+        },
+        {
+          "text": "博客",
+          "path": "Modules/Blogging.md"
+        },
+        {
+          "text": "客户端模拟",
+          "path": "Modules/Client-Simulation.md"
+        },
+        {
+          "text": "CMS Kit",
+          "path": "Modules/Cms-Kit.md"
+        },
+        {
+          "text": "文档",
+          "path": "Modules/Docs.md"
+        },
+        {
+          "text": "功能管理",
+          "path": "Modules/Feature-Management.md"
+        },
+        {
+          "text": "Identity",
+          "path": "Modules/Identity.md"
+        },
+        {
+          "text": "IdentityServer",
+          "path": "Modules/IdentityServer.md"
+        },
+        {
+          "text": "权限管理",
+          "path": "Modules/Permission-Management.md"
+        },
+        {
+          "text": "设置管理",
+          "path": "Modules/Setting-Management.md"
+        },
+        {
+          "text": "租户管理",
+          "path": "Modules/Tenant-Management.md"
+        },
+        {
+          "text": "用户",
+          "path": "Modules/Users.md"
+        },
+        {
+          "text": "虚拟文件浏览器",
+          "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
     },
     {
-      "text": "微服务架构",
-      "path": "Microservice-Architecture.md"
+      "text": "发布信息",
+      "items": [
+        {
+          "text": "升级",
+          "path": "Upgrading.md"
+        },
+        {
+          "text": "官方包",
+          "path": "https://abp.io/packages"
+        },
+        {
+          "text": "预览版本",
+          "path": "Previews.md"
+        },
+        {
+          "text": "每日构建",
+          "path": "Nightly-Builds.md"
+        },    
+        {
+          "text": "路线图",
+          "path": "Road-Map.md"
+        }
+      ]
     },
     {
-      "text": "预览版本",
-      "path": "Previews.md"
-    },
-    {
-      "text": "每日构建",
-      "path": "Nightly-Builds.md"
-    },
-    {
-      "text": "路线图",
-      "path": "Road-Map.md"
-    },
-    {
-      "text": "升级",
-      "path": "Upgrading.md"
+      "text": "参考",
+      "items": [
+        {
+          "text": "CLI",
+          "path": "CLI.md"
+        },
+        {
+          "text": "API文档",
+          "path": "{ApiDocumentationUrl}"
+        }
+      ]
     },
     {
       "text": "贡献指南",
       "path": "Contribution/Index.md"
-    },
-    {
-      "text": "API文档",
-      "path": "{ApiDocumentationUrl}"
-    },
-    {
-      "text": "官方包",
-      "path": "https://abp.io/packages"
     }
   ]
 }

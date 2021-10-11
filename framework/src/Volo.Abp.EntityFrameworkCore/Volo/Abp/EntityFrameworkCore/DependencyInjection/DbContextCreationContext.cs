@@ -13,7 +13,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 
         public string ConnectionString { get; }
 
-        public DbConnection ExistingConnection { get; set; }
+        public DbConnection ExistingConnection { get; internal set; }
 
         public DbContextCreationContext(string connectionStringName, string connectionString)
         {

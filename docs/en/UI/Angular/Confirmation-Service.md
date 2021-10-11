@@ -180,8 +180,3 @@ clear(
 ```
 
 - `status` parameter is the value of the confirmation closing event.
-
-
-## What's Next?
-
-- [Toast Overlay](./Toaster-Service.md)

@@ -27,7 +27,7 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
-        private readonly IDocumentFullSearch _documentFullSearch;
+        private readonly IDocumentFullSearch _elasticSearchService;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
@@ -35,7 +35,7 @@ namespace Volo.Docs.Admin.Documents
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDocumentFullSearch documentFullSearch)
+            IDocumentFullSearch elasticSearchService)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -43,7 +43,7 @@ namespace Volo.Docs.Admin.Documents
             _documentUpdateCache = documentUpdateCache;
             _versionCache = versionCache;
             _languageCache = languageCache;
-            _documentFullSearch = documentFullSearch;
+            _elasticSearchService = elasticSearchService;
 
             LocalizationResource = typeof(DocsResource);
         }
@@ -87,7 +87,7 @@ namespace Volo.Docs.Admin.Documents
                 input.Version
             );
 
-            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content, out var navigation))
+            if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content, out var navigation))
             {
                 throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
             }
@@ -188,7 +188,7 @@ namespace Volo.Docs.Admin.Documents
             return new PagedResultDto<DocumentDto>
             {
                 TotalCount = totalCount,
-                Items = ObjectMapper.Map<List<Document>, List<DocumentDto>>(docs)
+                Items = ObjectMapper.Map<List<DocumentWithoutContent>, List<DocumentDto>>(docs)
             };
         }
 
@@ -205,23 +205,16 @@ namespace Volo.Docs.Admin.Documents
             );
 
             await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
-
-            document.LastCachedTime = DateTime.MinValue;
-
-            await _documentRepository.UpdateAsync(document);
+            await _documentRepository.DeleteAsync(document);
         }
 
         public async Task ReindexAsync(Guid documentId)
         {
-            await _documentFullSearch.DeleteAsync(documentId);
-            var document = await _documentRepository.GetAsync(documentId);
-            await _documentFullSearch.AddOrUpdateAsync(document);
-        }
+            _elasticSearchService.ValidateElasticSearchEnabled();
 
-        public async Task DeleteFromDatabaseAsync(Guid documentId)
-        {
+            await _elasticSearchService.DeleteAsync(documentId);
             var document = await _documentRepository.GetAsync(documentId);
-            await _documentRepository.DeleteAsync(document);
+            await _elasticSearchService.AddOrUpdateAsync(document);
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

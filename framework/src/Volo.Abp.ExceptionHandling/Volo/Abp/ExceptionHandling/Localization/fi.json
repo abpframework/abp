@@ -1,0 +1,25 @@
+{
+  "culture": "fi",
+  "texts": {
+    "InternalServerErrorMessage": "Pyynnön aikana tapahtui sisäinen virhe!",
+    "ValidationErrorMessage": "Pyyntösi ei kelpaa!",
+    "ValidationNarrativeErrorMessageTitle": "Seuraavat virheet havaittiin validoinnin aikana.",
+    "DefaultErrorMessage": "Tapahtui virhe!",
+    "DefaultErrorMessageDetail": "Palvelin ei lähettänyt virhetietoja.",
+    "DefaultErrorMessage401": "Sinua ei ole todennettu!",
+    "DefaultErrorMessage401Detail": "Suorita tämä toimenpide kirjautumalla sisään.",
+    "DefaultErrorMessage403": "Sinulla ei ole valtuuksia!",
+    "DefaultErrorMessage403Detail": "Et saa suorittaa tätä toimintoa!",
+    "DefaultErrorMessage404": "Resurssia ei löydy!",
+    "DefaultErrorMessage404Detail": "Pyydettyä resurssia ei löytynyt palvelimelta!",
+    "EntityNotFoundErrorMessage": "Ei ole olemassa kohdetta {0}, jonka tunnus = {1}!",
+    "Error": "Virhe",
+    "UnhandledException": "Käsittelemätön poikkeus!",
+    "401Message": "Luvaton",
+    "403Message": "Kielletty",
+    "404Message": "Sivua ei löydetty",
+    "500Message": "Sisäinen palvelinvirhe",
+    "403MessageDetail": "Sinulla ei ole oikeutta suorittaa tätä toimintoa!",
+    "404MessageDetail": "Valitettavasti tässä osoitteessa ei ole mitään."
+  }
+}

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
@@ -17,20 +17,24 @@
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Components\**\*.js" />
     <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.js" />
+    <EmbeddedResource Include="wwwroot\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Components\**\*.js" />
     <Content Remove="Components\**\*.css" />
+    <Content Remove="wwwroot\**\*.js" />
+    <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
-    <ProjectReference Include="..\Volo.Abp.FeatureManagement.HttpApi\Volo.Abp.FeatureManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.Abp.FeatureManagement.Application.Contracts\Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

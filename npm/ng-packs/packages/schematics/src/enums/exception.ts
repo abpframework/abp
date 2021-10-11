@@ -5,7 +5,7 @@ export const enum Exception {
   InvalidModule = '[Invalid Module] Backend module "{0}" does not exist in API definition.',
   InvalidApiDefinition = '[Invalid API Definition] The provided API definition is invalid.',
   InvalidWorkspace = '[Invalid Workspace] The angular.json should be a valid JSON file.',
-  NoApi = '[API Not Available] Please double-check the URL in the source project environment and make sure your application is up and running.',
+  NoApi = '[API Not Available] Request to {0} is unsuccessful. Please double-check the URL in the source project environment and make sure your application is up and running.',
   NoProject = '[Project Not Found] Either define a default project in your workspace or specify the project name in schematics options.',
   NoProxyConfig = '[Proxy Config Not Found] There is no JSON file at "{0}".',
   NoTypeDefinition = '[Type Definition Not Found] There is no type definition for "{0}".',

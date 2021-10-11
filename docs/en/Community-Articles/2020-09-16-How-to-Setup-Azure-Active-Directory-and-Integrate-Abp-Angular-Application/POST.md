@@ -1,42 +1,31 @@
-# How to Setup Azure Active Directory and Integrate Abp Angular Application
+# How to Setup Azure Active Directory and Integrate ABP Angular Application
 
-This guide demonstrates how to register an application to Azure Active Directory and integrate AzureAD to an ABP angular application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
+This guide demonstrates how to register an application to Azure Active Directory and integrate AzureAD to an ABP Angular application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
 
 ## Authentication Flow
 
-Abp angular applications use **Authentication Code with PKCE** (specs [here](https://tools.ietf.org/html/rfc7636)) which is the most suitable flow for spa applications by the time this article is written since implicit flow is deprecated. 
+ABP Angular application uses **Authentication Code with PKCE** (specs [here](https://tools.ietf.org/html/rfc7636)) which is the most suitable flow for SPA applications by the time this article is written since implicit flow is deprecated. 
 
 The most common question is; 
 
-> Where to put OpenId connection code in angular project?
+> Where to put OpenId connection code in the Angular project?
 
-The answer is, **you don't**. Abp angular application is integrated with backend code (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
+The answer is, **you don't**. ABP Angular application is integrated with the backend (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
 
 <img src="auth-diagram.jpeg" alt="auth-diagram" style="zoom:50%;" />
 
 > What if I want Azure AD as my authorization server and not IdentityServer?
 
-This means your application will be using AzureAD user store for authentication. By registering both angular app and HttpApi to AzureAD, authentication might work but **authorization won't**. Users need to be registered to Abp identity system for auditing, permissions etc. So the flow should be 3rd party registration.
+This means your application will be using AzureAD user store for authentication. By registering both Angular app and HttpApi to AzureAD, authentication might work but **authorization won't**. Users need to be registered to ABP identity system for auditing, permissions etc. So the flow should be 3rd party registration.
 
 ## Setting up OpenId Connection
 
 Lets start with adding OpenId connection. Open the **HttpApiHostModule.cs** and update the **ConfigureAuthentication** method as below:
 
 ```csharp
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
 
 context.Services.AddAuthentication()
-    .AddIdentityServerAuthentication(options =>
-    {
-        options.Authority = configuration["AuthServer:Authority"];
-        options.RequireHttpsMetadata = false;
-        options.ApiName = "NonTieredAngular";
-        options.JwtBackChannelHandler = new HttpClientHandler()
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
-    })
+    ... //Omitted other third party configurations
     .AddOpenIdConnect("AzureOpenId", "Azure AD OpenId", options =>
     {
         options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
@@ -48,6 +37,8 @@ context.Services.AddAuthentication()
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.Scope.Add("email");
+        
+        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
     });
 ```
 
@@ -58,10 +49,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 {
     var hostingEnvironment = context.Services.GetHostingEnvironment();
     var configuration = context.Services.GetConfiguration();
-   
-    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
-    
+        
     context.Services.AddAuthentication()
         .AddOpenIdConnect("AzureOpenId", "Azure AD OpenId", options =>
         {
@@ -120,3 +108,8 @@ Next time you hit login, you should be seeing login screen enabled Azure AD like
 
 * But I don't want my users to see default login screen. I want my users to login **only** from AzureAD.
   * You can **mimic** this behaviour by customizing the login page and instantly trigger Azure AD provider click. For more info, you can check [this article](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd).
+
+# May 2021 Update
+
+- **AddOpenIdConnect**: Removed `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();` and added `sub`  claim mapping in ClaimActions rather than global mapping.
+- Updated OpenIdConnect configurations.

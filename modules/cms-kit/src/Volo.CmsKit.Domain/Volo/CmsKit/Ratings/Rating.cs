@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Ratings
             
         }
         
-        public Rating(
+        internal Rating(
             Guid id,
             [NotNull] string entityType,
             [NotNull] string entityId,

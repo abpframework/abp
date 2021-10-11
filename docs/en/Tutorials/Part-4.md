@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,10 +28,16 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -62,21 +51,23 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 This part covers the **server side** tests. There are several test projects in the solution:
 
-![bookstore-test-projects-v2](./images/bookstore-test-projects-{{UI_Text}}.png)
+![bookstore-test-projects-v2](./images/bookstore-test-projects-mvc.png)
+
+> Test projects slightly differs based on your UI and Database selection. For example, if you select MongoDB, then the `Acme.BookStore.EntityFrameworkCore.Tests` will be `Acme.BookStore.MongoDB.Tests`.
 
 Each project is used to test the related project. Test projects use the following libraries for testing:
 
-* [Xunit](https://xunit.github.io/) as the main test framework.
-* [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
+* [Xunit](https://github.com/xunit/xunit) as the main test framework.
+* [Shoudly](https://github.com/shouldly/shouldly) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
 {{if DB=="EF"}}
 
-> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
+> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
+> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 
@@ -89,9 +80,12 @@ If you had created a data seed contributor as described in the [first part](Part
 Add a new test class, named `BookAppService_Tests` in the `Books` namespace (folder) of the `Acme.BookStore.Application.Tests` project:
 
 ````csharp
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books
@@ -137,7 +131,7 @@ public async Task Should_Create_A_Valid_Book()
         {
             Name = "New test book 42",
             Price = 10,
-            PublishDate = System.DateTime.Now,
+            PublishDate = DateTime.Now,
             Type = BookType.ScienceFiction
         }
     );
@@ -219,7 +213,7 @@ namespace Acme.BookStore.Books
                 {
                     Name = "New test book 42",
                     Price = 10,
-                    PublishDate = System.DateTime.Now,
+                    PublishDate = DateTime.Now,
                     Type = BookType.ScienceFiction
                 }
             );

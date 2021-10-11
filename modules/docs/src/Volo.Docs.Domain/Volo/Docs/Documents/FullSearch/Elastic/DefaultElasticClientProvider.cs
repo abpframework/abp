@@ -21,7 +21,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             var node = new Uri(Configuration["ElasticSearch:Url"]);
             var settings = new ConnectionSettings(node).DefaultIndex(Options.IndexName);
-            return new ElasticClient(settings);
+            return new ElasticClient(Options.Authenticate(settings));
         }
     }
 }

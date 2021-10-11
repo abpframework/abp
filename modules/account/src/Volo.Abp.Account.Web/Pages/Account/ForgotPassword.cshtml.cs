@@ -29,15 +29,24 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            await AccountAppService.SendPasswordResetCodeAsync(
-                new SendPasswordResetCodeDto
-                {
-                    Email = Email,
-                    AppName = "MVC", //TODO: Const!
-                    ReturnUrl = ReturnUrl,
-                    ReturnUrlHash = ReturnUrlHash
-                }
-            );
+            try
+            {
+                await AccountAppService.SendPasswordResetCodeAsync(
+                    new SendPasswordResetCodeDto
+                    {
+                        Email = Email,
+                        AppName = "MVC", //TODO: Const!
+                        ReturnUrl = ReturnUrl,
+                        ReturnUrlHash = ReturnUrlHash
+                    }
+                );
+            }
+            catch (UserFriendlyException e)
+            {
+                Alerts.Danger(GetLocalizeExceptionMessage(e));
+                return Page();
+            }
+
 
             return RedirectToPage(
                 "./PasswordResetLinkSent",

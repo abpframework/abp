@@ -158,7 +158,53 @@ If you perform **database operations** and use the [repositories](Repositories.m
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
 
-## Transaction & Exception Behavior
+## Exception Handling
+
+ABP provides exception handling and retries when an exception occurs.
+
+Enable exception handling:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpEventBusOptions>(options =>
+    {
+        options.UseRetryStrategy();
+    });
+}
+```
+
+When an exception occurs, it will retry every three seconds up to the maximum number of retries(default is 3) and throw the original exception, you can change the number of retries and the retry interval:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.UseRetryStrategy(retryStrategyOptions =>
+    {
+        retryStrategyOptions.IntervalMillisecond = 0;
+        retryStrategyOptions.MaxRetryAttempts = 1;
+    });
+});
+```
+
+### Error Handle Selector
+
+By default all event types will be exception handling, you can use `ErrorHandleSelector` of `AbpEventBusOptions` to change it:
+
+```csharp
+PreConfigure<AbpEventBusOptions>(options =>
+{
+    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
+});
+```
+
+`options.ErrorHandleSelector` actually a list of type predicate. You can write a lambda expression to define your filter.
+
+### Customize Exception Handling
+
+ABP defines the `IEventErrorHandler` interface and implemented by `LocalEventErrorHandler`, you can replace it via [dependency injection](Dependency-Injection.md)
+
+### Transaction & Exception Behavior
 
 When an event published, subscribed event handlers are immediately executed. So;
 

@@ -8,9 +8,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             foreach (var file in context.Files)
             {
-                if (file.Name.EndsWith(".cs")) //TODO: Why only cs!
+                if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
                 {
-                    file.RemoveTemplateCode();
+                    file.RemoveTemplateCode(context.Symbols);
                     file.RemoveTemplateCodeMarkers();
                 }
             }

@@ -22,15 +22,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
-
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Domain\Volo.Abp.Users.Domain.csproj" />
-
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

@@ -25,6 +25,24 @@ namespace Volo.Abp.Caching
             IEnumerable<KeyValuePair<string, byte[]>> items,
             DistributedCacheEntryOptions options,
             CancellationToken token = default
-        ); 
+        );
+
+        void RefreshMany(
+            IEnumerable<string> keys
+        );
+
+        Task RefreshManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
+
+        void RemoveMany(
+            IEnumerable<string> keys
+        );
+
+        Task RemoveManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
     }
 }

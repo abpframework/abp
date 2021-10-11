@@ -1,79 +1,83 @@
-import { CORE_OPTIONS } from '../tokens/options.token';
+import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Actions, Store } from '@ngxs/store';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ConfigStateService, SessionStateService } from '../services';
 import { LocalizationService } from '../services/localization.service';
+import { CORE_OPTIONS } from '../tokens/options.token';
+import { CONFIG_STATE_DATA } from './config-state.service.spec';
+
+const appConfigData$ = new BehaviorSubject(CONFIG_STATE_DATA);
 
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
-  let store: SpyObject<Store>;
+  let sessionState: SpyObject<SessionStateService>;
+  let configState: SpyObject<ConfigStateService>;
   let service: LocalizationService;
 
   const createService = createServiceFactory({
     service: LocalizationService,
     entryComponents: [],
-    mocks: [Store, Router],
+    mocks: [Router],
     providers: [
-      { provide: Actions, useValue: new Subject() },
-      { provide: CORE_OPTIONS, useValue: { cultureNameLocaleFileMap: {} } },
+      {
+        provide: CORE_OPTIONS,
+        useValue: { registerLocaleFn: () => Promise.resolve(), cultureNameLocaleFileMap: {} },
+      },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => appConfigData$ },
+      },
     ],
   });
 
   beforeEach(() => {
     spectator = createService();
-    store = spectator.inject(Store);
+    sessionState = spectator.inject(SessionStateService);
+    configState = spectator.inject(ConfigStateService);
     service = spectator.service;
+
+    configState.refreshAppState();
+    sessionState.setLanguage('tr');
+    appConfigData$.next(CONFIG_STATE_DATA);
   });
 
   describe('#currentLang', () => {
-    it('should be tr', () => {
-      store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => string) => {
-        return selector({ SessionState: { language: 'tr' } });
-      });
-
-      expect(service.currentLang).toBe('tr');
+    it('should be tr', done => {
+      setTimeout(() => {
+        expect(service.currentLang).toBe('tr');
+        done();
+      }, 0);
     });
   });
 
   describe('#get', () => {
-    it('should be return an observable localization', async () => {
-      store.select.andReturn(of('AbpTest'));
-
-      const localization = await service.get('AbpTest').toPromise();
-
-      expect(localization).toBe('AbpTest');
+    it('should be return an observable localization', done => {
+      service.get('AbpIdentity::Identity').subscribe(localization => {
+        expect(localization).toBe(CONFIG_STATE_DATA.localization.values.AbpIdentity.Identity);
+        done();
+      });
     });
   });
 
   describe('#instant', () => {
     it('should be return a localization', () => {
-      store.selectSnapshot.andReturn('AbpTest');
+      const localization = service.instant('AbpIdentity::Identity');
 
-      expect(service.instant('AbpTest')).toBe('AbpTest');
+      expect(localization).toBe(CONFIG_STATE_DATA.localization.values.AbpIdentity.Identity);
     });
   });
 
   describe('#registerLocale', () => {
-    it('should return registerLocale and then call setRouteReuse', () => {
-      const router = spectator.inject(Router);
-
-      const shouldReuseRoute = () => true;
-      router.routeReuseStrategy = { shouldReuseRoute } as any;
-
-      router.navigateByUrl.andCallFake(url => {
-        return new Promise(resolve => resolve({ catch: () => null }));
-      });
-
-      service.registerLocale('tr');
-
-      expect(router.navigated).toBe(false);
-      expect(router.routeReuseStrategy.shouldReuseRoute).not.toEqual(shouldReuseRoute);
-    });
-
     it('should throw an error message when service have an otherInstance', async () => {
       try {
-        const instance = new LocalizationService(new Subject(), null, null, null, {} as any);
+        const instance = new LocalizationService(
+          sessionState,
+          spectator.inject(Injector),
+          null,
+          null,
+        );
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');
       }
@@ -107,16 +111,17 @@ describe('LocalizationService', () => {
     `(
       'should return observable $expected when resource name is $resource and key is $key',
       async ({ resource, key, defaultValue, expected }) => {
-        store.select.andReturn(
-          of({
+        appConfigData$.next({
+          localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
-          }),
-        );
+          },
+        } as any);
+        configState.refreshAppState();
 
-        const result = await service.localize(resource, key, defaultValue).toPromise();
-
-        expect(result).toBe(expected);
+        service.localize(resource, key, defaultValue).subscribe(result => {
+          expect(result).toBe(expected);
+        });
       },
     );
   });
@@ -148,10 +153,13 @@ describe('LocalizationService', () => {
     `(
       'should return $expected when resource name is $resource and key is $key',
       ({ resource, key, defaultValue, expected }) => {
-        store.selectSnapshot.andReturn({
-          values: { foo: { bar: 'baz' }, x: { y: 'z' } },
-          defaultResourceName: 'x',
-        });
+        appConfigData$.next({
+          localization: {
+            values: { foo: { bar: 'baz' }, x: { y: 'z' } },
+            defaultResourceName: 'x',
+          },
+        } as any);
+        configState.refreshAppState();
 
         const result = service.localizeSync(resource, key, defaultValue);
 
@@ -192,18 +200,17 @@ describe('LocalizationService', () => {
     `(
       'should return observable $expected when resource names are $resources and keys are $keys',
       async ({ resources, keys, defaultValue, expected }) => {
-        store.select.andReturn(
-          of({
+        appConfigData$.next({
+          localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
-          }),
-        );
+          },
+        } as any);
+        configState.refreshAppState();
 
-        const result = await service
-          .localizeWithFallback(resources, keys, defaultValue)
-          .toPromise();
-
-        expect(result).toBe(expected);
+        service.localizeWithFallback(resources, keys, defaultValue).subscribe(result => {
+          expect(result).toBe(expected);
+        });
       },
     );
   });
@@ -240,15 +247,26 @@ describe('LocalizationService', () => {
     `(
       'should return $expected when resource names are $resources and keys are $keys',
       ({ resources, keys, defaultValue, expected }) => {
-        store.selectSnapshot.andReturn({
-          values: { foo: { bar: 'baz' }, x: { y: 'z' } },
-          defaultResourceName: 'x',
-        });
+        appConfigData$.next({
+          localization: {
+            values: { foo: { bar: 'baz' }, x: { y: 'z' } },
+            defaultResourceName: 'x',
+          },
+        } as any);
+        configState.refreshAppState();
 
         const result = service.localizeWithFallbackSync(resources, keys, defaultValue);
 
         expect(result).toBe(expected);
       },
     );
+  });
+
+  describe('#getLocalization', () => {
+    it('should return a localization', () => {
+      expect(
+        service.instant("MyProjectName::'{0}' and '{1}' do not match.", 'first', 'second'),
+      ).toBe('first and second do not match.');
+    });
   });
 });

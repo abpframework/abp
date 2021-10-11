@@ -46,7 +46,7 @@
 
 
 	var docTag = {
-		pattern: /(\[Documentation\](?:  |\t)[ \t]*)(?![ \t]|#)(?:.|[ \t]*(?:\r\n?|\n)[ \t]*\.{3}[ \t]*)+/,
+		pattern: /(\[Documentation\](?:  |\t)[ \t]*)(?![ \t]|#)(?:.|(?:\r\n?|\n)[ \t]*\.{3})+/,
 		lookbehind: true,
 		alias: 'string'
 	};
@@ -71,7 +71,7 @@
 	Prism.languages['robotframework'] = {
 		'settings': createSection('Settings', {
 			'documentation': {
-				pattern: /([\r\n] ?Documentation(?:  |\t)[ \t]*)(?![ \t]|#)(?:.|[ \t]*(?:\r\n?|\n)[ \t]*\.{3}[ \t]*)+/,
+				pattern: /([\r\n] ?Documentation(?:  |\t)[ \t]*)(?![ \t]|#)(?:.|(?:\r\n?|\n)[ \t]*\.{3})+/,
 				lookbehind: true,
 				alias: 'string'
 			},

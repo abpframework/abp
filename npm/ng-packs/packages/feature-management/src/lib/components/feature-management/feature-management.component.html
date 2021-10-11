@@ -1,4 +1,4 @@
-<abp-modal size="lg" [(visible)]="visible" [busy]="modalBusy">
+<abp-modal *ngIf="visible" [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
   <ng-template #abpHeader>
     <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
@@ -15,7 +15,7 @@
         >
           <li
             *ngFor="let group of groups; trackBy: track.by('name')"
-            [ngbNavItem]="selectedGroupDisplayName"
+            [ngbNavItem]="group.displayName"
           >
             <a ngbNavLink>{{ group.displayName }}</a>
             <ng-template ngbNavContent>
@@ -23,20 +23,22 @@
               <hr class="mt-2 mb-3" />
 
               <div
-                class="row my-3"
+                class="mt-2"
                 *ngFor="let feature of features[group.name]; let i = index; trackBy: track.by('id')"
                 [ngStyle]="feature.style"
                 [ngSwitch]="feature.valueType?.name"
                 (keyup.enter)="save()"
               >
-                <div *ngSwitchCase="valueTypes.ToggleStringValueType">
+                <ng-container *ngSwitchCase="valueTypes.ToggleStringValueType">
                   <div class="custom-checkbox custom-control">
                     <input
                       class="custom-control-input"
                       type="checkbox"
                       [id]="feature.name"
                       [(ngModel)]="feature.value"
+                      (ngModelChange)="onCheckboxClick($event, feature)"
                     />
+
                     <label class="custom-control-label" [htmlFor]="feature.name">{{
                       feature.displayName
                     }}</label>
@@ -44,43 +46,52 @@
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
                     ></ng-container>
                   </div>
-                </div>
-                <div *ngSwitchCase="valueTypes.FreeTextStringValueType">
-                  <div class="form-group mb-0">
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.FreeTextStringValueType">
+                  <div class="form-group">
                     <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
                     <input
                       class="form-control"
                       type="text"
                       [id]="feature.name"
                       [(ngModel)]="feature.value"
+                      [abpFeatureManagementFreeText]="feature"
                     />
 
                     <ng-container
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
                     ></ng-container>
                   </div>
-                </div>
-                <div *ngSwitchCase="valueTypes.SelectionStringValueType">
-                  <div class="form-group mb-0">
-                    <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
-                    <select class="form-control" [id]="feature.name" [(ngModel)]="feature.value">
-                      <option [ngValue]=""></option>
-                      <option
-                        *ngFor="
-                          let prop of feature.valueType.properties | keyvalue;
-                          trackBy: track.by('key')
-                        "
-                        [ngValue]="prop.value"
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.SelectionStringValueType">
+                  <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
+                    <div class="form-group">
+                      <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
+                      <select
+                        class="form-control custom-select"
+                        [id]="feature.name"
+                        [(ngModel)]="feature.value"
                       >
-                        {{ prop.key }}</option
-                      >
-                    </select>
-                    <ng-container
-                      *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
-                    ></ng-container>
-                  </div>
-                </div>
-                <div *ngSwitchDefault>{{ feature.displayName }}</div>
+                        <option
+                          *ngFor="
+                            let item of feature.valueType.itemSource?.items;
+                            trackBy: track.by('value')
+                          "
+                          [ngValue]="item.value"
+                        >
+                          {{
+                            item.displayText?.resourceName + '::' + item.displayText?.name
+                              | abpLocalization
+                          }}
+                        </option>
+                      </select>
+                      <ng-container
+                        *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
+                      ></ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>{{ feature.displayName }}</ng-container>
               </div>
             </ng-template>
           </li>
@@ -100,13 +111,16 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <ng-container *ngIf="groups.length">
-      <button #abpClose type="button" class="btn btn-secondary">
-        {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
-      </button>
-      <abp-button iconClass="fa fa-check" [disabled]="modalBusy" (click)="save()">
-        {{ 'AbpFeatureManagement::Save' | abpLocalization }}
-      </abp-button>
-    </ng-container>
+    <button abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
+    </button>
+    <abp-button
+      *ngIf="groups.length"
+      iconClass="fa fa-check"
+      [disabled]="modalBusy"
+      (click)="save()"
+    >
+      {{ 'AbpFeatureManagement::Save' | abpLocalization }}
+    </abp-button>
   </ng-template>
 </abp-modal>

@@ -19,6 +19,7 @@ namespace Volo.Blogging.Posts
         [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxUrlLength))]
         public string Url { get; set; }
 
+        [Required]
         [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxContentLength))]
         public string Content { get; set; }
 

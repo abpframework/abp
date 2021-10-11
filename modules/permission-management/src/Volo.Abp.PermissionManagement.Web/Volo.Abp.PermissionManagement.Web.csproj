@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.PermissionManagement.Web</AssemblyName>
     <PackageId>Volo.Abp.PermissionManagement.Web</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -18,21 +18,24 @@
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Components\**\*.js" />
     <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.js" />
+    <EmbeddedResource Include="wwwroot\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Components\**\*.js" />
     <Content Remove="Components\**\*.css" />
+    <Content Remove="wwwroot\**\*.js" />
+    <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj" />
-
+    <ProjectReference Include="..\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>

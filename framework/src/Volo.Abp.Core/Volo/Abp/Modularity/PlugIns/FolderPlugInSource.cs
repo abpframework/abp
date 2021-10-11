@@ -18,7 +18,7 @@ namespace Volo.Abp.Modularity.PlugIns
         public Func<string, bool> Filter { get; set; }
 
         public FolderPlugInSource(
-            [NotNull] string folder, 
+            [NotNull] string folder,
             SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             Check.NotNull(folder, nameof(folder));
@@ -52,7 +52,7 @@ namespace Volo.Abp.Modularity.PlugIns
             return modules.ToArray();
         }
 
-        private IEnumerable<Assembly> GetAssemblies()
+        private List<Assembly> GetAssemblies()
         {
             var assemblyFiles = AssemblyHelper.GetAssemblyFiles(Folder, SearchOption);
 
@@ -61,7 +61,7 @@ namespace Volo.Abp.Modularity.PlugIns
                 assemblyFiles = assemblyFiles.Where(Filter);
             }
 
-            return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath);
+            return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath).ToList();
         }
     }
 }

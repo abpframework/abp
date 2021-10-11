@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
   isLeaf = true;
@@ -52,6 +53,25 @@ export function createMapFromList<T extends object, R extends unknown>(
   const map = new Map<Key, Value>();
   list.forEach(row => map.set(keySelector(row), valueMapper(row)));
   return map;
+}
+
+export function createTreeNodeFilterCreator<T extends object>(
+  key: keyof T,
+  mapperFn: (value: any) => string,
+) {
+  return (search: string) => {
+    const regex = new RegExp('.*' + search + '.*', 'i');
+
+    return function collectNodes(nodes: TreeNode<T>[], matches = []) {
+      for (const node of nodes) {
+        if (regex.test(mapperFn(node[key]))) matches.push(node);
+
+        if (node.children.length) collectNodes(node.children, matches);
+      }
+
+      return matches;
+    };
+  };
 }
 
 export type TreeNode<T extends object> = {

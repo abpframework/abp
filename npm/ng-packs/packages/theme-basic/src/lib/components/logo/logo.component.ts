@@ -1,6 +1,5 @@
-import { Config, ConfigState } from '@abp/ng.core';
+import { ApplicationInfo, EnvironmentService } from '@abp/ng.core';
 import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'abp-logo',
@@ -21,9 +20,9 @@ import { Store } from '@ngxs/store';
   `,
 })
 export class LogoComponent {
-  get appInfo(): Config.Application {
-    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  get appInfo(): ApplicationInfo {
+    return this.environment.getEnvironment().application;
   }
 
-  constructor(private store: Store) {}
+  constructor(private environment: EnvironmentService) {}
 }

@@ -33,7 +33,7 @@ namespace Volo.Abp.VirtualFileSystem
                 Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//jquery-3-1-1-min.js-contents");
             }
         }
-        
+
         [Fact]
         public void Should_Define_And_Get_Embedded_Resources_With_Special_Chars()
         {
@@ -57,10 +57,10 @@ namespace Volo.Abp.VirtualFileSystem
             var contents = _virtualFileProvider.GetDirectoryContents("/js");
 
             //Assert
-            contents.Exists.ShouldNotBeNull();
+            contents.Exists.ShouldBeTrue();
 
             var contentList = contents.ToList();
-            
+
             contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
             contentList.ShouldContain(x => x.Name == "my{test}.2.9.min.js");
         }
@@ -74,7 +74,7 @@ namespace Volo.Abp.VirtualFileSystem
             var contents = _virtualFileProvider.GetDirectoryContents(path);
 
             //Assert
-            contents.Exists.ShouldNotBeNull();
+            contents.Exists.ShouldBeTrue();
 
             var contentList = contents.ToList();
             contentList.ShouldContain(x => x.Name == "js");

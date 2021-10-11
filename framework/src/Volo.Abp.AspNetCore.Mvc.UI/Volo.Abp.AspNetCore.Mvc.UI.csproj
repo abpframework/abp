@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI</PackageId>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUglify" Version="1.6.3" />
+    <PackageReference Include="NUglify" Version="1.16.0" />
   </ItemGroup>
 
   <ItemGroup>

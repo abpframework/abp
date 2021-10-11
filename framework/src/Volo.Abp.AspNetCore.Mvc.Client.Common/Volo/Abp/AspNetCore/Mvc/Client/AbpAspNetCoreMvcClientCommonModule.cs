@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
+using Volo.Abp.Features;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -10,7 +12,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
         typeof(AbpHttpClientModule),
         typeof(AbpAspNetCoreMvcContractsModule),
         typeof(AbpCachingModule),
-        typeof(AbpLocalizationModule)
+        typeof(AbpLocalizationModule),
+        typeof(AbpAuthorizationModule),
+        typeof(AbpFeaturesModule)
     )]
     public class AbpAspNetCoreMvcClientCommonModule : AbpModule
     {

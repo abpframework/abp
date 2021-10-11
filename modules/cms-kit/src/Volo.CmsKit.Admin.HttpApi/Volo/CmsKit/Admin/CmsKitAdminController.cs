@@ -3,7 +3,7 @@ using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Admin
 {
-    public abstract class CmsKitAdminController : AbpController
+    public abstract class CmsKitAdminController : AbpControllerBase
     {
         protected CmsKitAdminController()
         {

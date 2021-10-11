@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account
 {
-    public class RegisterDto
+    public class RegisterDto : ExtensibleObject
     {
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
