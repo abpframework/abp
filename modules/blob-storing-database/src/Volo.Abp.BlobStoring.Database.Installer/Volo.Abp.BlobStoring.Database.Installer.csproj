@@ -19,8 +19,4 @@
       <EmbeddedResource Include="..\..\Volo.Abp.BlobStoring.Database.abpmdl.json" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Volo\Abp\BlobStoring" />
-    </ItemGroup>
-
 </Project>
