@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010007": "你不能修改你的雙因素身份驗證設置",
     "Volo.Abp.Identity:010008": "不允許修改雙因素身份驗證設置.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "允許一個使用者至多可隸屬在幾個組織單位",
+    "ThisUserIsNotActiveMessage": "該用戶不可用.",
     "Permission:IdentityManagement": "身份識別管理",
     "Permission:RoleManagement": "角色管理",
     "Permission:Create": "建立",

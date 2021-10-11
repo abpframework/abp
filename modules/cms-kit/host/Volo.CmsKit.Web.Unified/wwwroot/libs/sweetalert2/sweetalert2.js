@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.1.5
+* sweetalert2 v11.1.7
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -1335,7 +1335,6 @@
   }
 
   const bodyClickListener = event => {
-    // TODO: replace with event.composedPath()
     for (let el = event.target; el && el !== document; el = el.parentNode) {
       for (const attr in clickHandlers) {
         const template = el.getAttribute(attr);
@@ -2593,7 +2592,7 @@
     const innerParams = privateProps.innerParams.get(instance || undefined);
 
     if (innerParams.showLoaderOnConfirm) {
-      showLoading(); // TODO: make showLoading an *instance* method
+      showLoading();
     }
 
     if (innerParams.preConfirm) {
@@ -3110,7 +3109,7 @@
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.1.5';
+  SweetAlert.version = '11.1.7';
 
   const Swal = SweetAlert;
   Swal.default = Swal;
