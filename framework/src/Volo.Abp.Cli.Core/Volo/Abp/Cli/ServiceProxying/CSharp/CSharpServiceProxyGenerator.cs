@@ -21,7 +21,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
         private const string MethodPlaceholder = "<method placeholder>";
         private const string ClassName = "<className>";
         private const string ServiceInterface = "<serviceInterface>";
-        private const string ServicePostfix = "AppService";
+        private static string[] ServicePostfixes = {"AppService" , "ApplicationService"};
         private const string DefaultNamespace = "ClientProxies";
         private const string Namespace = "<namespace>";
         private const string AppServicePrefix = "Volo.Abp.Application.Services";
@@ -290,7 +290,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             }
 
             var serviceInterface = controllerApiDescription.Interfaces.Last();
-            return serviceInterface.Type.EndsWith(ServicePostfix);
+            return ServicePostfixes.Any(x => serviceInterface.Type.EndsWith(x));
         }
 
         private bool ShouldGenerateMethod(string appServiceTypeName, ActionApiDescriptionModel action)

@@ -1,4 +1,4 @@
-﻿﻿(function ($) {
+(function ($) {
     $(function () {
         var l = abp.localization.getResource("AbpAccount");
 

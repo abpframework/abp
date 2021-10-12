@@ -1,4 +1,4 @@
-﻿# Automated Testing
+# Automated Testing
 
 ## Introduction
 

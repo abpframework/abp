@@ -13,7 +13,7 @@ namespace Volo.Blogging.Admin
     [RemoteService(Name = BloggingAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("bloggingAdmin")]
     [Route("api/blogging/blogs/admin")]
-    public class BlogManagementController : AbpController, IBlogManagementAppService
+    public class BlogManagementController : AbpControllerBase, IBlogManagementAppService
     {
         private readonly IBlogManagementAppService _blogManagementAppService;
 

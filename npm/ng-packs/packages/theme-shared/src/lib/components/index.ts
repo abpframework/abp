@@ -1,3 +1,4 @@
+export * from './breadcrumb-items/breadcrumb-items.component';
 export * from './breadcrumb/breadcrumb.component';
 export * from './button/button.component';
 export * from './confirmation/confirmation.component';

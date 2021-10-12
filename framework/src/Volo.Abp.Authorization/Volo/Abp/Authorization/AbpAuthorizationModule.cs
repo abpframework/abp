@@ -31,6 +31,7 @@ namespace Volo.Abp.Authorization
             context.Services.AddAuthorizationCore();
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+            context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 
             context.Services.TryAddTransient<DefaultAuthorizationPolicyProvider>();
 

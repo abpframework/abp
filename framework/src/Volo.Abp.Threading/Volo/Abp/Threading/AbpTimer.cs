@@ -96,7 +96,7 @@ namespace Volo.Abp.Threading
 
             try
             {
-                Elapsed.InvokeSafely(this, new EventArgs());
+                Elapsed.InvokeSafely(this, EventArgs.Empty);
             }
             catch(Exception ex)
             {

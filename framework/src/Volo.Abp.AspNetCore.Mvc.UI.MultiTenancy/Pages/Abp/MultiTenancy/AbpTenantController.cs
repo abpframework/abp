@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 
@@ -10,7 +11,7 @@ namespace Pages.Abp.MultiTenancy
     [Area("abp")]
     [RemoteService(Name = "abp")]
     [Route("api/abp/multi-tenancy")]
-    public class AbpTenantController : AbpController, IAbpTenantAppService
+    public class AbpTenantController : AbpControllerBase, IAbpTenantAppService
     {
         private readonly IAbpTenantAppService _abpTenantAppService;
 
