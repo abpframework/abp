@@ -11,12 +11,12 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
     [Dependency(ReplaceServices = true)]
     public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
     {
-        public Task StartAsync(CancellationToken cancellationToken = new CancellationToken())
+        public Task StartAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken = new CancellationToken())
+        public Task StopAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -25,8 +25,16 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
         {
             if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
             {
-                RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.ExecuteAsync(),
-                    hangfireBackgroundWorker.CronExpression);
+                if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
+                {
+                    RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.ExecuteAsync(),
+                        hangfireBackgroundWorker.CronExpression);
+                }
+                else
+                {
+                    RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.ExecuteAsync(),
+                        hangfireBackgroundWorker.CronExpression);
+                }
             }
             else
             {
