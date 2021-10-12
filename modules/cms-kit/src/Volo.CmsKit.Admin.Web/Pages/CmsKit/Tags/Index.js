@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var createModal = new abp.ModalManager(abp.appPath + "CmsKit/Tags/CreateModal");

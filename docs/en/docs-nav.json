@@ -1083,6 +1083,10 @@
                 {
                   "text": "Page",
                   "path": "UI/Angular/Page-Component.md"
+                },
+                {
+                  "text": "Chart",
+                  "path": "UI/Angular/Chart-Component.md"
                 }
               ]
             }

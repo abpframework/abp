@@ -11,7 +11,7 @@ namespace Volo.Docs.Projects
     [Area("docs")]
     [ControllerName("Project")]
     [Route("api/docs/projects")]
-    public class DocsProjectController : AbpController, IProjectAppService
+    public class DocsProjectController : AbpControllerBase, IProjectAppService
     {
         protected IProjectAppService ProjectAppService { get; }
 

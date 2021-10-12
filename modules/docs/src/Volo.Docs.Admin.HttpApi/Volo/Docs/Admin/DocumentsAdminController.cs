@@ -13,7 +13,7 @@ namespace Volo.Docs.Admin
     [Area("docs-admin")]
     [ControllerName("DocumentsAdmin")]
     [Route("api/docs/admin/documents")]
-    public class DocumentsAdminController : AbpController, IDocumentAdminAppService
+    public class DocumentsAdminController : AbpControllerBase, IDocumentAdminAppService
     {
         private readonly IDocumentAdminAppService _documentAdminAppService;
 

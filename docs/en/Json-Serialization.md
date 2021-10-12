@@ -1,3 +1,3 @@
-﻿# JSON
+# JSON
 
 TODO

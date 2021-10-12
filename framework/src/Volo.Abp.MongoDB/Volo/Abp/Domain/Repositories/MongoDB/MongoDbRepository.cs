@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -23,8 +24,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public class MongoDbRepository<TMongoDbContext, TEntity>
         : RepositoryBase<TEntity>,
-        IMongoDbRepository<TEntity>,
-        IMongoQueryable<TEntity>
+        IMongoDbRepository<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
@@ -720,24 +720,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return aggregate;
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public QueryableExecutionModel GetExecutionModel()
-        {
-            return GetMongoQueryable().GetExecutionModel();
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public IAsyncCursor<TEntity> ToCursor(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursor(GetCancellationToken(cancellationToken));
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public Task<IAsyncCursor<TEntity>> ToCursorAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursorAsync(GetCancellationToken(cancellationToken));
         }
     }
 

@@ -684,12 +684,19 @@ var abp = abp || {};
         document.cookie = cookieValue;
     }
 
+    /**
+     * Escape HTML to help prevent XSS attacks. 
+     */
+    abp.utils.htmlEscape = function (html) {
+        return typeof html === 'string' ? html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : html;
+    }
+
     /* SECURITY ***************************************/
     abp.security = abp.security || {};
     abp.security.antiForgery = abp.security.antiForgery || {};
 
     abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN';
-    abp.security.antiForgery.tokenHeaderName = 'X-XSRF-TOKEN';
+    abp.security.antiForgery.tokenHeaderName = 'RequestVerificationToken';
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
@@ -750,5 +757,20 @@ var abp = abp || {};
             return toUtc(date);
         }
     };
+    
+    /* FEATURES *************************************************/
 
+    abp.features = abp.features || {};
+
+    abp.features.values = abp.features.values || {};
+
+    abp.features.isEnabled = function(name){
+        var value = abp.features.get(name);
+        return value == 'true' || value == 'True';
+    }
+
+    abp.features.get = function (name) {
+        return abp.features.values[name];
+    };
+    
 })();
