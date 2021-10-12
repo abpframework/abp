@@ -19,7 +19,7 @@ namespace Volo.Abp.EventBus.Azure
 {
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(AzureDistributedEventBus))]
-    public class AzureDistributedEventBus : DistributedEventBusBase, IDistributedEventBus, ISingletonDependency
+    public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDependency
     {
         private readonly AbpAzureEventBusOptions _options;
         private readonly IAzureServiceBusMessageConsumerFactory _messageConsumerFactory;
@@ -33,7 +33,6 @@ namespace Volo.Abp.EventBus.Azure
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
-            IEventErrorHandler errorHandler,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IGuidGenerator guidGenerator,
             IClock clock,
@@ -44,7 +43,6 @@ namespace Volo.Abp.EventBus.Azure
             : base(serviceScopeFactory,
                 currentTenant,
                 unitOfWorkManager,
-                errorHandler,
                 abpDistributedEventBusOptions,
                 guidGenerator,
                 clock)
@@ -232,6 +230,5 @@ namespace Volo.Abp.EventBus.Azure
                 }
             );
         }
-
     }
 }
