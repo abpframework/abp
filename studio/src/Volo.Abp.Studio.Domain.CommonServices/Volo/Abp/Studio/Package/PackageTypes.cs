@@ -98,14 +98,14 @@ namespace Volo.Abp.Studio.Packages
             };
         }
 
-        // TODO: Rename this method, or (maybe and) write a summary. Also consider other suggestions
-        public static List<string> GetDddTargetProjectRole(string packageType)
+        public static List<string> GetSuggestedInstallationType(string packageType)
         {
             if (packageType == DomainShared)
             {
                 return new List<string>()
                 {
                     Domain,
+                    DomainShared,
                     ApplicationContracts
                 };
             }
@@ -114,6 +114,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    Domain,
                     Application
                 };
             }
@@ -123,6 +124,7 @@ namespace Volo.Abp.Studio.Packages
                 return new List<string>()
                 {
                     Application,
+                    ApplicationContracts,
                     Mvc,
                     Blazor,
                     BlazorServer,
@@ -147,6 +149,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    EntityFrameworkCore,
                     HostMvc,
                     HostBlazorServer,
                     HostBlazorWebAssembly,
@@ -158,6 +161,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    MongoDB,
                     HostMvc,
                     HostBlazorServer,
                     HostBlazorWebAssembly,
@@ -169,6 +173,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    HttpApi,
                     HostMvc,
                     HostBlazorServer,
                     HostBlazorWebAssembly,
@@ -180,17 +185,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
-                    HostMvc,
-                    HostBlazorServer,
-                    HostBlazorWebAssembly,
-                    HostHttpApi
-                };
-            }
-
-            if (packageType == HttpApiClient)
-            {
-                return new List<string>()
-                {
+                    HttpApiClient,
                     HostMvc,
                     HostBlazorServer,
                     HostBlazorWebAssembly,
@@ -202,6 +197,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    Mvc,
                     HostMvc
                 };
             }
@@ -210,6 +206,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    Blazor,
                     BlazorServer,
                     BlazorWebAssembly
                 };
@@ -219,6 +216,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    BlazorServer,
                     HostBlazorServer
                 };
             }
@@ -227,6 +225,7 @@ namespace Volo.Abp.Studio.Packages
             {
                 return new List<string>()
                 {
+                    BlazorWebAssembly,
                     HostBlazorWebAssembly
                 };
             }
