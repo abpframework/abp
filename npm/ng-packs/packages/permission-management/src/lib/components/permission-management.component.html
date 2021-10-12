@@ -1,4 +1,4 @@
-<abp-modal [(visible)]="visible" [busy]="modalBusy">
+<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
   <ng-container *ngIf="data.entityDisplayName">
     <ng-template #abpHeader>
       <h4>
