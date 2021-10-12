@@ -77,6 +77,11 @@ namespace Volo.Abp.EventBus.Azure
                 return;
             }
 
+            if (await AddToInboxAsync(message.MessageId, eventName, eventType, message.Body.ToArray()))
+            {
+                return;
+            }
+
             var eventData = _serializer.Deserialize(message.Body.ToArray(), eventType);
 
             await TriggerHandlersAsync(eventType, eventData);
