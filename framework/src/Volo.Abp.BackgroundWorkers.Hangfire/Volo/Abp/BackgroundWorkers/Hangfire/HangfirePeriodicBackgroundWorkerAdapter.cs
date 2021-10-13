@@ -17,7 +17,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
             _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
-        public override async Task ExecuteAsync()
+        public override async Task DoWorkAsync()
         {
             var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
             var worker = ServiceProvider.GetRequiredService<TWorker>();

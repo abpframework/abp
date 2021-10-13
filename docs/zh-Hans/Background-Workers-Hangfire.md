@@ -51,7 +51,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
     public MyLogWorker()
     {
         RecurringJobId = nameof(MyLogWorker);
-        CronExpression = Cron.Hourly(5);
+        CronExpression = Cron.Daily();
     }
 
     public override Task DoWorkAsync()
@@ -91,7 +91,7 @@ context.ServiceProvider
     .Add(
         context
             .ServiceProvider
-            .GetRequiredService<PassiveUserCheckerWorker>()
+            .GetRequiredService<MyLogWorker>()
     );
 ````
 

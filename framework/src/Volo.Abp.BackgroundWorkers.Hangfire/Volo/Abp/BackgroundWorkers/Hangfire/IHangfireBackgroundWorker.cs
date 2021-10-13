@@ -8,7 +8,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
 
         string CronExpression { get; set; }
 
-        Task ExecuteAsync();
+        Task DoWorkAsync();
     }
 }
 

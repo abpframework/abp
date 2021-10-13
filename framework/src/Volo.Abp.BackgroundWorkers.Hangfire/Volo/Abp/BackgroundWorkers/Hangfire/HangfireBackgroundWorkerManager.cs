@@ -27,12 +27,12 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
             {
                 if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
                 {
-                    RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.ExecuteAsync(),
+                    RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.DoWorkAsync(),
                         hangfireBackgroundWorker.CronExpression);
                 }
                 else
                 {
-                    RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.ExecuteAsync(),
+                    RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.DoWorkAsync(),
                         hangfireBackgroundWorker.CronExpression);
                 }
             }
@@ -59,7 +59,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
                 var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
                 var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
-                RecurringJob.AddOrUpdate(() => workerAdapter.ExecuteAsync(), GetCron(period.Value));
+                RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
             }
         }
 
