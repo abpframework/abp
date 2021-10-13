@@ -51,7 +51,7 @@ namespace Volo.Abp.Cli.Bundling
                 }
             }
 
-            if (content.IndexOf(Environment.NewLine, StringComparison.Ordinal) < 10)
+            if (content.SplitToLines().Length < 10)
             {
                 return true;
             }
