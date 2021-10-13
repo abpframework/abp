@@ -329,6 +329,10 @@
               "path": "Distributed-Event-Bus.md",
               "items": [
                 {
+                  "text": "Azure Service Bus Integration",
+                  "path": "Distributed-Event-Bus-Azure-Integration.md"
+                },
+                {
                   "text": "RabbitMQ Integration",
                   "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
                 },
