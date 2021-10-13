@@ -41,7 +41,7 @@ namespace Volo.Abp.Cli.Bundling
             return GenerateDefinition(bundleFilePath,fileDefinitionsExcludingFromBundle);
         }
 
-        private bool IsMinFile(string fileName)
+        private bool IsMinFile(string fileName, string content)
         {
             foreach (var suffix in _minFileSuffixes)
             {
@@ -49,6 +49,11 @@ namespace Volo.Abp.Cli.Bundling
                 {
                     return true;
                 }
+            }
+
+            if (content.IndexOf(Environment.NewLine, StringComparison.Ordinal) < 10)
+            {
+                return true;
             }
 
             return false;
@@ -117,7 +122,7 @@ namespace Volo.Abp.Cli.Bundling
         private string GetFileContent(string filePath, bool minify)
         {
             var content = File.ReadAllText(filePath);
-            if (minify && !IsMinFile(filePath))
+            if (minify && !IsMinFile(filePath, content))
             {
                 try
                 {
