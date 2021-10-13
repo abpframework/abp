@@ -246,14 +246,29 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             var projects = await _projectAppService.GetListAsync();
 
-            var sb = new StringBuilder();
-            
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? sb.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(p.ShortName).Append("/").Append(DocsAppConsts.Latest).ToString() : null,
+                Value = CreateProjectLink(p),
                 Selected = p.Id == Project.Id
             }).ToList();
+        }
+
+        private string CreateProjectLink(ProjectDto project)
+        {
+            if (project.Id == Project.Id)
+            {
+                return null;
+            }
+
+            return new StringBuilder()
+                .Append(DocumentsUrlPrefix)
+                .Append(LanguageCode)
+                .Append('/')
+                .Append(project.ShortName)
+                .Append('/')
+                .Append(DocsAppConsts.Latest)
+                .ToString();
         }
 
         private async Task SetVersionAsync()
