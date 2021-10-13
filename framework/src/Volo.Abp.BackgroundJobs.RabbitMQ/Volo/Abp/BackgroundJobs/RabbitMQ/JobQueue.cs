@@ -12,6 +12,7 @@ using RabbitMQ.Client.Events;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
@@ -28,6 +29,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
         protected AbpRabbitMqBackgroundJobOptions AbpRabbitMqBackgroundJobOptions { get; }
+        protected IClock Clock { get; }
         protected IChannelPool ChannelPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
@@ -40,12 +42,14 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         public JobQueue(
             IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
             IOptions<AbpRabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
+            IClock clock,
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
             IBackgroundJobExecuter jobExecuter,
             IServiceScopeFactory serviceScopeFactory,
             IExceptionNotifier exceptionNotifier)
         {
+            Clock = clock;
             AbpBackgroundJobOptions = backgroundJobOptions.Value;
             AbpRabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
             Serializer = serializer;
@@ -85,6 +89,14 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
                 return null;
             }
+        }
+
+        public virtual async Task<string> EnqueueAsync(
+            TArgs args,
+            DateTime executionTime,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal)
+        {
+            return await EnqueueAsync(args, priority, executionTime - Clock.Now);
         }
 
         public virtual async Task StartAsync(CancellationToken cancellationToken = default)

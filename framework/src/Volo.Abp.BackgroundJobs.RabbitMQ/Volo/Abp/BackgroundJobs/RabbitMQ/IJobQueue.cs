@@ -11,5 +11,11 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null
         );
+        
+        Task<string> EnqueueAsync(
+            TArgs args,
+            DateTime executionTime,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal
+        );
     }
 }

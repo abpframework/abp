@@ -12,8 +12,23 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         {
             if (backgroundJobManager is QuartzBackgroundJobManager quartzBackgroundJobManager)
             {
+                var executionTime = delay.HasValue ? DateTime.Now.Add(delay.Value) : (DateTime?) null;
+
                 return await quartzBackgroundJobManager.ReEnqueueAsync(args, retryCount, retryIntervalMillisecond,
-                    priority, delay);
+                    priority, executionTime);
+            }
+
+            return null;
+        }
+        
+        public static async Task<string> EnqueueAsync<TArgs>(this IBackgroundJobManager backgroundJobManager,
+            TArgs args, int retryCount, int retryIntervalMillisecond,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal, DateTime? executionTime = null)
+        {
+            if (backgroundJobManager is QuartzBackgroundJobManager quartzBackgroundJobManager)
+            {
+                return await quartzBackgroundJobManager.ReEnqueueAsync(args, retryCount, retryIntervalMillisecond,
+                    priority, executionTime);
             }
 
             return null;
