@@ -32,6 +32,14 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
 
+### Visual Studio Upgrade
+
+As .NET 6 is a preview version you need to make changes on your current Visual Studio. If you want to run a .NET 6 project on Visual Studio 2019, you need to enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
+
+![Enable Using Previews of the .NET SDK ](use-preview-visual-studio.png)
+
+Alternatively you can download the latest Visual Studio 2022 preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
+
 ### Migration Notes & Breaking Changes
 
 This is a major version and there are some breaking changes and upgrade steps. Here, a list of important breaking changes in this version:
@@ -111,7 +119,7 @@ Enabling the inbox and outbox patterns requires a few manual steps for your appl
 
 First of all, you need to have EF Core or MongoDB installed into your solution. It should be already installed if you'd created a solution from the ABP startup template.
 
-#### Install the package
+#### Install the packages
 
 Install the new [Volo.Abp.EventBus.Boxes](https://www.nuget.org/packages/Volo.Abp.EventBus.Boxes) NuGet package to your database layer (to `EntityFrameworkCore` or `MongoDB` project) or to the host application. Open a command-line terminal at the root directory of your database (or host) project and execute the following command:
 
@@ -119,7 +127,27 @@ Install the new [Volo.Abp.EventBus.Boxes](https://www.nuget.org/packages/Volo.Ab
 abp add-package Volo.Abp.EventBus.Boxes
 ````
 
-This will install the package and setup the ABP module dependency.
+This will install the package and setup the ABP module dependency. This package depends on [DistributedLock.Core](https://www.nuget.org/packages/DistributedLock.Core) library which provides a distributed locking system for concurrency control in a distributed environment. There are [many distributed lock providers](https://github.com/madelson/DistributedLock#implementations), including Redis, SqlServer and ZooKeeper. You can use the one you like. Here, I will show the Redis provider.
+
+Add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the ConfigureService method of your ABP module class:
+
+````csharp
+context.Services.AddSingleton<IDistributedLockProvider>(sp =>
+{
+    var connection = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+    return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
+});
+````
+
+We are getting the Redis configuration from the `appsettings.json` file, so add the following lines to your `appsettings.json` file:
+
+````json
+"Redis": {
+    "Configuration": "127.0.0.1"
+}
+````
+
+You can change the IP or customize the configuration based on your environment.
 
 #### Configure the DbContext
 
