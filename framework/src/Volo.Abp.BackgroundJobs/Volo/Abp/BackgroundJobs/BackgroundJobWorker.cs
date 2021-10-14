@@ -13,6 +13,8 @@ namespace Volo.Abp.BackgroundJobs
 {
     public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
+        protected const string DistributedLockName = "AbpBackgroundJobWorker";
+        
         protected AbpBackgroundJobOptions JobOptions { get; }
 
         protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
@@ -37,7 +39,7 @@ namespace Volo.Abp.BackgroundJobs
 
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            await using (var handler = await DistributedLock.TryAcquireAsync(""))
+            await using (var handler = await DistributedLock.TryAcquireAsync(DistributedLockName, cancellationToken: StoppingToken))
             {
                 if (handler != null)
                 {

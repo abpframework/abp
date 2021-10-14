@@ -21,7 +21,7 @@ namespace Volo.Abp.EventBus.Boxes
         protected IEventOutbox Outbox { get; private set; }
         protected OutboxConfig OutboxConfig { get; private set; }
         protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
-        protected string DistributedLockName => "Outbox_" + OutboxConfig.Name;
+        protected string DistributedLockName => "AbpOutbox_" + OutboxConfig.Name;
         public ILogger<OutboxSender> Logger { get; set; }
 
         protected CancellationTokenSource StoppingTokenSource { get; }

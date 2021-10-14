@@ -28,7 +28,7 @@ namespace Volo.Abp.EventBus.Boxes
 
         protected DateTime? LastCleanTime { get; set; }
 
-        protected string DistributedLockName => "Inbox_" + InboxConfig.Name;
+        protected string DistributedLockName => "AbpInbox_" + InboxConfig.Name;
         public ILogger<InboxProcessor> Logger { get; set; }
         protected CancellationTokenSource StoppingTokenSource { get; }
         protected CancellationToken StoppingToken { get; }
