@@ -18,7 +18,7 @@ namespace Volo.Abp.DistributedLocking
         /// <param name="cancellationToken">Cancellation token</param>
         [ItemCanBeNull]
         Task<IAbpDistributedLockHandle> TryAcquireAsync(
-            string name,
+            [NotNull] string name,
             TimeSpan timeout = default,
             CancellationToken cancellationToken = default
         );

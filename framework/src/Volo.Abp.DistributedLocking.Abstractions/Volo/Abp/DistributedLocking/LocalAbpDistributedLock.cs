@@ -15,6 +15,8 @@ namespace Volo.Abp.DistributedLocking
             TimeSpan timeout = default,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+            
             var semaphore = _localSyncObjects.GetOrAdd(name, _ => new SemaphoreSlim(1, 1));
 
             if (!await semaphore.WaitAsync(timeout, cancellationToken))
