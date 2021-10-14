@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
+import { of } from 'rxjs';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
@@ -101,7 +102,7 @@ export const CONFIG_STATE_DATA = {
   registerLocaleFn: () => Promise.resolve(),
 } as any as ApplicationConfigurationDto;
 
-describe('ConfigState', () => {
+describe('ConfigStateService', () => {
   let spectator: SpectatorService<ConfigStateService>;
   let configState: ConfigStateService;
 
@@ -110,7 +111,10 @@ describe('ConfigState', () => {
     imports: [HttpClientTestingModule],
     providers: [
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
-      { provide: Store, useValue: {} },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => of(CONFIG_STATE_DATA) },
+      },
     ],
   });
 
@@ -118,7 +122,7 @@ describe('ConfigState', () => {
     spectator = createService();
     configState = spectator.service;
 
-    configState.setState(CONFIG_STATE_DATA);
+    configState.refreshAppState();
   });
 
   describe('#getAll', () => {

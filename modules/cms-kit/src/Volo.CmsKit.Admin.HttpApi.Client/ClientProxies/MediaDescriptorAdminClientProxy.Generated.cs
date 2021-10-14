@@ -4,21 +4,32 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.MediaDescriptors;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.MediaDescriptors.ClientProxies
 {
-    public partial class MediaDescriptorAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IMediaDescriptorAdminAppService), typeof(MediaDescriptorAdminClientProxy))]
+    public partial class MediaDescriptorAdminClientProxy : ClientProxyBase<IMediaDescriptorAdminAppService>, IMediaDescriptorAdminAppService
     {
         public virtual async Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
         {
-            return await RequestAsync<MediaDescriptorDto>(nameof(CreateAsync), entityType, inputStream);
+            return await RequestAsync<MediaDescriptorDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(CreateMediaInputWithStream), inputStream }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }

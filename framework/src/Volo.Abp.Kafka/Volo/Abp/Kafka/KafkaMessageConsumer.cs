@@ -39,8 +39,6 @@ namespace Volo.Abp.Kafka
 
         protected string TopicName { get; private set; }
 
-        protected string DeadLetterTopicName { get; private set; }
-
         public KafkaMessageConsumer(
             IConsumerPool consumerPool,
             IExceptionNotifier exceptionNotifier,
@@ -64,15 +62,12 @@ namespace Volo.Abp.Kafka
 
         public virtual void Initialize(
             [NotNull] string topicName,
-            [NotNull] string deadLetterTopicName,
             [NotNull] string groupId,
             string connectionName = null)
         {
             Check.NotNull(topicName, nameof(topicName));
-            Check.NotNull(deadLetterTopicName, nameof(deadLetterTopicName));
             Check.NotNull(groupId, nameof(groupId));
             TopicName = topicName;
-            DeadLetterTopicName = deadLetterTopicName;
             ConnectionName = connectionName ?? KafkaConnections.DefaultConnectionName;
             GroupId = groupId;
             Timer.Start();
@@ -94,30 +89,18 @@ namespace Volo.Abp.Kafka
         {
             using (var adminClient = new AdminClientBuilder(Options.Connections.GetOrDefault(ConnectionName)).Build())
             {
-                var topics = new List<TopicSpecification>
+                var topic = new TopicSpecification
                 {
-                    new()
-                    {
-                        Name = TopicName,
-                        NumPartitions = 1,
-                        ReplicationFactor = 1
-                    },
-                    new()
-                    {
-                        Name = DeadLetterTopicName,
-                        NumPartitions = 1,
-                        ReplicationFactor = 1
-                    }
+                    Name = TopicName,
+                    NumPartitions = 1,
+                    ReplicationFactor = 1
                 };
 
-                topics.ForEach(topic =>
-                {
-                    Options.ConfigureTopic?.Invoke(topic);
-                });
+                Options.ConfigureTopic?.Invoke(topic);
 
                 try
                 {
-                    await adminClient.CreateTopicsAsync(topics);
+                    await adminClient.CreateTopicsAsync(new[] {topic});
                 }
                 catch (CreateTopicsException e)
                 {

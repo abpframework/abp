@@ -4,26 +4,44 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Public.Reactions;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Public.Reactions.ClientProxies
 {
-    public partial class ReactionPublicClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IReactionPublicAppService), typeof(ReactionPublicClientProxy))]
+    public partial class ReactionPublicClientProxy : ClientProxyBase<IReactionPublicAppService>, IReactionPublicAppService
     {
         public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
         {
-            return await RequestAsync<ListResultDto<ReactionWithSelectionDto>>(nameof(GetForSelectionAsync), entityType, entityId);
+            return await RequestAsync<ListResultDto<ReactionWithSelectionDto>>(nameof(GetForSelectionAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
 
         public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            await RequestAsync(nameof(CreateAsync), entityType, entityId, reaction);
+            await RequestAsync(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId },
+                { typeof(string), reaction }
+            });
         }
 
         public virtual async Task DeleteAsync(string entityType, string entityId, string reaction)
         {
-            await RequestAsync(nameof(DeleteAsync), entityType, entityId, reaction);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId },
+                { typeof(string), reaction }
+            });
         }
     }
 }

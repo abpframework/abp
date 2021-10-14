@@ -1,3 +1,3 @@
-﻿(function() {
+(function() {
     //lib1-js-content
 })();

@@ -1,0 +1,53 @@
+{
+  "modules": {
+    "MyProjectName": {
+      "rootPath": "MyProjectName",
+      "remoteServiceName": "MyProjectName",
+      "controllers": {
+        "MyCompanyName.MyProjectName.Samples.SampleController": {
+          "controllerName": "Sample",
+          "controllerGroupName": "Sample",
+          "type": "MyCompanyName.MyProjectName.Samples.SampleController",
+          "interfaces": [
+            {
+              "type": "MyCompanyName.MyProjectName.Samples.ISampleAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/MyProjectName/sample",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "MyCompanyName.MyProjectName.Samples.SampleDto",
+                "typeSimple": "MyCompanyName.MyProjectName.Samples.SampleDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "MyCompanyName.MyProjectName.Samples.ISampleAppService"
+            },
+            "GetAuthorizedAsync": {
+              "uniqueName": "GetAuthorizedAsync",
+              "name": "GetAuthorizedAsync",
+              "httpMethod": "GET",
+              "url": "api/MyProjectName/sample/authorized",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "MyCompanyName.MyProjectName.Samples.SampleDto",
+                "typeSimple": "MyCompanyName.MyProjectName.Samples.SampleDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "MyCompanyName.MyProjectName.Samples.ISampleAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

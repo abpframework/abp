@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Menu:IdentityManagement": "Kimlik yönetimi",
@@ -25,6 +25,7 @@
     "DisplayName:Email": "E-posta adresi",
     "DisplayName:PhoneNumber": "Telefon numarası",
     "DisplayName:TwoFactorEnabled": "İki aşamalı doğrulama",
+    "DisplayName:IsActive": "Aktif",
     "DisplayName:LockoutEnabled": "Başarısız giriş denemeleri sonrası hesabı kilitleme",
     "NewRole": "Yeni rol",
     "RoleName": "Rol adı",
@@ -68,6 +69,7 @@
     "Volo.Abp.Identity:010003": "Kimliği dışarıdan alınan kullanıcıların şifresi değiştirilemez!",
     "Volo.Abp.Identity:010004": "{0} isminde bir birim zaten var. Aynı seviyede aynı isimli iki birim olamaz.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Bir kullanıcı için izin verilen en fazla organizasyon birimi sayısı",
+    "ThisUserIsNotActiveMessage": "Bu kullanıcı aktif değil.",
     "Permission:IdentityManagement": "Kimlik yönetimi",
     "Permission:RoleManagement": "Rol yönetimi",
     "Permission:Create": "Oluşturma",

@@ -4,21 +4,40 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Blogging.Files;
+using Volo.Abp.Content;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Blogging.ClientProxies
 {
-    public partial class BlogFilesClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IFileAppService), typeof(BlogFilesClientProxy))]
+    public partial class BlogFilesClientProxy : ClientProxyBase<IFileAppService>, IFileAppService
     {
         public virtual async Task<RawFileDto> GetAsync(string name)
         {
-            return await RequestAsync<RawFileDto>(nameof(GetAsync), name);
+            return await RequestAsync<RawFileDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), name }
+            });
+        }
+
+        public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
+        {
+            return await RequestAsync<IRemoteStreamContent>(nameof(GetFileAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), name }
+            });
         }
 
         public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
-            return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), input);
+            return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(FileUploadInputDto), input }
+            });
         }
     }
 }

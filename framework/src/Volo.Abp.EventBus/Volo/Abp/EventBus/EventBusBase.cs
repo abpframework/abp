@@ -22,18 +22,14 @@ namespace Volo.Abp.EventBus
 
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        protected IEventErrorHandler ErrorHandler { get; }
-
         protected EventBusBase(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IEventErrorHandler errorHandler)
+            IUnitOfWorkManager unitOfWorkManager)
         {
             ServiceScopeFactory = serviceScopeFactory;
             CurrentTenant = currentTenant;
             UnitOfWorkManager = unitOfWorkManager;
-            ErrorHandler = errorHandler;
         }
 
         /// <inheritdoc/>
@@ -92,13 +88,17 @@ namespace Volo.Abp.EventBus
         public abstract void UnsubscribeAll(Type eventType);
 
         /// <inheritdoc/>
-        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
+        public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
+            where TEvent : class
         {
             return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
         }
 
         /// <inheritdoc/>
-        public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+        public virtual async Task PublishAsync(
+            Type eventType,
+            object eventData,
+            bool onUnitOfWorkComplete = true)
         {
             if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
             {
@@ -116,7 +116,7 @@ namespace Volo.Abp.EventBus
 
         protected abstract void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord);
 
-        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, Action<EventExecutionErrorContext> onErrorAction = null)
+        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
         {
             var exceptions = new List<Exception>();
 
@@ -124,13 +124,11 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                var context = new EventExecutionErrorContext(exceptions, eventType, this);
-                onErrorAction?.Invoke(context);
-                await ErrorHandler.HandleAsync(context);
+                ThrowOriginalExceptions(eventType, exceptions);
             }
         }
 
-        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData , List<Exception> exceptions)
+        protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData, List<Exception> exceptions, InboxConfig inboxConfig = null)
         {
             await new SynchronizationContextRemover();
 
@@ -138,7 +136,7 @@ namespace Volo.Abp.EventBus
             {
                 foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions);
+                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions, inboxConfig);
                 }
             }
 
@@ -157,6 +155,19 @@ namespace Volo.Abp.EventBus
                     await PublishToEventBusAsync(baseEventType, baseEventData);
                 }
             }
+        }
+
+        protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)
+        {
+            if (exceptions.Count == 1)
+            {
+                exceptions[0].ReThrow();
+            }
+
+            throw new AggregateException(
+                "More than one error has occurred while triggering the event: " + eventType,
+                exceptions
+            );
         }
 
         protected virtual void SubscribeHandlers(ITypeList<IEventHandler> handlers)
@@ -182,13 +193,20 @@ namespace Volo.Abp.EventBus
 
         protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
 
-        protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType, object eventData, List<Exception> exceptions)
+        protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType,
+            object eventData, List<Exception> exceptions, InboxConfig inboxConfig = null)
         {
             using (var eventHandlerWrapper = asyncHandlerFactory.GetHandler())
             {
                 try
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
+
+                    if (inboxConfig?.HandlerSelector != null &&
+                        !inboxConfig.HandlerSelector(handlerType))
+                    {
+                        return;
+                    }
 
                     using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                     {

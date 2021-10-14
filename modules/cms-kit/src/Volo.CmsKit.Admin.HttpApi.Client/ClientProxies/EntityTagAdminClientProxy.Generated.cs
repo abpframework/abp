@@ -4,26 +4,39 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Tags;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.Tags.ClientProxies
 {
-    public partial class EntityTagAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IEntityTagAdminAppService), typeof(EntityTagAdminClientProxy))]
+    public partial class EntityTagAdminClientProxy : ClientProxyBase<IEntityTagAdminAppService>, IEntityTagAdminAppService
     {
         public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
         {
-            await RequestAsync(nameof(AddTagToEntityAsync), input);
+            await RequestAsync(nameof(AddTagToEntityAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagCreateDto), input }
+            });
         }
 
         public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
         {
-            await RequestAsync(nameof(RemoveTagFromEntityAsync), input);
+            await RequestAsync(nameof(RemoveTagFromEntityAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagRemoveDto), input }
+            });
         }
 
         public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
         {
-            await RequestAsync(nameof(SetEntityTagsAsync), input);
+            await RequestAsync(nameof(SetEntityTagsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(EntityTagSetDto), input }
+            });
         }
     }
 }

@@ -51,12 +51,15 @@ namespace Volo.Abp.Cli
         {
             var illegalKeywords = new[]
             {
-               "Blazor"
+                "Blazor"
             };
 
             foreach (var illegalKeyword in illegalKeywords)
             {
                 var args = new CommandLineArgs("new", illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+
+                args = new CommandLineArgs("new", "Acme." + illegalKeyword);
                 await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
             }
         }

@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": ["@abp/**/proxy", "@abp/**/config"],
             "depConstraints": [
               {
                 "sourceTag": "*",
@@ -20,7 +20,7 @@
           }
         ]
       }
-    },  
+    },
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],

@@ -1,19 +1,17 @@
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
-import { LocaleDirection } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
-import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
-import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
-import { PermissionManagement } from '../models/permission-management';
 import {
   GetPermissionListResultDto,
   PermissionGrantInfoDto,
   PermissionGroupDto,
+  PermissionsService,
   ProviderInfoDto,
   UpdatePermissionDto,
-} from '../proxy/models';
-import { PermissionManagementState } from '../states/permission-management.state';
+} from '@abp/ng.permission-management/proxy';
+import { LocaleDirection } from '@abp/ng.theme.shared';
+import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
+import { of } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs/operators';
+import { PermissionManagement } from '../models/permission-management';
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
   style: string;
@@ -60,6 +58,7 @@ export class PermissionManagementComponent
       this.openModal().subscribe(() => {
         this._visible = true;
         this.visibleChange.emit(true);
+        this.initModal();
       });
     } else {
       this.selectedGroup = null;
@@ -70,11 +69,7 @@ export class PermissionManagementComponent
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Select(PermissionManagementState.getPermissionGroups)
-  groups$: Observable<PermissionGroupDto[]>;
-
-  @Select(PermissionManagementState.getEntityDisplayName)
-  entityName$: Observable<string>;
+  data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
 
   selectedGroup: PermissionGroupDto;
 
@@ -88,31 +83,28 @@ export class PermissionManagementComponent
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
-  get selectedGroupPermissions$(): Observable<PermissionWithStyle[]> {
+  get selectedGroupPermissions(): PermissionWithStyle[] {
+    if (!this.selectedGroup) return [];
+
     const margin = `margin-${
       (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
     }.px`;
 
-    return this.groups$.pipe(
-      map(groups =>
-        this.selectedGroup
-          ? groups.find(group => group.name === this.selectedGroup.name).permissions
-          : [],
-      ),
-      map<PermissionGrantInfoDto[], PermissionWithStyle[]>(permissions =>
-        permissions.map(
-          permission =>
-            ({
-              ...permission,
-              style: { [margin]: findMargin(permissions, permission) },
-              isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
-            } as any as PermissionWithStyle),
-        ),
-      ),
+    const permissions = this.data.groups.find(
+      group => group.name === this.selectedGroup.name,
+    ).permissions;
+
+    return permissions.map(
+      permission =>
+        ({
+          ...permission,
+          style: { [margin]: findMargin(permissions, permission) },
+          isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
+        } as unknown as PermissionWithStyle),
     );
   }
 
-  constructor(protected store: Store, protected configState: ConfigStateService) {}
+  constructor(protected service: PermissionsService, protected configState: ConfigStateService) {}
 
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
@@ -151,20 +143,18 @@ export class PermissionManagementComponent
   }
 
   setTabCheckboxState() {
-    this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
-      const selectedPermissions = permissions.filter(per => per.isGranted);
-      const element = document.querySelector('#select-all-in-this-tabs') as any;
+    const selectedPermissions = this.selectedGroupPermissions.filter(per => per.isGranted);
+    const element = document.querySelector('#select-all-in-this-tabs') as any;
 
-      if (selectedPermissions.length === permissions.length) {
-        element.indeterminate = false;
-        this.selectThisTab = true;
-      } else if (selectedPermissions.length === 0) {
-        element.indeterminate = false;
-        this.selectThisTab = false;
-      } else {
-        element.indeterminate = true;
-      }
-    });
+    if (selectedPermissions.length === this.selectedGroupPermissions.length) {
+      element.indeterminate = false;
+      this.selectThisTab = true;
+    } else if (selectedPermissions.length === 0) {
+      element.indeterminate = false;
+      this.selectThisTab = false;
+    } else {
+      element.indeterminate = true;
+    }
   }
 
   setGrantCheckboxState() {
@@ -183,19 +173,17 @@ export class PermissionManagementComponent
   }
 
   onClickSelectThisTab() {
-    this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
-      permissions.forEach(permission => {
-        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
-          return;
+    this.selectedGroupPermissions.forEach(permission => {
+      if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
+        return;
 
-        const index = this.permissions.findIndex(per => per.name === permission.name);
+      const index = this.permissions.findIndex(per => per.name === permission.name);
 
-        this.permissions = [
-          ...this.permissions.slice(0, index),
-          { ...this.permissions[index], isGranted: !this.selectThisTab },
-          ...this.permissions.slice(index + 1),
-        ];
-      });
+      this.permissions = [
+        ...this.permissions.slice(0, index),
+        { ...this.permissions[index], isGranted: !this.selectThisTab },
+        ...this.permissions.slice(index + 1),
+      ];
     });
 
     this.setGrantCheckboxState();
@@ -217,9 +205,7 @@ export class PermissionManagementComponent
   }
 
   submit() {
-    const unchangedPermissions = getPermissions(
-      this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
-    );
+    const unchangedPermissions = getPermissions(this.data.groups);
 
     const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
@@ -236,14 +222,8 @@ export class PermissionManagementComponent
     }
 
     this.modalBusy = true;
-    this.store
-      .dispatch(
-        new UpdatePermissions({
-          providerKey: this.providerKey,
-          providerName: this.providerName,
-          permissions: changedPermissions,
-        }),
-      )
+    this.service
+      .update(this.providerName, this.providerKey, { permissions: changedPermissions })
       .pipe(
         switchMap(() =>
           this.shouldFetchAppConfig() ? this.configState.refreshAppState() : of(null),
@@ -260,20 +240,13 @@ export class PermissionManagementComponent
       throw new Error('Provider Key and Provider Name are required.');
     }
 
-    return this.store
-      .dispatch(
-        new GetPermissions({
-          providerKey: this.providerKey,
-          providerName: this.providerName,
-        }),
-      )
-      .pipe(
-        pluck('PermissionManagementState', 'permissionRes'),
-        tap((permissionRes: GetPermissionListResultDto) => {
-          this.selectedGroup = permissionRes.groups[0];
-          this.permissions = getPermissions(permissionRes.groups);
-        }),
-      );
+    return this.service.get(this.providerName, this.providerKey).pipe(
+      tap((permissionRes: GetPermissionListResultDto) => {
+        this.data = permissionRes;
+        this.selectedGroup = permissionRes.groups[0];
+        this.permissions = getPermissions(permissionRes.groups);
+      }),
+    );
   }
 
   initModal() {

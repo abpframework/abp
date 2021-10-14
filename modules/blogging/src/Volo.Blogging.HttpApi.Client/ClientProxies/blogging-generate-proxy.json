@@ -51,9 +51,9 @@
               "allowAnonymous": null,
               "implementFrom": "Volo.Blogging.Files.IFileAppService"
             },
-            "GetForWebAsyncByName": {
-              "uniqueName": "GetForWebAsyncByName",
-              "name": "GetForWebAsync",
+            "GetFileAsyncByName": {
+              "uniqueName": "GetFileAsyncByName",
+              "name": "GetFileAsync",
               "httpMethod": "GET",
               "url": "api/blogging/files/www/{name}",
               "supportedVersions": [],
@@ -82,17 +82,17 @@
                 }
               ],
               "returnValue": {
-                "type": "Microsoft.AspNetCore.Mvc.FileResult",
-                "typeSimple": "Microsoft.AspNetCore.Mvc.FileResult"
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Blogging.BlogFilesController"
+              "implementFrom": "Volo.Blogging.Files.IFileAppService"
             },
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
               "name": "CreateAsync",
               "httpMethod": "POST",
-              "url": "api/blogging/files",
+              "url": "api/blogging/files/images/upload",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -107,15 +107,27 @@
               "parameters": [
                 {
                   "nameOnMethod": "input",
-                  "name": "input",
+                  "name": "File",
                   "jsonName": null,
-                  "type": "Volo.Blogging.Files.FileUploadInputDto",
-                  "typeSimple": "Volo.Blogging.Files.FileUploadInputDto",
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
                 }
               ],
               "returnValue": {
@@ -124,43 +136,6 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Blogging.Files.IFileAppService"
-            },
-            "UploadImageByFile": {
-              "uniqueName": "UploadImageByFile",
-              "name": "UploadImage",
-              "httpMethod": "POST",
-              "url": "api/blogging/files/images/upload",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "file",
-                  "typeAsString": "Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features",
-                  "type": "Microsoft.AspNetCore.Http.IFormFile",
-                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "file",
-                  "name": "file",
-                  "jsonName": null,
-                  "type": "Microsoft.AspNetCore.Http.IFormFile",
-                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "FormFile",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Microsoft.AspNetCore.Mvc.JsonResult",
-                "typeSimple": "Microsoft.AspNetCore.Mvc.JsonResult"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.Blogging.BlogFilesController"
             }
           }
         },

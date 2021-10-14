@@ -1,3 +1,4 @@
+import { TenantCreateDto, TenantDto, TenantUpdateDto } from '@abp/ng.tenant-management/proxy';
 import {
   CreateFormPropContributorCallback,
   EditFormPropContributorCallback,
@@ -14,7 +15,6 @@ import {
 } from '../defaults/default-tenants-form-props';
 import { DEFAULT_TENANTS_TOOLBAR_ACTIONS } from '../defaults/default-tenants-toolbar-actions';
 import { eTenantManagementComponents } from '../enums/components';
-import { TenantCreateDto, TenantDto, TenantUpdateDto } from '../proxy/models';
 
 export const DEFAULT_TENANT_MANAGEMENT_ENTITY_ACTIONS = {
   [eTenantManagementComponents.Tenants]: DEFAULT_TENANTS_ENTITY_ACTIONS,

@@ -4,17 +4,25 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Tags;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Public.Tags.ClientProxies
 {
-    public partial class TagPublicClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ITagAppService), typeof(TagPublicClientProxy))]
+    public partial class TagPublicClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
     {
         public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
         {
-            return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), entityType, entityId);
+            return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
     }
 }

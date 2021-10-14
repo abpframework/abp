@@ -1,4 +1,4 @@
-﻿# 在AspNet Core MVC Web Application中使用ABP 
+# 在AspNet Core MVC Web Application中使用ABP 
 
 本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
 

@@ -276,5 +276,59 @@ namespace Volo.Abp.Http.DynamicProxying
             });
             result.ShouldBe("123.rtf:File1:application/rtf:1-1.rtf123.rtf:File2:application/rtf2:1-2.rtf789.rtf:File3:application/rtf3:i-789.rtf");
         }
+
+        [Fact]
+        public async Task GetParamsFromQueryAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsInput()
+            {
+                NameValues = new List<GetParamsNameValue>()
+                {
+                    new GetParamsNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        }
+
+        [Fact]
+        public async Task GetParamsFromFormAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromFormAsync(new GetParamsInput()
+            {
+                NameValues = new List<GetParamsNameValue>()
+                {
+                    new GetParamsNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        }
     }
 }

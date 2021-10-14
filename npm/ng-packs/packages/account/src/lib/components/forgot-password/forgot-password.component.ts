@@ -1,7 +1,7 @@
+import { AccountService } from '@abp/ng.account.core/proxy';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { AccountService } from '../../proxy/account/account.service';
 
 @Component({
   selector: 'abp-forgot-password',

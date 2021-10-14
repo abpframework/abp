@@ -21,7 +21,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
         private const string MethodPlaceholder = "<method placeholder>";
         private const string ClassName = "<className>";
         private const string ServiceInterface = "<serviceInterface>";
-        private const string ServicePostfix = "AppService";
+        private static string[] ServicePostfixes = {"AppService" , "ApplicationService"};
         private const string DefaultNamespace = "ClientProxies";
         private const string Namespace = "<namespace>";
         private const string AppServicePrefix = "Volo.Abp.Application.Services";
@@ -31,23 +31,19 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
                                                        $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
                                                        $"{Environment.NewLine}namespace <namespace>" +
                                                        $"{Environment.NewLine}{{" +
-                                                       $"{Environment.NewLine}    public partial class <className>" +
+                                                       $"{Environment.NewLine}    [Dependency(ReplaceServices = true)]" +
+                                                       $"{Environment.NewLine}    [ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
+                                                       $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
                                                        $"{Environment.NewLine}    {{" +
                                                        $"{Environment.NewLine}        <method placeholder>" +
                                                        $"{Environment.NewLine}    }}" +
                                                        $"{Environment.NewLine}}}" +
                                                        $"{Environment.NewLine}";
         private readonly string _clientProxyTemplate = "// This file is part of <className>, you can customize it here" +
-                                                        $"{Environment.NewLine}using Volo.Abp.DependencyInjection;" +
-                                                        $"{Environment.NewLine}using Volo.Abp.Http.Client.ClientProxying;" +
-                                                        $"{Environment.NewLine}<using placeholder>" +
-                                                        $"{Environment.NewLine}" +
                                                         $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
                                                         $"{Environment.NewLine}namespace <namespace>" +
                                                         $"{Environment.NewLine}{{" +
-                                                        $"{Environment.NewLine}    [Dependency(ReplaceServices = true)]" +
-                                                        $"{Environment.NewLine}    [ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
-                                                        $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
+                                                        $"{Environment.NewLine}    public partial class <className>" +
                                                         $"{Environment.NewLine}    {{" +
                                                         $"{Environment.NewLine}    }}" +
                                                         $"{Environment.NewLine}}}" +
@@ -58,7 +54,9 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             "using System.Threading.Tasks;",
             "using Volo.Abp.Application.Dtos;",
             "using Volo.Abp.Http.Client;",
-            "using Volo.Abp.Http.Modeling;"
+            "using Volo.Abp.Http.Modeling;",
+            "using Volo.Abp.DependencyInjection;",
+            "using Volo.Abp.Http.Client.ClientProxying;"
         };
 
         public CSharpServiceProxyGenerator(
@@ -130,8 +128,6 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             var clientProxyBuilder = new StringBuilder(_clientProxyTemplate);
             clientProxyBuilder.Replace(ClassName, clientProxyName);
             clientProxyBuilder.Replace(Namespace, rootNamespace);
-            clientProxyBuilder.Replace(ServiceInterface, appServiceTypeName);
-            clientProxyBuilder.Replace(UsingPlaceholder, $"using {GetTypeNamespace(appServiceTypeFullName)};");
 
             var filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.cs");
             Directory.CreateDirectory(Path.GetDirectoryName(filePath));
@@ -210,7 +206,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
         {
             var methodBuilder = new StringBuilder();
 
-            var returnTypeName = GetRealTypeName(usingNamespaceList, action.ReturnValue.Type);
+            var returnTypeName = GetRealTypeName(action.ReturnValue.Type, usingNamespaceList);
 
             if(!action.Name.EndsWith("Async"))
             {
@@ -229,7 +225,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
 
             foreach (var parameter in action.Parameters.GroupBy(x => x.Name).Select( x=> x.First()))
             {
-                methodBuilder.Replace("<args>", $"{GetRealTypeName(usingNamespaceList, parameter.Type)} {parameter.Name}, <args>");
+                methodBuilder.Replace("<args>", $"{GetRealTypeName(parameter.Type, usingNamespaceList)} {parameter.Name}, <args>");
             }
 
             methodBuilder.Replace("<args>", string.Empty);
@@ -253,7 +249,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
 
             foreach (var parameter in action.ParametersOnMethod)
             {
-                methodBuilder.Replace("<args>", $"{GetRealTypeName(usingNamespaceList, parameter.Type)} {parameter.Name}, <args>");
+                methodBuilder.Replace("<args>", $"{GetRealTypeName(parameter.Type, usingNamespaceList)} {parameter.Name}, <args>");
             }
 
             methodBuilder.Replace("<args>", string.Empty);
@@ -261,21 +257,27 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
 
             methodBuilder.AppendLine("        {");
 
+            var argsTemplate = "new ClientProxyRequestTypeValue" +
+                       $"{Environment.NewLine}            {{<args>" +
+                       $"{Environment.NewLine}            }}";
+
+            var args = action.ParametersOnMethod.Any() ? argsTemplate : string.Empty;
+
             if (returnTypeName == "void")
             {
-                methodBuilder.AppendLine($"            await RequestAsync(nameof({action.Name}), <args>);");
+                methodBuilder.AppendLine($"            await RequestAsync(nameof({action.Name}), {args});");
             }
             else
             {
-                methodBuilder.AppendLine($"            return await RequestAsync<{returnTypeName}>(nameof({action.Name}), <args>);");
+                methodBuilder.AppendLine($"            return await RequestAsync<{returnTypeName}>(nameof({action.Name}), {args});");
             }
 
             foreach (var parameter in action.ParametersOnMethod)
             {
-                methodBuilder.Replace("<args>", $"{parameter.Name}, <args>");
+                methodBuilder.Replace("<args>", $"{Environment.NewLine}                {{ typeof({GetRealTypeName(parameter.Type)}), {parameter.Name} }},<args>");
             }
 
-            methodBuilder.Replace("<args>", string.Empty);
+            methodBuilder.Replace(",<args>", string.Empty);
             methodBuilder.Replace(", )", ")");
             methodBuilder.AppendLine("        }");
         }
@@ -288,7 +290,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             }
 
             var serviceInterface = controllerApiDescription.Interfaces.Last();
-            return serviceInterface.Type.EndsWith(ServicePostfix);
+            return ServicePostfixes.Any(x => serviceInterface.Type.EndsWith(x));
         }
 
         private bool ShouldGenerateMethod(string appServiceTypeName, ActionApiDescriptionModel action)
@@ -301,7 +303,7 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             return typeFullName.Substring(0, typeFullName.LastIndexOf('.'));
         }
 
-        private string GetRealTypeName(List<string> usingNamespaceList, string typeName)
+        private string GetRealTypeName(string typeName, List<string> usingNamespaceList = null)
         {
             var filter = new []{"<", ",", ">"};
             var stringBuilder = new StringBuilder();
@@ -309,7 +311,11 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
 
             if (typeNames.All(x => !filter.Any(x.Contains)))
             {
-                AddUsingNamespace(usingNamespaceList, typeName);
+                if (usingNamespaceList != null)
+                {
+                    AddUsingNamespace(usingNamespaceList, typeName);
+                }
+
                 return NormalizeTypeName(typeNames.Last());
             }
 
@@ -319,7 +325,11 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
             {
                 if (filter.Any(x => item.Contains(x)))
                 {
-                    AddUsingNamespace(usingNamespaceList, $"{fullName}.{item}".TrimStart('.'));
+                    if (usingNamespaceList != null)
+                    {
+                        AddUsingNamespace(usingNamespaceList, $"{fullName}.{item}".TrimStart('.'));
+                    }
+
                     fullName = string.Empty;
 
                     if (item.Contains('<') || item.Contains(','))

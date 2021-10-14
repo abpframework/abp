@@ -4,36 +4,56 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Pages;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.CmsKit.Admin.Pages.ClientProxies
 {
-    public partial class PageAdminClientProxy
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IPageAdminAppService), typeof(PageAdminClientProxy))]
+    public partial class PageAdminClientProxy : ClientProxyBase<IPageAdminAppService>, IPageAdminAppService
     {
         public virtual async Task<PageDto> GetAsync(Guid id)
         {
-            return await RequestAsync<PageDto>(nameof(GetAsync), id);
+            return await RequestAsync<PageDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
 
         public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
         {
-            return await RequestAsync<PagedResultDto<PageDto>>(nameof(GetListAsync), input);
+            return await RequestAsync<PagedResultDto<PageDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(GetPagesInputDto), input }
+            });
         }
 
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            return await RequestAsync<PageDto>(nameof(CreateAsync), input);
+            return await RequestAsync<PageDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(CreatePageInputDto), input }
+            });
         }
 
         public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
         {
-            return await RequestAsync<PageDto>(nameof(UpdateAsync), id, input);
+            return await RequestAsync<PageDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id },
+                { typeof(UpdatePageInputDto), input }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }
