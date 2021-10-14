@@ -4,7 +4,7 @@ Angular UI extensions system allows you to add a new action to the actions menu,
 
 See the documents below for the details:
 
-* [Entity Action Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions)
-* [Data Table Column (or Entity Prop) Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions)
-* [Page Toolbar Extension](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions)
-* [Dynamic Form (or Form Prop) Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions)
+* [Entity Action Extensions](Entity-Action-Extensions.md)
+* [Data Table Column (or Entity Prop) Extensions](Data-Table-Column-Extensions.md)
+* [Page Toolbar Extension](Page-Toolbar-Extensions.md)
+* [Dynamic Form (or Form Prop) Extensions](Dynamic-Form-Extensions.md)
