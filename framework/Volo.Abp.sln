@@ -372,6 +372,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AzureServiceBus", "src\Volo.Abp.AzureServiceBus\Volo.Abp.AzureServiceBus.csproj", "{808EC18E-C8CC-4F5C-82B6-984EADBBF85D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Azure", "src\Volo.Abp.EventBus.Azure\Volo.Abp.EventBus.Azure.csproj", "{FB27F78E-F10E-4810-9B8E-BCD67DCFC8A2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Authorization.Abstractions", "src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj", "{87B0C2A8-FE95-4779-8B9C-2181AA52B3FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Core", "src\Volo.Abp.TextTemplating.Core\Volo.Abp.TextTemplating.Core.csproj", "{184E859A-282D-44D7-B8E9-FEA874644013}"
@@ -393,9 +394,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Boxes", "src\Volo.Abp.EventBus.Boxes\Volo.Abp.EventBus.Boxes.csproj", "{6E289F31-7924-418B-9DAC-62A7CFADF916}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking", "src\Volo.Abp.DistributedLocking\Volo.Abp.DistributedLocking.csproj", "{9A7EEA08-15BE-476D-8168-53039867038E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Auditing.Contracts", "src\Volo.Abp.Auditing.Contracts\Volo.Abp.Auditing.Contracts.csproj", "{508B6355-AD28-4E60-8549-266D21DBF2CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.Web", "src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj", "{F7407459-8AFA-45E4-83E9-9BB01412CC08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundWorkers.Hangfire", "src\Volo.Abp.BackgroundWorkers.Hangfire\Volo.Abp.BackgroundWorkers.Hangfire.csproj", "{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1187,6 +1191,10 @@ Global
 		{F7407459-8AFA-45E4-83E9-9BB01412CC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7407459-8AFA-45E4-83E9-9BB01412CC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7407459-8AFA-45E4-83E9-9BB01412CC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1388,6 +1396,7 @@ Global
 		{9A7EEA08-15BE-476D-8168-53039867038E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{508B6355-AD28-4E60-8549-266D21DBF2CF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{F7407459-8AFA-45E4-83E9-9BB01412CC08} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
