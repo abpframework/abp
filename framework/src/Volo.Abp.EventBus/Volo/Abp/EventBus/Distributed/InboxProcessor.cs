@@ -120,9 +120,11 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(
-                        Convert.ToInt32(EventBusBoxesOptions.DistributedLockWaitDuration.TotalMilliseconds), 
-                        StoppingToken);
+                    try
+                    {
+                        await Task.Delay(EventBusBoxesOptions.DistributedLockWaitDuration, StoppingToken);
+                    }
+                    catch (TaskCanceledException) { }
                 }
             }
         }

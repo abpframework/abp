@@ -3,7 +3,6 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
-using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
@@ -19,7 +18,7 @@ namespace Volo.Abp.Domain
     [DependsOn(
         typeof(AbpAuditingModule),
         typeof(AbpDataModule),
-        typeof(AbpEventBusBoxesModule),
+        typeof(AbpEventBusModule),
         typeof(AbpGuidsModule),
         typeof(AbpMultiTenancyModule),
         typeof(AbpThreadingModule),

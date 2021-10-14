@@ -105,7 +105,6 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
     "framework/src/Volo.Abp.EventBus.Abstractions",
     "framework/src/Volo.Abp.EventBus",
-    "framework/src/Volo.Abp.EventBus.Boxes",
     "framework/src/Volo.Abp.EventBus.RabbitMQ",
     "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.EventBus.Rebus",
