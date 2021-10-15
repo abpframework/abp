@@ -16,4 +16,11 @@
     <ProjectReference Include="..\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

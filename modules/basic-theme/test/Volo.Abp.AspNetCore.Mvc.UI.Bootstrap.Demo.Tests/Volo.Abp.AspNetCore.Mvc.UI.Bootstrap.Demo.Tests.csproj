@@ -29,6 +29,13 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <!-- Below ItemGroup and Target tags are added according to https://github.com/aspnet/Hosting/issues/959#issuecomment-286351703 -->
 
   <!-- Solves Problem#2 (404 when executing service calls hosted in other assemblies) -->
