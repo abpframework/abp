@@ -175,7 +175,9 @@ ngb-typeahead-window, ngb-typeahead-window.dropdown-menu {
 }
 
 /* </animations */
-
+.ngb-dp-body {
+  z-index: 1055 !important;
+}
 `;
 
 export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';

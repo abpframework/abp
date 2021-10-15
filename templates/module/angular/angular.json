@@ -95,7 +95,7 @@
                 "bundleName": "ngx-datatable-material"
               },
               {
-                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
                 "inject": false,
                 "bundleName": "bootstrap-rtl.min"
               },
