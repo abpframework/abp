@@ -1,12 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Medallion.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
@@ -19,7 +19,7 @@ namespace Volo.Abp.EventBus.Boxes
         protected IServiceProvider ServiceProvider { get; }
         protected AbpAsyncTimer Timer { get; }
         protected IDistributedEventBus DistributedEventBus { get; }
-        protected IDistributedLockProvider DistributedLockProvider { get; }
+        protected IAbpDistributedLock DistributedLock { get; }
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected IClock Clock { get; }
         protected IEventInbox Inbox { get; private set; }
@@ -28,7 +28,7 @@ namespace Volo.Abp.EventBus.Boxes
 
         protected DateTime? LastCleanTime { get; set; }
 
-        protected string DistributedLockName => "Inbox_" + InboxConfig.Name;
+        protected string DistributedLockName => "AbpInbox_" + InboxConfig.Name;
         public ILogger<InboxProcessor> Logger { get; set; }
         protected CancellationTokenSource StoppingTokenSource { get; }
         protected CancellationToken StoppingToken { get; }
@@ -37,7 +37,7 @@ namespace Volo.Abp.EventBus.Boxes
             IServiceProvider serviceProvider,
             AbpAsyncTimer timer,
             IDistributedEventBus distributedEventBus,
-            IDistributedLockProvider distributedLockProvider,
+            IAbpDistributedLock distributedLock,
             IUnitOfWorkManager unitOfWorkManager,
             IClock clock,
             IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
@@ -45,11 +45,11 @@ namespace Volo.Abp.EventBus.Boxes
             ServiceProvider = serviceProvider;
             Timer = timer;
             DistributedEventBus = distributedEventBus;
-            DistributedLockProvider = distributedLockProvider;
+            DistributedLock = distributedLock;
             UnitOfWorkManager = unitOfWorkManager;
             Clock = clock;
             EventBusBoxesOptions = eventBusBoxesOptions.Value;
-            Timer.Period = EventBusBoxesOptions.PeriodTimeSpan.Milliseconds;
+            Timer.Period = Convert.ToInt32(EventBusBoxesOptions.PeriodTimeSpan.TotalMilliseconds);
             Timer.Elapsed += TimerOnElapsed;
             Logger = NullLogger<InboxProcessor>.Instance;
             StoppingTokenSource = new CancellationTokenSource();
@@ -84,7 +84,7 @@ namespace Volo.Abp.EventBus.Boxes
                 return;
             }
 
-            await using (var handle = await DistributedLockProvider.TryAcquireLockAsync(DistributedLockName, cancellationToken: StoppingToken))
+            await using (var handle = await DistributedLock.TryAcquireAsync(DistributedLockName, cancellationToken: StoppingToken))
             {
                 if (handle != null)
                 {
@@ -120,7 +120,11 @@ namespace Volo.Abp.EventBus.Boxes
                 else
                 {
                     Logger.LogDebug("Could not obtain the distributed lock: " + DistributedLockName);
-                    await TaskDelayHelper.DelayAsync(EventBusBoxesOptions.DistributedLockWaitDuration.Milliseconds, StoppingToken);
+                    try
+                    {
+                        await Task.Delay(EventBusBoxesOptions.DistributedLockWaitDuration, StoppingToken);
+                    }
+                    catch (TaskCanceledException) { }
                 }
             }
         }
