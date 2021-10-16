@@ -26,4 +26,11 @@
     <ProjectReference Include="..\..\src\Volo.Abp.FeatureManagement.Domain\Volo.Abp.FeatureManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

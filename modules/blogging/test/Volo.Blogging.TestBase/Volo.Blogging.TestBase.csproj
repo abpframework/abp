@@ -20,4 +20,11 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xUnitRunnerVisualstudioPackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
