@@ -1,4 +1,3 @@
-
 export interface FindTenantResultDto {
   success: boolean;
   tenantId?: string;

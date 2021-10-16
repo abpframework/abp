@@ -1,1 +1,1 @@
-﻿This document has been [moved to here](Testing.md).
+This document has been [moved to here](Testing.md).

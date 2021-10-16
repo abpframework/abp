@@ -11,7 +11,7 @@ namespace Volo.Blogging
     [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
     [Area("blogging")]
     [Route("api/blogging/posts")]
-    public class PostsController : AbpController, IPostAppService
+    public class PostsController : AbpControllerBase, IPostAppService
     {
         private readonly IPostAppService _postAppService;
 
@@ -22,9 +22,9 @@ namespace Volo.Blogging
 
         [HttpGet]
         [Route("{blogId}/all")]
-        public Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName)
+        public Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagNameAsync(Guid blogId, string tagName)
         {
-            return _postAppService.GetListByBlogIdAndTagName(blogId, tagName);
+            return _postAppService.GetListByBlogIdAndTagNameAsync(blogId, tagName);
         }
 
         [HttpGet]

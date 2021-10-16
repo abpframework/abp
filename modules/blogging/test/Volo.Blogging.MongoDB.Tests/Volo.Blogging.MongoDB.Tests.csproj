@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -10,6 +10,13 @@
     <PackageReference Include="Mongo2Go" Version="$(Mongo2GoPackageVersion)" />
     <ProjectReference Include="..\..\src\Volo.Blogging.MongoDB\Volo.Blogging.MongoDB.csproj" />
     <ProjectReference Include="..\Volo.Blogging.TestBase\Volo.Blogging.TestBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

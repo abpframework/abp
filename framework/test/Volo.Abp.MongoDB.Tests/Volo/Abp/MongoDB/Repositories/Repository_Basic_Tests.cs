@@ -14,21 +14,21 @@ namespace Volo.Abp.MongoDB.Repositories
     public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
         [Fact]
-        public void ToMongoQueryable_Test()
+        public async Task ToMongoQueryable_Test()
         {
-            ((IMongoQueryable<Person>) PersonRepository).ShouldNotBeNull();
-            PersonRepository.As<IMongoQueryable<Person>>().ShouldNotBeNull();
-            ((IMongoQueryable<Person>) PersonRepository.Where(p => p.Name == "Douglas")).ShouldNotBeNull();
-            PersonRepository.Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
+            (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
+            (await PersonRepository.GetQueryableAsync()).As<IMongoQueryable<Person>>().ShouldNotBeNull();
+            ((IMongoQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
+            (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
         }
 
         [Fact]
         public async Task Linq_Queries()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
-                PersonRepository.Count().ShouldBeGreaterThan(0);
+                (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
+                (await PersonRepository.GetQueryableAsync()).Count().ShouldBeGreaterThan(0);
                 return Task.CompletedTask;
             });
         }

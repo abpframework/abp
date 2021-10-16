@@ -235,6 +235,10 @@
             {
               "text": "Quartz Integration",
               "path": "Background-Workers-Quartz.md"
+            },
+            {
+              "text": "Hangfire Integration",
+              "path": "Background-Workers-Hangfire.md"
             }
           ]
         },
@@ -329,6 +333,10 @@
               "path": "Distributed-Event-Bus.md",
               "items": [
                 {
+                  "text": "Azure Service Bus Integration",
+                  "path": "Distributed-Event-Bus-Azure-Integration.md"
+                },
+                {
                   "text": "RabbitMQ Integration",
                   "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
                 },
@@ -365,8 +373,8 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
-          "text":"String Encryption",
-          "path":"String-Encryption.md"
+          "text": "String Encryption",
+          "path": "String-Encryption.md"
         },
         {
           "text": "Text Templating",
@@ -578,6 +586,10 @@
               "path": "API/Application-Configuration.md"
             }
           ]
+        },
+        {
+          "text": "Swagger Integration",
+          "path": "API/Swagger-Integration.md"
         }
       ]
     },
@@ -1026,6 +1038,19 @@
                   "path": "UI/Angular/Customization-User-Interface.md"
                 },
                 {
+                  "text": "Theming",
+                  "items": [
+                    {
+                      "text": "Overall",
+                      "path": "UI/Angular/Theming.md"
+                    },
+                    {
+                      "text": "The Basic Theme",
+                      "path": "UI/Angular/Basic-Theme.md"
+                    }
+                  ]
+                },
+                {
                   "text": "Modifying the Menu",
                   "path": "UI/Angular/Modifying-the-Menu.md"
                 },
@@ -1062,6 +1087,10 @@
                 {
                   "text": "Page",
                   "path": "UI/Angular/Page-Component.md"
+                },
+                {
+                  "text": "Chart",
+                  "path": "UI/Angular/Chart-Component.md"
                 }
               ]
             }

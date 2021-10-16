@@ -33,6 +33,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 new RequestCulture(culture, uiCulture)
             );
 
+            HttpContext.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
+
             var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
             await QueryStringCultureReplacement.ReplaceAsync(context);
 

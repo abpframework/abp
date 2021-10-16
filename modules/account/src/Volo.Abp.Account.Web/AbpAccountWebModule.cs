@@ -17,7 +17,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Account.Web
 {
     [DependsOn(
-        typeof(AbpAccountHttpApiModule),
+        typeof(AbpAccountApplicationContractsModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),

@@ -1,3 +1,3 @@
-﻿# Specifications
+# Specifications
 
 Façam!

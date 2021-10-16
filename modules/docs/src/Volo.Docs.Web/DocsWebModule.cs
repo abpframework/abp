@@ -19,7 +19,7 @@ using Volo.Docs.Markdown;
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(DocsHttpApiModule),
+        typeof(DocsApplicationContractsModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),

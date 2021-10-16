@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.Web</AssemblyName>
     <PackageId>Volo.Abp.Account.Web</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -24,19 +24,23 @@
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Components\**\*.js" />
     <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.js" />
+    <EmbeddedResource Include="wwwroot\**\*.css" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Components\**\*.js" />
     <Content Remove="Components\**\*.css" />
+    <Content Remove="wwwroot\**\*.js" />
+    <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Account.HttpApi\Volo.Abp.Account.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

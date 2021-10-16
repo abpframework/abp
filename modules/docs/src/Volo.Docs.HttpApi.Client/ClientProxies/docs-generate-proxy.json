@@ -1,0 +1,656 @@
+{
+  "modules": {
+    "docs": {
+      "rootPath": "docs",
+      "remoteServiceName": "AbpDocs",
+      "controllers": {
+        "Volo.Docs.Projects.DocsProjectController": {
+          "controllerName": "DocsProject",
+          "controllerGroupName": "Project",
+          "type": "Volo.Docs.Projects.DocsProjectController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Projects.IProjectAppService"
+            }
+          ],
+          "actions": {
+            "GetListAsync": {
+              "uniqueName": "GetListAsync",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/projects",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.ProjectDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.ProjectDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Projects.IProjectAppService"
+            },
+            "GetAsyncByShortName": {
+              "uniqueName": "GetAsyncByShortName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/projects/{shortName}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "shortName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "shortName",
+                  "name": "shortName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Projects.ProjectDto",
+                "typeSimple": "Volo.Docs.Projects.ProjectDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Projects.IProjectAppService"
+            },
+            "GetDefaultLanguageCodeAsyncByShortNameAndVersion": {
+              "uniqueName": "GetDefaultLanguageCodeAsyncByShortNameAndVersion",
+              "name": "GetDefaultLanguageCodeAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/projects/{shortName}/defaultLanguage",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "shortName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "version",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "shortName",
+                  "name": "shortName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "version",
+                  "name": "version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Projects.IProjectAppService"
+            },
+            "GetVersionsAsyncByShortName": {
+              "uniqueName": "GetVersionsAsyncByShortName",
+              "name": "GetVersionsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/projects/{shortName}/versions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "shortName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "shortName",
+                  "name": "shortName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.VersionInfoDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.VersionInfoDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Projects.IProjectAppService"
+            },
+            "GetLanguageListAsyncByShortNameAndVersion": {
+              "uniqueName": "GetLanguageListAsyncByShortNameAndVersion",
+              "name": "GetLanguageListAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/projects/{shortName}/{version}/languageList",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "shortName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "version",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "shortName",
+                  "name": "shortName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "version",
+                  "name": "version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.LanguageConfig",
+                "typeSimple": "Volo.Docs.Documents.LanguageConfig"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Projects.IProjectAppService"
+            }
+          }
+        },
+        "Volo.Docs.Documents.DocsDocumentController": {
+          "controllerName": "DocsDocument",
+          "controllerGroupName": "Document",
+          "type": "Volo.Docs.Documents.DocsDocumentController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Documents.IDocumentAppService"
+            }
+          ],
+          "actions": {
+            "GetAsyncByInput": {
+              "uniqueName": "GetAsyncByInput",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.GetDocumentInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.GetDocumentInput",
+                  "typeSimple": "Volo.Docs.Documents.GetDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.DocumentWithDetailsDto",
+                "typeSimple": "Volo.Docs.Documents.DocumentWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "GetDefaultAsyncByInput": {
+              "uniqueName": "GetDefaultAsyncByInput",
+              "name": "GetDefaultAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/default",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.GetDefaultDocumentInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.GetDefaultDocumentInput",
+                  "typeSimple": "Volo.Docs.Documents.GetDefaultDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.DocumentWithDetailsDto",
+                "typeSimple": "Volo.Docs.Documents.DocumentWithDetailsDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "GetNavigationAsyncByInput": {
+              "uniqueName": "GetNavigationAsyncByInput",
+              "name": "GetNavigationAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/navigation",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.GetNavigationDocumentInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.GetNavigationDocumentInput",
+                  "typeSimple": "Volo.Docs.Documents.GetNavigationDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.NavigationNode",
+                "typeSimple": "Volo.Docs.Documents.NavigationNode"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "GetResourceAsyncByInput": {
+              "uniqueName": "GetResourceAsyncByInput",
+              "name": "GetResourceAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/resource",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.GetDocumentResourceInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.GetDocumentResourceInput",
+                  "typeSimple": "Volo.Docs.Documents.GetDocumentResourceInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.DocumentResourceDto",
+                "typeSimple": "Volo.Docs.Documents.DocumentResourceDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "SearchAsyncByInput": {
+              "uniqueName": "SearchAsyncByInput",
+              "name": "SearchAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/documents/search",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.DocumentSearchInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.DocumentSearchInput",
+                  "typeSimple": "Volo.Docs.Documents.DocumentSearchInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Documents.DocumentSearchInput",
+                  "typeSimple": "Volo.Docs.Documents.DocumentSearchInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Documents.DocumentSearchOutput>",
+                "typeSimple": "[Volo.Docs.Documents.DocumentSearchOutput]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "FullSearchEnabledAsync": {
+              "uniqueName": "FullSearchEnabledAsync",
+              "name": "FullSearchEnabledAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/full-search-enabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "GetUrlsAsyncByPrefix": {
+              "uniqueName": "GetUrlsAsyncByPrefix",
+              "name": "GetUrlsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/links",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "prefix",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "prefix",
+                  "name": "prefix",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<System.String>",
+                "typeSimple": "[string]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            },
+            "GetParametersAsyncByInput": {
+              "uniqueName": "GetParametersAsyncByInput",
+              "name": "GetParametersAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/documents/parameters",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Documents.GetParametersDocumentInput, Volo.Docs.Application.Contracts",
+                  "type": "Volo.Docs.Documents.GetParametersDocumentInput",
+                  "typeSimple": "Volo.Docs.Documents.GetParametersDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Documents.DocumentParametersDto",
+                "typeSimple": "Volo.Docs.Documents.DocumentParametersDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

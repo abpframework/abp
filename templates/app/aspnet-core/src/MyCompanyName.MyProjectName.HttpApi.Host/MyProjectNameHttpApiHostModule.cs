@@ -132,6 +132,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
                 options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
@@ -191,12 +192,6 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseAbpRequestLocalization();
-
-            if (!env.IsDevelopment())
-            {
-                app.UseErrorPage();
-            }
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

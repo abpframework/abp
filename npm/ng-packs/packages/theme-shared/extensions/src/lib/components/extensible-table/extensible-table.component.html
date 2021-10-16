@@ -1,6 +1,6 @@
 <ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
   <ngx-datatable-column
-    *ngIf="actionsTemplate || actionList.length"
+    *ngIf="actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)"
     [name]="actionsText | abpLocalization"
     [maxWidth]="columnWidths[0]"
     [width]="columnWidths[0]"
@@ -25,14 +25,24 @@
     >
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
         <ng-container *abpPermission="prop.permission">
-          <div
-            *ngIf="row['_' + prop.name].visible"
-            [innerHTML]="row['_' + prop.name].value | async"
-            (click)="
-              prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
-            "
-            [class.pointer]="prop.action"
-          ></div>
+          <ng-container *ngIf="row['_' + prop.name]?.visible">
+            <div
+              *ngIf="!row['_' + prop.name].component; else component"
+              [innerHTML]="row['_' + prop.name]?.value | async"
+              (click)="
+                prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
+              "
+              [class.pointer]="prop.action"
+            ></div>
+          </ng-container>
+          <ng-template #component>
+            <ng-container
+              *ngComponentOutlet="
+                row['_' + prop.name].component;
+                injector: row['_' + prop.name].injector
+              "
+            ></ng-container>
+          </ng-template>
         </ng-container>
       </ng-template>
     </ngx-datatable-column>

@@ -1,38 +1,35 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import {
   AuthConfig,
   OAuthErrorEvent,
   OAuthInfoEvent,
   OAuthService,
-  OAuthStorage,
+  OAuthStorage
 } from 'angular-oauth2-oidc';
 import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { RestOccurError } from '../actions/rest.actions';
 import { LoginParams } from '../models/auth';
-import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { SessionStateService } from '../services/session-state.service';
+import { TENANT_KEY } from '../tokens/tenant-key.token';
 import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
 import { noop } from '../utils/common-utils';
-import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 export const oAuthStorage = localStorage;
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
 
-  protected store: Store;
+  protected httpErrorReporter: HttpErrorReporterService;
   protected environment: EnvironmentService;
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   protected sessionState: SessionStateService;
-  protected appConfigService: AbpApplicationConfigurationService;
   protected tenantKey: string;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
@@ -40,14 +37,16 @@ export abstract class AuthFlowStrategy {
   abstract logout(queryParams?: Params): Observable<any>;
   abstract login(params?: LoginParams | Params): Observable<any>;
 
-  private catchError = err => this.store.dispatch(new RestOccurError(err));
+  private catchError = err => {
+    this.httpErrorReporter.reportError(err);
+    return of(null);
+  };
 
   constructor(protected injector: Injector) {
-    this.store = injector.get(Store);
+    this.httpErrorReporter = injector.get(HttpErrorReporterService);
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
-    this.appConfigService = injector.get(AbpApplicationConfigurationService);
     this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
     this.tenantKey = injector.get(TENANT_KEY);
@@ -84,11 +83,9 @@ export abstract class AuthFlowStrategy {
       .pipe(
         filter(event => event instanceof OAuthErrorEvent),
         tap(() => clearOAuthStorage()),
-        switchMap(() => this.appConfigService.get()),
+        switchMap(() => this.configState.refreshAppState()),
       )
-      .subscribe(res => {
-        this.configState.setState(res);
-      });
+      .subscribe();
   }
 }
 
@@ -148,9 +145,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
         } else {
           this.oAuthService.logOut();
           removeRememberMe();
-          this.appConfigService.get().subscribe(res => {
-            this.configState.setState(res);
-          });
+          this.configState.refreshAppState().subscribe();
         }
       });
   }
@@ -188,9 +183,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     const router = this.injector.get(Router);
 
     return pipe(
-      switchMap(() => this.appConfigService.get()),
-      tap(res => {
-        this.configState.setState(res);
+      switchMap(() => this.configState.refreshAppState()),
+      tap(() => {
         setRememberMe(params.rememberMe);
         if (params.redirectUrl) router.navigate([params.redirectUrl]);
       }),
@@ -201,9 +195,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     const router = this.injector.get(Router);
 
     return from(this.oAuthService.revokeTokenAndLogout(queryParams)).pipe(
-      switchMap(() => this.appConfigService.get()),
-      tap(res => {
-        this.configState.setState(res);
+      switchMap(() => this.configState.refreshAppState()),
+      tap(() => {
         router.navigateByUrl('/');
         removeRememberMe();
       }),

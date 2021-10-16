@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.Versioning" Version="5.6.0" />
+    <PackageReference Include="NuGet.Versioning" Version="5.11.0" />
   </ItemGroup>
 
   <ItemGroup>

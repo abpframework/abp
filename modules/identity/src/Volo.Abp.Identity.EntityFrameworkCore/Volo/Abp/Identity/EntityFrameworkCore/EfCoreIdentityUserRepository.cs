@@ -180,7 +180,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .Where(q => userOrganizationsQuery
                 .Select(t => t.Id)
                 .Contains(q.OrganizationUnitId))
-                .Select(t => t.RoleId);
+                .Select(t => t.RoleId)
+                .ToArray();
 
             var orgRoles = dbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
             var resultQuery = query.Union(orgRoles);

@@ -1,5 +1,5 @@
 {
-  "version": "4.4.0-rc.2",
+  "version": "5.0.0-beta.1",
   "name": "@abp/bootstrap-datepicker",
   "publishConfig": {
     "access": "public"

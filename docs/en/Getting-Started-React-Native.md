@@ -1,4 +1,4 @@
-﻿# Getting Started with the React Native
+# Getting Started with the React Native
 
 ````json
 //[doc-params]

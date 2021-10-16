@@ -64,6 +64,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                             context,
                             requestCulture
                         );
+                        context.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
                     }
 
                     await next(context);

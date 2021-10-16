@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -14,6 +14,13 @@
     <ProjectReference Include="..\..\src\Volo.Blogging.Admin.Application\Volo.Blogging.Admin.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
     <ProjectReference Include="..\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

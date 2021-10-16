@@ -1,16 +1,7 @@
-import { Observable, of, Subject } from 'rxjs';
-import { Store } from '@ngxs/store';
 import { AbstractType, InjectFlags, InjectionToken, Injector, Type } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export const mockActions = new Subject();
-export const mockStore = ({
-  selectSnapshot() {
-    return true;
-  },
-  select(): Observable<any> {
-    return of(null);
-  },
-} as unknown) as Store;
 
 export class DummyInjector extends Injector {
   constructor(public payload: { [key: string]: any }) {
