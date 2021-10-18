@@ -1,6 +1,6 @@
-import { CoreModule } from '@abp/ng.core';
+import { CoreModule, noop } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   NgxValidateCoreModule,
@@ -84,6 +84,12 @@ export class ThemeBasicModule {
           useValue: 'is-invalid',
         },
         LazyStyleHandler,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: noop,
+          multi: true,
+          deps: [LazyStyleHandler],
+        },
       ],
     };
   }

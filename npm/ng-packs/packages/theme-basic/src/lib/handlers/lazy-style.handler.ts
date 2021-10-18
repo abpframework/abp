@@ -1,12 +1,6 @@
-import {
-  getLocaleDirection,
-  LazyLoadService,
-  LOADING_STRATEGY,
-  LocalizationService,
-} from '@abp/ng.core';
-import { LocaleDirection } from '@abp/ng.theme.shared';
+import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
+import { DocumentDirHandlerService, LocaleDirection } from '@abp/ng.theme.shared';
 import { Injectable, Injector } from '@angular/core';
-import { startWith } from 'rxjs/operators';
 import { LAZY_STYLES } from '../tokens/lazy-styles.token';
 export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
 
@@ -22,7 +16,6 @@ export class LazyStyleHandler {
     if (dir === this._dir) return;
 
     this.switchCSS(dir);
-    this.setBodyDir(dir);
     this._dir = dir;
   }
 
@@ -33,7 +26,7 @@ export class LazyStyleHandler {
   constructor(injector: Injector) {
     this.setStyles(injector);
     this.setLazyLoad(injector);
-    this.listenToLanguageChanges(injector);
+    this.listenToDirectionChanges(injector);
   }
 
   private getHrefFromLink(link: HTMLLinkElement | null): string {
@@ -51,17 +44,13 @@ export class LazyStyleHandler {
     return { href, link };
   }
 
-  private listenToLanguageChanges(injector: Injector) {
-    const l10n = injector.get(LocalizationService);
+  private listenToDirectionChanges(injector: Injector) {
+    const docDirHandler = injector.get(DocumentDirHandlerService);
 
     // will always listen, no need to unsubscribe
-    l10n.languageChange$.pipe(startWith(l10n.currentLang)).subscribe(locale => {
-      this.dir = getLocaleDirection(locale);
+    docDirHandler.dir$.subscribe(dir => {
+      this.dir = dir;
     });
-  }
-
-  private setBodyDir(dir: LocaleDirection) {
-    document.body.dir = dir;
   }
 
   private setLazyLoad(injector: Injector) {

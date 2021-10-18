@@ -26,6 +26,7 @@ import { EllipsisModule } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
+import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
 import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
@@ -116,6 +117,13 @@ export class ThemeSharedModule {
         {
           provide: VALIDATION_VALIDATE_ON_SUBMIT,
           useValue: validation.validateOnSubmit,
+        },
+        DocumentDirHandlerService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: noop,
+          multi: true,
+          deps: [DocumentDirHandlerService],
         },
       ],
     };
