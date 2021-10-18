@@ -41,6 +41,23 @@ namespace Volo.Abp.Cli.NuGet
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
+        public async Task<bool> PackageExistAsync(string packageId, string version = null)
+        {
+            var versionList = await GetPackageVersionListAsync(packageId, false, true);
+
+            if (versionList == null)
+            {
+                return false;
+            }
+
+            if (version == null)
+            {
+                return versionList.Any();
+            }
+
+            return versionList.Contains(version);
+        }
+
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
         {
             var versionList = await GetPackageVersionListAsync(packageId, includeNightly, includeReleaseCandidates);
