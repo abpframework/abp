@@ -179,5 +179,3 @@ ngb-typeahead-window, ngb-typeahead-window.dropdown-menu {
   z-index: 1055 !important;
 }
 `;
-
-export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
