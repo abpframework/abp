@@ -1,6 +1,6 @@
 import { CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   defaultMapErrorsFn,
@@ -10,8 +10,8 @@ import {
   VALIDATION_VALIDATE_ON_SUBMIT,
 } from '@ngx-validate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { BreadcrumbItemsComponent } from './components/breadcrumb-items/breadcrumb-items.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { HttpErrorWrapperComponent } from './components/http-error-wrapper/http-error-wrapper.component';
@@ -27,7 +27,6 @@ import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { ErrorHandler } from './handlers/error.handler';
-import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
@@ -94,12 +93,6 @@ export class ThemeSharedModule {
           multi: true,
           deps: [THEME_SHARED_APPEND_CONTENT],
           useFactory: noop,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [Injector],
-          useFactory: initLazyStyleHandler,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
         {

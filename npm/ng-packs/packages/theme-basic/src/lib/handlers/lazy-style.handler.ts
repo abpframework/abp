@@ -4,15 +4,13 @@ import {
   LOADING_STRATEGY,
   LocalizationService,
 } from '@abp/ng.core';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Injectable, Injector } from '@angular/core';
-import { map, startWith } from 'rxjs/operators';
-import { BOOTSTRAP } from '../constants/styles';
-import { LocaleDirection } from '../models/common';
+import { startWith } from 'rxjs/operators';
 import { LAZY_STYLES } from '../tokens/lazy-styles.token';
+export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class LazyStyleHandler {
   private lazyLoad: LazyLoadService;
   private styles: string[];
