@@ -143,7 +143,7 @@ namespace AbpDemo
     {
         public async Task HandleEventAsync(StockCountChangedEvent eventData)
         {
-            //TODO: your code that does somthing on the event
+            //TODO: your code that does something on the event
         }
     }
 }
