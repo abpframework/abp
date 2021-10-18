@@ -7,6 +7,7 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.Helpers;
+using Volo.Abp.Studio.Modules;
 
 namespace Volo.Abp.Studio.Nuget
 {
@@ -153,7 +154,7 @@ namespace Volo.Abp.Studio.Nuget
 
             if (type == SourceCodeTypes.Module)
             {
-                return $"{name}.SourceCode";
+                return name + ModuleConsts.SourceCorePackagePostfix;
             }
 
             return name;

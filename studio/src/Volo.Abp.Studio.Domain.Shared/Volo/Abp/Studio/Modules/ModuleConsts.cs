@@ -3,8 +3,10 @@
     public static class ModuleConsts
     {
         public const string FileExtension = ".abpmdl.json";
+        public const string InstallerPackagePostfix = ".Installer";
+        public const string SourceCorePackagePostfix = ".SourceCode";
         public const string Packages = "packages";
-        
+
         public static class Layers //TODO: Moving to PackageTypes
         {
             public const string Domain = "lib.domain";
