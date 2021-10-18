@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using NuGet.Versioning;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ namespace Volo.Abp.Cli.NuGet
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
         private readonly IApiKeyService _apiKeyService;
         private readonly CliHttpClientFactory _cliHttpClientFactory;
-        private List<string> _proPackageList;
         private DeveloperApiKeyResult _apiKeyResult;
 
         public NuGetService(
@@ -77,36 +77,38 @@ namespace Volo.Abp.Cli.NuGet
         public async Task<List<string>> GetPackageVersionListAsync(string packageId, bool includeNightly = false,
             bool includeReleaseCandidates = false)
         {
-            if (AuthService.IsLoggedIn())
-            {
-                _proPackageList ??= await GetProPackageListAsync();
-            }
-
-            string url;
             if (includeNightly)
             {
-                url = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
-            }
-            else if (_proPackageList?.Contains(packageId) ?? false)
-            {
-                url = await GetNuGetUrlForCommercialPackage(packageId);
-            }
-            else
-            {
-                url = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+                var includeNightlyUrl = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+                return await GetPackageVersionListFromUrlAsync(includeNightlyUrl);
             }
 
-            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+            var nugetUrl = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            var commercialUrl = await GetNuGetUrlForCommercialPackage(packageId);
 
-            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                url,
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            ))
+            return (await GetPackageVersionListFromUrlAsync(nugetUrl)) ?? (await GetPackageVersionListFromUrlAsync(commercialUrl));
+        }
+
+        private async Task<List<string>> GetPackageVersionListFromUrlAsync(string url)
+        {
+            try
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+
+                using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                    url,
+                    cancellationToken: CancellationTokenProvider.Token,
+                    logger: Logger
+                ))
+                {
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -115,6 +117,11 @@ namespace Volo.Abp.Cli.NuGet
             if (_apiKeyResult == null)
             {
                 _apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
+
+                if (_apiKeyResult == null)
+                {
+                    return null;
+                }
             }
 
             return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
