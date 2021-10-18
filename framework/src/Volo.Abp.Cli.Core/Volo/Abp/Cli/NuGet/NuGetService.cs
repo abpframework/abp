@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -125,35 +124,6 @@ namespace Volo.Abp.Cli.NuGet
             }
 
             return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
-        }
-
-        private async Task<List<string>> GetProPackageListAsync()
-        {
-            var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames";
-            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: true);
-
-            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                url: url,
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            ))
-            {
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
-                }
-
-                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-                if (remoteServiceErrorMessage != null)
-                {
-                    exceptionMessage += remoteServiceErrorMessage;
-                }
-
-                Logger.LogError(exceptionMessage);
-                return null;
-            }
         }
 
         public class NuGetVersionResultDto
