@@ -45,6 +45,11 @@ namespace Volo.Abp.Cli.NuGet
         {
             var versionList = await GetPackageVersionListAsync(packageId, includeNightly, includeReleaseCandidates);
 
+            if (versionList == null)
+            {
+                return null;
+            }
+
             List<SemanticVersion> versions;
 
             if (!includeNightly && !includeReleaseCandidates)
