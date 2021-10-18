@@ -16,6 +16,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -55,7 +56,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 arguments = new ClientProxyRequestTypeValue();
             }
 
-            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => x.Key.FullName))}";
+            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.Key)))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
             if (action == null)
             {

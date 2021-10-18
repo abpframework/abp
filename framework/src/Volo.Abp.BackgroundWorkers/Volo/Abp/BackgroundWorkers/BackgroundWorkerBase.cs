@@ -21,6 +21,15 @@ namespace Volo.Abp.BackgroundWorkers
         protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
         protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+        
+        protected CancellationTokenSource StoppingTokenSource { get; }
+        protected CancellationToken StoppingToken { get; }
+
+        public BackgroundWorkerBase()
+        {
+            StoppingTokenSource = new CancellationTokenSource();
+            StoppingToken = StoppingTokenSource.Token;
+        }
 
         public virtual Task StartAsync(CancellationToken cancellationToken = default)
         {
@@ -31,6 +40,8 @@ namespace Volo.Abp.BackgroundWorkers
         public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
             Logger.LogDebug("Stopped background worker: " + ToString());
+            StoppingTokenSource.Cancel();
+            StoppingTokenSource.Dispose();
             return Task.CompletedTask;
         }
 

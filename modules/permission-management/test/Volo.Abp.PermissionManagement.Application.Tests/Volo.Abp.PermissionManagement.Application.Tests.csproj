@@ -13,4 +13,11 @@
     <ProjectReference Include="..\Volo.Abp.PermissionManagement.Domain.Tests\Volo.Abp.PermissionManagement.Domain.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
