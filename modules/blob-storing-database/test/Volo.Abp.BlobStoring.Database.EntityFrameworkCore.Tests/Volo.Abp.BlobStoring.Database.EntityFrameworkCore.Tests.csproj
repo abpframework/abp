@@ -14,11 +14,4 @@
     <ProjectReference Include="..\Volo.Abp.BlobStoring.Database.TestBase\Volo.Abp.BlobStoring.Database.TestBase.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorPackageVersion)">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 </Project>
