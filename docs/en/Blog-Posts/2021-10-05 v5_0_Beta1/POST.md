@@ -34,7 +34,7 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 ### Visual Studio Upgrade
 
-As .NET 6 is a preview version you need to make changes on your current Visual Studio. 
+As .NET 6 is a preview version you need to make changes on the Visual Studio 2019. 
 If you want to run a .NET 6 project on Visual Studio 2019, you need to install the latest .NET SDK 6 from https://dotnet.microsoft.com/download/dotnet/6.0 
 and also enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
 
