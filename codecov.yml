@@ -1,6 +1,7 @@
 codecov:
   branch: dev
   require_ci_to_pass: yes
+  allow_coverage_offsets: true
 comment:
   require_head: no
   require_base: no
