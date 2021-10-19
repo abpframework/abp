@@ -32,3 +32,6 @@ jobs:
       run: .\test-all.ps1
       working-directory: .\build
       shell: powershell
+
+    - name: Codecov
+      uses: codecov/codecov-action@v2
