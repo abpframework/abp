@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FeatureManagement.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FeatureManagement.Blazor.WebAssembly", "src\Volo.Abp.FeatureManagement.Blazor.WebAssembly\Volo.Abp.FeatureManagement.Blazor.WebAssembly.csproj", "{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FeatureManagement.Installer", "src\Volo.Abp.FeatureManagement.Installer\Volo.Abp.FeatureManagement.Installer.csproj", "{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{0F34FFD5-E98F-4F77-AE0B-A790BD5810D5} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{5B2EA81B-9FAE-456E-B83B-58205AA48752} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{A96771F7-65D7-43C2-818E-CF0F5DBC3DC6} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{0141EA97-1E9E-49D8-B7B4-8A82589A5BFF} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
