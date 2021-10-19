@@ -7,5 +7,6 @@ namespace Volo.Abp.AspNetCore.Authentication.OAuth
     public class AbpAspNetCoreAuthenticationOAuthModule : AbpModule
     {
 
+
     }
 }
