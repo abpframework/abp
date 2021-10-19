@@ -20,7 +20,8 @@ $solutionPaths = @(
 		"../modules/background-jobs",
 		"../modules/account",
 		"../modules/cms-kit",
-		"../modules/blob-storing-database"
+		"../modules/blob-storing-database",
+		"../studio"
 	)
 
 if ($full -eq "-f")

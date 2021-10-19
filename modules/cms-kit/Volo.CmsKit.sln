@@ -87,7 +87,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi.Client", "src\Volo.CmsKit.Common.HttpApi.Client\Volo.CmsKit.Common.HttpApi.Client.csproj", "{EC98F006-2002-4CE2-AA62-5EBB589ACD79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Database.Installer", "src\Volo.Abp.BlobStoring.Database.Installer\Volo.Abp.BlobStoring.Database.Installer.csproj", "{908C157E-2352-4373-BF5D-E5DA19913390}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Installer", "src\Volo.CmsKit.Installer\Volo.CmsKit.Installer.csproj", "{908C157E-2352-4373-BF5D-E5DA19913390}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
