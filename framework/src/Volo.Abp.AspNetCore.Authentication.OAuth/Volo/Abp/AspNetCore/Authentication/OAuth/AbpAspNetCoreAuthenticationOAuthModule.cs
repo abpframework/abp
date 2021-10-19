@@ -6,5 +6,6 @@ namespace Volo.Abp.AspNetCore.Authentication.OAuth
     [DependsOn(typeof(AbpSecurityModule))]
     public class AbpAspNetCoreAuthenticationOAuthModule : AbpModule
     {
+
     }
 }
