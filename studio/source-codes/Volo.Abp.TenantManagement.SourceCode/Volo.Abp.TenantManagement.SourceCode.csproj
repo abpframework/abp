@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\..\..\configureawait.props" />
-    <Import Project="..\..\..\..\common.props" />
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
 	
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
