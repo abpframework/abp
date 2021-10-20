@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
@@ -22,21 +25,57 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             }
 
             var lifeTime = GetMvcServiceLifetime(type);
+            var dependencyAttribute = GetDependencyAttributeOrNull(type);
 
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
+            var exposedServiceTypes = GetExposedServiceTypes(type);
 
-            TriggerServiceExposing(services, type, serviceTypes);
+            TriggerServiceExposing(services, type, exposedServiceTypes);
 
-            foreach (var serviceType in serviceTypes)
+            foreach (var exposedServiceType in exposedServiceTypes)
             {
-                services.Add(
-                    ServiceDescriptor.Describe(
-                        serviceType,
-                        type,
-                        lifeTime
-                    )
+                var serviceDescriptor = CreateServiceDescriptor(
+                    type,
+                    exposedServiceType,
+                    exposedServiceTypes,
+                    lifeTime
                 );
+                
+                if (dependencyAttribute?.ReplaceServices == true)
+                {
+                    services.Replace(serviceDescriptor);
+                }
+                else if (dependencyAttribute?.TryRegister == true)
+                {
+                    services.TryAdd(serviceDescriptor);
+                }
+                else
+                {
+                    services.Add(serviceDescriptor);
+                }
             }
+        }
+        
+        protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
+        {
+            return type.GetCustomAttribute<DependencyAttribute>(true);
+        }
+        
+        protected virtual List<Type> GetExposedServiceTypes(Type type)
+        {
+            return ExposedServiceExplorer.GetExposedServices(type);
+        }
+        
+        protected virtual ServiceDescriptor CreateServiceDescriptor(
+            Type implementationType,
+            Type exposingServiceType,
+            List<Type> allExposingServiceTypes,
+            ServiceLifetime lifeTime)
+        {
+            return ServiceDescriptor.Describe(
+                exposingServiceType,
+                implementationType,
+                lifeTime
+            );
         }
 
         protected virtual bool IsMvcService(Type type)
