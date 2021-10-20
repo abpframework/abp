@@ -82,6 +82,7 @@ namespace Volo.Abp.Account.Web
                     .Configure(typeof(ManageModel).FullName,
                         configuration =>
                         {
+                            configuration.AddFiles("/client-proxies/account-proxy.js");
                             configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
                             configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/PersonalInfo/Default.js");
                         });
