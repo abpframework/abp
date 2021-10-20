@@ -40,21 +40,29 @@
                 <abp-column>
                     <form id="CmsKitCommentsFilterForm" method="post">
                         <abp-row>
-                            <abp-column size-lg="_4" size-md="_12" class="input-group input-daterange">
-                                <abp-column size="_6" style="padding-left: 0">
-                                    <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" value="@defaultStartDate" type="text" />
-                                </abp-column>
-                                <abp-column size="_6" style="padding-right: 0">
-                                    <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text" />
-                                </abp-column>
+                            <abp-column size-lg="_6" size-md="_6">
+                                <abp-row class="input-daterange">
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" value="@defaultStartDate" type="text" />
+                                    </abp-column>
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text" />
+                                    </abp-column>
+                                </abp-row>
                             </abp-column>
-                            <abp-column size-lg="_4" size-md="_6">
-                                <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
+                            <abp-column size-lg="_6" size-md="_6">
+                                <abp-row>
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
+                                    </abp-column>
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
+                                    </abp-column>
+                                </abp-row>
                             </abp-column>
-                            <abp-column size-lg="_2" size-md="_6">
-                                <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
-                            </abp-column>
-                            <abp-column size-lg="_2" size-md="_12">
+                        </abp-row>
+                        <abp-row class="justify-content-end">
+                            <abp-column size-lg="_3" size-md="_3">
                                 <div class="d-grid gap-2">
                                     <abp-button class="mt-md-4" button-type="Primary" type="submit">
                                         <i class="fa fa-search" aria-hidden="true"></i>
