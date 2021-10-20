@@ -36,8 +36,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
             foreach (var module in model.Modules)
             {
-                if (!_dynamicJavaScriptProxyOptions.EnabledModules.Any(m =>
-                    module.Key.Equals(m, StringComparison.CurrentCultureIgnoreCase)))
+                if (_dynamicJavaScriptProxyOptions.EnabledModules.All(m => !m.Equals(module.Key, StringComparison.CurrentCultureIgnoreCase)))
                 {
                     continue;
                 }
