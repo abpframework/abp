@@ -11,17 +11,17 @@ namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.P
 {
     public class AccountProfilePasswordManagementGroupViewComponent : AbpViewComponent
     {
-        private readonly IProfileAppService _profileAppService;
+        protected IProfileAppService ProfileAppService { get; }
 
         public AccountProfilePasswordManagementGroupViewComponent(
             IProfileAppService profileAppService)
         {
-            _profileAppService = profileAppService;
+            ProfileAppService = profileAppService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = await _profileAppService.GetAsync();
+            var user = await ProfileAppService.GetAsync();
 
             var model = new ChangePasswordInfoModel
             {
