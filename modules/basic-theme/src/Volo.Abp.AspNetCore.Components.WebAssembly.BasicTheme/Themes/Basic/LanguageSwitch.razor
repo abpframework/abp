@@ -60,6 +60,11 @@
             "Abp.SelectedLanguage", language.UiCultureName
             );
 
+        await JsRuntime.InvokeVoidAsync(
+            "localStorage.setItem",
+            "Abp.IsRtl", CultureInfo.GetCultureInfo(language.UiCultureName).TextInfo.IsRightToLeft
+            );
+
         await JsRuntime.InvokeVoidAsync("location.reload");
     }
 }
