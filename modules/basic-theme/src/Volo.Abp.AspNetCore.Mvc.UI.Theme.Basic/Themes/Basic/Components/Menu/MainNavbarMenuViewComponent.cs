@@ -6,16 +6,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu
 {
     public class MainNavbarMenuViewComponent : AbpViewComponent
     {
-        private readonly IMenuManager _menuManager;
+        protected IMenuManager MenuManager { get; }
 
         public MainNavbarMenuViewComponent(IMenuManager menuManager)
         {
-            _menuManager = menuManager;
+            MenuManager = menuManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async virtual Task<IViewComponentResult> InvokeAsync()
         {
-            var menu = await _menuManager.GetMainMenuAsync();
+            var menu = await MenuManager.GetMainMenuAsync();
             return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
         }
     }

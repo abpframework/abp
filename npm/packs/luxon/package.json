@@ -1,6 +1,11 @@
 {
   "version": "5.0.0-beta.1",
   "name": "@abp/luxon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/luxon"
+  },
   "publishConfig": {
     "access": "public"
   },

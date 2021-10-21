@@ -22,7 +22,6 @@ namespace Volo.Abp.PermissionManagement
                 UserPermissionValueProvider.ProviderName,
                 PermissionTestDataBuilder.User1Id.ToString())).ShouldBeTrue();
 
-
             (await _permissionStore.IsGrantedAsync("MyPermission1NotExist",
                 UserPermissionValueProvider.ProviderName,
                 PermissionTestDataBuilder.User1Id.ToString())).ShouldBeFalse();

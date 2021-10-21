@@ -1,6 +1,11 @@
 {
   "version": "5.0.0-beta.1",
   "name": "@abp/timeago",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/timeago"
+  },
   "publishConfig": {
     "access": "public"
   },
