@@ -168,8 +168,8 @@ namespace Volo.Abp.Http.DynamicProxying
             var result = await _controller.AbortRequestAsync(default);
             result.ShouldBe("AbortRequestAsync");
 
-            var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _controller.AbortRequestAsync(cts.Token));
-            exception.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
+            var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(cts.Token));
+            exception.InnerException.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
         }
     }
 }

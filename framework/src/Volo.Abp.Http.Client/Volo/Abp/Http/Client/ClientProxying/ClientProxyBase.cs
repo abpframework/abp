@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
@@ -26,6 +28,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        protected ILogger<ClientProxyBase<TService>> Logger => LazyServiceProvider.LazyGetService<ILogger<ClientProxyBase<TService>>>(NullLogger<ClientProxyBase<TService>>.Instance);
         protected IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder => LazyServiceProvider.LazyGetRequiredService<IClientProxyApiDescriptionFinder>();
         protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetRequiredService<ICancellationTokenProvider>();
         protected ICorrelationIdProvider CorrelationIdProvider => LazyServiceProvider.LazyGetRequiredService<ICorrelationIdProvider>();
@@ -137,8 +140,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
             {
                 response = await client.SendAsync(
                     requestMessage,
-                    HttpCompletionOption
-                        .ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
+                    HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
                     GetCancellationToken(requestContext.Arguments)
                 );
             }
@@ -206,26 +208,46 @@ namespace Volo.Abp.Http.Client.ClientProxying
         {
             if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
             {
-                var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
-                    await response.Content.ReadAsStringAsync()
-                );
+                RemoteServiceErrorResponse errorResponse;
+                try
+                {
+                    errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+                        await response.Content.ReadAsStringAsync()
+                    );
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpRemoteCallException(
+                        new RemoteServiceErrorInfo
+                        {
+                            Message = response.ReasonPhrase,
+                            Code = response.StatusCode.ToString()
+                        },
+                        ex
+                    )
+                    {
+                        HttpStatusCode = (int)response.StatusCode
+                    };
+                }
 
                 throw new AbpRemoteCallException(errorResponse.Error)
                 {
                     HttpStatusCode = (int) response.StatusCode
                 };
             }
-
-            throw new AbpRemoteCallException(
-                new RemoteServiceErrorInfo
-                {
-                    Message = response.ReasonPhrase,
-                    Code = response.StatusCode.ToString()
-                }
-            )
+            else
             {
-                HttpStatusCode = (int) response.StatusCode
-            };
+                throw new AbpRemoteCallException(
+                    new RemoteServiceErrorInfo
+                    {
+                        Message = response.ReasonPhrase,
+                        Code = response.StatusCode.ToString()
+                    }
+                )
+                {
+                    HttpStatusCode = (int) response.StatusCode
+                };
+            }
         }
 
         protected virtual void AddHeaders(
