@@ -6,6 +6,8 @@ public class DynamicJavaScriptProxyOptions
 {
     public HashSet<string> EnabledModules { get; set; }
 
+    public bool EnabledAllModules { get; set; }
+
     public DynamicJavaScriptProxyOptions()
     {
         EnabledModules = new HashSet<string> { "app" };

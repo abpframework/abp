@@ -9,6 +9,7 @@ using Volo.Abp.Cli.ServiceProxying.CSharp;
 using Volo.Abp.Cli.ServiceProxying.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -70,6 +71,11 @@ namespace Volo.Abp.Cli
                 options.Generators[JavaScriptServiceProxyGenerator.Name] = typeof(JavaScriptServiceProxyGenerator);
                 options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
                 options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.EnabledAllModules = true;
             });
         }
     }

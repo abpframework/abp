@@ -36,7 +36,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
             foreach (var module in model.Modules)
             {
-                if (_dynamicJavaScriptProxyOptions.EnabledModules.All(m => !m.Equals(module.Key, StringComparison.CurrentCultureIgnoreCase)))
+                if (!ShouldCreateModuleScript(module))
                 {
                     continue;
                 }
@@ -48,6 +48,21 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             AddInitializedEventTrigger(script);
 
             return script.ToString();
+        }
+
+        private bool ShouldCreateModuleScript(KeyValuePair<string, ModuleApiDescriptionModel> module)
+        {
+            if (_dynamicJavaScriptProxyOptions.EnabledAllModules)
+            {
+                return true;
+            }
+
+            if (_dynamicJavaScriptProxyOptions.EnabledModules.Any(m => m.Equals(module.Key, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void AddModuleScript(StringBuilder script, ModuleApiDescriptionModel module)
