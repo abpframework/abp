@@ -10,6 +10,7 @@ $(function (){
             todayBtn: "linked",
             autoclose: true,
             language: abp.localization.currentCulture.cultureName,
+            format: abp.localization.currentCulture.dateTimeFormat.shortDatePattern
         })
         .on("hide", function (e) {
             e.stopPropagation();
