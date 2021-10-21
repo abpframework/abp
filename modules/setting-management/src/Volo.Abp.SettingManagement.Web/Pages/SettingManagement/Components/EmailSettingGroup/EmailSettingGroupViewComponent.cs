@@ -6,17 +6,17 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.Emai
 {
     public class EmailSettingGroupViewComponent : AbpViewComponent
     {
-        private readonly IEmailSettingsAppService _emailSettingsAppService;
+        protected IEmailSettingsAppService EmailSettingsAppService { get; }
 
         public EmailSettingGroupViewComponent(IEmailSettingsAppService emailSettingsAppService)
         {
             ObjectMapperContext = typeof(AbpSettingManagementWebModule);
-            _emailSettingsAppService = emailSettingsAppService;
+            EmailSettingsAppService = emailSettingsAppService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async virtual Task<IViewComponentResult> InvokeAsync()
         {
-            var model = await _emailSettingsAppService.GetAsync();
+            var model = await EmailSettingsAppService.GetAsync();
 
             return View("~/Pages/SettingManagement/Components/EmailSettingGroup/Default.cshtml", model);
         }
