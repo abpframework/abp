@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -10,7 +11,8 @@ namespace Volo.Abp.FluentValidation
     {
         protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            return !typeof(IValidator).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
+            return !type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IValidator<>)) ||
+                   base.IsConventionalRegistrationDisabled(type);
         }
 
         protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
