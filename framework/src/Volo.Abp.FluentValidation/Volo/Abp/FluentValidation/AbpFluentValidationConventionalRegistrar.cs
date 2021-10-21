@@ -6,34 +6,35 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.FluentValidation
 {
-    public class AbpFluentValidationConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
+            return !typeof(IValidator).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
+        }
 
-            if (!typeof(IValidator).IsAssignableFrom(type))
-            {
-                return;
-            }
+        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, DependencyAttribute dependencyAttribute)
+        {
+            return base.GetLifeTimeOrNull(type, dependencyAttribute) ?? GetValidatorServiceLifetime(type);
+        }
 
+        protected virtual ServiceLifetime GetValidatorServiceLifetime(Type type)
+        {
+            return ServiceLifetime.Transient;
+        }
+
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
             var validatingType = GetFirstGenericArgumentOrNull(type, 1);
             if (validatingType == null)
             {
-                return;
+                return new List<Type>();
             }
 
-            var serviceType = typeof(IValidator<>).MakeGenericType(validatingType);
-
-            TriggerServiceExposing(services, type, new List<Type>{ serviceType });
-
-            services.AddTransient(
-                serviceType,
-                type
-            );
+            return new List<Type>()
+            {
+                typeof(IValidator<>).MakeGenericType(validatingType)
+            };
         }
 
         private static Type GetFirstGenericArgumentOrNull(Type type, int depth)

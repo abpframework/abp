@@ -1,81 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
 {
-    public class AbpAspNetCoreMvcConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpAspNetCoreMvcConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            if (!IsMvcService(type))
-            {
-                return;
-            }
-
-            var lifeTime = GetMvcServiceLifetime(type);
-            var dependencyAttribute = GetDependencyAttributeOrNull(type);
-
-            var exposedServiceTypes = GetExposedServiceTypes(type);
-
-            TriggerServiceExposing(services, type, exposedServiceTypes);
-
-            foreach (var exposedServiceType in exposedServiceTypes)
-            {
-                var serviceDescriptor = CreateServiceDescriptor(
-                    type,
-                    exposedServiceType,
-                    exposedServiceTypes,
-                    lifeTime
-                );
-                
-                if (dependencyAttribute?.ReplaceServices == true)
-                {
-                    services.Replace(serviceDescriptor);
-                }
-                else if (dependencyAttribute?.TryRegister == true)
-                {
-                    services.TryAdd(serviceDescriptor);
-                }
-                else
-                {
-                    services.Add(serviceDescriptor);
-                }
-            }
-        }
-        
-        protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
-        {
-            return type.GetCustomAttribute<DependencyAttribute>(true);
-        }
-        
-        protected virtual List<Type> GetExposedServiceTypes(Type type)
-        {
-            return ExposedServiceExplorer.GetExposedServices(type);
-        }
-        
-        protected virtual ServiceDescriptor CreateServiceDescriptor(
-            Type implementationType,
-            Type exposingServiceType,
-            List<Type> allExposingServiceTypes,
-            ServiceLifetime lifeTime)
-        {
-            return ServiceDescriptor.Describe(
-                exposingServiceType,
-                implementationType,
-                lifeTime
-            );
+            return !IsMvcService(type) || base.IsConventionalRegistrationDisabled(type);
         }
 
         protected virtual bool IsMvcService(Type type)
@@ -83,11 +20,6 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             return IsController(type) ||
                    IsPageModel(type) ||
                    IsViewComponent(type);
-        }
-
-        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
-        {
-            return ServiceLifetime.Transient;
         }
 
         private static bool IsPageModel(Type type)
@@ -103,6 +35,16 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
         private static bool IsViewComponent(Type type)
         {
             return typeof(ViewComponent).IsAssignableFrom(type) || type.IsDefined(typeof(ViewComponentAttribute), true);
+        }
+
+        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+        {
+            return dependencyAttribute?.Lifetime ?? GetMvcServiceLifetime(type);
+        }
+
+        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

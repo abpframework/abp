@@ -23,9 +23,9 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             services.AddTypes(typeof(My_Test_PageModel), typeof(My_Test_Controller), typeof(My_Test_ViewComponent));
 
             //Assert
-            services.ShouldContainTransient(typeof(My_Test_PageModel)); 
-            services.ShouldContainTransient(typeof(My_Test_Controller)); 
-            services.ShouldContainTransient(typeof(My_Test_ViewComponent)); 
+            services.ShouldContainTransient(typeof(My_Test_PageModel));
+            services.ShouldContainTransient(typeof(My_Test_Controller));
+            services.ShouldContainTransient(typeof(My_Test_ViewComponent));
 
             var serviceProvider = services.BuildServiceProvider();
             serviceProvider.GetServices<My_Test_PageModel>().Count().ShouldBe(1);
@@ -46,8 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             services.AddTypes(typeof(My_Second_Test_ViewComponent), typeof(My_Third_Test_ViewComponent));
 
             //Assert
-            services.ShouldContainTransient(typeof(My_Second_Test_ViewComponent),
-                typeof(My_Third_Test_ViewComponent));
+            services.ShouldContainTransient(typeof(My_Second_Test_ViewComponent), typeof(My_Third_Test_ViewComponent));
             services.ShouldNotContainService(typeof(My_Third_Test_ViewComponent));
 
             var serviceProvider = services.BuildServiceProvider();

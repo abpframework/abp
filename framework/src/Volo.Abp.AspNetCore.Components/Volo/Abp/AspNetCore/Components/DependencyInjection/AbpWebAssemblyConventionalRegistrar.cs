@@ -1,43 +1,31 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.DependencyInjection
 {
-    public class AbpWebAssemblyConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpWebAssemblyConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            if (!IsComponent(type))
-            {
-                return;
-            }
-
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
-
-            TriggerServiceExposing(services, type, serviceTypes);
-
-            foreach (var serviceType in serviceTypes)
-            {
-                services.Add(
-                    ServiceDescriptor.Describe(
-                        serviceType,
-                        type,
-                        ServiceLifetime.Transient
-                    )
-                );
-            }
+            return !IsComponent(type) || base.IsConventionalRegistrationDisabled(type);
         }
 
         private static bool IsComponent(Type type)
         {
             return typeof(ComponentBase).IsAssignableFrom(type);
+        }
+
+        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+        {
+            return dependencyAttribute?.Lifetime ?? GetWebAssemblyServiceLifetime(type);
+        }
+
+        protected virtual ServiceLifetime GetWebAssemblyServiceLifetime(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

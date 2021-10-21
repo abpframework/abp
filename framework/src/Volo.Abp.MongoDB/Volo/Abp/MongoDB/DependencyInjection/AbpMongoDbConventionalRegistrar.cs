@@ -1,29 +1,25 @@
 ﻿using System;
-using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MongoDB.DependencyInjection
 {
     public class AbpMongoDbConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (!typeof(IAbpMongoDbContext).IsAssignableFrom(type) || type == typeof(AbpMongoDbContext))
-            {
-                return;
-            }
+            return !typeof(IAbpMongoDbContext).IsAssignableFrom(type) || type == typeof(AbpMongoDbContext) || base.IsConventionalRegistrationDisabled(type);
+        }
 
-            var dependencyAttribute = GetDependencyAttributeOrNull(type);
-            var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
+        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+        {
+            return dependencyAttribute?.Lifetime ?? GetAbpMongoDbContextLifetime(type);
+        }
 
-            if (lifeTime == null)
-            {
-                return;
-            }
-
-            services.Add(ServiceDescriptor.Describe(typeof(IAbpMongoDbContext), type, ServiceLifetime.Transient));
+        protected virtual ServiceLifetime GetAbpMongoDbContextLifetime(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

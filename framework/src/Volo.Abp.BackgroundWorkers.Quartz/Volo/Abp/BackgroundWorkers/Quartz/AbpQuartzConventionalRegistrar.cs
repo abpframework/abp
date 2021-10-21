@@ -1,27 +1,21 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz
 {
     public class AbpQuartzConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (!typeof(IQuartzBackgroundWorker).IsAssignableFrom(type))
-            {
-                return;
-            }
+            return !typeof(IQuartzBackgroundWorker).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
+        }
 
-            var dependencyAttribute = GetDependencyAttributeOrNull(type);
-            var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
-
-            if (lifeTime == null)
-            {
-                return;
-            }
-
-            services.Add(ServiceDescriptor.Describe(typeof(IQuartzBackgroundWorker), type, lifeTime.Value));
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
+            var serviceTypes = base.GetExposedServiceTypes(type);
+            serviceTypes.AddIfNotContains(typeof(IQuartzBackgroundWorker));
+            return serviceTypes;
         }
     }
 }
