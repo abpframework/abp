@@ -6,8 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
@@ -28,7 +26,6 @@ namespace Volo.Abp.Http.Client.ClientProxying
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
-        protected ILogger<ClientProxyBase<TService>> Logger => LazyServiceProvider.LazyGetService<ILogger<ClientProxyBase<TService>>>(NullLogger<ClientProxyBase<TService>>.Instance);
         protected IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder => LazyServiceProvider.LazyGetRequiredService<IClientProxyApiDescriptionFinder>();
         protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetRequiredService<ICancellationTokenProvider>();
         protected ICorrelationIdProvider CorrelationIdProvider => LazyServiceProvider.LazyGetRequiredService<ICorrelationIdProvider>();

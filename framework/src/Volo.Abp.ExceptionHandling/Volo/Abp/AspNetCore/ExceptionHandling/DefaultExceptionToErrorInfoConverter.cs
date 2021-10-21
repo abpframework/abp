@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             var errorInfo = CreateErrorInfoWithoutCode(exception, includeSensitiveDetails);
 
-            if (exception is IHasErrorCode hasErrorCodeException && hasErrorCodeException.Code.IsNullOrWhiteSpace())
+            if (exception is IHasErrorCode hasErrorCodeException)
             {
                 errorInfo.Code = hasErrorCodeException.Code;
             }
