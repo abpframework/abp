@@ -59,7 +59,7 @@ namespace Volo.Abp.DependencyInjection
 
         protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
         {
-            return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarchy(type);
+            return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarchy(type) ?? GetDefaultLifeTimeOrNull(type);
         }
 
         protected virtual ServiceLifetime? GetServiceLifetimeFromClassHierarchy(Type type)
@@ -79,6 +79,11 @@ namespace Volo.Abp.DependencyInjection
                 return ServiceLifetime.Scoped;
             }
 
+            return null;
+        }
+
+        protected virtual ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
             return null;
         }
 

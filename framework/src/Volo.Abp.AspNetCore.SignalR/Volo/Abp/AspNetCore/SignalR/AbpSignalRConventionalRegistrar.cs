@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -18,12 +17,7 @@ namespace Volo.Abp.AspNetCore.SignalR
             return typeof(Hub).IsAssignableFrom(type);
         }
 
-        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
-        {
-            return dependencyAttribute?.Lifetime ?? GetSignalRServiceLifetime(type);
-        }
-
-        protected virtual ServiceLifetime GetSignalRServiceLifetime(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
             return ServiceLifetime.Transient;
         }

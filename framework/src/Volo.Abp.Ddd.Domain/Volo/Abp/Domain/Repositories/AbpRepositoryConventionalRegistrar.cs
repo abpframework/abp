@@ -30,16 +30,9 @@ namespace Volo.Abp.Domain.Repositories
                 .ToList();
         }
 
-        protected override ServiceLifetime? GetServiceLifetimeFromClassHierarchy(Type type)
-        {
-            return base.GetServiceLifetimeFromClassHierarchy(type) ??
-                   GetRepositoryServiceLifetime(type);
-        }
-
-        protected virtual ServiceLifetime GetRepositoryServiceLifetime(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
             return ServiceLifetime.Transient;
         }
-
     }
 }

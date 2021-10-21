@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -12,12 +11,7 @@ namespace Volo.Abp.MongoDB.DependencyInjection
             return !typeof(IAbpMongoDbContext).IsAssignableFrom(type) || type == typeof(AbpMongoDbContext) || base.IsConventionalRegistrationDisabled(type);
         }
 
-        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
-        {
-            return dependencyAttribute?.Lifetime ?? GetAbpMongoDbContextLifetime(type);
-        }
-
-        protected virtual ServiceLifetime GetAbpMongoDbContextLifetime(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
             return ServiceLifetime.Transient;
         }

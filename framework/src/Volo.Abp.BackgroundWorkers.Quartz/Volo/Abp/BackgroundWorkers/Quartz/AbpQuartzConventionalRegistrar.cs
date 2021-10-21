@@ -13,9 +13,10 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
         protected override List<Type> GetExposedServiceTypes(Type type)
         {
-            var serviceTypes = base.GetExposedServiceTypes(type);
-            serviceTypes.AddIfNotContains(typeof(IQuartzBackgroundWorker));
-            return serviceTypes;
+            return new List<Type>()
+            {
+                typeof(IQuartzBackgroundWorker)
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
@@ -37,12 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             return typeof(ViewComponent).IsAssignableFrom(type) || type.IsDefined(typeof(ViewComponentAttribute), true);
         }
 
-        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
-        {
-            return dependencyAttribute?.Lifetime ?? GetMvcServiceLifetime(type);
-        }
-
-        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
             return ServiceLifetime.Transient;
         }

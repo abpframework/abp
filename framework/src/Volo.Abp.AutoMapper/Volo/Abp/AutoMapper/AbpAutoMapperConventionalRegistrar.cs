@@ -22,12 +22,7 @@ namespace Volo.Abp.AutoMapper
             return !OpenTypes.Any(type.ImplementsGenericInterface) || base.IsConventionalRegistrationDisabled(type);
         }
 
-        protected override ServiceLifetime? GetLifeTimeOrNull(Type type, DependencyAttribute dependencyAttribute)
-        {
-            return base.GetLifeTimeOrNull(type, dependencyAttribute) ?? GetAutoMapperServiceLifetime(type);
-        }
-
-        protected virtual ServiceLifetime GetAutoMapperServiceLifetime(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
             return ServiceLifetime.Transient;
         }
