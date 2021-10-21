@@ -15,7 +15,14 @@ namespace Volo.Abp.Http.Client
 
         public RemoteServiceErrorInfo Error { get; set; }
 
-        public AbpRemoteCallException()
+        public AbpRemoteCallException(string message)
+            : base(message)
+        {
+
+        }
+
+        public AbpRemoteCallException(string message, Exception innerException)
+            : base(message, innerException)
         {
 
         }

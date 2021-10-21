@@ -132,11 +132,20 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 );
             }
 
-            var response = await client.SendAsync(
-                requestMessage,
-                HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken(requestContext.Arguments)
-            );
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.SendAsync(
+                    requestMessage,
+                    HttpCompletionOption
+                        .ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
+                    GetCancellationToken(requestContext.Arguments)
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new AbpRemoteCallException($"An error occurred during the ABP remote HTTP request. ({ex.Message}) See the inner exception for details.", ex);
+            }
 
             if (!response.IsSuccessStatusCode)
             {

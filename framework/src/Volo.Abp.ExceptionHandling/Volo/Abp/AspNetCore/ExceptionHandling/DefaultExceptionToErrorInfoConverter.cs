@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             var errorInfo = CreateErrorInfoWithoutCode(exception, includeSensitiveDetails);
 
-            if (exception is IHasErrorCode hasErrorCodeException)
+            if (exception is IHasErrorCode hasErrorCodeException && hasErrorCodeException.Code.IsNullOrWhiteSpace())
             {
                 errorInfo.Code = hasErrorCodeException.Code;
             }
@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             if (exception is AbpRemoteCallException remoteCallException)
             {
-                return remoteCallException.Error;
+                return remoteCallException.Error ?? new RemoteServiceErrorInfo(remoteCallException.Message);
             }
 
             if (exception is AbpDbConcurrencyException)
@@ -175,7 +175,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             return new RemoteServiceErrorInfo(exception.Message);
         }
-        
+
         protected virtual Exception TryToGetActualException(Exception exception)
         {
             if (exception is AggregateException && exception.InnerException != null)
