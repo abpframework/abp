@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
             MenuManager = menuManager;
         }
 
-        public async virtual Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
             var menu = await MenuManager.GetAsync(StandardMenus.User);
             return View("~/Themes/Basic/Components/Toolbar/UserMenu/Default.cshtml", menu);

@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
             LanguageProvider = languageProvider;
         }
 
-        public async virtual Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
             var languages = await LanguageProvider.GetLanguagesAsync();
             var currentLanguage = languages.FindByCulture(

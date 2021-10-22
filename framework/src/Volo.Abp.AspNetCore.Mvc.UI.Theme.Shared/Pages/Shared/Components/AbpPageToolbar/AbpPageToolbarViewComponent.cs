@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPag
             ToolbarManager = toolbarManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string pageName)
+        public virtual async Task<IViewComponentResult> InvokeAsync(string pageName)
         {
             var items = await ToolbarManager.GetItemsAsync(pageName);
             return View("~/Pages/Shared/Components/AbpPageToolbar/Default.cshtml", items);
