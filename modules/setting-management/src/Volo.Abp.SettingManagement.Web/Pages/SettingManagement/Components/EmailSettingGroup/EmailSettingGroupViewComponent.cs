@@ -14,7 +14,7 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.Emai
             EmailSettingsAppService = emailSettingsAppService;
         }
 
-        public async virtual Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
             var model = await EmailSettingsAppService.GetAsync();
 
