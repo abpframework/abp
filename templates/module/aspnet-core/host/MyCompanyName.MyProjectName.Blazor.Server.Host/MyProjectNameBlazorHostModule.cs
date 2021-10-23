@@ -183,11 +183,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
 
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
-            });
-
             context.Services
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
