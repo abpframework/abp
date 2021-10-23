@@ -1,5 +1,22 @@
 name: "build and test"
 on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'framework/**/*.cs'
+      - 'framework/**/*.cshtml'
+      - 'framework/**/*.csproj'
+      - 'framework/**/*.razor'
+      - 'modules/**/*.cs'
+      - 'modules/**/*.cshtml'
+      - 'modules/**/*.csproj'
+      - 'modules/**/*.razor'
+      - 'templates/**/*.cs'
+      - 'templates/**/*.cshtml'
+      - 'templates/**/*.csproj'
+      - 'templates/**/*.razor'
+
   pull_request:
     paths:
       - 'framework/**/*.cs'
