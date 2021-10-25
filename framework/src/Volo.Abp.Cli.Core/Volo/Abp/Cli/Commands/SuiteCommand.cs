@@ -15,13 +15,15 @@ namespace Volo.Abp.Cli.Commands
 {
     public class SuiteCommand : IConsoleCommand, ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
         private readonly NuGetService _nuGetService;
         private const string SuitePackageName = "Volo.Abp.Suite";
         public ILogger<SuiteCommand> Logger { get; set; }
 
-        public SuiteCommand(AbpNuGetIndexUrlService nuGetIndexUrlService, NuGetService nuGetService)
+        public SuiteCommand(AbpNuGetIndexUrlService nuGetIndexUrlService, NuGetService nuGetService, ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             _nuGetIndexUrlService = nuGetIndexUrlService;
             _nuGetService = nuGetService;
             Logger = NullLogger<SuiteCommand>.Instance;
@@ -71,7 +73,7 @@ namespace Volo.Abp.Cli.Commands
 
         private string GetCurrentSuiteVersion()
         {
-            var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
+            var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
 
             var suiteLine = dotnetToolList.Split(Environment.NewLine)
                 .FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
@@ -127,11 +129,11 @@ namespace Volo.Abp.Cli.Commands
                     versionOption = $" --version {version}";
                 }
 
-                var result = CmdHelper.RunCmd(
-                    $"dotnet tool install {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g"
+                CmdHelper.RunCmd(
+                    $"dotnet tool install {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g", out int exitCode
                 );
 
-                if (result == 0)
+                if (exitCode == 0)
                 {
                     Logger.LogInformation("ABP Suite has been successfully installed.");
                     Logger.LogInformation("You can run it with the CLI command \"abp suite\"");
@@ -197,11 +199,11 @@ namespace Volo.Abp.Cli.Commands
                     versionOption = $" --version {version}";
                 }
 
-                var result = CmdHelper.RunCmd(
-                    $"dotnet tool update {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g"
+                CmdHelper.RunCmd(
+                    $"dotnet tool update {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g", out int exitCode
                 );
 
-                if (result != 0)
+                if (exitCode != 0)
                 {
                     ShowSuiteManualUpdateCommand();
                 }
@@ -230,7 +232,7 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogError("dotnet tool update -g Volo.Abp.Suite --add-source https://nuget.abp.io/<your-private-key>/v3/index.json");
         }
 
-        private static void RemoveSuite()
+        private void RemoveSuite()
         {
             CmdHelper.RunCmd("dotnet tool uninstall " + SuitePackageName + " -g");
         }
@@ -275,7 +277,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp suite");
             sb.AppendLine("  abp suite install");
             sb.AppendLine("  abp suite install --preview");
-            sb.AppendLine("  abp suite install --version 4.2.2");            
+            sb.AppendLine("  abp suite install --version 4.2.2");
             sb.AppendLine("  abp suite update");
             sb.AppendLine("  abp suite update --preview");
             sb.AppendLine("  abp suite remove");

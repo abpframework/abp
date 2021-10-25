@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Localization;
 using Xunit;
 
 namespace Volo.Abp.TextTemplating
@@ -16,25 +17,31 @@ namespace Volo.Abp.TextTemplating
         [Fact]
         public async Task Should_Render_By_Scriban()
         {
-            (await _templateRenderer.RenderAsync(
-                TestTemplates.HybridTemplateScriban,
-                model: new
-                {
-                    name = "John"
-                }
-            )).ShouldBe("Hello John, how are you?");
+            using (CultureHelper.Use("en"))
+            {
+                (await _templateRenderer.RenderAsync(
+                    TestTemplates.HybridTemplateScriban,
+                    model: new
+                    {
+                        name = "John"
+                    }
+                )).ShouldBe("Hello John, how are you?");
+            }
         }
 
         [Fact]
         public async Task Should_Render_By_Razor()
         {
-            (await _templateRenderer.RenderAsync(
-                TestTemplates.HybridTemplateRazor,
-                model: new HybridModel
-                {
-                    Name = "John"
-                }
-            )).ShouldBe("Hello John, how are you?");
+            using (CultureHelper.Use("en"))
+            {
+                (await _templateRenderer.RenderAsync(
+                    TestTemplates.HybridTemplateRazor,
+                    model: new HybridModel
+                    {
+                        Name = "John"
+                    }
+                )).ShouldBe("Hello John, how are you?");
+            }
         }
 
         public class HybridModel

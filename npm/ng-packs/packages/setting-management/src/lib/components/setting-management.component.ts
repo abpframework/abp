@@ -1,5 +1,6 @@
-import { ABP, SettingTabsService } from '@abp/ng.core';
+import { ABP } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.setting-management/config';
 import { Subscription } from 'rxjs';
 
 @Component({

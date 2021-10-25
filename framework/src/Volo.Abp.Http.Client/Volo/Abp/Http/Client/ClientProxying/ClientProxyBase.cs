@@ -16,6 +16,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -28,15 +29,15 @@ namespace Volo.Abp.Http.Client.ClientProxying
         protected IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder => LazyServiceProvider.LazyGetRequiredService<IClientProxyApiDescriptionFinder>();
         protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetRequiredService<ICancellationTokenProvider>();
         protected ICorrelationIdProvider CorrelationIdProvider => LazyServiceProvider.LazyGetRequiredService<ICorrelationIdProvider>();
-        protected ICurrentTenant CurrentTenant  => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
-        protected IOptions<AbpCorrelationIdOptions> AbpCorrelationIdOptions  => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpCorrelationIdOptions>>();
-        protected IProxyHttpClientFactory HttpClientFactory  => LazyServiceProvider.LazyGetRequiredService<IProxyHttpClientFactory>();
-        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider  => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceConfigurationProvider>();
-        protected IOptions<AbpHttpClientOptions> ClientOptions  => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpHttpClientOptions>>();
-        protected IJsonSerializer JsonSerializer  => LazyServiceProvider.LazyGetRequiredService<IJsonSerializer>();
-        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator  => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceHttpClientAuthenticator>();
-        protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
-        protected ClientProxyUrlBuilder ClientProxyUrlBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
+        protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+        protected IOptions<AbpCorrelationIdOptions> AbpCorrelationIdOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpCorrelationIdOptions>>();
+        protected IProxyHttpClientFactory HttpClientFactory => LazyServiceProvider.LazyGetRequiredService<IProxyHttpClientFactory>();
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceConfigurationProvider>();
+        protected IOptions<AbpHttpClientOptions> ClientOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpHttpClientOptions>>();
+        protected IJsonSerializer JsonSerializer => LazyServiceProvider.LazyGetRequiredService<IJsonSerializer>();
+        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceHttpClientAuthenticator>();
+        protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
+        protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
 
         protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
         {
@@ -55,7 +56,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 arguments = new ClientProxyRequestTypeValue();
             }
 
-            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => x.Key.FullName))}";
+            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.Key)))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
             if (action == null)
             {
@@ -114,7 +115,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
             var requestMessage = new HttpRequestMessage(requestContext.Action.GetHttpMethod(), url)
             {
-                Content = ClientProxyRequestPayloadBuilder.BuildContent(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion)
+                Content = await ClientProxyRequestPayloadBuilder.BuildContentAsync(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion)
             };
 
             AddHeaders(requestContext.Arguments, requestContext.Action, requestMessage, apiVersion);
@@ -156,14 +157,14 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
         }
 
-        protected virtual Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+        protected virtual async Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
         {
-            return Task.FromResult(ClientProxyUrlBuilder.GenerateUrlWithParameters(requestContext.Action, requestContext.Arguments, apiVersion));
+            return await ClientProxyUrlBuilder.GenerateUrlWithParametersAsync(requestContext.Action, requestContext.Arguments, apiVersion);
         }
 
-        protected virtual Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+        protected virtual async Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
         {
-            return Task.FromResult(ClientProxyRequestPayloadBuilder.BuildContent(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion));
+            return await ClientProxyRequestPayloadBuilder.BuildContentAsync(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion);
         }
 
         protected virtual async Task<string> FindBestApiVersionAsync(ClientProxyRequestContext requestContext)

@@ -1,18 +1,10 @@
-import { eLayoutType, RoutesService, SettingTabsService } from '@abp/ng.core';
+import { eLayoutType, noop, RoutesService } from '@abp/ng.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
-import { APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, inject, InjectionToken } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
 import { eSettingManagementRouteNames } from '../enums/route-names';
-
-export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
-  {
-    provide: APP_INITIALIZER,
-    useFactory: hideRoutes,
-    deps: [RoutesService, SettingTabsService],
-    multi: true,
-  },
-];
+import { SettingTabsService } from '../services/settings-tabs.service';
+import { Observable } from 'rxjs';
 
 export function configureRoutes(routesService: RoutesService) {
   return () => {
@@ -29,15 +21,25 @@ export function configureRoutes(routesService: RoutesService) {
   };
 }
 
-export function hideRoutes(routesService: RoutesService, settingTabsService: SettingTabsService) {
-  return () => {
-    settingTabsService.visible$
-      .pipe(
+export const SETTING_MANAGEMENT_HAS_SETTING = new InjectionToken<Observable<boolean>>(
+  'SETTING_MANAGEMENT_HAS_SETTING',
+  {
+    factory: () => {
+      const settingTabsService = inject(SettingTabsService);
+      return settingTabsService.visible$.pipe(
         debounceTime(0),
-        map(nodes => !nodes.length),
-      )
-      .subscribe(invisible =>
-        routesService.patch(eSettingManagementRouteNames.Settings, { invisible }),
+        map(nodes => !!nodes.length),
       );
-  };
-}
+    },
+  },
+);
+
+export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  {
+    provide: APP_INITIALIZER,
+    useFactory: noop,
+    deps: [SETTING_MANAGEMENT_HAS_SETTING],
+    multi: true,
+  },
+];

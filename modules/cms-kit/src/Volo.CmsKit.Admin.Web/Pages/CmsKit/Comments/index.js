@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
@@ -10,6 +10,7 @@
             todayBtn: "linked",
             autoclose: true,
             language: abp.localization.currentCulture.cultureName,
+            format: abp.localization.currentCulture.dateTimeFormat.shortDatePattern
         })
         .on("hide", function (e) {
             e.stopPropagation();
@@ -74,6 +75,7 @@
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }

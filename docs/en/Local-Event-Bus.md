@@ -143,7 +143,7 @@ namespace AbpDemo
     {
         public async Task HandleEventAsync(StockCountChangedEvent eventData)
         {
-            //TODO: your code that does somthing on the event
+            //TODO: your code that does something on the event
         }
     }
 }
@@ -157,52 +157,6 @@ That's all. `MyHandler` is **automatically discovered** by the ABP Framework and
 If you perform **database operations** and use the [repositories](Repositories.md) inside the event handler, you may need to create a [unit of work](Unit-Of-Work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
-
-## Exception Handling
-
-ABP provides exception handling and retries when an exception occurs.
-
-Enable exception handling:
-
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-    PreConfigure<AbpEventBusOptions>(options =>
-    {
-        options.UseRetryStrategy();
-    });
-}
-```
-
-When an exception occurs, it will retry every three seconds up to the maximum number of retries(default is 3) and throw the original exception, you can change the number of retries and the retry interval:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.UseRetryStrategy(retryStrategyOptions =>
-    {
-        retryStrategyOptions.IntervalMillisecond = 0;
-        retryStrategyOptions.MaxRetryAttempts = 1;
-    });
-});
-```
-
-### Error Handle Selector
-
-By default all event types will be exception handling, you can use `ErrorHandleSelector` of `AbpEventBusOptions` to change it:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
-});
-```
-
-`options.ErrorHandleSelector` actually a list of type predicate. You can write a lambda expression to define your filter.
-
-### Customize Exception Handling
-
-ABP defines the `IEventErrorHandler` interface and implemented by `LocalEventErrorHandler`, you can replace it via [dependency injection](Dependency-Injection.md)
 
 ### Transaction & Exception Behavior
 

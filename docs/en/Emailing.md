@@ -1,4 +1,4 @@
-﻿# Email Sending
+# Email Sending
 
 ABP Framework provides various services, settings and integrations for sending emails;
 

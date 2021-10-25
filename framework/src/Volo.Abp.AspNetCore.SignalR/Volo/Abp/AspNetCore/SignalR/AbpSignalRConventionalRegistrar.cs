@@ -5,39 +5,21 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.SignalR
 {
-    public class AbpSignalRConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpSignalRConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            if (!IsHub(type))
-            {
-                return;
-            }
-
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
-
-            TriggerServiceExposing(services, type, serviceTypes);
-
-            foreach (var serviceType in serviceTypes)
-            {
-                services.Add(
-                    ServiceDescriptor.Describe(
-                        serviceType,
-                        type,
-                        ServiceLifetime.Transient
-                    )
-                );
-            }
+            return !IsHub(type) || base.IsConventionalRegistrationDisabled(type);
         }
-        
+
         private static bool IsHub(Type type)
         {
             return typeof(Hub).IsAssignableFrom(type);
+        }
+
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

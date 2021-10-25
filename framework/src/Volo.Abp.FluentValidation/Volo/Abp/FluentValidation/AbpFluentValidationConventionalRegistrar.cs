@@ -1,39 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.FluentValidation
 {
-    public class AbpFluentValidationConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
+            return !type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IValidator<>)) ||
+                   base.IsConventionalRegistrationDisabled(type);
+        }
+
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
+        }
+
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
+            return new List<Type>()
             {
-                return;
-            }
-
-            if (!typeof(IValidator).IsAssignableFrom(type))
-            {
-                return;
-            }
-
-            var validatingType = GetFirstGenericArgumentOrNull(type, 1);
-            if (validatingType == null)
-            {
-                return;
-            }
-
-            var serviceType = typeof(IValidator<>).MakeGenericType(validatingType);
-
-            TriggerServiceExposing(services, type, new List<Type>{ serviceType });
-
-            services.AddTransient(
-                serviceType,
-                type
-            );
+                typeof(IValidator<>).MakeGenericType(GetFirstGenericArgumentOrNull(type, 1))
+            };
         }
 
         private static Type GetFirstGenericArgumentOrNull(Type type, int depth)

@@ -1,4 +1,4 @@
-﻿# Začínáme s ASP.NET Core MVC aplikací
+# Začínáme s ASP.NET Core MVC aplikací
 
 Tento tutoriál vysvětluje jak začít s ABP z ničeho s minimem závislostí. Obvykle chcete začít se **[startovací šablonou](https://abp.io/Templates)**.
 

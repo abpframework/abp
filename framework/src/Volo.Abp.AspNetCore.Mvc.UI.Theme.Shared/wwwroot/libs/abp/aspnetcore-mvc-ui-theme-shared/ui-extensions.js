@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function () {
     abp.ui = abp.ui || {};
     abp.ui.extensions = abp.ui.extensions || {};
