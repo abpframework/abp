@@ -1,8 +1,8 @@
 # Angular UI v4.x to v5.0 Migration Guide
 
-## Breaking Changes
+This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](Abp-5_0.md).
 
-### Overall
+## Overall
 
 See the overall list of breaking changes:
 
@@ -16,15 +16,15 @@ See the overall list of breaking changes:
 - Update all dependency versions to the latest [#9806](https://github.com/abpframework/abp/issues/9806)
 - Chart.js big include with CommonJS warning [#7472](https://github.com/abpframework/abp/issues/7472)
 
-### Angular v12
+## Angular v12
 
 The new ABP Angular UI is based on Angular v12. We started to compile Angular UI packages with the Ivy compilation. Therefore, **new packages only work with Angular v12**. If you are still on the older version of Angular v12, you have to update to Angular v12. The update is usually very easy. See [Angular Update Guide](https://update.angular.io/?l=2&v=11.0-12.0) for further information.
 
-### Bootstrap 5
+## Bootstrap 5
 
 TODO
 
-### NGXS has been removed
+## NGXS has been removed
 
 We aim to make the ABP Framework free of any state-management solutions. ABP developers should be able to use the ABP Framework with any library/framework of their choice. So, we decided to remove NGXS from ABP packages.
 
@@ -42,7 +42,7 @@ NGXS states and actions, some namespaces have been removed. See [this issue](htt
 
 If you don't want to use the NGXS, you should remove all NGXS related imports, injections, etc., from your project.
 
-### @angular/localize package
+## @angular/localize package
 
 [`@angular/localize`](https://angular.io/api/localize) dependency has been removed from `@abp/ng.core` package. The package must be installed in your app. Run the following command to install:
 
@@ -56,7 +56,7 @@ yarn add @angular/localize
 
 > ABP Angular UI packages are not dependent on the `@angular/localize` package. However, some packages (like `@ng-bootstrap/ng-bootstrap`) depend on the package. Thus, this package needs to be installed in your project.
 
-### Proxy endpoints
+## Proxy endpoints
 
 New endpoints named proxy have been created, related proxies have moved.
 For example; before v5.0, `IdentityUserService` could be imported from `@abp/ng.identity`. As of v5.0, the service can be imported from `@abp/ng.identity/proxy`. See an example:
@@ -79,11 +79,11 @@ Following proxies have been affected:
 - `@abp/ng.tenant-management` to `@abp/ng.tenant-management/proxy`
 - **ProfileService** is deleted from `@abp/ng.core`. Instead, you can import it from `@abp/ng.identity/proxy`
 
-### SettingTabsService
+## SettingTabsService
 
 **SettingTabsService** has moved from `@abp/ng.core` to `@abp/ng.setting-management/config`.
 
-### ChartComponent
+## ChartComponent
 
 [`ChartComponent`](../UI/Angular/Chart-Component.md) has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
 
