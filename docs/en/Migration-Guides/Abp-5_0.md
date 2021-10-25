@@ -95,6 +95,11 @@ public partial class AddIsActiveToIdentityUser : Migration
 
 For MongoDB, you need to update the `IsActive` field for the existing users in the database.
 
+You can use following script in MongoShell:
+```js
+db.AbpUsers.updateMany({},{$set:{ IsActive : true }})
+```
+
 #### Identity -> Account API Changes
 
 `IProfileAppService` (and the implementation and the related DTOs) are moved to the Account module from the Identity module (done with [this PR](https://github.com/abpframework/abp/pull/10370/files)).
