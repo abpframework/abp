@@ -354,7 +354,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual string GetAbpVersionOrNull(string projectFile)
         {
             var projectFileContent = File.ReadAllText(projectFile);
-            return SolutionAbpVersionFinder.TryParseVersionFromCsprojFile(projectFileContent, out var version)
+            return SolutionPackageVersionFinder.TryParseVersionFromCsprojFile(projectFileContent, out var version)
                 ? version
                 : null;
         }
