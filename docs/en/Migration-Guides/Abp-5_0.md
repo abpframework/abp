@@ -31,6 +31,8 @@ services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 ## UI Providers
 
 * [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide]()
+* [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
 
 ## Modules
 
@@ -38,11 +40,12 @@ This section contains breaking and important changes in the application modules.
 
 ### Identity
 
-`IsActive <bool>` property is added to the `IdentityUser`. This flag will be checked during the authentication of the users. See the related [PR](https://github.com/abpframework/abp/pull/10185). 
-**After the migration, set this property to `true` for the existing users: `UPDATE AbpUsers SET IsActive=1`**
+An `IsActive` (`bool`) property is added to the `IdentityUser` entity. This flag will be checked during the authentication of the users. EF Core developers need to add a new database migration and update their databases.
 
-For EFCore you can set `defaultValue` to `true` in the migration class:
-(This will add the column with `true` value for the existing records.)
+**After the database migration, set this property to `true` for the existing users: `UPDATE AbpUsers SET IsActive=1`**. Otherwise, none of the users can login to the application.
+
+Alternatively, you can set `defaultValue` to `true` in the migration class (after adding the migration).
+This will add the column with `true` value for the existing records.
 
 ```cs
 public partial class AddIsActiveToIdentityUser : Migration
@@ -66,8 +69,14 @@ public partial class AddIsActiveToIdentityUser : Migration
 }
 ```
 
-For document base databases like MongoDB, you need to manually update the `IsActive` field for the existing user records.
+For MongoDB, you need to manually update the `IsActive` field for the existing users.
 
 ### IdentityServer
 
 `IApiScopeRepository.GetByNameAsync` method renamed as `FindByNameAsync`.
+
+## See Also
+
+* [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide]()
+* [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
