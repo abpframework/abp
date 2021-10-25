@@ -52,17 +52,12 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
         private bool ShouldCreateModuleScript(KeyValuePair<string, ModuleApiDescriptionModel> module)
         {
-            if (_dynamicJavaScriptProxyOptions.EnabledAllModules)
+            if (_dynamicJavaScriptProxyOptions.DisabledModules.Contains(module.Key))
             {
-                return true;
+                return false;
             }
 
-            if (_dynamicJavaScriptProxyOptions.EnabledModules.Any(m => m.Equals(module.Key, StringComparison.CurrentCultureIgnoreCase)))
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         private static void AddModuleScript(StringBuilder script, ModuleApiDescriptionModel module)

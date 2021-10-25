@@ -4,13 +4,21 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 {
     public class DynamicJavaScriptProxyOptions
     {
-        public HashSet<string> EnabledModules { get; set; }
-
-        public bool EnabledAllModules { get; set; }
+        public HashSet<string> DisabledModules { get; }
 
         public DynamicJavaScriptProxyOptions()
         {
-            EnabledModules = new HashSet<string> { "app" };
+            DisabledModules = new HashSet<string>();
+        }
+
+        public void DisableModule(string module)
+        {
+            DisabledModules.AddIfNotContains(module);
+        }
+
+        public void EnableModule(string module)
+        {
+            DisabledModules.Remove(module);
         }
     }
 }

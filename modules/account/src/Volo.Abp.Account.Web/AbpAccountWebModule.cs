@@ -9,6 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -61,6 +62,11 @@ namespace Volo.Abp.Account.Web
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(AccountRemoteServiceConsts.ModuleName);
             });
         }
 

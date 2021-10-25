@@ -72,11 +72,6 @@ namespace Volo.Abp.Cli
                 options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
                 options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
             });
-
-            Configure<DynamicJavaScriptProxyOptions>(options =>
-            {
-                options.EnabledAllModules = true;
-            });
         }
     }
 }
