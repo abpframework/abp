@@ -10,6 +10,10 @@ ABP 5.0 runs on .NET 6.0. So, please upgrade your solution to .NET 6.0 if you wa
 
 ABP 5.0 uses the Bootstrap 5 as the fundamental HTML/CSS framework. We've migrated all the UI themes, tag helpers, UI components and the pages of the pre-built application modules. You may need to update your own pages by following the [Bootstrap's migration guide](https://getbootstrap.com/docs/5.0/migration/).
 
+The startup template changes
+
+The startup template has changed. You don't need to apply all the changes, but it is strongly suggested to follow [this guide](Upgrading-Startup-Template.md) and make the necessary changes for your solution.
+
 ## ABP Framework
 
 This section contains breaking changes in the ABP Framework.
@@ -18,19 +22,19 @@ This section contains breaking changes in the ABP Framework.
 
 ABP Framework will serialize the datetime based on [AbpClockOptions](https://docs.abp.io/en/abp/latest/Timing#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
 
-If you want to revert back this feature, set `UseAbpClockHandleDateTime = false` in `AbpMongoDbOptions`:
+If you want to revert back this feature, set `UseAbpClockHandleDateTime` to `false` in `AbpMongoDbOptions`:
 
 ```cs
-services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
+Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 ```
 
 ### Publishing Auto-Events in the Same Unit of Work
 
-Local and distributed auto-events are handled in the same unit of work now. That means the event handles are executed in the same database transaction and they can rollback the transaction if they throw any exception. See [#9896](https://github.com/abpframework/abp/issues/9896) for more.
+Local and distributed auto-events are handled in the same unit of work now. That means the event handles are executed in the same database transaction and they can rollback the transaction if they throw any exception. The new behavior may affect your previous assumptions. See [#9896](https://github.com/abpframework/abp/issues/9896) for more.
 
-### Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData
+#### Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData
 
-`EntityCreatingEventData`, `EntityUpdatingEventData`, `EntityDeletingEventData` and `EntityChangingEventData` is not necessary now, because `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` is already taken into the current unit of work. Please switch to `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` if you've used the deprecated events. See [#9897](https://github.com/abpframework/abp/issues/9897) to learn more.
+As a side effect of the previous change, `EntityCreatingEventData`, `EntityUpdatingEventData`, `EntityDeletingEventData` and `EntityChangingEventData` is not necessary now, because `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` is already taken into the current unit of work. Please switch to `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` if you've used the deprecated events. See [#9897](https://github.com/abpframework/abp/issues/9897) to learn more.
 
 ### Removed ModelBuilderConfigurationOptions classes
 
@@ -39,6 +43,12 @@ If you've used these classes, please remove their usages and use the static prop
 ### Removed Obsolete APIs
 
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was [made obsolete in 4.2](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-4_2#irepository-getqueryableasync).
+
+### Other Breaking Changes
+
+* [#9549](https://github.com/abpframework/abp/pull/9549) `IObjectValidator` methods have been changed to asynchronous.
+* [#9940](https://github.com/abpframework/abp/pull/9940) Use ASP NET Core's authentication scheme to handle `AbpAuthorizationException`.
+* [#9180](https://github.com/abpframework/abp/pull/9180) Use `IRemoteContentStream` without form content headers.
 
 ## UI Providers
 
@@ -71,7 +81,7 @@ public partial class AddIsActiveToIdentityUser : Migration
             table: "AbpUsers",
             type: "bit",
             nullable: false,
-            defaultValue: true); // Default is false.
+            defaultValue: true); // Default is false, change it to true.
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
@@ -83,7 +93,7 @@ public partial class AddIsActiveToIdentityUser : Migration
 }
 ```
 
-For MongoDB, you need to manually update the `IsActive` field for the existing users.
+For MongoDB, you need to update the `IsActive` field for the existing users in the database.
 
 #### Identity -> Account API Changes
 
