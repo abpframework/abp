@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Domain.Entities;
+﻿using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Account
 {
     public class UpdateProfileDto : ExtensibleObject
     {

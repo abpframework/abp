@@ -51,6 +51,7 @@ This is a major version and there are some breaking changes and upgrade steps. H
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was already made obsolete in 4.2.
 * Removed NGXS and states from the Angular UI.
 * Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of ABP CLI.
+* Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData classes. See [#9897](https://github.com/abpframework/abp/issues/9897).
 
 Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
 

@@ -1,16 +1,17 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Account
 {
     [Authorize]
     public class ProfileAppService : IdentityAppServiceBase, IProfileAppService

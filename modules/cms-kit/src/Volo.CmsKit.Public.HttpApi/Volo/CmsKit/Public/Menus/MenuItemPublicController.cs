@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Public.Menus
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/menu-items")]
     public class MenuItemPublicController : CmsKitPublicControllerBase, IMenuItemPublicAppService
     {
