@@ -95,6 +95,7 @@ public partial class AddIsActiveToIdentityUser : Migration
 
 For MongoDB, you need to update the `IsActive` field for the existing users in the database.
 
+You can use following script in MongoShell:
 ```js
 db.AbpUsers.updateMany({},{$set:{ IsActive : true }})
 ```
