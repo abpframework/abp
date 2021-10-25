@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -29,7 +31,14 @@ namespace MyCompanyName.MyProjectName.Web
             try
             {
                 Log.Information("Starting web host.");
-                CreateHostBuilder(args).Build().Run();
+                var builder = WebApplication.CreateBuilder(args);
+                builder.Host.AddAppSettingsSecretsJson()
+                    .UseAutofac()
+                    .UseSerilog();
+                builder.Services.AddApplication<MyProjectNameWebModule>();
+                var app = builder.Build();
+                app.InitializeApplication();
+                app.Run();
                 return 0;
             }
             catch (Exception ex)
@@ -42,15 +51,5 @@ namespace MyCompanyName.MyProjectName.Web
                 Log.CloseAndFlush();
             }
         }
-
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .AddAppSettingsSecretsJson()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac()
-                .UseSerilog();
     }
 }
