@@ -24,6 +24,18 @@ If you want to revert back this feature, set `UseAbpClockHandleDateTime = false`
 services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 ```
 
+### Publishing Auto-Events in the Same Unit of Work
+
+Local and distributed auto-events are handled in the same unit of work now. That means the event handles are executed in the same database transaction and they can rollback the transaction if they throw any exception. See [#9896](https://github.com/abpframework/abp/issues/9896) for more.
+
+### Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData
+
+`EntityCreatingEventData`, `EntityUpdatingEventData`, `EntityDeletingEventData` and `EntityChangingEventData` is not necessary now, because `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` is already taken into the current unit of work. Please switch to `EntityCreatedEventData`, `EntityUpdatedEventData`, `EntityDeletedEventData` and `EntityChangedEventData` if you've used the deprecated events. See [#9897](https://github.com/abpframework/abp/issues/9897) to learn more.
+
+### Removed ModelBuilderConfigurationOptions classes
+
+If you've used these classes, please remove their usages and use the static properties to customize the module's database mappings. See [#8887](https://github.com/abpframework/abp/issues/8887) for more.
+
 ### Removed Obsolete APIs
 
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was [made obsolete in 4.2](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-4_2#irepository-getqueryableasync).
@@ -39,6 +51,8 @@ services.Configure<AbpMongoDbOptions>(x => x.UseAbpClockHandleDateTime = false);
 This section contains breaking and important changes in the application modules.
 
 ### Identity
+
+#### User Active/Passive
 
 An `IsActive` (`bool`) property is added to the `IdentityUser` entity. This flag will be checked during the authentication of the users. EF Core developers need to add a new database migration and update their databases.
 
@@ -70,6 +84,10 @@ public partial class AddIsActiveToIdentityUser : Migration
 ```
 
 For MongoDB, you need to manually update the `IsActive` field for the existing users.
+
+#### Identity -> Account API Changes
+
+`IProfileAppService` (and the implementation and the related DTOs) are moved to the Account module from the Identity module (done with [this PR](https://github.com/abpframework/abp/pull/10370/files)).
 
 ### IdentityServer
 
