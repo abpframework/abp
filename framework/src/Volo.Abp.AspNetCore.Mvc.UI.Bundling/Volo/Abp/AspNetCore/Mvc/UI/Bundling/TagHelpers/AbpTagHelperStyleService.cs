@@ -13,18 +13,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public class AbpTagHelperStyleService : AbpTagHelperResourceService
     {
-        protected AbpTagHelperScriptStyleLoadingOptions LoadingOptions { get; }
-
         public AbpTagHelperStyleService(
             IBundleManager bundleManager,
             IOptions<AbpBundlingOptions> options,
-            IWebHostEnvironment hostingEnvironment,
-            IOptions<AbpTagHelperScriptStyleLoadingOptions> loadingOptions) : base(
+            IWebHostEnvironment hostingEnvironment) : base(
                 bundleManager,
                 options,
                 hostingEnvironment)
         {
-            LoadingOptions = loadingOptions.Value;
         }
 
         protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -50,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                 _ => false
             };
 
-            if (preload || LoadingOptions.GlobalPreloadStyle || LoadingOptions.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
             {
                 output.Content.AppendHtml($"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
             }

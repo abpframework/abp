@@ -13,18 +13,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public class AbpTagHelperScriptService : AbpTagHelperResourceService
     {
-        protected AbpTagHelperScriptStyleLoadingOptions LoadingOptions { get; }
-
         public AbpTagHelperScriptService(
             IBundleManager bundleManager,
             IOptions<AbpBundlingOptions> options,
-            IWebHostEnvironment hostingEnvironment,
-            IOptions<AbpTagHelperScriptStyleLoadingOptions> loadingOptions) : base(
+            IWebHostEnvironment hostingEnvironment) : base(
                 bundleManager,
                 options,
                 hostingEnvironment)
         {
-            LoadingOptions = loadingOptions.Value;
         }
 
         protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -50,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                 _ => false
             };
 
-            var deferText = (defer || LoadingOptions.GlobalDeferScript || LoadingOptions.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
                     ? "defer"
                     : string.Empty;
             output.Content.AppendHtml($"<script {deferText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
