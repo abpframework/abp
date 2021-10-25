@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
 
     var pagesService = volo.cmsKit.admin.pages.pageAdmin;
@@ -14,7 +14,6 @@
         serverSide: true,
         paging: true,
         searching: false,
-        autoWidth: false,
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
@@ -43,8 +42,8 @@
                                 pagesService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }
@@ -64,7 +63,14 @@
             {
                 title: l("CreationTime"),
                 orderable: true,
-                data: 'creationTime'
+                data: 'creationTime',
+                dataFormat: "datetime"
+            },
+            {
+                title: l("LastModificationTime"),
+                orderable: true,
+                data: 'lastModificationTime',
+                dataFormat: "datetime"
             }
         ]
     }));

@@ -6,7 +6,7 @@ The `abp-modal` provides some additional benefits:
  
  - It is **flexible**. You can pass header, body, footer templates easily by adding the templates to the `abp-modal` content. It can also be implemented quickly.
  - Provides several inputs be able to customize the modal and several outputs be able to listen to some events.
- - Automatically detects the close button which has a `#abpClose` template variable and closes the modal when pressed this button.
+ - Automatically detects the close button which has a `abpClose` directive attached to and closes the modal when pressed this button.
  - Automatically detects the `abp-button` and triggers its loading spinner when the `busy` input value of the modal component is true.
  - Automatically checks if the form inside the modal **has changed, but not saved**. It warns the user by displaying a [confirmation popup](Confirmation-Service) in this case when a user tries to close the modal or refresh/close the tab of the browser.
 
@@ -47,7 +47,7 @@ You can add the `abp-modal` to your component very quickly. See an example:
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>Close</button>
+    <button type="button" class="btn btn-secondary" abpClose>Close</button>
   </ng-template>
 </abp-modal>
 ```
@@ -116,7 +116,7 @@ See an example form inside a modal:
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       Cancel
     </button>
 

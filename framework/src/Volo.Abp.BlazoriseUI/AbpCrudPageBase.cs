@@ -9,11 +9,18 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
+using Volo.Abp.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
+using Volo.Abp.BlazoriseUI.Components.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -186,6 +193,8 @@ namespace Volo.Abp.BlazoriseUI
         protected Validations EditValidationsRef;
         protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
         protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
+        protected EntityActionDictionary EntityActions { get; set; }
+        protected TableColumnDictionary TableColumns { get; set; }
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -199,13 +208,29 @@ namespace Volo.Abp.BlazoriseUI
         {
             NewEntity = new TCreateViewModel();
             EditingEntity = new TUpdateViewModel();
+            TableColumns = new TableColumnDictionary();
+            EntityActions = new EntityActionDictionary();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
+            await SetEntityActionsAsync();
+            await SetTableColumnsAsync();
+            await InvokeAsync(StateHasChanged);
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await base.OnAfterRenderAsync(firstRender);
+                await SetToolbarItemsAsync();
+                await SetBreadcrumbItemsAsync();
+            }
+        }
+
+
 
         protected virtual async Task SetPermissionsAsync()
         {
@@ -460,14 +485,26 @@ namespace Volo.Abp.BlazoriseUI
             try
             {
                 await CheckDeletePolicyAsync();
-
+                await OnDeletingEntityAsync();
                 await AppService.DeleteAsync(entity.Id);
-                await GetEntitiesAsync();
+                await OnDeletedEntityAsync();
             }
             catch (Exception ex)
             {
                 await HandleErrorAsync(ex);
             }
+        }
+
+        protected virtual Task OnDeletingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual async Task OnDeletedEntityAsync()
+        {
+            await GetEntitiesAsync();
+            await InvokeAsync(StateHasChanged);
+            await Notify.Success(L["SuccessfullyDeleted"]);
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
@@ -510,6 +547,63 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual ValueTask SetBreadcrumbItemsAsync()
         {
             return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetEntityActionsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetTableColumnsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetToolbarItemsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual IEnumerable<TableColumn> GetExtensionTableColumns(string moduleName, string entityType)
+        {
+            var properties = ModuleExtensionConfigurationHelper.GetPropertyConfigurations(moduleName, entityType);
+            foreach (var propertyInfo in properties)
+            {
+                if (propertyInfo.IsAvailableToClients && propertyInfo.UI.OnTable.IsVisible)
+                {
+                    if (propertyInfo.Name.EndsWith("_Text"))
+                    {
+                        var lookupPropertyName = propertyInfo.Name.RemovePostFix("_Text");
+                        var lookupPropertyDefinition = properties.SingleOrDefault(t => t.Name == lookupPropertyName);
+                        yield return new TableColumn
+                        {
+                            Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+                    }
+                    else
+                    {
+                        var column = new TableColumn
+                        {
+                            Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+
+                        if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
+                        {
+                            column.DisplayFormat = propertyInfo.GetDateEditInputFormatOrNull();
+                        }
+
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            column.ValueConverter = (val) =>
+                                EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], StringLocalizerFactory);
+                        }
+
+                        yield return column;
+                    }
+                }
+            }
         }
     }
 }

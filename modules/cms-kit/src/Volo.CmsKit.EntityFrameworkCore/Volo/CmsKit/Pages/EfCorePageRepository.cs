@@ -40,7 +40,7 @@ namespace Volo.CmsKit.Pages
                     !filter.IsNullOrWhiteSpace(),
                     x =>
                         x.Title.Contains(filter))
-                .OrderBy(sorting ?? nameof(Page.Title))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

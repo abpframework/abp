@@ -23,7 +23,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
         {
             serviceName = serviceName.ToCamelCase().RemovePostFix("Service");
 
-            return Path.Combine(mainSolutionFolder, "microservices", serviceName);
+            return Path.Combine(mainSolutionFolder, "services", serviceName);
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)

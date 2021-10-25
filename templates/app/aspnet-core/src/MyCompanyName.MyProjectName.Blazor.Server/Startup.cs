@@ -8,7 +8,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<MyProjectNameBlazorServerModule>();
+            services.AddApplication<MyProjectNameBlazorModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

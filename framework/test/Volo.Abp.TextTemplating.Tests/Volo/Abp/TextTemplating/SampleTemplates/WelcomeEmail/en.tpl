@@ -1,1 +1,0 @@
-﻿Welcome {{model.name}} to the abp.io!

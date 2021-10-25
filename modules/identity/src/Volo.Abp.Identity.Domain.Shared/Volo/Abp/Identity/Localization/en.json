@@ -25,6 +25,7 @@
     "DisplayName:Email": "Email address",
     "DisplayName:PhoneNumber": "Phone number",
     "DisplayName:TwoFactorEnabled": "Two factor verification",
+    "DisplayName:IsActive": "Active",
     "DisplayName:LockoutEnabled": "Lock account after failed login attempts",
     "NewRole": "New role",
     "RoleName": "Role name",
@@ -70,6 +71,7 @@
     "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
     "Volo.Abp.Identity:010008": "It's not allowed to change two factor setting.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
+    "ThisUserIsNotActiveMessage": "This user is not active.",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
     "Permission:Create": "Create",
@@ -78,12 +80,6 @@
     "Permission:ChangePermissions": "Change permissions",
     "Permission:UserManagement": "User management",
     "Permission:UserLookup": "User lookup",
-    "Feature:IdentityGroup": "Identity",
-    "Feature:TwoFactor": "Two factor behaviour",
-    "Feature:TwoFactorDescription": "Set two factor behaviour. Optional values: Optional,Disabled,Forced",
-    "Feature:TwoFactor.Optional": "Optional",
-    "Feature:TwoFactor.Disabled": "Disabled",
-    "Feature:TwoFactor.Forced": "Forced",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Required length",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Required unique characters number",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Required non-alphanumeric character",
@@ -111,10 +107,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Whether the phoneNumber can be confirmed by the user.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
-    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
-    "Description:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
-    "DisplayName:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
-    "Description:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user."
   }
 }

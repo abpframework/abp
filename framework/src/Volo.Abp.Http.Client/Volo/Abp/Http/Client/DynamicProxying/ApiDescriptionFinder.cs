@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -36,7 +37,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public async Task<ActionApiDescriptionModel> FindActionAsync(HttpClient client, string baseUrl, Type serviceType, MethodInfo method)
+        public async Task<ActionApiDescriptionModel> FindActionAsync(
+            HttpClient client,
+            string baseUrl,
+            Type serviceType,
+            MethodInfo method)
         {
             var apiDescription = await GetApiDescriptionAsync(client, baseUrl);
 
@@ -113,7 +118,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return (ApplicationApiDescriptionModel)result;
+            return result;
         }
 
         protected virtual void AddHeaders(HttpRequestMessage requestMessage)
@@ -142,17 +147,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
         {
-            return NormalizeTypeName(actionParameter.TypeAsString) ==
-                   NormalizeTypeName(methodParameter.ParameterType.GetFullNameWithAssemblyName());
+            return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
         }
 
-        protected virtual string NormalizeTypeName(string typeName)
-        {
-            const string placeholder = "%COREFX%";
-            const string netCoreLib = "System.Private.CoreLib";
-            const string netFxLib = "mscorlib";
-
-            return typeName.Replace(netCoreLib, placeholder).Replace(netFxLib, placeholder);
-        }
     }
 }

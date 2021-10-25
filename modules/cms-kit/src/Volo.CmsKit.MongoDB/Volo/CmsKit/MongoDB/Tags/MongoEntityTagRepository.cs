@@ -18,7 +18,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
         }
 
-        public async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
         {
             var token = GetCancellationToken(cancellationToken);
             
@@ -26,7 +26,7 @@ namespace Volo.CmsKit.MongoDB.Tags
             await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds), token);
         }
 
-        public Task<EntityTag> FindAsync(
+        public virtual Task<EntityTag> FindAsync(
             [NotNull] Guid tagId,
             [NotNull] string entityId,
             [CanBeNull] Guid? tenantId,

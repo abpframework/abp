@@ -62,10 +62,9 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = ResolveConnectionString(connectionStringName);
-
             var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
+            var connectionString = ResolveConnectionString(connectionStringName);
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
@@ -85,10 +84,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
-            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
@@ -105,6 +104,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
         }
 
+        [Obsolete("Use CreateDbContextAsync method.")]
         private TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
         {
             var creationContext = new DbContextCreationContext(connectionStringName, connectionString);
@@ -145,6 +145,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
         }
 
+        [Obsolete("Use CreateDbContextAsync.")]
         private TDbContext CreateDbContext(IUnitOfWork unitOfWork)
         {
             return unitOfWork.Options.IsTransactional
@@ -159,6 +160,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
         }
 
+        [Obsolete("Use CreateDbContextWithTransactionAsync.")]
         private TDbContext CreateDbContextWithTransaction(IUnitOfWork unitOfWork)
         {
             var transactionApiKey = $"EntityFrameworkCore_{DbContextCreationContext.Current.ConnectionString}";
@@ -191,7 +193,24 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
-                    dbContext.Database.UseTransaction(activeTransaction.DbContextTransaction.GetDbTransaction());
+                    if (dbContext.Database.GetDbConnection() == DbContextCreationContext.Current.ExistingConnection)
+                    {
+                        dbContext.Database.UseTransaction(activeTransaction.DbContextTransaction.GetDbTransaction());
+                    }
+                    else
+                    {
+                        /* User did not re-use the ExistingConnection and we are starting a new transaction.
+                         * EfCoreTransactionApi will check the connection string match and separately
+                         * commit/rollback this transaction over the DbContext instance. */
+                        if (unitOfWork.Options.IsolationLevel.HasValue)
+                        {
+                            dbContext.Database.BeginTransaction(unitOfWork.Options.IsolationLevel.Value);
+                        }
+                        else
+                        {
+                            dbContext.Database.BeginTransaction();
+                        }
+                    }
                 }
                 else
                 {
@@ -239,7 +258,29 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
-                    await dbContext.Database.UseTransactionAsync(activeTransaction.DbContextTransaction.GetDbTransaction(), GetCancellationToken());
+                    if (dbContext.Database.GetDbConnection() == DbContextCreationContext.Current.ExistingConnection)
+                    {
+                        await dbContext.Database.UseTransactionAsync(activeTransaction.DbContextTransaction.GetDbTransaction(), GetCancellationToken());
+                    }
+                    else
+                    {
+                        /* User did not re-use the ExistingConnection and we are starting a new transaction.
+                         * EfCoreTransactionApi will check the connection string match and separately
+                         * commit/rollback this transaction over the DbContext instance. */
+                        if (unitOfWork.Options.IsolationLevel.HasValue)
+                        {
+                            await dbContext.Database.BeginTransactionAsync(
+                                unitOfWork.Options.IsolationLevel.Value,
+                                GetCancellationToken()
+                            );
+                        }
+                        else
+                        {
+                            await dbContext.Database.BeginTransactionAsync(
+                                GetCancellationToken()
+                            );
+                        }
+                    }
                 }
                 else
                 {

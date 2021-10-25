@@ -1,0 +1,14 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "VirtualFileExplorer" : "Explorator de fişiere virtuale",
+    "VirtualFileType" : "Tip fişier virtual",
+    "Menu:VirtualFileExplorer" : "Explorator de fişiere virtuale",
+    "LastUpdateTime" : "Data ultimei actualizări",
+    "VirtualFileName" : "Nume fişier virtual",
+    "FileContent" : "Conţinut fişier",
+    "Size" : "Mărimea",
+    "BackToRoot" : "Înapoi la rădăcină",
+    "EmptyFileInfoList" : "Nu există fişiere virtuale"
+  }
+}

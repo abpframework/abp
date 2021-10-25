@@ -55,11 +55,15 @@ namespace Volo.Abp.AspNetCore
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.GetEnvironment().WebRootFileProvider =
-                new CompositeFileProvider(
-                    context.GetEnvironment().WebRootFileProvider,
-                    context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
-                );
+            var environment = context.GetEnvironmentOrNull();
+            if (environment != null)
+            {
+                environment.WebRootFileProvider =
+                    new CompositeFileProvider(
+                        context.GetEnvironment().WebRootFileProvider,
+                        context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
+                    );
+            }
         }
     }
 }

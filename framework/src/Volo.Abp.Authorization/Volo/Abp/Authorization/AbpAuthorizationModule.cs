@@ -8,17 +8,16 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Authorization
 {
     [DependsOn(
+        typeof(AbpAuthorizationAbstractionsModule),
         typeof(AbpSecurityModule),
-        typeof(AbpLocalizationModule),
-        typeof(AbpMultiTenancyModule)
-        )]
+        typeof(AbpLocalizationModule)
+    )]
     public class AbpAuthorizationModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -32,6 +31,7 @@ namespace Volo.Abp.Authorization
             context.Services.AddAuthorizationCore();
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+            context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 
             context.Services.TryAddTransient<DefaultAuthorizationPolicyProvider>();
 

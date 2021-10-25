@@ -1,13 +1,16 @@
 ﻿@page "/"
 @namespace MyCompanyName.MyProjectName.Blazor.Server.Pages
+@using System.Globalization
 @using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
+@using Volo.Abp.Localization
 @{
     Layout = null;
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +19,7 @@
     
     <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
 </head>
-<body>
+<body class="abp-application-layout bg-light @rtl">
     <component type="typeof(App)" render-mode="Server" />
 
     <div id="blazor-error-ui">

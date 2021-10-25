@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
@@ -25,9 +27,10 @@ namespace Volo.Abp.Validation
             Options = options.Value;
         }
 
-        public void AddErrors(ObjectValidationContext context)
+        public Task AddErrorsAsync(ObjectValidationContext context)
         {
             ValidateObjectRecursively(context.Errors, context.ValidatingObject, currentDepth: 1);
+            return Task.CompletedTask;
         }
 
         protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object validatingObject, int currentDepth)
@@ -120,9 +123,10 @@ namespace Volo.Abp.Validation
                 MemberName = property.Name
             };
 
+            var attributeValidationResultProvider = ServiceProvider.GetRequiredService<IAttributeValidationResultProvider>();
             foreach (var attribute in validationAttributes)
             {
-                var result = attribute.GetValidationResult(property.GetValue(validatingObject), validationContext);
+                var result = attributeValidationResultProvider.GetOrDefault(attribute, property.GetValue(validatingObject), validationContext);
                 if (result != null)
                 {
                     errors.Add(result);

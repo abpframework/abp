@@ -2,10 +2,7 @@ import { createTypeParser, removeGenerics } from './type';
 
 export function parseNamespace(solution: string, type: string) {
   const parseType = createTypeParser(removeGenerics);
-  let namespace = parseType(type)[0]
-    .split('.')
-    .slice(0, -1)
-    .join('.');
+  let namespace = parseType(type)[0].split('.').slice(0, -1).join('.');
 
   if (solution === namespace) return '';
 

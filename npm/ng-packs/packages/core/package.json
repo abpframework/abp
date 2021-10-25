@@ -1,19 +1,16 @@
 {
   "name": "@abp/ng.core",
-  "version": "4.2.2",
+  "version": "5.0.0-beta.2",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "^4.2.2",
-    "@angular/localize": "~10.0.10",
-    "@ngxs/store": "^3.7.0",
-    "angular-oauth2-oidc": "^10.0.0",
-    "just-clone": "^3.1.0",
-    "just-compare": "^1.3.0",
-    "snq": "^1.0.3",
+    "@abp/utils": "^5.0.0-beta.2",
+    "angular-oauth2-oidc": "^12.1.0",
+    "just-clone": "^3.2.1",
+    "just-compare": "^1.4.0",
     "ts-toolbelt": "6.15.4",
     "tslib": "^2.0.0"
   },

@@ -10,7 +10,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
                 {
-                    file.RemoveTemplateCode();
+                    file.RemoveTemplateCode(context.Symbols);
                     file.RemoveTemplateCodeMarkers();
                 }
             }

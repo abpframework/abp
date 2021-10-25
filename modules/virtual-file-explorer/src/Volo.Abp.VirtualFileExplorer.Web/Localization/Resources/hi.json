@@ -1,0 +1,14 @@
+{
+  "culture": "hi",
+  "texts": {
+    "VirtualFileExplorer": "आभासी फ़ाइल एक्सप्लोरर",
+    "VirtualFileType": "वर्चुअल फ़ाइल प्रकार",
+    "Menu:VirtualFileExplorer": "आभासी फ़ाइल एक्सप्लोरर",
+    "LastUpdateTime": "अंतिम अद्यतन समय",
+    "VirtualFileName": "वर्चुअल फ़ाइल नाम",
+    "FileContent": "फ़ाइल सामग्री",
+    "Size": "आकार",
+    "BackToRoot": "वापस रूट करने के लिए",
+    "EmptyFileInfoList": "कोई वर्चुअल फ़ाइल नहीं हैं"
+  }
+}

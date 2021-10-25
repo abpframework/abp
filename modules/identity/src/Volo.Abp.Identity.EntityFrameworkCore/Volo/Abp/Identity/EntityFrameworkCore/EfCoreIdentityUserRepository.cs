@@ -136,6 +136,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             int skipCount = 0,
             string filter = null,
             bool includeDetails = false,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
@@ -149,6 +151,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         (u.Surname != null && u.Surname.Contains(filter)) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
+                .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
+                .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
                 .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -176,7 +180,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .Where(q => userOrganizationsQuery
                 .Select(t => t.Id)
                 .Contains(q.OrganizationUnitId))
-                .Select(t => t.RoleId);
+                .Select(t => t.RoleId)
+                .ToArray();
 
             var orgRoles = dbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
             var resultQuery = query.Union(orgRoles);
@@ -186,6 +191,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<long> GetCountAsync(
             string filter = null,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
@@ -198,6 +205,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         (u.Surname != null && u.Surname.Contains(filter)) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
+                .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
+                .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 

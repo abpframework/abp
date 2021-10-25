@@ -83,7 +83,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             auditLog = auditLogScope.Log;
             auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
-                context.HandlerMethod.GetType(),
+                context.HandlerMethod.MethodInfo.DeclaringType,
                 context.HandlerMethod.MethodInfo,
                 context.HandlerArguments
             );

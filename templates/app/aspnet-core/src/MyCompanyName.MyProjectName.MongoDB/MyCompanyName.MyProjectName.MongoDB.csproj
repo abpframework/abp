@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
@@ -17,9 +17,6 @@
     <ProjectReference Include="..\..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.MongoDB\Volo.Abp.TenantManagement.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.MongoDB\Volo.Abp.FeatureManagement.MongoDB.csproj" />
-    <!--<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>-->
-    <ProjectReference Include="..\..\..\..\..\modules\cms-kit\src\Volo.CmsKit.MongoDB\Volo.CmsKit.MongoDB.csproj" />
-    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
 </Project>

@@ -50,7 +50,7 @@ The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-styl
 This bundle defines a style bundle with a **unique name**: `MyGlobalBundle`. It's very easy to understand how to use it. Let's see how it *works*:
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add the files to the bundle, it's executed only once and any changes of the condition will not effect the bundle for the next requests.
-* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...).
+* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...). See the *Bundling Mode* section to change that behavior.
 * The bundle files may be **physical** files or [**virtual/embedded** files](../../Virtual-File-System.md).
 * ABP automatically adds **version query string** to the bundle file URL to prevent browsers from caching when the bundle is being updated. (like ?_v=67872834243042 - generated from last change date of the related files). The versioning works even if the bundle files are individually added to the page (on the development environment).
 
@@ -349,6 +349,66 @@ services.Configure<AbpBundlingOptions>(options =>
                 );
         });
 });
+````
+
+## Additional Options
+
+This section shows other useful options for the bundling and minification system.
+
+### Bundling Mode
+
+ABP adds bundle files individually to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...). Most of the times this is the behavior you would want. However, you may want to manually configure it in some cases. There are four modes;
+
+* `Auto`: Automatically determines the mode based on the environment.
+* `None`: No bundling or minification.
+* `Bundle`: Bundled but not minified.
+* `BundleAndMinify`: Bundled and minified.
+
+You can configure `AbpBundlingOptions` in the `ConfigureServices` of your [module](../../Module-Development-Basics.md).
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.Mode = BundlingMode.Bundle;
+});
+````
+
+### Ignore For Minification
+
+It is possible to ignore a specific file for the minification.
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.MinificationIgnoredFiles.Add("/scripts/myscript.js");
+});
+````
+
+Given file is still added to the bundle, but not minified in this case.
+
+### Load JavaScript and CSS asynchronously
+
+You can configure `AbpBundlingOptions` to load all or a single js/css file asynchronously.
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.PreloadStyles.Add("/__bundles/Basic.Global");
+    options.DeferScriptsByDefault = true;
+});
+````
+
+**Output HTML:**
+````html
+<link rel="preload" href="/__bundles/Basic.Global.F4FA61F368098407A4C972D0A6914137.css?_v=637697363694828051" as="style" onload="this.rel='stylesheet'"/>
+
+<script defer src="/libs/timeago/locales/jquery.timeago.en.js?_v=637674729040000000"></script>
 ````
 
 ## Themes

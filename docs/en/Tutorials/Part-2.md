@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -84,6 +89,8 @@ acme.bookStore.books.book.create({
         console.log('successfully created the book with id: ' + result.id); 
     });
 ````
+
+> If you downloaded the source code of the tutorial and following the steps from the sample, you should also pass the `authorId` parameter to the create method for **creating a new book**.
 
 You should see a message in the console something like that:
 
@@ -447,7 +454,11 @@ For more information, see the [RoutesService document](../UI/Angular/Modifying-t
 
 [ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
-Run the following command in the `angular` folder:
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+
+![vs-run-without-iisexpress](images/vs-run-without-iisexpress.png)
+
+Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
 abp generate-proxy
@@ -531,7 +542,7 @@ Now you can see the final result on your browser:
 
 ![Book list final result](images/bookstore-book-list.png)
 
-{{else if UI == "Blazor"}}
+{{else if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## Create a Books Page
 

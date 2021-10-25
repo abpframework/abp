@@ -1,8 +1,9 @@
 param(
-  [string]$Version
+  [string]$Version,
+  [string]$Registry
 )
 
-npm install
+yarn install
 
 $NextVersion = $(node publish-utils.js --nextVersion)
 $RootFolder = (Get-Item -Path "./" -Verbose).FullName
@@ -11,26 +12,32 @@ if (-Not $Version) {
   $Version = $NextVersion;
 }
 
-$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit"
-$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry https://registry.npmjs.org'"
+if (-Not $Registry) {
+  $Registry = "https://registry.npmjs.org";
+}
+
+$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
+$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 $UpdateGulpCommand = "npm run update-gulp"
+$UpdateNgPacksCommand = "yarn update --registry $Registry"
 
-$IsRc = $(node publish-utils.js --rc) -eq "true";
+$IsPrerelase = $(node publish-utils.js --prerelase --customVersion $Version) -eq "true";
 
-if ($IsRc) { 
-  $NgPacksPublishCommand += " --rc"
-  $UpdateGulpCommand += " -- --rc"
+if ($IsPrerelase) {
+  $UpdateGulpCommand += " -- --prerelase"
   $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
+  $UpdateNgPacksCommand += " --prerelase"
 }
 
 $commands = (
-  "cd ng-packs\scripts",
-  "npm install",
-  $NgPacksPublishCommand,
-  "cd ../../",
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
   "npm run replace-with-tilde",
   $PacksPublishCommand,
+  $UpdateNgPacksCommand,
+  "cd ng-packs\scripts",
+  "yarn install",
+  $NgPacksPublishCommand,
+  "cd ../../",
   "cd scripts",
   "yarn",
   "yarn remove-lock-files",

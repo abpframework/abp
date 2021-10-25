@@ -1,8 +1,0 @@
-{
-  "culture": "hu",
-  "texts": {
-    "Menu:Home": "Kezdőlap",
-    "Welcome": "Üdvözlöm",
-    "LongWelcomeMessage": "Üdvözöljük az alkalmazásban. Ez egy ABP keretrendszeren alapuló startup projekt. További információkért látogasson el az abp.io oldalra."
-  }
-}

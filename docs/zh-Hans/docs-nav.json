@@ -1,6 +1,10 @@
 {
   "items": [
     {
+      "text": "快速入门",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
       "text": "入门",
       "items": [
         {
@@ -172,6 +176,10 @@
                 {
                   "text": "Quartz 集成",
                   "path": "Background-Workers-Quartz.md"
+                },
+                {
+                  "text": "Hangfire 集成",
+                  "path": "Background-Workers-Hangfire.md"
                 }
               ]
             }
@@ -517,10 +525,6 @@
             {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
               "text": "懒加载Scripts与Styles",

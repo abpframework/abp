@@ -1,9 +1,5 @@
 # Module Entity Extensions
 
-> This feature is not supported by the Blazor UI yet.
-
-## Introduction
-
 Module entity extension system is a **high level** extension system that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
 
 > The module must be developed the *Module Entity Extensions* system in mind. All the **official modules** supports this system wherever possible.
@@ -495,3 +491,6 @@ Here, a few things you can do:
 * You can override a domain or application service to perform custom logics with your new property.
 * You can low level control how to add/render a field in the data table on the UI.
 
+## See Also
+
+* [Angular UI Extensions](UI/Angular/Extensions-Overall.md)

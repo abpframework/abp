@@ -17,30 +17,18 @@ yarn ng generate component my-roles/my-roles --flat --export
 Open the generated `src/app/my-roles/my-roles.component.ts` file and replace its content with the following:
 
 ```js
-import { ListService, PagedAndSortedResultRequestDto } from '@abp/ng.core';
-import {
-  CreateRole,
-  DeleteRole,
-  eIdentityComponents,
-  GetRoleById,
-  GetRoles,
-  IdentityRoleDto,
-  IdentityState,
-  RolesComponent,
-  UpdateRole,
-} from '@abp/ng.identity';
+import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { eIdentityComponents, IdentityRoleDto, IdentityRoleService, RolesComponent } from '@abp/ng.identity';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
-  generateFormFromProps,
+  generateFormFromProps
 } from '@abp/ng.theme.shared/extensions';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, pluck } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-roles',
@@ -51,15 +39,14 @@ import { finalize, pluck } from 'rxjs/operators';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eIdentityComponents.Roles,
     },
-    { provide: RolesComponent, useExisting: MyRolesComponent },
+    { 
+      provide: RolesComponent, 
+      useExisting: MyRolesComponent 
+    }
   ],
 })
 export class MyRolesComponent implements OnInit {
-  @Select(IdentityState.getRoles)
-  data$: Observable<IdentityRoleDto[]>;
-
-  @Select(IdentityState.getRolesTotalCount)
-  totalCount$: Observable<number>;
+  data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
   form: FormGroup;
 
@@ -82,8 +69,8 @@ export class MyRolesComponent implements OnInit {
   constructor(
     public readonly list: ListService<PagedAndSortedResultRequestDto>,
     protected confirmationService: ConfirmationService,
-    protected store: Store,
-    protected injector: Injector
+    protected injector: Injector,
+    protected service: IdentityRoleService,
   ) {}
 
   ngOnInit() {
@@ -106,25 +93,21 @@ export class MyRolesComponent implements OnInit {
   }
 
   edit(id: string) {
-    this.store
-      .dispatch(new GetRoleById(id))
-      .pipe(pluck('IdentityState', 'selectedRole'))
-      .subscribe(selectedRole => {
-        this.selected = selectedRole;
-        this.openModal();
-      });
+    this.service.get(id).subscribe(res => {
+      this.selected = res;
+      this.openModal();
+    });
   }
 
   save() {
     if (!this.form.valid) return;
     this.modalBusy = true;
 
-    this.store
-      .dispatch(
-        this.selected.id
-          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
-          : new CreateRole(this.form.value)
-      )
+    const { id } = this.selected;
+    (id
+      ? this.service.update(id, { ...this.selected, ...this.form.value })
+      : this.service.create(this.form.value)
+    )
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
@@ -139,13 +122,13 @@ export class MyRolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => this.list.get());
         }
       });
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.store.dispatch(new GetRoles(query))).subscribe();
+    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
   }
 
   openPermissionsModal(providerKey: string) {
@@ -189,15 +172,15 @@ Open the generated `src/app/my-role/my-role.component.html` file and replace its
         <h5 class="card-title">My Roles</h5>
       </div>
       <div class="text-right col col-md-6">
-        <abp-page-toolbar [record]="data$ | async"></abp-page-toolbar>
+        <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
       </div>
     </div>
   </div>
 
   <div class="card-body">
     <abp-extensible-table
-      [data]="data$ | async"
-      [recordsTotal]="totalCount$ | async"
+      [data]="data.items"
+      [recordsTotal]="data.totalCount"
       [list]="list"
     ></abp-extensible-table>
   </div>
@@ -215,7 +198,7 @@ Open the generated `src/app/my-role/my-role.component.html` file and replace its
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ 'AbpIdentity::Cancel' | abpLocalization }}}%}
     </button>
     <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{%{{{

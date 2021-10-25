@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Messages;
+using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
@@ -23,6 +24,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
 
         [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
+        
+        [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
         protected Modal Modal;
 
@@ -47,9 +50,14 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 ToggleValues = new Dictionary<string, bool>();
                 SelectionStringValues = new Dictionary<string, string>();
 
-                Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
+                Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey))?.Groups;
 
-                SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+                Groups ??= new List<FeatureGroupDto>();
+
+                if (Groups.Any())
+                {
+                    SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+                }
 
                 foreach (var featureGroupDto in Groups)
                 {
@@ -96,6 +104,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
                 await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
 
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync();
+
                 await InvokeAsync(Modal.Hide);
             }
             catch (Exception ex)
@@ -107,6 +117,11 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         protected virtual string GetNormalizedGroupName(string name)
         {
             return "FeatureGroup_" + name.Replace(".", "_");
+        }
+
+        protected virtual string GetFeatureStyles(FeatureDto feature)
+        {
+            return $"margin-left: {feature.Depth * 20}px";
         }
 
         protected virtual bool IsDisabled(string providerName)
@@ -126,9 +141,55 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             }
         }
 
-        protected virtual void SelectedValueChanged(string featureName, string value)
+        protected virtual Task OnSelectedValueChangedAsync(bool value, FeatureDto feature)
         {
-            SelectionStringValues[featureName] = value;
+            ToggleValues[feature.Name] = value;
+
+            if (value)
+            {
+                CheckParents(feature.ParentName);
+            }
+            else
+            {
+                UncheckChildren(feature.Name);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        protected virtual void CheckParents(string parentName)
+        {
+            if (parentName.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            foreach (var featureGroupDto in Groups)
+            {
+                foreach (var featureDto in featureGroupDto.Features)
+                {
+                    if (featureDto.Name == parentName && ToggleValues.ContainsKey(featureDto.Name))
+                    {
+                        ToggleValues[featureDto.Name] = true;
+                        CheckParents(featureDto.ParentName);
+                    }
+                }
+            }
+        }
+
+        protected virtual void UncheckChildren(string featureName)
+        {
+            foreach (var featureGroupDto in Groups)
+            {
+                foreach (var featureDto in featureGroupDto.Features)
+                {
+                    if (featureDto.ParentName == featureName && ToggleValues.ContainsKey(featureDto.Name))
+                    {
+                        ToggleValues[featureDto.Name] = false;
+                        UncheckChildren(featureDto.Name);
+                    }
+                }
+            }
         }
 
         protected virtual IStringLocalizer CreateStringLocalizer(string resourceName)

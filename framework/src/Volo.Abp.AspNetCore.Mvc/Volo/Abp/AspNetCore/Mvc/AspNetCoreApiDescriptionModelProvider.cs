@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -85,6 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var controllerModel = moduleModel.GetOrAddController(
                 _options.ControllerNameGenerator(controllerType, setting),
+                FindGroupName(controllerType) ?? apiDescription.GroupName,
                 controllerType,
                 _modelOptions.IgnoredInterfaces
             );
@@ -102,6 +104,24 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
 
+            bool? allowAnonymous = null;
+            if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAllowAnonymous))
+            {
+                allowAnonymous = true;
+            }
+            else if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAuthorizeData))
+            {
+                allowAnonymous = false;
+            }
+
+            var implementFrom = controllerType.FullName;
+
+            var interfaceType = controllerType.GetInterfaces().FirstOrDefault(i => i.GetMethods().Any(x => x.ToString() == method.ToString()));
+            if (interfaceType != null)
+            {
+                implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
+            }
+
             var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
                 ActionApiDescriptionModel.Create(
@@ -109,7 +129,9 @@ namespace Volo.Abp.AspNetCore.Mvc
                     method,
                     apiDescription.RelativePath,
                     apiDescription.HttpMethod,
-                    GetSupportedVersions(controllerType, method, setting)
+                    GetSupportedVersions(controllerType, method, setting),
+                    allowAnonymous,
+                    implementFrom
                 )
             );
 
@@ -337,6 +359,19 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             return ModuleApiDescriptionModel.DefaultRemoteServiceName;
+        }
+
+        private string FindGroupName(Type controllerType)
+        {
+            var controllerNameAttribute =
+                controllerType.GetCustomAttributes().OfType<ControllerNameAttribute>().FirstOrDefault();
+
+            if (controllerNameAttribute?.Name != null)
+            {
+                return controllerNameAttribute.Name;
+            }
+
+            return null;
         }
 
         [CanBeNull]

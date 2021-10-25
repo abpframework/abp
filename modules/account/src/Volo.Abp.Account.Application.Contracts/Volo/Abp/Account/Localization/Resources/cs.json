@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Použít jinou službu k přihlášení",
     "UserLockedOutMessage": "Tento účet byl uzamčen z důvodu neúspěšných přihlášení. Přihlaste se prosím později.",
     "InvalidUserNameOrPassword": "Neplatné uživatelské jméno nebo heslo!",
-    "LoginIsNotAllowed": "Není vám dovoleno se přihlásit! Musíte první potvrdit email/telefonní číslo.",
+    "LoginIsNotAllowed": "Nemáte oprávnění se přihlásit! Váš účet je neaktivní nebo potřebuje potvrdit váš e -mail/telefonní číslo.",
     "SelfRegistrationDisabledMessage": "Vlastní registrace uživatele není povolena. K vytvoření účtu kontaktujte správce.",
     "LocalLoginDisabledMessage": "Místní přihlášení je pro tuto aplikaci zakázáno.",
     "Login": "Přihlásit",
@@ -36,13 +36,13 @@
     "PasswordChanged": "Heslo změněno",
     "NewPasswordConfirmFailed": "Potvrďte nové heslo.",
     "Manage": "Spravovat",
-    "ManageYourProfile": "Spravujte svůj profil",
+    "MyAccount": "Můj účet",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je povolena automatická registrace",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Zda si uživatel může účet zaregistrovat sám.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Ověření pomocí místního účtu",
     "Description:Abp.Account.EnableLocalLogin": "Označuje, zda server umožní uživatelům ověřovat se pomocí místního účtu.",
     "LoggedOutTitle": "Odhlášeno",
     "LoggedOutText": "Byli jste odhlášeni a brzy budete přesměrováni.",
-    "ReturnToText": "Kliknutím sem přejdete na {0}"
+    "ReturnToText": "Kliknutím sem se vrátíte do aplikace"
   }
 }

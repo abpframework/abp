@@ -43,7 +43,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
             
             var query = await GetListQueryAsync(filter, token);
             
-            return await query.OrderBy(sorting ?? "creationTime desc")
+            return await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
                       .As<IMongoQueryable<Blog>>()
                       .PageBy<Blog, IMongoQueryable<Blog>>(skipCount, maxResultCount)
                       .ToListAsync(token);

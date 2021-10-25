@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -47,7 +44,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
 
         [AutoMap(typeof(BlogDto))]
         [AutoMap(typeof(UpdateBlogDto), ReverseMap = true)]
-        public class UpdateBlogViewModel
+        public class UpdateBlogViewModel : IHasConcurrencyStamp
         {
             [Required]
             [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]
@@ -56,6 +53,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
             [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxSlugLength))]
             [Required]
             public string Slug { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
 }

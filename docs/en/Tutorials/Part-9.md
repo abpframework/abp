@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 ## Introduction
 
@@ -719,7 +724,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       </div>
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
-          <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
+          <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
@@ -745,10 +750,10 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
-              <button ngbDropdownItem (click)="editAuthor(row.id)">
+              <button *abpPermission="'BookStore.Authors.Edit'" ngbDropdownItem (click)="editAuthor(row.id)">
                 {%{{{ '::Edit' | abpLocalization }}}%}
               </button>
-              <button ngbDropdownItem (click)="delete(row.id)">
+              <button *abpPermission="'BookStore.Authors.Delete'" ngbDropdownItem (click)="delete(row.id)">
                 {%{{{ '::Delete' | abpLocalization }}}%}
               </button>
             </div>
@@ -792,7 +797,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
 
@@ -832,7 +837,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## The Author Management Page
 
@@ -844,6 +849,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 @page "/authors"
 @using Acme.BookStore.Authors
 @using Acme.BookStore.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
@@ -1021,7 +1027,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 </Modal>
 ````
 
-* This code is similar to the `Books.razor`, except it doesn't inherit from the `BlazorisePageBase`, but uses its own implementation.
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
 * Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../API/Dynamic-CSharp-API-Clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
 * Injects the `IAuthorizationService` to check [permissions](../Authorization.md).
 * Injects the `IObjectMapper` for [object to object mapping](../Object-To-Object-Mapping.md).
@@ -1116,7 +1122,7 @@ namespace Acme.BookStore.Blazor.Pages
 
             await GetAuthorsAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OpenCreateAuthorModal()

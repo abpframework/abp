@@ -1,0 +1,10 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Bun venit pe VoloDocs!",
+    "NoProjectWarning": "Nu există niciun proiect definit încă!",
+    "CreateYourFirstProject": "Click aici pentru a începe primul dumneavoastră proiect",
+    "NoProject": "Niciun proiect!"
+  }
+}

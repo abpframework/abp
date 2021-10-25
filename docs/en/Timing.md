@@ -1,4 +1,4 @@
-﻿# Timing
+# Timing
 
 Working with times & [time zones](https://en.wikipedia.org/wiki/Time_zone) is always tricky, especially if you need to build a **global system** that is used by users in **different time zones**.
 
@@ -83,7 +83,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 
 * `DateTime` type binding in the ASP.NET Core MVC model binding.
 * Saving data to and reading data from database via [Entity Framework Core](Entity-Framework-Core.md).
-* Working with `DateTime` objects on [JSON deserialization](Json.md).
+* Working with `DateTime` objects on [JSON deserialization](Json-Serialization.md).
 
 #### DisableDateTimeNormalization Attribute
 

@@ -10,7 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components
     public partial class EntityAction<TItem> : ComponentBase
     {
         [Parameter] 
-        public bool IsVisible { get; set; } = true;
+        public bool Visible { get; set; } = true;
 
         internal bool HasPermission { get; set; } = true;
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         public EventCallback Clicked { get; set; }
 
         [Parameter]
-        [Obsolete("Use IsVisible to hide actions based on permissions. Check the permission yourself. It is more performant. This option might be removed in future versions.")]
+        [Obsolete("Use Visible to hide actions based on permissions. Check the permission yourself. It is more performant. This option might be removed in future versions.")]
         public string RequiredPolicy { get; set; }
 
         [Parameter]
@@ -32,6 +32,9 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         [Parameter]
         public Func<string> ConfirmationMessage { get; set; }
+
+        [Parameter]
+        public string Icon { get; set; }
 
         [CascadingParameter]
         public EntityActions<TItem> ParentActions { get; set; }
@@ -46,6 +49,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
+            
             if (!RequiredPolicy.IsNullOrEmpty())
             {
                 HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy);

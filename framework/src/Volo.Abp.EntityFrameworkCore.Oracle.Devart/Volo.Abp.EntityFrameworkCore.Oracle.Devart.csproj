@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Abp.EntityFrameworkCore.Oracle.Devart</AssemblyName>
         <PackageId>Volo.Abp.EntityFrameworkCore.Oracle.Devart</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1150" />
+        <PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1353" />
     </ItemGroup>
 
 </Project>

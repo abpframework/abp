@@ -16,12 +16,12 @@ namespace Volo.Abp.Cli.Commands.Services
                 case DatabaseManagementSystem.MySQL:
                     return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
                 case DatabaseManagementSystem.PostgreSQL:
-                    return "Host=localhost;Port=5432;Database=MyProjectName;User ID=root;Password=myPassword;Pooling=true;MinimumPoolSize=0;MaximumPoolSize=100;Connection Lifetime=0;";
-                //case DatabaseManagementSystem.Oracle:
+                    return "Host=localhost;Port=5432;Database=MyProjectName;User ID=root;Password=myPassword;";
+                case DatabaseManagementSystem.Oracle:
                 case DatabaseManagementSystem.OracleDevart:
                     return "Data Source=MyProjectName;Integrated Security=yes;";
                 case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder , "MyProjectName.db")};".Replace("\\", "\\\\");
+                    return $"Data Source={Path.Combine(outputFolder, "MyProjectName.db")};".Replace("\\", "\\\\");
                 default:
                     return null;
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -6,22 +7,22 @@ namespace Volo.Abp.MongoDB.DependencyInjection
 {
     public class AbpMongoDbConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (!typeof(IAbpMongoDbContext).IsAssignableFrom(type) || type == typeof(AbpMongoDbContext))
+            return !typeof(IAbpMongoDbContext).IsAssignableFrom(type) || type == typeof(AbpMongoDbContext) || base.IsConventionalRegistrationDisabled(type);
+        }
+
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
+            return new List<Type>()
             {
-                return;
-            }
+                typeof(IAbpMongoDbContext)
+            };
+        }
 
-            var dependencyAttribute = GetDependencyAttributeOrNull(type);
-            var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
-
-            if (lifeTime == null)
-            {
-                return;
-            }
-
-            services.Add(ServiceDescriptor.Describe(typeof(IAbpMongoDbContext), type, ServiceLifetime.Transient));
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

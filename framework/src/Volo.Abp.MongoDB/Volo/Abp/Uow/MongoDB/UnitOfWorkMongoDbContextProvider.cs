@@ -29,7 +29,7 @@ namespace Volo.Abp.Uow.MongoDB
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IOptions<AbpMongoDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -62,8 +62,8 @@ namespace Volo.Abp.Uow.MongoDB
                     $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
-            var connectionString = ResolveConnectionString();
             var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = ResolveConnectionString(targetDbContextType);
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
@@ -90,8 +90,8 @@ namespace Volo.Abp.Uow.MongoDB
                     $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
-            var connectionString = await ResolveConnectionStringAsync();
             var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
             var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
@@ -124,7 +124,7 @@ namespace Volo.Abp.Uow.MongoDB
 
         private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
         {
-            var client = new MongoClient(mongoUrl);
+            var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
             if (unitOfWork.Options.IsTransactional)
@@ -144,7 +144,7 @@ namespace Volo.Abp.Uow.MongoDB
             string databaseName,
             CancellationToken cancellationToken = default)
         {
-            var client = new MongoClient(mongoUrl);
+            var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
             if (unitOfWork.Options.IsTransactional)
@@ -244,33 +244,41 @@ namespace Volo.Abp.Uow.MongoDB
             return dbContext;
         }
 
-        private async Task<string> ResolveConnectionStringAsync()
+        private async Task<string> ResolveConnectionStringAsync(Type dbContextType)
         {
             // Multi-tenancy unaware contexts should always use the host connection string
             if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
             {
                 using (_currentTenant.Change(null))
                 {
-                    return await _connectionStringResolver.ResolveAsync<TMongoDbContext>();
+                    return await _connectionStringResolver.ResolveAsync(dbContextType);
                 }
             }
 
-            return await _connectionStringResolver.ResolveAsync<TMongoDbContext>();
+            return await _connectionStringResolver.ResolveAsync(dbContextType);
         }
 
         [Obsolete("Use ResolveConnectionStringAsync method.")]
-        private string ResolveConnectionString()
+        private string ResolveConnectionString(Type dbContextType)
         {
             // Multi-tenancy unaware contexts should always use the host connection string
             if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
             {
                 using (_currentTenant.Change(null))
                 {
-                    return _connectionStringResolver.Resolve<TMongoDbContext>();
+                    return _connectionStringResolver.Resolve(dbContextType);
                 }
             }
 
-            return _connectionStringResolver.Resolve<TMongoDbContext>();
+            return _connectionStringResolver.Resolve(dbContextType);
+        }
+
+        private MongoClient CreateMongoClient(MongoUrl mongoUrl)
+        {
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
+
+            return new MongoClient(mongoClientSettings);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)

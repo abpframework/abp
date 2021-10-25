@@ -1,11 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
+import { Params } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
-import {
-  AuthFlowStrategy,
-  AUTH_FLOW_STRATEGY,
-  LoginParams,
-} from '../strategies/auth-flow.strategy';
+import { LoginParams } from '../models/auth';
+import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
 import { EnvironmentService } from './environment.service';
 
 @Injectable({
@@ -40,19 +38,12 @@ export class AuthService {
       .toPromise();
   }
 
-  logout(): Observable<any> {
-    return this.strategy.logout();
+  logout(queryParams?: Params): Observable<any> {
+    return this.strategy.logout(queryParams);
   }
 
-  /**
-   * @deprecated Use navigateToLogin method instead. To be deleted in v5.0
-   */
-  initLogin() {
-    this.strategy.navigateToLogin();
-  }
-
-  navigateToLogin() {
-    this.strategy.navigateToLogin();
+  navigateToLogin(queryParams?: Params) {
+    this.strategy.navigateToLogin(queryParams);
   }
 
   login(params: LoginParams) {

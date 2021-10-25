@@ -14,15 +14,29 @@ namespace Volo.Abp.Cli.Commands
 {
     public class AddModuleCommand : IConsoleCommand, ITransientDependency
     {
+        private AddModuleInfoOutput _lastAddedModuleInfo;
         public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected SolutionModuleAdder SolutionModuleAdder { get; }
-        public SolutionAbpVersionFinder SolutionAbpVersionFinder { get; }
+        public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
 
-        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionAbpVersionFinder solutionAbpVersionFinder)
+        public AddModuleInfoOutput LastAddedModuleInfo
+        {
+            get
+            {
+                if (_lastAddedModuleInfo == null)
+                {
+                    throw new Exception("You need to add a module first to get the last added module info!");
+                }
+
+                return _lastAddedModuleInfo;
+            }
+        }
+
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionPackageVersionFinder solutionPackageVersionFinder)
         {
             SolutionModuleAdder = solutionModuleAdder;
-            SolutionAbpVersionFinder = solutionAbpVersionFinder;
+            SolutionPackageVersionFinder = solutionPackageVersionFinder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -38,34 +52,37 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
-
             var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
             var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
-
             var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
-
-            var skipDbMigrations = newTemplate || newProTemplate || Convert.ToBoolean(
-                commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
-
+            var skipDbMigrations = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.DbMigrations.Skip);
             var solutionFile = GetSolutionFile(commandLineArgs);
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             if (version == null)
             {
-                version = SolutionAbpVersionFinder.Find(solutionFile);
+                version = SolutionPackageVersionFinder.Find(solutionFile);
             }
 
-            await SolutionModuleAdder.AddAsync(
-                solutionFile,
-                commandLineArgs.Target,
-                version,
-                skipDbMigrations,
-                withSourceCode,
-                addSourceCodeToSolutionFile,
-                newTemplate,
-                newProTemplate
-            );
+            var moduleInfo = await SolutionModuleAdder.AddAsync(
+                 solutionFile,
+                 commandLineArgs.Target,
+                 version,
+                 skipDbMigrations,
+                 withSourceCode,
+                 addSourceCodeToSolutionFile,
+                 newTemplate,
+                 newProTemplate
+             );
+
+            _lastAddedModuleInfo = new AddModuleInfoOutput
+            {
+                DisplayName = moduleInfo.DisplayName,
+                Name = moduleInfo.Name,
+                DocumentationLinks = moduleInfo.DocumentationLinks,
+                InstallationCompleteMessage = moduleInfo.InstallationCompleteMessage
+            };
         }
 
         public string GetUsageInfo()

@@ -7,8 +7,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
     public static class BackgroundJobsDbContextModelCreatingExtensions
     {
         public static void ConfigureBackgroundJobs(
-            this ModelBuilder builder,
-            Action<BackgroundJobsModelBuilderConfigurationOptions> optionsAction = null)
+            this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -17,16 +16,9 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
                 return;
             }
 
-            var options = new BackgroundJobsModelBuilderConfigurationOptions(
-                BackgroundJobsDbProperties.DbTablePrefix,
-                BackgroundJobsDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<BackgroundJobRecord>(b =>
             {
-                b.ToTable(options.TablePrefix + "BackgroundJobs", options.Schema);
+                b.ToTable(BackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs", BackgroundJobsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -39,7 +31,11 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
                 b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal);
 
                 b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BackgroundJobsDbContext>();
         }
     }
 }

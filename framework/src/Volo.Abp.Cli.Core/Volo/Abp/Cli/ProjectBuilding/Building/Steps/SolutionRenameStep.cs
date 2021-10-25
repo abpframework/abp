@@ -21,6 +21,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new SolutionRenamer(
                     context.Files,
+                    "myCompanyName.myProjectName",
+                    "MicroserviceName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
                     null,
                     "MyProjectName",
                     null,
@@ -78,11 +86,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), _companyName.ToCamelCase());
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase(), _companyName.ToKebabCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToLowerInvariant(), _companyName.ToLowerInvariant());
                     }
                     else
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase() + "." + _projectNamePlaceHolder.ToCamelCase(), _projectNamePlaceHolder.ToCamelCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToLowerInvariant() + "." + _projectNamePlaceHolder.ToLowerInvariant(), _projectNamePlaceHolder.ToLowerInvariant());
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase() + "/" + _projectNamePlaceHolder.ToKebabCase(), _projectNamePlaceHolder.ToKebabCase());
                     }
                 }
@@ -90,6 +100,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), _projectName.ToCamelCase());
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToLowerInvariant(), _projectName.ToLowerInvariant());
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpper(), _projectName.ToSnakeCase().ToUpper());
             }
         }

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Users.Abstractions
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Users.MongoDB", "src\Volo.Abp.Users.MongoDB\Volo.Abp.Users.MongoDB.csproj", "{70E89492-7D4E-418A-835F-35E70282E808}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Users.Installer", "src\Volo.Abp.Users.Installer\Volo.Abp.Users.Installer.csproj", "{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{70E89492-7D4E-418A-835F-35E70282E808}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E89492-7D4E-418A-835F-35E70282E808}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E89492-7D4E-418A-835F-35E70282E808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{C18FFD6A-0BE2-4FB8-B953-895F7B9CB374} = {6DE713B1-3AD7-4388-8B07-CCBE7158EC6E}
 		{3905D0E9-448D-43DE-8884-C60D0612AA04} = {6DE713B1-3AD7-4388-8B07-CCBE7158EC6E}
 		{70E89492-7D4E-418A-835F-35E70282E808} = {6DE713B1-3AD7-4388-8B07-CCBE7158EC6E}
+		{561CE9B2-B9B7-43F0-9BBF-8918A8D749D7} = {6DE713B1-3AD7-4388-8B07-CCBE7158EC6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E18777C8-72AB-4C08-BA72-885650BE70A9}

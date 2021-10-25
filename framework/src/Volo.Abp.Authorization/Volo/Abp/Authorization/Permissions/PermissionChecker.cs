@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -15,17 +16,20 @@ namespace Volo.Abp.Authorization.Permissions
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IPermissionValueProviderManager PermissionValueProviderManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> StateCheckerManager { get; }
 
         public PermissionChecker(
             ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager,
             ICurrentTenant currentTenant,
-            IPermissionValueProviderManager permissionValueProviderManager)
+            IPermissionValueProviderManager permissionValueProviderManager,
+            ISimpleStateCheckerManager<PermissionDefinition> stateCheckerManager)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
             CurrentTenant = currentTenant;
             PermissionValueProviderManager = permissionValueProviderManager;
+            StateCheckerManager = stateCheckerManager;
         }
 
         public virtual async Task<bool> IsGrantedAsync(string name)
@@ -42,6 +46,11 @@ namespace Volo.Abp.Authorization.Permissions
             var permission = PermissionDefinitionManager.Get(name);
 
             if (!permission.IsEnabled)
+            {
+                return false;
+            }
+
+            if (!await StateCheckerManager.IsEnabledAsync(permission))
             {
                 return false;
             }
@@ -103,7 +112,9 @@ namespace Volo.Abp.Authorization.Permissions
 
                 result.Result.Add(name, PermissionGrantResult.Undefined);
 
-                if (permission.IsEnabled && permission.MultiTenancySide.HasFlag(multiTenancySide))
+                if (permission.IsEnabled &&
+                    await StateCheckerManager.IsEnabledAsync(permission) &&
+                    permission.MultiTenancySide.HasFlag(multiTenancySide))
                 {
                     permissionDefinitions.Add(permission);
                 }
@@ -111,8 +122,17 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var provider in PermissionValueProviderManager.ValueProviders)
             {
+                var permissions = permissionDefinitions
+                    .Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name))
+                    .ToList();
+
+                if (permissions.IsNullOrEmpty())
+                {
+                    break;
+                }
+
                 var context = new PermissionValuesCheckContext(
-                    permissionDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToList(),
+                    permissions,
                     claimsPrincipal);
 
                 var multipleResult = await provider.CheckAsync(context);

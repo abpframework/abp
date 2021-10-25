@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
@@ -22,6 +23,9 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public ILogger<ProjectNugetPackageAdder> Logger { get; set; }
         public BundleCommand BundleCommand { get; }
+        public SourceCodeDownloadService SourceCodeDownloadService { get; }
+        public SolutionFileModifier SolutionFileModifier { get; }
+        public ICmdHelper CmdHelper { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
@@ -37,8 +41,11 @@ namespace Volo.Abp.Cli.ProjectModification
             DerivedClassFinder moduleClassFinder,
             ModuleClassDependcyAdder moduleClassDependcyAdder,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            BundleCommand bundleCommand, 
-            CliHttpClientFactory cliHttpClientFactory)
+            BundleCommand bundleCommand,
+            CliHttpClientFactory cliHttpClientFactory,
+            SourceCodeDownloadService sourceCodeDownloadService,
+            SolutionFileModifier solutionFileModifier,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             NpmPackageAdder = npmPackageAdder;
@@ -46,32 +53,202 @@ namespace Volo.Abp.Cli.ProjectModification
             ModuleClassDependcyAdder = moduleClassDependcyAdder;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             BundleCommand = bundleCommand;
+            SourceCodeDownloadService = sourceCodeDownloadService;
+            SolutionFileModifier = solutionFileModifier;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<ProjectNugetPackageAdder>.Instance;
         }
 
-        public async Task AddAsync(string projectFile, string packageName, string version = null)
+        public async Task AddAsync(
+            string solutionFile,
+            string projectFile,
+            string packageName,
+            string version = null,
+            bool useDotnetCliToInstall = true,
+            bool withSourceCode = false,
+            bool addSourceCodeToSolutionFile = false)
         {
             await AddAsync(
+                solutionFile,
                 projectFile,
                 await FindNugetPackageInfoAsync(packageName),
+                version,
+                useDotnetCliToInstall,
+                withSourceCode,
+                addSourceCodeToSolutionFile
+            );
+        }
+
+        public async Task AddAsync(
+            string solutionFile,
+            string projectFile,
+            NugetPackageInfo package,
+            string version = null,
+            bool useDotnetCliToInstall = true,
+            bool withSourceCode = false,
+            bool addSourceCodeToSolutionFile = false)
+        {
+            if (projectFile == null)
+            {
+                if (solutionFile == null)
+                {
+                    throw new CliUsageException("Couldn't find any project/solution.");
+                }
+
+                projectFile = GetProjectFile(solutionFile, package);
+
+                if (projectFile == null)
+                {
+                    throw new CliUsageException("Couldn't find any project/solution.");
+                }
+            }
+
+            solutionFile ??= FindSolutionFile(projectFile);
+
+            if (version == null)
+            {
+                version = GetAbpVersionOrNull(projectFile);
+            }
+
+            await AddAsPackageReference(projectFile, package, version, useDotnetCliToInstall);
+
+            if (withSourceCode)
+            {
+                await AddSourceCode(projectFile, solutionFile, package, version);
+
+                var projectFilesInSolution = Directory.GetFiles(Path.GetDirectoryName(solutionFile), "*.csproj", SearchOption.AllDirectories);
+                foreach (var projectFileInSolution in projectFilesInSolution)
+                {
+                    await ConvertPackageReferenceToProjectReference(projectFileInSolution, solutionFile, package);
+                }
+
+                if (addSourceCodeToSolutionFile)
+                {
+                    await SolutionFileModifier.AddPackageToSolutionFileAsync(package, solutionFile);
+                }
+            }
+        }
+
+        private string GetProjectFile(string solutionFile, NugetPackageInfo package)
+        {
+            var projectFiles = Directory.GetFiles(Path.GetDirectoryName(solutionFile), "*.csproj", SearchOption.AllDirectories);
+            var isSolutionTiered = IsSolutionTiered(projectFiles);
+
+            var projectFile = ProjectFinder.FindNuGetTargetProjectFile(
+                projectFiles,
+                isSolutionTiered && package.TieredTarget != NuGetPackageTarget.Undefined
+                    ? package.TieredTarget
+                    : package.Target);
+            return projectFile;
+        }
+
+        protected virtual async Task ConvertPackageReferenceToProjectReference(string projectFile, string solutionFile, NugetPackageInfo package)
+        {
+            var content = File.ReadAllText(projectFile);
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+
+            using (var stream = StreamHelper.GenerateStreamFromString(content))
+            {
+                doc.Load(stream);
+                var nodes = doc.SelectNodes($"/Project/ItemGroup/PackageReference[starts-with(@Include, '{package.Name}')]");
+                if (nodes == null || nodes.Count < 1)
+                {
+                    return;
+                }
+
+                var downloadedProjectPath = FindRelativeFolderToDownloadPackage(projectFile, solutionFile, package);
+                var oldNodeIncludeValue = nodes[0]?.Attributes?["Include"]?.Value;
+
+                if (package.Name == oldNodeIncludeValue)
+                {
+                    var referenceProjectPath = $"{downloadedProjectPath}\\{package.Name}.csproj";
+
+                    var newNode = doc.CreateElement("ProjectReference");
+                    var includeAttr = doc.CreateAttribute("Include");
+                    includeAttr.Value = referenceProjectPath;
+                    newNode.Attributes.Append(includeAttr);
+
+                    nodes[0]?.ParentNode?.ReplaceChild(newNode, nodes[0]);
+                }
+
+                File.WriteAllText(projectFile, doc.OuterXml);
+                await Task.CompletedTask;
+            }
+        }
+
+        protected virtual async Task AddSourceCode(string projectFile, string solutionFile, NugetPackageInfo package, string version = null)
+        {
+            var targetFolder = FindFolderToDownloadPackage(solutionFile, package);
+
+            if (Directory.Exists(targetFolder))
+            {
+                Directory.Delete(targetFolder, true);
+            }
+
+            await DownloadSourceCode(targetFolder, package, version);
+        }
+
+        protected virtual string FindFolderToDownloadPackage(string solutionFile, NugetPackageInfo package)
+        {
+            return Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
+        }
+
+        protected virtual string FindRelativeFolderToDownloadPackage(string projectFile, string solutionFile, NugetPackageInfo package)
+        {
+            var folder = Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
+
+            return new Uri(projectFile).MakeRelativeUri(new Uri(folder)).ToString().Replace("/", "\\");
+        }
+
+        protected virtual async Task DownloadSourceCode(string targetFolder, NugetPackageInfo package, string version = null)
+        {
+            await SourceCodeDownloadService.DownloadNugetPackageAsync(
+                package.Name,
+                targetFolder,
                 version
             );
         }
 
-        public async Task AddAsync(string projectFile, NugetPackageInfo package, string version = null,
-            bool useDotnetCliToInstall = true)
+        protected virtual string FindSolutionFile(string projectFile)
+        {
+            var folder = FindSolutionFolder(projectFile);
+
+            return Directory.GetFiles(folder, "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+        }
+
+        protected virtual string FindSolutionFolder(string projectFile)
+        {
+            var targetFolder = Path.GetDirectoryName(projectFile);
+
+            do
+            {
+                if (Directory.GetParent(targetFolder) != null)
+                {
+                    targetFolder = Directory.GetParent(targetFolder).FullName;
+                }
+                else
+                {
+                    return Path.GetDirectoryName(projectFile);
+                }
+
+                if (Directory.GetFiles(targetFolder, "*.sln", SearchOption.TopDirectoryOnly).Any())
+                {
+                    break;
+                }
+            } while (targetFolder != null);
+
+            return targetFolder;
+        }
+
+        protected virtual async Task AddAsPackageReference(string projectFile, NugetPackageInfo package, string version,
+            bool useDotnetCliToInstall)
         {
             var projectFileContent = File.ReadAllText(projectFile);
 
             if (projectFileContent.Contains($"\"{package.Name}\""))
             {
                 return;
-            }
-
-            if (version == null)
-            {
-                version = GetAbpVersionOrNull(projectFileContent);
             }
 
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
@@ -105,15 +282,24 @@ namespace Volo.Abp.Cli.ProjectModification
                 ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
             }
 
-            if (package.Target == NuGetPackageTarget.Blazor)
+            if (useDotnetCliToInstall && (package.Target == NuGetPackageTarget.Blazor ||
+                                          package.Target == NuGetPackageTarget.BlazorServer ||
+                                          package.Target == NuGetPackageTarget.BlazorWebAssembly))
             {
-                await RunBundleForBlazorAsync(projectFile);
+                try
+                {
+                    await RunBundleForBlazorAsync(projectFile);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogWarning("Couldn't run bundle for blazor.");
+                }
             }
 
             Logger.LogInformation("Successfully installed.");
         }
 
-        private Task AddUsingDotnetCli(NugetPackageInfo package, string version = null)
+        protected virtual Task AddUsingDotnetCli(NugetPackageInfo package, string version = null)
         {
             var versionOption = version == null ? "" : $" -v {version}";
 
@@ -122,57 +308,55 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
-        private Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
+        protected virtual Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
         {
             var projectFileContent = File.ReadAllText(projectFile);
             var doc = new XmlDocument() { PreserveWhitespace = true };
-            doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
-
-            var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
-            XmlNode itemGroupNode = null;
-
-            if (itemGroupNodes == null || itemGroupNodes.Count < 1)
+            using (var stream = StreamHelper.GenerateStreamFromString(projectFileContent))
             {
-                var projectNodes = doc.SelectNodes("/Project");
-                var projectNode = projectNodes[0];
+                doc.Load(stream);
 
-                itemGroupNode = doc.CreateElement("ItemGroup");
-                projectNode.AppendChild(itemGroupNode);
+                var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
+                XmlNode itemGroupNode = null;
+
+                if (itemGroupNodes == null || itemGroupNodes.Count < 1)
+                {
+                    var projectNodes = doc.SelectNodes("/Project");
+                    var projectNode = projectNodes[0];
+
+                    itemGroupNode = doc.CreateElement("ItemGroup");
+                    projectNode.AppendChild(itemGroupNode);
+                }
+                else
+                {
+                    itemGroupNode = itemGroupNodes[0];
+                }
+
+                var packageReferenceNode = doc.CreateElement("PackageReference");
+
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = package.Name;
+                packageReferenceNode.Attributes.Append(includeAttr);
+
+                if (version != null)
+                {
+                    var versionAttr = doc.CreateAttribute("Version");
+                    versionAttr.Value = version;
+                    packageReferenceNode.Attributes.Append(versionAttr);
+                }
+
+                itemGroupNode.AppendChild(packageReferenceNode);
+                File.WriteAllText(projectFile, doc.OuterXml);
+                return Task.CompletedTask;
             }
-            else
-            {
-                itemGroupNode = itemGroupNodes[0];
-            }
-
-            var packageReferenceNode = doc.CreateElement("PackageReference");
-
-            var includeAttr = doc.CreateAttribute("Include");
-            includeAttr.Value = package.Name;
-            packageReferenceNode.Attributes.Append(includeAttr);
-
-            if (version != null)
-            {
-                var versionAttr = doc.CreateAttribute("Version");
-                versionAttr.Value = version;
-                packageReferenceNode.Attributes.Append(versionAttr);
-            }
-
-            itemGroupNode.AppendChild(packageReferenceNode);
-
-            File.WriteAllText(projectFile, doc.OuterXml);
-
-            return Task.CompletedTask;
         }
 
-        private string GetAbpVersionOrNull(string projectFileContent)
+        protected virtual string GetAbpVersionOrNull(string projectFile)
         {
-            var doc = new XmlDocument() { PreserveWhitespace = true };
-
-            doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
-
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
-
-            return nodes?[0]?.Attributes?["Version"]?.Value;
+            var projectFileContent = File.ReadAllText(projectFile);
+            return SolutionPackageVersionFinder.TryParseVersionFromCsprojFile(projectFileContent, out var version)
+                ? version
+                : null;
         }
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string packageName)
@@ -205,6 +389,14 @@ namespace Volo.Abp.Cli.ProjectModification
             args.Options.Add(BundleCommand.Options.ForceBuild.Short, string.Empty);
 
             await BundleCommand.ExecuteAsync(args);
+        }
+
+        protected virtual bool IsSolutionTiered(string[] projectFiles)
+        {
+            return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                       .Any(p => p.EndsWith(".HttpApi.Host"))
+                   && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                       .Any(p => p.EndsWith(".IdentityServer"));
         }
     }
 }

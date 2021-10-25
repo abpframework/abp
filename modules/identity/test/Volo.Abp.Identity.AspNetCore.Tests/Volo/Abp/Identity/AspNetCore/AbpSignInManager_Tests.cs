@@ -35,5 +35,15 @@ namespace Volo.Abp.Identity.AspNetCore
 
             result.ShouldBe("Failed");
         }
+
+        [Fact]
+        public async Task Should_Not_SignIn_If_User_Not_Active()
+        {
+            var result = await GetResponseAsStringAsync(
+                "api/signin-test/password?userName=bob&password=1q2w3E*"
+            );
+
+            result.ShouldBe("NotAllowed");
+        }
     }
 }

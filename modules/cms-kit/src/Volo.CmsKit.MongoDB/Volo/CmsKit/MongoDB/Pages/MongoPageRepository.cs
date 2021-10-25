@@ -49,7 +49,7 @@ namespace Volo.CmsKit.MongoDB.Pages
                     u =>
                         u.Title.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(Page.Title))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
                 .As<IMongoQueryable<Page>>()
                 .PageBy<Page, IMongoQueryable<Page>>(skipCount, maxResultCount)
                 .ToListAsync(cancellation);

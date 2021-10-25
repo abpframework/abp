@@ -1,10 +1,12 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
     [Serializable]
-    public class BlogPostDto : EntityDto<Guid>
+    public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime, IHasConcurrencyStamp
     {
         public Guid BlogId { get; set; }
 
@@ -17,5 +19,11 @@ namespace Volo.CmsKit.Admin.Blogs
         public string Content { get; set; }
 
         public Guid? CoverImageMediaId { get; set; }
+
+        public DateTime CreationTime { get; set; }
+
+        public DateTime? LastModificationTime { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
     }
 }

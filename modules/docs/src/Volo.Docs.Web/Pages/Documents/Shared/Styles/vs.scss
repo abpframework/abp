@@ -33,7 +33,7 @@ body {
         }
 
         .docs-sidebar-wrapper {
-            width: 270px;
+            width: 300px;
             float: right;
 
             input.form-control {
@@ -110,9 +110,9 @@ body {
                 }
 
                 ul {
-                    font-size: .9em;
+                    font-size: 14px;
                     list-style: none;
-                    padding: 0 1rem;
+                    padding: 0 1rem 1rem;
                     margin: 0;
 
                     li {
@@ -941,6 +941,10 @@ div.code-toolbar > .toolbar span {
 
 div.code-toolbar > .toolbar a {
     cursor: copy;
+}
+
+.logo-nav ul {
+    width: 300px !important;
 }
 
 @media (max-width: 767px) {

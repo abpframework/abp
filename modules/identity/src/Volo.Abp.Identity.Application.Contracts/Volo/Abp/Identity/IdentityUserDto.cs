@@ -23,6 +23,8 @@ namespace Volo.Abp.Identity
 
         public bool PhoneNumberConfirmed { get; set; }
 
+        public bool IsActive { get; set; }
+
         public bool LockoutEnabled { get; set; }
 
         public DateTimeOffset? LockoutEnd { get; set; }

@@ -1,0 +1,10 @@
+{
+  "modules": {
+    "Volo.Abp.BlobStoring.Database": {
+      "path": "Volo.Abp.BlobStoring.Database.abpmdl.json"
+    },
+    "BlobStoring.Database.Host.ConsoleApp": {
+      "path": "host/BlobStoring.Database.Host.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.abpmdl.json"
+    }
+  }
+}

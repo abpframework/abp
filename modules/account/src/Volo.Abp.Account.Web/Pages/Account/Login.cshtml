@@ -19,8 +19,6 @@
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4">
-                <input asp-for="ReturnUrl"/>
-                <input asp-for="ReturnUrlHash"/>
                 <div class="form-group">
                     <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
                     <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control"/>
@@ -52,8 +50,6 @@
             <div class="mt-2">
                 <h5>@L["OrLoginWith"]</h5>
                 <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-                    <input asp-for="ReturnUrl"/>
-                    <input asp-for="ReturnUrlHash"/>
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
                         <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>

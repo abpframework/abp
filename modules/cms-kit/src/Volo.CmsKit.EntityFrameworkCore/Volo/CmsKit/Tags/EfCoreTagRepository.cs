@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(name, nameof(name));
-            
+
             return await (await GetDbSetAsync()).AnyAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name,
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(name, nameof(name));
-            
+
             return GetAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name,
@@ -53,7 +53,7 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(name, nameof(name));
-            
+
             return FindAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name,
@@ -67,7 +67,7 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(entityId, nameof(entityId));
-            
+
             var entityTagIds = await (await GetDbContextAsync()).Set<EntityTag>()
                 .Where(q => q.EntityId == entityId)
                 .Select(q => q.TagId)
@@ -78,6 +78,26 @@ namespace Volo.CmsKit.Tags
                             entityTagIds.Contains(x.Id));
 
             return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<Tag>> GetListAsync(string filter)
+        {
+            return await (await GetQueryableByFilterAsync(filter)).ToListAsync();
+        }
+
+        public async Task<int> GetCountAsync(string filter)
+        {
+            return await (await GetQueryableByFilterAsync(filter)).CountAsync();
+        }
+
+        private async Task<IQueryable<Tag>> GetQueryableByFilterAsync(string filter)
+        {
+            return (await GetQueryableAsync())
+                .WhereIf(
+                    !filter.IsNullOrEmpty(),
+                    x =>
+                        x.Name.ToLower().Contains(filter.ToLower()) ||
+                        x.EntityType.ToLower().Contains(filter.ToLower()));
         }
     }
 }

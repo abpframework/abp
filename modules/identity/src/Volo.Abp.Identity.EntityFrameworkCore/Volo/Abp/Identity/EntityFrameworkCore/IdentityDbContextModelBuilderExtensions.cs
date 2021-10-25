@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUser>(b =>
             {
-                b.ToTable(options.TablePrefix + "Users", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
@@ -55,11 +55,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(u => u.NormalizedEmail);
                 b.HasIndex(u => u.UserName);
                 b.HasIndex(u => u.Email);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserClaims", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -69,11 +71,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaimConsts.MaxClaimValueLength);
 
                 b.HasIndex(uc => uc.UserId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserRoles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserRoles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -83,11 +87,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(ur => new {ur.RoleId, ur.UserId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserLogin>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserLogins", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserLogins", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -101,11 +107,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     .HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
 
                 b.HasIndex(l => new {l.LoginProvider, l.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserToken>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserTokens", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserTokens", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -114,11 +122,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength)
                     .IsRequired();
                 b.Property(ul => ul.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "Roles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Roles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -131,11 +141,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
                 b.HasIndex(r => r.NormalizedName);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityRoleClaim>(b =>
             {
-                b.ToTable(options.TablePrefix + "RoleClaims", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "RoleClaims", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -145,13 +157,15 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);
 
                 b.HasIndex(uc => uc.RoleId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             if (builder.IsHostDatabase())
             {
                 builder.Entity<IdentityClaimType>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "ClaimTypes", options.Schema);
+                    b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes", AbpIdentityDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -160,12 +174,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
                     b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
                     b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
 
             builder.Entity<OrganizationUnit>(b =>
             {
-                b.ToTable(options.TablePrefix + "OrganizationUnits", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -178,11 +194,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(ou => ou.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
 
                 b.HasIndex(ou => ou.Code);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<OrganizationUnitRole>(b =>
             {
-                b.ToTable(options.TablePrefix + "OrganizationUnitRoles", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnitRoles", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -191,11 +209,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ou => ou.RoleId).IsRequired();
 
                 b.HasIndex(ou => new {ou.RoleId, ou.OrganizationUnitId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserOrganizationUnit>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserOrganizationUnits", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserOrganizationUnits", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -204,11 +224,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
 
                 b.HasIndex(ou => new {ou.UserId, ou.OrganizationUnitId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentitySecurityLog>(b =>
             {
-                b.ToTable(options.TablePrefix + "SecurityLogs", options.Schema);
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs", AbpIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -229,13 +251,15 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(x => new { x.TenantId, x.Identity });
                 b.HasIndex(x => new { x.TenantId, x.Action });
                 b.HasIndex(x => new { x.TenantId, x.UserId });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             if (builder.IsHostDatabase())
             {
                 builder.Entity<IdentityLinkUser>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "LinkUsers", options.Schema);
+                    b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "LinkUsers", AbpIdentityDbProperties.DbSchema);
 
                     b.ConfigureByConvention();
 
@@ -246,8 +270,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         LinkedUserId = x.TargetUserId,
                         LinkedTenantId = x.TargetTenantId
                     }).IsUnique();
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
+
+            builder.TryConfigureObjectExtensions<IdentityDbContext>();
         }
     }
 }

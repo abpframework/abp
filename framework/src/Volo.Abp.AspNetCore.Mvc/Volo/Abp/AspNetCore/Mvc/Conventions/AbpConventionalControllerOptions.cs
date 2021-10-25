@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
@@ -25,7 +26,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
             FormBodyBindingIgnoredTypes = new List<Type>
             {
-                typeof(IFormFile)
+                typeof(IFormFile),
+                typeof(IRemoteStreamContent)
             };
         }
 

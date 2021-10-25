@@ -22,7 +22,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
         }
 
-        public async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
+        public virtual async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
@@ -41,7 +41,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
             return blogPost;
         }
 
-        public async Task<int> GetCountAsync(
+        public virtual async Task<int> GetCountAsync(
             string filter = null, 
             Guid? blogId = null, 
             CancellationToken cancellationToken = default)
@@ -54,7 +54,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<BlogPost>> GetListAsync(
+        public virtual async Task<List<BlogPost>> GetListAsync(
             string filter = null,
             Guid? blogId = null,
             int maxResultCount = int.MaxValue,
@@ -64,14 +64,15 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
-            var blogPostQueryable = dbContext.Collection<BlogPost>().AsQueryable();
+            var blogPostQueryable = await GetQueryableAsync();
+            
             var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
             var queryable = blogPostQueryable
                 .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
                 .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
 
-            queryable = queryable.OrderBy(sorting ?? $"{nameof(BlogPost.CreationTime)} desc");
+            queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 
             var combinedQueryable = queryable
                                     .Join(
@@ -91,7 +92,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
                                         }).ToList();
         }
 
-        public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
+        public virtual async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));

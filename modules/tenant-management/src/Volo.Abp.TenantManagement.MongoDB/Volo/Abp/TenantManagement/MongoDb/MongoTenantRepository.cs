@@ -56,7 +56,7 @@ namespace Volo.Abp.TenantManagement.MongoDB
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(Tenant.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
                 .As<IMongoQueryable<Tenant>>()
                 .PageBy<Tenant, IMongoQueryable<Tenant>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

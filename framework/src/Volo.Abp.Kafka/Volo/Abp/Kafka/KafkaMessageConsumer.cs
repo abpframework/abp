@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
@@ -26,6 +27,8 @@ namespace Volo.Abp.Kafka
 
         protected AbpKafkaOptions Options { get; }
 
+        protected AbpAsyncTimer Timer { get; }
+
         protected ConcurrentBag<Func<Message<string, byte[]>, Task>> Callbacks { get; }
 
         protected IConsumer<string, byte[]> Consumer { get; private set; }
@@ -40,15 +43,21 @@ namespace Volo.Abp.Kafka
             IConsumerPool consumerPool,
             IExceptionNotifier exceptionNotifier,
             IOptions<AbpKafkaOptions> options,
-            IProducerPool producerPool)
+            IProducerPool producerPool,
+            AbpAsyncTimer timer)
         {
             ConsumerPool = consumerPool;
             ExceptionNotifier = exceptionNotifier;
             ProducerPool = producerPool;
+            Timer = timer;
             Options = options.Value;
             Logger = NullLogger<KafkaMessageConsumer>.Instance;
 
             Callbacks = new ConcurrentBag<Func<Message<string, byte[]>, Task>>();
+
+            Timer.Period = 5000; //5 sec.
+            Timer.Elapsed = Timer_Elapsed;
+            Timer.RunOnStart = true;
         }
 
         public virtual void Initialize(
@@ -61,14 +70,19 @@ namespace Volo.Abp.Kafka
             TopicName = topicName;
             ConnectionName = connectionName ?? KafkaConnections.DefaultConnectionName;
             GroupId = groupId;
-
-            AsyncHelper.RunSync(CreateTopicAsync);
-            Consume();
+            Timer.Start();
         }
 
         public virtual void OnMessageReceived(Func<Message<string, byte[]>, Task> callback)
         {
             Callbacks.Add(callback);
+        }
+
+        protected virtual async Task Timer_Elapsed(AbpAsyncTimer timer)
+        {
+            await CreateTopicAsync();
+            Consume();
+            Timer.Stop();
         }
 
         protected virtual async Task CreateTopicAsync()
@@ -90,7 +104,7 @@ namespace Volo.Abp.Kafka
                 }
                 catch (CreateTopicsException e)
                 {
-                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
+                    if(e.Results.Any(x => x.Error.Code != ErrorCode.TopicAlreadyExists))
                     {
                         throw;
                     }
@@ -139,8 +153,6 @@ namespace Volo.Abp.Kafka
             }
             catch (Exception ex)
             {
-                await RequeueAsync(consumeResult);
-
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }
@@ -148,17 +160,6 @@ namespace Volo.Abp.Kafka
             {
                 Consumer.Commit(consumeResult);
             }
-        }
-
-        protected virtual async Task RequeueAsync(ConsumeResult<string, byte[]> consumeResult)
-        {
-            if (!Options.ReQueue)
-            {
-                return;
-            }
-
-            var producer = ProducerPool.Get(ConnectionName);
-            await producer.ProduceAsync(consumeResult.Topic, consumeResult.Message);
         }
 
         public virtual void Dispose()

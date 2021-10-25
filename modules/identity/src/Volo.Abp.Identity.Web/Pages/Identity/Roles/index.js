@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityRoleAppService = volo.abp.identity.identityRole;
@@ -38,6 +38,7 @@
                             _permissionsModal.open({
                                 providerName: 'R',
                                 providerKey: data.record.name,
+                                providerKeyDisplayName: data.record.name
                             });
                         },
                     },
@@ -62,6 +63,7 @@
                                 .delete(data.record.id)
                                 .then(function () {
                                     _dataTable.ajax.reload();
+                                    abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
                     }
@@ -84,7 +86,7 @@
                         title: l('RoleName'),
                         data: 'name',
                         render: function (data, type, row) {
-                            var name = '<span>' + data + '</span>';
+                            var name = '<span>' + $.fn.dataTable.render.text().display(data) + '</span>'; //prevent against possible XSS
                             if (row.isDefault) {
                                 name +=
                                     '<span class="badge badge-pill badge-success ml-1">' +

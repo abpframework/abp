@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 
     var l = abp.localization.getResource("CmsKit");
 
@@ -40,8 +40,6 @@
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    var editorDataKey = "tuiEditor";
-
     initAllEditors();
 
     function initAllEditors() {
@@ -56,25 +54,26 @@
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = $editorContainer.tuiEditor({
+        var editor = new toastui.Editor({
+            el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "25em",
+            height: "100%",
             minHeight: "25em",
-            initialEditType: initialValue ? 'wysiwyg' : 'markdown',
+            initialEditType: 'markdown',
             language: $editorContainer.data("language"),
             hooks: {
                 addImageBlobHook: uploadFile,
             },
             events: {
                 change: function (_val) {
-                    $editorInput.val(editor.getHtml());
+                    $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
                 }
             }
-        }).data(editorDataKey);
+        });
     }
 
     function uploadFile(blob, callback, source) {

@@ -10,10 +10,10 @@ export function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
       {
-        path: '/account',
+        path: undefined,
         name: eAccountRouteNames.Account,
         invisible: true,
-        layout: eLayoutType.application,
+        layout: eLayoutType.account,
         order: 1,
       },
       {
@@ -29,10 +29,23 @@ export function configureRoutes(routes: RoutesService) {
         order: 2,
       },
       {
-        path: '/account/manage-profile',
+        path: '/account/manage',
         name: eAccountRouteNames.ManageProfile,
         parentName: eAccountRouteNames.Account,
+        layout: eLayoutType.application,
         order: 3,
+      },
+      {
+        path: '/account/forgot-password',
+        parentName: eAccountRouteNames.Account,
+        name: eAccountRouteNames.ForgotPassword,
+        invisible: true,
+      },
+      {
+        path: '/account/reset-password',
+        parentName: eAccountRouteNames.Account,
+        name: eAccountRouteNames.ResetPassword,
+        invisible: true,
       },
     ]);
   };

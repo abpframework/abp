@@ -3,6 +3,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
@@ -23,7 +24,8 @@ namespace Volo.Abp.Application
         typeof(AbpAuthorizationModule),
         typeof(AbpHttpAbstractionsModule),
         typeof(AbpSettingsModule),
-        typeof(AbpFeaturesModule)
+        typeof(AbpFeaturesModule),
+        typeof(AbpGlobalFeaturesModule)
         )]
     public class AbpDddApplicationModule : AbpModule
     {

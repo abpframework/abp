@@ -4,17 +4,20 @@
     "lerna": "lerna",
     "ncu": "ncu",
     "update-gulp": "node update-gulp.js",
-    "replace-with-tilde": "node replace-with-tilde.js"
+    "replace-with-tilde": "node replace-with-tilde.js",
+    "update": "node package-update-script.js . abp"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "glob": "^7.1.5",
     "lerna": "^3.18.4",
-    "npm-check-updates": "^3.1.25"
+    "npm-check-updates": "^11.3.0"
   },
   "dependencies": {
     "commander": "^6.0.0",
     "execa": "^3.4.0",
-    "fs-extra": "^8.1.0"
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^8.1.0",
+    "semver": "^7.3.5"
   }
 }

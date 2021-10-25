@@ -1,9 +1,9 @@
-﻿using System;
-using Volo.Abp;
+﻿using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -15,16 +15,9 @@ namespace Volo.CmsKit.MongoDB
     public static class CmsKitMongoDbContextExtensions
     {
         public static void ConfigureCmsKit(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+            this IMongoModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
-
-            var options = new CmsKitMongoModelBuilderConfigurationOptions(
-                CmsKitDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
 
             builder.Entity<CmsUser>(x =>
             {
@@ -79,6 +72,11 @@ namespace Volo.CmsKit.MongoDB
             builder.Entity<MediaDescriptor>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
+            });
+
+            builder.Entity<MenuItem>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MenuItems";
             });
         }
     }

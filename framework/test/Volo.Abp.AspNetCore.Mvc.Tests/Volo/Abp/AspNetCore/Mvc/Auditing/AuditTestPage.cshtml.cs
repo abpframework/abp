@@ -15,6 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options = options.Value;
         }
 
+        public void OnGet()
+        {
+
+        }
+
         public IActionResult OnGetAuditSuccessForGetRequests()
         {
             return new OkResult();
@@ -28,6 +33,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         public ObjectResult OnGetAuditFailForGetRequestsReturningObject()
         {
             throw new UserFriendlyException("Exception occurred!");
+        }
+
+        public IActionResult OnGetAuditActivateFailed([FromServices] AbpAuditingOptions options)
+        {
+            return new OkResult();
         }
     }
 }

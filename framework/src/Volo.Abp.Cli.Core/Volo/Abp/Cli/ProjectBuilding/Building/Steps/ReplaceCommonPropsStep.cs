@@ -40,11 +40,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 Check.NotNull(content, nameof(content));
 
-                var doc = new XmlDocument() { PreserveWhitespace = true };
-
-                doc.Load(StreamHelper.GenerateStreamFromString(content));
-
-                return ProcessReferenceNodes(doc, content);
+                using (var stream = StreamHelper.GenerateStreamFromString(content))
+                {
+                    var doc = new XmlDocument() { PreserveWhitespace = true };
+                    doc.Load(stream);
+                    return ProcessReferenceNodes(doc, content);
+                }
             }
 
             private string ProcessReferenceNodes(XmlDocument doc, string content)
@@ -60,7 +61,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 foreach (XmlNode node in importNodes)
                 {
-                    if (!(node.Attributes?["Project"]?.Value?.EndsWith("\\common.props") ?? false))
+                    var value = node.Attributes?["Project"]?.Value;
+
+                    if (value == null || (!value.EndsWith("\\common.props") && !value.EndsWith("\\common.test.props")))
                     {
                         continue;
                     }

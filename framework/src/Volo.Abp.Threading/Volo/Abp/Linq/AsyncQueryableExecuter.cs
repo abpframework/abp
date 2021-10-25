@@ -30,6 +30,14 @@ namespace Volo.Abp.Linq
                 : Task.FromResult(queryable.Contains(item));
         }
 
+        public Task<bool> AnyAsync<T>(IQueryable<T> queryable,  CancellationToken cancellationToken = default)
+        {
+            var provider = FindProvider(queryable);
+            return provider != null
+                ? provider.AnyAsync(queryable, cancellationToken)
+                : Task.FromResult(queryable.Any());
+        }
+
         public Task<bool> AnyAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             var provider = FindProvider(queryable);

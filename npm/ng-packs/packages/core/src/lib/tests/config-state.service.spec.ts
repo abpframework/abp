@@ -1,12 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { ApplicationConfiguration } from '../models/application-configuration';
+import { of } from 'rxjs';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
   ApplicationConfigurationDto,
   CurrentUserDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
+import { CORE_OPTIONS } from '../tokens';
 
-export const CONFIG_STATE_DATA = ({
+export const CONFIG_STATE_DATA = {
   environment: {
     production: false,
     application: {
@@ -97,21 +100,29 @@ export const CONFIG_STATE_DATA = ({
     },
   },
   registerLocaleFn: () => Promise.resolve(),
-} as any) as ApplicationConfigurationDto;
+} as any as ApplicationConfigurationDto;
 
-describe('ConfigState', () => {
+describe('ConfigStateService', () => {
   let spectator: SpectatorService<ConfigStateService>;
   let configState: ConfigStateService;
 
   const createService = createServiceFactory({
     service: ConfigStateService,
+    imports: [HttpClientTestingModule],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => of(CONFIG_STATE_DATA) },
+      },
+    ],
   });
 
   beforeEach(() => {
     spectator = createService();
     configState = spectator.service;
 
-    configState.setState(CONFIG_STATE_DATA);
+    configState.refreshAppState();
   });
 
   describe('#getAll', () => {

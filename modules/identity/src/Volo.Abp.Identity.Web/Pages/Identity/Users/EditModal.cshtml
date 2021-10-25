@@ -27,6 +27,7 @@
                     <abp-input asp-for="UserInfo.Password" />
                     <abp-input asp-for="UserInfo.Email" />
                     <abp-input asp-for="UserInfo.PhoneNumber" />
+                    <abp-input asp-for="UserInfo.IsActive" />
                     <abp-input asp-for="UserInfo.LockoutEnabled" />
 
                     @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
@@ -35,6 +36,10 @@
                         {
                             if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                             {
+                                if (propertyInfo.Type.IsEnum)
+                                {
+                                    Model.UserInfo.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                                }
                                 <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                             label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                             autocomplete-api-url="@propertyInfo.Lookup.Url"

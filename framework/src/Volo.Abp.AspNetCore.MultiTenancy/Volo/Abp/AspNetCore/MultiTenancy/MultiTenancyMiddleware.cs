@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -16,22 +17,44 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
         private readonly ICurrentTenant _currentTenant;
+        private readonly AbpAspNetCoreMultiTenancyOptions _options;
+        private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
             ITenantConfigurationProvider tenantConfigurationProvider,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options,
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
             _tenantConfigurationProvider = tenantConfigurationProvider;
             _currentTenant = currentTenant;
+            _tenantResolveResultAccessor = tenantResolveResultAccessor;
+            _options = options.Value;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
+            TenantConfiguration tenant;
+            try
+            {
+                tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
+            }
+            catch (Exception e)
+            {
+                await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e);
+                return;
+            }
+
             if (tenant?.Id != _currentTenant.Id)
             {
                 using (_currentTenant.Change(tenant?.Id, tenant?.Name))
                 {
+                    if (_tenantResolveResultAccessor.Result != null &&
+                        _tenantResolveResultAccessor.Result.AppliedResolvers.Contains(QueryStringTenantResolveContributor.ContributorName))
+                    {
+                        AbpMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
+                    }
+
                     var requestCulture = await TryGetRequestCultureAsync(context);
                     if (requestCulture != null)
                     {
@@ -41,6 +64,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                             context,
                             requestCulture
                         );
+                        context.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
                     }
 
                     await next(context);

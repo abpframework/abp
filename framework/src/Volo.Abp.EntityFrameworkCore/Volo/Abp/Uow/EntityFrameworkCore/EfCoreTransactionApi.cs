@@ -30,17 +30,18 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
         public async Task CommitAsync()
         {
-            await DbContextTransaction.CommitAsync(CancellationTokenProvider.Token);
-
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
                 {
-                    continue; //Relational databases use the shared transaction
+                    continue; //Relational databases use the shared transaction if they are using the same connection
                 }
 
                 await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.Token);
             }
+            
+            await DbContextTransaction.CommitAsync(CancellationTokenProvider.Token);
         }
 
         public void Dispose()
@@ -50,17 +51,18 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
         public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            await DbContextTransaction.RollbackAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
-
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
                 {
-                    continue; //Relational databases use the shared transaction
+                    continue; //Relational databases use the shared transaction if they are using the same connection
                 }
 
                 await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
             }
+            
+            await DbContextTransaction.RollbackAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
     }
 }

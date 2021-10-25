@@ -3,7 +3,7 @@
 @using System.Globalization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
-@using Volo.CmsKit.Admin.Web.Bundles
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.CmsKit.Admin.Web.Pages
 
@@ -19,37 +19,58 @@
 
 
 @section scripts {
-    <abp-script-bundle>
-        <abp-script type="typeof(TuiEditorScriptContributor)"/>
-        <abp-script type="typeof(UppyScriptContributor)"/>
-        <abp-script type="typeof(SlugifyScriptContributor)"/>
-        <abp-script src="/Pages/CmsKit/Pages/update.js" />
-    </abp-script-bundle>
+<abp-script-bundle>
+    <abp-script type="typeof(TuiEditorScriptContributor)" />
+    <abp-script type="typeof(UppyScriptContributor)" />
+    <abp-script type="typeof(SlugifyScriptContributor)" />
+    <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+    <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+    <abp-script src="/Pages/CmsKit/Pages/update.js" />
+</abp-script-bundle>
 }
 
 @section styles {
-    <abp-style-bundle>
-        <abp-style type="typeof(TuiEditorStyleContributor)"/>
-    </abp-style-bundle>
+<abp-style-bundle>
+    <abp-style type="typeof(TuiEditorStyleContributor)" />
+    <abp-style src="/Pages/CmsKit/Pages/update.css" />
+</abp-style-bundle>
 }
 
 <abp-card>
     <abp-card-header title="@L["Update"].Value"></abp-card-header>
     <abp-card-body>
         <form asp-page="/CmsKit/Pages/Update" id="form-page-update">
-            <abp-input asp-for="@Model.Id"/>
-            
-            <abp-input asp-for="@Model.ViewModel.Title"/>
+            <abp-input asp-for="@Model.Id" />
 
-            <abp-input asp-for="ViewModel.Slug" title="@L["PageSlugInformation"]" data-toggle="tooltip"/>
+            <abp-input asp-for="@Model.ViewModel.ConcurrencyStamp" />
 
-            <abp-input asp-for="@Model.ViewModel.Content"/>
+            <abp-input asp-for="@Model.ViewModel.Title" />
 
-            <div class="content-editor"
-                 id="ContentEditor"
-                 data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
-                 data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
-            </div>
+            <abp-input asp-for="ViewModel.Slug" title="@L["PageSlugInformation"]" data-toggle="tooltip" />
+
+            <abp-input asp-for="@Model.ViewModel.Content" />
+
+
+            <abp-tabs tab-style="Tab">
+
+                <abp-tab title="@L["Content"]">
+                    <div class="content-editor cms-kit-editor"
+                         id="ContentEditor"
+                         data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
+                         data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
+                    </div>
+                </abp-tab>
+
+                <abp-tab title="@L["Script"]">
+                    <abp-input asp-for="ViewModel.Script" suppress-label="true" class="cms-kit-editor" />
+                </abp-tab>
+
+                <abp-tab title="@L["Style"]">
+                    <abp-input asp-for="ViewModel.Style" suppress-label="true" class="cms-kit-editor"/>
+                </abp-tab>
+
+            </abp-tabs>
+
         </form>
     </abp-card-body>
     <abp-card-footer>

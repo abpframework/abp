@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -148,7 +148,8 @@ namespace Volo.Abp.IdentityServer
             };
 
             client.AddCorsOrigin("https://client1-origin.com");
-            client.AddClaim(nameof(ClientClaim.Value), nameof(ClientClaim.Type));
+            client.AddCorsOrigin("https://{0}.abp.io");
+            client.AddClaim(nameof(ClientClaim.Type), nameof(ClientClaim.Value));
             client.AddGrantType(nameof(ClientGrantType.GrantType));
             client.AddIdentityProviderRestriction(nameof(ClientIdPRestriction.Provider));
             client.AddPostLogoutRedirectUri(nameof(ClientPostLogoutRedirectUri.PostLogoutRedirectUri));

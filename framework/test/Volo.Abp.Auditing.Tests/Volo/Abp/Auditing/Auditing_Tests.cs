@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
 using Volo.Abp.Auditing.App.Entities;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
@@ -32,7 +33,7 @@ namespace Volo.Abp.Auditing
         }
 
         [Fact]
-        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled()
+        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled_With_Containing_Scope()
         {
             var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
 
@@ -42,9 +43,17 @@ namespace Volo.Abp.Auditing
                 await scope.SaveAsync();
             }
 
-#pragma warning disable 4014
-            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
-#pragma warning restore 4014
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+
+        [Fact]
+        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled_Without_An_Explicit_Scope()
+        {
+            var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
+
+            await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
 
         public interface IMyAuditedObject : ITransientDependency, IAuditingEnabled
@@ -273,6 +282,59 @@ namespace Volo.Abp.Auditing
                                                                                   .ExtraProperties))
                                                                               .All(y => GetBaseAuditPropertyNames().Contains(y.PropertyName))));
 #pragma warning restore 4014
+        }
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_Without_ExtraPropertyDictionary()
+        {
+            var entityId = Guid.NewGuid();
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAudited, Guid>>();
+            var appEntityWithAudited = new AppEntityWithAudited(entityId, "test name");
+            appEntityWithAudited.SetProperty("No", 123456);
+            await repository.InsertAsync(appEntityWithAudited);
+
+            using (var scope = _auditingManager.BeginScope())
+            {
+                using (var uow = _unitOfWorkManager.Begin())
+                {
+                    var entity = await repository.GetAsync(entityId);
+                    entity.Name = "new test name";
+
+                    await repository.UpdateAsync(entity);
+
+                    await uow.CompleteAsync();
+                }
+
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithAudited.Name)));
+#pragma warning restore 4014
+        }
+
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_For_Soft_Deleted_Entity()
+        {
+            var entity = new AppEntityWithSoftDelete(Guid.NewGuid(), "test name");
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithSoftDelete, Guid>>();
+            await repository.InsertAsync(entity);
+
+            using (var scope = _auditingManager.BeginScope())
+            {
+                await repository.DeleteAsync(entity.Id);
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                          x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
+                                                                          x.EntityChanges[0].PropertyChanges.Count == 0));
+#pragma warning restore 4014
+
         }
     }
 }

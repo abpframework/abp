@@ -2,9 +2,12 @@
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Blogs
 {
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
     public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
     {
         protected virtual IBlogFeatureRepository BlogFeatureRepository { get; }

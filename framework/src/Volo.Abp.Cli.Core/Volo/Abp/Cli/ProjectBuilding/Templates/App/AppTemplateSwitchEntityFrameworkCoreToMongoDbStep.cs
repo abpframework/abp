@@ -5,6 +5,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
     public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPipelineStep
     {
+        private readonly bool _hasDbMigrations;
+
+        public AppTemplateSwitchEntityFrameworkCoreToMongoDbStep(bool hasDbMigrations)
+        {
+            _hasDbMigrations = hasDbMigrations;
+        }
+
         public override void Execute(ProjectBuildContext context)
         {
             //MyCompanyName.MyProjectName.Web
@@ -12,7 +19,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
                 "MongoDB"
             );
 
@@ -21,7 +28,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -35,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
                 "MongoDB"
             );
 
@@ -44,7 +51,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -58,7 +65,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
                 "MongoDB"
             );
 
@@ -67,7 +74,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -76,12 +83,35 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
             );
 
+            //MyCompanyName.MyProjectName.Blazor.Server
+
+            ChangeProjectReference(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
+                "MongoDB"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
+                "MyProjectNameMongoDbModule"
+            );
+
+            ChangeConnectionStringToMongoDb(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.json"
+            );
+
             //MyCompanyName.MyProjectName.HttpApi.HostWithIds
 
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyCompanyName.MyProjectName.HttpApi.HostWithIds.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
                 "MongoDB"
             );
 
@@ -90,7 +120,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -104,7 +134,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyCompanyName.MyProjectName.DbMigrator.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
                 "MongoDB"
             );
 
@@ -113,7 +143,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -170,6 +200,30 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
                 "MyProjectNameMongoDbCollectionFixtureBase"
             );
+
+            if (context.BuildArgs.PublicWebSite)
+            {
+                ChangeProjectReference(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyCompanyName.MyProjectName.Web.Public.csproj",
+                    _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
+                    "MongoDB"
+                );
+
+                ChangeNamespaceAndKeyword(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyProjectNameWebPublicModule.cs",
+                    "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                    "MyCompanyName.MyProjectName.MongoDB",
+                    _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
+                    "MyProjectNameMongoDbModule"
+                );
+
+                ChangeConnectionStringToMongoDb(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/appsettings.json"
+                );
+            }
         }
 
         private void ChangeProjectReference(
@@ -178,7 +232,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldReference,
             string newReference)
         {
-            var file = context.GetFile(targetProjectFilePath);
+            var file = context.FindFile(targetProjectFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -204,7 +263,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldKeyword,
             string newKeyword)
         {
-            var file = context.GetFile(targetModuleFilePath);
+            var file = context.FindFile(targetModuleFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -229,7 +293,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ProjectBuildContext context,
             string appsettingFilePath)
         {
-            var file = context.GetFile(appsettingFilePath);
+            var file = context.FindFile(appsettingFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 

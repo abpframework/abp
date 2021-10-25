@@ -1,4 +1,4 @@
-﻿$(function(){
+$(function(){
     var fileUploadUri = "/api/cms-kit-admin/media";
     var fileUriPrefix = "/api/cms-kit/media/"
     
@@ -42,8 +42,9 @@
             }
         });
     };
-   
-   editor.tuiEditor({
+
+    new toastui.Editor({
+        el: editor[0],
         usageStatistics: false,
         useCommandShortcut: true,
         initialEditType: 'wysiwyg',
@@ -54,5 +55,5 @@
         hooks: {
             addImageBlobHook: uploadImage,
        },
-   });
+    });
 });

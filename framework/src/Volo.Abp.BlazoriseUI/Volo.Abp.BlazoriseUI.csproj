@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
@@ -14,9 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.3" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.3" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.3" />
+        <PackageReference Include="Blazorise" Version="0.9.4.6" />
+        <PackageReference Include="Blazorise.DataGrid" Version="0.9.4.6" />
+        <PackageReference Include="Blazorise.Snackbar" Version="0.9.4.6" />
+        <PackageReference Include="Blazorise.Components" Version="0.9.4.6" />
     </ItemGroup>
 
 </Project>

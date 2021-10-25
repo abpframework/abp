@@ -9,7 +9,7 @@ using Volo.CmsKit.Tags;
 namespace Volo.CmsKit.Public.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/tags")]
     public class TagPublicController : CmsKitPublicControllerBase, ITagAppService

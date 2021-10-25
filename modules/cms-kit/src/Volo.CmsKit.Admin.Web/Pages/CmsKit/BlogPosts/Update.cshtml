@@ -9,7 +9,7 @@
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
-@using Volo.CmsKit.Admin.Web.Bundles
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
 
 @inherits CmsKitAdminPageBase
 
@@ -26,6 +26,8 @@
         <abp-script type="typeof(TuiEditorScriptContributor)"/>
         <abp-script type="typeof(UppyScriptContributor)"/>
         <abp-script type="typeof(SlugifyScriptContributor)"/>
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
         <abp-script src="/Pages/CmsKit/BlogPosts/update.js"/>
     </abp-script-bundle>
 }
@@ -33,6 +35,7 @@
 @section styles {
     <abp-style-bundle>
         <abp-style type="typeof(TuiEditorStyleContributor)"/>
+        <abp-style src="/Pages/CmsKit/BlogPosts/update.css"/>
     </abp-style-bundle>
 }
 
@@ -41,11 +44,15 @@
 }
 
 <abp-card>
-    <abp-card-header title="@L["Update"].Value"></abp-card-header>
+    <abp-card-header title="@L["Edit"].Value"></abp-card-header>
     <abp-card-body>
 
         <div class="form-group">
-            <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+            @if (Model.ViewModel.CoverImageMediaId != null)
+            {
+                <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+                <br />
+            }
             <label>@L["CoverImage"]</label>
             <input type="file" id="BlogPostCoverImage" class="form-control" />
         </div>
@@ -58,13 +65,13 @@
             <abp-input asp-for="ViewModel.Slug" />
 
             <abp-form-content />
-        
-            <div class="content-editor" 
-                 id="ContentEditor" 
+
+            <div class="content-editor cms-kit-editor"
+                 id="ContentEditor"
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
             </div>
-            
+
         </abp-dynamic-form>
 
         @if (Model.TagsFeature?.IsEnabled == true)

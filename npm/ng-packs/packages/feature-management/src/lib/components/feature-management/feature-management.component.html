@@ -1,4 +1,4 @@
-<abp-modal *ngIf="visible" size="lg" [(visible)]="visible" [busy]="modalBusy">
+<abp-modal *ngIf="visible" [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
   <ng-template #abpHeader>
     <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
@@ -82,8 +82,8 @@
                           {{
                             item.displayText?.resourceName + '::' + item.displayText?.name
                               | abpLocalization
-                          }}</option
-                        >
+                          }}
+                        </option>
                       </select>
                       <ng-container
                         *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
@@ -111,7 +111,7 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <button #abpClose type="button" class="btn btn-secondary">
+    <button abpClose type="button" class="btn btn-secondary">
       {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
     </button>
     <abp-button

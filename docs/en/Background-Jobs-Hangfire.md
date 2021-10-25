@@ -79,3 +79,39 @@ After you have installed these NuGet packages, you need to configure your projec
  
  }
 ````
+
+### Dashboard Authorization
+
+Hangfire Dashboard provides information about your background jobs, including method names and serialized arguments as well as gives you an opportunity to manage them by performing different actions – retry, delete, trigger, etc. So it is important to restrict access to the Dashboard.
+To make it secure by default, only local requests are allowed, however you can change this by following the [official documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html) of Hangfire.
+
+You can integrate the Hangfire dashboard to [ABP authorization system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
+class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
+
+```csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
+});
+```
+
+* `AbpHangfireAuthorizationFilter` is an implementation of an authorization filter.
+
+#### AbpHangfireAuthorizationFilter
+
+`AbpHangfireAuthorizationFilter` class has the following fields:
+
+* **`enableTenant`  (`bool`, default: `false`):** Enables/disables accessing the Hangfire dashboard on tenant users.
+* **`requiredPermissionName`  (`string`, default: `null`):** Hangfire dashboard is accessible only if the current user has the specified permission. In this case, if we specify a permission name, we don't need to set `enableTenant` `true` because the permission system already does it.
+
+If you want to require an additional permission, you can pass it into the constructor as below:
+
+```csharp
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") }
+});
+```
+
+**Important**: `UseHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
+authorization will always fail!

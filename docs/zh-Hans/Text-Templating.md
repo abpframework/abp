@@ -187,9 +187,9 @@ var result = await _templateRenderer.RenderAsync(
 
 示例中我们并没有创建模型类,但是创建了一个匿名对象模型.
 
-### 大驼峰 与 小驼峰
+### PascalCase 与 snake_case
 
-PascalCase 属性名(如 `UserName`) 在模板中用做小驼峰(如 `userName`).
+PascalCase 属性名(如 `UserName`) 在模板中使用蛇形命名(如 `user_name`).
 
 ## 本地化
 

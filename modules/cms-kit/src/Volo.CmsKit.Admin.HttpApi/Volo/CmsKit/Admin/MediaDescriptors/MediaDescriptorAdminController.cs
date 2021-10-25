@@ -12,8 +12,8 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
     [RequiresGlobalFeature(typeof(MediaFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area("cms-kit-admin")]
     [Route("api/cms-kit-admin/media")]
     public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
     {
@@ -25,10 +25,10 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         }
 
         [HttpPost]
-        [NonAction]
-        public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
+        [Route("{entityType}")]
+        public virtual Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
         {
-            return MediaDescriptorAdminAppService.CreateAsync(inputStream);
+            return MediaDescriptorAdminAppService.CreateAsync(entityType, inputStream);
         }
 
         [HttpDelete]
@@ -36,27 +36,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         public virtual Task DeleteAsync(Guid id)
         {
             return MediaDescriptorAdminAppService.DeleteAsync(id);
-        }
-
-        [HttpPost]
-        [Route("{entityType}")]
-        public virtual async Task<IActionResult> UploadAsync(string entityType, IFormFile file)
-        {
-            if (file == null)
-            {
-                return BadRequest();
-            }
-
-            var inputStream = new CreateMediaInputStream(file.OpenReadStream())
-                              {
-                                  EntityType = entityType,
-                                  ContentType = file.ContentType,
-                                  Name = file.FileName
-                              };
-            
-            var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(inputStream);
-            
-            return StatusCode((int)HttpStatusCode.Created, mediaDescriptorDto);
         }
     }
 }

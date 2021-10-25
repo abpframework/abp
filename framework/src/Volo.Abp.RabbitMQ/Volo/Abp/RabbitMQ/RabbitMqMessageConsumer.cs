@@ -6,6 +6,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using RabbitMQ.Client.Exceptions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
@@ -147,6 +148,7 @@ namespace Volo.Abp.RabbitMQ
                 Channel = ConnectionPool
                     .Get(ConnectionName)
                     .CreateModel();
+
                 Channel.ExchangeDeclare(
                     exchange: Exchange.ExchangeName,
                     type: Exchange.Type,
@@ -174,6 +176,14 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                if (ex is OperationInterruptedException operationInterruptedException &&
+                    operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
+                    operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
+                }
+
                 Logger.LogException(ex, LogLevel.Warning);
                 await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }
@@ -200,8 +210,9 @@ namespace Volo.Abp.RabbitMQ
                         requeue: true
                     );
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch { }
-                
+
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }

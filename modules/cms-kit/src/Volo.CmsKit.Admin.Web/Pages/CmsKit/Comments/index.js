@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
@@ -10,6 +10,7 @@
             todayBtn: "linked",
             autoclose: true,
             language: abp.localization.currentCulture.cultureName,
+            format: abp.localization.currentCulture.dateTimeFormat.shortDatePattern
         })
         .on("hide", function (e) {
             e.stopPropagation();
@@ -73,8 +74,8 @@
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }
@@ -88,7 +89,7 @@
                 data: "author.userName",
                 render: function (data) {
                     if (data !== null) {
-                        return GetFilterableDatatableContent('#Author', data);
+                        return GetFilterableDatatableContent('#Author', $.fn.dataTable.render.text().display(data)); //prevent against possible XSS
                     }
                     return "";
                 }
@@ -100,7 +101,7 @@
                 data: "entityType",
                 render: function (data) {
                     if (data !== null) {
-                        return GetFilterableDatatableContent('#EntityType', data);
+                        return GetFilterableDatatableContent('#EntityType', $.fn.dataTable.render.text().display(data));
                     }
                     return "";
                 }
@@ -110,7 +111,7 @@
                 data: "text",
                 orderable: false,
                 render: function (data) {
-                    data = data || "";
+                    data = $.fn.dataTable.render.text().display(data || "");
 
                     var maxChars = 64;
 

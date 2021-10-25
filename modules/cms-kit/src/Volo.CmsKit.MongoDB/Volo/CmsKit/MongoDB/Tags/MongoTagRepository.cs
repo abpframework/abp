@@ -26,7 +26,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(name, nameof(name));
-            
+
             return await (await GetMongoQueryableAsync(cancellationToken))
                     .AnyAsync(x =>
                             x.EntityType == entityType &&
@@ -52,7 +52,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(name, nameof(name));
-            
+
             return FindAsync(x =>
                 x.EntityType == entityType &&
                 x.Name == name,
@@ -66,7 +66,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(entityId, nameof(entityId));
-            
+
             var entityTagIds = await (await GetDbContextAsync(cancellationToken)).EntityTags.AsQueryable()
                 .Where(q => q.EntityId == entityId)
                 .Select(q => q.TagId)
@@ -79,6 +79,31 @@ namespace Volo.CmsKit.MongoDB.Tags
 
             var result = await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
             return result;
+        }
+
+
+        public async Task<List<Tag>> GetListAsync(string filter)
+        {
+            return await (await GetQueryableByFilterAsync(filter)).ToListAsync();
+        }
+
+        public async Task<int> GetCountAsync(string filter)
+        {
+            return await (await GetQueryableByFilterAsync(filter)).CountAsync();
+        }
+
+        private async Task<IMongoQueryable<Tag>> GetQueryableByFilterAsync(string filter)
+        {
+            var mongoQueryable = await GetMongoQueryableAsync();
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                mongoQueryable = mongoQueryable.Where(x =>
+                        x.Name.ToLower().Contains(filter) ||
+                        x.EntityType.ToLower().Contains(filter));
+            }
+
+            return mongoQueryable;
         }
     }
 }

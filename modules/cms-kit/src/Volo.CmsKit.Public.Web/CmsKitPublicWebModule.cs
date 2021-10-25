@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Markdig;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
@@ -8,13 +9,14 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Web.Menus;
 using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Public.Web
 {
     [DependsOn(
-        typeof(CmsKitPublicHttpApiModule),
+        typeof(CmsKitPublicApplicationContractsModule),
         typeof(CmsKitCommonWebModule)
     )]
     public class CmsKitPublicWebModule : AbpModule
@@ -42,6 +44,7 @@ namespace Volo.CmsKit.Public.Web
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new CmsKitPublicMenuContributor());
+                options.MainMenuNames.Add(CmsKitMenus.Public);
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -55,6 +58,14 @@ namespace Volo.CmsKit.Public.Web
             {
                 options.AddMaps<CmsKitPublicWebModule>(validate: true);
             });
+
+            context.Services
+                .AddSingleton(_ => new MarkdownPipelineBuilder()
+                    .UseAutoLinks()
+                    .UseBootstrap()
+                    .UseGridTables()
+                    .UsePipeTables()
+                    .Build());
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -63,7 +74,7 @@ namespace Volo.CmsKit.Public.Web
             {
                 Configure<RazorPagesOptions>(options =>
                 {
-                    options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", @"/pages/{slug:minlength(1)}");
+                    options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index",  PageConsts.UrlPrefix + "{slug:minlength(1)}");
                     options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
                     options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
                 });

@@ -19,9 +19,6 @@
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Application.Contracts\Volo.Abp.TenantManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Application.Contracts\Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Application.Contracts\Volo.Abp.SettingManagement.Application.Contracts.csproj" />
-    <!--<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>-->
-    <ProjectReference Include="..\..\..\..\..\modules\cms-kit\src\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
-    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
 </Project>

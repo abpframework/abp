@@ -1,5 +1,4 @@
-﻿using Volo.Abp.Identity.Features;
-using Volo.Abp.Identity.Localization;
+﻿using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -112,19 +111,7 @@ namespace Volo.Abp.Identity
                     int.MaxValue.ToString(),
                     L("Identity.OrganizationUnit.MaxUserMembershipCount"),
                     L("Identity.OrganizationUnit.MaxUserMembershipCount"),
-                    true),
-
-                new SettingDefinition(IdentitySettingNames.TwoFactor.Behaviour,
-                    IdentityTwoFactorBehaviour.Optional.ToString(),
-                    L("DisplayName:Abp.Identity.TwoFactorBehaviour"),
-                    L("Description:Abp.Identity.TwoFactorBehaviour"),
-                    isVisibleToClients: true),
-
-                new SettingDefinition(IdentitySettingNames.TwoFactor.UsersCanChange,
-                    true.ToString(),
-                    L("DisplayName:Abp.Identity.UsersCanChange"),
-                    L("Description:Abp.Identity.UsersCanChange"),
-                    isVisibleToClients: true)
+                    true)
             );
         }
 

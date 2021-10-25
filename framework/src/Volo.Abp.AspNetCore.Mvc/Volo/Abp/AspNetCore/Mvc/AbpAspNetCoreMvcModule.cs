@@ -157,10 +157,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             //Use DI to create controllers
-            context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
+            mvcBuilder.AddControllersAsServices();
 
             //Use DI to create view components
-            context.Services.Replace(ServiceDescriptor.Singleton<IViewComponentActivator, ServiceBasedViewComponentActivator>());
+            mvcBuilder.AddViewComponentsAsServices();
 
             //Use DI to create razor page
             context.Services.Replace(ServiceDescriptor.Singleton<IPageModelActivatorProvider, ServiceBasedPageModelActivatorProvider>());

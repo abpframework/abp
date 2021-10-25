@@ -108,6 +108,18 @@ namespace Volo.Abp.AspNetCore.Components
 
             return reference;
         }
+        
+        protected TService LazyGetService<TService>(ref TService reference) => LazyGetService(typeof(TService), ref reference);
+
+        protected TRef LazyGetService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                reference = (TRef)ScopedServices.GetService(serviceType);
+            }
+
+            return reference;
+        }
 
         protected TService LazyGetNonScopedRequiredService<TService>(ref TService reference) => LazyGetNonScopedRequiredService(typeof(TService), ref reference);
 
@@ -116,6 +128,18 @@ namespace Volo.Abp.AspNetCore.Components
             if (reference == null)
             {
                 reference = (TRef)NonScopedServices.GetRequiredService(serviceType);
+            }
+
+            return reference;
+        }
+        
+        protected TService LazyGetNonScopedService<TService>(ref TService reference) => LazyGetNonScopedService(typeof(TService), ref reference);
+
+        protected TRef LazyGetNonScopedService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                reference = (TRef)NonScopedServices.GetService(serviceType);
             }
 
             return reference;

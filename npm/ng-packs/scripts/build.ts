@@ -13,17 +13,18 @@ import fse from 'fs-extra';
       await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
     }
 
+    await fse.remove('../dist');
+
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--sync',
-        '--packages',
-        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components',
+        '--projects',
+        'core,theme-shared,components',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -31,13 +32,14 @@ import fse from 'fs-extra';
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management',
+        '--projects',
+        'feature-management,permission-management,account-core',
+        '--parallel',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -45,14 +47,15 @@ import fse from 'fs-extra';
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--all-packages',
-        '--excluded-packages',
-        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
+        '--all',
+        '--exclude',
+        'dev-app,schematics,core,theme-shared,components,feature-management,permission-management,account-core',
+        '--parallel',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

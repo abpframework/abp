@@ -39,6 +39,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`logout`**: 在你的计算机注销认证.
+* **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
 
@@ -154,6 +155,8 @@ abp add-package Volo.Abp.MongoDB
 #### Options
 
 * `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
+* `--with-source-code`: 下载包的源码到你的解决方案文件夹，而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的包添加到解决方案文件中,你在IDE中打开解决方案时也会看到包的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### add-module
 
@@ -181,6 +184,7 @@ abp add-module Volo.Blogging
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 * `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
 * `--with-source-code`: 添加模块的源代码,而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的模块添加到解决方案文件中,你在IDE中打开解决方案时也会看到模块的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### generate-proxy
 
@@ -336,3 +340,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 ```
 abp logout
 ```
+
+### install-libs
+
+为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包, 它的 **执行目录** 或者传递的 ```--working-directory``` 目录必须包含一个项目文件(*.csproj).
+
+`install-libs` 命令读取 `abp.resourcemapping.js` 来管理包. 参阅[客户端包管理](UI/AspNetCore/Client-Side-Package-Management.md)了解更多细节.
+
+用法:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定工作目录, 当执行目录不包含项目文件时会很有用.

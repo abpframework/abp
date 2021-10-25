@@ -62,14 +62,14 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(Tenant.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await this
+            return await (await GetQueryableAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Modularity;
@@ -11,7 +12,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.SettingManagement.Web
 {
     [DependsOn(
-        typeof(AbpSettingManagementHttpApiModule),
+        typeof(AbpSettingManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpSettingManagementDomainSharedModule)
         )]

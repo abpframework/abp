@@ -35,8 +35,8 @@ describe('Entity Prop Utils', () => {
 
     it('should merge default props with prop contributors', () => {
       const defaults: EntityPropDefaults = {
-        x: [(1 as any) as EntityProp, (2 as any) as EntityProp, (3 as any) as EntityProp],
-        y: [(1 as any) as EntityProp, (2 as any) as EntityProp, (3 as any) as EntityProp],
+        x: [1 as any as EntityProp, 2 as any as EntityProp, 3 as any as EntityProp],
+        y: [1 as any as EntityProp, 2 as any as EntityProp, 3 as any as EntityProp],
       };
 
       const contributors1: EntityPropContributorCallbacks = {

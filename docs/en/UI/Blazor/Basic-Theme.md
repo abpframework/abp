@@ -38,7 +38,7 @@ You have two options two customize this theme:
 
 ### Overriding Styles / Components
 
-In this approach, you continue to use the the theme as NuGet and NPM packages and customize the parts you need to. There are several ways to customize it;
+In this approach, you continue to use the theme as NuGet and NPM packages and customize the parts you need to. There are several ways to customize it;
 
 #### Override the Styles
 
@@ -50,7 +50,17 @@ See the [Customization / Overriding Components](Customization-Overriding-Compone
 
 ### Copy & Customize
 
-You can download the [source code](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) of the Basic Theme, copy the project content into your solution, re-arrange the package/module dependencies (see the Installation section above to understand how it was installed to the project) and freely customize the theme based on your application requirements.
+You can run the following [ABP CLI](../../CLI.md) command in **Blazor WebAssembly** project directory to copy the source code to your solution:
+
+`abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution-file`
+
+Then, navigate to downloaded `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` project directory and run:
+
+`abp add-package Volo.Abp.AspNetCore.Components.Web.BasicTheme --with-source-code --add-to-solution-file`
+
+----
+
+Or, you can download the [source code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) of the Basic Theme, manually copy the project content into your solution, re-arrange the package/module dependencies (see the Installation section above to understand how it was installed to the project) and freely customize the theme based on your application requirements.
 
 ## See Also
 

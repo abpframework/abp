@@ -4,7 +4,7 @@
 
 ## 提供程序
 
-分布式事件总线系统提供了一个可以被任何提供程序实现的**抽象**. 有两种开箱即用的提供程序:
+分布式事件总线系统提供了一个可以被任何提供程序实现的**抽象**. 有四种开箱即用的提供程序:
 
 * `LocalDistributedEventBus` 是默认实现,实现作为进程内工作的分布式事件总线. 是的!如果没有配置真正的分布式提供程序,**默认实现的工作方式与[本地事件总线](Local-Event-Bus.md)一样**.
 * `RabbitMqDistributedEventBus` 通过[RabbitMQ](https://www.rabbitmq.com/)实现分布式事件总线. 请参阅[RabbitMQ集成文档](Distributed-Event-Bus-RabbitMQ-Integration.md)了解如何配置它.
