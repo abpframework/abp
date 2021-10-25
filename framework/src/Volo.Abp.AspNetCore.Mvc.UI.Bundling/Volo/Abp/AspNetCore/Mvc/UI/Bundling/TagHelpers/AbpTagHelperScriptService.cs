@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
@@ -19,8 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public AbpTagHelperScriptService(
             IBundleManager bundleManager,
             IOptions<AbpBundlingOptions> options,
-            IWebHostEnvironment hostingEnvironment
-            ) : base(
+            IWebHostEnvironment hostingEnvironment) : base(
                 bundleManager,
                 options,
                 hostingEnvironment)
@@ -41,9 +37,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             return await BundleManager.GetScriptBundleFilesAsync(bundleName);
         }
 
-        protected override void AddHtmlTag(ViewContext viewContext, TagHelperContext context, TagHelperOutput output, string file)
+        protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
         {
-            output.Content.AppendHtml($"<script src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
+            var defer = tagHelper switch
+            {
+                AbpScriptTagHelper scriptTagHelper => scriptTagHelper.Defer,
+                AbpScriptBundleTagHelper scriptBundleTagHelper => scriptBundleTagHelper.Defer,
+                _ => false
+            };
+
+            var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    ? "defer"
+                    : string.Empty;
+            output.Content.AppendHtml($"<script {deferText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
         }
     }
 }
