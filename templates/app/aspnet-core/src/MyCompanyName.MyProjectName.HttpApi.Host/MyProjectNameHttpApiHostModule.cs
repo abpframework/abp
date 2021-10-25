@@ -51,7 +51,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureLocalization();
             ConfigureCache(configuration);
             ConfigureVirtualFileSystem(context);
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureDataProtection(context, configuration, hostingEnvironment);
             ConfigureCors(context, configuration);
             ConfigureSwaggerServices(context, configuration);
         }
@@ -145,17 +145,16 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureRedis(
+        private void ConfigureDataProtection(
             ServiceConfigurationContext context,
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
         }
 

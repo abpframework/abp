@@ -10,6 +10,7 @@ $(function (){
             todayBtn: "linked",
             autoclose: true,
             language: abp.localization.currentCulture.cultureName,
+            format: abp.localization.currentCulture.dateTimeFormat.shortDatePattern
         })
         .on("hide", function (e) {
             e.stopPropagation();
@@ -74,6 +75,7 @@ $(function (){
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }

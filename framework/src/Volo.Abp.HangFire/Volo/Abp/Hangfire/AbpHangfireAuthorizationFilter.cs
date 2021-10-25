@@ -9,16 +9,18 @@ namespace Volo.Abp.Hangfire
 {
     public class AbpHangfireAuthorizationFilter : IDashboardAsyncAuthorizationFilter
     {
+        private readonly bool _enableTenant;
         private readonly string _requiredPermissionName;
 
-        public AbpHangfireAuthorizationFilter(string requiredPermissionName = null)
+        public AbpHangfireAuthorizationFilter(bool enableTenant = false, string requiredPermissionName = null)
         {
+            _enableTenant = requiredPermissionName.IsNullOrWhiteSpace() ? enableTenant : true; 
             _requiredPermissionName = requiredPermissionName;
         }
 
         public async Task<bool> AuthorizeAsync(DashboardContext context)
         {
-            if (!IsLoggedIn(context))
+            if (!IsLoggedIn(context, _enableTenant))
             {
                 return false;
             }
@@ -31,9 +33,15 @@ namespace Volo.Abp.Hangfire
             return await IsPermissionGrantedAsync(context, _requiredPermissionName);
         }
 
-        private static bool IsLoggedIn(DashboardContext context)
+        private static bool IsLoggedIn(DashboardContext context, bool enableTenant)
         {
             var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
+
+            if (!enableTenant)
+            {
+                return currentUser.IsAuthenticated && !currentUser.TenantId.HasValue;
+            }
+            
             return currentUser.IsAuthenticated;
         }
 

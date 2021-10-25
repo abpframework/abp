@@ -20,7 +20,8 @@ namespace Volo.Abp.Validation.StringValues
 
         public NumericValueValidator()
         {
-
+            MinValue = int.MinValue;
+            MaxValue = int.MaxValue;
         }
 
         public NumericValueValidator(int minValue = int.MinValue, int maxValue = int.MaxValue)
