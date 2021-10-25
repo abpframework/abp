@@ -53,7 +53,7 @@ If you've used these classes, please remove their usages and use the static prop
 ## UI Providers
 
 * [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
-* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5_0-MVC.md)
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5-0-MVC.md)
 * [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
 
 ## Modules
