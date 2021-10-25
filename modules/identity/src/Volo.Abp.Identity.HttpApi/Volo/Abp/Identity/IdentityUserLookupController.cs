@@ -8,7 +8,7 @@ using Volo.Abp.Users;
 namespace Volo.Abp.Identity
 {
     [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-    [Area("identity")]
+    [Area(IdentityRemoteServiceConsts.ModuleName)]
     [ControllerName("UserLookup")]
     [Route("api/identity/users/lookup")]
     public class IdentityUserLookupController : AbpControllerBase, IIdentityUserLookupAppService

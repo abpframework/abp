@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Public.Reactions
 {
     [RequiresGlobalFeature(typeof(ReactionsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/reactions")]
     public class ReactionPublicController : CmsKitPublicControllerBase, IReactionPublicAppService
     {

@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Account
 {
     public class ProfileDto : ExtensibleObject, IHasConcurrencyStamp
     {

@@ -6,18 +6,18 @@ using Shouldly;
 using Volo.Abp.Users;
 using Xunit;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Account
 {
-    public class ProfileAppService_Tests : AbpIdentityApplicationTestBase
+    public class ProfileAppService_Tests : AbpAccountApplicationTestBase
     {
         private readonly IProfileAppService _profileAppService;
-        private readonly IdentityTestData _testData;
+        private readonly AccountTestData _testData;
         private ICurrentUser _currentUser;
 
         public ProfileAppService_Tests()
         {
             _profileAppService = GetRequiredService<IProfileAppService>();
-            _testData = GetRequiredService<IdentityTestData>();
+            _testData = GetRequiredService<AccountTestData>();
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
@@ -32,7 +32,7 @@ namespace Volo.Abp.Identity
             //Arrange
             _currentUser.Id.Returns(_testData.UserJohnId);
             _currentUser.IsAuthenticated.Returns(true);
-            
+
             //Act
             var result = await _profileAppService.GetAsync();
 
@@ -51,7 +51,7 @@ namespace Volo.Abp.Identity
             //Arrange
             _currentUser.Id.Returns(_testData.UserJohnId);
             _currentUser.IsAuthenticated.Returns(true);
-            
+
             var input = new UpdateProfileDto
             {
                 UserName = CreateRandomString(),

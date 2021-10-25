@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Account
 {
-    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-    [Area("identity")]
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+    [Area(AccountRemoteServiceConsts.ModuleName)]
     [ControllerName("Profile")]
-    [Route("/api/identity/my-profile")]
+    [Route("/api/account/my-profile")]
     public class ProfileController : AbpControllerBase, IProfileAppService
     {
         protected IProfileAppService ProfileAppService { get; }
