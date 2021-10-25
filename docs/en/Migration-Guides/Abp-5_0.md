@@ -10,7 +10,7 @@ ABP 5.0 runs on .NET 6.0. So, please upgrade your solution to .NET 6.0 if you wa
 
 ABP 5.0 uses the Bootstrap 5 as the fundamental HTML/CSS framework. We've migrated all the UI themes, tag helpers, UI components and the pages of the pre-built application modules. You may need to update your own pages by following the [Bootstrap's migration guide](https://getbootstrap.com/docs/5.0/migration/).
 
-The startup template changes
+## Startup Template Changes
 
 The startup template has changed. You don't need to apply all the changes, but it is strongly suggested to follow [this guide](Upgrading-Startup-Template.md) and make the necessary changes for your solution.
 
@@ -53,7 +53,7 @@ If you've used these classes, please remove their usages and use the static prop
 ## UI Providers
 
 * [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
-* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide]()
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5-0-MVC.md)
 * [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
 
 ## Modules
