@@ -12,7 +12,7 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddStaticHttpClientProxies(
+            context.Services.AddHttpClientProxies(
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
                 MyProjectNameRemoteServiceConsts.RemoteServiceName
             );
