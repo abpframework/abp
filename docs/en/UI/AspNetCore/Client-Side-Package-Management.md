@@ -22,7 +22,7 @@ The benefit of a **standard package** is:
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
-```
+```json
 {
   ...
   "dependencies": {
@@ -37,7 +37,7 @@ It's suggested to depend on a standard package instead of directly depending on 
 
 After depending on a NPM package, all you should do is to run the **yarn** command from the command line to install all the packages and their dependencies:
 
-```
+```bash
 yarn
 ```
 
@@ -69,7 +69,7 @@ The **startup templates** are already configured to work all these out of the bo
 
 A module should define a JavaScript file named `abp.resourcemapping.js` which is formatted as in the example below:
 
-```js
+```json
 module.exports = {
     aliases: {
         "@node_modules": "./node_modules",
@@ -91,7 +91,7 @@ module.exports = {
 
 An example mapping configuration is shown below:
 
-```js
+```json
 mappings: {
     "@node_modules/bootstrap/dist/css/bootstrap.css": "@libs/bootstrap/css/",
     "@node_modules/bootstrap/dist/js/bootstrap.bundle.js": "@libs/bootstrap/js/",
