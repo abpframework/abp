@@ -13,7 +13,7 @@ ABP is a modular platform. Every developer can create modules and the modules sh
 
 One challenge is the **versions of the dependant NPM packages**. What if two different modules use the same JavaScript library but its different (and potentially incompatible) versions.
 
-To solve the versioning problem, we created a **standard set of packages** those depends on some common third-party libraries. Some example packages are [@abp/jquery](https://www.npmjs.com/package/@abp/jquery), [@abp/bootstrap](https://www.npmjs.com/package/@abp/bootstrap) and [@abp/font-awesome](https://www.npmjs.com/package/@abp/font-awesome). You can see the **list of packages** from the [Github repository](https://github.com/volosoft/abp/tree/master/npm/packs).
+To solve the versioning problem, we created a **standard set of packages** those depends on some common third-party libraries. Some example packages are [@abp/jquery](https://www.npmjs.com/package/@abp/jquery), [@abp/bootstrap](https://www.npmjs.com/package/@abp/bootstrap) and [@abp/font-awesome](https://www.npmjs.com/package/@abp/font-awesome). You can see the **list of packages** from the [GitHub repository](https://github.com/volosoft/abp/tree/master/npm/packs).
 
 The benefit of a **standard package** is:
 
