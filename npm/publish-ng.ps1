@@ -17,7 +17,6 @@ if (-Not $Registry) {
 }
 
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
-$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 $UpdateGulpCommand = "npm run update-gulp"
 $UpdateNgPacksCommand = "yarn update --registry $Registry"
 
@@ -25,14 +24,10 @@ $IsPrerelase = $(node publish-utils.js --prerelase --customVersion $Version) -eq
 
 if ($IsPrerelase) {
   $UpdateGulpCommand += " -- --prerelase"
-  $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
   $UpdateNgPacksCommand += " --prerelase"
 }
 
 $commands = (
-  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "npm run replace-with-tilde",
-  $PacksPublishCommand,
   $UpdateNgPacksCommand,
   "cd ng-packs\scripts",
   "yarn install",
