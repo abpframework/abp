@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.CmsKit": {
+      "path": "Volo.CmsKit.abpmdl.json"
+    }
+  }
+}

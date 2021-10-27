@@ -26,6 +26,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public SourceCodeDownloadService SourceCodeDownloadService { get; }
         public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
         public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        public ICmdHelper CmdHelper { get; }
         private readonly CliHttpClientFactory _cliHttpClientFactory;
         public ILogger<ProjectNpmPackageAdder> Logger { get; set; }
 
@@ -33,12 +34,14 @@ namespace Volo.Abp.Cli.ProjectModification
             IJsonSerializer jsonSerializer,
             SourceCodeDownloadService sourceCodeDownloadService,
             AngularSourceCodeAdder angularSourceCodeAdder,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             SourceCodeDownloadService = sourceCodeDownloadService;
             AngularSourceCodeAdder = angularSourceCodeAdder;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
         }

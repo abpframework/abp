@@ -1,0 +1,38 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.AspNetCore.Components.Server.BasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Server.BasicTheme/Volo.Abp.AspNetCore.Components.Server.BasicTheme.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.Web.BasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Web.BasicTheme/Volo.Abp.AspNetCore.Components.Web.BasicTheme.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.abppkg.json",
+      "folder": "test"
+    }
+  }
+}

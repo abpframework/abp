@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.PermissionManagement
 {
     [RemoteService(Name = PermissionManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("permissionManagement")]
+    [Area(PermissionManagementRemoteServiceConsts.ModuleName)]
     [Route("api/permission-management/permissions")]
     public class PermissionsController : AbpControllerBase, IPermissionAppService
     {

@@ -36,7 +36,7 @@ namespace Volo.Abp.Cli
                                          "</ItemGroup>" +
                                          "</Project>";
 
-            var success = SolutionAbpVersionFinder.TryParseVersionFromCsprojFile(csprojContent, out var version);
+            var success = SolutionPackageVersionFinder.TryParseVersionFromCsprojFile(csprojContent, out var version);
             success.ShouldBe(true);
             version.ShouldBe("4.4.0-rc.1");
         }
@@ -58,7 +58,7 @@ namespace Volo.Abp.Cli
                                          "</ItemGroup>" +
                                          "</Project>";
 
-            var success = SolutionAbpVersionFinder.TryParseSemanticVersionFromCsprojFile(csprojContent, out var version);
+            var success = SolutionPackageVersionFinder.TryParseSemanticVersionFromCsprojFile(csprojContent, out var version);
             success.ShouldBe(true);
             version.Major.ShouldBe(12); 
             version.Minor.ShouldBe(8); 

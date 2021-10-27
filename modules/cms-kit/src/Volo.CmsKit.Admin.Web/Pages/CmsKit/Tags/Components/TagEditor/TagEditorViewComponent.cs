@@ -22,7 +22,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
             TagAppService = tagAppService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, bool displaySubmitButton = true)
+        public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, bool displaySubmitButton = true)
         {
             var tags =
                 entityId.IsNullOrWhiteSpace() ?
