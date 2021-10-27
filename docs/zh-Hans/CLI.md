@@ -188,43 +188,75 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-为您的HTTP API生成Angular服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
+为你的HTTP API生成Angular, C# 或 JavaScript服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
 
 用法:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp generate-proxy -t ng
+abp generate-proxy -t js -url https://localhost:44302/
+abp generate-proxy -t csharp -url https://localhost:44302/
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
 ### remove-proxy
 
-从Angular应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
+从Angular, CSharp 或 JavaScript应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
 
-This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+这在你之前为多个模块生成代理并且需要删除其中一个模块时特别有用.
 
-Usage:
+用法:
 
 ````bash
-abp remove-proxy
+abp remove-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp remove-proxy -t ng
+abp remove-proxy -t js -m identity -o Pages/Identity/client-proxies.js
+abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
