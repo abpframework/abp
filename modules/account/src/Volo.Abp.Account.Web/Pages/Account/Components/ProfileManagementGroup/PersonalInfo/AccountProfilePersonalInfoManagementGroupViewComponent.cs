@@ -9,6 +9,9 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo
 {
+    [Widget(
+           ScriptFiles = new[] { "/client-proxies/identity-proxy.js" }
+           )]
     public class AccountProfilePersonalInfoManagementGroupViewComponent : AbpViewComponent
     {
         protected IProfileAppService ProfileAppService { get; }
