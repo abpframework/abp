@@ -5,12 +5,6 @@
 @model MyCompanyName.MyProjectName.Web.Pages.MyProjectName.IndexModel
 @inject IStringLocalizer<MyProjectNameResource> L
 
-@section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/client-proxies/MyProjectName-proxy.js" />
-    </abp-script-bundle>
-}
-
 @{
 }
 <h1>MyProjectName</h1>

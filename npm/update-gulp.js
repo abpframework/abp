@@ -31,7 +31,7 @@ const updatePackages = (pkgJsonPath) => {
     const result = childProcess
       .execSync(
         `ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u${
-          program.prerelase ? ' --target greatest' : ''
+          program.prerelase ? ' --target newest' : ''
         }`
       )
       .toString();

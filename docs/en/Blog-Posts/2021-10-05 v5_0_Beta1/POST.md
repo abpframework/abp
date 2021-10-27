@@ -1,6 +1,6 @@
 # ABP Platform 5.0 Beta 1 Has Been Released
 
-Today, we are excited to release the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.0 Beta 1**. This blog post introduces the new features and important changes in this new version.
+Today, we are excited to release the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.0 Beta**. This blog post introduces the new features and important changes in this new version.
 
 > **The planned release date for the [5.0.0 Release Candidate](https://github.com/abpframework/abp/milestone/51) version is November, 2021**.
 
@@ -34,9 +34,12 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 ### Visual Studio Upgrade
 
-As .NET 6 is a preview version you need to make changes on your current Visual Studio. If you want to run a .NET 6 project on Visual Studio 2019, you need to enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
+As .NET 6 is a preview version you need to make changes on the Visual Studio 2019. 
+If you want to run a .NET 6 project on Visual Studio 2019, you need to install the latest .NET SDK 6 from https://dotnet.microsoft.com/download/dotnet/6.0 
+and also enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
 
 ![Enable Using Previews of the .NET SDK ](use-preview-visual-studio.png)
+
 
 Alternatively you can download the latest Visual Studio 2022 preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
 
@@ -48,6 +51,7 @@ This is a major version and there are some breaking changes and upgrade steps. H
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was already made obsolete in 4.2.
 * Removed NGXS and states from the Angular UI.
 * Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of ABP CLI.
+* Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData classes. See [#9897](https://github.com/abpframework/abp/issues/9897).
 
 Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
 

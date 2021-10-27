@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Comments
     [Authorize(CmsKitAdminPermissions.Comments.Default)]
     [RequiresGlobalFeature(typeof(CommentsFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit-admin")]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-admin/comments")]
     public class CommentAdminController : CmsKitAdminController, ICommentAdminAppService
     {

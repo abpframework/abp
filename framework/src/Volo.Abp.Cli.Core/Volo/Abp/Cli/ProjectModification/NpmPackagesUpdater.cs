@@ -23,6 +23,7 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public ILogger<NpmPackagesUpdater> Logger { get; set; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        public ICmdHelper CmdHelper { get; }
 
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
         private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
@@ -33,11 +34,13 @@ namespace Volo.Abp.Cli.ProjectModification
             PackageJsonFileFinder packageJsonFileFinder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
             ICancellationTokenProvider cancellationTokenProvider,
-            CliHttpClientFactory cliHttpClientFactory)
+            CliHttpClientFactory cliHttpClientFactory,
+            ICmdHelper cmdHelper)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
             _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
             CancellationTokenProvider = cancellationTokenProvider;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }

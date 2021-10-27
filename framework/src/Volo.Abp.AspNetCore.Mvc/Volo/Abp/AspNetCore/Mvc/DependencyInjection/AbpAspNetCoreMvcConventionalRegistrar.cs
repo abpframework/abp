@@ -7,36 +7,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
 {
-    public class AbpAspNetCoreMvcConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpAspNetCoreMvcConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            if (!IsMvcService(type))
-            {
-                return;
-            }
-
-            var lifeTime = GetMvcServiceLifetime(type);
-
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
-
-            TriggerServiceExposing(services, type, serviceTypes);
-
-            foreach (var serviceType in serviceTypes)
-            {
-                services.Add(
-                    ServiceDescriptor.Describe(
-                        serviceType,
-                        type,
-                        lifeTime
-                    )
-                );
-            }
+            return !IsMvcService(type) || base.IsConventionalRegistrationDisabled(type);
         }
 
         protected virtual bool IsMvcService(Type type)
@@ -44,11 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
             return IsController(type) ||
                    IsPageModel(type) ||
                    IsViewComponent(type);
-        }
-
-        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
-        {
-            return ServiceLifetime.Transient;
         }
 
         private static bool IsPageModel(Type type)
@@ -64,6 +34,11 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
         private static bool IsViewComponent(Type type)
         {
             return typeof(ViewComponent).IsAssignableFrom(type) || type.IsDefined(typeof(ViewComponentAttribute), true);
+        }
+
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

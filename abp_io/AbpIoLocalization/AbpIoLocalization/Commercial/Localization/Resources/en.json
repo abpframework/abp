@@ -388,6 +388,7 @@
     "PurchaseTrialLicenseMessage": "Your license expiration date is {0}. <br> If you want to continue using the projects you created during your free trial period, you need to change the license keys in your <code>appsettings.secrets.json</code> files. Here is your license key:",
     "TrialLicenseExpireMessage": "You are using the trial license and your trial license will expire on {0}.",
     "TryForFree": "Try For Free",
-    "TrialLicenseExpiredInfo": "Your trial license period has expired!"
+    "TrialLicenseExpiredInfo": "Your trial license period has expired!",
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
   }
 }
