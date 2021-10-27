@@ -24,11 +24,6 @@ namespace Volo.CmsKit.MediaDescriptors
             var entity = await MediaDescriptorRepository.GetAsync(id);
             var stream = await MediaContainer.GetAsync(id.ToString());
 
-            if (stream.CanSeek)
-            {
-                stream.Position = 0;
-            }
-
             return new RemoteStreamContent(stream, entity.Name, entity.MimeType);
         }
     }
