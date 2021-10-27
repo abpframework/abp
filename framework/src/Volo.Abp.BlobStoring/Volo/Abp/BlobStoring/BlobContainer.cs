@@ -194,14 +194,14 @@ namespace Volo.Abp.BlobStoring
                 var blobNormalizeNaming =
                     BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
-                return TrySeekStreamToBegin(await Provider.GetOrNullAsync(
+                return await Provider.GetOrNullAsync(
                     new BlobProviderGetArgs(
                         blobNormalizeNaming.ContainerName,
                         Configuration,
                         blobNormalizeNaming.BlobName,
                         CancellationTokenProvider.FallbackToProvider(cancellationToken)
                     )
-                ));
+                );
             }
         }
 
@@ -213,15 +213,6 @@ namespace Volo.Abp.BlobStoring
             }
 
             return CurrentTenant.Id;
-        }
-
-        protected virtual Stream TrySeekStreamToBegin(Stream stream)
-        {
-            if (stream != null && stream.CanSeek)
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-            }
-            return stream;
         }
     }
 }
