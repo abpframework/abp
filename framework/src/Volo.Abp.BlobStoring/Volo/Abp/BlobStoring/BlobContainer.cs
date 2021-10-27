@@ -217,18 +217,10 @@ namespace Volo.Abp.BlobStoring
 
         protected virtual Stream TrySeekStreamToBegin(Stream stream)
         {
-            if (stream == null)
+            if (stream != null && stream.CanSeek)
             {
-                return stream;
+                stream.Seek(0, SeekOrigin.Begin);
             }
-
-            if (!stream.CanSeek)
-            {
-                return stream;
-            }
-
-            stream.Seek(0, SeekOrigin.Begin);
-
             return stream;
         }
     }
