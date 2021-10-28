@@ -5,7 +5,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
-    public class MicroserviceServiceRandomizeStringEncryptionStep : RandomizeStringEncryptionStep
+    public class MicroserviceServiceStringEncryptionStep : RandomizeStringEncryptionStep
     {
         public override void Execute(ProjectBuildContext context)
         {
