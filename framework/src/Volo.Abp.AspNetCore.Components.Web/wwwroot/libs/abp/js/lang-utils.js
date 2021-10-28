@@ -2,7 +2,7 @@
 (function () {
     abp.utils = abp.utils || {};
 
-    abp.utils.setHTMLDir = function () {
+    abp.utils.setHTMLDirAndLang = function () {
         var isRtl = JSON.parse(localStorage.getItem("Abp.IsRtl"));
         var htmlTag = document.getElementsByTagName("html")[0];
 
@@ -18,5 +18,5 @@
         }
     }
 
-    abp.utils.setHTMLDir();
+    abp.utils.setHTMLDirAndLang();
 })();
