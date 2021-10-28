@@ -33,7 +33,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
             }
         }
 
-        private static string GetRandomString(int length)
+        protected static string GetRandomString(int length)
         {
             const string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var builder = new StringBuilder();
