@@ -66,6 +66,16 @@ namespace Volo.Abp.Authorization.Permissions
         {
             return PermissionGroupDefinitions.Values.ToImmutableList();
         }
+        
+        public PermissionGroupDefinition GetGroup( string name )
+        {
+            if( !PermissionGroupDefinitions.ContainsKey( name ) )
+            {
+                throw new AbpException($"Could not find a permission definition group with the given name: {name}");
+            }
+
+            return PermissionGroupDefinitions[name];
+        }
 
         protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
         {
