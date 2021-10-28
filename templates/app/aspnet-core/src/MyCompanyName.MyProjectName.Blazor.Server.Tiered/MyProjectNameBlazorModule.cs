@@ -94,7 +94,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
-            ConfigureHttpClient(context);
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(configuration);
@@ -230,14 +229,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
                 options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
                 options.Languages.Add(new LanguageInfo("es", "es", "Español"));
-            });
-        }
-
-        private static void ConfigureHttpClient(ServiceConfigurationContext context)
-        {
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
             });
         }
 

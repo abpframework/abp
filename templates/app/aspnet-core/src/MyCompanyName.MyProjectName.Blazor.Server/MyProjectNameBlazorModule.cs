@@ -89,7 +89,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             ConfigureLocalizationServices();
             ConfigureSwaggerServices(context.Services);
             ConfigureAutoApiControllers();
-            ConfigureHttpClient(context);
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(context);
@@ -204,14 +203,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
-        }
-
-        private static void ConfigureHttpClient(ServiceConfigurationContext context)
-        {
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
-            });
         }
 
         private void ConfigureBlazorise(ServiceConfigurationContext context)
