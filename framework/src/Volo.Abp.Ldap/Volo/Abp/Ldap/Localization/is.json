@@ -1,0 +1,15 @@
+{
+  "culture": "is",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Server host",
+    "Description:Abp.Ldap.ServerHost": "Server host",
+    "DisplayName:Abp.Ldap.ServerPort": "Server port",
+    "Description:Abp.Ldap.ServerPort": "Server port",
+    "DisplayName:Abp.Ldap.BaseDc": "Grunn léna hlutur",
+    "Description:Abp.Ldap.BaseDc": "Grunn léna hluturt",
+    "DisplayName:Abp.Ldap.UserName": "Notanda nafn",
+    "Description:Abp.Ldap.UserName": "Notanda nafn",
+    "DisplayName:Abp.Ldap.Password": "Lykilorð",
+    "Description:Abp.Ldap.Password": "Lykilorð"
+  }
+}
