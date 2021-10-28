@@ -1,5 +1,8 @@
-﻿(
-    function () {
+﻿var abp = abp || {};
+(function () {
+    abp.utils = abp.utils || {};
+
+    abp.utils.setHTMLDir = function () {
         var isRtl = JSON.parse(localStorage.getItem("Abp.IsRtl"));
         var htmlTag = document.getElementsByTagName("html")[0];
 
@@ -14,4 +17,6 @@
             }
         }
     }
-)();
+
+    abp.utils.setHTMLDir();
+})();
