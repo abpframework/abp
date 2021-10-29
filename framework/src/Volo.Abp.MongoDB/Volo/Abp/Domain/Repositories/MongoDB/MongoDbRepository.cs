@@ -471,6 +471,24 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 .ToListAsync(cancellationToken);
         }
 
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken = GetCancellationToken(cancellationToken);
+
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(predicate)
+                .OrderBy(sorting)
+                .As<IMongoQueryable<TEntity>>()
+                .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
+                .ToListAsync(cancellationToken);
+        }
+
         public override async Task DeleteAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,

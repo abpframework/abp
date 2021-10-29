@@ -257,6 +257,25 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var queryable = includeDetails
+                ? await WithDetailsAsync()
+                : await GetDbSetAsync();
+
+            return await queryable
+                .Where(predicate)
+                .OrderBy(sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         [Obsolete("Use GetQueryableAsync method.")]
         protected override IQueryable<TEntity> GetQueryable()
         {

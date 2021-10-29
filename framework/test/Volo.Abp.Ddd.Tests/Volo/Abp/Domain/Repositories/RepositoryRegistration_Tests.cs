@@ -352,6 +352,12 @@ namespace Volo.Abp.Domain.Repositories
             {
                 throw new NotImplementedException();
             }
+
+             public override Task<List<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate, int skipCount, int maxResultCount, string sorting, bool includeDetails = false,
+                CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public class MyTestDefaultRepository<TEntity, TKey> : MyTestDefaultRepository<TEntity>, IRepository<TEntity, TKey>

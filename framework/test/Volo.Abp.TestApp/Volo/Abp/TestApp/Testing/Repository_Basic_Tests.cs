@@ -68,6 +68,14 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetPagedListAsync_With_Predicate()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(p => p.Name.Contains("D"), 0, 10, "name");
+            persons.Count.ShouldBeGreaterThan(0);
+            persons.ShouldAllBe(p => p.Name.Contains("D"));
+        }
+
+        [Fact]
         public async Task GetAsync_With_Predicate()
         {
             var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");

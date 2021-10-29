@@ -289,6 +289,21 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
                 .PageBy(skipCount, maxResultCount)
                 .ToList();
         }
+
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            Expression<Func<TEntity, bool>> predicate
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return (await GetQueryableAsync())
+                .Where(predicate)
+                .OrderBy(sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToList();
+        }
     }
 
     public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TKey>
