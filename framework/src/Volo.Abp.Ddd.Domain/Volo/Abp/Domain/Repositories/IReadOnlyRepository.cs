@@ -37,6 +37,14 @@ namespace Volo.Abp.Domain.Repositories
             [NotNull] Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
+
+        Task<List<TEntity>> GetPagedListAsync(
+            [NotNull] Expression<Func<TEntity, bool>> predicate,
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
     }
 
     public interface IReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity>, IReadOnlyBasicRepository<TEntity, TKey>

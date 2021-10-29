@@ -291,7 +291,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         }
 
         public override async Task<List<TEntity>> GetPagedListAsync(
-            Expression<Func<TEntity, bool>> predicate
+            Expression<Func<TEntity, bool>> predicate,
             int skipCount,
             int maxResultCount,
             string sorting,
