@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ToasterService } from '@abp/ng.theme.shared';
 import {
-  AbpApplicationConfigurationService,
   AbpTenantService,
   ConfigStateService,
   CurrentTenantDto,
   SessionStateService,
 } from '@abp/ng.core';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { Injectable } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 
 @Injectable()
@@ -24,7 +23,6 @@ export class TenantBoxService {
     private tenantService: AbpTenantService,
     private sessionState: SessionStateService,
     private configState: ConfigStateService,
-    private appConfigService: AbpApplicationConfigurationService,
   ) {}
 
   onSwitch() {
@@ -57,7 +55,7 @@ export class TenantBoxService {
 
   private setTenant(tenant: CurrentTenantDto) {
     this.sessionState.setTenant(tenant);
-    this.appConfigService.get().subscribe(res => this.configState.setState(res));
+    this.configState.refreshAppState();
   }
 
   private showError() {

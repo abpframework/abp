@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,15 +14,6 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
         where TEntity : class, IEntity
     {
-        [Obsolete("This method will be removed in future versions.")]
-        public virtual Type ElementType => GetQueryable().ElementType;
-
-        [Obsolete("This method will be removed in future versions.")]
-        public virtual Expression Expression => GetQueryable().Expression;
-
-        [Obsolete("This method will be removed in future versions.")]
-        public virtual IQueryProvider Provider => GetQueryable().Provider;
-
         [Obsolete("Use WithDetailsAsync method.")]
         public virtual IQueryable<TEntity> WithDetails()
         {
@@ -44,18 +34,6 @@ namespace Volo.Abp.Domain.Repositories
         public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             return GetQueryableAsync();
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public IEnumerator<TEntity> GetEnumerator()
-        {
-            return GetQueryable().GetEnumerator();
         }
 
         [Obsolete("Use GetQueryableAsync method.")]

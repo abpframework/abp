@@ -22,6 +22,8 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
@@ -59,6 +61,10 @@ namespace Volo.Abp.EntityFrameworkCore
         public IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
         public IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
+
+        public IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
+
+        public ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
         public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
 
@@ -150,20 +156,21 @@ namespace Volo.Abp.EntityFrameworkCore
             try
             {
                 var auditLog = AuditingManager?.Current?.Log;
-
                 List<EntityChangeInfo> entityChangeList = null;
                 if (auditLog != null)
                 {
                     entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
                 }
 
-                var changeReport = ApplyAbpConcepts();
-
+                HandlePropertiesBeforeSave();
+                
+                var eventReport = CreateEventReport();
+                
                 var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
-                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+                PublishEntityEvents(eventReport);
 
-                if (auditLog != null)
+                if (entityChangeList != null)
                 {
                     EntityHistoryHelper.UpdateChangeList(entityChangeList);
                     auditLog.EntityChanges.AddRange(entityChangeList);
@@ -179,6 +186,23 @@ namespace Volo.Abp.EntityFrameworkCore
             finally
             {
                 ChangeTracker.AutoDetectChangesEnabled = true;
+            }
+        }
+
+        private void PublishEntityEvents(EntityEventReport changeReport)
+        {
+            foreach (var localEvent in changeReport.DomainEvents)
+            {
+                UnitOfWorkManager.Current?.AddOrReplaceLocalEvent(
+                    new UnitOfWorkEventRecord(localEvent.EventData.GetType(), localEvent.EventData, localEvent.EventOrder)
+                );
+            }
+
+            foreach (var distributedEvent in changeReport.DistributedEvents)
+            {
+                UnitOfWorkManager.Current?.AddOrReplaceDistributedEvent(
+                    new UnitOfWorkEventRecord(distributedEvent.EventData.GetType(), distributedEvent.EventData, distributedEvent.EventOrder)
+                );
             }
         }
 
@@ -202,11 +226,18 @@ namespace Volo.Abp.EntityFrameworkCore
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
 
             ChangeTracker.Tracked += ChangeTracker_Tracked;
+            ChangeTracker.StateChanged += ChangeTracker_StateChanged;
         }
 
         protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
         {
             FillExtraPropertiesForTrackedEntities(e);
+            PublishEventsForTrackedEntity(e.Entry);
+        }
+
+        protected virtual void ChangeTracker_StateChanged(object sender, EntityStateChangedEventArgs e)
+        {
+            PublishEventsForTrackedEntity(e.Entry);
         }
 
         protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
@@ -255,36 +286,96 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
-        protected virtual EntityChangeReport ApplyAbpConcepts()
-        {
-            var changeReport = new EntityChangeReport();
-
-            foreach (var entry in ChangeTracker.Entries().ToList())
-            {
-                ApplyAbpConcepts(entry, changeReport);
-            }
-
-            return changeReport;
-        }
-
-        protected virtual void ApplyAbpConcepts(EntityEntry entry, EntityChangeReport changeReport)
+        private void PublishEventsForTrackedEntity(EntityEntry entry)
         {
             switch (entry.State)
             {
                 case EntityState.Added:
-                    ApplyAbpConceptsForAddedEntity(entry, changeReport);
+                    ApplyAbpConceptsForAddedEntity(entry);
+                    EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
+                    EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                     break;
                 case EntityState.Modified:
-                    ApplyAbpConceptsForModifiedEntity(entry, changeReport);
+                    ApplyAbpConceptsForModifiedEntity(entry);
+                    if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+                    {
+                        if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+                        {
+                            EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
+                            EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
+                        }
+                        else
+                        {
+                            EntityChangeEventHelper.PublishEntityUpdatingEvent(entry.Entity);
+                            EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
+                        }
+                    }
+
                     break;
                 case EntityState.Deleted:
-                    ApplyAbpConceptsForDeletedEntity(entry, changeReport);
+                    ApplyAbpConceptsForDeletedEntity(entry);
+                    EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
+                    EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                     break;
             }
+        }
 
-            HandleExtraPropertiesOnSave(entry);
+        protected virtual void HandlePropertiesBeforeSave()
+        {
+            foreach (var entry in ChangeTracker.Entries().ToList())
+            {
+                HandleExtraPropertiesOnSave(entry);
 
-            AddDomainEvents(changeReport, entry.Entity);
+                if (entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
+                {
+                    UpdateConcurrencyStamp(entry);
+                }
+            }
+        }
+
+        protected virtual EntityEventReport CreateEventReport()
+        {
+            var eventReport = new EntityEventReport();
+
+            foreach (var entry in ChangeTracker.Entries().ToList())
+            {
+                var generatesDomainEventsEntity = entry.Entity as IGeneratesDomainEvents;
+                if (generatesDomainEventsEntity == null)
+                {
+                    continue;
+                }
+
+                var localEvents = generatesDomainEventsEntity.GetLocalEvents()?.ToArray();
+                if (localEvents != null && localEvents.Any())
+                {
+                    eventReport.DomainEvents.AddRange(
+                        localEvents.Select(
+                            eventRecord => new DomainEventEntry(
+                                entry.Entity,
+                                eventRecord.EventData,
+                                eventRecord.EventOrder
+                            )
+                        )
+                    );
+                    generatesDomainEventsEntity.ClearLocalEvents();
+                }
+
+                var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents()?.ToArray();
+                if (distributedEvents != null && distributedEvents.Any())
+                {
+                    eventReport.DistributedEvents.AddRange(
+                        distributedEvents.Select(
+                            eventRecord => new DomainEventEntry(
+                                entry.Entity,
+                                eventRecord.EventData,
+                                eventRecord.EventOrder)
+                        )
+                    );
+                    generatesDomainEventsEntity.ClearDistributedEvents();
+                }
+            }
+
+            return eventReport;
         }
 
         protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
@@ -361,42 +452,41 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
-        protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry)
         {
             CheckAndSetId(entry);
             SetConcurrencyStampIfNull(entry);
             SetCreationAuditProperties(entry);
-            changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
         }
 
-        protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry)
         {
             if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
             {
-                UpdateConcurrencyStamp(entry);
                 SetModificationAuditProperties(entry);
 
                 if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                 {
                     SetDeletionAuditProperties(entry);
-                    changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
-                }
-                else
-                {
-                    changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Updated));
                 }
             }
         }
 
-        protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry)
         {
-            if (TryCancelDeletionForSoftDelete(entry))
+            if (!(entry.Entity is ISoftDelete))
             {
-                UpdateConcurrencyStamp(entry);
-                SetDeletionAuditProperties(entry);
+                return;
             }
 
-            changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+            if (IsHardDeleted(entry))
+            {
+                return;
+            }
+
+            entry.Reload();
+            entry.Entity.As<ISoftDelete>().IsDeleted = true;
+            entry.State = EntityState.Modified;
         }
 
         protected virtual bool IsHardDeleted(EntityEntry entry)
@@ -410,29 +500,6 @@ namespace Volo.Abp.EntityFrameworkCore
             return hardDeletedEntities.Contains(entry.Entity);
         }
 
-        protected virtual void AddDomainEvents(EntityChangeReport changeReport, object entityAsObj)
-        {
-            var generatesDomainEventsEntity = entityAsObj as IGeneratesDomainEvents;
-            if (generatesDomainEventsEntity == null)
-            {
-                return;
-            }
-
-            var localEvents = generatesDomainEventsEntity.GetLocalEvents()?.ToArray();
-            if (localEvents != null && localEvents.Any())
-            {
-                changeReport.DomainEvents.AddRange(localEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
-                generatesDomainEventsEntity.ClearLocalEvents();
-            }
-
-            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents()?.ToArray();
-            if (distributedEvents != null && distributedEvents.Any())
-            {
-                changeReport.DistributedEvents.AddRange(distributedEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
-                generatesDomainEventsEntity.ClearDistributedEvents();
-            }
-        }
-
         protected virtual void UpdateConcurrencyStamp(EntityEntry entry)
         {
             var entity = entry.Entity as IHasConcurrencyStamp;
@@ -440,7 +507,7 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 return;
             }
-
+            
             Entry(entity).Property(x => x.ConcurrencyStamp).OriginalValue = entity.ConcurrencyStamp;
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
@@ -459,24 +526,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
-        }
-
-        protected virtual bool TryCancelDeletionForSoftDelete(EntityEntry entry)
-        {
-            if (!(entry.Entity is ISoftDelete))
-            {
-                return false;
-            }
-
-            if (IsHardDeleted(entry))
-            {
-                return false;
-            }
-
-            entry.Reload();
-            entry.State = EntityState.Modified;
-            entry.Entity.As<ISoftDelete>().IsDeleted = true;
-            return true;
         }
 
         protected virtual void CheckAndSetId(EntityEntry entry)
@@ -568,7 +617,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
-                if (LazyServiceProvider == null || Clock == null || !Clock.SupportsMultipleTimezone)
+                if (LazyServiceProvider == null || Clock == null)
                 {
                     return;
                 }
@@ -580,7 +629,7 @@ namespace Volo.Abp.EntityFrameworkCore
                         (property.PropertyType == typeof(DateTime) ||
                          property.PropertyType == typeof(DateTime?)) &&
                         property.CanWrite &&
-                        !property.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true)
+                        ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
                     ).ToList();
 
                 dateTimePropertyInfos.ForEach(property =>

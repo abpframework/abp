@@ -1,5 +1,4 @@
-﻿using System;
-using Volo.Abp;
+﻿using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.Docs.Documents;
 using Volo.Docs.Projects;
@@ -9,25 +8,18 @@ namespace Volo.Docs.MongoDB
     public static class DocsMongoDbContextExtensions
     {
         public static void ConfigureDocs(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+            this IMongoModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DocsMongoModelBuilderConfigurationOptions(
-                DocsDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<Project>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "Projects";
+                b.CollectionName = DocsDbProperties.DbTablePrefix + "Projects";
             });
 
             builder.Entity<Document>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "DocumentS";
+                b.CollectionName = DocsDbProperties.DbTablePrefix + "DocumentS";
             });
         }
     }

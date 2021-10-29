@@ -15,10 +15,16 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         /// </summary>
         public string DefaultQueueNamePrefix { get; set; }
 
+        /// <summary>
+        /// Default value: "AbpBackgroundJobsDelayed."
+        /// </summary>
+        public string DefaultDelayedQueueNamePrefix { get; set;}
+
         public AbpRabbitMqBackgroundJobOptions()
         {
             JobQueues = new Dictionary<Type, JobQueueConfiguration>();
             DefaultQueueNamePrefix = "AbpBackgroundJobs.";
+            DefaultDelayedQueueNamePrefix = "AbpBackgroundJobsDelayed.";
         }
     }
 }

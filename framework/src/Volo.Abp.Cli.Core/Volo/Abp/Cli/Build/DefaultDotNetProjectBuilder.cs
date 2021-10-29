@@ -9,6 +9,13 @@ namespace Volo.Abp.Cli.Build
 {
     public class DefaultDotNetProjectBuilder : IDotNetProjectBuilder, ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
+
+        public DefaultDotNetProjectBuilder(ICmdHelper cmdHelper)
+        {
+            CmdHelper = cmdHelper;
+        }
+
         public List<string> BuildProjects(List<DotNetProjectInfo> projects, string arguments)
         {
             var builtProjects = new ConcurrentBag<string>();

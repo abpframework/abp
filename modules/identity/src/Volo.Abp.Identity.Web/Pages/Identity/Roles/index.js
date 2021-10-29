@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityRoleAppService = volo.abp.identity.identityRole;
@@ -38,6 +38,7 @@
                             _permissionsModal.open({
                                 providerName: 'R',
                                 providerKey: data.record.name,
+                                providerKeyDisplayName: data.record.name
                             });
                         },
                     },
@@ -62,6 +63,7 @@
                                 .delete(data.record.id)
                                 .then(function () {
                                     _dataTable.ajax.reload();
+                                    abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
                     }

@@ -1,4 +1,4 @@
-﻿# ABP CLI
+# ABP CLI
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
 

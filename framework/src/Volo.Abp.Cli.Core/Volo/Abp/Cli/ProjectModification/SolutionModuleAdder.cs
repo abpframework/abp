@@ -30,6 +30,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
         public NewCommand NewCommand { get; }
         public BundleCommand BundleCommand { get; }
+        public ICmdHelper CmdHelper { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -58,7 +59,8 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder angularSourceCodeAdder,
             NewCommand newCommand,
             BundleCommand bundleCommand,
-            CliHttpClientFactory cliHttpClientFactory)
+            CliHttpClientFactory cliHttpClientFactory,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -74,12 +76,12 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder = angularSourceCodeAdder;
             NewCommand = newCommand;
             BundleCommand = bundleCommand;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
-        public virtual async Task AddAsync(
-            [NotNull] string solutionFile,
+        public virtual async Task<ModuleWithMastersInfo> AddAsync([NotNull] string solutionFile,
             [NotNull] string moduleName,
             string version,
             bool skipDbMigrations = false,
@@ -94,8 +96,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
             module = RemoveIncompatiblePackages(module, version);
 
-            Logger.LogInformation(
-                $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
+            Logger.LogInformation($"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
@@ -137,6 +138,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 CmdHelper.OpenWebPage(documentationLink);
             }
+
+            return module;
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
@@ -146,7 +149,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return module;
         }
 
-        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
+        private static bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
@@ -620,7 +623,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!string.IsNullOrEmpty(dbMigratorProject))
             {
-                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run");
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
             }
         }
 

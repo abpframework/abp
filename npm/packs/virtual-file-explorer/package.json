@@ -1,12 +1,12 @@
 {
-  "version": "4.4.3",
+  "version": "5.0.0-beta.2",
   "name": "@abp/virtual-file-explorer",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/clipboard": "~4.4.3",
-    "@abp/prismjs": "~4.4.3"
+    "@abp/clipboard": "~5.0.0-beta.2",
+    "@abp/prismjs": "~5.0.0-beta.2"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

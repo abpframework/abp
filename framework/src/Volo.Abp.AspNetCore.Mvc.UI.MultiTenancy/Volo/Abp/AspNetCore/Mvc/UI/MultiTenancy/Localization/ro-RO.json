@@ -1,0 +1,13 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "GivenTenantIsNotExist": "Tenantul {0} nu există",
+    "GivenTenantIsNotAvailable": "Tenantul {0} nu este disponibil",
+    "Tenant": "Tenant",
+    "Switch": "schimbă",
+    "Name": "Nume",
+    "SwitchTenantHint": "Lăsaţi câmpul de nume gol pentru a schimba pe host.",
+    "SwitchTenant": "Schimbă tenant",
+    "NotSelected": "Neselectat"
+  }
+}

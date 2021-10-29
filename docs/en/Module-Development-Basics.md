@@ -1,4 +1,4 @@
-﻿# Modularity
+# Modularity
 
 ## Introduction
 

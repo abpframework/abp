@@ -1,4 +1,4 @@
-﻿# EF Core Database Migrations
+# EF Core Database Migrations
 
 This document begins by **introducing the default structure** provided by [the application startup template](Startup-Templates/Application.md) and **discusses various scenarios** you may want to implement for your own application.
 

@@ -9,7 +9,7 @@ using Volo.Docs.Documents;
 
 namespace Volo.Docs.Areas.Documents
 {
-    [RemoteService]
+    [RemoteService(Name = DocsRemoteServiceConsts.RemoteServiceName)]
     [Area("docs")]
     [ControllerName("DocumentResource")]
     [Route("document-resources")]

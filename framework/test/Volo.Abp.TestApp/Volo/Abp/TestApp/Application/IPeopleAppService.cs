@@ -32,5 +32,8 @@ namespace Volo.Abp.TestApp.Application
 
         Task<string> CreateMultipleFileAsync(CreateMultipleFileInput input);
 
+        Task<string> GetParamsFromQueryAsync(GetParamsInput input);
+
+        Task<string> GetParamsFromFormAsync(GetParamsInput input);
     }
 }

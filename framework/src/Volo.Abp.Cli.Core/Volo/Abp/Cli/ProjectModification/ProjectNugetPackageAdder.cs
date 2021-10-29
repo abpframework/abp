@@ -25,6 +25,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public BundleCommand BundleCommand { get; }
         public SourceCodeDownloadService SourceCodeDownloadService { get; }
         public SolutionFileModifier SolutionFileModifier { get; }
+        public ICmdHelper CmdHelper { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
@@ -43,7 +44,8 @@ namespace Volo.Abp.Cli.ProjectModification
             BundleCommand bundleCommand,
             CliHttpClientFactory cliHttpClientFactory,
             SourceCodeDownloadService sourceCodeDownloadService,
-            SolutionFileModifier solutionFileModifier)
+            SolutionFileModifier solutionFileModifier,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             NpmPackageAdder = npmPackageAdder;
@@ -53,6 +55,7 @@ namespace Volo.Abp.Cli.ProjectModification
             BundleCommand = bundleCommand;
             SourceCodeDownloadService = sourceCodeDownloadService;
             SolutionFileModifier = solutionFileModifier;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<ProjectNugetPackageAdder>.Instance;
         }

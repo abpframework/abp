@@ -1,4 +1,4 @@
-﻿
+
 $(function () {
     var l = abp.localization.getResource("CmsKit");
 
@@ -44,6 +44,7 @@ $(function () {
                                     .delete(data.record.id)
                                     .then(function () {
                                         dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }

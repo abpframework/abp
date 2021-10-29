@@ -29,6 +29,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.Http.Client.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -44,7 +45,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName.Web
 {
     [DependsOn(
-        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
@@ -52,6 +52,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpSettingManagementWebModule),
+        typeof(AbpHttpClientWebModule),
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
@@ -80,7 +81,7 @@ namespace MyCompanyName.MyProjectName.Web
 
             ConfigureBundles();
             ConfigureCache();
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureDataProtection(context, configuration, hostingEnvironment);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -213,17 +214,16 @@ namespace MyCompanyName.MyProjectName.Web
             );
         }
 
-        private void ConfigureRedis(
+        private void ConfigureDataProtection(
             ServiceConfigurationContext context,
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
         }
 

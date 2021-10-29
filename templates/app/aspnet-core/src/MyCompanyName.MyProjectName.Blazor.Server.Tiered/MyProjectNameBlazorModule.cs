@@ -98,7 +98,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(configuration);
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureDataProtection(context, configuration, hostingEnvironment);
             ConfigureSwaggerServices(context.Services);
         }
 
@@ -109,7 +109,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
         }
-        
+
         private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
@@ -143,7 +143,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 );
             });
         }
-        
+
         private void ConfigureMultiTenancy()
         {
             Configure<AbpMultiTenancyOptions>(options =>
@@ -219,8 +219,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -252,7 +253,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
-            
+
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new MyProjectNameToolbarContributor());
@@ -274,7 +275,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
-        
+
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
             services.AddAbpSwaggerGen(
@@ -287,17 +288,16 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             );
         }
 
-        private void ConfigureRedis(
+        private void ConfigureDataProtection(
             ServiceConfigurationContext context,
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
         }
 
