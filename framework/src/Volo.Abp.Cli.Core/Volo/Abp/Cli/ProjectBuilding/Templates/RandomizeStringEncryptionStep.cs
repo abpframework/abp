@@ -7,6 +7,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
     public class RandomizeStringEncryptionStep: ProjectBuildPipelineStep
     {
+        protected const string DefaultPassPhrase = "gsKnGZ041HLL4IM8";
+
         public override void Execute(ProjectBuildContext context)
         {
             var appSettings = context.Files
@@ -14,8 +16,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 .Where(x => x.Content.IndexOf("StringEncryption", StringComparison.InvariantCultureIgnoreCase) >= 0)
                 .ToList();
 
-            const string defaultPassPhrase = "gsKnGZ041HLL4IM8";
-            var randomPassPhrase = GetRandomString(defaultPassPhrase.Length);
+            var randomPassPhrase = GetRandomPassPhrase(context);
             foreach (var appSetting in appSettings)
             {
                 appSetting.NormalizeLineEndings();
@@ -23,9 +24,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 var appSettingLines = appSetting.GetLines();
                 for (var i = 0; i < appSettingLines.Length; i++)
                 {
-                    if (appSettingLines[i].Contains("DefaultPassPhrase") && appSettingLines[i].Contains(defaultPassPhrase))
+                    if (appSettingLines[i].Contains("DefaultPassPhrase") && appSettingLines[i].Contains(DefaultPassPhrase))
                     {
-                        appSettingLines[i] = appSettingLines[i].Replace(defaultPassPhrase, randomPassPhrase);
+                        appSettingLines[i] = appSettingLines[i].Replace(DefaultPassPhrase, randomPassPhrase);
                     }
                 }
 
@@ -33,11 +34,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
             }
         }
 
-        protected static string GetRandomString(int length)
+        protected virtual string GetRandomPassPhrase(ProjectBuildContext context)
         {
             const string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var builder = new StringBuilder();
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < DefaultPassPhrase.Length; i++)
             {
                 builder.Append(letters[RandomHelper.GetRandom(0, letters.Length)]);
             }
