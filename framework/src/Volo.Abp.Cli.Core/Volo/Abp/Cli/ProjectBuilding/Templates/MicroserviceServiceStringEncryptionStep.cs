@@ -7,33 +7,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
     public class MicroserviceServiceStringEncryptionStep : RandomizeStringEncryptionStep
     {
-        public override void Execute(ProjectBuildContext context)
+        protected override string GetRandomPassPhrase(ProjectBuildContext context)
         {
-            var appSettings = context.Files
-                .Where(x => !x.IsDirectory && x.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => x.Content.IndexOf("StringEncryption", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                .ToList();
-
-            const string defaultPassPhrase = "gsKnGZ041HLL4IM8";
-            var randomPassPhrase = FindDefaultPassPhrase(context) ?? GetRandomString(defaultPassPhrase.Length);
-            foreach (var appSetting in appSettings)
-            {
-                appSetting.NormalizeLineEndings();
-
-                var appSettingLines = appSetting.GetLines();
-                for (var i = 0; i < appSettingLines.Length; i++)
-                {
-                    if (appSettingLines[i].Contains("DefaultPassPhrase") && appSettingLines[i].Contains(defaultPassPhrase))
-                    {
-                        appSettingLines[i] = appSettingLines[i].Replace(defaultPassPhrase, randomPassPhrase);
-                    }
-                }
-
-                appSetting.SetLines(appSettingLines);
-            }
+            return FindDefaultPassPhrase(context) ?? base.GetRandomPassPhrase(context);
         }
 
-        protected static string FindDefaultPassPhrase(ProjectBuildContext context)
+        protected virtual string FindDefaultPassPhrase(ProjectBuildContext context)
         {
             var directoryInfo = new DirectoryInfo(context.BuildArgs.OutputFolder);
             do
