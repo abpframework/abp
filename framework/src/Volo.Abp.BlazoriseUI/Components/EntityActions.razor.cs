@@ -18,6 +18,9 @@ namespace Volo.Abp.BlazoriseUI.Components
         public Color ToggleColor { get; set; } = Color.Primary;
 
         [Parameter]
+        public Size Size { get; set; } = Size.Medium;
+
+        [Parameter]
         public string ToggleText { get; set; }
 
         [Parameter]

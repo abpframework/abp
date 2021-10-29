@@ -10,11 +10,11 @@
                         Clicked="async ()=> await PrimaryAction.ActionClickedAsync()">
                     @PrimaryAction.Text
                 </Button>
-                <DropdownToggle Color="@ToggleColor" Split="true" />
+                <DropdownToggle Color="@ToggleColor" Size="@Size" Split="true" />
             }
             else
             {
-                <DropdownToggle Class="btn-block" Color="@ToggleColor">
+                <DropdownToggle Class="btn-block" Color="@ToggleColor" Size="@Size">
                     @ToggleText
                 </DropdownToggle>
             }
