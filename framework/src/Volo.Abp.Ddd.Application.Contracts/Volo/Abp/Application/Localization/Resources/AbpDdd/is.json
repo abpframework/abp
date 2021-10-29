@@ -1,0 +1,6 @@
+{
+  "culture": "is",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} getur ekki verið meira en {1}! Auka {2}. {3} á þjón til að leyfa fleiri niðurstöður."
+  }
+}

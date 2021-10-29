@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Volo.Abp.AutoMapper;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
@@ -24,7 +24,8 @@ namespace Volo.Blogging
             CreateMap<PostCacheItem, PostWithDetailsDto>()
                 .IgnoreModificationAuditedObjectProperties()
                 .IgnoreDeletionAuditedObjectProperties()
-                .Ignore(x=>x.Writer)
+                .Ignore(x => x.ConcurrencyStamp)
+                .Ignore(x => x.Writer)
                 .Ignore(x => x.CommentCount)
                 .Ignore(x => x.Tags);
         }

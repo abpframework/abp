@@ -38,7 +38,7 @@ This configuration recursively adds all files under the **MyResources** folder o
 Embedding a file in the project/assembly may cause problems if a file name contains some special chars. To overcome this limitation;
 
 1. Add [Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet package to the project that contains the embedded resource(s).
-2. Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyConfig>...</PropertyConfig>` section of your `.csproj` file.
+2. Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyGroup>...</PropertyGroup>` section of your `.csproj` file.
 
 > While these two steps are optional and ABP can work without these configuration, it is strongly suggested to make it.
 

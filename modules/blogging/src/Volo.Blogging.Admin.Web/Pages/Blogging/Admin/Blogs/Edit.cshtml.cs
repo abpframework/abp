@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs;
@@ -53,7 +54,7 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
             return Page();
         }
 
-        public class BlogEditViewModel
+        public class BlogEditViewModel : IHasConcurrencyStamp
         {
             [HiddenInput]
             [Required]
@@ -69,8 +70,9 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 
             [DynamicStringLength(typeof(BlogConsts), nameof(BlogConsts.MaxDescriptionLength))]
             public string Description { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
     }
-
-
 }

@@ -1,1 +1,1 @@
-﻿Hello {{model.name}}, {{L "HowAreYou" }}
+Hello {{model.name}}, {{L "HowAreYou" }}

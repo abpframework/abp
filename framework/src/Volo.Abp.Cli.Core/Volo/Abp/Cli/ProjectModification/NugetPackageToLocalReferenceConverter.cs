@@ -31,13 +31,13 @@ namespace Volo.Abp.Cli.ProjectModification
             foreach (var projectFile in projectFiles)
             {
                 var content = File.ReadAllText(projectFile);
-                var doc = new XmlDocument() { PreserveWhitespace = true };
-
-                doc.Load(StreamHelper.GenerateStreamFromString(content));
-
-                var convertedProject = ProcessReferenceNodes(folder, doc, nugetPackageList, localPathPrefix, sourceFile, modulePrefix);
-
-                File.WriteAllText(projectFile, convertedProject);
+                using (var stream = StreamHelper.GenerateStreamFromString(content))
+                {
+                    var doc = new XmlDocument() { PreserveWhitespace = true };
+                    doc.Load(stream);
+                    var convertedProject = ProcessReferenceNodes(folder, doc, nugetPackageList, localPathPrefix, sourceFile, modulePrefix);
+                    File.WriteAllText(projectFile, convertedProject);
+                }
             }
         }
 
@@ -67,7 +67,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
                             oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase) ||
-                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase))
+                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase)||
+                            oldNodeIncludeValue.EndsWith(".Demo", StringComparison.InvariantCultureIgnoreCase))
                         {
                             tempSourceFile = "test";
                         }

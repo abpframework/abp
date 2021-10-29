@@ -10,10 +10,12 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class EfCoreMigrationManager : ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         public ILogger<EfCoreMigrationManager> Logger { get; set; }
 
-        public EfCoreMigrationManager()
+        public EfCoreMigrationManager(ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             Logger = NullLogger<EfCoreMigrationManager>.Instance;
         }
 
@@ -69,9 +71,10 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual string FindDbContextName(string dbMigrationsFolder)
         {
-            var dbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
-                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs"));
+            var dbContext = Directory.GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs")) ??
+                            Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
 
             if (dbContext == null)
             {
@@ -83,9 +86,10 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual string FindTenantDbContextName(string dbMigrationsFolder)
         {
-            var tenantDbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
-                .FirstOrDefault();
+            var tenantDbContext = Directory.GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault() ??
+                                  Directory.GetFiles(dbMigrationsFolder, "*TenantDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault();
 
             if (tenantDbContext == null)
             {

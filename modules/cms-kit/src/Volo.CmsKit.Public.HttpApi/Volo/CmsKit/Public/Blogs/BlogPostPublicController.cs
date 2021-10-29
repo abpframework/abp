@@ -11,7 +11,7 @@ namespace Volo.CmsKit.Public.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/blog-posts")]
     public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPublicAppService
     {

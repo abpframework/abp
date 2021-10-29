@@ -1,4 +1,4 @@
-﻿# Automated Testing
+# Automated Testing
 
 ## Introduction
 
@@ -647,7 +647,7 @@ namespace MyProject.Issues
 }
 ````
 
-It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Later and the Domain Layer of your solution.
+It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Layer and the Domain Layer of your solution.
 
 ## UI Tests
 

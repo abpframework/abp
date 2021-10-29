@@ -12,10 +12,12 @@ namespace Volo.Abp.Cli.Commands
 {
     public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 
-        public CreateMigrationAndRunMigratorCommand()
+        public CreateMigrationAndRunMigratorCommand(ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             Logger = NullLogger<CreateMigrationAndRunMigratorCommand>.Instance;
         }
 
@@ -70,9 +72,10 @@ namespace Volo.Abp.Cli.Commands
 
         private string FindTenantDbContextName(string dbMigrationsFolder)
         {
-            var tenantDbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
-                .FirstOrDefault();
+            var tenantDbContext = Directory.GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault() ??
+                                  Directory.GetFiles(dbMigrationsFolder, "*TenantDbContext.cs", SearchOption.AllDirectories)
+                                      .FirstOrDefault();
 
             if (tenantDbContext == null)
             {
@@ -84,9 +87,10 @@ namespace Volo.Abp.Cli.Commands
 
         private string FindDbContextName(string dbMigrationsFolder)
         {
-            var dbContext = Directory
-                .GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
-                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs"));
+            var dbContext = Directory.GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs")) ??
+                            Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
+                                .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
 
             if (dbContext == null)
             {
@@ -96,7 +100,7 @@ namespace Volo.Abp.Cli.Commands
             return Path.GetFileName(dbContext).RemovePostFix(".cs");
         }
 
-        private static string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
+        private string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
         {
             var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
                 ? string.Empty
@@ -105,12 +109,12 @@ namespace Volo.Abp.Cli.Commands
             var addMigrationCmd = $"cd \"{dbMigrationsFolder}\" && " +
                                   $"dotnet ef migrations add Initial --output-dir {outputDirectory} {dbContextOption}";
 
-            return CmdHelper.RunCmdAndGetOutput(addMigrationCmd);
+            return CmdHelper.RunCmdAndGetOutput(addMigrationCmd, out int exitCode);
         }
 
-        private static bool IsDotNetEfToolInstalled()
+        private bool IsDotNetEfToolInstalled()
         {
-            var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
+            var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
             return output.Contains("dotnet-ef");
         }
 

@@ -15,12 +15,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (!typeof(IRepository).IsAssignableFrom(type))
-            {
-                return true;
-            }
-
-            return base.IsConventionalRegistrationDisabled(type);
+            return !typeof(IRepository).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
         }
 
         protected override List<Type> GetExposedServiceTypes(Type type)
@@ -35,10 +30,9 @@ namespace Volo.Abp.Domain.Repositories
                 .ToList();
         }
 
-        protected override ServiceLifetime? GetServiceLifetimeFromClassHierarchy(Type type)
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
         {
-            return base.GetServiceLifetimeFromClassHierarchy(type) ??
-                   ServiceLifetime.Transient;
+            return ServiceLifetime.Transient;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿## Module Architecture Best Practices & Conventions
+## Module Architecture Best Practices & Conventions
 
 ### Solution Structure
 

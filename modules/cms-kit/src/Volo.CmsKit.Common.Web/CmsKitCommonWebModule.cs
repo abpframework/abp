@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Reactions;
@@ -9,7 +10,7 @@ namespace Volo.CmsKit.Web
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(CmsKitCommonHttpApiModule),
+        typeof(CmsKitCommonApplicationContractsModule),
         typeof(AbpAutoMapperModule)
         )]
     public class CmsKitCommonWebModule : AbpModule
@@ -35,6 +36,11 @@ namespace Volo.CmsKit.Web
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<CmsKitCommonWebModule>();
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(CmsKitCommonRemoteServiceConsts.ModuleName);
             });
         }
     }

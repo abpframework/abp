@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Languages": "Diller",
@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "Kaydediliyor...",
     "Actions": "İşlemler",
     "Delete": "Sil",
+    "SuccessfullyDeleted": "Başarıyla silindi",
     "Edit": "Düzenle",
     "Refresh": "Yenile",
     "Language": "Dil",

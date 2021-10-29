@@ -12,5 +12,7 @@ namespace Volo.Abp.Cli.Auth
         public string EmailAddress { get; set; }
 
         public string Organization { get; set; }
+
+        public bool HasSourceCodeAccess { get; set; }
     }
 }

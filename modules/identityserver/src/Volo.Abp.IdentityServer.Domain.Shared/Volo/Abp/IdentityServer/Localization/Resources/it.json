@@ -2,13 +2,14 @@
   "culture": "it",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Il nome della risorsa identità esiste già: {Name}",
-    "Volo.IdentityServer:DuplicateApiResourceName": "L'Api Resource esiste già: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "L'API Resource esiste già: {Name}",
     "Volo.IdentityServer:DuplicateApiScopeName": "L'API Scope esiste già: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId già esistente: {ClientId}",
     "UserLockedOut": "L'account utente è stato bloccato a causa di tentativi di accesso non validi. Attendi qualche istante e riprova.",
     "InvalidUserNameOrPassword": "Username o password non validi!",
-    "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Devi confermare la tua email/numero di telefono.",
+    "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Il tuo account non è attivo o devi confermare la tua e-mail/numero di telefono.",
     "InvalidUsername": "Username o password non validi!",
-    "TheTargetUserIsNotLinkedToYou": "L'utente di destinazione non è collegato a te!"
+    "InvalidAuthenticatorCode": "Codice autenticatore non valido!",
+    "TheTargetUserIsNotLinkedToYou": "L'utente indicato non è collegato a te!"
   }
 }

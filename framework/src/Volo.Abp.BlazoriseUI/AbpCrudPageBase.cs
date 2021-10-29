@@ -504,6 +504,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
             await InvokeAsync(StateHasChanged);
+            await Notify.Success(L["SuccessfullyDeleted"]);
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)

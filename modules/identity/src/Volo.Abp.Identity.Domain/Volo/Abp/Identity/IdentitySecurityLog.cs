@@ -56,6 +56,11 @@ namespace Volo.Abp.Identity
             ClientId = securityLogInfo.ClientId.Truncate(IdentitySecurityLogConsts.MaxClientIdLength);
             CorrelationId = securityLogInfo.CorrelationId.Truncate(IdentitySecurityLogConsts.MaxCorrelationIdLength);
             BrowserInfo = securityLogInfo.BrowserInfo.Truncate(IdentitySecurityLogConsts.MaxBrowserInfoLength);
+
+            foreach (var property in securityLogInfo.ExtraProperties)
+            {
+                ExtraProperties.Add(property.Key, property.Value);
+            }
         }
     }
 }

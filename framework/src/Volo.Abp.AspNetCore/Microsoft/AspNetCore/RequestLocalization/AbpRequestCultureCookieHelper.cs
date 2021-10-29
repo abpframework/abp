@@ -15,6 +15,7 @@ namespace Microsoft.AspNetCore.RequestLocalization
                 CookieRequestCultureProvider.MakeCookieValue(requestCulture),
                 new CookieOptions
                 {
+                    IsEssential = true,
                     Expires = DateTime.Now.AddYears(2)
                 }
             );

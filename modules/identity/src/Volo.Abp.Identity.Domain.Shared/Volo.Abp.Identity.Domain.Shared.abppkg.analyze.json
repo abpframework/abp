@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.Identity.Domain.Shared",
+  "hash": "7db38ac2a2f335158964c4d06d0dfaab",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity",
+      "contentType": "abpModule",
+      "name": "AbpIdentityDomainSharedModule"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using NuGet.Versioning;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -24,7 +24,6 @@ namespace Volo.Abp.Cli.NuGet
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
         private readonly IApiKeyService _apiKeyService;
         private readonly CliHttpClientFactory _cliHttpClientFactory;
-        private List<string> _proPackageList;
         private DeveloperApiKeyResult _apiKeyResult;
 
         public NuGetService(
@@ -42,9 +41,31 @@ namespace Volo.Abp.Cli.NuGet
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
+        public async Task<bool> PackageExistAsync(string packageId, string version = null)
+        {
+            var versionList = await GetPackageVersionListAsync(packageId, false, true);
+
+            if (versionList == null)
+            {
+                return false;
+            }
+
+            if (version == null)
+            {
+                return versionList.Any();
+            }
+
+            return versionList.Contains(version);
+        }
+
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
         {
             var versionList = await GetPackageVersionListAsync(packageId, includeNightly, includeReleaseCandidates);
+
+            if (versionList == null)
+            {
+                return null;
+            }
 
             List<SemanticVersion> versions;
 
@@ -77,36 +98,38 @@ namespace Volo.Abp.Cli.NuGet
         public async Task<List<string>> GetPackageVersionListAsync(string packageId, bool includeNightly = false,
             bool includeReleaseCandidates = false)
         {
-            if (AuthService.IsLoggedIn())
-            {
-                _proPackageList ??= await GetProPackageListAsync();
-            }
-
-            string url;
             if (includeNightly)
             {
-                url = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
-            }
-            else if (_proPackageList?.Contains(packageId) ?? false)
-            {
-                url = await GetNuGetUrlForCommercialPackage(packageId);
-            }
-            else
-            {
-                url = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+                var includeNightlyUrl = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+                return await GetPackageVersionListFromUrlAsync(includeNightlyUrl);
             }
 
-            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+            var nugetUrl = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            var commercialUrl = await GetNuGetUrlForCommercialPackage(packageId);
 
-            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                url,
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            ))
+            return (await GetPackageVersionListFromUrlAsync(nugetUrl)) ?? (await GetPackageVersionListFromUrlAsync(commercialUrl));
+        }
+
+        private async Task<List<string>> GetPackageVersionListFromUrlAsync(string url)
+        {
+            try
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+
+                using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                    url,
+                    cancellationToken: CancellationTokenProvider.Token,
+                    logger: Logger
+                ))
+                {
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -115,38 +138,14 @@ namespace Volo.Abp.Cli.NuGet
             if (_apiKeyResult == null)
             {
                 _apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
+
+                if (_apiKeyResult == null)
+                {
+                    return null;
+                }
             }
 
             return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
-        }
-
-        private async Task<List<string>> GetProPackageListAsync()
-        {
-            var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames";
-            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: true);
-
-            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                url: url,
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            ))
-            {
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
-                }
-
-                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-                if (remoteServiceErrorMessage != null)
-                {
-                    exceptionMessage += remoteServiceErrorMessage;
-                }
-
-                Logger.LogError(exceptionMessage);
-                return null;
-            }
         }
 
         public class NuGetVersionResultDto
