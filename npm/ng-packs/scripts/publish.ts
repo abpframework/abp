@@ -40,9 +40,7 @@ program.parse(process.argv);
         '--compareVersion',
         program.nextVersion,
         '--path',
-        '../ng-packs/packages',
-        '--excludedPackages',
-        '@abp/utils',
+        '../ng-packs/packages'
       ],
       { stdout: 'inherit', cwd: '../../scripts' },
     );
