@@ -3,6 +3,8 @@ import fse from 'fs-extra';
 import * as path from 'path';
 import { log } from './utils/log';
 
+let excludedPackages = [];
+
 (async () => {
   initCommander();
   await compare();
@@ -14,7 +16,14 @@ function initCommander() {
     'version to compare'
   );
   program.requiredOption('-p, --path <path>', 'NPM packages folder path');
+  program.option(
+    '-ep, --excludedPackages <excludedpackages>',
+    'Packages that will not be checked. Can be passed with separeted comma (like @abp/utils,@abp/core)',
+    ''
+  );
   program.parse(process.argv);
+
+  excludedPackages = program.opts().excludedPackages.split(',');
 }
 
 async function compare() {
@@ -30,7 +39,10 @@ async function compare() {
       pkgJson = await fse.readJSON(pkgJsonPath);
     } catch (error) {}
 
-    if (pkgJson.version !== compareVersion) {
+    if (
+      !excludedPackages.includes(pkgJson.name) &&
+      pkgJson.version !== compareVersion
+    ) {
       throwError(pkgJsonPath, pkgJson.name);
     }
 
@@ -53,6 +65,7 @@ async function compareDependencies(
     const entry = entries[i];
 
     if (
+      !excludedPackages.includes(entry[0]) &&
       entry[0].match(/@(abp|volo)/)?.length &&
       entry[1] !== `~${compareVersion}`
     ) {

@@ -41,13 +41,13 @@ program.parse(process.argv);
         program.nextVersion,
         '--path',
         '../ng-packs/packages',
+        '--excludedPackages',
+        '@abp/utils',
       ],
       { stdout: 'inherit', cwd: '../../scripts' },
     );
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
-
-    return;
 
     await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
