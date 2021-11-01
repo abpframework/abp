@@ -70,12 +70,20 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            await AuthService.LoginAsync(
-                commandLineArgs.Target,
-                password,
-                organization
-            );
-
+            try
+            {
+                await AuthService.LoginAsync(
+                    commandLineArgs.Target,
+                    password,
+                    organization
+                );
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message);
+                return;
+            }
+            
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
         }
 
