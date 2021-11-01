@@ -22,11 +22,6 @@ function initCommander() {
     .requiredOption(
       '-tc, --targetChannel <target-channel>',
       'target channel to send message'
-    )
-    .option(
-      '-r, --registry <registry>',
-      'npm server registry, default: https://registry.npmjs.org',
-      'https://registry.npmjs.org'
     );
 
   program.parse(process.argv);
