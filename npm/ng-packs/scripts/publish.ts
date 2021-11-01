@@ -33,8 +33,21 @@ program.parse(process.argv);
     await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
 
     await updateVersion(program.nextVersion);
+    await execa(
+      'yarn',
+      [
+        'validate-versions',
+        '--compareVersion',
+        program.nextVersion,
+        '--path',
+        '../ng-packs/packages',
+      ],
+      { stdout: 'inherit', cwd: '../../scripts' },
+    );
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
+
+    return;
 
     await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });

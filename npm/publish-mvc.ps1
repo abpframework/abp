@@ -26,7 +26,11 @@ if ($IsPrerelase) {
 
 $commands = (
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "npm run replace-with-tilde",
+  "yarn replace-with-tilde",
+  "cd scripts",
+  "yarn install",
+  "yarn validate-versions --compareVersion $Version --path ../packs",
+  "cd ..",
   $PacksPublishCommand
 )
 

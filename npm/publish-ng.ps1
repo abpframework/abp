@@ -34,7 +34,6 @@ $commands = (
   $NgPacksPublishCommand,
   "cd ../../",
   "cd scripts",
-  "yarn",
   "yarn remove-lock-files",
   "cd ..",
   $UpdateGulpCommand
