@@ -55,7 +55,6 @@ async function checkPackages() {
       .get(`https://registry.npmjs.org/${packageName}`)
       .then((res) => {
         const versions = Object.keys(res.data.time);
-        // console.log(packageName, versions[versions.length - 1]);
         return versions[versions.length - 1];
       });
 
