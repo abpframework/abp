@@ -2,7 +2,7 @@
 {
     public class AbpDropdownMenuTagHelper : AbpTagHelper<AbpDropdownMenuTagHelper, AbpDropdownMenuTagHelperService>
     {
-            public DropdownAlign Align { get; set; } = DropdownAlign.Left;
+            public DropdownAlign Align { get; set; } = DropdownAlign.Start;
 
         public AbpDropdownMenuTagHelper(AbpDropdownMenuTagHelperService tagHelperService)
             : base(tagHelperService)
