@@ -29,7 +29,7 @@ $commands = (
   "yarn replace-with-tilde",
   "cd scripts",
   "yarn install",
-  "yarn validate-versions --compareVersion $Version --path ../packs --excludedPackages @abp/utils",
+  "yarn validate-versions --compareVersion $Version --path ../packs",
   "cd ..",
   $PacksPublishCommand
 )
