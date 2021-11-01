@@ -18,7 +18,11 @@ namespace Volo.CmsKit.Public.Tags.ClientProxies
     {
         public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
         {
-            return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), entityType, entityId);
+            return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(string), entityId }
+            });
         }
     }
 }

@@ -1,0 +1,23 @@
+<ol class="breadcrumb" *ngIf="items.length">
+  <li class="breadcrumb-item">
+    <a routerLink="/"><i class="fa fa-home"></i> </a>
+  </li>
+  <li
+    *ngFor="let item of items; let last = last"
+    class="breadcrumb-item"
+    [class.active]="last"
+    aria-current="page"
+  >
+    <ng-container
+      *ngTemplateOutlet="item.path ? linkTemplate : textTemplate; context: { $implicit: item }"
+    ></ng-container>
+  </li>
+</ol>
+
+<ng-template #linkTemplate let-item>
+  <a [routerLink]="item.path"> {{ item.name | abpLocalization }}</a>
+</ng-template>
+
+<ng-template #textTemplate let-item>
+  {{ item.name | abpLocalization }}
+</ng-template>

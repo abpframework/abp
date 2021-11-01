@@ -62,7 +62,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
         private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            steps.Add(new RandomizeStringEncryptionStep());
+            steps.Add(new MicroserviceServiceStringEncryptionStep());
         }
     }
 }

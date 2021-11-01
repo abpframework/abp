@@ -1,4 +1,4 @@
-﻿# ABP Framework Road Map
+# ABP Framework Road Map
 
 This document provides a road map, release schedule and planned features for the ABP Framework.
 

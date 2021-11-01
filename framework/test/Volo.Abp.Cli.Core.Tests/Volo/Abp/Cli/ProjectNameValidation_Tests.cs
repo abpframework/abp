@@ -39,24 +39,19 @@ namespace Volo.Abp.Cli
         }
 
         [Fact]
-        public async Task Parent_Directory_Char_Contains_Test()
-        {
-
-            var args = new CommandLineArgs("new", "Test..Test");
-            await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
-        }
-
-        [Fact]
         public async Task Contains_Illegal_Keyword_Test()
         {
             var illegalKeywords = new[]
             {
-               "Blazor"
+                "Blazor"
             };
 
             foreach (var illegalKeyword in illegalKeywords)
             {
                 var args = new CommandLineArgs("new", illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+
+                args = new CommandLineArgs("new", "Acme." + illegalKeyword);
                 await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
             }
         }

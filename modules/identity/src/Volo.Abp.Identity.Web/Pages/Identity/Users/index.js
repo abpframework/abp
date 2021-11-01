@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityUserAppService = volo.abp.identity.identityUser;
@@ -58,9 +58,10 @@
                                 .delete(data.record.id)
                                 .then(function () {
                                     _dataTable.ajax.reload();
+                                    abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
-                    } 
+                    }
                 ]
             );
         }
@@ -79,6 +80,17 @@
                     {
                         title: l('UserName'),
                         data: 'userName',
+                        render: function (data, type, row) {
+                            row.userName = $.fn.dataTable.render.text().display(row.userName);
+                            if (!row.isActive) {
+                                return  '<i data-toggle="tooltip" data-placement="top" title="' +
+                                    l('ThisUserIsNotActiveMessage') +
+                                    '" class="fa fa-ban text-danger"></i> ' +
+                                    '<span class="opc-65">' + row.userName + '</span>';
+                            }
+
+                            return row.userName;
+                        }
                     },
                     {
                         title: l('EmailAddress'),
@@ -93,7 +105,7 @@
         },
         0 //adds as the first contributor
     );
-    
+
     $(function () {
         var _$wrapper = $('#IdentityUsersWrapper');
         var _$table = _$wrapper.find('table');

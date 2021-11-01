@@ -177,38 +177,6 @@
 
   })();
 
-  // controller volo.abp.identity.profile
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.abp.identity.profile');
-
-    volo.abp.identity.profile.get = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/identity/my-profile',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.abp.identity.profile.update = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/identity/my-profile',
-        type: 'PUT',
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.abp.identity.profile.changePassword = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/identity/my-profile/change-password',
-        type: 'POST',
-        dataType: null,
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-  })();
-
 })();
 
 

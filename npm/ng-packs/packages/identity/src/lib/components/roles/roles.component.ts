@@ -1,4 +1,5 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
@@ -10,8 +11,6 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
-import { IdentityRoleService } from '../../proxy/identity/identity-role.service';
-import { IdentityRoleDto } from '../../proxy/identity/models';
 
 @Component({
   selector: 'abp-roles',

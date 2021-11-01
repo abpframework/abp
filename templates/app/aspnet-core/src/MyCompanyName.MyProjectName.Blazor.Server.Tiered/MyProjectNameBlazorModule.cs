@@ -94,11 +94,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
-            ConfigureHttpClient(context);
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(configuration);
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureDataProtection(context, configuration, hostingEnvironment);
             ConfigureSwaggerServices(context.Services);
         }
 
@@ -109,7 +108,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
         }
-        
+
         private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
@@ -143,7 +142,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 );
             });
         }
-        
+
         private void ConfigureMultiTenancy()
         {
             Configure<AbpMultiTenancyOptions>(options =>
@@ -219,6 +218,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
                 options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
@@ -229,14 +229,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
                 options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
                 options.Languages.Add(new LanguageInfo("es", "es", "Español"));
-            });
-        }
-
-        private static void ConfigureHttpClient(ServiceConfigurationContext context)
-        {
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
             });
         }
 
@@ -253,7 +245,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
-            
+
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new MyProjectNameToolbarContributor());
@@ -275,7 +267,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
-        
+
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
             services.AddAbpSwaggerGen(
@@ -288,17 +280,16 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             );
         }
 
-        private void ConfigureRedis(
+        private void ConfigureDataProtection(
             ServiceConfigurationContext context,
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
         }
 

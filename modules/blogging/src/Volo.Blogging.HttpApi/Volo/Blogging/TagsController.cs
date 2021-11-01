@@ -10,9 +10,9 @@ using Volo.Blogging.Tagging.Dtos;
 namespace Volo.Blogging
 {
     [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
-    [Area("blogging")]
+    [Area(BloggingRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/tags")]
-    public class TagsController : AbpController, ITagAppService
+    public class TagsController : AbpControllerBase, ITagAppService
     {
         private readonly ITagAppService _tagAppService;
 

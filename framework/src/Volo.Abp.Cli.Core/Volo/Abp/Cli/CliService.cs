@@ -24,17 +24,20 @@ namespace Volo.Abp.Cli
         protected ICommandSelector CommandSelector { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected NuGetService NuGetService { get; }
+        public ICmdHelper CmdHelper { get; }
 
         public CliService(
             ICommandLineArgumentParser commandLineArgumentParser,
             ICommandSelector commandSelector,
             IServiceScopeFactory serviceScopeFactory,
-            NuGetService nugetService)
+            NuGetService nugetService,
+            ICmdHelper cmdHelper)
         {
             CommandLineArgumentParser = commandLineArgumentParser;
             CommandSelector = commandSelector;
             ServiceScopeFactory = serviceScopeFactory;
             NuGetService = nugetService;
+            CmdHelper = cmdHelper;
 
             Logger = NullLogger<CliService>.Instance;
         }
@@ -42,7 +45,7 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
-            
+
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
 #if !DEBUG
@@ -147,7 +150,7 @@ namespace Volo.Abp.Cli
                 await RunInternalAsync(args);
             }
         }
-        
+
         private async Task RunInternalAsync(CommandLineArgs commandLineArgs)
         {
             var commandType = CommandSelector.Select(commandLineArgs);
@@ -203,7 +206,7 @@ namespace Volo.Abp.Cli
         {
             SemanticVersion currentCliVersion = default;
 
-            var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g"));
+            var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g", out int exitCode));
             string line;
             while ((line = await consoleOutput.ReadLineAsync()) != null)
             {

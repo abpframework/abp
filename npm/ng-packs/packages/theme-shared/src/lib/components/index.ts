@@ -1,3 +1,4 @@
+export * from './breadcrumb-items/breadcrumb-items.component';
 export * from './breadcrumb/breadcrumb.component';
 export * from './button/button.component';
 export * from './confirmation/confirmation.component';
@@ -7,8 +8,5 @@ export * from './loading/loading.component';
 export * from './modal/modal-close.directive';
 export * from './modal/modal-ref.service';
 export * from './modal/modal.component';
-export * from './sort-order-icon/sort-order-icon.component';
-export * from './table-empty-message/table-empty-message.component';
-export * from './table/table.component';
 export * from './toast-container/toast-container.component';
 export * from './toast/toast.component';

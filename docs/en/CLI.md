@@ -1,4 +1,4 @@
-﻿# ABP CLI
+# ABP CLI
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
 
@@ -89,12 +89,14 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-      * `angular`: Angular. There are some additional options for this template:
-        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-      * `blazor`: Blazor. There are some additional options for this template:
-        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-      * `none`: Without UI. There are some additional options for this template:
-        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
+      * `angular`: Angular UI. There are some additional options for this template:
+        * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+      * `blazor`: Blazor UI. There are some additional options for this template:
+        * `--separate-identity-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+      * `blazor-server`: Blazor Server UI. There are some additional options for this template:
+        * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *IdentityServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+      * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
+        * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
@@ -264,43 +266,75 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 
 ### generate-proxy
 
-Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Your host (server) application must be up and running before running this command.
+Generates Angular, C# or JavaScript service proxies for your HTTP APIs to make easy to consume your services from the client side. Your host (server) application must be up and running before running this command.
 
 Usage:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t <client-type> [options]
+````
+
+Examples:
+
+````bash
+abp generate-proxy -t ng
+abp generate-proxy -t js -url https://localhost:44302/
+abp generate-proxy -t csharp -url https://localhost:44302/
 ````
 
 #### Options
 
+* `--type` or `-t`: The name of client type. Available clients:
+  * `csharp`: C#, work in the `*.HttpApi.Client` project directory. There are some additional options for this client:
+    * `--folder`: Folder name to place generated CSharp code in. Default value: `ClientProxies`.
+  * `ng`: Angular. There are some additional options for this client:
+    * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+    * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+    * `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+    * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+  * `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
+    * `--output` or `-o`: JavaScript file path or folder to place generated code in.
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
-* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
-* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
-* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
-* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+* `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
+* `--url` or `-u`: API definition URL from. For `csharp` and `js` client types.
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 ### remove-proxy
 
-Removes previously generated proxy code from the Angular application. Your host (server) application must be up and running before running this command.
+Removes previously generated proxy code from the Angular, CSharp or JavaScript application. Your host (server) application must be up and running before running this command.
 
 This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
 
 Usage:
 
 ````bash
-abp remove-proxy
+abp remove-proxy -t <client-type> [options]
+````
+
+Examples:
+
+````bash
+abp remove-proxy -t ng
+abp remove-proxy -t js -m identity -o Pages/Identity/client-proxies.js
+abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 ````
 
 #### Options
 
-* `--module` or `-m`: Specifies the name of the backend module you wish to remove proxies for. Default value: `app`.
-* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
-* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
-* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
-* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+* `--type` or `-t`: The name of client type. Available clients:
+  * `csharp`: C#, work in the `*.HttpApi.Client` project directory. There are some additional options for this client:
+    * `--folder`: Folder name to place generated CSharp code in. Default value: `ClientProxies`.
+  * `ng`: Angular. There are some additional options for this client:
+    * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+    * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+    * `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+    * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+  * `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
+    * `--output` or `-o`: JavaScript file path or folder to place generated code in.
+* `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
+* `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
+* `--url` or `-u`: API definition URL from. For `csharp` and `js` client types.
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 

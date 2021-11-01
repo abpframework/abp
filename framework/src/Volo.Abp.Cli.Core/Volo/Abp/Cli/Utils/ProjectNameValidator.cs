@@ -53,7 +53,7 @@ namespace Volo.Abp.Cli.Utils
         {
             foreach (var illegalKeyword in IllegalKeywords)
             {
-                if (projectName.Contains(illegalKeyword))
+                if (projectName.Split(".").Contains(illegalKeyword))
                 {
                     throw new CliUsageException("Project name cannot contain the word \"" + illegalKeyword + "\". Specify a different name.");
                 }

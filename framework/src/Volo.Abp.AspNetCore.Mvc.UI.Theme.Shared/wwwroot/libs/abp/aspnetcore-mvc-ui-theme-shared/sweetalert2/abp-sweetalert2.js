@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function ($) {
     if (!Swal || !$) {
         return;
@@ -36,11 +36,6 @@
     /* MESSAGE **************************************************/
 
     var showMessage = function (type, message, title) {
-        if (!title) {
-            title = message;
-            message = undefined;
-        }
-
         var opts = $.extend(
             {},
             abp.libs.sweetAlert.config['default'],

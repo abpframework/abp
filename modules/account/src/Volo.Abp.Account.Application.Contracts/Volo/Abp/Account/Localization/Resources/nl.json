@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Gebruik een andere dienst om in te loggen",
     "UserLockedOutMessage": "Het gebruikersaccount is geblokkeerd vanwege ongeldige inlogpogingen. Wacht even en probeer het opnieuw.",
     "InvalidUserNameOrPassword": "Ongeldige gebruikersnaam of wachtwoord!",
-    "LoginIsNotAllowed": "U mag niet inloggen! U moet uw e-mailadres / telefoonnummer bevestigen.",
+    "LoginIsNotAllowed": "U mag niet inloggen! Uw account is inactief of moet uw e-mailadres/telefoonnummer bevestigen.",
     "SelfRegistrationDisabledMessage": "Zelfregistratie is uitgeschakeld voor deze applicatie. Neem contact op met de applicatiebeheerder om een nieuwe gebruiker te registreren.",
     "LocalLoginDisabledMessage": "Lokale aanmelding is uitgeschakeld voor deze applicatie.",
     "Login": "Log in",

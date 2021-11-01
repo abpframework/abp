@@ -103,9 +103,7 @@ namespace Volo.Abp.BlobStoring.Aws
                     Key = blobName
                 });
 
-                var memoryStream = new MemoryStream();
-                await response.ResponseStream.CopyToAsync(memoryStream);
-                return memoryStream;
+                return await TryCopyToMemoryStreamAsync(response.ResponseStream, args.CancellationToken);
             }
         }
 

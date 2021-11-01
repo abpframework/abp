@@ -19,7 +19,11 @@ namespace Volo.Blogging.ClientProxies
     {
         public virtual async Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
         {
-            return await RequestAsync<List<TagDto>>(nameof(GetPopularTagsAsync), blogId, input);
+            return await RequestAsync<List<TagDto>>(nameof(GetPopularTagsAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), blogId },
+                { typeof(GetPopularTagsInput), input }
+            });
         }
     }
 }

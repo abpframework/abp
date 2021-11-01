@@ -10,10 +10,10 @@ using Volo.Docs.Admin.Documents;
 namespace Volo.Docs.Admin
 {
     [RemoteService(Name = DocsAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("docs-admin")]
+    [Area(DocsAdminRemoteServiceConsts.ModuleName)]
     [ControllerName("DocumentsAdmin")]
     [Route("api/docs/admin/documents")]
-    public class DocumentsAdminController : AbpController, IDocumentAdminAppService
+    public class DocumentsAdminController : AbpControllerBase, IDocumentAdminAppService
     {
         private readonly IDocumentAdminAppService _documentAdminAppService;
 

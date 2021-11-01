@@ -1,1 +1,1 @@
-﻿{{ model.amount}}
+{{ model.amount}}

@@ -40,6 +40,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Public.Web;
 using System;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
@@ -51,24 +52,30 @@ namespace Volo.CmsKit
     [DependsOn(
         typeof(CmsKitWebModule),
         typeof(CmsKitApplicationModule),
+        typeof(CmsKitHttpApiModule),
         typeof(CmsKitEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementWebModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
+        typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreSerilogModule),
@@ -129,6 +136,7 @@ namespace Volo.CmsKit
                 options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
                 options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
                 options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
@@ -161,11 +169,11 @@ namespace Volo.CmsKit
             {
                 options.EntityTypes.Add(new MediaDescriptorDefinition("quote"));
             });
-            
+
             Configure<CmsKitReactionOptions>(options =>
             {
                 options.EntityTypes.Add(
-                    new ReactionEntityTypeDefinition("quote", 
+                    new ReactionEntityTypeDefinition("quote",
                     reactions: new[]
                     {
                         new ReactionDefinition(StandardReactions.ThumbsUp),

@@ -16,14 +16,16 @@ namespace Volo.Abp.Cli.LIbs
 {
     public class InstallLibsService : IInstallLibsService, ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         public const string LibsDirectory = "./wwwroot/libs";
 
         public ILogger<InstallLibsService> Logger { get; set; }
 
         private readonly IJsonSerializer _jsonSerializer;
 
-        public InstallLibsService(IJsonSerializer jsonSerializer)
+        public InstallLibsService(IJsonSerializer jsonSerializer, ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             _jsonSerializer = jsonSerializer;
             Logger = NullLogger<InstallLibsService>.Instance;
         }

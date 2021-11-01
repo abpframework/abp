@@ -11,9 +11,9 @@ using Volo.Blogging.Blogs.Dtos;
 namespace Volo.Blogging.Admin
 {
     [RemoteService(Name = BloggingAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("bloggingAdmin")]
+    [Area(BloggingAdminRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/blogs/admin")]
-    public class BlogManagementController : AbpController, IBlogManagementAppService
+    public class BlogManagementController : AbpControllerBase, IBlogManagementAppService
     {
         private readonly IBlogManagementAppService _blogManagementAppService;
 

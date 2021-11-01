@@ -17,12 +17,19 @@ namespace Volo.CmsKit.Admin.MediaDescriptors.ClientProxies
     {
         public virtual async Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
         {
-            return await RequestAsync<MediaDescriptorDto>(nameof(CreateAsync), entityType, inputStream);
+            return await RequestAsync<MediaDescriptorDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(string), entityType },
+                { typeof(CreateMediaInputWithStream), inputStream }
+            });
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            await RequestAsync(nameof(DeleteAsync), id);
+            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+            {
+                { typeof(Guid), id }
+            });
         }
     }
 }
