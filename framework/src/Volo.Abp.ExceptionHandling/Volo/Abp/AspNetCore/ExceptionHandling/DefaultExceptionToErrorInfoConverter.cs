@@ -59,7 +59,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             exception = TryToGetActualException(exception);
 
-            if (exception is AbpRemoteCallException remoteCallException)
+            if (exception is AbpRemoteCallException remoteCallException && remoteCallException.Error != null)
             {
                 return remoteCallException.Error;
             }
@@ -76,7 +76,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             var errorInfo = new RemoteServiceErrorInfo();
 
-            if (exception is IUserFriendlyException)
+            if (exception is IUserFriendlyException || exception is AbpRemoteCallException)
             {
                 errorInfo.Message = exception.Message;
                 errorInfo.Details = (exception as IHasErrorDetails)?.Details;
@@ -175,7 +175,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             return new RemoteServiceErrorInfo(exception.Message);
         }
-        
+
         protected virtual Exception TryToGetActualException(Exception exception)
         {
             if (exception is AggregateException && exception.InnerException != null)
