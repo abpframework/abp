@@ -1,12 +1,10 @@
 import {
   ChangeDetectorRef,
   Directive,
-  ElementRef,
   Input,
   OnChanges,
   OnDestroy,
   Optional,
-  Renderer2,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
@@ -18,13 +16,11 @@ import { PermissionService } from '../services/permission.service';
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges {
-  @Input('abpPermission') condition: string;
+  @Input('abpPermission') condition!: string;
 
-  subscription: Subscription;
+  subscription!: Subscription;
 
   constructor(
-    private elRef: ElementRef<HTMLElement>,
-    private renderer: Renderer2,
     @Optional() private templateRef: TemplateRef<any>,
     private vcRef: ViewContainerRef,
     private permissionService: PermissionService,

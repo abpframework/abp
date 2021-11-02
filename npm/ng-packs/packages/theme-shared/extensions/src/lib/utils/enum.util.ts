@@ -68,6 +68,6 @@ function createEnumLocalizer(
     );
 }
 
-function getShortEnumType(enumType: string): string {
+function getShortEnumType(enumType: string) {
   return enumType.split('.').pop();
 }

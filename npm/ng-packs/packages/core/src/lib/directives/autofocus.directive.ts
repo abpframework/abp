@@ -5,8 +5,16 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
   selector: '[autofocus]',
 })
 export class AutofocusDirective implements AfterViewInit {
+  private _delay = 0;
+
   @Input('autofocus')
-  delay = 0;
+  set delay(val: number | undefined) {
+    this._delay = val ?? 0;
+  }
+
+  get delay() {
+    return this._delay;
+  }
 
   constructor(private elRef: ElementRef) {}
 

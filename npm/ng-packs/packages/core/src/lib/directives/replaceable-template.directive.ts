@@ -24,7 +24,7 @@ import { SubscriptionService } from '../services/subscription.service';
 })
 export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   @Input('abpReplaceableTemplate')
-  data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
+  data!: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
   providedData = {
     inputs: {},
@@ -33,7 +33,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
 
   context = {} as any;
 
-  externalComponent: Type<any>;
+  externalComponent!: Type<any>;
 
   defaultComponentRef: any;
 
@@ -50,7 +50,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
     private subscription: SubscriptionService,
   ) {
     this.context = {
-      initTemplate: ref => {
+      initTemplate: (ref: any) => {
         this.resetDefaultComponent();
         this.defaultComponentRef = ref;
         this.setDefaultComponentInputs();
@@ -121,7 +121,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
         if (Object.prototype.hasOwnProperty.call(this.data.outputs, key)) {
           if (!this.defaultComponentSubscriptions[key]) {
             this.defaultComponentSubscriptions[key] = this.defaultComponentRef[key].subscribe(
-              value => {
+              (value: any) => {
                 this.data.outputs[key](value);
               },
             );
@@ -144,7 +144,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
             configurable: true,
             get: () => this.data.inputs[key].value,
             ...(this.data.inputs[key].twoWay && {
-              set: newValue => {
+              set: (newValue: any) => {
                 this.data.inputs[key].value = newValue;
                 this.data.outputs[`${key}Change`](newValue);
               },

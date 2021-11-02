@@ -5,7 +5,7 @@ import {
   LocalizationService,
 } from '@abp/ng.core';
 import { Injectable, Injector } from '@angular/core';
-import { map, startWith } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 import { BOOTSTRAP } from '../constants/styles';
 import { LocaleDirection } from '../models/common';
 import { LAZY_STYLES } from '../tokens/lazy-styles.token';
@@ -14,8 +14,8 @@ import { LAZY_STYLES } from '../tokens/lazy-styles.token';
   providedIn: 'root',
 })
 export class LazyStyleHandler {
-  private lazyLoad: LazyLoadService;
-  private styles: string[];
+  private lazyLoad!: LazyLoadService;
+  private styles!: string[];
   private _dir: LocaleDirection = 'ltr';
 
   readonly loaded = new Map<string, HTMLLinkElement>();
@@ -38,7 +38,7 @@ export class LazyStyleHandler {
     this.listenToLanguageChanges(injector);
   }
 
-  private getHrefFromLink(link: HTMLLinkElement | null): string {
+  private getHrefFromLink(link: HTMLLinkElement | null | undefined): string {
     if (!link) return '';
 
     const a = document.createElement('a');
@@ -107,5 +107,5 @@ export function initLazyStyleHandler(injector: Injector) {
 
 interface LoadedStyle {
   href: string;
-  link: HTMLLinkElement;
+  link: HTMLLinkElement | null;
 }

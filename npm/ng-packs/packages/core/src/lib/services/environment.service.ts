@@ -23,11 +23,11 @@ export class EnvironmentService {
     return this.store.state;
   }
 
-  getApiUrl(key?: string) {
+  getApiUrl(key: string) {
     return mapToApiUrl(key)(this.store.state.apis);
   }
 
-  getApiUrl$(key?: string) {
+  getApiUrl$(key: string) {
     return this.store.sliceState(state => state.apis).pipe(map(mapToApiUrl(key)));
   }
 

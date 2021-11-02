@@ -46,13 +46,13 @@ import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
   ],
 })
 export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
-  @Input() data: PropData;
+  @Input() data!: PropData;
 
-  @Input() prop: FormProp;
+  @Input() prop!: FormProp;
 
-  @Input() first: boolean;
+  @Input() first?: boolean;
 
-  @ViewChild('field') private fieldRef: ElementRef<HTMLElement>;
+  @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   asterisk = '';
 
@@ -60,9 +60,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   validators: ValidatorFn[] = [];
 
-  readonly: boolean;
+  readonly!: boolean;
 
-  disabled: boolean;
+  disabled!: boolean;
 
   private readonly form: FormGroup;
 
@@ -72,9 +72,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     this.typeaheadModel = selectedOption || { key: null, value: null };
     const { key, value } = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
-    if (valueControl.value && !value) valueControl.markAsDirty();
-    keyControl.setValue(key);
-    valueControl.setValue(value);
+    if (valueControl?.value && !value) valueControl.markAsDirty();
+    keyControl?.setValue(key);
+    valueControl?.setValue(value);
   }
 
   search = (text$: Observable<string>) =>

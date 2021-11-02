@@ -26,17 +26,15 @@ import { eTenantManagementComponents } from '../../enums/components';
 export class TenantsComponent implements OnInit {
   data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
-  selected: TenantDto;
+  selected!: TenantDto;
 
-  tenantForm: FormGroup;
+  tenantForm!: FormGroup;
 
-  isModalVisible: boolean;
+  isModalVisible!: boolean;
 
   visibleFeatures = false;
 
   providerKey: string;
-
-  _useSharedDatabase: boolean;
 
   modalBusy = false;
 
@@ -142,7 +140,7 @@ export class TenantsComponent implements OnInit {
     }, 0);
   }
 
-  sort(data) {
+  sort(data: any) {
     const { prop, dir } = data.sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;

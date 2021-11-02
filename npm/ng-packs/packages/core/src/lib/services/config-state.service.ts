@@ -48,14 +48,14 @@ export class ConfigStateService {
     return this.store.state;
   }
 
-  getDeep$(keys: string[] | string) {
+  getDeep$(keys: string[] | string): Observable<any> {
     keys = splitKeys(keys);
 
     return this.store
       .sliceState(state => state)
       .pipe(
         map(state => {
-          return (keys as string[]).reduce((acc, val) => {
+          return (keys as string[]).reduce((acc: any, val) => {
             if (acc) {
               return acc[val];
             }
@@ -66,10 +66,10 @@ export class ConfigStateService {
       );
   }
 
-  getDeep(keys: string[] | string) {
+  getDeep(keys: string[] | string): any {
     keys = splitKeys(keys);
 
-    return (keys as string[]).reduce((acc, val) => {
+    return (keys as string[]).reduce((acc: any, val) => {
       if (acc) {
         return acc[val];
       }

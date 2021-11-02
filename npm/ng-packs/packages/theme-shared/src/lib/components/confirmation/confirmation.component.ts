@@ -12,9 +12,9 @@ export class ConfirmationComponent {
   reject = Confirmation.Status.reject;
   dismiss = Confirmation.Status.dismiss;
 
-  confirmation$: ReplaySubject<Confirmation.DialogData>;
+  confirmation$!: ReplaySubject<Confirmation.DialogData>;
 
-  clear: (status: Confirmation.Status) => void;
+  clear!: (status: Confirmation.Status) => void;
 
   close(status: Confirmation.Status) {
     this.clear(status);
