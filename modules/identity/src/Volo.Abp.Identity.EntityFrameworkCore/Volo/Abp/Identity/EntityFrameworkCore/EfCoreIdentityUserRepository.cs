@@ -142,7 +142,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string phoneNumber = null,
             string emailAddress = null,
             bool? isLockedOut = null,
-            bool? isActive = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
@@ -162,7 +162,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
                 .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
                 .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
-                .WhereIf(isActive == true, x => x.IsActive == isActive)
+                .WhereIf(notActive == true, x => !x.IsActive)
                 .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -207,7 +207,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string phoneNumber = null,
             string emailAddress = null,
             bool? isLockedOut = null,
-            bool? isActive = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
@@ -226,7 +226,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
                 .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
                 .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
-                .WhereIf(isActive == true, x => x.IsActive == isActive)
+                .WhereIf(notActive == true, x => !x.IsActive)
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 

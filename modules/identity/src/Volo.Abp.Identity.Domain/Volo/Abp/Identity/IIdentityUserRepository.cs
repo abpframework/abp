@@ -62,7 +62,7 @@ namespace Volo.Abp.Identity
             string phoneNumber = null,
             string emailAddress = null,
             bool? isLockedOut = null,
-            bool? isActive = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default
         );
 
@@ -99,7 +99,7 @@ namespace Volo.Abp.Identity
             string phoneNumber = null,
             string emailAddress = null,
             bool? isLockedOut = null,
-            bool? isActive = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default
         );
     }
