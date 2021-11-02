@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
@@ -49,9 +51,8 @@ namespace Volo.Abp.Cli.Commands
 
             var organization = commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long);
 
-            if (string.IsNullOrWhiteSpace(organization) && await CheckMultipleOrganizationsAsync(commandLineArgs.Target))
+            if (await HasMultipleOrganizationAndThisNotSpecified(commandLineArgs, organization))
             {
-                Logger.LogError($"You have multiple organizations, please specify your organization with `--organization` parameter.");
                 return;
             }
 
@@ -70,13 +71,81 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            await AuthService.LoginAsync(
-                commandLineArgs.Target,
-                password,
-                organization
-            );
+            try
+            {
+                await AuthService.LoginAsync(
+                    commandLineArgs.Target,
+                    password,
+                    organization
+                );
+            }
+            catch (Exception ex)
+            {
+                LogCliError(ex, commandLineArgs);
+                return;
+            }
 
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
+        }
+
+        private async Task<bool> HasMultipleOrganizationAndThisNotSpecified(CommandLineArgs commandLineArgs, string organization)
+        {
+            if (string.IsNullOrWhiteSpace(organization) &&
+                await CheckMultipleOrganizationsAsync(commandLineArgs.Target))
+            {
+                Logger.LogError($"You have multiple organizations, please specify your organization with `--organization` parameter.");
+                return true;
+            }
+
+            return false;
+        }
+
+        private void LogCliError(Exception ex, CommandLineArgs args)
+        {
+            if (ex.Message.Contains("Invalid username or password"))
+            {
+                Logger.LogError("Invalid username or password!");
+                return;
+            }
+
+            if (TryGetErrorMessageFromHtmlPage(ex.Message, out var errorMsg))
+            {
+                Logger.LogError(errorMsg);
+                return;
+            }
+
+            Logger.LogError(ex.Message);
+        }
+
+        private static bool TryGetErrorMessageFromHtmlPage(string htmlPage, out string errorMessage)
+        {
+            if (!htmlPage.Contains("error-page-container"))
+            {
+                errorMessage = null;
+                return false;
+            }
+
+            var decodedHtml = HttpUtility.HtmlDecode(htmlPage);
+
+            var error = Regex.Match(decodedHtml,
+                @"<h2\ class=""text-danger.*"">(.*?)</h2>",
+                RegexOptions.IgnoreCase |
+                RegexOptions.IgnorePatternWhitespace |
+                RegexOptions.Singleline |
+                RegexOptions.Multiline);
+
+            if (error.Success && error.Groups.Count > 1)
+            {
+                errorMessage = error.Groups[1].Value;
+                errorMessage = errorMessage
+                    .Replace("<eof/>", string.Empty)
+                    .Replace("</small>", string.Empty);
+
+                return true;
+            }
+
+            errorMessage = null;
+            return false;
         }
 
         private async Task<bool> CheckMultipleOrganizationsAsync(string username)
