@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUglify;
@@ -12,6 +13,12 @@ namespace Volo.Abp.Minify.NUglify
             : base(message)
         {
             Errors = errors;
+        }
+
+        public NUglifyException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+
         }
 
         /// <summary>

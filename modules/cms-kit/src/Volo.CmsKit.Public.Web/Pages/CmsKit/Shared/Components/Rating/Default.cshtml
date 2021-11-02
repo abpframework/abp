@@ -5,7 +5,7 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
-<div class="row form-row">
+<div class="row row">
         <div class="col">
             <div class="cms-rating-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
                 @if (CurrentUser.IsAuthenticated)
@@ -18,7 +18,7 @@
                     }
                     if (Model.Ratings != null)
                     {
-                        <a href="#" class="text-muted ml-1" data-toggle="modal" data-target="#ratingDetail">
+                        <a href="#" class="text-muted ms-1" data-bs-toggle="modal" data-bs-target="#ratingDetail">
                             <i class="far fa-question-circle"></i>
                         </a>
 
@@ -27,9 +27,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Rating Detail</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row text-center">
@@ -57,7 +55,7 @@
                 }
                 else
                 {
-                    <span class="my-rating text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><a href='@Model.LoginUrl' class='btn btn-primary btn-block'>@L["LoginToRate"]</a></div>"></span>
+                    <span class="my-rating text-dark p-1" data-authenticated="True" data-bs-toggle="popover" data-bs-placement="right" data-html="true" data-content="<div class='text-center'><div class='d-grid gap-2'><a href='@Model.LoginUrl' class='btn btn-primary'>@L["LoginToRate"]</a></div></div>"></span>
                     <span class="rating-login"></span>
                 }
             </div>

@@ -24,7 +24,7 @@ import {
       (focus)="focus.next($event); abpFocus.next($event)"
       (blur)="blur.next($event); abpBlur.next($event)"
     >
-      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
+      <i [ngClass]="icon" class="me-1"></i><ng-content></ng-content>
     </button>
   `,
 })

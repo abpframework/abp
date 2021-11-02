@@ -2,7 +2,7 @@
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(ToastrStyleBundleContributor),
         typeof(Select2StyleContributor),
         typeof(MalihuCustomScrollbarPluginStyleBundleContributor),
-        typeof(DatatablesNetBs4StyleContributor),
+        typeof(DatatablesNetBs5StyleContributor),
         typeof(BootstrapDatepickerStyleContributor)
     )]
     public class SharedThemeGlobalStyleContributor : BundleContributor

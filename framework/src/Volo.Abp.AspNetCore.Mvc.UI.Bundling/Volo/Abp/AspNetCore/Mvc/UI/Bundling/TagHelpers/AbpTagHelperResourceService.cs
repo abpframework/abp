@@ -36,6 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         public virtual async Task ProcessAsync(
             [NotNull] ViewContext viewContext,
+            [NotNull] TagHelper tagHelper,
             [NotNull] TagHelperContext context,
             [NotNull] TagHelperOutput output,
             [NotNull] List<BundleTagHelperItem> bundleItems,
@@ -72,7 +73,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
                 if (file.Length > 0)
                 {
-                    AddHtmlTag(viewContext, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                    AddHtmlTag(viewContext, tagHelper, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
                 }
             }
 
@@ -84,7 +85,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
-        protected abstract void AddHtmlTag(ViewContext viewContext, TagHelperContext context, TagHelperOutput output, string file);
+        protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file);
 
         protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
         {

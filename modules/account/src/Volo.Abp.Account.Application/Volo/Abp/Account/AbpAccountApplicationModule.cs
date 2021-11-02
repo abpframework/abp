@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Emailing;
+﻿using Volo.Abp.AutoMapper;
+using Volo.Abp.Emailing;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -20,6 +21,11 @@ namespace Volo.Abp.Account
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
+            });
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpAccountApplicationModuleAutoMapperProfile>(validate: true);
             });
 
             Configure<AppUrlOptions>(options =>

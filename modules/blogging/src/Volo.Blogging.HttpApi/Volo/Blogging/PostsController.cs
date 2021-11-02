@@ -9,7 +9,7 @@ using Volo.Blogging.Posts;
 namespace Volo.Blogging
 {
     [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
-    [Area("blogging")]
+    [Area(BloggingRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/posts")]
     public class PostsController : AbpControllerBase, IPostAppService
     {

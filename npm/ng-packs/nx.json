@@ -37,7 +37,7 @@
     },
     "account": {
       "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "account-core", "identity"]
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "components": {
       "tags": [],

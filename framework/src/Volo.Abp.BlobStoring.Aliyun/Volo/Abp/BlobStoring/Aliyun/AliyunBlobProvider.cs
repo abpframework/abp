@@ -86,9 +86,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
                 return null;
             }
             var result = ossClient.GetObject(containerName, blobName);
-            var memoryStream = new MemoryStream();
-            await result.Content.CopyToAsync(memoryStream);
-            return memoryStream;
+            return await TryCopyToMemoryStreamAsync(result.Content, args.CancellationToken);
         }
 
         protected virtual string GetContainerName(BlobProviderArgs args)

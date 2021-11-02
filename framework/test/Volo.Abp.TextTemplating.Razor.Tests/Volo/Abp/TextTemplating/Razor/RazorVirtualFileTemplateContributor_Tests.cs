@@ -17,7 +17,13 @@ namespace Volo.Abp.TextTemplating.Razor
 
             ForgotPasswordEmailEnglishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRendererProvider_Tests.ForgotPasswordEmailModel>" +
                                                 Environment.NewLine +
-                                                "@Localizer[\"HelloText\", Model.Name], @Localizer[\"HowAreYou\"]. Please click to the following link to get an email to reset your password!";
+                                                "@{" +
+                                                Environment.NewLine +
+                                                "    var url = @\"https://abp.io/Account/ResetPassword\";" +
+                                                Environment.NewLine +
+                                                "}" +
+                                                Environment.NewLine +
+                                                "@Localizer[\"HelloText\", Model.Name], @Localizer[\"HowAreYou\"]. Please click to the following link to get an email to reset your password!<a target=\"_blank\" href=\"@url\">Reset your password</a>";
         }
     }
 }

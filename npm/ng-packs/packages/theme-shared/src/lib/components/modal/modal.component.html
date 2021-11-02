@@ -7,12 +7,10 @@
     <button
       id="abp-modal-close-button"
       type="button"
-      class="close"
+      class="btn-sm btn-close"
       aria-label="Close"
       (click)="modal.dismiss()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    ></button>
   </div>
   <div *ngIf="abpBody" id="abp-modal-body" class="modal-body">
     <ng-container *ngTemplateOutlet="abpBody"></ng-container>

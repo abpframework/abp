@@ -26,7 +26,7 @@ import { map } from 'rxjs/operators';
         {{ defaultLanguage$ | async }}
       </a>
       <div
-        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
+        class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && languageDropdown.isOpen()"
       >
