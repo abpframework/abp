@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
         public TestPermissionDataBuilder(
             IGuidGenerator guidGenerator,
             IIdentityUserRepository userRepository,
-            IPermissionGrantRepository permissionGrantRepository, 
+            IPermissionGrantRepository permissionGrantRepository,
             ILookupNormalizer lookupNormalizer)
         {
             _guidGenerator = guidGenerator;
@@ -35,10 +35,6 @@ namespace Volo.Abp.Identity
 
         private async Task AddRolePermissions()
         {
-            await AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "admin");
-            await AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "admin");
-            await AddPermission(TestPermissionNames.MyPermission2_ChildPermission1, RolePermissionValueProvider.ProviderName, "admin");
-
             await AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "moderator");
             await AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "moderator");
 
