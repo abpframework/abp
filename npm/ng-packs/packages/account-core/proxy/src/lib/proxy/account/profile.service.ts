@@ -6,12 +6,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ProfileService {
-  apiName = 'AbpIdentity';
+  apiName = 'AbpAccount';
 
   changePassword = (input: ChangePasswordInput) =>
     this.restService.request<any, void>({
       method: 'POST',
-      url: '/api/identity/my-profile/change-password',
+      url: '/api/account/my-profile/change-password',
       body: input,
     },
     { apiName: this.apiName });
@@ -19,14 +19,14 @@ export class ProfileService {
   get = () =>
     this.restService.request<any, ProfileDto>({
       method: 'GET',
-      url: '/api/identity/my-profile',
+      url: '/api/account/my-profile',
     },
     { apiName: this.apiName });
 
   update = (input: UpdateProfileDto) =>
     this.restService.request<any, ProfileDto>({
       method: 'PUT',
-      url: '/api/identity/my-profile',
+      url: '/api/account/my-profile',
       body: input,
     },
     { apiName: this.apiName });
