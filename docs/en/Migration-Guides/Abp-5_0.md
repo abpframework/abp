@@ -44,6 +44,12 @@ If you've used these classes, please remove their usages and use the static prop
 
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was [made obsolete in 4.2](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-4_2#irepository-getqueryableasync).
 
+### Automatically Setting the TenantId for New Entities
+
+Beginning from the version 5.0, ABP automatically sets the `TenantId` for you when you create a new entity object (that implements the `IMultiTenant` interface). It is done in the constructor of the base `Entity` class (all other base entity and aggregate root classes are derived from the `Entity` class). The `TenantId` is set from the current value of the `ICurrentTenant.Id` property.
+
+This can be a breaking change in rare cases (for example, if you create host side entities from a tenant context and do not explicitly set host entity's `TenantId` to `null`).
+
 ### Other Breaking Changes
 
 * [#9549](https://github.com/abpframework/abp/pull/9549) `IObjectValidator` methods have been changed to asynchronous.
