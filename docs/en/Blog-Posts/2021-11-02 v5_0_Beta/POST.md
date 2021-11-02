@@ -1,25 +1,25 @@
-# ABP Platform 5.0 Beta 1 Has Been Released
+# ABP Platform 5.0 Beta Has Been Released
 
 Today, we are excited to release the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.0 Beta**. This blog post introduces the new features and important changes in this new version.
 
 > **The planned release date for the [5.0.0 Release Candidate](https://github.com/abpframework/abp/milestone/51) version is November, 2021**.
 
-Please try the beta 1 version and provide feedback for a more stable ABP version 5.0! Thank you all.
+Please try this version and provide feedback for a more stable ABP version 5.0! Thank you all.
 
-## Get Started with the 5.0 Beta 1
+## Get Started with the 5.0 Beta
 
-follow the steps below to try the version 5.0.0 beta 1 today;
+follow the steps below to try the version 5.0.0 beta today;
 
-1) **Upgrade** the ABP CLI to the version `5.0.0-beta.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `5.0.0-beta.3` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 5.0.0-beta.1
+dotnet tool update Volo.Abp.Cli -g --version 5.0.0-beta.3
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 5.0.0-beta.1
+dotnet tool install Volo.Abp.Cli -g --version 5.0.0-beta.3
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -41,23 +41,24 @@ and also enable the  `Use Previews of the .NET SDK` option from Visual Studio 20
 ![Enable Using Previews of the .NET SDK ](use-preview-visual-studio.png)
 
 
-Alternatively you can download the latest Visual Studio 2022 preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
+Alternatively you can download the latest **Visual Studio 2022** preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
 
 ### Migration Notes & Breaking Changes
 
 This is a major version and there are some breaking changes and upgrade steps. Here, a list of important breaking changes in this version:
 
 * Upgraded to .NET 6.0-rc.1, so you need to move your solution to .NET 6.0 if you want to use the ABP 5.0.
+* Upgraded to Bootstrap 5. This is the most important breaking change in ABP 5.0 and you should take care of it.
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was already made obsolete in 4.2.
 * Removed NGXS and states from the Angular UI.
-* Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of ABP CLI.
-* Deprecated EntityCreatingEventData, EntityUpdatingEventData, EntityDeletingEventData and EntityChangingEventData classes. See [#9897](https://github.com/abpframework/abp/issues/9897).
+* Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of the ABP CLI.
+* Deprecated `EntityCreatingEventData`, `EntityUpdatingEventData`, `EntityDeletingEventData` and `EntityChangingEventData` classes. See [#9897](https://github.com/abpframework/abp/issues/9897).
 
 Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
 
-## What's new with Beta 1?
+## What's new with 5.0?
 
-In this section, I will introduce some major features released with beta 1.
+In this section, I will introduce some major features released with beta version.
 
 ### Static (Generated) Client Proxies for C# and JavaScript
 
@@ -273,11 +274,13 @@ public class ProductController : AbpControllerBase
 }
 ````
 
-## Ongoing Works & Next Release
+### Automatically setting the TenantId for new entities
 
-We'd published important features and changes with this beta 1 release. However, there are still some major works in development. The most important work is the **Bootstrap 5 upgrade**. ABP 5.0 will work on Bootstrap 5, which is an important change for existing applications. We suggest to prepare for this change from now.
+Beginning from the version 5.0, ABP automatically sets the `TenantId` for you when you create a new entity object (that implements the `IMultiTenant` interface). It is done in the constructor of the base `Entity` class (all other base entity and aggregate root classes are derived from the `Entity` class). The `TenantId` is set from the current value of the `ICurrentTenant.Id` property.
 
-The next release will be 5.0.0-beta.2. It will include the Bootstrap 5 upgrade. We don't plan make another big work for the version 5.0. After the beta.2, we will work on tests, feedbacks and documentation to prepare a stable final release.
+Previously, it was a responsibility of the developer to set `TenantId` for new entities. Now, ABP takes care of it. You only may need to set it if you want to set id of a tenant other than the current tenant.
+
+This can be a breaking change in rare cases (for example, if you create host side entities from a tenant context and do not explicitly set host entity's `TenantId` to `null`).
 
 ## Community News
 
