@@ -4,11 +4,11 @@
 
 In this article, we'll create a **BookStore** application like in [the ABP tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF) and add an extra `Category` feature to demonstrate how we can manage the many-to-many relationship with ABP-based applications (by following DDD rules).
 
-You can see the ER Diagram of our application under below. This diagram will be helpful for us to demonstrate the relations between our entities.
+You can see the ER Diagram of our application below. This diagram will be helpful for us to demonstrate the relations between our entities.
 
 ![ER-Diagram](./er-diagram.png)
 
-When we've examined the ER Diagram, we can see the one-to-many relationship between **Author** and **Book** tables and also the many-to-many relationship (**BookCategory** table) between **Book** and **Category** tables. Cause, there can be more than one category on each book and vice-versa in our scenario.
+When we've examined the ER Diagram, we can see the one-to-many relationship between **Author** and **Book** tables and also the many-to-many relationship (**BookCategory** table) between **Book** and **Category** tables. There can be more than one category on each book and vice-versa in our scenario.
 
 ### Source Code
 
@@ -30,7 +30,7 @@ In this article, I will create a new startup template with EF Core as a database
 abp new BookStore -t app --version 5.0.0-beta.2
 ```
 
-* Our project boilerplate will be ready after the download is finished. Then, we can open the solution and starts to the development.
+* Our project boilerplate will be ready after the download is finished. Then, we can open the solution and starts the development.
 
 ## Starting the Development
 
@@ -177,20 +177,18 @@ namespace BookStore.Books
 }
 ```
 
-* In our scenerio, a book can have more than one category and a category can have more 
-than one book so it's obvious to we need to establish many-to-many relationship between them.
+* In our scenario, a book can have more than one category and a category can have more than one book so we need to create a many-to-many relationship between them.
 
-* For achieve this we will create an **join entity** named `BookCategory`, and this class
-will simply have variables named `BookId` and `CategoryId`.
+* For achieving this, we will create a **join entity** named `BookCategory`, and this class will simply have variables named `BookId` and `CategoryId`.
 
-* To manage this **join entity**, we can add it as sub-collection to the **Book** entity, as we do above. We add this sub-collection
-to **Book** class instead of **Category** class, because a book can have tens or mostly hundreds of category in it but in other
-view a category can have more than hundred (or even way much) book inside of it.
+* To manage this **join entity**, we can add it as a sub-collection to the **Book** entity, as we do above. We add this sub-collection
+to **Book** class instead of **Category** class, because a book can have tens (or mostly hundreds) of categories but on the other perspective a category can have more than a hundred (or even way much) books inside of it.
 
-* It is a significant performance problem to load thousands of items whenever you query a category. Therefore it's make much sense to add that sub-collection to `Book` entity. (Don't forget: **An aggregate (with the root entity and sub-collections) should
-be serializable and transferrable on the wire as a single unit.**)
+* It is a significant performance problem to load thousands of items whenever you query a category. Therefore it makes much more sense to add that sub-collection to the `Book` entity. (Don't forget: **An aggregate (with the root entity and sub-collections) should be serializable and transferrable on the wire as a single unit.**)
 
-* Notice that, `BookCategory` is not an **Aggregate Root** so we are not violating the one of the base rule about Aggregate Root (Rule: "Reference Other Aggregates Only by ID").
+* Notice that, `BookCategory` is not an **Aggregate Root** so we are not violating one of the base rules about Aggregate Root (Rule: "Reference Other Aggregates Only by ID").
+
+* If we examine the methods in the `Book` class (such as **RemoveAllCategories**, **RemoveAllCategoriesExceptGivenIds** and **AddCategory**) we will manage our sub-collection `Categories` (**BookCategory** - join table/entity) through them. (Adds or removes categories for books)
 
 > We'll create the `BookCategory` and `BookConsts` classes later in this step.
 
@@ -227,15 +225,160 @@ namespace BookStore.Books
 }
 ```
 
-* Here, as you can notice we've defined the `BookCategory` as the **Join Table/Entity** for our many-to-many relationship and ensure the required properties (BookId and CategoryId) must be set to create this object.
+* Here, as you can notice we've defined the `BookCategory` as the **Join Table/Entity** for our many-to-many relationship and ensure the required properties (BookId and CategoryId) must be set in the constructor method of this class to create this object.
 
-* And also we've derived this class from `Entity` class and therefore we've had to override the **GetKeys** method of this class to define **Composite Key**.
+* And also we've derived this class from the `Entity` class and therefore we've had to override the **GetKeys** method of this class to define **Composite Key**.
 
-> The composite key is composed of `BookId` and `CategoryId` in our case. And they are unique with together.
+> The composite key is composed of `BookId` and `CategoryId` in our case. And they are unique together.
 
 >  For more information about **Entities with Composite Keys**, you can read the relavant section from [Entites documentation](https://docs.abp.io/en/abp/latest/Entities#entities-with-composite-keys)
 
-//TODO: add BookManager class later?
+* **BookManager.cs**
+
+```csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using BookStore.Categories;
+using JetBrains.Annotations;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+
+namespace BookStore.Books
+{
+    public class BookManager : DomainService
+    {
+        private readonly IBookRepository _bookRepository;
+        private readonly IRepository<Category, Guid> _categoryRepository;
+
+        public BookManager(IBookRepository bookRepository, IRepository<Category, Guid> categoryRepository)
+        {
+            _bookRepository = bookRepository;
+            _categoryRepository = categoryRepository;
+        }
+
+        public async Task CreateAsync(Guid authorId, string name, DateTime publishDate, float price, [CanBeNull]string[] categoryNames)
+        {
+            var book = new Book(GuidGenerator.Create(), authorId, name, publishDate, price);
+
+            await SetCategoriesAsync(book, categoryNames);
+            
+            await _bookRepository.InsertAsync(book);
+        }
+
+        public async Task UpdateAsync(
+            Book book, 
+            Guid authorId,
+            string name, 
+            DateTime publishDate, 
+            float price,
+            [CanBeNull] string[] categoryNames
+        )
+        {
+            book.AuthorId = authorId;
+            book.SetName(name);
+            book.PublishDate = publishDate;
+            book.Price = price;
+            
+            await SetCategoriesAsync(book, categoryNames);
+
+            await _bookRepository.UpdateAsync(book);
+        }
+        
+        private async Task SetCategoriesAsync(Book book, [CanBeNull] string[] categoryNames)
+        {
+            if (categoryNames == null || !categoryNames.Any())
+            {
+                book.RemoveAllCategories();
+                return;
+            }
+
+            var query = (await _categoryRepository.GetQueryableAsync())
+                .Where(x => categoryNames.Contains(x.Name))
+                .Select(x => x.Id)
+                .Distinct();
+
+            var categoryIds = await AsyncExecuter.ToListAsync(query);
+            if (!categoryIds.Any())
+            {
+                return;
+            }
+
+            book.RemoveAllCategoriesExceptGivenIds(categoryIds);
+
+            foreach (var categoryId in categoryIds)
+            {
+                book.AddCategory(categoryId);
+            }
+        }
+    }
+}
+```
+
+* If we examine the codes in the `BookManager` class, we can see that we've managed the `BookCategory` class (our join table/entity)
+by using some methods that we've defined in the `Book` class such as **RemoveAllCategories**, **RemoveAllCategoriesExceptGivenIds** and **AddCategory**.
+
+* These methods basically add or remove categories related to the book by conditions.
+
+* In the `CreateAsync` method, if the category names are specified we are retrieving their ids from the database and by using the **AddCategory** method that we've defined in the `Book` class, we're adding them.
+
+* In the `UpdateAsync` method, the same logic is also valid. But in this case, the user could want to remove some categories from books, so if the user sends us an empty **categoryNames** array, we remove all categories from the book he wants to update. If the user sends us some category names, we remove the excluded ones and add the new ones according to **categoryNames** array.
+
+* **BookWithDetails.cs**
+
+```csharp
+using System;
+using Volo.Abp.Auditing;
+
+namespace BookStore.Books
+{
+    public class BookWithDetails : IHasCreationTime
+    {
+        public Guid Id { get; set; }
+        
+        public string Name { get; set; }
+
+        public DateTime PublishDate { get; set; }
+
+        public float Price { get; set; }
+
+        public string AuthorName { get; set; }
+
+        public string[] CategoryNames { get; set; }
+        
+        public DateTime CreationTime { get; set; }
+    }
+}
+```
+
+* We will use this class to retrieve books with their sub-categories and author names.
+
+* **IBookRepository.cs**
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace BookStore.Books
+{
+    public interface IBookRepository : IRepository<Book, Guid>
+    {
+        Task<List<BookWithDetails>> GetListAsync(
+            string sorting,
+            int skipCount,
+            int maxResultCount,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<BookWithDetails> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    }
+}
+```
+
+* We need to create two methods named **GetListAsync** and **GetAsync** and specify their return type as `BookWithDetails`. So by implementing these methods, we will return the book/books by their details (author name and categories).
 
 * **Category.cs**
 
@@ -269,10 +412,277 @@ namespace BookStore.Categories
 }
 ```
 
-### Step 2 - (Database Integration)
+### Step 2 - (Define Consts)
 
-### Step 3 - (Database Migration)
+We can create a folder-structure under the `BookStore.Domain.Shared` project like in the below image.
 
-### Step 4 - (Create Application Services)
+![Domain Shared File Structure](./domain-shared-file-structure.png)
 
-### Step 5 - (UI)
+* **AuthorConsts.cs**
+
+```csharp
+namespace BookStore.Authors
+{
+    public class AuthorConsts
+    {
+        public const int MaxNameLength = 128;
+
+        public const int MaxShortBioLength = 256;
+    }
+}
+```
+
+* **BookConsts.cs**
+
+```csharp
+namespace BookStore.Books
+{
+    public class BookConsts
+    {
+        public const int MaxNameLength = 128;
+    }
+}
+```
+
+* **CategoryConsts.cs**
+
+```csharp
+namespace BookStore.Categories
+{
+    public class CategoryConsts
+    {
+        public const int MaxNameLength = 64;
+    }
+}
+```
+
+* In these classes, we've defined max text length for our entity properties that we will use in the **Database Integration** section to specify limits for our properties. (E.g. varchar(128) for BookName)
+
+### Step 3 - (Database Integration)
+
+* After defining our entities, we can configure them for the database integration. 
+Open the `BookStoreDbContext` class in the `BookStore.EntityFrameworkCore` project and update with the following code blocks.
+
+```csharp
+namespace BookStore.EntityFrameworkCore
+{
+    [ReplaceDbContext(typeof(IIdentityDbContext))]
+    [ReplaceDbContext(typeof(ITenantManagementDbContext))]
+    [ConnectionStringName("Default")]
+    public class BookStoreDbContext : 
+        AbpDbContext<BookStoreDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
+    {
+        //...
+
+        //DbSet properties for our Aggregate Roots
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        
+        //NOTE: We don't need to add DbSet<BookCategory>, because we will be query it via using the Book entity
+        // public DbSet<BookCategory> BookCategories { get; set; }
+
+        //...
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            //...
+
+            /* Configure your own tables/entities inside here */
+            builder.Entity<Author>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Authors" + BookStoreConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name)
+                    .HasMaxLength(AuthorConsts.MaxNameLength)
+                    .IsRequired();
+
+                b.Property(x => x.ShortBio)
+                    .HasMaxLength(AuthorConsts.MaxShortBioLength)
+                    .IsRequired();
+            });
+
+            builder.Entity<Book>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Books" + BookStoreConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name)
+                    .HasMaxLength(BookConsts.MaxNameLength)
+                    .IsRequired();
+
+                //one-to-many relationship with Author table
+                b.HasOne<Author>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
+
+                //many-to-many relationship with Category table => BookCategories
+                b.HasMany(x => x.Categories).WithOne().HasForeignKey(x => x.BookId).IsRequired();
+            });
+
+            builder.Entity<Category>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Categories" + BookStoreConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name)
+                    .HasMaxLength(CategoryConsts.MaxNameLength)
+                    .IsRequired();
+            });
+
+            builder.Entity<BookCategory>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "BookCategories" + BookStoreConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                //define composite key
+                b.HasKey(x => new { x.BookId, x.CategoryId });
+
+                //many-to-many configuration
+                b.HasOne<Book>().WithMany(x => x.Categories).HasForeignKey(x => x.BookId).IsRequired();
+                b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId).IsRequired();
+                
+                b.HasIndex(x => new { x.BookId, x.CategoryId });
+            });
+        }
+    }
+}
+```
+
+* In this class, we've defined **DbSet** properties for our **Aggregate Roots** (**Book**, **Author** and **Category**). Notice, we didn't define **DbSet** for `BookCategory` class (our join table/entity). Because, the `Book` aggregate is responsible to manage it via sub-collection.
+
+* After that, we can use the **FluentAPI** to configure our tables in the `OnModelCreating` method of this class.
+
+```csharp
+builder.Entity<Book>(b =>
+{
+    //...
+
+    //one-to-many relationship with Author table
+    b.HasOne<Author>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
+
+    //many-to-many relationship with Category table => BookCategories
+    b.HasMany(x => x.Categories).WithOne().HasForeignKey(x => x.BookId).IsRequired();
+});
+```
+
+* Here, we have provided the one-to-many relationship between the **Book** and the **Author** in the above code-block. 
+
+```csharp
+builder.Entity<BookCategory>(b =>
+{
+    //...
+
+    //define composite key
+    b.HasKey(x => new { x.BookId, x.CategoryId });
+
+    //many-to-many configuration
+    b.HasOne<Book>().WithMany(x => x.Categories).HasForeignKey(x => x.BookId).IsRequired();
+    b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId).IsRequired();
+                
+    b.HasIndex(x => new { x.BookId, x.CategoryId });
+});
+```
+
+* Here, firstly we've defined the composite key for our `BookCategory` entity. `BookId` and `CategoryId` are together composite keys for the `BookCategory` table. Then we've configured the many-to-many relationship between `Book` and `Category` table like in the above code-block.
+
+#### Implementing the `IBookRepository` Interface
+
+* After making the relevant configurations for database integration, we can now implement the `IBookRepository` interface. To do this, create a folder named `Books` in the `BookStore.EntityFrameworkCore` project and inside of this folder create a class named `EfCoreBookRepository` and update this class with the following code. 
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Threading;
+using System.Threading.Tasks;
+using BookStore.Authors;
+using BookStore.Categories;
+using BookStore.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace BookStore.Books
+{
+    public class EfCoreBookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, IBookRepository
+    {
+        public EfCoreBookRepository(IDbContextProvider<BookStoreDbContext> dbContextProvider) : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<BookWithDetails>> GetListAsync(
+            string sorting, 
+            int skipCount, 
+            int maxResultCount, 
+            CancellationToken cancellationToken = default
+        )
+        {
+            var query = await ApplyFilterAsync();
+            
+            return await query
+                .OrderBy(!string.IsNullOrWhiteSpace(sorting) ? sorting : nameof(Book.Name))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<BookWithDetails> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var query = await ApplyFilterAsync();
+            
+            return await query
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
+        private async Task<IQueryable<BookWithDetails>> ApplyFilterAsync()
+        {
+            var dbContext = await GetDbContextAsync();
+
+            return (await GetDbSetAsync())
+                .Include(x => x.Categories)
+                .Join(dbContext.Set<Author>(), book => book.AuthorId, author => author.Id,
+                    (book, author) => new {book, author})
+                .Select(x => new BookWithDetails
+                {
+                    Id = x.book.Id,
+                    Name = x.book.Name,
+                    Price = x.book.Price,
+                    PublishDate = x.book.PublishDate,
+                    CreationTime = x.book.CreationTime,
+                    AuthorName = x.author.Name,
+                    CategoryNames = (from bookCategories in x.book.Categories
+                        join category in dbContext.Set<Category>() on bookCategories.CategoryId equals category.Id
+                        select category.Name).ToArray()
+                });
+        }
+
+        public override Task<IQueryable<Book>> WithDetailsAsync()
+        {
+            return base.WithDetailsAsync(x => x.Categories);
+        }
+    }
+}
+```
+
+* Here we've implemented our custom repository methods and returned the book with details (author name and categories).
+
+### Step 4 - (Database Migration)
+
+* We've integrated our entities with the database in the previous step, now we can create a new database migration and apply it to the database. So let's do that.
+
+* Open the `BookStore.EntityFrameworkCore` project in the terminal. And create a new database migration by using the following command.
+
+```bash
+dotnet ef migrations add <Migration_Name>
+```
+
+* Then, run the `BookStore.DbMigrator` application to create the database.
+
+### Step 5 - (Create Application Services)
+
+
+
+### Step 6 - (UI)
