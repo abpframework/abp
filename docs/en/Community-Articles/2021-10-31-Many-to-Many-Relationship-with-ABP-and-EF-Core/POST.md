@@ -14,11 +14,11 @@ When we've examined the ER Diagram, we can see the one-to-many relationship betw
 
 You can find the source code of the application at https://github.com/EngincanV/ABP-Many-to-Many-Relationship-Demo .
 
-### Screenshot of The Final Application
+### Demo of The Final Application
 
-At the end of this article, we will have created an application as in the below image.
+At the end of this article, we will have created an application as in the below gif.
 
-![Book Homepage](./demo.png)
+![Demo of The Final Application](./application-final-demo.gif)
 
 ## Creating the Solution
 
@@ -683,6 +683,885 @@ dotnet ef migrations add <Migration_Name>
 
 ### Step 5 - (Create Application Services)
 
+* Let's start with defining our DTOs and application service interfaces in the `BookStore.Application.Contracts` layer. We can create a folder-structure like in the below image.
 
+![Application Contracts Folder Structure](./application-contracts-folder-structure.png)
+
+* We can use the [`CrudAppService`](https://docs.abp.io/en/abp/latest/Application-Services#crud-application-services) base class of the ABP Framework to create application services to **Get**, **Create**, **Update** and **Delete** authors and categories.
+
+* **AuthorDto.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Authors
+{
+    public class AuthorDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+        
+        public DateTime BirthDate { get; set; }
+        
+        public string ShortBio { get; set; }
+    }
+}
+```
+
+* **AuthorLookupDto.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Authors
+{
+    public class AuthorLookupDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+    }
+}
+```
+
+* We will use this DTO class to get all authors and list them in a select box in the book creation modal. (Like in the below image.)
+
+![Book Create Modal](./book-creation-modal.png)
+
+* **CreateUpdateAuthorDto.cs**
+
+```csharp
+using System;
+
+namespace BookStore.Authors
+{
+    public class CreateUpdateAuthorDto
+    {
+        public string Name { get; set; }
+        
+        public DateTime BirthDate { get; set; }
+        
+        public string ShortBio { get; set; }
+    }
+}
+```
+
+* **IAuthorAppService.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace BookStore.Authors
+{
+    public interface IAuthorAppService : 
+        ICrudAppService<AuthorDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateAuthorDto, CreateUpdateAuthorDto>
+    {
+    }
+}
+```
+
+* **Book.Dto**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Books
+{
+    public class BookDto : EntityDto<Guid>
+    {
+        public string AuthorName { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime PublishDate { get; set; }
+
+        public float Price { get; set; }
+
+        public string[] CategoryNames { get; set; }
+    }
+}
+```
+
+* When listing the Books we will retrieve them with all their details (author name and category names).
+
+* **BookGetListInput.cs**
+
+```csharp
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Books
+{
+    public class BookGetListInput : PagedAndSortedResultRequestDto
+    {
+    }
+}
+```
+
+* **CreateUpdateBookDto.cs**
+
+```csharp
+using System;
+
+namespace BookStore.Books
+{
+    public class CreateUpdateBookDto
+    {
+        public Guid AuthorId { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime PublishDate { get; set; }
+
+        public float Price { get; set; }
+
+        public string[] CategoryNames { get; set; }
+    }
+}
+```
+
+* To create or update a book we will use this input DTO.
+
+* **IBookAppService.cs**
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using BookStore.Authors;
+using BookStore.Categories;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace BookStore.Books
+{
+    public interface IBookAppService : IApplicationService
+    {
+        Task<PagedResultDto<BookDto>> GetListAsync(BookGetListInput input);
+
+        Task<BookDto> GetAsync(Guid id);
+
+        Task CreateAsync(CreateUpdateBookDto input);
+
+        Task UpdateAsync(Guid id, CreateUpdateBookDto input);
+
+        Task DeleteAsync(Guid id);
+
+        Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync();
+
+        Task<ListResultDto<CategoryLookupDto>> GetCategoryLookupAsync();
+    }
+}
+```
+
+* Instead of Author and Category app services (CrudAppService), we need to customize the **GetList**, **GetAsync**, **CreateAsync**, **UpdateAsync** and **DeleteAsync** methods. So we will create custom application services for them.
+
+* Also we will create two additional methods and they are `GetAuthorLookupAsync` and `GetCategoryLookupAsync`. We will use these two methods to retrieve all authors and categories without pagination and listed them as select box item in create/update modals for Book page.
+(You can see the usage of these two methods in the below gif.)
+
+![New Book](./book-create.gif)
+
+* **CategoryDto.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Categories
+{
+    public class CategoryDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+    }
+}
+```
+
+* **CategoryLookupDto.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace BookStore.Categories
+{
+    public class CategoryLookupDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+    }
+}
+```
+
+* We will use this DTO class to get all categories without pagination and list them in a select box in the book create/update modal.
+
+* **CreateUpdateCategoryDto.cs**
+
+```csharp
+namespace BookStore.Categories
+{
+    public class CreateUpdateCategoryDto
+    {
+        public string Name { get; set; }
+    }
+}
+```
+
+* **ICategoryAppService.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace BookStore.Categories
+{
+    public interface ICategoryAppService : 
+        ICrudAppService<CategoryDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateCategoryDto, CreateUpdateCategoryDto>
+    {
+    }
+}
+```
+
+* After creating the DTOs and application service interfaces, now we can define implementation of that interfaces. So, we can create a folder-structure like in the below image for `BookStore.Application` layer. Open the application service classes and add the following codes to each of these classes.
+
+![Application Folder Structure](./application-folder-structure.png)
+
+* **AuthorAppService.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace BookStore.Authors
+{
+    public class AuthorAppService : 
+        CrudAppService<Author, AuthorDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateAuthorDto, CreateUpdateAuthorDto>, 
+        IAuthorAppService
+    {
+        public AuthorAppService(IRepository<Author, Guid> repository) : base(repository)
+        {
+        }
+    }
+}
+```
+
+* **CategoryAppService.cs**
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace BookStore.Categories
+{
+    public class CategoryAppService : 
+        CrudAppService<Category, CategoryDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateCategoryDto, CreateUpdateCategoryDto>,
+        ICategoryAppService
+    {
+        public CategoryAppService(IRepository<Category, Guid> repository) : base(repository)
+        {
+        }
+    }
+}
+```
+
+* Thanks to the `CrudAppService`, we don't need to manually implement the crud methods.
+
+* **BookAppService.cs**
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BookStore.Authors;
+using BookStore.Categories;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
+
+namespace BookStore.Books
+{
+    public class BookAppService : BookStoreAppService, IBookAppService
+    {
+        private readonly IBookRepository _bookRepository;
+        private readonly BookManager _bookManager;
+        private readonly IRepository<Author, Guid> _authorRepository;
+        private readonly IRepository<Category, Guid> _categoryRepository;
+
+        public BookAppService(
+            IBookRepository bookRepository, 
+            BookManager bookManager, 
+            IRepository<Author, Guid> authorRepository,
+            IRepository<Category, Guid> categoryRepository
+            )
+        {
+            _bookRepository = bookRepository;
+            _bookManager = bookManager;
+            _authorRepository = authorRepository;
+            _categoryRepository = categoryRepository;
+        }
+        
+        public async Task<PagedResultDto<BookDto>> GetListAsync(BookGetListInput input)
+        {
+            var books = await _bookRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount);
+            var totalCount = await _bookRepository.CountAsync();
+
+            return new PagedResultDto<BookDto>(totalCount, ObjectMapper.Map<List<BookWithDetails>, List<BookDto>>(books));
+        }
+
+        public async Task<BookDto> GetAsync(Guid id)
+        {
+            var book = await _bookRepository.GetAsync(id);
+
+            return ObjectMapper.Map<BookWithDetails, BookDto>(book);
+        }
+
+        public async Task CreateAsync(CreateUpdateBookDto input)
+        {
+            await _bookManager.CreateAsync(
+                input.AuthorId, 
+                input.Name, 
+                input.PublishDate, 
+                input.Price,
+                input.CategoryNames
+            );
+        }
+
+        public async Task UpdateAsync(Guid id, CreateUpdateBookDto input)
+        {
+            var book = await _bookRepository.GetAsync(id, includeDetails: true); //return type is: Book (not BookWithDetails) Because, we don't need author name
+            
+            await _bookManager.UpdateAsync(
+                book, 
+                input.AuthorId, 
+                input.Name, 
+                input.PublishDate, 
+                input.Price, 
+                input.CategoryNames
+            );
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            await _bookRepository.DeleteAsync(id);
+        }
+        
+        public async Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync()
+        {
+            var authors = await _authorRepository.GetListAsync();
+
+            return new ListResultDto<AuthorLookupDto>(
+                ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
+            );
+        }
+
+        public async Task<ListResultDto<CategoryLookupDto>> GetCategoryLookupAsync()
+        {
+            var categories = await _categoryRepository.GetListAsync();
+
+            return new ListResultDto<CategoryLookupDto>(
+                ObjectMapper.Map<List<Category>, List<CategoryLookupDto>>(categories)
+            );
+        }
+    }
+}
+```
+
+* As you can notice in here, we've used our **Domain Service** class named `BookManager` in the **CreateAsync** and **UpdateAsync** methods. (In step 1, we've defined them)
+
+* As you may remember, in these methods, new categories are added to the book or removed from the sub-collection (**Categories** (`BookCategory`)) according to the relevant category names.
+
+* After implementing the application services, we need to define the mappings for our services to work. So open the `BookStoreApplicationAutoMapperProfile` class and update with the following code.
+
+```csharp
+using AutoMapper;
+using BookStore.Authors;
+using BookStore.Books;
+using BookStore.Categories;
+
+namespace BookStore
+{
+    public class BookStoreApplicationAutoMapperProfile : Profile
+    {
+        public BookStoreApplicationAutoMapperProfile()
+        {
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Category, CategoryLookupDto>();
+            CreateMap<CreateUpdateCategoryDto, Category>();
+
+            CreateMap<Author, AuthorDto>();
+            CreateMap<Author, AuthorLookupDto>();
+            CreateMap<CreateUpdateAuthorDto, Author>();
+
+            CreateMap<BookWithDetails, BookDto>();
+        }
+    }
+}
+
+```
 
 ### Step 6 - (UI)
+
+The only thing we need to do is, by using the application service methods that we've defined in the previous step to create the UI.
+
+![Web Folder Structure](./web-folder-structure.png)
+
+> For keep the article shorter, I'll just show you how to create the Book page (with Create/Edit modals). If you want to implement it to other pages, you can access the source code of the application at https://github.com/EngincanV/ABP-Many-to-Many-Relationship-Demo and copy-paste the relevant code-blocks to your application.
+
+#### Book Page
+
+* Create a razor page named **Index.cshtml** under the **Pages/Books** folder of the `BookStore.Web` project and paste the following code to that page.
+
+* **Index.cshtml**
+
+```html
+@page
+@model BookStore.Web.Pages.Books.Index
+
+@section scripts
+{
+    <abp-script src="/Pages/Books/Index.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>Books</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button id="NewBookButton"
+                            text="New Book"
+                            icon="plus"
+                            button-type="Primary"/>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+```
+
+* In here we've added a **New Book** button and a table with id named "BooksTable". We'll create an `Index.js` file and by the using [datatable.js](https://datatables.net) we will fill the table with our records.
+
+* **Index.js**
+
+```js
+$(function () {
+    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
+    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
+    
+    var bookService = bookStore.books.book;
+    
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+            serverSide: true,
+            paging: true,
+            order: [[1, "asc"]],
+            searching: false,
+            scrollX: true,
+            ajax: abp.libs.datatables.createAjax(bookService.getList),
+            columnDefs: [
+                {
+                    title: 'Actions',
+                    rowAction: {
+                        items:
+                            [
+                                {
+                                    text: 'Edit',
+                                    action: function (data) {
+                                        editModal.open({ id: data.record.id });
+                                    }
+                                },
+                                {
+                                    text: 'Delete',
+                                    confirmMessage: function (data) {
+                                        return "Are you sure to delete the book '" + data.record.name  +"'?";
+                                    },
+                                    action: function (data) {
+                                        bookService
+                                            .delete(data.record.id)
+                                            .then(function() {
+                                                abp.notify.info("Successfully deleted!");
+                                                dataTable.ajax.reload();
+                                            });
+                                    }
+                                }
+                            ]
+                    }
+                },
+                {
+                    title: 'Name',
+                    data: "name"
+                },
+                {
+                    title: 'Publish Date',
+                    data: "publishDate",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString();
+                    }
+                },
+                {
+                  title: 'Author Name',
+                  data: "authorName"  
+                },
+                {
+                    title: 'Price',
+                    data: "price"
+                },
+                {
+                   title: 'Categories',
+                   data: "categoryNames",
+                    render: function (data) {
+                       return data.join(", ");
+                    }
+                }
+            ]
+        })
+    );
+
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    $('#NewBookButton').click(function (e) {
+        e.preventDefault();
+        createModal.open();
+    });
+});
+
+```
+
+> `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP Framework. It simplifies the Datatables configuration by providing conventional default values for missing options.
+
+* Let's examine what we've done it `Index.js` file.
+
+* Firstly, we've defined our `createModal` and `editModal` modals by using the [ABP Modals](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Modals). Then, we've created the DataTable and fetch our books by using the dynamic JavaScript proxy function (`bookStore.books.book.getList`) (It sends a request to the **GetListAsync** method that we've defined in the `BookAppService`, under the hook) and display them in the table with id named "BooksTable".
+
+* Now let's run the application and navigates to **/Books** route to see how our Book page looks.
+
+![Demo](./demo.png)
+
+* Now that our app is working properly, we can continue to development.
+
+#### View Model Classes and Mapping Configurations
+
+* Create a folder named **Modals** and add a class named `CategoryViewModel` inside of it. We will use this view modal class to determine which categories are selected or not in our Create/Edit modals.
+
+* **CategoryViewModel.cs**
+
+```csharp
+using System;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BookStore.Web.Models
+{
+    public class CategoryViewModel
+    {
+        [HiddenInput]
+        public Guid Id { get; set; }
+
+        public bool IsSelected { get; set; }
+
+        [Required]
+        [HiddenInput]
+        public string Name { get; set; }
+    }
+}
+```
+
+* Then, we can open the `BookStoreWebAutoMapperProfile` class and define the required mappings as follows.
+
+```csharp
+using AutoMapper;
+using BookStore.Authors;
+using BookStore.Books;
+using BookStore.Categories;
+using BookStore.Web.Models;
+using BookStore.Web.Pages.Books;
+using Volo.Abp.AutoMapper;
+
+namespace BookStore.Web
+{
+    public class BookStoreWebAutoMapperProfile : Profile
+    {
+        public BookStoreWebAutoMapperProfile()
+        {
+            CreateMap<CategoryLookupDto, CategoryViewModel>()
+                .Ignore(x => x.IsSelected);
+
+            CreateMap<BookDto, CreateUpdateBookDto>();
+
+            CreateMap<AuthorDto, CreateUpdateAuthorDto>();
+
+            CreateMap<CategoryDto, CreateUpdateCategoryDto>();
+        }
+    }
+}
+```
+
+#### Create/Edit Modals
+
+* After creating our index page for Books and configuring mappings, let's continue with creating the Create/Edit modals for Books.
+
+* Create a razor page named **CreateModal.cshtml** (and **CreateModal.cshtml.cs**).
+
+* **CreateModal.cs**
+
+```html
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model BookStore.Web.Pages.Books.CreateModal
+
+@{
+    Layout = null;
+}
+
+<form method="post" id="CreateBookModal" asp-page="/Books/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="New Book"></abp-modal-header>
+        <abp-modal-body>
+            <abp-tabs name="create-book-modal-tabs">
+                <abp-tab title="Book Information" class="mt-3">
+                    <div id="book-information-wrapper" class="mt-3">
+                        <abp-input asp-for="Book.Name" label="Book Name"/>
+                        <abp-input asp-for="Book.Price" label="Price" type="number"/>
+                        <abp-input asp-for="Book.PublishDate" type="date" label="Publish Date"/>
+                        <abp-select asp-for="Book.AuthorId" asp-items="@Model.AuthorList" label="Author">
+                            <option value="" disabled="disabled">Choose a author...</option>
+                        </abp-select>
+                    </div>
+                </abp-tab>
+                <abp-tab title="Categories">
+                    <div id="category-list-wrapper" class="mt-3">
+                        @for (var i = 0; i < Model.Categories.Count; i++)
+                        {
+                            var category = Model.Categories[i];
+                            <abp-input abp-id-name="@Model.Categories[i].IsSelected" asp-for="@category.IsSelected" label="@category.Name"/>
+                            <input abp-id-name="@Model.Categories[i].Name" asp-for="@category.Name" />
+                        }
+                    </div>
+                </abp-tab>
+            </abp-tabs>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+```
+
+* **CreateModal.cshtml.cs**
+
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BookStore.Books;
+using BookStore.Categories;
+using BookStore.Web.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace BookStore.Web.Pages.Books
+{
+    public class CreateModal : BookStorePageModel
+    {
+        [BindProperty]
+        public CreateUpdateBookDto Book { get; set; }
+           
+        [BindProperty]
+        public List<CategoryViewModel> Categories { get; set; }
+        
+        public List<SelectListItem> AuthorList { get; set; }
+
+        private readonly IBookAppService _bookAppService;
+
+        public CreateModal(IBookAppService bookAppService)
+        {
+            _bookAppService = bookAppService;
+        }
+
+        public async Task OnGetAsync()
+        {
+            Book = new CreateUpdateBookDto();
+            
+            //Get all authors and fill the select list
+            var authorLookup = await _bookAppService.GetAuthorLookupAsync();
+            AuthorList = authorLookup.Items
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+
+            //Get all categories
+            var categoryLookupDto = await _bookAppService.GetCategoryLookupAsync();
+            Categories = ObjectMapper.Map<List<CategoryLookupDto>, List<CategoryViewModel>>(categoryLookupDto.Items.ToList());
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
+            
+            var selectedCategories = Categories.Where(x => x.IsSelected).ToList();
+            if (selectedCategories.Any())
+            {
+                var categoryNames = selectedCategories.Select(x => x.Name).ToArray();
+                Book.CategoryNames = categoryNames;
+            }
+            
+            await _bookAppService.CreateAsync(Book);
+            return NoContent();
+        }
+    }
+}
+```
+
+* Here, we've get all categories and authors inside of the `OnGetAsync` method. And use them inside of the create modal to list them to let the user choose when creating a new book.
+
+![Create Book Modal](./book-creation-modal.png)
+
+* When the user submitted the form, `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.CreateAsync` method to create a new book.
+
+* Create a razor page named **EditModal.cshtml** (and **EditModal.cshtml.cs**).
+
+* **EditModal.cshtml**
+
+```html
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model BookStore.Web.Pages.Books.EditModal
+
+@{
+    Layout = null;
+}
+
+<form method="post" id="EditBookModal" asp-page="/Books/EditModal">
+    <abp-modal>
+        <abp-modal-header title="Update"></abp-modal-header>
+        <abp-modal-body>
+            <abp-tabs name="edit-book-modal-tabs">
+                <abp-tab title="Book Information" class="mt-3">
+                    <div id="book-information-wrapper" class="mt-3">
+                        <abp-input asp-for="Id" />
+                        <abp-input asp-for="EditingBook.Name" label="Book Name"/>
+                        <abp-input asp-for="EditingBook.Price" label="Price" type="number"/>
+                        <abp-input asp-for="EditingBook.PublishDate" type="date" label="Publish Date"/>
+                        <abp-select asp-for="EditingBook.AuthorId" asp-items="@Model.AuthorList" label="Author">
+                            <option value="" disabled="disabled">Choose a author...</option>
+                        </abp-select>
+                    </div>
+                </abp-tab>
+                <abp-tab title="Categories">
+                    <div id="category-list-wrapper" class="mt-3">
+                        @for (var i = 0; i < Model.Categories.Count; i++)
+                        {
+                            var category = Model.Categories[i];
+                            <abp-input abp-id-name="@Model.Categories[i].IsSelected" asp-for="@category.IsSelected" label="@category.Name"/>
+                            <input abp-id-name="@Model.Categories[i].Name" asp-for="@category.Name" />
+                        }
+                    </div>
+                </abp-tab>
+            </abp-tabs>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+```
+
+* **EditModal.cshtml.cs**
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BookStore.Books;
+using BookStore.Categories;
+using BookStore.Web.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace BookStore.Web.Pages.Books
+{
+    public class EditModal : BookStorePageModel
+    {
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid Id { get; set; }
+
+        [BindProperty]
+        public CreateUpdateBookDto EditingBook { get; set; }
+        
+        [BindProperty]
+        public List<CategoryViewModel> Categories { get; set; }
+        
+        public List<SelectListItem> AuthorList { get; set; }
+
+        private readonly IBookAppService _bookAppService;
+
+        public EditModal(IBookAppService bookAppService)
+        {
+            _bookAppService = bookAppService;
+        }
+
+        public async Task OnGetAsync()
+        {
+            var bookDto = await _bookAppService.GetAsync(Id);
+            EditingBook = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
+            
+            //get all authors
+            var authorLookup = await _bookAppService.GetAuthorLookupAsync();
+            AuthorList = authorLookup.Items
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+
+            //get all categories
+            var categoryLookupDto = await _bookAppService.GetCategoryLookupAsync();
+            Categories = ObjectMapper.Map<List<CategoryLookupDto>, List<CategoryViewModel>>(categoryLookupDto.Items.ToList());
+
+            //mark as Selected for Categories in the book
+            if (EditingBook.CategoryNames != null && EditingBook.CategoryNames.Any())
+            {
+                Categories
+                    .Where(x => EditingBook.CategoryNames.Contains(x.Name))
+                    .ToList()
+                    .ForEach(x => x.IsSelected = true);
+            }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
+            
+            var selectedCategories = Categories.Where(x => x.IsSelected).ToList();
+            if (selectedCategories.Any())
+            {
+                var categoryNames = selectedCategories.Select(x => x.Name).ToArray();
+                EditingBook.CategoryNames = categoryNames;
+            }
+            
+            await _bookAppService.UpdateAsync(Id, EditingBook);
+            return NoContent();
+        }
+    }
+}
+```
+
+* As in the create model, we've get all categories and authors inside of the `OnGetAsync` method. And also get the book by id and marked as selected for the categories of the book.
+
+* When the user updated the inputs and submitted the form, `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.UpdateAsync` method to update the book.
+
+![Edit Book Modal](./book-update-modal.png)
+
+#### Conclusion
+
+In this article, I've tried to explain how to create many-to-many relationship by using the ABP framework. (by following DDD principles)
+Thanks for reading this article, I hope it was helpful.
