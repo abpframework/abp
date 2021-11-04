@@ -12,9 +12,9 @@ namespace Volo.Abp.Sms.Aliyun
     {
         protected AbpAliyunSmsOptions Options { get; }
 
-        public AliyunSmsSender(IOptionsSnapshot<AbpAliyunSmsOptions> options)
+        public AliyunSmsSender(IOptionsMonitor<AbpAliyunSmsOptions> options)
         {
-            Options = options.Value;
+            Options = options.CurrentValue;
         }
 
         public async Task SendAsync(SmsMessage smsMessage)
