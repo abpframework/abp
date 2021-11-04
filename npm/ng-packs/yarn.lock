@@ -14,9 +14,9 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-5.0.0-beta.1-1.tgz#0b1fe99e5f0df4892e12f1ea989c087dd3fafcc1"
   integrity sha512-bwqqiUxVINtDX6cMqNx6Wh1Ie7VUJNGyAx3nHNjhvDwU+40w0DvngoQ/+2UUNrWvacFplj9wkuhKR4YNr26Dfw==
   dependencies:
-    "@abp/ng.account.core" "~5.0.0-beta.2"
-    "@abp/ng.identity" "~5.0.0-beta.2"
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.account.core" "~5.0.0-beta.1-1"
+    "@abp/ng.identity" "~5.0.0-beta.1-1"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.components@~5.0.0-beta.2":
@@ -45,7 +45,7 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.feature-management/-/ng.feature-management-5.0.0-beta.1-1.tgz#0b14ef984de2308297b053ea421c834d22bd352c"
   integrity sha512-89XX1+PkA1LZROZIJGGIDGQWEbuqvusnDcDKkuzVrI3+mghkvoGQYPig7nxnhW5vGdAmvJ9fDztsUNN5JKUDDQ==
   dependencies:
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.identity@~5.0.0-beta.2":
@@ -53,8 +53,8 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-5.0.0-beta.1-1.tgz#dd06d766a950a354565b5821363200d8763d2a65"
   integrity sha512-qHRc5SceIQ56V1F0VVGqPjVnr7YHLEYmfX5tgyd/qk97WWvszkBD7a1eyQREP4Q63IiwcBtqnbN3hRCAU78JIQ==
   dependencies:
-    "@abp/ng.permission-management" "~5.0.0-beta.2"
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.permission-management" "~5.0.0-beta.1-1"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.permission-management@~5.0.0-beta.2":
@@ -62,7 +62,7 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.permission-management/-/ng.permission-management-5.0.0-beta.1-1.tgz#72f709fc99581724b9102e9308f69f52200dc596"
   integrity sha512-TKoP0lPMpgGzhtQ4W1zfv3uof4oP4ZZNxoTa9W7t1TzfAhxo/ryPJuMf11NXrJvKnD3s0I9AZMudGhjQvxXm3Q==
   dependencies:
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.schematics@~5.0.0-beta.2":
@@ -82,8 +82,8 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-5.0.0-beta.1-1.tgz#4ad8d3ce4b0eee54460f6babb6a6b8775a217b05"
   integrity sha512-Qqu/vjeoGJ/8+uq1/dmIb/ZsZn7lah3afUkYrs/1auFACYSiR9F9JgYueXaQ9OxLjrBZuA7wjdMB2mxKGDaZAg==
   dependencies:
-    "@abp/ng.components" "~5.0.0-beta.2"
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.components" "~5.0.0-beta.1-1"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.tenant-management@~5.0.0-beta.2":
@@ -91,8 +91,8 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-5.0.0-beta.1-1.tgz#4b851d6d4971fce83d11cf0511d74d2578ccf742"
   integrity sha512-t7e8oYGas4Y3L28UUFmWPGlHyri/HVHSdKNf27rq3XjY1bhDd2RCC3FqSJCCr/AoNm1NU7fIPUl8oLTCWIYvkg==
   dependencies:
-    "@abp/ng.feature-management" "~5.0.0-beta.2"
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.feature-management" "~5.0.0-beta.1-1"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.theme.basic@~5.0.0-beta.2":
@@ -100,8 +100,8 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.basic/-/ng.theme.basic-5.0.0-beta.1-1.tgz#fdb92411c5c3df686472ea3ea6175294a7a1f437"
   integrity sha512-CAoVAU3ZOBsXhIAiQYGhNeuPic1yGR1MBolIK4EUpR0Ag1jyUXEahCu3T78MYdRBcPlYOD0yrK1/llo4GWZn2w==
   dependencies:
-    "@abp/ng.account.core" "~5.0.0-beta.2"
-    "@abp/ng.theme.shared" "~5.0.0-beta.2"
+    "@abp/ng.account.core" "~5.0.0-beta.1-1"
+    "@abp/ng.theme.shared" "~5.0.0-beta.1-1"
     tslib "^2.0.0"
 
 "@abp/ng.theme.shared@~5.0.0-beta.2":
@@ -109,7 +109,7 @@
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-5.0.0-beta.1-1.tgz#fce2aa9433838f514263cfa3aff34ab803651320"
   integrity sha512-AQFTm4T8ohR/7RmZTTJ7CvUscwKqf/HF2AvxZRy+ixe+q1PGWos6L+e8ZFt5YuzkieUPLXdWkeBni0x4rEQRdw==
   dependencies:
-    "@abp/ng.core" "~5.0.0-beta.2"
+    "@abp/ng.core" "~5.0.0-beta.1-1"
     "@fortawesome/fontawesome-free" "^5.15.4"
     "@ng-bootstrap/ng-bootstrap" "^7.0.0"
     "@ngx-validate/core" "^0.0.13"
@@ -124,10 +124,10 @@
   dependencies:
     just-compare "^1.3.0"
 
-"@abp/utils@~5.0.0-beta.2":
-  version "5.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-5.0.0-beta.2.tgz#4d120c0f930b943071b4ba27dafedf6c8b730182"
-  integrity sha512-EZV1P+eafVBEHO6B+Ws6iX4xyeg8B6nCPLvpaFC6mStk7SGidh2rAYYWyydyh68Ky8YdbLYQE3oPaIewOhDWTg==
+"@abp/utils@~5.0.0-beta.3":
+  version "5.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-5.0.0-beta.3.tgz#63ece8b7a524a056c7dd16486cbb3203eca39017"
+  integrity sha512-RonjfS2eL7vdbLa+J/wvDc+8TkyPYB3S587evvB+wkncmL1POY/KjOt6GVcsjIj/E5KbprAj+UMRHuwAQbxvmg==
   dependencies:
     just-compare "^1.3.0"
 
@@ -2571,6 +2571,13 @@
     npmlog "^4.1.2"
     write-file-atomic "^3.0.3"
 
+"@ng-bootstrap/ng-bootstrap@^11.0.0-beta.2":
+  version "11.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-11.0.0-beta.2.tgz#4d0c1f23a050e2e07ea22cc0c017e0b3685cdbf9"
+  integrity sha512-H6Kdzw4DBsUIrlvoxEJHCValSTHq0XcsiTVNbb99PjgD6ZhkBjINenT0W62A91k0nQEQBZCjhGGv+aNU/XxQNg==
+  dependencies:
+    tslib "^2.1.0"
+
 "@ng-bootstrap/ng-bootstrap@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-7.0.0.tgz#3bfa62eb52fdb891b1ce693ea11c39127e2d1ab7"
@@ -4462,7 +4469,12 @@ boolbase@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootstrap@^4.5.0, bootstrap@~4.6.0:
+bootstrap@^5.1.1:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.1.3.tgz#ba081b0c130f810fa70900acbc1c6d3c28fa8f34"
+  integrity sha512-fcQztozJ8jToQWXxVuEyXWW+dSo8AiXWKwiSSrKWsRB/Qt+Ewwza+JWoLKiTuQLaEPhdNAJ7+Dosc9DOIqNy7Q==
+
+bootstrap@~4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.6.0.tgz#97b9f29ac98f98dfa43bf7468262d84392552fd7"
   integrity sha512-Io55IuQY3kydzHtbGvQya3H+KorS/M9rSNyfCGCg9WZ4pyT/lCxIlpJgG1GXW/PswzC84Tr2fBYi+7+jFVQQBw==
