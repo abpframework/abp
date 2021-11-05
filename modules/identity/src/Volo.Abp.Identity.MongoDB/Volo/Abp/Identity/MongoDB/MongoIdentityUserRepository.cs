@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity.MongoDB
 {
@@ -117,7 +118,9 @@ namespace Volo.Abp.Identity.MongoDB
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
-            var role = await (await GetDbContextAsync(cancellationToken)).Roles.AsQueryable() //TODO: Such usages breaks data filters
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
+            var role = await ApplyDataFilters<IMongoQueryable<IdentityRole>, IdentityRole>(dbContext.Roles.AsQueryable())
                 .Where(x => x.NormalizedName == normalizedRoleName)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -275,6 +278,22 @@ namespace Volo.Abp.Identity.MongoDB
             return await (await GetMongoQueryableAsync(cancellationToken))
                      .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                      .ToListAsync(cancellationToken);
+        }
+
+        private TQueryable ApplyDataFilters<TQueryable, TEntity>(TQueryable query) where TQueryable : IQueryable<TEntity>
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
         }
     }
 }
