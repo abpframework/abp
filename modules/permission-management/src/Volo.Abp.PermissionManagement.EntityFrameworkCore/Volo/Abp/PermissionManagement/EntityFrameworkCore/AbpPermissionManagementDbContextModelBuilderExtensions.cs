@@ -21,7 +21,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
                 b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
 
-                b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey}).IsUnique(true);
+                b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
 
                 b.ApplyObjectExtensionMappings();
             });

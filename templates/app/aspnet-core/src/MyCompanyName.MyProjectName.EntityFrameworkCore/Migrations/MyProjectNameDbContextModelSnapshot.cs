@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-#nullable disable
-
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
@@ -19,10 +17,9 @@ namespace MyCompanyName.MyProjectName.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "6.0.0-rc.2.21480.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
@@ -129,7 +126,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("TenantId", "UserId", "ExecutionTime");
 
-                    b.ToTable("AbpAuditLogs", (string)null);
+                    b.ToTable("AbpAuditLogs");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
@@ -179,7 +176,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
 
-                    b.ToTable("AbpAuditLogActions", (string)null);
+                    b.ToTable("AbpAuditLogActions");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
@@ -229,7 +226,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
 
-                    b.ToTable("AbpEntityChanges", (string)null);
+                    b.ToTable("AbpEntityChanges");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
@@ -271,7 +268,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("EntityChangeId");
 
-                    b.ToTable("AbpEntityPropertyChanges", (string)null);
+                    b.ToTable("AbpEntityPropertyChanges");
                 });
 
             modelBuilder.Entity("Volo.Abp.BackgroundJobs.BackgroundJobRecord", b =>
@@ -329,7 +326,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("IsAbandoned", "NextTryTime");
 
-                    b.ToTable("AbpBackgroundJobs", (string)null);
+                    b.ToTable("AbpBackgroundJobs");
                 });
 
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
@@ -358,16 +355,15 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "ProviderName", "ProviderKey")
-                        .IsUnique()
-                        .HasFilter("[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
 
-                    b.ToTable("AbpFeatureValues", (string)null);
+                    b.ToTable("AbpFeatureValues");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -408,12 +404,13 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AbpClaimTypes", (string)null);
+                    b.ToTable("AbpClaimTypes");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -434,12 +431,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .IsUnique()
                         .HasFilter("[SourceTenantId] IS NOT NULL AND [TargetTenantId] IS NOT NULL");
 
-                    b.ToTable("AbpLinkUsers", (string)null);
+                    b.ToTable("AbpLinkUsers");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -482,7 +480,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("NormalizedName");
 
-                    b.ToTable("AbpRoles", (string)null);
+                    b.ToTable("AbpRoles");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>
@@ -510,12 +508,13 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AbpRoleClaims", (string)null);
+                    b.ToTable("AbpRoleClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Action")
@@ -584,12 +583,13 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("TenantId", "UserId");
 
-                    b.ToTable("AbpSecurityLogs", (string)null);
+                    b.ToTable("AbpSecurityLogs");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -738,7 +738,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("UserName");
 
-                    b.ToTable("AbpUsers", (string)null);
+                    b.ToTable("AbpUsers");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserClaim", b =>
@@ -766,7 +766,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AbpUserClaims", (string)null);
+                    b.ToTable("AbpUserClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserLogin", b =>
@@ -795,7 +795,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("LoginProvider", "ProviderKey");
 
-                    b.ToTable("AbpUserLogins", (string)null);
+                    b.ToTable("AbpUserLogins");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserOrganizationUnit", b =>
@@ -822,7 +822,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("UserId", "OrganizationUnitId");
 
-                    b.ToTable("AbpUserOrganizationUnits", (string)null);
+                    b.ToTable("AbpUserOrganizationUnits");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
@@ -841,7 +841,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("RoleId", "UserId");
 
-                    b.ToTable("AbpUserRoles", (string)null);
+                    b.ToTable("AbpUserRoles");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserToken", b =>
@@ -866,12 +866,13 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AbpUserTokens", (string)null);
+                    b.ToTable("AbpUserTokens");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -939,7 +940,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("AbpOrganizationUnits", (string)null);
+                    b.ToTable("AbpOrganizationUnits");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnitRole", b =>
@@ -966,7 +967,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("RoleId", "OrganizationUnitId");
 
-                    b.ToTable("AbpOrganizationUnitRoles", (string)null);
+                    b.ToTable("AbpOrganizationUnitRoles");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResource", b =>
@@ -1040,7 +1041,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityServerApiResources", (string)null);
+                    b.ToTable("IdentityServerApiResources");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim", b =>
@@ -1054,7 +1055,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiResourceId", "Type");
 
-                    b.ToTable("IdentityServerApiResourceClaims", (string)null);
+                    b.ToTable("IdentityServerApiResourceClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty", b =>
@@ -1072,7 +1073,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiResourceId", "Key", "Value");
 
-                    b.ToTable("IdentityServerApiResourceProperties", (string)null);
+                    b.ToTable("IdentityServerApiResourceProperties");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceScope", b =>
@@ -1086,7 +1087,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiResourceId", "Scope");
 
-                    b.ToTable("IdentityServerApiResourceScopes", (string)null);
+                    b.ToTable("IdentityServerApiResourceScopes");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret", b =>
@@ -1111,7 +1112,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiResourceId", "Type", "Value");
 
-                    b.ToTable("IdentityServerApiResourceSecrets", (string)null);
+                    b.ToTable("IdentityServerApiResourceSecrets");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScope", b =>
@@ -1187,7 +1188,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityServerApiScopes", (string)null);
+                    b.ToTable("IdentityServerApiScopes");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim", b =>
@@ -1201,7 +1202,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiScopeId", "Type");
 
-                    b.ToTable("IdentityServerApiScopeClaims", (string)null);
+                    b.ToTable("IdentityServerApiScopeClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty", b =>
@@ -1219,7 +1220,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ApiScopeId", "Key", "Value");
 
-                    b.ToTable("IdentityServerApiScopeProperties", (string)null);
+                    b.ToTable("IdentityServerApiScopeProperties");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.Client", b =>
@@ -1403,7 +1404,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("IdentityServerClients", (string)null);
+                    b.ToTable("IdentityServerClients");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientClaim", b =>
@@ -1421,7 +1422,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Type", "Value");
 
-                    b.ToTable("IdentityServerClientClaims", (string)null);
+                    b.ToTable("IdentityServerClientClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientCorsOrigin", b =>
@@ -1435,7 +1436,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Origin");
 
-                    b.ToTable("IdentityServerClientCorsOrigins", (string)null);
+                    b.ToTable("IdentityServerClientCorsOrigins");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientGrantType", b =>
@@ -1449,7 +1450,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "GrantType");
 
-                    b.ToTable("IdentityServerClientGrantTypes", (string)null);
+                    b.ToTable("IdentityServerClientGrantTypes");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientIdPRestriction", b =>
@@ -1463,7 +1464,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Provider");
 
-                    b.ToTable("IdentityServerClientIdPRestrictions", (string)null);
+                    b.ToTable("IdentityServerClientIdPRestrictions");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri", b =>
@@ -1477,7 +1478,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "PostLogoutRedirectUri");
 
-                    b.ToTable("IdentityServerClientPostLogoutRedirectUris", (string)null);
+                    b.ToTable("IdentityServerClientPostLogoutRedirectUris");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientProperty", b =>
@@ -1495,7 +1496,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Key", "Value");
 
-                    b.ToTable("IdentityServerClientProperties", (string)null);
+                    b.ToTable("IdentityServerClientProperties");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientRedirectUri", b =>
@@ -1509,7 +1510,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "RedirectUri");
 
-                    b.ToTable("IdentityServerClientRedirectUris", (string)null);
+                    b.ToTable("IdentityServerClientRedirectUris");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientScope", b =>
@@ -1523,7 +1524,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Scope");
 
-                    b.ToTable("IdentityServerClientScopes", (string)null);
+                    b.ToTable("IdentityServerClientScopes");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientSecret", b =>
@@ -1548,7 +1549,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("ClientId", "Type", "Value");
 
-                    b.ToTable("IdentityServerClientSecrets", (string)null);
+                    b.ToTable("IdentityServerClientSecrets");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Devices.DeviceFlowCodes", b =>
@@ -1620,7 +1621,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("UserCode");
 
-                    b.ToTable("IdentityServerDeviceFlowCodes", (string)null);
+                    b.ToTable("IdentityServerDeviceFlowCodes");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Grants.PersistedGrant", b =>
@@ -1686,7 +1687,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("SubjectId", "SessionId", "Type");
 
-                    b.ToTable("IdentityServerPersistedGrants", (string)null);
+                    b.ToTable("IdentityServerPersistedGrants");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResource", b =>
@@ -1762,7 +1763,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityServerIdentityResources", (string)null);
+                    b.ToTable("IdentityServerIdentityResources");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim", b =>
@@ -1776,7 +1777,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("IdentityResourceId", "Type");
 
-                    b.ToTable("IdentityServerIdentityResourceClaims", (string)null);
+                    b.ToTable("IdentityServerIdentityResourceClaims");
                 });
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty", b =>
@@ -1794,7 +1795,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("IdentityResourceId", "Key", "Value");
 
-                    b.ToTable("IdentityServerIdentityResourceProperties", (string)null);
+                    b.ToTable("IdentityServerIdentityResourceProperties");
                 });
 
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
@@ -1824,10 +1825,9 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "ProviderName", "ProviderKey")
-                        .IsUnique();
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
 
-                    b.ToTable("AbpPermissionGrants", (string)null);
+                    b.ToTable("AbpPermissionGrants");
                 });
 
             modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
@@ -1856,16 +1856,15 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "ProviderName", "ProviderKey")
-                        .IsUnique()
-                        .HasFilter("[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
 
-                    b.ToTable("AbpSettings", (string)null);
+                    b.ToTable("AbpSettings");
                 });
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1917,7 +1916,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("AbpTenants", (string)null);
+                    b.ToTable("AbpTenants");
                 });
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
@@ -1936,7 +1935,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("TenantId", "Name");
 
-                    b.ToTable("AbpTenantConnectionStrings", (string)null);
+                    b.ToTable("AbpTenantConnectionStrings");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
