@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void SetAbpTenantId(AuthorizationCodeReceivedContext receivedContext)
         {
             var tenantKey = receivedContext.HttpContext.RequestServices
-                .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+                .GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
 
             if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
             {
