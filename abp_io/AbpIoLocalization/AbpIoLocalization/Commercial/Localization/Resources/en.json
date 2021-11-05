@@ -23,7 +23,7 @@
     "Modules": "Modules",
     "LicenseExtendMessage": "Your license end date is extended to {0}",
     "LicenseUpgradeMessage": "Your license is upgraded to {0}",
-    "LicenseExtendAdnUpgradeMessage": "Both your license end date is extended to {0} and your license is upgraded to {1} ",
+    "LicenseExtendAdnUpgradeMessage": "Both your license end date is extended to {0} and your license is upgraded to {1}",
     "LicenseAddDeveloperMessage": "{0} developers added to your license",
     "Volo.AbpIo.Commercial:010004": "Can not find the specified user! The user must have already registered.",
     "MyOrganizations": "My organizations",
