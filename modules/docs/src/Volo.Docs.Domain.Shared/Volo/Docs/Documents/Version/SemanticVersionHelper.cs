@@ -26,6 +26,11 @@ namespace Volo.Docs.GitHub.Documents.Version
 
         private static string NormalizeVersion(string version)
         {
+            if (version == "master" || version == "dev")
+            {
+                return version;
+            }
+            
             version = version.RemovePreFix("v");
 
             var normalizedVersion = "";
