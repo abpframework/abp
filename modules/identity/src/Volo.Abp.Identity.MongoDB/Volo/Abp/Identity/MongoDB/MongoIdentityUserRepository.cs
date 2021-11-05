@@ -143,6 +143,8 @@ namespace Volo.Abp.Identity.MongoDB
             string userName = null,
             string phoneNumber = null,
             string emailAddress = null,
+            bool? isLockedOut = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
@@ -160,6 +162,8 @@ namespace Volo.Abp.Identity.MongoDB
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive == true, x => !x.IsActive)
                 .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -210,6 +214,8 @@ namespace Volo.Abp.Identity.MongoDB
             string userName = null,
             string phoneNumber = null,
             string emailAddress = null,
+            bool? isLockedOut = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
@@ -227,6 +233,8 @@ namespace Volo.Abp.Identity.MongoDB
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
                 .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive == true, x => !x.IsActive)
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
