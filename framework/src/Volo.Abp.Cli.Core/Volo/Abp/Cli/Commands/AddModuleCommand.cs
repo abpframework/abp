@@ -14,15 +14,29 @@ namespace Volo.Abp.Cli.Commands
 {
     public class AddModuleCommand : IConsoleCommand, ITransientDependency
     {
+        private AddModuleInfoOutput _lastAddedModuleInfo;
         public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected SolutionModuleAdder SolutionModuleAdder { get; }
-        public SolutionAbpVersionFinder SolutionAbpVersionFinder { get; }
+        public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
 
-        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionAbpVersionFinder solutionAbpVersionFinder)
+        public AddModuleInfoOutput LastAddedModuleInfo
+        {
+            get
+            {
+                if (_lastAddedModuleInfo == null)
+                {
+                    throw new Exception("You need to add a module first to get the last added module info!");
+                }
+
+                return _lastAddedModuleInfo;
+            }
+        }
+
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionPackageVersionFinder solutionPackageVersionFinder)
         {
             SolutionModuleAdder = solutionModuleAdder;
-            SolutionAbpVersionFinder = solutionAbpVersionFinder;
+            SolutionPackageVersionFinder = solutionPackageVersionFinder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -48,19 +62,27 @@ namespace Volo.Abp.Cli.Commands
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             if (version == null)
             {
-                version = SolutionAbpVersionFinder.Find(solutionFile);
+                version = SolutionPackageVersionFinder.Find(solutionFile);
             }
 
-            await SolutionModuleAdder.AddAsync(
-                solutionFile,
-                commandLineArgs.Target,
-                version,
-                skipDbMigrations,
-                withSourceCode,
-                addSourceCodeToSolutionFile,
-                newTemplate,
-                newProTemplate
-            );
+            var moduleInfo = await SolutionModuleAdder.AddAsync(
+                 solutionFile,
+                 commandLineArgs.Target,
+                 version,
+                 skipDbMigrations,
+                 withSourceCode,
+                 addSourceCodeToSolutionFile,
+                 newTemplate,
+                 newProTemplate
+             );
+
+            _lastAddedModuleInfo = new AddModuleInfoOutput
+            {
+                DisplayName = moduleInfo.DisplayName,
+                Name = moduleInfo.Name,
+                DocumentationLinks = moduleInfo.DocumentationLinks,
+                InstallationCompleteMessage = moduleInfo.InstallationCompleteMessage
+            };
         }
 
         public string GetUsageInfo()

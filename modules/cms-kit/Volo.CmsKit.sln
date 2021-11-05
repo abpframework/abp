@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi.Client", "src\Volo.CmsKit.Common.HttpApi.Client\Volo.CmsKit.Common.HttpApi.Client.csproj", "{EC98F006-2002-4CE2-AA62-5EBB589ACD79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Installer", "src\Volo.CmsKit.Installer\Volo.CmsKit.Installer.csproj", "{908C157E-2352-4373-BF5D-E5DA19913390}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -233,6 +235,10 @@ Global
 		{EC98F006-2002-4CE2-AA62-5EBB589ACD79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC98F006-2002-4CE2-AA62-5EBB589ACD79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC98F006-2002-4CE2-AA62-5EBB589ACD79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908C157E-2352-4373-BF5D-E5DA19913390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908C157E-2352-4373-BF5D-E5DA19913390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908C157E-2352-4373-BF5D-E5DA19913390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908C157E-2352-4373-BF5D-E5DA19913390}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -277,6 +283,7 @@ Global
 		{5D9BD65D-353E-4618-BE49-E1DF4CFF2393} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
 		{E8CC280A-D049-4564-9C71-2F5657C17937} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
 		{EC98F006-2002-4CE2-AA62-5EBB589ACD79} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
+		{908C157E-2352-4373-BF5D-E5DA19913390} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}

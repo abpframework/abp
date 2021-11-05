@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -168,6 +168,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
                 options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -182,13 +183,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
 
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
-            });
-
             context.Services
-                .AddBootstrapProviders()
+                .AddBootstrap5Providers()
                 .AddFontAwesomeIcons();
 
             Configure<AbpNavigationOptions>(options =>

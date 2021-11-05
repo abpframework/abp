@@ -9,7 +9,7 @@ type ExcludeKeys<Type, Excluded> = Exclude<
   never
 >;
 
-// tslint:disable-next-line: ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
 type ExcludeMethods<Type> = Pick<Type, ExcludeKeys<Type, Function>>;
 
 // Options (methods will be omitted, given keys will become optional)

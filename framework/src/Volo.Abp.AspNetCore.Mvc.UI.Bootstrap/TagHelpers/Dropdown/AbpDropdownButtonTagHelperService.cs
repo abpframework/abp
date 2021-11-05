@@ -105,7 +105,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             if (TagHelper.DropdownStyle != DropdownStyle.Split)
             {
                 attributes.AddClass("dropdown-toggle");
-                attributes.Add("data-toggle", "dropdown");
+                attributes.Add("data-bs-toggle", "dropdown");
                 attributes.Add("aria-haspopup", "true");
                 attributes.Add("aria-expanded", "false");
             }
@@ -117,7 +117,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
         {
             var attributes = new TagHelperAttributeList
             {
-                {"data-toggle", "dropdown"},
+                {"data-bs-toggle", "dropdown"},
                 {"aria-haspopup", "true"},
                 {"aria-expanded", "false"},
             };

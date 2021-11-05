@@ -5,7 +5,7 @@
     aria-haspopup="true"
     ngbDropdownToggle
   >
-    <i [ngClass]="icon" [class.mr-1]="icon"></i>{{ text | abpLocalization }}
+    <i [ngClass]="icon" [class.me-1]="icon"></i>{{ text | abpLocalization }}
   </button>
   <div ngbDropdownMenu>
     <ng-container
@@ -33,7 +33,7 @@
       class="{{ actionList.length === 1 ? 'btn btn-primary' : '' }}"
       [class.text-center]="actionList.length === 1"
     >
-      <i [ngClass]="action.icon" [class.mr-1]="action.icon"></i>
+      <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
       <span *ngIf="action.icon; else ellipsis">{{ action.text | abpLocalization }}</span>
       <ng-template #ellipsis>
         <div abpEllipsis>{{ action.text | abpLocalization }}</div>

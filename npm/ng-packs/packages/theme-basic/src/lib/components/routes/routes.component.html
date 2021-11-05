@@ -86,7 +86,7 @@
           abpEllipsis="210px"
           [abpEllipsisEnabled]="!smallScreen"
           role="button"
-          class="btn d-block text-left dropdown-toggle"
+          class="btn d-block text-start dropdown-toggle"
         >
           <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
           {{ child.name | abpLocalization }}
@@ -94,7 +94,7 @@
       </div>
       <div
         #childrenContainer
-        class="dropdown-menu border-0 shadow-sm"
+        class="dropdown-menu dropdown-menu-start border-0 shadow-sm"
         [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
       >
         <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }"></ng-container>

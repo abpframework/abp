@@ -17,6 +17,8 @@
     "DefaultFromDisplayName": "Default from display name",
     "Feature:SettingManagementGroup": "Setting Management",
     "Feature:SettingManagementEnable": "Enable setting management",
-    "Feature:SettingManagementEnableDescription": "Enable setting management system in the application."
+    "Feature:SettingManagementEnableDescription": "Enable setting management system in the application.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Allow tenants to change email settings.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Allow tenants to change email settings."
   }
 }

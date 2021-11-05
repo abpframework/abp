@@ -1,5 +1,22 @@
 name: "build and test"
 on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'framework/**/*.cs'
+      - 'framework/**/*.cshtml'
+      - 'framework/**/*.csproj'
+      - 'framework/**/*.razor'
+      - 'modules/**/*.cs'
+      - 'modules/**/*.cshtml'
+      - 'modules/**/*.csproj'
+      - 'modules/**/*.razor'
+      - 'templates/**/*.cs'
+      - 'templates/**/*.cshtml'
+      - 'templates/**/*.csproj'
+      - 'templates/**/*.razor'
+
   pull_request:
     paths:
       - 'framework/**/*.cs'
@@ -21,7 +38,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 5.0.201
+        dotnet-version: 6.0.100-rc.2.21505.57
 
     - name: Build All
       run: .\build-all.ps1
@@ -32,3 +49,6 @@ jobs:
       run: .\test-all.ps1
       working-directory: .\build
       shell: powershell
+
+    - name: Codecov
+      uses: codecov/codecov-action@v2

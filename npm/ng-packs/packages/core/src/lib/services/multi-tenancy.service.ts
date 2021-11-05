@@ -1,16 +1,14 @@
-import { Injectable, Inject } from '@angular/core';
-import { switchMap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { ABP } from '../models/common';
-import {
-  FindTenantResultDto,
-  CurrentTenantDto,
-} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
-import { RestService } from './rest.service';
+import { Inject, Injectable } from '@angular/core';
+import { map, switchMap } from 'rxjs/operators';
 import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy';
-import { ConfigStateService } from './config-state.service';
-import { SessionStateService } from './session-state.service';
+import {
+  CurrentTenantDto,
+  FindTenantResultDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { TENANT_KEY } from '../tokens/tenant-key.token';
+import { ConfigStateService } from './config-state.service';
+import { RestService } from './rest.service';
+import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
@@ -32,30 +30,6 @@ export class MultiTenancyService {
     private configStateService: ConfigStateService,
     @Inject(TENANT_KEY) public tenantKey: string,
   ) {}
-
-  /**
-   * @deprecated Use AbpTenantService.findTenantByName method instead. To be deleted in v5.0.
-   */
-  findTenantByName(name: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      {
-        url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
-        method: 'GET',
-        headers,
-      },
-      { apiName: this.apiName },
-    );
-  }
-
-  /**
-   * @deprecated Use AbpTenantService.findTenantById method instead. To be deleted in v5.0.
-   */
-  findTenantById(id: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
-    return this.restService.request(
-      { url: `/api/abp/multi-tenancy/tenants/by-id/${id}`, method: 'GET', headers },
-      { apiName: this.apiName },
-    );
-  }
 
   setTenantByName(tenantName: string) {
     return this.tenantService

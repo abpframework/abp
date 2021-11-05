@@ -102,7 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             if (TagHelper.Static == true)
             {
-                return "data-backdrop=\"static\" ";
+                return "data-bs-backdrop=\"static\" ";
             }
             return string.Empty;
         }
@@ -111,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             if (TagHelper.Static == true)
             {
-                builder.Attributes.Add("data-backdrop", "static");
+                builder.Attributes.Add("data-bs-backdrop", "static");
             }
         }
     }

@@ -1,0 +1,10 @@
+{
+  "culture": "is",
+  "texts": {
+    "Features": "Eiginleikar",
+    "NoFeatureFoundMessage": "Enginn eiginleiki í boði.",
+    "Permission:FeatureManagement": "Eiginleika stjórnun",
+    "Permission:FeatureManagement.ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "eiginleikagildið {0} er ekki gilt"
+  }
+}

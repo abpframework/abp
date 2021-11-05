@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Başka bir servisle giriş yap",
     "UserLockedOutMessage": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
-    "LoginIsNotAllowed": "Giriş yapamazsınız! E-posta adresinizi ya da telefon numaranızı doğrulamanız gerekiyor.",
+    "LoginIsNotAllowed": "Giriş yapmanıza izin verilmiyor! Hesabınız etkin değil veya e-postanızı/telefon numaranızı onaylamanız gerekiyor.",
     "SelfRegistrationDisabledMessage": "Bu uygulama için kullanıcıların kendi kendilerine kaydolmaları engellenmiştir. Yeni bir kullanıcı kaydetmek için lütfen uygulama yöneticisi ile iletişime geçin.",
     "LocalLoginDisabledMessage": "Bu uygulama için local login devre dışı bırakılmıştır.",
     "Login": "Giriş yap",

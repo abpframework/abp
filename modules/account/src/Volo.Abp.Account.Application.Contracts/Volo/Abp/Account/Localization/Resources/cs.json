@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Použít jinou službu k přihlášení",
     "UserLockedOutMessage": "Tento účet byl uzamčen z důvodu neúspěšných přihlášení. Přihlaste se prosím později.",
     "InvalidUserNameOrPassword": "Neplatné uživatelské jméno nebo heslo!",
-    "LoginIsNotAllowed": "Není vám dovoleno se přihlásit! Musíte první potvrdit email/telefonní číslo.",
+    "LoginIsNotAllowed": "Nemáte oprávnění se přihlásit! Váš účet je neaktivní nebo potřebuje potvrdit váš e -mail/telefonní číslo.",
     "SelfRegistrationDisabledMessage": "Vlastní registrace uživatele není povolena. K vytvoření účtu kontaktujte správce.",
     "LocalLoginDisabledMessage": "Místní přihlášení je pro tuto aplikaci zakázáno.",
     "Login": "Přihlásit",

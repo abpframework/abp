@@ -161,7 +161,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
         public static string GenerateJsFuncParameterList(ActionApiDescriptionModel action, string ajaxParametersName)
         {
-            var methodParamNames = action.ParametersOnMethod.Select(p => p.Name).Distinct().ToList();
+            var methodParamNames = action.Parameters.GroupBy(p => p.NameOnMethod).Select(x => x.Key).ToList();
             methodParamNames.Add(ajaxParametersName);
             return methodParamNames.Select(prmName => NormalizeJsVariableName(prmName.ToCamelCase())).JoinAsString(", ");
         }

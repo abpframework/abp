@@ -1,11 +1,16 @@
 {
-  "version": "4.4.0-rc.2",
+  "version": "5.0.0-beta.3",
   "name": "@abp/aspnetcore.mvc.ui.theme.basic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/aspnetcore.mvc.ui.theme.basic"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "~4.4.0-rc.2"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~5.0.0-beta.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

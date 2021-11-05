@@ -82,7 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             var element = new TagBuilder("button");
             element.Attributes.Add("type", "button");
-            element.Attributes.Add("data-dismiss", "modal");
+            element.Attributes.Add("data-bs-dismiss", "modal");
             element.AddCssClass("btn");
             element.AddCssClass("btn-secondary");
             element.InnerHtml.Append(_localizer["Close"]);
@@ -94,7 +94,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             var element = new TagBuilder("button");
             element.Attributes.Add("type", "button");
-            element.Attributes.Add("data-dismiss", "modal");
+            element.Attributes.Add("data-bs-dismiss", "modal");
             element.AddCssClass("btn");
             element.AddCssClass("btn-secondary");
             element.InnerHtml.Append(_localizer["Cancel"]);

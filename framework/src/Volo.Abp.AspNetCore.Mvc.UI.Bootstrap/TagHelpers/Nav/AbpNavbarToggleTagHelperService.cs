@@ -34,8 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
             var button = new TagBuilder("button");
             button.AddCssClass("navbar-toggler");
             button.Attributes.Add("type", "button");
-            button.Attributes.Add("data-toggle", "collapse");
-            button.Attributes.Add("data-target", "#" + TagHelper.Id);
+            button.Attributes.Add("data-bs-toggle", "collapse");
+            button.Attributes.Add("data-bs-target", "#" + TagHelper.Id);
             button.Attributes.Add("aria-controls", TagHelper.Id);
             button.Attributes.Add("aria-expanded", "false");
             button.Attributes.Add("aria-label", L["ToggleNavigation"].Value);

@@ -1,14 +1,15 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Utils
 {
-    public static class CmdHelper
+    public class CmdHelper :  ICmdHelper, ITransientDependency
     {
-        public static int SuccessfulExitCode = 0;
+        private const int SuccessfulExitCode = 0;
 
-        public static void OpenWebPage(string url)
+        public void OpenWebPage(string url)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -25,45 +26,57 @@ namespace Volo.Abp.Cli.Utils
             }
         }
 
-        public static void Run(string file, string arguments)
+
+        public void Run(string file, string arguments)
         {
             var procStartInfo = new ProcessStartInfo(file, arguments);
             Process.Start(procStartInfo)?.WaitForExit();
         }
 
-        public static int RunCmd(string command)
+        public void RunCmd(string command, string workingDirectory = null)
+        {
+            RunCmd(command, out _, workingDirectory);
+        }
+
+        public void RunCmd(string command, out int exitCode, string workingDirectory = null)
         {
             var procStartInfo = new ProcessStartInfo(
                 GetFileName(),
                 GetArguments(command)
             );
 
+            if (!string.IsNullOrEmpty(workingDirectory))
+            {
+                procStartInfo.WorkingDirectory = workingDirectory;
+            }
+
             using (var process = Process.Start(procStartInfo))
             {
                 process?.WaitForExit();
-                return process?.ExitCode ?? 0;
+
+                exitCode = process.ExitCode;
             }
         }
 
-        public static string RunCmdAndGetOutput(string command)
+        public string RunCmdAndGetOutput(string command, string workingDirectory = null)
         {
-            return RunCmdAndGetOutput(command, out int _);
+            return RunCmdAndGetOutput(command, out int _, workingDirectory);
         }
 
-        public static string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful)
+        public string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful, string workingDirectory = null)
         {
-            var output = RunCmdAndGetOutput(command, out int exitCode);
+            var output = RunCmdAndGetOutput(command, out int exitCode, workingDirectory);
             isExitCodeSuccessful = exitCode == SuccessfulExitCode;
             return output;
         }
 
-        public static string RunCmdAndGetOutput(string command, out int exitCode)
+        public string RunCmdAndGetOutput(string command, out int exitCode, string workingDirectory = null)
         {
             string output;
 
             using (var process = new Process())
             {
-                process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
+                process.StartInfo = new ProcessStartInfo(GetFileName())
                 {
                     Arguments = GetArguments(command),
                     UseShellExecute = false,
@@ -71,6 +84,11 @@ namespace Volo.Abp.Cli.Utils
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };
+
+                if (!string.IsNullOrEmpty(workingDirectory))
+                {
+                    process.StartInfo.WorkingDirectory = workingDirectory;
+                }
 
                 process.Start();
 
@@ -91,7 +109,7 @@ namespace Volo.Abp.Cli.Utils
             return output.Trim();
         }
 
-        public static string GetArguments(string command)
+        public string GetArguments(string command)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -102,7 +120,7 @@ namespace Volo.Abp.Cli.Utils
             return "/C \"" + command + "\"";
         }
 
-        public static string GetFileName()
+        public string GetFileName()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

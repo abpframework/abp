@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Distributed
 {
@@ -12,5 +13,17 @@ namespace Volo.Abp.EventBus.Distributed
         /// <param name="handler">Object to handle the event</param>
         IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler)
             where TEvent : class;
+
+        Task PublishAsync<TEvent>(
+            TEvent eventData,
+            bool onUnitOfWorkComplete = true, 
+            bool useOutbox = true)
+            where TEvent : class;
+
+        Task PublishAsync(
+            Type eventType,
+            object eventData,
+            bool onUnitOfWorkComplete = true,
+            bool useOutbox = true);
     }
 }

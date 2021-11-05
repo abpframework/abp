@@ -23,6 +23,7 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/client-proxies/identity-proxy.js" />
         <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
         <abp-script src="/Pages/identity/users/index.js" />
     </abp-script-bundle>
@@ -34,7 +35,7 @@
             <abp-column size-md="_6">
                 <abp-card-title>@L["Users"]</abp-card-title>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
             </abp-column>
         </abp-row>

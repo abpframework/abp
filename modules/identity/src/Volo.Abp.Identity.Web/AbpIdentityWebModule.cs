@@ -4,6 +4,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Localization;
@@ -17,7 +18,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.Web
 {
-    [DependsOn(typeof(AbpIdentityHttpApiModule))]
+    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpPermissionManagementWebModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
@@ -66,8 +67,8 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
             });
-            
-            
+
+
             Configure<AbpPageToolbarOptions>(options =>
             {
                 options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel>(
@@ -81,7 +82,7 @@ namespace Volo.Abp.Identity.Web
                         );
                     }
                 );
-                
+
                 options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel>(
                     toolbar =>
                     {
@@ -93,6 +94,11 @@ namespace Volo.Abp.Identity.Web
                         );
                     }
                 );
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(IdentityRemoteServiceConsts.ModuleName);
             });
         }
 
@@ -107,7 +113,7 @@ namespace Volo.Abp.Identity.Web
                         createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel.RoleInfoModel) },
                         editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel.RoleInfoModel) }
                     );
-                
+
                 ModuleExtensionConfigurationHelper
                     .ApplyEntityConfigurationToUi(
                         IdentityModuleExtensionConsts.ModuleName,

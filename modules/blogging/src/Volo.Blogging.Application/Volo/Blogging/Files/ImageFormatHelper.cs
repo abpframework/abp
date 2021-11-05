@@ -1,23 +1,33 @@
-﻿using System.Collections.Generic;
-using System.Drawing.Imaging;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 
 namespace Volo.Blogging.Areas.Blog.Helpers
 {
     public class ImageFormatHelper
     {
-        public static ImageFormat GetImageRawFormat(byte[] fileBytes)
+        public static IImageFormat GetImageRawFormat(Stream stream)
         {
-            using (var memoryStream = new MemoryStream(fileBytes))
+            using (var image = Image.Load(stream, out var imageFormat))
             {
-                return System.Drawing.Image.FromStream(memoryStream).RawFormat;
+                return imageFormat;
             }
         }
 
-        public static bool IsValidImage(byte[] fileBytes, ICollection<ImageFormat> validFormats)
+        public static bool IsValidImage(Stream stream, ICollection<IImageFormat> validFormats)
         {
-            var imageFormat = GetImageRawFormat(fileBytes);
-            return validFormats.Contains(imageFormat);
+            try
+            {
+                var imageFormat = GetImageRawFormat(stream);
+                
+                return validFormats.Contains(imageFormat);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }
