@@ -2,6 +2,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -17,6 +18,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
+using Volo.Abp.Emailing;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
@@ -132,6 +134,10 @@ namespace MyCompanyName.MyProjectName
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
+
+#if DEBUG
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+#endif
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
