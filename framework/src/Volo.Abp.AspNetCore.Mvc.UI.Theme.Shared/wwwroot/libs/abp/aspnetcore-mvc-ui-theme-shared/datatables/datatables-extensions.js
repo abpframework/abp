@@ -368,6 +368,8 @@ var abp = abp || {};
                 //Text filter
                 if (requestData.search && requestData.search.value !== "") {
                     input.filter = requestData.search.value;
+                } else {
+                    input.filter = null;       
                 }
 
                 if (callback) {
