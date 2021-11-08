@@ -10,7 +10,7 @@ async function replace(filePath: string) {
   if (!dependencies) return;
 
   Object.keys(dependencies).forEach(key => {
-    if (key.includes('@abp/') && key !== '@abp/utils') {
+    if (key.includes('@abp/')) {
       dependencies[key] = dependencies[key].replace('^', '~');
     }
   });
