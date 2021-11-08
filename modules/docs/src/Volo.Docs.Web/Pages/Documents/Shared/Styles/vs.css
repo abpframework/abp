@@ -1,4 +1,4 @@
-body {
+﻿body {
   position: relative; }
 
 .docs-page {
@@ -278,7 +278,7 @@ body {
     position: fixed;
     top: 0px;
     width: 100%; }
-    .docs-page .doc-social-btns a:hover {
+    .docs-page .doc-social-btns a {
       text-decoration: none; }
     .docs-page .doc-social-btns .twitter {
       color: #00ACEE; }
@@ -361,7 +361,7 @@ body {
     color: white;
     opacity: .5; }
 
-.docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select label {
+.docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select span {
   background: #000000;
   border-color: #000000;
   color: #ddd; }
@@ -382,6 +382,8 @@ body {
   border-bottom: 0; }
   .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
     color: #fff; }
+  .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:not(:hover) {
+    text-decoration: none; }
   .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon {
     font-size: .85em;
     transition: .3s;

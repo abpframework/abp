@@ -452,7 +452,7 @@ body {
         top: 0px;
         width: 100%;
 
-        a:hover {
+        a {
             text-decoration: none;
         }
 
@@ -605,7 +605,7 @@ body {
                         }
                     }
 
-                    label {
+                    span {
                         background: #000000;
                         border-color: #000000;
                         color: #ddd;
@@ -642,6 +642,10 @@ body {
 
                             &:hover {
                                 color: #fff;
+                            }
+
+                            &:not(:hover) {
+                                text-decoration: none;
                             }
 
                             .plus-icon {
