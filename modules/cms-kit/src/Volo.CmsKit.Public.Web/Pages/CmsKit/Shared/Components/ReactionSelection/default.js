@@ -2,10 +2,10 @@
 
     var l = abp.localization.getResource('CmsKit');
 
-    var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.allowList;
+    var myDefaultAllowList = $.fn.tooltip.Constructor.Default.allowList;
 
-    if (myDefaultWhiteList.span.indexOf('data-reaction-name') < 0) {
-        myDefaultWhiteList.span.push('data-reaction-name');
+    if (myDefaultAllowList.span.indexOf('data-reaction-name') < 0) {
+        myDefaultAllowList.span.push('data-reaction-name');
     }
 
     abp.widgets.CmsReactionSelection = function ($widget) {
