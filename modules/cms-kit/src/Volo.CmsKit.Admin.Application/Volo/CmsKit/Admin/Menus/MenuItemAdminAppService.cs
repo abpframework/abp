@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
@@ -93,6 +94,7 @@ namespace Volo.CmsKit.Admin.Menus
             menuItem.Target = input.Target;
             menuItem.ElementId = input.ElementId;
             menuItem.CssClass = input.CssClass;
+            menuItem.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             await MenuItemRepository.UpdateAsync(menuItem);
 

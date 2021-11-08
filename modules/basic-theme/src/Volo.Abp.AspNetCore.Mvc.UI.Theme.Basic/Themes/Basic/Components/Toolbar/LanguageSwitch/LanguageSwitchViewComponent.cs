@@ -10,16 +10,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
 {
     public class LanguageSwitchViewComponent : AbpViewComponent
     {
-        private readonly ILanguageProvider _languageProvider;
+        protected ILanguageProvider LanguageProvider { get; }
 
         public LanguageSwitchViewComponent(ILanguageProvider languageProvider)
         {
-            _languageProvider = languageProvider;
+            LanguageProvider = languageProvider;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
-            var languages = await _languageProvider.GetLanguagesAsync();
+            var languages = await LanguageProvider.GetLanguagesAsync();
             var currentLanguage = languages.FindByCulture(
                 CultureInfo.CurrentCulture.Name,
                 CultureInfo.CurrentUICulture.Name

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
@@ -17,11 +17,6 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public virtual bool Equals(Guid clientId, string value, string type)
-        {
-            return ClientId == clientId && Type == type && Value == value;
-        }
-
         protected internal ClientClaim(Guid clientId, [NotNull] string type, string value)
         {
             Check.NotNull(type, nameof(type));
@@ -29,6 +24,11 @@ namespace Volo.Abp.IdentityServer.Clients
             ClientId = clientId;
             Type = type;
             Value = value;
+        }
+
+        public virtual bool Equals(Guid clientId, string type, string value)
+        {
+            return ClientId == clientId && Type == type && Value == value;
         }
 
         public override object[] GetKeys()

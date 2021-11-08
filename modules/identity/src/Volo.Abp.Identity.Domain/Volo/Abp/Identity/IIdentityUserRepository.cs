@@ -56,6 +56,11 @@ namespace Volo.Abp.Identity
             int skipCount = 0,
             string filter = null,
             bool includeDetails = false,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
+            string userName = null,
+            string phoneNumber = null,
+            string emailAddress = null,
             CancellationToken cancellationToken = default
         );
 
@@ -86,6 +91,11 @@ namespace Volo.Abp.Identity
 
         Task<long> GetCountAsync(
             string filter = null,
+            Guid? roleId = null,
+            Guid? organizationUnitId = null,
+            string userName = null,
+            string phoneNumber = null,
+            string emailAddress = null,
             CancellationToken cancellationToken = default
         );
     }

@@ -10,9 +10,9 @@ using Volo.Blogging.Tagging.Dtos;
 namespace Volo.Blogging
 {
     [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
-    [Area("blogging")]
+    [Area(BloggingRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/tags")]
-    public class TagsController : AbpController, ITagAppService
+    public class TagsController : AbpControllerBase, ITagAppService
     {
         private readonly ITagAppService _tagAppService;
 
@@ -23,9 +23,9 @@ namespace Volo.Blogging
 
         [HttpGet]
         [Route("popular/{blogId}")]
-        public Task<List<TagDto>> GetPopularTags(Guid blogId, GetPopularTagsInput input)
+        public Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
         {
-            return _tagAppService.GetPopularTags(blogId, input);
+            return _tagAppService.GetPopularTagsAsync(blogId, input);
         }
     }
 }

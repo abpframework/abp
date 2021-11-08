@@ -7,10 +7,12 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class NpmGlobalPackagesChecker : ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         public ILogger<NpmGlobalPackagesChecker> Logger { get; set; }
 
-        public NpmGlobalPackagesChecker()
+        public NpmGlobalPackagesChecker(ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             Logger = NullLogger<NpmGlobalPackagesChecker>.Instance;
         }
 
@@ -31,7 +33,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual string GetInstalledNpmPackages()
         {
             Logger.LogInformation("Checking installed npm global packages...");
-            return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent");
+            return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent", out int exitCode);
         }
 
         protected virtual void InstallYarn()

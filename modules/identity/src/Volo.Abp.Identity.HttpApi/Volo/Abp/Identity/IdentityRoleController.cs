@@ -7,10 +7,10 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.Identity
 {
     [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-    [Area("identity")]
+    [Area(IdentityRemoteServiceConsts.ModuleName)]
     [ControllerName("Role")]
     [Route("api/identity/roles")]
-    public class IdentityRoleController : AbpController, IIdentityRoleAppService
+    public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
     {
         protected IIdentityRoleAppService RoleAppService { get; }
 

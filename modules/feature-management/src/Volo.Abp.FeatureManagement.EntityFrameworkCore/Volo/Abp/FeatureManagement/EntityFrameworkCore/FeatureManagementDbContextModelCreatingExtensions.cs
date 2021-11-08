@@ -7,8 +7,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
     public static class FeatureManagementDbContextModelCreatingExtensions
     {
         public static void ConfigureFeatureManagement(
-            this ModelBuilder builder,
-            Action<FeatureManagementModelBuilderConfigurationOptions> optionsAction = null)
+            this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -17,16 +16,9 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
                 return;
             }
 
-            var options = new FeatureManagementModelBuilderConfigurationOptions(
-                FeatureManagementDbProperties.DbTablePrefix,
-                FeatureManagementDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<FeatureValue>(b =>
             {
-                b.ToTable(options.TablePrefix + "FeatureValues", options.Schema);
+                b.ToTable(FeatureManagementDbProperties.DbTablePrefix + "FeatureValues", FeatureManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 

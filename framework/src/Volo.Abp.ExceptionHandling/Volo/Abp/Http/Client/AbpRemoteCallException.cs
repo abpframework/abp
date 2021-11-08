@@ -20,14 +20,20 @@ namespace Volo.Abp.Http.Client
 
         }
 
+        public AbpRemoteCallException(string message, Exception innerException = null)
+            : base(message, innerException)
+        {
+
+        }
+
         public AbpRemoteCallException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context)
         {
 
         }
 
-        public AbpRemoteCallException(RemoteServiceErrorInfo error)
-            : base(error.Message)
+        public AbpRemoteCallException(RemoteServiceErrorInfo error, Exception innerException = null)
+            : base(error.Message, innerException)
         {
             Error = error;
 

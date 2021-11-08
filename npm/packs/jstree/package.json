@@ -1,11 +1,11 @@
 {
-  "version": "4.4.3",
+  "version": "5.0.0-beta.3",
   "name": "@abp/jstree",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~4.4.3",
+    "@abp/jquery": "~5.0.0-beta.3",
     "jstree": "^3.3.9"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

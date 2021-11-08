@@ -1,14 +1,15 @@
+/* eslint-disable @angular-eslint/no-output-native */
+import { ABP } from '@abp/ng.core';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
-  Output,
-  ViewChild,
-  ElementRef,
-  Renderer2,
   OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
-import { ABP } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-button',
@@ -23,7 +24,7 @@ import { ABP } from '@abp/ng.core';
       (focus)="focus.next($event); abpFocus.next($event)"
       (blur)="blur.next($event); abpBlur.next($event)"
     >
-      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
+      <i [ngClass]="icon" class="me-1"></i><ng-content></ng-content>
     </button>
   `,
 })
@@ -49,13 +50,11 @@ export class ButtonComponent implements OnInit {
   @Input()
   attributes: ABP.Dictionary<string>;
 
-  // tslint:disable
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
   @Output() readonly focus = new EventEmitter<FocusEvent>();
 
   @Output() readonly blur = new EventEmitter<FocusEvent>();
-  // tslint:enable
 
   @Output() readonly abpClick = new EventEmitter<MouseEvent>();
 

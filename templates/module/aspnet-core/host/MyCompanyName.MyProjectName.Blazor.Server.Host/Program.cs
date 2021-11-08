@@ -45,10 +45,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build =>
-                {
-                    build.AddJsonFile("appsettings.secrets.json", optional: true);
-                })
+                .AddAppSettingsSecretsJson()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
 

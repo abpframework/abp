@@ -1,6 +1,8 @@
 <form validateOnSubmit *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
-  <div class="form-group">
-    <label for="username">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="username" class="form-label">{{
+      'AbpIdentity::DisplayName:UserName' | abpLocalization
+    }}</label
     ><span> * </span
     ><input
       type="text"
@@ -13,25 +15,33 @@
   </div>
   <div class="row">
     <div class="col col-md-6">
-      <div class="form-group">
-        <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label
+      <div class="mb-3 form-group">
+        <label for="name" class="form-label">{{
+          'AbpIdentity::DisplayName:Name' | abpLocalization
+        }}</label
         ><input type="text" id="name" class="form-control" formControlName="name" />
       </div>
     </div>
     <div class="col col-md-6">
-      <div class="form-group">
-        <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label
+      <div class="mb-3 form-group">
+        <label for="surname" class="form-label">{{
+          'AbpIdentity::DisplayName:Surname' | abpLocalization
+        }}</label
         ><input type="text" id="surname" class="form-control" formControlName="surname" />
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="email-address">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="email-address" class="form-label">{{
+      'AbpIdentity::DisplayName:Email' | abpLocalization
+    }}</label
     ><span> * </span
     ><input type="text" id="email-address" class="form-control" formControlName="email" />
   </div>
-  <div class="form-group">
-    <label for="phone-number">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="phone-number" class="form-label">{{
+      'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization
+    }}</label
     ><input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
   </div>
   <abp-button

@@ -2,17 +2,15 @@ import { SubscriptionService, uuid } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
-  ElementRef,
   EventEmitter,
   Inject,
   Input,
-  isDevMode,
   OnDestroy,
   OnInit,
   Optional,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';
@@ -32,19 +30,6 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   providers: [SubscriptionService],
 })
 export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
-  /**
-   * @deprecated Use centered property of options input instead. To be deleted in v5.0.
-   */
-  @Input() centered = false;
-  /**
-   * @deprecated Use windowClass property of options input instead. To be deleted in v5.0.
-   */
-  @Input() modalClass = '';
-  /**
-   * @deprecated Use size property of options input instead. To be deleted in v5.0.
-   */
-  @Input() size: ModalSize = 'lg';
-
   @Input()
   get visible(): boolean {
     return this._visible;
@@ -80,12 +65,6 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
-
-  /**
-   * @deprecated will be removed in v5.0
-   */
-  @ContentChild('abpClose', { static: false, read: ElementRef })
-  abpClose: ElementRef<any>;
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
@@ -164,9 +143,8 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
     setTimeout(() => this.listen(), 0);
     this.modalRef = this.modal.open(this.modalContent, {
-      // TODO: set size to 'lg' when removed the size variable
-      size: this.size,
-      centered: this.centered,
+      size: 'md',
+      centered: false,
       keyboard: false,
       scrollable: true,
       beforeDismiss: () => {
@@ -176,7 +154,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         return !this.visible;
       },
       ...this.options,
-      windowClass: `${this.modalClass} ${this.options.windowClass || ''} ${this.modalIdentifier}`,
+      windowClass: `${this.options.windowClass || ''} ${this.modalIdentifier}`,
     });
 
     this.appear.emit();
@@ -232,22 +210,6 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         }
       });
 
-    setTimeout(() => {
-      if (!this.abpClose) return;
-      this.warnForDeprecatedClose();
-      fromEvent(this.abpClose.nativeElement, 'click')
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.close());
-    }, 0);
-
     this.init.emit();
-  }
-
-  private warnForDeprecatedClose() {
-    if (isDevMode()) {
-      console.warn(
-        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
-      );
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { ProfileService } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.account.core/proxy';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +17,8 @@ export class PersonalSettingsComponent
   implements
     OnInit,
     Account.PersonalSettingsComponentInputs,
-    Account.PersonalSettingsComponentOutputs {
+    Account.PersonalSettingsComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;

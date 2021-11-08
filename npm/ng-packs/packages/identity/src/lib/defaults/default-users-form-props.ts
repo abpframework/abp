@@ -1,7 +1,7 @@
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
 import { Validators } from '@angular/forms';
-import { IdentityUserDto } from '../proxy/identity/models';
 
 export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserDto>([
   {
@@ -46,6 +46,13 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
     displayName: 'AbpIdentity::PhoneNumber',
     id: 'phone-number',
     validators: () => [Validators.maxLength(16)],
+  },
+  {
+    type: ePropType.Boolean,
+    name: 'isActive',
+    displayName: 'AbpIdentity::DisplayName:IsActive',
+    id: 'active-checkbox',
+    defaultValue: true,
   },
   {
     type: ePropType.Boolean,

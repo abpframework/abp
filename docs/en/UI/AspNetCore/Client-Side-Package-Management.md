@@ -18,7 +18,7 @@ To solve the versioning problem, we created a **standard set of packages** those
 The benefit of a **standard package** is:
 
 * It depends on a **standard version** of a package. Depending on this package is **safe** because all modules depend on the same version.
-* It contains the gulp task to copy library resources (js, css, img... files) from the **node_modules** folder to **wwwroot/libs** folder. See the *Mapping The Library Resources* section for more.
+* It contains the mappings copy library resources (js, css, img... files) from the **node_modules** folder to **wwwroot/libs** folder. See the *Mapping The Library Resources* section for more.
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
@@ -61,7 +61,7 @@ Using NPM packages and NPM/Yarn tool is the de facto standard for client side li
 
 Next challenge is copying needed resources (js, css, img... files) from the `node_modules` into a folder inside the **wwwroot** folder to make it accessible to the clients/browsers.
 
-ABP defines a [Gulp](https://gulpjs.com/) based task to **copy resources** from **node_modules** to **wwwroot/libs** folder. Each **standard package** (see the *@ABP NPM Packages* section) defines the mapping for its own files. So, most of the time, you only configure dependencies.
+ABP CLI's `abp install-libs` command **copies resources** from **node_modules** to **wwwroot/libs** folder. Each **standard package** (see the *@ABP NPM Packages* section) defines the mapping for its own files. So, most of the time, you only configure dependencies.
 
 The **startup templates** are already configured to work all these out of the box. This section will explain the configuration options.
 
@@ -100,17 +100,15 @@ mappings: {
 }
 ```
 
-#### Using The Gulp
+#### install-libs Command
 
-Once you properly configure the `abp.resourcemapping.js` file, you can run the gulp command from the command line:
+Once you properly configure the `abp.resourcemapping.js` file, you can run the following ABP CLI command from the command line:
 
-```
-gulp
-```
+````bash
+abp install-libs
+````
 
-When you run the `gulp`, all packages will copy their own resources into the **wwwroot/libs** folder. Running `yarn & gulp` is only necessary if you make a change in your dependencies in the **package.json** file.
-
-> When you run the Gulp command, dependencies of the application are resolved using the package.json file. The Gulp task automatically discovers and maps all resources from all dependencies (recursively).
+When you run this command, all packages will copy their own resources into the **wwwroot/libs** folder. Running `abp install-libs` is only necessary if you make a change in your dependencies in the **package.json** file.
 
 #### See Also
 

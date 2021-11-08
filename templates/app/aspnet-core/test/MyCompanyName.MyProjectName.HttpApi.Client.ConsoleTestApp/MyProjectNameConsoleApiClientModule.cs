@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Modularity;
@@ -8,6 +9,7 @@ using Volo.Abp.Modularity;
 namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 {
     [DependsOn(
+        typeof(AbpAutofacModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpHttpClientIdentityModelModule)
         )]

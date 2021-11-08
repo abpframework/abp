@@ -6,13 +6,26 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.AspNetCore.Threading
 {
     [Dependency(ReplaceServices = true)]
-    public class HttpContextCancellationTokenProvider : ICancellationTokenProvider, ITransientDependency
+    public class HttpContextCancellationTokenProvider : CancellationTokenProviderBase, ITransientDependency
     {
-        public CancellationToken Token => _httpContextAccessor.HttpContext?.RequestAborted ?? CancellationToken.None;
-
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HttpContextCancellationTokenProvider(IHttpContextAccessor httpContextAccessor)
+        public override CancellationToken Token
+        {
+            get
+            {
+                if (OverrideValue != null)
+                {
+                    return OverrideValue.CancellationToken;
+                }
+                return _httpContextAccessor.HttpContext?.RequestAborted ?? CancellationToken.None;
+            }
+        }
+
+        public HttpContextCancellationTokenProvider(
+            IAmbientScopeProvider<CancellationTokenOverride> cancellationTokenOverrideScopeProvider,
+            IHttpContextAccessor httpContextAccessor)
+            : base(cancellationTokenOverrideScopeProvider)
         {
             _httpContextAccessor = httpContextAccessor;
         }

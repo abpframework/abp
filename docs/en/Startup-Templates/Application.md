@@ -1,4 +1,4 @@
-﻿# Application Startup Template
+# Application Startup Template
 
 ## Introduction
 
