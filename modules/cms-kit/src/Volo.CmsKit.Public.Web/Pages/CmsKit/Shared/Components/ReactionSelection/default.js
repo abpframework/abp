@@ -2,7 +2,7 @@
 
     var l = abp.localization.getResource('CmsKit');
 
-    var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.whiteList;
+    var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.allowList;
 
     if (myDefaultWhiteList.span.indexOf('data-reaction-name') < 0) {
         myDefaultWhiteList.span.push('data-reaction-name');
