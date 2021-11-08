@@ -3,7 +3,7 @@ param(
   [string]$Registry
 )
 
-npm install
+yarn install
 
 $NextVersion = $(node publish-utils.js --nextVersion)
 $RootFolder = (Get-Item -Path "./" -Verbose).FullName
@@ -17,32 +17,23 @@ if (-Not $Registry) {
 }
 
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
-$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 $UpdateGulpCommand = "npm run update-gulp"
 $UpdateNgPacksCommand = "yarn update --registry $Registry"
 
-$IsRc = $(node publish-utils.js --rc --customVersion $Version) -eq "true";
+$IsPrerelase = $(node publish-utils.js --prerelase --customVersion $Version) -eq "true";
 
-
-
-if ($IsRc) {
-  $NgPacksPublishCommand += " --rc"
-  $UpdateGulpCommand += " -- --rc"
-  $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
-  $UpdateNgPacksCommand += " --rc"
+if ($IsPrerelase) {
+  $UpdateGulpCommand += " -- --prerelase"
+  $UpdateNgPacksCommand += " --prerelase"
 }
 
 $commands = (
-  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "npm run replace-with-tilde",
-  $PacksPublishCommand,
   $UpdateNgPacksCommand,
   "cd ng-packs\scripts",
-  "npm install",
+  "yarn install",
   $NgPacksPublishCommand,
   "cd ../../",
   "cd scripts",
-  "yarn",
   "yarn remove-lock-files",
   "cd ..",
   $UpdateGulpCommand
