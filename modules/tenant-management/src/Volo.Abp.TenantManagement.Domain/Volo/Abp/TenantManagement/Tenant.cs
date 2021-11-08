@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class Tenant : FullAuditedAggregateRoot<Guid>
+    public partial class Tenant : FullAuditedAggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
