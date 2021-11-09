@@ -16,7 +16,7 @@ import { PermissionService } from '../services/permission.service';
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges {
-  @Input('abpPermission') condition!: string;
+  @Input('abpPermission') condition: string | undefined;
 
   subscription!: Subscription;
 
@@ -33,7 +33,7 @@ export class PermissionDirective implements OnDestroy, OnChanges {
     }
 
     this.subscription = this.permissionService
-      .getGrantedPolicy$(this.condition)
+      .getGrantedPolicy$(this.condition || '')
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         this.vcRef.clear();

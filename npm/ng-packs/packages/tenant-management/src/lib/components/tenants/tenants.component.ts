@@ -34,7 +34,7 @@ export class TenantsComponent implements OnInit {
 
   visibleFeatures = false;
 
-  providerKey: string;
+  providerKey!: string;
 
   modalBusy = false;
 

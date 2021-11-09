@@ -18,6 +18,8 @@ export class RoutesComponent {
 
   @ViewChildren('childrenContainer') childrenContainers!: QueryList<ElementRef<HTMLDivElement>>;
 
+  rootDropdownExpand = {} as { [key: string]: boolean };
+
   trackByFn: TrackByFunction<TreeNode<ABP.Route>> = (_, item) => item.name;
 
   constructor(public readonly routesService: RoutesService, protected renderer: Renderer2) {}

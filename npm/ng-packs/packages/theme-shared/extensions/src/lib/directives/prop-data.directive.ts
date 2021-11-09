@@ -18,11 +18,11 @@ export class PropDataDirective<L extends PropList<any>>
   extends PropData<InferredData<L>>
   implements OnChanges, OnDestroy
 {
-  @Input('abpPropDataFromList') readonly propList?: L;
+  @Input('abpPropDataFromList') propList?: L;
 
-  @Input('abpPropDataWithRecord') readonly record!: InferredData<L>['record'];
+  @Input('abpPropDataWithRecord') record!: InferredData<L>['record'];
 
-  @Input('abpPropDataAtIndex') readonly index?: number;
+  @Input('abpPropDataAtIndex') index?: number;
 
   readonly getInjected: InferredData<L>['getInjected'];
 

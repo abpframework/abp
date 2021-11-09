@@ -8,17 +8,17 @@ export class AutofocusDirective implements AfterViewInit {
   private _delay = 0;
 
   @Input('autofocus')
-  set delay(val: number | undefined) {
-    this._delay = val ?? 0;
+  set delay(val: number | undefined | string) {
+    this._delay = Number(val) || 0;
   }
 
-  get delay() {
+  get delay(): number {
     return this._delay;
   }
 
   constructor(private elRef: ElementRef) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.elRef.nativeElement.focus(), this.delay);
+    setTimeout(() => this.elRef.nativeElement.focus(), this.delay as number);
   }
 }

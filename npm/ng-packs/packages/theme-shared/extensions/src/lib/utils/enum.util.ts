@@ -8,7 +8,7 @@ import { PropCallback } from '../models/props';
 export function createEnum(members: ObjectExtensions.ExtensionEnumFieldDto[]) {
   const enumObject: any = {};
 
-  members.forEach(({ name, value }) => {
+  members.forEach(({ name = '', value }) => {
     enumObject[(enumObject[name] = value as any)] = name;
   });
 
@@ -21,7 +21,7 @@ export function createEnumValueResolver<T = any>(
   propName: string,
 ): PropCallback<T, Observable<string>> {
   return data => {
-    const value = data.record[EXTRA_PROPERTIES_KEY][propName];
+    const value = (data.record as any)[EXTRA_PROPERTIES_KEY][propName];
     const key = lookupEnum.transformed[value];
     const l10n = data.getInjected(LocalizationService);
     const localizeEnum = createEnumLocalizer(l10n, enumType, lookupEnum);
@@ -40,7 +40,7 @@ export function createEnumOptions<T = any>(
 
     return createLocalizationStream(
       l10n,
-      lookupEnum.fields.map(({ name, value }) => ({
+      lookupEnum.fields.map(({ name = '', value }) => ({
         key: localizeEnum(name),
         value,
       })),
@@ -62,7 +62,7 @@ function createEnumLocalizer(
 
   return key =>
     l10n.localizeWithFallbackSync(
-      [resource],
+      [resource || ''],
       ['Enum:' + shortType + '.' + key, shortType + '.' + key, key],
       key,
     );

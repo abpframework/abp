@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   selector: 'abp-languages',
   template: `
     <div
-      *ngIf="(dropdownLanguages$ | async).length > 0"
+      *ngIf="((dropdownLanguages$ | async)?.length || 0) > 0"
       class="dropdown"
       ngbDropdown
       #languageDropdown="ngbDropdown"

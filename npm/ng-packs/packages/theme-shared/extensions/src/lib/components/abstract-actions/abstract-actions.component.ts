@@ -13,7 +13,7 @@ export abstract class AbstractActionsComponent<L extends ActionList<any>> extend
 
   readonly getInjected: InferredData<L>['getInjected'];
 
-  @Input() readonly record!: InferredData<L>['record'];
+  @Input() record!: InferredData<L>['record'];
 
   constructor(injector: Injector) {
     super();
