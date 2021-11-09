@@ -35,6 +35,12 @@ namespace Volo.Abp.Uow
                 if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
                 {
                     await invocation.ProceedAsync();
+                    
+                    if (unitOfWorkManager.Current != null)
+                    {
+                        await unitOfWorkManager.Current.SaveChangesAsync();
+                    }
+
                     return;
                 }
 
