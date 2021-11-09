@@ -44,12 +44,12 @@
                                 </div>
                                 <div class="hero-content pt-3">
                                     <h2>
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="text-decoration-none">@post.Title</a>
                                     </h2>
                                     <p class="article-sum">
                                         @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                     </p>
-                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn text-decoration-none">Continue Reading &#8594;</a>
 
                                 </div>
                                 @if (post.Writer != null)
@@ -76,7 +76,7 @@
                             <p class="tags">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag text-decoration-none">@tag.Name</a>
                                 }
                             </p>
 
@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="col-8 ps-0">
                                             <h3 class="font-125">
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="text-decoration-none">@post.Title</a>
                                             </h3>
 
                                             @if (post.Writer != null)

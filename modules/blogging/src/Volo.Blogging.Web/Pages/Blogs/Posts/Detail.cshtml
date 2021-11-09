@@ -57,7 +57,7 @@
                     <div class="hero-articles">
                         <div class="hero-content">
                             <h1 class="mb-3">
-                                <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" id="PostTitle">@Model.Post.Title</a>
+                                <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" id="PostTitle" class="text-decoration-none">@Model.Post.Title</a>
                             </h1>
 
                             <div class="article-owner">
@@ -125,13 +125,13 @@
                 <hr />
                 <div class="mb-2 mt-1">
                     @(L["ShareOn"].Value + " :")
-                    <a href="#" target="_blank" class="me-2" id="TwitterShareLink" title="Twitter">
+                    <a href="#" target="_blank" class="me-2 text-decoration-none" id="TwitterShareLink" title="Twitter">
                         Twitter <i class="fa fa-twitter"></i>
                     </a>
-                    <a href="#" target="_blank" class="me-2" id="LinkedinShareLink" title="LinkedIn">
+                    <a href="#" target="_blank" class="me-2 text-decoration-none" id="LinkedinShareLink" title="LinkedIn">
                         Linkedin <i class="fa fa-linkedin"></i>
                     </a>
-                    <a href="#" target="_blank" class="me-2" id="EmailShareLink" title="E-mail">
+                    <a href="#" target="_blank" class="me-2 text-decoration-none" id="EmailShareLink" title="E-mail">
                         E-mail <i class="fa fa-envelope-square"></i>
                     </a>
                 </div>
