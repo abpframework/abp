@@ -80,7 +80,8 @@ namespace Volo.Abp.AspNetCore.SignalR.Auditing
             }
 
             var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
-            if (auditingManager.Current != null && auditingManager.Current.Log.Actions.IsNullOrEmpty())
+            if (auditingManager.Current == null ||
+                auditingManager.Current.Log.Actions.IsNullOrEmpty())
             {
                 return false;
             }
