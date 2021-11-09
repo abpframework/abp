@@ -60,6 +60,11 @@ export abstract class AuthFlowStrategy {
     if (shouldClear) clearOAuthStorage(oAuthStorage);
 
     this.oAuthService.configure(this.oAuthConfig);
+
+    this.oAuthService.events
+      .pipe(filter(event => event.type === 'token_refresh_error'))
+      .subscribe(() => this.navigateToLogin());
+
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
