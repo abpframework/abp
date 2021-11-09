@@ -284,7 +284,6 @@ namespace Volo.Abp.Cli.Bundling
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
-            CheckProjectIsSupportedType(document);
 
             return document.SelectSingleNode("//TargetFramework").InnerText;
         }
@@ -293,11 +292,7 @@ namespace Volo.Abp.Cli.Bundling
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
-            CheckProjectIsSupportedType(document);
-        }
-
-        private void CheckProjectIsSupportedType(XmlDocument document)
-        {
+            
             var sdk = document.DocumentElement.GetAttribute("Sdk");
             if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
             {
