@@ -8,11 +8,11 @@ export class AutofocusDirective implements AfterViewInit {
   private _delay = 0;
 
   @Input('autofocus')
-  set delay(val: number | undefined | string) {
+  set delay(val: number | string | undefined) {
     this._delay = Number(val) || 0;
   }
 
-  get delay(): number {
+  get delay() {
     return this._delay;
   }
 
