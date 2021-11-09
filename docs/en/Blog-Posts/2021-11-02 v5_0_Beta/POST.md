@@ -82,7 +82,17 @@ abp generate-proxy -t csharp -u https://localhost:44305
 
 ![csharp-proxies](csharp-proxies.png)
 
-Once the proxies are generated, you can inject and use the application service interfaces of these proxies, like `IProductAppService` in this example. Usage is same of the [dynamic C# client proxies](https://docs.abp.io/en/abp/latest/API/Dynamic-CSharp-API-Clients).
+The next step is to enable the static proxy system for your application (or module) using the `AddStaticHttpClientProxies` extension method:
+
+````csharp
+context.Services.AddStaticHttpClientProxies(
+    typeof(MyApplicationContractsModule).Assembly
+);
+````
+
+You can then inject and use the application service interfaces of these proxies. The usage is same of the [dynamic C# client proxies](https://docs.abp.io/en/abp/latest/API/Dynamic-CSharp-API-Clients).
+
+When you use static proxies for a module / application, you don't need to dynamic proxies. Find and remove the `context.Services.AddHttpClientProxies(...)` in your solution (typically in the `*.HttpApi.Client` project).
 
 #### Creating JavaScript client proxies
 

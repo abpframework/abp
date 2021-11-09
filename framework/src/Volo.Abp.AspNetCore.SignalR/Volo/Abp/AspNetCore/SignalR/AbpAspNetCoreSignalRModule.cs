@@ -32,7 +32,10 @@ namespace Volo.Abp.AspNetCore.SignalR
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var routePatterns = new List<string> {"/signalr-hubs"};
-            var signalRServerBuilder = context.Services.AddSignalR();
+            var signalRServerBuilder = context.Services.AddSignalR(options =>
+            {
+                options.AddFilter<AbpSignalRHubFilter>();
+            });
 
             context.Services.ExecutePreConfiguredActions(signalRServerBuilder);
 

@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "remove-lock-files": "ts-node -r tsconfig-paths/register remove-lock-files.ts",
-    "report-npm-packages": "ts-node -r tsconfig-paths/register report-npm-packages.ts",
     "validate-versions": "ts-node -r tsconfig-paths/register validate-versions.ts"
   },
   "dependencies": {
