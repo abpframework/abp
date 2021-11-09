@@ -1,14 +1,14 @@
 {
   "name": "@abp/ng.components",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": ">=4.4.3",
-    "@abp/ng.theme.shared": ">=4.4.3",
+    "@abp/ng.core": ">=4.4.4",
+    "@abp/ng.theme.shared": ">=4.4.4",
     "@ng-bootstrap/ng-bootstrap": ">=6.0.0"
   },
   "dependencies": {

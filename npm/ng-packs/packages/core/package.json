@@ -1,13 +1,13 @@
 {
   "name": "@abp/ng.core",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "^4.4.3",
+    "@abp/utils": "~4.4.4",
     "@angular/localize": "~10.0.10",
     "@ngxs/store": "^3.7.0",
     "angular-oauth2-oidc": "^10.0.0",
