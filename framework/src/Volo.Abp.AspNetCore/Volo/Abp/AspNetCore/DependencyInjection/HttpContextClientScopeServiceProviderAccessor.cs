@@ -2,32 +2,31 @@
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.DependencyInjection
+namespace Volo.Abp.AspNetCore.DependencyInjection;
+
+public class HttpContextClientScopeServiceProviderAccessor :
+    IClientScopeServiceProviderAccessor,
+    ISingletonDependency
 {
-    public class HttpContextClientScopeServiceProviderAccessor :
-        IClientScopeServiceProviderAccessor,
-        ISingletonDependency
+    public IServiceProvider ServiceProvider
     {
-        public IServiceProvider ServiceProvider
+        get
         {
-            get
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null)
             {
-                var httpContext = _httpContextAccessor.HttpContext;
-                if (httpContext == null)
-                {
-                    throw new AbpException("HttpContextClientScopeServiceProviderAccessor should only be used in a web request scope!");
-                }
-
-                return httpContext.RequestServices;
+                throw new AbpException("HttpContextClientScopeServiceProviderAccessor should only be used in a web request scope!");
             }
-        }
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public HttpContextClientScopeServiceProviderAccessor(
-            IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
+            return httpContext.RequestServices;
         }
+    }
+
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public HttpContextClientScopeServiceProviderAccessor(
+        IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
     }
 }

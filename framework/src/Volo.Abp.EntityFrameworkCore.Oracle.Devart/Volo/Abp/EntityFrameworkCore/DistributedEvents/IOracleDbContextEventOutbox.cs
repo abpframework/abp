@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
+﻿namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
+
+public interface IOracleDbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext>
+    where TDbContext : IHasEventOutbox
 {
-    public interface IOracleDbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext>
-        where TDbContext : IHasEventOutbox
-    {
-    }
 }

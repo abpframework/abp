@@ -4,47 +4,46 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Quartz;
 
-namespace Volo.Abp.Quartz
+namespace Volo.Abp.Quartz;
+
+public class AbpQuartzOptions
 {
-    public class AbpQuartzOptions
+    /// <summary>
+    /// The quartz configuration. Available properties can be found within Quartz.Impl.StdSchedulerFactory.
+    /// </summary>
+    public NameValueCollection Properties { get; set; }
+
+    public Action<IServiceCollectionQuartzConfigurator> Configurator { get; set; }
+
+    /// <summary>
+    /// How long Quartz should wait before starting. Default: 0.
+    /// </summary>
+    public TimeSpan StartDelay { get; set; }
+
+    [NotNull]
+    public Func<IScheduler, Task> StartSchedulerFactory
     {
-        /// <summary>
-        /// The quartz configuration. Available properties can be found within Quartz.Impl.StdSchedulerFactory.
-        /// </summary>
-        public NameValueCollection Properties { get; set; }
+        get => _startSchedulerFactory;
+        set => _startSchedulerFactory = Check.NotNull(value, nameof(value));
+    }
+    private Func<IScheduler, Task> _startSchedulerFactory;
 
-        public Action<IServiceCollectionQuartzConfigurator> Configurator { get; set; }
+    public AbpQuartzOptions()
+    {
+        Properties = new NameValueCollection();
+        StartDelay = new TimeSpan(0);
+        _startSchedulerFactory = StartSchedulerAsync;
+    }
 
-        /// <summary>
-        /// How long Quartz should wait before starting. Default: 0.
-        /// </summary>
-        public TimeSpan StartDelay { get; set; }
-
-        [NotNull]
-        public Func<IScheduler, Task> StartSchedulerFactory
+    private async Task StartSchedulerAsync(IScheduler scheduler)
+    {
+        if (StartDelay.Ticks > 0)
         {
-            get => _startSchedulerFactory;
-            set => _startSchedulerFactory = Check.NotNull(value, nameof(value));
+            await scheduler.StartDelayed(StartDelay);
         }
-        private Func<IScheduler, Task> _startSchedulerFactory;
-
-        public AbpQuartzOptions()
+        else
         {
-            Properties = new NameValueCollection();
-            StartDelay = new TimeSpan(0);
-            _startSchedulerFactory = StartSchedulerAsync;
-        }
-        
-        private async Task StartSchedulerAsync(IScheduler scheduler)
-        {
-            if (StartDelay.Ticks > 0)
-            {
-                await scheduler.StartDelayed(StartDelay);
-            }
-            else
-            {
-                await scheduler.Start();
-            }
+            await scheduler.Start();
         }
     }
 }

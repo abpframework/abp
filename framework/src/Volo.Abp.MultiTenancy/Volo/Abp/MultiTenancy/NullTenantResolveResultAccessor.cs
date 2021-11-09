@@ -1,13 +1,12 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public class NullTenantResolveResultAccessor : ITenantResolveResultAccessor, ISingletonDependency
 {
-    public class NullTenantResolveResultAccessor : ITenantResolveResultAccessor, ISingletonDependency
+    public TenantResolveResult Result
     {
-        public TenantResolveResult Result
-        {
-            get => null;
-            set { }
-        }
+        get => null;
+        set { }
     }
 }

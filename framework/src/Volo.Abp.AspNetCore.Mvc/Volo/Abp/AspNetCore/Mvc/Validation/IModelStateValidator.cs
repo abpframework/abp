@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.AspNetCore.Mvc.Validation
-{
-    public interface IModelStateValidator
-    {
-        void Validate(ModelStateDictionary modelState);
+namespace Volo.Abp.AspNetCore.Mvc.Validation;
 
-        void AddErrors(IAbpValidationResult validationResult, ModelStateDictionary modelState);
-    }
+public interface IModelStateValidator
+{
+    void Validate(ModelStateDictionary modelState);
+
+    void AddErrors(IAbpValidationResult validationResult, ModelStateDictionary modelState);
 }

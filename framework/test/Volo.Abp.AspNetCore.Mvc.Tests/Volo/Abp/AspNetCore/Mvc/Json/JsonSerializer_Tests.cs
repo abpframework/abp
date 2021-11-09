@@ -6,36 +6,35 @@ using Shouldly;
 using Volo.Abp.Json;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json
+namespace Volo.Abp.AspNetCore.Mvc.Json;
+
+public class JsonSerializer_Tests : AspNetCoreMvcTestBase
 {
-    public class JsonSerializer_Tests : AspNetCoreMvcTestBase
+    private readonly IJsonSerializer _jsonSerializer;
+
+    public JsonSerializer_Tests()
     {
-        private readonly IJsonSerializer _jsonSerializer;
+        _jsonSerializer = ServiceProvider.GetRequiredService<IJsonSerializer>();
+    }
 
-        public JsonSerializer_Tests()
+    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    {
+        services.Configure<AbpJsonOptions>(options =>
         {
-            _jsonSerializer = ServiceProvider.GetRequiredService<IJsonSerializer>();
-        }
+            options.DefaultDateTimeFormat = "yyyy*MM*dd";
+        });
 
-        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        base.ConfigureServices(context, services);
+    }
+
+    [Fact]
+    public void DateFormatString_Test()
+    {
+        var output = _jsonSerializer.Serialize(new
         {
-            services.Configure<AbpJsonOptions>(options =>
-            {
-                options.DefaultDateTimeFormat = "yyyy*MM*dd";
-            });
+            Time = DateTime.Parse("2019-01-01 11:59:59")
+        });
 
-            base.ConfigureServices(context, services);
-        }
-
-        [Fact]
-        public void DateFormatString_Test()
-        {
-            var output = _jsonSerializer.Serialize(new
-            {
-                Time = DateTime.Parse("2019-01-01 11:59:59")
-            });
-
-            output.ShouldContain("2019*01*01");
-        }
+        output.ShouldContain("2019*01*01");
     }
 }

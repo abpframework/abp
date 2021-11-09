@@ -16,106 +16,105 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
-namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
+namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
+
+public partial class LookupExtensionProperty<TEntity, TResourceType> : ComponentBase
+    where TEntity : IHasExtraProperties
 {
-    public partial class LookupExtensionProperty<TEntity, TResourceType> : ComponentBase
-        where TEntity : IHasExtraProperties
+    protected List<SelectItem<object>> lookupItems;
+
+    [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+
+    [Parameter] public TEntity Entity { get; set; }
+
+    [Parameter] public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
+
+
+    [Inject] public ILookupApiRequestService LookupApiService { get; set; }
+
+    public string TextPropertyName => PropertyInfo.Name + "_Text";
+
+    public object SelectedValue
     {
-        protected List<SelectItem<object>> lookupItems;
-
-        [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
-
-        [Parameter] public TEntity Entity { get; set; }
-
-        [Parameter] public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
-
-
-        [Inject] public ILookupApiRequestService LookupApiService { get; set; }
-
-        public string TextPropertyName => PropertyInfo.Name + "_Text";
-
-        public object SelectedValue
+        get { return Entity.GetProperty(PropertyInfo.Name); }
+        set
         {
-            get { return Entity.GetProperty(PropertyInfo.Name); }
-            set
+            Entity.SetProperty(PropertyInfo.Name, value, false);
+            UpdateLookupTextProperty(value);
+        }
+    }
+
+    public LookupExtensionProperty()
+    {
+        lookupItems = new List<SelectItem<object>>();
+    }
+
+    protected override void OnParametersSet()
+    {
+        var value = Entity.GetProperty(PropertyInfo.Name);
+        var text = Entity.GetProperty(TextPropertyName);
+        if (value != null && text != null)
+        {
+            lookupItems.Add(new SelectItem<object>
             {
-                Entity.SetProperty(PropertyInfo.Name, value, false);
-                UpdateLookupTextProperty(value);
-            }
+                Text = Entity.GetProperty(TextPropertyName).ToString(),
+                Value = value
+            });
+        }
+    }
+
+    protected virtual void UpdateLookupTextProperty(object value)
+    {
+        var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value)).Text;
+        Entity.SetProperty(TextPropertyName, selectedItemText);
+    }
+
+    protected virtual async Task<List<SelectItem<object>>> GetLookupItemsAsync(string filter)
+    {
+        var selectItems = new List<SelectItem<object>>();
+
+        var url = PropertyInfo.Lookup.Url;
+        if (!filter.IsNullOrEmpty())
+        {
+            url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
         }
 
-        public LookupExtensionProperty()
-        {
-            lookupItems = new List<SelectItem<object>>();
-        }
+        var response = await LookupApiService.SendAsync(url);
 
-        protected override void OnParametersSet()
+        var document = JsonDocument.Parse(response);
+        var itemsArrayProp = document.RootElement.GetProperty(PropertyInfo.Lookup.ResultListPropertyName);
+        foreach (var item in itemsArrayProp.EnumerateArray())
         {
-            var value = Entity.GetProperty(PropertyInfo.Name);
-            var text = Entity.GetProperty(TextPropertyName);
-            if (value != null && text != null)
+            selectItems.Add(new SelectItem<object>
             {
-                lookupItems.Add(new SelectItem<object>
-                {
-                    Text = Entity.GetProperty(TextPropertyName).ToString(),
-                    Value = value
-                });
-            }
+                Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
+                Value = JsonSerializer.Deserialize(
+                    item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
+            });
         }
 
-        protected virtual void UpdateLookupTextProperty(object value)
+        return selectItems;
+    }
+
+    protected virtual Task SelectedValueChanged(object selectedItem)
+    {
+        SelectedValue = selectedItem;
+
+        return Task.CompletedTask;
+    }
+
+    protected async Task SearchFilterChangedAsync(string filter)
+    {
+        lookupItems = await GetLookupItemsAsync(filter);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
         {
-            var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value)).Text;
-            Entity.SetProperty(TextPropertyName, selectedItemText);
-        }
-
-        protected virtual async Task<List<SelectItem<object>>> GetLookupItemsAsync(string filter)
-        {
-            var selectItems = new List<SelectItem<object>>();
-
-            var url = PropertyInfo.Lookup.Url;
-            if (!filter.IsNullOrEmpty())
-            {
-                url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
-            }
-
-            var response = await LookupApiService.SendAsync(url);
-
-            var document = JsonDocument.Parse(response);
-            var itemsArrayProp = document.RootElement.GetProperty(PropertyInfo.Lookup.ResultListPropertyName);
-            foreach (var item in itemsArrayProp.EnumerateArray())
-            {
-                selectItems.Add(new SelectItem<object>
-                {
-                    Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
-                    Value = JsonSerializer.Deserialize(
-                        item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
-                });
-            }
-
-            return selectItems;
-        }
-
-        protected virtual Task SelectedValueChanged(object selectedItem)
-        {
-            SelectedValue = selectedItem;
-
-            return Task.CompletedTask;
-        }
-
-        protected async Task SearchFilterChangedAsync(string filter)
-        {
-            lookupItems = await GetLookupItemsAsync(filter);
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-
-            if (firstRender)
-            {
-                await SearchFilterChangedAsync(string.Empty);
-            }
+            await SearchFilterChangedAsync(string.Empty);
         }
     }
 }

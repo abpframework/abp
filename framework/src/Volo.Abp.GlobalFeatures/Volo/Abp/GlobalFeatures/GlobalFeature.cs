@@ -1,51 +1,50 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.GlobalFeatures
+namespace Volo.Abp.GlobalFeatures;
+
+public abstract class GlobalFeature
 {
-    public abstract class GlobalFeature
+    [NotNull]
+    public GlobalModuleFeatures Module { get; }
+
+    [NotNull]
+    public GlobalFeatureManager FeatureManager { get; }
+
+    [NotNull]
+    public string FeatureName { get; }
+
+    public bool IsEnabled
     {
-        [NotNull]
-        public GlobalModuleFeatures Module { get; }
+        get => FeatureManager.IsEnabled(FeatureName);
+        set => SetEnabled(value);
+    }
 
-        [NotNull]
-        public GlobalFeatureManager FeatureManager { get; }
+    protected GlobalFeature([NotNull] GlobalModuleFeatures module)
+    {
+        Module = Check.NotNull(module, nameof(module));
+        FeatureManager = Module.FeatureManager;
+        FeatureName = GlobalFeatureNameAttribute.GetName(GetType());
+    }
 
-        [NotNull]
-        public string FeatureName { get; }
+    public virtual void Enable()
+    {
+        FeatureManager.Enable(FeatureName);
+    }
 
-        public bool IsEnabled
+    public virtual void Disable()
+    {
+        FeatureManager.Disable(FeatureName);
+    }
+
+    public void SetEnabled(bool isEnabled)
+    {
+        if (isEnabled)
         {
-            get => FeatureManager.IsEnabled(FeatureName);
-            set => SetEnabled(value);
+            Enable();
         }
-
-        protected GlobalFeature([NotNull] GlobalModuleFeatures module)
+        else
         {
-            Module = Check.NotNull(module, nameof(module));
-            FeatureManager = Module.FeatureManager;
-            FeatureName = GlobalFeatureNameAttribute.GetName(GetType());
-        }
-
-        public virtual void Enable()
-        {
-            FeatureManager.Enable(FeatureName);
-        }
-
-        public virtual void Disable()
-        {
-            FeatureManager.Disable(FeatureName);
-        }
-
-        public void SetEnabled(bool isEnabled)
-        {
-            if (isEnabled)
-            {
-                Enable();
-            }
-            else
-            {
-                Disable();
-            }
+            Disable();
         }
     }
 }

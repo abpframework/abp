@@ -4,119 +4,118 @@ using System.Linq;
 using LibGit2Sharp;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Build
+namespace Volo.Abp.Cli.Build;
+
+public class DefaultBuildStatusGenerator : IBuildStatusGenerator, ITransientDependency
 {
-    public class DefaultBuildStatusGenerator : IBuildStatusGenerator, ITransientDependency
+    private readonly IGitRepositoryHelper _gitRepositoryHelper;
+
+    public DefaultBuildStatusGenerator(IGitRepositoryHelper gitRepositoryHelper)
     {
-        private readonly IGitRepositoryHelper _gitRepositoryHelper;
+        _gitRepositoryHelper = gitRepositoryHelper;
+    }
 
-        public DefaultBuildStatusGenerator(IGitRepositoryHelper gitRepositoryHelper)
+    public GitRepositoryBuildStatus Generate(
+        DotNetProjectBuildConfig buildConfig,
+        List<DotNetProjectInfo> changedProjects,
+        List<string> buildSucceededProjects)
+    {
+        var lastCommitId = _gitRepositoryHelper.GetLastCommitId(buildConfig.GitRepository);
+        var repoFriendlyName = _gitRepositoryHelper.GetFriendlyName(buildConfig.GitRepository);
+
+        var status = new GitRepositoryBuildStatus(
+            buildConfig.GitRepository.Name,
+            repoFriendlyName
+        );
+
+        if (ShouldUpdateRepositoryCommitId(buildConfig, changedProjects, buildSucceededProjects))
         {
-            _gitRepositoryHelper = gitRepositoryHelper;
+            status.CommitId = lastCommitId;
         }
 
-        public GitRepositoryBuildStatus Generate(
-            DotNetProjectBuildConfig buildConfig,
-            List<DotNetProjectInfo> changedProjects,
-            List<string> buildSucceededProjects)
-        {
-            var lastCommitId = _gitRepositoryHelper.GetLastCommitId(buildConfig.GitRepository);
-            var repoFriendlyName = _gitRepositoryHelper.GetFriendlyName(buildConfig.GitRepository);
+        status.SucceedProjects = changedProjects.Where(p =>
+                p.RepositoryName == buildConfig.GitRepository.Name &&
+                buildSucceededProjects.Contains(p.CsProjPath)
+            )
+            .Select(e => new DotNetProjectBuildStatus
+            {
+                CsProjPath = e.CsProjPath,
+                CommitId = lastCommitId
+            }).ToList();
 
-            var status = new GitRepositoryBuildStatus(
-                buildConfig.GitRepository.Name,
-                repoFriendlyName
+        foreach (var dependingRepository in buildConfig.GitRepository.DependingRepositories)
+        {
+            GenerateBuildStatusInternal(
+                buildConfig,
+                dependingRepository,
+                changedProjects,
+                buildSucceededProjects,
+                status
             );
-
-            if (ShouldUpdateRepositoryCommitId(buildConfig, changedProjects, buildSucceededProjects))
-            {
-                status.CommitId = lastCommitId;
-            }
-
-            status.SucceedProjects = changedProjects.Where(p =>
-                    p.RepositoryName == buildConfig.GitRepository.Name &&
-                    buildSucceededProjects.Contains(p.CsProjPath)
-                )
-                .Select(e => new DotNetProjectBuildStatus
-                {
-                    CsProjPath = e.CsProjPath,
-                    CommitId = lastCommitId
-                }).ToList();
-
-            foreach (var dependingRepository in buildConfig.GitRepository.DependingRepositories)
-            {
-                GenerateBuildStatusInternal(
-                    buildConfig,
-                    dependingRepository,
-                    changedProjects,
-                    buildSucceededProjects,
-                    status
-                );
-            }
-
-            return status;
         }
 
-        private bool ShouldUpdateRepositoryCommitId(
-            DotNetProjectBuildConfig buildConfig,
-            List<DotNetProjectInfo> changedProjects,
-            List<string> buildSucceededProjects)
+        return status;
+    }
+
+    private bool ShouldUpdateRepositoryCommitId(
+        DotNetProjectBuildConfig buildConfig,
+        List<DotNetProjectInfo> changedProjects,
+        List<string> buildSucceededProjects)
+    {
+        if (!buildConfig.SlFilePath.IsNullOrEmpty())
         {
-            if (!buildConfig.SlFilePath.IsNullOrEmpty())
-            {
-                return false;
-            }
-            
-            if (changedProjects.Count == 0 || buildSucceededProjects.Count == 0)
-            {
-                return false;
-            }
-            
-            return changedProjects.Count == buildSucceededProjects.Count;
+            return false;
         }
 
-        private void GenerateBuildStatusInternal(
-            DotNetProjectBuildConfig buildConfig,
-            GitRepository gitRepository,
-            List<DotNetProjectInfo> changedProjects,
-            List<string> buildSucceededProjects,
-            GitRepositoryBuildStatus status)
+        if (changedProjects.Count == 0 || buildSucceededProjects.Count == 0)
         {
-            var lastCommitId = _gitRepositoryHelper.GetLastCommitId(gitRepository);
-            var repoFriendlyName = _gitRepositoryHelper.GetFriendlyName(gitRepository);
+            return false;
+        }
 
-            var dependingRepositoryStatus = new GitRepositoryBuildStatus(
-                gitRepository.Name,
-                repoFriendlyName
+        return changedProjects.Count == buildSucceededProjects.Count;
+    }
+
+    private void GenerateBuildStatusInternal(
+        DotNetProjectBuildConfig buildConfig,
+        GitRepository gitRepository,
+        List<DotNetProjectInfo> changedProjects,
+        List<string> buildSucceededProjects,
+        GitRepositoryBuildStatus status)
+    {
+        var lastCommitId = _gitRepositoryHelper.GetLastCommitId(gitRepository);
+        var repoFriendlyName = _gitRepositoryHelper.GetFriendlyName(gitRepository);
+
+        var dependingRepositoryStatus = new GitRepositoryBuildStatus(
+            gitRepository.Name,
+            repoFriendlyName
+        );
+
+        if (ShouldUpdateRepositoryCommitId(buildConfig, changedProjects, buildSucceededProjects))
+        {
+            dependingRepositoryStatus.CommitId = lastCommitId;
+        }
+
+        dependingRepositoryStatus.SucceedProjects = changedProjects.Where(p =>
+                p.RepositoryName == gitRepository.Name &&
+                buildSucceededProjects.Contains(p.CsProjPath)
+            )
+            .Select(e => new DotNetProjectBuildStatus()
+            {
+                CsProjPath = e.CsProjPath,
+                CommitId = lastCommitId
+            }).ToList();
+
+        foreach (var dependingRepository in gitRepository.DependingRepositories)
+        {
+            GenerateBuildStatusInternal(
+                buildConfig,
+                dependingRepository,
+                changedProjects,
+                buildSucceededProjects,
+                dependingRepositoryStatus
             );
-            
-            if (ShouldUpdateRepositoryCommitId(buildConfig, changedProjects, buildSucceededProjects))
-            {
-                dependingRepositoryStatus.CommitId = lastCommitId;
-            }
-
-            dependingRepositoryStatus.SucceedProjects = changedProjects.Where(p =>
-                    p.RepositoryName == gitRepository.Name &&
-                    buildSucceededProjects.Contains(p.CsProjPath)
-                )
-                .Select(e => new DotNetProjectBuildStatus()
-                {
-                    CsProjPath = e.CsProjPath,
-                    CommitId = lastCommitId
-                }).ToList();
-
-            foreach (var dependingRepository in gitRepository.DependingRepositories)
-            {
-                GenerateBuildStatusInternal(
-                    buildConfig,
-                    dependingRepository,
-                    changedProjects,
-                    buildSucceededProjects,
-                    dependingRepositoryStatus
-                );
-            }
-
-            status.DependingRepositories.Add(dependingRepositoryStatus);
         }
+
+        status.DependingRepositories.Add(dependingRepositoryStatus);
     }
 }

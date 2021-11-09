@@ -2,23 +2,22 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
+namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+
+public static class ViewComponentHelperLayoutHookExtensions
 {
-    public static class ViewComponentHelperLayoutHookExtensions
+    public static Task<IHtmlContent> InvokeLayoutHookAsync(
+        this IViewComponentHelper componentHelper,
+        string name,
+        string layout)
     {
-        public static Task<IHtmlContent> InvokeLayoutHookAsync(
-            this IViewComponentHelper componentHelper, 
-            string name, 
-            string layout)
-        {
-            return componentHelper.InvokeAsync(
-                typeof(LayoutHookViewComponent),
-                new
-                {
-                    name = name,
-                    layout = layout
-                }
-            );
-        }
+        return componentHelper.InvokeAsync(
+            typeof(LayoutHookViewComponent),
+            new
+            {
+                name = name,
+                layout = layout
+            }
+        );
     }
 }
