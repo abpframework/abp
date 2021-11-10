@@ -395,11 +395,10 @@ namespace Volo.Abp.Cli.ServiceProxying.CSharp
                 throw new CliUsageException("Specified directory does not exist.");
             }
 
-            var projectFiles = Directory.GetFiles(directory, "*HttpApi.Client.csproj");
+            var projectFiles = Directory.GetFiles(directory, "*.csproj");
             if (!projectFiles.Any())
             {
-                throw new CliUsageException(
-                    "No project file found in the directory. The working directory must have a HttpApi.Client project file.");
+                throw new CliUsageException("No project file(csproj) found in the directory.");
             }
         }
 

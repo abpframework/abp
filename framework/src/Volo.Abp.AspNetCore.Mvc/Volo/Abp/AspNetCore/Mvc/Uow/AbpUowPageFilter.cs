@@ -47,7 +47,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
             {
                 var result = await next();
-                if (!Succeed(result))
+                if (Succeed(result))
+                {
+                    await SaveChangesAsync(context, unitOfWorkManager);
+                }
+                else
                 {
                     await RollbackAsync(context, unitOfWorkManager);
                 }
@@ -92,6 +96,15 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             if (currentUow != null)
             {
                 await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+            }
+        }
+        
+        private async Task SaveChangesAsync(PageHandlerExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
+        {
+            var currentUow = unitOfWorkManager.Current;
+            if (currentUow != null)
+            {
+                await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
             }
         }
 
