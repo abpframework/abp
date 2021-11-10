@@ -13,7 +13,7 @@
     "@abp/aspnetcore.mvc.ui": "~5.0.0-beta.3",
     "@abp/bootstrap": "~5.0.0-beta.3",
     "@abp/bootstrap-datepicker": "~5.0.0-beta.3",
-    "@abp/datatables.net-bs4": "~5.0.0-beta.3",
+    "@abp/datatables.net-bs5": "~5.0.0-beta.3",
     "@abp/font-awesome": "~5.0.0-beta.3",
     "@abp/jquery-form": "~5.0.0-beta.3",
     "@abp/jquery-validation-unobtrusive": "~5.0.0-beta.3",
