@@ -1,4 +1,4 @@
-<ng-container *ngIf="(service.currentTenant$ | async) || {} as currentTenant">
+<ng-container *ngIf="(service.currentTenant$ | async) || { name: '' } as currentTenant">
   <div class="card shadow-sm rounded mb-3">
     <div class="card-body px-5">
       <div class="row">
