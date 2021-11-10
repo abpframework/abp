@@ -8,46 +8,48 @@
 @model IndexModel
 
 @section styles{
-    <abp-style src="/Pages/Public/CmsKit/Blogs/index.css" />
+<abp-style src="/Pages/Public/CmsKit/Blogs/index.css" />
 }
 @{
-    const string dummyImageSource = "https://dummyimage.com/320x180/a3a3a3/fff.png";
+	const string dummyImageSource = "https://dummyimage.com/320x180/a3a3a3/fff.png";
 }
 
-<abp-row id="blogs-container">
-    @foreach (var blog in Model.Blogs.Items)
-    {
-        <abp-column size="_12" size-md="_6" size-lg="_4">
-            <abp-card>
-                @if (blog.CoverImageMediaId != null)
-                {
-                    <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
-                }
-                else
-                {
-                    <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
-                }
-                <abp-card-body class="p-4">
-                    <h5>@blog.Title</h5>
-                    <p class="mb-2">
-                        <span class="font-weight-bold">@@@blog.Author?.UserName</span>
-                        <small style="opacity:.65;">@blog.CreationTime</small>
-                    </p>
-                    <p style="min-height: 60px;">@blog.ShortDescription</p>
-                    <div class="d-grid gap-2">
-                        <a href="/blogs/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
-                            @L["Read"]
-                        </a>
-                    </div>
-                </abp-card-body>
-            </abp-card>
-        </abp-column>
+<div id="blogs-container" class="m-4">
+	<abp-row>
+		@foreach (var blog in Model.Blogs.Items)
+		{
+			<abp-column size="_12" size-md="_6" size-lg="_4">
+				<abp-card>
+					@if (blog.CoverImageMediaId != null)
+					{
+						<img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+					}
+					else
+					{
+						<img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
+					}
+					<abp-card-body class="p-4">
+						<h5>@blog.Title</h5>
+						<p class="mb-2">
+							<span class="font-weight-bold">@@@blog.Author?.UserName</span>
+							<small style="opacity:.65;">@blog.CreationTime</small>
+						</p>
+						<p style="min-height: 60px;">@blog.ShortDescription</p>
+						<div class="d-grid gap-2">
+							<a href="/blogs/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
+								@L["Read"]
+							</a>
+						</div>
+					</abp-card-body>
+				</abp-card>
+			</abp-column>
 
-    }
-</abp-row>
-<abp-row>
-    <abp-column>
-        <abp-paginator model="Model.PagerModel" />
-    </abp-column>
-</abp-row>
+		}
+	</abp-row>
+	<abp-row>
+		<abp-column>
+			<abp-paginator model="Model.PagerModel" />
+		</abp-column>
+	</abp-row>
+</div>
 
