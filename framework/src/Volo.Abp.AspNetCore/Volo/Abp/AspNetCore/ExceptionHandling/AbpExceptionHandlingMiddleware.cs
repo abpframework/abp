@@ -76,7 +76,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                 var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
                 var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
                 var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
-                var options = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+                var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
                 httpContext.Response.Clear();
                 httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
@@ -86,7 +86,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                 await httpContext.Response.WriteAsync(
                     jsonSerializer.Serialize(
                         new RemoteServiceErrorResponse(
-                            errorInfoConverter.Convert(exception, options.SendExceptionsDetailsToClients)
+                            errorInfoConverter.Convert(exception, options =>
+                            {
+                                options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                                options.EnableStackTrace = exceptionHandlingOptions.EnableStackTrace;
+                            })
                         )
                     )
                 );

@@ -47,7 +47,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
             await _exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(exception));
 
-            var errorInfo = _errorInfoConverter.Convert(exception, _exceptionHandlingOptions.SendExceptionsDetailsToClients);
+            var errorInfo = _errorInfoConverter.Convert(exception, options =>
+            {
+                options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                options.EnableStackTrace = _exceptionHandlingOptions.EnableStackTrace;
+            });
 
             if (httpStatusCode == 0)
             {

@@ -40,7 +40,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
         public RemoteServiceErrorInfo Convert(Exception exception, bool includeSensitiveDetails)
         {
-            var errorInfo = CreateErrorInfoWithoutCode(exception, includeSensitiveDetails);
+            var exceptionHandlingOptions = CreateDefaultOptions();
+            exceptionHandlingOptions.SendExceptionsDetailsToClients = includeSensitiveDetails;
+            exceptionHandlingOptions.EnableStackTrace = includeSensitiveDetails;
+            
+            var errorInfo = CreateErrorInfoWithoutCode(exception, exceptionHandlingOptions);
 
             if (exception is IHasErrorCode hasErrorCodeException)
             {
@@ -50,11 +54,26 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return errorInfo;
         }
 
-        protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception, bool includeSensitiveDetails)
+        public RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null)
         {
-            if (includeSensitiveDetails)
+            var exceptionHandlingOptions = CreateDefaultOptions();
+            options?.Invoke(exceptionHandlingOptions);
+            
+            var errorInfo = CreateErrorInfoWithoutCode(exception, exceptionHandlingOptions);
+
+            if (exception is IHasErrorCode hasErrorCodeException)
             {
-                return CreateDetailedErrorInfoFromException(exception);
+                errorInfo.Code = hasErrorCodeException.Code;
+            }
+
+            return errorInfo;
+        }
+        
+        protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception, AbpExceptionHandlingOptions options)
+        {
+            if (options.SendExceptionsDetailsToClients)
+            {
+                return CreateDetailedErrorInfoFromException(exception, options.EnableStackTrace);
             }
 
             exception = TryToGetActualException(exception);
@@ -194,11 +213,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return exception;
         }
 
-        protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception)
+        protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception, bool enableStackTrace)
         {
             var detailBuilder = new StringBuilder();
 
-            AddExceptionToDetails(exception, detailBuilder);
+            AddExceptionToDetails(exception, detailBuilder, enableStackTrace);
 
             var errorInfo = new RemoteServiceErrorInfo(exception.Message, detailBuilder.ToString());
 
@@ -210,7 +229,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return errorInfo;
         }
 
-        protected virtual void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder)
+        protected virtual void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder, bool enableStackTrace)
         {
             //Exception Message
             detailBuilder.AppendLine(exception.GetType().Name + ": " + exception.Message);
@@ -237,7 +256,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             }
 
             //Exception StackTrace
-            if (!string.IsNullOrEmpty(exception.StackTrace))
+            if (enableStackTrace && !string.IsNullOrEmpty(exception.StackTrace))
             {
                 detailBuilder.AppendLine("STACK TRACE: " + exception.StackTrace);
             }
@@ -245,7 +264,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             //Inner exception
             if (exception.InnerException != null)
             {
-                AddExceptionToDetails(exception.InnerException, detailBuilder);
+                AddExceptionToDetails(exception.InnerException, detailBuilder, enableStackTrace);
             }
 
             //Inner exceptions for AggregateException
@@ -259,7 +278,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
                 foreach (var innerException in aggException.InnerExceptions)
                 {
-                    AddExceptionToDetails(innerException, detailBuilder);
+                    AddExceptionToDetails(innerException, detailBuilder, enableStackTrace);
                 }
             }
         }
@@ -295,6 +314,15 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             }
 
             return detailBuilder.ToString();
+        }
+        
+        protected virtual AbpExceptionHandlingOptions CreateDefaultOptions()
+        {
+            return new AbpExceptionHandlingOptions
+            {
+                SendExceptionsDetailsToClients = false,
+                EnableStackTrace = false
+            };
         }
     }
 }
