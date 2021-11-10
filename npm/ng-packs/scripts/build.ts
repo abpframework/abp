@@ -1,5 +1,6 @@
 import program from 'commander';
 import execa from 'execa';
+import fse from 'fs-extra';
 
 (async () => {
   program.option('-i, --noInstall', 'skip updating package.json and installation', false);
@@ -12,17 +13,18 @@ import execa from 'execa';
       await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
     }
 
+    await fse.remove('../dist');
+
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--sync',
-        '--packages',
-        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components',
+        '--projects',
+        'core,theme-shared,components',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -30,13 +32,14 @@ import execa from 'execa';
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
+        '--projects',
+        'feature-management,permission-management,account-core',
+        '--parallel',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -44,14 +47,15 @@ import execa from 'execa';
     await execa(
       'yarn',
       [
-        'symlink',
-        'copy',
-        '--angular',
+        'nx',
+        'run-many',
+        '--target',
+        'build',
         '--prod',
-        '--no-watch',
-        '--all-packages',
-        '--excluded-packages',
-        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.core',
+        '--all',
+        '--exclude',
+        'dev-app,schematics,core,theme-shared,components,feature-management,permission-management,account-core',
+        '--parallel',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

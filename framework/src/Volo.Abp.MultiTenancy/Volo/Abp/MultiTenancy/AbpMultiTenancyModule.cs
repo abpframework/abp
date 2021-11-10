@@ -18,6 +18,8 @@ namespace Volo.Abp.MultiTenancy
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddSingleton<ICurrentTenantAccessor>(AsyncLocalCurrentTenantAccessor.Instance);
+            
             var configuration = context.Services.GetConfiguration();
             Configure<AbpDefaultTenantStoreOptions>(configuration);
         }

@@ -1,0 +1,88 @@
+{
+  "npmScope": "abp",
+  "affected": {
+    "defaultBase": "dev"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "workspaceLayout": {
+    "libsDir": "packages",
+    "appsDir": ""
+  },
+  "projects": {
+    "account-core": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
+    "account": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
+    },
+    "components": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
+    "core": {
+      "tags": []
+    },
+    "dev-app": {
+      "tags": []
+    },
+    "dev-app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["dev-app"]
+    },
+    "feature-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
+    "identity": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "permission-management"]
+    },
+    "permission-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
+    },
+    "schematics": {
+      "tags": []
+    },
+    "setting-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "components"]
+    },
+    "tenant-management": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "feature-management"]
+    },
+    "theme-basic": {
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
+    },
+    "theme-shared": {
+      "tags": [],
+      "implicitDependencies": ["core"]
+    }
+  }
+}

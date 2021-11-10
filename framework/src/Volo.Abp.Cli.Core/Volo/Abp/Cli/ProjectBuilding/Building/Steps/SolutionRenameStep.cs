@@ -21,6 +21,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new SolutionRenamer(
                     context.Files,
+                    "myCompanyName.myProjectName",
+                    "MicroserviceName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
                     null,
                     "MyProjectName",
                     null,

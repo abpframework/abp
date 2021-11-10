@@ -10,7 +10,7 @@ namespace Volo.CmsKit.MediaDescriptors
 {
     [RequiresGlobalFeature(typeof(MediaFeature))]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitCommonRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit/media")]
     public class MediaDescriptorController : CmsKitControllerBase, IMediaDescriptorAppService
     {

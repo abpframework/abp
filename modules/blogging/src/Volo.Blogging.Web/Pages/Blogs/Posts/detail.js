@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     var l = abp.localization.getResource('Blogging');
 
     var initSocialShareLinks = function () {
@@ -60,11 +60,14 @@
                 id: form.commentId,
                 commentDto: {
                     text: form.text,
+                    // TODO: Implement concurrencyStamp here:
+                    //concurrencyStamp: form.concurrencyStamp
                 },
             },
             success: function (response) {
                 $('div .editForm').hide();
                 $('#' + form.commentId).text(form.text);
+                //$(this).find('[name=concurrencyStamp]').val(response.concurrencyStamp);
             },
         });
     });

@@ -38,6 +38,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
         {
             [Required]
             [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
+            [Display(Name = "DisplayName:TenantName")]
             public string Name { get; set; }
 
             [Required]

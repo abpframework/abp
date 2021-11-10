@@ -33,7 +33,7 @@ namespace Volo.Abp.Identity.AspNetCore
             AbpOptions = options.Value;
         }
 
-        public async override Task<SignInResult> PasswordSignInAsync(
+        public override async Task<SignInResult> PasswordSignInAsync(
             string userName,
             string password,
             bool isPersistent,
@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity.AspNetCore
         {
             foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
             {
-                var externalLoginProvider = (IExternalLoginProvider) Context.RequestServices
+                var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
                     .GetRequiredService(externalLoginProviderInfo.Type);
 
                 if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
@@ -61,6 +61,17 @@ namespace Volo.Abp.Identity.AspNetCore
             }
 
             return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        }
+
+        protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
+        {
+            if (!user.IsActive)
+            {
+                Logger.LogWarning($"The user is not active therefore cannot login! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+                return SignInResult.NotAllowed;
+            }
+
+            return await base.PreSignInCheck(user);
         }
     }
 }

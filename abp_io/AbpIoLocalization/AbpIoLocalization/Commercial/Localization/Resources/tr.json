@@ -98,6 +98,7 @@
     "WeWillSendYouADownloadLink": "{0} adresine email gönderilmiştir.",
     "InvalidFormInputs": "Lütfen formda belirtilen geçerli bilgileri yazınız.",
     "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>.",
-    "FreeDDDEBook": "Ücretsiz DDD E-Kitap"
+    "FreeDDDEBook": "Ücretsiz DDD E-Kitap",
+    "CommercialNewsletterConfirmationMessage": "<a href=\"https://commercial.abp.io/TermsConditions\">Şartlar, Koşullar</a> ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik politikasını</a> kabul ediyorum."
   }
 }

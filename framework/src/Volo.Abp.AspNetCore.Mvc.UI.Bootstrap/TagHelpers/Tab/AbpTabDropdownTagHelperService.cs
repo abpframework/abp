@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var anchor = new TagBuilder("a");
             anchor.AddCssClass("nav-link dropdown-toggle");
             anchor.Attributes.Add("id", id);
-            anchor.Attributes.Add("data-toggle", "dropdown");
+            anchor.Attributes.Add("data-bs-toggle", "dropdown");
             anchor.Attributes.Add("href", "#" + link);
             anchor.Attributes.Add("role", "button");
             anchor.Attributes.Add("aria-haspopup", "true");

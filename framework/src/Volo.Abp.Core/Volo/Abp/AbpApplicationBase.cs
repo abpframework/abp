@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -136,6 +137,8 @@ namespace Volo.Abp
                 }
             }
 
+            var assemblies = new HashSet<Assembly>();
+
             //ConfigureServices
             foreach (var module in Modules)
             {
@@ -143,7 +146,12 @@ namespace Volo.Abp
                 {
                     if (!abpModule.SkipAutoServiceRegistration)
                     {
-                        Services.AddAssembly(module.Type.Assembly);
+                        var assembly = module.Type.Assembly;
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
 

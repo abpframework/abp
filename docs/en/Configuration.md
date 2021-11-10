@@ -1,3 +1,3 @@
-﻿# Configuration
+# Configuration
 
 ASP.NET Core has an flexible and extensible key-value based configuration system. In fact, the configuration system is a part of Microsoft.Extensions libraries and it is independent from ASP.NET Core. That means it can be used in any type of application. See [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) to learn the configuration infrastructure. ABP framework is 100% compatible with the configuration system.

@@ -235,6 +235,10 @@
             {
               "text": "Quartz Integration",
               "path": "Background-Workers-Quartz.md"
+            },
+            {
+              "text": "Hangfire Integration",
+              "path": "Background-Workers-Hangfire.md"
             }
           ]
         },
@@ -328,6 +332,10 @@
               "text": "Distributed Event Bus",
               "path": "Distributed-Event-Bus.md",
               "items": [
+                {
+                  "text": "Azure Service Bus Integration",
+                  "path": "Distributed-Event-Bus-Azure-Integration.md"
+                },
                 {
                   "text": "RabbitMQ Integration",
                   "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
@@ -1083,6 +1091,10 @@
                 {
                   "text": "Page",
                   "path": "UI/Angular/Page-Component.md"
+                },
+                {
+                  "text": "Chart",
+                  "path": "UI/Angular/Chart-Component.md"
                 }
               ]
             }

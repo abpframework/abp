@@ -48,8 +48,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             output.PreContent.AppendHtml("<div class=\"col-auto\">");
             output.PreContent.AppendHtml("<nav>");
             output.PreContent.AppendHtml("<div class=\"nav nav-pills\" role=\"tablist\">");
-            output.PreContent.AppendHtml($"<a class=\"nav-item nav-link active\" id=\"nav-preview-tab-{previewId}\" data-toggle=\"tab\" href=\"#nav-preview-{previewId}\" role=\"tab\" aria-controls=\"nav-preview-{previewId}\" aria-selected=\"true\">Preview</a>");
-            output.PreContent.AppendHtml($"<a class=\"nav-item nav-link\" id=\"nav-code-tab-{codeBlockId}\" data-toggle=\"tab\" href=\"#nav-code-{codeBlockId}\" role=\"tab\" aria-controls=\"nav-code-{codeBlockId}\" aria-selected=\"false\">Code</a>");
+            output.PreContent.AppendHtml($"<a class=\"nav-item nav-link active\" id=\"nav-preview-tab-{previewId}\" data-bs-toggle=\"tab\" href=\"#nav-preview-{previewId}\" role=\"tab\" aria-controls=\"nav-preview-{previewId}\" aria-selected=\"true\">Preview</a>");
+            output.PreContent.AppendHtml($"<a class=\"nav-item nav-link\" id=\"nav-code-tab-{codeBlockId}\" data-bs-toggle=\"tab\" href=\"#nav-code-{codeBlockId}\" role=\"tab\" aria-controls=\"nav-code-{codeBlockId}\" aria-selected=\"false\">Code</a>");
             output.PreContent.AppendHtml("</div>");
             output.PreContent.AppendHtml("</nav>");
             output.PreContent.AppendHtml("</div>"); // col-auto
@@ -68,10 +68,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
 
             output.PostContent.AppendHtml($"<ul class=\"nav nav-tabs\" id=\"code-block-tab-{codeBlockTabId}\" role=\"tablist\">");
             output.PostContent.AppendHtml("<li class=\"nav-item\">");
-            output.PostContent.AppendHtml($"<a class=\"nav-link active\" id=\"tag-helper-tab-{tagHelperCodeBlockId}\" data-toggle=\"pill\" href=\"#tag-helper-{tagHelperCodeBlockId}\" role=\"tab\" aria-controls=\"tag-helper-{tagHelperCodeBlockId}\" aria-selected=\"true\">Abp Tag Helper</a>");
+            output.PostContent.AppendHtml($"<a class=\"nav-link active\" id=\"tag-helper-tab-{tagHelperCodeBlockId}\" data-bs-toggle=\"pill\" href=\"#tag-helper-{tagHelperCodeBlockId}\" role=\"tab\" aria-controls=\"tag-helper-{tagHelperCodeBlockId}\" aria-selected=\"true\">Abp Tag Helper</a>");
             output.PostContent.AppendHtml("</li>");
             output.PostContent.AppendHtml("<li class=\"nav-item\">");
-            output.PostContent.AppendHtml($"<a class=\"nav-link\" id=\"bootstrap-tab-{bootstrapCodeBlockId}\" data-toggle=\"pill\" href=\"#bootstrap-{bootstrapCodeBlockId}\" role=\"tab\" aria-controls=\"bootstrap-{tagHelperCodeBlockId}\" aria-selected=\"true\">Bootstrap</a>");
+            output.PostContent.AppendHtml($"<a class=\"nav-link\" id=\"bootstrap-tab-{bootstrapCodeBlockId}\" data-bs-toggle=\"pill\" href=\"#bootstrap-{bootstrapCodeBlockId}\" role=\"tab\" aria-controls=\"bootstrap-{tagHelperCodeBlockId}\" aria-selected=\"true\">Bootstrap</a>");
             output.PostContent.AppendHtml("</li>");
             output.PostContent.AppendHtml("</ul>");
             output.PostContent.AppendHtml($"<div class=\"tab-content\" id=\"code-block-tabContent-{codeBlockTabId}\">");

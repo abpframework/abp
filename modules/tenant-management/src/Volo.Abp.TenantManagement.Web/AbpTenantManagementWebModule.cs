@@ -5,6 +5,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
@@ -17,7 +18,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement.Web
 {
-    [DependsOn(typeof(AbpTenantManagementHttpApiModule))]
+    [DependsOn(typeof(AbpTenantManagementApplicationContractsModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpFeatureManagementWebModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
@@ -62,7 +63,7 @@ namespace Volo.Abp.TenantManagement.Web
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/EditModal", TenantManagementPermissions.Tenants.Update);
             });
-            
+
             Configure<AbpPageToolbarOptions>(options =>
             {
                 options.Configure<Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.IndexModel>(
@@ -74,7 +75,7 @@ namespace Volo.Abp.TenantManagement.Web
                             name: "ManageHostFeatures",
                             requiredPolicyName: FeatureManagementPermissions.ManageHostFeatures
                         );
-                        
+
                         toolbar.AddButton(
                             LocalizableString.Create<AbpTenantManagementResource>("NewTenant"),
                             icon: "plus",
@@ -83,6 +84,11 @@ namespace Volo.Abp.TenantManagement.Web
                         );
                     }
                 );
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(TenantManagementRemoteServiceConsts.ModuleName);
             });
         }
 

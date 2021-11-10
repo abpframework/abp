@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Public.Ratings
 {
     [RequiresGlobalFeature(typeof(RatingsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/ratings")]
     public class RatingPublicController : CmsKitPublicControllerBase, IRatingPublicAppService
     {

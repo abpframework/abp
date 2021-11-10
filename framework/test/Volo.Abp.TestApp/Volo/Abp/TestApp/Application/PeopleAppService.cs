@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
@@ -72,11 +73,9 @@ namespace Volo.Abp.TestApp.Application
         {
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
+            memoryStream.Position = 0;
 
-            return new RemoteStreamContent(memoryStream, "download.rtf")
-            {
-                ContentType = "application/rtf"
-            };
+            return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
         }
 
         public async Task<string> UploadAsync(IRemoteStreamContent streamContent)
@@ -126,6 +125,22 @@ namespace Volo.Abp.TestApp.Application
             }
 
             return str;
+        }
+
+        public Task<string> GetParamsFromQueryAsync([FromQuery]GetParamsInput input)
+        {
+            return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
+                                   input.NameValues?.FirstOrDefault()?.Value + ":" +
+                                   input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value  + ":" +
+                                   input.NameValue?.Name + "-" + input.NameValue?.Value);
+        }
+
+        public Task<string> GetParamsFromFormAsync([FromForm]GetParamsInput input)
+        {
+            return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
+                                   input.NameValues?.FirstOrDefault()?.Value + ":" +
+                                   input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value  + ":" +
+                                   input.NameValue?.Name + "-" + input.NameValue?.Value);
         }
     }
 }

@@ -20,11 +20,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// </summary>
         public BundlingMode Mode { get; set; } = BundlingMode.Auto;
 
+        public bool DeferScriptsByDefault { get; set; }
+
+        public List<string> DeferScripts { get; }
+
+        public bool PreloadStylesByDefault { get; set; }
+
+        public List<string> PreloadStyles { get; }
+
         public AbpBundlingOptions()
         {
             StyleBundles = new BundleConfigurationCollection();
             ScriptBundles = new BundleConfigurationCollection();
             MinificationIgnoredFiles = new HashSet<string>();
+            DeferScriptsByDefault = false;
+            DeferScripts = new List<string>();
+            PreloadStylesByDefault = false;
+            PreloadStyles = new List<string>();
         }
     }
 }

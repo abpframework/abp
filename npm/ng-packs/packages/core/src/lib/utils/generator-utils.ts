@@ -1,5 +1,3 @@
-// tslint:disable: no-bitwise
-
 export function uuid(a?: any): string {
   return a
     ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
