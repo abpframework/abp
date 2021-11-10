@@ -30,9 +30,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
 
-            if (isCheckBox)
+            if (isCheckBox && TagHelper.CheckBoxHiddenInputRenderMode.HasValue)
             {
-                TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode;
+                TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode.Value;
             }
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
