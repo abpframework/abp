@@ -45,7 +45,10 @@
                     <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                 </p>
 
-                @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))
+                @if(!Model.BlogPost.Content.IsNullOrEmpty())
+                {
+                    @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))
+                }
 
                 <p class="mb-3">
                     @if (Model.BlogPost.LastModificationTime != null)
