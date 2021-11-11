@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace Volo.CmsKit.Migrations
 {
     public partial class Initial : Migration
@@ -130,8 +132,7 @@ namespace Volo.CmsKit.Migrations
                         name: "FK_AbpOrganizationUnits_AbpOrganizationUnits_ParentId",
                         column: x => x.ParentId,
                         principalTable: "AbpOrganizationUnits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +248,7 @@ namespace Volo.CmsKit.Migrations
                     IsExternal = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -323,7 +325,9 @@ namespace Volo.CmsKit.Migrations
                     Text = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     RepliedCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -865,7 +869,9 @@ namespace Volo.CmsKit.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
                 table: "AbpFeatureValues",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
+                columns: new[] { "Name", "ProviderName", "ProviderKey" },
+                unique: true,
+                filter: "[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpLinkUsers_SourceUserId_SourceTenantId_TargetUserId_TargetTenantId",
@@ -890,9 +896,11 @@ namespace Volo.CmsKit.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpPermissionGrants_Name_ProviderName_ProviderKey",
+                name: "IX_AbpPermissionGrants_TenantId_Name_ProviderName_ProviderKey",
                 table: "AbpPermissionGrants",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
+                columns: new[] { "TenantId", "Name", "ProviderName", "ProviderKey" },
+                unique: true,
+                filter: "[TenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpRoleClaims_RoleId",
@@ -927,7 +935,9 @@ namespace Volo.CmsKit.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_Name_ProviderName_ProviderKey",
                 table: "AbpSettings",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
+                columns: new[] { "Name", "ProviderName", "ProviderKey" },
+                unique: true,
+                filter: "[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenants_Name",
