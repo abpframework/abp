@@ -22,6 +22,11 @@ namespace Volo.Abp.AspNetCore.Uow
                     return null;
                 }
 
+                if (httpContext.WebSockets.IsWebSocketRequest)
+                {
+                    return null;
+                }
+
                 var currentUrl = httpContext.Request.Path.Value;
                 if (currentUrl != null)
                 {
