@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.AspNetCore.SignalR
+namespace Volo.Abp.AspNetCore.SignalR.Authentication
 {
-    public class AbpSignalRHubFilter : IHubFilter
+    public class AbpAuthenticationHubFilter : IHubFilter
     {
         public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
         {
