@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
             return ExceptionToErrorInfoConverter.Convert(context.Exception, options =>
             {
                 options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
-                options.EnableStackTrace = Options.EnableStackTrace;
+                options.SendStackTraceToClients = Options.SendStackTraceToClients;
             });
         }
     }

@@ -89,7 +89,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                             errorInfoConverter.Convert(exception, options =>
                             {
                                 options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-                                options.EnableStackTrace = exceptionHandlingOptions.EnableStackTrace;
+                                options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
                             })
                         )
                     )

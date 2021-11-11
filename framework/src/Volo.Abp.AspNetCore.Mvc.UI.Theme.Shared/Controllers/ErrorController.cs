@@ -50,7 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
             var errorInfo = _errorInfoConverter.Convert(exception, options =>
             {
                 options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
-                options.EnableStackTrace = _exceptionHandlingOptions.EnableStackTrace;
+                options.SendStackTraceToClients = _exceptionHandlingOptions.SendStackTraceToClients;
             });
 
             if (httpStatusCode == 0)

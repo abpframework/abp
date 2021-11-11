@@ -2,21 +2,8 @@
 {
     public class AbpExceptionHandlingOptions
     {
-        public bool SendExceptionsDetailsToClients { get; set; }
-     
-        private bool _enableStackTrace;
+        public bool SendExceptionsDetailsToClients { get; set; } = false;
 
-        public bool EnableStackTrace
-        {
-            get => _enableStackTrace;
-            set
-            {
-                _enableStackTrace = value;
-                if (_enableStackTrace)
-                {
-                    SendExceptionsDetailsToClients = true;
-                }
-            }
-        }
+        public bool SendStackTraceToClients { get; set; } = true;
     }
 }

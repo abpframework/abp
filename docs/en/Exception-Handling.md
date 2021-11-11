@@ -329,12 +329,12 @@ You can also throw these type of exceptions in your code (although it's rarely n
 Configure<AbpExceptionHandlingOptions>(options =>
 {
     options.SendExceptionsDetailsToClients = true;
-    options.EnableStackTrace = false;
+    options.SendStackTraceToClients = false;
 });
 ````
 
 Here, a list of the options you can configure:
 
 * `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
-* `EnableStackTrace` (default: `false`): You can enable or disable sending the `StackTrace` of exception to the client. When you set `EnableStackTrace` to true, it is set to `true` even if `SendExceptionsDetailsToClients` is `false` because it contains the exception details.
+* `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
 

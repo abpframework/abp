@@ -62,7 +62,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             var remoteServiceErrorInfo  = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
             {
                 options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-                options.EnableStackTrace = exceptionHandlingOptions.EnableStackTrace;
+                options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
             });
 
             var logLevel = context.Exception.GetLogLevel();

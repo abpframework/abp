@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             var exceptionHandlingOptions = CreateDefaultOptions();
             exceptionHandlingOptions.SendExceptionsDetailsToClients = includeSensitiveDetails;
-            exceptionHandlingOptions.EnableStackTrace = includeSensitiveDetails;
+            exceptionHandlingOptions.SendStackTraceToClients = includeSensitiveDetails;
             
             var errorInfo = CreateErrorInfoWithoutCode(exception, exceptionHandlingOptions);
 
@@ -73,7 +73,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             if (options.SendExceptionsDetailsToClients)
             {
-                return CreateDetailedErrorInfoFromException(exception, options.EnableStackTrace);
+                return CreateDetailedErrorInfoFromException(exception, options.SendStackTraceToClients);
             }
 
             exception = TryToGetActualException(exception);
@@ -213,11 +213,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return exception;
         }
 
-        protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception, bool enableStackTrace)
+        protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception, bool sendStackTraceToClients)
         {
             var detailBuilder = new StringBuilder();
 
-            AddExceptionToDetails(exception, detailBuilder, enableStackTrace);
+            AddExceptionToDetails(exception, detailBuilder, sendStackTraceToClients);
 
             var errorInfo = new RemoteServiceErrorInfo(exception.Message, detailBuilder.ToString());
 
@@ -229,7 +229,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return errorInfo;
         }
 
-        protected virtual void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder, bool enableStackTrace)
+        protected virtual void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder, bool sendStackTraceToClients)
         {
             //Exception Message
             detailBuilder.AppendLine(exception.GetType().Name + ": " + exception.Message);
@@ -256,7 +256,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             }
 
             //Exception StackTrace
-            if (enableStackTrace && !string.IsNullOrEmpty(exception.StackTrace))
+            if (sendStackTraceToClients && !string.IsNullOrEmpty(exception.StackTrace))
             {
                 detailBuilder.AppendLine("STACK TRACE: " + exception.StackTrace);
             }
@@ -264,7 +264,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             //Inner exception
             if (exception.InnerException != null)
             {
-                AddExceptionToDetails(exception.InnerException, detailBuilder, enableStackTrace);
+                AddExceptionToDetails(exception.InnerException, detailBuilder, sendStackTraceToClients);
             }
 
             //Inner exceptions for AggregateException
@@ -278,7 +278,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
                 foreach (var innerException in aggException.InnerExceptions)
                 {
-                    AddExceptionToDetails(innerException, detailBuilder, enableStackTrace);
+                    AddExceptionToDetails(innerException, detailBuilder, sendStackTraceToClients);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return new AbpExceptionHandlingOptions
             {
                 SendExceptionsDetailsToClients = false,
-                EnableStackTrace = false
+                SendStackTraceToClients = true
             };
         }
     }
