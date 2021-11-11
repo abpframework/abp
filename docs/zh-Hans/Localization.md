@@ -49,6 +49,9 @@ public class MyModule : AbpModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             // "YourRootNameSpace" 是项目的根命名空间名字. 如果你的项目的根命名空间名字为空,则无需传递此参数.
+            //      假设程序集根命名空间为：Haha.Abc.Efg 并在AbpLocalizationOptions配置了.AddVirtualJson("/Resources");    
+            //          情况1. AddEmbedded<TestResource>()，虚拟文件路径为：/Haha/Abc/Efg/Resources
+            //          情况2. AddEmbedded<TestResource>("Haha.Abc.Efg"),虚拟文件路径为：/Resources
             options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
         });
 
@@ -65,6 +68,9 @@ public class MyModule : AbpModule
 在这个例子中;
 
 * 添加了一个新的本地化资源, 使用"en"（英语）作为默认的本地化.
+* 注意：
+  * 本地化资源文件（如en.json）的属性需要配置为 “嵌入式资源”
+  * 如果是Visual Studio创建的文件，可能存在编码与Swagger显示解码不一致的情况,可以使用VSCode对编码进行调整.
 * 用JSON文件存储本地化字符串.
 * 使用[虚拟文件系统](Virtual-File-System.md) 将JSON文件嵌入到程序集中.
 
