@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 
 namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 {
-    public partial class NavToolbar
+    public partial class NavToolbar : IDisposable
     {
         [Inject]
         private IToolbarManager ToolbarManager { get; set; }
+
+        [Inject]
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
 
@@ -27,7 +33,18 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
                     builder.CloseComponent();
                 });
             }
+
+            AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
         }
 
+        private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public void Dispose()
+        {
+            AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+        }
     }
 }
