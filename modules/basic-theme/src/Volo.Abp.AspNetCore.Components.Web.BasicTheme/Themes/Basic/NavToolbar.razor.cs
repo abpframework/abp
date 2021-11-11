@@ -20,6 +20,12 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 
         protected override async Task OnInitializedAsync()
         {
+            await GetToolbarItemRendersAsync();
+            AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
+        }
+
+        private async Task GetToolbarItemRendersAsync()
+        {
             var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
 
             ToolbarItemRenders.Clear();
@@ -33,12 +39,11 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
                     builder.CloseComponent();
                 });
             }
-
-            AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
         }
 
         private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
         {
+            await GetToolbarItemRendersAsync();
             await InvokeAsync(StateHasChanged);
         }
 
