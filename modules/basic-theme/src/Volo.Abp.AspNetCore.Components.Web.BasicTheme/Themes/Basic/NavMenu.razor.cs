@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
         private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
         {
             Menu = await MenuManager.GetMainMenuAsync();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 }
