@@ -22,17 +22,17 @@ namespace Volo.Abp.Features
             {
                 var exception = new AbpAuthorizationException(code: AbpFeatureErrorCodes.FeatureIsNotEnabled)
                     .WithData("FeatureName", "my_feature_name");
-                var errorInfo = _exceptionToErrorInfoConverter.Convert(exception, false);
+                var errorInfo = _exceptionToErrorInfoConverter.Convert(exception);
                 errorInfo.Message.ShouldBe("功能未启用: my_feature_name");
 
                 exception = new AbpAuthorizationException(code: AbpFeatureErrorCodes.AllOfTheseFeaturesMustBeEnabled)
                     .WithData("FeatureNames", "my_feature_name, my_feature_name2");
-                errorInfo = _exceptionToErrorInfoConverter.Convert(exception, false);
+                errorInfo = _exceptionToErrorInfoConverter.Convert(exception);
                 errorInfo.Message.ShouldBe("必要的功能未启用. 这些功能需要启用: my_feature_name, my_feature_name2");
 
                 exception = new AbpAuthorizationException(code: AbpFeatureErrorCodes.AtLeastOneOfTheseFeaturesMustBeEnabled)
                     .WithData("FeatureNames", "my_feature_name, my_feature_name2");
-                errorInfo = _exceptionToErrorInfoConverter.Convert(exception, false);
+                errorInfo = _exceptionToErrorInfoConverter.Convert(exception);
                 errorInfo.Message.ShouldBe("必要的功能未启用. 需要启用这些功能中的一项：my_feature_name, my_feature_name2");
             }
         }
