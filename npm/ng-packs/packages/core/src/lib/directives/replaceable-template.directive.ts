@@ -132,7 +132,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   setProvidedData() {
-    this.providedData = { ...this.data, inputs: {}, outputs: {} };
+    this.providedData = { outputs: {}, ...this.data, inputs: {} };
 
     if (!this.data.inputs) return;
     Object.defineProperties(this.providedData.inputs, {
