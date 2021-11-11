@@ -34,11 +34,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
             if (AuthenticationStateProvider != null)
             {
-                AuthenticationStateProvider.AuthenticationStateChanged += async (task) =>
-                {
-                    Menu = await MenuManager.GetAsync(StandardMenus.User);
-                    await InvokeAsync(StateHasChanged);
-                };
+                AuthenticationStateProvider.AuthenticationStateChanged +=
+                    AuthenticationStateProviderOnAuthenticationStateChanged;
             }
         }
 
@@ -46,10 +43,21 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         {
             InvokeAsync(StateHasChanged);
         }
+        
+        private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            Menu = await MenuManager.GetAsync(StandardMenus.User);
+            await InvokeAsync(StateHasChanged);
+        }
 
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
+            if (AuthenticationStateProvider != null)
+            {
+                AuthenticationStateProvider.AuthenticationStateChanged -=
+                    AuthenticationStateProviderOnAuthenticationStateChanged;
+            }
         }
         
         private async Task NavigateToAsync(string uri, string target = null)

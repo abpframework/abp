@@ -18,14 +18,13 @@
   <ng-template #dropdownLink let-route>
     <ng-container *ngIf="route.children?.length">
       <li
-        #navbarRootDropdown
         class="nav-item dropdown"
         display="static"
         *abpPermission="route.requiredPolicy"
         (click)="
-          navbarRootDropdown.expand
-            ? (navbarRootDropdown.expand = false)
-            : (navbarRootDropdown.expand = true)
+          rootDropdownExpand[route.name]
+            ? (rootDropdownExpand[route.name] = false)
+            : (rootDropdownExpand[route.name] = true)
         "
       >
         <a
@@ -42,7 +41,7 @@
           #routeContainer
           class="dropdown-menu border-0 shadow-sm"
           (click)="$event.preventDefault(); $event.stopPropagation()"
-          [class.d-block]="smallScreen && navbarRootDropdown.expand"
+          [class.d-block]="smallScreen && rootDropdownExpand[route.name]"
         >
           <ng-container
             *ngTemplateOutlet="forTemplate; context: { $implicit: route }"

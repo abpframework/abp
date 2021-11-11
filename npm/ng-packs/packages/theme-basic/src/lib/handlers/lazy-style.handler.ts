@@ -6,8 +6,8 @@ export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
 
 @Injectable()
 export class LazyStyleHandler {
-  private lazyLoad: LazyLoadService;
-  private styles: string[];
+  private lazyLoad!: LazyLoadService;
+  private styles!: string[];
   private _dir: LocaleDirection = 'ltr';
 
   readonly loaded = new Map<string, HTMLLinkElement>();
@@ -29,7 +29,7 @@ export class LazyStyleHandler {
     this.listenToDirectionChanges(injector);
   }
 
-  private getHrefFromLink(link: HTMLLinkElement | null): string {
+  private getHrefFromLink(link: HTMLLinkElement | null | undefined): string {
     if (!link) return '';
 
     const a = document.createElement('a');
@@ -94,5 +94,5 @@ export function initLazyStyleHandler(injector: Injector) {
 
 interface LoadedStyle {
   href: string;
-  link: HTMLLinkElement;
+  link: HTMLLinkElement | null;
 }

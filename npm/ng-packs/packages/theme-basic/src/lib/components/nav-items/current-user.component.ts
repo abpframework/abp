@@ -21,7 +21,7 @@ export class CurrentUserComponent {
   }
 
   constructor(
-    @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile,
+    @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile: () => void,
     private authService: AuthService,
     private configState: ConfigStateService,
     private sessionState: SessionStateService,

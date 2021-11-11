@@ -9,13 +9,20 @@ import { LocalizationService } from '../services/localization.service';
 export class LocalizationPipe implements PipeTransform {
   constructor(private localization: LocalizationService) {}
 
-  transform(value: string | LocalizationWithDefault = '', ...interpolateParams: string[]): string {
-    return this.localization.instant(
-      value,
-      ...interpolateParams.reduce(
-        (acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]),
-        [],
-      ),
-    );
+  transform(
+    value: string | LocalizationWithDefault = '',
+    ...interpolateParams: (string | string[] | undefined)[]
+  ): string {
+    const params =
+      interpolateParams.reduce((acc, val) => {
+        if (!acc) {
+          return val;
+        }
+        if (!val) {
+          return acc;
+        }
+        return Array.isArray(val) ? [...acc, ...val] : [...acc, val];
+      }, []) || [];
+    return this.localization.instant(value, ...params);
   }
 }

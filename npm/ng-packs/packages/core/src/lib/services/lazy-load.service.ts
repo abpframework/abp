@@ -8,7 +8,7 @@ import { ResourceWaitService } from './resource-wait.service';
   providedIn: 'root',
 })
 export class LazyLoadService {
-  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement>();
+  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement | null>();
 
   constructor(private resourceWaitService: ResourceWaitService) {}
 
