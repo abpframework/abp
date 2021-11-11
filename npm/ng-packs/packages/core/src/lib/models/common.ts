@@ -67,7 +67,7 @@ export namespace ABP {
   }
 
   export interface Route extends Nav {
-    path: string;
+    path?: string;
     layout?: eLayoutType;
     iconClass?: string;
   }

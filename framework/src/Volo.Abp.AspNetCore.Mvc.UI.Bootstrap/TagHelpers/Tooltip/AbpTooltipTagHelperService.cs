@@ -22,13 +22,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
         protected virtual void SetParentElementWithTooltip(TagHelperContext context, TagHelperOutput output)
         {
             var directory = GetDirectory() != TooltipDirectory.Default ? GetDirectory() : TooltipDirectory.Top;
-            output.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
+            output.Attributes.Add("data-bs-placement", directory.ToString().ToLowerInvariant());
 
             var span = new TagBuilder("span");
             span.AddCssClass("d-inline-block");
             span.Attributes.Add("tabindex", "0");
-            span.Attributes.Add("data-toggle", "tooltip");
-            span.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
+            span.Attributes.Add("data-bs-toggle", "tooltip");
+            span.Attributes.Add("data-bs-placement", directory.ToString().ToLowerInvariant());
             span.Attributes.Add("title", GetTitle());
 
             output.PreElement.SetHtmlContent(span.RenderStartTag());
@@ -40,13 +40,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 
         protected virtual void SetDataToggle(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-toggle", "tooltip");
+            output.Attributes.Add("data-bs-toggle", "tooltip");
         }
 
         protected virtual void SetDataPlacement(TagHelperContext context, TagHelperOutput output)
         {
             var directory = GetDirectory() != TooltipDirectory.Default ? GetDirectory() : TooltipDirectory.Top;
-            output.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
+            output.Attributes.Add("data-bs-placement", directory.ToString().ToLowerInvariant());
         }
 
         protected virtual void SetTooltipTitle(TagHelperContext context, TagHelperOutput output)

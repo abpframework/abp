@@ -71,7 +71,7 @@ export const DEFAULT_ERROR_LOCALIZATIONS = {
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  componentRef: ComponentRef<HttpErrorWrapperComponent>;
+  componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
 
   protected httpErrorHandler = this.injector.get(HTTP_ERROR_HANDLER, (_, err: HttpErrorResponse) =>
     throwError(err),
@@ -109,7 +109,7 @@ export class ErrorHandler {
       .getEvents(ResolveEnd)
       .pipe(filter(() => !!this.componentRef))
       .subscribe(() => {
-        this.componentRef.destroy();
+        this.componentRef?.destroy();
         this.componentRef = null;
       });
   }
@@ -120,7 +120,7 @@ export class ErrorHandler {
       .subscribe();
   }
 
-  private executeErrorHandler = error => {
+  private executeErrorHandler = (error: any) => {
     const returnValue = this.httpErrorHandler(this.injector, error);
 
     return (returnValue instanceof Observable ? returnValue : of(null)).pipe(
@@ -138,7 +138,7 @@ export class ErrorHandler {
     };
 
     if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
-      const confirmation$ = this.showError(null, null, body);
+      const confirmation$ = this.showErrorWithRequestBody(body);
 
       if (err.status === 401) {
         confirmation$.subscribe(() => {
@@ -249,29 +249,34 @@ export class ErrorHandler {
     });
   }
 
-  protected showError(
-    message?: LocalizationParam,
-    title?: LocalizationParam,
-    body?: any,
-  ): Observable<Confirmation.Status> {
-    if (body) {
-      if (body.details) {
-        message = body.details;
-        title = body.message;
-      } else if (body.message) {
-        title = {
-          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
-          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-        };
-        message = body.message;
-      } else {
-        message = body.message || {
-          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
-          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-        };
-      }
+  protected showErrorWithRequestBody(body: any) {
+    let message: LocalizationParam;
+    let title: LocalizationParam;
+
+    if (body.details) {
+      message = body.details;
+      title = body.message;
+    } else if (body.message) {
+      title = {
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+      };
+      message = body.message;
+    } else {
+      message = body.message || {
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+      };
+      title = '';
     }
 
+    return this.showError(message, title);
+  }
+
+  protected showError(
+    message: LocalizationParam,
+    title: LocalizationParam,
+  ): Observable<Confirmation.Status> {
     return this.confirmationService.error(message, title, {
       hideCancelBtn: true,
       yesText: 'AbpAccount::Close',
@@ -293,18 +298,18 @@ export class ErrorHandler {
     for (const key in instance) {
       /* istanbul ignore else */
       if (Object.prototype.hasOwnProperty.call(this.componentRef.instance, key)) {
-        this.componentRef.instance[key] = instance[key];
+        (this.componentRef.instance as any)[key] = (instance as any)[key];
       }
     }
 
-    this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
+    this.componentRef.instance.hideCloseIcon = !!this.httpErrorConfig.errorScreen?.hideCloseIcon;
     const appRef = this.injector.get(ApplicationRef);
 
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
       this.componentRef.instance.appRef = appRef;
       this.componentRef.instance.injector = this.injector;
-      this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
+      this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen?.component;
     }
 
     appRef.attachView(this.componentRef.hostView);
@@ -313,27 +318,32 @@ export class ErrorHandler {
     const destroy$ = new Subject<void>();
     this.componentRef.instance.destroy$ = destroy$;
     destroy$.subscribe(() => {
-      this.componentRef.destroy();
+      this.componentRef?.destroy();
       this.componentRef = null;
     });
   }
 
   canCreateCustomError(status: ErrorScreenErrorCodes): boolean {
-    return (
+    return !!(
       this.httpErrorConfig?.errorScreen?.component &&
-      this.httpErrorConfig?.errorScreen?.forWhichErrors?.indexOf(status) > -1
+      this.httpErrorConfig?.errorScreen?.forWhichErrors &&
+      this.httpErrorConfig?.errorScreen?.forWhichErrors.indexOf(status) > -1
     );
   }
 
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
     if (typeof status !== 'number') return false;
 
-    return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
+    return (
+      !!this.httpErrorConfig.skipHandledErrorCodes &&
+      this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0
+    );
   };
 
   protected filterRouteErrors = (navigationError: NavigationError): boolean => {
     return (
       navigationError.error?.message?.indexOf('Cannot match') > -1 &&
+      !!this.httpErrorConfig.skipHandledErrorCodes &&
       this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };

@@ -7,7 +7,7 @@ export const DEFAULT_TENANTS_TOOLBAR_ACTIONS = ToolbarAction.createMany<TenantDt
     text: 'AbpTenantManagement::ManageHostFeatures',
     action: data => {
       const component = data.getInjected(TenantsComponent);
-      component.openFeaturesModal(null);
+      component.openFeaturesModal('');
     },
     permission: 'FeatureManagement.ManageHostFeatures',
     icon: 'fa fa-cog',

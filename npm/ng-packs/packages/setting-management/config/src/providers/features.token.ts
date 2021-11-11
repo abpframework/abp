@@ -10,7 +10,7 @@ export const SETTING_MANAGEMENT_FEATURES = new InjectionToken<Observable<{ enabl
     factory: () => {
       const configState = inject(ConfigStateService);
       const featureKey = 'SettingManagement.Enable';
-      const mapFn = features => ({
+      const mapFn = (features: Record<string, string>) => ({
         enable: features[featureKey].toLowerCase() !== 'false',
       });
       return featuresFactory(configState, [featureKey], mapFn);

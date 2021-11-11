@@ -16,7 +16,7 @@ You can find source code of the completed application [here](https://github.com/
 
 ## Pre-Requirements
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
 
 {{if DB=="Mongo"}}
 

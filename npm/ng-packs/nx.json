@@ -30,59 +30,37 @@
     "libsDir": "packages",
     "appsDir": ""
   },
-  "projects": {
-    "account-core": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
+  "cli": {
+    "analytics": false,
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "dev-app",
+  "generators": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
     },
-    "account": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "account-core", "identity"]
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
     },
-    "components": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "strict": false
     },
-    "core": {
-      "tags": []
-    },
-    "dev-app": {
-      "tags": []
-    },
-    "dev-app-e2e": {
-      "tags": [],
-      "implicitDependencies": ["dev-app"]
-    },
-    "feature-management": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
-    },
-    "identity": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "permission-management"]
-    },
-    "permission-management": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared"]
-    },
-    "schematics": {
-      "tags": []
-    },
-    "setting-management": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "components"]
-    },
-    "tenant-management": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "feature-management"]
-    },
-    "theme-basic": {
-      "tags": [],
-      "implicitDependencies": ["core", "theme-shared", "account-core"]
-    },
-    "theme-shared": {
-      "tags": [],
-      "implicitDependencies": ["core"]
+    "@nrwl/angular:component": {
+      "style": "scss"
     }
   }
 }

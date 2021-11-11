@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.Server.Host.Menus;
@@ -26,6 +27,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
+using Volo.Abp.Emailing;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
@@ -183,13 +185,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
 
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
-            });
-
             context.Services
-                .AddBootstrapProviders()
+                .AddBootstrap5Providers()
                 .AddFontAwesomeIcons();
 
             Configure<AbpNavigationOptions>(options =>
@@ -201,6 +198,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
             {
                 options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
             });
+
+#if DEBUG
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+#endif
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

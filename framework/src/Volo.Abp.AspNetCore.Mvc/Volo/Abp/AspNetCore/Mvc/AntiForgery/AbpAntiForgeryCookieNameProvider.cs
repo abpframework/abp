@@ -6,11 +6,11 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
     public class AbpAntiForgeryCookieNameProvider : ITransientDependency
     {
-        private readonly IOptionsSnapshot<CookieAuthenticationOptions> _namedOptionsAccessor;
+        private readonly IOptionsMonitor<CookieAuthenticationOptions> _namedOptionsAccessor;
         private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
 
         public AbpAntiForgeryCookieNameProvider(
-            IOptionsSnapshot<CookieAuthenticationOptions> namedOptionsAccessor,
+            IOptionsMonitor<CookieAuthenticationOptions> namedOptionsAccessor,
             IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions)
         {
             _namedOptionsAccessor = namedOptionsAccessor;

@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public bool SuppressLabel { get; set; }
 
-        public CheckBoxHiddenInputRenderMode CheckBoxHiddenInputRenderMode { get; set; }
+        public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
 
         public AbpInputTagHelper(AbpInputTagHelperService tagHelperService)
             : base(tagHelperService)

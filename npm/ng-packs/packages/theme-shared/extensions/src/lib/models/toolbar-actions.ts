@@ -27,7 +27,7 @@ export class ToolbarAction<R = any> extends Action<R> {
   readonly icon: string;
 
   constructor(options: ToolbarActionOptions<R>) {
-    super(options.permission, options.visible, options.action);
+    super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
   }
@@ -45,7 +45,7 @@ export class ToolbarComponent<R = any> extends Action<R> {
   readonly component: Type<any>;
 
   constructor(options: ToolbarComponentOptions<R>) {
-    super(options.permission, options.visible, options.action);
+    super(options.permission || '', options.visible, options.action);
     this.component = options.component;
   }
 

@@ -1,5 +1,5 @@
 {
-  "version": "5.0.0-beta.1",
+  "version": "5.0.0-beta.3",
   "name": "@abp/jquery-validation-unobtrusive",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery-validation": "~5.0.0-beta.1",
+    "@abp/jquery-validation": "~5.0.0-beta.3",
     "jquery-validation-unobtrusive": "^3.2.11"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
