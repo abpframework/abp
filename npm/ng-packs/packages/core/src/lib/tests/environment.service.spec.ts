@@ -54,7 +54,7 @@ describe('Environment', () => {
     it(
       'should return api url',
       waitForAsync(() => {
-        expect(environment.getApiUrl()).toEqual(ENVIRONMENT_DATA.apis.default.url);
+        expect(environment.getApiUrl('default')).toEqual(ENVIRONMENT_DATA.apis.default.url);
         environment
           .getApiUrl$('other')
           .subscribe(data => expect(data).toEqual(ENVIRONMENT_DATA.apis.other.url));

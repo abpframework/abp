@@ -1,8 +1,8 @@
 import { LazyLoadService, LOADING_STRATEGY, LocalizationService } from '@abp/ng.core';
+import { DocumentDirHandlerService } from '@abp/ng.theme.shared';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { EMPTY, of } from 'rxjs';
-import { BOOTSTRAP } from '../constants/styles';
-import { createLazyStyleHref, initLazyStyleHandler, LazyStyleHandler } from '../handlers';
+import { of } from 'rxjs';
+import { BOOTSTRAP, createLazyStyleHref, LazyStyleHandler } from '../handlers';
 
 const languageChange$ = of({ payload: 'en' });
 
@@ -14,6 +14,7 @@ describe('LazyStyleHandler', () => {
   const createService = createServiceFactory({
     service: LazyStyleHandler,
     providers: [
+      DocumentDirHandlerService,
       {
         provide: LocalizationService,
         useValue: { currentLang: 'en', languageChange$ },
@@ -45,22 +46,5 @@ describe('LazyStyleHandler', () => {
       expect(load).toHaveBeenCalledWith(strategy);
       expect(remove).toHaveBeenCalledWith(oldHref);
     });
-  });
-});
-
-describe('initLazyStyleHandler', () => {
-  it('should return a LazyStyleHandler factory', () => {
-    const generator = (function* () {
-      yield undefined; // LAZY_STYLES
-      yield { loaded: new Map() }; // LazyLoadService
-      yield { currentLang: 'en', languageChange$: EMPTY }; // LocalizationService
-    })();
-
-    const injector = {
-      get: () => generator.next().value as any,
-    };
-    const factory = initLazyStyleHandler(injector);
-
-    expect(factory()).toBeInstanceOf(LazyStyleHandler);
   });
 });
