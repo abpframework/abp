@@ -17,7 +17,7 @@ export class LocalizationService {
   private latestLang = this.sessionState.getLanguage();
   private _languageChange$ = new Subject<string>();
 
-  private localLocalizations$ = new BehaviorSubject(
+  private uiLocalizations$ = new BehaviorSubject(
     new Map<string, Map<string, Record<string, string>>>(),
   );
 
@@ -56,14 +56,18 @@ export class LocalizationService {
     >;
     const currentLanguage$ = this.sessionState.getLanguage$();
 
-    const localLocalizations$ = combineLatest([currentLanguage$, this.localLocalizations$]).pipe(
+    const uiLocalizations$ = combineLatest([currentLanguage$, this.uiLocalizations$]).pipe(
       map(([currentLang, localizations]) => localizations.get(currentLang)),
     );
 
-    combineLatest([remoteLocalizations$, localLocalizations$])
+    combineLatest([remoteLocalizations$, uiLocalizations$])
       .pipe(
         map(([remote, local]) => {
           if (remote) {
+            if (!local) {
+              local = new Map();
+            }
+
             Object.entries(remote).forEach(entry => {
               const resourceName = entry[0];
               const remoteTexts = entry[1];
@@ -83,7 +87,7 @@ export class LocalizationService {
   addLocalization(localizations?: ABP.Localization[]) {
     if (!localizations) return;
 
-    const localizationMap = this.localLocalizations$.value;
+    const localizationMap = this.uiLocalizations$.value;
 
     localizations.forEach(loc => {
       const cultureMap =
@@ -100,7 +104,7 @@ export class LocalizationService {
       localizationMap.set(loc.culture, cultureMap);
     });
 
-    this.localLocalizations$.next(localizationMap);
+    this.uiLocalizations$.next(localizationMap);
   }
 
   private listenToSetLanguage() {
