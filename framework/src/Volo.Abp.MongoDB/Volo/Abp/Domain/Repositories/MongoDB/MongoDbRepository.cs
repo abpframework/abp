@@ -522,15 +522,15 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             return GetMongoQueryableAsync<TEntity>(cancellationToken);
         }
-        
-        protected virtual async Task<IMongoQueryable<TEnt>> GetMongoQueryableAsync<TEnt>(CancellationToken cancellationToken = default)
+
+        protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default)
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
             var dbContext = await GetDbContextAsync(cancellationToken);
-            var collection = dbContext.Collection<TEnt>();
+            var collection = dbContext.Collection<TOtherEntity>();
 
-            return ApplyDataFilters<IMongoQueryable<TEnt>, TEnt>(
+            return ApplyDataFilters<IMongoQueryable<TOtherEntity>, TOtherEntity>(
                 dbContext.SessionHandle != null
                     ? collection.AsQueryable(dbContext.SessionHandle)
                     : collection.AsQueryable()

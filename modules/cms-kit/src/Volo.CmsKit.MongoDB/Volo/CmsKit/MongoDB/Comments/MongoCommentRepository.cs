@@ -47,26 +47,26 @@ namespace Volo.CmsKit.MongoDB.Comments
         }
 
         public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
-            string filter = null, 
+            string filter = null,
             string entityType = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
-            DateTime? creationStartDate = null, 
-            DateTime? creationEndDate = null, 
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null,
             string sorting = null,
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             CancellationToken cancellationToken = default
         )
         {
             var token = GetCancellationToken(cancellationToken);
             var query = await GetListQueryAsync(
-                filter, 
+                filter,
                 entityType,
-                repliedCommentId, 
-                authorUsername, 
-                creationStartDate, 
-                creationEndDate, 
+                repliedCommentId,
+                authorUsername,
+                creationStartDate,
+                creationEndDate,
                 token);
 
             var comments = await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
@@ -75,15 +75,15 @@ namespace Volo.CmsKit.MongoDB.Comments
                 .ToListAsync(token);
 
             var commentIds = comments.Select(x => x.Id).ToList();
-            
+
             var authorsQuery = from comment in (await GetMongoQueryableAsync(token))
                 join user in (await GetDbContextAsync(token)).CmsUsers on comment.CreatorId equals user.Id
                 where commentIds.Contains(comment.Id)
                 orderby comment.CreationTime
                 select user;
 
-            var authors = await authorsQuery.ToListAsync(token);
-            
+            var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(token);
+
             return comments
                 .Select(
                     comment =>
@@ -95,22 +95,22 @@ namespace Volo.CmsKit.MongoDB.Comments
         }
 
         public virtual async Task<long> GetCountAsync(
-            string text = null, 
+            string text = null,
             string entityType = null,
-            Guid? repliedCommentId = null, 
+            Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
-            DateTime? creationEndDate = null, 
+            DateTime? creationEndDate = null,
             CancellationToken cancellationToken = default
         )
         {
             var query = await GetListQueryAsync(
-                text, 
+                text,
                 entityType,
-                repliedCommentId, 
-                authorUsername, 
-                creationStartDate, 
-                creationEndDate, 
+                repliedCommentId,
+                authorUsername,
+                creationStartDate,
+                creationEndDate,
                 cancellationToken);
 
             return await query.As<IMongoQueryable<Comment>>()
@@ -131,7 +131,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 orderby comment.CreationTime
                 select user;
 
-            var authors = await authorsQuery.ToListAsync(GetCancellationToken(cancellationToken));
+            var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
 
             var comments = await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(c => c.EntityId == entityId && c.EntityType == entityType)
@@ -169,11 +169,11 @@ namespace Volo.CmsKit.MongoDB.Comments
                 );
             }
         }
-        
+
         protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
-            string filter = null, 
+            string filter = null,
             string entityType = null,
-            Guid? repliedCommentId = null, 
+            Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null,
@@ -181,18 +181,16 @@ namespace Volo.CmsKit.MongoDB.Comments
         )
         {
             var queryable = await GetMongoQueryableAsync(cancellationToken);
-            
+
             if (!string.IsNullOrEmpty(authorUsername))
             {
-                var authorQueryable = (await GetDbContextAsync(cancellationToken)).Collection<CmsUser>().AsQueryable();
-                
-                var author = await authorQueryable.FirstOrDefaultAsync(x => x.UserName == authorUsername, cancellationToken: cancellationToken);
+                var author = await (await GetMongoQueryableAsync<CmsUser>(cancellationToken)).FirstOrDefaultAsync(x => x.UserName == authorUsername, cancellationToken: cancellationToken);
 
                 var authorId = author?.Id ?? Guid.Empty;
 
                 queryable = queryable.Where(x => x.CreatorId == authorId);
             }
-            
+
             return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
                 .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
