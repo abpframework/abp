@@ -72,8 +72,9 @@ namespace Volo.Abp.Identity.MongoDB
 
             var roleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
 
-            return await dbContext.Roles //TODO: Such usage suppress filters!
-                .AsQueryable()
+            var queryable = await GetMongoQueryableAsync<IdentityRole>(cancellationToken); 
+
+            return await queryable
                 .Where(r => roleIds.Contains(r.Id))
                 .Select(r => r.Name)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -117,7 +118,9 @@ namespace Volo.Abp.Identity.MongoDB
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
-            var role = await (await GetDbContextAsync(cancellationToken)).Roles.AsQueryable() //TODO: Such usages breaks data filters
+            var queryable = await GetMongoQueryableAsync<IdentityRole>(cancellationToken);
+            
+            var role = await queryable
                 .Where(x => x.NormalizedName == normalizedRoleName)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -244,8 +247,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
             var result = await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnitId))
-                    .ToListAsync(GetCancellationToken(cancellationToken))
-                    ;
+                    .ToListAsync(GetCancellationToken(cancellationToken));
             return result;
         }
 
@@ -255,8 +257,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
             var result = await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
-                    .ToListAsync(GetCancellationToken(cancellationToken))
-                    ;
+                    .ToListAsync(GetCancellationToken(cancellationToken));
             return result;
         }
 
@@ -269,8 +270,7 @@ namespace Volo.Abp.Identity.MongoDB
             var organizationUnitIds = await (await GetDbContextAsync(cancellationToken)).OrganizationUnits.AsQueryable()
                 .Where(ou => ou.Code.StartsWith(code))
                 .Select(ou => ou.Id)
-                .ToListAsync(cancellationToken)
-                ;
+                .ToListAsync(cancellationToken);
 
             return await (await GetMongoQueryableAsync(cancellationToken))
                      .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
