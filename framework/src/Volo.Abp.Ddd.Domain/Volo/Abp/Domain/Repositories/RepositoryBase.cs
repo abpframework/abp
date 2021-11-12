@@ -68,16 +68,16 @@ namespace Volo.Abp.Domain.Repositories
         {
             return ApplyDataFilters<TQueryable, TEntity>(query);
         }
-        
-        protected virtual TQueryable ApplyDataFilters<TQueryable, TEnt>(TQueryable query)
-            where TQueryable : IQueryable<TEnt>
+
+        protected virtual TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
+            where TQueryable : IQueryable<TOtherEntity>
         {
-            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEnt)))
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TOtherEntity)))
             {
                 query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
             }
 
-            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEnt)))
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TOtherEntity)))
             {
                 var tenantId = CurrentTenant.Id;
                 query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
