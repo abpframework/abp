@@ -353,7 +353,7 @@ namespace BookStore.Books
 }
 ```
 
-We will use this class as output DTO to retrieve books with their sub-categories and author names.
+We will use this class to retrieve books with their sub-categories and author names.
 
 * **IBookRepository.cs**
 
