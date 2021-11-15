@@ -8,21 +8,21 @@ You can see the ER Diagram of our application below. This diagram will be helpfu
 
 ![ER-Diagram](./er-diagram.png)
 
-When we've examined the ER Diagram, we can see the one-to-many relationship between **Author** and **Book** tables and also the many-to-many relationship (**BookCategory** table) between **Book** and **Category** tables. (There can be more than one category on each book and vice-versa in our scenario)..
+When we've examined the ER Diagram, we can see the one-to-many relationship between the **Author** and the **Book** tables. Also, the many-to-many relationship (**BookCategory** table) between the **Book** and the **Category** tables. (There can be more than one category on each book and vice-versa in our scenario)..
 
 ### Source Code
 
 You can find the source code of the application at https://github.com/EngincanV/ABP-Many-to-Many-Relationship-Demo .
 
-### Demo of The Final Application
+### Demo of the Final Application
 
-At the end of this article, we will have created an application as in the below gif.
+At the end of this article, we will have created an application same as in the gif below.
 
 ![Demo of The Final Application](./application-final-demo.gif)
 
 ## Creating the Solution
 
-In this article, I will create a new startup template with EF Core as a database provider and MVC for UI framework.
+In this article, we will create a new startup template with EF Core as a database provider and MVC for UI framework.
 
 * We can create a new startup template by using the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
@@ -30,7 +30,7 @@ In this article, I will create a new startup template with EF Core as a database
 abp new BookStore -t app --version 5.0.0-beta.2
 ```
 
-* Our project boilerplate will be ready after the download is finished. Then, we can open the solution and starts the development.
+* Our project boilerplate will be ready after the download is finished. Then, we can open the solution and start developing.
 
 ## Starting the Development
 
@@ -38,7 +38,7 @@ Let's start with creating our Domain Entities.
 
 ### Step 1 - (Creating the Domain Entities)
 
-We can create a folder-structure under the `BookStore.Domain` project like in the below image.
+We can create a folder-structure under the `BookStore.Domain` project an in the image below.
 
 ![Domain-Layer-Folder-Structure](./domain-file-structure.png)
 
@@ -227,9 +227,9 @@ namespace BookStore.Books
 }
 ```
 
-* Here, as you can notice we've defined the `BookCategory` as the **Join Table/Entity** for our many-to-many relationship and ensure the required properties (BookId and CategoryId) must be set in the constructor method of this class to create this object.
+* Here, as you can notice, we've defined the `BookCategory` as the **Join Table/Entity** for our many-to-many relationship and ensured the required properties (BookId and CategoryId) were set in the constructor method of this class to create this object. 
 
-* And also we've derived this class from the `Entity` class and therefore we've had to override the **GetKeys** method of this class to define **Composite Key**.
+* And also we've derived this class from the `Entity` class and therefore we've had to override the **GetKeys** method of this class to define the **Composite Key**.
 
 > The composite key is composed of `BookId` and `CategoryId` in our case. And they are unique together.
 
@@ -317,14 +317,13 @@ namespace BookStore.Books
 }
 ```
 
-* If we examine the codes in the `BookManager` class, we can see that we've managed the `BookCategory` class (our join table/entity)
-by using some methods that we've defined in the `Book` class such as **RemoveAllCategories**, **RemoveAllCategoriesExceptGivenIds** and **AddCategory**.
+* If we examine the codes in the `BookManager` class, we can see that we've managed the `BookCategory` class (our join table/entity) by using some methods that we've defined in the `Book` class such as **RemoveAllCategories**, **RemoveAllCategoriesExceptGivenIds** and **AddCategory**.
 
 * These methods basically add or remove categories related to the book by conditions.
 
-* In the `CreateAsync` method, if the category names are specified we are retrieving their ids from the database and by using the **AddCategory** method that we've defined in the `Book` class, we're adding them.
+* In the `CreateAsync` method, if the category names are specified, we'll retrieve their ids from the database and by using the **AddCategory** method that we've defined in the `Book` class, we'll add them.
 
-* In the `UpdateAsync` method, the same logic is also valid. But in this case, the user could want to remove some categories from books, so if the user sends us an empty **categoryNames** array, we remove all categories from the book he wants to update. If the user sends us some category names, we remove the excluded ones and add the new ones according to **categoryNames** array.
+* In the `UpdateAsync` method, the same logic is also valid. But in this case, the user might want to remove some categories from books, so if the user sends us an empty **categoryNames** array, we remove all categories from the book he wants to update. If the user sends us some category names, we remove the excluded ones and add the new ones according to the **categoryNames** array.
 
 * **BookWithDetails.cs**
 
@@ -380,7 +379,7 @@ namespace BookStore.Books
 }
 ```
 
-We need to create two methods named **GetListAsync** and **GetAsync** and specify their return type as `BookWithDetails`. So by implementing these methods, we will return the book/books by their details (author name and categories).
+We need to create two methods named **GetListAsync** and **GetAsync** and specify their return type as `BookWithDetails`. So by implementing these methods, we will return the book/books by their details (author, name and categories).
 
 * **Category.cs**
 
@@ -416,7 +415,7 @@ namespace BookStore.Categories
 
 ### Step 2 - (Define Consts)
 
-We can create a folder-structure under the `BookStore.Domain.Shared` project like in the below image.
+We can create a folder-structure under the `BookStore.Domain.Shared` project like in the image below.
 
 ![Domain Shared File Structure](./domain-shared-file-structure.png)
 
@@ -463,7 +462,7 @@ In these classes, we've defined max text length for our entity properties that w
 ### Step 3 - (Database Integration)
 
 After defining our entities, we can configure them for the database integration. 
-Open the `BookStoreDbContext` class in the `BookStore.EntityFrameworkCore` project and update with the following code blocks.
+Open the `BookStoreDbContext` class in the `BookStore.EntityFrameworkCore` project and update the following code blocks.
 
 ```csharp
 namespace BookStore.EntityFrameworkCore
@@ -552,7 +551,7 @@ namespace BookStore.EntityFrameworkCore
 }
 ```
 
-* In this class, we've defined **DbSet** properties for our **Aggregate Roots** (**Book**, **Author** and **Category**). Notice, we didn't define **DbSet** for `BookCategory` class (our join table/entity). Because, the `Book` aggregate is responsible to manage it via sub-collection.
+* In this class, we've defined the **DbSet** properties for our **Aggregate Roots** (**Book**, **Author** and **Category**). Notice, we didn't define the **DbSet** for the `BookCategory` class (our join table/entity). Because, the `Book` aggregate is responsible for managing it via sub-collection.
 
 * After that, we can use the **FluentAPI** to configure our tables in the `OnModelCreating` method of this class.
 
@@ -587,11 +586,11 @@ builder.Entity<BookCategory>(b =>
 });
 ```
 
-Here, firstly we've defined the composite key for our `BookCategory` entity. `BookId` and `CategoryId` are together composite keys for the `BookCategory` table. Then we've configured the many-to-many relationship between `Book` and `Category` table like in the above code-block.
+Here, firstly we've defined the composite key for our `BookCategory` entity. `BookId` and `CategoryId` are together as composite keys for the `BookCategory` table. Then we've configured the many-to-many relationship between the `Book` and the `Category` table like in the above code-block.
 
 #### Implementing the `IBookRepository` Interface
 
-After making the relevant configurations for database integration, we can now implement the `IBookRepository` interface. To do this, create a folder named `Books` in the `BookStore.EntityFrameworkCore` project and inside of this folder create a class named `EfCoreBookRepository` and update this class with the following code. 
+After making the relevant configurations for the database integration, we can now implement the `IBookRepository` interface. To do this, create a folder named `Books` in the `BookStore.EntityFrameworkCore` project and inside of this folder, create a class named `EfCoreBookRepository` and update this class with the following code: 
 
 ```csharp
 using System;
@@ -669,13 +668,13 @@ namespace BookStore.Books
 }
 ```
 
-* Here we've implemented our custom repository methods and returned the book with details (author name and categories).
+* Here, we've implemented our custom repository methods and returned the book with details (author name and categories).
 
 ### Step 4 - (Database Migration)
 
 * We've integrated our entities with the database in the previous step, now we can create a new database migration and apply it to the database. So let's do that.
 
-* Open the `BookStore.EntityFrameworkCore` project in the terminal. And create a new database migration by using the following command.
+* Open the `BookStore.EntityFrameworkCore` project in the terminal. And create a new database migration by using the following command:
 
 ```bash
 dotnet ef migrations add <Migration_Name>
@@ -685,7 +684,7 @@ dotnet ef migrations add <Migration_Name>
 
 ### Step 5 - (Create Application Services)
 
-* Let's start with defining our DTOs and application service interfaces in the `BookStore.Application.Contracts` layer. We can create a folder-structure like in the below image.
+* Let's start with defining our DTOs and application service interfaces in the `BookStore.Application.Contracts` layer. We can create a folder-structure like in the image below:
 
 ![Application Contracts Folder Structure](./application-contracts-folder-structure.png)
 
@@ -725,7 +724,7 @@ namespace BookStore.Authors
 }
 ```
 
-We will use this DTO class as output DTO to get all authors and list them in a select box in the book creation modal. (Like in the below image.)
+We will use this DTO class as output DTO to get all the authors and list them in a select box in the book creation model. (Like in the image below.)
 
 ![Book Create Modal](./book-creation-modal.png)
 
@@ -858,8 +857,8 @@ namespace BookStore.Books
 
 * We will create custom application service method for managing Books instead of using the `CrudAppService`'s methods.
 
-* Also we will create two additional methods and they are `GetAuthorLookupAsync` and `GetCategoryLookupAsync`. We will use these two methods to retrieve all authors and categories without pagination and listed them as select box item in create/update modals for Book page.
-(You can see the usage of these two methods in the below gif.)
+* Also we will create two additional methods and they are `GetAuthorLookupAsync` and `GetCategoryLookupAsync`. We will use these two methods to retrieve all the authors and categories without pagination and list them as a select box item in create/update modals for the Book page.
+(You can see the usage of these two methods in the gif below.)
 
 ![New Book](./book-create.gif)
 
@@ -893,7 +892,7 @@ namespace BookStore.Categories
 }
 ```
 
-We will use this DTO class  as output DTO to get all categories without pagination and list them in a select box in the book create/update modal.
+We will use this DTO class as an output DTO to get all categories without pagination and list them in a select box in the book create/update modals.
 
 * **CreateUpdateCategoryDto.cs**
 
@@ -923,7 +922,7 @@ namespace BookStore.Categories
 }
 ```
 
-After creating the DTOs and application service interfaces, now we can define the implementation of that interfaces. So, we can create a folder-structure like in the below image for `BookStore.Application` layer. Open the application service classes and add the following codes to each of these classes.
+After creating the DTOs and application service interfaces, now we can define the implementation of those interfaces. So, we can create a folder-structure like in the image below for the `BookStore.Application` layer. Open the application service classes and add the following codes to each of these classes.
 
 ![Application Folder Structure](./application-folder-structure.png)
 
@@ -1070,11 +1069,11 @@ namespace BookStore.Books
 }
 ```
 
-* As you can notice here, we've used our **Domain Service** class named `BookManager` in the **CreateAsync** and **UpdateAsync** methods. (In step 1, we've defined them)
+* As you can notice here, we've used our **Domain Service** class named `BookManager` in the **CreateAsync** and **UpdateAsync** methods. (Defined them in step 1)
 
 * As you may remember, in these methods, new categories are added to the book or removed from the sub-collection (**Categories** (`BookCategory`)) according to the relevant category names.
 
-* After implementing the application services, we need to define the mappings for our services to work. So open the `BookStoreApplicationAutoMapperProfile` class and update with the following code.
+* After implementing the application services, we need to define the mappings for our services to work. So open the `BookStoreApplicationAutoMapperProfile` class and update it with the following code:
 
 ```csharp
 using AutoMapper;
@@ -1248,13 +1247,13 @@ $(function () {
 
 * Let's examine what we've done in the `Index.js` file.
 
-* Firstly, we've defined our `createModal` and `editModal` modals by using the [ABP Modals](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Modals). Then, we've created the DataTable and fetch our books by using the dynamic JavaScript proxy function (`bookStore.books.book.getList`) (It sends a request to the **GetListAsync** method that we've defined in the `BookAppService`, under the hook) and we've shown them in the table with an id named "BooksTable".
+* Firstly, we've defined our `createModal` and `editModal` modals by using the [ABP Modals](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Modals). Then, we've created the DataTable and fetched our books by using the dynamic JavaScript proxy function (`bookStore.books.book.getList`) (It sends a request to the **GetListAsync** method that we've defined in the `BookAppService` under the hook) and we've shown them in the table with an id named "BooksTable".
 
-* Now let's run the application and navigate to **/Books** route to see how our Book page looks.
+* Now let's run the application and navigate to the **/Books** route to see how our Book page looks.
 
 ![Demo](./demo.png)
 
-We need to see a page like in the above image. Our app is working properly, we can continue to development.
+We need to see a page similar to the image above. Our app is working properly, we can continue developing.
 
 > If you are stuck in any point, you can examine the [source codes](https://github.com/EngincanV/ABP-Many-to-Many-Relationship-Demo).
 
@@ -1285,7 +1284,7 @@ namespace BookStore.Web.Models
 }
 ```
 
-Then, we can open the `BookStoreWebAutoMapperProfile` class and define the required mappings as follows.
+Then, we can open the `BookStoreWebAutoMapperProfile` class and define the required mappings as follows:
 
 ```csharp
 using AutoMapper;
@@ -1428,11 +1427,11 @@ namespace BookStore.Web.Pages.Books
 }
 ```
 
-Here, we've got all categories and authors inside of the `OnGetAsync` method. And use them inside of the create modal to list them to let the user choose when creating a new book.
+Here, we've got all categories and authors inside of the `OnGetAsync` method. And use them inside of the create modal to list them so the user can choose when creating a new book.
 
 ![Create Book Modal](./book-creation-modal.png)
 
-* When the user submitted the form, `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.CreateAsync` method to create a new book.
+* When the user submits the form, the`OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.CreateAsync` method to create a new book.
 
 Create a razor page named **EditModal.cshtml** (and **EditModal.cshtml.cs**).
 
@@ -1561,12 +1560,12 @@ namespace BookStore.Web.Pages.Books
 
 * As in the `CreateModal.cshtml.cs`, we've got all categories and authors inside of the `OnGetAsync` method. And also we get the book by id and mark the selected categories properties' as `IsSelected = true`. 
 
-* When the user updated the inputs and submitted the form, the `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.UpdateAsync` method to update the book.
+* When the user updates the inputs and submits the form, the `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.UpdateAsync` method to update the book.
 
 ![Edit Book Modal](./book-update-modal.png)
 
 ### Conclusion
 
-In this article, I've tried to explain how to create many-to-many relationship by using the ABP framework. (by following DDD principles)
+In this article, I've tried to explain how to create a many-to-many relationship by using the ABP framework. (by following DDD principles)
 
 Thanks for reading this article, I hope it was helpful.
