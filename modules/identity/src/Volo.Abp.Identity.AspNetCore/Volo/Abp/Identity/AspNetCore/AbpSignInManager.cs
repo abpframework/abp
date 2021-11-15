@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity.AspNetCore
         {
             foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
             {
-                var externalLoginProvider = (IExternalLoginProvider) Context.RequestServices
+                var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
                     .GetRequiredService(externalLoginProviderInfo.Type);
 
                 if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity.AspNetCore
         {
             if (!user.IsActive)
             {
-                Logger.LogWarning("User is currently inactive.");
+                Logger.LogWarning($"The user is not active therefore cannot login! (username: \"{user.UserName}\", id:\"{user.Id}\")");
                 return SignInResult.NotAllowed;
             }
 

@@ -65,7 +65,14 @@ describe('ReplaceableTemplateDirective', () => {
           <abp-default-component #defaultComponent="abpDefaultComponent"></abp-default-component>
         </div>
         `,
-        { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
+        {
+          hostProps: {
+            oneWay: { label: 'Test' },
+            twoWay: false,
+            twoWayChange,
+            someOutput,
+          },
+        },
       );
 
       const component = spectator.query(DefaultComponent);

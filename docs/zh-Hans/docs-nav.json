@@ -176,6 +176,10 @@
                 {
                   "text": "Quartz 集成",
                   "path": "Background-Workers-Quartz.md"
+                },
+                {
+                  "text": "Hangfire 集成",
+                  "path": "Background-Workers-Hangfire.md"
                 }
               ]
             }

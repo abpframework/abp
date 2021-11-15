@@ -131,10 +131,15 @@ If that's a problem for your workers, you have two options;
 * Disable the background worker system using the `AbpBackgroundWorkerOptions` described above, for all the application instances, except one of them.
 * Disable the background worker system for all the application instances and create another special application that runs on a single server and execute the workers.
 
-## Quartz Integration
+## Integrations
 
-ABP Framework's background worker system is good to implement periodic tasks. However, you may want to use an advanced task scheduler like [Quartz](https://www.quartz-scheduler.net/). See the community contributed [quartz integration](Background-Workers-Quartz.md) for the background workers.
+Background worker system is extensible and you can change the default background worker manager with your own implementation or on of the pre-built integrations.
+
+See pre-built worker manager alternatives:
+
+* [Quartz Background Worker Manager](Background-Workers-Quartz.md) 
+* [Hangfire Background Worker Manager](Background-Workers-Hangfire.md) 
 
 ## See Also
-* [Quartz Integration for the background workers](Background-Workers-Quartz.md) 
+
 * [Background Jobs](Background-Jobs.md)

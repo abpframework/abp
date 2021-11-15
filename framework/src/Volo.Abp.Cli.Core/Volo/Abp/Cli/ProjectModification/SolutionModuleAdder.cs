@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Xml;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
@@ -30,6 +32,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
         public NewCommand NewCommand { get; }
         public BundleCommand BundleCommand { get; }
+        public ICmdHelper CmdHelper { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -58,7 +61,8 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder angularSourceCodeAdder,
             NewCommand newCommand,
             BundleCommand bundleCommand,
-            CliHttpClientFactory cliHttpClientFactory)
+            CliHttpClientFactory cliHttpClientFactory,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -74,6 +78,7 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder = angularSourceCodeAdder;
             NewCommand = newCommand;
             BundleCommand = bundleCommand;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
@@ -178,6 +183,14 @@ namespace Volo.Abp.Cli.ProjectModification
             var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
 
             if (blazorProject == null || !module.NugetPackages.Any(np => np.Target == NuGetPackageTarget.Blazor))
+            {
+                return;
+            }
+            // return if project is blazor-server
+            var document = new XmlDocument();
+            document.Load(blazorProject);
+            var sdk = document.DocumentElement.GetAttribute("Sdk");
+            if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
             {
                 return;
             }
@@ -620,7 +633,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!string.IsNullOrEmpty(dbMigratorProject))
             {
-                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run");
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
             }
         }
 

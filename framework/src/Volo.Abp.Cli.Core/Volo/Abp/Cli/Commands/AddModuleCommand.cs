@@ -18,7 +18,7 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected SolutionModuleAdder SolutionModuleAdder { get; }
-        public SolutionAbpVersionFinder SolutionAbpVersionFinder { get; }
+        public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
 
         public AddModuleInfoOutput LastAddedModuleInfo
         {
@@ -33,10 +33,10 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionAbpVersionFinder solutionAbpVersionFinder)
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionPackageVersionFinder solutionPackageVersionFinder)
         {
             SolutionModuleAdder = solutionModuleAdder;
-            SolutionAbpVersionFinder = solutionAbpVersionFinder;
+            SolutionPackageVersionFinder = solutionPackageVersionFinder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -62,7 +62,7 @@ namespace Volo.Abp.Cli.Commands
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             if (version == null)
             {
-                version = SolutionAbpVersionFinder.Find(solutionFile);
+                version = SolutionPackageVersionFinder.Find(solutionFile);
             }
 
             var moduleInfo = await SolutionModuleAdder.AddAsync(

@@ -16,11 +16,11 @@
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
     @<span>
-        <i class="far fa-comment-alt mr-2"></i>
+        <i class="far fa-comment-alt me-2"></i>
         @((string.IsNullOrWhiteSpace(author.Name)
                 ? author.UserName
                 : author.Name + " " + author.Surname).Trim())
-        <small class="text-muted float-right" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
+        <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
     </span>;
 }
 @{
@@ -30,21 +30,21 @@
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
-            <div class="form-row">
+            <div class="row">
                 <div class="col">
-                    <div class="form-group m-0">
+                    <div class="mb-3 m-0">
                         <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="text-right">
+                    <div class="text-end">
                         <abp-button type="submit" button-type="Primary" size="Block">
-                            <i class="fa fa-comment-alt mr-1"></i> @L["Send"]
+                            <i class="fa fa-comment-alt me-1"></i> @L["Send"]
                         </abp-button>
                         @if (cancelButton)
                         {
                             <abp-button type="button" button-type="Light" class="reply-cancel-button mb-2" size="Block_Small" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
-                                <i class="fa fa-times mr-1"></i> @L["Cancel"]
+                                <i class="fa fa-times me-1"></i> @L["Cancel"]
                             </abp-button>
                         }
                     </div>
@@ -63,7 +63,7 @@
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentActionArea(Guid id, Guid authorId, bool isReply) =>
-    @<div class="inner-comment-buttons text-left">
+    @<div class="inner-comment-buttons text-start">
         @if (!isReply)
         {
             @if (CurrentUser.IsAuthenticated)
@@ -94,17 +94,17 @@
         <div class="card bg-light p-3 mx-0 mt-3">
             <form class="cms-comment-update-form">
                 <input hidden value="@id.ToString()" name="id" />
-                <div class="form-row">
+                <div class="row">
                     <div class="col">
-                        <div class="form-group m-0">
+                        <div class="mb-3 m-0">
                             <textarea class="form-control" name="commentText" rows="3">@text</textarea>
                             <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
                         </div>
                     </div>
                     <div class="col-auto">
-                        <div class="text-right">
+                        <div class="text-end">
                             <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
-                            <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times mr-1"></i>  @L["Cancel"] </abp-button>
+                            <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
 
                         </div>
                     </div>
@@ -123,7 +123,7 @@
     }
     else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
     {
-        <div class="text-right">
+        <div class="text-end">
             <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
         </div>
     }
@@ -137,7 +137,7 @@
 
                 @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-                <div class="form-row mt-2">
+                <div class="row mt-2">
                     <div class="col">
                         <div class="my-2 ">
                             @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
@@ -166,7 +166,7 @@
 
                                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
-                                <div class="form-row mt-2">
+                                <div class="row mt-2">
                                     <div class="col">
                                         <div class="my-2 ">
                                             @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
@@ -192,7 +192,7 @@
                             @if (CurrentUser.IsAuthenticated)
                             {
                                 <a href="#" class="comment-links  comment-reply-link btn btn-primary btn-sm" data-reply-id="@comment.Id.ToString()">
-                                    <i class="fa fa-reply mr-1"></i> @L["Reply"]
+                                    <i class="fa fa-reply me-1"></i> @L["Reply"]
                                 </a>
                             }
                             else

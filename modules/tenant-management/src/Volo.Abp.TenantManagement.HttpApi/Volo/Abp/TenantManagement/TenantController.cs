@@ -8,7 +8,7 @@ namespace Volo.Abp.TenantManagement
 {
     [Controller]
     [RemoteService(Name = TenantManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("multi-tenancy")]
+    [Area(TenantManagementRemoteServiceConsts.ModuleName)]
     [Route("api/multi-tenancy/tenants")]
     public class TenantController : AbpControllerBase, ITenantAppService //TODO: Throws exception on validation if we inherit from Controller
     {

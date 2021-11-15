@@ -1,3 +1,5 @@
+
+   
 const glob = require('glob');
 var path = require('path');
 const childProcess = require('child_process');
@@ -15,7 +17,7 @@ const check = (pkgJsonPath) => {
     return childProcess
       .execSync(
         `ncu "/^@(${packages}).*$/" --packageFile ${pkgJsonPath} -u${
-          program.prerelase ? ' --target greatest' : ''
+          program.prerelase ? ' --target newest' : ''
         }${program.registry ? ` --registry ${program.registry}` : ''}`
       )
       .toString();

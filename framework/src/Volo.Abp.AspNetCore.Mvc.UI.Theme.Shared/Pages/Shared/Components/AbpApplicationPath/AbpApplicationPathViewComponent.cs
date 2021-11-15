@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpApp
 {
     public class AbpApplicationPathViewComponent : AbpViewComponent
     {
-        public IViewComponentResult Invoke()
+        public virtual IViewComponentResult Invoke()
         {
             var applicationPath = ViewContext.HttpContext.Request.PathBase.Value;
             var model = new AbpApplicationPathViewComponentModel

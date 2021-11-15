@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Volo.Abp.DependencyInjection;
 
-
 namespace Volo.Abp.Serialization.Objects
 {
     public class CarSerializer : IObjectSerializer<Car>, ITransientDependency

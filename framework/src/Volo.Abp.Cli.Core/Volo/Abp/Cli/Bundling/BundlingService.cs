@@ -39,6 +39,8 @@ namespace Volo.Abp.Cli.Bundling
             }
 
             var projectFilePath = projectFiles[0];
+            
+            CheckProjectIsSupportedType(projectFilePath);
 
             var config = ConfigReader.Read(PathHelper.GetWwwRootPath(directory));
             var bundleConfig = config.Bundle;
@@ -282,14 +284,21 @@ namespace Volo.Abp.Cli.Bundling
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
+
+            return document.SelectSingleNode("//TargetFramework").InnerText;
+        }
+
+        private void CheckProjectIsSupportedType(string projectFilePath)
+        {
+            var document = new XmlDocument();
+            document.Load(projectFilePath);
+            
             var sdk = document.DocumentElement.GetAttribute("Sdk");
             if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
             {
                 throw new BundlingException(
                     $"Unsupported project type. Project type must be {BundlingConsts.SupportedWebAssemblyProjectType}.");
             }
-
-            return document.SelectSingleNode("//TargetFramework").InnerText;
         }
     }
 }

@@ -3,7 +3,7 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "^5.0.0-beta.1",
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^5.0.0-beta.3",
     "highlight.js": "^9.13.1"
   },
   "devDependencies": {}

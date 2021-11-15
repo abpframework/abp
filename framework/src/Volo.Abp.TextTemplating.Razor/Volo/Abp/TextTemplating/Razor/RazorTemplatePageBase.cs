@@ -34,18 +34,30 @@ namespace Volo.Abp.TextTemplating.Razor
 
         public virtual void WriteLiteral(string literal = null)
         {
-            _stringBuilder.Append(literal);
+            if (!literal.IsNullOrEmpty())
+            {
+                _stringBuilder.Append(literal);
+            }
         }
 
-        public virtual void Write(object obj = null)
+        public virtual void Write(object value = null)
         {
-            _stringBuilder.Append(obj);
+            if (value is null)
+            {
+                return;
+            }
+
+            _stringBuilder.Append(value.ToString());
         }
 
         public virtual void BeginWriteAttribute(string name, string prefix, int prefixOffset, string suffix, int suffixOffset, int attributeValuesCount)
         {
             _attributeInfo = new AttributeInfo(name, prefix, prefixOffset, suffix, suffixOffset, attributeValuesCount);
-            WriteLiteral(prefix);
+
+            if (attributeValuesCount != 1)
+            {
+                WriteLiteral(prefix);
+            }
         }
 
         public virtual void WriteAttributeValue(string prefix, int prefixOffset, object value, int valueOffset, int valueLength, bool isLiteral)
@@ -81,9 +93,6 @@ namespace Volo.Abp.TextTemplating.Razor
 
                 WriteUnprefixedAttributeValue(value, isLiteral);
             }
-
-            _stringBuilder.Append(prefix);
-            _stringBuilder.Append(value);
         }
 
         public virtual void EndWriteAttribute()
@@ -128,15 +137,19 @@ namespace Volo.Abp.TextTemplating.Razor
             }
         }
 
-        private bool IsBoolFalseOrNullValue(string prefix, object value)
+
+        private static bool IsBoolFalseOrNullValue(string prefix, object value)
         {
-            return string.IsNullOrEmpty(prefix) && (value == null || (value is bool b && !b));
+            return string.IsNullOrEmpty(prefix) &&
+                   (value is null ||
+                    (value is bool boolValue && !boolValue));
         }
 
-        private bool IsBoolTrueWithEmptyPrefixValue(string prefix, object value)
+        private static bool IsBoolTrueWithEmptyPrefixValue(string prefix, object value)
         {
             // If the value is just the bool 'true', use the attribute name as the value.
-            return string.IsNullOrEmpty(prefix) && (value is bool b && b);
+            return string.IsNullOrEmpty(prefix) &&
+                   (value is bool boolValue && boolValue);
         }
 
         private struct AttributeInfo

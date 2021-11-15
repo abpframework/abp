@@ -6,16 +6,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPag
 {
     public class AbpPageToolbarViewComponent : AbpViewComponent
     {
-        private readonly IPageToolbarManager _toolbarManager;
+        protected IPageToolbarManager ToolbarManager { get; }
 
         public AbpPageToolbarViewComponent(IPageToolbarManager toolbarManager)
         {
-            _toolbarManager = toolbarManager;
+            ToolbarManager = toolbarManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string pageName)
+        public virtual async Task<IViewComponentResult> InvokeAsync(string pageName)
         {
-            var items = await _toolbarManager.GetItemsAsync(pageName);
+            var items = await ToolbarManager.GetItemsAsync(pageName);
             return View("~/Pages/Shared/Components/AbpPageToolbar/Default.cshtml", items);
         }
     }

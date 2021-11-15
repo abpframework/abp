@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 export type ModalDismissMode = 'hard' | 'soft';
 
 export interface DismissableModal {
-  dismiss(mode: ModalDismissMode);
+  dismiss(mode: ModalDismissMode): void;
 }
 
 @Injectable({ providedIn: 'root' })

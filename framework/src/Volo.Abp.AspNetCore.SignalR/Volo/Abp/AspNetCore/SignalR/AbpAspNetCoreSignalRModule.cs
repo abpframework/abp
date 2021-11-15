@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
+using Volo.Abp.AspNetCore.SignalR.Auditing;
+using Volo.Abp.AspNetCore.SignalR.Authentication;
+using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
@@ -32,7 +35,12 @@ namespace Volo.Abp.AspNetCore.SignalR
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var routePatterns = new List<string> {"/signalr-hubs"};
-            var signalRServerBuilder = context.Services.AddSignalR();
+            var signalRServerBuilder = context.Services.AddSignalR(options =>
+            {
+                options.AddFilter<AbpHubContextAccessorHubFilter>();
+                options.AddFilter<AbpAuthenticationHubFilter>();
+                options.AddFilter<AbpAuditHubFilter>();
+            });
 
             context.Services.ExecutePreConfiguredActions(signalRServerBuilder);
 
@@ -71,6 +79,11 @@ namespace Volo.Abp.AspNetCore.SignalR
                 {
                     options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x), () => routePattern);
                 }
+            });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.Contributors.Add(new AspNetCoreSignalRAuditLogContributor());
             });
         }
 
