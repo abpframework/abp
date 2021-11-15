@@ -8,7 +8,7 @@ You can see the ER Diagram of our application below. This diagram will be helpfu
 
 ![ER-Diagram](./er-diagram.png)
 
-When we've examined the ER Diagram, we can see the one-to-many relationship between the **Author** and the **Book** tables. Also, the many-to-many relationship (**BookCategory** table) between the **Book** and the **Category** tables. (There can be more than one category on each book and vice-versa in our scenario)..
+When we've examined the ER Diagram, we can see the one-to-many relationship between the **Author** and the **Book** tables. Also, the many-to-many relationship (**BookCategory** table) between the **Book** and the **Category** tables. (There can be more than one category on each book and vice-versa in our scenario).
 
 ### Source Code
 
