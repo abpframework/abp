@@ -20,9 +20,9 @@ $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --s
 $UpdateGulpCommand = "yarn update-gulp --registry $Registry"
 $UpdateNgPacksCommand = "yarn update ./ng-packs abp --registry $Registry"
 
-$IsPrerelase = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
+$IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
 
-if ($IsPrerelase) {
+if ($IsPrerelease) {
   $UpdateGulpCommand += " --prerelease"
   $UpdateNgPacksCommand += " --prerelease"
 }
