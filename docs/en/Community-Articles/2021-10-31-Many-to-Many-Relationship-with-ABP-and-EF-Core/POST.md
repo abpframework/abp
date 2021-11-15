@@ -413,6 +413,106 @@ namespace BookStore.Categories
 }
 ```
 
+After defining our entities we can seed initial data to our database by using the [Data Seeding](https://docs.abp.io/en/abp/5.0/Data-Seeding#data-seeding) system of the ABP framework. We will create initial data for both the `Category` and `Author` entities because we will not create CRUD pages for these entities. 
+
+> We will create only CRUD pages for the Book entity therefore we don't need to add initial data for the Book entity. We can create a new book by using the create modal of the Book page. (We will create it in the sixth step.)
+
+Create a class named `BookStoreDataSeederContributor` in your `*.Domain` project and update with the following code:
+
+* **BookStoreDataSeederContributor.cs**
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using BookStore.Authors;
+using BookStore.Categories;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Guids;
+
+namespace BookStore
+{
+    public class BookStoreDataSeederContributor : IDataSeedContributor, ITransientDependency
+    {
+        private readonly IGuidGenerator _guidGenerator;
+        private readonly IRepository<Category, Guid> _categoryRepository;
+        private readonly IRepository<Author, Guid> _authorRepository;
+        
+        public BookStoreDataSeederContributor(
+            IGuidGenerator guidGenerator,
+            IRepository<Category, Guid> categoryRepository, 
+            IRepository<Author, Guid> authorRepository
+        )
+        {
+            _guidGenerator = guidGenerator;
+            _categoryRepository = categoryRepository;
+            _authorRepository = authorRepository;
+        }
+
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            await SeedCategoriesAsync();
+            await SeedAuthorsAsync();
+        }
+
+        private async Task SeedCategoriesAsync()
+        {
+            if (await _categoryRepository.GetCountAsync() <= 0)
+            {
+                await _categoryRepository.InsertAsync(
+                    new Category(_guidGenerator.Create(), "History")
+                );
+
+                await _categoryRepository.InsertAsync(
+                    new Category(_guidGenerator.Create(), "Unknown")
+                );
+
+                await _categoryRepository.InsertAsync(
+                    new Category(_guidGenerator.Create(), "Adventure")
+                );
+
+                await _categoryRepository.InsertAsync(
+                new Category(_guidGenerator.Create(), "Action")
+                );
+
+                await _categoryRepository.InsertAsync(
+                    new Category(_guidGenerator.Create(), "Crime")
+                );
+                
+                await _categoryRepository.InsertAsync(
+                    new Category(_guidGenerator.Create(), "Dystopia")
+                );
+            }
+        }
+        
+        private async Task SeedAuthorsAsync()
+        {
+            if (await _authorRepository.GetCountAsync() <= 0)
+            {
+                await _authorRepository.InsertAsync(
+                    new Author(
+                        _guidGenerator.Create(), 
+                        "George Orwell", 
+                        new DateTime(1903, 06, 25),
+                  "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
+                    )
+                );
+                
+                await _authorRepository.InsertAsync(
+                    new Author(
+                        _guidGenerator.Create(), 
+                        "Dan Brown", 
+                        new DateTime(1964, 06, 22),
+                        "Daniel Gerhard Brown (born June 22, 1964) is an American author best known for his thriller novels"
+                    )
+                );
+            }
+        }
+    }
+}
+```
+
 ### Step 2 - (Define Consts)
 
 We can create a folder-structure under the `BookStore.Domain.Shared` project like in the image below.
@@ -1259,7 +1359,7 @@ We need to see a page similar to the image above. Our app is working properly, w
 
 #### Model Classes and Mapping Configurations
 
-Create a folder named **Modals** and add a class named `CategoryViewModel` inside of it. We will use this view modal class to determine which categories are selected or not in our Create/Edit modals.
+Create a folder named **Models** and add a class named `CategoryViewModel` inside of it. We will use this view modal class to determine which categories are selected or not in our Create/Edit modals.
 
 * **CategoryViewModel.cs**
 
@@ -1320,7 +1420,7 @@ After creating our index page for Books and configuring mappings, let's continue
 
 Create a razor page named **CreateModal.cshtml** (and **CreateModal.cshtml.cs**).
 
-* **CreateModal.cs**
+* **CreateModal.cshtml**
 
 ```html
 @page
