@@ -314,7 +314,7 @@ abp-build-config.json
 tempkey.jwk
 
 # ABP Analyzing files
-*.abppkg.analyze.json
+# [Disabled for now] *.abppkg.analyze.json
 
 # appsettings.secrets.json
 appsettings.secrets.json

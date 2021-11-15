@@ -5,9 +5,9 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.SettingManagement
 {
     [RemoteService(Name = SettingManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("settingManagement")]
+    [Area(SettingManagementRemoteServiceConsts.ModuleName)]
     [Route("api/setting-management/emailing")]
-    public class EmailSettingsController : AbpController, IEmailSettingsAppService
+    public class EmailSettingsController : AbpControllerBase, IEmailSettingsAppService
     {
         private readonly IEmailSettingsAppService _emailSettingsAppService;
 

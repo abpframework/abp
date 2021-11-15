@@ -17,13 +17,16 @@ namespace Volo.Abp.Cli.ServiceProxying.Angular
         public const string Name = "NG";
 
         private readonly CliService _cliService;
+        private readonly ICmdHelper _cmdhelper;
 
         public AngularServiceProxyGenerator(
             CliHttpClientFactory cliHttpClientFactory,
             IJsonSerializer jsonSerializer,
+            ICmdHelper cmdhelper,
             CliService cliService) :
             base(cliHttpClientFactory, jsonSerializer)
         {
+            _cmdhelper = cmdhelper;
             _cliService = cliService;
         }
 
@@ -63,7 +66,7 @@ namespace Volo.Abp.Cli.ServiceProxying.Angular
                 commandBuilder.Append($" --target {target}");
             }
 
-            CmdHelper.RunCmd(commandBuilder.ToString());
+            _cmdhelper.RunCmd(commandBuilder.ToString());
         }
 
         private async Task CheckNgSchematicsAsync()

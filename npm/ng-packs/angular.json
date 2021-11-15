@@ -35,9 +35,12 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/account/src/**/*.ts", "packages/account/src/**/*.html"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "account-core": {
       "projectType": "library",
@@ -76,9 +79,12 @@
               "packages/account-core/src/**/*.ts",
               "packages/account-core/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "components": {
       "projectType": "library",
@@ -117,9 +123,12 @@
               "packages/components/src/**/*.ts",
               "packages/components/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "core": {
       "projectType": "library",
@@ -155,9 +164,11 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/core/src/**/*.ts", "packages/core/src/**/*.html"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": []
     },
     "dev-app": {
       "projectType": "application",
@@ -179,7 +190,7 @@
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
               {
-                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
                 "inject": false,
                 "bundleName": "bootstrap-rtl.min"
               },
@@ -307,9 +318,12 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/dev-app-e2e/**/*.{js,ts}"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["dev-app"]
     },
     "feature-management": {
       "projectType": "library",
@@ -348,9 +362,12 @@
               "packages/feature-management/src/**/*.ts",
               "packages/feature-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "identity": {
       "projectType": "library",
@@ -386,9 +403,12 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/identity/src/**/*.ts", "packages/identity/src/**/*.html"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "permission-management"]
     },
     "permission-management": {
       "projectType": "library",
@@ -427,9 +447,12 @@
               "packages/permission-management/src/**/*.ts",
               "packages/permission-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "schematics": {
       "projectType": "library",
@@ -452,9 +475,11 @@
               "packages/schematics/src/**/*.ts",
               "packages/schematics/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": []
     },
     "setting-management": {
       "projectType": "library",
@@ -493,9 +518,12 @@
               "packages/setting-management/src/**/*.ts",
               "packages/setting-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "components"]
     },
     "tenant-management": {
       "projectType": "library",
@@ -534,9 +562,12 @@
               "packages/tenant-management/src/**/*.ts",
               "packages/tenant-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "feature-management"]
     },
     "theme-basic": {
       "projectType": "library",
@@ -575,9 +606,12 @@
               "packages/theme-basic/src/**/*.ts",
               "packages/theme-basic/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "theme-shared": {
       "projectType": "library",
@@ -616,42 +650,12 @@
               "packages/theme-shared/src/**/*.ts",
               "packages/theme-shared/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
-    }
-  },
-  "cli": {
-    "analytics": false,
-    "defaultCollection": "@nrwl/angular"
-  },
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
       },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "strict": false
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
+      "tags": [],
+      "implicitDependencies": ["core"]
     }
-  },
-  "defaultProject": "dev-app"
+  }
 }

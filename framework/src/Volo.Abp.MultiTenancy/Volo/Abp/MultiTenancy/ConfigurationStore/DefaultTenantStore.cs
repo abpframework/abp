@@ -11,9 +11,9 @@ namespace Volo.Abp.MultiTenancy.ConfigurationStore
     {
         private readonly AbpDefaultTenantStoreOptions _options;
 
-        public DefaultTenantStore(IOptionsSnapshot<AbpDefaultTenantStoreOptions> options)
+        public DefaultTenantStore(IOptionsMonitor<AbpDefaultTenantStoreOptions> options)
         {
-            _options = options.Value;
+            _options = options.CurrentValue;
         }
 
         public Task<TenantConfiguration> FindAsync(string name)

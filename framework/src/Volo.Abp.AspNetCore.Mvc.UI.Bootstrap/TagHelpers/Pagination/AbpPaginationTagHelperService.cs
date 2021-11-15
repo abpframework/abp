@@ -90,7 +90,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             {
                 pageHtml.AppendLine("                                 <span class=\"page-link\">\r\n" +
                                     "                                    " + page.Index + "\r\n" +
-                                    "                                    <span class=\"sr-only\">(current)</span>\r\n" +
+                                    "                                    <span class=\"visually-hidden\">(current)</span>\r\n" +
                                     "                                </span>");
             }
             else

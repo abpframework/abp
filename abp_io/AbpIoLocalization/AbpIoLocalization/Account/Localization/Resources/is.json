@@ -1,0 +1,15 @@
+{
+  "culture": "is",
+  "texts": {
+    "Account": "ABP Aðgangur - Innskráning og skráning| ABP.IO",
+    "Welcome": "Velkomin",
+    "UseOneOfTheFollowingLinksToContinue": "Notaðu einn af eftirfarandi krækjum til að halda áfram",
+    "FrameworkHomePage": "Heimasíða umgjarðarinnar",
+    "FrameworkDocumentation": "Skjölun umgjarðarinnar",
+    "OfficialBlog": "Opinbert blogg",
+    "CommercialHomePage": "Heimasíða Commercial útgáfunnarinnar",
+    "CommercialSupportWebSite": "Þjónustu síða Commercial útgáfunnarinnar",
+    "CommunityWebSite": "Samfélagssíða ABP",
+    "ManageAccount": "Minn aðgangur | ABP.IO"
+  }
+}

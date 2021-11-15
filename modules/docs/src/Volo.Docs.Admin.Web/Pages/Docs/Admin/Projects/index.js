@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource('Docs');
 
     var _createModal = new abp.ModalManager({
@@ -57,6 +57,7 @@
                                         .delete(data.record.id)
                                         .then(function () {
                                             _dataTable.ajax.reload();
+                                            abp.notify.success(l('SuccessfullyDeleted'));
                                         });
                                 },
                             },

@@ -74,9 +74,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
                 {
                     using (var fileStream = File.OpenRead(filePath))
                     {
-                        var memoryStream = new MemoryStream();
-                        await fileStream.CopyToAsync(memoryStream, args.CancellationToken);
-                        return memoryStream;
+                        return await TryCopyToMemoryStreamAsync(fileStream, args.CancellationToken);
                     }
                 });
         }

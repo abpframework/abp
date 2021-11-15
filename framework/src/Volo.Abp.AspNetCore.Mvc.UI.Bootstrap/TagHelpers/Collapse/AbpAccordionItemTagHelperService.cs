@@ -28,8 +28,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             var button = new TagBuilder("button");
             button.AddCssClass("btn btn-link");
             button.Attributes.Add("type", "button");
-            button.Attributes.Add("data-toggle", "collapse");
-            button.Attributes.Add("data-target", "#" + GetContentId());
+            button.Attributes.Add("data-bs-toggle", "collapse");
+            button.Attributes.Add("data-bs-target", "#" + GetContentId());
             button.Attributes.Add("aria-expanded", "true");
             button.Attributes.Add("aria-controls", GetContentId());
             button.InnerHtml.AppendHtml(TagHelper.Title);
@@ -58,7 +58,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             wrapper.AddCssClass("collapse" + show);
             wrapper.Attributes.Add("id", GetContentId());
             wrapper.Attributes.Add("aria-labelledby", GetHeadingId());
-            wrapper.Attributes.Add("data-parent", "#" + AbpAccordionParentIdPlaceholder);
+            wrapper.Attributes.Add("data-bs-parent", "#" + AbpAccordionParentIdPlaceholder);
             wrapper.InnerHtml.AppendHtml(cardBody);
 
             return wrapper.ToHtmlString();

@@ -9,9 +9,12 @@
     <PackageId>Volo.Blogging.Application</PackageId>
     <RootNamespace />
   </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="$(MicrosoftPackageVersion)" />
     <ProjectReference Include="..\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Blogging.Domain\Volo.Blogging.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />

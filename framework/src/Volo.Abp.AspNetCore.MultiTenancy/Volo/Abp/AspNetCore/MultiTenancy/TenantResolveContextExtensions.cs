@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         public static AbpAspNetCoreMultiTenancyOptions GetAbpAspNetCoreMultiTenancyOptions(this ITenantResolveContext context)
         {
-            return context.ServiceProvider.GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value;
+            return context.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
         }
     }
 }

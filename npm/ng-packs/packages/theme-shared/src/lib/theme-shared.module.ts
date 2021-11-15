@@ -1,6 +1,6 @@
 import { CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   defaultMapErrorsFn,
@@ -10,6 +10,7 @@ import {
   VALIDATION_VALIDATE_ON_SUBMIT,
 } from '@ngx-validate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { BreadcrumbItemsComponent } from './components/breadcrumb-items/breadcrumb-items.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
@@ -25,8 +26,8 @@ import { EllipsisModule } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
+import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
-import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
@@ -36,6 +37,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
+  BreadcrumbItemsComponent,
   ButtonComponent,
   ConfirmationComponent,
   LoaderBarComponent,
@@ -93,12 +95,6 @@ export class ThemeSharedModule {
           deps: [THEME_SHARED_APPEND_CONTENT],
           useFactory: noop,
         },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [Injector],
-          useFactory: initLazyStyleHandler,
-        },
         { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
         {
           provide: 'HTTP_ERROR_CONFIG',
@@ -121,6 +117,13 @@ export class ThemeSharedModule {
         {
           provide: VALIDATION_VALIDATE_ON_SUBMIT,
           useValue: validation.validateOnSubmit,
+        },
+        DocumentDirHandlerService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: noop,
+          multi: true,
+          deps: [DocumentDirHandlerService],
         },
       ],
     };

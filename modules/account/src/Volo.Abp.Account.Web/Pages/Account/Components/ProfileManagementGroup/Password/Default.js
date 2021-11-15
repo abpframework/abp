@@ -1,4 +1,4 @@
-﻿﻿(function ($) {
+(function ($) {
     $(function () {
         var l = abp.localization.getResource("AbpAccount");
 
@@ -23,7 +23,7 @@
                 return;
             }
 
-            volo.abp.identity.profile.changePassword(input).then(function (result) {
+            volo.abp.account.profile.changePassword(input).then(function (result) {
                 abp.message.success(l('PasswordChanged'));
             });
         });

@@ -88,7 +88,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  initChart = () => {
+  private initChart = () => {
     const opts = this.options || {};
     opts.responsive = this.responsive;
 

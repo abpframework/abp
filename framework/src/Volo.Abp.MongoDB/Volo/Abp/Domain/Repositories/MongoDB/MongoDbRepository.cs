@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -23,8 +24,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public class MongoDbRepository<TMongoDbContext, TEntity>
         : RepositoryBase<TEntity>,
-        IMongoDbRepository<TEntity>,
-        IMongoQueryable<TEntity>
+        IMongoDbRepository<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
@@ -518,14 +518,19 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             );
         }
 
-        public virtual async Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
+        public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
+        {
+            return GetMongoQueryableAsync<TEntity>(cancellationToken);
+        }
+
+        protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default)
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
             var dbContext = await GetDbContextAsync(cancellationToken);
-            var collection = dbContext.Collection<TEntity>();
+            var collection = dbContext.Collection<TOtherEntity>();
 
-            return ApplyDataFilters(
+            return ApplyDataFilters<IMongoQueryable<TOtherEntity>, TOtherEntity>(
                 dbContext.SessionHandle != null
                     ? collection.AsQueryable(dbContext.SessionHandle)
                     : collection.AsQueryable()
@@ -570,12 +575,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
           );
         }
 
-        protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
+        protected virtual Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
             TriggerEntityCreateEvents(entity);
             TriggerDomainEvents(entity);
+            return Task.CompletedTask;
         }
 
         private void TriggerEntityCreateEvents(TEntity entity)
@@ -719,24 +725,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return aggregate;
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public QueryableExecutionModel GetExecutionModel()
-        {
-            return GetMongoQueryable().GetExecutionModel();
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public IAsyncCursor<TEntity> ToCursor(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursor(GetCancellationToken(cancellationToken));
-        }
-
-        [Obsolete("This method will be removed in future versions.")]
-        public Task<IAsyncCursor<TEntity>> ToCursorAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return GetMongoQueryable().ToCursorAsync(GetCancellationToken(cancellationToken));
         }
     }
 

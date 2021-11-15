@@ -1,6 +1,6 @@
 {
   "name": "@abp/utils",
-  "version": "4.4.2",
+  "version": "5.0.0-beta.3",
   "scripts": {
     "prepublish": "yarn install --ignore-scripts && node prepublish.js",
     "ng": "ng",
@@ -13,6 +13,11 @@
     "access": "public"
   },
   "main": "dist/bundles/abp-utils.umd.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/utils"
+  },
   "module": "dist/fesm2015/abp-utils.js",
   "es2015_ivy_ngcc": "__ivy_ngcc__/dist/fesm2015/abp-utils.js",
   "es2015": "dist/fesm2015/abp-utils.js",

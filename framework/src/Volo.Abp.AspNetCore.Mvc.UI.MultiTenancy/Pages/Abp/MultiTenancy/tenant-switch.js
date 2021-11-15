@@ -1,4 +1,4 @@
-﻿(function($) {
+(function($) {
 
     var tenantSwitchModal = new abp.ModalManager(abp.appPath + 'Abp/MultiTenancy/TenantSwitchModal');
 

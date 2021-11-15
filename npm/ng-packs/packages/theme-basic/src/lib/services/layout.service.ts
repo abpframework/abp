@@ -1,14 +1,14 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
-import { eThemeBasicComponents } from '../enums';
 import { SubscriptionService } from '@abp/ng.core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { eThemeBasicComponents } from '../enums';
 
 @Injectable()
 export class LayoutService {
   isCollapsed = true;
 
-  smallScreen: boolean; // do not set true or false
+  smallScreen!: boolean; // do not set true or false
 
   logoComponentKey = eThemeBasicComponents.Logo;
 

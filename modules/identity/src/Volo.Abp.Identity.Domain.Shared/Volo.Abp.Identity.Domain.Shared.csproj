@@ -18,6 +18,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Identity\Localization\*.json" />
     <Content Remove="Volo\Abp\Identity\Localization\*.json" />
+    <None Remove="Volo.Abp.Identity.Domain.Shared.abppkg.json" />
+    <EmbeddedResource Include="Volo.Abp.Identity.Domain.Shared.abppkg.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <None Remove="Volo.Abp.Identity.Domain.Shared.abppkg.analyze.json" />
+    <EmbeddedResource Include="Volo.Abp.Identity.Domain.Shared.abppkg.analyze.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,9 @@
-import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedResultRequestDto } from '@abp/ng.core';
-
-export interface ChangePasswordInput {
-  currentPassword?: string;
-  newPassword: string;
-}
+import type {
+  ExtensibleEntityDto,
+  ExtensibleFullAuditedEntityDto,
+  ExtensibleObject,
+  PagedAndSortedResultRequestDto,
+} from '@abp/ng.core';
 
 export interface GetIdentityRolesInput extends PagedAndSortedResultRequestDto {
   filter?: string;
@@ -13,8 +13,7 @@ export interface GetIdentityUsersInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 
-export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {
-}
+export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {}
 
 export interface IdentityRoleCreateOrUpdateDtoBase extends ExtensibleObject {
   name: string;
@@ -44,6 +43,7 @@ export interface IdentityUserCreateOrUpdateDtoBase extends ExtensibleObject {
   surname?: string;
   email: string;
   phoneNumber?: string;
+  isActive: boolean;
   lockoutEnabled: boolean;
   roleNames: string[];
 }
@@ -57,6 +57,7 @@ export interface IdentityUserDto extends ExtensibleFullAuditedEntityDto<string> 
   emailConfirmed: boolean;
   phoneNumber?: string;
   phoneNumberConfirmed: boolean;
+  isActive: boolean;
   lockoutEnabled: boolean;
   lockoutEnd?: string;
   concurrencyStamp?: string;
@@ -69,26 +70,6 @@ export interface IdentityUserUpdateDto extends IdentityUserCreateOrUpdateDtoBase
 
 export interface IdentityUserUpdateRolesDto {
   roleNames: string[];
-}
-
-export interface ProfileDto extends ExtensibleObject {
-  userName?: string;
-  email?: string;
-  name?: string;
-  surname?: string;
-  phoneNumber?: string;
-  isExternal: boolean;
-  hasPassword: boolean;
-  concurrencyStamp?: string;
-}
-
-export interface UpdateProfileDto extends ExtensibleObject {
-  userName?: string;
-  email?: string;
-  name?: string;
-  surname?: string;
-  phoneNumber?: string;
-  concurrencyStamp?: string;
 }
 
 export interface UserLookupCountInputDto {

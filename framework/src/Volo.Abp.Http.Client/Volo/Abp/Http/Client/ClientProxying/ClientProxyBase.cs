@@ -16,6 +16,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -28,15 +29,15 @@ namespace Volo.Abp.Http.Client.ClientProxying
         protected IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder => LazyServiceProvider.LazyGetRequiredService<IClientProxyApiDescriptionFinder>();
         protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetRequiredService<ICancellationTokenProvider>();
         protected ICorrelationIdProvider CorrelationIdProvider => LazyServiceProvider.LazyGetRequiredService<ICorrelationIdProvider>();
-        protected ICurrentTenant CurrentTenant  => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
-        protected IOptions<AbpCorrelationIdOptions> AbpCorrelationIdOptions  => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpCorrelationIdOptions>>();
-        protected IProxyHttpClientFactory HttpClientFactory  => LazyServiceProvider.LazyGetRequiredService<IProxyHttpClientFactory>();
-        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider  => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceConfigurationProvider>();
-        protected IOptions<AbpHttpClientOptions> ClientOptions  => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpHttpClientOptions>>();
-        protected IJsonSerializer JsonSerializer  => LazyServiceProvider.LazyGetRequiredService<IJsonSerializer>();
-        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator  => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceHttpClientAuthenticator>();
-        protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
-        protected ClientProxyUrlBuilder ClientProxyUrlBuilder  => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
+        protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+        protected IOptions<AbpCorrelationIdOptions> AbpCorrelationIdOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpCorrelationIdOptions>>();
+        protected IProxyHttpClientFactory HttpClientFactory => LazyServiceProvider.LazyGetRequiredService<IProxyHttpClientFactory>();
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceConfigurationProvider>();
+        protected IOptions<AbpHttpClientOptions> ClientOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpHttpClientOptions>>();
+        protected IJsonSerializer JsonSerializer => LazyServiceProvider.LazyGetRequiredService<IJsonSerializer>();
+        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceHttpClientAuthenticator>();
+        protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
+        protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
 
         protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
         {
@@ -55,7 +56,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 arguments = new ClientProxyRequestTypeValue();
             }
 
-            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => x.Key.FullName))}";
+            var methodUniqueName = $"{typeof(TService).FullName}.{methodName}.{string.Join("-", arguments.Values.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.Key)))}";
             var action = ClientProxyApiDescriptionFinder.FindAction(methodUniqueName);
             if (action == null)
             {
@@ -114,7 +115,7 @@ namespace Volo.Abp.Http.Client.ClientProxying
 
             var requestMessage = new HttpRequestMessage(requestContext.Action.GetHttpMethod(), url)
             {
-                Content = ClientProxyRequestPayloadBuilder.BuildContent(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion)
+                Content = await ClientProxyRequestPayloadBuilder.BuildContentAsync(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion)
             };
 
             AddHeaders(requestContext.Arguments, requestContext.Action, requestMessage, apiVersion);
@@ -131,11 +132,19 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 );
             }
 
-            var response = await client.SendAsync(
-                requestMessage,
-                HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken(requestContext.Arguments)
-            );
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.SendAsync(
+                    requestMessage,
+                    HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
+                    GetCancellationToken(requestContext.Arguments)
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new AbpRemoteCallException($"An error occurred during the ABP remote HTTP request. ({ex.Message}) See the inner exception for details.", ex);
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -156,14 +165,14 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
         }
 
-        protected virtual Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+        protected virtual async Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
         {
-            return Task.FromResult(ClientProxyUrlBuilder.GenerateUrlWithParameters(requestContext.Action, requestContext.Arguments, apiVersion));
+            return await ClientProxyUrlBuilder.GenerateUrlWithParametersAsync(requestContext.Action, requestContext.Arguments, apiVersion);
         }
 
-        protected virtual Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+        protected virtual async Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
         {
-            return Task.FromResult(ClientProxyRequestPayloadBuilder.BuildContent(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion));
+            return await ClientProxyRequestPayloadBuilder.BuildContentAsync(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion);
         }
 
         protected virtual async Task<string> FindBestApiVersionAsync(ClientProxyRequestContext requestContext)
@@ -196,26 +205,46 @@ namespace Volo.Abp.Http.Client.ClientProxying
         {
             if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
             {
-                var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
-                    await response.Content.ReadAsStringAsync()
-                );
+                RemoteServiceErrorResponse errorResponse;
+                try
+                {
+                    errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+                        await response.Content.ReadAsStringAsync()
+                    );
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpRemoteCallException(
+                        new RemoteServiceErrorInfo
+                        {
+                            Message = response.ReasonPhrase,
+                            Code = response.StatusCode.ToString()
+                        },
+                        ex
+                    )
+                    {
+                        HttpStatusCode = (int)response.StatusCode
+                    };
+                }
 
                 throw new AbpRemoteCallException(errorResponse.Error)
                 {
                     HttpStatusCode = (int) response.StatusCode
                 };
             }
-
-            throw new AbpRemoteCallException(
-                new RemoteServiceErrorInfo
-                {
-                    Message = response.ReasonPhrase,
-                    Code = response.StatusCode.ToString()
-                }
-            )
+            else
             {
-                HttpStatusCode = (int) response.StatusCode
-            };
+                throw new AbpRemoteCallException(
+                    new RemoteServiceErrorInfo
+                    {
+                        Message = response.ReasonPhrase,
+                        Code = response.StatusCode.ToString()
+                    }
+                )
+                {
+                    HttpStatusCode = (int) response.StatusCode
+                };
+            }
         }
 
         protected virtual void AddHeaders(

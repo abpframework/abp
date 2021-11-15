@@ -1,4 +1,4 @@
-﻿var _fileContentModal = new abp.ModalManager(
+var _fileContentModal = new abp.ModalManager(
     abp.appPath + 'VirtualFileExplorer/FileContentModal'
 );
 

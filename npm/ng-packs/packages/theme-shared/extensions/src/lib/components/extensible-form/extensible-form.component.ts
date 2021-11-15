@@ -33,7 +33,7 @@ import { ExtensibleFormPropComponent } from './extensible-form-prop.component';
 })
 export class ExtensibleFormComponent<R = any> {
   @ViewChildren(ExtensibleFormPropComponent)
-  formProps: QueryList<ExtensibleFormPropComponent>;
+  formProps!: QueryList<ExtensibleFormPropComponent>;
 
   @Input()
   set selectedRecord(record: R) {
@@ -43,8 +43,8 @@ export class ExtensibleFormComponent<R = any> {
   }
 
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
-  propList: FormPropList<R>;
-  record: R;
+  propList!: FormPropList<R>;
+  record!: R;
 
   get form(): FormGroup {
     return (this.container ? this.container.control : { controls: {} }) as FormGroup;

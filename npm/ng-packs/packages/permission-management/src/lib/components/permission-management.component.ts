@@ -8,9 +8,18 @@ import {
   UpdatePermissionDto,
 } from '@abp/ng.permission-management/proxy';
 import { LocaleDirection } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
-import { of } from 'rxjs';
-import { finalize, switchMap, tap } from 'rxjs/operators';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  TrackByFunction,
+  ViewChildren,
+} from '@angular/core';
+import { concat, of } from 'rxjs';
+import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { PermissionManagement } from '../models/permission-management';
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
@@ -58,7 +67,11 @@ export class PermissionManagementComponent
       this.openModal().subscribe(() => {
         this._visible = true;
         this.visibleChange.emit(true);
-        this.initModal();
+        concat(this.selectAllInAllTabsRef.changes, this.selectAllInThisTabsRef.changes)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.initModal();
+          });
       });
     } else {
       this.selectedGroup = null;
@@ -68,6 +81,11 @@ export class PermissionManagementComponent
   }
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
+
+  @ViewChildren('selectAllInThisTabsRef')
+  selectAllInThisTabsRef: QueryList<ElementRef<HTMLInputElement>>;
+  @ViewChildren('selectAllInAllTabsRef')
+  selectAllInAllTabsRef: QueryList<ElementRef<HTMLInputElement>>;
 
   data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
 
@@ -250,8 +268,11 @@ export class PermissionManagementComponent
   }
 
   initModal() {
-    this.setTabCheckboxState();
-    this.setGrantCheckboxState();
+    // TODO: Refactor
+    setTimeout(() => {
+      this.setTabCheckboxState();
+      this.setGrantCheckboxState();
+    });
   }
 
   getAssignedCount(groupName: string) {

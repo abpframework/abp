@@ -74,6 +74,23 @@ namespace Volo.Abp.Domain.Entities
             new Car(42, tenantId1).EntityEquals(new Car(42, tenantId1)).ShouldBeTrue();
         }
 
+        [Fact]
+        public void Should_Set_TenantId_On_Object_Creation()
+        {
+            var tenantId = Guid.NewGuid();
+            AsyncLocalCurrentTenantAccessor.Instance.Current = new BasicTenantInfo(tenantId);
+            new Car().TenantId.ShouldBe(tenantId);
+        }
+        
+        [Fact]
+        public void Should_Override_TenantId_Manually()
+        {
+            AsyncLocalCurrentTenantAccessor.Instance.Current = null;
+            
+            var tenantId = Guid.NewGuid();
+            new Car(0, tenantId).TenantId.ShouldBe(tenantId);
+        }
+
         public class Person : Entity<Guid>
         {
             public Person()
@@ -88,7 +105,7 @@ namespace Volo.Abp.Domain.Entities
 
         public class Car : Entity<int>, IMultiTenant
         {
-            public Guid? TenantId { get; }
+            public Guid? TenantId { get; private set; }
 
             public Car()
             {

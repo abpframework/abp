@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
     {
         public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DropdownsDemo/Default.cshtml";
 
-        public IViewComponentResult Invoke()
+        public virtual IViewComponentResult Invoke()
         {
             var Model = new DropDownDemoDemoModel();
 

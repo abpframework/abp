@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+    public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
@@ -35,7 +35,7 @@ namespace Volo.Abp.TestApp.Testing
             bool douglesNameChangeHandled = false;
             bool customEventHandled = false;
             bool customEvent2Handled = false;
-            
+
             LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
             {
                 data.Entity.Name.ShouldBe("TestPerson1");
@@ -46,7 +46,7 @@ namespace Volo.Abp.TestApp.Testing
                 customEvent2Handled.ShouldBeFalse();
                 return Task.CompletedTask;
             });
-            
+
             LocalEventBus.Subscribe<MyCustomEventData>(data =>
             {
                 data.Value.ShouldBe("42");
@@ -57,7 +57,7 @@ namespace Volo.Abp.TestApp.Testing
                 customEvent2Handled.ShouldBeFalse();
                 return Task.CompletedTask;
             });
-            
+
             LocalEventBus.Subscribe<PersonNameChangedEvent>(data =>
             {
                 data.OldName.ShouldBe("Douglas");
@@ -69,7 +69,7 @@ namespace Volo.Abp.TestApp.Testing
                 customEvent2Handled.ShouldBeFalse();
                 return Task.CompletedTask;
             });
-            
+
             LocalEventBus.Subscribe<EntityUpdatedEventData<Person>>(data =>
             {
                 data.Entity.Name.ShouldBe("Douglas-Updated");
@@ -80,7 +80,7 @@ namespace Volo.Abp.TestApp.Testing
                 customEvent2Handled.ShouldBeFalse();
                 return Task.CompletedTask;
             });
-            
+
             LocalEventBus.Subscribe<MyCustomEventData2>(data =>
             {
                 data.Value.ShouldBe("44");
@@ -97,13 +97,13 @@ namespace Volo.Abp.TestApp.Testing
                 await PersonRepository.InsertAsync(
                     new Person(Guid.NewGuid(), "TestPerson1", 42)
                 );
-                
+
                 await LocalEventBus.PublishAsync(new MyCustomEventData { Value = "42" });
 
                 var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
                 douglas.ChangeName("Douglas-Updated");
                 await PersonRepository.UpdateAsync(douglas);
-                
+
                 await LocalEventBus.PublishAsync(new MyCustomEventData2 { Value = "44" });
             });
         }
@@ -112,7 +112,7 @@ namespace Volo.Abp.TestApp.Testing
         public virtual async Task Should_Rollback_Uow_If_Event_Handler_Throws_Exception()
         {
             (await PersonRepository.FindAsync(x => x.Name == "TestPerson1")).ShouldBeNull();
-            
+
             LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
             {
                 data.Entity.Name.ShouldBe("TestPerson1");
@@ -128,7 +128,7 @@ namespace Volo.Abp.TestApp.Testing
                     );
                 });
             });
-            
+
             exception.Message.ShouldBe("Just to rollback the UOW");
 
             (await PersonRepository.FindAsync(x => x.Name == "TestPerson1")).ShouldBeNull();
@@ -162,7 +162,7 @@ namespace Volo.Abp.TestApp.Testing
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var dougles = PersonRepository.Single(b => b.Name == "Douglas");
+                var dougles = await PersonRepository.SingleAsync(b => b.Name == "Douglas");
                 dougles.ChangeName("Douglas-Changed");
                 await PersonRepository.UpdateAsync(dougles);
             });
@@ -172,12 +172,12 @@ namespace Volo.Abp.TestApp.Testing
             isLocalEventTriggered.ShouldBeTrue();
             isDistributedEventTriggered.ShouldBeTrue();
         }
-        
+
         private class MyCustomEventData
         {
             public string Value { get; set; }
         }
-        
+
         private class MyCustomEventData2
         {
             public string Value { get; set; }

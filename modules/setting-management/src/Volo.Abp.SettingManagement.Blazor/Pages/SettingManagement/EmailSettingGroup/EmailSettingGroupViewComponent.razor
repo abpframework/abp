@@ -49,14 +49,10 @@
                         </Field>
                     </Validation>
                     <Field>
-                        <FieldLabel>@L["SmtpEnableSsl"]</FieldLabel>
-                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl">
-                        </Check>
+                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl">@L["SmtpEnableSsl"]</Check>
                     </Field>
                     <Field>
-                        <FieldLabel>@L["SmtpUseDefaultCredentials"]</FieldLabel>
-                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials">
-                        </Check>
+                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials">@L["SmtpUseDefaultCredentials"]</Check>
                     </Field>
                     @if (!EmailSettings.SmtpUseDefaultCredentials)
                     {
@@ -83,7 +79,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                <FieldLabel>@L["SmtpPassword"]</FieldLabel>
-                                <TextEdit @bind-Text="@EmailSettings.SmtpPassword">
+                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>

@@ -27,12 +27,11 @@ namespace Volo.Abp.IdentityServer.Grants
 
         protected PersistedGrant()
         {
-
         }
 
         public PersistedGrant(Guid id)
+            : base(id)
         {
-            Id = id;
         }
     }
 }

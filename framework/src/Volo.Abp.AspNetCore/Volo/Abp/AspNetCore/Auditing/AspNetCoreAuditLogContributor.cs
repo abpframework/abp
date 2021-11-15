@@ -26,6 +26,11 @@ namespace Volo.Abp.AspNetCore.Auditing
                 return;
             }
 
+            if (httpContext.WebSockets.IsWebSocketRequest)
+            {
+                return;
+            }
+
             if (context.AuditInfo.HttpMethod == null)
             {
                 context.AuditInfo.HttpMethod = httpContext.Request.Method;

@@ -25,7 +25,11 @@ namespace Volo.Abp.EventBus
         {
             foreach (var localEvent in localEvents)
             {
-                await _localEventBus.PublishAsync(localEvent.EventType, localEvent.EventData, onUnitOfWorkComplete: false);
+                await _localEventBus.PublishAsync(
+                    localEvent.EventType,
+                    localEvent.EventData,
+                    onUnitOfWorkComplete: false
+                );
             }
         }
 
@@ -33,7 +37,12 @@ namespace Volo.Abp.EventBus
         {
             foreach (var distributedEvent in distributedEvents)
             {
-                await _distributedEventBus.PublishAsync(distributedEvent.EventType, distributedEvent.EventData, onUnitOfWorkComplete: false);
+                await _distributedEventBus.PublishAsync(
+                    distributedEvent.EventType,
+                    distributedEvent.EventData,
+                    onUnitOfWorkComplete: false,
+                    useOutbox: distributedEvent.UseOutbox
+                );
             }
         }
     }

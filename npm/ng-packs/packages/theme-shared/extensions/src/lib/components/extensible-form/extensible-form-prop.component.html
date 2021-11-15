@@ -1,4 +1,4 @@
-<div class="form-group" *abpPermission="prop.permission" [ngSwitch]="getComponent(prop)">
+<div class="mb-3 form-group" *abpPermission="prop.permission" [ngSwitch]="getComponent(prop)">
   <ng-template ngSwitchCase="input">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <input
@@ -18,18 +18,18 @@
   </ng-template>
 
   <ng-template ngSwitchCase="checkbox">
-    <div class="custom-checkbox custom-control" validationTarget>
+    <div class="form-check" validationTarget>
       <input
         #field
         [id]="prop.id"
         [formControlName]="prop.name"
         [abpDisabled]="disabled"
         type="checkbox"
-        class="custom-control-input"
+        class="form-check-input"
       />
       <ng-template
         [ngTemplateOutlet]="label"
-        [ngTemplateOutletContext]="{ $implicit: 'custom-control-label' }"
+        [ngTemplateOutletContext]="{ $implicit: 'form-check-label' }"
       ></ng-template>
     </div>
   </ng-template>
@@ -41,7 +41,7 @@
       [id]="prop.id"
       [formControlName]="prop.name"
       [abpDisabled]="disabled"
-      class="custom-select form-control"
+      class="form-select form-control"
     >
       <option
         *ngFor="let option of options$ | async; trackBy: track.by('value')"
@@ -60,7 +60,7 @@
       [formControlName]="prop.name"
       [abpDisabled]="disabled"
       multiple="multiple"
-      class="custom-select form-control"
+      class="form-select form-control"
     >
       <option
         *ngFor="let option of options$ | async; trackBy: track.by('value')"
@@ -132,7 +132,7 @@
 </div>
 
 <ng-template #label let-classes>
-  <label [htmlFor]="prop.id" [ngClass]="classes"
+  <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'"
     >{{ prop.displayName | abpLocalization }} {{ asterisk }}</label
   >
 </ng-template>

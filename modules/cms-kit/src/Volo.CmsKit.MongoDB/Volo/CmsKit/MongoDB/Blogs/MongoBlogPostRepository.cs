@@ -28,26 +28,24 @@ namespace Volo.CmsKit.MongoDB.Blogs
             Check.NotNullOrEmpty(slug, nameof(slug));
 
             var token = GetCancellationToken(cancellationToken);
-            
+
             var blogPost = await GetAsync(x =>
                     x.BlogId == blogId &&
                     x.Slug.ToLower() == slug,
                 cancellationToken: token);
 
-            var dbContext = await GetDbContextAsync(token);
-
-            blogPost.Author = await dbContext.Collection<CmsUser>().AsQueryable().FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, token);
+            blogPost.Author = await (await GetMongoQueryableAsync<CmsUser>(token)).FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, token);
 
             return blogPost;
         }
 
         public virtual async Task<int> GetCountAsync(
-            string filter = null, 
-            Guid? blogId = null, 
+            string filter = null,
+            Guid? blogId = null,
             CancellationToken cancellationToken = default)
         {
             var token = GetCancellationToken(cancellationToken);
-            
+
             return await (await GetMongoQueryableAsync(token))
                 .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
                 .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
@@ -65,7 +63,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
             var blogPostQueryable = await GetQueryableAsync();
-            
+
             var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
             var queryable = blogPostQueryable

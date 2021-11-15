@@ -11,7 +11,7 @@ import { EmailSettingsDto } from '../../proxy/models';
   animations: [collapse],
 })
 export class EmailSettingGroupComponent implements OnInit {
-  form: FormGroup;
+  form!: FormGroup;
 
   saving = false;
 

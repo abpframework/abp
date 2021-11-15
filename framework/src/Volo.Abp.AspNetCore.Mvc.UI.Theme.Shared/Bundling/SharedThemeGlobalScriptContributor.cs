@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(JQueryValidationUnobtrusiveScriptContributor),
         typeof(JQueryFormScriptContributor),
         typeof(Select2ScriptContributor),
-        typeof(DatatablesNetBs4ScriptContributor),
+        typeof(DatatablesNetBs5ScriptContributor),
         typeof(Sweetalert2ScriptContributor),
         typeof(ToastrScriptBundleContributor),
         typeof(MalihuCustomScrollbarPluginScriptBundleContributor),

@@ -19,7 +19,7 @@ export class ToasterService implements ToasterContract {
 
   private toasts = [] as Toaster.Toast[];
 
-  private containerComponentRef: ComponentRef<ToastContainerComponent>;
+  private containerComponentRef!: ComponentRef<ToastContainerComponent>;
 
   constructor(private contentProjectionService: ContentProjectionService) {}
 
@@ -100,7 +100,7 @@ export class ToasterService implements ToasterContract {
 
   show(
     message: LocalizationParam,
-    title: LocalizationParam = null,
+    title: LocalizationParam | undefined = undefined,
     severity: Toaster.Severity = 'neutral',
     options = {} as Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {

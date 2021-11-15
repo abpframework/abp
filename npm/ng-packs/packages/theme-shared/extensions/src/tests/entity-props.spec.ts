@@ -101,7 +101,7 @@ describe('EntityProp', () => {
     expect(prop.displayName).toBe(options.displayName);
     expect(prop.permission).toBe(options.permission);
     expect(prop.visible()).toBe(options.visible());
-    expect(prop.valueResolver()).toBe(options.valueResolver());
+    expect(prop.valueResolver(null)).toBe(options.valueResolver());
     expect(prop.sortable).toBe(options.sortable);
     expect(prop.columnWidth).toBe(options.columnWidth);
   });

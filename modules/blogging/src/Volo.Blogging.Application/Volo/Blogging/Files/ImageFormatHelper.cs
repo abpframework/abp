@@ -1,30 +1,33 @@
-﻿using System.Collections.Generic;
-using System.Drawing.Imaging;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 
 namespace Volo.Blogging.Areas.Blog.Helpers
 {
     public class ImageFormatHelper
     {
-        public static ImageFormat GetImageRawFormat(byte[] fileBytes)
+        public static IImageFormat GetImageRawFormat(Stream stream)
         {
-            using (var memoryStream = new MemoryStream(fileBytes))
+            using (var image = Image.Load(stream, out var imageFormat))
             {
-                return System.Drawing.Image.FromStream(memoryStream).RawFormat;
+                return imageFormat;
             }
         }
 
-        public static bool IsValidImage(byte[] fileBytes, ICollection<ImageFormat> validFormats)
+        public static bool IsValidImage(Stream stream, ICollection<IImageFormat> validFormats)
         {
-            // System.Drawing only works on windows => https://docs.microsoft.com/en-us/dotnet/api/system.drawing.image?view=net-5.0#remarks
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            try
             {
-                var imageFormat = GetImageRawFormat(fileBytes);
+                var imageFormat = GetImageRawFormat(stream);
+                
                 return validFormats.Contains(imageFormat);
             }
-
-            return true;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

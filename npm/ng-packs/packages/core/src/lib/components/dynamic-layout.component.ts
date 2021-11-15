@@ -52,9 +52,7 @@ export class DynamicLayoutComponent {
     this.router = injector.get(Router);
     this.routes = injector.get(RoutesService);
 
-    this.getLayout();
     this.checkLayoutOnNavigationEnd();
-
     this.listenToLanguageChange();
   }
 

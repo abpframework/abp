@@ -1,4 +1,5 @@
-import { ABP, SettingTabsService } from '@abp/ng.core';
+import { ABP } from '@abp/ng.core';
+import { SettingTabsService } from '@abp/ng.setting-management/config';
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +11,7 @@ export class SettingManagementComponent implements OnDestroy, OnInit {
   private subscription = new Subscription();
   settings: ABP.Tab[] = [];
 
-  selected: ABP.Tab;
+  selected!: ABP.Tab;
 
   trackByFn: TrackByFunction<ABP.Tab> = (_, item) => item.name;
 

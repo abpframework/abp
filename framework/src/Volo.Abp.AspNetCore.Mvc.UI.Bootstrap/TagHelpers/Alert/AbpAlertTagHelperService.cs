@@ -42,9 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
             }
 
             var buttonAsHtml =
-                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">" + Environment.NewLine +
-                "    <span aria-hidden=\"true\">&times;</span>" + Environment.NewLine +
-                " </button>";
+                "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>";
 
             output.PostContent.SetHtmlContent(buttonAsHtml);
         }
