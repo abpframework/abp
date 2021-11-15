@@ -38,7 +38,7 @@ Let's start with creating our Domain Entities.
 
 ### Step 1 - (Creating the Domain Entities)
 
-We can create a folder-structure under the `BookStore.Domain` project an in the image below.
+We can create a folder-structure under the `BookStore.Domain` project like in the image below.
 
 ![Domain-Layer-Folder-Structure](./domain-file-structure.png)
 
@@ -379,7 +379,7 @@ namespace BookStore.Books
 }
 ```
 
-We need to create two methods named **GetListAsync** and **GetAsync** and specify their return type as `BookWithDetails`. So by implementing these methods, we will return the book/books by their details (author, name and categories).
+We need to create two methods named **GetListAsync** and **GetAsync** and specify their return type as `BookWithDetails`. So by implementing these methods, we will return the book/books by their details (author name and categories).
 
 * **Category.cs**
 
@@ -586,7 +586,7 @@ builder.Entity<BookCategory>(b =>
 });
 ```
 
-Here, firstly we've defined the composite key for our `BookCategory` entity. `BookId` and `CategoryId` are together as composite keys for the `BookCategory` table. Then we've configured the many-to-many relationship between the `Book` and the `Category` table like in the above code-block.
+Here, firstly we've defined the composite key for our `BookCategory` entity. `BookId` and `CategoryId` are together as composite keys for the `BookCategory` table. Then we've configured the many-to-many relationship between the `Book` and the `Category` tables like in the above code-block.
 
 #### Implementing the `IBookRepository` Interface
 
@@ -1431,7 +1431,7 @@ Here, we've got all categories and authors inside of the `OnGetAsync` method. An
 
 ![Create Book Modal](./book-creation-modal.png)
 
-* When the user submits the form, the`OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.CreateAsync` method to create a new book.
+* When the user submits the form, the `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.CreateAsync` method to create a new book.
 
 Create a razor page named **EditModal.cshtml** (and **EditModal.cshtml.cs**).
 
