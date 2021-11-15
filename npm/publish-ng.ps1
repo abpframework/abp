@@ -17,14 +17,14 @@ if (-Not $Registry) {
 }
 
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
-$UpdateGulpCommand = "npm run update-gulp"
-$UpdateNgPacksCommand = "yarn update --registry $Registry"
+$UpdateGulpCommand = "yarn update-gulp --registry $Registry"
+$UpdateNgPacksCommand = "yarn update ./ng-packs abp --registry $Registry"
 
-$IsPrerelase = $(node publish-utils.js --prerelase --customVersion $Version) -eq "true";
+$IsPrerelase = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
 
 if ($IsPrerelase) {
-  $UpdateGulpCommand += " -- --prerelase"
-  $UpdateNgPacksCommand += " --prerelase"
+  $UpdateGulpCommand += " --prerelease"
+  $UpdateNgPacksCommand += " --prerelease"
 }
 
 $commands = (
