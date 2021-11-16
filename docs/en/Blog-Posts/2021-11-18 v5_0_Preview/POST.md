@@ -1,25 +1,25 @@
-# ABP Platform 5.0 Beta Has Been Released
+# ABP.IO Platform 5.0 RC.1 Has Been Released
 
-Today, we are excited to release the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.0 Beta**. This blog post introduces the new features and important changes in this new version.
+Today, we are excited to release the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.0 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
-> **The planned release date for the [5.0.0 Release Candidate](https://github.com/abpframework/abp/milestone/51) version is November, 2021**.
+> **The planned release date for the [5.0.0 Stable](https://github.com/abpframework/abp/milestone/57) version is December 14, 2021**.
 
 Please try this version and provide feedback for a more stable ABP version 5.0! Thank you all.
 
-## Get Started with the 5.0 Beta
+## Get Started with the 5.0 RC
 
-follow the steps below to try the version 5.0.0 beta today;
+follow the steps below to try the version 5.0.0 RC today;
 
-1) **Upgrade** the ABP CLI to the version `5.0.0-beta.3` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `5.0.0-rc.1` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 5.0.0-beta.3
+dotnet tool update Volo.Abp.Cli -g --version 5.0.0-rc.1
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 5.0.0-beta.3
+dotnet tool install Volo.Abp.Cli -g --version 5.0.0-rc.1
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -32,33 +32,24 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
 
-### Visual Studio Upgrade
-
-As .NET 6 is a preview version you need to make changes on the Visual Studio 2019. 
-If you want to run a .NET 6 project on Visual Studio 2019, you need to install the latest .NET SDK 6 from https://dotnet.microsoft.com/download/dotnet/6.0 
-and also enable the  `Use Previews of the .NET SDK` option from Visual Studio 2019 options.  See the screenshot:
-
-![Enable Using Previews of the .NET SDK ](use-preview-visual-studio.png)
-
-
-Alternatively you can download the latest **Visual Studio 2022** preview to run/create the .NET 6 projects.  We have tested the ABP solution with the Visual Studio 2022 `17.0.0 Preview 4.1`. Check out https://visualstudio.microsoft.com/vs/preview/ for more information.
+You can use any IDE that supports .NET 6.0, like **[Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)**.
 
 ### Migration Notes & Breaking Changes
 
 This is a major version and there are some breaking changes and upgrade steps. Here, a list of important breaking changes in this version:
 
-* Upgraded to .NET 6.0-rc.1, so you need to move your solution to .NET 6.0 if you want to use the ABP 5.0.
+* Upgraded to .NET 6.0, so you need to move your solution to .NET 6.0 if you want to use the ABP 5.0.
 * Upgraded to Bootstrap 5. This is the most important breaking change in ABP 5.0 and you should take care of it.
 * `IRepository` doesn't inherit from `IQueryable` anymore. It was already made obsolete in 4.2.
 * Removed NGXS and states from the Angular UI.
 * Removed gulp dependency from the MVC / Razor Pages UI in favor of `abp install-libs` command of the ABP CLI.
 * Deprecated `EntityCreatingEventData`, `EntityUpdatingEventData`, `EntityDeletingEventData` and `EntityChangingEventData` classes. See [#9897](https://github.com/abpframework/abp/issues/9897).
 
-Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull request](https://github.com/abpframework/abp/releases/tag/5.0.0-beta.1) on GitHub.
+Please see the [migration document](https://docs.abp.io/en/abp/5.0/Migration-Guides/Abp-5_0) for all the details. You can also see all [the closed issues and pull requests](https://github.com/abpframework/abp/milestone/51).
 
 ## What's new with 5.0?
 
-In this section, I will introduce some major features released with beta version.
+In this section, I will introduce some major features released with this version.
 
 ### Static (Generated) Client Proxies for C# and JavaScript
 
@@ -308,12 +299,14 @@ This books is a complete guide to start working with the ABP Framework, explore 
 
 ### New ABP Community posts
 
-Here, the latest posts added to the [ABP community](https://community.abp.io/):
+Here, some of the latest posts added to the [ABP community](https://community.abp.io/):
 
+* [Many to many relationship with ABP and EF Core](https://community.abp.io/articles/many-to-many-relationship-with-abp-and-ef-core-g7rm2qut)
+* [Add a new module to your ABP application](https://community.abp.io/articles/abp-framework-add-a-new-module-to-your-abp-application-eogrfm88)
+* [Changing UI Theme for ABP MVC / Razor Pages UI](https://community.abp.io/articles/changing-ui-theme-for-abp-mvc-razor-pages-ui-ravx6a0o)
+* [Create a Windows Service with the ABP Framework](https://community.abp.io/articles/create-a-windows-service-with-abp-framework-hop4dtra)
 * [Deploy ABP Framework .NET Core tiered application to docker swarm](https://community.abp.io/articles/deploy-abp-framework-dotnet-core-tiered-app-to-docker-swarm-kcrjbjec)
-* [How to override localization strings of depending modules](https://community.abp.io/articles/how-to-override-localization-strings-of-depending-modules-ba1oy03l)
 * [Centralized logging for .NET Core ABP microservices application using Seq](https://community.abp.io/articles/centralized-logging-for-.net-core-abp-microservices-app-using-seq-g1xe7e7y)
-* [Extend Tenant management and add custom host to your ABP application](https://community.abp.io/articles/extend-tenant-management-and-add-custom-host-to-your-abp-app-lwmi9lr5)
 
 Thanks to the ABP Community for all the contents they have published. You can also post your ABP and .NET related (text or video) contents to the ABP Community.
 
