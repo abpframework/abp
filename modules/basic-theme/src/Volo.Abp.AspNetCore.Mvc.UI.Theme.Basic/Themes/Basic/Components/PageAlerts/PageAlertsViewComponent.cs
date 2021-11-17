@@ -5,16 +5,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAle
 {
     public class PageAlertsViewComponent : AbpViewComponent
     {
-        private readonly IAlertManager _alertManager;
+        protected IAlertManager AlertManager { get; }
 
         public PageAlertsViewComponent(IAlertManager alertManager)
         {
-            _alertManager = alertManager;
+            AlertManager = alertManager;
         }
 
         public IViewComponentResult Invoke(string name)
         {
-            return View("~/Themes/Basic/Components/PageAlerts/Default.cshtml", _alertManager.Alerts);
+            return View("~/Themes/Basic/Components/PageAlerts/Default.cshtml", AlertManager.Alerts);
         }
     }
 }

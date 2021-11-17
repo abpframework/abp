@@ -34,16 +34,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
         protected virtual string CreatePostContent()
         {
-            var span = new TagBuilder("span");
-            span.Attributes.Add("aria-hidden", "true");
-            span.InnerHtml.AppendHtml("&times;");
-
             var button = new TagBuilder("button");
-            button.AddCssClass("close");
+            button.AddCssClass("btn-close");
             button.Attributes.Add("type", "button");
-            button.Attributes.Add("data-dismiss", "modal");
+            button.Attributes.Add("data-bs-dismiss", "modal");
             button.Attributes.Add("aria-label", L["Close"].Value);
-            button.InnerHtml.AppendHtml(span);
 
             return button.ToHtmlString();
         }

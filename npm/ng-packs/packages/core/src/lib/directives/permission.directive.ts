@@ -1,12 +1,10 @@
 import {
   ChangeDetectorRef,
   Directive,
-  ElementRef,
   Input,
   OnChanges,
   OnDestroy,
   Optional,
-  Renderer2,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
@@ -18,13 +16,11 @@ import { PermissionService } from '../services/permission.service';
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges {
-  @Input('abpPermission') condition: string;
+  @Input('abpPermission') condition: string | undefined;
 
-  subscription: Subscription;
+  subscription!: Subscription;
 
   constructor(
-    private elRef: ElementRef<HTMLElement>,
-    private renderer: Renderer2,
     @Optional() private templateRef: TemplateRef<any>,
     private vcRef: ViewContainerRef,
     private permissionService: PermissionService,
@@ -37,7 +33,7 @@ export class PermissionDirective implements OnDestroy, OnChanges {
     }
 
     this.subscription = this.permissionService
-      .getGrantedPolicy$(this.condition)
+      .getGrantedPolicy$(this.condition || '')
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         this.vcRef.clear();

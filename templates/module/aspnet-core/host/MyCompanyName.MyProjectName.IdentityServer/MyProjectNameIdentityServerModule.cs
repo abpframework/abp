@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
@@ -25,6 +26,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
+using Volo.Abp.Emailing;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
@@ -111,6 +113,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
                 options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
@@ -153,12 +156,11 @@ namespace MyCompanyName.MyProjectName
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
 
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
 
             context.Services.AddCors(options =>
@@ -179,6 +181,10 @@ namespace MyCompanyName.MyProjectName
                         .AllowCredentials();
                 });
             });
+
+#if DEBUG
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+#endif
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

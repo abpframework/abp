@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Public.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/tags")]
     public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
     {

@@ -11,19 +11,19 @@ namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.P
 {
     public class AccountProfilePersonalInfoManagementGroupViewComponent : AbpViewComponent
     {
-        private readonly IProfileAppService _profileAppService;
+        protected IProfileAppService ProfileAppService { get; }
 
         public AccountProfilePersonalInfoManagementGroupViewComponent(
             IProfileAppService profileAppService)
         {
-            _profileAppService = profileAppService;
+            ProfileAppService = profileAppService;
 
             ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public virtual async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = await _profileAppService.GetAsync();
+            var user = await ProfileAppService.GetAsync();
 
             var model = ObjectMapper.Map<ProfileDto, PersonalInfoModel>(user);
 

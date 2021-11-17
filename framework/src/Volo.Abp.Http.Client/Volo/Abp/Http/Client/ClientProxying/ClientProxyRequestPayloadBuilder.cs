@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -149,6 +150,13 @@ namespace Volo.Abp.Http.Client.ClientProxying
                         }
                         streamContent.Headers.ContentLength = content.ContentLength;
                         formData.Add(streamContent, parameter.Name, content.FileName ?? parameter.Name);
+                    }
+                }
+                else if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
+                {
+                    foreach (var item in (IEnumerable) value)
+                    {
+                        formData.Add(new StringContent(item.ToString(), Encoding.UTF8), parameter.Name);
                     }
                 }
                 else

@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.FeatureManagement
 {
     [RemoteService(Name = FeatureManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("featureManagement")]
+    [Area(FeatureManagementRemoteServiceConsts.ModuleName)]
     [Route("api/feature-management/features")]
     public class FeaturesController : AbpControllerBase, IFeatureAppService
     {

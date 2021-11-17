@@ -15,31 +15,24 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         [Inject]
         protected IMenuManager MenuManager { get; set; }
 
-        [CanBeNull]
-        protected AuthenticationStateProvider AuthenticationStateProvider;
+        [Inject]
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         [CanBeNull]
         protected SignOutSessionStateManager SignOutManager;
 
         protected ApplicationMenu Menu { get; set; }
-        
+
         protected override async Task OnInitializedAsync()
         {
             Menu = await MenuManager.GetAsync(StandardMenus.User);
 
             Navigation.LocationChanged += OnLocationChanged;
 
-            LazyGetService(ref AuthenticationStateProvider);
             LazyGetService(ref SignOutManager);
 
-            if (AuthenticationStateProvider != null)
-            {
-                AuthenticationStateProvider.AuthenticationStateChanged += async (task) =>
-                {
-                    Menu = await MenuManager.GetAsync(StandardMenus.User);
-                    await InvokeAsync(StateHasChanged);
-                };
-            }
+            AuthenticationStateProvider.AuthenticationStateChanged +=
+                AuthenticationStateProviderOnAuthenticationStateChanged;
         }
 
         protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
@@ -47,11 +40,19 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
             InvokeAsync(StateHasChanged);
         }
 
+        private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            Menu = await MenuManager.GetAsync(StandardMenus.User);
+            await InvokeAsync(StateHasChanged);
+        }
+
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
+            AuthenticationStateProvider.AuthenticationStateChanged -=
+                AuthenticationStateProviderOnAuthenticationStateChanged;
         }
-        
+
         private async Task NavigateToAsync(string uri, string target = null)
         {
             if (target == "_blank")

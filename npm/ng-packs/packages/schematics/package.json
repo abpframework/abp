@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.schematics",
-  "version": "5.0.0-beta.1-1",
+  "version": "5.0.0-rc.1",
   "description": "Schematics that works with ABP Backend",
   "keywords": [
     "schematics"

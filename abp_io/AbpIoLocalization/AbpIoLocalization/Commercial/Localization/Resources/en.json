@@ -23,6 +23,7 @@
     "Modules": "Modules",
     "LicenseExtendMessage": "Your license end date is extended to {0}",
     "LicenseUpgradeMessage": "Your license is upgraded to {0}",
+    "LicenseExtendAdnUpgradeMessage": "Your license has been extended until {0} and your license plan is upgraded to {1}.",
     "LicenseAddDeveloperMessage": "{0} developers added to your license",
     "Volo.AbpIo.Commercial:010004": "Can not find the specified user! The user must have already registered.",
     "MyOrganizations": "My organizations",
@@ -181,7 +182,7 @@
     "LicenseRenewalCost": "What is the license renewal cost after 1 year?",
     "LicenseRenewalCostExplanation": "The renewal (extend) rate of all ABP Commercial perpetual licenses is {0} of the license list price. The renewal price of the standard Team License is ${1}, standard Business License is ${2} and standard Enterprise License is ${3}. If you are already a customer, <a href='{4}' target='_blank'>log into your account</a> to review the available renewal pricing.",
     "HowDoIRenewMyLicense": "How do I renew my license?",
-    "HowDoIRenewMyLicenseExplanation": "You can renew your license by navigating to the <a href='{0}' target='_blank'>organization management page</a>. In order to take advantage of our discounted Early Renewal rates, make sure you renew before your license expires. Don't worry about not knowing when your Early Renewal opportunity closes, however. You'll receive 2 reminder e-mails before your subscription expires. We'll send them at 30 days, 7 days before expiration.",
+    "HowDoIRenewMyLicenseExplanation": "You can renew your license by navigating to the <a href='{0}' target='_blank'>organization management page</a>. In order to take advantage of our discounted Early Renewal rates, make sure you renew before your license expires. Don't worry about not knowing when your Early Renewal opportunity closes, however. You'll receive 3 reminder e-mails before your subscription expires. We'll send them at 30 days, 7 days and 1 day before expiration.",
     "IsSourceCodeIncluded": "Does my license include the source code of the commercial modules and themes?",
     "IsSourceCodeIncludedExplanation1": "Depends on the license type you've purchased:",
     "IsSourceCodeIncludedExplanation2": "<strong>Team</strong>: Your solution uses the modules and the themes as NuGet and NPM packages. It doesn't include their source code. In this way, you can easily upgrade these modules and themes whenever a new version is available. However, you can not get the source code of the modules and the themes.",
@@ -388,6 +389,7 @@
     "PurchaseTrialLicenseMessage": "Your license expiration date is {0}. <br> If you want to continue using the projects you created during your free trial period, you need to change the license keys in your <code>appsettings.secrets.json</code> files. Here is your license key:",
     "TrialLicenseExpireMessage": "You are using the trial license and your trial license will expire on {0}.",
     "TryForFree": "Try For Free",
-    "TrialLicenseExpiredInfo": "Your trial license period has expired!"
+    "TrialLicenseExpiredInfo": "Your trial license period has expired!",
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
   }
 }

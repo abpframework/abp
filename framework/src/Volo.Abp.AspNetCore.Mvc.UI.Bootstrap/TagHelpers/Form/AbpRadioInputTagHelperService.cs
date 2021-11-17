@@ -50,12 +50,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             foreach (var selectItem in selectItems)
             {
-                var inlineClass = (TagHelper.Inline ?? false) ? " custom-control-inline" : "";
+                var inlineClass = (TagHelper.Inline ?? false) ? " form-check-inline" : "";
                 var id = TagHelper.AspFor.Name + "Radio" + selectItem.Value;
                 var name = TagHelper.AspFor.Name;
 
                 var input = new TagBuilder("input");
-                input.AddCssClass("custom-control-input");
+                input.AddCssClass("form-check-input");
                 input.Attributes.Add("type", "radio");
                 input.Attributes.Add("id", id);
                 input.Attributes.Add("name", name);
@@ -72,12 +72,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 }
 
                 var label = new TagBuilder("label");
-                label.AddCssClass("custom-control-label");
+                label.AddCssClass("form-check-label");
                 label.Attributes.Add("for", id);
                 label.InnerHtml.AppendHtml(selectItem.Text);
 
                 var wrapper = new TagBuilder("div");
-                wrapper.AddCssClass("custom-control custom-radio" + inlineClass);
+                wrapper.AddCssClass("form-check" + inlineClass);
                 wrapper.InnerHtml.AppendHtml(input);
                 wrapper.InnerHtml.AppendHtml(label);
 

@@ -8,9 +8,9 @@ namespace Volo.Abp.Http.Client
     {
         protected AbpRemoteServiceOptions Options { get; }
 
-        public RemoteServiceConfigurationProvider(IOptionsSnapshot<AbpRemoteServiceOptions> options)
+        public RemoteServiceConfigurationProvider(IOptionsMonitor<AbpRemoteServiceOptions> options)
         {
-            Options = options.Value;
+            Options = options.CurrentValue;
         }
 
         public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name)

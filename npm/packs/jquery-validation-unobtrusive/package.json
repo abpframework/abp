@@ -1,11 +1,16 @@
 {
-  "version": "5.0.0-beta.1",
+  "version": "5.0.0-rc.1",
   "name": "@abp/jquery-validation-unobtrusive",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/jquery-validation-unobtrusive"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery-validation": "~5.0.0-beta.1",
+    "@abp/jquery-validation": "~5.0.0-rc.1",
     "jquery-validation-unobtrusive": "^3.2.11"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

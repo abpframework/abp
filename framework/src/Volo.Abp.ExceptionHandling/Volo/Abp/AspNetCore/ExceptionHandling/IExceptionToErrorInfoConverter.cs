@@ -12,9 +12,18 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         /// <summary>
         /// Converter method.
         /// </summary>
-        /// <param name="exception">The exception</param>
+        /// <param name="exception">The exception.</param>
         /// <param name="includeSensitiveDetails">Should include sensitive details to the error info?</param>
         /// <returns>Error info or null</returns>
+        [Obsolete("Use other Convert method.")]
         RemoteServiceErrorInfo Convert(Exception exception, bool includeSensitiveDetails);
+        
+        /// <summary>
+        /// Converter method.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <param name="options">Additional options.</param>
+        /// <returns>Error info or null</returns>
+        RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null);
     }
 }

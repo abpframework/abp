@@ -14,9 +14,11 @@ import {
   templateUrl: 'routes.component.html',
 })
 export class RoutesComponent {
-  @Input() smallScreen: boolean;
+  @Input() smallScreen?: boolean;
 
-  @ViewChildren('childrenContainer') childrenContainers: QueryList<ElementRef<HTMLDivElement>>;
+  @ViewChildren('childrenContainer') childrenContainers!: QueryList<ElementRef<HTMLDivElement>>;
+
+  rootDropdownExpand = {} as { [key: string]: boolean };
 
   trackByFn: TrackByFunction<TreeNode<ABP.Route>> = (_, item) => item.name;
 

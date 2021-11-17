@@ -2,6 +2,7 @@
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -37,6 +38,11 @@ namespace Volo.Abp.PermissionManagement.Web
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(PermissionManagementRemoteServiceConsts.ModuleName);
             });
         }
     }

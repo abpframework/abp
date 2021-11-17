@@ -265,5 +265,25 @@ namespace Volo.Abp.Domain.Entities
                     ? new Type[] { typeof(DisableIdGenerationAttribute) }
                     : new Type[] { });
         }
+
+        public static void TrySetTenantId(IEntity entity)
+        {
+            if (entity is not IMultiTenant multiTenantEntity)
+            {
+                return;
+            }
+
+            var tenantId = AsyncLocalCurrentTenantAccessor.Instance.Current?.TenantId;
+            if (tenantId == multiTenantEntity.TenantId)
+            {
+                return;
+            }
+
+            ObjectHelper.TrySetProperty(
+                multiTenantEntity,
+                x => x.TenantId,
+                () => tenantId
+            );
+        }
     }
 }
