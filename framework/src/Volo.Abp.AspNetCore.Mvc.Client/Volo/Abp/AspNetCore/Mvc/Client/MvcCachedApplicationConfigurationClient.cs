@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
                 async () => await ApplicationConfigurationAppService.GetAsync(),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30) //TODO: Should be configurable.
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
                 }
             );
 
