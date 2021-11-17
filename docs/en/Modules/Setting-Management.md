@@ -88,7 +88,7 @@ Setting Management module is extensible, just like the [setting system](../Setti
 If you want to create your own provider, implement the `ISettingManagementProvider` interface or inherit from the `SettingManagementProvider` base class:
 
 ````csharp
-public class CustomSettingProvider : SettingManagementProvider
+public class CustomSettingProvider : SettingManagementProvider, ITransientDependency
 {
     public override string Name => "Custom";
 
