@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            
+
 
             AddCommonAttributes(context, output);
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 
         protected virtual void AddCommonAttributes(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-toggle", "collapse");
+            output.Attributes.Add("data-bs-toggle", "collapse");
             output.Attributes.Add("aria-expanded", "false");
             output.Attributes.Add("aria-controls", TagHelper.BodyId);
         }
@@ -33,11 +33,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
         {
             if (TagHelper.BodyId.Trim().Split(' ').Length > 1)
             {
-                output.Attributes.Add("data-target", ".multi-collapse");
+                output.Attributes.Add("data-bs-target", ".multi-collapse");
                 return;
             }
 
-            output.Attributes.Add("data-target", "#" + TagHelper.BodyId);
+            output.Attributes.Add("data-bs-target", "#" + TagHelper.BodyId);
         }
 
         protected virtual void AddLinkAttributes(TagHelperContext context, TagHelperOutput output)

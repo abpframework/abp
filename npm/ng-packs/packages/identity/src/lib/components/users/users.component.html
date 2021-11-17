@@ -4,7 +4,7 @@
       <div class="col col-md-6">
         <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
       </div>
-      <div class="text-right col col-md-6">
+      <div class="text-end col col-md-6">
         <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
       </div>
     </div>
@@ -53,17 +53,15 @@
           <ng-template ngbNavContent>
             <div
               *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
-              class="custom-checkbox custom-control mb-2"
+              class="form-check mb-2"
             >
               <input
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
                 [attr.id]="'roles-' + i"
                 [formControl]="roleGroup.controls[roles[i].name]"
               />
-              <label class="custom-control-label" [attr.for]="'roles-' + i">{{
-                roles[i].name
-              }}</label>
+              <label class="form-check-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
             </div>
           </ng-template>
         </li>

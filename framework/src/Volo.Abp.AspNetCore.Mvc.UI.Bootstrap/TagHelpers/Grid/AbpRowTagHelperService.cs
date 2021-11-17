@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             }
             if (output.TagName == "abp-form-row")
             {
-                output.Attributes.AddClass("form-row");
+                output.Attributes.AddClass("row");
             }
 
             output.TagName = "div";
@@ -50,7 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
                 return;
             }
 
-            output.Attributes.AddClass("no-gutters");
+            output.Attributes.AddClass("g-0");
         }
     }
 }

@@ -7,6 +7,11 @@ namespace Volo.Abp.Domain.Entities
     [Serializable]
     public abstract class Entity : IEntity
     {
+        protected Entity()
+        {
+            EntityHelper.TrySetTenantId(this);
+        }
+        
         /// <inheritdoc/>
         public override string ToString()
         {

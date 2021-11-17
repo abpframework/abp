@@ -18,10 +18,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
         {
             switch (TagHelper.Align)
             {
-                case DropdownAlign.Right:
-                    output.Attributes.AddClass("dropdown-menu-right");
+                case DropdownAlign.End:
+                    output.Attributes.AddClass("dropdown-menu-end");
                     return;
-                case DropdownAlign.Left:
+                case DropdownAlign.Start:
                     return;
             }
         }

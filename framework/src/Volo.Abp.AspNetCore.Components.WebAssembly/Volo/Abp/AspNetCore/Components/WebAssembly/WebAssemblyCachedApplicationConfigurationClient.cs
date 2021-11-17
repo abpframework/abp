@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
@@ -14,25 +14,25 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         )]
     public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
-        protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
+        protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
 
         protected ApplicationConfigurationCache Cache { get; }
 
         protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
         public WebAssemblyCachedApplicationConfigurationClient(
-            IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
+            AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
             ApplicationConfigurationCache cache,
             ICurrentTenantAccessor currentTenantAccessor)
         {
-            Proxy = proxy;
+            ApplicationConfigurationAppService = applicationConfigurationAppService;
             Cache = cache;
             CurrentTenantAccessor = currentTenantAccessor;
         }
 
         public virtual async Task InitializeAsync()
         {
-            var configurationDto = await Proxy.Service.GetAsync();
+            var configurationDto = await ApplicationConfigurationAppService.GetAsync();
 
             Cache.Set(configurationDto);
 

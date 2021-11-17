@@ -10,9 +10,9 @@ namespace Volo.Abp.Data
         protected AbpDbConnectionOptions Options { get; }
 
         public DefaultConnectionStringResolver(
-            IOptionsSnapshot<AbpDbConnectionOptions> options)
+            IOptionsMonitor<AbpDbConnectionOptions> options)
         {
-            Options = options.Value;
+            Options = options.CurrentValue;
         }
 
         [Obsolete("Use ResolveAsync method.")]
@@ -32,9 +32,9 @@ namespace Volo.Abp.Data
             {
                 return Options.ConnectionStrings.Default;
             }
-            
+
             var connectionString = Options.GetConnectionStringOrNull(connectionStringName);
-            
+
             if (!connectionString.IsNullOrEmpty())
             {
                 return connectionString;

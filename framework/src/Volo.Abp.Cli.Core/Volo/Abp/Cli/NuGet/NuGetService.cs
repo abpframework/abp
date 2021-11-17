@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.NuGet
 
         public async Task<bool> PackageExistAsync(string packageId, string version = null)
         {
-            var versionList = await GetPackageVersionListAsync(packageId, false, true);
+            var versionList = await GetPackageVersionListAsync(packageId, false);
 
             if (versionList == null)
             {
@@ -60,7 +60,7 @@ namespace Volo.Abp.Cli.NuGet
 
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
         {
-            var versionList = await GetPackageVersionListAsync(packageId, includeNightly, includeReleaseCandidates);
+            var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
 
             if (versionList == null)
             {
@@ -95,19 +95,45 @@ namespace Volo.Abp.Cli.NuGet
 
         }
 
-        public async Task<List<string>> GetPackageVersionListAsync(string packageId, bool includeNightly = false,
-            bool includeReleaseCandidates = false)
+        public async Task<List<string>> GetPackageVersionListAsync(string packageId, bool includeNightly = false)
         {
             if (includeNightly)
             {
-                var includeNightlyUrl = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
-                return await GetPackageVersionListFromUrlAsync(includeNightlyUrl);
+                return await GetPackageVersionsFromMyGet(packageId);
             }
 
-            var nugetUrl = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
-            var commercialUrl = await GetNuGetUrlForCommercialPackage(packageId);
+            if (CommercialPackages.IsCommercial(packageId))
+            {
+                return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
+            }
+            else
+            {
+                var packagesFromNugetOrg = await GetPackageVersionsFromNuGetOrgAsync(packageId);
+                if (packagesFromNugetOrg != null)
+                {
+                    return packagesFromNugetOrg;
+                }
+            }
 
-            return (await GetPackageVersionListFromUrlAsync(nugetUrl)) ?? (await GetPackageVersionListFromUrlAsync(commercialUrl));
+            return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
+        }
+
+        private async Task<List<string>> GetPackageVersionsFromAbpCommercialNuGetAsync(string packageId)
+        {
+            var url = await GetNuGetUrlForCommercialPackage(packageId);
+            return await GetPackageVersionListFromUrlAsync(url);
+        }
+
+        private async Task<List<string>> GetPackageVersionsFromNuGetOrgAsync(string packageId)
+        {
+            var url = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            return await GetPackageVersionListFromUrlAsync(url);
+        }
+
+        private async Task<List<string>> GetPackageVersionsFromMyGet(string packageId)
+        {
+            var url = $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            return await GetPackageVersionListFromUrlAsync(url);
         }
 
         private async Task<List<string>> GetPackageVersionListFromUrlAsync(string url)
@@ -122,7 +148,16 @@ namespace Volo.Abp.Cli.NuGet
                     logger: Logger
                 ))
                 {
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    if (responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        //the package doesn't exist...
+                        return null;
+                    }
+                    else
+                    {
+                        await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    }
+
                     var responseContent = await responseMessage.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
                 }

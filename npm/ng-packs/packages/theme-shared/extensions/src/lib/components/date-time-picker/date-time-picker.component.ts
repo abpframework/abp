@@ -58,11 +58,11 @@ import { selfFactory } from '../../utils/factory.util';
   ],
 })
 export class DateTimePickerComponent {
-  @Input() prop: FormProp;
+  @Input() prop!: FormProp;
   @Input() meridian = false;
 
-  @ViewChild(NgbInputDatepicker) date: NgbInputDatepicker;
-  @ViewChild(NgbTimepicker) time: NgbTimepicker;
+  @ViewChild(NgbInputDatepicker) date!: NgbInputDatepicker;
+  @ViewChild(NgbTimepicker) time!: NgbTimepicker;
 
   constructor(public readonly cdRef: ChangeDetectorRef) {}
 

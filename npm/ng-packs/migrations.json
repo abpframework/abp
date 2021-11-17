@@ -1,0 +1,60 @@
+{
+  "migrations": [
+    {
+      "version": "13.0.0-beta.1",
+      "description": "Add default base to nx.json if its not currently set",
+      "factory": "./src/migrations/update-13-0-0/set-default-base-if-not-set",
+      "cli": "nx",
+      "package": "@nrwl/workspace",
+      "name": "set-default-base-if-not-set"
+    },
+    {
+      "version": "13.0.0-beta.4",
+      "description": "Move global settings into nx.json, and project specific settings into workspace.json",
+      "cli": "nx",
+      "implementation": "./src/migrations/update-13-0-0/config-locations/config-locations",
+      "package": "@nrwl/workspace",
+      "name": "13-0-0-config-locations"
+    },
+    {
+      "cli": "nx",
+      "version": "12.9.0",
+      "description": "Fixes invalid importPaths for buildable and publishable libs.",
+      "factory": "./src/migrations/update-12-9-0/update-invalid-import-paths",
+      "package": "@nrwl/angular",
+      "name": "update-invalid-import-paths"
+    },
+    {
+      "cli": "nx",
+      "version": "13.0.0-beta.10",
+      "description": "Adds postcss packages needed for Tailwind support if ng-packagr is already installed.",
+      "factory": "./src/migrations/update-13-0-0/add-postcss-packages",
+      "package": "@nrwl/angular",
+      "name": "add-postcss-packages"
+    },
+    {
+      "cli": "nx",
+      "version": "12.8.0-beta.0",
+      "description": "Remove Typescript Preprocessor Plugin",
+      "factory": "./src/migrations/update-12-8-0/remove-typescript-plugin",
+      "package": "@nrwl/cypress",
+      "name": "remove-typescript-plugin"
+    },
+    {
+      "cli": "nx",
+      "version": "12.9.0-beta.0",
+      "description": "Add outputs for caching",
+      "factory": "./src/migrations/update-12-9-0/add-outputs",
+      "package": "@nrwl/linter",
+      "name": "add-outputs"
+    },
+    {
+      "cli": "nx",
+      "version": "12.9.0-beta.0",
+      "description": "Remove ESLint parserOptions.project config if no rules requiring type-checking are in use",
+      "factory": "./src/migrations/update-12-4-0/remove-eslint-project-config-if-no-type-checking-rules",
+      "package": "@nrwl/linter",
+      "name": "remove-eslint-project-config-if-no-type-checking-rules-again"
+    }
+  ]
+}

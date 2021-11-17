@@ -2,7 +2,7 @@
 {
     public enum DropdownAlign
     {
-        Left,
-        Right
+        Start,
+        End
     }
 }

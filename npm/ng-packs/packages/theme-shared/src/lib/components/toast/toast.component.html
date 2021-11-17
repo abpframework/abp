@@ -3,7 +3,7 @@
     <i class="fa icon" [ngClass]="iconClass"></i>
   </div>
   <div class="abp-toast-content">
-    <button class="abp-toast-close-button" (click)="close()" *ngIf="toast.options.closable">
+    <button class="abp-toast-close-button" (click)="close()" *ngIf="toast.options?.closable">
       <i class="fa fa-times"></i>
     </button>
     <div class="abp-toast-title">

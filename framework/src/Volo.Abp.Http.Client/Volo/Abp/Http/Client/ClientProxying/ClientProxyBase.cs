@@ -132,11 +132,19 @@ namespace Volo.Abp.Http.Client.ClientProxying
                 );
             }
 
-            var response = await client.SendAsync(
-                requestMessage,
-                HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken(requestContext.Arguments)
-            );
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.SendAsync(
+                    requestMessage,
+                    HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
+                    GetCancellationToken(requestContext.Arguments)
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new AbpRemoteCallException($"An error occurred during the ABP remote HTTP request. ({ex.Message}) See the inner exception for details.", ex);
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -197,26 +205,46 @@ namespace Volo.Abp.Http.Client.ClientProxying
         {
             if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
             {
-                var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
-                    await response.Content.ReadAsStringAsync()
-                );
+                RemoteServiceErrorResponse errorResponse;
+                try
+                {
+                    errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+                        await response.Content.ReadAsStringAsync()
+                    );
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpRemoteCallException(
+                        new RemoteServiceErrorInfo
+                        {
+                            Message = response.ReasonPhrase,
+                            Code = response.StatusCode.ToString()
+                        },
+                        ex
+                    )
+                    {
+                        HttpStatusCode = (int)response.StatusCode
+                    };
+                }
 
                 throw new AbpRemoteCallException(errorResponse.Error)
                 {
                     HttpStatusCode = (int) response.StatusCode
                 };
             }
-
-            throw new AbpRemoteCallException(
-                new RemoteServiceErrorInfo
-                {
-                    Message = response.ReasonPhrase,
-                    Code = response.StatusCode.ToString()
-                }
-            )
+            else
             {
-                HttpStatusCode = (int) response.StatusCode
-            };
+                throw new AbpRemoteCallException(
+                    new RemoteServiceErrorInfo
+                    {
+                        Message = response.ReasonPhrase,
+                        Code = response.StatusCode.ToString()
+                    }
+                )
+                {
+                    HttpStatusCode = (int) response.StatusCode
+                };
+            }
         }
 
         protected virtual void AddHeaders(

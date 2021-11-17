@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
         {
             if (CultureHelper.IsRtl)
             {
-                context.Files.AddIfNotContains("/libs/bootstrap/css/bootstrap-rtl.css");
+                context.Files.AddIfNotContains("/libs/bootstrap/css/bootstrap.rtl.css");
             }
             else
             {
