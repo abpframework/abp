@@ -32,26 +32,23 @@ Finally, configure `AbpApplicationCreationOptions` to replace default dependency
 
 ### ASP.NET Core Application
 
-Call `UseAutofac()` in the **Startup.cs** file as shown below:
+Call `UseAutofac()` in the **Program.cs** file as shown below:
 
 ````csharp
-public class Startup
+public class Program
 {
-    public IServiceProvider ConfigureServices(IServiceCollection services)
+    public static int Main(string[] args)
     {
-        services.AddApplication<MyWebModule>(options =>
-        {
-            //Integrate Autofac!
-            options.UseAutofac();
-        });
-
-        return services.BuildServiceProviderFromFactory();
+        CreateHostBuilder(args).Build().Run();
     }
 
-    public void Configure(IApplicationBuilder app)
-    {
-        app.InitializeApplication();
-    }
+    internal static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .UseAutofac(); //Integrate Autofac!
 }
 ````
 
