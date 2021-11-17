@@ -45,21 +45,23 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             var cacheKey = CreateCacheKey();
             var httpContext = HttpContextAccessor?.HttpContext;
 
-            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+            if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
             {
+
                 return configuration;
             }
+
 
             configuration = await Cache.GetOrAddAsync(
                 cacheKey,
                 async () => await ApplicationConfigurationAppService.GetAsync(),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30) //TODO: Should be configurable.
                 }
             );
 
-            if (httpContext != null)
+            if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest)
             {
                 httpContext.Items[cacheKey] = configuration;
             }
@@ -72,7 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             var cacheKey = CreateCacheKey();
             var httpContext = HttpContextAccessor?.HttpContext;
 
-            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+            if (httpContext != null  && !httpContext.WebSockets.IsWebSocketRequest && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
             {
                 return configuration;
             }
