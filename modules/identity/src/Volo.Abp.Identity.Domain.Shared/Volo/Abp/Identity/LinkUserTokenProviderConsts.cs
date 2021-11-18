@@ -4,6 +4,8 @@
     {
         public static string LinkUserTokenProviderName { get; set; } = "AbpLinkUser";
 
-        public static string LinkUserTokenPurpose { get; set; } = "AbpLinkUserLogin";
+        public static string LinkUserTokenPurpose { get; set; } = "AbpLinkUser";
+
+        public static string LinkUserLoginTokenPurpose { get; set; } = "AbpLinkUserLogin";
     }
 }

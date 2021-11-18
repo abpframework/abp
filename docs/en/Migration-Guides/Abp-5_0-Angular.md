@@ -22,7 +22,58 @@ The new ABP Angular UI is based on Angular v12. We started to compile Angular UI
 
 ## Bootstrap 5
 
-TODO
+ABP 5.0 now works with Bootstrap 5. For details, please refer to the official [migration guide](https://getbootstrap.com/docs/5.0/migration/) provided by Bootstrap.
+
+We have updated dependencies of the `ThemeShared` package, therefore when you update `@abp/ng.theme.shared`, it will install the necessary dependencies. 
+
+### RTL
+
+Bootstrap 5 provides its own CSS file for RTL(right-to-left) languages. Therefore, we have removed `bootstrap-rtl.min.css` from `@abp/ng.theme.shared`.
+
+In angular.json, make the following change:
+
+Replace 
+
+`"node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css"` with 
+
+`"node_modules/bootstrap/dist/css/bootstrap.rtl.min.css"`
+
+```js
+{
+  // ...
+    "styles": [{
+      "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+      "inject": false,
+      "bundleName": "bootstrap-rtl.min"
+    }]
+}
+```
+
+That's it for open source templates.
+
+### Commercial
+
+Starting from version 5.0, Lepton styles get bundled with Bootstrap. That's why you don't need to provide `bootstrap` styles in `angular.json` anymore.
+
+Remove the following two objects from the `styles` array in `angular.json`
+
+```js
+{
+  // ...
+    "styles": [{
+      "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+      "inject": false,
+      "bundleName": "bootstrap-rtl.min"
+    },
+    {
+      "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "inject": true,
+      "bundleName": "bootstrap-ltr.min"
+    }]
+}
+```
+
+After you have implemented the necessary changes explained by Bootstrap, it should be good to go.
 
 ## NGXS has been removed
 
@@ -47,11 +98,11 @@ If you don't want to use the NGXS, you should remove all NGXS related imports, i
 [`@angular/localize`](https://angular.io/api/localize) dependency has been removed from `@abp/ng.core` package. The package must be installed in your app. Run the following command to install:
 
 ```bash
-npm install @angular/localize
+npm install @angular/localize@12
 
 # or
 
-yarn add @angular/localize
+yarn add @angular/localize@12
 ```
 
 > ABP Angular UI packages are not dependent on the `@angular/localize` package. However, some packages (like `@ng-bootstrap/ng-bootstrap`) depend on the package. Thus, this package needs to be installed in your project.

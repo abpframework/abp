@@ -39,7 +39,12 @@ namespace Volo.Abp.Cli.ServiceProxying.Angular
             var prompt = args.ExtraProperties.ContainsKey("p") || args.ExtraProperties.ContainsKey("prompt");
             var defaultValue = prompt ? null : "__default";
 
-            var module = args.Module ?? defaultValue;
+            var module = defaultValue;
+            if (args.ExtraProperties.ContainsKey("t") || args.ExtraProperties.ContainsKey("module"))
+            {
+                module = args.Module;
+            }
+
             var apiName = args.ApiName ?? defaultValue;
             var source = args.Source ?? defaultValue;
             var target = args.Target ?? defaultValue;

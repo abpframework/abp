@@ -285,6 +285,16 @@ This can be a breaking change in rare cases (for example, if you create host sid
 
 ## Community News
 
+### ABP Community Talks 2021.12
+
+![community-talks](community-talks.png)
+
+As the core ABP development team, we've decided to organize monthly live meetings with the ABP community. The first live meeting will be at **December 16, 2021, 17:00 (UTC)** on YouTube. ABP core team members will present some of the new features coming with ABP 5.0.
+
+**The YouTube event link is: https://www.youtube.com/watch?v=uLu2t5E8T-w**
+
+You can also [subscribe to the Volosoft channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) for reminders for further ABP events and videos.
+
 ### ABP was on ASP.NET Community Startup!
 
 It was great for us to be invited to Microsoft's [ASP.NET Community Weekly Standup](https://dotnet.microsoft.com/live/community-standup) show, at September 28. There was a very high attention and that made us very happy. Thanks to the ABP Community and all the watchers :) If you've missed the talk, [you can watch it here](https://www.youtube.com/watch?v=vMWM-_ihjwM).

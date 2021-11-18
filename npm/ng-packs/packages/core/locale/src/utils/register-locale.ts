@@ -28,7 +28,7 @@ export function registerLocale(
       return import(
         /* webpackMode: "lazy-once" */
         /* webpackChunkName: "locales"*/
-        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
+        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant).js/ */
         /* webpackExclude: /[/\\]global|extra/ */
         `@angular/common/locales/${localeMap[locale] || locale}.js`
       )
