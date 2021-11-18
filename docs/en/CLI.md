@@ -16,6 +16,17 @@ To update an existing installation:
 dotnet tool update -g Volo.Abp.Cli
 ````
 
+To use a preview version cli, append a `--version` param.take version `5.0.0-rc.1` as an example below
+
+````bash
+### install 
+dotnet tool install Volo.Abp.Cli -g --version 5.0.0-rc.1
+
+###  update
+dotnet tool update Volo.Abp.Cli -g --version 5.0.0-rc.1
+
+````
+
 ## Global Options
 
 While each command may have a set of options, there are some global options those can be used with any command;
