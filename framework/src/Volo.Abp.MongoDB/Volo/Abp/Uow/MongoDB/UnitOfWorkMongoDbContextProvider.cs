@@ -130,7 +130,7 @@ namespace Volo.Abp.Uow.MongoDB
             var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
-            if (unitOfWork.Options.IsTransactional && IsSupportedTransactions(client))
+            if (unitOfWork.Options.IsTransactional)
             {
                 return CreateDbContextWithTransaction(unitOfWork, mongoUrl, client, database);
             }
@@ -150,7 +150,7 @@ namespace Volo.Abp.Uow.MongoDB
             var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
-            if (unitOfWork.Options.IsTransactional && IsSupportedTransactions(client))
+            if (unitOfWork.Options.IsTransactional)
             {
                 return await CreateDbContextWithTransactionAsync(
                     unitOfWork,
@@ -187,6 +187,12 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
+                if (!IsSupportedTransactions(client))
+                {
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
+                
                 session.StartTransaction();
 
                 unitOfWork.AddTransactionApi(
@@ -225,6 +231,12 @@ namespace Volo.Abp.Uow.MongoDB
                 if (unitOfWork.Options.Timeout.HasValue)
                 {
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                }
+
+                if (!IsSupportedTransactions(client))
+                {
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
                 }
 
                 session.StartTransaction();
