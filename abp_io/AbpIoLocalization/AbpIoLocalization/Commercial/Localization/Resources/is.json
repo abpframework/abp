@@ -23,6 +23,7 @@
     "Modules": "Einingar",
     "LicenseExtendMessage": "Leyfið þitt og lokadagur hefur verið framlengt til {0}",
     "LicenseUpgradeMessage": "Leyfið þitt hefur verið uppfært í {0}",
+    "LicenseExtendAdnUpgradeMessage": "Leyfið þitt hefur verið framlengt til {0} og leyfisáætlunin þín er uppfærð í {1}.",
     "LicenseAddDeveloperMessage": "{0} forritarar bættu við Leyfið þitt",
     "Volo.AbpIo.Commercial:010004": "Finn ekki tiltekinn notanda! Notandinn er líklega nú þegar skráður.",
     "MyOrganizations": "Félögin mín",
@@ -91,6 +92,7 @@
     "Saas": "Saas",
     "LanguageManagement": "Túngumálaumsjón",
     "TextTemplateManagement": "Textasmíðastjórnun",
+    "See All Modules": "Sjá AllModules",
     "ABPSuite": "ABP Suite",
     "AbpSuiteShortDescription": "ABP Suite er viðbótar tól sem kemur með ABP Commercial.",
     "AbpSuiteExplanation": "Það gerir þér kleift að byggja vefsíður á örfáum mínútum. Það er .NET Core Global tól sem hægt er að setja upp frá skipanalínunni. Það getur búið til nýja ABP lausn, búið til CRUD síður úr gagnagrunninum í framendann.",
@@ -387,6 +389,7 @@
     "PurchaseTrialLicenseMessage": "Gildistími leyfis þíns er {0}. <br> Ef þú vilt halda áfram að nota verkefnin sem þú bjóst til á ókeypis prufutímabilinu þarftu að breyta leyfislyklunum í <code> appsettings.secrets.json </code> skránni þinn. Hér er leyfislykillinn þinn:",
     "TrialLicenseExpireMessage": "Þú ert að nota prufuleyfið og prufuleyfið rennur út {0}.",
     "TryForFree": "Prófaðu ókeypis",
-    "TrialLicenseExpiredInfo": "Prófunartímabil þitt er útrunnið!"
+    "TrialLicenseExpiredInfo": "Prófunartímabil þitt er útrunnið!",
+    "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>."
   }
 }
