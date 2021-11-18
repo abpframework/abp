@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Usar outro serviço para entrar",
     "UserLockedOutMessage": "Esta conta de usuário está bloqueada devido a muitas tentativas de acesso. Por favor, espero alguns instantes e tente novamente.",
     "InvalidUserNameOrPassword": "Usuário ou senha estão incorretos!",
-    "LoginIsNotAllowed": "Você não tem permissão para fazer o login! Sua conta está inativa ou precisa confirmar seu e-mail / número de telefone.",
+    "LoginIsNotAllowed": "Você não tem permissão para fazer o login! Sua conta está inativa ou precisa confirmar seu e-mail/número de telefone.",
     "SelfRegistrationDisabledMessage": "Não é permitido que você crie uma nova conta neste site. Contate um administrador para que ele crie uma conta para você.",
     "LocalLoginDisabledMessage": "O login local está desativado para este aplicativo.",
     "Login": "Entrar",

@@ -97,7 +97,7 @@
     "Community": "Communauté",
     "Marketing": "Commercialisation",
     "CommunityPrivacyPolicyConfirmation": "J'accepte les conditions générales et la <a href=\"https://commercial.abp.io/Privacy\"> politique de confidentialité </a>.",
-    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Ouvrez un problème </a> sur le GitHub pour demander un article / didacticiel que vous souhaitez voir sur ce site Web.",
+    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Ouvrez un problème </a> sur le GitHub pour demander un article/didacticiel que vous souhaitez voir sur ce site Web.",
     "ArticleRequestMessageBody": "Ici, la liste des articles demandés par la communauté. Voulez-vous écrire un article demandé? Veuillez cliquer sur la demande et vous joindre à la discussion.",
     "Language": "Langue",
     "CreateArticleLanguageInfo": "La langue du contenu de l'article.",

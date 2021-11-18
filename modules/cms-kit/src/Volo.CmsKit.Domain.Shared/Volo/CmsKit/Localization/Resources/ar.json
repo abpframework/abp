@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "هل أنت متأكد من حذف هذه الصفحة؟",
     "PageId": "صفحة",
     "Pages": "الصفحات",
-    "PageSlugInformation": "سبيكة تستخدم على url. سيكون عنوان url الخاص بك هو \"/ pages / {{slug}}\".",
+    "PageSlugInformation": "سبيكة تستخدم على url. سيكون عنوان url الخاص بك هو \"/pages/{{slug}}\".",
     "Permission:BlogManagement": "إدارة المدونة",
     "Permission:BlogManagement.Create": "إنشاء",
     "Permission:BlogManagement.Delete": "حذف",

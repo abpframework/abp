@@ -255,7 +255,7 @@
     "Name": "Nombre",
     "Surname": "Apellido",
     "CompanyName": "nombre de empresa",
-    "DoYouAgreePrivacyPolicy": "Acepto los <a href=\"https://account.abp.io/Account/TermsConditions\"> Términos y condiciones </a> y <a href = \"https://account.abp.io/Account/Privacy \"> Política de privacidad </a>.",
+    "DoYouAgreePrivacyPolicy": "Acepto los <a href=\"https://account.abp.io/Account/TermsConditions\"> Términos y condiciones </a> y <a href=\"https://account.abp.io/Account/Privacy \"> Política de privacidad </a>.",
     "Free": "Gratis",
     "DDDEBook": "Libro electrónico DDD",
     "PracticalGuideForImplementingDDD": "Este libro es una guía práctica para implementar el diseño basado en dominios con el marco ABP.",

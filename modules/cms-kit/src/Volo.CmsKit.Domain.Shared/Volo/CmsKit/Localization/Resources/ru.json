@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Вы уверены, что хотите удалить эту страницу?",
     "PageId": "Страница",
     "Pages": "Страницы",
-    "PageSlugInformation": "Слаг используется для URL. Ваш URL-адрес будет '/ pages / {{slug}}'.",
+    "PageSlugInformation": "Слаг используется для URL. Ваш URL-адрес будет '/pages/{{slug}}'.",
     "Permission:BlogManagement": "Управление блогом",
     "Permission:BlogManagement.Create": "Создавать",
     "Permission:BlogManagement.Delete": "Удалить",

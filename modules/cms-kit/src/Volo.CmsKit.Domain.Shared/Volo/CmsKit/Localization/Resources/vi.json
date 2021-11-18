@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Bạn có chắc chắn xóa trang này không?",
     "PageId": "Trang",
     "Pages": "Các trang",
-    "PageSlugInformation": "Slug được sử dụng trên url. Url của bạn sẽ là '/ pages / {{slug}}'.",
+    "PageSlugInformation": "Slug được sử dụng trên url. Url của bạn sẽ là '/pages/{{slug}}'.",
     "Permission:BlogManagement": "Quản lý blog",
     "Permission:BlogManagement.Create": "Tạo ra",
     "Permission:BlogManagement.Delete": "Xóa bỏ",

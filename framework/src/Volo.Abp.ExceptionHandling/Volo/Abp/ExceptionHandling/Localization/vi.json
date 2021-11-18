@@ -13,7 +13,7 @@
     "DefaultErrorMessage404": "Tài nguyên không tìm thấy!",
     "DefaultErrorMessage404Detail": "Tài nguyên được yêu cầu không được tìm thấy trên máy chủ!",
     "EntityNotFoundErrorMessage": "Không có thực thể nào {0} với id = {1}!",
-    "AbpDbConcurrencyErrorMessage": "Dữ liệu bạn gửi đã bị người dùng / khách hàng khác thay đổi. Vui lòng hủy các thay đổi bạn đã thực hiện và thử lại từ đầu.",
+    "AbpDbConcurrencyErrorMessage": "Dữ liệu bạn gửi đã bị người dùng/khách hàng khác thay đổi. Vui lòng hủy các thay đổi bạn đã thực hiện và thử lại từ đầu.",
     "Error": "Lỗi",
     "UnhandledException": "Tình huống ngoại lệ không thể xử lí được!",
     "401Message": "Không được phép",

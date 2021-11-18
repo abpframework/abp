@@ -97,7 +97,7 @@
     "Community": "Yhteisö",
     "Marketing": "Markkinointi",
     "CommunityPrivacyPolicyConfirmation": "Hyväksyn käyttöehdot ja <a href=\"https://commercial.abp.io/Privacy\"> tietosuojakäytännön </a>.",
-    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Avaa ongelma </a> GitHubissa pyytääksesi artikkelia / opetusohjelmaa, jonka haluat nähdä tällä verkkosivustolla.",
+    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Avaa ongelma </a> GitHubissa pyytääksesi artikkelia/opetusohjelmaa, jonka haluat nähdä tällä verkkosivustolla.",
     "ArticleRequestMessageBody": "Tässä luettelo yhteisön pyytämistä artikkeleista. Haluatko kirjoittaa pyydetyn artikkelin? Napsauta pyyntöä ja liity keskusteluun.",
     "Language": "Kieli",
     "CreateArticleLanguageInfo": "Viestin sisällön kieli.",
