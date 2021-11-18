@@ -353,10 +353,12 @@ namespace Volo.Abp.BlazoriseUI
             return InvokeAsync(CreateModal.Hide);
         }
 
-        protected virtual void ClosingCreateModal(ModalClosingEventArgs eventArgs)
+        protected virtual Task ClosingCreateModal(ModalClosingEventArgs eventArgs)
         {
             // cancel close if clicked outside of modal area
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task OpenEditModalAsync(TListViewModel entity)
@@ -421,10 +423,12 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual void ClosingEditModal(ModalClosingEventArgs eventArgs)
+        protected virtual Task ClosingEditModal(ModalClosingEventArgs eventArgs)
         {
             // cancel close if clicked outside of modal area
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task CreateEntityAsync()

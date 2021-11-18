@@ -7,8 +7,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
         public void AddScripts(BundleContext context)
         {
             context.Add("_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js");
-            context.Add("_content/Blazorise/blazorise.js");
-            context.Add("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.js");
             context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
             context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/lang-utils.js");
         }
@@ -23,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
             {
                 Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css"
             });
-            
+
             context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css");
             context.Add("_content/Blazorise/blazorise.css");
             context.Add("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css");
