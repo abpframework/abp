@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "अमान्य उपयोगकर्ता नाम या पासवर्ड!",
     "LoginIsNotAllowed": "आपको लॉगिन करने की अनुमति नहीं है! आपका खाता निष्क्रिय है या आपके ईमेल/फ़ोन नंबर की पुष्टि करने की आवश्यकता है।",
     "InvalidUsername": "अमान्य उपयोगकर्ता नाम या पासवर्ड!",
+    "InvalidAuthenticatorCode": "अमान्य प्रमाणक कोड!",
     "TheTargetUserIsNotLinkedToYou": "लक्ष्य उपयोगकर्ता आपसे जुड़ा नहीं है!"
   }
 }
