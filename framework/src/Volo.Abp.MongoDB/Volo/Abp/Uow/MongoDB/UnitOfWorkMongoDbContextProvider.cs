@@ -70,7 +70,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseName = mongoUrl.DatabaseName;
             if (databaseName.IsNullOrWhiteSpace())
             {
-                databaseName = ConnectionStringNameAttribute.GetConnStringName<TMongoDbContext>();
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             }
 
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
@@ -98,7 +98,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseName = mongoUrl.DatabaseName;
             if (databaseName.IsNullOrWhiteSpace())
             {
-                databaseName = ConnectionStringNameAttribute.GetConnStringName<TMongoDbContext>();
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             }
 
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
