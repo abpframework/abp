@@ -57,7 +57,7 @@ namespace Volo.Abp.TestApp.Application
             var uniquePersonName = Guid.NewGuid().ToString();
             var personDto = await _peopleAppService.CreateAsync(new PersonDto {Name = uniquePersonName});
 
-            var repository = ServiceProvider.GetService<IRepository<Person, Guid>>();
+            var repository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
             var person = await repository.FindAsync(personDto.Id);
 
             person.ShouldNotBeNull();

@@ -27,6 +27,7 @@ import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
+import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { TENANT_KEY } from './tokens/tenant-key.token';
 import { noop } from './utils/common-utils';
@@ -176,6 +177,26 @@ export class CoreModule {
         },
         { provide: OAuthStorage, useFactory: storageFactory },
         { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
+        {
+          provide: LOCALIZATIONS,
+          multi: true,
+          useValue: localizationContributor(options.localizations),
+          deps: [LocalizationService],
+        },
+      ],
+    };
+  }
+
+  static forChild(options = {} as ABP.Child): ModuleWithProviders<RootCoreModule> {
+    return {
+      ngModule: RootCoreModule,
+      providers: [
+        {
+          provide: LOCALIZATIONS,
+          multi: true,
+          useValue: localizationContributor(options.localizations),
+          deps: [LocalizationService],
+        },
       ],
     };
   }

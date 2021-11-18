@@ -7,6 +7,7 @@
         public const string ModuleFileAlreadyExists = "AbpStudio:ModuleFileAlreadyExists";
         public const string IncorrectFileFormat = "AbpStudio:IncorrectFileFormat";
         public const string ModuleNotFound = "AbpStudio:ModuleNotFound";
+        public const string SolutionNotFound = "AbpStudio:SolutionNotFound";
         public const string ModuleNotSpecified = "AbpStudio:ModuleNotSpecified";
         public const string SolutionNotSpecified = "AbpStudio:SolutionNotSpecified";
         public const string ProjectAlreadyExistInTheModule = "AbpStudio:ProjectAlreadyExistInTheModule";

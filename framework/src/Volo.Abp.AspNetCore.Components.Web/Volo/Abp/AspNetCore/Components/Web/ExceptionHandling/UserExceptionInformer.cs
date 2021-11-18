@@ -63,7 +63,11 @@ namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 
         protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
         {
-            return ExceptionToErrorInfoConverter.Convert(context.Exception, Options.SendExceptionsDetailsToClients);
+            return ExceptionToErrorInfoConverter.Convert(context.Exception, options =>
+            {
+                options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
+                options.SendStackTraceToClients = Options.SendStackTraceToClients;
+            });
         }
     }
 }

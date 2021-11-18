@@ -11,6 +11,7 @@ using Volo.CmsKit.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 
 namespace Volo.CmsKit.Admin.Web
 {
@@ -151,6 +152,11 @@ namespace Volo.CmsKit.Admin.Web
                             requiredPolicyName: CmsKitAdminPermissions.Menus.Update
                             );
                     });
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(CmsKitAdminRemoteServiceConsts.ModuleName);
             });
         }
     }

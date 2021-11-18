@@ -31,9 +31,23 @@ namespace Volo.Abp.Minify.NUglify
             string fileName = null,
             string originalFileName = null)
         {
-            var result = UglifySource(source, fileName);
-            CheckErrors(result, originalFileName);
-            return result.Code;
+            try
+            {
+                var result = UglifySource(source, fileName);
+                CheckErrors(result, originalFileName);
+                return result.Code;
+            }
+            catch (Exception e)
+            {
+                var errorMessage = "There is an error in uglifying the given source code!";
+
+                if (originalFileName != null)
+                {
+                    errorMessage += " Original file: " + originalFileName;
+                }
+
+                throw new NUglifyException($"{errorMessage}{Environment.NewLine}{e.Message}", e);
+            }
         }
 
         protected abstract UglifyResult UglifySource(string source, string fileName);

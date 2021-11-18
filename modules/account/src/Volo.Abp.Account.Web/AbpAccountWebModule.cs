@@ -9,6 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -62,6 +63,11 @@ namespace Volo.Abp.Account.Web
             {
                 options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
             });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(AccountRemoteServiceConsts.ModuleName);
+            });
         }
 
         private void ConfigureProfileManagementPage()
@@ -82,6 +88,7 @@ namespace Volo.Abp.Account.Web
                     .Configure(typeof(ManageModel).FullName,
                         configuration =>
                         {
+                            configuration.AddFiles("/client-proxies/account-proxy.js");
                             configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
                             configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/PersonalInfo/Default.js");
                         });

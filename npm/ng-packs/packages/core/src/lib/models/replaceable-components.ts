@@ -16,8 +16,8 @@ export namespace ReplaceableComponents {
     I,
     O extends { [K in keyof O]: EventEmitter<any> | Subject<any> },
   > {
-    inputs: { -readonly [K in keyof I]: { value: I[K]; twoWay?: boolean } };
-    outputs: { -readonly [K in keyof O]: (value: ABP.ExtractFromOutput<O[K]>) => void };
+    inputs?: { -readonly [K in keyof I]: { value: I[K]; twoWay?: boolean } };
+    outputs?: { -readonly [K in keyof O]: (value: ABP.ExtractFromOutput<O[K]>) => void };
     componentKey: string;
   }
 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -66,6 +67,11 @@ namespace Volo.CmsKit.Public.Web
                     .UseGridTables()
                     .UsePipeTables()
                     .Build());
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(CmsKitPublicRemoteServiceConsts.ModuleName);
+            });
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)

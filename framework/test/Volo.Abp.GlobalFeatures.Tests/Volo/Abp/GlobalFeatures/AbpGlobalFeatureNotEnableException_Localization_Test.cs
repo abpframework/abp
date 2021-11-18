@@ -22,7 +22,7 @@ namespace Volo.Abp.GlobalFeatures
                 var exception = new AbpGlobalFeatureNotEnabledException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
                     .WithData("ServiceName", "MyService")
                     .WithData("GlobalFeatureName", "TestFeature");;
-                var errorInfo = _exceptionToErrorInfoConverter.Convert(exception, false);
+                var errorInfo = _exceptionToErrorInfoConverter.Convert(exception);
                 errorInfo.Message.ShouldBe("'MyService'服务需要启用'TestFeature'功能.");
             }
         }

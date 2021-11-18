@@ -1,9 +1,9 @@
+import { HttpWaitService, LOADER_DELAY, SubscriptionService } from '@abp/ng.core';
+import { HttpRequest } from '@angular/common/http';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { createComponentFactory, Spectator, SpyObject } from '@ngneat/spectator/jest';
 import { Subject, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
-import { HttpWaitService, LOADER_DELAY, SubscriptionService } from '@abp/ng.core';
-import { HttpRequest } from '@angular/common/http';
 
 describe('LoaderBarComponent', () => {
   let spectator: Spectator<LoaderBarComponent>;
@@ -44,10 +44,13 @@ describe('LoaderBarComponent', () => {
   });
 
   it('should be interval unsubscribed', done => {
+    const request = new HttpRequest('GET', 'test');
+
     spectator.detectChanges();
     const httpWaitService = spectator.inject(HttpWaitService);
-    httpWaitService.addRequest(new HttpRequest('GET', 'test'));
+    httpWaitService.addRequest(request);
     expect(spectator.component.interval.closed).toBe(false);
+    httpWaitService.deleteRequest(request);
     timer(400).subscribe(() => {
       expect(spectator.component.interval.closed).toBe(true);
       done();

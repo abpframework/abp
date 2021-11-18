@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
     {
         public const string ViewPath = "/Views/Components/Themes/Shared/Demos/NavbarsDemo/Default.cshtml";
 
-        public IViewComponentResult Invoke()
+        public virtual IViewComponentResult Invoke()
         {
             return View(ViewPath);
         }

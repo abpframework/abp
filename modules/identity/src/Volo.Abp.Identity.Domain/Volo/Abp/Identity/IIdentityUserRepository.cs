@@ -58,6 +58,11 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             Guid? roleId = null,
             Guid? organizationUnitId = null,
+            string userName = null,
+            string phoneNumber = null,
+            string emailAddress = null,
+            bool? isLockedOut = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default
         );
 
@@ -90,6 +95,11 @@ namespace Volo.Abp.Identity
             string filter = null,
             Guid? roleId = null,
             Guid? organizationUnitId = null,
+            string userName = null,
+            string phoneNumber = null,
+            string emailAddress = null,
+            bool? isLockedOut = null,
+            bool? notActive = null,
             CancellationToken cancellationToken = default
         );
     }

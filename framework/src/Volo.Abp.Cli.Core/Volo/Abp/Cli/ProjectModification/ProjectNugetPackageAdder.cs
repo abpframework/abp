@@ -143,37 +143,38 @@ namespace Volo.Abp.Cli.ProjectModification
             return projectFile;
         }
 
-        protected virtual async Task ConvertPackageReferenceToProjectReference(string projectFile,string solutionFile, NugetPackageInfo package)
+        protected virtual async Task ConvertPackageReferenceToProjectReference(string projectFile, string solutionFile, NugetPackageInfo package)
         {
             var content = File.ReadAllText(projectFile);
-            var doc = new XmlDocument() {PreserveWhitespace = true};
+            var doc = new XmlDocument() { PreserveWhitespace = true };
 
-            doc.Load(StreamHelper.GenerateStreamFromString(content));
-
-            var nodes = doc.SelectNodes(
-                $"/Project/ItemGroup/PackageReference[starts-with(@Include, '{package.Name}')]");
-
-            if (nodes == null || nodes.Count < 1)
+            using (var stream = StreamHelper.GenerateStreamFromString(content))
             {
-                return;
+                doc.Load(stream);
+                var nodes = doc.SelectNodes($"/Project/ItemGroup/PackageReference[starts-with(@Include, '{package.Name}')]");
+                if (nodes == null || nodes.Count < 1)
+                {
+                    return;
+                }
+
+                var downloadedProjectPath = FindRelativeFolderToDownloadPackage(projectFile, solutionFile, package);
+                var oldNodeIncludeValue = nodes[0]?.Attributes?["Include"]?.Value;
+
+                if (package.Name == oldNodeIncludeValue)
+                {
+                    var referenceProjectPath = $"{downloadedProjectPath}\\{package.Name}.csproj";
+
+                    var newNode = doc.CreateElement("ProjectReference");
+                    var includeAttr = doc.CreateAttribute("Include");
+                    includeAttr.Value = referenceProjectPath;
+                    newNode.Attributes.Append(includeAttr);
+
+                    nodes[0]?.ParentNode?.ReplaceChild(newNode, nodes[0]);
+                }
+
+                File.WriteAllText(projectFile, doc.OuterXml);
+                await Task.CompletedTask;
             }
-
-            var downloadedProjectPath = FindRelativeFolderToDownloadPackage(projectFile, solutionFile, package);
-            var oldNodeIncludeValue = nodes[0]?.Attributes?["Include"]?.Value;
-
-            if (package.Name == oldNodeIncludeValue)
-            {
-                var referenceProjectPath = $"{downloadedProjectPath}\\{package.Name}.csproj";
-
-                var newNode = doc.CreateElement("ProjectReference");
-                var includeAttr = doc.CreateAttribute("Include");
-                includeAttr.Value = referenceProjectPath;
-                newNode.Attributes.Append(includeAttr);
-
-                nodes[0]?.ParentNode?.ReplaceChild(newNode, nodes[0]);
-            }
-
-            File.WriteAllText(projectFile, doc.OuterXml);
         }
 
         protected virtual async Task AddSourceCode(string projectFile, string solutionFile, NugetPackageInfo package, string version = null)
@@ -195,7 +196,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual string FindRelativeFolderToDownloadPackage(string projectFile, string solutionFile, NugetPackageInfo package)
         {
-            var folder =  Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
+            var folder = Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
 
             return new Uri(projectFile).MakeRelativeUri(new Uri(folder)).ToString().Replace("/", "\\");
         }
@@ -310,56 +311,52 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
         {
             var projectFileContent = File.ReadAllText(projectFile);
-            var doc = new XmlDocument() {PreserveWhitespace = true};
-            doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
-
-            var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
-            XmlNode itemGroupNode = null;
-
-            if (itemGroupNodes == null || itemGroupNodes.Count < 1)
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+            using (var stream = StreamHelper.GenerateStreamFromString(projectFileContent))
             {
-                var projectNodes = doc.SelectNodes("/Project");
-                var projectNode = projectNodes[0];
+                doc.Load(stream);
 
-                itemGroupNode = doc.CreateElement("ItemGroup");
-                projectNode.AppendChild(itemGroupNode);
+                var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
+                XmlNode itemGroupNode = null;
+
+                if (itemGroupNodes == null || itemGroupNodes.Count < 1)
+                {
+                    var projectNodes = doc.SelectNodes("/Project");
+                    var projectNode = projectNodes[0];
+
+                    itemGroupNode = doc.CreateElement("ItemGroup");
+                    projectNode.AppendChild(itemGroupNode);
+                }
+                else
+                {
+                    itemGroupNode = itemGroupNodes[0];
+                }
+
+                var packageReferenceNode = doc.CreateElement("PackageReference");
+
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = package.Name;
+                packageReferenceNode.Attributes.Append(includeAttr);
+
+                if (version != null)
+                {
+                    var versionAttr = doc.CreateAttribute("Version");
+                    versionAttr.Value = version;
+                    packageReferenceNode.Attributes.Append(versionAttr);
+                }
+
+                itemGroupNode.AppendChild(packageReferenceNode);
+                File.WriteAllText(projectFile, doc.OuterXml);
+                return Task.CompletedTask;
             }
-            else
-            {
-                itemGroupNode = itemGroupNodes[0];
-            }
-
-            var packageReferenceNode = doc.CreateElement("PackageReference");
-
-            var includeAttr = doc.CreateAttribute("Include");
-            includeAttr.Value = package.Name;
-            packageReferenceNode.Attributes.Append(includeAttr);
-
-            if (version != null)
-            {
-                var versionAttr = doc.CreateAttribute("Version");
-                versionAttr.Value = version;
-                packageReferenceNode.Attributes.Append(versionAttr);
-            }
-
-            itemGroupNode.AppendChild(packageReferenceNode);
-
-            File.WriteAllText(projectFile, doc.OuterXml);
-
-            return Task.CompletedTask;
         }
 
         protected virtual string GetAbpVersionOrNull(string projectFile)
         {
             var projectFileContent = File.ReadAllText(projectFile);
-
-            var doc = new XmlDocument() {PreserveWhitespace = true};
-
-            doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
-
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
-
-            return nodes?[0]?.Attributes?["Version"]?.Value;
+            return SolutionPackageVersionFinder.TryParseVersionFromCsprojFile(projectFileContent, out var version)
+                ? version
+                : null;
         }
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string packageName)

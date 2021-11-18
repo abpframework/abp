@@ -13,7 +13,7 @@
       },
       "x-prompt": "Please enter backend module name. (default: \"app\")"
     },
-    "api-name": {
+    "apiName": {
       "description": "Backend api name, a.k.a. remoteServiceName",
       "type": "string",
       "$default": {
