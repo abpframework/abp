@@ -184,7 +184,18 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                session.StartTransaction();
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
+
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
@@ -224,8 +235,19 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                session.StartTransaction();
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
 
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
+                
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
                     new MongoDbTransactionApi(
