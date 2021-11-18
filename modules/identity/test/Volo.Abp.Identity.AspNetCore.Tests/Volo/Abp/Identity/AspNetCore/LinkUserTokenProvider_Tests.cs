@@ -31,14 +31,16 @@ namespace Volo.Abp.Identity.AspNetCore
                 x.Value.ProviderType == typeof(LinkUserTokenProvider));
         }
 
-        [Fact]
-        public virtual async Task GenerateAndVerifyLinkTokenAsync()
+        [Theory]
+        [InlineData("TestTokenPurpose1")]
+        [InlineData("TestTokenPurpose2")]
+        [InlineData("TestTokenPurpose3")]
+        public virtual async Task GenerateAndVerifyLinkTokenAsync(string tokenPurpose)
         {
             var john = await UserRepository.GetAsync(TestData.UserJohnId);
-            var token = await IdentityLinkUserManager.GenerateLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId));
-            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), token)).ShouldBeTrue();
-
-            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), "123123")).ShouldBeFalse();
+            var token = await IdentityLinkUserManager.GenerateLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), tokenPurpose);
+            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), token, tokenPurpose)).ShouldBeTrue();
+            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), "123123", tokenPurpose)).ShouldBeFalse();
         }
     }
 }
