@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +7,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Misc;
-using MongoDB.Driver.Core.Servers;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
@@ -187,13 +184,18 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                if (!IsSupportedTransactions(client))
+                try
                 {
+                    session.StartTransaction();
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
+
                     dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
                     return dbContext;
                 }
-                
-                session.StartTransaction();
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
@@ -233,14 +235,19 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                if (!IsSupportedTransactions(client))
+                try
                 {
+                    session.StartTransaction();
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
+
                     dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
                     return dbContext;
                 }
-
-                session.StartTransaction();
-
+                
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
                     new MongoDbTransactionApi(
@@ -299,56 +306,6 @@ namespace Volo.Abp.Uow.MongoDB
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
         {
             return _cancellationTokenProvider.FallbackToProvider(preferredValue);
-        }
-
-        /// <summary>
-        /// https://github.com/mongodb/mongo-csharp-driver/blob/master/src/MongoDB.Driver.Core/Core/Bindings/CoreSession.cs#L495
-        /// </summary>
-        /// <param name="client"></param>
-        /// <returns></returns>
-        /// <exception cref="NotSupportedException"></exception>
-        protected virtual bool IsSupportedTransactions(MongoClient client)
-        {
-            try
-            {
-                var connectedDataBearingServers = client.Cluster.Description.Servers.Where(s => s.State == ServerState.Connected && s.IsDataBearing).ToList();
-            
-                if (connectedDataBearingServers.Count == 0)
-                {
-                    throw new NotSupportedException("StartTransaction cannot determine if transactions are supported because there are no connected servers.");
-                }
-
-                foreach (var connectedDataBearingServer in connectedDataBearingServers)
-                {
-                    var serverType = connectedDataBearingServer.Type;
-
-                    switch (serverType)
-                    {
-                        case ServerType.Standalone:
-                            throw new NotSupportedException("Standalone servers do not support transactions.");
-                        case ServerType.ShardRouter:
-                            Feature.ShardedTransactions.ThrowIfNotSupported(connectedDataBearingServer.Version);
-                            break;
-                        case ServerType.LoadBalanced:
-                            // do nothing, load balancing always supports transactions
-                            break;
-                        default:
-                            Feature.Transactions.ThrowIfNotSupported(connectedDataBearingServer.Version);
-                            break;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.LogError("The current MongoDB database does not support transactions, " +
-                                "All operations will be performed in non-transactions. " +
-                                "This may cause errors, " +
-                                "Please make your database support transactions.");
-                Logger.LogException(e);
-                return false;
-            }
-
-            return true;
         }
     }
 }
