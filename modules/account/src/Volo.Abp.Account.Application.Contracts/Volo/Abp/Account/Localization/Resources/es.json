@@ -60,6 +60,8 @@
     "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}",
     "PasswordReset": "Restablecer contraseña",
     "PasswordResetInfoInEmail": "Recibimos una solicitud de recuperación de cuenta. Si inició esta solicitud, haga clic en el siguiente enlace para restablecer su contraseña.",
-    "ResetMyPassword": "Restablecer mi contraseña"
+    "ResetMyPassword": "Restablecer mi contraseña",
+    "AccessDenied": "¡Acceso denegado!",
+    "AccessDeniedMessage": "No tienes acceso a este recurso."
   }
 }
