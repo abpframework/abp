@@ -10,11 +10,14 @@
     "ConnectionStrings": "Chuỗi kết nối",
     "DisplayName:DefaultConnectionString": "Chuỗi kết nối mặc định",
     "DisplayName:UseSharedDatabase": "Sử dụng cơ sở dữ liệu dùng chung",
+    "ManageHostFeatures": "Quản lý các tính năng của Máy chủ lưu trữ",
     "Permission:TenantManagement": "Quản lý khách thuê",
     "Permission:Create": "Tạo",
     "Permission:Edit": "Sửa",
     "Permission:Delete": "Xóa",
     "Permission:ManageConnectionStrings": "Quản lý chuỗi kết nối",
-    "Permission:ManageFeatures": "Quản lý các tính năng"
+    "Permission:ManageFeatures": "Quản lý các tính năng",
+    "DisplayName:AdminEmailAddress": "Địa chỉ Email Quản trị viên",
+    "DisplayName:AdminPassword": "Mật khẩu quản trị"
   }
 }
