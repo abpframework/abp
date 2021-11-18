@@ -23,6 +23,7 @@
     "Modules": "Moduli",
     "LicenseExtendMessage": "La data di fine della tua licenza è estesa a {0}",
     "LicenseUpgradeMessage": "La tua licenza è stata aggiornata a {0}",
+    "LicenseExtendAdnUpgradeMessage": "La tua licenza è stata estesa fino al {0} e il tuo piano di licenza è stato aggiornato a {1}.",
     "LicenseAddDeveloperMessage": "{0} sviluppatori aggiunti alla tua licenza",
     "Volo.AbpIo.Commercial:010004": "Impossibile trovare l'utente specificato! L'utente deve essere già registrato.",
     "MyOrganizations": "Le mie organizzazioni",
@@ -377,6 +378,18 @@
     "AddressValidationMessage": "L'indirizzo è troppo lungo!",
     "TaxNoValidationMessage": "TAX/VAT (IVA) è troppo lungo!",
     "NotesValidationMessage": "Il campo note è troppo lungo!",
-    "CheckYourBillingInfo": "Puoi creare una fattura solo una volta! Controlla i tuoi dati di fatturazione prima di creare una fattura."
+    "CheckYourBillingInfo": "Puoi creare una fattura solo una volta! Controlla i tuoi dati di fatturazione prima di creare una fattura.",
+    "Volo.AbpIo.Commercial:030000": "Hai già utilizzato il periodo di prova.",
+    "Volo.AbpIo.Commercial:030001": "Questo nome dell'organizzazione esiste già.",
+    "StartYourFreeTrial": "Inizia la tua prova gratuita",
+    "TrialLicenseModelInvalidErrorMessage": "Uno dei seguenti campi non è valido: nome del paese, dimensione dell'azienda, settore o scopo di utilizzo.",
+    "Trial": "Processo",
+    "Purchased": "Acquistato",
+    "PurchaseLicense": "Acquista licenza",
+    "PurchaseTrialLicenseMessage": "La data di scadenza della tua licenza è {0}. <br> Se desideri continuare a utilizzare i progetti che hai creato durante il periodo di prova gratuito, devi modificare le chiavi di licenza nei file <code>appsettings.secrets.json</code>. Ecco la tua chiave di licenza:",
+    "TrialLicenseExpireMessage": "Stai utilizzando la licenza di prova e la tua licenza di prova scadrà il {0}.",
+    "TryForFree": "Prova gratis",
+    "TrialLicenseExpiredInfo": "Il periodo della tua licenza di prova è scaduto!",
+    "CommercialNewsletterConfirmationMessage": "Accetto i <a href=\"https://commercial.abp.io/TermsConditions\">Termini e condizioni</a> e la <a href=\"https://commercial.abp.io/Privacy\">Informativa sulla privacy </a>."
   }
 }
