@@ -79,7 +79,7 @@
     "ManyMore": "以及更多",
     "ExploreTheABPFramework": "探索ABP框架",
     "WhyUseTheABPCommercial": "為什麽使用ABP商業版?",
-    "WhyUseTheABPCommercialExplanation": "<p class=\"lead mt- 5\">構建企業級的web應用程序可能復雜和耗時.</p><p>ABP商業版提供所有現代企業級基於ASP.NET Core的解決方案所需要的基礎設施. 從設計到部署,整個開發生命周期都由ABP的內置功能和模塊提供支持.</p>",
+    "WhyUseTheABPCommercialExplanation": "<p class=\"lead mt-5\">構建企業級的web應用程序可能復雜和耗時.</p><p>ABP商業版提供所有現代企業級基於ASP.NET Core的解決方案所需要的基礎設施. 從設計到部署,整個開發生命周期都由ABP的內置功能和模塊提供支持.</p>",
     "StartupTemplatesShortDescription": "啟動模板使你在幾秒內快速啟動項目.",
     "UIFrameworksOptions": "UI框架選項;",
     "DatabaseProviderOptions": "數據庫提供程序選項;",
