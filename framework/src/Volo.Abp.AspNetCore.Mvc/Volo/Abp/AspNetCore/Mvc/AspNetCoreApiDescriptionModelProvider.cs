@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -335,7 +336,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RootPath;
             }
 
-            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
+            var areaAttr = TypeDescriptor.GetAttributes(controllerType).OfType<AreaAttribute>().FirstOrDefault();
             if (areaAttr != null)
             {
                 return areaAttr.RouteValue;
@@ -352,7 +353,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             var remoteServiceAttr =
-                controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
+                TypeDescriptor.GetAttributes(controllerType).OfType<RemoteServiceAttribute>().FirstOrDefault();
             if (remoteServiceAttr?.Name != null)
             {
                 return remoteServiceAttr.Name;
