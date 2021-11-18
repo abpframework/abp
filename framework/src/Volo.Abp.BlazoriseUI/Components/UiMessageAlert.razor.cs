@@ -147,10 +147,12 @@ namespace Volo.Abp.BlazoriseUI.Components
             });
         }
 
-        protected virtual void OnModalClosing(ModalClosingEventArgs eventArgs)
+        protected virtual Task OnModalClosing(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.EscapeClosing
                 || eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
     }
 }

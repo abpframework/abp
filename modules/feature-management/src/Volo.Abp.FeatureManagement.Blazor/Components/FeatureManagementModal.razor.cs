@@ -24,7 +24,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
 
         [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
-        
+
         [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
         protected Modal Modal;
@@ -198,9 +198,11 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
         }
 
-        protected virtual void ClosingModal( ModalClosingEventArgs eventArgs )
+        protected virtual Task ClosingModal(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
     }
 }
