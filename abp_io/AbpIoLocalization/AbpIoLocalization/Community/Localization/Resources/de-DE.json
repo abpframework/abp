@@ -85,6 +85,7 @@
     "ProfileImageChange": "Ändern Sie das Profilbild",
     "BlogItemErrorMessage": "Die neuesten Blogpost-Details konnten nicht abgerufen werden.",
     "PlannedReleaseDate": "Geplantes Erscheinungsdatum",
-    "CommunityArticleRequestErrorMessage": "Die Anfrage nach den neuesten Beiträgen von Github konnte nicht abgerufen werden."
+    "CommunityArticleRequestErrorMessage": "Die Anfrage nach den neuesten Beiträgen von Github konnte nicht abgerufen werden.",
+    "SeeMore": "Mehr Sehen"
   }
 }

@@ -139,6 +139,7 @@
     "LinkedinUrlValidationMessage": "Votre URL Linkedin ne peut pas inclure d'espace blanc, veuillez vous assurer que votre URL Linkedin est correcte.",
     "NoPostsFound": "Aucun article trouvé!",
     "SearchInPosts": "Rechercher dans les messages...",
-    "MinimumSearchContent": "Vous devez saisir au moins 3 caractères!"
+    "MinimumSearchContent": "Vous devez saisir au moins 3 caractères!",
+    "SeeMore": "Voir Plus"
   }
 }

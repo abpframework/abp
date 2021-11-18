@@ -142,6 +142,7 @@
     "MinimumSearchContent": "आपको कम से कम 3 वर्ण दर्ज करने होंगे!",
     "Volo.AbpIo.Domain:060001": "स्रोत URL (\"{ArticleUrl}\") जीथब URL नहीं है",
     "Volo.AbpIo.Domain:060002": "लेख सामग्री Github (\"{ArticleUrl}\") संसाधन से उपलब्ध नहीं है।",
-    "Volo.AbpIo.Domain:060003": "कोई लेख सामग्री नहीं मिली!"
+    "Volo.AbpIo.Domain:060003": "कोई लेख सामग्री नहीं मिली!",
+    "SeeMore": "और देखें"
   }
 }
