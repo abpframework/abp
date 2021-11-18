@@ -14,6 +14,9 @@ namespace Volo.Abp.Authorization.Permissions
         [NotNull]
         PermissionGroupDefinition GetGroup( [NotNull] string name );
 
+        [NotNull]
+        PermissionGroupDefinition GetGroup( [NotNull] string name );
+
         IReadOnlyList<PermissionDefinition> GetPermissions();
 
         IReadOnlyList<PermissionGroupDefinition> GetGroups();

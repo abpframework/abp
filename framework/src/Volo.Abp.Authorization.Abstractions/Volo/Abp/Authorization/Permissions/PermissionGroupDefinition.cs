@@ -81,6 +81,11 @@ namespace Volo.Abp.Authorization.Permissions
             return _permissions.Remove( permission );
         }
 
+        public virtual bool RemovePermission( PermissionDefinition permission )
+        {
+            return _permissions.Remove( permission );
+        }
+
         public virtual List<PermissionDefinition> GetPermissionsWithChildren()
         {
             var permissions = new List<PermissionDefinition>();
