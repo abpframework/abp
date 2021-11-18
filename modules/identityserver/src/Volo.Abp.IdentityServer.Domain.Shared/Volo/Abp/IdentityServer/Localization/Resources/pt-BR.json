@@ -3,6 +3,13 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "O nome da Identity Resource já existe: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "O nome da Api Resource já existe: {Name}",
-    "Volo.IdentityServer:DuplicateClientId": "ClientId já existe: {ClientId}"
+    "Volo.IdentityServer:DuplicateApiScopeName": "O nome do Api Scope já existe: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId já existe: {ClientId}",
+    "UserLockedOut": "A conta do usuário foi bloqueada devido a tentativas de login inválidas. Aguarde um pouco e tente novamente.",
+    "InvalidUserNameOrPassword": "Nome de usuário ou senha inválidos!",
+    "LoginIsNotAllowed": "Você não tem permissão para fazer o login! Sua conta está inativa ou precisa confirmar seu e-mail / número de telefone.",
+    "InvalidUsername": "Nome de usuário ou senha inválidos!",
+    "InvalidAuthenticatorCode": "Código de autenticador inválido!",
+    "TheTargetUserIsNotLinkedToYou": "O usuário-alvo não está vinculado a você!"
   }
 }

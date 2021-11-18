@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "Recurso não encontrado!",
     "DefaultErrorMessage404Detail": "O recurso requisitado não pode ser encontrado pelo servidor!",
     "EntityNotFoundErrorMessage": "Não existe uma entidade {0} com código = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Os dados que você enviou já foram alterados por outro usuário / cliente. Descarte as alterações feitas e tente desde o início.",
     "Error": "Erro",
     "UnhandledException": "Exceção não tratada!",
     "401Message": "Autenticação inválida",
     "403Message": "Não autorizado",
     "404Message": "Página não encontrada",
-    "500Message": "Erro interno do servidor"
+    "500Message": "Erro interno do servidor",
+    "403MessageDetail": "Você não está autorizado a realizar esta operação!",
+    "404MessageDetail": "Desculpe, não há nada neste endereço."
   }
 }
