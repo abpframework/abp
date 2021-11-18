@@ -53,6 +53,15 @@
     "ResetPassword_Information": "الرجاء إدخال كلمة المرور الجديدة الخاصة بك.",
     "YourPasswordIsSuccessfullyReset": "تم إعادة تعيين كلمة المرور الخاصة بك بنجاح.",
     "GoToTheApplication": "اذهب إلى التطبيق",
-    "BackToLogin": "العودة إلى تسجيل الدخول"
+    "BackToLogin": "العودة إلى تسجيل الدخول",
+    "ProfileTab:Password": "تغيير كلمة المرور",
+    "ProfileTab:PersonalInfo": "معلومات شخصية",
+    "ReturnToApplication": "العودة إلى التطبيق",
+    "Volo.Account:InvalidEmailAddress": "لا يمكن العثور على عنوان البريد الإلكتروني المحدد: {0}",
+    "PasswordReset": "إعادة تعيين كلمة المرور",
+    "PasswordResetInfoInEmail": "لقد تلقينا طلب استرداد الحساب! إذا بدأت هذا الطلب ، فانقر فوق الارتباط التالي لإعادة تعيين كلمة المرور الخاصة بك.",
+    "ResetMyPassword": "إعادة تعيين كلمة المرور الخاصة بي",
+    "AccessDenied": "تم الرفض!",
+    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد."
   }
 }
