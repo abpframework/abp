@@ -14,5 +14,6 @@
         /// Default value: null.
         /// </summary>
         public static string DbSchema { get; set; } = null;
+
     }
 }

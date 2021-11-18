@@ -9,5 +9,6 @@ namespace Volo.Abp.TenantManagement
         public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpTenantManagement";
+
     }
 }

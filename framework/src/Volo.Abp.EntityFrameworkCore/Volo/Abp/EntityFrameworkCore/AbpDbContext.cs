@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -43,6 +44,8 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
 
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
+
+        protected NamingConventionOptions NamingConventionOptions;
 
         public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
@@ -89,9 +92,18 @@ namespace Volo.Abp.EntityFrameworkCore
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
-        protected AbpDbContext(DbContextOptions<TDbContext> options)
+        protected AbpDbContext(
+            DbContextOptions<TDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
             : base(options)
         {
+            this.NamingConventionOptions = namingConventionOptions.Value;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            base.OnConfiguring(builder);
+            builder.ConfigureNamingConvention<TDbContext>(this.NamingConventionOptions);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

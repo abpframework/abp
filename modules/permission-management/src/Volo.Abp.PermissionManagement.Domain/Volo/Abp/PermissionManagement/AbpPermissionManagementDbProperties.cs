@@ -9,5 +9,6 @@ namespace Volo.Abp.PermissionManagement
         public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpPermissionManagement";
+
     }
 }

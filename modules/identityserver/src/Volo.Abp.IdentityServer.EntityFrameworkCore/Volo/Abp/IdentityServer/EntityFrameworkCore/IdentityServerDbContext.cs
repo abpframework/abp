@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
@@ -77,17 +78,23 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
         public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
 
-        public IdentityServerDbContext(DbContextOptions<IdentityServerDbContext> options)
-            : base(options)
+        public IdentityServerDbContext(DbContextOptions<IdentityServerDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
 
         }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ConfigureIdentityServer();
+
+            builder.ConfigureNamingConvention<IdentityServerDbContext>(this.NamingConventionOptions);
+
         }
+
     }
 }

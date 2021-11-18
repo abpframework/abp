@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
@@ -11,8 +12,10 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
     {
         public DbSet<BackgroundJobRecord> BackgroundJobs { get; set; }
 
-        public BackgroundJobsDbContext(DbContextOptions<BackgroundJobsDbContext> options)
-            : base(options)
+        public BackgroundJobsDbContext(
+            DbContextOptions<BackgroundJobsDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
 
         }
@@ -22,6 +25,10 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             base.OnModelCreating(builder);
 
             builder.ConfigureBackgroundJobs();
+
+            builder.ConfigureNamingConvention<BackgroundJobsDbContext>(this.NamingConventionOptions);
+
         }
+
     }
 }

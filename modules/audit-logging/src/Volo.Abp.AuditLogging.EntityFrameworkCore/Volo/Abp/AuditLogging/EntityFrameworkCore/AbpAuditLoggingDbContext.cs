@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -9,17 +10,24 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
     {
         public DbSet<AuditLog> AuditLogs { get; set; }
 
-        public AbpAuditLoggingDbContext(DbContextOptions<AbpAuditLoggingDbContext> options)
-            : base(options)
+        public AbpAuditLoggingDbContext(
+            DbContextOptions<AbpAuditLoggingDbContext> options,
+            IOptions<NamingConventionOptions> namingConventionOptions)
+            : base(options, namingConventionOptions)
         {
 
         }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ConfigureAuditLogging();
+
+            builder.ConfigureNamingConvention<AbpAuditLoggingDbContext>(this.NamingConventionOptions);
+
         }
+
     }
 }
