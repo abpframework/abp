@@ -188,7 +188,7 @@ namespace Volo.Abp.Uow.MongoDB
                 {
                     session.StartTransaction();
                 }
-                catch (Exception e)
+                catch (NotSupportedException e)
                 {
                     Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
                     Logger.LogException(e);
@@ -239,7 +239,7 @@ namespace Volo.Abp.Uow.MongoDB
                 {
                     session.StartTransaction();
                 }
-                catch (Exception e)
+                catch (NotSupportedException e)
                 {
                     Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
                     Logger.LogException(e);
