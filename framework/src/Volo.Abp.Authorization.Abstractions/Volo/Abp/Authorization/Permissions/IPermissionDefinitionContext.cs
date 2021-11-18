@@ -17,6 +17,7 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         /// <param name="name">Name of the group</param>
         /// <returns></returns>
+		[NotNull]
         PermissionGroupDefinition GetGroup([NotNull] string name);
 
         /// <summary>
@@ -25,14 +26,14 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         /// <param name="name">Name of the group</param>
         /// <returns></returns>
-        [NotNull]
-        PermissionGroupDefinition GetGroupOrNull(string name);
+		[CanBeNull]
+		PermissionGroupDefinition GetGroupOrNull([NotNull] string name);
 
-        [CanBeNull]
-        PermissionGroupDefinition AddGroup(
-            [NotNull] string name, 
-            ILocalizableString displayName = null,
-            MultiTenancySides multiTenancySide = MultiTenancySides.Both);
+		[NotNull]
+		PermissionGroupDefinition AddGroup(
+			[NotNull] string name, 
+			ILocalizableString displayName = null,
+			MultiTenancySides multiTenancySide = MultiTenancySides.Both);
 
         void RemoveGroup(string name);
 
