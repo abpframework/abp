@@ -1,0 +1,10 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Volo.Authorization:010001": "فشل التفويض! لم تمنح السياسة المعينة.",
+    "Volo.Authorization:010002": "فشل التفويض! لم تمنح السياسة المقدمة: {PolicyName}",
+    "Volo.Authorization:010003": "فشل التفويض! لم يتم منح السياسة المقدمة للمورد المحدد: {ResourceName}",
+    "Volo.Authorization:010004": "فشل التفويض! لم يتم منح المطلب المحدد للمورد المحدد: {ResourceName}",
+    "Volo.Authorization:010005": "فشل التفويض! لم يتم منح المتطلبات المحددة للمورد المحدد: {ResourceName}"
+  }
+}

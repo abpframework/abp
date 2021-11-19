@@ -2,6 +2,23 @@
   "culture": "ru",
   "texts": {
     "Settings": "Настройки",
-    "SuccessfullySaved": "Успешно сохранено"
+    "SuccessfullySaved": "Успешно сохранено",
+    "Permission:SettingManagement": "Управление настройками",
+    "Permission:Emailing": "Отправка по электронной почте",
+    "Menu:Emailing": "Отправка по электронной почте",
+    "SmtpHost": "Хозяин",
+    "SmtpPort": "Порт",
+    "SmtpUserName": "Имя пользователя",
+    "SmtpPassword": "Пароль",
+    "SmtpDomain": "Домен",
+    "SmtpEnableSsl": "Включить ssl",
+    "SmtpUseDefaultCredentials": "Использовать учетные данные по умолчанию",
+    "DefaultFromAddress": "По умолчанию с адреса",
+    "DefaultFromDisplayName": "По умолчанию из отображаемого имени",
+    "Feature:SettingManagementGroup": "Управление настройками",
+    "Feature:SettingManagementEnable": "Включить управление настройками",
+    "Feature:SettingManagementEnableDescription": "Включите систему управления настройками в приложении.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Разрешить арендаторам изменять настройки электронной почты.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Разрешить арендаторам изменять настройки электронной почты."
   }
 }

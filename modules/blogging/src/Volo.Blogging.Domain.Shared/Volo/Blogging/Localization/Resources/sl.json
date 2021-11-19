@@ -12,6 +12,7 @@
     "Permission:Posts": "Objave",
     "Permission:Tags": "Oznake",
     "Permission:Comments": "Komentarji",
+    "Permission:ClearCache": "Počistiti začasni pomnilnik",
     "Title": "Naslov",
     "Delete": "Izbriši",
     "Reply": "Odgovori",
@@ -51,6 +52,10 @@
     "CreationTime": "Čas nastanka",
     "Description": "Opis",
     "Blogs": "Blogi",
-    "Tags": "Oznake"
+    "Tags": "Oznake",
+    "ShareOn": "Delite naprej",
+    "TitleLengthWarning": "Naj bo vaš naslov pod 60 znaki, da bo SEO prijazen!",
+    "ClearCache": "Počistiti začasni pomnilnik",
+    "ClearCacheConfirmationMessage": "Ali ste prepričani, da želite počistiti predpomnilnik?"
   }
 }

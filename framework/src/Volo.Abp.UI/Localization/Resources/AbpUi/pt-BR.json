@@ -1,10 +1,13 @@
 {
   "culture": "pt-BR",
   "texts": {
+    "Languages": "línguas",
     "AreYouSure": "Você tem certeza?",
     "Cancel": "Cancelar",
+    "Clear": "Claro",
     "Yes": "Sim",
     "No": "Não",
+    "Ok": "OK",
     "Close": "Fechar",
     "Save": "Salvar",
     "SavingWithThreeDot": "Salvando...",
@@ -13,6 +16,8 @@
     "SuccessfullyDeleted": "Excluído com sucesso",
     "Edit": "Editar",
     "Refresh": "Refrescar",
+    "Language": "Língua",
+    "LoadMore": "Carregue mais",
     "ProcessingWithThreeDot": "Processando...",
     "LoadingWithThreeDot": "Carregando...",
     "Welcome": "Bem Vindo",
@@ -31,6 +36,8 @@
     "PagerInfoEmpty": "Mostrando 0 até 0 de 0 registros",
     "PagerInfoFiltered": "(filtrado de um total de _MAX_ registros)",
     "NoDataAvailableInDatatable": "Nenhum dado disponível",
+    "Total": "total",
+    "Selected": "selecionado",
     "PagerShowMenuEntries": "Mostrando _MENU_ registros",
     "DatatableActionDropdownDefaultText": "Ações",
     "ChangePassword": "Alterar Senha",
@@ -38,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "Há alterações não salvas.",
     "GoHomePage": "Voltar à página principal",
     "GoBack": "Voltar",
-    "Search": "Procurar"
+    "Search": "Procurar",
+    "ItemWillBeDeletedMessageWithFormat": "{0} será excluído!",
+    "ItemWillBeDeletedMessage": "Este item será excluído!",
+    "ManageYourAccount": "Gerenciar sua conta"
   }
 }

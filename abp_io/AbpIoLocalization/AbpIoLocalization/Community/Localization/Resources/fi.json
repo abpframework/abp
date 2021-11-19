@@ -97,7 +97,7 @@
     "Community": "Yhteisö",
     "Marketing": "Markkinointi",
     "CommunityPrivacyPolicyConfirmation": "Hyväksyn käyttöehdot ja <a href=\"https://commercial.abp.io/Privacy\"> tietosuojakäytännön </a>.",
-    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Avaa ongelma </a> GitHubissa pyytääksesi artikkelia / opetusohjelmaa, jonka haluat nähdä tällä verkkosivustolla.",
+    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> Avaa ongelma </a> GitHubissa pyytääksesi artikkelia/opetusohjelmaa, jonka haluat nähdä tällä verkkosivustolla.",
     "ArticleRequestMessageBody": "Tässä luettelo yhteisön pyytämistä artikkeleista. Haluatko kirjoittaa pyydetyn artikkelin? Napsauta pyyntöä ja liity keskusteluun.",
     "Language": "Kieli",
     "CreateArticleLanguageInfo": "Viestin sisällön kieli.",
@@ -140,6 +140,9 @@
     "NoPostsFound": "Viestejä ei löytynyt!",
     "SearchInPosts": "Hae viesteistä...",
     "MinimumSearchContent": "Sinun on annettava vähintään 3 merkkiä!",
+    "Volo.AbpIo.Domain:060001": "Lähteen URL-osoite (\"{ArticleUrl}\") ei ole Githubin URL-osoite",
+    "Volo.AbpIo.Domain:060002": "Artikkelin sisältö ei ole saatavilla Githubin (\"{ArticleUrl}\") -resurssista.",
+    "Volo.AbpIo.Domain:060003": "Artikkelin sisältöä ei löytynyt!",
     "SeeMore": "Katso Lisää"
   }
 }
