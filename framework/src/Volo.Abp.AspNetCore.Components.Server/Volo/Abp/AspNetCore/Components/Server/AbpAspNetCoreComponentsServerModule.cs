@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Mvc;
@@ -25,7 +26,13 @@ namespace Volo.Abp.AspNetCore.Components.Server
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var serverSideBlazorBuilder = context.Services.AddServerSideBlazor();
+            var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
+            {
+                if (context.Services.GetHostingEnvironment().IsDevelopment())
+                {
+                    options.DetailedErrors = true;
+                }
+            });
             context.Services.ExecutePreConfiguredActions(serverSideBlazorBuilder);
 
             Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
