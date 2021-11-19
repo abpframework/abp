@@ -4,6 +4,7 @@
     "Languages": "Jazyky",
     "AreYouSure": "Jste si jisti?",
     "Cancel": "Zrušit",
+    "Clear": "Průhledná",
     "Yes": "Ano",
     "No": "Ne",
     "Ok": "Ok",
@@ -44,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "Máte neuložené změny.",
     "GoHomePage": "Přejít na domovskou stránku",
     "GoBack": "Jít zpět",
-    "Search": "Vyhledávání"
+    "Search": "Vyhledávání",
+    "ItemWillBeDeletedMessageWithFormat": "{0} bude smazáno!",
+    "ItemWillBeDeletedMessage": "Tato položka bude smazána!",
+    "ManageYourAccount": "Spravujte svůj účet"
   }
 }

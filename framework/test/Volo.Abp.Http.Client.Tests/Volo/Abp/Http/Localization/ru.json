@@ -1,0 +1,6 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Volo.Abp.Http.DynamicProxying:10001": "Исключение для бизнеса с данными: {0}"
+  }
+}

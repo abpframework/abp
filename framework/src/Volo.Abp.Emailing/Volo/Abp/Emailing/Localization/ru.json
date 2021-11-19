@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "Пароль для SMTP-сервера.",
     "Description:Abp.Mailing.Smtp.Domain": "Домен или имя компьютера, от которого производится SMTP-запрос.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Использовать SSL для подключения к SMTP-серверу.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Использовать учетные данные для SMTP по умолчанию."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Использовать учетные данные для SMTP по умолчанию.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Шаблон макета электронной почты по умолчанию",
+    "TextTemplate:StandardEmailTemplates.Message": "Простой шаблон сообщения для писем"
   }
 }

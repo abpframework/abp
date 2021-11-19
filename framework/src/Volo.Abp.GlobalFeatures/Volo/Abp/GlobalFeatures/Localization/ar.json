@@ -1,0 +1,6 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Volo.GlobalFeature:010001": "تحتاج خدمة \"{ServiceName}\" إلى تمكين ميزة \"{GlobalFeatureName}\"."
+  }
+}

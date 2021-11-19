@@ -32,6 +32,13 @@
     "SeeDocuments": "Pozrieť dokumenty",
     "Samples": "Ukážky",
     "Framework": "Framework",
-    "Support": "Podpora"
+    "Support": "Podpora",
+    "FreeDDDBook": "E-kniha DDD zadarmo",
+    "New": "Nový",
+    "Volo.AbpIo.Domain:020005": "Rok predĺženia licencie nemôže byť nižší ako {MinExtendLicenseYear} rok(y) a väčší ako {MaxExtendLicenseYear} rok(y)",
+    "TrialLicensePeriodHasExpired": "Doba platnosti vašej skúšobnej licencie uplynula pred {0} dňami.",
+    "TrialLicensePeriodWillExpire": "Doba platnosti vašej skúšobnej licencie uplynie o {0} dní.",
+    "TrialLicensePeriodExpireToday": "Vaše skúšobné licenčné obdobie dnes vyprší.",
+    "PurchaseNow": "Kúpiť teraz!"
   }
 }

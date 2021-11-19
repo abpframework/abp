@@ -1,0 +1,11 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Hello <b>{0}</b>.": "Bună ziua <b>{0}</b>.",
+    "Car": "Mașină",
+    "CarPlural": "Mașini",
+    "MaxLenghtErrorMessage": "Lungimea acestui câmp poate fi de maximum „{0}” caractere",
+    "Universe": "Univers",
+    "FortyTwo": "Patruzeci si doi"
+  }
+}

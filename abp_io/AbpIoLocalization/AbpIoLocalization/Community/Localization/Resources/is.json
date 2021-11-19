@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Til að búa til áhrifaríka færslu skaltu bæta við forsíðumynd. Hladdu upp 16: 9 myndhlutföllum fyrir besta útsýnið. Hámarks skráarstærð: 1MB.",
     "ThankYouForContribution": "Þakka þér fyrir að leggja þitt af mörkum til ABP samfélagsins.",
     "GithubArticle": "Github Greinar",
-    "GithubArticleSubmitStepOne": "<span class = \"font-weight-bold \"> 1. </span> Skrifaðu grein á hvaða opinbera GitHub geymslu sem er með markdown sniðinu. <a target = \"_ blank \" href = \"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles 2020-12-04-Event-Organizer/Post.md \"> dæmi </a>",
+    "GithubArticleSubmitStepOne": "<span class=\"font-weight-bold \"> 1. </span> Skrifaðu grein á hvaða opinbera GitHub geymslu sem er með markdown sniðinu. <a target=\"_ blank \" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles 2020-12-04-Event-Organizer/Post.md \"> dæmi </a>",
     "GithubArticleSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Sendu vefslóð greinarinnar með því að nota formið.",
     "GithubArticleSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Grein þín verður birt á þessari vefsíðu.",
     "YoutubeVideo": "Youtube Videó",
@@ -130,9 +130,9 @@
     "ExternalContentSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Sendu inn vefslóðina þína með því að nota eyðublaðið.",
     "ExternalContentSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Gestum er vísað á innihaldið á upphaflegu vefsíðunni.",
     "ChooseYourContentType": "Vinsamlegast veldu hvernig þú vilt bæta við efninu þínu.",
-    "PostContentViaGithub": "Ég vil bæta við greininni minni með <span class = \"font-weight-bold \"> <i class = \"fa fa-github \"> </i> GitHub </span> í samræmi við markdown reglurnar.",
-    "PostContentViaYoutube": "Ég vil deila myndböndunum mínum sem eru fáanleg á <span class = \"font-weight-bold \"> <i class = \"fa fa-youtube \"> </i> Youtube </span> hér.",
-    "PostContentViaExternalSource": "Ég vil bæta við innihaldi sem ég birti á <span class = \"font-weight-bold \"> annan vettvang </span> hér.",
+    "PostContentViaGithub": "Ég vil bæta við greininni minni með <span class=\"font-weight-bold \"> <i class=\"fa fa-github \"> </i> GitHub </span> í samræmi við markdown reglurnar.",
+    "PostContentViaYoutube": "Ég vil deila myndböndunum mínum sem eru fáanleg á <span class=\"font-weight-bold \"> <i class=\"fa fa-youtube \"> </i> Youtube </span> hér.",
+    "PostContentViaExternalSource": "Ég vil bæta við innihaldi sem ég birti á <span class=\"font-weight-bold \"> annan vettvang </span> hér.",
     "GitHubUserNameValidationMessage": "Github notendanafnið þitt getur ekki innihaldið bil, vinsamlegast vertu viss um að Github notendanafnið þitt sé rétt.",
     "PersonalSiteUrlValidationMessage": "Persónulega vefslóð þín getur ekki innihaldið bil, vinsamlegast vertu viss um að vefsíða þín sé rétt.",
     "TwitterUserNameValidationMessage": "Twitter notandanafnið þitt getur ekki innihaldið bil, vinsamlegast vertu viss um að Twitter notendanafnið þitt sé rétt.",
@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Þú verður að slá inn að minnsta kosti 3 stafi!",
     "Volo.AbpIo.Domain:060001": "Upprunaslóð (\"{ArticleUrl} \") er ekki Github slóð",
     "Volo.AbpIo.Domain:060002": "Innihald greinar er ekki fáanlegt frá Github (\"{ArticleUrl} \") resoursum.",
-    "Volo.AbpIo.Domain:060003": "Innihald greinar fannst ekki!"
+    "Volo.AbpIo.Domain:060003": "Innihald greinar fannst ekki!",
+    "SeeMore": "Sjá Meira"
   }
 }
