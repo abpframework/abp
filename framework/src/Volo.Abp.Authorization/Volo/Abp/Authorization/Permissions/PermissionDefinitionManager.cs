@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -39,16 +40,6 @@ namespace Volo.Abp.Authorization.Permissions
             );
         }
 
-        public PermissionGroupDefinition GetGroup( string name )
-        {
-            if( !PermissionGroupDefinitions.ContainsKey( name ) )
-            {
-                throw new AbpException($"Could not find a permission definition group with the given name: {name}");
-            }
-
-            return PermissionGroupDefinitions[name];
-        }
-
         public virtual PermissionDefinition Get(string name)
         {
             var permission = GetOrNull(name);
@@ -68,99 +59,178 @@ namespace Volo.Abp.Authorization.Permissions
             return PermissionDefinitions.GetOrDefault(name);
         }
 
+        public PermissionGroupDefinition GetGroup(string name)
+        {
+	        var permission = GetGroupOrNull(name);
+
+	        if (permission == null)
+	        {
+		        throw new AbpException("Undefined group permission: " + name);
+	        }
+
+	        return permission;
+        }
+
+        public PermissionGroupDefinition GetGroupOrNull(string name)
+        {
+	        Check.NotNull(name, nameof(name));
+
+	        return PermissionGroupDefinitions.GetOrDefault(name);
+        }
+        
+        public PermissionDefinition Add( 
+	        string name, 
+	        PermissionDefinition parent = null, 
+	        ILocalizableString displayName = null, 
+	        MultiTenancySides multiTenancySides = MultiTenancySides.Both, 
+	        bool isEnabled = true )
+        {
+	        if (PermissionDefinitions.ContainsKey(name))
+	        {
+		        throw new AbpException($"Permission already exist: {name}");
+	        }
+
+	        var permission = parent?.AddChild( 
+		        name,
+		        displayName,
+		        multiTenancySides,
+		        isEnabled
+	        ) ?? new PermissionDefinition(
+		        name,
+		        displayName,
+		        multiTenancySides,
+		        isEnabled
+	        );
+	        
+	        PermissionDefinitions.Add(name, permission);
+
+	        return permission;
+        }
+        
+        public PermissionDefinition Add( 
+	        string name, 
+	        PermissionGroupDefinition parent = null, 
+	        ILocalizableString displayName = null, 
+	        MultiTenancySides multiTenancySides = MultiTenancySides.Both, 
+	        bool isEnabled = true )
+        {
+	        if (PermissionDefinitions.ContainsKey(name))
+	        {
+		        throw new AbpException($"Permission already exist: {name}");
+	        }
+	        
+	        var permission = parent?.AddPermission( 
+		        name,
+		        displayName,
+		        multiTenancySides,
+		        isEnabled
+	        ) ?? new PermissionDefinition(
+		        name,
+		        displayName,
+		        multiTenancySides,
+		        isEnabled
+	        );
+
+	        PermissionDefinitions.Add(name, permission);
+
+	        return permission;
+        }
+
+        public PermissionGroupDefinition AddGroup(
+	        string name,
+	        ILocalizableString displayName = null,
+	        MultiTenancySides multiTenancySides = MultiTenancySides.Both )
+        {
+	        if (PermissionGroupDefinitions.ContainsKey(name))
+	        {
+		        throw new AbpException($"Permission group already exist: {name}");
+	        }
+
+	        var permission = new PermissionGroupDefinition(
+		        name,
+		        displayName,
+		        multiTenancySides
+	        );
+	        
+	        PermissionGroupDefinitions.Add(name, permission);
+
+	        return permission;
+        }
+
+        public void Remove(string name, bool removeChildren = true)
+        {
+	        var permission = Get(name);
+	        
+	        PermissionDefinitions.Remove(name);
+
+	        if (removeChildren)
+	        {
+		        foreach (PermissionDefinition childPermission in permission.Children)
+		        {
+			        Remove(childPermission);
+		        }
+	        }
+	        
+	        permission.Parent?.RemoveChild(permission);
+        }
+
+        public void Remove(PermissionDefinition permission, bool removeChildren = true)
+        {
+	        Remove(permission.Name, removeChildren);
+        }
+
+        public void RemoveGroup(string name, bool removeChildren = true)
+        {
+	        var permission = GetGroup(name);
+	        
+	        if (removeChildren)
+	        {
+		        foreach (PermissionDefinition childPermission in permission.Permissions)
+		        {
+			        Remove(childPermission.Name);
+		        }
+	        }
+	        
+	        PermissionGroupDefinitions.Remove(name);
+        }
+
+        public void RemoveGroup(PermissionGroupDefinition permission, bool removeChildren = true)
+        {
+	        RemoveGroup(permission.Name, removeChildren);
+        }
+
+        public void Update(
+	        string name,
+	        ILocalizableString displayName = null,
+	        MultiTenancySides multiTenancySides = MultiTenancySides.Both,
+	        bool isEnabled = true)
+        {
+	        var permission = Get(name);
+
+	        permission.DisplayName = displayName ?? new FixedLocalizableString(name);
+	        permission.MultiTenancySide = multiTenancySides;
+	        permission.IsEnabled = isEnabled;
+        }
+
+        public void UpdateGroup(
+	        string name, 
+	        ILocalizableString displayName = null, 
+	        MultiTenancySides multiTenancySides = MultiTenancySides.Both)
+        {
+	        var permission = GetGroup(name);
+
+	        permission.DisplayName = displayName ?? new FixedLocalizableString(name);
+	        permission.MultiTenancySide = multiTenancySides;
+        }
+
         public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
         {
-            return PermissionDefinitions.Values.ToImmutableList();
+	        return PermissionDefinitions.Values.ToImmutableList();
         }
 
         public IReadOnlyList<PermissionGroupDefinition> GetGroups()
         {
-            return PermissionGroupDefinitions.Values.ToImmutableList();
-        }
-        
-        public PermissionGroupDefinition GetGroup( string name )
-        {
-            if( !PermissionGroupDefinitions.ContainsKey( name ) )
-            {
-                throw new AbpException($"Could not find a permission definition group with the given name: {name}");
-            }
-
-            return PermissionGroupDefinitions[name];
-        }
-        
-        public PermissionDefinition AddGroupPermission( PermissionGroupDefinition group, string permissionName, ILocalizableString displayName )
-        {
-	        // create new group
-	        PermissionDefinition groupPermission = group.AddPermission( permissionName, displayName );;
-
-	        // add to permission list
-	        PermissionDefinitions.Add( permissionName, groupPermission );
-
-	        return groupPermission;
-        }
-
-        public void AddPermission( PermissionDefinition group, string permissionName, ILocalizableString displayName )
-        {
-	        // create permission
-	        PermissionDefinition permission = group.AddChild( permissionName, displayName );
-
-	        // add to permission list
-	        PermissionDefinitions.Add( permissionName, permission );
-        }
-
-        public void RemoveGroupPermission( PermissionGroupDefinition group, string permissionName )
-        {
-	        PermissionDefinition groupPermission = group.GetPermissionOrNull( permissionName );
-
-	        if( groupPermission == null )
-	        {
-		        throw new AbpException( $"Could not find a permission definition with the given name: {permissionName}" );
-	        }
-
-	        // remove all child permission
-	        foreach( PermissionDefinition childPermission in groupPermission.Children )
-	        {
-		        PermissionDefinitions.Remove( childPermission.Name );
-	        }
-	        
-	        // remove group
-	        PermissionDefinitions.Remove( permissionName );
-	        group.RemovePermission( groupPermission );
-        }
-
-        public void UpdateGroupPermission( PermissionGroupDefinition group, string permissionName, ILocalizableString displayName )
-        {
-	        PermissionDefinition groupPermission = group.GetPermissionOrNull( permissionName );
-
-	        if( groupPermission == null )
-	        {
-		        throw new AbpException( $"Could not find a permission definition with the given name: {permissionName}" );
-	        }
-
-	        // update localized name
-	        groupPermission.DisplayName = displayName;
-	        PermissionDefinitions[permissionName].DisplayName = displayName;
-        }
-
-        public void UpdatePermission( PermissionGroupDefinition group, string permissionName, ILocalizableString displayName )
-        {
-	        PermissionDefinition groupPermission = group.GetPermissionOrNull( permissionName );
-
-	        if( groupPermission == null )
-	        {
-		        throw new AbpException( $"Could not find a permission definition with the given name: {permissionName}" );
-	        }
-
-	        PermissionDefinition childPermission = groupPermission.Children.FirstOrDefault( permission => permission.Name == permissionName );
-
-	        if( childPermission == null )
-	        {
-		        throw new AbpException( $"Could not find child permission definition with the given name: {displayName}" );
-	        }
-
-	        // update localized name
-	        childPermission.DisplayName = displayName;
-	        PermissionDefinitions[permissionName].DisplayName = displayName;
+	        return PermissionGroupDefinitions.Values.ToImmutableList();
         }
 
         protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()

@@ -45,7 +45,7 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionGroupDefinition(
+        public PermissionGroupDefinition(
             string name,
             ILocalizableString displayName = null,
             MultiTenancySides multiTenancySide = MultiTenancySides.Both)
@@ -75,15 +75,10 @@ namespace Volo.Abp.Authorization.Permissions
 
             return permission;
         }
-        
-        public virtual bool RemovePermission( PermissionDefinition permission )
-        {
-            return _permissions.Remove( permission );
-        }
 
-        public virtual bool RemovePermission( PermissionDefinition permission )
+        public virtual bool RemovePermission(PermissionDefinition permission)
         {
-            return _permissions.Remove( permission );
+            return _permissions.Remove(permission);
         }
 
         public virtual List<PermissionDefinition> GetPermissionsWithChildren()

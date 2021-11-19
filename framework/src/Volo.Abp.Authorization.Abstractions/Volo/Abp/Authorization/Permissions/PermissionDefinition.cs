@@ -76,7 +76,7 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionDefinition(
+        public PermissionDefinition(
             [NotNull] string name,
             ILocalizableString displayName = null,
             MultiTenancySides multiTenancySide = MultiTenancySides.Both,
@@ -111,6 +111,14 @@ namespace Volo.Abp.Authorization.Permissions
             _children.Add(child);
 
             return child;
+        }
+
+        public void RemoveChild([NotNull] PermissionDefinition childPermission)
+        {
+	        if (_children.Remove(childPermission))
+	        {
+		        childPermission.Parent = null;
+	        }
         }
 
         /// <summary>
