@@ -139,6 +139,7 @@
     "LinkedinUrlValidationMessage": "Linkedin-URL-osoitteesi ei voi sisältää välilyöntiä. Varmista, että Linkedin-URL-osoitteesi on oikea.",
     "NoPostsFound": "Viestejä ei löytynyt!",
     "SearchInPosts": "Hae viesteistä...",
-    "MinimumSearchContent": "Sinun on annettava vähintään 3 merkkiä!"
+    "MinimumSearchContent": "Sinun on annettava vähintään 3 merkkiä!",
+    "SeeMore": "Katso Lisää"
   }
 }

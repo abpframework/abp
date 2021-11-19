@@ -85,6 +85,7 @@
     "ProfileImageChange": "Cambiar la imagen de perfil",
     "BlogItemErrorMessage": "No se pudo obtener los detalles del último blog desde ABP.",
     "PlannedReleaseDate": "Fecha de entrega planificada",
-    "CommunityArticleRequestErrorMessage": "No se pudo obtener la última petición de artículo desde Github"
+    "CommunityArticleRequestErrorMessage": "No se pudo obtener la última petición de artículo desde Github",
+    "SeeMore": "Ver Más"
   }
 }
