@@ -117,21 +117,9 @@ The Virtual File System is well integrated to ASP.NET Core:
 * Js, css, image files and all other web content types can be embedded into assemblies and used just like the physical files.
 * An application (or another module) can **override a virtual file** of a module just like placing a file with the same name and extension into the same folder of the virtual file.
 
-### UseVirtualFiles Middleware
+### Static Virtual File Folders
 
-The Virtual Files Middleware is used to serve embedded (js, css, image...) files to clients/browsers just like physical files in the **wwwroot** folder. It also covers the physical files.
-
-Replace the `app.UseStaticFiles()` with the `app.UseVirtualFiles()` in your ASP.NET Core middleware configuration:
-
-````C#
-app.UseVirtualFiles();
-````
-
-> `UseVirtualFiles()` is already configured for the [application startup template](Startup-Templates/Application.md).
-
-#### Static Virtual File Folders
-
-By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the `UseVirtualFiles` middleware, the following folders also can contain static files:
+By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the birtual File System, the following folders also can contain static files:
 
 * Pages
 * Views
