@@ -12,6 +12,7 @@
     "Permission:Posts": "Beiträge",
     "Permission:Tags": "Schlagwörter",
     "Permission:Comments": "Kommentare",
+    "Permission:ClearCache": "Cache leeren",
     "Title": "Titel",
     "Delete": "Löschen",
     "Reply": "Antworten",
@@ -53,6 +54,8 @@
     "Blogs": "Blogs",
     "Tags": "Schlagwörter",
     "ShareOn": "Teilen auf",
-    "TitleLengthWarning": "Halten Sie Ihre Titellänge unter 60 Zeichen, um SEO-freundlich zu sein!"
+    "TitleLengthWarning": "Halten Sie Ihre Titellänge unter 60 Zeichen, um SEO-freundlich zu sein!",
+    "ClearCache": "Cache leeren",
+    "ClearCacheConfirmationMessage": "Möchten Sie den Cache wirklich leeren?"
   }
 }

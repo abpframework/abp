@@ -40,6 +40,7 @@
     "EfCoreConfigureMethodName": "Stilla nafn aðgerðar",
     "IsProFilter": "Er pro",
     "ApplicationType": "Tegund umsóknar",
+    "Target": "Skotmark",
     "TargetFilter": "Markmið",
     "ModuleClass": "Eininga klassi",
     "NugetPackageTarget.DomainShared": "Léni er deilt",
@@ -335,6 +336,7 @@
     "PurchasedToNormalLicense": "Keypt",
     "Expired": "Útrunnið",
     "TrialLicenseDeletionWarningMessage": "Ertu viss um að þú viljir eyða prufuleyfi? Prufuleyfi, skipulagsheildum og stuðningsreikningum verður eytt!",
+    "LicenseCategoryFilter": "Leyfisflokkur",
     "Volo.AbpIo.Commercial:030000": "Þú hefur nú þegar nýtt þér prufutímann.",
     "Volo.AbpIo.Commercial:030001": "Nafn þessa félags er nú þegar til.",
     "Volo.AbpIo.Commercial:030002": "Þegar virkjað, þá er ekki hægt að stilla prufuleyfi á óskað",
@@ -342,6 +344,10 @@
     "Volo.AbpIo.Commercial:030004": "Ekki var mögulegt að breyta stöðu vegna óvæntrar villu!",
     "Volo.AbpIo.Commercial:030005": "Ekki er hægt að gefa upp upphafsdag og lokadag þegar prufuleyfi er í biðlunar stöðu!",
     "Volo.AbpIo.Commercial:030006": "Lokadagur verður alltaf að vera seinni en upphafsdagur!",
-    "Volo.AbpIo.Commercial:030007": "Þetta prufuleyfi hefur nú þegar verið virkjað einu sinni áður!"
+    "Volo.AbpIo.Commercial:030007": "Þetta prufuleyfi hefur nú þegar verið virkjað einu sinni áður!",
+    "Volo.AbpIo.Commercial:030008": "Aðeins er hægt að stilla kaupdagsetningu þegar staða er keypt!",
+    "Volo.AbpIo.Commercial:030009": "Notandi finnst ekki!",
+    "Volo.AbpIo.Commercial:030010": "Til að kaupa prufuleyfið þarftu fyrst að virkja prufuleyfið þitt!",
+    "Volo.AbpIo.Commercial:030011": "Þú getur ekki eytt reynsluleyfi þegar það er keypt!"
   }
 }

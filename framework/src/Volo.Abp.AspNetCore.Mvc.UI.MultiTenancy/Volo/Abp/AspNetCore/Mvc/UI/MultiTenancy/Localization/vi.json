@@ -7,6 +7,7 @@
     "Switch": "Chuyển đổi",
     "Name": "Tên",
     "SwitchTenantHint": "Để trống trường tên để chuyển sang phía máy chủ.",
+    "SwitchTenant": "Chuyển đổi người thuê nhà",
     "NotSelected": "Không được chọn"
   }
 }

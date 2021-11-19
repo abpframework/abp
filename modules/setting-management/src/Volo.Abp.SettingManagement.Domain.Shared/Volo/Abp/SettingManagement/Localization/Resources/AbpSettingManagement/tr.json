@@ -17,6 +17,8 @@
     "DefaultFromDisplayName": "Varsayılan gönderici email adresi",
     "Feature:SettingManagementGroup": "Ayar yönetimi",
     "Feature:SettingManagementEnable": "Ayar yönetimini etkinleştir",
-    "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin."
+    "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Kiracıların e-posta ayarlarını değiştirmesine izin verin.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Kiracıların e-posta ayarlarını değiştirmesine izin verin."
   }
 }

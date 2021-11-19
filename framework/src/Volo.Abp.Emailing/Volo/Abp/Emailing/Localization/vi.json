@@ -1,0 +1,25 @@
+{
+  "culture": "vi",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Mặc định từ địa chỉ",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Mặc định từ tên hiển thị",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Tổ chức",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Hải cảng",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Tên tài khoản",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Mật khẩu",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Lãnh địa",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Bật SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Sử dụng thông tin đăng nhập mặc định",
+    "Description:Abp.Mailing.DefaultFromAddress": "Địa chỉ từ mặc định",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Mặc định từ tên hiển thị",
+    "Description:Abp.Mailing.Smtp.Host": "Tên hoặc địa chỉ IP của máy chủ được sử dụng cho các giao dịch SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "Cổng được sử dụng cho các giao dịch SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "Tên người dùng được liên kết với thông tin xác thực.",
+    "Description:Abp.Mailing.Smtp.Password": "Mật khẩu cho tên người dùng được liên kết với thông tin đăng nhập.",
+    "Description:Abp.Mailing.Smtp.Domain": "Miền hoặc tên máy tính xác minh thông tin đăng nhập.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "SmtpClient có sử dụng Lớp cổng bảo mật (SSL) để mã hóa kết nối hay không.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Thông tin đăng nhập mặc định có được gửi cùng với các yêu cầu hay không.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Mẫu bố cục email mặc định",
+    "TextTemplate:StandardEmailTemplates.Message": "Mẫu tin nhắn đơn giản cho email"
+  }
+}

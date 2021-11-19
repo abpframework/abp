@@ -17,6 +17,8 @@
     "DefaultFromDisplayName": "Implicit de la numele de afişare",
     "Feature:SettingManagementGroup": "Administrarea setărilor",
     "Feature:SettingManagementEnable": "Activează administrarea setărilor",
-    "Feature:SettingManagementEnableDescription": "Activează sistemul de administrare a setărilor în aplicaţie."
+    "Feature:SettingManagementEnableDescription": "Activează sistemul de administrare a setărilor în aplicaţie.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Permiteți chiriașilor să modifice setările de e-mail.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Permiteți chiriașilor să modifice setările de e-mail."
   }
 }

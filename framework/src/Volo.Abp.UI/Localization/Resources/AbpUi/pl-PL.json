@@ -1,10 +1,13 @@
 {
   "culture": "pl-PL",
   "texts": {
+    "Languages": "Języki",
     "AreYouSure": "Czy jesteś pewien?",
     "Cancel": "Anuluj",
+    "Clear": "Jasne",
     "Yes": "Tak",
     "No": "Nie",
+    "Ok": "Ok",
     "Close": "Zamknij",
     "Save": "Zapisz",
     "SavingWithThreeDot": "Zapisywanie...",
@@ -13,6 +16,8 @@
     "SuccessfullyDeleted": "Pomyślnie usunięto",
     "Edit": "Edytuj",
     "Refresh": "Odśwież",
+    "Language": "Język",
+    "LoadMore": "Załaduj więcej",
     "ProcessingWithThreeDot": "Procesowanie...",
     "LoadingWithThreeDot": "Ładowanie...",
     "Welcome": "Witaj",
@@ -31,10 +36,18 @@
     "PagerInfoEmpty": "Pokaż od 0 do 0 z 0 rekordów",
     "PagerInfoFiltered": "(filtruj od _MAX_ wszystkich rekordów)",
     "NoDataAvailableInDatatable": "Nie znaleziono danych w tabeli",
+    "Total": "całkowity",
+    "Selected": "wybrany",
     "PagerShowMenuEntries": "Pokaż _MENU_ rekordów",
     "DatatableActionDropdownDefaultText": "Akcje",
     "ChangePassword": "Zmień hasło",
     "PersonalInfo": "Mój profil",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Masz niezapisane zmiany."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Masz niezapisane zmiany.",
+    "GoHomePage": "Przejdź do strony głównej",
+    "GoBack": "Wróć",
+    "Search": "Szukaj",
+    "ItemWillBeDeletedMessageWithFormat": "{0} zostanie usunięty!",
+    "ItemWillBeDeletedMessage": "Ten element zostanie usunięty!",
+    "ManageYourAccount": "Zarządzaj kontem"
   }
 }

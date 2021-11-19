@@ -56,6 +56,12 @@
     "BackToLogin": "Vissza a bejelentkezéshez",
     "ProfileTab:Password": "Jelszó módosítása",
     "ProfileTab:PersonalInfo": "Személyes adatok",
-    "ReturnToApplication": "Vissza az alkalmazáshoz"
+    "ReturnToApplication": "Vissza az alkalmazáshoz",
+    "Volo.Account:InvalidEmailAddress": "Nem található a megadott e-mail cím: {0}",
+    "PasswordReset": "Jelszó visszaállítása",
+    "PasswordResetInfoInEmail": "Fiók-helyreállítási kérelmet kaptunk! Ha Ön kezdeményezte ezt a kérést, kattintson a következő hivatkozásra jelszava visszaállításához.",
+    "ResetMyPassword": "Jelszavam visszaállítása",
+    "AccessDenied": "Hozzáférés megtagadva!",
+    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz."
   }
 }
