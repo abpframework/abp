@@ -4,22 +4,21 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.Localization;
 using Xunit;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public class Localization_Tests : AbpIdentityDomainTestBase
 {
-    public class Localization_Tests : AbpIdentityDomainTestBase
+    private readonly IStringLocalizer<IdentityResource> _stringLocalizer;
+
+    public Localization_Tests()
     {
-        private readonly IStringLocalizer<IdentityResource> _stringLocalizer;
+        _stringLocalizer = GetRequiredService<IStringLocalizer<IdentityResource>>();
+    }
 
-        public Localization_Tests()
-        {
-            _stringLocalizer = GetRequiredService<IStringLocalizer<IdentityResource>>();
-        }
-
-        [Fact]
-        public void Test()
-        {
-            _stringLocalizer["PersonalSettingsSavedMessage"].Value
-            .ShouldBe("Your personal settings has been saved successfully.");
-        }
+    [Fact]
+    public void Test()
+    {
+        _stringLocalizer["PersonalSettingsSavedMessage"].Value
+        .ShouldBe("Your personal settings has been saved successfully.");
     }
 }
