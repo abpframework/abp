@@ -89,7 +89,12 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
 
         using (CultureHelper.Use("tr"))
         {
-            _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr, getting from default lang
+            _localizer["SeeYou"].Value.ShouldBe("Görüşürüz");
+        }
+        
+        using (CultureHelper.Use("pl"))
+        {
+            _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in pl, getting from default lang
         }
 
         using (CultureHelper.Use("it"))
