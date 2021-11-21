@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
+
+public enum AbpCardImagePosition
 {
-    public enum AbpCardImagePosition
-    {
-        None,
-        Top,
-        Bottom
-    }
+    None,
+    Top,
+    Bottom
 }

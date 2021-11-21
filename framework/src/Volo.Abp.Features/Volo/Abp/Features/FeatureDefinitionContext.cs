@@ -1,51 +1,50 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.Features
+namespace Volo.Abp.Features;
+
+public class FeatureDefinitionContext : IFeatureDefinitionContext
 {
-    public class FeatureDefinitionContext : IFeatureDefinitionContext
+    internal Dictionary<string, FeatureGroupDefinition> Groups { get; }
+
+    public FeatureDefinitionContext()
     {
-        internal Dictionary<string, FeatureGroupDefinition> Groups { get; }
+        Groups = new Dictionary<string, FeatureGroupDefinition>();
+    }
 
-        public FeatureDefinitionContext()
+    public FeatureGroupDefinition AddGroup(string name, ILocalizableString displayName = null)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (Groups.ContainsKey(name))
         {
-            Groups = new Dictionary<string, FeatureGroupDefinition>();
+            throw new AbpException($"There is already an existing permission group with name: {name}");
         }
 
-        public FeatureGroupDefinition AddGroup(string name, ILocalizableString displayName = null)
+        return Groups[name] = new FeatureGroupDefinition(name, displayName);
+    }
+
+    public FeatureGroupDefinition GetGroupOrNull(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (!Groups.ContainsKey(name))
         {
-            Check.NotNull(name, nameof(name));
-
-            if (Groups.ContainsKey(name))
-            {
-                throw new AbpException($"There is already an existing permission group with name: {name}");
-            }
-
-            return Groups[name] = new FeatureGroupDefinition(name, displayName);
+            return null;
         }
 
-        public FeatureGroupDefinition GetGroupOrNull(string name)
+        return Groups[name];
+    }
+
+    public void RemoveGroup(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (!Groups.ContainsKey(name))
         {
-            Check.NotNull(name, nameof(name));
-
-            if (!Groups.ContainsKey(name))
-            {
-                return null;
-            }
-
-            return Groups[name];
+            throw new AbpException($"Undefined feature group: '{name}'.");
         }
 
-        public void RemoveGroup(string name)
-        {
-            Check.NotNull(name, nameof(name));
-
-            if (!Groups.ContainsKey(name))
-            {
-                throw new AbpException($"Undefined feature group: '{name}'.");
-            }
-
-            Groups.Remove(name);
-        }
+        Groups.Remove(name);
     }
 }

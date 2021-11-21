@@ -1,9 +1,8 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp
+namespace Volo.Abp;
+
+public interface IOnApplicationShutdown
 {
-    public interface IOnApplicationShutdown
-    {
-        void OnApplicationShutdown([NotNull] ApplicationShutdownContext context);
-    }
+    void OnApplicationShutdown([NotNull] ApplicationShutdownContext context);
 }

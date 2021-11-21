@@ -13,55 +13,54 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.Server
+namespace Volo.Abp.AspNetCore.Components.Server;
+
+[DependsOn(
+    typeof(AbpHttpClientModule),
+    typeof(AbpAspNetCoreComponentsWebModule),
+    typeof(AbpAspNetCoreSignalRModule),
+    typeof(AbpEventBusModule),
+    typeof(AbpAspNetCoreMvcContractsModule)
+    )]
+public class AbpAspNetCoreComponentsServerModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpHttpClientModule),
-        typeof(AbpAspNetCoreComponentsWebModule),
-        typeof(AbpAspNetCoreSignalRModule),
-        typeof(AbpEventBusModule),
-        typeof(AbpAspNetCoreMvcContractsModule)
-        )]
-    public class AbpAspNetCoreComponentsServerModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
         {
-            var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
+            if (context.Services.GetHostingEnvironment().IsDevelopment())
             {
-                if (context.Services.GetHostingEnvironment().IsDevelopment())
-                {
-                    options.DetailedErrors = true;
-                }
-            });
-            context.Services.ExecutePreConfiguredActions(serverSideBlazorBuilder);
+                options.DetailedErrors = true;
+            }
+        });
+        context.Services.ExecutePreConfiguredActions(serverSideBlazorBuilder);
 
-            Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
-            {
-                options.IgnoredUrls.AddIfNotContains("/_blazor");
-            });
-
-            Configure<AbpAspNetCoreAuditingOptions>(options =>
-            {
-                options.IgnoredUrls.AddIfNotContains("/_blazor");
-            });
-
-            Configure<AbpEndpointRouterOptions>(options =>
-            {
-                options.EndpointConfigureActions.Add(endpointContext =>
-                {
-                    endpointContext.Endpoints.MapBlazorHub();
-                    endpointContext.Endpoints.MapFallbackToPage("/_Host");
-                });
-            });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
         {
-            context.GetEnvironment().WebRootFileProvider =
-                new CompositeFileProvider(
-                    new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
-                    context.GetEnvironment().WebRootFileProvider
-                );
-        }
+            options.IgnoredUrls.AddIfNotContains("/_blazor");
+        });
+
+        Configure<AbpAspNetCoreAuditingOptions>(options =>
+        {
+            options.IgnoredUrls.AddIfNotContains("/_blazor");
+        });
+
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(endpointContext =>
+            {
+                endpointContext.Endpoints.MapBlazorHub();
+                endpointContext.Endpoints.MapFallbackToPage("/_Host");
+            });
+        });
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context.GetEnvironment().WebRootFileProvider =
+            new CompositeFileProvider(
+                new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
+                context.GetEnvironment().WebRootFileProvider
+            );
     }
 }
