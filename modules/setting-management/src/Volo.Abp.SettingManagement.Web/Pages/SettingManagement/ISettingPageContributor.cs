@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
-{
-    public interface ISettingPageContributor
-    {
-        Task ConfigureAsync(SettingPageCreationContext context);
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 
-        Task<bool> CheckPermissionsAsync(SettingPageCreationContext context);
-    }
+public interface ISettingPageContributor
+{
+    Task ConfigureAsync(SettingPageCreationContext context);
+
+    Task<bool> CheckPermissionsAsync(SettingPageCreationContext context);
 }
