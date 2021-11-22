@@ -9,6 +9,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -343,7 +344,16 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         if (AbpEntityOptions.DefaultWithDetailsFunc == null)
         {
-            return await base.WithDetailsAsync();
+	        var dbSet = await GetDbSetAsync();
+	        var query = dbSet.AsQueryable();
+	        var navigationProperties = dbSet.EntityType.GetNavigations();
+	        
+	        foreach ( var navigation in navigationProperties )
+	        {
+		        query = query.Include( navigation.Name );
+	        }
+
+	        return query;
         }
 
         return AbpEntityOptions.DefaultWithDetailsFunc(await GetQueryableAsync());
