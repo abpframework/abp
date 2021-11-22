@@ -285,7 +285,7 @@ This can be a breaking change in rare cases (for example, if you create host sid
 
 As the core ABP development team, we've decided to organize monthly live meetings with the ABP community. The first live meeting will be at **December 16, 2021, 17:00 (UTC)** on YouTube. ABP core team members will present some of the new features coming with ABP 5.0.
 
-**The YouTube event link is: https://www.youtube.com/watch?v=uLu2t5E8T-w**
+**Join this event on the Kommunity platform: https://kommunity.com/volosoft/events/abp-community-talks-4afca9c9**
 
 You can also [subscribe to the Volosoft channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) for reminders for further ABP events and videos.
 
