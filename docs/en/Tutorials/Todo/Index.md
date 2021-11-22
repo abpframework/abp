@@ -682,7 +682,7 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t ng
 ````
 
 If everything goes well, it should generate an output like shown below:
