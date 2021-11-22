@@ -543,7 +543,7 @@ namespace TodoApp.Blazor.Pages
         private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
         private string NewTodoText { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             TodoItems = await TodoAppService.GetListAsync();
         }
@@ -595,7 +595,7 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
                   class="form-inline">
                 <input type="text" 
                        @bind-value="@NewTodoText"
-                       class="form-control mr-2" 
+                       class="form-control me-2" 
                        placeholder="enter text...">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
