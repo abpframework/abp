@@ -2,6 +2,7 @@
 using Shouldly;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.Localization;
 using Xunit;
 
 namespace Volo.Abp.TenantManagement;
@@ -18,7 +19,10 @@ public class Localization_Tests : AbpIdentityDomainTestBase
     [Fact]
     public void Test()
     {
-        _stringLocalizer["PersonalSettingsSavedMessage"].Value
-        .ShouldBe("Your personal settings has been saved successfully.");
+        using (CultureHelper.Use("en"))
+        {
+            _stringLocalizer["PersonalSettingsSavedMessage"].Value
+            .ShouldBe("Your personal settings has been saved successfully.");
+        }
     }
 }
