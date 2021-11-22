@@ -29,8 +29,8 @@ public class AbpIdentityResultException_Tests : AbpIdentityDomainTestBase
         {
             var localizeMessage = exception.LocalizeMessage(new LocalizationContext(ServiceProvider));
 
-            localizeMessage.ShouldContain("Şifre en az 6 karakter uzunluğunda olmalı.");
-            localizeMessage.ShouldContain("Şifre en az bir sayı ya da harf olmayan karakter içermeli.");
+            localizeMessage.ShouldContain("Şifre uzunluğu 6 karakterden uzun olmalıdır.");
+            localizeMessage.ShouldContain("Parola en az bir alfasayısal olmayan karakter içermeli");
         }
 
         using (CultureHelper.Use("en"))
