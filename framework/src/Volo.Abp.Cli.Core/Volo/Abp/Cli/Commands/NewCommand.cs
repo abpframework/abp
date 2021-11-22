@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Build;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -29,6 +31,7 @@ namespace Volo.Abp.Cli.Commands
     public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
     {
         public ILogger<NewCommand> Logger { get; set; }
+        public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
@@ -83,6 +86,16 @@ namespace Volo.Abp.Cli.Commands
             ExtractProjectZip(result, projectArgs.OutputFolder);
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
+            
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
+            {
+                var projects = new List<DotNetProjectInfo>
+                {
+                    new DotNetProjectInfo(string.Empty, projectArgs.OutputFolder, true)
+                };
+
+                DotNetProjectBuilder.BuildProjects(projects, "/graphBuild");
+            }
 
             OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
         }
