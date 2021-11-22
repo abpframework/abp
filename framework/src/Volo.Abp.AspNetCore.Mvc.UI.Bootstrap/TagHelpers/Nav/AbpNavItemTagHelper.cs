@@ -1,13 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
+
+public class AbpNavItemTagHelper : AbpTagHelper<AbpNavItemTagHelper, AbpNavItemTagHelperService>
 {
-    public class AbpNavItemTagHelper : AbpTagHelper<AbpNavItemTagHelper, AbpNavItemTagHelperService>
+    public bool? Dropdown { get; set; }
+
+    public AbpNavItemTagHelper(AbpNavItemTagHelperService tagHelperService)
+        : base(tagHelperService)
     {
-        public bool? Dropdown { get; set; }
 
-        public AbpNavItemTagHelper(AbpNavItemTagHelperService tagHelperService)
-            : base(tagHelperService)
-        {
-
-        }
     }
 }

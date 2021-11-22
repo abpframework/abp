@@ -11,70 +11,49 @@ using Volo.Abp.Testing;
 using Volo.Abp.Validation;
 using Xunit;
 
-namespace Volo.Abp.FluentValidation
+namespace Volo.Abp.FluentValidation;
+
+public class ApplicationService_FluentValidation_Tests : AbpIntegratedTest<ApplicationService_FluentValidation_Tests.TestModule>
 {
-    public class ApplicationService_FluentValidation_Tests : AbpIntegratedTest<ApplicationService_FluentValidation_Tests.TestModule>
+    private readonly IMyAppService _myAppService;
+
+    public ApplicationService_FluentValidation_Tests()
     {
-        private readonly IMyAppService _myAppService;
+        _myAppService = ServiceProvider.GetRequiredService<IMyAppService>();
+    }
 
-        public ApplicationService_FluentValidation_Tests()
-        {
-            _myAppService = ServiceProvider.GetRequiredService<IMyAppService>();
-        }
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    {
+        options.UseAutofac();
+    }
 
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    [Fact]
+    public async Task Should_Work_Proper_With_Right_Inputs()
+    {
+        var asyncOutput = await _myAppService.MyMethodAsync(new MyMethodInput
         {
-            options.UseAutofac();
-        }
-
-        [Fact]
-        public async Task Should_Work_Proper_With_Right_Inputs()
-        {
-            var asyncOutput = await _myAppService.MyMethodAsync(new MyMethodInput
+            MyStringValue = "aaa",
+            MyMethodInput2 = new MyMethodInput2
             {
-                MyStringValue = "aaa",
-                MyMethodInput2 = new MyMethodInput2
-                {
-                    MyStringValue2 = "bbb"
-                },
-                MyMethodInput3 = new MyMethodInput3
-                {
-                    MyStringValue3 = "ccc",
-                    MyBoolValue3 = true
-                }
-            });
+                MyStringValue2 = "bbb"
+            },
+            MyMethodInput3 = new MyMethodInput3
+            {
+                MyStringValue3 = "ccc",
+                MyBoolValue3 = true
+            }
+        });
 
-            asyncOutput.ShouldBe("aaabbbccc");
-        }
+        asyncOutput.ShouldBe("aaabbbccc");
+    }
 
-        [Fact]
-        public async Task Should_Not_Work_With_Wrong_Inputs()
-        {
-            // MyStringValue should be aaa, MyStringValue2 should be bbb. MyStringValue3 should be ccc
+    [Fact]
+    public async Task Should_Not_Work_With_Wrong_Inputs()
+    {
+        // MyStringValue should be aaa, MyStringValue2 should be bbb. MyStringValue3 should be ccc
 
-            var exception = await Assert.ThrowsAsync<AbpValidationException>(
-                async () => await _myAppService.MyMethodAsync(
-                    new MyMethodInput
-                    {
-                        MyStringValue = "a",
-                        MyMethodInput2 = new MyMethodInput2
-                        {
-                            MyStringValue2 = "b"
-                        },
-                        MyMethodInput3 = new MyMethodInput3
-                        {
-                            MyStringValue3 = "c",
-                            MyBoolValue3 = false
-                        }
-                    }
-                )
-            );
-
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
-
-            exception = await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethodAsync(
+        var exception = await Assert.ThrowsAsync<AbpValidationException>(
+            async () => await _myAppService.MyMethodAsync(
                 new MyMethodInput
                 {
                     MyStringValue = "a",
@@ -84,130 +63,150 @@ namespace Volo.Abp.FluentValidation
                     },
                     MyMethodInput3 = new MyMethodInput3
                     {
-                        MyStringValue3 = "c"
+                        MyStringValue3 = "c",
+                        MyBoolValue3 = false
                     }
-                }));
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
-            exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
-        }
+                }
+            )
+        );
 
-        [Fact]
-        public async Task NotValidateMyMethod_Test()
-        {
-            var output = await _myAppService.NotValidateMyMethod(new MyMethodInput4
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
+
+        exception = await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethodAsync(
+            new MyMethodInput
             {
-                MyStringValue4 = "444"
-            });
-
-            output.ShouldBe("444");
-        }
-
-        [DependsOn(typeof(AbpAutofacModule))]
-        [DependsOn(typeof(AbpFluentValidationModule))]
-        public class TestModule : AbpModule
-        {
-            public override void PreConfigureServices(ServiceConfigurationContext context)
-            {
-                context.Services.OnRegistred(onServiceRegistredContext =>
+                MyStringValue = "a",
+                MyMethodInput2 = new MyMethodInput2
                 {
-                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
-                        !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
-                    {
-                        onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
-                    }
-                });
-            }
+                    MyStringValue2 = "b"
+                },
+                MyMethodInput3 = new MyMethodInput3
+                {
+                    MyStringValue3 = "c"
+                }
+            }));
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
+        exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
+    }
 
-            public override void ConfigureServices(ServiceConfigurationContext context)
+    [Fact]
+    public async Task NotValidateMyMethod_Test()
+    {
+        var output = await _myAppService.NotValidateMyMethod(new MyMethodInput4
+        {
+            MyStringValue4 = "444"
+        });
+
+        output.ShouldBe("444");
+    }
+
+    [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AbpFluentValidationModule))]
+    public class TestModule : AbpModule
+    {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.OnRegistred(onServiceRegistredContext =>
             {
-                context.Services.AddType<MyAppService>();
-            }
+                if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                    !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
+                {
+                    onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
+                }
+            });
         }
 
-        public interface IMyAppService
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Task<string> MyMethodAsync(MyMethodInput input);
+            context.Services.AddType<MyAppService>();
+        }
+    }
 
-            Task<string> NotValidateMyMethod(MyMethodInput4 input);
+    public interface IMyAppService
+    {
+        Task<string> MyMethodAsync(MyMethodInput input);
+
+        Task<string> NotValidateMyMethod(MyMethodInput4 input);
+    }
+
+    public class MyAppService : IMyAppService, ITransientDependency
+    {
+        public Task<string> MyMethodAsync(MyMethodInput input)
+        {
+            return Task.FromResult(input.MyStringValue + input.MyMethodInput2.MyStringValue2 +
+                                   input.MyMethodInput3.MyStringValue3);
         }
 
-        public class MyAppService : IMyAppService, ITransientDependency
+        public Task<string> NotValidateMyMethod(MyMethodInput4 input)
         {
-            public Task<string> MyMethodAsync(MyMethodInput input)
-            {
-                return Task.FromResult(input.MyStringValue + input.MyMethodInput2.MyStringValue2 +
-                                       input.MyMethodInput3.MyStringValue3);
-            }
-
-            public Task<string> NotValidateMyMethod(MyMethodInput4 input)
-            {
-                return Task.FromResult(input.MyStringValue4);
-            }
+            return Task.FromResult(input.MyStringValue4);
         }
+    }
 
-        public class MyMethodInput
+    public class MyMethodInput
+    {
+        public string MyStringValue { get; set; }
+
+        public MyMethodInput2 MyMethodInput2 { get; set; }
+
+        public MyMethodInput3 MyMethodInput3 { get; set; }
+    }
+
+    public class MyMethodInput2
+    {
+        public string MyStringValue2 { get; set; }
+    }
+
+    public class MyMethodInput3
+    {
+
+        public string MyStringValue3 { get; set; }
+
+        public bool MyBoolValue3 { get; set; }
+    }
+
+    public class MyMethodInput4
+    {
+        public string MyStringValue4 { get; set; }
+    }
+
+    public class MyMethodInputValidator : AbstractValidator<MyMethodInput>
+    {
+        public MyMethodInputValidator()
         {
-            public string MyStringValue { get; set; }
-
-            public MyMethodInput2 MyMethodInput2 { get; set; }
-
-            public MyMethodInput3 MyMethodInput3 { get; set; }
+            RuleFor(x => x.MyStringValue).Equal("aaa");
+            RuleFor(x => x.MyMethodInput2.MyStringValue2).Equal("bbb");
+            RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3Validator());
+            RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3AsyncValidator());
         }
+    }
 
-        public class MyMethodInput2
+    public class MethodInputBaseValidator : AbstractValidator<MyMethodInput3>
+    {
+        public MethodInputBaseValidator()
         {
-            public string MyStringValue2 { get; set; }
+            RuleFor(x => x.MyStringValue3).NotNull();
         }
+    }
 
-        public class MyMethodInput3
+    public class MyMethodInput3Validator : MethodInputBaseValidator
+    {
+        public MyMethodInput3Validator()
         {
-
-            public string MyStringValue3 { get; set; }
-
-            public bool MyBoolValue3 { get; set; }
+            RuleFor(x => x.MyStringValue3).Equal("ccc");
         }
+    }
 
-        public class MyMethodInput4
+    public class MyMethodInput3AsyncValidator : MethodInputBaseValidator
+    {
+        public MyMethodInput3AsyncValidator()
         {
-            public string MyStringValue4 { get; set; }
-        }
+            RuleFor(x => x.MyStringValue3).Equal("ccc");
 
-        public class MyMethodInputValidator : AbstractValidator<MyMethodInput>
-        {
-            public MyMethodInputValidator()
-            {
-                RuleFor(x => x.MyStringValue).Equal("aaa");
-                RuleFor(x => x.MyMethodInput2.MyStringValue2).Equal("bbb");
-                RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3Validator());
-                RuleFor(x => x.MyMethodInput3).SetValidator(new MyMethodInput3AsyncValidator());
-            }
-        }
-
-        public class MethodInputBaseValidator : AbstractValidator<MyMethodInput3>
-        {
-            public MethodInputBaseValidator()
-            {
-                RuleFor(x => x.MyStringValue3).NotNull();
-            }
-        }
-
-        public class MyMethodInput3Validator : MethodInputBaseValidator
-        {
-            public MyMethodInput3Validator()
-            {
-                RuleFor(x => x.MyStringValue3).Equal("ccc");
-            }
-        }
-
-        public class MyMethodInput3AsyncValidator : MethodInputBaseValidator
-        {
-            public MyMethodInput3AsyncValidator()
-            {
-                RuleFor(x => x.MyStringValue3).Equal("ccc");
-
-                RuleFor(x => x.MyBoolValue3).MustAsync((myBookValue3, cancellation) => Task.FromResult(myBookValue3));
-            }
+            RuleFor(x => x.MyBoolValue3).MustAsync((myBookValue3, cancellation) => Task.FromResult(myBookValue3));
         }
     }
 }

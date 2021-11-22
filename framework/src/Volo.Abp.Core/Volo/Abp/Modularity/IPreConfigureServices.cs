@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IPreConfigureServices
 {
-    public interface IPreConfigureServices
-    {
-        void PreConfigureServices(ServiceConfigurationContext context);
-    }
+    void PreConfigureServices(ServiceConfigurationContext context);
 }

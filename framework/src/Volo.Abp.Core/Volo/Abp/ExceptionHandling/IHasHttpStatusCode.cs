@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.ExceptionHandling
+﻿namespace Volo.Abp.ExceptionHandling;
+
+public interface IHasHttpStatusCode
 {
-    public interface IHasHttpStatusCode
-    {
-        int HttpStatusCode { get; }
-    }
+    int HttpStatusCode { get; }
 }

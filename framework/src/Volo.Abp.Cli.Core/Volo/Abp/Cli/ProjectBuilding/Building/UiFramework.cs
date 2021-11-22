@@ -1,12 +1,11 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
+
+public enum UiFramework
 {
-    public enum UiFramework
-    {
-        NotSpecified = 0,
-        None = 1,
-        Mvc = 2,
-        Angular = 3,
-        Blazor = 4,
-        BlazorServer = 5
-    }
+    NotSpecified = 0,
+    None = 1,
+    Mvc = 2,
+    Angular = 3,
+    Blazor = 4,
+    BlazorServer = 5
 }

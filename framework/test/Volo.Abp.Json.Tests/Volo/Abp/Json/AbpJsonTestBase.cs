@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json;
+
+public abstract class AbpJsonTestBase : AbpIntegratedTest<AbpJsonTestModule>
 {
-    public abstract class AbpJsonTestBase : AbpIntegratedTest<AbpJsonTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

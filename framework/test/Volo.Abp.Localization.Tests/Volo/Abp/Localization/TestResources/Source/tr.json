@@ -5,7 +5,6 @@
     "Car": "Araba",
     "CarPlural": "Araba",
     "MaxLenghtErrorMessage": "Bu alanın uzunluğu maksimum '{0}' karakter olabilir",
-    "Universe": "Evren",
-    "FortyTwo": "Kırk iki"
+    "Universe": "Evren"
   }
 }

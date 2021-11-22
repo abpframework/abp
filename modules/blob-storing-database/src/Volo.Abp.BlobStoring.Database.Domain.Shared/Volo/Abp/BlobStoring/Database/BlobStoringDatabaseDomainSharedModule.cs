@@ -6,32 +6,31 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.BlobStoring.Database
+namespace Volo.Abp.BlobStoring.Database;
+
+[DependsOn(
+    typeof(AbpValidationModule)
+)]
+public class BlobStoringDatabaseDomainSharedModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpValidationModule)
-    )]
-    public class BlobStoringDatabaseDomainSharedModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<BlobStoringDatabaseDomainSharedModule>();
-            });
+            options.FileSets.AddEmbedded<BlobStoringDatabaseDomainSharedModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<BlobStoringDatabaseResource>("en")
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Volo/Abp/BlobStoring/Database/Localization");
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<BlobStoringDatabaseResource>("en")
+                .AddBaseTypes(typeof(AbpValidationResource))
+                .AddVirtualJson("/Volo/Abp/BlobStoring/Database/Localization");
+        });
 
-            Configure<AbpExceptionLocalizationOptions>(options =>
-            {
-                options.MapCodeNamespace("BlobStoringDatabase", typeof(BlobStoringDatabaseResource));
-            });
-        }
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("BlobStoringDatabase", typeof(BlobStoringDatabaseResource));
+        });
     }
 }

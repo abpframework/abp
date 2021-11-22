@@ -1,22 +1,21 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public abstract class UserClaim : Entity
 {
-    public abstract class UserClaim : Entity
+    public virtual string Type { get; protected set; }
+
+    protected UserClaim()
     {
-        public virtual string Type { get; protected set; }
 
-        protected UserClaim()
-        {
+    }
 
-        }
+    protected UserClaim([NotNull] string type)
+    {
+        Check.NotNull(type, nameof(type));
 
-        protected UserClaim([NotNull] string type)
-        {
-            Check.NotNull(type, nameof(type));
-
-            Type = type;
-        }
+        Type = type;
     }
 }

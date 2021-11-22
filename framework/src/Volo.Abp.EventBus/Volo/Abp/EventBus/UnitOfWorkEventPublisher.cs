@@ -5,45 +5,44 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus;
+
+[Dependency(ReplaceServices = true)]
+public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDependency
+    private readonly ILocalEventBus _localEventBus;
+    private readonly IDistributedEventBus _distributedEventBus;
+
+    public UnitOfWorkEventPublisher(
+        ILocalEventBus localEventBus,
+        IDistributedEventBus distributedEventBus)
     {
-        private readonly ILocalEventBus _localEventBus;
-        private readonly IDistributedEventBus _distributedEventBus;
+        _localEventBus = localEventBus;
+        _distributedEventBus = distributedEventBus;
+    }
 
-        public UnitOfWorkEventPublisher(
-            ILocalEventBus localEventBus,
-            IDistributedEventBus distributedEventBus)
+    public async Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents)
+    {
+        foreach (var localEvent in localEvents)
         {
-            _localEventBus = localEventBus;
-            _distributedEventBus = distributedEventBus;
+            await _localEventBus.PublishAsync(
+                localEvent.EventType,
+                localEvent.EventData,
+                onUnitOfWorkComplete: false
+            );
         }
-        
-        public async Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents)
-        {
-            foreach (var localEvent in localEvents)
-            {
-                await _localEventBus.PublishAsync(
-                    localEvent.EventType,
-                    localEvent.EventData,
-                    onUnitOfWorkComplete: false
-                );
-            }
-        }
+    }
 
-        public async Task PublishDistributedEventsAsync(IEnumerable<UnitOfWorkEventRecord> distributedEvents)
+    public async Task PublishDistributedEventsAsync(IEnumerable<UnitOfWorkEventRecord> distributedEvents)
+    {
+        foreach (var distributedEvent in distributedEvents)
         {
-            foreach (var distributedEvent in distributedEvents)
-            {
-                await _distributedEventBus.PublishAsync(
-                    distributedEvent.EventType,
-                    distributedEvent.EventData,
-                    onUnitOfWorkComplete: false,
-                    useOutbox: distributedEvent.UseOutbox
-                );
-            }
+            await _distributedEventBus.PublishAsync(
+                distributedEvent.EventType,
+                distributedEvent.EventData,
+                onUnitOfWorkComplete: false,
+                useOutbox: distributedEvent.UseOutbox
+            );
         }
     }
 }
