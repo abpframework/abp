@@ -8,91 +8,90 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Users
+namespace Volo.Abp.Identity.Web.Pages.Identity.Users;
+
+public class CreateModalModel : IdentityPageModel
 {
-    public class CreateModalModel : IdentityPageModel
+    [BindProperty]
+    public UserInfoViewModel UserInfo { get; set; }
+
+    [BindProperty]
+    public AssignedRoleViewModel[] Roles { get; set; }
+
+    protected IIdentityUserAppService IdentityUserAppService { get; }
+
+    public CreateModalModel(IIdentityUserAppService identityUserAppService)
     {
-        [BindProperty]
-        public UserInfoViewModel UserInfo { get; set; }
+        IdentityUserAppService = identityUserAppService;
+    }
 
-        [BindProperty]
-        public AssignedRoleViewModel[] Roles { get; set; }
+    public virtual async Task<IActionResult> OnGetAsync()
+    {
+        UserInfo = new UserInfoViewModel();
 
-        protected IIdentityUserAppService IdentityUserAppService { get; }
+        var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
 
-        public CreateModalModel(IIdentityUserAppService identityUserAppService)
+        Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
+
+        foreach (var role in Roles)
         {
-            IdentityUserAppService = identityUserAppService;
+            role.IsAssigned = role.IsDefault;
         }
 
-        public virtual async Task<IActionResult> OnGetAsync()
-        {
-            UserInfo = new UserInfoViewModel();
+        return Page();
+    }
 
-            var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
+    public virtual async Task<NoContentResult> OnPostAsync()
+    {
+        ValidateModel();
 
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
+        var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
+        input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
-            foreach (var role in Roles)
-            {
-                role.IsAssigned = role.IsDefault;
-            }
+        await IdentityUserAppService.CreateAsync(input);
 
-            return Page();
-        }
+        return NoContent();
+    }
 
-        public virtual async Task<NoContentResult> OnPostAsync()
-        {
-            ValidateModel();
+    public class UserInfoViewModel : ExtensibleObject
+    {
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
+        public string UserName { get; set; }
 
-            var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
-            input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
+        public string Name { get; set; }
 
-            await IdentityUserAppService.CreateAsync(input);
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
+        public string Surname { get; set; }
 
-            return NoContent();
-        }
+        [Required]
+        [DataType(DataType.Password)]
+        [DisableAuditing]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        public string Password { get; set; }
 
-        public class UserInfoViewModel : ExtensibleObject
-        {
-            [Required]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-            public string UserName { get; set; }
+        [Required]
+        [EmailAddress]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+        public string Email { get; set; }
 
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
-            public string Name { get; set; }
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
+        public string PhoneNumber { get; set; }
 
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
-            public string Surname { get; set; }
+        public bool IsActive { get; set; } = true;
 
-            [Required]
-            [DataType(DataType.Password)]
-            [DisableAuditing]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-            public string Password { get; set; }
+        public bool LockoutEnabled { get; set; } = true;
+    }
 
-            [Required]
-            [EmailAddress]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-            public string Email { get; set; }
+    public class AssignedRoleViewModel
+    {
+        [Required]
+        [HiddenInput]
+        public string Name { get; set; }
 
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
-            public string PhoneNumber { get; set; }
+        public bool IsAssigned { get; set; }
 
-            public bool IsActive { get; set; } = true;
-
-            public bool LockoutEnabled { get; set; } = true;
-        }
-
-        public class AssignedRoleViewModel
-        {
-            [Required]
-            [HiddenInput]
-            public string Name { get; set; }
-
-            public bool IsAssigned { get; set; }
-
-            public bool IsDefault { get; set; }
-        }
+        public bool IsDefault { get; set; }
     }
 }

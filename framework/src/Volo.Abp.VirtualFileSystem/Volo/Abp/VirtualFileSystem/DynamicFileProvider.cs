@@ -6,86 +6,85 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.VirtualFileSystem
+namespace Volo.Abp.VirtualFileSystem;
+
+//TODO: Work with directory & wildcard watches!
+//TODO: Work with dictionaries!
+
+/// <remarks>
+/// Current implementation only supports file watch.
+/// Does not support directory or wildcard watches.
+/// </remarks>
+public class DynamicFileProvider : DictionaryBasedFileProvider, IDynamicFileProvider, ISingletonDependency
 {
-    //TODO: Work with directory & wildcard watches!
-    //TODO: Work with dictionaries!
+    protected override IDictionary<string, IFileInfo> Files => DynamicFiles;
 
-    /// <remarks>
-    /// Current implementation only supports file watch.
-    /// Does not support directory or wildcard watches.
-    /// </remarks>
-    public class DynamicFileProvider : DictionaryBasedFileProvider, IDynamicFileProvider, ISingletonDependency
+    protected ConcurrentDictionary<string, IFileInfo> DynamicFiles { get; }
+
+    protected ConcurrentDictionary<string, ChangeTokenInfo> FilePathTokenLookup { get; }
+
+    public DynamicFileProvider()
     {
-        protected override IDictionary<string, IFileInfo> Files => DynamicFiles;
+        FilePathTokenLookup = new ConcurrentDictionary<string, ChangeTokenInfo>(StringComparer.OrdinalIgnoreCase); ;
+        DynamicFiles = new ConcurrentDictionary<string, IFileInfo>();
+    }
 
-        protected ConcurrentDictionary<string, IFileInfo> DynamicFiles { get; }
+    public void AddOrUpdate(IFileInfo fileInfo)
+    {
+        var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+        DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
+        ReportChange(filePath);
+    }
 
-        protected ConcurrentDictionary<string, ChangeTokenInfo> FilePathTokenLookup { get; }
-
-        public DynamicFileProvider()
+    public bool Delete(string filePath)
+    {
+        if (!DynamicFiles.TryRemove(filePath, out _))
         {
-            FilePathTokenLookup = new ConcurrentDictionary<string, ChangeTokenInfo>(StringComparer.OrdinalIgnoreCase);;
-            DynamicFiles = new ConcurrentDictionary<string, IFileInfo>();
+            return false;
         }
 
-        public void AddOrUpdate(IFileInfo fileInfo)
+        ReportChange(filePath);
+        return true;
+    }
+
+    public override IChangeToken Watch(string filter)
+    {
+        return GetOrAddChangeToken(filter);
+    }
+
+    private IChangeToken GetOrAddChangeToken(string filePath)
+    {
+        if (!FilePathTokenLookup.TryGetValue(filePath, out var tokenInfo))
         {
-            var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
-            DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
-            ReportChange(filePath);
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationChangeToken = new CancellationChangeToken(cancellationTokenSource.Token);
+            tokenInfo = new ChangeTokenInfo(cancellationTokenSource, cancellationChangeToken);
+            tokenInfo = FilePathTokenLookup.GetOrAdd(filePath, tokenInfo);
         }
 
-        public bool Delete(string filePath)
-        {
-            if (!DynamicFiles.TryRemove(filePath, out _))
-            {
-                return false;
-            }
+        return tokenInfo.ChangeToken;
+    }
 
-            ReportChange(filePath);
-            return true;
+    private void ReportChange(string filePath)
+    {
+        if (FilePathTokenLookup.TryRemove(filePath, out var tokenInfo))
+        {
+            tokenInfo.TokenSource.Cancel();
+        }
+    }
+
+    protected struct ChangeTokenInfo
+    {
+        public ChangeTokenInfo(
+            CancellationTokenSource tokenSource,
+            CancellationChangeToken changeToken)
+        {
+            TokenSource = tokenSource;
+            ChangeToken = changeToken;
         }
 
-        public override IChangeToken Watch(string filter)
-        {
-            return GetOrAddChangeToken(filter);
-        }
+        public CancellationTokenSource TokenSource { get; }
 
-        private IChangeToken GetOrAddChangeToken(string filePath)
-        {
-            if (!FilePathTokenLookup.TryGetValue(filePath, out var tokenInfo))
-            {
-                var cancellationTokenSource = new CancellationTokenSource();
-                var cancellationChangeToken = new CancellationChangeToken(cancellationTokenSource.Token);
-                tokenInfo = new ChangeTokenInfo(cancellationTokenSource, cancellationChangeToken);
-                tokenInfo = FilePathTokenLookup.GetOrAdd(filePath, tokenInfo);
-            }
-
-            return tokenInfo.ChangeToken;
-        }
-
-        private void ReportChange(string filePath)
-        {
-            if (FilePathTokenLookup.TryRemove(filePath, out var tokenInfo))
-            {
-                tokenInfo.TokenSource.Cancel();
-            }
-        }
-
-        protected struct ChangeTokenInfo
-        {
-            public ChangeTokenInfo(
-                CancellationTokenSource tokenSource,
-                CancellationChangeToken changeToken)
-            {
-                TokenSource = tokenSource;
-                ChangeToken = changeToken;
-            }
-
-            public CancellationTokenSource TokenSource { get; }
-
-            public CancellationChangeToken ChangeToken { get; }
-        }
+        public CancellationChangeToken ChangeToken { get; }
     }
 }

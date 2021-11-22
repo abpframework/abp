@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Serialization
-{
-    [DependsOn(typeof(AbpSerializationModule))]
-    public class AbpSerializationTestModule : AbpModule
-    {
+namespace Volo.Abp.Serialization;
 
-    }
+[DependsOn(typeof(AbpSerializationModule))]
+public class AbpSerializationTestModule : AbpModule
+{
+
 }

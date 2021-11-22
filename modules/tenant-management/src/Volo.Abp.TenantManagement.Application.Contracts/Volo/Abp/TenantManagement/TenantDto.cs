@@ -2,12 +2,11 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.TenantManagement
-{
-    public class TenantDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
-    {
-        public string Name { get; set; }
+namespace Volo.Abp.TenantManagement;
 
-        public string ConcurrencyStamp { get; set; }
-    }
+public class TenantDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
+{
+    public string Name { get; set; }
+
+    public string ConcurrencyStamp { get; set; }
 }
