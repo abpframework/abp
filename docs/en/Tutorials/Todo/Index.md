@@ -758,17 +758,16 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
     </div>
     <div class="card-body">
       <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="form-inline" (ngSubmit)="create()">
-        <input
-          name="NewTodoText"
-          type="text"
-          [(ngModel)]="newTodoText"
-          class="form-control mr-2"
-          placeholder="enter text..."
-        />
-        <button type="submit" class="btn btn-primary">Submit</button>
+      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+        <div class="col-12">
+          <div class="input-group">
+            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </form>
-
       <!-- TODO ITEMS LIST -->
       <ul id="TodoList">
         <li *ngFor="let todoItem of todoItems">
