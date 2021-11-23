@@ -392,7 +392,7 @@
     "TrialLicenseExpiredInfo": "Your trial license period has expired!",
     "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "DowngradeLicensePlan": "Can I downgrade to a lower license plan in the future?",
-    "DowngradeLicensePlanExplanation": "You cannot downgrade your license plan in the future",
+    "DowngradeLicensePlanExplanation": "You cannot downgrade your existing license plan. But you can purchase a new lower license plan and continue to your development on the new license. After you purchase a lower license, you just need to login to your new license plan via ABP CLI command: ` abp login <username> -o <organization> `.",
     "LicenseTransfer": "Can a license be transferred from one developer to another?",
     "LicenseTransferExplanation": "Yes! When you purchase a license, you become the license holder, hence you will have access to the organization management page. An organization has owner and developer roles. Owners can manage the developer seats and assign developers. Each assigned developer will login via ABP CLI command into the system and will have development and https://support.abp.io permissions."
    }
