@@ -31,6 +31,8 @@ public static class AbpAuditLoggingDbContextModelBuilderExtensions
             b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
             b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
             b.Property(x => x.ImpersonatorUserId).HasColumnName(nameof(AuditLog.ImpersonatorUserId));
+            b.Property(x => x.ImpersonatorTenantName).HasColumnName(nameof(AuditLog.ImpersonatorTenantName));
+            b.Property(x => x.ImpersonatorUserName).HasColumnName(nameof(AuditLog.ImpersonatorUserName));
             b.Property(x => x.UserId).HasColumnName(nameof(AuditLog.UserId));
             b.Property(x => x.UserName).HasMaxLength(AuditLogConsts.MaxUserNameLength).HasColumnName(nameof(AuditLog.UserName));
             b.Property(x => x.TenantId).HasColumnName(nameof(AuditLog.TenantId));
