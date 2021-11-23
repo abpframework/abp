@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
 
-namespace Volo.Abp.Authorization
-{
-    public class MethodInvocationAuthorizationContext
-    {
-        public MethodInfo Method { get; }
+namespace Volo.Abp.Authorization;
 
-        public MethodInvocationAuthorizationContext(MethodInfo method)
-        {
-            Method = method;
-        }
+public class MethodInvocationAuthorizationContext
+{
+    public MethodInfo Method { get; }
+
+    public MethodInvocationAuthorizationContext(MethodInfo method)
+    {
+        Method = method;
     }
 }

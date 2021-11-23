@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs;
+
+public interface IDefaultBlogFeatureProvider
 {
-    public interface IDefaultBlogFeatureProvider
-    {
-        Task<List<BlogFeature>> GetDefaultFeaturesAsync(Guid blogId);
-    }
+    Task<List<BlogFeature>> GetDefaultFeaturesAsync(Guid blogId);
 }
