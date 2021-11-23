@@ -21,11 +21,8 @@ public class Localization_Tests : AbpIdentityDomainTestBase
     {
         using (CultureHelper.Use("en"))
         {
-            using (CultureHelper.Use("en"))
-            {
-                _stringLocalizer["PersonalSettingsSavedMessage"].Value
-                .ShouldBe("Your personal settings has been saved successfully.");
-            }
+            _stringLocalizer["PersonalSettingsSavedMessage"].Value
+            .ShouldBe("Your personal settings has been saved successfully.");
         }
     }
 }
