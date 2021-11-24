@@ -16,7 +16,7 @@
                 <div id="HideSectionWhenUseDefaultCredentialsIsChecked" @Html.Raw(Model.SmtpUseDefaultCredentials ? "style=\"display: none;\"" : "")>
                     <abp-input asp-for="SmtpDomain" label="@L["SmtpDomain"].Value" />
                     <abp-input asp-for="SmtpUserName" label="@L["SmtpUserName"].Value" />
-                    <abp-input asp-for="SmtpPassword" label="@L["SmtpPassword"].Value" />
+                    <abp-input type="password" asp-for="SmtpPassword" label="@L["SmtpPassword"].Value" />
                 </div>
             </div>
             <hr class="my-4" />

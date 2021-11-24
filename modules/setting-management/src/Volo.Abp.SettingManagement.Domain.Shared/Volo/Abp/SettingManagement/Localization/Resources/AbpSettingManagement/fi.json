@@ -14,6 +14,11 @@
     "SmtpEnableSsl": "Ota käyttöön ssl",
     "SmtpUseDefaultCredentials": "Käytä oletusarvoisia tunnistetietoja",
     "DefaultFromAddress": "Oletus osoitteesta",
-    "DefaultFromDisplayName": "Oletus näyttönimestä"
+    "DefaultFromDisplayName": "Oletus näyttönimestä",
+    "Feature:SettingManagementGroup": "Asetusten hallinta",
+    "Feature:SettingManagementEnable": "Ota asetusten hallinta käyttöön",
+    "Feature:SettingManagementEnableDescription": "Ota asetustenhallintajärjestelmä käyttöön sovelluksessa.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Salli vuokralaisten muuttaa sähköpostiasetuksia.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Salli vuokralaisten muuttaa sähköpostiasetuksia."
   }
 }

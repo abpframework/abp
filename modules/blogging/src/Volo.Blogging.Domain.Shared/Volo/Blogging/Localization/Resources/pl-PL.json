@@ -12,6 +12,7 @@
     "Permission:Posts": "Posty",
     "Permission:Tags": "Tagi",
     "Permission:Comments": "Komentarze",
+    "Permission:ClearCache": "Wyczyść pamięć podręczną",
     "Title": "Tytuł",
     "Delete": "Usuń",
     "Reply": "Odpowiedz",
@@ -51,6 +52,10 @@
     "CreationTime": "Data utworzenia",
     "Description": "Opis",
     "Blogs": "Blogi",
-    "Tags": "Tagi"
+    "Tags": "Tagi",
+    "ShareOn": "Podziel się",
+    "TitleLengthWarning": "Utrzymuj rozmiar tytułu poniżej 60 znaków, aby był przyjazny dla SEO!",
+    "ClearCache": "Wyczyść pamięć podręczną",
+    "ClearCacheConfirmationMessage": "Czy na pewno chcesz wyczyścić pamięć podręczną?"
   }
 }

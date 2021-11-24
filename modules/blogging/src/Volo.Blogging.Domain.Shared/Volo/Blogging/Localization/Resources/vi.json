@@ -12,6 +12,7 @@
     "Permission:Posts": "Bài viết",
     "Permission:Tags": "Thẻ",
     "Permission:Comments": "Bình luận",
+    "Permission:ClearCache": "Xóa bộ nhớ cache",
     "Title": "Tiêu đề",
     "Delete": "Xóa",
     "Reply": "Trả lời",
@@ -51,6 +52,10 @@
     "CreationTime": "Thời gian tạo",
     "Description": "Mô tả",
     "Blogs": "Blogs",
-    "Tags": "Thẻ"
+    "Tags": "Thẻ",
+    "ShareOn": "Chia sẻ",
+    "TitleLengthWarning": "Giữ kích thước tiêu đề của bạn dưới 60 ký tự để thân thiện với SEO!",
+    "ClearCache": "Xóa bộ nhớ cache",
+    "ClearCacheConfirmationMessage": "Bạn có chắc chắn muốn xóa bộ nhớ cache không?"
   }
 }

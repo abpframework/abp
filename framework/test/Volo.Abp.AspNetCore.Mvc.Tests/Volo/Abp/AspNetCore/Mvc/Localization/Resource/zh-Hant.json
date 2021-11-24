@@ -1,7 +1,10 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "出生日期1",
+    "DisplayName:BirthDate2": "出生日期2",
+    "PersonModel:BirthDate3": "出生日期3",
     "BirthDate": "生日",
-    "Value1": "值1" 
+    "Value1": "值1"
   }
 }

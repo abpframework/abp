@@ -1,7 +1,6 @@
-﻿namespace MyCompanyName.MyProjectName
+﻿namespace MyCompanyName.MyProjectName;
+
+public static class MyProjectNameTestConsts
 {
-    public static class MyProjectNameTestConsts
-    {
-        public const string CollectionDefinitionName = "MyProjectName collection";
-    }
+    public const string CollectionDefinitionName = "MyProjectName collection";
 }

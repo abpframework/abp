@@ -2,30 +2,29 @@
 using System.Collections.Concurrent;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+
+public class AbpBundleContributorOptions
 {
-    public class AbpBundleContributorOptions
+    public ConcurrentDictionary<Type, BundleContributorCollection> AllExtensions { get; }
+
+    public AbpBundleContributorOptions()
     {
-        public ConcurrentDictionary<Type, BundleContributorCollection> AllExtensions { get; }
+        AllExtensions = new ConcurrentDictionary<Type, BundleContributorCollection>();
+    }
 
-        public AbpBundleContributorOptions()
-        {
-            AllExtensions = new ConcurrentDictionary<Type, BundleContributorCollection>();
-        }
+    public BundleContributorCollection Extensions<TContributor>()
+    {
+        return Extensions(typeof(TContributor));
+    }
 
-        public BundleContributorCollection Extensions<TContributor>()
-        {
-            return Extensions(typeof(TContributor));
-        }
+    public BundleContributorCollection Extensions([NotNull] Type contributorType)
+    {
+        Check.NotNull(contributorType, nameof(contributorType));
 
-        public BundleContributorCollection Extensions([NotNull] Type contributorType)
-        {
-            Check.NotNull(contributorType, nameof(contributorType));
-
-            return AllExtensions.GetOrAdd(
-                contributorType,
-                _ => new BundleContributorCollection()
-            );
-        }
+        return AllExtensions.GetOrAdd(
+            contributorType,
+            _ => new BundleContributorCollection()
+        );
     }
 }

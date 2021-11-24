@@ -7,6 +7,7 @@ import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/u
 const mockSessionState = {
   languageChange$: new BehaviorSubject('tr'),
   getLanguage: () => 'tr',
+  getLanguage$: () => of('tr'),
   onLanguageChange$: () => new BehaviorSubject('tr'),
 } as any;
 

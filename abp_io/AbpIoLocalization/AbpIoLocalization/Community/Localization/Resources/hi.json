@@ -97,7 +97,7 @@
     "Community": "समुदाय",
     "Marketing": "विपणन",
     "CommunityPrivacyPolicyConfirmation": "मैं नियम और शर्तों और <a href=\"https://commercial.abp.io/Privacy\">गोपनीयता नीति</a> से सहमत हूं।",
-    "ArticleRequestMessageTitle": "GitHub पर एक लेख / ट्यूटोरियल जिसे आप इस वेब साइट पर देखना चाहते हैं, का अनुरोध करने के लिए <a href=\"https://github.com/abpframework/abp/issues/new\"> एक समस्या खोलें </a>।",
+    "ArticleRequestMessageTitle": "GitHub पर एक लेख/ट्यूटोरियल जिसे आप इस वेब साइट पर देखना चाहते हैं, का अनुरोध करने के लिए <a href=\"https://github.com/abpframework/abp/issues/new\"> एक समस्या खोलें </a>।",
     "ArticleRequestMessageBody": "यहाँ, समुदाय द्वारा अनुरोधित लेखों की सूची। क्या आप एक अनुरोधित लेख लिखना चाहते हैं? कृपया अनुरोध पर क्लिक करें और चर्चा में शामिल हों।",
     "Language": "भाषा: हिन्दी",
     "CreateArticleLanguageInfo": "पोस्ट सामग्री के लिए भाषा।",
@@ -142,6 +142,7 @@
     "MinimumSearchContent": "आपको कम से कम 3 वर्ण दर्ज करने होंगे!",
     "Volo.AbpIo.Domain:060001": "स्रोत URL (\"{ArticleUrl}\") जीथब URL नहीं है",
     "Volo.AbpIo.Domain:060002": "लेख सामग्री Github (\"{ArticleUrl}\") संसाधन से उपलब्ध नहीं है।",
-    "Volo.AbpIo.Domain:060003": "कोई लेख सामग्री नहीं मिली!"
+    "Volo.AbpIo.Domain:060003": "कोई लेख सामग्री नहीं मिली!",
+    "SeeMore": "और देखें"
   }
 }

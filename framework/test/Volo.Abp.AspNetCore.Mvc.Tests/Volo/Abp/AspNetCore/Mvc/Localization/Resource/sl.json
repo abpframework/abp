@@ -1,0 +1,10 @@
+{
+  "culture": "sl",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Datum rojstva 1",
+    "DisplayName:BirthDate2": "Datum rojstva 2",
+    "PersonModel:BirthDate3": "Datum rojstva 3",
+    "BirthDate": "Rojstni datum",
+    "Value1": "Ena vrednost"
+  }
+}

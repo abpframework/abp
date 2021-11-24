@@ -2,6 +2,23 @@
   "culture": "sl",
   "texts": {
     "Settings": "Nastavitve",
-    "SuccessfullySaved": "Uspešno shranjeno"
+    "SuccessfullySaved": "Uspešno shranjeno",
+    "Permission:SettingManagement": "Upravljanje nastavitev",
+    "Permission:Emailing": "Pošiljanje po e-pošti",
+    "Menu:Emailing": "Pošiljanje po e-pošti",
+    "SmtpHost": "Gostitelj",
+    "SmtpPort": "pristanišče",
+    "SmtpUserName": "Uporabniško ime",
+    "SmtpPassword": "Geslo",
+    "SmtpDomain": "domena",
+    "SmtpEnableSsl": "Omogoči ssl",
+    "SmtpUseDefaultCredentials": "Uporabite privzete poverilnice",
+    "DefaultFromAddress": "Privzeto od naslova",
+    "DefaultFromDisplayName": "Privzeto iz prikaznega imena",
+    "Feature:SettingManagementGroup": "Upravljanje nastavitev",
+    "Feature:SettingManagementEnable": "Omogoči upravljanje nastavitev",
+    "Feature:SettingManagementEnableDescription": "Omogočite nastavitev sistema upravljanja v aplikaciji.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Dovoli najemnikom, da spremenijo nastavitve e-pošte.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Dovoli najemnikom, da spremenijo nastavitve e-pošte."
   }
 }

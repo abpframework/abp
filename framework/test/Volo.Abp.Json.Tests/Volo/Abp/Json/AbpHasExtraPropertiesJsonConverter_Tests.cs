@@ -5,72 +5,71 @@ using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 using Xunit;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json;
+
+public class AbpHasExtraPropertiesJsonConverter_Tests : AbpJsonTestBase
 {
-    public class AbpHasExtraPropertiesJsonConverter_Tests: AbpJsonTestBase
-    {
-        private readonly IJsonSerializer _jsonSerializer;
+    private readonly IJsonSerializer _jsonSerializer;
 
-        public AbpHasExtraPropertiesJsonConverter_Tests()
+    public AbpHasExtraPropertiesJsonConverter_Tests()
+    {
+        _jsonSerializer = GetRequiredService<IJsonSerializer>();
+    }
+
+    [Fact]
+    public void JsonConverter_Test()
+    {
+        var fooDto = new FooDto
         {
-            _jsonSerializer = GetRequiredService<IJsonSerializer>();
-        }
+            Name = "foo-dto",
+            BarDtos = new List<BarDto>()
+        };
+        fooDto.SetProperty("foo", "foo-value");
 
-        [Fact]
-        public void JsonConverter_Test()
+        var barDto = new BarDto
         {
-            var fooDto = new FooDto
-            {
-                Name = "foo-dto",
-                BarDtos = new List<BarDto>()
-            };
-            fooDto.SetProperty("foo", "foo-value");
+            Name = "bar-dto"
+        };
+        barDto.SetProperty("bar", "bar-value");
+        fooDto.BarDtos.Add(barDto);
 
-            var barDto = new BarDto
-            {
-                Name = "bar-dto"
-            };
-            barDto.SetProperty("bar", "bar-value");
-            fooDto.BarDtos.Add(barDto);
+        var json = _jsonSerializer.Serialize(fooDto);
 
-            var json = _jsonSerializer.Serialize(fooDto);
+        fooDto = _jsonSerializer.Deserialize<FooDto>(json);
+        fooDto.ShouldNotBeNull();
+        fooDto.Name.ShouldBe("foo-dto");
+        fooDto.GetProperty("foo").ShouldBe("foo-value");
 
-            fooDto = _jsonSerializer.Deserialize<FooDto>(json);
-            fooDto.ShouldNotBeNull();
-            fooDto.Name.ShouldBe("foo-dto");
-            fooDto.GetProperty("foo").ShouldBe("foo-value");
+        fooDto.BarDtos.Count.ShouldBe(1);
+        fooDto.BarDtos.First().Name.ShouldBe("bar-dto");
+        fooDto.BarDtos.First().GetProperty("bar").ShouldBe("bar-value");
 
-            fooDto.BarDtos.Count.ShouldBe(1);
-            fooDto.BarDtos.First().Name.ShouldBe("bar-dto");
-            fooDto.BarDtos.First().GetProperty("bar").ShouldBe("bar-value");
+        fooDto.Name = "new-foo-dto";
+        fooDto.SetProperty("foo", "new-foo-value");
+        fooDto.BarDtos.First().Name = "new-bar-dto";
+        fooDto.BarDtos.First().SetProperty("bar", "new-bar-value");
 
-            fooDto.Name = "new-foo-dto";
-            fooDto.SetProperty("foo", "new-foo-value");
-            fooDto.BarDtos.First().Name = "new-bar-dto";
-            fooDto.BarDtos.First().SetProperty("bar", "new-bar-value");
+        json = _jsonSerializer.Serialize(fooDto);
 
-            json = _jsonSerializer.Serialize(fooDto);
+        fooDto = _jsonSerializer.Deserialize<FooDto>(json);
+        fooDto.ShouldNotBeNull();
+        fooDto.Name.ShouldBe("new-foo-dto");
+        fooDto.GetProperty("foo").ShouldBe("new-foo-value");
 
-            fooDto = _jsonSerializer.Deserialize<FooDto>(json);
-            fooDto.ShouldNotBeNull();
-            fooDto.Name.ShouldBe("new-foo-dto");
-            fooDto.GetProperty("foo").ShouldBe("new-foo-value");
-
-            fooDto.BarDtos.Count.ShouldBe(1);
-            fooDto.BarDtos.First().Name.ShouldBe("new-bar-dto");
-            fooDto.BarDtos.First().GetProperty("bar").ShouldBe("new-bar-value");
-        }
+        fooDto.BarDtos.Count.ShouldBe(1);
+        fooDto.BarDtos.First().Name.ShouldBe("new-bar-dto");
+        fooDto.BarDtos.First().GetProperty("bar").ShouldBe("new-bar-value");
     }
+}
 
-    public class FooDto : ExtensibleObject
-    {
-        public string Name { get; set; }
+public class FooDto : ExtensibleObject
+{
+    public string Name { get; set; }
 
-        public List<BarDto> BarDtos { get; set; }
-    }
+    public List<BarDto> BarDtos { get; set; }
+}
 
-    public class BarDto : ExtensibleObject
-    {
-        public string Name { get; set; }
-    }
+public class BarDto : ExtensibleObject
+{
+    public string Name { get; set; }
 }

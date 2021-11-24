@@ -23,4 +23,8 @@
         <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <EmbeddedResource Include="**\*generate-proxy.json" />
+        <Content Remove="**\*generate-proxy.json" />
+    </ItemGroup>
 </Project>

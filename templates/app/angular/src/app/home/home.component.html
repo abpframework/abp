@@ -10,7 +10,7 @@
 
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
-    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
+    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ms-1" role="button"
       ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
     >
   </div>
@@ -281,7 +281,7 @@
 </div>
 
 <ng-template #starterLinkTemplate let-context>
-  <div class="col-lg-4 border-left">
+  <div class="col-lg-4 border-start">
     <div class="p-4">
       <h5 class="mb-3">
         <i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> {{ context.title }}
@@ -303,7 +303,7 @@
 </ng-template>
 
 <ng-template #featuresTemplate let-context>
-  <div class="col-lg-2 border-left">
+  <div class="col-lg-2 border-start">
     <div class="p-3">
       <h6>
         <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
@@ -317,16 +317,16 @@
 </ng-template>
 
 <style scoped>
-  .col-lg-2.border-left:nth-of-type(6n + 1) {
+  .col-lg-2.border-start:nth-of-type(6n + 1) {
     border-left: 0 !important;
   }
 
-  .col-lg-4.border-left:nth-of-type(3n + 1) {
+  .col-lg-4.border-start:nth-of-type(3n + 1) {
     border-left: 0 !important;
   }
 
   @media (max-width: 991px) {
-    .border-left {
+    .border-start {
       border-left: 0 !important;
     }
   }

@@ -1,6 +1,9 @@
 {
   "culture": "cs",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Datum narození 1",
+    "DisplayName:BirthDate2": "Datum narození 2",
+    "PersonModel:BirthDate3": "Datum narození 3",
     "BirthDate": "Narozeniny",
     "Value1": "Hodnota jedna"
   }

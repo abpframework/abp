@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "Vir ni bil najden!",
     "DefaultErrorMessage404Detail": "Zahtevanega vira ni bilo mogoče najti na strežniku!",
     "EntityNotFoundErrorMessage": "Ni entitete {0} z id-jem = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Podatke, ki ste jih poslali, je že spremenil drug uporabnik/stranka. Zavrzite spremembe, ki ste jih naredili, in poskusite od začetka.",
     "Error": "Napaka",
     "UnhandledException": "Neobravnavana napaka!",
     "401Message": "Nepooblaščeno",
     "403Message": "Prepovedano",
     "404Message": "Strani ni mogoče najti",
-    "500Message": "Napaka na strani strežnika"
+    "500Message": "Napaka na strani strežnika",
+    "403MessageDetail": "Niste pooblaščeni za izvajanje te operacije!",
+    "404MessageDetail": "Oprostite, na tem naslovu ni ničesar."
   }
 }

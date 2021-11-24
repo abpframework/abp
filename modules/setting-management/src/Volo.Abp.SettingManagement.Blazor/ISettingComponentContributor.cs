@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.SettingManagement.Blazor
-{
-    public interface ISettingComponentContributor
-    {
-        Task ConfigureAsync(SettingComponentCreationContext context);
+namespace Volo.Abp.SettingManagement.Blazor;
 
-        Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context);
-    }
+public interface ISettingComponentContributor
+{
+    Task ConfigureAsync(SettingComponentCreationContext context);
+
+    Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context);
 }

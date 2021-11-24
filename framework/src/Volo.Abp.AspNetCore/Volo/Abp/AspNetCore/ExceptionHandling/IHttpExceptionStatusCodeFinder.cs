@@ -2,10 +2,9 @@
 using System.Net;
 using Microsoft.AspNetCore.Http;
 
-namespace Volo.Abp.AspNetCore.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling;
+
+public interface IHttpExceptionStatusCodeFinder
 {
-    public interface IHttpExceptionStatusCodeFinder
-    {
-        HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception);
-    }
+    HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception);
 }

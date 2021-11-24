@@ -7,42 +7,41 @@ using Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Perso
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Account.Web.ProfileManagement
+namespace Volo.Abp.Account.Web.ProfileManagement;
+
+public class AccountProfileManagementPageContributor : IProfileManagementPageContributor
 {
-    public class AccountProfileManagementPageContributor : IProfileManagementPageContributor
+    public async Task ConfigureAsync(ProfileManagementPageCreationContext context)
     {
-        public async Task ConfigureAsync(ProfileManagementPageCreationContext context)
+        var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AccountResource>>();
+
+        if (await IsPasswordChangeEnabled(context))
         {
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AccountResource>>();
-
-            if (await IsPasswordChangeEnabled(context))
-            {
-                context.Groups.Add(
-                    new ProfileManagementPageGroup(
-                        "Volo.Abp.Account.Password",
-                        l["ProfileTab:Password"],
-                        typeof(AccountProfilePasswordManagementGroupViewComponent)
-                    )
-                );
-            }
-
             context.Groups.Add(
                 new ProfileManagementPageGroup(
-                    "Volo.Abp.Account.PersonalInfo",
-                    l["ProfileTab:PersonalInfo"],
-                    typeof(AccountProfilePersonalInfoManagementGroupViewComponent)
+                    "Volo.Abp.Account.Password",
+                    l["ProfileTab:Password"],
+                    typeof(AccountProfilePasswordManagementGroupViewComponent)
                 )
             );
         }
 
-        protected virtual async Task<bool> IsPasswordChangeEnabled(ProfileManagementPageCreationContext context)
-        {
-            var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
-            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+        context.Groups.Add(
+            new ProfileManagementPageGroup(
+                "Volo.Abp.Account.PersonalInfo",
+                l["ProfileTab:PersonalInfo"],
+                typeof(AccountProfilePersonalInfoManagementGroupViewComponent)
+            )
+        );
+    }
 
-            var user = await userManager.GetByIdAsync(currentUser.GetId());
+    protected virtual async Task<bool> IsPasswordChangeEnabled(ProfileManagementPageCreationContext context)
+    {
+        var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
+        var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
 
-            return !user.IsExternal;
-        }
+        var user = await userManager.GetByIdAsync(currentUser.GetId());
+
+        return !user.IsExternal;
     }
 }

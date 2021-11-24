@@ -5,7 +5,7 @@
     "ncu": "ncu",
     "update-gulp": "node update-gulp.js",
     "replace-with-tilde": "node replace-with-tilde.js",
-    "update": "node package-update-script.js . abp"
+    "update": "node package-update-script.js"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
