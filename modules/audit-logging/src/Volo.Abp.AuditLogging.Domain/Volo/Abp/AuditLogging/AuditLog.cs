@@ -107,9 +107,9 @@ public class AuditLog : AggregateRoot<Guid>, IMultiTenant
         Url = url.Truncate(AuditLogConsts.MaxUrlLength);
         HttpStatusCode = httpStatusCode;
         ImpersonatorUserId = impersonatorUserId;
-        ImpersonatorUserName = impersonatorUserName;
+        ImpersonatorUserName = impersonatorUserName.Truncate(AuditLogConsts.MaxUserNameLength);
         ImpersonatorTenantId = impersonatorTenantId;
-        ImpersonatorTenantName = impersonatorTenantName;
+        ImpersonatorTenantName = impersonatorTenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
         ExtraProperties = extraPropertyDictionary;
         EntityChanges = entityChanges;
         Actions = actions;
