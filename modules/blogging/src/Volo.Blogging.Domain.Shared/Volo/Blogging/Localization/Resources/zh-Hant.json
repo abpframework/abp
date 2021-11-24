@@ -12,6 +12,7 @@
     "Permission:Posts": "文章",
     "Permission:Tags": "標籤",
     "Permission:Comments": "評論",
+    "Permission:ClearCache": "清除緩存",
     "Title": "標題",
     "Delete": "刪除",
     "Reply": "回覆",
@@ -53,6 +54,8 @@
     "Blogs": "部落格",
     "Tags": "標籤",
     "ShareOn": "分享在",
-    "TitleLengthWarning": "為了優化搜索引擎，標題建議保持在60個字元以內"
+    "TitleLengthWarning": "為了優化搜索引擎，標題建議保持在60個字元以內",
+    "ClearCache": "清除緩存",
+    "ClearCacheConfirmationMessage": "您確定要清除緩存嗎？"
   }
 }

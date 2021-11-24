@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Public.Web.Renderers
+namespace Volo.CmsKit.Public.Web.Renderers;
+
+public interface IMarkdownToHtmlRenderer
 {
-    public interface IMarkdownToHtmlRenderer
-    {
-        Task<string> RenderAsync(string rawMarkdown);
-    }
+    Task<string> RenderAsync(string rawMarkdown);
 }

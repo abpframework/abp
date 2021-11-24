@@ -1,5 +1,8 @@
-body {
+﻿body {
   position: relative; }
+
+a {
+  text-decoration: none; }
 
 .docs-page {
   background: #f5f7f9; }
@@ -35,13 +38,14 @@ body {
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select {
           border-radius: 3px; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text {
-            padding: 0 10px;
+            padding: 0 12px;
             font-size: .9rem;
-            width: 26px;
+            width: 30px;
             height: 34px;
             line-height: 1;
             border-radius: 0px;
-            border: 0; }
+            border: 0;
+            background: #000; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text i {
               color: #666; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
@@ -137,30 +141,32 @@ body {
               color: #007bff; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree.last-link > span .fa {
               transform: rotate(0deg); }
-    .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand {
-      font-size: 1.35rem;
-      color: #000;
-      font-weight: 700;
-      padding: 15px 0 15px;
-      line-height: 1; }
-      .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand strong {
-        font-weight: 300;
-        text-transform: uppercase;
-        font-size: .7em;
-        letter-spacing: 1px; }
-    .docs-page .docs-sidebar .docs-top .navbar-logo .go-back-site {
-      color: #000;
-      opacity: .65;
-      transition: .2s;
-      font-size: .8em;
-      font-weight: 300; }
-      .docs-page .docs-sidebar .docs-top .navbar-logo .go-back-site:hover {
-        text-decoration: none;
-        opacity: 1; }
-    .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-logo-desc {
-      font-size: .85em; }
-      .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-logo-desc strong {
-        display: block; }
+    .docs-page .docs-sidebar .docs-top {
+      padding: 0 1em; }
+      .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand {
+        font-size: 1.35rem;
+        color: #000;
+        font-weight: 700;
+        padding: 15px 0 15px;
+        line-height: 1; }
+        .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand strong {
+          font-weight: 300;
+          text-transform: uppercase;
+          font-size: .7em;
+          letter-spacing: 1px; }
+      .docs-page .docs-sidebar .docs-top .navbar-logo .go-back-site {
+        color: #000;
+        opacity: .65;
+        transition: .2s;
+        font-size: .8em;
+        font-weight: 300; }
+        .docs-page .docs-sidebar .docs-top .navbar-logo .go-back-site:hover {
+          text-decoration: none;
+          opacity: 1; }
+      .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-logo-desc {
+        font-size: .85em; }
+        .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-logo-desc strong {
+          display: block; }
   .docs-page .docs-content {
     overflow-x: scroll;
     min-height: 100vh; }

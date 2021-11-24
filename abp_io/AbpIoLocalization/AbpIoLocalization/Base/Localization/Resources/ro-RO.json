@@ -35,6 +35,10 @@
     "Support": "Suport",
     "FreeDDDBook": "DDD E-book gratis",
     "New": "Nou",
-    "Volo.AbpIo.Domain:020005": "Anul prelungirii licenţei nu poate fi mai mic decât {MinExtendLicenseYear} şi mai mare decât {MaxExtendLicenseYear}"
+    "Volo.AbpIo.Domain:020005": "Anul prelungirii licenţei nu poate fi mai mic decât {MinExtendLicenseYear} şi mai mare decât {MaxExtendLicenseYear}",
+    "TrialLicensePeriodHasExpired": "Perioada dvs. de licență de probă a expirat acum {0} zile.",
+    "TrialLicensePeriodWillExpire": "Perioada dvs. de licență de probă va expira în {0} zile.",
+    "TrialLicensePeriodExpireToday": "Perioada dvs. de licență de probă va expira astăzi.",
+    "PurchaseNow": "Cumpara acum!"
   }
 }

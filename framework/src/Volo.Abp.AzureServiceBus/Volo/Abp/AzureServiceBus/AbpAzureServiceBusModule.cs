@@ -3,18 +3,17 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.AzureServiceBus
+namespace Volo.Abp.AzureServiceBus;
+
+[DependsOn(
+    typeof(AbpJsonModule),
+    typeof(AbpThreadingModule)
+)]
+public class AbpAzureServiceBusModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpJsonModule),
-        typeof(AbpThreadingModule)
-    )]
-    public class AbpAzureServiceBusModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var configuration = context.Services.GetConfiguration();
-            Configure<AbpAzureServiceBusOptions>(configuration.GetSection("Azure:ServiceBus"));
-        }
+        var configuration = context.Services.GetConfiguration();
+        Configure<AbpAzureServiceBusOptions>(configuration.GetSection("Azure:ServiceBus"));
     }
 }

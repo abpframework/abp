@@ -1,6 +1,14 @@
 {
   "culture": "sl",
   "texts": {
-
+    "VirtualFileExplorer": "Virtualni raziskovalec datotek",
+    "VirtualFileType": "Navidezna vrsta datoteke",
+    "Menu:VirtualFileExplorer": "Virtualni raziskovalec datotek",
+    "LastUpdateTime": "Čas zadnje posodobitve",
+    "VirtualFileName": "Ime virtualne datoteke",
+    "FileContent": "Vsebina datoteke",
+    "Size": "Velikost",
+    "BackToRoot": "Nazaj na koren",
+    "EmptyFileInfoList": "Navideznih datotek ni"
   }
 }

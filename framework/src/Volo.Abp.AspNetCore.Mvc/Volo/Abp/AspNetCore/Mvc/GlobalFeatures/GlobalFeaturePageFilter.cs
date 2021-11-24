@@ -9,35 +9,34 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
+namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
+
+public class GlobalFeaturePageFilter : IAsyncPageFilter, ITransientDependency
 {
-    public class GlobalFeaturePageFilter: IAsyncPageFilter, ITransientDependency
+    public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {
-        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+        return Task.CompletedTask;
+    }
+
+    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+    {
+        if (context.HandlerInstance == null || !context.ActionDescriptor.IsPageAction())
         {
-            return Task.CompletedTask;
+            await next();
+            return;
         }
 
-        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+        if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
         {
-            if (context.HandlerInstance == null || !context.ActionDescriptor.IsPageAction())
-            {
-                await next();
-                return;
-            }
+            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
+            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
+            context.Result = new NotFoundResult();
+            return;
+        }
 
-            if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
-            {
-                var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-                logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
-                context.Result = new NotFoundResult();
-                return;
-            }
-
-            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.GlobalFeatureChecking))
-            {
-                await next();
-            }
+        using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.GlobalFeatureChecking))
+        {
+            await next();
         }
     }
 }

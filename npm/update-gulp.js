@@ -6,7 +6,12 @@ const fse = require('fs-extra');
 const { program } = require('commander');
 
 program.version('0.0.1');
-program.option('-pr, --prerelase', 'whether version is prerelase');
+program.option('-pr, --prerelease', 'whether version is prerelease');
+program.option(
+  '-rg, --registry <registry>',
+  'NPM server registry',
+  'https://registry.npmjs.org'
+);
 program.parse(process.argv);
 
 const gulp = (folderPath) => {
@@ -31,8 +36,8 @@ const updatePackages = (pkgJsonPath) => {
     const result = childProcess
       .execSync(
         `ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u${
-          program.prerelase ? ' --target newest' : ''
-        }`
+          program.prerelease ? ' --target newest' : ''
+        } --registry ${program.registry}`
       )
       .toString();
     console.log('\x1b[0m', result);

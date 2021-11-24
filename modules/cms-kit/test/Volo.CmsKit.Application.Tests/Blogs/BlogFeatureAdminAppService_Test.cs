@@ -3,65 +3,64 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Admin.Blogs;
 using Xunit;
 
-namespace Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs;
+
+public class BlogFeatureAdminAppService_Test : CmsKitApplicationTestBase
 {
-    public class BlogFeatureAdminAppService_Test : CmsKitApplicationTestBase
+    private readonly CmsKitTestData testData;
+    private readonly IBlogFeatureAdminAppService blogFeatureAdminAppService;
+    private readonly IBlogFeatureRepository blogFeatureRepository;
+
+    public BlogFeatureAdminAppService_Test()
     {
-        private readonly CmsKitTestData testData;
-        private readonly IBlogFeatureAdminAppService blogFeatureAdminAppService;
-        private readonly IBlogFeatureRepository blogFeatureRepository;
+        testData = GetRequiredService<CmsKitTestData>();
+        blogFeatureAdminAppService = GetRequiredService<IBlogFeatureAdminAppService>();
+        blogFeatureRepository = GetRequiredService<IBlogFeatureRepository>();
+    }
 
-        public BlogFeatureAdminAppService_Test()
+    [Fact]
+    public async Task SetAsync_ShouldWorkProperly_WithNonExistingFeature()
+    {
+        var dto = new BlogFeatureInputDto
         {
-            testData = GetRequiredService<CmsKitTestData>();
-            blogFeatureAdminAppService = GetRequiredService<IBlogFeatureAdminAppService>();
-            blogFeatureRepository = GetRequiredService<IBlogFeatureRepository>();
-        }
+            FeatureName = "My.Awesome.Feature",
+            IsEnabled = true
+        };
 
-        [Fact]
-        public async Task SetAsync_ShouldWorkProperly_WithNonExistingFeature()
+        await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
+
+        var feature = await blogFeatureRepository.FindAsync(testData.Blog_Id, dto.FeatureName);
+
+        feature.ShouldNotBeNull();
+        feature.BlogId.ShouldBe(testData.Blog_Id);
+        feature.IsEnabled.ShouldBe(dto.IsEnabled);
+    }
+
+    [Fact]
+    public async Task SetAsync_ShouldWorkProperly_WithExistingFeature()
+    {
+        var dto = new BlogFeatureInputDto
         {
-            var dto = new BlogFeatureInputDto
-            {
-                FeatureName = "My.Awesome.Feature",
-                IsEnabled = true
-            };
+            FeatureName = testData.BlogFeature_2_FeatureName,
+            IsEnabled = !testData.BlogFeature_2_Enabled
+        };
 
-            await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
+        await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
 
-            var feature = await blogFeatureRepository.FindAsync(testData.Blog_Id, dto.FeatureName);
+        var feature = await blogFeatureRepository.FindAsync(testData.Blog_Id, dto.FeatureName);
 
-            feature.ShouldNotBeNull();
-            feature.BlogId.ShouldBe(testData.Blog_Id);
-            feature.IsEnabled.ShouldBe(dto.IsEnabled);
-        }
+        feature.ShouldNotBeNull();
+        feature.BlogId.ShouldBe(testData.Blog_Id);
+        feature.IsEnabled.ShouldBe(dto.IsEnabled);
+    }
 
-        [Fact]
-        public async Task SetAsync_ShouldWorkProperly_WithExistingFeature()
-        {
-            var dto = new BlogFeatureInputDto
-            {
-                FeatureName = testData.BlogFeature_2_FeatureName,
-                IsEnabled = !testData.BlogFeature_2_Enabled
-            };
+    [Fact]
+    public async Task GetListAsync_ShouldWorkProperly_WithBlogId()
+    {
+        var result = await blogFeatureAdminAppService.GetListAsync(testData.Blog_Id);
 
-            await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
-
-            var feature = await blogFeatureRepository.FindAsync(testData.Blog_Id, dto.FeatureName);
-
-            feature.ShouldNotBeNull();
-            feature.BlogId.ShouldBe(testData.Blog_Id);
-            feature.IsEnabled.ShouldBe(dto.IsEnabled);
-        }
-
-        [Fact]
-        public async Task GetListAsync_ShouldWorkProperly_WithBlogId()
-        {
-            var result = await blogFeatureAdminAppService.GetListAsync(testData.Blog_Id);
-
-            result.ShouldNotBeNull();
-            result.ShouldNotBeEmpty();
-            result.Count.ShouldBeGreaterThanOrEqualTo(2); // 2 are seeded and there are built-in Features.
-        }
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.Count.ShouldBeGreaterThanOrEqualTo(2); // 2 are seeded and there are built-in Features.
     }
 }

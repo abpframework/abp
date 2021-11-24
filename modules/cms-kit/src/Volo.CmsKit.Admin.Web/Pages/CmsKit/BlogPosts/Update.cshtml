@@ -47,13 +47,13 @@
     <abp-card-header title="@L["Edit"].Value"></abp-card-header>
     <abp-card-body>
 
-        <div class="form-group">
+        <div class="mb-3">
             @if (Model.ViewModel.CoverImageMediaId != null)
             {
                 <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
                 <br />
             }
-            <label>@L["CoverImage"]</label>
+            <label class="form-label" >@L["CoverImage"]</label>
             <input type="file" id="BlogPostCoverImage" class="form-control" />
         </div>
 

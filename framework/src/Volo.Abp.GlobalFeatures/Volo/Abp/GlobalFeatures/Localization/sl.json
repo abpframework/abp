@@ -1,0 +1,6 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Storitev »{ServiceName}« mora omogočiti funkcijo »{GlobalFeatureName}«."
+  }
+}

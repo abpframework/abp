@@ -26,6 +26,19 @@
     "ContributionGuide": "دليل المساهمة",
     "Blog": "المدونة",
     "Commercial": "تجارى",
-    "SeeDocuments": "انظر للوثائق"
+    "MyAccount": "حسابي",
+    "Permission:License": "رخصة",
+    "Permission:UserInfo": "معلومات مفيدة",
+    "SeeDocuments": "انظر للوثائق",
+    "Samples": "عينات",
+    "Framework": "إطار العمل",
+    "Support": "الدعم",
+    "FreeDDDBook": "كتاب إلكتروني مجاني DDD",
+    "New": "جديد",
+    "Volo.AbpIo.Domain:020005": "لا يمكن أن تكون سنة تمديد الترخيص أقل من {MinExtendLicenseYear} سنة وأكبر من {MaxExtendLicenseYear} عام (سنوات)",
+    "TrialLicensePeriodHasExpired": "انتهت فترة الترخيص التجريبي الخاص بك قبل {0} يوم.",
+    "TrialLicensePeriodWillExpire": "ستنتهي فترة الترخيص التجريبي الخاص بك في غضون {0} يوم.",
+    "TrialLicensePeriodExpireToday": "ستنتهي فترة الترخيص التجريبي الخاص بك اليوم.",
+    "PurchaseNow": "شراء الآن!"
   }
 }

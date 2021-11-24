@@ -58,10 +58,10 @@
                                         <div class="article-infos">
                                             <div class="user-card">
                                                 <div class="row">
-                                                    <div class="col-auto pr-1">
+                                                    <div class="col-auto pe-1">
                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                     </div>
-                                                    <div class="col pl-1">
+                                                    <div class="col ps-1">
                                                         <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
                                                         <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
@@ -106,7 +106,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="col-8 pl-0">
+                                        <div class="col-8 ps-0">
                                             <h3 class="font-125">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                             </h3>
@@ -176,10 +176,10 @@
                                                     <div class="article-infos">
                                                         <div class="user-card">
                                                             <div class="row">
-                                                                <div class="col-auto pr-1">
+                                                                <div class="col-auto pe-1">
                                                                     <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                                 </div>
-                                                                <div class="col pl-1">
+                                                                <div class="col ps-1">
                                                                     <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
                                                                     <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                                     @*<span class="vs-seperator">|</span>

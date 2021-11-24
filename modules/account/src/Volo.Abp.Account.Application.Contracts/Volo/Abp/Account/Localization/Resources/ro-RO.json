@@ -9,7 +9,7 @@
     "UseAnotherServiceToLogin": "Folisiţi alt serviciu pentru a vă autentifica",
     "UserLockedOutMessage": "Contul a fost blocat din cauza incercărilor eşuate de autentificare. Vă rugăm să aşteptaţi şi să încercaţi din nou.",
     "InvalidUserNameOrPassword": "Nume de utilizator sau parolă invalide!",
-    "LoginIsNotAllowed": "Nu ai voie să te autentifici! Contul dvs. este inactiv sau trebuie să vă confirme numărul de e-mail / telefon.",
+    "LoginIsNotAllowed": "Nu ai voie să te autentifici! Contul dvs. este inactiv sau trebuie să vă confirme numărul de e-mail/telefon.",
     "SelfRegistrationDisabledMessage": "Înregistrarea personală este dezactivată pentru această aplicaţie. Vă rugăm să contactaţi administratorul aplicaţiei pentru a înregistra un nou utilizator.",
     "LocalLoginDisabledMessage": "Autentificarea locală este dezactivată pentru această aplicaţie.",
     "Login": "Autentificare",

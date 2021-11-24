@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+
+public enum AbpFormControlSize
 {
-    public enum AbpFormControlSize
-    {
-        Default,
-        Small,
-        Medium,
-        Large
-    }
+    Default,
+    Small,
+    Medium,
+    Large
 }

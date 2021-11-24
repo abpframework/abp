@@ -255,7 +255,7 @@
     "Name": "Nafn",
     "Surname": "Eftirnafn",
     "CompanyName": "Nafn fyrirtækis",
-    "DoYouAgreePrivacyPolicy": "Ég samþykki <a href=\"https://account.abp.io/Account/TermsConditions\"> skilmála </a> og <a href = \"https://account.abp.io/ Reikningur/friðhelgi einkalífs \"> persónuverndarstefna </a>.",
+    "DoYouAgreePrivacyPolicy": "Ég samþykki <a href=\"https://account.abp.io/Account/TermsConditions\"> skilmála </a> og <a href=\"https://account.abp.io/ Reikningur/friðhelgi einkalífs \"> persónuverndarstefna </a>.",
     "Free": "Frí",
     "DDDEBook": "DDD rafbók",
     "PracticalGuideForImplementingDDD": "Þessi bók er hagnýtur leiðarvísir til að innleiða Domain Driven Design hönnun með ABP ramma.",

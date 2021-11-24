@@ -5,33 +5,35 @@ using Volo.Abp.Features;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client
+namespace Volo.Abp.AspNetCore.Mvc.Client;
+
+[DependsOn(
+    typeof(AbpHttpClientModule),
+    typeof(AbpAspNetCoreMvcContractsModule),
+    typeof(AbpCachingModule),
+    typeof(AbpLocalizationModule),
+    typeof(AbpAuthorizationModule),
+    typeof(AbpFeaturesModule),
+    typeof(AbpVirtualFileSystemModule)
+)]
+public class AbpAspNetCoreMvcClientCommonModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpHttpClientModule),
-        typeof(AbpAspNetCoreMvcContractsModule),
-        typeof(AbpCachingModule),
-        typeof(AbpLocalizationModule),
-        typeof(AbpAuthorizationModule),
-        typeof(AbpFeaturesModule)
-    )]
-    public class AbpAspNetCoreMvcClientCommonModule : AbpModule
+    public const string RemoteServiceName = "AbpMvcClient";
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public const string RemoteServiceName = "AbpMvcClient";
+        context.Services.AddStaticHttpClientProxies(typeof(AbpAspNetCoreMvcContractsModule).Assembly, RemoteServiceName);
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.AddHttpClientProxies(
-                typeof(AbpAspNetCoreMvcContractsModule).Assembly,
-                RemoteServiceName,
-                asDefaultServices: false
-            );
+            options.FileSets.AddEmbedded<AbpAspNetCoreMvcClientCommonModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.GlobalContributors.Add<RemoteLocalizationContributor>();
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.GlobalContributors.Add<RemoteLocalizationContributor>();
+        });
     }
 }

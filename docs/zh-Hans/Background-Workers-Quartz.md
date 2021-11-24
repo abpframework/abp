@@ -37,7 +37,6 @@ public class YourModule : AbpModule
 ````
 
 > Quartz后台工作者集成提供了 `QuartzPeriodicBackgroundWorkerAdapter` 来适配 `PeriodicBackgroundWorkerBase` 和 `AsyncPeriodicBackgroundWorkerBase` 派生类. 所以你依然可以按照[后台工作者文档](Background-Workers.md)来定义后台作业.
-> `BackgroundJobWorker` 每5秒检查待执行作业,但是长时间的作业不会阻塞quartz. 所以安装Quartz后台工作者集成后,你同时需要安装[Quartz后台作业](Background-Jobs-Quartz.md)或[Hangfire后台作业](Background-Jobs-Hangfire.md)以避免重复执行作业.
 
 ## 配置
 

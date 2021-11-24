@@ -15,223 +15,222 @@ using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.EventBus.Rebus
+namespace Volo.Abp.EventBus.Rebus;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IDistributedEventBus), typeof(RebusDistributedEventBus))]
+public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IDistributedEventBus), typeof(RebusDistributedEventBus))]
-    public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDependency
+    protected IBus Rebus { get; }
+    protected IRebusSerializer Serializer { get; }
+
+    //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
+    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<string, Type> EventTypes { get; }
+    protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
+
+    public RebusDistributedEventBus(
+        IServiceScopeFactory serviceScopeFactory,
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        IBus rebus,
+        IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
+        IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
+        IRebusSerializer serializer,
+        IGuidGenerator guidGenerator,
+        IClock clock) :
+        base(
+            serviceScopeFactory,
+            currentTenant,
+            unitOfWorkManager,
+            abpDistributedEventBusOptions,
+            guidGenerator,
+            clock)
     {
-        protected IBus Rebus { get; }
-        protected IRebusSerializer Serializer { get; }
+        Rebus = rebus;
+        Serializer = serializer;
+        AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
 
-        //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
-        protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
-        protected ConcurrentDictionary<string, Type> EventTypes { get; }
-        protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
+        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        EventTypes = new ConcurrentDictionary<string, Type>();
+    }
 
-        public RebusDistributedEventBus(
-            IServiceScopeFactory serviceScopeFactory,
-            ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IBus rebus,
-            IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
-            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
-            IRebusSerializer serializer,
-            IGuidGenerator guidGenerator,
-            IClock clock) :
-            base(
-                serviceScopeFactory,
-                currentTenant,
-                unitOfWorkManager,
-                abpDistributedEventBusOptions,
-                guidGenerator,
-                clock)
+    public void Initialize()
+    {
+        SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
+    }
+
+    public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        var handlerFactories = GetOrCreateHandlerFactories(eventType);
+
+        if (factory.IsInFactories(handlerFactories))
         {
-            Rebus = rebus;
-            Serializer = serializer;
-            AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
-
-            HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
-            EventTypes = new ConcurrentDictionary<string, Type>();
+            return NullDisposable.Instance;
         }
 
-        public void Initialize()
+        handlerFactories.Add(factory);
+
+        if (handlerFactories.Count == 1) //TODO: Multi-threading!
         {
-            SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
+            Rebus.Subscribe(eventType);
         }
 
-        public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
-        {
-            var handlerFactories = GetOrCreateHandlerFactories(eventType);
+        return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
 
-            if (factory.IsInFactories(handlerFactories))
+    public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
+    {
+        Check.NotNull(action, nameof(action));
+
+        GetOrCreateHandlerFactories(typeof(TEvent))
+            .Locking(factories =>
             {
-                return NullDisposable.Instance;
-            }
-
-            handlerFactories.Add(factory);
-
-            if (handlerFactories.Count == 1) //TODO: Multi-threading!
-            {
-                Rebus.Subscribe(eventType);
-            }
-
-            return new EventHandlerFactoryUnregistrar(this, eventType, factory);
-        }
-
-        public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
-        {
-            Check.NotNull(action, nameof(action));
-
-            GetOrCreateHandlerFactories(typeof(TEvent))
-                .Locking(factories =>
-                {
-                    factories.RemoveAll(
-                        factory =>
+                factories.RemoveAll(
+                    factory =>
+                    {
+                        if (!(factory is SingleInstanceHandlerFactory singleInstanceFactory))
                         {
-                            if (!(factory is SingleInstanceHandlerFactory singleInstanceFactory))
-                            {
-                                return false;
-                            }
+                            return false;
+                        }
 
-                            if (!(singleInstanceFactory.HandlerInstance is ActionEventHandler<TEvent> actionHandler))
-                            {
-                                return false;
-                            }
+                        if (!(singleInstanceFactory.HandlerInstance is ActionEventHandler<TEvent> actionHandler))
+                        {
+                            return false;
+                        }
 
-                            return actionHandler.Action == action;
-                        });
-                });
+                        return actionHandler.Action == action;
+                    });
+            });
 
-            Rebus.Unsubscribe(typeof(TEvent));
-        }
+        Rebus.Unsubscribe(typeof(TEvent));
+    }
 
-        public override void Unsubscribe(Type eventType, IEventHandler handler)
-        {
-            GetOrCreateHandlerFactories(eventType)
-                .Locking(factories =>
-                {
-                    factories.RemoveAll(
-                        factory =>
-                            factory is SingleInstanceHandlerFactory handlerFactory &&
-                            handlerFactory.HandlerInstance == handler
-                    );
-                });
-
-            Rebus.Unsubscribe(eventType);
-        }
-
-        public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
-        {
-            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
-            Rebus.Unsubscribe(eventType);
-        }
-
-        public override void UnsubscribeAll(Type eventType)
-        {
-            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
-            Rebus.Unsubscribe(eventType);
-        }
-
-        public async Task ProcessEventAsync(Type eventType, object eventData)
-        {
-            var messageId = MessageContext.Current.TransportMessage.GetMessageId();
-            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-
-            if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body))
+    public override void Unsubscribe(Type eventType, IEventHandler handler)
+    {
+        GetOrCreateHandlerFactories(eventType)
+            .Locking(factories =>
             {
-                return;
-            }
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory handlerFactory &&
+                        handlerFactory.HandlerInstance == handler
+                );
+            });
 
-            await TriggerHandlersAsync(eventType, eventData);
+        Rebus.Unsubscribe(eventType);
+    }
+
+    public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
+        Rebus.Unsubscribe(eventType);
+    }
+
+    public override void UnsubscribeAll(Type eventType)
+    {
+        GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+        Rebus.Unsubscribe(eventType);
+    }
+
+    public async Task ProcessEventAsync(Type eventType, object eventData)
+    {
+        var messageId = MessageContext.Current.TransportMessage.GetMessageId();
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+
+        if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body))
+        {
+            return;
         }
 
-        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
-        {
-            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
-        }
+        await TriggerHandlersAsync(eventType, eventData);
+    }
 
-        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
-        {
-            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
-        }
+    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    {
+        await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+    }
 
-        private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
-        {
-            return HandlerFactories.GetOrAdd(
-                eventType,
-                type =>
-                {
-                    var eventName = EventNameAttribute.GetNameOrDefault(type);
-                    EventTypes[eventName] = type;
-                    return new List<IEventHandlerFactory>();
-                }
-            );
-        }
+    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+    {
+        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
+    }
 
-        protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
-        {
-            var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
-
-            foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-            )
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
+    {
+        return HandlerFactories.GetOrAdd(
+            eventType,
+            type =>
             {
-                handlerFactoryList.Add(
-                    new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+                var eventName = EventNameAttribute.GetNameOrDefault(type);
+                EventTypes[eventName] = type;
+                return new List<IEventHandlerFactory>();
             }
+        );
+    }
 
-            return handlerFactoryList.ToArray();
-        }
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+    {
+        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
-        private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
+        )
         {
-            //Should trigger same type
-            if (handlerEventType == targetEventType)
-            {
-                return true;
-            }
-
-            //Should trigger for inherited types
-            if (handlerEventType.IsAssignableFrom(targetEventType))
-            {
-                return true;
-            }
-
-            return false;
+            handlerFactoryList.Add(
+                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
         }
 
-        public override Task PublishFromOutboxAsync(
-            OutgoingEventInfo outgoingEvent,
-            OutboxConfig outboxConfig)
+        return handlerFactoryList.ToArray();
+    }
+
+    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+    {
+        //Should trigger same type
+        if (handlerEventType == targetEventType)
         {
-            var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
-            var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
-
-            return PublishToEventBusAsync(eventType, eventData);
+            return true;
         }
 
-        public override async Task ProcessFromInboxAsync(
-            IncomingEventInfo incomingEvent,
-            InboxConfig inboxConfig)
+        //Should trigger for inherited types
+        if (handlerEventType.IsAssignableFrom(targetEventType))
         {
-            var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-            if (eventType == null)
-            {
-                return;
-            }
-
-            var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
-            var exceptions = new List<Exception>();
-            await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
-            if (exceptions.Any())
-            {
-                ThrowOriginalExceptions(eventType, exceptions);
-            }
+            return true;
         }
 
-        protected override byte[] Serialize(object eventData)
+        return false;
+    }
+
+    public override Task PublishFromOutboxAsync(
+        OutgoingEventInfo outgoingEvent,
+        OutboxConfig outboxConfig)
+    {
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
+
+        return PublishToEventBusAsync(eventType, eventData);
+    }
+
+    public override async Task ProcessFromInboxAsync(
+        IncomingEventInfo incomingEvent,
+        InboxConfig inboxConfig)
+    {
+        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+        if (eventType == null)
         {
-            return Serializer.Serialize(eventData);
+            return;
         }
+
+        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+        var exceptions = new List<Exception>();
+        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        if (exceptions.Any())
+        {
+            ThrowOriginalExceptions(eventType, exceptions);
+        }
+    }
+
+    protected override byte[] Serialize(object eventData)
+    {
+        return Serializer.Serialize(eventData);
     }
 }
