@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public class GetFeatureListResultDto
 {
-    public class GetFeatureListResultDto
-    {
-        public List<FeatureGroupDto> Groups { get; set; }
-    }
+    public List<FeatureGroupDto> Groups { get; set; }
 }

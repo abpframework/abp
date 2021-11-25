@@ -2,43 +2,42 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+//TODO: Rename to JsonAuditSerializer
+public class JsonNetAuditSerializer : IAuditSerializer, ITransientDependency
 {
-    //TODO: Rename to JsonAuditSerializer
-    public class JsonNetAuditSerializer : IAuditSerializer, ITransientDependency
+    protected AbpAuditingOptions Options;
+
+    public JsonNetAuditSerializer(IOptions<AbpAuditingOptions> options)
     {
-        protected AbpAuditingOptions Options;
+        Options = options.Value;
+    }
 
-        public JsonNetAuditSerializer(IOptions<AbpAuditingOptions> options)
+    public string Serialize(object obj)
+    {
+        return JsonConvert.SerializeObject(obj, GetSharedJsonSerializerSettings());
+    }
+
+    private static readonly object SyncObj = new object();
+    private static JsonSerializerSettings _sharedJsonSerializerSettings;
+
+    private JsonSerializerSettings GetSharedJsonSerializerSettings()
+    {
+        if (_sharedJsonSerializerSettings == null)
         {
-            Options = options.Value;
-        }
-
-        public string Serialize(object obj)
-        {
-            return JsonConvert.SerializeObject(obj, GetSharedJsonSerializerSettings());
-        }
-
-        private static readonly object SyncObj = new object();
-        private static JsonSerializerSettings _sharedJsonSerializerSettings;
-
-        private JsonSerializerSettings GetSharedJsonSerializerSettings()
-        {
-            if (_sharedJsonSerializerSettings == null)
+            lock (SyncObj)
             {
-                lock (SyncObj)
+                if (_sharedJsonSerializerSettings == null)
                 {
-                    if (_sharedJsonSerializerSettings == null)
+                    _sharedJsonSerializerSettings = new JsonSerializerSettings
                     {
-                        _sharedJsonSerializerSettings = new JsonSerializerSettings
-                        {
-                            ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
-                        };
-                    }
+                        ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
+                    };
                 }
             }
-
-            return _sharedJsonSerializerSettings;
         }
+
+        return _sharedJsonSerializerSettings;
     }
 }

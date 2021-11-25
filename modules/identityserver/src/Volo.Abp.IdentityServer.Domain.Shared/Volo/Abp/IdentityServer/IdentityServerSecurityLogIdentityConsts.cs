@@ -1,7 +1,6 @@
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public class IdentityServerSecurityLogIdentityConsts
 {
-    public class IdentityServerSecurityLogIdentityConsts
-    {
-        public static string IdentityServer { get; set; } = "IdentityServer";
-    }
+    public static string IdentityServer { get; set; } = "IdentityServer";
 }

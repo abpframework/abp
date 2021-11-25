@@ -8,49 +8,48 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
+namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
+
+public class AbpDateTimeModelBinderProvider : IModelBinderProvider
 {
-    public class AbpDateTimeModelBinderProvider : IModelBinderProvider
+    public IModelBinder GetBinder(ModelBinderProviderContext context)
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        var modelType = context.Metadata.UnderlyingOrModelType;
+        if (modelType == typeof(DateTime))
         {
-            var modelType = context.Metadata.UnderlyingOrModelType;
-            if (modelType == typeof(DateTime))
+            if (context.Metadata.ContainerType == null)
             {
-                if (context.Metadata.ContainerType == null)
+                if (context.Metadata is DefaultModelMetadata defaultModelMetadata &&
+                    defaultModelMetadata.Attributes.Attributes.All(x => x.GetType() != typeof(DisableDateTimeNormalizationAttribute)))
                 {
-                    if (context.Metadata is DefaultModelMetadata defaultModelMetadata &&
-                        defaultModelMetadata.Attributes.Attributes.All(x => x.GetType() != typeof(DisableDateTimeNormalizationAttribute)))
-                    {
-                        return CreateAbpDateTimeModelBinder(context);
-                    }
-                }
-                else
-                {
-                    var dateNormalizationDisabledForClass =
-                        context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
-
-                    var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
-                        .GetProperty(context.Metadata.PropertyName)
-                        ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
-
-                    if (!dateNormalizationDisabledForClass &&
-                        dateNormalizationDisabledForProperty != null &&
-                        !dateNormalizationDisabledForProperty.Value)
-                    {
-                        return CreateAbpDateTimeModelBinder(context);
-                    }
+                    return CreateAbpDateTimeModelBinder(context);
                 }
             }
+            else
+            {
+                var dateNormalizationDisabledForClass =
+                    context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
 
-            return null;
+                var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
+                    .GetProperty(context.Metadata.PropertyName)
+                    ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
+
+                if (!dateNormalizationDisabledForClass &&
+                    dateNormalizationDisabledForProperty != null &&
+                    !dateNormalizationDisabledForProperty.Value)
+                {
+                    return CreateAbpDateTimeModelBinder(context);
+                }
+            }
         }
 
-        protected virtual AbpDateTimeModelBinder CreateAbpDateTimeModelBinder(ModelBinderProviderContext context)
-        {
-            const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
-            var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
-            return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
-        }
+        return null;
+    }
+
+    protected virtual AbpDateTimeModelBinder CreateAbpDateTimeModelBinder(ModelBinderProviderContext context)
+    {
+        const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
+        var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
+        return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
     }
 }
