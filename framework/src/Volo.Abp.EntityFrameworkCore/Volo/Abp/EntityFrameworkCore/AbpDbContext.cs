@@ -486,7 +486,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         entry.Reload();
         entry.Entity.As<ISoftDelete>().IsDeleted = true;
-        entry.State = EntityState.Modified;
+        
+        SetDeletionAuditProperties(entry);
     }
 
     protected virtual bool IsHardDeleted(EntityEntry entry)
