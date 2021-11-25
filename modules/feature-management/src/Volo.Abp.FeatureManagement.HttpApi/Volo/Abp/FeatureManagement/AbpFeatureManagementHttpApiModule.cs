@@ -34,7 +34,8 @@ public class AbpFeatureManagementHttpApiModule : AbpModule
 
         Configure<JsonOptions>(options =>
         {
-            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
+            var contractsOptions = context.Services.ExecutePreConfiguredActions<AbpFeatureManagementApplicationContractsOptions>();
+            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(contractsOptions));
         });
     }
 }

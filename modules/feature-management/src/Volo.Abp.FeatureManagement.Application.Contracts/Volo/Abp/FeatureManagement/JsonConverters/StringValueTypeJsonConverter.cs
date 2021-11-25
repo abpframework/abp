@@ -8,6 +8,13 @@ namespace Volo.Abp.FeatureManagement.JsonConverters;
 
 public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 {
+    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+
+    public StringValueTypeJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
+    {
+        Options = options;
+    }
+
     public override IStringValueType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
@@ -17,7 +24,7 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
         {
             var name = nameJsonProperty.Value.GetString();
 
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(),
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(Options),
                 new SelectionStringValueItemSourceJsonConverter());
 
             return name switch

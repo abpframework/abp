@@ -10,6 +10,13 @@ namespace Volo.Abp.FeatureManagement.JsonConverters;
 
 public class ValueValidatorJsonConverter : JsonConverter<IValueValidator>
 {
+    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+
+    public ValueValidatorJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
+    {
+        Options = options;
+    }
+    
     public override IValueValidator Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
@@ -47,13 +54,11 @@ public class ValueValidatorJsonConverter : JsonConverter<IValueValidator>
 
     protected virtual IValueValidator CreateValueValidatorByName(string name)
     {
-        return name switch
+        foreach (var factory in Options.ValueValidatorFactory.Where(factory => factory.CanCreate(name)))
         {
-            "NULL" => new AlwaysValidValueValidator(),
-            "BOOLEAN" => new BooleanValueValidator(),
-            "NUMERIC" => new NumericValueValidator(),
-            "STRING" => new StringValueValidator(),
-            _ => throw new ArgumentException($"{nameof(IValueValidator)} named {name} was not found!")
-        };
+            return factory.Create();
+        }
+
+        throw new ArgumentException($"{nameof(IValueValidator)} named {name} was cannot be created!");
     }
 }

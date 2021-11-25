@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
 using Volo.Abp.FeatureManagement.JsonConverters;
@@ -25,6 +26,11 @@ public class AbpFeatureManagementApplicationContractsModule : AbpModule
             options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
         });
 
+        Configure<AbpFeatureManagementApplicationContractsOptions>(options =>
+        {
+            context.Services.ExecutePreConfiguredActions(options);
+        });
+        
         Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
         {
             options.Converters.Add<NewtonsoftStringValueTypeJsonConverter>();
@@ -32,7 +38,8 @@ public class AbpFeatureManagementApplicationContractsModule : AbpModule
 
         Configure<AbpSystemTextJsonSerializerOptions>(options =>
         {
-            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
+            var contractsOptions = context.Services.ExecutePreConfiguredActions<AbpFeatureManagementApplicationContractsOptions>();
+            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(contractsOptions));
         });
     }
 }
