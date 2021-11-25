@@ -412,14 +412,16 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
         </abp-card-header>
         <abp-card-body>            
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" class="form-inline">
-                <input id="NewItemText" 
-                       type="text" 
-                       class="form-control mr-2" 
-                       placeholder="enter text...">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <form id="NewItemForm" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input id="NewItemText" type="text" class="form-control" placeholder="enter text...">
+                    </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form>
-            
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in Model.TodoItems)
