@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.5" />
+    <PackageReference Include="Volo.Abp" Version="4.4.4" />
+    <PackageReference Include="Volo.Abp.BlobStoring" Version="4.4.4" />
+  </ItemGroup>
+
+</Project>
