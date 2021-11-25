@@ -1,31 +1,34 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Hangfire
+namespace Volo.Abp.Hangfire;
+
+[DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
+public class AbpHangfireModule : AbpModule
 {
-    public class AbpHangfireModule : AbpModule
+    private BackgroundJobServer _backgroundJobServer;
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        private BackgroundJobServer _backgroundJobServer;
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddHangfire(configuration =>
         {
-            context.Services.AddHangfire(configuration =>
-            {
-                context.Services.ExecutePreConfiguredActions(configuration);
-            });
-        }
+            context.Services.ExecutePreConfiguredActions(configuration);
+        });
+    }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
-            _backgroundJobServer = options.BackgroundJobServerFactory.Invoke(context.ServiceProvider);
-        }
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+        _backgroundJobServer = options.BackgroundJobServerFactory.Invoke(context.ServiceProvider);
+    }
 
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        if (_backgroundJobServer != null)
         {
-            //TODO: ABP may provide two methods for application shutdown: OnPreApplicationShutdown & OnApplicationShutdown
             _backgroundJobServer.SendStop();
             _backgroundJobServer.Dispose();
         }

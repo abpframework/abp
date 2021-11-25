@@ -1,29 +1,21 @@
-<ng-container *ngIf="visible">
-  <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">
-    <div class="modal-backdrop" [@fade]="isModalOpen" (click)="close()"></div>
-    <div
-      id="abp-modal-dialog"
-      class="modal-dialog modal-{{ size }}"
-      role="document"
-      [@dialog]="isModalOpen"
-      #abpModalContent
-    >
-      <div id="abp-modal-content" class="modal-content">
-        <div id="abp-modal-header" class="modal-header">
-          <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
-          ​
-          <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div id="abp-modal-body" class="modal-body">
-          <ng-container *ngTemplateOutlet="abpBody"></ng-container>
-        </div>
-        <div id="abp-modal-footer" class="modal-footer">
-          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>
-        </div>
-      </div>
-    </div>
-    <ng-content></ng-content>
+<ng-content></ng-content>
+
+<ng-template #modalContent let-modal>
+  <div *ngIf="abpHeader" id="abp-modal-header" class="modal-header">
+    <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
+    ​
+    <button
+      id="abp-modal-close-button"
+      type="button"
+      class="btn-sm btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
   </div>
-</ng-container>
+  <div *ngIf="abpBody" id="abp-modal-body" class="modal-body">
+    <ng-container *ngTemplateOutlet="abpBody"></ng-container>
+  </div>
+  <div *ngIf="abpFooter" id="abp-modal-footer" class="modal-footer">
+    <ng-container *ngTemplateOutlet="abpFooter"></ng-container>
+  </div>
+</ng-template>

@@ -1,9 +1,12 @@
-﻿namespace Volo.Abp.Settings
-{
-    public interface ISettingDefinitionContext
-    {
-        SettingDefinition GetOrNull(string name);
+using System.Collections.Generic;
 
-        void Add(params SettingDefinition[] definitions);
-    }
+namespace Volo.Abp.Settings;
+
+public interface ISettingDefinitionContext
+{
+    SettingDefinition GetOrNull(string name);
+
+    IReadOnlyList<SettingDefinition> GetAll();
+
+    void Add(params SettingDefinition[] definitions);
 }

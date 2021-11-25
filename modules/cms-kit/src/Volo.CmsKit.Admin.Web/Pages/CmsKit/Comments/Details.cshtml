@@ -1,0 +1,111 @@
+﻿@page "{id}"
+
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Localization
+
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<CmsKitResource> L
+
+@model DetailsModel
+
+@{
+    PageLayout.Content.Title = L["Comments"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.Comments.CommentsMenu;
+}
+
+@section styles{
+    <abp-style-bundle>
+        <abp-style src="/Pages/CmsKit/Comments/details.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/Comments/details.js"/>
+    </abp-script-bundle>
+}
+
+<div id="CmsKitCommentsWrapper">
+
+    <abp-card>
+        <abp-card-body>
+            <abp-row>
+                <abp-column>
+                    <abp-table>
+                        <tr>
+                            <td width="10%"><b>@L["EntityType"]</b>:</td>
+                            <td>@Model.CommentWithAuthorDto.EntityType</td>
+                        </tr>
+                        <tr>
+                            <td><b>@L["EntityId"]</b>:</td>
+                            <td>@Model.CommentWithAuthorDto.EntityId</td>
+                        </tr>
+                        <tr>
+                            <td><b>@L["CreationTime"]</b>:</td>
+                            <td>@Model.CommentWithAuthorDto.CreationTime.ToString(CultureInfo.CurrentUICulture)</td>
+                        </tr>
+                        <tr>
+                            <td><b>@L["Username"]</b>:</td>
+                            <td>@Model.CommentWithAuthorDto.Author.Name</td>
+                        </tr>
+                        @if (Model.CommentWithAuthorDto.RepliedCommentId.HasValue)
+                        {
+                            <tr>
+                                <td><b>@L["ReplyTo"]</b>:</td>
+                                <td><a href="/CmsKit/Comments/Details/@Model.CommentWithAuthorDto.RepliedCommentId">@Model.CommentWithAuthorDto.RepliedCommentId</a></td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="align-text-top"><b>@L["Text"]</b>:</td>
+                            <td>@Model.CommentWithAuthorDto.Text</td>
+                        </tr>
+                    </abp-table>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card>
+        <abp-card-body>
+            <abp-row>
+                <abp-column>
+                    <form id="CmsKitCommentsFilterForm" method="post">
+                        <abp-row>
+                            <input type="hidden" name="@nameof(Model.CommentWithAuthorDto.RepliedCommentId)" value="@Model.CommentWithAuthorDto.Id"/>
+
+                            <abp-column size-lg="_6" size-md="_12" class="input-group input-daterange">
+                                <abp-column size="_6" style="padding-left: 0">
+                                    <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" type="text"/>
+                                </abp-column>
+                                <abp-column size="_6" style="padding-right: 0">
+                                    <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text"/>
+                                </abp-column>
+                            </abp-column>
+                            <abp-column size-lg="_4" size-md="_12">
+                                <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
+                            </abp-column>
+                            <abp-column size-lg="_2" size-md="_12">
+                                <div class="d-grid gap-2">
+                                    <abp-button class="mt-md-4" button-type="Primary" type="submit">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </abp-button>
+                                </div>
+                            </abp-column>
+                        </abp-row>
+                    </form>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+
+    <h3>@L["RepliesToThisComment"]</h3>
+
+    <abp-table striped-rows="true" id="CommentsTable" class="nowrap"></abp-table>
+</div>

@@ -1,0 +1,23 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Menu:TenantManagement": "租戶管理",
+    "Tenants": "租戶",
+    "NewTenant": "新租戶",
+    "TenantName": "租戶名稱",
+    "DisplayName:TenantName": "租戶名稱",
+    "TenantDeletionConfirmationMessage": "租戶 '{0}' 將被刪除. 您確定嗎?",
+    "ConnectionStrings": "資料庫連線字串",
+    "DisplayName:DefaultConnectionString": "預設資料庫連線字串",
+    "DisplayName:UseSharedDatabase": "使用共用資料庫",
+    "ManageHostFeatures": "管理Host功能",
+    "Permission:TenantManagement": "租戶管理",
+    "Permission:Create": "新增",
+    "Permission:Edit": "編輯",
+    "Permission:Delete": "刪除",
+    "Permission:ManageConnectionStrings": "管理資料庫連線字串",
+    "Permission:ManageFeatures": "管理功能",
+    "DisplayName:AdminEmailAddress": "管理者信箱",
+    "DisplayName:AdminPassword": "管理者密碼"
+  }
+}

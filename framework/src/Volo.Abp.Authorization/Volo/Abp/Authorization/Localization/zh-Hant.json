@@ -1,0 +1,10 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Volo.Authorization:010001": "認證失敗!  Given policy has not granted.",
+    "Volo.Authorization:010002": "認證失敗!  Given policy has not granted: {PolicyName}",
+    "Volo.Authorization:010003": "認證失敗! Given policy has not granted for given resource: {ResourceName}",
+    "Volo.Authorization:010004": "認證失敗! Given requirement has not granted for given resource: {ResourceName}",
+    "Volo.Authorization:010005": "認證失敗! Given requirements has not granted for given resource: {ResourceName}"
+  }
+}

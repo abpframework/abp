@@ -1,21 +1,22 @@
 using System;
 
-namespace Volo.Abp.Emailing
+namespace Volo.Abp.Emailing;
+
+[Serializable]
+public class BackgroundEmailSendingJobArgs
 {
-    [Serializable]
-    public class BackgroundEmailSendingJobArgs
-    {
-        public string To { get; set; }
+    public string From { get; set; }
 
-        public string Subject { get; set; }
+    public string To { get; set; }
 
-        public string Body { get; set; }
-        
-        /// <summary>
-        /// Default: true.
-        /// </summary>
-        public bool IsBodyHtml { get; set; } = true;
+    public string Subject { get; set; }
 
-        //TODO: Add other properties and attachments
-    }
+    public string Body { get; set; }
+
+    /// <summary>
+    /// Default: true.
+    /// </summary>
+    public bool IsBodyHtml { get; set; } = true;
+
+    //TODO: Add other properties and attachments
 }

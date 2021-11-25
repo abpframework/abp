@@ -1,9 +1,10 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Hello <b>{0}</b>.": "Merhaba <b>{0}</b>.",
     "Car": "Araba",
     "CarPlural": "Araba",
+    "MaxLenghtErrorMessage": "Bu alanın uzunluğu maksimum '{0}' karakter olabilir",
     "Universe": "Evren"
   }
 }

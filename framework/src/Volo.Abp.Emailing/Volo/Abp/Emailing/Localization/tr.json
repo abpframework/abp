@@ -1,0 +1,25 @@
+{
+  "culture": "tr",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Varsayılan gönderici adresi",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Varsayılan gönderici adı",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Sunucu",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Kullanıcı adı",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Şifre",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domain",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL aktif",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Varsayılan kimlik kullan",
+    "Description:Abp.Mailing.DefaultFromAddress": "Varsayılan gönderici adresi",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Varsayılan gönderici adı",
+    "Description:Abp.Mailing.Smtp.Host": "SMTP üzerinden e-posta göndermek için kullanılacak sunucunun IP adresi ya da adı.",
+    "Description:Abp.Mailing.Smtp.Port": "Sunucunun SMTP portu.",
+    "Description:Abp.Mailing.Smtp.UserName": "Varsayılan kimlik kullanılmaması durumunda kullanılacak kullanıcı adı.",
+    "Description:Abp.Mailing.Smtp.Password": "Varsayılan kimlik kullanılmaması durumunda kullanılacak şifre.",
+    "Description:Abp.Mailing.Smtp.Domain": "Kimlik bilgilerinin doğrulanacağı sunucu/domain.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Email gönderiminde SSL kullanılıp kullanılmayacağı.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Varsayılan kimlik bilgilerinin kullanılıp kullanılmayacağı.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Varsayılan e-posta layout şablonu",
+    "TextTemplate:StandardEmailTemplates.Message": "Basit bir mesaj göndermek için e-posta şablonu"
+  }
+}

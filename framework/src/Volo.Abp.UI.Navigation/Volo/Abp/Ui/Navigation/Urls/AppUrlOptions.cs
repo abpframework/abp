@@ -1,12 +1,16 @@
-﻿namespace Volo.Abp.UI.Navigation.Urls
-{
-    public class AppUrlOptions
-    {
-        public ApplicationUrlDictionary Applications { get; }
+﻿using System.Collections.Generic;
 
-        public AppUrlOptions()
-        {
-            Applications = new ApplicationUrlDictionary();
-        }
+namespace Volo.Abp.UI.Navigation.Urls;
+
+public class AppUrlOptions
+{
+    public ApplicationUrlDictionary Applications { get; }
+
+    public List<string> RedirectAllowedUrls { get; }
+
+    public AppUrlOptions()
+    {
+        Applications = new ApplicationUrlDictionary();
+        RedirectAllowedUrls = new List<string>();
     }
 }

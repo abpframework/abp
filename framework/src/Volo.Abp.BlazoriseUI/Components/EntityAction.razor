@@ -1,0 +1,24 @@
+﻿@typeparam TItem
+
+@if (Visible && HasPermission)
+{
+    if (ParentActions.Type == ActionType.Dropdown)
+    {
+        if (Primary == false)
+        {
+            <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
+        }
+    }
+    else
+    {
+        <Button Block="true"
+                Color="@Color"
+                Clicked="@ActionClickedAsync">
+            @if(!string.IsNullOrEmpty(Icon))
+            {
+                <Icon Name="@Icon"/>
+            }
+            @Text
+        </Button>
+    }
+}

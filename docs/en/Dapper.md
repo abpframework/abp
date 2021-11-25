@@ -1,22 +1,26 @@
 # Dapper Integration
 
-Because Dapper's idea is that the sql statement takes precedence, and mainly provides some extension methods for the `IDbConnection` interface.
+Dapper is a light-weight and simple database provider. The major benefit of using Dapper is writing T-SQL queries. It provides  some extension methods for `IDbConnection` interface.
 
-Abp does not encapsulate too many functions for Dapper. Abp Dapper provides a `DapperRepository<TDbContext>` base class based on Abp EntityFrameworkCore, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
+ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
 
-These two properties can work well with [Unit-Of-Work](Unit-Of-Work.md).
+`IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
 
 ## Installation
 
-Please install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
+Install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
 
-`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. 
+
+You can find it on NuGet Gallery: https://www.nuget.org/packages/Volo.Abp.Dapper
+
+Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ```shell
 Install-Package Volo.Abp.Dapper
 ```
 
-Then add `AbpDapperModule` module dependency (`DependsOn` attribute) to your [module](Module-Development-Basics.md):
+Then add `AbpDapperModule` module dependency (with `DependsOn` attribute) to your [module](Module-Development-Basics.md):
 
 ````C#
 using Volo.Abp.Dapper;
@@ -34,9 +38,10 @@ namespace MyCompany.MyProject
 
 ## Implement Dapper Repository
 
-The following code implements the `Person` repository, which requires EF Core's `DbContext` (MyAppDbContext). You can inject `PersonDapperRepository` to call its methods.
+The following code creates the `PersonRepository`, which requires EF Core's `DbContext` (MyAppDbContext).
+You can inject `PersonDapperRepository` to your services for your database operations.
 
-`DbConnection` and `DbTransaction` are from the `DapperRepository` base class.
+`DbConnection` and `DbTransaction` comes from the `DapperRepository` base class.
 
 ```C#
 public class PersonDapperRepository : DapperRepository<MyAppDbContext>, ITransientDependency
@@ -48,14 +53,16 @@ public class PersonDapperRepository : DapperRepository<MyAppDbContext>, ITransie
 
     public virtual async Task<List<string>> GetAllPersonNames()
     {
-        return (await DbConnection.QueryAsync<string>("select Name from People", transaction: DbTransaction))
+        var dbConnection = await GetDbConnectionAsync();
+        return (await dbConnection.QueryAsync<string>("select Name from People", transaction:  await GetDbTransactionAsync()))
             .ToList();
     }
 
     public virtual async Task<int> UpdatePersonNames(string name)
     {
-        return await DbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
-            DbTransaction);
+        var dbConnection = await GetDbConnectionAsync();
+        return await dbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
+             await GetDbTransactionAsync());
     }
 }
 ```

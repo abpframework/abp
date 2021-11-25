@@ -1,0 +1,116 @@
+﻿@page
+
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
+@using Volo.CmsKit.Public.Web.Pages
+@using Volo.Abp.GlobalFeatures
+@using Volo.CmsKit.GlobalFeatures
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
+@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
+
+@inherits CmsKitPublicPageBase
+
+@model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+
+@section styles{
+<abp-abp-style-bundle>
+    <abp-style src="/Pages/Public/CmsKit/Blogs/blogPost.css" />
+    <abp-style type="typeof(HighlightJsStyleContributor)" />
+</abp-abp-style-bundle>
+}
+
+@section scripts{
+<abp-script-bundle>
+    <abp-script type="typeof(HighlightJsScriptContributor)" />
+    <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js" />
+</abp-script-bundle>
+}
+
+@{
+    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.BlogPost.Title;
+}
+
+<abp-card class="mb-4">
+    <img src="/api/cms-kit/media/@Model.BlogPost.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+    <abp-card-body>
+        <abp-row>
+            <div class="col-lg-8 col-md-10 mx-auto pb-4">
+                <h1 class="mt-lg-4 mt-md-3">@Model.BlogPost.Title</h1>
+                <p class="mb-lg-5 mb-md-3">
+                    <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                    <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
+                </p>
+
+                @if(!Model.BlogPost.Content.IsNullOrEmpty())
+                {
+                    @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))
+                }
+
+                <p class="mb-3">
+                    @if (Model.BlogPost.LastModificationTime != null)
+                    {
+                        <small style="opacity:.65;">@L["LastModification"].Value : @Model.BlogPost.LastModificationTime</small>
+                    }
+                </p>
+                <hr />
+
+                @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+                {
+                    if (Model.TagsFeature?.IsEnabled == true)
+                    {
+                        @await Component.InvokeAsync(typeof(TagViewComponent), new
+                {
+                entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                entityId = Model.BlogPost.Id.ToString()
+                })
+                    }
+                }
+            </div>
+        </abp-row>
+
+        <abp-row class="row">
+            <abp-column size-lg="_6" size-md="_12">
+                @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                {
+                    if (Model.ReactionsFeature?.IsEnabled == true)
+                    {
+                        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
+                        {
+                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                        entityId = Model.BlogPost.Id.ToString()
+                        })
+                    }
+                }
+            </abp-column>
+            <abp-column size-lg="_6" size-md="_12">
+                @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+                {
+                    if (Model.RatingsFeature?.IsEnabled == true)
+                    {
+                        @await Component.InvokeAsync(typeof(RatingViewComponent), new
+                        {
+                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                        entityId = Model.BlogPost.Id.ToString()
+                        })
+                    }
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>
+
+@if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+{
+    if (Model.CommentsFeature?.IsEnabled == true)
+    {
+        @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
+}

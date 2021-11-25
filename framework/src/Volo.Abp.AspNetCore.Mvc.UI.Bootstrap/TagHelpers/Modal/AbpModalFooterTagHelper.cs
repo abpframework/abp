@@ -1,12 +1,15 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-{
-    public class AbpModalFooterTagHelper : AbpTagHelper<AbpModalFooterTagHelper, AbpModalFooterTagHelperService>
-    {
-        public AbpModalButtons Buttons { get; set; }
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-        public AbpModalFooterTagHelper(AbpModalFooterTagHelperService tagHelperService)
-            : base(tagHelperService)
-        {
-        }
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
+
+[HtmlTargetElement("abp-modal-footer")]
+public class AbpModalFooterTagHelper : AbpTagHelper<AbpModalFooterTagHelper, AbpModalFooterTagHelperService>
+{
+    public AbpModalButtons Buttons { get; set; }
+    public ButtonsAlign ButtonAlignment { get; set; } = ButtonsAlign.Default;
+
+    public AbpModalFooterTagHelper(AbpModalFooterTagHelperService tagHelperService)
+        : base(tagHelperService)
+    {
     }
 }

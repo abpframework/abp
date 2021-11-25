@@ -1,379 +1,378 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public class UnitOfWork : IUnitOfWork, ITransientDependency
 {
-    public class UnitOfWork : IUnitOfWork, ITransientDependency
+    /// <summary>
+    /// Default: false.
+    /// </summary>
+    public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
+
+    public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
+
+    public Guid Id { get; } = Guid.NewGuid();
+
+    public IAbpUnitOfWorkOptions Options { get; private set; }
+
+    public IUnitOfWork Outer { get; private set; }
+
+    public bool IsReserved { get; set; }
+
+    public bool IsDisposed { get; private set; }
+
+    public bool IsCompleted { get; private set; }
+
+    public string ReservationName { get; set; }
+
+    protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
+    protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new List<UnitOfWorkEventRecord>();
+    protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new List<UnitOfWorkEventRecord>();
+
+    public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+    public event EventHandler<UnitOfWorkEventArgs> Disposed;
+
+    public IServiceProvider ServiceProvider { get; }
+    protected IUnitOfWorkEventPublisher UnitOfWorkEventPublisher { get; }
+
+    [NotNull]
+    public Dictionary<string, object> Items { get; }
+
+    private readonly Dictionary<string, IDatabaseApi> _databaseApis;
+    private readonly Dictionary<string, ITransactionApi> _transactionApis;
+    private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
+
+    private Exception _exception;
+    private bool _isCompleting;
+    private bool _isRolledback;
+
+    public UnitOfWork(
+        IServiceProvider serviceProvider,
+        IUnitOfWorkEventPublisher unitOfWorkEventPublisher,
+        IOptions<AbpUnitOfWorkDefaultOptions> options)
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        ServiceProvider = serviceProvider;
+        UnitOfWorkEventPublisher = unitOfWorkEventPublisher;
+        _defaultOptions = options.Value;
 
-        public IAbpUnitOfWorkOptions Options { get; private set; }
+        _databaseApis = new Dictionary<string, IDatabaseApi>();
+        _transactionApis = new Dictionary<string, ITransactionApi>();
 
-        public IUnitOfWork Outer { get; private set; }
+        Items = new Dictionary<string, object>();
+    }
 
-        public bool IsReserved { get; set; }
+    public virtual void Initialize(AbpUnitOfWorkOptions options)
+    {
+        Check.NotNull(options, nameof(options));
 
-        public bool IsDisposed { get; private set; }
-
-        public bool IsCompleted { get; private set; }
-
-        public string ReservationName { get; set; }
-
-        protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
-
-        public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-        public event EventHandler<UnitOfWorkEventArgs> Disposed;
-
-        public IServiceProvider ServiceProvider { get; }
-
-        private readonly Dictionary<string, IDatabaseApi> _databaseApis;
-        private readonly Dictionary<string, ITransactionApi> _transactionApis;
-        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
-
-        private Exception _exception;
-        private bool _isCompleting;
-        private bool _isRolledback;
-
-        public UnitOfWork(IServiceProvider serviceProvider, IOptions<AbpUnitOfWorkDefaultOptions> options)
+        if (Options != null)
         {
-            ServiceProvider = serviceProvider;
-            _defaultOptions = options.Value;
-
-            _databaseApis = new Dictionary<string, IDatabaseApi>();
-            _transactionApis = new Dictionary<string, ITransactionApi>();
+            throw new AbpException("This unit of work is already initialized before!");
         }
 
-        public virtual void Initialize(AbpUnitOfWorkOptions options)
-        {
-            Check.NotNull(options, nameof(options));
+        Options = _defaultOptions.Normalize(options.Clone());
+        IsReserved = false;
+    }
 
-            if (Options != null)
+    public virtual void Reserve(string reservationName)
+    {
+        Check.NotNull(reservationName, nameof(reservationName));
+
+        ReservationName = reservationName;
+        IsReserved = true;
+    }
+
+    public virtual void SetOuter(IUnitOfWork outer)
+    {
+        Outer = outer;
+    }
+
+    public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        if (_isRolledback)
+        {
+            return;
+        }
+
+        foreach (var databaseApi in GetAllActiveDatabaseApis())
+        {
+            if (databaseApi is ISupportsSavingChanges)
             {
-                throw new AbpException("This unit of work is already initialized before!");
-            }
-
-            Options = _defaultOptions.Normalize(options.Clone());
-            IsReserved = false;
-        }
-
-        public virtual void Reserve(string reservationName)
-        {
-            Check.NotNull(reservationName, nameof(reservationName));
-
-            ReservationName = reservationName;
-            IsReserved = true;
-        }
-
-        public virtual void SetOuter(IUnitOfWork outer)
-        {
-            Outer = outer;
-        }
-
-        public virtual void SaveChanges()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                (databaseApi as ISupportsSavingChanges)?.SaveChanges();
+                await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
             }
         }
+    }
 
-        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    public virtual IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
+    {
+        return _databaseApis.Values.ToImmutableList();
+    }
+
+    public virtual IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
+    {
+        return _transactionApis.Values.ToImmutableList();
+    }
+
+    public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
+    {
+        if (_isRolledback)
         {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
+            return;
+        }
+
+        PreventMultipleComplete();
+
+        try
+        {
+            _isCompleting = true;
+            await SaveChangesAsync(cancellationToken);
+
+            while (LocalEvents.Any() || DistributedEvents.Any())
             {
-                if (databaseApi is ISupportsSavingChanges)
+                if (LocalEvents.Any())
                 {
-                    await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
+                    var localEventsToBePublished = LocalEvents.OrderBy(e => e.EventOrder).ToArray();
+                    LocalEvents.Clear();
+                    await UnitOfWorkEventPublisher.PublishLocalEventsAsync(
+                        localEventsToBePublished
+                    );
                 }
-            }
-        }
 
-        public IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
-        {
-            return _databaseApis.Values.ToImmutableList();
-        }
+                if (DistributedEvents.Any())
+                {
+                    var distributedEventsToBePublished = DistributedEvents.OrderBy(e => e.EventOrder).ToArray();
+                    DistributedEvents.Clear();
+                    await UnitOfWorkEventPublisher.PublishDistributedEventsAsync(
+                        distributedEventsToBePublished
+                    );
+                }
 
-        public IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
-        {
-            return _transactionApis.Values.ToImmutableList();
-        }
-
-        public virtual void Complete()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            PreventMultipleComplete();
-
-            try
-            {
-                _isCompleting = true;
-                SaveChanges();
-                CommitTransactions();
-                IsCompleted = true;
-                OnCompleted();
-            }
-            catch (Exception ex)
-            {
-                _exception = ex;
-                throw;
-            }
-        }
-
-        public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            PreventMultipleComplete();
-
-            try
-            {
-                _isCompleting = true;
                 await SaveChangesAsync(cancellationToken);
-                await CommitTransactionsAsync();
-                IsCompleted = true;
-                await OnCompletedAsync();
             }
-            catch (Exception ex)
+
+            await CommitTransactionsAsync();
+            IsCompleted = true;
+            await OnCompletedAsync();
+        }
+        catch (Exception ex)
+        {
+            _exception = ex;
+            throw;
+        }
+    }
+
+    public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
+    {
+        if (_isRolledback)
+        {
+            return;
+        }
+
+        _isRolledback = true;
+
+        await RollbackAllAsync(cancellationToken);
+    }
+
+    public virtual IDatabaseApi FindDatabaseApi(string key)
+    {
+        return _databaseApis.GetOrDefault(key);
+    }
+
+    public virtual void AddDatabaseApi(string key, IDatabaseApi api)
+    {
+        Check.NotNull(key, nameof(key));
+        Check.NotNull(api, nameof(api));
+
+        if (_databaseApis.ContainsKey(key))
+        {
+            throw new AbpException("There is already a database API in this unit of work with given key: " + key);
+        }
+
+        _databaseApis.Add(key, api);
+    }
+
+    public virtual IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
+    {
+        Check.NotNull(key, nameof(key));
+        Check.NotNull(factory, nameof(factory));
+
+        return _databaseApis.GetOrAdd(key, factory);
+    }
+
+    public virtual ITransactionApi FindTransactionApi(string key)
+    {
+        Check.NotNull(key, nameof(key));
+
+        return _transactionApis.GetOrDefault(key);
+    }
+
+    public virtual void AddTransactionApi(string key, ITransactionApi api)
+    {
+        Check.NotNull(key, nameof(key));
+        Check.NotNull(api, nameof(api));
+
+        if (_transactionApis.ContainsKey(key))
+        {
+            throw new AbpException("There is already a transaction API in this unit of work with given key: " + key);
+        }
+
+        _transactionApis.Add(key, api);
+    }
+
+    public virtual ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
+    {
+        Check.NotNull(key, nameof(key));
+        Check.NotNull(factory, nameof(factory));
+
+        return _transactionApis.GetOrAdd(key, factory);
+    }
+
+    public virtual void OnCompleted(Func<Task> handler)
+    {
+        CompletedHandlers.Add(handler);
+    }
+
+    public virtual void AddOrReplaceLocalEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+    {
+        AddOrReplaceEvent(LocalEvents, eventRecord, replacementSelector);
+    }
+
+    public virtual void AddOrReplaceDistributedEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+    {
+        AddOrReplaceEvent(DistributedEvents, eventRecord, replacementSelector);
+    }
+
+    public virtual void AddOrReplaceEvent(
+        List<UnitOfWorkEventRecord> eventRecords,
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+    {
+        if (replacementSelector == null)
+        {
+            eventRecords.Add(eventRecord);
+        }
+        else
+        {
+            var foundIndex = eventRecords.FindIndex(replacementSelector);
+            if (foundIndex < 0)
             {
-                _exception = ex;
-                throw;
+                eventRecords.Add(eventRecord);
             }
-        }
-
-        public virtual void Rollback()
-        {
-            if (_isRolledback)
+            else
             {
-                return;
+                eventRecords[foundIndex] = eventRecord;
             }
+        }
+    }
 
-            _isRolledback = true;
+    protected virtual async Task OnCompletedAsync()
+    {
+        foreach (var handler in CompletedHandlers)
+        {
+            await handler.Invoke();
+        }
+    }
 
-            RollbackAll();
+    protected virtual void OnFailed()
+    {
+        Failed.InvokeSafely(this, new UnitOfWorkFailedEventArgs(this, _exception, _isRolledback));
+    }
+
+    protected virtual void OnDisposed()
+    {
+        Disposed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
+    }
+
+    public virtual void Dispose()
+    {
+        if (IsDisposed)
+        {
+            return;
         }
 
-        public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
+        IsDisposed = true;
+
+        DisposeTransactions();
+
+        if (!IsCompleted || _exception != null)
         {
-            if (_isRolledback)
+            OnFailed();
+        }
+
+        OnDisposed();
+    }
+
+    private void DisposeTransactions()
+    {
+        foreach (var transactionApi in GetAllActiveTransactionApis())
+        {
+            try
             {
-                return;
+                transactionApi.Dispose();
             }
-
-            _isRolledback = true;
-
-            await RollbackAllAsync(cancellationToken);
-        }
-
-        public IDatabaseApi FindDatabaseApi(string key)
-        {
-            return _databaseApis.GetOrDefault(key);
-        }
-
-        public void AddDatabaseApi(string key, IDatabaseApi api)
-        {
-            Check.NotNull(key, nameof(key));
-            Check.NotNull(api, nameof(api));
-
-            if (_databaseApis.ContainsKey(key))
+            catch
             {
-                throw new AbpException("There is already a database API in this unit of work with given key: " + key);
-            }
-
-            _databaseApis.Add(key, api);
-        }
-
-        public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
-        {
-            Check.NotNull(key, nameof(key));
-            Check.NotNull(factory, nameof(factory));
-
-            return _databaseApis.GetOrAdd(key, factory);
-        }
-
-        public ITransactionApi FindTransactionApi(string key)
-        {
-            Check.NotNull(key, nameof(key));
-
-            return _transactionApis.GetOrDefault(key);
-        }
-
-        public void AddTransactionApi(string key, ITransactionApi api)
-        {
-            Check.NotNull(key, nameof(key));
-            Check.NotNull(api, nameof(api));
-
-            if (_transactionApis.ContainsKey(key))
-            {
-                throw new AbpException("There is already a transaction API in this unit of work with given key: " + key);
-            }
-
-            _transactionApis.Add(key, api);
-        }
-
-        public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
-        {
-            Check.NotNull(key, nameof(key));
-            Check.NotNull(factory, nameof(factory));
-
-            return _transactionApis.GetOrAdd(key, factory);
-        }
-
-        public void OnCompleted(Func<Task> handler)
-        {
-            CompletedHandlers.Add(handler);
-        }
-
-        public void OnFailed(Func<Task> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void OnCompleted()
-        {
-            foreach (var handler in CompletedHandlers)
-            {
-                AsyncHelper.RunSync(handler);
             }
         }
+    }
 
-        protected virtual async Task OnCompletedAsync()
+    private void PreventMultipleComplete()
+    {
+        if (IsCompleted || _isCompleting)
         {
-            foreach (var handler in CompletedHandlers)
-            {
-                await handler.Invoke();
-            }
+            throw new AbpException("Complete is called before!");
         }
+    }
 
-        protected virtual void OnFailed()
+    protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
+    {
+        foreach (var databaseApi in GetAllActiveDatabaseApis())
         {
-            Failed.InvokeSafely(this, new UnitOfWorkFailedEventArgs(this, _exception, _isRolledback));
-        }
-
-        protected virtual void OnDisposed()
-        {
-            Disposed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
-        }
-
-        public virtual void Dispose()
-        {
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            IsDisposed = true;
-
-            DisposeTransactions();
-
-            if (!IsCompleted || _exception != null)
-            {
-                OnFailed();
-            }
-
-            OnDisposed();
-        }
-
-        private void DisposeTransactions()
-        {
-            foreach (var transactionApi in GetAllActiveTransactionApis())
+            if (databaseApi is ISupportsRollback)
             {
                 try
                 {
-                    transactionApi.Dispose();
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        private void PreventMultipleComplete()
-        {
-            if (IsCompleted || _isCompleting)
-            {
-                throw new AbpException("Complete is called before!");
-            }
-        }
-
-        protected virtual void RollbackAll()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                try
-                {
-                    (databaseApi as ISupportsRollback)?.Rollback();
+                    await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
                 }
                 catch { }
             }
+        }
 
-            foreach (var transactionApi in GetAllActiveTransactionApis())
+        foreach (var transactionApi in GetAllActiveTransactionApis())
+        {
+            if (transactionApi is ISupportsRollback)
             {
                 try
                 {
-                    (transactionApi as ISupportsRollback)?.Rollback();
+                    await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
                 }
                 catch { }
             }
         }
+    }
 
-        protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
+    protected virtual async Task CommitTransactionsAsync()
+    {
+        foreach (var transaction in GetAllActiveTransactionApis())
         {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                if (databaseApi is ISupportsRollback)
-                {
-                    try
-                    {
-                        await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
-                    }
-                    catch { }
-                }
-            }
-
-            foreach (var transactionApi in GetAllActiveTransactionApis())
-            {
-                if (transactionApi is ISupportsRollback)
-                {
-                    try
-                    {
-                        await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
-                    }
-                    catch { }
-                }
-            }
+            await transaction.CommitAsync();
         }
+    }
 
-        protected virtual void CommitTransactions()
-        {
-            foreach (var transaction in GetAllActiveTransactionApis())
-            {
-                transaction.Commit();
-            }
-        }
-
-        protected virtual async Task CommitTransactionsAsync()
-        {
-            foreach (var transaction in GetAllActiveTransactionApis())
-            {
-                await transaction.CommitAsync();
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"[UnitOfWork {Id}]";
-        }
+    public override string ToString()
+    {
+        return $"[UnitOfWork {Id}]";
     }
 }

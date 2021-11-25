@@ -1,0 +1,42 @@
+﻿@inject ICurrentUser CurrentUser
+@inject IHtmlLocalizer<CmsKitResource> L
+@using Volo.Abp.Users
+@using Volo.CmsKit.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewComponent.ReactionSelectionViewModel
+
+
+<div class="row row">
+        <div class="col">
+            <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+
+                @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
+                {
+                    <span class="ms-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
+                        <i class="@reaction.Icon"></i>
+                        <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
+                    </span>
+                }
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a class="cms-reaction-select-icon text-dark p-1" href="javascript:;">
+                        <i class="fa fa-smile-o"></i>
+                    </a>
+                    <div class="cms-reaction-selection-popover-content" style="display: none">
+                        @foreach (var reaction in Model.Reactions)
+                        {
+                            <span class="m-2 p-2 w-25 d-inline-block text-center cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "shadow-sm  bg-light rounded cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name">
+                                <i class="@reaction.Icon fa-2x"></i>
+                            </span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <span class="ms-reaction-select-icon text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><div class='d-grid gap-2'><a href='@Model.LoginUrl' class='btn btn-primary'>@L["LoginToReact"]</a</div>div>">
+                        <i class="fa fa-smile-o"></i>
+                    </span>
+                }
+            </span>
+        </div>
+    </div>

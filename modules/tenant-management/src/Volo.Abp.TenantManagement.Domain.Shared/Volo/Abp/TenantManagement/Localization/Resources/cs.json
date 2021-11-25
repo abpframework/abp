@@ -10,11 +10,14 @@
     "ConnectionStrings": "Connection stringy",
     "DisplayName:DefaultConnectionString": "Výchozí connection string",
     "DisplayName:UseSharedDatabase": "Použít sdílenou databázi",
+    "ManageHostFeatures": "Správa funkcí hostitele",
     "Permission:TenantManagement": "Správa tenantů",
     "Permission:Create": "Vytvořit",
     "Permission:Edit": "Upravit",
     "Permission:Delete": "Smazat",
     "Permission:ManageConnectionStrings": "Spravovat connection stringy",
-    "Permission:ManageFeatures": "Spravovat funkce"
+    "Permission:ManageFeatures": "Spravovat funkce",
+    "DisplayName:AdminEmailAddress": "Email adresa správce",
+    "DisplayName:AdminPassword": "Heslo správce"
   }
 }

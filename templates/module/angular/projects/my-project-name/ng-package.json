@@ -3,6 +3,5 @@
   "dest": "../../dist/my-project-name",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "whitelistedNonPeerDependencies": ["@abp/ng.theme.shared", "my-project-name.config"]
+  }
 }

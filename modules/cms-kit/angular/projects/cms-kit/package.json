@@ -1,0 +1,13 @@
+{
+  "name": "@my-company-name/cms-kit",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^9.1.11",
+    "@angular/core": "^9.1.11",
+    "@abp/ng.core": ">=5.0.0-rc.1",
+    "@abp/ng.theme.shared": ">=5.0.0-rc.1"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+}
+}

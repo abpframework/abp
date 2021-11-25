@@ -1,8 +1,15 @@
-﻿# Module Development
+# Modularity
 
 ## Introduction
 
-ABP is a **modular application framework** which consists of dozens of **nuget packages**. It also provides a complete infrastructure to build your own application modules which may have entities, services, database integration, APIs, UI components and so on.
+ABP Framework was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
+
+* This document introduces the basics of the module system.
+* [Module development best practice guide](Best-Practices/Index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
+* [Pre-built application modules](Modules/Index.md) are **ready to use** in any kind of application.
+* [Module startup template](Startup-Templates/Module.md) is a jump start way to **create a new module**.
+* [ABP CLI](CLI.md) has commands to support modular development.
+* All other framework features are compatible to the modularity system.
 
 ## Module Class
 
@@ -42,7 +49,7 @@ public class BlogModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Configure default connection string for the application
-        Configure<DbConnectionOptions>(options =>
+        Configure<AbpDbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });
@@ -50,7 +57,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See Configuration (TODO: link) document for more about the configuration system.
+See the [Configuration](Configuration.md) document for more about the configuration system.
 
 #### Pre & Post Configure Services
 

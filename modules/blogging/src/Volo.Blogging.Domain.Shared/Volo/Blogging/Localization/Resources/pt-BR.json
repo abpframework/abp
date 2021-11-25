@@ -3,6 +3,16 @@
   "texts": {
     "Menu:Blogs": "Blogs",
     "Menu:BlogManagement": "Gerenciar Blog",
+    "Permission:Management": "Gerenciamento",
+    "Permission:Edit": "Editar",
+    "Permission:Create": "Criar",
+    "Permission:Delete": "Excluir",
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Blogs",
+    "Permission:Posts": "Postagens",
+    "Permission:Tags": "Etiquetas",
+    "Permission:Comments": "Comentários",
+    "Permission:ClearCache": "Limpar cache",
     "Title": "Título",
     "Delete": "Excluir",
     "Reply": "Responder",
@@ -42,6 +52,10 @@
     "CreationTime": "Hora da criação",
     "Description": "Descrição",
     "Blogs": "Blogs",
-    "Tags": "Etiquetas"
+    "Tags": "Etiquetas",
+    "ShareOn": "Compartilhar no",
+    "TitleLengthWarning": "Mantenha o tamanho do título abaixo de 60 caracteres para ser SEO amigável!",
+    "ClearCache": "Limpar cache",
+    "ClearCacheConfirmationMessage": "Tem certeza de que deseja limpar o cache?"
   }
 }

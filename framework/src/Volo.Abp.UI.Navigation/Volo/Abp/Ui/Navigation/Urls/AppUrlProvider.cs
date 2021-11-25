@@ -1,92 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.UI.Navigation.Urls
+namespace Volo.Abp.UI.Navigation.Urls;
+
+public class AppUrlProvider : IAppUrlProvider, ITransientDependency
 {
-    public class AppUrlProvider : IAppUrlProvider, ITransientDependency
+    public const string TenantIdPlaceHolder = "{{tenantId}}";
+    public const string TenantNamePlaceHolder = "{{tenantName}}";
+
+    protected AppUrlOptions Options { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected ITenantStore TenantStore { get; }
+
+    public AppUrlProvider(
+        IOptions<AppUrlOptions> options,
+        ICurrentTenant currentTenant,
+        ITenantStore tenantStore)
     {
-        public const string TenantIdPlaceHolder = "{{tenantId}}";
-        public const string TenantNamePlaceHolder = "{{tenantName}}";
+        CurrentTenant = currentTenant;
+        TenantStore = tenantStore;
+        Options = options.Value;
+    }
 
-        protected AppUrlOptions Options { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected ITenantStore TenantStore { get; }
+    public virtual async Task<string> GetUrlAsync(string appName, string urlName = null)
+    {
+        return await ReplacePlaceHoldersAsync(
+            await GetConfiguredUrl(
+                appName,
+                urlName
+            )
+        );
+    }
 
-        public AppUrlProvider(
-            IOptions<AppUrlOptions> options,
-            ICurrentTenant currentTenant,
-            ITenantStore tenantStore)
+    public bool IsRedirectAllowedUrl(string url)
+    {
+        return Options.RedirectAllowedUrls.Any(url.StartsWith);
+    }
+
+    protected virtual async Task<string> GetConfiguredUrl(string appName, string urlName)
+    {
+        var url = await GetUrlOrNullAsync(appName, urlName);
+        if (!url.IsNullOrEmpty())
         {
-            CurrentTenant = currentTenant;
-            TenantStore = tenantStore;
-            Options = options.Value;
+            return url;
         }
 
-        public virtual async Task<string> GetUrlAsync(string appName, string urlName = null)
+        if (!urlName.IsNullOrEmpty())
         {
-            return await ReplacePlaceHoldersAsync(
-                await GetConfiguredUrl(
-                    appName,
-                    urlName
-                )
+            throw new AbpException(
+                $"Url, named '{urlName}', for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
             );
         }
 
-        protected virtual Task<string> GetConfiguredUrl(string appName, string urlName)
+        throw new AbpException(
+            $"RootUrl for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
+        );
+    }
+
+    protected virtual async Task<string> ReplacePlaceHoldersAsync(string url)
+    {
+        url = url.Replace(
+            TenantIdPlaceHolder,
+            CurrentTenant.Id.HasValue ? CurrentTenant.Id.Value.ToString() : ""
+        );
+
+        if (!url.Contains(TenantNamePlaceHolder))
         {
-            var app = Options.Applications[appName];
-
-            if (urlName.IsNullOrEmpty())
-            {
-                if (app.RootUrl.IsNullOrEmpty())
-                {
-                    throw new AbpException(
-                        $"RootUrl for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
-                    );
-                }
-
-                return Task.FromResult(app.RootUrl);
-            }
-
-            var url = app.Urls.GetOrDefault(urlName);
-            if (url.IsNullOrEmpty())
-            {
-                throw new AbpException(
-                    $"Url, named '{urlName}', for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
-                );
-            }
-
-            if (app.RootUrl == null)
-            {
-                return Task.FromResult(url);
-            }
-
-            return Task.FromResult(app.RootUrl.EnsureEndsWith('/') + url);
+            return url;
         }
 
-        protected virtual async Task<string> ReplacePlaceHoldersAsync(string url)
+        var tenantNamePlaceHolder = TenantNamePlaceHolder;
+
+        if (url.Contains(TenantNamePlaceHolder + '.'))
         {
-            url = url.Replace(
-                TenantIdPlaceHolder,
-                CurrentTenant.Id.HasValue ? CurrentTenant.Id.Value.ToString() : ""
-            );
+            tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
+        }
 
-            if (!url.Contains(TenantNamePlaceHolder))
-            {
-                return url;
-            }
-
-            var tenantNamePlaceHolder = TenantNamePlaceHolder;
-
-            if (url.Contains(TenantNamePlaceHolder + '.'))
-            {
-                tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
-            }
-
+        if (url.Contains(tenantNamePlaceHolder))
+        {
             if (CurrentTenant.Id.HasValue)
             {
                 url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
@@ -95,19 +92,38 @@ namespace Volo.Abp.UI.Navigation.Urls
             {
                 url = url.Replace(tenantNamePlaceHolder, "");
             }
-
-            return url;
         }
 
-        private async Task<string> GetCurrentTenantNameAsync()
+        return url;
+    }
+
+    private async Task<string> GetCurrentTenantNameAsync()
+    {
+        if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
         {
-            if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
-            {
-                var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
-                return tenantConfiguration.Name;
-            }
-
-            return CurrentTenant.Name;
+            var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
+            return tenantConfiguration.Name;
         }
+
+        return CurrentTenant.Name;
+    }
+
+    public Task<string> GetUrlOrNullAsync([NotNull] string appName, [CanBeNull] string urlName = null)
+    {
+        var app = Options.Applications[appName];
+
+        if (urlName.IsNullOrEmpty())
+        {
+            return Task.FromResult(app.RootUrl);
+        }
+
+        var url = app.Urls.GetOrDefault(urlName);
+
+        if (app.RootUrl == null)
+        {
+            return Task.FromResult(url);
+        }
+
+        return Task.FromResult(app.RootUrl.EnsureEndsWith('/') + url);
     }
 }

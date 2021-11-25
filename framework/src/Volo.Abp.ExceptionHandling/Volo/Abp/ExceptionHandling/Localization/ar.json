@@ -1,0 +1,26 @@
+{
+  "culture": "ar",
+  "texts": {
+    "InternalServerErrorMessage": "حدث خطأ داخلي أثناء طلبك!",
+    "ValidationErrorMessage": "طلبك غير صحيح!",
+    "ValidationNarrativeErrorMessageTitle": "تم الكشف عن الأخطاء التالية أثناء التحقق .",
+    "DefaultErrorMessage": "حدث خطأ!",
+    "DefaultErrorMessageDetail": "لم يتم إرسال تفاصيل الخطأ بواسطة الخادم.",
+    "DefaultErrorMessage401": "أنت غير مصدق!",
+    "DefaultErrorMessage401Detail": "يجب عليك تسجيل الدخول لأداء هذه العملية.",
+    "DefaultErrorMessage403": "أنك غير مخول!",
+    "DefaultErrorMessage403Detail": "لا يسمح لك بإجراء هذه العملية!",
+    "DefaultErrorMessage404": "المورد غير موجود!",
+    "DefaultErrorMessage404Detail": "لم يتم العثور على المورد المطلوب على الخادم!",
+    "EntityNotFoundErrorMessage": "لا يوجد كيان {0} بالمعرف = {1}!",
+    "AbpDbConcurrencyErrorMessage": "تم تغيير البيانات التي قدمتها بالفعل من قبل مستخدم/عميل آخر. يرجى تجاهل التغييرات التي قمت بها والمحاولة من البداية.",
+    "Error": "خطأ",
+    "UnhandledException": "استثناء غير معالج!",
+    "401Message": "غير مصرح",
+    "403Message": "ممنوع",
+    "404Message": "الصفحة غير موجودة",
+    "500Message": "خطأ في الخادم الداخلي",
+    "403MessageDetail": "أنت غير مصرح لك لإجراء هذه العملية!",
+    "404MessageDetail": "عذرا ، لا يوجد شيء في هذا العنوان."
+  }
+}

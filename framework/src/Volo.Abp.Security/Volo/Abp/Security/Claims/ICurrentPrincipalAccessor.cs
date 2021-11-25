@@ -1,9 +1,11 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 
-namespace Volo.Abp.Security.Claims
+namespace Volo.Abp.Security.Claims;
+
+public interface ICurrentPrincipalAccessor
 {
-    public interface ICurrentPrincipalAccessor
-    {
-        ClaimsPrincipal Principal { get; }
-    }
+    ClaimsPrincipal Principal { get; }
+
+    IDisposable Change(ClaimsPrincipal principal);
 }

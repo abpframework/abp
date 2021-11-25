@@ -8,7 +8,7 @@ Esta é a segunda parte da série de tutoriais do ASP.NET Core MVC. Veja todas a
 - **Parte II: Criar, atualizar e excluir livros (este tutorial)**
 - [Parte III: Testes de Integração](https://docs.abp.io/en/abp/latest/Tutorials/AspNetCore-Mvc/Part-III)
 
-Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/volosoft/abp/tree/master/samples/BookStore) .
+Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore) .
 
 > Você também pode assistir a [este curso em vídeo](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) preparado por um membro da comunidade ABP, com base neste tutorial.
 
@@ -67,7 +67,6 @@ Abra o `CreateModal.cshtml`arquivo e cole o código abaixo:
 
 ```html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -86,13 +85,13 @@ Abra o `CreateModal.cshtml`arquivo e cole o código abaixo:
 
 
 
-- Este modal usa o 
+- Este modal usa o
 
   ```
   abp-dynamic-form
   ```
 
-  auxiliar de marca para criar automaticamente o formulário a partir da 
+  auxiliar de marca para criar automaticamente o formulário a partir da
 
   ```
   CreateBookViewModel
@@ -234,7 +233,6 @@ Substitua o `EditModal.cshtml`conteúdo pelo seguinte:
 
 ```html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
@@ -454,7 +452,8 @@ $(function () {
 Abra o `en.json`no `Acme.BookStore.Domain.Shared`projeto e adicione a seguinte linha:
 
 ```json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?" 
+"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
+"SuccessfullyDeleted": "Successfully deleted"
 ```
 
 

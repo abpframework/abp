@@ -1,50 +1,153 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigStateService {
-  constructor(private store: Store) {}
+  private readonly store = new InternalStore({} as ApplicationConfigurationDto);
 
-  getAll() {
-    return this.store.selectSnapshot(ConfigState.getAll);
+  get createOnUpdateStream() {
+    return this.store.sliceUpdate;
   }
 
-  getApplicationInfo() {
-    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  private updateSubject = new Subject();
+
+  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+    this.initUpdateStream();
   }
 
-  getOne(...args: Parameters<typeof ConfigState.getOne>) {
-    return this.store.selectSnapshot(ConfigState.getOne(...args));
+  private initUpdateStream() {
+    this.updateSubject
+      .pipe(switchMap(() => this.abpConfigService.get()))
+      .subscribe(res => this.store.set(res));
   }
 
-  getDeep(...args: Parameters<typeof ConfigState.getDeep>) {
-    return this.store.selectSnapshot(ConfigState.getDeep(...args));
+  refreshAppState() {
+    this.updateSubject.next();
+    return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
-  getRoute(...args: Parameters<typeof ConfigState.getRoute>) {
-    return this.store.selectSnapshot(ConfigState.getRoute(...args));
+  getOne$(key: string) {
+    return this.store.sliceState(state => state[key]);
   }
 
-  getApiUrl(...args: Parameters<typeof ConfigState.getApiUrl>) {
-    return this.store.selectSnapshot(ConfigState.getApiUrl(...args));
+  getOne(key: string) {
+    return this.store.state[key];
   }
 
-  getSetting(...args: Parameters<typeof ConfigState.getSetting>) {
-    return this.store.selectSnapshot(ConfigState.getSetting(...args));
+  getAll$(): Observable<ApplicationConfigurationDto> {
+    return this.store.sliceState(state => state);
   }
 
-  getSettings(...args: Parameters<typeof ConfigState.getSettings>) {
-    return this.store.selectSnapshot(ConfigState.getSettings(...args));
+  getAll(): ApplicationConfigurationDto {
+    return this.store.state;
   }
 
-  getGrantedPolicy(...args: Parameters<typeof ConfigState.getGrantedPolicy>) {
-    return this.store.selectSnapshot(ConfigState.getGrantedPolicy(...args));
+  getDeep$(keys: string[] | string): Observable<any> {
+    keys = splitKeys(keys);
+
+    return this.store
+      .sliceState(state => state)
+      .pipe(
+        map(state => {
+          return (keys as string[]).reduce((acc: any, val) => {
+            if (acc) {
+              return acc[val];
+            }
+
+            return undefined;
+          }, state);
+        }),
+      );
   }
 
-  getLocalization(...args: Parameters<typeof ConfigState.getLocalization>) {
-    return this.store.selectSnapshot(ConfigState.getLocalization(...args));
+  getDeep(keys: string[] | string): any {
+    keys = splitKeys(keys);
+
+    return (keys as string[]).reduce((acc: any, val) => {
+      if (acc) {
+        return acc[val];
+      }
+
+      return undefined;
+    }, this.store.state);
   }
+
+  getFeature(key: string) {
+    return this.store.state.features?.values?.[key];
+  }
+
+  getFeature$(key: string) {
+    return this.store.sliceState(state => state.features?.values?.[key]);
+  }
+
+  getFeatures(keys: string[]) {
+    const { features } = this.store.state;
+    if (!features) return;
+
+    return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
+  }
+
+  getFeatures$(keys: string[]) {
+    return this.store.sliceState(({ features }) => {
+      if (!features?.values) return;
+
+      return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
+    });
+  }
+
+  getSetting(key: string) {
+    return this.store.state.setting?.values?.[key];
+  }
+
+  getSetting$(key: string) {
+    return this.store.sliceState(state => state.setting?.values?.[key]);
+  }
+
+  getSettings(keyword?: string) {
+    const settings = this.store.state.setting?.values || {};
+
+    if (!keyword) return settings;
+
+    const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+    return keysFound.reduce((acc, key) => {
+      acc[key] = settings[key];
+      return acc;
+    }, {});
+  }
+
+  getSettings$(keyword?: string) {
+    return this.store
+      .sliceState(state => state.setting?.values)
+      .pipe(
+        map((settings = {}) => {
+          if (!keyword) return settings;
+
+          const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+          return keysFound.reduce((acc, key) => {
+            acc[key] = settings[key];
+            return acc;
+          }, {});
+        }),
+      );
+  }
+}
+
+function splitKeys(keys: string[] | string): string[] {
+  if (typeof keys === 'string') {
+    keys = keys.split('.');
+  }
+
+  if (!Array.isArray(keys)) {
+    throw new Error('The argument must be a dot string or an string array.');
+  }
+
+  return keys;
 }

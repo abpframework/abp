@@ -3,68 +3,67 @@ using System.Collections.Generic;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 
-namespace Volo.Abp.VirtualFileSystem
+namespace Volo.Abp.VirtualFileSystem;
+
+public abstract class DictionaryBasedFileProvider : IFileProvider
 {
-    public abstract class DictionaryBasedFileProvider : IFileProvider
+    protected abstract IDictionary<string, IFileInfo> Files { get; }
+
+    public virtual IFileInfo GetFileInfo(string subpath)
     {
-        protected abstract IDictionary<string, IFileInfo> Files { get; }
-
-        public virtual IFileInfo GetFileInfo(string subpath)
+        if (subpath == null)
         {
-            if (string.IsNullOrEmpty(subpath))
-            {
-                return new NotFoundFileInfo(subpath);
-            }
-
-            var file = Files.GetOrDefault(NormalizePath(subpath));
-
-            if (file == null)
-            {
-                return new NotFoundFileInfo(subpath);
-            }
-
-            return file;
+            return new NotFoundFileInfo(subpath);
         }
 
-        public virtual IDirectoryContents GetDirectoryContents(string subpath)
+        var file = Files.GetOrDefault(NormalizePath(subpath));
+
+        if (file == null)
         {
-            var directory = GetFileInfo(subpath);
-            if (!directory.IsDirectory)
+            return new NotFoundFileInfo(subpath);
+        }
+
+        return file;
+    }
+
+    public virtual IDirectoryContents GetDirectoryContents(string subpath)
+    {
+        var directory = GetFileInfo(subpath);
+        if (!directory.IsDirectory)
+        {
+            return NotFoundDirectoryContents.Singleton;
+        }
+
+        var fileList = new List<IFileInfo>();
+
+        var directoryPath = subpath.EnsureEndsWith('/');
+        foreach (var fileInfo in Files.Values)
+        {
+            var fullPath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+            if (!fullPath.StartsWith(directoryPath))
             {
-                return NotFoundDirectoryContents.Singleton;
+                continue;
             }
 
-            var fileList = new List<IFileInfo>();
-
-            var directoryPath = subpath.EnsureEndsWith('/');
-            foreach (var fileInfo in Files.Values)
+            var relativePath = fullPath.Substring(directoryPath.Length);
+            if (relativePath.Contains("/"))
             {
-                var fullPath = fileInfo.GetVirtualOrPhysicalPathOrNull();
-                if (!fullPath.StartsWith(directoryPath))
-                {
-                    continue;
-                }
-
-                var relativePath = fullPath.Substring(directoryPath.Length);
-                if (relativePath.Contains("/"))
-                {
-                    continue;
-                }
-
-                fileList.Add(fileInfo);
+                continue;
             }
 
-            return new EnumerableDirectoryContents(fileList);
+            fileList.Add(fileInfo);
         }
 
-        public virtual IChangeToken Watch(string filter)
-        {
-            return NullChangeToken.Singleton;
-        }
+        return new EnumerableDirectoryContents(fileList);
+    }
 
-        protected virtual string NormalizePath(string subpath)
-        {
-            return subpath;
-        }
+    public virtual IChangeToken Watch(string filter)
+    {
+        return NullChangeToken.Singleton;
+    }
+
+    protected virtual string NormalizePath(string subpath)
+    {
+        return subpath;
     }
 }

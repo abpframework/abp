@@ -1,21 +1,28 @@
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
-namespace Volo.Abp.Emailing
+namespace Volo.Abp.Emailing;
+
+public class BackgroundEmailSendingJob : AsyncBackgroundJob<BackgroundEmailSendingJobArgs>, ITransientDependency
 {
-    public class BackgroundEmailSendingJob : BackgroundJob<BackgroundEmailSendingJobArgs>, ITransientDependency
+    protected IEmailSender EmailSender { get; }
+
+    public BackgroundEmailSendingJob(IEmailSender emailSender)
     {
-        protected IEmailSender EmailSender { get; }
+        EmailSender = emailSender;
+    }
 
-        public BackgroundEmailSendingJob(IEmailSender emailSender)
+    public override async Task ExecuteAsync(BackgroundEmailSendingJobArgs args)
+    {
+        if (args.From.IsNullOrWhiteSpace())
         {
-            EmailSender = emailSender;
+            await EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml);
         }
-
-        public override void Execute(BackgroundEmailSendingJobArgs args)
+        else
         {
-            AsyncHelper.RunSync(() => EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml));
+            await EmailSender.SendAsync(args.From, args.To, args.Subject, args.Body, args.IsBodyHtml);
         }
     }
 }

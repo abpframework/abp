@@ -1,7 +1,12 @@
 ﻿@page
 @using MyCompanyName.MyProjectName.Pages
-@inherits MyProjectNamePage
 @model IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyCompanyName.MyProjectName.Localization
+@using Volo.Abp.Users
+@inject IHtmlLocalizer<MyProjectNameResource> L
+@inject ICurrentUser CurrentUser
+
 <abp-card>
     <abp-card-header>Welcome</abp-card-header>
     <abp-card-body>
@@ -17,6 +22,6 @@
             @Html.Raw(CurrentUser.GetAllClaims().Select(c => $"{c.Type}={c.Value}").OrderBy(x => x).JoinAsString(" <br /> "))
         }
         <hr />
-        <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+        <p class="text-end"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
     </abp-card-body>
 </abp-card>

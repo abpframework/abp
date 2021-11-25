@@ -1,0 +1,12 @@
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.NavsDemo
+@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Navs.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Navs";
+}
+<h2>Navs</h2>
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/navs/" target="_blank"> Bootstrap Navs</a>.</p>
+
+@await Component.InvokeAsync(typeof(NavsDemoViewComponent))

@@ -1,0 +1,7 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "HelloText": "Hallo {0}",
+    "HowAreYou": "wie geht es Ihnen?"
+  }
+}

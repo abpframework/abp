@@ -1,0 +1,14 @@
+{
+  "culture": "ru",
+  "texts": {
+    "VirtualFileExplorer": "Виртуальный файловый менеджер",
+    "VirtualFileType": "Тип виртуального файла",
+    "Menu:VirtualFileExplorer": "Виртуальный файловый менеджер",
+    "LastUpdateTime": "Время последнего обновления",
+    "VirtualFileName": "Имя виртуального файла",
+    "FileContent": "Содержание файла",
+    "Size": "Размер",
+    "BackToRoot": "Вернуться к корню",
+    "EmptyFileInfoList": "Нет виртуальных файлов"
+  }
+}

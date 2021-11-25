@@ -1,0 +1,197 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Docs.Admin
+@using Volo.Docs.Admin.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
+@model Volo.Docs.Admin.Pages.Docs.Admin.Documents.IndexModel
+@inject IHtmlLocalizer<DocsResource> L
+@inject IAuthorizationService Authorization
+@{
+    ViewBag.PageTitle = L["Menu:Documents"];
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Documents"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:DocumentManagement"].Value);
+    PageLayout.Content.MenuItemName = DocsMenuNames.Documents;
+}
+
+@section scripts {
+    <abp-script src="/client-proxies/docs-admin-proxy.js" />
+    <abp-script src="/Pages/Docs/Admin/Documents/index.js" />
+}
+
+@section styles {
+    <abp-style src="/Pages/Docs/Admin/Documents/index.min.css" />
+}
+
+<div id="DocumentsContainer">
+    <abp-card>
+        <abp-card-header>
+            <form autocomplete="off" id="FilterForm">
+
+                <div class="row">
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["Name"].Value</div>
+
+                            <input type="text"
+                                   id="Name"
+                                   name="Name"
+                                   class="form-control me-sm-2">
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["Version"].Value</div>
+
+                            <input type="text"
+                                   id="Version"
+                                   name="Version"
+                                   class="form-control me-sm-2">
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["LanguageCode"].Value</div>
+
+                            <input type="text"
+                                   id="LanguageCode"
+                                   name="LanguageCode"
+                                   class="form-control me-sm-2">
+                        </div>
+                    </div>
+
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["FileName"].Value</div>
+
+                            <input type="text"
+                                   id="FileName"
+                                   name="FileName"
+                                   class="form-control me-sm-2">
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["Format"].Value</div>
+
+                            <input type="text"
+                                   id="Format"
+                                   name="Format"
+                                   class="form-control me-sm-2">
+                        </div>
+                    </div>
+
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["CreationTime"].Value</div>
+
+                            <span>
+                                <input type="date"
+                                       id="CreationTimeMin"
+                                       name="CreationTimeMin"
+                                       class="form-control datepicker"
+                                       placeholder="@L["StartDate"].Value">
+                                <span>-</span>
+                                <input type="date"
+                                       id="CreationTimeMax"
+                                       name="CreationTimeMax"
+                                       placeholder="@L["EndDate"].Value"
+                                       class="form-control datepicker">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["LastUpdateTime"].Value</div>
+                            <span>
+                                <input type="date"
+                                       id="LastUpdatedTimeMin"
+                                       name="LastUpdatedTimeMin"
+                                       class="form-control datepicker"
+                                       placeholder="@L["StartDate"].Value">
+                                <span>-</span>
+                                <input type="date"
+                                       id="LastUpdatedTimeMax"
+                                       name="LastUpdatedTimeMax"
+                                       placeholder="@L["EndDate"].Value"
+                                       class="form-control datepicker">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
+
+                            <span>
+                                <input type="date"
+                                       id="LastSignificantUpdateTimeMin"
+                                       name="LastSignificantUpdateTimeMin"
+                                       class="form-control datepicker"
+                                       placeholder="@L["StartDate"].Value">
+                                <span>-</span>
+                                <input type="date"
+                                       id="LastSignificantUpdateTimeMax"
+                                       name="LastSignificantUpdateTimeMax"
+                                       placeholder="@L["EndDate"].Value"
+                                       class="form-control datepicker">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["LastCachedTime"].Value</div>
+
+                            <span>
+                                <input type="date"
+                                       id="LastCachedTimeMin"
+                                       name="LastCachedTimeMin"
+                                       class="form-control datepicker"
+                                       placeholder="@L["StartDate"].Value">
+                                <span>-</span>
+                                <input type="date"
+                                       id="LastCachedTimeMax"
+                                       name="LastCachedTimeMax"
+                                       placeholder="@L["EndDate"].Value"
+                                       class="form-control datepicker">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <abp-button button-type="Primary" icon="search" id="SearchButton" style="line-height: 25px;" text="@L["Search"].Value"></abp-button>
+                    </div>
+                </div>
+            </form>
+        </abp-card-header>
+        <abp-card-body>
+            <abp-table striped-rows="true" id="DocumentsTable" class="nowrap">
+                <thead>
+                    <tr>
+                        <th>@L["Actions"]</th>
+                        <th>@L["Name"]</th>
+                        <th>@L["Version"]</th>
+                        <th>@L["LanguageCode"]</th>
+                        <th>@L["FileName"]</th>
+                        <th>@L["Format"]</th>
+                        <th>@L["CreationTime"]</th>
+                        <th>@L["LastUpdatedTime"]</th>
+                        <th>@L["LastSignificantUpdateTime"]</th>
+                        <th>@L["LastCachedTime"]</th>
+                    </tr>
+                </thead>
+            </abp-table>
+        </abp-card-body>
+    </abp-card>
+</div>

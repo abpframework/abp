@@ -25,7 +25,7 @@ namespace Volo.Docs.Pages.Documents
             _uiOptions = urlOptions.Value;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
 
@@ -33,7 +33,7 @@ namespace Volo.Docs.Pages.Documents
 
             if (listResult.Items.Count == 1)
             {
-                return Redirect("." + DocumentsUrlPrefix + listResult.Items[0].ShortName);
+                return Redirect(DocumentsUrlPrefix + listResult.Items[0].ShortName);
             }
 
             Projects = listResult.Items;

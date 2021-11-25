@@ -1,0 +1,10 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Features": "Funkcionalnosti",
+    "NoFeatureFoundMessage": "Na voljo ni nobene funkcionalnosti.",
+    "Permission:FeatureManagement": "Upravljanje funkcij",
+    "Permission:FeatureManagement.ManageHostFeatures": "Upravljajte funkcije gostitelja",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Vrednost funkcije {0} ni veljavna!"
+  }
+}

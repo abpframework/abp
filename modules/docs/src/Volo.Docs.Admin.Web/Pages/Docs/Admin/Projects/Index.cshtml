@@ -3,8 +3,10 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Docs.Admin
 @using Volo.Docs.Admin.Navigation
-@inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
 @model Volo.Docs.Admin.Pages.Docs.Admin.Projects.IndexModel
+@inject IHtmlLocalizer<DocsResource> L
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Projects";
@@ -17,9 +19,11 @@
 }
 
 @section scripts {
+    <abp-script src="/client-proxies/docs-admin-proxy.js" />
     <abp-script src="/Pages/Docs/Admin/Projects/index.js" />
     <abp-script src="/Pages/Docs/Admin/Projects/create.js" />
     <abp-script src="/Pages/Docs/Admin/Projects/edit.js" />
+    <abp-script src="/Pages/Docs/Admin/Projects/pull.js" />
 }
 
 <abp-card>
@@ -28,15 +32,19 @@
             <abp-column size-md="_6">
                 <h2>@L["Projects"]</h2>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Create))
                 {
                     <abp-dropdown>
                         <abp-dropdown-button button-type="Primary" icon="plus" text="@L["CreateANewProject"].Value" />
-                        <abp-dropdown-menu align="Right">
+                        <abp-dropdown-menu align="End">
                             <abp-dropdown-item href="#" id="CreateNewGithubProjectButtonId"><i class="fa fa-github"></i> GitHub</abp-dropdown-item>
                         </abp-dropdown-menu>
                     </abp-dropdown>
+                }
+                @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
+                {
+                    <abp-button button-type="Primary" icon="plus" text="@L["ReIndexAllProjects"].Value" id="ReIndexAllProjects" />
                 }
             </abp-column>
         </abp-row>

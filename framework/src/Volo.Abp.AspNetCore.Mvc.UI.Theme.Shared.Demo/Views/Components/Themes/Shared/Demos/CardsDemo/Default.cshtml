@@ -1,0 +1,305 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.CardsDemo
+
+<abp-component-demo-section title="Example" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <img abp-card-image="Top" src="https://via.placeholder.com/300x200.png?text=Image+cap" />
+        <abp-card-body>
+            <abp-card-title>Card Title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Titles, text, and links" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <abp-card-body>
+            <abp-card-title>Card title</abp-card-title>
+            <abp-card-subtitle class="mb-2 text-muted">Card subtitle</abp-card-subtitle>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+            <a abp-card-link href="#">Card link</a>
+            <a abp-card-link href="#">Another link</a>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="List groups" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <abp-list-group flush="true">
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="List Title" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-list-group flush="true">
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Kitchen sink" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <img abp-card-image="Top" src="https://via.placeholder.com/300x200.png?text=Image+cap" />
+        <abp-card-body>
+            <abp-card-title>Card Title</abp-card-title><abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+        <abp-list-group flush="true">
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+        <abp-card-body>
+            <a abp-card-link href="#">Card link</a>
+            <a abp-card-link href="#">Another link</a>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Header and footer" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card style="width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Quoate" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card>
+        <abp-card-header>Quote</abp-card-header>
+        <abp-card-body>
+            <abp-blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer>Someone famous in Source Title</footer>
+            </abp-blockquote>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Featured" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card class="text-center">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+        <abp-card-footer class="text-muted"> 2 days ago</abp-card-footer>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Sizing with grid markup" view-path="@CardsDemoViewComponent.ViewPath">
+    <div class="row">
+        <div class="col-md-6">
+            <abp-card>
+                <abp-card-header>Quote</abp-card-header>
+                <abp-card-body>
+                    <abp-blockquote>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                        <footer>Someone famous in Source Title</footer>
+                    </abp-blockquote>
+                </abp-card-body>
+            </abp-card>
+        </div>
+        <div class="col-md-6">
+            <abp-card class="text-center">
+                <abp-card-header>Featured</abp-card-header>
+                <abp-card-body>
+                    <abp-card-title> Special title treatment</abp-card-title>
+                    <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+                    <a abp-button="Primary" href="#"> Go somewhere</a>
+                </abp-card-body>
+                <abp-card-footer class="text-muted"> 2 days ago</abp-card-footer>
+            </abp-card>
+        </div>
+    </div>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Sizing with utilities" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card class="w-75">
+        <abp-card-header>Quote</abp-card-header>
+        <abp-card-body>
+            <abp-blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer>Someone famous in Source Title</footer>
+            </abp-blockquote>
+        </abp-card-body>
+    </abp-card>
+    <abp-card class="text-center w-50">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+        <abp-card-footer class="text-muted"> 2 days ago</abp-card-footer>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Text alignment" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card class="text-start" style="width: 18rem;">
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+    </abp-card>
+    <abp-card class="text-center" style="width: 18rem;">
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+    </abp-card>
+    <abp-card class="text-end" style="width: 18rem;">
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Image overlays" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card>
+        <img abp-card-image="Top" src="https://via.placeholder.com/1150x270.png?text=Image+cap" />
+        <div class="card-img-overlay">
+            <abp-card-title>Card Title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+            <a abp-button="Primary" href="#"> Go somewhere</a>
+        </div>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Border" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card class="border-primary mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-primary">
+            <abp-card-title>Primary card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-secondary mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-secondary">
+            <abp-card-title>Secondary card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-success mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-success">
+            <abp-card-title>Success card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-danger mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-danger">
+            <abp-card-title>Danger card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-warning mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-warning">
+            <abp-card-title>Warning card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-info mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-info">
+            <abp-card-title>Info card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-light mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body>
+            <abp-card-title>Light card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card class="border-dark mb-3" style="width: 18rem;">
+        <abp-card-header>Header</abp-card-header>
+        <abp-card-body class="text-dark">
+            <abp-card-title>Dark card title</abp-card-title>
+            <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Card Styles" view-path="@CardsDemoViewComponent.ViewPath">
+    <abp-card background="Primary" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Success" text-color="Danger" border="Dark" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Warning" text-color="Secondary" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Light" text-color="Dark" border="Success" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Dark" text-color="White" border="Danger" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Danger" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header text-color="Primary">Featured</abp-card-header>
+        <abp-card-body>
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card background="Info" border="Danger" class="mb-3" style="max-width: 18rem;">
+        <abp-card-header>Featured</abp-card-header>
+        <abp-card-body text-color="Danger">
+            <abp-card-title> Special title treatment</abp-card-title>
+            <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+        </abp-card-body>
+    </abp-card>
+</abp-component-demo-section>

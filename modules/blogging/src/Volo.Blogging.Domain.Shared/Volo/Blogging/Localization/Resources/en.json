@@ -2,7 +2,17 @@
   "culture": "en",
   "texts": {
     "Menu:Blogs": "Blogs",
-    "Menu:BlogManagement": "Blog Management",
+    "Menu:BlogManagement": "Blogging",
+    "Permission:Management": "Management",
+    "Permission:Edit": "Edit",
+    "Permission:Create": "Create",
+    "Permission:Delete": "Delete",
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Blogs",
+    "Permission:Posts": "Posts",
+    "Permission:Tags": "Tags",
+    "Permission:Comments": "Comments",
+    "Permission:ClearCache": "Clear cache",
     "Title": "Title",
     "Delete": "Delete",
     "Reply": "Reply",
@@ -42,6 +52,10 @@
     "CreationTime": "Creation Time",
     "Description": "Description",
     "Blogs": "Blogs",
-    "Tags": "Tags"
+    "Tags": "Tags",
+    "ShareOn": "Share on",
+    "TitleLengthWarning": "Keep your title size under 60 characters to be SEO friendly!",
+    "ClearCache": "Clear cache",
+    "ClearCacheConfirmationMessage": "Are you sure you want to clear the cache?"
   }
 }

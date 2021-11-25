@@ -1,25 +1,45 @@
-import { AuthGuard, DynamicLayoutComponent, PermissionGuard } from '@abp/ng.core';
+import {
+  AuthGuard,
+  DynamicLayoutComponent,
+  PermissionGuard,
+  ReplaceableComponents,
+  ReplaceableRouteContainerComponent,
+} from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
+import { eIdentityComponents } from './enums/components';
+import { IdentityExtensionsGuard } from './guards/extensions.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
     path: '',
     component: DynamicLayoutComponent,
-    canActivate: [AuthGuard, PermissionGuard],
+    canActivate: [AuthGuard, PermissionGuard, IdentityExtensionsGuard],
     children: [
       {
         path: 'roles',
-        component: RolesComponent,
-        data: { requiredPolicy: 'AbpIdentity.Roles' },
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpIdentity.Roles',
+          replaceableComponent: {
+            key: eIdentityComponents.Roles,
+            defaultComponent: RolesComponent,
+          } as ReplaceableComponents.RouteData<RolesComponent>,
+        },
       },
       {
         path: 'users',
-        component: UsersComponent,
-        data: { requiredPolicy: 'AbpIdentity.Users' },
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpIdentity.Users',
+          replaceableComponent: {
+            key: eIdentityComponents.Users,
+            defaultComponent: UsersComponent,
+          } as ReplaceableComponents.RouteData<UsersComponent>,
+        },
       },
     ],
   },

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Bootstrap Table of Contents v1.0.0 (http://afeld.github.io/bootstrap-toc/)
  * Copyright 2015 Aidan Feldman
  * Licensed under MIT (https://github.com/afeld/bootstrap-toc/blob/gh-pages/LICENSE.md) */
@@ -12,12 +12,18 @@
                 // http://danielnouri.org/notes/2011/03/14/a-jquery-find-that-also-finds-the-root-element/
                 // http://stackoverflow.com/a/12731439/358804
                 var $descendants = $el.find(selector);
-                return $el.filter(selector).add($descendants).filter(':not([data-toc-skip])');
+                return $el
+                    .filter(selector)
+                    .add($descendants)
+                    .filter(':not([data-toc-skip])');
             },
 
             generateUniqueIdBase: function (el) {
                 var text = $(el).text();
-                var anchor = text.trim().toLowerCase().replace(/[^A-Za-z0-9]+/g, '-');
+                var anchor = text
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^A-Za-z0-9]+/g, '-');
                 return anchor || el.tagName.toLowerCase();
             },
 
@@ -91,7 +97,10 @@
                 var secondaryLevel = topLevel + 1;
                 var secondarySelector = 'h' + secondaryLevel;
 
-                return this.findOrFilter($scope, topSelector + ',' + secondarySelector);
+                return this.findOrFilter(
+                    $scope,
+                    topSelector + ',' + secondarySelector
+                );
             },
 
             getNavLevel: function (el) {
@@ -126,14 +135,14 @@
                 var opts;
                 if (arg.jquery) {
                     opts = {
-                        $nav: arg
+                        $nav: arg,
                     };
                 } else {
                     opts = arg;
                 }
                 opts.$scope = opts.$scope || $(document.body);
                 return opts;
-            }
+            },
         },
 
         // accepts a jQuery object, or an options object
@@ -147,7 +156,7 @@
             var topLevel = this.helpers.getTopLevel(opts.$scope);
             var $headings = this.helpers.getHeadings(opts.$scope, topLevel);
             this.helpers.populateNav($topContext, topLevel, $headings);
-        }
+        },
     };
 
     $(function () {

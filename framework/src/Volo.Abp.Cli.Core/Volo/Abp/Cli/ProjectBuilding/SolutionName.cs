@@ -1,50 +1,54 @@
 ﻿using System;
 
-namespace Volo.Abp.Cli.ProjectBuilding
+namespace Volo.Abp.Cli.ProjectBuilding;
+
+public class SolutionName
 {
-    public class SolutionName
+    public string FullName { get; }
+
+    public string CompanyName { get; }
+
+    public string ProjectName { get; }
+
+    private SolutionName(string fullName, string companyName, string projectName)
     {
-        public string FullName { get; }
+        FullName = fullName;
+        CompanyName = companyName;
+        ProjectName = projectName;
+    }
 
-        public string CompanyName { get; }
+    public static SolutionName Parse(string fullName, string microserviceName)
+    {
+        return new SolutionName(fullName + "." + microserviceName, fullName, microserviceName);
+    }
 
-        public string ProjectName { get; }
-
-        private SolutionName(string fullName, string companyName, string projectName)
+    public static SolutionName Parse(string fullName)
+    {
+        if (fullName.Length < 1)
         {
-            FullName = fullName;
-            CompanyName = companyName;
-            ProjectName = projectName;
+            throw new UserFriendlyException("Solution name is not valid. It should be 1 character length at minimum.");
         }
 
-        public static SolutionName Parse(string fullName)
+        string companyName = null;
+        var projectName = fullName;
+
+        if (fullName.Contains("."))
         {
-            if (fullName.Length < 1)
+            var lastDotIndex = fullName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase);
+            companyName = fullName.Substring(0, lastDotIndex);
+            projectName = fullName.Substring(lastDotIndex + 1);
+
+            if (companyName.Length < 1)
             {
-                throw new UserFriendlyException("Solution name is not valid. It should be 1 character length at minimum.");
+                throw new UserFriendlyException("Solution name is not valid. Company name should be 1 character length at minimum.");
             }
 
-            string companyName = null;
-            var projectName = fullName;
-
-            if (fullName.Contains("."))
+            if (projectName.Length < 1)
             {
-                var lastDotIndex = fullName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase);
-                companyName = fullName.Substring(0, lastDotIndex);
-                projectName = fullName.Substring(lastDotIndex + 1);
-
-                if (companyName.Length < 1)
-                {
-                    throw new UserFriendlyException("Solution name is not valid. Company name should be 1 character length at minimum.");
-                }
-
-                if (projectName.Length < 1)
-                {
-                    throw new UserFriendlyException("Solution name is not valid. Project name should be 1 character length at minimum.");
-                }
+                throw new UserFriendlyException("Solution name is not valid. Project name should be 1 character length at minimum.");
             }
-
-            return new SolutionName(fullName, companyName, projectName);
         }
+
+        return new SolutionName(fullName, companyName, projectName);
     }
 }

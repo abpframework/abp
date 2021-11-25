@@ -2,8 +2,14 @@
 {
     public class TagConsts
     {
-        public const int MaxNameLength = 64;
+        /// <summary>
+        /// Default value: 64
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 64;
 
-        public const int MaxDescriptionLength = 512;
+        /// <summary>
+        /// Default value: 512
+        /// </summary>
+        public static int MaxDescriptionLength { get; set; } = 512;
     }
 }

@@ -1,0 +1,1 @@
+dotnet ef database update -s Volo.BloggingTestApp/Volo.BloggingTestApp.csproj -p Volo.BloggingTestApp.EntityFrameworkCore/Volo.BloggingTestApp.EntityFrameworkCore.csproj

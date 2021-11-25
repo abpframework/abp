@@ -1,0 +1,7 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "ThisFieldIsRequired": "Acest câmp este obligatoriu",
+    "MaxLenghtErrorMessage": "Acest câmp poate avea maximum „{0}” caractere"
+  }
+}

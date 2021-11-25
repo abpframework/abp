@@ -1,38 +1,80 @@
 import { registerLocaleData } from '@angular/common';
 import { Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { GetAppConfiguration } from '../actions/config.actions';
-import differentLocales from '../constants/different-locales';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { tap, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { ABP } from '../models/common';
+import { Environment } from '../models/environment';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { AuthService } from '../services/auth.service';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
+import { SessionStateService } from '../services/session-state.service';
+import { clearOAuthStorage } from '../strategies/auth-flow.strategy';
+import { CORE_OPTIONS } from '../tokens/options.token';
+import { APP_INIT_ERROR_HANDLERS } from '../tokens/app-config.token';
+import { getRemoteEnv } from './environment-utils';
+import { parseTenantFromUrl } from './multi-tenancy-utils';
 
 export function getInitialData(injector: Injector) {
-  const fn = () => {
-    const store: Store = injector.get(Store);
+  const fn = async () => {
+    const environmentService = injector.get(EnvironmentService);
+    const configState = injector.get(ConfigStateService);
+    const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
-    return store.dispatch(new GetAppConfiguration()).toPromise();
+    environmentService.setState(options.environment as Environment);
+    await getRemoteEnv(injector, options.environment);
+    await parseTenantFromUrl(injector);
+    await injector.get(AuthService).init();
+
+    if (options.skipGetAppConfiguration) return;
+
+    return configState
+      .refreshAppState()
+      .pipe(
+        tap(() => checkAccessToken(injector)),
+        tap(() => {
+          const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
+          injector.get(SessionStateService).setTenant(currentTenant);
+        }),
+        catchError(error => {
+          const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS, null);
+          if (appInitErrorHandlers && appInitErrorHandlers.length) {
+            appInitErrorHandlers.forEach(func => func(error));
+          }
+
+          return throwError(error);
+        }),
+      )
+      .toPromise();
   };
 
   return fn;
+}
+
+export function checkAccessToken(injector: Injector) {
+  const configState = injector.get(ConfigStateService);
+  const oAuth = injector.get(OAuthService);
+  if (oAuth.hasValidAccessToken() && !configState.getDeep('currentUser.id')) {
+    clearOAuthStorage();
+  }
 }
 
 export function localeInitializer(injector: Injector) {
   const fn = () => {
-    const store: Store = injector.get(Store);
+    const sessionState = injector.get(SessionStateService);
+    const { registerLocaleFn }: ABP.Root = injector.get(CORE_OPTIONS);
 
-    const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
+    const lang = sessionState.getLanguage() || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocale(lang).then(() => resolve('resolved'), reject);
+      registerLocaleFn(lang).then(module => {
+        if (module?.default) registerLocaleData(module.default);
+
+        return resolve('resolved');
+      }, reject);
     });
   };
 
   return fn;
-}
-
-export function registerLocale(locale: string) {
-  return import(
-    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
-    `@angular/common/locales/${differentLocales[locale] || locale}.js`
-  ).then(module => {
-    registerLocaleData(module.default);
-  });
 }

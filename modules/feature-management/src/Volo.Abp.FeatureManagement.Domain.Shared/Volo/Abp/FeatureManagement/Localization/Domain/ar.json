@@ -1,0 +1,10 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Features": "المميزات",
+    "NoFeatureFoundMessage": "لا توجد أي ميزة متاحة.",
+    "Permission:FeatureManagement": "إدارة الميزات",
+    "Permission:FeatureManagement.ManageHostFeatures": "إدارة ميزات المضيف",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} قيمة الميزة غير صالحة!"
+  }
+}

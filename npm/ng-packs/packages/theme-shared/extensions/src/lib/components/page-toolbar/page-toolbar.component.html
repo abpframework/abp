@@ -1,0 +1,24 @@
+<div class="row justify-content-end mx-0" id="AbpContentToolbar">
+  <div
+    class="col-auto px-1 pt-0 pt-md-2"
+    [class.pe-0]="last"
+    *ngFor="let action of actionList; trackBy: trackByFn; let last = last"
+  >
+    <ng-container *ngIf="action.visible(data)">
+      <ng-container *abpPermission="action.permission">
+        <ng-container *ngIf="action.component as component; else button">
+          <ng-container
+            *ngComponentOutlet="component; injector: createInjector(action)"
+          ></ng-container>
+        </ng-container>
+
+        <ng-template #button>
+          <button (click)="action.action(data)" type="button" class="btn btn-primary btn-sm">
+            <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
+            {{ action.text | abpLocalization }}
+          </button>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

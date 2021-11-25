@@ -1,39 +1,60 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, take, tap } from 'rxjs/operators';
-import { RestOccurError } from '../actions/rest.actions';
+import { catchError } from 'rxjs/operators';
+import { ABP } from '../models/common';
 import { Rest } from '../models/rest';
-import { ConfigState } from '../states/config.state';
+import { CORE_OPTIONS } from '../tokens/options.token';
+import { isUndefinedOrEmptyString } from '../utils/common-utils';
+import { EnvironmentService } from './environment.service';
+import { HttpErrorReporterService } from './http-error-reporter.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestService {
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    @Inject(CORE_OPTIONS) protected options: ABP.Root,
+    protected http: HttpClient,
+    protected environment: EnvironmentService,
+    protected httpErrorReporter: HttpErrorReporterService,
+  ) {}
+
+  protected getApiFromStore(apiName: string): string {
+    return this.environment.getApiUrl(apiName);
+  }
 
   handleError(err: any): Observable<any> {
-    this.store.dispatch(new RestOccurError(err));
-    console.error(err);
+    this.httpErrorReporter.reportError(err);
     return throwError(err);
   }
 
-  request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config?: Rest.Config, api?: string): Observable<R> {
+  request<T, R>(
+    request: HttpRequest<T> | Rest.Request<T>,
+    config?: Rest.Config,
+    api?: string,
+  ): Observable<R> {
     config = config || ({} as Rest.Config);
+    api = api || this.getApiFromStore(config.apiName);
+    const { method, params, ...options } = request;
     const { observe = Rest.Observe.Body, skipHandleError } = config;
-    const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
-    const { method, ...options } = request;
 
-    return this.http.request<T>(method, url, { observe, ...options } as any).pipe(
-      observe === Rest.Observe.Body ? take(1) : tap(),
-      catchError(err => {
-        if (skipHandleError) {
-          return throwError(err);
-        }
+    return this.http
+      .request<R>(method, api + request.url, {
+        observe,
+        ...(params && {
+          params: Object.keys(params).reduce((acc, key) => {
+            const value = params[key];
 
-        return this.handleError(err);
-      }),
-    );
+            if (isUndefinedOrEmptyString(value)) return acc;
+            if (value === null && !this.options.sendNullsAsQueryParam) return acc;
+
+            acc[key] = value;
+            return acc;
+          }, {}),
+        }),
+        ...options,
+      } as any)
+      .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
   }
 }

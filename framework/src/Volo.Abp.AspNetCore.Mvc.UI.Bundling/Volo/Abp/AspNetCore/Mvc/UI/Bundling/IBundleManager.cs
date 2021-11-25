@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+
+public interface IBundleManager
 {
-    public interface IBundleManager
-    {
-        IReadOnlyList<string> GetStyleBundleFiles(string bundleName);
+    Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName);
 
-        IReadOnlyList<string> GetScriptBundleFiles(string bundleName);
-    }
+    Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName);
 }

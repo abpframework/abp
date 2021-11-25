@@ -1,101 +1,109 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.AspNetCore.Mvc.Uow
+namespace Volo.Abp.AspNetCore.Mvc.Uow;
+
+public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
 {
-    public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
-
-        public AbpUowActionFilter(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
+        if (!context.ActionDescriptor.IsControllerAction())
         {
-            _unitOfWorkManager = unitOfWorkManager;
-            _defaultOptions = options.Value;
+            await next();
+            return;
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        var methodInfo = context.ActionDescriptor.GetMethodInfo();
+        var unitOfWorkAttr = UnitOfWorkHelper.GetUnitOfWorkAttributeOrNull(methodInfo);
+
+        context.HttpContext.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
         {
-            if (!context.ActionDescriptor.IsControllerAction())
-            {
-                await next();
-                return;
-            }
+            IsObjectResult = context.ActionDescriptor.HasObjectResult()
+        };
 
-            var methodInfo = context.ActionDescriptor.GetMethodInfo();
-            var unitOfWorkAttr = UnitOfWorkHelper.GetUnitOfWorkAttributeOrNull(methodInfo);
-
-            context.HttpContext.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
-            {
-                IsObjectResult = context.ActionDescriptor.HasObjectResult()
-            };
-
-            if (unitOfWorkAttr?.IsDisabled == true)
-            {
-                await next();
-                return;
-            }
-
-            var options = CreateOptions(context, unitOfWorkAttr);
-
-            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
-            if (_unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
-            {
-                var result = await next();
-                if (!Succeed(result))
-                {
-                    await RollbackAsync(context);
-                }
-
-                return;
-            }
-
-            //Begin a new, independent unit of work
-            using (var uow = _unitOfWorkManager.Begin(options))
-            {
-                var result = await next();
-                if (Succeed(result))
-                {
-                    await uow.CompleteAsync(context.HttpContext.RequestAborted);
-                }
-            }
+        if (unitOfWorkAttr?.IsDisabled == true)
+        {
+            await next();
+            return;
         }
 
-        private AbpUnitOfWorkOptions CreateOptions(ActionExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
+        var options = CreateOptions(context, unitOfWorkAttr);
+
+        var unitOfWorkManager = context.GetRequiredService<IUnitOfWorkManager>();
+
+        //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+        if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
         {
-            var options = new AbpUnitOfWorkOptions();
-
-            unitOfWorkAttribute?.SetOptions(options);
-
-            if (unitOfWorkAttribute?.IsTransactional == null)
+            var result = await next();
+            if (Succeed(result))
             {
-                options.IsTransactional = _defaultOptions.CalculateIsTransactional(
-                    autoValue: !string.Equals(context.HttpContext.Request.Method, HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase)
-                );
+                await SaveChangesAsync(context, unitOfWorkManager);
+            }
+            else
+            {
+                await RollbackAsync(context, unitOfWorkManager);
             }
 
-            return options;
+            return;
         }
 
-        private async Task RollbackAsync(ActionExecutingContext context)
+        using (var uow = unitOfWorkManager.Begin(options))
         {
-            var currentUow = _unitOfWorkManager.Current;
-            if (currentUow != null)
+            var result = await next();
+            if (Succeed(result))
             {
-                await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+                await uow.CompleteAsync(context.HttpContext.RequestAborted);
+            }
+            else
+            {
+                await uow.RollbackAsync(context.HttpContext.RequestAborted);
             }
         }
+    }
 
-        private static bool Succeed(ActionExecutedContext result)
+    private AbpUnitOfWorkOptions CreateOptions(ActionExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
+    {
+        var options = new AbpUnitOfWorkOptions();
+
+        unitOfWorkAttribute?.SetOptions(options);
+
+        if (unitOfWorkAttribute?.IsTransactional == null)
         {
-            return result.Exception == null || result.ExceptionHandled;
+            var abpUnitOfWorkDefaultOptions = context.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
+            options.IsTransactional = abpUnitOfWorkDefaultOptions.CalculateIsTransactional(
+                autoValue: !string.Equals(context.HttpContext.Request.Method, HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase)
+            );
         }
+
+        return options;
+    }
+
+    private async Task RollbackAsync(ActionExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
+    {
+        var currentUow = unitOfWorkManager.Current;
+        if (currentUow != null)
+        {
+            await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+        }
+    }
+
+    private async Task SaveChangesAsync(ActionExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
+    {
+        var currentUow = unitOfWorkManager.Current;
+        if (currentUow != null)
+        {
+            await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+        }
+    }
+
+    private static bool Succeed(ActionExecutedContext result)
+    {
+        return result.Exception == null || result.ExceptionHandled;
     }
 }

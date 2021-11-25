@@ -57,9 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs.Web", "app\VoloDoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs.Migrator", "app\VoloDocs.Migrator\VoloDocs.Migrator.csproj", "{8A5E5001-C017-44A8-ADDA-DC66C102556E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.MongoDB", "src\Volo.Docs.MongoDB\Volo.Docs.MongoDB.csproj", "{DBE846CD-1BED-4F2C-ABF2-94F6240BCB9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.MongoDB", "src\Volo.Docs.MongoDB\Volo.Docs.MongoDB.csproj", "{DBE846CD-1BED-4F2C-ABF2-94F6240BCB9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.MongoDB.Tests", "test\Volo.Docs.MongoDB.Tests\Volo.Docs.MongoDB.Tests.csproj", "{C5E2A2A3-D54D-4C2E-97BA-EA50A49ED7AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.MongoDB.Tests", "test\Volo.Docs.MongoDB.Tests\Volo.Docs.MongoDB.Tests.csproj", "{C5E2A2A3-D54D-4C2E-97BA-EA50A49ED7AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

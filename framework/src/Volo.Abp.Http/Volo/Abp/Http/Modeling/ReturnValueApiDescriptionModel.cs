@@ -1,24 +1,29 @@
 ﻿using System;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Http.Modeling
+namespace Volo.Abp.Http.Modeling;
+
+[Serializable]
+public class ReturnValueApiDescriptionModel
 {
-    [Serializable]
-    public class ReturnValueApiDescriptionModel
+    public string Type { get; set; }
+
+    public string TypeSimple { get; set; }
+
+    public ReturnValueApiDescriptionModel()
     {
-        public string TypeAsString { get; set; }
 
-        private ReturnValueApiDescriptionModel()
+    }
+
+    public static ReturnValueApiDescriptionModel Create(Type type)
+    {
+        var unwrappedType = AsyncHelper.UnwrapTask(type);
+
+        return new ReturnValueApiDescriptionModel
         {
-
-        }
-
-        public static ReturnValueApiDescriptionModel Create(Type type)
-        {
-            return new ReturnValueApiDescriptionModel
-            {
-                TypeAsString = AsyncHelper.UnwrapTask(type).GetFullNameWithAssemblyName()
-            };
-        }
+            Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(unwrappedType),
+            TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(unwrappedType)
+        };
     }
 }

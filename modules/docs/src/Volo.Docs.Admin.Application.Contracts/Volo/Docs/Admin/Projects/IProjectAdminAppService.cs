@@ -12,9 +12,13 @@ namespace Volo.Docs.Admin.Projects
         Task<ProjectDto> GetAsync(Guid id);
 
         Task<ProjectDto> CreateAsync(CreateProjectDto input);
-     
+
         Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input);
-     
+
         Task DeleteAsync(Guid id);
+
+        Task ReindexAsync(ReindexInput input);
+
+        Task ReindexAllAsync();
     }
 }

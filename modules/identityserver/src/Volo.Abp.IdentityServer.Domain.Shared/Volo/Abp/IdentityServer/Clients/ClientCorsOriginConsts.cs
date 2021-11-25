@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.IdentityServer.Clients
+﻿namespace Volo.Abp.IdentityServer.Clients;
+
+public class ClientCorsOriginConsts
 {
-    public class ClientCorsOriginConsts
-    {
-        public const int OriginMaxLength = 150;
-    }
+    public static int OriginMaxLength { get; set; } = 150;
 }

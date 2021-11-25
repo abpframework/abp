@@ -1,0 +1,13 @@
+{
+  "culture": "sl",
+  "texts": {
+    "GivenTenantIsNotExist": "Dani najemnik ne obstaja: {0}",
+    "GivenTenantIsNotAvailable": "Najemnik ni na voljo: {0}",
+    "Tenant": "Najemnik",
+    "Switch": "Zamenjaj",
+    "Name": "Naziv",
+    "SwitchTenantHint": "Pustite polje z imenom prazno, da preklopite na stran za upravnike.",
+    "SwitchTenant": "Zamenjaj najemnika",
+    "NotSelected": "Ni izbran"
+  }
+}

@@ -8,8 +8,7 @@ namespace Volo.Docs
     {
         public DocsWebAutoMapperProfile()
         {
-            CreateMap<DocumentWithDetailsDto, NavigationWithDetailsDto>()
-                .Ignore(x => x.RootNode);
+
         }
     }
 }

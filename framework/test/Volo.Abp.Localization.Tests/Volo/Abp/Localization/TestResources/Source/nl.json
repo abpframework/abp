@@ -1,0 +1,11 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Hello <b>{0}</b>.": "Hallo <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Auto's",
+    "MaxLenghtErrorMessage": "De lengte van dit veld mag maximaal '{0}' tekens zijn",
+    "Universe": "Universum",
+    "FortyTwo": "Tweeënveertig"
+  }
+}

@@ -17,7 +17,9 @@ export class SortPipe implements PipeTransform {
       numberArray = value.filter(item => typeof item === 'number').sort();
       stringArray = value.filter(item => typeof item === 'string').sort();
     } else {
-      numberArray = value.filter(item => typeof item[sortKey] === 'number').sort((a, b) => a[sortKey] - b[sortKey]);
+      numberArray = value
+        .filter(item => typeof item[sortKey] === 'number')
+        .sort((a, b) => a[sortKey] - b[sortKey]);
       stringArray = value
         .filter(item => typeof item[sortKey] === 'string')
         .sort((a, b) => {
@@ -26,7 +28,15 @@ export class SortPipe implements PipeTransform {
           else return 0;
         });
     }
-    const sorted = numberArray.concat(stringArray);
+    const sorted = [
+      ...numberArray,
+      ...stringArray,
+      ...value.filter(
+        item =>
+          typeof (sortKey ? item[sortKey] : item) !== 'number' &&
+          typeof (sortKey ? item[sortKey] : item) !== 'string',
+      ),
+    ];
     return sortOrder === 'asc' ? sorted : sorted.reverse();
   }
 }

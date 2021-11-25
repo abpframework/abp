@@ -257,3 +257,6 @@ src/MyCompanyName.MyProjectName.Web.Host/Logs/*
 src/MyCompanyName.MyProjectName.IdentityServer/Logs/*
 src/MyCompanyName.MyProjectName.HttpApi.Host/Logs/*
 src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/Logs/*
+src/MyCompanyName.MyProjectName.DbMigrator/Logs/*
+src/MyCompanyName.MyProjectName.Blazor.Server/Logs/*
+src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/Logs/*

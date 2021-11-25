@@ -1,62 +1,73 @@
-import { GetAppConfiguration, ConfigState } from '@abp/ng.core';
-import { Component, Inject, Optional } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { from, throwError } from 'rxjs';
-import { Options } from '../../models/options';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import snq from 'snq';
+import { Component, Injector, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { eAccountComponents } from '../../enums/components';
+import { getRedirectUrl } from '../../utils/auth-utils';
 
-const { maxLength, minLength, required } = Validators;
+const { maxLength, required } = Validators;
 
 @Component({
   selector: 'abp-login',
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form: FormGroup;
 
   inProgress: boolean;
 
-  constructor(
-    private fb: FormBuilder,
-    private oauthService: OAuthService,
-    private store: Store,
-    private toasterService: ToasterService,
-    @Optional() @Inject('ACCOUNT_OPTIONS') private options: Options,
-  ) {
-    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
-    this.oauthService.loadDiscoveryDocument();
+  isSelfRegistrationEnabled = true;
 
+  authWrapperKey = eAccountComponents.AuthWrapper;
+
+  constructor(
+    protected injector: Injector,
+    protected fb: FormBuilder,
+    protected toasterService: ToasterService,
+    protected authService: AuthService,
+    protected configState: ConfigStateService,
+  ) {}
+
+  ngOnInit() {
+    this.init();
+    this.buildForm();
+  }
+
+  protected init() {
+    this.isSelfRegistrationEnabled =
+      (
+        (this.configState.getSetting('Abp.Account.IsSelfRegistrationEnabled') as string) || ''
+      ).toLowerCase() !== 'false';
+  }
+
+  protected buildForm() {
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, maxLength(32)]],
-      remember: [false],
+      password: ['', [required, maxLength(128)]],
+      rememberMe: [false],
     });
   }
 
   onSubmit() {
     if (this.form.invalid) return;
-    // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
     this.inProgress = true;
-    from(
-      this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value),
-    )
+
+    const { username, password, rememberMe } = this.form.value;
+
+    const redirectUrl = getRedirectUrl(this.injector);
+
+    this.authService
+      .login({ username, password, rememberMe, redirectUrl })
       .pipe(
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-        tap(() => {
-          const redirectUrl = snq(() => window.history.state).redirectUrl || (this.options || {}).redirectUrl || '/';
-          this.store.dispatch(new Navigate([redirectUrl]));
-        }),
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
+            err.error?.error_description ||
+              err.error?.error.message ||
+              'AbpAccount::DefaultErrorMessage',
+            null,
             { life: 7000 },
           );
           return throwError(err);

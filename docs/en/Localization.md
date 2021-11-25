@@ -2,7 +2,7 @@
 
 ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
 
-## Volo.Abp.Localization Package
+## Installation
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
@@ -46,9 +46,10 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<VirtualFileSystemOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<MyModule>();
+            // "YourRootNameSpace" is the root namespace of your project. It can be empty if your root namespace is empty.
+            options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
         });
 
         Configure<AbpLocalizationOptions>(options =>
@@ -66,7 +67,7 @@ In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using `VirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
+* JSON files are embedded into the assembly using `AbpVirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
 
 JSON files are located under "/Localization/Resources/Test" project folder as shown below:
 
@@ -85,6 +86,19 @@ A JSON localization file content is shown below:
 
 * Every localization file should define the `culture` code for the file (like "en" or "en-US").
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
+
+### Default Resource
+
+`AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.DefaultResourceType = typeof(TestResource);
+});
+````
+
+> The [application startup template](Startup-Templates/Application.md) sets `DefaultResourceType` to the localization resource of the application.
 
 ### Short Localization Resource Name
 
@@ -140,16 +154,16 @@ services.Configure<AbpLocalizationOptions>(options =>
 
 * If an extension file defines the same localized string, it overrides the string.
 
-## Getting Localized Texts
+## Getting the Localized Texts
 
-### Server Side
+Getting the localized text is pretty standard.
 
-Getting the localized text on the server side is pretty standard.
+### Simplest Usage In A Class
 
-#### Simplest Usage In A Class
+Just inject the `IStringLocalizer<TResource>` service and use it like shown below:
 
-````C#
-public class MyService
+````csharp
+public class MyService : ITransientDependency
 {
     private readonly IStringLocalizer<TestResource> _localizer;
 
@@ -165,7 +179,15 @@ public class MyService
 }
 ````
 
-#### Simplest Usage In A Razor View/Page
+##### Format Arguments
+
+Format arguments can be passed after the localization key. If your message is `Hello {0}, welcome!`, then you can pass the `{0}` argument to the localizer like `_localizer["HelloMessage", "John"]`.
+
+> Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using the localization.
+
+### Using In A Razor View/Page
+
+Use `IHtmlLocalizer<T>` in razor views/pages;
 
 ````c#
 @inject IHtmlLocalizer<TestResource> Localizer
@@ -173,20 +195,59 @@ public class MyService
 <h1>@Localizer["HelloWorld"]</h1>
 ````
 
-Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using localization on the server side.
+### Special Base Classes
 
-### Client Side
+Some ABP Framework base classes provide a `L` property to use the localizer even easier.
 
-ABP provides JavaScript services to use the same localized texts in the client side.
+**Example: Localize a text in an application service method**
 
-Get a localization resource:
+```csharp
+using System.Threading.Tasks;
+using MyProject.Localization;
+using Volo.Abp.Application.Services;
 
-````js
-var testResource = abp.localization.getResource('Test');
-````
+namespace MyProject
+{
+    public class TestAppService : ApplicationService
+    {
+        public TestAppService()
+        {
+            LocalizationResource = typeof(MyProjectResource);
+        }
 
-Localize a string:
+        public async Task DoIt()
+        {
+            var str = L["HelloWorld"];
+        }
+    }
+}
+```
 
-````js
-var str = testResource('HelloWorld');
-````
+When you set the `LocalizationResource` in the constructor, the `ApplicationService` class uses that resource type when you use the `L` property, just like in the `DoIt()` method.
+
+Setting `LocalizationResource` in every application service can be tedious. You can create an abstract base application service class, set it there and derive your application services from that base class. This is already implemented when you create a new project with the [startup templates](Startup-Templates/Application.md). So, you can simply inherit from the base class directly use the `L` property:
+
+```csharp
+using System.Threading.Tasks;
+
+namespace MyProject
+{
+    public class TestAppService : MyProjectAppService
+    {
+        public async Task DoIt()
+        {
+            var str = L["HelloWorld"];
+        }
+    }
+}
+```
+
+The `L` property is also available for some other base classes like `AbpController` and `AbpPageModel`.
+
+## The Client Side
+
+See the following documents to learn how to reuse the same localization texts in the JavaScript side;
+
+* [Localization for the MVC / Razor Pages UI](UI/AspNetCore/JavaScript-API/Localization.md)
+* [Localization for the Blazor UI](UI/Blazor/Localization.md)
+* [Localization for the Angular UI](UI/Angular/Localization.md)

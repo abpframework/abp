@@ -1,7 +1,0 @@
-{
-  "name": "@abp/ng.tenant-management.config",
-  "version": "1.0.2",
-  "publishConfig": {
-    "access": "public"
-  }
-}

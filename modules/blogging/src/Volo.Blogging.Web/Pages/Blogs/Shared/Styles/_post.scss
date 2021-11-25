@@ -1,0 +1,134 @@
+.post-detail { 
+    h1 { 
+        padding: 0px 0;
+        line-height: 1.25em;
+        font-size: 3.5em;
+    }
+    .article-owner {      
+        text-align: center; 
+        position: relative;
+        z-index: 12;
+        .article-infos {
+            color: #000;
+            a {
+                color: black;
+                color: rgba(0, 0, 0, 0.8);
+            }
+            .seperator {
+                margin: 0 4px;
+                color: rgba(0, 0, 0, 0.2);
+            }
+            img.article-avatar { 
+                width: 64px;
+                margin: -20px 10px 0px 0;
+                display: inline-block;
+                border-radius: 50%;
+                border: 3px solid #fff;
+            }
+        }
+    }   
+    .post-content {
+        font-size: 1.125em;
+        .post-img-container {
+            margin: 50px -80px  20px; 
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .lead {
+            font-size: 1.125em;
+            color: #111;
+        }
+    }
+}
+
+.media {
+    font-size: .95em;
+    .media {
+        font-size: .95em;
+    }
+
+}
+.read-more-btn {
+    display: inline-block;
+    font-size: .9em;
+    margin: 0 0 1em 0;
+    background: #eee; 
+    color: blue;
+    padding: .25em 1em;
+    border-radius: 20px; 
+}
+.comment-area {
+    background: #f5f5f5;
+    margin: 1.5rem 0;
+    padding: 10px;
+
+    .comment-owner {
+        margin-bottom: 4px;
+        margin-top: 8px;
+
+        span {
+            font-weight: 300;
+            opacity: .5;
+            padding: 0 5px;
+        }
+    }
+
+    .media {
+        background: #fff;
+        margin: 1px;
+        border-radius: 4px;
+    }
+
+    > .media {
+        padding: 30px;
+        border-bottom: 1px solid #f1f1f1;
+
+        .media {
+            padding: 20px 0px 0px;
+        }
+    }
+
+    .comment-buttons {
+        padding: 4px 0;
+        font-size: .96em;
+
+        .seperator {
+            color: #ddd;
+            margin: 0 8px;
+        }
+
+        .count {
+            color: #fff;
+            background: #ddd;
+            margin-left: 5px;
+            padding: 1px 3px;
+            font-size: 10px;
+            border-radius: 3px;
+
+            &.count-up {
+                background: #999;
+            }
+        }
+
+        a {
+            opacity: .65;
+            margin-right: 10px;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    p {
+        margin-bottom: 6px;
+    }
+
+    .comment-avatar {
+        width: 64px;
+    }
+
+    .answer-avatar {
+        width: 64px;
+    }
+}

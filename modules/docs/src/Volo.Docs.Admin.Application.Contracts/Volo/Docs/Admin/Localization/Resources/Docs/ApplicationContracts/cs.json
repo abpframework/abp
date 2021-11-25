@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "cs",
   "texts": {
     "Permission:DocumentManagement": "Správa dokumentů",
@@ -6,11 +6,14 @@
     "Permission:Edit": "Upravit",
     "Permission:Delete": "Smazat",
     "Permission:Create": "Vytvořit",
+    "Permission:Documents": "Dokumenty",
+    "Menu:Documents": "Dokumenty",
     "Menu:DocumentManagement": "Dokumenty",
     "Menu:ProjectManagement": "Projekty",
     "CreateANewProject": "Vytvořit nový projekt",
     "Edit": "Upravit",
     "Create": "Vytvořit",
+    "Pull": "Pull",
     "Projects": "Projekty",
     "Name": "Název",
     "ShortName": "Krátký název",
@@ -27,6 +30,30 @@
     "DisplayName:LatestVersionBranchName": "Název poslední verze odvětví",
     "DisplayName:GitHubRootUrl": "GitHub kořenové URL",
     "DisplayName:GitHubAccessToken": "GitHub přístupový token",
-    "DisplayName:GitHubUserAgent": "GitHub user agent"
+    "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:GithubVersionProviderSource": "GitHub version provider source",
+    "DisplayName:VersionBranchPrefix": "Version branch prefix",
+    "DisplayName:All": "Pull všeho",
+    "DisplayName:LanguageCode": "Kód jazyka",
+    "DisplayName:Version": "Verze",
+    "Documents": "Dokumenty",
+    "RemoveFromCache": "Odebrat z mezipaměti",
+    "Reindex": "Reindex",
+    "ReindexCompleted": "Reindex dokončen",
+    "RemovedFromCache": "Odebráno z mezipaměti",
+    "RemoveFromCacheConfirmation": "Opravdu chcete tuto položku odebrat z mezipaměti?",
+    "ReIndexDocumentConfirmation": "Opravdu chcete tuto položku reindexovat?",
+    "DeleteFromDatabase": "Odstranit z databáze",
+    "Deleted": "Vymazáno",
+    "Search": "Vyhledávání",
+    "StartDate": "Počáteční datum",
+    "EndDate": "Datum ukončení",
+    "CreationTime": "Čas vytvoření",
+    "LastUpdateTime": "Poslední aktualizace",
+    "LastSignificantUpdateTime": "Poslední významná aktualizace",
+    "Version": "Verze",
+    "LanguageCode": "Kód jazyka",
+    "FileName": "Název souboru",
+    "LastCachedTime": "Čas uložení v mezipaměti"
   }
 }

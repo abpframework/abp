@@ -4,61 +4,72 @@ using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureManagementTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureManagementTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected IFeatureValueRepository Repository { get; set; }
+
+    protected FeatureValueRepository_Tests()
     {
-        protected IFeatureValueRepository Repository { get; set; }
+        Repository = GetRequiredService<IFeatureValueRepository>();
+    }
 
-        protected FeatureValueRepository_Tests()
-        {
-            Repository = GetRequiredService<IFeatureValueRepository>();
-        }
+    [Fact]
+    public async Task FindAsync()
+    {
+        //feature value does exists
 
-        [Fact]
-        public async Task FindAsync()
-        {
-            //feature value does exists
+        var featureValue = await Repository.FindAsync(
+            TestFeatureDefinitionProvider.ProjectCount,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Enterprise.ToString()
+        );
 
-            var featureValue = await Repository.FindAsync(
-                TestFeatureDefinitionProvider.ProjectCount,
-                EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Enterprise.ToString("N")
-            );
+        featureValue.ShouldNotBeNull();
+        featureValue.Value.ShouldBe("3");
 
-            featureValue.ShouldNotBeNull();
-            featureValue.Value.ShouldBe("3");
+        //feature value does not exists
+        featureValue = await Repository.FindAsync(
+            TestFeatureDefinitionProvider.ProjectCount,
+            EditionFeatureValueProvider.ProviderName,
+            "undefined-edition-id"
+        );
 
-            //feature value does not exists
-            featureValue = await Repository.FindAsync(
-                TestFeatureDefinitionProvider.ProjectCount,
-                EditionFeatureValueProvider.ProviderName,
-                "undefined-edition-id"
-            );
+        featureValue.ShouldBeNull();
+    }
 
-            featureValue.ShouldBeNull();
-        }
+    [Fact]
+    public async Task FindAllAsync()
+    {
+        var featureValues = await Repository.FindAllAsync(
+            TestFeatureDefinitionProvider.ProjectCount,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Enterprise.ToString()
+        );
 
-        [Fact]
-        public async Task GetListAsync()
-        {
-            var featureValues = await Repository.GetListAsync(
-                EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Enterprise.ToString("N")
-            );
+        featureValues.Count.ShouldBe(1);
+    }
 
-            featureValues.Count.ShouldBeGreaterThan(0);
+    [Fact]
+    public async Task GetListAsync()
+    {
+        var featureValues = await Repository.GetListAsync(
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Enterprise.ToString()
+        );
 
-            featureValues.ShouldContain(
-                fv => fv.Name == TestFeatureDefinitionProvider.SocialLogins &&
-                      fv.Value == "true"
-            );
+        featureValues.Count.ShouldBeGreaterThan(0);
 
-            featureValues.ShouldContain(
-                fv => fv.Name == TestFeatureDefinitionProvider.ProjectCount &&
-                      fv.Value == "3"
-            );
-        }
+        featureValues.ShouldContain(
+            fv => fv.Name == TestFeatureDefinitionProvider.SocialLogins &&
+                  fv.Value == "true"
+        );
+
+        featureValues.ShouldContain(
+            fv => fv.Name == TestFeatureDefinitionProvider.ProjectCount &&
+                  fv.Value == "3"
+        );
     }
 }

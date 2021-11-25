@@ -1,17 +1,18 @@
-namespace Volo.Abp.EventBus.Distributed
+using Volo.Abp.Testing;
+
+namespace Volo.Abp.EventBus.Distributed;
+
+public abstract class LocalDistributedEventBusTestBase : AbpIntegratedTest<EventBusTestModule>
 {
-    public abstract class LocalDistributedEventBusTestBase : AbpIntegratedTest<EventBusTestModule>
+    protected IDistributedEventBus DistributedEventBus;
+
+    protected LocalDistributedEventBusTestBase()
     {
-        protected IDistributedEventBus DistributedEventBus;
+        DistributedEventBus = GetRequiredService<LocalDistributedEventBus>();
+    }
 
-        protected LocalDistributedEventBusTestBase()
-        {
-            DistributedEventBus = GetRequiredService<LocalDistributedEventBus>();
-        }
-
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    {
+        options.UseAutofac();
     }
 }

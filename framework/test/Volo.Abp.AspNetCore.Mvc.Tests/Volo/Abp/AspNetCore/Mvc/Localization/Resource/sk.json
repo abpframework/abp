@@ -1,0 +1,10 @@
+{
+  "culture": "sk",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Dátum narodenia 1",
+    "DisplayName:BirthDate2": "Dátum narodenia 2",
+    "PersonModel:BirthDate3": "Dátum narodenia 3",
+    "BirthDate": "Dátum narodenia",
+    "Value1": "Hodnota jedna"
+  }
+}

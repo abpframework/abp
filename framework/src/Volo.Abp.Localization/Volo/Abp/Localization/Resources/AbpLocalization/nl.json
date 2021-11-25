@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Standaard taal",
+    "Description:Abp.Localization.DefaultLanguage": "De standaardtaal van de applicatie."
+  }
+}

@@ -5,21 +5,17 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor;
+
+[DependsOn(
+    typeof(HighlightJsScriptContributor),
+    typeof(CodemirrorScriptContributor),
+    typeof(MarkdownItScriptContributor)
+)]
+public class TuiEditorScriptContributor : BundleContributor
 {
-    [DependsOn(
-        typeof(HighlightJsScriptContributor),
-        typeof(CodemirrorScriptContributor),
-        typeof(MarkdownItScriptContributor)
-    )]
-    public class TuiEditorScriptContributor : BundleContributor
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            context.Files.AddIfNotContains("/libs/to-mark/to-mark.min.js");
-            context.Files.AddIfNotContains("/libs/tui-code-snippet/tui-code-snippet.min.js");
-            context.Files.AddIfNotContains("/libs/squire-rte/squire.js");
-            context.Files.AddIfNotContains("/libs/tui-editor/tui-editor-Editor.min.js");
-        }
+        context.Files.AddIfNotContains("/libs/tui-editor/toastui-editor.js");
     }
 }

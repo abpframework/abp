@@ -1,77 +1,37 @@
-﻿var abp = abp;
-
+var abp = abp || {};
 (function ($) {
 
-    /************************************************************************
-    * RECORD-ACTIONS extension for datatables                               
-     ---------------------------------------------------------------
-    * SINGLE BUTTON USAGE (creates the given JQuery element)
-       {
-            targets: 0,  //optional
-            rowAction: 
-            {
-                element: $("<button/>")
-                    .addClass("btn btn-primary btn-sm m-btn--icon")
-                    .text("My button")
-                    .prepend($("<i/>").addClass("la la-sign-in"))
-                    .click(function () {
-                        console.log($(this).data());
-                    })
-            },
-        },
+    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
-     ---------------------------------------------------------------
-     * LIST OF ITEMS USAGE
-       {
-           targets: 0, //optional
-           rowAction: 
-           {
-                text: 'My actions', //optional. default value: Actions
-                icon: 'bolt' //optional. default value: cog. See fa icon set https://fontawesome.com/v4.7.0/icons/
-                items:
-                    [
-                        {
-                            text: "My first action", //mandatory
-                            icon: "thumbs-o-down",  //optional.
-                            visible: true //optional. default value: true. Accepts boolean returning function too. Eg: function(){ return true/false;} ,
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        },
-                         {
-                            text: "My second action",
-                            icon: "thumbs-o-up",
-                            visible: true, 
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        }
-                    ]
-           }
-        },
-    *************************************************************************/
     var localize = function (key) {
         return abp.localization.getResource('AbpUi')(key);
     };
 
-    var recordActions = function () {
+    /************************************************************************
+     * RECORD-ACTIONS extension for datatables                               *
+     *************************************************************************/
+    (function () {
         if (!$.fn.dataTableExt) {
             return;
         }
 
-        var getVisibilityValue = function (visibilityField, record) {
+        var getVisibilityValue = function (visibilityField, record, tableInstance) {
             if (visibilityField === undefined) {
                 return true;
             }
 
             if (abp.utils.isFunction(visibilityField)) {
-                return visibilityField(record);
+                return visibilityField(record, tableInstance);
             } else {
                 return visibilityField;
             }
         };
 
-        var _createDropdownItem = function (record, fieldItem) {
+        var htmlEncode = function (html) {
+            return $('<div/>').text(html).html();
+        }
+
+        var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
             var $a = $('<a/>');
 
@@ -80,12 +40,12 @@
             } else {
 
                 if (fieldItem.icon !== undefined && fieldItem.icon) {
-                    $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " mr-1"));
+                    $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " me-1"));
                 } else if (fieldItem.iconClass) {
-                    $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
+                    $a.append($("<i>").addClass(fieldItem.iconClass + " me-1"));
                 }
 
-                $a.append(fieldItem.text);
+                $a.append(htmlEncode(fieldItem.text));
             }
 
             if (fieldItem.action) {
@@ -94,14 +54,14 @@
 
                     if (!$(this).closest('li').hasClass('disabled')) {
                         if (fieldItem.confirmMessage) {
-                            abp.message.confirm(fieldItem.confirmMessage({ record: record }))
+                            abp.message.confirm(fieldItem.confirmMessage({ record: record, table: tableInstance }))
                                 .done(function (accepted) {
                                     if (accepted) {
-                                        fieldItem.action({ record: record });
+                                        fieldItem.action({ record: record, table: tableInstance });
                                     }
                                 });
                         } else {
-                            fieldItem.action({ record: record });
+                            fieldItem.action({ record: record, table: tableInstance });
                         }
                     }
                 });
@@ -111,32 +71,75 @@
             return $li;
         };
 
-        var _createButtonDropdown = function (record, field) {
+        var _createButtonDropdown = function (record, field, tableInstance) {
+            if(field.items.length === 1) {
+                var firstItem = field.items[0];
+                if (!getVisibilityValue(firstItem.visible, record, tableInstance)) {
+                    return "";
+                }
+
+                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
+
+                if (firstItem.displayNameHtml) {
+                    $button.html(firstItem.text);
+                } else {
+                    if (firstItem.icon !== undefined && firstItem.icon) {
+                        $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " me-1"));
+                    } else if (firstItem.iconClass) {
+                        $button.append($("<i>").addClass(firstItem.iconClass + " me-1"));
+                    }
+                    $button.append(htmlEncode(firstItem.text));
+                }
+
+                if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
+                    $button.addClass('disabled');
+                }
+
+                if (firstItem.action) {
+                    $button.click(function (e) {
+                        e.preventDefault();
+
+                        if (!$(this).hasClass('disabled')) {
+                            if (firstItem.confirmMessage) {
+                                abp.message.confirm(firstItem.confirmMessage({ record: record, table: tableInstance }))
+                                    .done(function (accepted) {
+                                        if (accepted) {
+                                            firstItem.action({ record: record, table: tableInstance });
+                                        }
+                                    });
+                            } else {
+                                firstItem.action({ record: record, table: tableInstance });
+                            }
+                        }
+                    });
+                }
+
+                return $button;
+            }
+
             var $container = $('<div/>')
                 .addClass('dropdown')
-                .addClass('action-button');
+                .addClass('abp-action-button');
 
             var $dropdownButton = $('<button/>');
-            
-            if (field.icon !== undefined) {
-                if (field.icon) {
-                    $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
-                }
+
+            if (field.icon !== undefined && field.icon) {
+                $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " me-1"));
             } else if (field.iconClass) {
-                $dropdownButton.append($("<i>").addClass(field.iconClass + " mr-1"));
+                $dropdownButton.append($("<i>").addClass(field.iconClass + " me-1"));
             } else {
-                $dropdownButton.append($("<i>").addClass("fa fa-cog mr-1"));
+                $dropdownButton.append($("<i>").addClass("fa fa-cog me-1"));
             }
 
             if (field.text) {
-                $dropdownButton.append(field.text);
+                $dropdownButton.append(htmlEncode(field.text));
             } else {
-                $dropdownButton.append(localize("DatatableActionDropdownDefaultText"));
+                $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
 
             $dropdownButton
                 .addClass('btn btn-primary btn-sm dropdown-toggle')
-                .attr('data-toggle', 'dropdown')
+                .attr('data-bs-toggle', 'dropdown')
                 .attr('aria-haspopup', 'true')
                 .attr('aria-expanded', 'false');
 
@@ -149,14 +152,14 @@
             for (var i = 0; i < field.items.length; i++) {
                 var fieldItem = field.items[i];
 
-                var isVisible = getVisibilityValue(fieldItem.visible, record);
+                var isVisible = getVisibilityValue(fieldItem.visible, record, tableInstance);
                 if (!isVisible) {
                     continue;
                 }
 
-                var $dropdownItem = _createDropdownItem(record, fieldItem);
+                var $dropdownItem = _createDropdownItem(record, fieldItem, tableInstance);
 
-                if (fieldItem.enabled && !fieldItem.enabled({ record: record })) {
+                if (fieldItem.enabled && !fieldItem.enabled({ record: record, table: tableInstance })) {
                     $dropdownItem.addClass('disabled');
                 }
 
@@ -165,7 +168,7 @@
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.appendTo($container);
+                $dropdownButton.prependTo($container);
             }
 
             if ($dropdownItemsContainer.children().length === 0) {
@@ -175,10 +178,10 @@
             return $container;
         };
 
-        var _createSingleButton = function (record, field) {
+        var _createSingleButton = function (record, field, tableInstance) {
             $(field.element).data(record);
 
-            var isVisible = getVisibilityValue(field.visible, record);
+            var isVisible = getVisibilityValue(field.visible, record, tableInstance);
 
             if (isVisible) {
                 return field.element;
@@ -191,7 +194,7 @@
             if (field.items && field.items.length > 0) {
                 return _createButtonDropdown(record, field, tableInstance);
             } else if (field.element) {
-                var $singleActionButton = _createSingleButton(record, field);
+                var $singleActionButton = _createSingleButton(record, field, tableInstance);
                 if ($singleActionButton === "") {
                     return "";
                 }
@@ -214,6 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
+
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -232,9 +236,11 @@
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".action-button");
-                    if ($actionButton.length === 0) {
-                        $(cells[colIndex]).append($actionContainer);
+                    if ($actionContainer) {
+                        var $actionButton = $(cells[colIndex]).find(".abp-action-button");
+                        if ($actionButton.length === 0) {
+                            $(cells[colIndex]).empty().append($actionContainer);
+                        }
                     }
                 }
             }
@@ -267,17 +273,74 @@
                 }
             });
 
-    }();
+       //Delay for processing indicator
+        var defaultDelayForProcessingIndicator = 500;
+        var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnPreDrawCallback: function (settings) {
+                    if (_existingDefaultFnPreDrawCallback) {
+                        _existingDefaultFnPreDrawCallback(settings);
+                    }
+
+                    var $tableWrapper = $(settings.nTableWrapper);
+                    var $processing = $tableWrapper.find(".dataTables_processing");
+                    var timeoutHandles = [];
+                    var cancelHandles = [];
+
+                    $tableWrapper.on('processing.dt',
+                        function (e, settings, processing) {
+                            if ((settings.oInit.processingDelay !== undefined && settings.oInit.processingDelay < 1) || defaultDelayForProcessingIndicator < 1) {
+                                return;
+                            }
+
+                            if (processing) {
+                                $processing.hide();
+
+                                var delay = settings.oInit.processingDelay === undefined
+                                    ? defaultDelayForProcessingIndicator
+                                    : settings.oInit.processingDelay;
+
+                                cancelHandles[settings.nTableWrapper.id] = false;
+
+                                timeoutHandles[settings.nTableWrapper.id] = setTimeout(function () {
+                                    if (cancelHandles[settings.nTableWrapper.id] === true) {
+                                        return;
+                                    }
+
+                                    $processing.show();
+                                }, delay);
+                            }
+                            else {
+                                clearTimeout(timeoutHandles[settings.nTableWrapper.id]);
+                                cancelHandles[settings.nTableWrapper.id] = true;
+                                $processing.hide();
+                            }
+                        });
+                }
+            });
+
+    })();
 
     /************************************************************************
-    * AJAX extension for datatables                                         *
-    *************************************************************************/
-    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
-
-    var ajaxActions = function () {
-        datatables.createAjax = function (serverMethod, inputAction) {
+     * AJAX extension for datatables                                         *
+     *************************************************************************/
+    (function () {
+        datatables.createAjax = function (serverMethod, inputAction, responseCallback, cancelPreviousRequest) {
+            responseCallback = responseCallback || function(result) {
+                return {
+                    recordsTotal: result.totalCount,
+                    recordsFiltered: result.totalCount,
+                    data: result.items
+                };
+            }
+            var promise = null;
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction() : {};
+                var input = typeof inputAction === 'function'
+                    ? inputAction(requestData, settings)
+                    : (typeof inputAction === 'object' && inputAction)
+                        ? inputAction : {};
 
                 //Paging
                 if (settings.oInit.paging) {
@@ -305,27 +368,31 @@
                 //Text filter
                 if (requestData.search && requestData.search.value !== "") {
                     input.filter = requestData.search.value;
+                } else {
+                    input.filter = null;       
                 }
 
                 if (callback) {
-                    serverMethod(input).then(function (result) {
-                        callback({
-                            recordsTotal: result.totalCount,
-                            recordsFiltered: result.totalCount,
-                            data: result.items
-                        });
+                    if(cancelPreviousRequest && promise && promise.jqXHR) {
+                        promise.jqXHR.abort();
+                    }
+                    promise = serverMethod(input);
+                    promise.always(function () {
+                        promise = null;
+                    }).then(function (result) {
+                        callback(responseCallback(result));
                     });
                 }
             };
         };
-    }();
+    })();
 
     /************************************************************************
-    * Configuration/Options normalizer for datatables                       *
-    *************************************************************************/
-    var optionNormalizer = function () {
+     * Configuration/Options normalizer for datatables                       *
+     *************************************************************************/
+    (function () {
 
-        var customizeRowActionColumn = function(column) {
+        var customizeRowActionColumn = function (column) {
             column.data = null;
             column.orderable = false;
             column.defaultContent = "";
@@ -336,10 +403,24 @@
         };
 
         datatables.normalizeConfiguration = function (configuration) {
+
+            configuration.scrollX = datatables.defaultConfigurations.scrollX;
+
             for (var i = 0; i < configuration.columnDefs.length; i++) {
                 var column = configuration.columnDefs[i];
                 if (!column.targets) {
                     column.targets = i;
+                }
+
+                if (!column.render && column.dataFormat) {
+                    var render = datatables.defaultRenderers[column.dataFormat];
+                    if (render) {
+                        column.render = render;
+                    }
+                }
+
+                if (!column.render) {
+                    column.render = $.fn.dataTable.render.text();
                 }
 
                 if (column.rowAction) {
@@ -347,28 +428,88 @@
                 }
             }
 
-            configuration.language = {
-                info: localize("PagerInfo"),
-                infoFiltered: localize("PagerInfoFiltered"),
-                infoEmpty: localize("PagerInfoEmpty"),
-                search: localize("PagerSearch"),
-                processing: localize("ProcessingWithThreeDot"),
-                loadingRecords: localize("LoadingWithThreeDot"),
-                lengthMenu: localize("PagerShowMenuEntries"),
-                emptyTable: localize("NoDataAvailableInDatatable"),
-                paginate: {
-                    first: localize("PagerFirst"),
-                    last: localize("PagerLast"),
-                    previous: localize("PagerPrevious"),
-                    next: localize("PagerNext")
-                }
-            };
+            configuration.language = datatables.defaultConfigurations.language();
 
-            configuration.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
+            if(configuration.dom){
+                configuration.dom += datatables.defaultConfigurations.dom;
+            }else{
+                configuration.dom = datatables.defaultConfigurations.dom;
+            }
 
             return configuration;
         };
+    })();
 
-    }();
+    /************************************************************************
+     * Default Renderers                                                     *
+     *************************************************************************/
+
+    datatables.defaultRenderers = datatables.defaultRenderers || {};
+
+    datatables.defaultRenderers['boolean'] = function(value) {
+        if (value) {
+            return '<i class="fa fa-check"></i>';
+        } else {
+            return '<i class="fa fa-times"></i>';
+        }
+    };
+
+    var ISOStringToDateTimeLocaleString = function (format) {
+        return function(data) {
+            var date = luxon
+                .DateTime
+                .fromISO(data, {
+                    locale: abp.localization.currentCulture.name
+                });
+            return format ? date.toLocaleString(format) : date.toLocaleString();
+        };
+    };
+
+    datatables.defaultRenderers['date'] = function (value) {
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString())(value);
+        }
+    };
+
+    datatables.defaultRenderers['datetime'] = function (value) {
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        }
+    };
+
+    /************************************************************************
+     * Default Configurations                                                *
+     *************************************************************************/
+
+    datatables.defaultConfigurations = datatables.defaultConfigurations || {};
+
+    datatables.defaultConfigurations.scrollX = true;
+
+    datatables.defaultConfigurations.responsive = true;
+
+    datatables.defaultConfigurations.language = function () {
+        return {
+            info: localize("PagerInfo"),
+            infoFiltered: localize("PagerInfoFiltered"),
+            infoEmpty: localize("PagerInfoEmpty"),
+            search: localize("PagerSearch"),
+            processing: localize("ProcessingWithThreeDot"),
+            loadingRecords: localize("LoadingWithThreeDot"),
+            lengthMenu: localize("PagerShowMenuEntries"),
+            emptyTable: localize("NoDataAvailableInDatatable"),
+            paginate: {
+                first: localize("PagerFirst"),
+                last: localize("PagerLast"),
+                previous: localize("PagerPrevious"),
+                next: localize("PagerNext")
+            }
+        };
+    };
+
+    datatables.defaultConfigurations.dom = '<"dataTable_filters row"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto me-auto"i><"col-auto"p>>';
 
 })(jQuery);

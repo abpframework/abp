@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.Emailing.Templates
+﻿namespace Volo.Abp.Emailing.Templates;
+
+public static class StandardEmailTemplates
 {
-    public static class StandardEmailTemplates
-    {
-        public const string DefaultLayout = "Abp.DefaultLayout";
-        public const string SimpleMessage = "Abp.SimpleMessage";
-    }
+    public const string Layout = "Abp.StandardEmailTemplates.Layout";
+    public const string Message = "Abp.StandardEmailTemplates.Message";
 }

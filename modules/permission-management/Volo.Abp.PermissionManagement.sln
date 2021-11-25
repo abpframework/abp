@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.Web", "src\Volo.Abp.PermissionManagement.Web\Volo.Abp.PermissionManagement.Web.csproj", "{97A386F8-DAE0-4BEA-ADE5-1D57C3336515}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.Tests", "test\Volo.Abp.PermissionManagement.Tests\Volo.Abp.PermissionManagement.Tests.csproj", "{48297098-79D0-413B-939C-6C432142C42D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.Domain.Tests", "test\Volo.Abp.PermissionManagement.Domain.Tests\Volo.Abp.PermissionManagement.Domain.Tests.csproj", "{48297098-79D0-413B-939C-6C432142C42D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.TestBase", "test\Volo.Abp.PermissionManagement.TestBase\Volo.Abp.PermissionManagement.TestBase.csproj", "{49259427-CAEB-4FAE-81E4-848F789487EA}"
 EndProject
@@ -33,7 +33,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.HttpApi.Client", "src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj", "{1CD80519-9431-48DB-B0EA-291A73FF9F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Application.Tests", "test\Volo.Abp.PermissionManagement.Application.Tests\Volo.Abp.PermissionManagement.Application.Tests.csproj", "{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.Application.Tests", "test\Volo.Abp.PermissionManagement.Application.Tests\Volo.Abp.PermissionManagement.Application.Tests.csproj", "{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Blazor", "src\Volo.Abp.PermissionManagement.Blazor\Volo.Abp.PermissionManagement.Blazor.csproj", "{6F899C50-83BB-43C4-983A-DCCD8FBBF066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Blazor.Server", "src\Volo.Abp.PermissionManagement.Blazor.Server\Volo.Abp.PermissionManagement.Blazor.Server.csproj", "{88B39D54-5289-4D39-B4B9-E7C264ED2996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Blazor.WebAssembly", "src\Volo.Abp.PermissionManagement.Blazor.WebAssembly\Volo.Abp.PermissionManagement.Blazor.WebAssembly.csproj", "{C8AA18AA-BD1F-4E58-92C6-12F846C02000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Installer", "src\Volo.Abp.PermissionManagement.Installer\Volo.Abp.PermissionManagement.Installer.csproj", "{A0D67614-A668-45E6-BB8F-8ACE54D8A196}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +105,22 @@ Global
 		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F899C50-83BB-43C4-983A-DCCD8FBBF066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F899C50-83BB-43C4-983A-DCCD8FBBF066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F899C50-83BB-43C4-983A-DCCD8FBBF066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F899C50-83BB-43C4-983A-DCCD8FBBF066}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B39D54-5289-4D39-B4B9-E7C264ED2996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B39D54-5289-4D39-B4B9-E7C264ED2996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B39D54-5289-4D39-B4B9-E7C264ED2996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B39D54-5289-4D39-B4B9-E7C264ED2996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8AA18AA-BD1F-4E58-92C6-12F846C02000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8AA18AA-BD1F-4E58-92C6-12F846C02000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8AA18AA-BD1F-4E58-92C6-12F846C02000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8AA18AA-BD1F-4E58-92C6-12F846C02000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D67614-A668-45E6-BB8F-8ACE54D8A196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D67614-A668-45E6-BB8F-8ACE54D8A196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D67614-A668-45E6-BB8F-8ACE54D8A196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D67614-A668-45E6-BB8F-8ACE54D8A196}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +140,10 @@ Global
 		{9E0B517E-F02E-436F-9695-7CF12795D34C} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
 		{1CD80519-9431-48DB-B0EA-291A73FF9F49} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
 		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1} = {63DA4A89-5908-4F37-B7E6-525AEEF20C77}
+		{6F899C50-83BB-43C4-983A-DCCD8FBBF066} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
+		{88B39D54-5289-4D39-B4B9-E7C264ED2996} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
+		{C8AA18AA-BD1F-4E58-92C6-12F846C02000} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
+		{A0D67614-A668-45E6-BB8F-8ACE54D8A196} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FC7DF78-5E2D-489F-9D43-147D2ABAA112}

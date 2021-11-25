@@ -1,0 +1,91 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ModalsModel
+@{
+    ViewData["Title"] = "Modals";
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<h2>Modals</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/modal/" target="_blank"> Bootstrap Modal</a>.</p>
+
+<h4>Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-button button-type="Primary" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</abp-button>
+
+        <abp-modal centered="true" scrollable="true" size="Large" id="myModal">
+            <abp-modal-header title="Modal title"></abp-modal-header>
+            <abp-modal-body>
+                Woohoo, you're reading this text in a modal!
+            </abp-modal-body>
+            <abp-modal-footer buttons="@(AbpModalButtons.Save|AbpModalButtons.Close)"></abp-modal-footer>
+        </abp-modal>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+    &lt;abp-button button-type=&quot;Primary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#myModal&quot;&gt;Launch modal&lt;/abp-button&gt;
+
+    &lt;abp-modal centered=&quot;true&quot; scrollable=&quot;true&quot; size=&quot;Large&quot; id=&quot;myModal&quot;&gt;
+    &lt;abp-modal-header title=&quot;Modal title&quot;&gt;&lt;/abp-modal-header&gt;
+    &lt;abp-modal-body&gt;
+    Woohoo, you're reading this text in a modal!
+    &lt;/abp-modal-body&gt;
+    &lt;abp-modal-footer buttons=&quot;&commat;(AbpModalButtons.Save|AbpModalButtons.Close)&quot;&gt;&lt;/abp-modal-footer&gt;
+    &lt;/abp-modal&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;!-- Button trigger modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#exampleModal&quot;&gt;
+  Launch demo modal
+&lt;/button&gt;
+
+&lt;!-- Modal --&gt;
+&lt;div class=&quot;modal fade&quot; id=&quot;exampleModal&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;exampleModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;div class=&quot;modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg&quot; role=&quot;document&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+      &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot; id=&quot;exampleModalLabel&quot;&gt;Modal title&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-bs-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;modal-body&quot;&gt;
+        ...
+      &lt;/div&gt;
+      &lt;div class=&quot;modal-footer&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary&quot; data-bs-dismiss=&quot;modal&quot;&gt;Close&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Save&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

@@ -1,62 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
+
+public class AbpAccordionTagHelperService : AbpTagHelperService<AbpAccordionTagHelper>
 {
-    public class AbpAccordionTagHelperService : AbpTagHelperService<AbpAccordionTagHelper>
+    protected IHtmlGenerator HtmlGenerator { get; }
+
+    public AbpAccordionTagHelperService(IHtmlGenerator htmlGenerator)
     {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        HtmlGenerator = htmlGenerator;
+    }
+
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        SetRandomIdIfNotProvided();
+
+        output.TagName = "div";
+        output.TagMode = TagMode.StartTagAndEndTag;
+        output.Attributes.AddClass("accordion");
+        output.Attributes.Add("id", TagHelper.Id);
+
+        var items = InitilizeFormGroupContentsContext(context, output);
+
+        await output.GetChildContentAsync();
+
+        SetContent(context, output, items);
+    }
+
+    protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<string> items)
+    {
+        foreach (var item in items)
         {
-            SetRandomIdIfNotProvided();
+            var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id));
 
-            output.TagName = "div";
-            output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.AddClass("accordion");
-            output.Attributes.Add("id",TagHelper.Id);
-            
-            var items = InitilizeFormGroupContentsContext(context, output);
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("card");
+            wrapper.InnerHtml.AppendHtml(content);
 
-            await output.GetChildContentAsync();
-
-            var content = GetContent(items);
-
-            output.Content.SetHtmlContent(content);
+            output.Content.AppendHtml(wrapper);
         }
+    }
 
-        protected virtual string GetContent(List<string> items)
+    protected virtual List<string> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)
+    {
+        var items = new List<string>();
+        context.Items[AccordionItems] = items;
+        return items;
+    }
+
+    protected virtual void SetRandomIdIfNotProvided()
+    {
+        if (string.IsNullOrWhiteSpace(TagHelper.Id))
         {
-            var html = new StringBuilder("");
-            foreach (var item in items)
-            {
-                var content = item.Replace(AbpAccordionParentIdPlaceholder, TagHelper.Id);
-
-                html.AppendLine(
-                    "<div class=\"card\">" + Environment.NewLine + 
-                        content
-                    + "</div>" + Environment.NewLine
-                );
-            }
-
-            return html.ToString();
-        }
-
-        protected virtual List<string> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)
-        {
-            var items = new List<string>();
-            context.Items[AccordionItems] = items;
-            return items;
-        }
-
-        protected virtual void SetRandomIdIfNotProvided()
-        {
-            if (string.IsNullOrWhiteSpace(TagHelper.Id))
-            {
-                TagHelper.Id = "A" + Guid.NewGuid().ToString("N");
-            }
+            TagHelper.Id = "A" + Guid.NewGuid().ToString("N");
         }
     }
 }

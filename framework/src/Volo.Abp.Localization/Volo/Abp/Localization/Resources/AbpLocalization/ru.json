@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Язык по умолчанию",
+    "Description:Abp.Localization.DefaultLanguage": "Язык приложения по умолчанию."
+  }
+}

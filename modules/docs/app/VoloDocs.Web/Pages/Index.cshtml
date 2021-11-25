@@ -3,3 +3,21 @@
 @{
 }
 
+@if (!Model.Projects.Any())
+{
+    <abp-alert alert-type="Warning">
+        <strong>No projects found!</strong><br />
+        See <a href=" https://docs.abp.io/en/abp/latest/Modules/Docs">documentation</a> to see how you can create a new one.
+    </abp-alert>
+}
+else
+{
+    <h1>Projects</h1>
+
+    <abp-list-group class="mt-5">
+        @foreach (var project in Model.Projects)
+        {
+            <abp-list-group-item href="@Model.GetUrlForProject(project)">@project.Name</abp-list-group-item>
+        }
+    </abp-list-group>
+}

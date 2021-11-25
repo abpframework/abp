@@ -1,38 +1,54 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
-namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants;
+
+public class CreateModalModel : TenantManagementPageModel
 {
-    public class CreateModalModel : TenantManagementPageModel
+    [BindProperty]
+    public TenantInfoModel Tenant { get; set; }
+
+    protected ITenantAppService TenantAppService { get; }
+
+    public CreateModalModel(ITenantAppService tenantAppService)
     {
-        [BindProperty]
-        public TenantInfoModel Tenant { get; set; }
+        TenantAppService = tenantAppService;
+    }
 
-        private readonly ITenantAppService _tenantAppService;
+    public virtual Task<IActionResult> OnGetAsync()
+    {
+        Tenant = new TenantInfoModel();
+        return Task.FromResult<IActionResult>(Page());
+    }
 
-        public CreateModalModel(ITenantAppService tenantAppService)
-        {
-            _tenantAppService = tenantAppService;
-        }
+    public virtual async Task<IActionResult> OnPostAsync()
+    {
+        ValidateModel();
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            ValidateModel();
+        var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
+        await TenantAppService.CreateAsync(input);
 
-            var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
-            await _tenantAppService.CreateAsync(input);
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    public class TenantInfoModel : ExtensibleObject
+    {
+        [Required]
+        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
+        [Display(Name = "DisplayName:TenantName")]
+        public string Name { get; set; }
 
-        public class TenantInfoModel
-        {
-            [Required]
-            [StringLength(TenantConsts.MaxNameLength)]
-            [Display(Name = "DisplayName:TenantName")]
-            public string Name { get; set; }
-        }
+        [Required]
+        [EmailAddress]
+        [MaxLength(256)]
+        public string AdminEmailAddress { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [MaxLength(128)]
+        public string AdminPassword { get; set; }
     }
 }

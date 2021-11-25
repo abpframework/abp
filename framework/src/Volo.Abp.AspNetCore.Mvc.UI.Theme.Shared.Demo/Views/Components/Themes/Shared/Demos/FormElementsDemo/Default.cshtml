@@ -1,0 +1,124 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.FormElementsDemo
+@model FormElementsDemoModel
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>The form model is:</h3>
+        <hr />
+        <textarea style="width:100%;height: 320px" disabled>
+public class FormElementsDemoModel
+{
+    public enum CarType
+    {
+        Sedan,
+        Hatchback,
+        StationWagon,
+        Coupe
+    }
+
+    public List<SelectListItem> CityList { get; set; } = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "NY", Text = "New York"},
+        new SelectListItem { Value = "LDN", Text = "London"},
+        new SelectListItem { Value = "IST", Text = "Istanbul"},
+        new SelectListItem { Value = "MOS", Text = "Moscow"}
+    };
+
+    public class InformMeModel
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        public bool CheckMeOut { get; set; }
+    }
+
+    public class DetailsModel
+    {
+        [Required]
+        public string EmailAddress { get; set; }
+
+        public string City { get; set; }
+
+        public List<string> Cities { get; set; }
+
+        [TextArea]
+        public string Description { get; set; }
+    }
+
+    public class CheckboxModel
+    {
+        public bool DefaultCheckbox { get; set; }
+
+        public bool DisabledCheckbox { get; set; }
+    }
+
+    public class CityRadioModel
+    {
+        [Display(Name = "City")]
+        public string CityRadio { get; set; }
+    }
+
+    public class EnumModel
+    {
+        public CarType CarType { get; set; }
+    }
+
+    public InformMeModel MyInformMeModel { get; set; }
+    public DetailsModel MyDetailsModel { get; set; }
+    public CheckboxModel MyCheckboxModel { get; set; }
+    public CityRadioModel MyCityRadioModel { get; set; }
+    public EnumModel MyEnumModel { get; set; }
+
+
+    public FormElementsDemoModel()
+    {
+        MyInformMeModel = new InformMeModel();
+        MyDetailsModel = new DetailsModel();
+        MyCheckboxModel = new CheckboxModel();
+        MyCityRadioModel = new CityRadioModel() { CityRadio = "IST" };
+        MyEnumModel = new EnumModel();
+    }
+}
+        </textarea>
+    </div>
+</div>
+
+<abp-component-demo-section title="Example" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyInformMeModel.Name" label="Name" />
+    <abp-input asp-for="@Model.MyInformMeModel.Password" label="Password" />
+    <abp-input asp-for="@Model.MyInformMeModel.CheckMeOut" label="Check Me Out" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Form controls" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyDetailsModel.EmailAddress" label="Email Address" placeholder="name@example.com" />
+    <abp-select asp-for="@Model.MyDetailsModel.City" asp-items="@Model.CityList" label="City" />
+    <abp-select asp-for="@Model.MyDetailsModel.Cities" asp-items="@Model.CityList" label="Cities" />
+    <abp-input asp-for="@Model.MyDetailsModel.Description" label="Description" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Sizing" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyInformMeModel.Name" size="Large" />
+    <abp-input asp-for="@Model.MyInformMeModel.Name" size="Small" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Disabled And ReadOnly" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyInformMeModel.Name" disabled="true" />
+    <abp-input asp-for="@Model.MyInformMeModel.Name" readonly="true" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Checkboxes" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyCheckboxModel.DefaultCheckbox" />
+    <abp-input asp-for="@Model.MyCheckboxModel.DisabledCheckbox" disabled="true" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Radios" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-radio asp-for="@Model.MyCityRadioModel.CityRadio" asp-items="@Model.CityList" inline="true" />
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Enum" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-select asp-for="@Model.MyEnumModel.CarType" />
+</abp-component-demo-section>

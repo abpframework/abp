@@ -11,9 +11,9 @@ Background jobs are **persistent** that means they will be **re-tried** and **ex
 
 ## Abstraction Package
 
-ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire and RabbitMQ integrations.
+ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire, RabbitMQ and Quartz integrations.
 
-`Volo.Abp.BackgroundJobs.Abstractions` nuget package provides needed services to create background jobs and queue background job items. If your module only depend on this package, it can be independent from the actual implementation/integration.
+`Volo.Abp.BackgroundJobs.Abstractions` NuGet package provides needed services to create background jobs and queue background job items. If your module only depend on this package, it can be independent from the actual implementation/integration.
 
 > `Volo.Abp.BackgroundJobs.Abstractions` package is installed to the startup templates by default.
 
@@ -24,23 +24,29 @@ A background job is a class that implements the `IBackgroundJob<TArgs>` interfac
 This example is used to send emails in background. First, define a class to store arguments of the background job:
 
 ````csharp
-public class EmailSendingArgs
+namespace MyProject
 {
-    public string EmailAddress { get; set; }
-    public string Subject { get; set; }
-    public string Body { get; set; }
+    public class EmailSendingArgs
+    {
+        public string EmailAddress { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+    }
 }
 ````
 
 Then create a background job class that uses an `EmailSendingArgs` object to send an email:
 
 ````csharp
+using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing;
 
 namespace MyProject
 {
-    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>
+    public class EmailSendingJob
+        : AsyncBackgroundJob<EmailSendingArgs>, ITransientDependency
     {
         private readonly IEmailSender _emailSender;
 
@@ -49,9 +55,9 @@ namespace MyProject
             _emailSender = emailSender;
         }
 
-        public override void Execute(EmailSendingArgs args)
+        public override async Task ExecuteAsync(EmailSendingArgs args)
         {
-            _emailSender.Send(
+            await _emailSender.SendAsync(
                 args.EmailAddress,
                 args.Subject,
                 args.Body
@@ -63,9 +69,34 @@ namespace MyProject
 
 This job simply uses `IEmailSender` to send emails (see [email sending document](Emailing.md)).
 
+> `AsyncBackgroundJob` is used to create a job needs to perform async calls. You can inherit from `BackgroundJob<TJob>` and override the `Execute` method if the method doesn't need to perform any async call.
+
 #### Exception Handling
 
 A background job should not hide exceptions. If it throws an exception, the background job is automatically re-tried after a calculated waiting time. Hide exceptions only if you don't want to re-run the background job for the current argument.
+
+#### Job Name
+
+Each background job has a name. Job names are used in several places. For example, RabbitMQ provider uses job names to determine the RabbitMQ Queue names.
+
+Job name is determined by the **job argument type**. For the `EmailSendingArgs` example above, the job name is `MyProject.EmailSendingArgs` (full name, including the namespace). You can use the `BackgroundJobName` attribute to set a different job name.
+
+**Example**
+
+```csharp
+using Volo.Abp.BackgroundJobs;
+
+namespace MyProject
+{
+    [BackgroundJobName("emails")]
+    public class EmailSendingArgs
+    {
+        public string EmailAddress { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+    }
+}
+```
 
 ### Queue a Job Item
 
@@ -108,7 +139,7 @@ Enqueue method gets some optional arguments to control the background job:
 
 You may want to disable background job execution for your application. This is generally needed if you want to execute background jobs in another process and disable it for the current process.
 
-Use `BackgroundJobOptions` to configure the job execution:
+Use `AbpBackgroundJobOptions` to configure the job execution:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -116,7 +147,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobOptions>(options =>
+        Configure<AbpBackgroundJobOptions>(options =>
         {
             options.IsJobExecutionEnabled = false; //Disables job execution
         });
@@ -140,7 +171,7 @@ ABP framework includes a simple `IBackgroundJobManager` implementation that;
 
 ### Configuration
 
-Use `BackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
+Use `AbpBackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -148,7 +179,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobWorkerOptions>(options =>
+        Configure<AbpBackgroundJobWorkerOptions>(options =>
         {
             options.DefaultTimeout = 864000; //10 days (as seconds)
         });
@@ -172,3 +203,7 @@ See pre-built job manager alternatives:
 
 * [Hangfire Background Job Manager](Background-Jobs-Hangfire.md)
 * [RabbitMQ Background Job Manager](Background-Jobs-RabbitMq.md)
+* [Quartz Background Job Manager](Background-Jobs-Quartz.md)
+
+## See Also
+* [Background Workers](Background-Workers.md)

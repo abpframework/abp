@@ -1,0 +1,25 @@
+{
+  "culture": "cs",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Výchozí adresa odesílatele",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Výchozí zobrazované jméno odesilátele",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Hostitel",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Uživatelské jméno",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Heslo",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Doména",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Povolit SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Použít výchozí přihlašovací údaje",
+    "Description:Abp.Mailing.DefaultFromAddress": "Výchozí adresa odesílatele",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Výchozí zobrazované jméno odesilátele",
+    "Description:Abp.Mailing.Smtp.Host": "Název nebo IP adresa hostitele použitého pro SMTP transakce.",
+    "Description:Abp.Mailing.Smtp.Port": "Port použitý pro SMTP tansakce",
+    "Description:Abp.Mailing.Smtp.UserName": "Uživatelské jméno spojené s přihlašovacími údaji.",
+    "Description:Abp.Mailing.Smtp.Password": "Heslo pro uživatelské jméno spojené s přihlašovacími údaji.",
+    "Description:Abp.Mailing.Smtp.Domain": "Název domény nebo počítače, který ověřuje přihlašovací údaje.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Zda SmtpClient používá SSL k šifrování připojení.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Zda jsou výchozí přihlašovací údaje odesílány s požadavky.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Výchozí šablona rozložení emailu",
+    "TextTemplate:StandardEmailTemplates.Message": "Jednoduchá šablona zprávy pro emaily"
+  }
+}

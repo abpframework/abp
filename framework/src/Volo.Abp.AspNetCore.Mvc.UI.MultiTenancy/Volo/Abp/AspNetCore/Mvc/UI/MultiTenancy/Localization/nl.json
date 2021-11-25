@@ -1,0 +1,13 @@
+{
+  "culture": "nl",
+  "texts": {
+    "GivenTenantIsNotExist": "Opgegeven huurder bestaat niet: {0}",
+    "GivenTenantIsNotAvailable": "Gegeven klant is niet beschikbaar: {0}",
+    "Tenant": "Klant",
+    "Switch": "Schakel over",
+    "Name": "Name",
+    "SwitchTenantHint": "Laat het naamveld leeg om over te schakelen naar de hostkant.",
+    "SwitchTenant": "Klant wisselen",
+    "NotSelected": "Niet geselecteerd"
+  }
+}

@@ -2,28 +2,28 @@
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
+using Volo.Abp.Threading;
 
-namespace Volo.Abp.SettingManagement
+namespace Volo.Abp.SettingManagement;
+
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(AbpTestBaseModule),
+    typeof(AbpSettingManagementDomainModule))]
+public class AbpSettingManagementTestBaseModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpSettingManagementDomainModule))]
-    public class AbpSettingManagementTestBaseModule : AbpModule
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedTestData(context);
-        }
+        SeedTestData(context);
+    }
 
-        private static void SeedTestData(ApplicationInitializationContext context)
+    private static void SeedTestData(ApplicationInitializationContext context)
+    {
+        using (var scope = context.ServiceProvider.CreateScope())
         {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                scope.ServiceProvider
-                    .GetRequiredService<SettingTestDataBuilder>()
-                    .Build();
-            }
+            AsyncHelper.RunSync(() => scope.ServiceProvider
+                .GetRequiredService<SettingTestDataBuilder>()
+                .BuildAsync());
         }
     }
 }

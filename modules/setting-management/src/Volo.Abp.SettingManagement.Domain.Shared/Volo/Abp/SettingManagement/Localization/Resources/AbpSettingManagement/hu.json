@@ -1,0 +1,24 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Settings": "Beállítások",
+    "SuccessfullySaved": "Sikeresen mentve",
+    "Permission:SettingManagement": "Beállításkezelés",
+    "Permission:Emailing": "E-mailezés",
+    "Menu:Emailing": "E-mailezés",
+    "SmtpHost": "Házigazda",
+    "SmtpPort": "Kikötő",
+    "SmtpUserName": "Felhasználónév",
+    "SmtpPassword": "Jelszó",
+    "SmtpDomain": "Tartomány",
+    "SmtpEnableSsl": "ssl engedélyezése",
+    "SmtpUseDefaultCredentials": "Használja az alapértelmezett hitelesítő adatokat",
+    "DefaultFromAddress": "Alapértelmezett a címtől",
+    "DefaultFromDisplayName": "Alapértelmezett a megjelenített névből",
+    "Feature:SettingManagementGroup": "Beállításkezelés",
+    "Feature:SettingManagementEnable": "Beállításkezelés engedélyezése",
+    "Feature:SettingManagementEnableDescription": "A beállításkezelő rendszer engedélyezése az alkalmazásban.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Engedélyezze a bérlőknek az e-mail beállítások módosítását.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Engedélyezze a bérlőknek az e-mail beállítások módosítását."
+  }
+}

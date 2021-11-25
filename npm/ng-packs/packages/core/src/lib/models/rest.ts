@@ -1,10 +1,11 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 
 export namespace Rest {
-  export interface Config {
-    skipHandleError?: boolean;
-    observe?: Observe;
-  }
+  export type Config = Partial<{
+    apiName: string;
+    skipHandleError: boolean;
+    observe: Observe;
+  }>;
 
   export const enum Observe {
     Body = 'body',
@@ -33,7 +34,7 @@ export namespace Rest {
           [param: string]: any;
         };
     reportProgress?: boolean;
-    responseType?: ResponseType;
+    responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
     url: string;
     withCredentials?: boolean;
   }

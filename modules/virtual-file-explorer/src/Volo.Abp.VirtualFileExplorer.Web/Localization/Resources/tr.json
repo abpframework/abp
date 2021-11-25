@@ -1,0 +1,14 @@
+{
+  "culture": "tr",
+  "texts": {
+    "VirtualFileExplorer": "Sanal dosya gezgini",
+    "VirtualFileType": "Sanal dosya  tipi",
+    "Menu:VirtualFileExplorer": "Sanal dosya gezgini ",
+    "LastUpdateTime": "Son güncelleme zamanı",
+    "VirtualFileName": "Sanal dosya adı",
+    "FileContent": "Dosyaa içeriği",
+    "Size": "Boyut",
+    "BackToRoot": "Kök'e dön",
+    "EmptyFileInfoList": "Sanal dosyalar yok"
+  }
+}

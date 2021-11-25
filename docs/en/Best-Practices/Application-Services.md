@@ -1,4 +1,4 @@
-﻿## Application Services Best Practices & Conventions
+## Application Services Best Practices & Conventions
 
 * **Do** create an application service for each **aggregate root**.
 
@@ -17,17 +17,18 @@
 
 ##### Basic DTO
 
-**Do** define a **basic** DTO for an entity.
+**Do** define a **basic** DTO for an aggregate root.
 
-- Include all the **primitive properties** directly on the entity.
-  - Exception: Can **exclude** properties for **security** reasons (like User.Password).
+- Include all the **primitive properties** directly on the aggregate root.
+  - Exception: Can **exclude** properties for **security** reasons (like `User.Password`).
 - Include all the **sub collections** of the entity where every item in the collection is a simple **relation DTO**.
+- Inherit from one of the **extensible entity DTO** classes for aggregate roots (and entities implement the `IHasExtraProperties`).
 
 Example:
 
 ```c#
 [Serializable]
-public class IssueDto : FullAuditedEntityDto<Guid>
+public class IssueDto : ExtensibleFullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
     public string Text { get; set; }
@@ -57,7 +58,7 @@ Example:
 
 ````C#
 [Serializable]
-public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
+public class IssueWithDetailsDto : ExtensibleFullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
     public string Text { get; set; }
@@ -66,14 +67,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 }
 
 [Serializable]
-public class MilestoneDto : EntityDto<Guid>
+public class MilestoneDto : ExtensibleEntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
 [Serializable]
-public class LabelDto : EntityDto<Guid>
+public class LabelDto : ExtensibleEntityDto<Guid>
 {
     public string Name { get; set; }
     public string Color { get; set; }
@@ -120,6 +121,7 @@ Task<List<QuestionWithDetailsDto>> GetListAsync(QuestionListQueryDto queryDto);
 
 * **Do** use the `CreateAsync` **method name**.
 * **Do** get a **specialized input** DTO to create the entity.
+* **Do** inherit the DTO class from the `ExtensibleObject` (or any other class implements the `IHasExtraProperties`) to allow to pass extra properties if needed.
 * **Do** use **data annotations** for input validation.
   * Share constants between domain wherever possible (via constants defined in the **domain shared** package).
 * **Do** return **the detailed** DTO for new created entity.
@@ -135,10 +137,11 @@ The related **DTO**:
 
 ````C#
 [Serializable]
-public class CreateQuestionDto
+public class CreateQuestionDto : ExtensibleObject
 {
     [Required]
-    [StringLength(QuestionConsts.MaxTitleLength, MinimumLength = QuestionConsts.MinTitleLength)]
+    [StringLength(QuestionConsts.MaxTitleLength,
+                  MinimumLength = QuestionConsts.MinTitleLength)]
     public string Title { get; set; }
     
     [StringLength(QuestionConsts.MaxTextLength)]
@@ -152,6 +155,7 @@ public class CreateQuestionDto
 
 - **Do** use the `UpdateAsync` **method name**.
 - **Do** get a **specialized input** DTO to update the entity.
+- **Do** inherit the DTO class from the `ExtensibleObject` (or any other class implements the `IHasExtraProperties`) to allow to pass extra properties if needed.
 - **Do** get the Id of the entity as a separated primitive parameter. Do not include to the update DTO.
 - **Do** use **data annotations** for input validation.
   - Share constants between domain wherever possible (via constants defined in the **domain shared** package).
@@ -200,10 +204,19 @@ This method votes a question and returns the current score of the question.
 
 * **Do not** use LINQ/SQL for querying data from database inside the application service methods. It's repository's responsibility to perform LINQ/SQL queries from the data source.
 
+#### Extra Properties
+
+* **Do** use either `MapExtraPropertiesTo` extension method ([see](../Object-Extensions.md)) or configure the object mapper (`MapExtraProperties`) to allow application developers to be able to extend the objects and services.
+
 #### Manipulating / Deleting Entities
 
 * **Do** always get all the related entities from repositories to perform the operations on them.
 * **Do** call repository's Update/UpdateAsync method after updating an entity. Because, not all database APIs support change tracking & auto update.
+
+#### Handle files
+
+* **Do not** use any web components like `IFormFile` or `Stream` in the application services. If you want to serve a file you can use `byte[]`.
+* **Do** use a `Controller` to handle file uploading then pass the `byte[]` of the file to the application service method.
 
 #### Using Other Application Services
 

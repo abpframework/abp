@@ -1,4 +1,4 @@
-﻿## Entity Framework Core Integration Best Practices
+## Entity Framework Core Integration Best Practices
 
 > See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
 
@@ -16,10 +16,12 @@
 [ConnectionStringName("AbpIdentity")]
 public interface IIdentityDbContext : IEfCoreDbContext
 {
-    DbSet<IdentityUser> Users { get; set; }
-    DbSet<IdentityRole> Roles { get; set; }
+    DbSet<IdentityUser> Users { get; }
+    DbSet<IdentityRole> Roles { get; }
 }
 ````
+
+* **Do not** define `set;` for the properties in this interface.
 
 ### DbContext class
 
@@ -64,12 +66,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 protected override void OnModelCreating(ModelBuilder builder)
 {
     base.OnModelCreating(builder);
-
-    builder.ConfigureIdentity(options =>
-    {
-        options.TablePrefix = TablePrefix;
-        options.Schema = Schema;
-    });
+    builder.ConfigureIdentity();
 }
 ````
 
@@ -78,24 +75,21 @@ protected override void OnModelCreating(ModelBuilder builder)
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
 {
-    public static void ConfigureIdentity(
-        [NotNull] this ModelBuilder builder,
-        Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+    public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
 
-        var options = new IdentityModelBuilderConfigurationOptions();
-        optionsAction?.Invoke(options);
-
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema);            
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users", AbpIdentityDbProperties.DbSchema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
 
         builder.Entity<IdentityUserClaim>(b =>
         {
-            b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserClaims", AbpIdentityDbProperties.DbSchema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
         
@@ -104,17 +98,7 @@ public static class IdentityDbContextModelBuilderExtensions
 }
 ````
 
-* **Do** create a **configuration options** class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
-
-````C#
-public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
-{
-    public IdentityModelBuilderConfigurationOptions()
-        : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)
-    {
-    }
-}
-````
+* **Do** call `b.ConfigureByConvention();` for each entity mapping (as shown above).
 
 ### Repository Implementation
 
@@ -141,7 +125,7 @@ public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
     bool includeDetails = true,
     CancellationToken cancellationToken = default)
 {
-    return await DbSet
+    return await (await GetDbSetAsync())
         .IncludeDetails(includeDetails)
         .FirstOrDefaultAsync(
             u => u.NormalizedUserName == normalizedUserName,
@@ -172,14 +156,15 @@ public static IQueryable<IdentityUser> IncludeDetails(
 }
 ````
 
-* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
+* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see `FindByNormalizedUserNameAsync`).
 
-- **Do** override `IncludeDetails` method of the repository for aggregates root which have **sub collections**. Example:
+- **Do** override `WithDetails` method of the repository for aggregates root which have **sub collections**. Example:
 
 ````C#
-protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
 {
-    return queryable.IncludeDetails(); //uses the extension method defined above
+    // Uses the extension method defined above
+    return (await GetQueryableAsync()).IncludeDetails();
 }
 ````
 
@@ -206,4 +191,3 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
-

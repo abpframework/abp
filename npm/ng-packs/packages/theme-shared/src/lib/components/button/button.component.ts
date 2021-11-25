@@ -1,58 +1,69 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ElementRef, Renderer2, OnInit } from '@angular/core';
+/* eslint-disable @angular-eslint/no-output-native */
 import { ABP } from '@abp/ng.core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'abp-button',
-  // tslint:disable-next-line: component-max-inline-declarations
   template: `
     <button
       #button
-      [attr.type]="buttonType || type"
+      [id]="buttonId"
+      [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
-      (click)="onClick($event)"
-      (focus)="onFocus($event)"
-      (blur)="onBlur($event)"
+      (click.stop)="click.next($event); abpClick.next($event)"
+      (focus)="focus.next($event); abpFocus.next($event)"
+      (blur)="blur.next($event); abpBlur.next($event)"
     >
-      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
+      <i [ngClass]="icon" class="me-1"></i><ng-content></ng-content>
     </button>
   `,
 })
 export class ButtonComponent implements OnInit {
   @Input()
+  buttonId = '';
+
+  @Input()
   buttonClass = 'btn btn-primary';
 
   @Input()
-  buttonType; // TODO: Add initial value.
+  buttonType = 'button';
 
   @Input()
-  iconClass: string;
+  iconClass?: string;
 
   @Input()
   loading = false;
 
   @Input()
-  disabled = false;
+  disabled: boolean | undefined = false;
 
   @Input()
-  attributes: ABP.Dictionary<string>;
+  attributes?: ABP.Dictionary<string>;
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly focus = new EventEmitter<FocusEvent>();
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly blur = new EventEmitter<FocusEvent>();
 
-  @ViewChild('button', { static: true })
-  buttonRef: ElementRef<HTMLButtonElement>;
+  @Output() readonly abpClick = new EventEmitter<MouseEvent>();
 
-  /**
-   * @deprecated Use buttonType instead. To be deleted in v1
-   */
-  @Input() type = 'button';
+  @Output() readonly abpFocus = new EventEmitter<FocusEvent>();
+
+  @Output() readonly abpBlur = new EventEmitter<FocusEvent>();
+
+  @ViewChild('button', { static: true })
+  buttonRef!: ElementRef<HTMLButtonElement>;
 
   get icon(): string {
     return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
@@ -63,23 +74,10 @@ export class ButtonComponent implements OnInit {
   ngOnInit() {
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {
-        this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+        if (this.attributes?.[key]) {
+          this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+        }
       });
     }
-  }
-
-  onClick(event: MouseEvent) {
-    event.stopPropagation();
-    this.click.next(event);
-  }
-
-  onFocus(event: FocusEvent) {
-    event.stopPropagation();
-    this.focus.next(event);
-  }
-
-  onBlur(event: FocusEvent) {
-    event.stopPropagation();
-    this.blur.next(event);
   }
 }

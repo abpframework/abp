@@ -1,0 +1,10 @@
+﻿<Button form="@Form" Type="@Type" Color="@Color" Block="@Block" PreventDefaultOnSubmit="@PreventDefaultOnSubmit" Disabled="@IsDisabled" Loading="@IsLoading" Clicked="@OnClickedHandler">
+    @if ( ChildContent != null )
+    {
+        @ChildContent
+    }
+    else
+    {
+        @SaveString
+    }
+</Button>

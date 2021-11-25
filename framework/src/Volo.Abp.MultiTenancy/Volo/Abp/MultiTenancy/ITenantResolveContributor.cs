@@ -1,9 +1,10 @@
-namespace Volo.Abp.MultiTenancy
-{
-    public interface ITenantResolveContributor
-    {
-        string Name { get; }
+using System.Threading.Tasks;
 
-        void Resolve(ITenantResolveContext context);
-    }
+namespace Volo.Abp.MultiTenancy;
+
+public interface ITenantResolveContributor
+{
+    string Name { get; }
+
+    Task ResolveAsync(ITenantResolveContext context);
 }

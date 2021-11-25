@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
 {
-    public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
+    public AbpIdentityApplicationModuleAutoMapperProfile()
     {
-        public AbpIdentityApplicationModuleAutoMapperProfile()
-        {
-            CreateMap<IdentityUser, IdentityUserDto>();
-            CreateMap<IdentityRole, IdentityRoleDto>();
-            CreateMap<IdentityUser, ProfileDto>();
-        }
+        CreateMap<IdentityUser, IdentityUserDto>()
+            .MapExtraProperties();
+
+        CreateMap<IdentityRole, IdentityRoleDto>()
+            .MapExtraProperties();
     }
 }

@@ -4,52 +4,58 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+[RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
+[Area(IdentityRemoteServiceConsts.ModuleName)]
+[ControllerName("Role")]
+[Route("api/identity/roles")]
+public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
 {
-    [RemoteService]
-    [Area("identity")]
-    [ControllerName("Role")]
-    [Route("api/identity/roles")]
-    public class IdentityRoleController : AbpController, IIdentityRoleAppService
+    protected IIdentityRoleAppService RoleAppService { get; }
+
+    public IdentityRoleController(IIdentityRoleAppService roleAppService)
     {
-        private readonly IIdentityRoleAppService _roleAppService;
+        RoleAppService = roleAppService;
+    }
 
-        public IdentityRoleController(IIdentityRoleAppService roleAppService)
-        {
-            _roleAppService = roleAppService;
-        }
+    [HttpGet]
+    [Route("all")]
+    public virtual Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
+    {
+        return RoleAppService.GetAllListAsync();
+    }
 
-        [HttpGet]
-        public virtual Task<ListResultDto<IdentityRoleDto>> GetListAsync()
-        {
-            return _roleAppService.GetListAsync();
-        }
+    [HttpGet]
+    public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
+    {
+        return RoleAppService.GetListAsync(input);
+    }
 
-        [HttpGet]
-        [Route("{id}")]
-        public virtual Task<IdentityRoleDto> GetAsync(Guid id)
-        {
-            return _roleAppService.GetAsync(id);
-        }
+    [HttpGet]
+    [Route("{id}")]
+    public virtual Task<IdentityRoleDto> GetAsync(Guid id)
+    {
+        return RoleAppService.GetAsync(id);
+    }
 
-        [HttpPost]
-        public virtual Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
-        {
-            return _roleAppService.CreateAsync(input);
-        }
+    [HttpPost]
+    public virtual Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
+    {
+        return RoleAppService.CreateAsync(input);
+    }
 
-        [HttpPut]
-        [Route("{id}")]
-        public virtual Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
-        {
-            return _roleAppService.UpdateAsync(id, input);
-        }
+    [HttpPut]
+    [Route("{id}")]
+    public virtual Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
+    {
+        return RoleAppService.UpdateAsync(id, input);
+    }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public virtual Task DeleteAsync(Guid id)
-        {
-            return _roleAppService.DeleteAsync(id);
-        }
+    [HttpDelete]
+    [Route("{id}")]
+    public virtual Task DeleteAsync(Guid id)
+    {
+        return RoleAppService.DeleteAsync(id);
     }
 }

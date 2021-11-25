@@ -1,0 +1,44 @@
+﻿@page
+
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
+@using Volo.CmsKit.Admin.Web.Pages
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+
+@inherits CmsKitAdminPageBase
+
+@model FeaturesModalModel
+
+@{
+    Layout = null;
+}
+
+<form action="/CmsKit/Blogs/FeaturesModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Features"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="BlogId"></abp-input>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <div class="mb-3">
+
+                    @if (Model.Items[i].IsAvailable)
+                    {
+                        <abp-input asp-for="Items[i].IsEnabled"
+                                   label="@L[Model.Items[i].FeatureName]" />
+                    }
+                    else
+                    {
+                        <div data-toggle="tooltip" title="@L["BlogFeatureNotAvailable"]">
+                            <abp-input asp-for="Items[i].IsEnabled"
+                                       label="@L[Model.Items[i].FeatureName]"
+                                       disabled="true" />
+                        </div>
+                    }
+                    <abp-input asp-for="Items[i].FeatureName" />
+                </div>
+            }
+
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Close | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

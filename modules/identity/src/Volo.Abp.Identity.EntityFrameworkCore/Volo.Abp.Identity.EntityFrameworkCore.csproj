@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Abp.Identity.EntityFrameworkCore</AssemblyName>
     <PackageId>Volo.Abp.Identity.EntityFrameworkCore</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -14,8 +15,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.EntityFrameworkCore\Volo.Abp.Users.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <None Remove="Volo.Abp.Identity.EntityFrameworkCore.abppkg.json" />
+    <EmbeddedResource Include="Volo.Abp.Identity.EntityFrameworkCore.abppkg.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <None Remove="Volo.Abp.Identity.EntityFrameworkCore.abppkg.analyze.json" />
+    <EmbeddedResource Include="Volo.Abp.Identity.EntityFrameworkCore.abppkg.analyze.json" />
+  </ItemGroup>
+
 </Project>

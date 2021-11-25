@@ -1,0 +1,12 @@
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.TablesDemo
+@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Tables.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Tables";
+}
+<h2>Tables</h2>
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/content/Tables/" target="_blank"> Bootstrap Tables</a>.</p>
+
+@await Component.InvokeAsync(typeof(TablesDemoViewComponent))

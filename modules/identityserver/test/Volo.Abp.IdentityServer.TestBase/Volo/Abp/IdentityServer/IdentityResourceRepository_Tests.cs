@@ -8,22 +8,21 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public abstract class IdentityResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class IdentityResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected IIdentityResourceRepository identityResourceRepository;
+
+    public IdentityResourceRepository_Tests()
     {
-        protected IIdentityResourceRepository identityResourceRepository;
+        identityResourceRepository = ServiceProvider.GetRequiredService<IIdentityResourceRepository>();
+    }
 
-        public IdentityResourceRepository_Tests()
-        {
-            identityResourceRepository = ServiceProvider.GetRequiredService<IIdentityResourceRepository>();
-        }
-
-        [Fact]
-        public async Task GetListByScopesAsync()
-        {
-            (await identityResourceRepository.GetListByScopesAsync(new []{"", "NewIdentityResource2" })).Count.ShouldBe(1);
-        }
+    [Fact]
+    public async Task GetListByScopesAsync()
+    {
+        (await identityResourceRepository.GetListByScopeNameAsync(new[] { "", "NewIdentityResource2" })).Count.ShouldBe(1);
     }
 }

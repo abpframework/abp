@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
-namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
+public interface IAbpAntiForgeryManager
 {
-    public interface IAbpAntiForgeryManager
-    {
-        AbpAntiForgeryOptions Options { get; }
+    void SetCookie();
 
-        HttpContext HttpContext { get; }
-
-        void SetCookie();
-
-        string GenerateToken();
-    }
+    string GenerateToken();
 }

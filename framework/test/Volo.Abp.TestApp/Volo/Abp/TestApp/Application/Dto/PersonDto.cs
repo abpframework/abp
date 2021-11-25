@@ -1,15 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.TestApp.Application.Dto
+namespace Volo.Abp.TestApp.Application.Dto;
+
+public class PersonDto : EntityDto<Guid>, IMultiTenant
 {
-    public class PersonDto : EntityDto<Guid>, IMultiTenant
-    {
-        public string Name { get; set; }
+    [Required]
+    public string Name { get; set; }
 
-        public int Age { get; set; }
+    public int Age { get; set; }
 
-        public Guid? TenantId { get; set; }
-    }
+    public Guid? TenantId { get; set; }
 }

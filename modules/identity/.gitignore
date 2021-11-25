@@ -1,0 +1,4 @@
+src/Volo.Abp.Identity.HttpApi/Properties/launchSettings.json
+src/Volo.Abp.Identity.Web/Properties/launchSettings.json
+test/Volo.Abp.Identity.AspNetCore.Tests/Properties/launchSettings.json
+src/Volo.Abp.Identity.AspNetCore/Properties/launchSettings.json

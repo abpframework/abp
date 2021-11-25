@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
+using Volo.Docs.Localization;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Areas.Documents.TagHelpers
@@ -14,6 +16,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     public class TreeTagHelper : TagHelper
     {
         private readonly DocsUiOptions _uiOptions;
+
+        private readonly IStringLocalizer<DocsResource> _localizer;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -41,8 +45,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer)
         {
+            _localizer = localizer;
             _uiOptions = urlOptions.Value;
         }
 
@@ -103,6 +108,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private string GetLeafNode(NavigationNode node, string content)
         {
+            var sb = new StringBuilder();
+            
             var textCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
             var isNodeSelected = node.IsSelected(SelectedDocumentName);
             var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
@@ -118,12 +125,36 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                var badgeStringBuilder = new StringBuilder();
+
+                if (!node.Path.IsNullOrWhiteSpace() && node.CreationTime.HasValue && node.LastUpdatedTime.HasValue)
+                {
+                    if(node.CreationTime + TimeSpan.FromDays(14) > DateTime.Now)
+                    {
+                        var newBadge = sb.Append("<span class='badge bg-primary ms-2' title=\"").Append(_localizer["NewExplanation"]).Append("\">").Append(_localizer["New"]).Append("</span>").ToString();
+                        
+                        badgeStringBuilder.Append(newBadge);
+                    }
+                    else if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
+                    {
+                        var updBadge = sb.Append("<span class='badge bg-light ms-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>").ToString();
+                        badgeStringBuilder.Append(updBadge);
+                    }
+                }
+
+                sb.Clear();
+
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
+                    node.Text.IsNullOrEmpty()
+                        ? "?"
+                        : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());
             }
 
+            sb.Clear();
+            
             return string.Format(LiItemTemplateWithLink,
                 listItemCss,
-                node.HasChildItems ? "chevron-right" : "long-arrow-right " + (node.Path.IsNullOrEmpty() ?  "no-link" : "has-link"),
+                node.HasChildItems ? "chevron-right" : sb.Append("long-arrow-right ").Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
                 listInnerItem,
                 content);
         }
@@ -143,8 +174,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
 
             var prefix = _uiOptions.RoutePrefix;
-
-            return  prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            
+            var sb = new StringBuilder();
+            return sb.Append(prefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(Version).Append("/").Append(pathWithoutFileExtension).ToString();
         }
 
         private string RemoveFileExtensionFromPath(string path)

@@ -1,80 +1,52 @@
 ﻿using System;
-using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Volo.Abp.DependencyInjection
+namespace Volo.Abp.DependencyInjection;
+
+//TODO: Make DefaultConventionalRegistrar extensible, so we can only define GetLifeTimeOrNull to contribute to the convention. This can be more performant!
+public class DefaultConventionalRegistrar : ConventionalRegistrarBase
 {
-    //TODO: Make DefaultConventionalRegistrar extensible, so we can only define GetLifeTimeOrNull to contribute to the convention. This can be more performant!
-    public class DefaultConventionalRegistrar : ConventionalRegistrarBase
+    public override void AddType(IServiceCollection services, Type type)
     {
-        public override void AddType(IServiceCollection services, Type type)
+        if (IsConventionalRegistrationDisabled(type))
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            var dependencyAttribute = GetDependencyAttributeOrNull(type);
-            var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
-
-            if (lifeTime == null)
-            {
-                return;
-            }
-
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
-
-            TriggerServiceExposing(services, type, serviceTypes);
-
-            foreach (var serviceType in serviceTypes)
-            {
-                var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
-
-                if (dependencyAttribute?.ReplaceServices == true)
-                {
-                    services.Replace(serviceDescriptor);
-                }
-                else if (dependencyAttribute?.TryRegister == true)
-                {
-                    services.TryAdd(serviceDescriptor);
-                }
-                else
-                {
-                    services.Add(serviceDescriptor);
-                }
-            }
-        }
-        
-        protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
-        {
-            return type.GetCustomAttribute<DependencyAttribute>(true);
+            return;
         }
 
-        protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+        var dependencyAttribute = GetDependencyAttributeOrNull(type);
+        var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
+
+        if (lifeTime == null)
         {
-            return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarcy(type);
+            return;
         }
 
-        protected virtual ServiceLifetime? GetServiceLifetimeFromClassHierarcy(Type type)
+        var exposedServiceTypes = GetExposedServiceTypes(type);
+
+        TriggerServiceExposing(services, type, exposedServiceTypes);
+
+        foreach (var exposedServiceType in exposedServiceTypes)
         {
-            if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
-            {
-                return ServiceLifetime.Transient;
-            }
+            var serviceDescriptor = CreateServiceDescriptor(
+                type,
+                exposedServiceType,
+                exposedServiceTypes,
+                lifeTime.Value
+            );
 
-            if (typeof(ISingletonDependency).GetTypeInfo().IsAssignableFrom(type))
+            if (dependencyAttribute?.ReplaceServices == true)
             {
-                return ServiceLifetime.Singleton;
+                services.Replace(serviceDescriptor);
             }
-
-            if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
+            else if (dependencyAttribute?.TryRegister == true)
             {
-                return ServiceLifetime.Scoped;
+                services.TryAdd(serviceDescriptor);
             }
-
-            return null;
+            else
+            {
+                services.Add(serviceDescriptor);
+            }
         }
     }
 }

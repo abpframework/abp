@@ -1,0 +1,10 @@
+{
+	"culture": "zh-Hant",
+	"texts": {
+		"Features": "功能",
+		"NoFeatureFoundMessage": "沒有可用的功能.",
+		"Permission:FeatureManagement": "功能管理",
+		"Permission:FeatureManagement.ManageHostFeatures": "管理Host功能",
+		"Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0}功能的值無效!"
+	}
+}

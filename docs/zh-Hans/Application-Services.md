@@ -2,7 +2,7 @@
 
 应用服务实现应用程序的**用例**, 将**领域层逻辑公开给表示层**.
 
-从表示层(可选)调用应用服务,**DTO (数据传对象)** 作为参数. 返回(可选)DTO给表示层.
+从表示层(可选)调用应用服务,**DTO ([数据传对象](Data-Transfer-Objects.md))** 作为参数. 返回(可选)DTO给表示层.
 
 ## 示例
 
@@ -146,7 +146,6 @@ public interface IBookAppService : IApplicationService
 `BookDto`是一个简单的[DTO](Data-Transfer-Objects.md)类, 定义如下:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,7 +158,36 @@ public class BookDto
 }
 ````
 
-* `BookDto`定义了`[AbpAutoMapFrom(typeof(Book))]`属性来从创建对象映射Book到BookDto.
+我们创建一个Automapper的[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances)类. 例如:
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+    }
+}
+```
+
+然后使用`AbpAutoMapperOptions`注册配置文件:
+
+````csharp
+[DependsOn(typeof(AbpAutoMapperModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            //Add all mappings defined in the assembly of the MyModule class
+            options.AddMaps<MyModule>();
+        });
+    }
+}
+````
+
+`AddMaps` 注册给定类的程序集中所有的配置类,通常使用模块类. 它还会注册 [attribute 映射](https://docs.automapper.org/en/stable/Attribute-mapping.html). 更多信息请参考[对象到对象映射](Object-To-Object-Mapping.md)文档
 
 然后你可以实现`GetAsync`方法. 如下所示:
 
@@ -200,15 +228,15 @@ public async Task<BookDto> GetAsync(Guid id)
 
 ### CRUD应用服务
 
-如果需要创建具有Create,Update,Delete和Get方法的简单CRUD应用服务,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService或 AsyncCrudAppService.
+如果需要创建具有Create,Update,Delete和Get方法的简单**CRUD应用服务**,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService.
 
 示例:
 
-创建继承`IAsyncCrudAppService`接口的`IBookAppService`接口.
+创建继承`ICrudAppService`接口的`IBookAppService`接口.
 
 ````csharp
 public interface IBookAppService : 
-    IAsyncCrudAppService< //Defines CRUD methods
+    ICrudAppService< //Defines CRUD methods
         BookDto, //Used to show books
         Guid, //Primary key of the book entity
         PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
@@ -218,12 +246,14 @@ public interface IBookAppService :
 }
 ````
 
-* IAsyncCrudAppService有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
+`ICrudAppService` 有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
 
-`IAsyncCrudAppService`声明以下方法:
+> 为应用程序服务创建一个接口是最佳做法,但是ABP框架并不强制你这么做,你可以跳过接口部分.
+
+`ICrudAppService`声明以下方法:
 
 ````csharp
-public interface IAsyncCrudAppService<
+public interface ICrudAppService<
     TEntityDto,
     in TKey,
     in TGetListInput,
@@ -247,7 +277,6 @@ public interface IAsyncCrudAppService<
 示例中使用的DTO类是`BookDto`和`CreateUpdateBookDto`:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -257,7 +286,6 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]
@@ -272,13 +300,26 @@ public class CreateUpdateBookDto
 }
 ````
 
+DTO类的[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances)类.
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
+    }
+}
+```
+
 * `CreateUpdateBookDto`由创建和更新操作共享,但你也可以使用单独的DTO类.
 
 最后`BookAppService`实现非常简单:
 
 ````csharp
 public class BookAppService : 
-    AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+    CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                         CreateUpdateBookDto, CreateUpdateBookDto>,
     IBookAppService
 {
@@ -289,9 +330,54 @@ public class BookAppService :
 }
 ````
 
-`AsyncCrudAppService`实现了`IAsyncCrudAppService`接口中声明的所有方法. 然后,你可以添加自己的自定义方法或覆盖和自定义实现.
+`CrudAppService`实现了`ICrudAppService`接口中声明的所有方法. 然后,你可以添加自己的自定义方法或覆盖和自定义实现.
+
+> `CrudAppService` 有不同数量泛型参数的版本,你可以选择适合的使用.
+
+### AbstractKeyCrudAppService
+
+`CrudAppService` 要求你的实体拥有一个Id属性做为主键. 如果你使用的是复合主键,那么你无法使用它.
+
+`AbstractKeyCrudAppService` 实现了相同的 `ICrudAppService` 接口,但它没有假设你的主键.
+
+#### 示例
+
+假设你有实体 `District`,它的`CityId` 和 `Name` 做为复合主键,使用 `AbstractKeyCrudAppService` 时需要你自己实现 `DeleteByIdAsync` 和 `GetEntityByIdAsync` 方法:
+
+````csharp
+public class DistrictAppService
+    : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
+{
+    public DistrictAppService(IRepository<District> repository)
+        : base(repository)
+    {
+    }
+
+    protected async override Task DeleteByIdAsync(DistrictKey id)
+    {
+        await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
+    }
+
+    protected async override Task<District> GetEntityByIdAsync(DistrictKey id)
+    {
+        return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+        );
+    }
+}
+````
+
+这个实现需要你创建一个类做为复合键:
+
+````csharp
+public class DistrictKey
+{
+    public Guid CityId { get; set; }
+
+    public string Name { get; set; }
+}
+````
 
 ### 生命周期
 
-应用服务的生命周期是[transient](Dependency-Injection)的，它们会自动注册到依赖注入系统.
-
+应用服务的生命周期是[transient](Dependency-Injection)的,它们会自动注册到依赖注入系统.

@@ -1,18 +1,29 @@
-import { Toaster } from './toaster';
+import { LocalizationParam } from '@abp/ng.core';
 
 export namespace Confirmation {
-  export interface Options extends Toaster.Options {
+  export interface Options {
+    id?: any;
+    dismissible?: boolean;
+    messageLocalizationParams?: string[];
+    titleLocalizationParams?: string[];
     hideCancelBtn?: boolean;
     hideYesBtn?: boolean;
-    cancelText?: string;
-    yesText?: string;
-    /**
-     * @deprecated to be deleted in v2
-     */
-    cancelCopy?: string;
-    /**
-     * @deprecated to be deleted in v2
-     */
-    yesCopy?: string;
+    cancelText?: LocalizationParam;
+    yesText?: LocalizationParam;
+  }
+
+  export interface DialogData {
+    message: LocalizationParam;
+    title?: LocalizationParam;
+    severity?: Severity;
+    options?: Partial<Options>;
+  }
+
+  export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
+
+  export enum Status {
+    confirm = 'confirm',
+    reject = 'reject',
+    dismiss = 'dismiss',
   }
 }

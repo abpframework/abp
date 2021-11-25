@@ -1,9 +1,14 @@
-﻿namespace Volo.Abp.TenantManagement
-{
-    public static class TenantConnectionStringConsts
-    {
-        public const int MaxNameLength = 64;
+﻿namespace Volo.Abp.TenantManagement;
 
-        public const int MaxValueLength = 1024;
-    }
+public static class TenantConnectionStringConsts
+{
+    /// <summary>
+    /// Default value: 64
+    /// </summary>
+    public static int MaxNameLength { get; set; } = 64;
+
+    /// <summary>
+    /// Default value: 1024
+    /// </summary>
+    public static int MaxValueLength { get; set; } = 1024;
 }

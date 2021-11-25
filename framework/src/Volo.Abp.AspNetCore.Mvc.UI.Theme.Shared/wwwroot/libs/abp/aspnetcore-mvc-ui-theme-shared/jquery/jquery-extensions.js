@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     if (!$) {
         return;
     }
@@ -35,7 +35,12 @@
                 //change text
                 if ($buttonInnerSpan.length && $button.attr('data-busy-text')) {
                     $button.data('buttonOriginalText', $buttonInnerSpan.html());
-                    $buttonInnerSpan.html($button.attr('data-busy-text'));
+                    
+                    if ($button.data('busy-text-is-html')) {
+                        $buttonInnerSpan.html($button.attr('data-busy-text'));
+                    } else {
+                        $buttonInnerSpan.text($button.attr('data-busy-text'));
+                    }
                 }
 
                 $button.addClass('button-busy');
@@ -90,6 +95,13 @@
     $.fn.serializeFormToObject = function (camelCase) {
         //serialize to array
         var data = $(this).serializeArray();
+
+        // add unchecked checkboxes because serializeArray ignores them
+        $(this).find("input[type=checkbox]").each(function () {
+            if (!$(this).is(':checked')) {
+                data.push({name: this.name, value: this.checked});
+            }
+        });
 
         //add also disabled items
         $(':disabled[name]', this)

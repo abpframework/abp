@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Volo.Docs.Admin.Documents;
 using Volo.Docs.Admin.Projects;
+using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin
@@ -9,6 +11,8 @@ namespace Volo.Docs.Admin
         public DocsAdminApplicationAutoMapperProfile()
         {
             CreateMap<Project, ProjectDto>();
+            CreateMap<Document, DocumentDto>();
+            CreateMap<DocumentWithoutContent, DocumentDto>();
         }
     }
 }

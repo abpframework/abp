@@ -1,12 +1,17 @@
 {
-  "version": "1.0.2",
+  "version": "5.0.0-rc.1",
   "name": "@abp/toastr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/toastr"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^1.0.2",
+    "@abp/jquery": "~5.0.0-rc.1",
     "toastr": "^2.1.4"
   },
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

@@ -3,47 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Volo.Abp.Reflection
+namespace Volo.Abp.Reflection;
+
+public class TypeFinder : ITypeFinder
 {
-    public class TypeFinder : ITypeFinder
+    private readonly IAssemblyFinder _assemblyFinder;
+
+    private readonly Lazy<IReadOnlyList<Type>> _types;
+
+    public TypeFinder(IAssemblyFinder assemblyFinder)
     {
-        private readonly IAssemblyFinder _assemblyFinder;
+        _assemblyFinder = assemblyFinder;
 
-        private readonly Lazy<IReadOnlyList<Type>> _types;
+        _types = new Lazy<IReadOnlyList<Type>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
+    }
 
-        public TypeFinder(IAssemblyFinder assemblyFinder)
+    public IReadOnlyList<Type> Types => _types.Value;
+
+    private IReadOnlyList<Type> FindAll()
+    {
+        var allTypes = new List<Type>();
+
+        foreach (var assembly in _assemblyFinder.Assemblies)
         {
-            _assemblyFinder = assemblyFinder;
-
-            _types = new Lazy<IReadOnlyList<Type>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
-        }
-
-        public IReadOnlyList<Type> Types => _types.Value;
-
-        private IReadOnlyList<Type> FindAll()
-        {
-            var allTypes = new List<Type>();
-
-            foreach (var assembly in _assemblyFinder.Assemblies)
+            try
             {
-                try
-                {
-                    var typesInThisAssembly = AssemblyHelper.GetAllTypes(assembly);
+                var typesInThisAssembly = AssemblyHelper.GetAllTypes(assembly);
 
-                    if (!typesInThisAssembly.Any())
-                    {
-                        continue;
-                    }
-
-                    allTypes.AddRange(typesInThisAssembly.Where(type => type != null));
-                }
-                catch (Exception ex)
+                if (!typesInThisAssembly.Any())
                 {
-                    //TODO: Trigger a global event?
+                    continue;
                 }
+
+                allTypes.AddRange(typesInThisAssembly.Where(type => type != null));
             }
-
-            return allTypes;
+            catch
+            {
+                //TODO: Trigger a global event?
+            }
         }
+
+        return allTypes;
     }
 }

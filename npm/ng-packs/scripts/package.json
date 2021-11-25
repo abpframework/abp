@@ -1,21 +1,31 @@
 {
   "name": "scripts",
   "version": "1.0.0",
-  "description": "Abp publish helper scripts",
+  "description": "ABP helper scripts",
   "main": "index.js",
-  "modules": "[build.js, sync.js]",
   "scripts": {
-    "build": "node -r esm build.js",
-    "sync": "node -r esm sync.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "ts-node -r tsconfig-paths/register build.ts",
+    "build:prod": "ts-node -r tsconfig-paths/register prod-build.ts",
+    "build:schematics": "ts-node -r tsconfig-paths/register build-schematics.ts",
+    "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
+    "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "babel-preset-node6": "^11.0.0",
-    "esm": "^3.2.25",
+    "commander": "^4.1.1",
     "execa": "^2.0.3",
     "fs-extra": "^8.1.0",
-    "prompt-confirm": "^2.0.4"
+    "glob": "^7.1.6",
+    "prompt-confirm": "^2.0.4",
+    "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.1",
+    "@types/node": "^13.1.2",
+    "esm": "^3.2.25",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4"
   }
 }

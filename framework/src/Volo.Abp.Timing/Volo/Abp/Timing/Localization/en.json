@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Timezone",
+    "Description:Abp.Timing.Timezone": "Application time zone"
+  }
+}

@@ -4,6 +4,7 @@ using NSubstitute;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
+using Volo.Abp.Testing;
 
 namespace Volo.Blogging
 {

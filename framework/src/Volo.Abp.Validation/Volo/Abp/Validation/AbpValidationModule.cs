@@ -1,34 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation.Localization;
+using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.Validation;
+
+[DependsOn(
+    typeof(AbpValidationAbstractionsModule),
+    typeof(AbpLocalizationModule)
+    )]
+public class AbpValidationModule : AbpModule
 {
-    public class AbpValidationModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+        AutoAddObjectValidationContributors(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
-            AutoAddObjectValidationContributors(context.Services);
-        }
+            options.FileSets.AddEmbedded<AbpValidationResource>();
+        });
 
-        private static void AutoAddObjectValidationContributors(IServiceCollection services)
+        Configure<AbpLocalizationOptions>(options =>
         {
-            var contributorTypes = new List<Type>();
+            options.Resources
+                .Add<AbpValidationResource>("en")
+                .AddVirtualJson("/Volo/Abp/Validation/Localization");
+        });
+    }
 
-            services.OnRegistred(context =>
-            {
-                if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
-                {
-                    contributorTypes.Add(context.ImplementationType);
-                }
-            });
+    private static void AutoAddObjectValidationContributors(IServiceCollection services)
+    {
+        var contributorTypes = new List<Type>();
 
-            services.Configure<AbpValidationOptions>(options =>
+        services.OnRegistred(context =>
+        {
+            if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
             {
-                options.ObjectValidationContributors.AddIfNotContains(contributorTypes);
-            });
-        }
+                contributorTypes.Add(context.ImplementationType);
+            }
+        });
+
+        services.Configure<AbpValidationOptions>(options =>
+        {
+            options.ObjectValidationContributors.AddIfNotContains(contributorTypes);
+        });
     }
 }

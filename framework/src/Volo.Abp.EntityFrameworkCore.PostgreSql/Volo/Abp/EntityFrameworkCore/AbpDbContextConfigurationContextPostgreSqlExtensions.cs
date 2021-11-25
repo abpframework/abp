@@ -4,22 +4,37 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore;
+
+public static class AbpDbContextConfigurationContextPostgreSqlExtensions
 {
-    public static class AbpDbContextConfigurationContextPostgreSqlExtensions
+    [Obsolete("Use 'UseNpgsql(...)' method instead. This will be removed in future versions.")]
+    public static DbContextOptionsBuilder UsePostgreSql(
+        [NotNull] this AbpDbContextConfigurationContext context,
+        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
     {
-        public static DbContextOptionsBuilder UsePostgreSql(
-            [NotNull] this AbpDbContextConfigurationContext context,
-            [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        return context.UseNpgsql(postgreSqlOptionsAction);
+    }
+
+    public static DbContextOptionsBuilder UseNpgsql(
+        [NotNull] this AbpDbContextConfigurationContext context,
+        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+    {
+        if (context.ExistingConnection != null)
         {
-            if (context.ExistingConnection != null)
+            return context.DbContextOptions.UseNpgsql(context.ExistingConnection, optionsBuilder =>
             {
-                return context.DbContextOptions.UseNpgsql(context.ExistingConnection, postgreSqlOptionsAction);
-            }
-            else
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                postgreSqlOptionsAction?.Invoke(optionsBuilder);
+            });
+        }
+        else
+        {
+            return context.DbContextOptions.UseNpgsql(context.ConnectionString, optionsBuilder =>
             {
-                return context.DbContextOptions.UseNpgsql(context.ConnectionString, postgreSqlOptionsAction);
-            }
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                postgreSqlOptionsAction?.Invoke(optionsBuilder);
+            });
         }
     }
 }

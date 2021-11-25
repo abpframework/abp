@@ -10,9 +10,12 @@ using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Guids;
+using Volo.Abp.Linq;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -22,131 +25,109 @@ using Volo.Abp.Uow;
 using Volo.Abp.Users;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Application.Services
+namespace Volo.Abp.Application.Services;
+
+public abstract class ApplicationService :
+    IApplicationService,
+    IAvoidDuplicateCrossCuttingConcerns,
+    IValidationEnabled,
+    IUnitOfWorkEnabled,
+    IAuditingEnabled,
+    IGlobalFeatureCheckingEnabled,
+    ITransientDependency
 {
-    public abstract class ApplicationService :
-        IApplicationService,
-        IAvoidDuplicateCrossCuttingConcerns,
-        IValidationEnabled,
-        IUnitOfWorkEnabled,
-        IAuditingEnabled,
-        ITransientDependency
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
+    [Obsolete("Use LazyServiceProvider instead.")]
+    public IServiceProvider ServiceProvider { get; set; }
+
+    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
+
+    public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
+
+    protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+
+    protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
+
+    protected Type ObjectMapperContext { get; set; }
+    protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
+        ObjectMapperContext == null
+            ? provider.GetRequiredService<IObjectMapper>()
+            : (IObjectMapper)provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
+
+    protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
+
+    protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
+
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+
+    protected IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
+
+    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
+
+    protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
+
+    protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
+
+    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
+
+    protected IFeatureChecker FeatureChecker => LazyServiceProvider.LazyGetRequiredService<IFeatureChecker>();
+
+    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
+
+    protected IStringLocalizer L {
+        get {
+            if (_localizer == null)
+            {
+                _localizer = CreateLocalizer();
+            }
+
+            return _localizer;
+        }
+    }
+    private IStringLocalizer _localizer;
+
+    protected Type LocalizationResource {
+        get => _localizationResource;
+        set {
+            _localizationResource = value;
+            _localizer = null;
+        }
+    }
+    private Type _localizationResource = typeof(DefaultResource);
+
+    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+
+    /// <summary>
+    /// Checks for given <paramref name="policyName"/>.
+    /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
+    /// </summary>
+    /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
+    protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
     {
-        public IServiceProvider ServiceProvider { get; set; }
-        protected readonly object ServiceProviderLock = new object();
-
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
+        if (string.IsNullOrEmpty(policyName))
         {
-            if (reference == null)
-            {
-                lock (ServiceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
-                    }
-                }
-            }
-
-            return reference;
+            return;
         }
 
-        public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
+        await AuthorizationService.CheckAsync(policyName);
+    }
 
-        public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
-
-        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
-        private IUnitOfWorkManager _unitOfWorkManager;
-
-        protected Type ObjectMapperContext { get; set; }
-        public IObjectMapper ObjectMapper
+    protected virtual IStringLocalizer CreateLocalizer()
+    {
+        if (LocalizationResource != null)
         {
-            get
-            {
-                if (_objectMapper != null)
-                {
-                    return _objectMapper;
-                }
-
-                if (ObjectMapperContext == null)
-                {
-                    return LazyGetRequiredService(ref _objectMapper);
-                }
-
-                return LazyGetRequiredService(
-                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
-                    ref _objectMapper
-                );
-            }
-        }
-        private IObjectMapper _objectMapper;
-
-        public IGuidGenerator GuidGenerator { get; set; }
-
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-        private ILoggerFactory _loggerFactory;
-
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
-        private ICurrentTenant _currentTenant;
-
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
-        private ICurrentUser _currentUser;
-
-        public ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
-        private ISettingProvider _settingProvider;
-
-        public IClock Clock => LazyGetRequiredService(ref _clock);
-        private IClock _clock;
-
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
-        private IAuthorizationService _authorizationService;
-
-        public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
-        private IFeatureChecker _featureChecker;
-
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
-        private IStringLocalizerFactory _stringLocalizerFactory;
-
-        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
-        private IStringLocalizer _localizer;
-
-        protected Type LocalizationResource
-        {
-            get => _localizationResource;
-            set
-            {
-                _localizationResource = value;
-                _localizer = null;
-            }
-        }
-        private Type _localizationResource = typeof(DefaultResource);
-
-        protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
-
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
-
-        protected ApplicationService()
-        {
-            GuidGenerator = SimpleGuidGenerator.Instance;
+            return StringLocalizerFactory.Create(LocalizationResource);
         }
 
-        /// <summary>
-        /// Checks for given <paramref name="policyName"/>.
-        /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
-        /// </summary>
-        /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
-        protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
+        var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+        if (localizer == null)
         {
-            if (string.IsNullOrEmpty(policyName))
-            {
-                return;
-            }
-
-            await AuthorizationService.CheckAsync(policyName);
+            throw new AbpException($"Set {nameof(LocalizationResource)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
         }
+
+        return localizer;
     }
 }

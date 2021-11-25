@@ -15,7 +15,7 @@ namespace Volo.Blogging.Comments
             _permissionChecker = permissionChecker;
         }
 
-        protected override async Task HandleRequirementAsync(
+        protected async override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             OperationAuthorizationRequirement requirement,
             Comment resource)
@@ -35,6 +35,11 @@ namespace Volo.Blogging.Comments
 
         private async Task<bool> HasDeletePermission(AuthorizationHandlerContext context, Comment resource)
         {
+            if (resource.CreatorId != null && resource.CreatorId == context.User.FindUserId())
+            {
+                return true;
+            }
+
             if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Comments.Delete))
             {
                 return true;

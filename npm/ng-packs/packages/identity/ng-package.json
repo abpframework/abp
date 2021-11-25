@@ -1,8 +1,11 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/identity",
+  "dest": "../../dist/packages/identity",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@abp/ng.theme.shared", "@abp/ng.permission-management", "@abp/ng.identity.config"]
+  "allowedNonPeerDependencies": [
+    "@abp/ng.theme.shared",
+    "@abp/ng.permission-management"
+  ]
 }

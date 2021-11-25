@@ -11,5 +11,6 @@ namespace Volo.Docs.Admin.Navigation
         
         public const string Projects = GroupName + ".Projects";
 
+        public const string Documents = GroupName + ".Documents";
     }
 }

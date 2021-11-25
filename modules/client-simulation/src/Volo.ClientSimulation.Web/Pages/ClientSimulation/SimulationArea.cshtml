@@ -13,7 +13,7 @@
     <form class="d-inline" id="StopButtonForm" method="post" asp-page-handler="Stop" data-ajaxForm="true">
         <abp-button button-type="Primary" type="submit" disabled="@(Model.Snapshot.State != SimulationState.Started)">Stop</abp-button>
     </form>
-    <span class="ml-3">
+    <span class="ms-3">
         @Model.Snapshot.State
     </span>
 </abp-alert>

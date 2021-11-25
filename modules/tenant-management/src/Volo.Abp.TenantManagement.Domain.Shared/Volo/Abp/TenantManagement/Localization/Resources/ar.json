@@ -1,0 +1,23 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Menu:TenantManagement": "إدارة الجهات",
+    "Tenants": "الجهات",
+    "NewTenant": "جهة جديدة",
+    "TenantName": "اسم الجهة",
+    "DisplayName:TenantName": "اسم الجهة",
+    "TenantDeletionConfirmationMessage": "سيتم حذف المستأجر {0}. هل تؤكد ذلك?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Default Connection String",
+    "DisplayName:UseSharedDatabase": "استخدام قاعدة البيانات المشتركة",
+    "ManageHostFeatures": "إدارة ميزات المضيف",
+    "Permission:TenantManagement": "إدارة المستأجر",
+    "Permission:Create": "إنشاء",
+    "Permission:Edit": "تحرير",
+    "Permission:Delete": "حذف",
+    "Permission:ManageConnectionStrings": "Manage connection strings",
+    "Permission:ManageFeatures": "إدارة الميزات",
+    "DisplayName:AdminEmailAddress": "عنوان البريد الإلكتروني للمسؤول",
+    "DisplayName:AdminPassword": "كلمة مرور المسؤول"
+  }
+}

@@ -4,93 +4,86 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.Utils;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class ReplaceCommonPropsStep : ProjectBuildPipelineStep
 {
-    public class ReplaceCommonPropsStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
+        new CommonPropsReplacer(context.Files).Run();
+    }
+
+    private class CommonPropsReplacer
+    {
+        private readonly List<FileEntry> _entries;
+
+        public CommonPropsReplacer(
+            List<FileEntry> entries)
         {
-            new CommonPropsReplacer(context.Files).Run();
+            _entries = entries;
         }
 
-        private class CommonPropsReplacer
+        public void Run()
         {
-            private readonly List<FileEntry> _entries;
-
-            public CommonPropsReplacer(
-                List<FileEntry> entries)
+            foreach (var fileEntry in _entries)
             {
-                _entries = entries;
-            }
-
-            public void Run()
-            {
-                foreach (var fileEntry in _entries)
+                if (fileEntry.Name.EndsWith(".csproj"))
                 {
-                    if (fileEntry.Name.EndsWith(".csproj"))
-                    {
-                        fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
-                    }
+                    fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
                 }
             }
+        }
 
-            private string ProcessFileContent(string content)
+        private string ProcessFileContent(string content)
+        {
+            Check.NotNull(content, nameof(content));
+
+            using (var stream = StreamHelper.GenerateStreamFromString(content))
             {
-                Check.NotNull(content, nameof(content));
-
                 var doc = new XmlDocument() { PreserveWhitespace = true };
-
-                doc.Load(GenerateStreamFromString(content));
-
+                doc.Load(stream);
                 return ProcessReferenceNodes(doc, content);
             }
+        }
 
-            private string ProcessReferenceNodes(XmlDocument doc, string content)
+        private string ProcessReferenceNodes(XmlDocument doc, string content)
+        {
+            Check.NotNull(content, nameof(content));
+
+            var importNodes = doc.SelectNodes("/Project/Import[@Project]");
+
+            if (importNodes == null)
             {
-                Check.NotNull(content, nameof(content));
-
-                var importNodes = doc.SelectNodes("/Project/Import[@Project]");
-
-                if (importNodes == null)
-                {
-                    return doc.OuterXml;
-                }
-
-                foreach (XmlNode node in importNodes)
-                {
-                    if (!(node.Attributes?["Project"]?.Value?.EndsWith("\\common.props") ?? false))
-                    {
-                        continue;
-                    }
-
-                    node.ParentNode?.RemoveChild(node);
-                }
-
-                var propertyGroupNodes = doc.SelectNodes("/Project/PropertyGroup");
-
-                if (propertyGroupNodes == null || propertyGroupNodes.Count < 1)
-                {
-                    return doc.OuterXml;
-                }
-
-                var firstPropertyGroupNode = propertyGroupNodes.Item(0);
-                var langNode = doc.CreateElement("LangVersion");
-                langNode.InnerText = "latest";
-                firstPropertyGroupNode?.PrependChild(langNode);
-
                 return doc.OuterXml;
             }
 
-            private static Stream GenerateStreamFromString(string s)
+            foreach (XmlNode node in importNodes)
             {
-                var stream = new MemoryStream();
-                var writer = new StreamWriter(stream);
-                writer.Write(s);
-                writer.Flush();
-                stream.Position = 0;
-                return stream;
+                var value = node.Attributes?["Project"]?.Value;
+
+                if (value == null || (!value.EndsWith("\\common.props") && !value.EndsWith("\\common.test.props")))
+                {
+                    continue;
+                }
+
+                node.ParentNode?.RemoveChild(node);
             }
+
+            var propertyGroupNodes = doc.SelectNodes("/Project/PropertyGroup");
+
+            if (propertyGroupNodes == null || propertyGroupNodes.Count < 1)
+            {
+                return doc.OuterXml;
+            }
+
+            var firstPropertyGroupNode = propertyGroupNodes.Item(0);
+            var langNode = doc.CreateElement("LangVersion");
+            langNode.InnerText = "latest";
+            firstPropertyGroupNode?.PrependChild(langNode);
+
+            return doc.OuterXml;
         }
     }
 }

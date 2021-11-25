@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -6,147 +8,199 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Users
+namespace Volo.Abp.Users;
+
+public abstract class UserLookupService<TUser, TUserRepository> : IUserLookupService<TUser>, ITransientDependency
+    where TUser : class, IUser
+    where TUserRepository : IUserRepository<TUser>
 {
-    public abstract class UserLookupService<TUser, TUserRepository> : IUserLookupService<TUser>, ITransientDependency
-        where TUser : class, IUser
-        where TUserRepository : IUserRepository<TUser>
+    protected bool SkipExternalLookupIfLocalUserExists { get; set; } = true;
+
+    public IExternalUserLookupServiceProvider ExternalUserLookupServiceProvider { get; set; }
+    public ILogger<UserLookupService<TUser, TUserRepository>> Logger { get; set; }
+
+    private readonly TUserRepository _userRepository;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+    protected UserLookupService(
+        TUserRepository userRepository,
+        IUnitOfWorkManager unitOfWorkManager)
     {
-        protected bool SkipExternalLookupIfLocalUserExists { get; set; } = true;
+        _userRepository = userRepository;
+        _unitOfWorkManager = unitOfWorkManager;
 
-        public IExternalUserLookupServiceProvider ExternalUserLookupServiceProvider { get; set; }
-        public ILogger<UserLookupService<TUser, TUserRepository>> Logger { get; set; }
+        Logger = NullLogger<UserLookupService<TUser, TUserRepository>>.Instance;
+    }
 
-        private readonly TUserRepository _userRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
+    public async Task<TUser> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
 
-        protected UserLookupService(
-            TUserRepository userRepository,
-            IUnitOfWorkManager unitOfWorkManager)
+        if (ExternalUserLookupServiceProvider == null)
         {
-            _userRepository = userRepository;
-            _unitOfWorkManager = unitOfWorkManager;
-
-            Logger = NullLogger<UserLookupService<TUser, TUserRepository>>.Instance;
+            return localUser;
         }
 
-        public async Task<TUser> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        if (SkipExternalLookupIfLocalUserExists && localUser != null)
         {
-            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+            return localUser;
+        }
 
-            if (ExternalUserLookupServiceProvider == null)
+        IUserData externalUser;
+
+        try
+        {
+            externalUser = await ExternalUserLookupServiceProvider.FindByIdAsync(id, cancellationToken);
+            if (externalUser == null)
             {
-                return localUser;
-            }
-
-            if (SkipExternalLookupIfLocalUserExists && localUser != null)
-            {
-                return localUser;
-            }
-
-            IUserData externalUser;
-
-            try
-            {
-                externalUser = await ExternalUserLookupServiceProvider.FindByIdAsync(id, cancellationToken);
-                if (externalUser == null)
+                if (localUser != null)
                 {
-                    if (localUser != null)
-                    {
-                        //TODO: Instead of deleting, should be make it inactive or something like that?
-                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
-                    }
-
-                    return null;
+                    //TODO: Instead of deleting, should be make it inactive or something like that?
+                    await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
-                return localUser;
-            }
 
-            if (localUser == null)
-            {
-                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
-                return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+                return null;
             }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogException(ex);
+            return localUser;
+        }
 
-            if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
-            {
-                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
-            }
-            else
-            {
-                return localUser;
-            }
-
+        if (localUser == null)
+        {
+            await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
             return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
         }
 
-        public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
+        if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
         {
-            var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+            await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
+        }
+        else
+        {
+            return localUser;
+        }
 
-            if (ExternalUserLookupServiceProvider == null)
+        return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+    }
+
+    public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
+    {
+        var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+
+        if (ExternalUserLookupServiceProvider == null)
+        {
+            return localUser;
+        }
+
+        if (SkipExternalLookupIfLocalUserExists && localUser != null)
+        {
+            return localUser;
+        }
+
+        IUserData externalUser;
+
+        try
+        {
+            externalUser = await ExternalUserLookupServiceProvider.FindByUserNameAsync(userName, cancellationToken);
+            if (externalUser == null)
             {
-                return localUser;
-            }
-
-            if (SkipExternalLookupIfLocalUserExists && localUser != null)
-            {
-                return localUser;
-            }
-
-            IUserData externalUser;
-
-            try
-            {
-                externalUser = await ExternalUserLookupServiceProvider.FindByUserNameAsync(userName, cancellationToken);
-                if (externalUser == null)
+                if (localUser != null)
                 {
-                    if (localUser != null)
-                    {
-                        //TODO: Instead of deleting, should be make it passive or something like that?
-                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
-                    }
-
-                    return null;
+                    //TODO: Instead of deleting, should be make it passive or something like that?
+                    await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
-                return localUser;
-            }
 
-            if (localUser == null)
-            {
-                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
-                return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
+                return null;
             }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogException(ex);
+            return localUser;
+        }
 
-            if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
-            {
-                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
-            }
-            else
-            {
-                return localUser;
-            }
-
+        if (localUser == null)
+        {
+            await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
             return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
         }
 
-        protected abstract TUser CreateUser(IUserData externalUser);
-
-        private async Task WithNewUowAsync(Func<Task> func)
+        if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
         {
-            using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
-            {
-                await func();
-                await uow.SaveChangesAsync();
-            }
+            await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
+        }
+        else
+        {
+            return localUser;
+        }
+
+        return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
+    }
+
+    public async Task<List<IUserData>> SearchAsync(
+        string sorting = null,
+        string filter = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        CancellationToken cancellationToken = default)
+    {
+        if (ExternalUserLookupServiceProvider != null)
+        {
+            return await ExternalUserLookupServiceProvider
+                .SearchAsync(
+                    sorting,
+                    filter,
+                    maxResultCount,
+                    skipCount,
+                    cancellationToken
+                );
+        }
+
+        var localUsers = await _userRepository
+            .SearchAsync(
+                sorting,
+                maxResultCount,
+                skipCount,
+                filter,
+                cancellationToken
+            );
+
+        return localUsers
+            .Cast<IUserData>()
+            .ToList();
+    }
+
+    public async Task<long> GetCountAsync(
+        string filter = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (ExternalUserLookupServiceProvider != null)
+        {
+            return await ExternalUserLookupServiceProvider
+                .GetCountAsync(
+                    filter,
+                    cancellationToken
+                );
+        }
+
+        return await _userRepository
+            .GetCountAsync(
+                filter,
+                cancellationToken
+            );
+    }
+
+    protected abstract TUser CreateUser(IUserData externalUser);
+
+    private async Task WithNewUowAsync(Func<Task> func)
+    {
+        using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
+        {
+            await func();
+            await uow.CompleteAsync();
         }
     }
 }

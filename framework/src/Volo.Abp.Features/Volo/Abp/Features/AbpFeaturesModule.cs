@@ -1,52 +1,73 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using Volo.Abp.Authorization;
+using Volo.Abp.Features.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Validation;
+using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Features
+namespace Volo.Abp.Features;
+
+[DependsOn(
+    typeof(AbpLocalizationModule),
+    typeof(AbpMultiTenancyModule),
+    typeof(AbpValidationModule),
+    typeof(AbpAuthorizationAbstractionsModule)
+    )]
+public class AbpFeaturesModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpLocalizationAbstractionsModule),
-        typeof(AbpMultiTenancyModule),
-        typeof(AbpValidationModule)
-        )]
-    public class AbpFeaturesModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        context.Services.OnRegistred(FeatureInterceptorRegistrar.RegisterIfNeeded);
+        AutoAddDefinitionProviders(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.Configure<AbpFeatureOptions>(options =>
         {
-            context.Services.OnRegistred(FeatureInterceptorRegistrar.RegisterIfNeeded);
-            AutoAddDefinitionProviders(context.Services);
-        }
+            options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
+            options.ValueProviders.Add<EditionFeatureValueProvider>();
+            options.ValueProviders.Add<TenantFeatureValueProvider>();
+        });
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.Configure<AbpFeatureOptions>(options =>
-            {
-                options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
-                options.ValueProviders.Add<EditionFeatureValueProvider>();
-                options.ValueProviders.Add<TenantFeatureValueProvider>();
-            });
-        }
+            options.FileSets.AddEmbedded<AbpFeatureResource>();
+        });
 
-        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        Configure<AbpLocalizationOptions>(options =>
         {
-            var definitionProviders = new List<Type>();
+            options.Resources
+                .Add<AbpFeatureResource>("en")
+                .AddVirtualJson("/Volo/Abp/Features/Localization");
+        });
 
-            services.OnRegistred(context =>
-            {
-                if (typeof(IFeatureDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionProviders.Add(context.ImplementationType);
-                }
-            });
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("Volo.Feature", typeof(AbpFeatureResource));
+        });
+    }
 
-            services.Configure<AbpFeatureOptions>(options =>
+    private static void AutoAddDefinitionProviders(IServiceCollection services)
+    {
+        var definitionProviders = new List<Type>();
+
+        services.OnRegistred(context =>
+        {
+            if (typeof(IFeatureDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {
-                options.DefinitionProviders.AddIfNotContains(definitionProviders);
-            });
-        }
+                definitionProviders.Add(context.ImplementationType);
+            }
+        });
+
+        services.Configure<AbpFeatureOptions>(options =>
+        {
+            options.DefinitionProviders.AddIfNotContains(definitionProviders);
+        });
     }
 }

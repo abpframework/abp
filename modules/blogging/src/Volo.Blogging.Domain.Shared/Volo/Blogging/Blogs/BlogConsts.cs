@@ -2,10 +2,19 @@
 {
     public static class BlogConsts
     {
-        public const int MaxNameLength = 256;
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 256;
 
-        public const int MaxShortNameLength = 32;
+        /// <summary>
+        /// Default value: 32
+        /// </summary>
+        public static int MaxShortNameLength { get; set; } = 32;
 
-        public const int MaxDescriptionLength = 1024;
+        /// <summary>
+        /// Default value: 1024
+        /// </summary>
+        public static int MaxDescriptionLength { get; set; } = 1024;
     }
 }

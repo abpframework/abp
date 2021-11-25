@@ -1,0 +1,18 @@
+#qa-new-post-container {
+    .new-post-editor {
+        background-color: #F9F9F9;
+        min-height: 19.5em;
+
+        .CodeMirror-scroll {
+            min-height: 20em;
+        }
+    }
+
+    .card {
+        background-color: #f6f8fa;
+    }
+
+    .loading-cover {
+        min-height: 19.5em;
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Settings": "Einstellungen",
+    "SuccessfullySaved": "Erfolgreich gespeichert",
+    "Permission:SettingManagement": "Einstellungen-Verwaltung",
+    "Permission:Emailing": "E-Mail",
+    "Menu:Emailing": "E-Mail",
+    "SmtpHost": "Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Benutzername",
+    "SmtpPassword": "Passwort",
+    "SmtpDomain": "Domain",
+    "SmtpEnableSsl": "SSL aktivieren",
+    "SmtpUseDefaultCredentials": "Standardanmeldeinformationen verwenden",
+    "DefaultFromAddress": "Standard-Absenderadresse",
+    "DefaultFromDisplayName": "Standard-Anzeigename des Absenders",
+    "Feature:SettingManagementGroup": "Einstellungsverwaltung",
+    "Feature:SettingManagementEnable": "Einstellungsverwaltung aktivieren",
+    "Feature:SettingManagementEnableDescription": "Aktivieren Sie das Einstellungsverwaltungssystem in der Anwendung.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern."
+  }
+}

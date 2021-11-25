@@ -2,7 +2,17 @@
   "culture": "cs",
   "texts": {
     "Menu:Blogs": "Blogy",
-    "Menu:BlogManagement": "Správa blogu",
+    "Menu:BlogManagement": "Blogování",
+    "Permission:Management": "Správa",
+    "Permission:Edit": "Upravit",
+    "Permission:Create": "Vytvořit",
+    "Permission:Delete": "Smazat",
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Blogy",
+    "Permission:Posts": "Příspěvky",
+    "Permission:Tags": "Tagy",
+    "Permission:Comments": "Komentáře",
+    "Permission:ClearCache": "Vyčistit mezipaměť",
     "Title": "Nadpis",
     "Delete": "Smazat",
     "Reply": "Odpovědět",
@@ -42,6 +52,10 @@
     "CreationTime": "Vytvořeno",
     "Description": "Popis",
     "Blogs": "Blogy",
-    "Tags": "Tagy"
+    "Tags": "Tagy",
+    "ShareOn": "Sdílet na",
+    "TitleLengthWarning": "Zachovejte velikost titulku pod 60 znaků kvůli SEO!",
+    "ClearCache": "Vyčistit mezipaměť",
+    "ClearCacheConfirmationMessage": "Opravdu chcete vymazat mezipaměť?"
   }
 }

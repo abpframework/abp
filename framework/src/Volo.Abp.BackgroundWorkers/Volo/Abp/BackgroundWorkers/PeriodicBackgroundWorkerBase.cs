@@ -1,55 +1,62 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers
+namespace Volo.Abp.BackgroundWorkers;
+
+/// <summary>
+/// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer.
+/// </summary>
+public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
 {
-    /// <summary>
-    /// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer. 
-    /// </summary>
-    public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected AbpTimer Timer { get; }
+
+    protected PeriodicBackgroundWorkerBase(
+        AbpTimer timer,
+        IServiceScopeFactory serviceScopeFactory)
     {
-        protected readonly AbpTimer Timer;
+        ServiceScopeFactory = serviceScopeFactory;
+        Timer = timer;
+        Timer.Elapsed += Timer_Elapsed;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PeriodicBackgroundWorkerBase"/> class.
-        /// </summary>
-        /// <param name="timer">A timer.</param>
-        protected PeriodicBackgroundWorkerBase(AbpTimer timer)
-        {
-            Timer = timer;
-            Timer.Elapsed += Timer_Elapsed;
-        }
+    public override async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        await base.StartAsync(cancellationToken);
+        Timer.Start(cancellationToken);
+    }
 
-        public override async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            await base.StartAsync(cancellationToken);
-            Timer.Start(cancellationToken);
-        }
+    public override async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        Timer.Stop(cancellationToken);
+        await base.StopAsync(cancellationToken);
+    }
 
-        public override async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            Timer.Stop(cancellationToken);
-            await base.StopAsync(cancellationToken);
-        }
-        
-        private void Timer_Elapsed(object sender, System.EventArgs e)
+    private void Timer_Elapsed(object sender, System.EventArgs e)
+    {
+        using (var scope = ServiceScopeFactory.CreateScope())
         {
             try
             {
-                DoWork();
+                DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
             }
             catch (Exception ex)
             {
+                var exceptionNotifier = scope.ServiceProvider.GetRequiredService<IExceptionNotifier>();
+                AsyncHelper.RunSync(() => exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(ex)));
+
                 Logger.LogException(ex);
             }
         }
-
-        /// <summary>
-        /// Periodic works should be done by implementing this method.
-        /// </summary>
-        protected abstract void DoWork();
     }
+
+    /// <summary>
+    /// Periodic works should be done by implementing this method.
+    /// </summary>
+    protected abstract void DoWork(PeriodicBackgroundWorkerContext workerContext);
 }

@@ -6,143 +6,287 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.IO;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.ProjectBuilding
+namespace Volo.Abp.Cli.ProjectBuilding;
+
+public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 {
-    public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
+    public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
+
+    protected AbpCliOptions Options { get; }
+    protected IJsonSerializer JsonSerializer { get; }
+    protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+    private readonly CliHttpClientFactory _cliHttpClientFactory;
+
+    public AbpIoSourceCodeStore(
+        IOptions<AbpCliOptions> options,
+        IJsonSerializer jsonSerializer,
+        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+        ICancellationTokenProvider cancellationTokenProvider,
+        CliHttpClientFactory cliHttpClientFactory)
     {
-        public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
+        JsonSerializer = jsonSerializer;
+        RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+        CancellationTokenProvider = cancellationTokenProvider;
+        _cliHttpClientFactory = cliHttpClientFactory;
+        Options = options.Value;
 
-        protected AbpCliOptions Options { get; }
+        Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
+    }
 
-        protected IJsonSerializer JsonSerializer { get; }
+    public async Task<TemplateFile> GetAsync(
+        string name,
+        string type,
+        string version = null,
+        string templateSource = null,
+        bool includePreReleases = false)
+    {
+        DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+        var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type, null, includePreReleases);
 
-        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-
-        protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
-        public AbpIoSourceCodeStore(
-            IOptions<AbpCliOptions> options,
-            IJsonSerializer jsonSerializer,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            ICancellationTokenProvider cancellationTokenProvider)
+        if (version == null)
         {
-            JsonSerializer = jsonSerializer;
-            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-            CancellationTokenProvider = cancellationTokenProvider;
-            Options = options.Value;
+            if (latestVersion == null)
+            {
+                Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
+                Logger.LogWarning(string.Empty);
+                Logger.LogWarning("Find the following template in your cache directory: ");
+                Logger.LogWarning("\tTemplate Name\tVersion");
 
-            Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
+                var templateList = GetLocalTemplates();
+                foreach (var cacheFile in templateList)
+                {
+                    Logger.LogWarning($"\t{cacheFile.TemplateName}\t\t{cacheFile.Version}");
+                }
+
+                Logger.LogWarning(string.Empty);
+                throw new CliUsageException("Use command: abp new Acme.BookStore -v version");
+            }
+
+            version = latestVersion;
         }
 
-        public async Task<TemplateFile> GetAsync(
-            string name,
-            string type,
-            string version = null)
+        var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+
+        if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
         {
+            Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
+            return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
+                version, latestVersion, nugetVersion);
+        }
 
-            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
-            if (version == null)
+        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
+
+#if DEBUG
+        if (File.Exists(localCacheFile))
+        {
+            return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+        }
+#endif
+
+        if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
+        {
+            Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
+            return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+        }
+
+        Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
+
+        var fileContent = await DownloadSourceCodeContentAsync(
+            new SourceCodeDownloadInputDto
             {
-                version = latestVersion;
+                Name = name,
+                Type = type,
+                TemplateSource = templateSource,
+                Version = version,
+                IncludePreReleases = includePreReleases
             }
+        );
 
-            DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+        if (Options.CacheTemplates && templateSource.IsNullOrWhiteSpace())
+        {
+            File.WriteAllBytes(localCacheFile, fileContent);
+        }
 
-            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
-            if (Options.CacheTemplates && File.Exists(localCacheFile))
-            {
-                Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
-            }
+        return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
+    }
 
-            Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
+    private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null,
+        bool includePreReleases = false)
+    {
+        if (url == null)
+        {
+            url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
+        }
 
-            var fileContent = await DownloadSourceCodeContentAsync(
-                new SourceCodeDownloadInputDto
-                {
-                    Name = name,
-                    Type = type,
-                    Version = version
-                }
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient();
+            var stringContent = new StringContent(
+                JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto
+                { Name = name, IncludePreReleases = includePreReleases }),
+                Encoding.UTF8,
+                MimeTypes.Application.Json
             );
 
-            if (Options.CacheTemplates)
+            using (var response = await client.PostAsync(url, stringContent,
+                _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                File.WriteAllBytes(localCacheFile, fileContent);
-            }
-
-            return new TemplateFile(fileContent, version, latestVersion);
-
-        }
-
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
-        {
-            using (var client = new CliHttpClient())
-            {
-                var response = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/",
-                    new StringContent(
-                        JsonSerializer.Serialize(
-                            new GetLatestSourceCodeVersionDto { Name = name }
-                        ),
-                        Encoding.UTF8,
-                        MimeTypes.Application.Json
-                    ),
-                    CancellationTokenProvider.Token
-                );
-
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
                 var result = await response.Content.ReadAsStringAsync();
-
-                return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
+                return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-
-        private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
+        catch (Exception ex)
         {
-            var postData = JsonSerializer.Serialize(input);
+            Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
+            return null;
+        }
+    }
 
-            using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+    private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
+    {
+        if (type != SourceCodeTypes.Template)
+        {
+            return null;
+        }
+
+        try
+        {
+            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/";
+            var client = _cliHttpClientFactory.CreateClient();
+
+            var stringContent = new StringContent(
+                JsonSerializer.Serialize(new GetTemplateNugetVersionDto { Name = name, Version = version }),
+                Encoding.UTF8,
+                MimeTypes.Application.Json
+            );
+
+            using (var response = await client.PostAsync(url, stringContent,
+                _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
-                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                    CancellationTokenProvider.Token
-                );
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-
-                return await responseMessage.Content.ReadAsByteArrayAsync();
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                var result = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-
-        public class SourceCodeDownloadInputDto
+        catch (Exception)
         {
-            public string Name { get; set; }
+            return null;
+        }
+    }
 
-            public string Version { get; set; }
+    private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
+    {
+        var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
 
-            public string Type { get; set; }
+        HttpResponseMessage responseMessage = null;
+
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient(timeout: TimeSpan.FromMinutes(5));
+
+            if (input.TemplateSource.IsNullOrWhiteSpace())
+            {
+                responseMessage = await client.PostAsync(
+                    url,
+                    new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, MimeTypes.Application.Json),
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))
+                );
+            }
+            else
+            {
+                responseMessage = await client.GetAsync(input.TemplateSource,
+                    _cliHttpClientFactory.GetCancellationToken());
+            }
+
+            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+            var resultAsBytes = await responseMessage.Content.ReadAsByteArrayAsync();
+            responseMessage.Dispose();
+
+            return resultAsBytes;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
+                responseMessage?.ToString(), Environment.NewLine, ex.Message);
+            throw;
+        }
+    }
+
+    private static bool IsNetworkSource(string source)
+    {
+        return source.ToLower().StartsWith("http");
+    }
+
+    private List<(string TemplateName, string Version)> GetLocalTemplates()
+    {
+        var templateList = new List<(string TemplateName, string Version)>();
+
+        var stringBuilder = new StringBuilder();
+        foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
+        {
+            stringBuilder.AppendLine(cacheFile);
         }
 
-        public class GetLatestSourceCodeVersionDto
+        var matches = Regex.Matches(stringBuilder.ToString(),
+            $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
+        foreach (Match match in matches)
         {
-            public string Name { get; set; }
+            templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
         }
 
-        public class GetLatestSourceCodeVersionResultDto
-        {
-            public string Version { get; set; }
-        }
+        return templateList;
+    }
+
+    public class SourceCodeDownloadInputDto
+    {
+        public string Name { get; set; }
+
+        public string Version { get; set; }
+
+        public string Type { get; set; }
+
+        public string TemplateSource { get; set; }
+
+        public bool IncludePreReleases { get; set; }
+    }
+
+    public class GetLatestSourceCodeVersionDto
+    {
+        public string Name { get; set; }
+
+        public bool IncludePreReleases { get; set; }
+    }
+
+    public class GetTemplateNugetVersionDto
+    {
+        public string Name { get; set; }
+
+        public string Version { get; set; }
+
+        public bool IncludePreReleases { get; set; }
+    }
+
+    public class GetVersionResultDto
+    {
+        public string Version { get; set; }
     }
 }

@@ -1,38 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/app",
-    "types": [],
-    "paths": {
-      "@abp/ng.core": ["packages/core/src/public-api.ts"],
-      "@abp/ng.core/*": ["packages/core/src/lib/*"],
-      // "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
-      // "@abp/ng.theme.shared/*": ["packages/theme-shared/src/lib/*"],
-      "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
-      "@abp/ng.theme.basic/*": ["packages/theme-basic/src/lib/*"],
-      "@abp/ng.account": ["packages/account/src/public-api.ts"],
-      "@abp/ng.account/*": ["packages/account/src/lib/*"],
-      "@abp/ng.account.config": ["packages/account-config/src/public-api.ts"],
-      "@abp/ng.account.config/*": ["packages/account-config/src/lib/*"],
-      "@abp/ng.identity": ["packages/identity/src/public-api.ts"],
-      "@abp/ng.identity/*": ["packages/identity/src/lib/*"],
-      "@abp/ng.identity.config": ["packages/identity-config/src/public-api.ts"],
-      "@abp/ng.identity.config/*": ["packages/identity-config/src/lib/*"],
-      "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
-      "@abp/ng.tenant-management/*": ["packages/tenant-management/src/lib/*"],
-      "@abp/ng.tenant-management.config": ["packages/tenant-management-config/src/public-api.ts"],
-      "@abp/ng.tenant-management.config/*": ["packages/tenant-management-config/src/lib/*"],
-      "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
-      "@abp/ng.setting-management/*": ["packages/setting-management/src/lib/*"],
-      "@abp/ng.setting-management.config": ["packages/setting-management-config/src/public-api.ts"],
-      "@abp/ng.setting-management.config/*": ["packages/setting-management-config/src/lib/*"],
-      "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
-      "@abp/ng.permission-management/*": ["packages/permission-management/src/lib/*"],
-      "@abp/ng.feature-management": ["packages/feature-management/src/public-api.ts"],
-      "@abp/ng.feature-management/*": ["packages/feature-management/src/lib/*"]
-    }
+    "outDir": "../../dist/out-tsc",
+    "types": []
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/test.ts", "src/**/*.spec.ts"]
+  "include": ["src/**/*.d.ts"]
 }

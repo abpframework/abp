@@ -1,10 +1,7 @@
-import { StartLoader, StopLoader } from '@abp/ng.core';
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
-import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { takeUntilDestroy } from '@ngx-validate/core';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { interval, Subscription, timer } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { combineLatest, Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -12,6 +9,7 @@ import { filter } from 'rxjs/operators';
     <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
       <div
         class="abp-progress"
+        [class.progressing]="progressLevel"
         [style.width.vw]="progressLevel"
         [ngStyle]="{
           'background-color': color,
@@ -20,87 +18,103 @@ import { filter } from 'rxjs/operators';
       ></div>
     </div>
   `,
-  styleUrls: ['./loader-bar.component.scss']
+  styleUrls: ['./loader-bar.component.scss'],
+  providers: [SubscriptionService],
 })
-export class LoaderBarComponent implements OnDestroy {
-  get boxShadow(): string {
-    return `0 0 10px rgba(${this.color}, 0.5)`;
+export class LoaderBarComponent implements OnDestroy, OnInit {
+  protected _isLoading!: boolean;
+
+  @Input()
+  set isLoading(value: boolean) {
+    this._isLoading = value;
+    this.cdRef.detectChanges();
+  }
+  get isLoading(): boolean {
+    return this._isLoading;
   }
 
-  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {
-    actions
-      .pipe(
-        ofActionSuccessful(StartLoader, StopLoader),
-        filter(this.filter),
-        takeUntilDestroy(this)
-      )
-      .subscribe(action => {
-        if (action instanceof StartLoader) this.startLoading();
-        else this.stopLoading();
-      });
-
-    router.events
-      .pipe(
-        filter(
-          event =>
-            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError
-        ),
-        takeUntilDestroy(this)
-      )
-      .subscribe(event => {
-        if (event instanceof NavigationStart) this.startLoading();
-        else this.stopLoading();
-      });
-  }
   @Input()
   containerClass = 'abp-loader-bar';
 
   @Input()
   color = '#77b6ff';
 
-  @Input()
-  isLoading = false;
-
   progressLevel = 0;
 
-  interval: Subscription;
+  interval = new Subscription();
 
-  timer: Subscription;
+  timer = new Subscription();
 
-  @Input()
-  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
+  intervalPeriod = 350;
+
+  stopDelay = 800;
+
+  private readonly clearProgress = () => {
+    this.progressLevel = 0;
+    this.cdRef.detectChanges();
+  };
+
+  private readonly reportProgress = () => {
+    if (this.progressLevel < 75) {
+      this.progressLevel += 1 + Math.random() * 9;
+    } else if (this.progressLevel < 90) {
+      this.progressLevel += 0.4;
+    } else if (this.progressLevel < 100) {
+      this.progressLevel += 0.1;
+    } else {
+      this.interval.unsubscribe();
+    }
+    this.cdRef.detectChanges();
+  };
+
+  get boxShadow(): string {
+    return `0 0 10px rgba(${this.color}, 0.5)`;
+  }
+
+  constructor(
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private subscription: SubscriptionService,
+    private httpWaitService: HttpWaitService,
+    private routerWaitService: RouterWaitService,
+  ) {}
+
+  ngOnInit() {
+    this.subscribeLoading();
+  }
+
+  subscribeLoading() {
+    this.subscription.addOne(
+      combineLatest([this.httpWaitService.getLoading$(), this.routerWaitService.getLoading$()]),
+      ([httpLoading, routerLoading]) => {
+        if (httpLoading || routerLoading) this.startLoading();
+        else this.stopLoading();
+      },
+    );
+  }
 
   ngOnDestroy() {
     this.interval.unsubscribe();
   }
 
   startLoading() {
-    if (this.isLoading || this.progressLevel !== 0) return;
+    if (this.isLoading || !this.interval.closed) return;
 
     this.isLoading = true;
-    this.interval = interval(350).subscribe(() => {
-      if (this.progressLevel < 75) {
-        this.progressLevel += Math.random() * 10;
-      } else if (this.progressLevel < 90) {
-        this.progressLevel += 0.4;
-      } else if (this.progressLevel < 100) {
-        this.progressLevel += 0.1;
-      } else {
-        this.interval.unsubscribe();
-      }
-      this.cdRef.detectChanges();
-    });
+    this.progressLevel = 0;
+    this.cdRef.detectChanges();
+    this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
+    this.timer.unsubscribe();
   }
 
   stopLoading() {
     this.interval.unsubscribe();
+
     this.progressLevel = 100;
     this.isLoading = false;
-    if (this.timer && !this.timer.closed) return;
 
-    this.timer = timer(820).subscribe(() => {
-      this.progressLevel = 0;
-      this.cdRef.detectChanges();
-    });
+    if (!this.timer.closed) return;
+
+    this.timer = timer(this.stopDelay).subscribe(this.clearProgress);
   }
 }

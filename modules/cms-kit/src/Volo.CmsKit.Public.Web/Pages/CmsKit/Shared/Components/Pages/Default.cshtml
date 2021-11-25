@@ -1,0 +1,17 @@
+﻿@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+
+@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages.PageViewModel
+
+<abp-card>
+    <abp-card-body>
+        @if (!Model.Content.IsNullOrEmpty())
+        {   
+            @Html.Raw(await MarkdownRenderer.RenderAsync(Model.Content))
+        }
+    </abp-card-body>
+</abp-card>

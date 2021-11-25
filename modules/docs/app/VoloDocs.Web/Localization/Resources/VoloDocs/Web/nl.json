@@ -1,0 +1,10 @@
+{
+  "culture": "nl",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Welkom bij de VoloDocs!",
+    "NoProjectWarning": "Er is nog geen gedefinieerd project!",
+    "CreateYourFirstProject": "Klik hier om uw eerste project te starten",
+    "NoProject": "Geen project!"
+  }
+}

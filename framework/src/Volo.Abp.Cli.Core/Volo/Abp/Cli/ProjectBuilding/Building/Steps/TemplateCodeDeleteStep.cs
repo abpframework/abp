@@ -1,18 +1,17 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
 {
-    public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
+        foreach (var file in context.Files)
         {
-            foreach (var file in context.Files)
+            if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
             {
-                if (file.Name.EndsWith(".cs")) //TODO: Why only cs!
-                {
-                    file.RemoveTemplateCode();
-                    file.RemoveTemplateCodeMarkers();
-                }
+                file.RemoveTemplateCode(context.Symbols);
+                file.RemoveTemplateCodeMarkers();
             }
         }
     }

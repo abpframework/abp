@@ -10,147 +10,152 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.AspNetCore.Mvc.Validation;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
+namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+
+public abstract class AbpPageModel : PageModel
 {
-    public abstract class AbpPageModel : PageModel
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
+    [Obsolete("Use LazyServiceProvider instead.")]
+    public IServiceProvider ServiceProvider { get; set; }
+
+    protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
+
+    protected AlertList Alerts => AlertManager.Alerts;
+
+    protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+
+    protected Type ObjectMapperContext { get; set; }
+    protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
+        ObjectMapperContext == null
+            ? provider.GetRequiredService<IObjectMapper>()
+            : (IObjectMapper)provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
+
+    protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
+
+    protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
+
+    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
+
+    protected IStringLocalizer L {
+        get {
+            if (_localizer == null)
+            {
+                _localizer = CreateLocalizer();
+            }
+
+            return _localizer;
+        }
+    }
+
+    private IStringLocalizer _localizer;
+
+    protected Type LocalizationResourceType { get; set; }
+
+    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
+
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+
+    protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
+
+    protected IModelStateValidator ModelValidator => LazyServiceProvider.LazyGetRequiredService<IModelStateValidator>();
+
+    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
+
+    protected IAlertManager AlertManager => LazyServiceProvider.LazyGetRequiredService<IAlertManager>();
+
+    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+
+    protected IAppUrlProvider AppUrlProvider => LazyServiceProvider.LazyGetRequiredService<IAppUrlProvider>();
+
+    protected virtual NoContentResult NoContent() //TODO: Is that true to return empty result like that?
     {
-        public IServiceProvider ServiceProvider { get; set; }
-        protected readonly object ServiceProviderLock = new object();
+        return new NoContentResult();
+    }
 
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-        
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
+    protected virtual void ValidateModel()
+    {
+        ModelValidator?.Validate(ModelState);
+    }
+
+    protected virtual Task CheckPolicyAsync(string policyName)
+    {
+        return AuthorizationService.CheckAsync(policyName);
+    }
+
+    protected virtual PartialViewResult PartialView<TModel>(string viewName, TModel model)
+    {
+        return new PartialViewResult
         {
-            if (reference == null)
-            {
-                lock (ServiceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
-                    }
-                }
-            }
+            ViewName = viewName,
+            ViewData = new ViewDataDictionary<TModel>(ViewData, model),
+            TempData = TempData
+        };
+    }
 
-            return reference;
+    protected virtual IStringLocalizer CreateLocalizer()
+    {
+        if (LocalizationResourceType != null)
+        {
+            return StringLocalizerFactory.Create(LocalizationResourceType);
         }
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
-        private IClock _clock;
-
-        public AlertList Alerts => AlertManager.Alerts;
-
-        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
-        private IUnitOfWorkManager _unitOfWorkManager;
-
-        protected Type ObjectMapperContext { get; set; }
-        public IObjectMapper ObjectMapper
+        var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+        if (localizer == null)
         {
-            get
-            {
-                if (_objectMapper != null)
-                {
-                    return _objectMapper;
-                }
-
-                if (ObjectMapperContext == null)
-                {
-                    return LazyGetRequiredService(ref _objectMapper);
-                }
-
-                return LazyGetRequiredService(
-                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
-                    ref _objectMapper
-                );
-            }
-        }
-        private IObjectMapper _objectMapper;
-
-        public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
-        private IGuidGenerator _guidGenerator;
-
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-        private ILoggerFactory _loggerFactory;
-
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
-        private IStringLocalizerFactory _stringLocalizerFactory;
-
-        public IStringLocalizer L
-        {
-            get
-            {
-                if (_localizer == null)
-                {
-                    if (LocalizationResourceType == null)
-                    {
-                        throw new AbpException($"{nameof(LocalizationResourceType)} should be set before using the {nameof(L)} object!");
-                    }
-
-                    _localizer = StringLocalizerFactory.Create(LocalizationResourceType);
-                }
-
-                return _localizer;
-            }
-        }
-        private IStringLocalizer _localizer;
-
-        protected Type LocalizationResourceType { get; set; }
-
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
-        private ICurrentUser _currentUser;
-
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
-        private ICurrentTenant _currentTenant;
-
-        public ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
-        private ISettingProvider _settingProvider;
-
-        public IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
-        private IModelStateValidator _modelValidator;
-
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
-        private IAuthorizationService _authorizationService;
-
-        public IAlertManager AlertManager => LazyGetRequiredService(ref _alertManager);
-        private IAlertManager _alertManager;
-
-        protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
-
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
-
-        protected virtual NoContentResult NoContent() //TODO: Is that true to return empty result like that?
-        {
-            return new NoContentResult();
+            throw new AbpException($"Set {nameof(LocalizationResourceType)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
         }
 
-        protected virtual void ValidateModel()
+        return localizer;
+    }
+
+    protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+    {
+        return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+    }
+
+    protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+    {
+        returnUrl = NormalizeReturnUrl(returnUrl);
+
+        if (!returnUrlHash.IsNullOrWhiteSpace())
         {
-            ModelValidator?.Validate(ModelState);
+            returnUrl = returnUrl + returnUrlHash;
         }
 
-        protected virtual Task CheckPolicyAsync(string policyName)
+        return returnUrl;
+    }
+
+    private string NormalizeReturnUrl(string returnUrl)
+    {
+        if (returnUrl.IsNullOrEmpty())
         {
-            return AuthorizationService.CheckAsync(policyName);
+            return GetAppHomeUrl();
         }
 
-        protected virtual PartialViewResult PartialView<TModel>(string viewName, TModel model)
+        if (Url.IsLocalUrl(returnUrl) || AppUrlProvider.IsRedirectAllowedUrl(returnUrl))
         {
-            return new PartialViewResult
-            {
-                ViewName = viewName,
-                ViewData = new ViewDataDictionary<TModel>(ViewData, model),
-                TempData = TempData
-            };
+            return returnUrl;
         }
+
+        return GetAppHomeUrl();
+    }
+
+    protected virtual string GetAppHomeUrl()
+    {
+        return "~/"; //TODO: ???
     }
 }

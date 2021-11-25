@@ -1,4 +1,22 @@
 {
+  "[typescriptreact]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "[xml]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "files.associations": {
+    "*.ts.template": "typescriptreact",
+    "*.html.template": "xml"
+  },
   "search.exclude": {
     "**/dist": true
   },
@@ -6,6 +24,8 @@
   "typescript.tsdk": "../node_modules/typescript/lib",
   "workbench.colorCustomizations": {
     "activityBar.background": "#258ecd",
+    "activityBar.activeBackground": "#258ecd",
+    "activityBar.activeBorder": "#f0aed7",
     "activityBar.foreground": "#e7e7e7",
     "activityBar.inactiveForeground": "#e7e7e799",
     "activityBarBadge.background": "#f0aed7",

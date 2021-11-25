@@ -1,0 +1,15 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Account": "Аккаунт",
+    "Welcome": "Добро пожаловать",
+    "UseOneOfTheFollowingLinksToContinue": "Для продолжения используйте одну из следующих ссылок",
+    "FrameworkHomePage": "Главная страница фреймворка",
+    "FrameworkDocumentation": "Документация фреймворка",
+    "OfficialBlog": "Официальный блог",
+    "CommercialHomePage": "Главная страница коммерческой версии",
+    "CommercialSupportWebSite": "Сайт коммерческой поддержки",
+    "CommunityWebSite": "Веб-сайт сообщества ABP",
+    "ManageAccount": "Моя учетная запись | ABP.IO"
+  }
+}

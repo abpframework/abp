@@ -1,70 +1,40 @@
-using System.Threading.Tasks;
+namespace Volo.Abp.Domain.Entities.Events;
 
-namespace Volo.Abp.Domain.Entities.Events
+/// <summary>
+/// Null-object implementation of <see cref="IEntityChangeEventHelper"/>.
+/// </summary>
+public class NullEntityChangeEventHelper : IEntityChangeEventHelper
 {
     /// <summary>
-    /// Null-object implementation of <see cref="IEntityChangeEventHelper"/>.
+    /// Gets single instance of <see cref="NullEntityChangeEventHelper"/> class.
     /// </summary>
-    public class NullEntityChangeEventHelper : IEntityChangeEventHelper
+    public static NullEntityChangeEventHelper Instance { get; } = new NullEntityChangeEventHelper();
+
+    private NullEntityChangeEventHelper()
     {
-        /// <summary>
-        /// Gets single instance of <see cref="NullEntityChangeEventHelper"/> class.
-        /// </summary>
-        public static NullEntityChangeEventHelper Instance { get; } = new NullEntityChangeEventHelper();
+    }
 
-        private NullEntityChangeEventHelper()
-        {
+    public void PublishEntityCreatingEvent(object entity)
+    {
+    }
 
-        }
+    public void PublishEntityCreatedEvent(object entity)
+    {
+    }
 
-        public Task TriggerEntityCreatingEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
+    public void PublishEntityUpdatingEvent(object entity)
+    {
+    }
 
-        public Task TriggerEntityCreatedEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
+    public void PublishEntityUpdatedEvent(object entity)
+    {
+    }
 
-        public Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
+    public void PublishEntityDeletingEvent(object entity)
+    {
+    }
 
-        public Task TriggerEntityUpdatingEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityUpdatedEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityDeletingEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityDeletedEventAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task TriggerEventsAsync(EntityChangeReport changeReport)
-        {
-            return Task.CompletedTask;
-        }
+    public void PublishEntityDeletedEvent(object entity)
+    {
     }
 }

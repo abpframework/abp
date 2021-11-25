@@ -1,0 +1,365 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ListGroupsModel
+@{
+    ViewData["Title"] = "List Groups";
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<h2>List Groups</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/list-group/" target="_blank"> Bootstrap List Group</a>.</p>
+
+<h4>Basic example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;list-group&quot;&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Morbi leo risus&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Porta ac consectetur ac&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Active & disabled items</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item active="true">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item disabled="true">Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item active=&quot;true&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item disabled=&quot;true&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;list-group&quot;&gt;
+  &lt;li class=&quot;list-group-item active&quot;&gt;Cras justo odio&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Morbi leo risus&lt;/li&gt;
+  &lt;li class=&quot;list-group-item disabled&quot;&gt;Porta ac consectetur ac&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Links and buttons</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item href="#" active="true">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item href="#">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item href="#">Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item href="#" disabled="true">Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; active=&quot;true&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;list-group&quot;&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action active&quot;&gt;Cras justo odio&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action&quot;&gt;Dapibus ac facilisis in&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action&quot;&gt;Morbi leo risus&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action disabled&quot;&gt;Vestibulum at eros&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item tag-type="Button" active="true">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot; active=&quot;true&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;list-group&quot;&gt;
+  &lt;button type=&quot;button&quot; class=&quot;list-group-item list-group-item-action active&quot;&gt;
+    Cras justo odio
+  &lt;/button&gt;
+  &lt;button type=&quot;button&quot; class=&quot;list-group-item list-group-item-action&quot;&gt;Morbi leo risus&lt;/button&gt;
+  &lt;button type=&quot;button&quot; class=&quot;list-group-item list-group-item-action&quot;&gt;Porta ac consectetur ac&lt;/button&gt;
+  &lt;button type=&quot;button&quot; class=&quot;list-group-item list-group-item-action&quot; disabled&gt;Vestibulum at eros&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Flush</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group flush="true">
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group flush=&quot;true&quot;&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;list-group list-group-flush&quot;&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Morbi leo risus&lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Vestibulum at eros&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Contextual classes</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item type="Primary">A simple Primary list group item</abp-list-group-item>
+            <abp-list-group-item type="Secondary">A simple Secondary list group item</abp-list-group-item>
+            <abp-list-group-item type="Success">A simple Success list group item</abp-list-group-item>
+            <abp-list-group-item type="Danger">A simple Danger list group item</abp-list-group-item>
+            <abp-list-group-item type="Warning">A simple Warning list group item</abp-list-group-item>
+            <abp-list-group-item type="Info">A simple Info list group item</abp-list-group-item>
+            <abp-list-group-item type="Light">A simple Light list group item</abp-list-group-item>
+            <abp-list-group-item type="Dark">A simple Dark list group item</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Primary&quot;&gt;A simple Primary list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Secondary&quot;&gt;A simple Secondary list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Success&quot;&gt;A simple Success list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Danger&quot;&gt;A simple Danger list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Warning&quot;&gt;A simple Warning list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Info&quot;&gt;A simple Info list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Light&quot;&gt;A simple Light list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Dark&quot;&gt;A simple Dark list group item&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;list-group&quot;&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-primary&quot;&gt;A simple primary list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-secondary&quot;&gt;A simple secondary list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-success&quot;&gt;A simple success list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-danger&quot;&gt;A simple danger list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-warning&quot;&gt;A simple warning list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-info&quot;&gt;A simple info list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-light&quot;&gt;A simple light list group item&lt;/li&gt;
+  &lt;li class=&quot;list-group-item list-group-item-dark&quot;&gt;A simple dark list group item&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item href="#">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item href="#" type="Primary">A simple Primary list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Secondary">A simple Secondary list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Success">A simple Success list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Danger">A simple Danger list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Warning">A simple Warning list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Info">A simple Info list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Light">A simple Light list group item</abp-list-group-item>
+            <abp-list-group-item href="#" type="Dark">A simple Dark list group item</abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Primary&quot;&gt;A simple Primary list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Secondary&quot;&gt;A simple Secondary list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Success&quot;&gt;A simple Success list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Danger&quot;&gt;A simple Danger list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Warning&quot;&gt;A simple Warning list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Info&quot;&gt;A simple Info list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Light&quot;&gt;A simple Light list group item&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot; type=&quot;Dark&quot;&gt;A simple Dark list group item&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;list-group&quot;&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action&quot;&gt;Dapibus ac facilisis in&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-primary&quot;&gt;A simple primary list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-secondary&quot;&gt;A simple secondary list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-success&quot;&gt;A simple success list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-danger&quot;&gt;A simple danger list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-warning&quot;&gt;A simple warning list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-info&quot;&gt;A simple info list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-light&quot;&gt;A simple light list group item&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;list-group-item list-group-item-action list-group-item-dark&quot;&gt;A simple dark list group item&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>With badges</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item>Cras justo odio <span abp-badge-pill="Primary">14</span></abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in <span abp-badge-pill="Primary">2</span></abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus <span abp-badge-pill="Primary">1</span></abp-list-group-item>
+        </abp-list-group>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio &lt;span abp-badge-pill=&quot;Primary&quot;&gt;14&lt;/span&gt;&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Dapibus ac facilisis in &lt;span abp-badge-pill=&quot;Primary&quot;&gt;2&lt;/span&gt;&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus &lt;span abp-badge-pill=&quot;Primary&quot;&gt;1&lt;/span&gt;&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;list-group&quot;&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;
+    Cras justo odio
+    &lt;span class=&quot;badge bg-primary rounded-pill&quot;&gt;14&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;
+    Dapibus ac facilisis in
+    &lt;span class=&quot;badge bg-primary rounded-pill&quot;&gt;2&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;
+    Morbi leo risus
+    &lt;span class=&quot;badge bg-primary rounded-pill&quot;&gt;1&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

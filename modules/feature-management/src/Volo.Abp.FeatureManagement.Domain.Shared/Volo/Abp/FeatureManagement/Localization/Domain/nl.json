@@ -1,0 +1,10 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Features": "Functies",
+    "NoFeatureFoundMessage": "Er is geen functie beschikbaar.",
+    "Permission:FeatureManagement": "Functiebeheer",
+    "Permission:FeatureManagement.ManageHostFeatures": "Beheer host functies",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} functie-waarde is niet geldig!"
+  }
+}

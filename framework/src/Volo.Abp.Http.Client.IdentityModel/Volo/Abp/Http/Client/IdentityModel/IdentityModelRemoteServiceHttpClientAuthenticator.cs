@@ -1,53 +1,26 @@
 ﻿using System.Threading.Tasks;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel
+namespace Volo.Abp.Http.Client.IdentityModel;
+
+[Dependency(ReplaceServices = true)]
+public class IdentityModelRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class IdentityModelRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ITransientDependency
+    protected IIdentityModelAuthenticationService IdentityModelAuthenticationService { get; }
+
+    public IdentityModelRemoteServiceHttpClientAuthenticator(
+        IIdentityModelAuthenticationService identityModelAuthenticationService)
     {
-        public IHttpContextAccessor HttpContextAccessor { get; set; }
+        IdentityModelAuthenticationService = identityModelAuthenticationService;
+    }
 
-        protected IIdentityModelAuthenticationService IdentityModelAuthenticationService { get; }
-
-        public IdentityModelRemoteServiceHttpClientAuthenticator(
-            IIdentityModelAuthenticationService identityModelAuthenticationService)
-        {
-            IdentityModelAuthenticationService = identityModelAuthenticationService;
-        }
-
-        public async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
-        {
-            if (context.RemoteService.GetUseCurrentAccessToken() != false)
-            {
-                var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
-                if (accessToken != null)
-                {
-                    context.Request.SetBearerToken(accessToken);
-                    return;
-                }
-            }
-
-            await IdentityModelAuthenticationService.TryAuthenticateAsync(
-                context.Client,
-                context.RemoteService.GetIdentityClient()
-            );
-        }
-
-        protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
-        {
-            var httpContext = HttpContextAccessor?.HttpContext;
-            if (httpContext == null)
-            {
-                return null;
-            }
-
-            return await httpContext.GetTokenAsync("access_token");
-        }
+    public virtual async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+    {
+        await IdentityModelAuthenticationService.TryAuthenticateAsync(
+            context.Client,
+            context.RemoteService.GetIdentityClient() ?? context.RemoteServiceName
+        );
     }
 }

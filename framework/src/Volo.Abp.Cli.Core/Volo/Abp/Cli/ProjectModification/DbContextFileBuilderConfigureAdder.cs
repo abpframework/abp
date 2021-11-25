@@ -1,84 +1,98 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class DbContextFileBuilderConfigureAdder : ITransientDependency
 {
-    public class DbContextFileBuilderConfigureAdder : ITransientDependency
+    public ILogger<DbContextFileBuilderConfigureAdder> Logger { get; set; }
+
+    protected UsingStatementAdder UsingStatementAdder { get; }
+
+    public DbContextFileBuilderConfigureAdder(UsingStatementAdder usingStatementAdder)
     {
-        public ILogger<DbContextFileBuilderConfigureAdder> Logger { get; set; }
+        UsingStatementAdder = usingStatementAdder;
+        Logger = NullLogger<DbContextFileBuilderConfigureAdder>.Instance;
+    }
 
-        protected UsingStatementAdder UsingStatementAdder { get; }
+    public bool Add(string path, string moduleConfiguration)
+    {
+        var file = File.ReadAllText(path);
 
-        public DbContextFileBuilderConfigureAdder(UsingStatementAdder usingStatementAdder)
+        var parsedModuleConfiguration = moduleConfiguration.Split(", ");
+
+        var namespaces = parsedModuleConfiguration.Select(GetNamespace);
+        var configurationLines = parsedModuleConfiguration.Select(GetLineToAdd);
+
+        var indexToInsert = FindIndexToInsert(file);
+
+        if (indexToInsert <= 0 || indexToInsert >= file.Length)
         {
-            UsingStatementAdder = usingStatementAdder;
-            Logger = NullLogger<DbContextFileBuilderConfigureAdder>.Instance;
+            Logger.LogWarning($"\"OnModelCreating(ModelBuilder builder)\" method couldn't be found in {path}");
+            return false;
         }
 
-        public void Add(string path, string moduleConfiguration)
+        foreach (var configurationLine in configurationLines)
         {
-            var file = File.ReadAllText(path);
-
-            file = UsingStatementAdder.Add(file, GetNamespace(moduleConfiguration));
-
-            var stringToAdd = GetLineToAdd(moduleConfiguration);
-            if (!file.Contains(stringToAdd))
+            if (file.Contains(configurationLine))
             {
-                var indexToInsert = FindIndexToInsert(file);
-
-                if (indexToInsert <= 0 || indexToInsert >= file.Length)
-                {
-                    Logger.LogWarning($"\"OnModelCreating(ModelBuilder builder)\" method couldn't be found in {path}");
-                    return;
-                }
-                file = file.Insert(indexToInsert, "    " + stringToAdd + Environment.NewLine + "        ");
+                continue;
             }
 
-
-            File.WriteAllText(path, file);
+            file = file.Insert(indexToInsert, "    " + configurationLine + Environment.NewLine + "        ");
         }
 
-        protected int FindIndexToInsert(string file)
+        foreach (var namespaceOfConfiguration in namespaces)
         {
-            var indexOfMethodDeclaration = file.IndexOf("OnModelCreating(", StringComparison.Ordinal);
-            var indexOfOpeningBracket = indexOfMethodDeclaration + file.Substring(indexOfMethodDeclaration).IndexOf('{');
+            file = UsingStatementAdder.Add(file, namespaceOfConfiguration);
+        }
 
-            var stack = 1;
-            var index = indexOfOpeningBracket;
+        File.WriteAllText(path, file);
+        return true;
+    }
 
-            while (stack > 0)
+    protected int FindIndexToInsert(string file)
+    {
+        var indexOfMethodDeclaration = file.IndexOf("OnModelCreating(", StringComparison.Ordinal);
+        var indexOfOpeningBracket =
+            indexOfMethodDeclaration + file.Substring(indexOfMethodDeclaration).IndexOf('{');
+
+        var stack = 1;
+        var index = indexOfOpeningBracket;
+
+        while (stack > 0)
+        {
+            index++;
+
+            if (index >= file.Length)
             {
-                index++;
-
-                if (index >= file.Length)
-                {
-                    break;
-                }
-
-                if (file[index] == '{')
-                {
-                    stack++;
-                }
-                else if (file[index] == '}')
-                {
-                    stack--;
-                }
+                break;
             }
 
-            return index;
+            if (file[index] == '{')
+            {
+                stack++;
+            }
+            else if (file[index] == '}')
+            {
+                stack--;
+            }
         }
 
-        protected string GetLineToAdd(string moduleConfiguration)
-        {
-            return "builder." + moduleConfiguration.Split(':')[1] + "();";
-        }
+        return index;
+    }
 
-        protected string GetNamespace(string moduleConfiguration)
-        {
-            return string.Join(".", moduleConfiguration.Split(':')[0]);
-        }
+    protected string GetLineToAdd(string moduleConfiguration)
+    {
+        return "builder." + moduleConfiguration.Split(':')[1] + "();";
+    }
+
+    protected string GetNamespace(string moduleConfiguration)
+    {
+        return string.Join(".", moduleConfiguration.Split(':')[0]);
     }
 }

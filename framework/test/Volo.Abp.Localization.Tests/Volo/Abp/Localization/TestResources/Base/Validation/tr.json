@@ -1,0 +1,7 @@
+{
+  "culture": "tr",
+  "texts": {
+    "ThisFieldIsRequired": "Bu alan zorunludur",
+    "MaxLenghtErrorMessage": "Bu alan maksimum '{0}' karakter olabilir"
+  }
+}

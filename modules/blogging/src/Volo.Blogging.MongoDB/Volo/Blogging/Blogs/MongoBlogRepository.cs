@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -13,9 +14,9 @@ namespace Volo.Blogging.Blogs
         {
         }
 
-        public async Task<Blog> FindByShortNameAsync(string shortName)
+        public async Task<Blog> FindByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == shortName);
+            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.ShortName == shortName, GetCancellationToken(cancellationToken));
         }
     }
 }

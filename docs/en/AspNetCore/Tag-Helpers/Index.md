@@ -1,3 +1,3 @@
-## ABP Tag Helpers
+This document has moved. 
 
-"ABP tag helpers" is not documented yet. You can see a [demo of components](http://bootstrap-taghelpers.abp.io/) for now.
+[Click to navigate to ABP Tag Helpers document](../../UI/AspNetCore/Tag-Helpers/Index.md)

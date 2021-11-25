@@ -1,0 +1,11 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Hello <b>{0}</b>.": "您好 <b>{0}</b>.",
+    "Car": "汽車",
+    "CarPlural": "汽車",
+    "MaxLenghtErrorMessage": "此欄位的長度最多'{0}'個字元",
+    "Universe": "宇宙",
+    "FortyTwo": "四十二"
+  }
+}

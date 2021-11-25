@@ -1,0 +1,15 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.ModalsDemo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+
+<abp-component-demo-section title="Example" view-path="@ModalsDemoViewComponent.ViewPath">
+
+    <abp-button button-type="Primary" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</abp-button>
+
+    <abp-modal centered="true" size="Large" id="myModal">
+        <abp-modal-header title="Modal title"></abp-modal-header>
+        <abp-modal-body>
+            Woohoo, you're reading this text in a modal!
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Save|AbpModalButtons.Close)"></abp-modal-footer>
+    </abp-modal>
+</abp-component-demo-section>

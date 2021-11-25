@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -11,161 +11,236 @@ using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.ApiVersioning;
+using Volo.Abp.Application;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
+using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
+using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
+using Volo.Abp.DynamicProxy;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc;
+
+[DependsOn(
+    typeof(AbpAspNetCoreModule),
+    typeof(AbpLocalizationModule),
+    typeof(AbpApiVersioningAbstractionsModule),
+    typeof(AbpAspNetCoreMvcContractsModule),
+    typeof(AbpUiNavigationModule),
+    typeof(AbpGlobalFeaturesModule),
+    typeof(AbpDddApplicationModule)
+    )]
+public class AbpAspNetCoreMvcModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreModule),
-        typeof(AbpLocalizationModule),
-        typeof(AbpApiVersioningAbstractionsModule),
-        typeof(AbpAspNetCoreMvcContractsModule),
-        typeof(AbpUiModule)
-        )]
-    public class AbpAspNetCoreMvcModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
-        }
+        DynamicProxyIgnoreTypes.Add<ControllerBase>();
+        DynamicProxyIgnoreTypes.Add<PageModel>();
+        DynamicProxyIgnoreTypes.Add<ViewComponent>();
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpApiDescriptionModelOptions>(options =>
         {
-            //Configure Razor
-            context.Services.Insert(0,
-                ServiceDescriptor.Singleton<IConfigureOptions<MvcRazorRuntimeCompilationOptions>>(
-                    new ConfigureOptions<MvcRazorRuntimeCompilationOptions>(options =>
-                        {
-                            options.FileProviders.Add(
-                                new RazorViewEngineVirtualFileProvider(
-                                    context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
-                                )
-                            );
-                        }
-                    )
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
+        });
+
+        Configure<AbpRemoteServiceApiDescriptionProviderOptions>(options =>
+        {
+            var statusCodes = new List<int>
+            {
+                    (int) HttpStatusCode.Forbidden,
+                    (int) HttpStatusCode.Unauthorized,
+                    (int) HttpStatusCode.BadRequest,
+                    (int) HttpStatusCode.NotFound,
+                    (int) HttpStatusCode.NotImplemented,
+                    (int) HttpStatusCode.InternalServerError
+            };
+
+            options.SupportedResponseTypes.AddIfNotContains(statusCodes.Select(statusCode => new ApiResponseType
+            {
+                Type = typeof(RemoteServiceErrorResponse),
+                StatusCode = statusCode
+            }));
+        });
+
+        context.Services.PostConfigure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            if (options.MinifyGeneratedScript == null)
+            {
+                options.MinifyGeneratedScript = context.Services.GetHostingEnvironment().IsProduction();
+            }
+        });
+
+        var mvcCoreBuilder = context.Services.AddMvcCore(options =>
+        {
+            options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+        });
+        context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
+
+        var abpMvcDataAnnotationsLocalizationOptions = context.Services
+            .ExecutePreConfiguredActions(
+                new AbpMvcDataAnnotationsLocalizationOptions()
+            );
+
+        context.Services
+            .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
+                new OptionsWrapper<AbpMvcDataAnnotationsLocalizationOptions>(
+                    abpMvcDataAnnotationsLocalizationOptions
                 )
             );
 
-            Configure<AbpApiDescriptionModelOptions>(options =>
+        var mvcBuilder = context.Services.AddMvc()
+            .AddRazorRuntimeCompilation()
+            .AddDataAnnotationsLocalization(options =>
             {
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
-            });
-
-            var mvcCoreBuilder = context.Services.AddMvcCore();
-            context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-            
-            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
-
-            context.Services
-                .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
-                    new OptionsWrapper<AbpMvcDataAnnotationsLocalizationOptions>(
-                        abpMvcDataAnnotationsLocalizationOptions
-                    )
-                );
-
-            var mvcBuilder = context.Services.AddMvc()
-                .AddNewtonsoftJson(options =>
+                options.DataAnnotationLocalizerProvider = (type, factory) =>
                 {
-                    options.SerializerSettings.ContractResolver =
-                        new AbpMvcJsonContractResolver(context.Services);
-                })
-                .AddRazorRuntimeCompilation()
-                .AddDataAnnotationsLocalization(options =>
-                {
-                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    var resourceType = abpMvcDataAnnotationsLocalizationOptions
+                        .AssemblyResources
+                        .GetOrDefault(type.Assembly);
+
+                    if (resourceType != null)
                     {
-                        var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
-                        return factory.Create(resourceType ?? type);
-                    };
-                })                
-                .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-            
-            context.Services.ExecutePreConfiguredActions(mvcBuilder);
+                        return factory.Create(resourceType);
+                    }
 
-            //TODO: AddViewLocalization by default..?
+                    return factory.CreateDefaultOrNull() ??
+                           factory.Create(type);
+                };
+            })
+            .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-            context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        mvcCoreBuilder.AddAbpHybridJson();
 
-            //Use DI to create controllers
-            context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
+        Configure<MvcRazorRuntimeCompilationOptions>(options =>
+        {
+            options.FileProviders.Add(
+                new RazorViewEngineVirtualFileProvider(
+                    context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
+                )
+            );
+        });
 
-            //Use DI to create view components
-            context.Services.Replace(ServiceDescriptor.Singleton<IViewComponentActivator, ServiceBasedViewComponentActivator>());
+        context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
-            //Add feature providers
-            var partManager = context.Services.GetSingletonInstance<ApplicationPartManager>();
-            var application = context.Services.GetSingletonInstance<IAbpApplication>();
+        //TODO: AddViewLocalization by default..?
 
-            partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
-            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
+        context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            Configure<MvcOptions>(mvcOptions =>
+        //Use DI to create controllers
+        mvcBuilder.AddControllersAsServices();
+
+        //Use DI to create view components
+        mvcBuilder.AddViewComponentsAsServices();
+
+        //Use DI to create razor page
+        context.Services.Replace(ServiceDescriptor.Singleton<IPageModelActivatorProvider, ServiceBasedPageModelActivatorProvider>());
+
+        //Add feature providers
+        var partManager = context.Services.GetSingletonInstance<ApplicationPartManager>();
+        var application = context.Services.GetSingletonInstance<IAbpApplication>();
+
+        partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+        partManager.ApplicationParts.AddIfNotContains(typeof(AbpAspNetCoreMvcModule).Assembly);
+
+        context.Services.Replace(ServiceDescriptor.Singleton<IValidationAttributeAdapterProvider, AbpValidationAttributeAdapterProvider>());
+        context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
+
+        Configure<MvcOptions>(mvcOptions =>
+        {
+            mvcOptions.AddAbp(context.Services);
+        });
+
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(endpointContext =>
             {
-                mvcOptions.AddAbp(context.Services);
+                endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpointContext.Endpoints.MapRazorPages();
             });
+        });
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        ApplicationPartSorter.Sort(
+            context.Services.GetSingletonInstance<ApplicationPartManager>(),
+            context.Services.GetSingletonInstance<IModuleContainer>()
+        );
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AddApplicationParts(context);
+    }
+
+    private static void AddApplicationParts(ApplicationInitializationContext context)
+    {
+        var partManager = context.ServiceProvider.GetService<ApplicationPartManager>();
+        if (partManager == null)
+        {
+            return;
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        //Plugin modules
+        var moduleAssemblies = context
+            .ServiceProvider
+            .GetRequiredService<IModuleContainer>()
+            .Modules
+            .Where(m => m.IsLoadedAsPlugIn)
+            .Select(m => m.Type.Assembly)
+            .Distinct();
+
+        AddToApplicationParts(partManager, moduleAssemblies);
+
+        //Controllers for application services
+        var controllerAssemblies = context
+            .ServiceProvider
+            .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
+            .Value
+            .ConventionalControllers
+            .ConventionalControllerSettings
+            .Select(s => s.Assembly)
+            .Distinct();
+
+        AddToApplicationParts(partManager, controllerAssemblies);
+    }
+
+    private static void AddToApplicationParts(ApplicationPartManager partManager, IEnumerable<Assembly> moduleAssemblies)
+    {
+        foreach (var moduleAssembly in moduleAssemblies)
         {
-            AddApplicationParts(context);
-        }
-
-        private static void AddApplicationParts(ApplicationInitializationContext context)
-        {
-            var partManager = context.ServiceProvider.GetService<ApplicationPartManager>();
-            if (partManager == null)
-            {
-                return;
-            }
-
-            //Plugin modules
-            var moduleAssemblies = context
-                .ServiceProvider
-                .GetRequiredService<IModuleContainer>()
-                .Modules
-                .Where(m => m.IsLoadedAsPlugIn)
-                .Select(m => m.Type.Assembly)
-                .Distinct();
-
-            AddToApplicationParts(partManager, moduleAssemblies);
-
-            //Controllers for application services
-            var controllerAssemblies = context
-                .ServiceProvider
-                .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
-                .Value
-                .ConventionalControllers
-                .ConventionalControllerSettings
-                .Select(s => s.Assembly)
-                .Distinct();
-
-            AddToApplicationParts(partManager, controllerAssemblies);
-        }
-
-        private static void AddToApplicationParts(ApplicationPartManager partManager, IEnumerable<Assembly> moduleAssemblies)
-        {
-            foreach (var moduleAssembly in moduleAssemblies)
-            {
-                if (partManager.ApplicationParts.OfType<AssemblyPart>().Any(p => p.Assembly == moduleAssembly))
-                {
-                    continue;
-                }
-
-                partManager.ApplicationParts.Add(new AssemblyPart(moduleAssembly));
-            }
+            partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
         }
     }
 }

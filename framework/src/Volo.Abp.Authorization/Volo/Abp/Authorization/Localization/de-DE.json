@@ -1,0 +1,10 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Volo.Authorization:010001": "Autorisation fehlgeschlagen! Die gegebene Politik hat nicht gewährt.",
+    "Volo.Authorization:010002": "Autorisation fehlgeschlagen! Die angegebene Richtlinie wurde nicht gewährt: {PolicyName}",
+    "Volo.Authorization:010003": "Autorisation fehlgeschlagen! Die angegebene Richtlinie wurde für die angegebene Ressource nicht gewährt: {ResourceName}",
+    "Volo.Authorization:010004": "Autorisation fehlgeschlagen! Die angegebene Anforderung wurde für die angegebene Ressource nicht gewährt: {ResourceName}",
+    "Volo.Authorization:010005": "Autorisation fehlgeschlagen! Die angegebenen Anforderungen wurden für die angegebene Ressource nicht gewährt: {ResourceName}"
+  }
+}

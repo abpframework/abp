@@ -9,10 +9,10 @@ using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
-    [Area("blogging")]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
+    [Area(BloggingRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/blogs")]
-    public class BlogsController : AbpController, IBlogAppService
+    public class BlogsController : AbpControllerBase, IBlogAppService
     {
         private readonly IBlogAppService _blogAppService;
 
@@ -39,26 +39,6 @@ namespace Volo.Blogging
         public async Task<BlogDto> GetAsync(Guid id)
         {
             return await _blogAppService.GetAsync(id);
-        }
-
-        [HttpPost]
-        public async Task<BlogDto> Create(CreateBlogDto input)
-        {
-            return await _blogAppService.Create(input);
-        }
-
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
-        {
-            return await _blogAppService.Update(id, input);
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task Delete(Guid id)
-        {
-            await _blogAppService.Delete(id);
         }
     }
 }

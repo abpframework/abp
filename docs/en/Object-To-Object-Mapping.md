@@ -28,7 +28,7 @@ public class UserAppService : ApplicationService
 }
 ```
 
-`CreateUserInput ` is a simple [DTO](Data-Transfer-Objects.md) class and the `User` is a simple [entity](Entities.md). The code above creates a `User` entity from the given input object. The `User` entity will have more properties in a real-world application and manually creating it will become tedious and error-prone. You also have to change the mapping code when you add new properties to `User` and `CreateUserInput` classes.
+`CreateUserInput` is a simple [DTO](Data-Transfer-Objects.md) class and the `User` is a simple [entity](Entities.md). The code above creates a `User` entity from the given input object. The `User` entity will have more properties in a real-world application and manually creating it will become tedious and error-prone. You also have to change the mapping code when you add new properties to `User` and `CreateUserInput` classes.
 
 We can use a library to automatically handle these kind of mappings. ABP provides abstractions for object to object mapping and has an integration package to use [AutoMapper](http://automapper.org/) as the object mapper. 
 
@@ -145,6 +145,78 @@ options.AddProfile<MyProfile>(validate: true);
 
 > If you have multiple profiles and need to enable validation only for a few of them, first use `AddMaps` without validation, then use `AddProfile` for each profile you want to validate.
 
+### Mapping the Object Extensions
+
+[Object extension system](Object-Extensions.md) allows to define extra properties for existing classes. ABP Framework provides a mapping definition extension to properly map extra properties of two objects.
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<User, UserDto>()
+            .MapExtraProperties();
+    }
+}
+````
+
+It is suggested to use the `MapExtraProperties()` method if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](Object-Extensions.md) for more.
+
+### Other Useful Extension Methods
+
+There are some more extension methods those can simplify your mapping code.
+
+#### Ignoring Audit Properties
+
+It is common to ignore audit properties when you map an object to another.
+
+Assume that you need to map a `ProductDto` ([DTO](Data-Transfer-Objects.md)) to a `Product` [entity](Entities.md) and the entity is inheriting from the `AuditedEntity` class (which provides properties like `CreationTime`, `CreatorId`, `IHasModificationTime`... etc).
+
+You probably want to ignore these base properties while mapping from the DTO. You can use `IgnoreAuditedObjectProperties()` method to ignore all audit properties (instead of manually ignoring them one by one):
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<ProductDto, Product>()
+            .IgnoreAuditedObjectProperties();
+    }
+}
+````
+
+There are more extension methods like `IgnoreFullAuditedObjectProperties()` and `IgnoreCreationAuditedObjectProperties()` those can be used based on your entity type.
+
+> See the "*Base Classes & Interfaces for Audit Properties*" section in the [entities document](Entities.md) to know more about auditing properties.
+
+#### Ignoring Other Properties
+
+In AutoMapper, you typically write such a mapping code to ignore a property:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .ForMember(x => x.CreationTime, map => map.Ignore());
+    }
+}
+````
+
+We found it unnecessarily long and created the `Ignore()` extension method:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .Ignore(x => x.CreationTime);
+    }
+}
+````
+
 ## Advanced Topics
 
 ### IObjectMapper<TContext> Interface
@@ -182,7 +254,7 @@ public class UserAppService : ApplicationService
 }
 ````
 
-`UserAppService ` injects the `IObjectMapper<MyModule>`, the specific object mapper for this module. It's usage is exactly same of the `IObjectMapper`.
+`UserAppService` injects the `IObjectMapper<MyModule>`, the specific object mapper for this module. It's usage is exactly same of the `IObjectMapper`.
 
 The example code above don't use the `ObjectMapper` property defined in the `ApplicationService`, but injects the `IObjectMapper<MyModule>`. However, it is still possible to use the base property since the `ApplicationService` defines an `ObjectMapperContext` property that can be set in the class constructor. So, the example about can be re-written as like below:
 

@@ -1,4 +1,4 @@
-﻿## Entity Framework Core 集成最佳实践
+## Entity Framework Core 集成最佳实践
 
 > 有关EF Core 集成的基础知识,请参阅[Entity Framework Core 集成文档](../Entity-Framework-Core.md).
 
@@ -58,7 +58,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 
 ### Model Mapping
 
-- **Do** 重写 `DbContext` 的 `OnModelCreating` 方法显式 **配置所有实体**. 例如:
+- **推荐** 重写 `DbContext` 的 `OnModelCreating` 方法显式 **配置所有实体**. 例如:
 
 ````C#
 protected override void OnModelCreating(ModelBuilder builder)
@@ -89,24 +89,27 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema); 
+            b.ToTable(options.TablePrefix + "Users", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
 
         builder.Entity<IdentityUserClaim>(b =>
         {
             b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
-        }); 
+        });
         //code omitted for brevity
     }
 }
 ````
 
-* **推荐** 通过继承 `ModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 例如:
+* **推荐** 为每个Enttiy映射调用 `b.ConfigureByConvention();`(如上所示).
+* **推荐** 通过继承 `AbpModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 例如:
 
 ````C#
-public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+public class IdentityModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
 {
     public IdentityModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)
@@ -173,12 +176,12 @@ public static IQueryable<IdentityUser> IncludeDetails(
 
 * **推荐** 推荐在仓储其他方法中使用 `IncludeDetails` 扩展方法, 就像上面的示例代码一样(参阅 FindByNormalizedUserNameAsync).
 
-- **推荐** 覆盖具有 **子集合** 的聚合根仓储中的`IncludeDetails` 方法. 例如:
+- **推荐** 覆盖具有 **子集合** 的聚合根仓储中的 `WithDetails` 方法. 例如:
 
 ````C#
-protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+public override IQueryable<IdentityUser> WithDetails()
 {
-    return queryable.IncludeDetails(); //uses the extension method defined above
+    return GetQueryable().IncludeDetails(); // Uses the extension method defined above
 }
 ````
 
@@ -205,4 +208,3 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
-

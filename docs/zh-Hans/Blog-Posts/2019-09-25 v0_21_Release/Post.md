@@ -14,8 +14,8 @@ ABP框架越来越接近v1.0.我们打算在今年10月中旬发布1.0. 现在,�
 
 ## Techorama荷兰2019
 
-[Techorama NL](https://techorama.nl/)是欧洲最大的会议之一.今年,Volosoft是会议的赞助商,并将有一个展位与软件开发人员讨论ABP框架和软件开发.我们的展位墙如下图所示：
+[Techorama NL](https://techorama.nl/)是欧洲最大的会议之一.今年,Volosoft是会议的赞助商,并将有一个展位与软件开发人员讨论ABP框架和软件开发.我们的展位墙如下图所示:
 
 ![volosoft-booth](volosoft-booth.png)
 
-如果您也参加会议,请到展位讨论ABP框架.我们还为您准备了一些私货:)
+如果你也参加会议,请到展位讨论ABP框架.我们还为你准备了一些私货:)

@@ -3,83 +3,55 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.Authentication
+namespace Volo.Abp.AspNetCore.Mvc.Authentication;
+
+public abstract class ChallengeAccountController : AbpController
 {
-    public abstract class ChallengeAccountController : AbpController
+    protected string[] ChallengeAuthenticationSchemas { get; }
+    protected string AuthenticationType { get; }
+
+    protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
     {
-        protected string[] ChallengeAuthenticationSchemas { get; }
+        ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
+        AuthenticationType = "Identity.Application";
+    }
 
-        protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
+    [HttpGet]
+    public ActionResult Login(string returnUrl = "", string returnUrlHash = "")
+    {
+        if (CurrentUser.IsAuthenticated)
         {
-            ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[]{ "oidc" };
-        }
-
-        [HttpGet]
-        public ActionResult Login(string returnUrl = "", string returnUrlHash = "")
-        {
-            if (CurrentUser.IsAuthenticated)
-            {
-                return RedirectSafely(returnUrl, returnUrlHash);
-            }
-            else
-            {
-                return Challenge(
-                    new AuthenticationProperties
-                    {
-                        Parameters =
-                        {
-                            {"returnUrl", returnUrl},
-                            {"returnUrlHash", returnUrlHash}
-                        }
-                    },
-                    ChallengeAuthenticationSchemas
-                );
-            }
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
-        {
-            await HttpContext.SignOutAsync();
-
             return RedirectSafely(returnUrl, returnUrlHash);
         }
 
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        return Challenge(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
+    {
+        await HttpContext.SignOutAsync();
+
+        if (HttpContext.User.Identity?.AuthenticationType == AuthenticationType)
         {
-            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+            return RedirectSafely(returnUrl, returnUrlHash);
         }
 
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
-        {
-            returnUrl = NormalizeReturnUrl(returnUrl);
+        return SignOut(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
+    }
 
-            if (!returnUrlHash.IsNullOrWhiteSpace())
+    [HttpGet]
+    public async Task<IActionResult> FrontChannelLogout(string sid)
+    {
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            var currentSid = User.FindFirst("sid")?.Value ?? string.Empty;
+            if (string.Equals(currentSid, sid, StringComparison.Ordinal))
             {
-                returnUrl = returnUrl + returnUrlHash;
+                await Logout();
             }
-
-            return returnUrl;
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return GetAppHomeUrl();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return GetAppHomeUrl();
-        }
-
-        protected virtual string GetAppHomeUrl()
-        {
-            return "/";
-        }
+        return NoContent();
     }
 }

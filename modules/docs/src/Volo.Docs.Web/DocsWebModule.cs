@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Bundling;
@@ -17,8 +20,12 @@ using Volo.Docs.Markdown;
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(DocsHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(DocsApplicationContractsModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMvcUiPackagesModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule)
         )]
     public class DocsWebModule : AbpModule
     {
@@ -39,7 +46,7 @@ namespace Volo.Docs
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
+                options.FileSets.AddEmbedded<DocsWebModule>();
             });
 
             var configuration = context.Services.GetConfiguration();
@@ -55,6 +62,7 @@ namespace Volo.Docs
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
+                options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
             });
 
             context.Services.AddAutoMapperObjectMapper<DocsWebModule>();
@@ -77,6 +85,11 @@ namespace Volo.Docs
                 options
                     .Extensions<PrismjsScriptBundleContributor>()
                     .Add<PrismjsScriptBundleContributorDocsExtension>();
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(DocsRemoteServiceConsts.ModuleName);
             });
         }
     }

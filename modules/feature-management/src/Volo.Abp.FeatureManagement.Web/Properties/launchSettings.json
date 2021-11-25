@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:56993/",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:50650/",
+      "sslPort": 44341
     }
   },
   "profiles": {
@@ -15,13 +15,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Abp.FeatureManagement.Web": {
+    "Volo.Abp.FeatureManagement.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:56994/"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

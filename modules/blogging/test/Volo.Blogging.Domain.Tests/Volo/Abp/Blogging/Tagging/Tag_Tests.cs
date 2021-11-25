@@ -14,7 +14,7 @@ namespace Volo.Blogging
         [InlineData("bbb")]
         public void SetName(string name)
         {
-            var tag = new Tag(Guid.NewGuid(), "abp", 0, "abp tag");
+            var tag = new Tag(Guid.NewGuid(), Guid.NewGuid(), "abp", 0, "abp tag");
             tag.SetName(name);
             tag.Name.ShouldBe(name);
         }
@@ -25,7 +25,7 @@ namespace Volo.Blogging
         [InlineData(3)]
         public void IncreaseUsageCount(int number)
         {
-            var tag = new Tag(Guid.NewGuid(), "abp", 0, "abp tag");
+            var tag = new Tag(Guid.NewGuid(), Guid.NewGuid(), "abp", 0, "abp tag");
             tag.IncreaseUsageCount(number);
             tag.UsageCount.ShouldBe(number);
         }
@@ -36,7 +36,7 @@ namespace Volo.Blogging
         [InlineData(3)]
         public void DecreaseUsageCount(int number)
         {
-            var tag = new Tag(Guid.NewGuid(), "abp",  10, "abp tag");
+            var tag = new Tag(Guid.NewGuid(), Guid.NewGuid(), "abp",  10, "abp tag");
             tag.DecreaseUsageCount(number);
             tag.UsageCount.ShouldBe(10 - number);
         }
@@ -44,7 +44,7 @@ namespace Volo.Blogging
         [Fact]
         public void DecreaseUsageCount_Should_Greater_ThanOrEqual_Zero()
         {
-            var tag = new Tag(Guid.NewGuid(), "abp", 10, "abp tag");
+            var tag = new Tag(Guid.NewGuid(), Guid.NewGuid(), "abp", 10, "abp tag");
             tag.DecreaseUsageCount(100);
             tag.UsageCount.ShouldBe(0);
         }
@@ -54,7 +54,7 @@ namespace Volo.Blogging
         [InlineData("bbb")]
         public void SetDescription(string description)
         {
-            var tag = new Tag(Guid.NewGuid(), "abp", 0, "abp tag");
+            var tag = new Tag(Guid.NewGuid(), Guid.NewGuid(), "abp", 0, "abp tag");
             tag.SetDescription(description);
             tag.Description.ShouldBe(description);
         }

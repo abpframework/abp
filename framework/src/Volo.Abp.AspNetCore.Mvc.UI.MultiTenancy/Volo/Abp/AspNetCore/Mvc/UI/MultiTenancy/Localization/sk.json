@@ -1,0 +1,13 @@
+{
+  "culture": "sk",
+  "texts": {
+    "GivenTenantIsNotExist": "Daný nájomca neexistuje: {0}",
+    "GivenTenantIsNotAvailable": "Daný tenant nie je k dispozícii: {0}",
+    "Tenant": "Tenant",
+    "Switch": "prepnúť",
+    "Name": "Meno",
+    "SwitchTenantHint": "Ak sa chcete prihlásiť ako používateľ poskytovateľa, nechajte pole s menom prázdne.",
+    "SwitchTenant": "Prepnúť tenanta",
+    "NotSelected": "Nie je vybraný"
+  }
+}

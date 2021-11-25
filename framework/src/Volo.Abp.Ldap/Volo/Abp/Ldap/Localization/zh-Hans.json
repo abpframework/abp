@@ -1,0 +1,19 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "服务器主机",
+    "Description:Abp.Ldap.ServerHost": "服务器主机",
+
+    "DisplayName:Abp.Ldap.ServerPort": "服务器端口",
+    "Description:Abp.Ldap.ServerPort": "服务器端口",
+
+    "DisplayName:Abp.Ldap.BaseDc": "基域组件",
+    "Description:Abp.Ldap.BaseDc": "基域组件",
+
+    "DisplayName:Abp.Ldap.UserName": "用户名",
+    "Description:Abp.Ldap.UserName": "用户名",
+
+    "DisplayName:Abp.Ldap.Password": "密码",
+    "Description:Abp.Ldap.Password": "密码"
+  }
+}

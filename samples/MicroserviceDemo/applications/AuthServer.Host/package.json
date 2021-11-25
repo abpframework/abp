@@ -1,8 +1,0 @@
-{
-  "version": "0.1.0",
-  "name": "msdemo-authserver-host",
-  "private": true,
-  "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.9.0"
-  }
-}

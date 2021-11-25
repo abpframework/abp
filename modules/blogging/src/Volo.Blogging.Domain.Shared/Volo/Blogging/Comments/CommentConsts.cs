@@ -2,6 +2,9 @@
 {
     public class CommentConsts
     {
-        public const int MaxTextLength = 1024;
+        /// <summary>
+        /// Default value: 1024
+        /// </summary>
+        public static int MaxTextLength { get; set; } = 1024;
     }
 }

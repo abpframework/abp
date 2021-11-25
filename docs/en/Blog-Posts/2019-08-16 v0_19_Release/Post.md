@@ -12,11 +12,11 @@ Finally, ABP has a **SPA UI** option with the latest [Angular](https://angular.i
 * Created Angular UI packages for the modules like account, identity and tenant-management.
 * Created a minimal startup template that authenticates using IdentityServer and uses the ASP.NET Core backend. This template uses the packages mentioned above.
 * Worked on the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) and the [download page](https://abp.io/get-started) to be able to generate projects with the new UI option.
-* Created a [tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Angular/Part-I) to jump start with the new UI option.
+* Created a [tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=NG) to jump start with the new UI option.
 
 We've created the template, document and infrastructure based on the latest Angular tools and trends:
 
-* Uses [NgBootstrap](https://ng-bootstrap.github.io/) and [PrimeNG](https://www.primefaces.org/primeng/) as the UI component libraries. You can use your favorite library, no problem, but pre-built modules work with these libraries.
+* Uses [NgBootstrap](https://ng-bootstrap.github.io/) as the UI component library. You can use your favorite library, but pre-built modules work with these libraries.
 * Uses [NGXS](https://ngxs.gitbook.io/ngxs/) as the state management library.
 
 Angular was the first SPA UI option, but it is not the last. After v1.0 release, we will start to work on a second UI option. Not decided yet, but candidates are Blazor, React and Vue.js. Waiting your feedback. You can thumb up using the following issues:
@@ -27,7 +27,7 @@ Angular was the first SPA UI option, but it is not the last. After v1.0 release,
 
 ### Widget System
 
-[Widget system](https://docs.abp.io/en/abp/latest/AspNetCore/Widgets) allows to **define and reuse** widgets for ASP.NET Core MVC applications. Widgets may have their own script and style resources and dependencies to 3rd-party libraries which are managed by the ABP framework.
+[Widget system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) allows to **define and reuse** widgets for ASP.NET Core MVC applications. Widgets may have their own script and style resources and dependencies to 3rd-party libraries which are managed by the ABP framework.
 
 ### Others
 

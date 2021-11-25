@@ -1,38 +1,41 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
+using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
+using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
-using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
-using Client = Volo.Abp.IdentityServer.Clients.Client;
-using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResource;
 
-namespace Volo.Abp.IdentityServer.MongoDB
+namespace Volo.Abp.IdentityServer.MongoDB;
+
+[DependsOn(
+    typeof(AbpIdentityServerDomainModule),
+    typeof(AbpMongoDbModule)
+)]
+public class AbpIdentityServerMongoDbModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpIdentityServerDomainModule),
-        typeof(AbpMongoDbModule)
-    )]
-    public class AbpIdentityServerMongoDbModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.PreConfigure<IIdentityServerBuilder>(
-                builder =>
-                {
-                    builder.AddAbpStores();
-                }
-            );
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>
+        context.Services.PreConfigure<IIdentityServerBuilder>(
+            builder =>
             {
-                options.AddRepository<ApiResource, MongoApiResourceRepository>();
-                options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
-                options.AddRepository<Client, MongoClientRepository>();
-                options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
-            });
-        }
+                builder.AddAbpStores();
+            }
+        );
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>
+        {
+            options.AddRepository<ApiResource, MongoApiResourceRepository>();
+            options.AddRepository<ApiScope, MongoApiScopeRepository>();
+            options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
+            options.AddRepository<Client, MongoClientRepository>();
+            options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
+            options.AddRepository<DeviceFlowCodes, MongoDeviceFlowCodesRepository>();
+        });
     }
 }

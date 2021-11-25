@@ -7,6 +7,7 @@
 *.userosscache
 *.sln.docstates
 
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -152,6 +153,7 @@ PublishScripts/
 
 # NuGet Packages
 *.nupkg
+*.snupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
 # except build/, which is used as an MSBuild target.
@@ -267,7 +269,9 @@ modules/blog/app/Volo.BlogTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
+modules/setting-management/app/Volo.Abp.SettingManagement.DemoApp/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
+templates/module/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 
 
@@ -289,4 +293,28 @@ samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/PublicWebSite.Host/Logs/logs.txt
 samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
+samples/MicroserviceDemo/applications/ConsoleClientDemo/Logs/logs.txt
 modules/docs/app/Volo.DocsTestApp/Logs/logs.txt
+framework/test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo/Logs/logs.txt
+samples/MicroserviceDemo/microservices/TenantManagementService.Host/Logs/logs.txt
+/framework/test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo/package-lock.json
+/npm/packs/bootstrap/package-lock.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package-lock.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/package-lock.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/package-lock.json
+
+modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package-lock.json
+/templates/app/angular/package-lock.json
+/modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
+abp-build-config.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/Test/
+
+# Identity Server temp signature file
+tempkey.jwk
+
+# ABP Analyzing files
+# [Disabled for now] *.abppkg.analyze.json
+
+# appsettings.secrets.json
+appsettings.secrets.json

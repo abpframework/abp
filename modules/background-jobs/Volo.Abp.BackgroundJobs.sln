@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Domain.Shared", "src\Volo.Abp.BackgroundJobs.Domain.Shared\Volo.Abp.BackgroundJobs.Domain.Shared.csproj", "{D64C1577-4929-4B60-939E-96DE1534891A}"
 EndProject
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Dom
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{649A3FFA-182F-4E56-9717-E6A9A2BEC545}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{E400416D-2895-4512-9D17-90681EEC7E0A}"
 EndProject
@@ -27,11 +27,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Mon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.DemoApp", "app\Volo.Abp.BackgroundJobs.DemoApp\Volo.Abp.BackgroundJobs.DemoApp.csproj", "{9A871D66-BE8D-440C-BF79-F778F8A50BF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.Shared", "app\Volo.Abp.BackgroundJobs.DemoApp.Shared\Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj", "{DE6914FF-F60A-461A-8498-461198E917BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.DemoApp.Shared", "app\Volo.Abp.BackgroundJobs.DemoApp.Shared\Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj", "{DE6914FF-F60A-461A-8498-461198E917BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.HangFire", "app\Volo.Abp.BackgroundJobs.DemoApp.HangFire\Volo.Abp.BackgroundJobs.DemoApp.HangFire.csproj", "{2060AC85-2598-4342-A87C-A684A2C71A37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.DemoApp.HangFire", "app\Volo.Abp.BackgroundJobs.DemoApp.HangFire\Volo.Abp.BackgroundJobs.DemoApp.HangFire.csproj", "{2060AC85-2598-4342-A87C-A684A2C71A37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq", "app\Volo.Abp.BackgroundJobs.DemoApp.RabbitMq\Volo.Abp.BackgroundJobs.DemoApp.RabbitMq.csproj", "{7C8D03F7-165E-478C-A6D6-DC8229EEABB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq", "app\Volo.Abp.BackgroundJobs.DemoApp.RabbitMq\Volo.Abp.BackgroundJobs.DemoApp.RabbitMq.csproj", "{7C8D03F7-165E-478C-A6D6-DC8229EEABB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.Quartz", "app\Volo.Abp.BackgroundJobs.DemoApp.Quartz\Volo.Abp.BackgroundJobs.DemoApp.Quartz.csproj", "{0146891D-3FF8-4516-94D6-B9EFC37383CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Installer", "src\Volo.Abp.BackgroundJobs.Installer\Volo.Abp.BackgroundJobs.Installer.csproj", "{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +91,14 @@ Global
 		{7C8D03F7-165E-478C-A6D6-DC8229EEABB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C8D03F7-165E-478C-A6D6-DC8229EEABB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C8D03F7-165E-478C-A6D6-DC8229EEABB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +116,8 @@ Global
 		{DE6914FF-F60A-461A-8498-461198E917BE} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{2060AC85-2598-4342-A87C-A684A2C71A37} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{7C8D03F7-165E-478C-A6D6-DC8229EEABB9} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{0146891D-3FF8-4516-94D6-B9EFC37383CD} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}

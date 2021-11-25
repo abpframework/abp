@@ -1,0 +1,26 @@
+{
+  "culture": "it",
+  "texts": {
+    "InternalServerErrorMessage": "Si è verificato un errore interno durante la tua richiesta!",
+    "ValidationErrorMessage": "La tua richiesta non è valida!",
+    "ValidationNarrativeErrorMessageTitle": "Durante la convalida sono stati rilevati i seguenti errori.",
+    "DefaultErrorMessage": "C'è stato un errore!",
+    "DefaultErrorMessageDetail": "Dettaglio errore non inviato dal server.",
+    "DefaultErrorMessage401": "Non sei autenticato!",
+    "DefaultErrorMessage401Detail": "È necessario accedere per eseguire questa operazione.",
+    "DefaultErrorMessage403": "Non sei autorizzato!",
+    "DefaultErrorMessage403Detail": "Non sei autorizzato a eseguire questa operazione!",
+    "DefaultErrorMessage404": "Risorsa non trovata!",
+    "DefaultErrorMessage404Detail": "La risorsa richiesta non è stata trovata sul server!",
+    "EntityNotFoundErrorMessage": "Non esiste un'entità {0} con id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "I dati che hai inviato sono già stati modificati da un altro utente/cliente. Per favore scarta le modifiche che hai fatto e riprova dall'inizio.",
+    "Error": "Errore",
+    "UnhandledException": "Eccezione non gestita!",
+    "401Message": "Non autorizzato",
+    "403Message": "Vietato",
+    "404Message": "pagina non trovata",
+    "500Message": "Errore interno del server",
+    "403MessageDetail": "Non sei autorizzato a eseguire questa operazione!",
+    "404MessageDetail": "Spiacenti, non c'è niente a questo indirizzo."
+  }
+}

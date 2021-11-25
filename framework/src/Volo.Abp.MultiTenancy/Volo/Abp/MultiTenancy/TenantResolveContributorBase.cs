@@ -1,10 +1,10 @@
-namespace Volo.Abp.MultiTenancy
-{
-    public abstract class TenantResolveContributorBase : ITenantResolveContributor
-    {
-        public abstract string Name { get; }
+using System.Threading.Tasks;
 
-        //TODO: We can make this async
-        public abstract void Resolve(ITenantResolveContext context);
-    }
+namespace Volo.Abp.MultiTenancy;
+
+public abstract class TenantResolveContributorBase : ITenantResolveContributor
+{
+    public abstract string Name { get; }
+
+    public abstract Task ResolveAsync(ITenantResolveContext context);
 }

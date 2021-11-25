@@ -1,11 +1,13 @@
 {
     "culture": "zh-Hans",
     "texts": {
+      "GivenTenantIsNotExist": "给定的租户不存在: {0}",
       "GivenTenantIsNotAvailable": "给定的租户不可用: {0}",
       "Tenant": "租户",
       "Switch": "切换",
       "Name": "名称",
-      "SwitchTenantHint": "将name字段留空以切换到宿主端.",
+      "SwitchTenantHint": "将名称字段留空以切换到宿主端.",
+      "SwitchTenant": "切换租户",
       "NotSelected": "未选中"
     }
   }

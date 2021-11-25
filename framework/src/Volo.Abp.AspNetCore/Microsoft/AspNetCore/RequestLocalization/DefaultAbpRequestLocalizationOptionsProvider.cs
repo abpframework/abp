@@ -1,80 +1,99 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
 
-namespace Microsoft.AspNetCore.RequestLocalization
+namespace Microsoft.AspNetCore.RequestLocalization;
+
+public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizationOptionsProvider, ISingletonDependency
 {
-    public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizationOptionsProvider, ISingletonDependency
+    private readonly IServiceScopeFactory _serviceProviderFactory;
+    private readonly SemaphoreSlim _syncSemaphore;
+    private Action<RequestLocalizationOptions> _optionsAction;
+    private RequestLocalizationOptions _requestLocalizationOptions;
+
+    public DefaultAbpRequestLocalizationOptionsProvider(IServiceScopeFactory serviceProviderFactory)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private Lazy<RequestLocalizationOptions> _lazyRequestLocalizationOptions;
+        _serviceProviderFactory = serviceProviderFactory;
+        _syncSemaphore = new SemaphoreSlim(1, 1);
+    }
 
-        public DefaultAbpRequestLocalizationOptionsProvider(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+    public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
+    {
+        _optionsAction = optionsAction;
+    }
 
-        public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
+    public async Task<RequestLocalizationOptions> GetLocalizationOptionsAsync()
+    {
+        if (_requestLocalizationOptions == null)
         {
-            _lazyRequestLocalizationOptions = new Lazy<RequestLocalizationOptions>(() =>
+            using (await _syncSemaphore.LockAsync())
             {
-                using (var serviceScope = _serviceProvider.CreateScope())
+                if (_requestLocalizationOptions == null)
                 {
-                    var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                    var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
+                    using (var serviceScope = _serviceProviderFactory.CreateScope())
+                    {
+                        var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
+                        var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
 
-                    var languages = AsyncHelper.RunSync(languageProvider.GetLanguagesAsync);
-                    var defaultLanguage = AsyncHelper.RunSync(() =>
-                        settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage));
+                        var languages = await languageProvider.GetLanguagesAsync();
+                        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
 
-                    var options = !languages.Any()
-                        ? new RequestLocalizationOptions()
-                        : new RequestLocalizationOptions
+                        var options = !languages.Any()
+                            ? new RequestLocalizationOptions()
+                            : new RequestLocalizationOptions
+                            {
+                                DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+
+                                SupportedCultures = languages
+                                    .Select(l => l.CultureName)
+                                    .Distinct()
+                                    .Select(c => new CultureInfo(c))
+                                    .ToArray(),
+
+                                SupportedUICultures = languages
+                                    .Select(l => l.UiCultureName)
+                                    .Distinct()
+                                    .Select(c => new CultureInfo(c))
+                                    .ToArray()
+                            };
+
+                        foreach (var configurator in serviceScope.ServiceProvider
+                            .GetRequiredService<IOptions<AbpRequestLocalizationOptions>>()
+                            .Value.RequestLocalizationOptionConfigurators)
                         {
-                            DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+                            await configurator(serviceScope.ServiceProvider, options);
+                        }
 
-                            SupportedCultures = languages
-                                .Select(l => l.CultureName)
-                                .Distinct()
-                                .Select(c => new CultureInfo(c))
-                                .ToArray(),
-
-                            SupportedUICultures = languages
-                                .Select(l => l.UiCultureName)
-                                .Distinct()
-                                .Select(c => new CultureInfo(c))
-                                .ToArray()
-                        };
-
-                    optionsAction?.Invoke(options);
-                    return options;
+                        _optionsAction?.Invoke(options);
+                        _requestLocalizationOptions = options;
+                    }
                 }
-            }, true);
-        }
-
-        public RequestLocalizationOptions GetLocalizationOptions()
-        {
-            return _lazyRequestLocalizationOptions.Value;
-        }
-
-        private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, IReadOnlyList<LanguageInfo> languages)
-        {
-            if (defaultLanguage == null)
-            {
-                var firstLanguage = languages.First();
-                return new RequestCulture(firstLanguage.CultureName, firstLanguage.UiCultureName);
             }
-
-            var (cultureName, uiCultureName) = LocalizationSettingHelper.ParseLanguageSetting(defaultLanguage);
-            return new RequestCulture(cultureName, uiCultureName);
         }
+
+        return _requestLocalizationOptions;
+    }
+
+    private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, IReadOnlyList<LanguageInfo> languages)
+    {
+        if (defaultLanguage == null)
+        {
+            var firstLanguage = languages.First();
+            return new RequestCulture(firstLanguage.CultureName, firstLanguage.UiCultureName);
+        }
+
+        var (cultureName, uiCultureName) = LocalizationSettingHelper.ParseLanguageSetting(defaultLanguage);
+        return new RequestCulture(cultureName, uiCultureName);
     }
 }

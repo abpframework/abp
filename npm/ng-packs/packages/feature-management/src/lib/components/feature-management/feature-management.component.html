@@ -1,31 +1,125 @@
-<abp-modal size="md" [(visible)]="visible" [busy]="modalBusy">
+<abp-modal *ngIf="visible" [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
   <ng-template #abpHeader>
-    <h3>{{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}</h3>
+    <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <form *ngIf="form" (ngSubmit)="save()" [formGroup]="form">
-      <div
-        class="row my-3"
-        *ngFor="let feature of features$ | async; let i = index"
-        [ngSwitch]="feature.valueType.name"
-      >
-        <div class="col-4">{{ feature.name }}</div>
-        <div class="col-8" *ngSwitchCase="'ToggleStringValueType'">
-          <input type="checkbox" name="feature.name" [formControlName]="i" />
-        </div>
-        <div class="col-8" *ngSwitchCase="'FreeTextStringValueType'">
-          <input type="text" name="feature.name" [formControlName]="i" />
-        </div>
+    <div class="row">
+      <div class="col-md-4">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [(activeId)]="selectedGroupDisplayName"
+          class="nav-pills"
+          orientation="vertical"
+        >
+          <li
+            *ngFor="let group of groups; trackBy: track.by('name')"
+            [ngbNavItem]="group.displayName"
+          >
+            <a ngbNavLink>{{ group.displayName }}</a>
+            <ng-template ngbNavContent>
+              <h4>{{ selectedGroupDisplayName }}</h4>
+              <hr class="mt-2 mb-3" />
+
+              <div
+                class="mt-2"
+                *ngFor="let feature of features[group.name]; let i = index; trackBy: track.by('id')"
+                [ngStyle]="feature.style"
+                [ngSwitch]="feature.valueType?.name"
+                (keyup.enter)="save()"
+              >
+                <ng-container *ngSwitchCase="valueTypes.ToggleStringValueType">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [id]="feature.name"
+                      [(ngModel)]="feature.value"
+                      (ngModelChange)="onCheckboxClick($event, feature)"
+                    />
+
+                    <label class="form-check-label" [htmlFor]="feature.name">{{
+                      feature.displayName
+                    }}</label>
+                    <ng-container
+                      *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
+                    ></ng-container>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.FreeTextStringValueType">
+                  <div class="mb-3 form-group">
+                    <label [htmlFor]="feature.name" class="form-label">{{
+                      feature.displayName
+                    }}</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      [id]="feature.name"
+                      [(ngModel)]="feature.value"
+                      [abpFeatureManagementFreeText]="feature"
+                    />
+
+                    <ng-container
+                      *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
+                    ></ng-container>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.SelectionStringValueType">
+                  <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
+                    <div class="mb-3 form-group">
+                      <label [htmlFor]="feature.name" class="form-label">{{
+                        feature.displayName
+                      }}</label>
+                      <select class="form-select" [id]="feature.name" [(ngModel)]="feature.value">
+                        <option
+                          *ngFor="
+                            let item of feature.valueType.itemSource?.items;
+                            trackBy: track.by('value')
+                          "
+                          [ngValue]="item.value"
+                        >
+                          {{
+                            item.displayText?.resourceName + '::' + item.displayText?.name
+                              | abpLocalization
+                          }}
+                        </option>
+                      </select>
+                      <ng-container
+                        *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
+                      ></ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>{{ feature.displayName }}</ng-container>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
       </div>
-    </form>
+
+      <ng-template #descTmp let-description>
+        <small *ngIf="description" class="d-block form-text text-muted">{{ description }}</small>
+      </ng-template>
+
+      <div class="col-md-8"><div [ngbNavOutlet]="nav"></div></div>
+
+      <div class="mx-3" *ngIf="!groups.length">
+        {{ 'AbpFeatureManagement::NoFeatureFoundMessage' | abpLocalization }}
+      </div>
+    </div>
   </ng-template>
 
   <ng-template #abpFooter>
-    <button #abpClose type="button" class="btn btn-secondary">
+    <button abpClose type="button" class="btn btn-secondary">
       {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">
+    <abp-button
+      *ngIf="groups.length"
+      iconClass="fa fa-check"
+      [disabled]="modalBusy"
+      (click)="save()"
+    >
       {{ 'AbpFeatureManagement::Save' | abpLocalization }}
     </abp-button>
   </ng-template>

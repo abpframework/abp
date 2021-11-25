@@ -1,24 +1,22 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
-using Volo.Abp.Threading;
+using Microsoft.Extensions.Hosting;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            using (var application = AbpApplicationFactory.Create<MyProjectNameConsoleApiClientModule>())
-            {
-                application.Initialize();
-
-                var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
-                AsyncHelper.RunSync(() => demo.RunAsync());
-
-                Console.WriteLine("Press ENTER to stop application...");
-                Console.ReadLine();
-            }
-        }
+        await CreateHostBuilder(args).RunConsoleAsync();
     }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .AddAppSettingsSecretsJson()
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHostedService<ConsoleTestAppHostedService>();
+            });
 }

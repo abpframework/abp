@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
+using Volo.Abp.Ui.Branding;
 using Volo.Abp.DependencyInjection;
 using Volo.Blogging.Localization;
 

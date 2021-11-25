@@ -8,7 +8,7 @@ Esta é a segunda parte da série de tutoriais angulares. Veja todas as peças:
 - **Parte II: Criar, atualizar e excluir livros (este tutorial)**
 - [Parte III: Testes de Integração](Part-III.md)
 
-Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb) .
+Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb) .
 
 ### Criando um novo livro
 
@@ -90,7 +90,7 @@ Abra o `book-list.component.html`e adicione o `abp-modal`para mostrar / ocultar 
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       Cancel
     </button>
   </ng-template>
@@ -195,7 +195,7 @@ Abra `book-list.component.html`e adicione o formulário no modelo de corpo do mo
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {{ type }}</option>
+        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -218,18 +218,18 @@ Abra `book-list.component.html`e adicione o formulário no modelo de corpo do mo
 
 > Usamos o [datepicker do NgBootstrap](https://ng-bootstrap.github.io/#/components/datepicker/overview) neste componente.
 
-Abra o `book-list.component.ts`e crie uma matriz chamada `bookTypeArr`:
+Abra o `book-list.component.ts`e crie uma matriz chamada `bookTypes`:
 
 ```js
 //...
 form: FormGroup;
 
-bookTypeArr = Object.keys(Books.BookType).filter(
+bookTypes = Object.keys(Books.BookType).filter(
     bookType => typeof this.booksType[bookType] === 'number'
 );
 ```
 
-O `bookTypeArr`contém os campos da `BookType`enumeração. A matriz resultante é mostrada abaixo:
+O `bookTypes`contém os campos da `BookType`enumeração. A matriz resultante é mostrada abaixo:
 
 ```js
 ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
@@ -276,7 +276,7 @@ Abra o `book-list.component.html`e adicione um `abp-button`para salvar o formul�
 
 ```html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
     Cancel
   </button>
   <button class="btn btn-primary" (click)="save()">
@@ -455,10 +455,10 @@ Abra o `book-list.component.html` e adicione modifique o `p-table` como mostrado
           </div>
         </div>
       </td>
-      <td>{{ data.name }}</td>
-      <td>{{ booksType[data.type] }}</td>
-      <td>{{ data.publishDate | date }}</td>
-      <td>{{ data.price }}</td>
+      <td>{%{{{ data.name }}}%}</td>
+      <td>{%{{{ booksType[data.type] }}}%}</td>
+      <td>{%{{{ data.publishDate | date }}}%}</td>
+      <td>{%{{{ data.price }}}%}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -477,7 +477,7 @@ Atualize o cabeçalho modal para alterar o título com base na operação atual:
 
 ```html
 <ng-template #abpHeader>
-  <h3>{{ selectedBook.id ? 'Edit' : 'New Book' }}</h3>
+  <h3>{%{{{ selectedBook.id ? 'Edit' : 'New Book' }}}%}</h3>
 </ng-template>
 ```
 

@@ -1,0 +1,19 @@
+﻿@page
+@using Volo.Blogging.Pages.Blog
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
+@model IndexModel
+@{
+    ViewBag.PageTitle = "Blogs";
+}
+<h2>
+    @L["Blogs"]
+</h2>
+
+<ul>
+    @foreach (var blog in Model.Blogs)
+    {
+        <li><a asp-page="./Posts/Index" asp-route-blogShortName="@blog.ShortName">@blog.Name</a></li>
+    }
+</ul>

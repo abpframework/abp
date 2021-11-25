@@ -1,0 +1,10 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Volo.Authorization:010001": "Autorizace se nezdařila! Daná politika nebyla udělena.",
+    "Volo.Authorization:010002": "Autorizace se nezdařila! Dané zásady nebyly uděleny: {PolicyName}",
+    "Volo.Authorization:010003": "Autorizace se nezdařila! Dané zásady nebyly uděleny pro daný zdroj: {ResourceName}",
+    "Volo.Authorization:010004": "Autorizace se nezdařila! Daný požadavek nebyl udělen pro daný zdroj: {ResourceName}",
+    "Volo.Authorization:010005": "Autorizace se nezdařila! Dané požadavky nebyly uděleny pro daný zdroj: {ResourceName}"
+  }
+}

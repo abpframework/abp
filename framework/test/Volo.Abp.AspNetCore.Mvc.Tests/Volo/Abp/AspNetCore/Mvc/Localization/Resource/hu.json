@@ -1,0 +1,10 @@
+{
+  "culture": "hu",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Születési dátum 1",
+    "DisplayName:BirthDate2": "Születési dátum 2",
+    "PersonModel:BirthDate3": "Születési dátum 3",
+    "BirthDate": "Születési dátum",
+    "Value1": "Első érték"
+  }
+}

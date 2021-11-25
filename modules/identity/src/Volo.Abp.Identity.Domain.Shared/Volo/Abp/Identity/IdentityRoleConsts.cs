@@ -1,9 +1,14 @@
-﻿namespace Volo.Abp.Identity
+﻿namespace Volo.Abp.Identity;
+
+public static class IdentityRoleConsts
 {
-    public static class IdentityRoleConsts
-    {
-        public const int MaxNameLength = 256;
-        public const int MaxNormalizedNameLength = MaxNameLength;
-        public const int MaxConcurrencyStampLength = 256;
-    }
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxNameLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxNormalizedNameLength { get; set; } = 256;
 }

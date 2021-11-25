@@ -1,0 +1,12 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.CarouselDemo
+@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Carousel.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Carousel";
+}
+<h2>Carousel</h2>
+<p>Based on <a href="https://getbootstrap.com/docs/4.0/components/carousel/" target="_blank"> Bootstrap carousel</a>.</p>
+
+@await Component.InvokeAsync(typeof(CarouselDemoViewComponent))

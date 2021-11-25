@@ -1,46 +1,44 @@
 using System;
-using System.Linq;
-using JetBrains.Annotations;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public class TenantResolver : ITenantResolver, ITransientDependency
 {
-    public class TenantResolver : ITenantResolver, ITransientDependency
+    private readonly IServiceProvider _serviceProvider;
+    private readonly AbpTenantResolveOptions _options;
+
+    public TenantResolver(IOptions<AbpTenantResolveOptions> options, IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly AbpTenantResolveOptions _options;
+        _serviceProvider = serviceProvider;
+        _options = options.Value;
+    }
 
-        public TenantResolver(IOptions<AbpTenantResolveOptions> options, IServiceProvider serviceProvider)
+    public virtual async Task<TenantResolveResult> ResolveTenantIdOrNameAsync()
+    {
+        var result = new TenantResolveResult();
+
+        using (var serviceScope = _serviceProvider.CreateScope())
         {
-            _serviceProvider = serviceProvider;
-            _options = options.Value;
-        }
+            var context = new TenantResolveContext(serviceScope.ServiceProvider);
 
-        public TenantResolveResult ResolveTenantIdOrName()
-        {
-            var result = new TenantResolveResult();
-
-            using (var serviceScope = _serviceProvider.CreateScope())
+            foreach (var tenantResolver in _options.TenantResolvers)
             {
-                var context = new TenantResolveContext(serviceScope.ServiceProvider);
+                await tenantResolver.ResolveAsync(context);
 
-                foreach (var tenantResolver in _options.TenantResolvers)
+                result.AppliedResolvers.Add(tenantResolver.Name);
+
+                if (context.HasResolvedTenantOrHost())
                 {
-                    tenantResolver.Resolve(context);
-
-                    result.AppliedResolvers.Add(tenantResolver.Name);
-
-                    if (context.HasResolvedTenantOrHost())
-                    {
-                        result.TenantIdOrName = context.TenantIdOrName;
-                        break;
-                    }
+                    result.TenantIdOrName = context.TenantIdOrName;
+                    break;
                 }
             }
-
-            return result;
         }
+
+        return result;
     }
 }

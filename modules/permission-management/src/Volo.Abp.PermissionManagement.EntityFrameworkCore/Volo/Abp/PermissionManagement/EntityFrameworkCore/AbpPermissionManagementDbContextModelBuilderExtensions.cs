@@ -1,34 +1,31 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
+namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
+
+public static class AbpPermissionManagementDbContextModelBuilderExtensions
 {
-    public static class AbpPermissionManagementDbContextModelBuilderExtensions
+    public static void ConfigurePermissionManagement(
+        [NotNull] this ModelBuilder builder)
     {
-        public static void ConfigurePermissionManagement(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<AbpPermissionManagementModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<PermissionGrant>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.ToTable(AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants", AbpPermissionManagementDbProperties.DbSchema);
 
-            var options = new AbpPermissionManagementModelBuilderConfigurationOptions(
-                AbpPermissionManagementDbProperties.DbTablePrefix,
-                AbpPermissionManagementDbProperties.DbSchema
-            );
+            b.ConfigureByConvention();
 
-            optionsAction?.Invoke(options);
+            b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
+            b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
 
-            builder.Entity<PermissionGrant>(b =>
-            {
-                b.ToTable(options.TablePrefix + "PermissionGrants", options.Schema);
+            b.HasIndex(x => new { x.TenantId, x.Name, x.ProviderName, x.ProviderKey }).IsUnique(true);
 
-                b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
-                b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
-                b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
+            b.ApplyObjectExtensionMappings();
+        });
 
-                b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
-            });
-        }
+        builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();
     }
 }

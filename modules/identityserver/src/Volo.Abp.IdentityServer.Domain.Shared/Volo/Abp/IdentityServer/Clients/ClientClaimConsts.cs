@@ -1,8 +1,8 @@
-﻿namespace Volo.Abp.IdentityServer.Clients
+﻿namespace Volo.Abp.IdentityServer.Clients;
+
+public class ClientClaimConsts
 {
-    public class ClientClaimConsts
-    {
-        public const int TypeMaxLength = 250;
-        public const int ValueMaxLength = 250;
-    }
+    public static int TypeMaxLength { get; set; } = 250;
+
+    public static int ValueMaxLength { get; set; } = 250;
 }

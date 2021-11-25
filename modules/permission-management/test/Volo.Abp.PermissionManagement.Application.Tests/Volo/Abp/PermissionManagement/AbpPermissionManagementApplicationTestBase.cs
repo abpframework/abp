@@ -5,23 +5,22 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public class AbpPermissionManagementApplicationTestBase : PermissionManagementTestBase<AbpPermissionManagementApplicationTestModule>
 {
-    public class AbpPermissionManagementApplicationTestBase : PermissionManagementTestBase<AbpPermissionManagementApplicationTestModule>
+    protected Guid? CurrentUserId { get; set; }
+
+    protected AbpPermissionManagementApplicationTestBase()
     {
-        protected Guid? CurrentUserId { get; set; }
+        CurrentUserId = Guid.NewGuid();
+    }
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        var currentUser = Substitute.For<ICurrentUser>();
+        currentUser.Roles.Returns(new[] { "admin" });
+        currentUser.IsAuthenticated.Returns(true);
 
-        protected AbpPermissionManagementApplicationTestBase()
-        {
-            CurrentUserId = Guid.NewGuid();
-        }
-        protected override void AfterAddApplication(IServiceCollection services)
-        {
-            var currentUser = Substitute.For<ICurrentUser>();
-            //currentUser.Id.Returns(ci => CurrentUserId);
-            currentUser.IsAuthenticated.Returns(true);
-
-            services.AddSingleton(currentUser);
-        }
+        services.AddSingleton(currentUser);
     }
 }

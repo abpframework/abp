@@ -1,0 +1,24 @@
+{
+  "culture": "es",
+  "texts": {
+    "Settings": "Configuraciones",
+    "SuccessfullySaved": "Guardado correctamente",
+    "Permission:SettingManagement": "Configuraciones de correo electronico",
+    "Permission:Emailing": "Configuración",
+    "Menu:Emailing": "Configuración",
+    "SmtpHost": "Host",
+    "SmtpPort": "Puerto",
+    "SmtpUserName": "Nombre de usuario",
+    "SmtpPassword": "Contraseña",
+    "SmtpDomain": "Dominio",
+    "SmtpEnableSsl": "Activar ssl",
+    "SmtpUseDefaultCredentials": "Usar credenciales por defecto",
+    "DefaultFromAddress": "Dirección origen por defecto",
+    "DefaultFromDisplayName": "Nombre a mostrar por defecto",
+    "Feature:SettingManagementGroup": "Gestión de la configuración",
+    "Feature:SettingManagementEnable": "Habilitar la gestión de la configuración",
+    "Feature:SettingManagementEnableDescription": "Habilite el sistema de gestión de la configuración en la aplicación.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Permitir que los inquilinos cambien la configuración del correo electrónico.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Permitir que los inquilinos cambien la configuración del correo electrónico."
+  }
+}

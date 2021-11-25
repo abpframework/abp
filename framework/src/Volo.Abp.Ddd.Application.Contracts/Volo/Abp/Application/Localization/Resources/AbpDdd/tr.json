@@ -1,0 +1,6 @@
+{
+  "culture": "tr",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} en fazla {1} olabilir, daha büyük olamaz! Daha fazla sonuca izin vermek için {2}.{3}'ü sunucu tarafında artırın."
+  }
+}

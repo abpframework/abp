@@ -1,12 +1,17 @@
-namespace Volo.Abp.EventBus
-{
-    public class MySimpleEventData
-    {
-        public int Value { get; set; }
+using System;
+using Volo.Abp.MultiTenancy;
 
-        public MySimpleEventData(int value)
-        {
-            Value = value;
-        }
+namespace Volo.Abp.EventBus;
+
+public class MySimpleEventData : IMultiTenant
+{
+    public int Value { get; set; }
+
+    public Guid? TenantId { get; }
+
+    public MySimpleEventData(int value, Guid? tenantId = null)
+    {
+        Value = value;
+        TenantId = tenantId;
     }
 }

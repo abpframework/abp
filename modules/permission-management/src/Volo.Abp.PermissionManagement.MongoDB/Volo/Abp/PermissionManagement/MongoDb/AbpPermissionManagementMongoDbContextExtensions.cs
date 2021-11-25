@@ -1,26 +1,17 @@
-﻿using System;
-using Volo.Abp.MongoDB;
+﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.PermissionManagement.MongoDB
+namespace Volo.Abp.PermissionManagement.MongoDB;
+
+public static class AbpPermissionManagementMongoDbContextExtensions
 {
-    public static class AbpPermissionManagementMongoDbContextExtensions
+    public static void ConfigurePermissionManagement(
+        this IMongoModelBuilder builder)
     {
-        public static void ConfigurePermissionManagement(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<PermissionGrant>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
-
-            var options = new PermissionManagementMongoModelBuilderConfigurationOptions(
-                AbpPermissionManagementDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
-
-            builder.Entity<PermissionGrant>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "PermissionGrants";
-            });
-        }
+            b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants";
+        });
     }
 }

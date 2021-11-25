@@ -1,0 +1,89 @@
+﻿@using Volo.Abp.Validation.StringValues
+@using Microsoft.Extensions.Localization
+@inherits AbpFeatureManagementComponentBase
+
+<Modal @ref="Modal" Closing="@ClosingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Features"]</ModalTitle>
+            <CloseButton Clicked="CloseModal" />
+        </ModalHeader>
+        <ModalBody MaxHeight="50">
+            @if (Groups == null || !Groups.Any())
+            {
+                <span>@L["NoFeatureFoundMessage"]</span>
+            }
+            else
+            {
+                <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@SelectedTabName">
+                    <Items>
+                        @foreach (var group in Groups)
+                        {
+                            <Tab Name="@GetNormalizedGroupName(group.Name)">
+                                <span>@group.DisplayName</span>
+                            </Tab>
+                        }
+                    </Items>
+                    <Content>
+                        @foreach (var group in Groups)
+                        {
+                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
+                                <h4>@group.DisplayName</h4>
+                                <hr class="mt-2 mb-3"/>
+                                @foreach (var feature in group.Features)
+                                {
+                                    var disabled = IsDisabled(feature.Provider.Name);
+
+                                    if (feature.ValueType is FreeTextStringValueType)
+                                    {
+                                        <Field Style="@GetFeatureStyles(feature)">
+                                            <FieldLabel>@feature.DisplayName</FieldLabel>
+                                            <TextEdit Disabled="@disabled"
+                                                      Text="@feature.Value"
+                                                      TextChanged="@(async(v) => await OnFeatureValueChangedAsync(v, feature))" />
+                                            @if (feature.Description != null)
+                                            {
+                                                <span>@feature.Description</span>
+                                            }
+                                        </Field>
+                                    }
+
+                                    if (feature.ValueType is SelectionStringValueType)
+                                    {
+                                        var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
+
+                                        <Field Style="@GetFeatureStyles(feature)">
+                                            <FieldLabel>@feature.DisplayName</FieldLabel>
+                                            <Select TValue="string"
+                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
+                                                @foreach (var item in items)
+                                                {
+                                                    <SelectItem Value="@item.Value">
+                                                        @CreateStringLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name)
+                                                    </SelectItem>
+                                                }
+                                            </Select>
+                                        </Field>
+                                    }
+
+                                    if (feature.ValueType is ToggleStringValueType)
+                                    {
+                                        <Field Style="@GetFeatureStyles(feature)" >
+                                            <Check
+                                                TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async(v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
+                                        </Field>
+                                    }
+                                }
+
+                            </TabPanel>
+                        }
+                    </Content>
+                </Tabs>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

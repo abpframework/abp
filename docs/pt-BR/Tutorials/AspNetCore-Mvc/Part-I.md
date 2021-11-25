@@ -10,7 +10,7 @@ Esta é a primeira parte da série de tutoriais do ASP.NET Core MVC. Veja todas 
 - [Parte II: Criar, atualizar e excluir livros](Part-II.md)
 - [Parte III: Testes de Integração](Part-III.md)
 
-Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/abpframework/abp/tree/master/samples/BookStore) .
+Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore) .
 
 > Você também pode assistir a [este curso em vídeo](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) preparado por um membro da comunidade ABP, com base neste tutorial.
 
@@ -222,7 +222,7 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.BookStore
 {
-    public interface IBookAppService : 
+    public interface IBookAppService :
         ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
@@ -251,12 +251,12 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore
 {
-    public class BookAppService : 
+    public class BookAppService :
         CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                        CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
-        public BookAppService(IRepository<Book, Guid> repository) 
+        public BookAppService(IRepository<Book, Guid> repository)
             : base(repository)
         {
 
@@ -338,13 +338,11 @@ Abra `Index.cshtml`e altere o conteúdo, como mostrado abaixo:
 ```html
 @page
 @using Acme.BookStore.Web.Pages.Books
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model IndexModel
 
 <h2>Books</h2>
 ```
 
-- Esse código altera a herança padrão do Razor View Page Model para que ele **herda** da `BookStorePage`classe (em vez de `PageModel`). A `BookStorePage`classe que acompanha o modelo de inicialização e fornece algumas propriedades / métodos compartilhados usados por todas as páginas.
 - Verifique se o `IndexModel`( *Index.cshtml.cs)* possui o `Acme.BookStore.Pages.Books`espaço para nome ou atualize-o no `Index.cshtml`.
 
 #### Adicionar página de livros ao menu principal
@@ -395,7 +393,6 @@ Altere o `Pages/Books/Index.cshtml`seguinte:
 
 ```html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {

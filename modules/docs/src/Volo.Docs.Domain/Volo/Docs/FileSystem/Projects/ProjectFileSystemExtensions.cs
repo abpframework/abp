@@ -24,7 +24,7 @@ namespace Volo.Docs.FileSystem.Projects
         {
             Check.NotNull(project, nameof(project));
 
-            if (project.DocumentStoreType != FileSystemDocumentStore.Type)
+            if (project.DocumentStoreType != FileSystemDocumentSource.Type)
             {
                 throw new ApplicationException("Given project has not a FileSystem document store!");
             }

@@ -1,14 +1,23 @@
 {
+  "version": "2.3.0",
   "scripts": {
     "lerna": "lerna",
-    "gulp:app": "node run-gulp-script.js ../templates/app/aspnet-core",
-    "gulp:module": "node run-gulp-script.js ../templates/module/aspnet-core",
     "ncu": "ncu",
-    "update:templates": "node abp-package-update-script.js ../templates"
+    "update-gulp": "node update-gulp.js",
+    "replace-with-tilde": "node replace-with-tilde.js",
+    "update": "node package-update-script.js"
   },
   "devDependencies": {
-    "lerna": "^2.11.0",
-    "npm-check-updates": "^3.1.25",
-    "glob": "^7.1.5"
+    "@types/fs-extra": "^8.0.1",
+    "glob": "^7.1.5",
+    "lerna": "^3.18.4",
+    "npm-check-updates": "^11.3.0"
+  },
+  "dependencies": {
+    "commander": "^6.0.0",
+    "execa": "^3.4.0",
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^8.1.0",
+    "semver": "^7.3.5"
   }
 }

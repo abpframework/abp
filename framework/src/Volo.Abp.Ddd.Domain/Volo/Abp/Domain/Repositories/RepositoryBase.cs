@@ -1,130 +1,120 @@
-﻿using System;
-using System.Collections;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
-namespace Volo.Abp.Domain.Repositories
+namespace Volo.Abp.Domain.Repositories;
+
+public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
+    where TEntity : class, IEntity
 {
-    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>
-        where TEntity : class, IEntity
+    [Obsolete("Use WithDetailsAsync method.")]
+    public virtual IQueryable<TEntity> WithDetails()
     {
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
-
-        public virtual Type ElementType => GetQueryable().ElementType;
-
-        public virtual Expression Expression => GetQueryable().Expression;
-
-        public virtual IQueryProvider Provider => GetQueryable().Provider;
-
-        public virtual IQueryable<TEntity> WithDetails()
-        {
-            return GetQueryable();
-        }
-
-        public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
-        {
-            return GetQueryable();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<TEntity> GetEnumerator()
-        {
-            return GetQueryable().GetEnumerator();
-        }
-
-        protected abstract IQueryable<TEntity> GetQueryable();
-
-        public virtual void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
-        {
-            foreach (var entity in GetQueryable().Where(predicate).ToList())
-            {
-                Delete(entity, autoSave);
-            }
-        }
-
-        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            Delete(predicate, autoSave);
-            return Task.CompletedTask;
-        }
-
-        protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
-            where TQueryable : IQueryable<TEntity>
-        {
-            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
-            {
-                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
-            }
-
-            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
-            {
-                var tenantId = CurrentTenant.Id;
-                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
-            }
-
-            return query;
-        }
+        return GetQueryable();
     }
 
-    public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
-        where TEntity : class, IEntity<TKey>
+    [Obsolete("Use WithDetailsAsync method.")]
+    public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
     {
-        public virtual TEntity Find(TKey id, bool includeDetails = true)
+        return GetQueryable();
+    }
+
+    public virtual Task<IQueryable<TEntity>> WithDetailsAsync()
+    {
+        return GetQueryableAsync();
+    }
+
+    public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+    {
+        return GetQueryableAsync();
+    }
+
+    [Obsolete("Use GetQueryableAsync method.")]
+    protected abstract IQueryable<TEntity> GetQueryable();
+
+    public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
+
+    public abstract Task<TEntity> FindAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default);
+
+    public async Task<TEntity> GetAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await FindAsync(predicate, includeDetails, cancellationToken);
+
+        if (entity == null)
         {
-            return includeDetails
-                ? WithDetails().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
-                : GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+            throw new EntityNotFoundException(typeof(TEntity));
         }
 
-        public virtual TEntity Get(TKey id, bool includeDetails = true)
+        return entity;
+    }
+
+    public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
+
+    protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
+        where TQueryable : IQueryable<TEntity>
+    {
+        return ApplyDataFilters<TQueryable, TEntity>(query);
+    }
+
+    protected virtual TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
+        where TQueryable : IQueryable<TOtherEntity>
+    {
+        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TOtherEntity)))
         {
-            var entity = Find(id, includeDetails);
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-
-            return entity;
+            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
         }
 
-        public virtual Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        if (typeof(IMultiTenant).IsAssignableFrom(typeof(TOtherEntity)))
         {
-            return Task.FromResult(Get(id, includeDetails));
+            var tenantId = CurrentTenant.Id;
+            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
         }
 
-        public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        return query;
+    }
+}
+
+public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
+    where TEntity : class, IEntity<TKey>
+{
+    public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+    public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var entity = await FindAsync(id, cancellationToken: cancellationToken);
+        if (entity == null)
         {
-            return Task.FromResult(Find(id, includeDetails));
+            return;
         }
 
-        public virtual void Delete(TKey id, bool autoSave = false)
-        {
-            var entity = Find(id, includeDetails: false);
-            if (entity == null)
-            {
-                return;
-            }
+        await DeleteAsync(entity, autoSave, cancellationToken);
+    }
 
-            Delete(entity, autoSave);
+    public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        foreach (var id in ids)
+        {
+            await DeleteAsync(id, cancellationToken: cancellationToken);
         }
 
-        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
+        if (autoSave)
         {
-            Delete(id, autoSave);
-            return Task.CompletedTask;
+            await SaveChangesAsync(cancellationToken);
         }
     }
 }

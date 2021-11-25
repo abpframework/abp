@@ -1,0 +1,14 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "VirtualFileExplorer" : "虛擬檔案總管",
+    "VirtualFileType" : "虛擬檔案類型",
+    "Menu:VirtualFileExplorer" : "虛擬檔案瀏覽器",
+    "LastUpdateTime" : "最後更新時間",
+    "VirtualFileName" : "虛擬檔案名稱",
+    "FileContent" : "檔案內容",
+    "Size" : "檔案大小",
+    "BackToRoot" : "返回根目錄",
+    "EmptyFileInfoList" : "無任何虛擬檔案"
+  }
+}

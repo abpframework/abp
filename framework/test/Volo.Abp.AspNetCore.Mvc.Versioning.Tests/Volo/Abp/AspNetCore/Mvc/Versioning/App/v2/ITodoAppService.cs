@@ -1,9 +1,9 @@
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v2
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v2;
+
+public interface ITodoAppService : IApplicationService
 {
-    public interface ITodoAppService : IApplicationService
-    {
-        string Get(int id);
-    }
+    Task<string> GetAsync(int id);
 }

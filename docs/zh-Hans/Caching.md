@@ -2,6 +2,32 @@
 
 ABP框架扩展了ASP.NET Core的分布式缓存系统.
 
+## Volo.Abp.Caching Package
+
+> 默认情况下启动模板已经安装了这个包,所以大部分情况下你不需要手动安装.
+
+Volo.Abp.Caching是缓存系统的核心包.使用包管理控制台(PMC)安装到项目:
+
+```
+Install-Package Volo.Abp.Caching
+```
+
+然后将 **AbpCachingModule** 依赖添加到你的模块:
+
+```c#
+using Volo.Abp.Modularity;
+using Volo.Abp.Caching;
+
+namespace MyCompany.MyProject
+{
+    [DependsOn(typeof(AbpCachingModule))]
+    public class MyModule : AbpModule
+    {
+        //...
+    }
+}
+```
+
 ## `IDistributedCache` 接口
 
 ASP.NET Core 定义了 `IDistributedCache` 接口用于 get/set 缓存值 . 但是会有以下问题:
@@ -165,6 +191,18 @@ public class BookService : ITransientDependency
     ...
 }
 ````
+
+## 批量操作
+
+ABP的分布式缓存接口定义了以下批量操作方法,当你需要在一个方法中调用多次缓存操作时,这些方法可以提高性能
+
+* `SetManyAsync` 和 `SetMany` 方法可以用来设置多个值.
+* `GetManyAsync` 和 `GetMany` 方法可以用来从缓存中获取多个值.
+* `GetOrAddManyAsync` 和 `GetOrAddMany` 方法可以用来从缓存中获取并添加缺少的值.
+* `RefreshManyAsync` 和 `RefreshMany` 方法可以来用重置多个值的滚动过期时间.
+* `RemoveManyAsync` 和 `RemoveMany` 方法呆以用来删除多个值.
+
+> 这些不是标准的ASP.NET Core缓存方法, 所以某些提供程序可能不支持. [ABP Redis集成包](Redis-Cache.md)实现了它们. 如果提供程序不支持,会回退到 `SetAsync` 和 `GetAsync` ... 方法(循环调用).
 
 ### DistributedCacheOptions
 

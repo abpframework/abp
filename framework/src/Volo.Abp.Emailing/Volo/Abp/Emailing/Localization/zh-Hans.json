@@ -1,0 +1,25 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "默认发件人地址",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "默认发件人名字",
+    "DisplayName:Abp.Mailing.Smtp.Host": "主机",
+    "DisplayName:Abp.Mailing.Smtp.Port": "端口",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "用户名",
+    "DisplayName:Abp.Mailing.Smtp.Password": "密码",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "域",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "启用SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "使用默认凭据",
+    "Description:Abp.Mailing.DefaultFromAddress": "默认的发件人地址.",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "默认的发件人名字.",
+    "Description:Abp.Mailing.Smtp.Host": "SMTP 事务的主机名或主机 IP 地址.",
+    "Description:Abp.Mailing.Smtp.Port": "SMTP 事务的端口.",
+    "Description:Abp.Mailing.Smtp.UserName": "凭据关联的用户名.",
+    "Description:Abp.Mailing.Smtp.Password": "凭据关联的用户名的密码.",
+    "Description:Abp.Mailing.Smtp.Domain": "验证凭据的域名或计算机名.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "指定 SmtpClient 是否使用安全套接字层 (SSL) 加密连接.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "控制默认凭据是否随请求一起发送.",
+    "TextTemplate:StandardEmailTemplates.Layout": "默认电子邮件模板",
+    "TextTemplate:StandardEmailTemplates.Message": "电子邮件的简单消息模板"
+  }
+}

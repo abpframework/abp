@@ -8,37 +8,42 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Volo.Abp.IdentityServer.AspNetIdentity
+namespace Volo.Abp.IdentityServer.AspNetIdentity;
+
+public class AbpProfileService : ProfileService<IdentityUser>
 {
-    public class AbpProfileService : ProfileService<IdentityUser>
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public AbpProfileService(
+        IdentityUserManager userManager,
+        IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+        ICurrentTenant currentTenant)
+        : base(userManager, claimsFactory)
     {
-        private readonly ICurrentTenant _currentTenant;
+        CurrentTenant = currentTenant;
+    }
 
-        public AbpProfileService(
-            IdentityUserManager userManager,
-            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
-            ICurrentTenant currentTenant)
-            : base(userManager, claimsFactory)
+    [UnitOfWork]
+    public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            _currentTenant = currentTenant;
+            await base.GetProfileDataAsync(context);
         }
+    }
 
-        [UnitOfWork]
-        public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    [UnitOfWork]
+    public override async Task IsActiveAsync(IsActiveContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            using (_currentTenant.Change(context.Subject.FindTenantId()))
-            {
-                await base.GetProfileDataAsync(context);
-            }
+            await base.IsActiveAsync(context);
         }
+    }
 
-        [UnitOfWork]
-        public override async Task IsActiveAsync(IsActiveContext context)
-        {
-            using (_currentTenant.Change(context.Subject.FindTenantId()))
-            {
-                await base.IsActiveAsync(context);
-            }
-        }
+    [UnitOfWork]
+    public override Task<bool> IsUserActiveAsync(IdentityUser user)
+    {
+        return Task.FromResult(user.IsActive);
     }
 }

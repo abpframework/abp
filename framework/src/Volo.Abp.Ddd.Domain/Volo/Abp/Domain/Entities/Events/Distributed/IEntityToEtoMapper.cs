@@ -1,10 +1,9 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed
+namespace Volo.Abp.Domain.Entities.Events.Distributed;
+
+public interface IEntityToEtoMapper
 {
-    public interface IEntityToEtoMapper
-    {
-        [CanBeNull]
-        object Map(object entityObj);
-    }
+    [CanBeNull]
+    object Map(object entityObj);
 }

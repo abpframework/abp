@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public class AbpTenantManagementApplicationAutoMapperProfile : Profile
 {
-    public class AbpTenantManagementApplicationAutoMapperProfile : Profile
+    public AbpTenantManagementApplicationAutoMapperProfile()
     {
-        public AbpTenantManagementApplicationAutoMapperProfile()
-        {
-            CreateMap<Tenant, TenantDto>();
-        }
+        CreateMap<Tenant, TenantDto>()
+            .MapExtraProperties();
     }
 }

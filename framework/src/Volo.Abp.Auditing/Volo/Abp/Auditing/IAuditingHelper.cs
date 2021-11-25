@@ -2,27 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+//TODO: Move ShouldSaveAudit & IsEntityHistoryEnabled and rename to IAuditingFactory
+public interface IAuditingHelper
 {
-    //TODO: Move ShouldSaveAudit and rename to IAuditingFactory
-    public interface IAuditingHelper
-    {
-        bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false);
+    bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false);
 
-        AuditLogInfo CreateAuditLogInfo();
+    bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false);
 
-        AuditLogActionInfo CreateAuditLogAction(
-            AuditLogInfo auditLog,
-            Type type,
-            MethodInfo method,
-            object[] arguments
-        );
+    AuditLogInfo CreateAuditLogInfo();
 
-        AuditLogActionInfo CreateAuditLogAction(
-            AuditLogInfo auditLog,
-            Type type,
-            MethodInfo method,
-            IDictionary<string, object> arguments
-        );
-    }
+    AuditLogActionInfo CreateAuditLogAction(
+        AuditLogInfo auditLog,
+        Type type,
+        MethodInfo method,
+        object[] arguments
+    );
+
+    AuditLogActionInfo CreateAuditLogAction(
+        AuditLogInfo auditLog,
+        Type type,
+        MethodInfo method,
+        IDictionary<string, object> arguments
+    );
 }

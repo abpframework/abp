@@ -1,0 +1,25 @@
+{
+  "culture": "es",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Por defecto desde dirección",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Por defecto desde nombre a mostrar",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Host",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Puerto",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Nombre de usuario",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Contraseña",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Dominio",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Habilitar SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Usar credenciales por defecto",
+    "Description:Abp.Mailing.DefaultFromAddress": "Por defecto desde dirección",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Por defecto desde nombre a mostrar",
+    "Description:Abp.Mailing.Smtp.Host": "El nombre o dirección IP del host usado para transacciones SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "El puerto usado por transacciones SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "Nombre de usuario asociado con los credenciales.",
+    "Description:Abp.Mailing.Smtp.Password": "La contraseña para el nombre de usuario asociado con los credenciales.",
+    "Description:Abp.Mailing.Smtp.Domain": "El dominio o nombre de equipo que verifica los credenciales.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Cuando el cliente SMTP usa Secure Sockets Layer (SSL) para encriptar la conexión.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Cuando los credenciales por defecto son enviados con las peticiones.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Plantilla de Email por defecto",
+    "TextTemplate:StandardEmailTemplates.Message": "Simple plantilla de mensaje para emails"
+  }
+}

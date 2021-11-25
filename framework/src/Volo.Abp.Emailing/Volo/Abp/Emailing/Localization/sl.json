@@ -1,0 +1,25 @@
+{
+  "culture": "sl",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Privzeti naslov za pošiljanje",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Privzeto ime za prikaz pri pošiljanju",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Gostitelj",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Vrata",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Uporabniško ime",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Geslo",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domena",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Omogoči SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Uporabi privzete poverilnice",
+    "Description:Abp.Mailing.DefaultFromAddress": "Privzeti naslov za pošiljanje",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Privzeto ime za prikaz pri pošiljanju",
+    "Description:Abp.Mailing.Smtp.Host": "Naziv ali IP naslov gostitelja za uporabo SMTP transakcij.",
+    "Description:Abp.Mailing.Smtp.Port": "Vrata za uporabo SMTP transakcij.",
+    "Description:Abp.Mailing.Smtp.UserName": "Uporabniško ime, povezano s poverilnicami.",
+    "Description:Abp.Mailing.Smtp.Password": "The password for the user name associated with the credentials.",
+    "Description:Abp.Mailing.Smtp.Domain": "Geslo za uporabniško ime, povezano s poverilnicami.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Ali SmtpClient uporablja sloj varnih vtičnic (SSL) za šifriranje povezave.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Ali so privzete poverilnice poslane skupaj z zahtevki.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Privzeta predloga postavitve e-pošte",
+    "TextTemplate:StandardEmailTemplates.Message": "Preprosta predloga sporočil za e-pošto"
+  }
+}

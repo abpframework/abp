@@ -5,37 +5,37 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+[DependsOn(
+    typeof(AbpJsonModule)
+    )]
+public class AbpBackgroundJobsAbstractionsModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpJsonModule)
-        )]
-    public class AbpBackgroundJobsAbstractionsModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        RegisterJobs(context.Services);
+    }
+
+    private static void RegisterJobs(IServiceCollection services)
+    {
+        var jobTypes = new List<Type>();
+
+        services.OnRegistred(context =>
         {
-            RegisterJobs(context.Services);
-        }
+            if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
+                ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))
+            {
+                jobTypes.Add(context.ImplementationType);
+            }
+        });
 
-        private static void RegisterJobs(IServiceCollection services)
+        services.Configure<AbpBackgroundJobOptions>(options =>
         {
-            var jobTypes = new List<Type>();
-
-            services.OnRegistred(context =>
+            foreach (var jobType in jobTypes)
             {
-                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)))
-                {
-                    jobTypes.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<AbpBackgroundJobOptions>(options =>
-            {
-                foreach (var jobType in jobTypes)
-                {
-                    options.AddJob(jobType);
-                }
-            });
-        }
+                options.AddJob(jobType);
+            }
+        });
     }
 }

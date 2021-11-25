@@ -4,22 +4,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore;
+
+public static class AbpDbContextConfigurationContextSqlServerExtensions
 {
-    public static class AbpDbContextConfigurationContextSqlServerExtensions
+    public static DbContextOptionsBuilder UseSqlServer(
+        [NotNull] this AbpDbContextConfigurationContext context,
+        [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
     {
-        public static DbContextOptionsBuilder UseSqlServer(
-            [NotNull] this AbpDbContextConfigurationContext context,
-            [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
+        if (context.ExistingConnection != null)
         {
-            if (context.ExistingConnection != null)
+            return context.DbContextOptions.UseSqlServer(context.ExistingConnection, optionsBuilder =>
             {
-                return context.DbContextOptions.UseSqlServer(context.ExistingConnection, sqlServerOptionsAction);
-            }
-            else
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                sqlServerOptionsAction?.Invoke(optionsBuilder);
+            });
+        }
+        else
+        {
+            return context.DbContextOptions.UseSqlServer(context.ConnectionString, optionsBuilder =>
             {
-                return context.DbContextOptions.UseSqlServer(context.ConnectionString, sqlServerOptionsAction);
-            }
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                sqlServerOptionsAction?.Invoke(optionsBuilder);
+            });
         }
     }
 }

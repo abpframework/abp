@@ -1,25 +1,22 @@
 ﻿using AutoMapper;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants;
 
-namespace Volo.Abp.TenantManagement.Web
+namespace Volo.Abp.TenantManagement.Web;
+
+public class AbpTenantManagementWebAutoMapperProfile : Profile
 {
-    public class AbpTenantManagementWebAutoMapperProfile : Profile
+    public AbpTenantManagementWebAutoMapperProfile()
     {
-        public AbpTenantManagementWebAutoMapperProfile()
-        {
-            CreateRoleMappings();
-        }
+        //List
+        CreateMap<TenantDto, EditModalModel.TenantInfoModel>();
 
-        private void CreateRoleMappings()
-        {
-            //List
-            CreateMap<TenantDto, EditModalModel.TenantInfoModel>();
+        //CreateModal
+        CreateMap<CreateModalModel.TenantInfoModel, TenantCreateDto>()
+            .MapExtraProperties();
 
-            //CreateModal
-            CreateMap<CreateModalModel.TenantInfoModel, TenantCreateDto>();
-
-            //EditModal
-            CreateMap<EditModalModel.TenantInfoModel, TenantUpdateDto>();
-        }
+        //EditModal
+        CreateMap<EditModalModel.TenantInfoModel, TenantUpdateDto>()
+            .MapExtraProperties();
     }
 }

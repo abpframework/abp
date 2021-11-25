@@ -1,44 +1,48 @@
-﻿using System;
-using Volo.Abp.IdentityServer.ApiResources;
+﻿using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.IdentityServer.MongoDB
+namespace Volo.Abp.IdentityServer.MongoDB;
+
+public static class AbpIdentityServerMongoDbContextExtensions
 {
-    public static class AbpIdentityServerMongoDbContextExtensions
+    public static void ConfigureIdentityServer(
+        this IMongoModelBuilder builder)
     {
-        public static void ConfigureIdentityServer(
-            this IMongoModelBuilder builder,
-            Action<IdentityServerMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<ApiResource>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "ApiResources";
+        });
 
-            var options = new IdentityServerMongoModelBuilderConfigurationOptions(
-                AbpIdentityServerDbProperties.DbTablePrefix
-            );
+        builder.Entity<ApiScope>(b =>
+        {
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopes";
+        });
 
-            optionsAction?.Invoke(options);
+        builder.Entity<IdentityResource>(b =>
+        {
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResources";
+        });
 
-            builder.Entity<ApiResource>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "ApiResources";
-            });
+        builder.Entity<Client>(b =>
+        {
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "Clients";
+        });
 
-            builder.Entity<Client>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "Clients";
-            });
-            builder.Entity<IdentityResource>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "IdentityResources";
-            });
+        builder.Entity<PersistedGrant>(b =>
+        {
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "PersistedGrants";
+        });
 
-            builder.Entity<PersistedGrant>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "PersistedGrants";
-            });
-        }
+        builder.Entity<DeviceFlowCodes>(b =>
+        {
+            b.CollectionName = AbpIdentityServerDbProperties.DbTablePrefix + "DeviceFlowCodes";
+        });
     }
 }

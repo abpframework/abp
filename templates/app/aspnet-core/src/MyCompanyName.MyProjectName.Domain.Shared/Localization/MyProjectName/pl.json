@@ -1,8 +1,0 @@
-{
-  "culture": "pl",
-  "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Witaj",
-    "LongWelcomeMessage": "Witaj w aplikacji. To jest inicjalny projekt bazujący na ABP framework. Po więcej informacji odwiedź stronę abp.io."
-  }
-}

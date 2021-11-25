@@ -1,0 +1,11 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Hello <b>{0}</b>.": "Witaj <b>{0}</b>.",
+    "Car": "Samochód",
+    "CarPlural": "Samochody",
+    "MaxLenghtErrorMessage": "To pole może mieć maksymalnie '{0}' znaków",
+    "Universe": "Wszechświat",
+    "FortyTwo": "Czterdzieści dwa"
+  }
+}

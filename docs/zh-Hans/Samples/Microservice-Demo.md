@@ -24,82 +24,15 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 
 下图展示了该系统:
 
-![microservice-sample-diagram](../images/microservice-sample-diagram-2.png)
+![microservice-sample-diagram](../images/microservice-sample-diagram-3.png)
 
 ### 源码
 
-你可以从[GitHub仓库](https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo)获取源码.
-
-### 状态
-
-该示例的初始版本已完成.其他改进仍在开发中.
+你可以从[GitHub仓库](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo)获取源码.
 
 ## 运行解决方案
 
-您可以从 **源代码** 或者预先配置好的 **docker-compose** 文件运行.
-
-### 使用Docker容器
-
-#### 预先要求
-
-由于所有依赖项都已预先配置, 因此作为Docker容器运行更容易. 你只需要安装[最新的docker](https://docs.docker.com/compose/install/).
-
-#### 运行容器
-
-- 克隆或下载 [ABP仓库](https://github.com/abpframework/abp).
-
-- 在存储库的`samples/MicroserviceDemo`文件夹中打开命令行.
-
-- 从Docker Hub中拉取image:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml pull
-  ```
-
-- 如果要在本地构建映像, 可以跳过上述步骤, 使用build命令:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml build
-  ```
-
-  根据你的电脑配置, 构建image可能需要**很长时间**.
-
-- 还原 SQL Server 数据库:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml run restore-database
-  ```
-
-- 启动容器:
-
-  ```
-  docker-compose up -d
-  ```
-
-- 将此行添加到`hosts`文件的末尾:
-
-  ```
-  127.0.0.1	auth-server
-  ```
-
-  hosts文件位于Windows上的`C:\Windows\System32\Drivers\etc\hosts`文件夹, Linux/MacOS的`/etc/hosts`中.
-
-#### 运行应用程序
-
-你可能想要了解容器中运行一些应用程序:
-
-* 后端管理应用程序 (BackendAdminApp.Host): `http://localhost:51512`
-  *(用于管理系统中的用户和产品)*
-* 公共网站 (PublicWebsite.Host): `http://localhost:51513`
-  *(用于列出产品并运行/管理博客模块)*
-* 认证服务器 (AuthServer.Host): `http://auth-server:51511/`
-  *(用作使用IdentityServer4构建的单点登录和身份验证服务器)*
-* Kibana UI: `http://localhost:51510`
-  *(用于显示/跟踪所有服务/应用程序/网关写入的日志)*
-
-### 从源代码运行
-
-#### 预先要求
+### 预先要求
 
 为了能够从源代码运行解决方案, 应在你的计算机上安装并运行以下工具:
 
@@ -110,42 +43,49 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
 * [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (可选,建议显示日志)
 
-#### 打开并构建Visual Studio解决方案
+### 运行基础设施
+
+- 默认情况下运行Docker-compose可以轻松运行预先要求. 如果你没有安装,在windows环境下你可以在[这里](https://docs.docker.com/docker-for-windows/install/)下载并使用[Docker for Windows](https://docs.docker.com/docker-for-windows/).
+* 在 `MicroserviceDemo` 目录下运行命令 `docker-compose -f docker-compose.infrastructure.yml -f docker-compose.infrastructure.override.yml up -d` 或使用powershell运行 `MicroserviceDemo/_run` 文件夹下的 `__Run_Infrastructure.ps1` 脚本.
+* 如果你不想使用docker运行预先要求的服务在你的本地环境,你需要更改微服务示例解决方案项目中的 `appsettings.json` 文件.
+
+### 打开并构建Visual Studio解决方案
 
 * 在Visual Studio 2017 (15.9.0+)中打开`samples\MicroserviceDemo\MicroserviceDemo.sln`.
 * 在`samples\MicroserviceDemo`文件夹中的命令行运行`dotnet restore`命令.
 * 在Visual Studio中构建解决方案.
 
-#### 创建数据库
+### 创建数据库
 
-MongoDB 数据库是动态创建的，但是你需要创建 SQL server 数据库的结构。其实你可以很轻松的创建数据库，因为这个解决方案配置了使用 Entity Core Code First 来做迁移。
+MongoDB 数据库是动态创建的,但是你需要创建 SQL server 数据库的结构.其实你可以很轻松的创建数据库,因为这个解决方案配置了使用 Entity Core Code First 来做迁移.
 
-这个解决方案中有两个 SQL server 数据库。
+这个解决方案中有两个 SQL server 数据库.
 
-##### MsDemo_Identity 数据库
+#### MsDemo_Identity 数据库
 
-* 右键 `AuthServer.Host` 项目，然后点击 `设置为启动项目`.
+* 右键 `AuthServer.Host` 项目,然后点击 `设置为启动项目`.
 * 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
 * 选择 `AuthServer.Host` 成为 **默认项目**.
 * 执行 `Update-Database` 命令.
 
 ![microservice-sample-update-database-authserver](../images/microservice-sample-update-database-authserver.png)
 
-##### MsDemo_ProductManagement
+#### MsDemo_ProductManagement
 
-* 右键 `ProductService.Host` 项目，然后点击 `设置为启动项目`.
+* 右键 `ProductService.Host` 项目,然后点击 `设置为启动项目`.
 * 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
 * 选择 `ProductService.Host` 成为 **默认项目**.
 * 执行 `Update-Database` 命令.
 
 ![microservice-sample-update-database-products](../images/microservice-sample-update-database-products.png)
 
-#### 运行项目
+### 运行项目
 
 按以下顺序运行项目(右键单击每个项目设置为启动项目,按Ctrl+F5运行,无需调试):
 
 * AuthServer.Host
 * IdentityService.Host
+* TenantManagementService.Host
 * BloggingService.Host
 * ProductService.Host
 * InternalGateway.Host
@@ -158,7 +98,7 @@ MongoDB 数据库是动态创建的，但是你需要创建 SQL server 数据库
 
 Visual Studio解决方案由多个项目组成,每个项目在系统中具有不同的角色:
 
-![microservice-sample-solution](../images/microservice-sample-solution.png)
+![microservice-sample-solution](../images/microservice-sample-solution-2.png)
 
 ### 应用程序(Applications)
 
@@ -182,6 +122,7 @@ Visual Studio解决方案由多个项目组成,每个项目在系统中具有不
 微服务没有UI,但暴露了一些REST API.
 
 - **IdentityService.Host**: 托管用于管理用户和角色的ABP Identity模块. 它没有其他服务,仅托管Identity模块的API.
+- **TenantManagementService.Host**: 托管用于管理角色的ABP租户管理模块. 它没有其他服务,仅托管租户管理模块的API.
 - **BloggingService.Host**: 托管ABP博客模块,该模块用于管理博客和帖子(典型的博客应用程序). 它没有其他服务,仅托管Blogging模块的API.
 - **ProductService.Host**: 托管用于管理产品的产品模块(位于解决方案内). 它还包含用于创建/更新产品管理数据库架构的EF Core迁移.
 
@@ -193,7 +134,7 @@ Visual Studio解决方案由多个项目组成,每个项目在系统中具有不
 
 此解决方案使用多个数据库:
 
-* **MsDemo_Identity**: 一个SQL数据库. 默认使用**SQL Server**,但可以是EF Core支持的任何DBMS. 由AuthServer和IdentityService共享. 审计日志,权限和设置也存储在此数据库中(虽然它们可以轻松拥有自己的数据库,共享相同的数据库以保持简单).
+* **MsDemo_Identity**: 一个SQL数据库. 默认使用**SQL Server**,但可以是EF Core支持的任何DBMS. 由AuthServer,IdentityService和TenantManagementService共享. 审计日志,权限和设置也存储在此数据库中(虽然它们可以轻松拥有自己的数据库,共享相同的数据库以保持简单).
 * **MsDemo_ProductManagement**: 一个SQL数据库. 同样默认使用 **SQL Server**,但可以是EF Core支持的任何DBMS. 由ProductService用作专用数据库.
 * **MsDemo_Blogging**: **MongoDB**数据库. 由BloggingService使用.
 * **Elasticsearch**: 用于在Serilog上写日志.
@@ -341,7 +282,7 @@ BackendAdminApp.Host项目本身没有单个UI元素/页面. 它仅用于提供�
 
 ##### HTTP Clients
 
-ABP应用程序模块通常提供C＃客户端库以轻松地使用服务(API)(它们通常使用ABP框架的[Dynamic C# API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)). 这意味着如果你需要使用Identity Service API, 你可以引用其客户端软件包,并通过提供的接口轻松使用API.
+ABP应用程序模块通常提供C＃客户端库以轻松地使用服务(API)(它们通常使用ABP框架的[Dynamic C# API客户端](../API/Dynamic-CSharp-API-Clients.md)). 这意味着如果你需要使用Identity Service API, 你可以引用其客户端软件包,并通过提供的接口轻松使用API.
 
 为此`BackendAdminAppHostModule`类声明了`AbpIdentityHttpApiClientModule`和`ProductManagementHttpApiClientModule`的依赖关系.
 
@@ -399,7 +340,7 @@ context.Services.AddAuthentication(options =>
 - 它需要额外的身份范围 *role*, *email* and *phone*.
 - 它需要API资源范围 *PublicWebSiteGateway*,*BloggingService*和*ProductService*,因为它将这些服务用作API.
 
-IdentityServer客户端设置存储在`appsettings.json`文件中：
+IdentityServer客户端设置存储在`appsettings.json`文件中:
 
 ```json
 "AuthServer": {
@@ -413,7 +354,7 @@ IdentityServer客户端设置存储在`appsettings.json`文件中：
 
 PublicWebSite.Host项目有一个列出产品的页面 (`Pages/Products.cshtml`). 它还使用博客模块中的UI. 为此`PublicWebSiteHostModule`加入了`BloggingWebModule`(*[Volo.Blogging.Web](https://www.nuget.org/packages/Volo.Blogging.Web)* 包)的依赖项.
 
-产品页面的屏幕截图：
+产品页面的屏幕截图:
 
 ![microservice-sample-public-product-list](../images/microservice-sample-public-product-list.png)
 
@@ -455,7 +396,7 @@ PublicWebSite.Host项目有一个列出产品的页面 (`Pages/Products.cshtml`)
 
 #### 远程服务配置
 
-`appsettings.json`文件中的`RemoteService`配置很简单：
+`appsettings.json`文件中的`RemoteService`配置很简单:
 
 ````json
 "RemoteServices": {
@@ -483,7 +424,7 @@ PublicWebSite.Host项目有一个列出产品的页面 (`Pages/Products.cshtml`)
 }
 ````
 
-此示例使用`client_credentials` 授予类型,该类型需要`ClientId`和`ClientSecret`进行身份验证过程. 还有[其他授予类型](http://docs.identityserver.io/en/latest/topics/grant_types.html). 例如, 你可以使用以下配置切换到`password`(Resource Owner Password)授予类型：
+此示例使用`client_credentials` 授予类型,该类型需要`ClientId`和`ClientSecret`进行身份验证过程. 还有[其他授予类型](http://docs.identityserver.io/en/latest/topics/grant_types.html). 例如, 你可以使用以下配置切换到`password`(Resource Owner Password)授予类型:
 
 ````json
 "IdentityClients": {
@@ -618,7 +559,7 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                    ctx.Request.Path.ToString().StartsWith("/Abp/"),
     app2 =>
     {
-        app2.UseMvcWithDefaultRouteAndArea();
+        app2.UseConfiguredEndpoints();
     });
 
 app.UseOcelot().Wait();
@@ -636,7 +577,7 @@ app.UseOcelot().Wait();
 
 #### 权限管理
 
-后端管理应用程序提供权限管理UI(之前见过),并使用此网关获取/设置权限. 权限管理API托管在网关内,而不是单独的服务. 这是一个设计决策,但如果您愿意,它可以作为另一个微服务托管.
+后端管理应用程序提供权限管理UI(之前见过),并使用此网关获取/设置权限. 权限管理API托管在网关内,而不是单独的服务. 这是一个设计决策,但如果你愿意,它可以作为另一个微服务托管.
 
 #### Dependencies
 
@@ -902,7 +843,7 @@ Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://lo
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
   "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
@@ -1028,8 +969,8 @@ public class ProductServiceMigrationDbContext : AbpDbContext<ProductServiceMigra
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True"
 }
 ````
 
@@ -1104,7 +1045,7 @@ ABP提供强大的基础架构,通过提供服务和架构,使模块化应用程
 * `ProductManagement.Application` 包含应用程序服务的实现.
 * `ProductManagement.EntityFrameworkCore` 包含DbContext和其他与EF Core相关的类和配置.
 * `ProductManagement.HttpApi` 包含API控制器.
-* `ProductManagement.HttpApi.Client` 包含C#代理以远程直接使用HTTP API. 使用ABP的[Dynamic C＃API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功能.
+* `ProductManagement.HttpApi.Client` 包含C#代理以远程直接使用HTTP API. 使用ABP的[Dynamic C＃API客户端](../API/Dynamic-CSharp-API-Clients.md)功能.
 
 * `ProductManagement.Web` 包含UI元素(页面,脚本,样式..等).
 
@@ -1177,7 +1118,7 @@ internal Product(
 
 默认(**无参数**)构造函数是私有的,不在应用程序代码中使用. 这是必需的,因为大多数ORM在从数据库获取时需要在反序列化实体时使用无参数构造函数.
 
-第二个构造函数是**internal**,这意味着它只能在域层内使用. 这强制在创建新的`Product`时使用`ProductManager`. 因为``ProductManager`应该在新产品创建上实现业务规则. 此构造函数仅需要最少的必需参数来创建具有一些可选参数的新产品. 它会检查一些简单的业务规则,以确保将实体创建为有效产品.
+第二个构造函数是**internal**,这意味着它只能在域层内使用. 这强制在创建新的`Product`时使用`ProductManager`. 因为`ProductManager`应该在新产品创建上实现业务规则. 此构造函数仅需要最少的必需参数来创建具有一些可选参数的新产品. 它会检查一些简单的业务规则,以确保将实体创建为有效产品.
 
 该类的其余部分具有操纵实体属性的方法. 例:
 
@@ -1294,7 +1235,7 @@ public class ProductCodeAlreadyExistsException : BusinessException
 }
 ````
 
-`PM：000001`是发送给客户端的异常类型的代码,因此他们可以理解错误类型. 在这种情况下没有实现,但也可以本地化业务异常. 请参阅[异常处理文档](../Exception-Handling.md).
+`PM:000001`是发送给客户端的异常类型的代码,因此他们可以理解错误类型. 在这种情况下没有实现,但也可以本地化业务异常. 请参阅[异常处理文档](../Exception-Handling.md).
 
 #### 应用层
 
@@ -1343,7 +1284,7 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 
 分布式事件(事件总线)是一种消息传递方式,其中服务引发/触发事件,而其他服务注册/侦听这些事件,以便在发生重要事件时得到通知. ABP通过提供约定,服务和集成使分布式事件更易于使用.
 
-您已经看到`Product`类使用以下代码行发布事件:
+你已经看到`Product`类使用以下代码行发布事件:
 
 ````csharp
 AddDistributedEvent(new ProductStockCountChangedEto(Id, StockCount, stockCount));
@@ -1471,6 +1412,10 @@ Kibana URL默认为`http://localhost:5601/`.
 
 ABP提供自动审计日志记录,详细保存每个请求(当前用户,浏览器/客户端,执行了哪些操作,哪些实体更改,甚至实体的哪些属性已更新). 有关详细信息,请参阅[审计日志文档](../Audit-Logging.md).
 
-所有服务和应用程序都配置为编写审核日志. 审核日志将保存到MsDemo_Identity SQL数据库中. 因此,您可以从单个点查询所有应用程序的所有审核日志.
+所有服务和应用程序都配置为编写审核日志. 审核日志将保存到MsDemo_Identity SQL数据库中. 因此,你可以从单个点查询所有应用程序的所有审核日志.
 
 审核日志记录具有`CorrelationId`属性,可用于跟踪请求. 当服务在单个Web请求中调用另一个服务时,它们都会使用相同的`CorrelationId`保存审核日志. 请参阅数据库中的`AbpAuditLogs`表.
+
+### 多租户
+
+该解决方案已配置提供[多租户](../Multi-Tenancy.md)系统,其中每个租户可以拥有其隔离的用户,角色,权限和其他数据.

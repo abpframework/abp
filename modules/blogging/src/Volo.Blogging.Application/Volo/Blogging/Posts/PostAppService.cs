@@ -4,10 +4,14 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.Caching;
+using Volo.Abp.EventBus.Local;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
 using Volo.Blogging.Users;
+using Volo.Abp.Data;
 
 namespace Volo.Blogging.Posts
 {
@@ -18,16 +22,27 @@ namespace Volo.Blogging.Posts
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IDistributedCache<List<PostCacheItem>> _postsCache;
+        private readonly ILocalEventBus _localEventBus;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService)
+        public PostAppService(
+            IPostRepository postRepository,
+            ITagRepository tagRepository,
+            ICommentRepository commentRepository,
+            IBlogUserLookupService userLookupService,
+            IDistributedCache<List<PostCacheItem>> postsCache,
+            ILocalEventBus localEventBus
+        )
         {
             UserLookupService = userLookupService;
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _commentRepository = commentRepository;
+            _postsCache = postsCache;
+            _localEventBus = localEventBus;
         }
 
-        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
+        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagNameAsync(Guid id, string tagName)
         {
             var posts = await _postRepository.GetPostsByBlogId(id);
             var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
@@ -36,17 +51,12 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
+                postDto.Tags = await GetTagsOfPostAsync(postDto.Id);
             }
 
             if (tag != null)
             {
-                postDtos = await FilterPostsByTag(postDtos, tag);
-            }
-
-            foreach (var postDto in postDtos)
-            {
-                postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
+                postDtos = await FilterPostsByTagAsync(postDtos, tag);
             }
 
             foreach (var postDto in postDtos)
@@ -72,6 +82,34 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
+        public async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
+        {
+            var postCacheItems = await _postsCache.GetOrAddAsync(
+                blogId.ToString(),
+                async () => await GetTimeOrderedPostsAsync(blogId),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddHours(1)
+                }
+            );
+
+            var postsWithDetails = ObjectMapper.Map<List<PostCacheItem>, List<PostWithDetailsDto>>(postCacheItems);
+
+            foreach (var post in postsWithDetails)
+            {
+                if (post.CreatorId.HasValue)
+                {
+                    var creatorUser = await UserLookupService.FindByIdAsync(post.CreatorId.Value);
+                    if (creatorUser != null)
+                    {
+                        post.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                    }
+                }
+            }
+
+            return new ListResultDto<PostWithDetailsDto>(postsWithDetails);
+        }
+
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             var post = await _postRepository.GetPostByUrl(input.BlogId, input.Url);
@@ -80,7 +118,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto.Id);
+            postDto.Tags = await GetTagsOfPostAsync(postDto.Id);
 
             if (postDto.CreatorId.HasValue)
             {
@@ -98,7 +136,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto.Id);
+            postDto.Tags = await GetTagsOfPostAsync(postDto.Id);
 
             if (postDto.CreatorId.HasValue)
             {
@@ -117,11 +155,12 @@ namespace Volo.Blogging.Posts
 
             await AuthorizationService.CheckAsync(post, CommonOperations.Delete);
 
-            var tags = await GetTagsOfPost(id);
-            _tagRepository.DecreaseUsageCountOfTags(tags.Select(t => t.Id).ToList());
+            var tags = await GetTagsOfPostAsync(id);
+            await _tagRepository.DecreaseUsageCountOfTagsAsync(tags.Select(t => t.Id).ToList());
             await _commentRepository.DeleteOfPost(id);
 
             await _postRepository.DeleteAsync(id);
+            await PublishPostChangedEventAsync(post.BlogId);
         }
 
         [Authorize(BloggingPermissions.Posts.Update)]
@@ -135,13 +174,16 @@ namespace Volo.Blogging.Posts
 
             post.SetTitle(input.Title);
             post.SetUrl(input.Url);
+            post.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
             post.Content = input.Content;
+            post.Description = input.Description;
             post.CoverImage = input.CoverImage;
 
             post = await _postRepository.UpdateAsync(post);
 
             var tagList = SplitTags(input.Tags);
             await SaveTags(tagList, post);
+            await PublishPostChangedEventAsync(post.BlogId);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
@@ -158,21 +200,30 @@ namespace Volo.Blogging.Posts
                 coverImage: input.CoverImage,
                 url: input.Url
             )
-            { Content = input.Content };
+            {
+                Content = input.Content,
+                Description = input.Description
+            };
 
             await _postRepository.InsertAsync(post);
 
             var tagList = SplitTags(input.Tags);
             await SaveTags(tagList, post);
+            await PublishPostChangedEventAsync(post.BlogId);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        private async Task<List<PostCacheItem>> GetTimeOrderedPostsAsync(Guid blogId)
+        {
+            var posts = await _postRepository.GetOrderedList(blogId);
+
+            return ObjectMapper.Map<List<Post>, List<PostCacheItem>>(posts);
+        }
+
         private async Task<string> RenameUrlIfItAlreadyExistAsync(Guid blogId, string url, Post existingPost = null)
         {
-            var postList = await _postRepository.GetListAsync();
-
-            if (postList.Where(p => p.Url == url).WhereIf(existingPost != null, p =>  existingPost.Id != p.Id).Any())
+            if (await _postRepository.IsPostUrlInUseAsync(blogId, url, existingPost?.Id))
             {
                 return url + "-" + Guid.NewGuid().ToString().Substring(0, 5);
             }
@@ -180,16 +231,16 @@ namespace Volo.Blogging.Posts
             return url;
         }
 
-        private async Task SaveTags(List<String> newTags, Post post)
+        private async Task SaveTags(ICollection<string> newTags, Post post)
         {
             await RemoveOldTags(newTags, post);
 
             await AddNewTags(newTags, post);
         }
 
-        private async Task RemoveOldTags(List<string> newTags, Post post)
+        private async Task RemoveOldTags(ICollection<string> newTags, Post post)
         {
-            foreach (var oldTag in post.Tags)
+            foreach (var oldTag in post.Tags.ToList())
             {
                 var tag = await _tagRepository.GetAsync(oldTag.TagId);
 
@@ -209,7 +260,7 @@ namespace Volo.Blogging.Posts
             }
         }
 
-        private async Task AddNewTags(List<string> newTags, Post post)
+        private async Task AddNewTags(IEnumerable<string> newTags, Post post)
         {
             var tags = await _tagRepository.GetListAsync(post.BlogId);
 
@@ -219,7 +270,7 @@ namespace Volo.Blogging.Posts
 
                 if (tag == null)
                 {
-                    tag = await _tagRepository.InsertAsync(new Tag(post.BlogId, newTag, 1));
+                    tag = await _tagRepository.InsertAsync(new Tag(GuidGenerator.Create(), post.BlogId, newTag, 1));
                 }
                 else
                 {
@@ -231,7 +282,7 @@ namespace Volo.Blogging.Posts
             }
         }
 
-        private async Task<List<TagDto>> GetTagsOfPost(Guid id)
+        private async Task<List<TagDto>> GetTagsOfPostAsync(Guid id)
         {
             var tagIds = (await _postRepository.GetAsync(id)).Tags;
 
@@ -249,11 +300,20 @@ namespace Volo.Blogging.Posts
             return new List<string>(tags.Split(",").Select(t => t.Trim()));
         }
 
-        private Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
+        private Task<List<PostWithDetailsDto>> FilterPostsByTagAsync(IEnumerable<PostWithDetailsDto> allPostDtos, Tag tag)
         {
             var filteredPostDtos = allPostDtos.Where(p => p.Tags?.Any(t => t.Id == tag.Id) ?? false).ToList();
-           
+
             return Task.FromResult(filteredPostDtos);
+        }
+
+        private async Task PublishPostChangedEventAsync(Guid blogId)
+        {
+            await _localEventBus.PublishAsync(
+                new PostChangedEvent
+                {
+                    BlogId = blogId
+                });
         }
     }
 }

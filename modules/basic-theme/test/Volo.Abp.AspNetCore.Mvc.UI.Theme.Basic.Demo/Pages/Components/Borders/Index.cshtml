@@ -1,0 +1,20 @@
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.BordersDemo
+@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Borders.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Borders";
+}
+<h2>Borders</h2>
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/border/" target="_blank"> Bootstrap Border</a>.</p>
+<style>
+    span {
+        display: inline-block;
+        width: 5rem;
+        height: 5rem;
+        margin: .25rem;
+        background-color: #f5f5f5;
+    }
+</style>
+@await Component.InvokeAsync(typeof(BordersDemoViewComponent))

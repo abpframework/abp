@@ -1,28 +1,25 @@
 ﻿using System;
-using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 
-namespace MyCompanyName.MyProjectName.MongoDB
+namespace MyCompanyName.MyProjectName.MongoDB;
+
+[DependsOn(
+    typeof(MyProjectNameTestBaseModule),
+    typeof(MyProjectNameMongoDbModule)
+    )]
+public class MyProjectNameMongoDbTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(MyProjectNameTestBaseModule),
-        typeof(MyProjectNameMongoDbModule)
-        )]
-    public class MyProjectNameMongoDbTestModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        private static readonly MongoDbRunner MongoDbRunner = MongoDbRunner.Start();
+        var stringArray = MyProjectNameMongoDbFixture.ConnectionString.Split('?');
+        var connectionString = stringArray[0].EnsureEndsWith('/') +
+                                   "Db_" +
+                               Guid.NewGuid().ToString("N") + "/?" + stringArray[1];
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpDbConnectionOptions>(options =>
         {
-            var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
-                                    "Db_" +		
-                                    Guid.NewGuid().ToString("N");
-
-            Configure<AbpDbConnectionOptions>(options =>
-            {
-                options.ConnectionStrings.Default = connectionString;
-            });
-        }
+            options.ConnectionStrings.Default = connectionString;
+        });
     }
 }

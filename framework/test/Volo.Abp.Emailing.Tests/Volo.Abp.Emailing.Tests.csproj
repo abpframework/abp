@@ -1,24 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
-    <None Remove="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
-    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
-    <None Remove="Volo\Abp\Emailing\Localization\*.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Emailing\Volo.Abp.Emailing.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,19 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "服務器主機",
+    "Description:Abp.Ldap.ServerHost": "服務器主機",
+
+    "DisplayName:Abp.Ldap.ServerPort": "服務器端口",
+    "Description:Abp.Ldap.ServerPort": "服務器端口",
+
+    "DisplayName:Abp.Ldap.BaseDc": "基域組件",
+    "Description:Abp.Ldap.BaseDc": "基域組件",
+
+    "DisplayName:Abp.Ldap.UserName": "用戶名",
+    "Description:Abp.Ldap.UserName": "用戶名",
+
+    "DisplayName:Abp.Ldap.Password": "密碼",
+    "Description:Abp.Ldap.Password": "密碼"
+  }
+}

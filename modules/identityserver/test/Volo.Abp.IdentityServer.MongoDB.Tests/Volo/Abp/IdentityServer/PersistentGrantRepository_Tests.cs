@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Xunit;
 
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+[Collection(MongoTestCollection.Name)]
+public class PersistentGrantRepository_Tests : PersistentGrantRepository_Tests<AbpIdentityServerMongoDbTestModule>
 {
-    public class PersistentGrantRepository_Tests : PersistentGrantRepository_Tests<AbpIdentityServerMongoDbTestModule>
-    {
 
-    }
 }

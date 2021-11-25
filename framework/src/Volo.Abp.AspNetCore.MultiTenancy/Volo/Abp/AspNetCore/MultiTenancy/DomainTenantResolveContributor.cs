@@ -1,47 +1,40 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Text.Formatting;
 
-namespace Volo.Abp.AspNetCore.MultiTenancy
+namespace Volo.Abp.AspNetCore.MultiTenancy;
+
+//TODO: Create a better domain format. We can accept regex for example.
+
+public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
 {
-    //TODO: Create a better domain format. We can accept regex for example.
+    public const string ContributorName = "Domain";
 
-    public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
+    public override string Name => ContributorName;
+
+    private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
+
+    private readonly string _domainFormat;
+
+    public DomainTenantResolveContributor(string domainFormat)
     {
-        public const string ContributorName = "Domain";
+        _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
+    }
 
-        public override string Name => ContributorName;
-
-        private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
-
-        private readonly string _domainFormat;
-
-        public DomainTenantResolveContributor(string domainFormat)
+    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    {
+        if (!httpContext.Request.Host.HasValue)
         {
-            _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
+            return Task.FromResult<string>(null);
         }
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(
-            ITenantResolveContext context, 
-            HttpContext httpContext)
-        {
-            if (httpContext.Request?.Host == null)
-            {
-                return null;
-            }
+        var hostName = httpContext.Request.Host.Value.RemovePreFix(ProtocolPrefixes);
+        var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
-            var hostName = httpContext.Request.Host.Host.RemovePreFix(ProtocolPrefixes);
-            var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
+        context.Handled = true;
 
-            context.Handled = true;
-
-            if (!extractResult.IsMatch)
-            {
-                return null;
-            }
-
-            return extractResult.Matches[0].Value;
-        }
+        return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
     }
 }

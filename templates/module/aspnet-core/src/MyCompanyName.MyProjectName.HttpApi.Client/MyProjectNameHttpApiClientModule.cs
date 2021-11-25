@@ -1,22 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName;
+
+[DependsOn(
+    typeof(MyProjectNameApplicationContractsModule),
+    typeof(AbpHttpClientModule))]
+public class MyProjectNameHttpApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
-    public class MyProjectNameHttpApiClientModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public const string RemoteServiceName = "MyProjectName";
+        context.Services.AddHttpClientProxies(
+            typeof(MyProjectNameApplicationContractsModule).Assembly,
+            MyProjectNameRemoteServiceConsts.RemoteServiceName
+        );
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.AddHttpClientProxies(
-                typeof(MyProjectNameApplicationContractsModule).Assembly,
-                RemoteServiceName
-            );
-        }
+            options.FileSets.AddEmbedded<MyProjectNameHttpApiClientModule>();
+        });
+
     }
 }

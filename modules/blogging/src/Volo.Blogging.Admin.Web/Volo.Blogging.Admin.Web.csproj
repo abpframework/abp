@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>Volo.Blogging.Admin.Web</AssemblyName>
+        <PackageId>Volo.Blogging.Admin.Web</PackageId>
+        <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+        <OutputType>Library</OutputType>
+        <IsPackable>true</IsPackable>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+        <RootNamespace>Volo.Blogging.Admin</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+        <ProjectReference Include="..\Volo.Blogging.Admin.Application.Contracts\Volo.Blogging.Admin.Application.Contracts.csproj" />
+        <PackageReference Include="Markdig.Signed" Version="0.26.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Pages\**\*.js" />
+        <EmbeddedResource Include="Pages\**\*.css" />
+        <EmbeddedResource Include="Components\**\*.js" />
+        <EmbeddedResource Include="Components\**\*.css" />
+        <EmbeddedResource Include="wwwroot\**\*.js" />
+        <EmbeddedResource Include="wwwroot\**\*.css" />
+        <Content Remove="Pages\**\*.js" />
+        <Content Remove="Pages\**\*.css" />
+        <Content Remove="Components\**\*.js" />
+        <Content Remove="Components\**\*.css" />
+        <Content Remove="wwwroot\**\*.js" />
+        <Content Remove="wwwroot\**\*.css" />
+        <Content Remove="compilerconfig.json" />
+    </ItemGroup>
+
+</Project>

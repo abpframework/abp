@@ -1,31 +1,31 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public class TenantFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
 {
-    public class TenantFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
+    public override string Name => TenantFeatureValueProvider.ProviderName;
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public TenantFeatureManagementProvider(
+        IFeatureManagementStore store,
+        ICurrentTenant currentTenant)
+        : base(store)
     {
-        public override string Name => TenantFeatureValueProvider.ProviderName;
+        CurrentTenant = currentTenant;
+    }
 
-        protected ICurrentTenant CurrentTenant { get; }
-
-        public TenantFeatureManagementProvider(
-            IFeatureManagementStore store,
-            ICurrentTenant currentTenant)
-            : base(store)
+    protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
+    {
+        if (providerKey != null)
         {
-            CurrentTenant = currentTenant;
+            return Task.FromResult(providerKey);
         }
 
-        protected override string NormalizeProviderKey(string providerKey)
-        {
-            if (providerKey != null)
-            {
-                return providerKey;
-            }
-
-            return CurrentTenant.Id?.ToString("N");
-        }
+        return Task.FromResult(CurrentTenant.Id?.ToString());
     }
 }

@@ -1,0 +1,13 @@
+{
+  "culture": "ru",
+  "texts": {
+    "GivenTenantIsNotExist": "Данный арендатор не существует: {0}",
+    "GivenTenantIsNotAvailable": "Данный арендатор недоступен: {0}",
+    "Tenant": "Арендатор",
+    "Switch": "переключиться",
+    "Name": "Имя",
+    "SwitchTenantHint": "Оставьте поле Имя пустым, чтобы переключиться на администратора.",
+    "SwitchTenant": "Сменить арендатора",
+    "NotSelected": "Не выбрано"
+  }
+}

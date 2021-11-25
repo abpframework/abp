@@ -3,35 +3,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.ClientSimulation.Snapshot;
 
-namespace Volo.ClientSimulation.Pages.ClientSimulation
+namespace Volo.ClientSimulation.Pages.ClientSimulation;
+
+public class SimulationAreaModel : PageModel
 {
-    public class SimulationAreaModel : PageModel
+    public SimulationSnapshot Snapshot { get; private set; }
+
+    protected Simulation Simulation { get; }
+
+    public SimulationAreaModel(Simulation simulation)
     {
-        public SimulationSnapshot Snapshot { get; private set; }
+        Simulation = simulation;
+    }
 
-        protected Simulation Simulation { get; }
+    public virtual Task<IActionResult> OnGetAsync()
+    {
+        Snapshot = Simulation.CreateSnapshot();
+        return Task.FromResult<IActionResult>(Page());
+    }
 
-        public SimulationAreaModel(Simulation simulation)
-        {
-            Simulation = simulation;
-        }
+    public virtual async Task<IActionResult> OnPostStartAsync()
+    {
+        Simulation.Start();
+        return new NoContentResult();
+    }
 
-        public Task OnGetAsync()
-        {
-            Snapshot = Simulation.CreateSnapshot();
-            return Task.CompletedTask;
-        }
-
-        public async Task<IActionResult> OnPostStartAsync()
-        {
-            Simulation.Start();
-            return new NoContentResult();
-        }
-
-        public async Task<IActionResult> OnPostStopAsync()
-        {
-            Simulation.Stop();
-            return new NoContentResult();
-        }
+    public virtual async Task<IActionResult> OnPostStopAsync()
+    {
+        Simulation.Stop();
+        return new NoContentResult();
     }
 }

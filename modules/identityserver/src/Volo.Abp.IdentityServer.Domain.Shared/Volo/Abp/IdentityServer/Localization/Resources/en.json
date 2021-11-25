@@ -1,8 +1,15 @@
-﻿{
+{
   "culture": "en",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource name already exist: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource name already exist: {Name}",
-    "Volo.IdentityServer:DuplicateClientId": "ClientId already exist: {ClientId}"
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api Scope name already exist: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId already exist: {ClientId}",
+    "UserLockedOut": "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
+    "InvalidUserNameOrPassword": "Invalid username or password!",
+    "LoginIsNotAllowed": "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.",
+    "InvalidUsername": "Invalid username or password!",
+    "InvalidAuthenticatorCode": "Invalid authenticator code!",
+    "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!"
   }
 }

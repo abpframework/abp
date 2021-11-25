@@ -1,0 +1,85 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Docs.Localization
+@using Volo.Docs.Pages.Documents
+@inject IHtmlLocalizer<DocsResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@model SearchModel
+@{
+    Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+}
+@section styles {
+    <style>
+        highlight {
+            font-weight: bold;
+            color: #212529;
+            background: #f9efa6;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+    </style>
+}
+
+<div class="container mb-5">
+
+    <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
+		<h4 class="text-center my-3">@L["FullSearch"]</h4>
+        <div class="card rounded">
+            <div class="p-3 bg-white">
+                <div class="row">
+                    <div class="col"><input type="text" asp-for="@Model.KeyWord" class="form-control" /></div>
+                    <div class="col-auto"><button type="submit" class="btn btn-primary px-md-5">@L["Search"]</button></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card mt-4 rounded">
+        <div class="card-header">
+            <h5 class="text-center ">@L["SearchResults"]</h5>
+        </div>
+        <div class="p-5 card-body">
+            @foreach (var docs in Model.SearchOutputs)
+            {
+                <div class="row">
+                    <div class="col">
+                        <div class="pb-4 small">
+                            @functions
+                                {
+                                string RemoveFileExtensionFromPath(string path)
+                                {
+                                    if (path == null)
+                                    {
+                                        return null;
+                                    }
+
+                                    return path.EndsWith("." + @Model.Project.Format)
+                                        ? path.Left(path.Length - Model.Project.Format.Length - 1)
+                                        : path;
+                                }
+                            }
+                            <h5 class="mb-3">
+                                <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
+                                    @RemoveFileExtensionFromPath(docs.Name)
+                                </a>
+                            </h5>
+                            <div class="mb-4">
+                                @foreach (var highlight in docs.Highlight)
+                                {
+                                    <p class="mb-2">@Html.Raw(highlight)</p>
+                                }
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

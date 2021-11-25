@@ -1,0 +1,38 @@
+.ant-tree {
+  color: inherit;
+
+  .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    background-color: transparent;
+  }
+
+  .ant-tree-switcher {
+    line-height: 17px;
+  }
+
+  .ant-tree-node-content-wrapper {
+    width: 100%;
+    padding: 0;
+  }
+
+  .node-wrapper {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0 5px;
+    line-height: 30px;
+    text-decoration: none;
+    vertical-align: top;
+    border-radius: 2px;
+    cursor: pointer;
+    padding-left: 8px;
+    border: 1px solid transparent;
+  }
+
+  .ellipsis {
+    position: absolute;
+    right: 8px;
+    top: 1px;
+    cursor: pointer;
+  }
+}

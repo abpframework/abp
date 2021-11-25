@@ -1,11 +1,17 @@
 {
-  "version": "1.0.2",
+  "version": "5.0.0-rc.1",
   "name": "@abp/luxon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/luxon"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "luxon": "^1.17.3"
+    "@abp/core": "~5.0.0-rc.1",
+    "luxon": "^1.24.1"
   },
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

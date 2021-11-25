@@ -1,7 +1,10 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Dogum gunu1",
+    "DisplayName:BirthDate2": "Dogum gunu2",
+    "PersonModel:BirthDate3": "Dogum gunu3",
     "BirthDate": "Dogum gunu",
-    "Value1":  "Değer Bir" 
+    "Value1":  "Değer Bir"
   }
 }

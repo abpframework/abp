@@ -1,16 +1,21 @@
 {
-  "version": "1.0.2",
+  "version": "5.0.0-rc.1",
   "name": "@abp/aspnetcore.mvc.ui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/aspnetcore.mvc.ui"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "ansi-colors": "^3.2.4",
+    "ansi-colors": "^4.1.1",
     "extend-object": "^1.0.0",
+    "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "merge-stream": "^2.0.0",
-    "path": "^0.12.7",
-    "rimraf": "^2.6.3"
+    "micromatch": "^4.0.2"
   },
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

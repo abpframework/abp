@@ -2,11 +2,39 @@
 {
     public static class ProjectConsts
     {
-        public const int MaxNameLength = 128;
-        public const int MaxShortNameLength = 32;
-        public const int MaxDefaultDocumentNameLength = 128;
-        public const int MaxNavigationDocumentNameLength = 128;
-        public const int MaxLatestVersionBranchNameLength = 128;
-        public const int MaxVersionNameLength = 128;
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 128;
+
+        /// <summary>
+        /// Default value: 32
+        /// </summary>
+        public static int MaxShortNameLength { get; set; } = 32;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxDefaultDocumentNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxNavigationDocumentNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxParametersDocumentNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxLatestVersionBranchNameLength { get; set; } = 128;
+        
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
+        public static int MaxVersionNameLength { get; set; } = 128;
     }
 }

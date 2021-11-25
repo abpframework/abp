@@ -1,18 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Microsoft.AspNetCore.Builder;
+
+public static class VirtualFileSystemApplicationBuilderExtensions
 {
-    public static class VirtualFileSystemApplicationBuilderExtensions
+    [Obsolete("Use UseStaticFiles() instead. UseVirtualFiles is not needed anymore.")]
+    public static IApplicationBuilder UseVirtualFiles(this IApplicationBuilder app, Action<StaticFileOptions> configure = null)
     {
-        public static void UseVirtualFiles(this IApplicationBuilder app)
+        if (configure != null)
         {
-            app.UseStaticFiles(
-                new StaticFileOptions
-                {
-                    FileProvider = app.ApplicationServices.GetRequiredService<IWebContentFileProvider>()
-                }
-            );
+            configure(app.ApplicationServices.GetRequiredService<IOptions<StaticFileOptions>>().Value);
         }
+
+        return app.UseStaticFiles();
     }
 }

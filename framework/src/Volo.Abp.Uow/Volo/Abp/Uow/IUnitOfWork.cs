@@ -1,49 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
 {
-    public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
-    {
-        Guid Id { get; }
+    Guid Id { get; }
 
-        //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
-        event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+    Dictionary<string, object> Items { get; }
 
-        event EventHandler<UnitOfWorkEventArgs> Disposed;
+    //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
+    event EventHandler<UnitOfWorkFailedEventArgs> Failed;
 
-        IAbpUnitOfWorkOptions Options { get; }
+    event EventHandler<UnitOfWorkEventArgs> Disposed;
 
-        IUnitOfWork Outer { get; }
+    IAbpUnitOfWorkOptions Options { get; }
 
-        bool IsReserved { get; }
+    IUnitOfWork Outer { get; }
 
-        bool IsDisposed { get; }
+    bool IsReserved { get; }
 
-        bool IsCompleted { get; }
+    bool IsDisposed { get; }
 
-        string ReservationName { get; }
+    bool IsCompleted { get; }
 
-        void SetOuter([CanBeNull] IUnitOfWork outer);
+    string ReservationName { get; }
 
-        void Initialize([NotNull] AbpUnitOfWorkOptions options);
+    void SetOuter([CanBeNull] IUnitOfWork outer);
 
-        void Reserve([NotNull] string reservationName);
+    void Initialize([NotNull] AbpUnitOfWorkOptions options);
 
-        void SaveChanges();
+    void Reserve([NotNull] string reservationName);
 
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        void Complete();
+    Task CompleteAsync(CancellationToken cancellationToken = default);
 
-        Task CompleteAsync(CancellationToken cancellationToken = default);
+    Task RollbackAsync(CancellationToken cancellationToken = default);
 
-        void Rollback();
+    void OnCompleted(Func<Task> handler);
 
-        Task RollbackAsync(CancellationToken cancellationToken = default);
+    void AddOrReplaceLocalEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord> replacementSelector = null
+    );
 
-        void OnCompleted(Func<Task> handler);
-    }
+    void AddOrReplaceDistributedEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord> replacementSelector = null
+    );
 }

@@ -1,48 +1,68 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
+using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
-using Volo.Abp.Domain;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
-using Volo.Abp.UI;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore
+namespace Volo.Abp.AspNetCore;
+
+[DependsOn(
+    typeof(AbpAuditingModule),
+    typeof(AbpSecurityModule),
+    typeof(AbpVirtualFileSystemModule),
+    typeof(AbpUnitOfWorkModule),
+    typeof(AbpHttpModule),
+    typeof(AbpAuthorizationModule),
+    typeof(AbpValidationModule),
+    typeof(AbpExceptionHandlingModule)
+    )]
+public class AbpAspNetCoreModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAuditingModule), 
-        typeof(AbpSecurityModule),
-        typeof(AbpVirtualFileSystemModule),
-        typeof(AbpUnitOfWorkModule),
-        typeof(AbpHttpModule),
-        typeof(AbpAuthorizationModule),
-        typeof(AbpDddDomainModule), //TODO: Can we remove this?
-        typeof(AbpLocalizationModule),
-        typeof(AbpUiModule), //TODO: Can we remove this?
-        typeof(AbpValidationModule)
-        )]
-    public class AbpAspNetCoreModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpAuditingOptions>(options =>
         {
-            Configure<AbpAuditingOptions>(options =>
-            {
-                options.Contributors.Add(new AspNetCoreAuditLogContributor());
-            });
+            options.Contributors.Add(new AspNetCoreAuditLogContributor());
+        });
 
-            AddAspNetServices(context.Services);
-            context.Services.AddObjectAccessor<IApplicationBuilder>();
-        }
-
-        private static void AddAspNetServices(IServiceCollection services)
+        Configure<StaticFileOptions>(options =>
         {
-            services.AddHttpContextAccessor();
+            options.ContentTypeProvider = context.Services.GetRequiredService<AbpFileExtensionContentTypeProvider>();
+        });
+
+        AddAspNetServices(context.Services);
+        context.Services.AddObjectAccessor<IApplicationBuilder>();
+        context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
+    }
+
+    private static void AddAspNetServices(IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var environment = context.GetEnvironmentOrNull();
+        if (environment != null)
+        {
+            environment.WebRootFileProvider =
+                new CompositeFileProvider(
+                    context.GetEnvironment().WebRootFileProvider,
+                    context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
+                );
         }
     }
 }

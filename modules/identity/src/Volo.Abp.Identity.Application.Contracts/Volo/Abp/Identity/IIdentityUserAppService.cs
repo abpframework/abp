@@ -3,16 +3,23 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public interface IIdentityUserAppService
+    : ICrudAppService<
+        IdentityUserDto,
+        Guid,
+        GetIdentityUsersInput,
+        IdentityUserCreateDto,
+        IdentityUserUpdateDto>
 {
-    public interface IIdentityUserAppService : ICrudAppService<IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
-    {
-        Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
+    Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
 
-        Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
+    Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync();
 
-        Task<IdentityUserDto> FindByUsernameAsync(string username);
+    Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 
-        Task<IdentityUserDto> FindByEmailAsync(string email);
-    }
+    Task<IdentityUserDto> FindByUsernameAsync(string userName);
+
+    Task<IdentityUserDto> FindByEmailAsync(string email);
 }

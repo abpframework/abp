@@ -1,0 +1,26 @@
+﻿@page
+@using Volo.CmsKit.Pages
+@model IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Localization
+@using Volo.Abp.Users
+@inject IHtmlLocalizer<CmsKitResource> L
+@inject ICurrentUser CurrentUser
+<abp-card>
+    <abp-card-header>Welcome</abp-card-header>
+    <abp-card-body>
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <form method="POST">
+                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-primary" />
+            </form>
+        }
+        else
+        {
+            <strong>Claims</strong><br />
+            @Html.Raw(CurrentUser.GetAllClaims().Select(c => $"{c.Type}={c.Value}").OrderBy(x => x).JoinAsString(" <br /> "))
+        }
+        <hr />
+        <p class="text-end"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+    </abp-card-body>
+</abp-card>

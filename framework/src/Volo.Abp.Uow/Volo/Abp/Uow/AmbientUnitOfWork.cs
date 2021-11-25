@@ -1,23 +1,35 @@
 ﻿using System.Threading;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+[ExposeServices(typeof(IAmbientUnitOfWork), typeof(IUnitOfWorkAccessor))]
+public class AmbientUnitOfWork : IAmbientUnitOfWork, ISingletonDependency
 {
-    [ExposeServices(typeof(IAmbientUnitOfWork), typeof(IUnitOfWorkAccessor))]
-    public class AmbientUnitOfWork : IAmbientUnitOfWork, ISingletonDependency
+    public IUnitOfWork UnitOfWork => _currentUow.Value;
+
+    private readonly AsyncLocal<IUnitOfWork> _currentUow;
+
+    public AmbientUnitOfWork()
     {
-        public IUnitOfWork UnitOfWork => _currentUow.Value;
+        _currentUow = new AsyncLocal<IUnitOfWork>();
+    }
 
-        private readonly AsyncLocal<IUnitOfWork> _currentUow;
+    public void SetUnitOfWork(IUnitOfWork unitOfWork)
+    {
+        _currentUow.Value = unitOfWork;
+    }
 
-        public AmbientUnitOfWork()
+    public IUnitOfWork GetCurrentByChecking()
+    {
+        var uow = UnitOfWork;
+
+        //Skip reserved unit of work
+        while (uow != null && (uow.IsReserved || uow.IsDisposed || uow.IsCompleted))
         {
-            _currentUow = new AsyncLocal<IUnitOfWork>();
+            uow = uow.Outer;
         }
 
-        public void SetUnitOfWork(IUnitOfWork unitOfWork)
-        {
-            _currentUow.Value = unitOfWork;
-        }
+        return uow;
     }
 }

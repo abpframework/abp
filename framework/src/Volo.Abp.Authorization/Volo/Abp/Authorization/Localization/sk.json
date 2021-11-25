@@ -1,0 +1,10 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Volo.Authorization:010001": "Autorizácia zlyhala! Daná politika nebola udelená.",
+    "Volo.Authorization:010002": "Autorizácia zlyhala! Daná politika nebola udelená: {PolicyName}",
+    "Volo.Authorization:010003": "Autorizácia zlyhala! Politika nebola udelená danému zdroju: {ResourceName}",
+    "Volo.Authorization:010004": "Autorizácia zlyhala! Daná požiadavka nebola udelená danému zdroju: {ResourceName}",
+    "Volo.Authorization:010005": "Autorizácia zlyhala! Dané požiadavky neboli udelené danému zdroju: {ResourceName}"
+  }
+}

@@ -8,97 +8,81 @@ using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Auditing
+namespace Volo.Abp.AspNetCore.Mvc.Auditing;
+
+public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
 {
-    public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        protected AbpAuditingOptions Options { get; }
-        private readonly IAuditingHelper _auditingHelper;
-        private readonly IAuditingManager _auditingManager;
-
-        public AbpAuditActionFilter(IOptions<AbpAuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
+        if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
         {
-            Options = options.Value;
-            _auditingHelper = auditingHelper;
-            _auditingManager = auditingManager;
+            await next();
+            return;
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Auditing))
         {
-            if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
+            var stopwatch = Stopwatch.StartNew();
+
+            try
             {
-                await next();
-                return;
+                var result = await next();
+
+                if (result.Exception != null && !result.ExceptionHandled)
+                {
+                    auditLog.Exceptions.Add(result.Exception);
+                }
             }
-
-            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Auditing))
+            catch (Exception ex)
             {
-                var stopwatch = Stopwatch.StartNew();
-
-                try
-                {
-                    var result = await next();
-
-                    if (result.Exception != null && !result.ExceptionHandled)
-                    {
-                        auditLog.Exceptions.Add(result.Exception);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    auditLog.Exceptions.Add(ex);
-                    throw;
-                }
-                finally
-                {
-                    stopwatch.Stop();
-                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    auditLog.Actions.Add(auditLogAction);
-                }
+                auditLog.Exceptions.Add(ex);
+                throw;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditLog.Actions.Add(auditLogAction);
             }
         }
+    }
 
-        private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    {
+        auditLog = null;
+        auditLogAction = null;
+
+        var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+        if (!options.IsEnabled)
         {
-            auditLog = null;
-            auditLogAction = null;
-
-            if (!Options.IsEnabled)
-            {
-                return false;
-            }
-
-            if (!context.ActionDescriptor.IsControllerAction())
-            {
-                return false;
-            }
-
-            var auditLogScope = _auditingManager.Current;
-            if (auditLogScope == null)
-            {
-                return false;
-            }
-
-            if (!_auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
-            {
-                return false;
-            }
-
-            //TODO: This is partially duplication of AuditHelper.ShouldSaveAudit method. Check why it does not work for controllers
-            if (!AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(context.Controller.GetType()))
-            {
-                return false;
-            }
-
-            auditLog = auditLogScope.Log;
-            auditLogAction = _auditingHelper.CreateAuditLogAction(
-                auditLog,
-                context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
-                context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
-                context.ActionArguments
-            );
-
-            return true;
+            return false;
         }
+
+        if (!context.ActionDescriptor.IsControllerAction())
+        {
+            return false;
+        }
+
+        var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
+        if (auditLogScope == null)
+        {
+            return false;
+        }
+
+        var auditingHelper = context.GetRequiredService<IAuditingHelper>();
+        if (!auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+        {
+            return false;
+        }
+
+        auditLog = auditLogScope.Log;
+        auditLogAction = auditingHelper.CreateAuditLogAction(
+            auditLog,
+            context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
+            context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
+            context.ActionArguments
+        );
+
+        return true;
     }
 }

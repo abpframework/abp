@@ -1,0 +1,10 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Permissions": "Uprawnienia",
+    "OnlyProviderPermissons": "Tylko ten dostawca",
+    "All": "Wszystkie",
+    "SelectAllInAllTabs": "Udziel wszystkich uprawnień",
+    "SelectAllInThisTab": "Zaznacz wszystkie"
+  }
+}

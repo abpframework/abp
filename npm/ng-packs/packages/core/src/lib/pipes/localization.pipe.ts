@@ -1,21 +1,28 @@
-import { Pipe, PipeTransform, Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { Config } from '../models';
-import { ConfigState } from '../states';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { LocalizationWithDefault } from '../models/localization';
+import { LocalizationService } from '../services/localization.service';
 
 @Injectable()
 @Pipe({
   name: 'abpLocalization',
 })
 export class LocalizationPipe implements PipeTransform {
-  constructor(private store: Store) {}
+  constructor(private localization: LocalizationService) {}
 
-  transform(value: string | Config.LocalizationWithDefault = '', ...interpolateParams: string[]): string {
-    return this.store.selectSnapshot(
-      ConfigState.getLocalization(
-        value,
-        ...interpolateParams.reduce((acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), []),
-      ),
-    );
+  transform(
+    value: string | LocalizationWithDefault = '',
+    ...interpolateParams: (string | string[] | undefined)[]
+  ): string {
+    const params =
+      interpolateParams.reduce((acc, val) => {
+        if (!acc) {
+          return val;
+        }
+        if (!val) {
+          return acc;
+        }
+        return Array.isArray(val) ? [...acc, ...val] : [...acc, val];
+      }, []) || [];
+    return this.localization.instant(value, ...params);
   }
 }

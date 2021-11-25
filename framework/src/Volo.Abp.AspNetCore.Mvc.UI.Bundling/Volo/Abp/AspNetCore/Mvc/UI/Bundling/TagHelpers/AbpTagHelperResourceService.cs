@@ -5,88 +5,90 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
+
+public abstract class AbpTagHelperResourceService : ITransientDependency
 {
-    public abstract class AbpTagHelperResourceService : ITransientDependency
+    public ILogger<AbpTagHelperResourceService> Logger { get; set; }
+    protected IBundleManager BundleManager { get; }
+    protected IWebHostEnvironment HostingEnvironment { get; }
+    protected AbpBundlingOptions Options { get; }
+
+    protected AbpTagHelperResourceService(
+        IBundleManager bundleManager,
+        IOptions<AbpBundlingOptions> options,
+        IWebHostEnvironment hostingEnvironment)
     {
-        public ILogger<AbpTagHelperResourceService> Logger { get; set; }
+        BundleManager = bundleManager;
+        HostingEnvironment = hostingEnvironment;
+        Options = options.Value;
 
-        protected IBundleManager BundleManager { get; }
-        protected IWebContentFileProvider WebContentFileProvider { get; }
-        protected IWebHostEnvironment HostingEnvironment { get; }
-        protected readonly AbpBundlingOptions Options;
-        
-        protected AbpTagHelperResourceService(
-            IBundleManager bundleManager,
-            IWebContentFileProvider webContentFileProvider,
-            IOptions<AbpBundlingOptions> options,
-            IWebHostEnvironment hostingEnvironment)
+        Logger = NullLogger<AbpTagHelperResourceService>.Instance;
+    }
+
+    public virtual async Task ProcessAsync(
+        [NotNull] ViewContext viewContext,
+        [NotNull] TagHelper tagHelper,
+        [NotNull] TagHelperContext context,
+        [NotNull] TagHelperOutput output,
+        [NotNull] List<BundleTagHelperItem> bundleItems,
+        [CanBeNull] string bundleName = null)
+    {
+        Check.NotNull(viewContext, nameof(viewContext));
+        Check.NotNull(context, nameof(context));
+        Check.NotNull(output, nameof(output));
+        Check.NotNull(bundleItems, nameof(bundleItems));
+
+        var stopwatch = Stopwatch.StartNew();
+
+        output.TagName = null;
+
+        if (bundleName.IsNullOrEmpty())
         {
-            BundleManager = bundleManager;
-            WebContentFileProvider = webContentFileProvider;
-            HostingEnvironment = hostingEnvironment;
-            Options = options.Value;
-
-            Logger = NullLogger<AbpTagHelperResourceService>.Instance;
+            bundleName = GenerateBundleName(bundleItems);
         }
 
-        public virtual Task ProcessAsync(
-            [NotNull] TagHelperContext context,
-            [NotNull] TagHelperOutput output,
-            [NotNull] List<BundleTagHelperItem> bundleItems,
-            [CanBeNull] string bundleName = null)
+        CreateBundle(bundleName, bundleItems);
+
+        var bundleFiles = await GetBundleFilesAsync(bundleName);
+
+        output.Content.Clear();
+
+        foreach (var bundleFile in bundleFiles)
         {
-            Check.NotNull(context, nameof(context));
-            Check.NotNull(output, nameof(output));
-            Check.NotNull(bundleItems, nameof(bundleItems));
+            var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
 
-            var stopwatch = Stopwatch.StartNew();
-
-            output.TagName = null;
-
-            if (bundleName.IsNullOrEmpty())
+            if (file == null || !file.Exists)
             {
-                bundleName = GenerateBundleName(bundleItems);
+                throw new AbpException($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
             }
 
-            CreateBundle(bundleName, bundleItems);
-
-            var bundleFiles = GetBundleFiles(bundleName);
-
-            output.Content.Clear();
-
-            foreach (var bundleFile in bundleFiles)
+            if (file.Length > 0)
             {
-                var file = WebContentFileProvider.GetFileInfo(bundleFile);
-                if (file == null)
-                {
-                    throw new AbpException($"Could not find the bundle file from {nameof(IWebContentFileProvider)}");
-                }
-
-                AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                AddHtmlTag(viewContext, tagHelper, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
             }
-
-            stopwatch.Stop();
-            Logger.LogDebug($"Added bundle '{bundleName}' to the page in {stopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
-
-            return Task.CompletedTask;
         }
 
-        protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
+        stopwatch.Stop();
+        Logger.LogDebug($"Added bundle '{bundleName}' to the page in {stopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
+    }
 
-        protected abstract IReadOnlyList<string> GetBundleFiles(string bundleName);
+    protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
-        protected abstract void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file);
+    protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
-        protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
-        {
-            return bundleItems.JoinAsString("|").ToMd5();
-        }
+    protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file);
+
+    protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
+    {
+        return bundleItems.JoinAsString("|").ToMd5();
     }
 }

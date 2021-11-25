@@ -1,0 +1,26 @@
+{
+  "culture": "ru",
+  "texts": {
+    "InternalServerErrorMessage": "Во время запроса произошла внутренняя ошибка!",
+    "ValidationErrorMessage": "Ваш запрос недействителен!",
+    "ValidationNarrativeErrorMessageTitle": "При проверке были обнаружены следующие ошибки.",
+    "DefaultErrorMessage": "Произошла ошибка!",
+    "DefaultErrorMessageDetail": "Сведения об ошибке не были предоставлены сервером.",
+    "DefaultErrorMessage401": "Вы не авторизированы!",
+    "DefaultErrorMessage401Detail": "Вы должны Войти, чтобы выполнить эту операцию.",
+    "DefaultErrorMessage403": "Вы не авторизованы!",
+    "DefaultErrorMessage403Detail": "У вас нет доступа к выполнению этой операции!",
+    "DefaultErrorMessage404": "Ресурс не найден!",
+    "DefaultErrorMessage404Detail": "Запрошенный ресурс не удалось найти на сервере!",
+    "EntityNotFoundErrorMessage": "Нет объекта {0} с id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Отправленные вами данные уже были изменены другим пользователем/клиентом. Отмените внесенные вами изменения и попробуйте с самого начала.",
+    "Error": "Ошибка",
+    "UnhandledException": "Непредвиденная ошибка!",
+    "401Message": "Неавторизованный",
+    "403Message": "В доступе отказано",
+    "404Message": "Страница не найдена",
+    "500Message": "Внутренняя ошибка сервера",
+    "403MessageDetail": "У вас нет прав на выполнение этой операции!",
+    "404MessageDetail": "Извините, по этому адресу ничего нет."
+  }
+}

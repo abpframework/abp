@@ -1,0 +1,23 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Menu:TenantManagement": "Klanten beheer",
+    "Tenants": "Klanten",
+    "NewTenant": "Nieuwe klant",
+    "TenantName": "Naam klant",
+    "DisplayName:TenantName": "Naam klant",
+    "TenantDeletionConfirmationMessage": "Klant '{0}' wordt verwijderd. Bevestigt u dat?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Standaard Connection String",
+    "DisplayName:UseSharedDatabase": "Gebruik de gedeelde database",
+    "ManageHostFeatures": "Beheer host functies",
+    "Permission:TenantManagement": "Klanten beheer",
+    "Permission:Create": "Maak aan",
+    "Permission:Edit": "Bewerk",
+    "Permission:Delete": "Verwijder",
+    "Permission:ManageConnectionStrings": "Beheer connection strings",
+    "Permission:ManageFeatures": "Beheer functies",
+    "DisplayName:AdminEmailAddress": "Admin e-mail adres",
+    "DisplayName:AdminPassword": "Admin wachtwoord"
+  }
+}

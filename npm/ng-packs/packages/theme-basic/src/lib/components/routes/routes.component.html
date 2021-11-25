@@ -1,0 +1,103 @@
+<ul class="navbar-nav">
+  <ng-container
+    *ngFor="let route of routesService.visible$ | async; trackBy: trackByFn"
+    [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
+    [ngTemplateOutletContext]="{ $implicit: route }"
+  >
+  </ng-container>
+
+  <ng-template #defaultLink let-route>
+    <li class="nav-item" *abpPermission="route.requiredPolicy">
+      <a class="nav-link" [routerLink]="[route.path]"
+        ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+        {{ route.name | abpLocalization }}</a
+      >
+    </li>
+  </ng-template>
+
+  <ng-template #dropdownLink let-route>
+    <ng-container *ngIf="route.children?.length">
+      <li
+        class="nav-item dropdown"
+        display="static"
+        *abpPermission="route.requiredPolicy"
+        (click)="
+          rootDropdownExpand[route.name]
+            ? (rootDropdownExpand[route.name] = false)
+            : (rootDropdownExpand[route.name] = true)
+        "
+      >
+        <a
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          href="javascript:void(0)"
+        >
+          <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+          {{ route.name | abpLocalization }}
+        </a>
+        <div
+          #routeContainer
+          class="dropdown-menu border-0 shadow-sm"
+          (click)="$event.preventDefault(); $event.stopPropagation()"
+          [class.d-block]="smallScreen && rootDropdownExpand[route.name]"
+        >
+          <ng-container
+            *ngTemplateOutlet="forTemplate; context: { $implicit: route }"
+          ></ng-container>
+        </div>
+      </li>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #forTemplate let-route>
+    <ng-container *ngFor="let child of route.children">
+      <ng-template
+        [ngTemplateOutlet]="child.children?.length ? dropdownChild : defaultChild"
+        [ngTemplateOutletContext]="{ $implicit: child }"
+      ></ng-template>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #defaultChild let-child>
+    <ng-container *ngIf="child.path">
+      <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
+        <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}</a
+        >
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #dropdownChild let-child>
+    <div
+      class="dropdown-submenu"
+      ngbDropdown
+      #dropdownSubmenu="ngbDropdown"
+      placement="right-top"
+      [autoClose]="true"
+      *abpPermission="child.requiredPolicy"
+    >
+      <div ngbDropdownToggle [class.dropdown-toggle]="false">
+        <a
+          abpEllipsis="210px"
+          [abpEllipsisEnabled]="!smallScreen"
+          role="button"
+          class="btn d-block text-start dropdown-toggle"
+        >
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}
+        </a>
+      </div>
+      <div
+        #childrenContainer
+        class="dropdown-menu dropdown-menu-start border-0 shadow-sm"
+        [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
+      >
+        <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }"></ng-container>
+      </div>
+    </div>
+  </ng-template>
+</ul>

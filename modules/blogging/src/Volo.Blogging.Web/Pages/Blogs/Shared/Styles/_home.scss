@@ -1,0 +1,231 @@
+.hero-section {
+    padding: 0;
+
+    .hero-articles {
+        position: relative;
+        overflow: hidden;
+
+        .hero-content {
+            h1 {
+                margin-top: 2em;
+                font-size: 2em;
+                font-weight: bold;
+                line-height: 1.25;
+
+                a {
+                    color: #000;
+                    font-weight: 700;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            h2 {
+                margin-top: .5rem;
+                font-size: 1.75em;
+                font-weight: bold;
+                line-height: 1.25;
+
+                a {
+                    color: #000;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        .tags {
+            .tag {
+                background: rgba(208, 208, 208, 0.3);
+                color: #fff !important;
+
+                &:hover {
+                    background: white;
+                    color: black !important;
+                }
+            }
+        }
+
+        .article-owner {
+            .article-infos {
+                color: black;
+
+
+                .seperator {
+                    margin: 0 4px;
+                    color: rgba(255, 255, 255, 0.2);
+                }
+
+                img.article-avatar {
+                    display: inline-block;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        .img-container {
+            img {
+                width: 100%;
+            }
+        }
+
+        &:hover {
+            .img-container {
+                &::after {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+.article-owner {
+    .article-infos {
+        color: #000;
+
+        a {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .seperator {
+            margin: 0 4px;
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        img.article-avatar {
+            width: 48px;
+            margin: -1px 4px 0 0;
+            display: inline-block;
+            border-radius: 50%;
+        }
+    }
+}
+
+.user-card {
+    h5 {
+        span {
+            font-weight: 300;
+            opacity: .5;
+            padding: 0 5px;
+        }
+    }
+}
+.card-articles {
+    .card-content {
+        padding: 10px 0px 10px;
+
+        h3 {
+            margin: 10px 0;
+
+            a {
+                font-weight: 700;
+            }
+        }
+    }
+
+    .article-owner {
+        text-align: left;
+
+        .article-infos {
+            color: #000;
+
+            a {
+                color: rgba(0, 0, 0, 0.6);
+            }
+
+            .seperator {
+                margin: 0 4px;
+                color: rgba(0, 0, 0, 0.2);
+            }
+
+            img.article-avatar {
+                width: 30px;
+                margin: -1px 4px 0 0;
+                display: inline-block;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+
+.article-owner {
+    font-size: .72em;
+}
+
+.user-link-icons {
+    position: absolute;
+    right: 18px;
+    top: 15px;
+    z-index: 3;
+
+    a {
+        display: inline-block;
+        color: #eee;
+        margin-left: 12px;
+        font-size: 1.25em;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+}
+
+.tags {
+    margin: 2rem 0;
+    padding: 0 0 1.25rem 0; 
+
+    .tag {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(208, 208, 208, 0.3);
+        border-radius: 4px;
+        margin: 0 2px 3px 0;
+        color: #b1b1b1 !important;
+        font-size: .85em;
+        line-height: 1.6em;
+        text-transform: uppercase;
+        transition: .25s;
+        text-decoration: none;
+
+        &:hover {
+            background: black;
+            color: white !important;
+        }
+    }
+}
+.hero-section {
+    .tags {
+        margin: 1rem 0;
+        padding: 0 0 .5rem 0;
+    }
+}
+.list-group-item { 
+    .tags {
+        margin: 1rem 0 0;
+        padding: 0 0;
+    }
+}
+.popular-tags {
+    a {
+        display: block;
+        font-size: .9em;
+
+        span {
+            float: right;
+            opacity: .3;
+            font-size: .9em;
+        }
+    }
+}
+
+
+.img-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    background: gainsboro;
+}

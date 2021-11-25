@@ -1,68 +1,72 @@
 ﻿@page
-@using Volo.Abp.Account.Web.Settings
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Account.Settings
+@using Volo.Abp.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@inject IHtmlLocalizer<AccountResource> L
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
-@if (Model.EnableLocalLogin)
-{
-    <div class="card mt-3 shadow-sm rounded">
-        <div class="card-body p-5">
-            <h4>@L["Login"]</h4> 
-            @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
-            {
-                <strong>
-                    @L["AreYouANewUser"]
-                    <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
-                </strong>
-            }
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["Login"]</h4>
+        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+        {
+            <strong>
+                @L["AreYouANewUser"]
+                <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
+            </strong>
+        }
+        @if (Model.EnableLocalLogin)
+        {
             <form method="post" class="mt-4">
-                <input asp-for="ReturnUrl" />
-                <input asp-for="ReturnUrlHash" />
-                <div class="form-group">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
+                <div class="mb-3">
+                    <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control"/>
                     <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="LoginInput.Password"></label>
-                    <input asp-for="LoginInput.Password" class="form-control" />
+                <div class="mb-3">
+                    <label asp-for="LoginInput.Password" class="form-label"></label>
+                    <input asp-for="LoginInput.Password" class="form-control"/>
                     <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
                 </div>
-                <div class="form-check">
-                    <label asp-for="LoginInput.RememberMe" class="form-check-label">
-                        <input asp-for="LoginInput.RememberMe" class="form-check-input" />
-                        @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
-                    </label>
+                <abp-row>
+                    <abp-column>
+                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4"/>
+                    </abp-column>
+                    <abp-column class="text-end">
+                        <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
+                    </abp-column>
+                </abp-row>
+                <div class="d-grid gap-2">
+                    <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                    @if (Model.ShowCancelButton)
+                    {
+                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                    }
                 </div>
-                <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
             </form>
-        </div>
+        }
 
-        <div class="card-footer text-center border-0">
-            <abp-button type="button" button-type="Link" name="Action" value="Cancel" class="px-2 py-0">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
-        </div>
-    </div>
-}
+        @if (Model.VisibleExternalProviders.Any())
+        {
+            <div class="mt-2">
+                <h5>@L["OrLoginWith"]</h5>
+                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    }
+                </form>
+            </div>
+        }
 
-@if (Model.VisibleExternalProviders.Any())
-{
-    <div class="col-md-6">
-        <h4>@L["UseAnotherServiceToLogIn"]</h4>
-        <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-            <input asp-for="ReturnUrl" />
-            <input asp-for="ReturnUrlHash" />
-            @foreach (var provider in Model.VisibleExternalProviders)
-            {
-                <button type="submit" class="btn btn-primary" name="provider" value="@provider.AuthenticationScheme" title="@L["GivenTenantIsNotAvailable", provider.DisplayName]">@provider.DisplayName</button>
-            }
-        </form>
-    </div>
-}
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>@L["InvalidLoginRequest"]</strong>
+                @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+            </div>
+        }
 
-@if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-{
-    <div class="alert alert-warning">
-        <strong>@L["InvalidLoginRequest"]</strong>
-        @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
     </div>
-}
+</div>

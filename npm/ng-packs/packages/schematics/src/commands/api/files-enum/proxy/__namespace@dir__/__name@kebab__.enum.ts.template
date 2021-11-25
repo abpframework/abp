@@ -1,0 +1,8 @@
+import { mapEnumToOptions } from '@abp/ng.core';
+
+export enum <%= name %> {<%
+  for (let member of members) { %>
+  <%= member.key %> = <%= quote(member.value) %>,<% } %>
+}
+
+export const <%= camel(name) %>Options = mapEnumToOptions(<%= name %>);

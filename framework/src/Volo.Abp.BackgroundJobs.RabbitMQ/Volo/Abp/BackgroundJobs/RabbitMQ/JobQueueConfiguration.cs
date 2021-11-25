@@ -1,29 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
+using RabbitMQ.Client;
 using Volo.Abp.RabbitMQ;
 
-namespace Volo.Abp.BackgroundJobs.RabbitMQ
+namespace Volo.Abp.BackgroundJobs.RabbitMQ;
+
+public class JobQueueConfiguration : QueueDeclareConfiguration
 {
-    public class JobQueueConfiguration : QueueDeclareConfiguration
+    public Type JobArgsType { get; }
+
+    public string ConnectionName { get; set; }
+
+    public string DelayedQueueName { get; set; }
+
+    public JobQueueConfiguration(
+        Type jobArgsType,
+        string queueName,
+        string delayedQueueName,
+        string connectionName = null,
+        bool durable = true,
+        bool exclusive = false,
+        bool autoDelete = false)
+        : base(
+            queueName,
+            durable,
+            exclusive,
+            autoDelete)
     {
-        public Type JobArgsType { get; }
+        JobArgsType = jobArgsType;
+        ConnectionName = connectionName;
+        DelayedQueueName = delayedQueueName;
+    }
 
-        public string ConnectionName { get; set; }
-
-        public JobQueueConfiguration(
-            Type jobArgsType, 
-            string queueName, 
-            string connectionName = null,
-            bool durable = true,
-            bool exclusive = false,
-            bool autoDelete = false)
-            : base(
-                queueName, 
-                durable, 
-                exclusive, 
-                autoDelete)
+    public virtual QueueDeclareOk DeclareDelayed(IModel channel)
+    {
+        var delayedArguments = new Dictionary<string, object>(Arguments)
         {
-            JobArgsType = jobArgsType;
-            ConnectionName = connectionName;
-        }
+            ["x-dead-letter-routing-key"] = QueueName,
+            ["x-dead-letter-exchange"] = string.Empty
+        };
+
+        return channel.QueueDeclare(
+            queue: DelayedQueueName,
+            durable: Durable,
+            exclusive: Exclusive,
+            autoDelete: AutoDelete,
+            arguments: delayedArguments
+        );
     }
 }

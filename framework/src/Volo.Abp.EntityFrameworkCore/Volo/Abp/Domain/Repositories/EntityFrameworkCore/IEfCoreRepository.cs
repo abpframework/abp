@@ -1,19 +1,26 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
+namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+
+public interface IEfCoreRepository<TEntity> : IRepository<TEntity>
+    where TEntity : class, IEntity
 {
-    public interface IEfCoreRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntity
-    {
-        DbContext DbContext { get; }
+    [Obsolete("Use GetDbContextAsync() method.")]
+    DbContext DbContext { get; }
 
-        DbSet<TEntity> DbSet { get; }
-    }
+    [Obsolete("Use GetDbSetAsync() method.")]
+    DbSet<TEntity> DbSet { get; }
 
-    public interface IEfCoreRepository<TEntity, TKey> : IEfCoreRepository<TEntity>, IRepository<TEntity, TKey>
-        where TEntity : class, IEntity<TKey>
-    {
+    Task<DbContext> GetDbContextAsync();
 
-    }
+    Task<DbSet<TEntity>> GetDbSetAsync();
+}
+
+public interface IEfCoreRepository<TEntity, TKey> : IEfCoreRepository<TEntity>, IRepository<TEntity, TKey>
+    where TEntity : class, IEntity<TKey>
+{
+
 }

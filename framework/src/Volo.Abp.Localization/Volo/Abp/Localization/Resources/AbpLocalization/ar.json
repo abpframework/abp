@@ -1,0 +1,7 @@
+{
+  "culture": "ar",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "اللغة الافتراضية",
+    "Description:Abp.Localization.DefaultLanguage": "اللغة الافتراضية للتطبيق."
+  }
+}

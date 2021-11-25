@@ -1,0 +1,100 @@
+﻿@page
+@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.VirtualFileExplorer.Web.Localization
+@using Volo.Abp.VirtualFileExplorer.Web.Navigation
+@using Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
+@model IndexModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<VirtualFileExplorerResource> L
+@inject IHtmlLocalizer<AbpUiResource> UiLocalizer
+@{
+    PageLayout.Content.Title = L["VirtualFileExplorer"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:VirtualFileExplorer"].Value);
+    PageLayout.Content.MenuItemName = VirtualFileExplorerMenuNames.Index;
+}
+
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/VirtualFileExplorer/index.css"/>
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/VirtualFileExplorer/index.js"/>
+    </abp-script-bundle>
+}
+
+<abp-card id="VirtualFileExplorerWrapper">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["VirtualFileExplorer"]</abp-card-title>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+
+        @Html.Raw(Model.PathNavigation)
+
+        <abp-table striped-rows="true" class="nowrap dataTable no-footer">
+            <thead>
+            <tr>
+                <th>@UiLocalizer["Actions"]</th>
+                <th>@L["VirtualFileName"]</th>
+                <th>@L["VirtualFileType"]</th>
+                <th>@L["LastUpdateTime"]</th>
+                <th>@L["Size"]</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @{
+                if (!Model.FileInfoList.Any())
+                {
+                    <tr>
+                        <td colspan="5" style="text-align: center">@L["EmptyFileInfoList"]</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.FileInfoList)
+                    {
+                        <tr>
+                            <td>
+                                @if (!item.IsDirectory)
+                                {
+                                    <div class="dropdown action-button">
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a onclick="showContent('@item.FilePath')">@L["FileContent"]</a>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-cog me-1"></i>@UiLocalizer["Actions"]
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span>/</span>
+                                }
+                            </td>
+                            <td>@Html.Raw(item.FileName)</td>
+                            <td>
+                                <i class="@item.Icon"></i>
+                                <span>@item.FileType</span>
+                            </td>
+                            <td>@item.LastUpdateTime</td>
+                            <td>@item.Length</td>
+                        </tr>
+                    }
+                }
+            }
+            </tbody>
+        </abp-table>
+        <abp-paginator model="Model.PagerModel" show-info="true"/>
+    </abp-card-body>
+</abp-card>

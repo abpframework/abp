@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
@@ -86,6 +87,8 @@ namespace Volo.Blogging.Comments
 
             comment = await _commentRepository.InsertAsync(comment);
 
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 
@@ -97,6 +100,7 @@ namespace Volo.Blogging.Comments
             await AuthorizationService.CheckAsync(comment, CommonOperations.Update);
 
             comment.SetText(input.Text);
+            comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             comment = await _commentRepository.UpdateAsync(comment);
 

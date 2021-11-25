@@ -1,0 +1,10 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Permissions": "Разрешения",
+    "OnlyProviderPermissons": "Только этот провайдер",
+    "All": "Все",
+    "SelectAllInAllTabs": "Предоставить все разрешения",
+    "SelectAllInThisTab": "Выбрать все"
+  }
+}

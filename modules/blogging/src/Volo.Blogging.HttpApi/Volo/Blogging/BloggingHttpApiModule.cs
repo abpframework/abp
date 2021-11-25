@@ -3,6 +3,8 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Blogging.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Blogging.Files;
 
 namespace Volo.Blogging
 {
@@ -11,6 +13,13 @@ namespace Volo.Blogging
         typeof(AbpAspNetCoreMvcModule))]
     public class BloggingHttpApiModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(BloggingHttpApiModule).Assembly);
+            });
+        }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -19,6 +28,11 @@ namespace Volo.Blogging
                 options.Resources
                     .Get<BloggingResource>()
                     .AddBaseTypes(typeof(AbpUiResource));
+            });
+
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(FileUploadInputDto));
             });
         }
     }

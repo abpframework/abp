@@ -1,44 +1,95 @@
-import { Injectable } from '@angular/core';
-import { AbstractToaster } from '../abstracts/toaster';
+import { ContentProjectionService, LocalizationParam, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ComponentRef, Injectable } from '@angular/core';
+import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 import { Confirmation } from '../models/confirmation';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import { Toaster } from '../models/toaster';
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
-  key = 'abpConfirmation';
+export class ConfirmationService {
+  status$!: Subject<Confirmation.Status>;
+  confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
 
-  sticky = true;
+  private containerComponentRef!: ComponentRef<ConfirmationComponent>;
 
-  destroy$ = new Subject();
+  clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
+    this.confirmation$.next();
+    this.status$.next(status);
+  };
 
-  constructor(protected messageService: MessageService) {
-    super(messageService);
+  constructor(private contentProjectionService: ContentProjectionService) {}
+
+  private setContainer() {
+    this.containerComponentRef = this.contentProjectionService.projectContent(
+      PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent, {
+        confirmation$: this.confirmation$,
+        clear: this.clear,
+      }),
+    );
+
+    setTimeout(() => {
+      this.containerComponentRef.changeDetectorRef.detectChanges();
+    }, 0);
+  }
+
+  info(
+    message: LocalizationParam,
+    title: LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'info', options);
+  }
+
+  success(
+    message: LocalizationParam,
+    title: LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'success', options);
+  }
+
+  warn(
+    message: LocalizationParam,
+    title: LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'warning', options);
+  }
+
+  error(
+    message: LocalizationParam,
+    title: LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'error', options);
   }
 
   show(
-    message: string,
-    title: string,
-    severity: Toaster.Severity,
-    options?: Confirmation.Options,
-  ): Observable<Toaster.Status> {
-    this.listenToEscape();
+    message: LocalizationParam,
+    title: LocalizationParam,
+    severity?: Confirmation.Severity,
+    options = {} as Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    if (!this.containerComponentRef) this.setContainer();
 
-    return super.show(message, title, severity, options);
+    this.confirmation$.next({
+      message,
+      title,
+      severity: severity || 'neutral',
+      options,
+    });
+
+    this.status$ = new Subject();
+    const { dismissible = true } = options;
+    if (dismissible) this.listenToEscape();
+
+    return this.status$;
   }
 
-  clear(status?: Toaster.Status) {
-    super.clear(status);
-
-    this.destroy$.next();
-  }
-
-  listenToEscape() {
-    fromEvent(document, 'keyup')
+  private listenToEscape() {
+    fromEvent<KeyboardEvent>(document, 'keyup')
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.status$),
         debounceTime(150),
         filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )

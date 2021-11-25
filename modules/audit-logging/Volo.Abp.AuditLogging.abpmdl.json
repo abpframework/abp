@@ -1,0 +1,42 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.AuditLogging.Domain.Shared": {
+      "path": "src/Volo.Abp.AuditLogging.Domain.Shared/Volo.Abp.AuditLogging.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AuditLogging.Domain": {
+      "path": "src/Volo.Abp.AuditLogging.Domain/Volo.Abp.AuditLogging.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AuditLogging.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.AuditLogging.EntityFrameworkCore/Volo.Abp.AuditLogging.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AuditLogging.MongoDB": {
+      "path": "src/Volo.Abp.AuditLogging.MongoDB/Volo.Abp.AuditLogging.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.AuditLogging.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.Tests/Volo.Abp.AuditLogging.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.AuditLogging.TestBase": {
+      "path": "test/Volo.Abp.AuditLogging.TestBase/Volo.Abp.AuditLogging.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.AuditLogging.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.AuditLogging.MongoDB.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.MongoDB.Tests/Volo.Abp.AuditLogging.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    }
+  }
+}

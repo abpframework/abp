@@ -1,37 +1,45 @@
-﻿using System.Text;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
+
+public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeaderTagHelper>
 {
-    public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeaderTagHelper>
+    protected IStringLocalizer<AbpUiResource> L { get; }
+
+    public AbpModalHeaderTagHelperService(IStringLocalizer<AbpUiResource> localizer)
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
-        {
-            output.TagName = "div";
-            output.Attributes.AddClass("modal-header");
-            output.PreContent.SetHtmlContent(CreatePreContent());
-            output.PostContent.SetHtmlContent(CreatePostContent());
-        }
+        L = localizer;
+    }
 
-        protected virtual string CreatePreContent()
-        {
-            var sb = new StringBuilder();
+    public override void Process(TagHelperContext context, TagHelperOutput output)
+    {
+        output.TagName = "div";
+        output.Attributes.AddClass("modal-header");
+        output.PreContent.SetHtmlContent(CreatePreContent());
+        output.PostContent.SetHtmlContent(CreatePostContent());
+    }
 
-            sb.AppendLine("    <h5 class=\"modal-title\">" + TagHelper.Title + "</h5>");
+    protected virtual string CreatePreContent()
+    {
+        var title = new TagBuilder("h5");
+        title.AddCssClass("modal-title");
+        title.InnerHtml.AppendHtml(TagHelper.Title);
 
-            return sb.ToString();
-        }
+        return title.ToHtmlString();
+    }
 
-        protected virtual string CreatePostContent()
-        {
-            var sb = new StringBuilder();
-            
-            sb.AppendLine("    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">");
-            sb.AppendLine("        <span aria-hidden=\"true\">&times;</span>");
-            sb.AppendLine("    </button>");
+    protected virtual string CreatePostContent()
+    {
+        var button = new TagBuilder("button");
+        button.AddCssClass("btn-close");
+        button.Attributes.Add("type", "button");
+        button.Attributes.Add("data-bs-dismiss", "modal");
+        button.Attributes.Add("aria-label", L["Close"].Value);
 
-            return sb.ToString();
-        }
+        return button.ToHtmlString();
     }
 }

@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
-using Volo.Blogging.EntityFrameworkCore;
 
-namespace Volo.Blogging
+namespace Volo.Blogging.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BloggingEntityFrameworkCoreModule),
-        typeof(BloggingTestBaseModule)
+        typeof(BloggingTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
     public class BloggingEntityFrameworkCoreTestModule : AbpModule
     {

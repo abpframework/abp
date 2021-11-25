@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Auditing;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
-    [Area("blogging")]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
+    [Area(BloggingRemoteServiceConsts.ModuleName)]
     [Route("api/blogging/comments")]
-    public class CommentsController : AbpController, ICommentAppService
+    public class CommentsController : AbpControllerBase, ICommentAppService
     {
         private readonly ICommentAppService _commentAppService;
 
@@ -47,7 +45,7 @@ namespace Volo.Blogging
         [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _commentAppService.DeleteAsync(id);
         }
     }
 }

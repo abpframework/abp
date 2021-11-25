@@ -1,12 +1,19 @@
-﻿using Volo.Abp.Domain.Repositories.MemoryDb;
+﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories.MemoryDb;
 
-namespace Volo.Abp.MemoryDb
+namespace Volo.Abp.MemoryDb;
+
+public interface IMemoryDatabaseProvider<TMemoryDbContext>
+    where TMemoryDbContext : MemoryDbContext
 {
-    public interface IMemoryDatabaseProvider<TMemoryDbContext>
-        where TMemoryDbContext : MemoryDbContext
-    {
-        TMemoryDbContext DbContext { get; }
+    [Obsolete("Use GetDbContextAsync method.")]
+    TMemoryDbContext DbContext { get; }
 
-        IMemoryDatabase GetDatabase();
-    }
+    Task<TMemoryDbContext> GetDbContextAsync();
+
+    [Obsolete("Use GetDatabaseAsync method.")]
+    IMemoryDatabase GetDatabase();
+
+    Task<IMemoryDatabase> GetDatabaseAsync();
 }

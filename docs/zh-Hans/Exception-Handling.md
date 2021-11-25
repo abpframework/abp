@@ -190,7 +190,7 @@ throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"
 "UserNameShouldBeUniqueMessage": "Username should be unique! '{0}' is already taken!"
 ````
 
-* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException `类派生自`BusinessException`类.
+* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException`类派生自`BusinessException`类.
 
 #### 使用错误代码
 
@@ -204,7 +204,7 @@ throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"
 首先,在模块配置代码中将 **code-namespace**  映射至 **本地化资源**:
 
 ````C#
-services.Configure<ExceptionLocalizationOptions>(options =>
+services.Configure<AbpExceptionLocalizationOptions>(options =>
 {
     options.MapCodeNamespace("Volo.Qa", typeof(QaResource));
 });
@@ -285,7 +285,7 @@ ABP尝试按照以下规则,自动映射常见的异常类型的HTTP状态代码
 可以重写HTTP状态代码的自动映射,示例如下:
 
 ````C#
-services.Configure<ExceptionHttpStatusCodeOptions>(options =>
+services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 {
     options.Map("Volo.Qa:010002", HttpStatusCode.Conflict);
 });
@@ -295,8 +295,19 @@ services.Configure<ExceptionHttpStatusCodeOptions>(options =>
 
 框架会自动抛出以下异常类型:
 
-- 当用户没有权限执行操作时,会抛出 `AbpAuthorizationException` 异常. 有关更多信息,请参阅授权文档(TODO:link).
-- 如果当前请求的输入无效,则抛出`AbpValidationException 异常`. 有关更多信息,请参阅授权文档(TODO:link).
+- 当用户没有权限执行操作时,会抛出 `AbpAuthorizationException` 异常. 有关更多信息,请参阅授权文档[authorization](Authorization.md).
+- 如果当前请求的输入无效,则抛出`AbpValidationException 异常`. 有关更多信息,请参阅[验证文档](Validation.md).
 - 如果请求的实体不存在,则抛出`EntityNotFoundException` 异常. 此异常大多数由 [repositories](Repositories.md) 抛出.
 
 你同样可以在代码中抛出这些类型的异常(虽然很少需要这样做)
+
+## 发送异常详情到客户端
+
+你可以通过 `AbpExceptionHandlingOptions` 类的 `SendExceptionsDetailsToClients` 属性异常发送到客户端:
+
+````csharp
+services.Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionsDetailsToClients = true;
+});
+````

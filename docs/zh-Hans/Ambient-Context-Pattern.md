@@ -1,0 +1,3 @@
+## Ambient Context Pattern
+
+TODO

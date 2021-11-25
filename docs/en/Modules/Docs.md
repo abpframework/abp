@@ -16,27 +16,29 @@ Docs module is an application module and does not offer any hosting solution. Yo
 
 When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
 
-[The documents](https://abp.io/documents/) for ABP framework is also using this module.
+[The documents](docs.abp.io) for ABP framework is also using this module.
 
 > Docs module follows the [module architecture best practices](../Best-Practices/Module-Architecture.md) guide.
 
-
-
 ## Installation
 
-### 1- Download 
+### 1- Download
 
-If you do not have an existing ABP project, this step shows you how to create a new project from [abp.io](https://abp.io) to add the Docs Module. If you already have an ABP project, you can skip this step. 
+If you do not have an existing ABP project, this step shows you how to create a new project from [abp.io](https://abp.io) to add the Docs Module. If you already have an ABP project, you can skip this step.
 
-Navigate to https://abp.io/Templates. Enter your project name as `Acme.MyProject`, select `ASP.NET Core Mvc Application` and select `Entity Framework Core` for the database provider.
+It is recommended to use ABP CLI to create new projects. Use the following command:
 
-Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider. 
+`abp new Acme.MyProject`
+
+You can also navigate to https://abp.io/get-started. Enter your project name as `Acme.MyProject`, other use default options.
+
+Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
 
 ![Create new project](../images/docs-module_download-new-abp-project.png)
 
 ### 2- Running The Empty Application
 
-After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Domain `, `EntityFrameworkCore` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
+After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contracts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
 
 ![Create a new project](../images/docs-module_solution-explorer.png)
 
@@ -45,55 +47,48 @@ The database connection string is located in `appsettings.json` of your `Acme.My
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=localhost;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
   }
 }
 ```
 
+Run `Acme.MyProject.DbMigrator` project, it will be responsible for applying database migration and seed data. The database `MyProject` will be created in your database server.
 
-
-Open `Package Manager Console`  in the Visual Studio and choose `src\Acme.MyProject.EntityFrameworkCore` as the default project. Run `Update-Database` command to create your new database. The database `MyProject` will be created in your database server.
-
-Now an empty ABP project has been created! You can now run your project and see the empty website. 
+Now an empty ABP project has been created! You can now run your project and see the empty website.
 
 To login your website enter `admin` as the username and `1q2w3E*` as the password.
 
-### 2- Referencing Docs Module Packages
+### 3- Installation Module
 
 Docs module packages are hosted on NuGet. There are 4 packages that needs be to installed to your application. Each package has to be installed to the relevant project.  
 
-* [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/)  needs to be referenced to `Acme.MyProject.Domain` project.
+#### 3.1- Use ABP CLI
 
-  * Edit `Acme.MyProject.Domain.csproj`file and add the below line to as a reference. Note that you need to change version (v0.9.0) to the latest.
+It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
-    ```csharp
-     <PackageReference Include="Volo.Docs.Domain" Version="0.9.0" />
-    ```
-* [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) needs to be referenced to `Acme.MyProject.EntityFrameworkCore` project.
+`abp add-module Volo.Docs`
 
-  - Edit `Acme.MyProject.EntityFrameworkCore.csproj`file and add the below line to as a reference. Note that you need to change version (v0.9.0) to the latest.
+#### 3.2- Manually install
 
-    ```csharp
-    <PackageReference Include="Volo.Docs.EntityFrameworkCore" Version="0.9.0" />
-    ```
-* [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) needs to be referenced to `Acme.MyProject.Application` project.
+Or you can also manually install nuget package to each project:
 
-  * Edit `Acme.MyProject.Application.csproj`file and add the below line to as a reference. Note that you need to change version (v0.9.0) to the latest.
+* Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
 
-    ```csharp
-    <PackageReference Include="Volo.Docs.Application" Version="0.9.0" />
-    ```
-* [Volo.Docs.Web ](https://www.nuget.org/packages/Volo.Docs.Web/)needs to be referenced to `Acme.MyProject.Web` project.
+  `Install-Package Volo.Docs.Domain`
 
-  - Edit `Acme.MyProject.Web.csproj`file and add the below line to as a reference. Note that you need to change version (v0.9.0) to the latest.
+* Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
 
-    ```csharp
-    <PackageReference Include="Volo.Docs.Web" Version="0.9.0" />
-    ```
+  `Install-Package Volo.Docs.EntityFrameworkCore`
 
+* Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
 
+  `Install-Package Volo.Docs.Application`
 
-### 3- Adding Module Dependencies
+* Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
+
+  `Install-Package Volo.Docs.Web`
+
+##### 3.2.1- Adding Module Dependencies
 
 An ABP module must declare `[DependsOn]` attribute if it has a dependency upon another module. Each module has to be added in`[DependsOn]` attribute to the relevant project.
 
@@ -132,7 +127,6 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
       }
   ```
 
-
 * Open `MyProjectApplicationModule.cs`and add `typeof(DocsApplicationModule)` as shown below;
 
   ```csharp
@@ -144,7 +138,7 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
       {
           public override void ConfigureServices(ServiceConfigurationContext context)
           {
-              Configure<PermissionOptions>(options =>
+              Configure<AbpPermissionOptions>(options =>
               {
                   options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
               });
@@ -156,7 +150,6 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
           }
       }
   ```
-
 
 * Open `MyProjectWebModule.cs`and add `typeof(DocsWebModule)` as shown below;
 
@@ -176,32 +169,73 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
       }
   ```
 
+##### 3.2.2- Adding NPM Package
 
+Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
+
+  ```json
+    {
+        "version": "1.0.0",
+        "name": "my-app",
+        "private": true,
+        "dependencies": {
+            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
+            "@abp/docs": "^2.9.0"
+        }
+    }
+  ```
+
+Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
+
+````bash
+abp install-libs
+````
 
 ### 4- Database Integration
 
 #### 4.1- Entity Framework Integration
 
-If you choose Entity Framework as your database provider, you need to configure the Docs Module in your DbContext. To do this;
+If you choose Entity Framework as your database provider, you need to configure the Docs Module. To do this;
 
-- Open `MyProjectDbContext.cs` and add `modelBuilder.ConfigureDocs()` to the `OnModelCreating()` 
+- Open `MyProjectMigrationsDbContext.cs` and add `builder.ConfigureDocs()` to the `OnModelCreating()`.
 
   ```csharp
-  [ConnectionStringName("Default")]
-  public class MyProjectDbContext : AbpDbContext<MyProjectDbContext>
-  {
-      public MyProjectDbContext(DbContextOptions<MyProjectDbContext> options)
-          : base(options)
-      {
-  
-      }
-  
-      protected override void OnModelCreating(ModelBuilder modelBuilder)
-      {      
-         //...
-         modelBuilder.ConfigureDocs();
-      }
-  }
+  public class MyProjectMigrationsDbContext : AbpDbContext<MyProjectMigrationsDbContext>
+    {
+        public MyProjectMigrationsDbContext(DbContextOptions<MyProjectMigrationsDbContext> options)
+            : base(options)
+        {
+
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            /* Include modules to your migration db context */
+
+            builder.ConfigurePermissionManagement();
+            builder.ConfigureSettingManagement();
+            builder.ConfigureBackgroundJobs();
+            builder.ConfigureAuditLogging();
+            builder.ConfigureIdentity();
+            builder.ConfigureIdentityServer();
+            builder.ConfigureFeatureManagement();
+            builder.ConfigureTenantManagement();
+            builder.ConfigureDocs(); //Add this line to configure the Docs Module
+
+            /* Configure customizations for entities from the modules included  */
+
+            builder.Entity<IdentityUser>(b =>
+            {
+                b.ConfigureCustomUserProperties();
+            });
+
+            /* Configure your own tables/entities inside the ConfigureQaDoc method */
+
+            builder.ConfigureMyProject();
+        }
+    }
   ```
 
 * Open `Package Manager Console` in `Visual Studio` and choose `Acme.MyProject.EntityFrameworkCore` as default project. Then write the below command to add the migration for Docs Module.
@@ -219,7 +253,6 @@ If you choose Entity Framework as your database provider, you need to configure 
   ```
 
   Finally, you can check your database to see the newly created tables. For example you can see `DocsProjects` table must be added to your database.
-
 
 ### 5- Linking Docs Module
 
@@ -250,7 +283,7 @@ To add Docs module link to your application menu;
       }
   ```
 
-The `Menu:Docs` keyword is a localization key. To localize the menu text, open `Localization\MyProject\en.json` in the project `Acme.MyProject.Domain`. And add the below line 
+The `Menu:Docs` keyword is a localization key. To localize the menu text, open `Localization\MyProject\en.json` in the project `Acme.MyProject.Domain`. And add the below line
 
 ```json
 "Menu:Docs": "Documents"
@@ -270,7 +303,7 @@ Final look of **en.json**
 }
 ```
 
-The new menu item for Docs Module is added to the menu. Run your web application and browse to `http://localhost:YOUR_PORT_NUMBER/documents` URL. 
+The new menu item for Docs Module is added to the menu. Run your web application and browse to `http://localhost:YOUR_PORT_NUMBER/documents` URL.
 
 You will see a warning says;
 
@@ -288,7 +321,7 @@ Open `DocsProjects` in your database, and insert a new record with the following
 * **ShortName**: A short and URL friendly name that will be used in your docs URL.
 * **Format**: The format of the document (for Markdown: `md`, for HTML: `html`)
 * **DefaultDocumentName**: The document for the initial page.
-* **NavigationDocumentName**: The document to be used for the navigation menu (index).
+* **NavigationDocumentName**: The document to be used for the navigation menu (Index).
 * **MinimumVersion**: The minimum version to show the docs. Below version will not be listed.
 * **DocumentStoreType**: The source of the documents (for GitHub:`GitHub`, for file system`FileSystem`)
 * **ExtraProperties**: A serialized `JSON` that stores special configuration for the selected `DocumentStoreType`. 
@@ -316,22 +349,24 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 - ExtraProperties: 
 
   ```json
-  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/en/","GitHubAccessToken":"***"}
+  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}
   ```
 
   Note that `GitHubAccessToken` is masked with `***`. It's a private token that you must get it from GitHub. See https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 
-- MainWebsiteUrl: `/` 
+- MainWebsiteUrl: `/`
 
 - LatestVersionBranchName: `master`
 
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/en/","GitHubAccessToken":"***"}', N'/', N'master')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'master', N'')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
+
+Now you can run the application and navigate to `/Documents`.
 
 #### Sample Project Record for "FileSystem"
 
@@ -354,10 +389,10 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 - ExtraProperties: 
 
   ```json
-  {"Path":"C:\\Github\\abp\\docs\\en"}
+  {"Path":"C:\\Github\\abp\\docs"}
   ```
 
-  Note that `Path` must be replaced with your local docs directory. You can fetch the ABP Framework's documents from https://github.com/abpframework/abp/tree/master/docs/en and copy to the directory `C:\\Github\\abp\\docs\\en` to get it work.
+  Note that `Path` must be replaced with your local docs directory. You can fetch the ABP Framework's documents from https://github.com/abpframework/abp/tree/master/docs and copy to the directory `C:\\Github\\abp\\docs` to get it work.
 
 - MainWebsiteUrl: `/`
 
@@ -366,10 +401,8 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs\\en"}', N'/', NULL)
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
 ```
-
-
 
 Add one of the sample projects above and run the application. In the menu you will see `Documents` link, click the menu link to open the documents page. 
 
@@ -408,11 +441,104 @@ public class Person
 ```
 ~~~
 
-
-
 As an example you can see ABP Framework documentation:
 
 [https://github.com/abpframework/abp/blob/master/docs/en/](https://github.com/abpframework/abp/blob/master/docs/en/)
+
+#### Conditional sections feature (Using Scriban)
+
+Docs module uses [Scriban](https://github.com/lunet-io/scriban/tree/master/doc) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
+
+For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
+
+```json
+{
+    "parameters": [{
+        "name": "UI",
+        "displayName": "UI",
+		"values": {
+			"MVC": "MVC / Razor Pages",
+			"NG": "Angular"
+		}
+    },
+	{
+        "name": "DB",
+        "displayName": "Database",
+		"values": {
+			"EF": "Entity Framework Core",
+			"Mongo": "MongoDB"			
+		}
+    },
+	{
+        "name": "Tiered",
+        "displayName": "Tiered",
+		"values": {
+			"No": "Not Tiered",
+			"Yes": "Tiered"
+		}
+    }]
+}
+```
+
+Since not every single document in your projects may not have sections or may not need all of those parameters, you have to declare which of those parameters will be used for sectioning the document, as a JSON block anywhere on the document. 
+
+For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/getting-started.md):
+
+```
+.....
+
+​````json
+//[doc-params]
+{
+    "UI": ["MVC","NG"],
+    "DB": ["EF", "Mongo"],
+    "Tiered": ["Yes", "No"]
+}
+​````
+
+........
+```
+
+This section will be automatically deleted during render. And f course, those key values must match with the ones in **Parameter document**.
+
+![Interface](../images/docs-section-ui.png)
+
+Now you can use **Scriban** syntax to create sections in your document.
+
+For example:
+
+````
+{{ if UI == "NG" }}
+
+* `-u` argument specifies the UI framework, `angular` in this case.
+
+{{ end }}
+
+{{ if DB == "Mongo" }}
+
+* `-d` argument specifies the database provider, `mongodb` in this case.
+
+{{ end }}
+
+{{ if Tiered == "Yes" }}
+
+* `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
+
+{{ end }}
+
+````
+
+You can also use variables in a text, adding **_Value** postfix to its key:
+
+````
+This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
+````
+
+Also, **Document_Language_Code** and **Document_Version** keys are pre-defined if you want to get the language code or the version of the current document (This may be useful for creating links that redirects to another documentation system in another domain).
+
+------
+
+**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block) for more information.
 
 ### 8- Creating the Navigation Document
 
@@ -470,11 +596,74 @@ The upper sample `JSON` file renders the below navigation menu as `HTML`.
 
 ![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
 
-
-
 Finally a new Docs Module is added to your project which is feeded with GitHub.
+
+
+## Full-Text Search(Elastic Search)
+
+The Docs module supports full-text search using Elastic Search. It is not enabled by default. You can configure `DocsElasticSearchOptions` to enable it.
+
+```
+Configure<DocsElasticSearchOptions>(options =>
+{
+    options.Enable = true;
+    options.IndexName = "your_index_name"; //default IndexName is abp_documents
+});
+```
+
+The `Index` is automatically created after the application starts if the `Index` does not exist.
+
+`DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
+If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../Dependency-Injection.md) system.
+
+```
+{
+  "ElasticSearch": {
+    "Url": "http://localhost:9200"
+  }
+}
+```
+
+
+## Row Highlighting
+
+You can apply highlight to specific code lines or a range of sequential lines.
+See the following examples:
+
+```
+	```C# {3, 5}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+```
+	```C# {2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+```
+	```C# {1, 2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+---
+
+
 
 ## Next
 
 Docs Module is also available as a standalone application. Check out [VoloDocs](../Apps/VoloDocs).
-

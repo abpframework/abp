@@ -1,0 +1,24 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Settings": "Ustawienia",
+    "SuccessfullySaved": "Zapisano pomyślnie",
+    "Permission:SettingManagement": "Zarządzanie ustawieniami",
+    "Permission:Emailing": "Wysyłanie e-maili",
+    "Menu:Emailing": "Wysyłanie e-maili",
+    "SmtpHost": "Gospodarz",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Nazwa użytkownika",
+    "SmtpPassword": "Hasło",
+    "SmtpDomain": "Domena",
+    "SmtpEnableSsl": "Włącz SSL",
+    "SmtpUseDefaultCredentials": "Użyj domyślnych danych logowania",
+    "DefaultFromAddress": "Domyślnie z adresu",
+    "DefaultFromDisplayName": "Domyślnie z wyświetlanej nazwy",
+    "Feature:SettingManagementGroup": "Zarządzanie ustawieniami",
+    "Feature:SettingManagementEnable": "Włącz zarządzanie ustawieniami",
+    "Feature:SettingManagementEnableDescription": "Włącz system zarządzania ustawieniami w aplikacji.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Zezwalaj najemcom na zmianę ustawień poczty e-mail.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Zezwalaj najemcom na zmianę ustawień poczty e-mail."
+  }
+}

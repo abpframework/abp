@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -15,9 +16,9 @@ namespace Volo.Blogging.Blogs
 
         }
 
-        public async Task<Blog> FindByShortNameAsync(string shortName)
+        public async Task<Blog> FindByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
+            return await (await GetDbSetAsync()).FirstOrDefaultAsync(p => p.ShortName == shortName, GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -1,0 +1,75 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.ButtonGroupsDemo
+
+<abp-component-demo-section title="Basic example" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
+    <abp-button-group>
+        <abp-button button-type="Secondary">Left</abp-button>
+        <abp-button button-type="Secondary">Middle</abp-button>
+        <abp-button button-type="Secondary">Right</abp-button>
+    </abp-button-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Button Toolbar" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
+    <abp-button-toolbar>
+        <abp-button-group class="me-2">
+            <abp-button button-type="Secondary">1</abp-button>
+            <abp-button button-type="Secondary">2</abp-button>
+            <abp-button button-type="Secondary">3</abp-button>
+            <abp-button button-type="Secondary">4</abp-button>
+        </abp-button-group>
+        <abp-button-group class="me-2">
+            <abp-button button-type="Secondary">5</abp-button>
+            <abp-button button-type="Secondary">6</abp-button>
+            <abp-button button-type="Secondary">7</abp-button>
+        </abp-button-group>
+        <abp-button-group>
+            <abp-button button-type="Secondary">8</abp-button>
+        </abp-button-group>
+    </abp-button-toolbar>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Sizing" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
+    <abp-button-group size="Large">
+        <abp-button button-type="Secondary">Left</abp-button>
+        <abp-button button-type="Secondary">Middle</abp-button>
+        <abp-button button-type="Secondary">Right</abp-button>
+    </abp-button-group>
+    <abp-button-group>
+        <abp-button button-type="Secondary">Left</abp-button>
+        <abp-button button-type="Secondary">Middle</abp-button>
+        <abp-button button-type="Secondary">Right</abp-button>
+    </abp-button-group>
+    <abp-button-group size="Small">
+        <abp-button button-type="Secondary">Left</abp-button>
+        <abp-button button-type="Secondary">Middle</abp-button>
+        <abp-button button-type="Secondary">Right</abp-button>
+    </abp-button-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Nesting" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
+    <abp-button-group>
+        <abp-button button-type="Secondary">1</abp-button>
+        <abp-button button-type="Secondary">2</abp-button>
+        <abp-dropdown>
+            <abp-dropdown-button button-type="Secondary" text="Dropdown" />
+            <abp-dropdown-menu>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
+    </abp-button-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Vertical variation" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
+    <abp-button-group direction="Vertical">
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-dropdown>
+            <abp-dropdown-button button-type="Secondary" text="Dropdown" />
+            <abp-dropdown-menu>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
+    </abp-button-group>
+</abp-component-demo-section>

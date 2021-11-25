@@ -1,0 +1,26 @@
+{
+  "culture": "nl",
+  "texts": {
+    "InternalServerErrorMessage": "Er is een interne fout opgetreden tijdens uw verzoek!",
+    "ValidationErrorMessage": "Uw verzoek is niet geldig!",
+    "ValidationNarrativeErrorMessageTitle": "Tijdens de validatie zijn de volgende fouten gedetecteerd.",
+    "DefaultErrorMessage": "Er is een fout opgetreden!",
+    "DefaultErrorMessageDetail": "Foutdetails niet verzonden door server.",
+    "DefaultErrorMessage401": "U bent niet geverifieerd!",
+    "DefaultErrorMessage401Detail": "U moet inloggen om deze bewerking uit te voeren.",
+    "DefaultErrorMessage403": "U bent niet geautoriseerd!",
+    "DefaultErrorMessage403Detail": "U mag deze bewerking niet uitvoeren!",
+    "DefaultErrorMessage404": "Bron niet gevonden!",
+    "DefaultErrorMessage404Detail": "De gevraagde bron kan niet worden gevonden op de server!",
+    "EntityNotFoundErrorMessage": "Er is geen entiteit {0} met id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "De door u ingevulde gegevens zijn al gewijzigd door een andere gebruiker/klant. Negeer de wijzigingen die u heeft aangebracht en probeer het vanaf het begin.",
+    "Error": "Fout",
+    "UnhandledException": "Onverwerkte uitzondering!",
+    "401Message": "Ongeautoriseerd",
+    "403Message": "Verboden",
+    "404Message": "Pagina niet gevonden",
+    "500Message": "Interne Server Fout",
+    "403MessageDetail": "U bent niet bevoegd om deze handeling uit te voeren!",
+    "404MessageDetail": "Sorry, op dit adres is niks gevonden."
+  }
+}

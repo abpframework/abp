@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Xunit;
 
-namespace Volo.Abp.FeatureManagement.MongoDB
+namespace Volo.Abp.FeatureManagement.MongoDB;
+
+[Collection(MongoTestCollection.Name)]
+public class FeatureManagementStore_Tests : FeatureManagementStore_Tests<AbpFeatureManagementMongoDbTestModule>
 {
-    public class FeatureManagementStore_Tests : FeatureManagementStore_Tests<AbpFeatureManagementMongoDbTestModule>
-    {
 
-    }
 }

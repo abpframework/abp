@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     abp.widgets = abp.widgets || {};
 
     abp.WidgetManager = function (opts) {
@@ -25,11 +25,16 @@
             opts.filterForm = $(opts.filterForm);
         }
 
-        var getFilters = function ($widgetWrapperDiv) {
+        var publicApi = {
+            init: init,
+            refresh: refresh
+        };
+
+        function getFilters($widget) {
             var filters = {};
-            
+
             if (opts.filterForm) {
-                opts.filterForm.each(function() {
+                opts.filterForm.each(function () {
                     filters = $.extend(filters, opts.filterForm.serializeFormToObject());
                 });
             }
@@ -38,55 +43,76 @@
                 filters = $.extend(filters, opts.filterCallback());
             }
 
-            var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
+            var widgetApi = $widget.data('abp-widget-api');
             if (widgetApi && widgetApi.getFilters) {
                 filters = $.extend(filters, widgetApi.getFilters());
             }
 
             return filters;
-        };
+        }
 
-        var init = function () {
-            opts.wrapper.find('.abp-widget-wrapper').each(function () {
-                var $widgetWrapperDiv = $(this);
-                var widgetName = $widgetWrapperDiv.attr('data-widget-name');
+        function init($widgets) {
+            if (!$widgets) {
+                if (opts.wrapper.hasClass('abp-widget-wrapper')) {
+                    $widgets = opts.wrapper;
+                } else {
+                    $widgets = opts.wrapper.find('.abp-widget-wrapper');
+                }
+            }
+
+            $widgets.each(function () {
+                var $widget = $(this);
+                $widget.data('abp-widget-manager', publicApi);
+                var widgetName = $widget.attr('data-widget-name');
                 var widgetApiClass = abp.widgets[widgetName];
                 if (widgetApiClass) {
-                    var widgetApi = new widgetApiClass($widgetWrapperDiv);
-                    $widgetWrapperDiv.data('abp-widget-api', widgetApi);
+                    var widgetApi = new widgetApiClass($widget);
+                    $widget.data('abp-widget-api', widgetApi);
                     if (widgetApi.init) {
-                        widgetApi.init(getFilters($widgetWrapperDiv));
+                        widgetApi.init(getFilters($widget));
                     }
                 }
             });
-        };
+        }
 
-        var refresh = function () {
-            opts.wrapper.find('.abp-widget-wrapper').each(function () {
-                var $widgetWrapperDiv = $(this);
+        function refresh($widgets) {
+            if (!$widgets) {
+                if (opts.wrapper.hasClass('abp-widget-wrapper')) {
+                    $widgets = opts.wrapper;
+                } else {
+                    $widgets = opts.wrapper.findWithSelf('.abp-widget-wrapper');
+                }
+            }
 
-                var refreshUrl = $widgetWrapperDiv.attr('data-refresh-url');
+            $widgets.each(function () {
+                var $widget = $(this);
+
+                var refreshUrl = $widget.attr('data-refresh-url');
                 if (refreshUrl) {
                     abp.ajax({
                         url: refreshUrl,
                         type: 'GET',
                         dataType: 'html',
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        data: getFilters($widgetWrapperDiv)
+                        data: getFilters($widget)
                     }).then(function (result) {
-                        $widgetWrapperDiv.replaceWith($(result));
+                        var $result = $(result);
+                        $widget.replaceWith($result);
+                        if($widget.attr('data-widget-auto-init') !== "true"){
+                            init($result);
+                        }
                     });
                 } else {
-                    var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
+                    var widgetApi = $widget.data('abp-widget-api');
                     if (widgetApi && widgetApi.refresh) {
-                        widgetApi.refresh(getFilters($widgetWrapperDiv));
+                        widgetApi.refresh(getFilters($widget));
                     }
                 }
             });
-        };
+        }
 
         if (opts.filterForm) {
-            opts.filterForm.each(function() {
+            opts.filterForm.each(function () {
                 $(this).submit(function (e) {
                     e.preventDefault();
                     refresh();
@@ -94,14 +120,28 @@
             });
         }
 
-        var publicApi = {
-            init: init,
-            refresh: refresh
-        };
-
         opts.wrapper.data('abp-widget-manager', publicApi);
 
         return publicApi;
     };
+
+    function autoInitWidgets($wrapper) {
+        $wrapper.findWithSelf('.abp-widget-wrapper[data-widget-auto-init="true"]')
+            .each(function () {
+                var widgetManager = new abp.WidgetManager({
+                    wrapper: $(this),
+                });
+
+                widgetManager.init();
+            });
+    }
+
+    abp.dom.onNodeAdded(function (args) {
+        autoInitWidgets(args.$el);
+    })
+
+    $(function () {
+        autoInitWidgets($('body'));
+    });
 
 })(jQuery);

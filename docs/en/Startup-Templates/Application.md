@@ -1,12 +1,13 @@
-﻿# Application Startup Template
+# Application Startup Template
 
 ## Introduction
 
-This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. This document explains the solution structure and projects in details. If you want to start quickly, follow the guides below:
+This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. 
 
-* See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
-* See the [ASP.NET Core MVC Application Development Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
-* See the [Angular Application Development Tutorial](../Tutorials/Angular/Part-I.md) to learn how to develop applications using this template (uses Angular as the UI framework and MongoDB as the database provider).
+This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
+
+* [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
+* [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
 
 ## How to Start With?
 
@@ -32,6 +33,7 @@ abp new Acme.BookStore -t app
 This template provides multiple UI frameworks:
 
 * `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
+* `blazor`: Blazor UI
 * `angular`: Angular UI
 
 Use `-u` or `--ui` option to specify the UI framework:
@@ -52,6 +54,20 @@ Use `-d` (or `--database-provider`) option to specify the database provider:
 ````bash
 abp new Acme.BookStore -d mongodb
 ````
+
+### Specify the Mobile Application Framework
+
+This template supports the following mobile application frameworks:
+
+- `react-native`: React Native
+
+Use `-m` (or `--mobile`) option to specify the mobile application framework:
+
+````bash
+abp new Acme.BookStore -m react-native
+````
+
+If not specified, no mobile application will be created.
 
 ## Solution Structure
 
@@ -81,7 +97,7 @@ A `BookType` enum and a `BookConsts` class (which may have some constant fields 
 
 #### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value objects](../Value-Objects.md), [repository interfaces](../Repositories.md) and other domain objects.
 
 A `Book` entity, a `BookManager` domain service and an `IBookRepository` interface are good candidates for this project.
 
@@ -112,18 +128,6 @@ This is the integration project for the EF Core. It defines the `DbContext` and 
 
 > This project is available only if you are using EF Core as the database provider. If you select another database provider, its name will be different.
 
-#### .EntityFrameworkCore.DbMigrations Project
-
-Contains EF Core database migrations for the solution. It has a separated `DbContext` to dedicated to manage migrations.
-
-ABP is a modular framework and with an ideal design, each module has its own `DbContext` class. This is where the migration `DbContext` comes into play and unifies all `DbContext` configurations into a single model to maintain a single database schema. For more advanced scenarios, you can have multiple databases (each contains a single or a few module tables) and multiple migration `DbContext`s  (each maintains a different database schema).
-
-Notice that the migration `DbContext` is only used for database migrations and *not used on runtime*.
-
-* Depends on the `.EntityFrameworkCore` project since it re-uses the configuration defined for the `DbContext` of the application.
-
-> This project is available only if you are using EF Core as the database provider.
-
 #### .DbMigrator Project
 
 This is a console application which simplifies to execute database migrations on development and production environments. When you run this application, it;
@@ -138,14 +142,14 @@ Especially, seeding initial data is important at this point. ABP has a modular d
 
 While creating database & applying migrations seems only necessary for relational databases, this projects comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds initial data which is necessary for the application.
 
-* Depends on the `.EntityFrameworkCore.DbMigrations` project (for EF Core) since it needs to access to the migrations.
+* Depends on the `.EntityFrameworkCore` project (for EF Core) since it needs to access to the migrations.
 * Depends on the `.Application.Contracts` project to be able to access permission definitions, because initial data seeder grants all permissions for the admin role by default.
 
 #### .HttpApi Project
 
 This project is used to define your API Controllers.
 
-Most of time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../AspNetCore/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
+Most of time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../API/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
 
 * Depends on the `.Application.Contracts` project to be able to inject the application service interfaces.
 
@@ -153,7 +157,7 @@ Most of time you don't need to manually define API Controllers since ABP's [Auto
 
 This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications (For other type of applications, they can still use your APIs, either manually or using a tool in their own platform)
 
-Most of time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
+Most of time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature.
 
 `.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
 
@@ -169,7 +173,7 @@ This project contains the main `appsettings.json` file that contains the connect
 
 * Depends on the `.HttpApi` since UI layer needs to use APIs and application service interfaces of the solution.
 
-> If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore.DbMigrations` projects.
+> If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore` projects.
 >
 > These references are actually not needed while coding your UI layer, because UI layer normally doesn't depend on the EF Core or the Application layer's implementation. This startup templates are ready for the tiered deployment, where API layer is hosted in a separate server than the UI layer.
 >
@@ -258,16 +262,186 @@ You should run the application with the given order:
 
 ### Angular UI
 
-If you choose Angular as the UI framework (using the `-u angular` option), the solution is separated into two folders:
+If you choose `Angular` as the UI framework (using the `-u angular` option), the solution is being separated into two folders:
 
-* `angular` folder contains the Angular UI solution, the client side.
-* `aspnet-core` folder contains the ASP.NET Core solution, the server side.
+* `angular` folder contains the Angular UI application, the client-side code.
+* `aspnet-core` folder contains the ASP.NET Core solution, the server-side code.
 
-Server side is very similar to the solution described above. `.HttpApi.Host` project serves the API, so the Angular application can consume it.
+The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API, so the `Angular` application consumes it.
 
-The files under the `angular/src/environments` folder has the essential configuration of the application.
+Angular application folder structure looks like below:
+
+![angular-folder-structure](../images/angular-folder-structure.png)
+
+
+Each of ABP Commercial modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
+
+```bash
+yarn list --pattern abp
+```
+
+Angular application module structure:
+
+![Angular template structure diagram](../images/angular-template-structure-diagram.png)
+
+#### AppModule
+
+`AppModule` is the root module of the application. Some of ABP modules and some essential modules imported to the `AppModule`.
+
+ABP Config modules also have imported to `AppModule`  for initially requirements of lazy-loadable ABP modules.
+
+#### AppRoutingModule
+
+There are lazy-loadable ABP modules in the `AppRoutingModule` as routes.
+
+> Paths of ABP Modules should not be changed.
+
+You should add `routes` property in the `data` object to add a link on the menu to redirect to your custom pages.
+
+```js
+{
+   path: 'dashboard',
+   loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+   canActivate: [AuthGuard, PermissionGuard],
+   data: {
+      routes: {
+         name: 'ProjectName::Menu:Dashboard',
+         order: 2,
+         iconClass: 'fa fa-dashboard',
+         requiredPolicy: 'ProjectName.Dashboard.Host'
+      } as ABP.Route
+   }
+}
+```
+In the above example;
+*  If the user is not logged in, AuthGuard blocks access and redirects to the login page.
+*  PermissionGuard checks the user's permission with `requiredPolicy` property of the `rotues` object. If the user is not authorized to access the page, the 403 page appears.
+*  `name` property of `routes` is the menu link label. A localization key can be defined .
+*  `iconClass` property of `routes` object is the menu link icon class.
+*  `requiredPolicy` property of `routes` object is the required policy key to access the page.
+
+After the above `routes` definition, if the user is authorized, the dashboard link will appear on the menu.
+
+#### Shared Module
+
+The modules that may be required for all modules have imported to the `SharedModule`. You should import the `SharedModule` to all modules.
+
+See the [Sharing Modules](https://angular.io/guide/sharing-ngmodules) document.
+
+#### Environments
+
+The files under the `src/environments` folder has the essential configuration of the application.
+
+#### Home Module
+
+Home module is an example lazy-loadable module that loads on the root address of the application.
+
+#### Styles
+
+The required style files added to `styles` array in the `angular.json`. `AppComponent` loads some style files lazily via `LazyLoadService` after the main bundle is loaded to shorten the first rendering time.
+
+#### Testing
+
+You should create your tests in the same folder as the file file you want to test.
+
+See the [testing document](https://angular.io/guide/testing).
+
+#### Depended Packages
+
+* [NG Bootstrap](https://ng-bootstrap.github.io/) is used as UI component library.
+* [NGXS](https://www.ngxs.io/) is used as state management library.
+* [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc) is used to support for OAuth 2 and OpenId Connect (OIDC).
+* [Chart.js](https://www.chartjs.org/) is used to create widgets.
+* [ngx-validate](https://github.com/ng-turkey/ngx-validate) is used for dynamic validation of reactive forms.
+
+### React Native
+
+if `-m react-native` option is spesified in new project command, the solution includes the [React Native](https://reactnative.dev/) application in the `react-native` folder.
+
+The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API, so the React Native application consumes it.
+
+The React Native application was generated with [Expo](https://expo.io/). Expo is a set of tools built around React Native to help you quickly start an app and, while it has many features.
+
+React Native application folder structure as like below:
+
+![react-native-folder-structure](../images/react-native-folder-structure.png)
+
+* `App.js` is bootstrap component of the application.
+* `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations defined in this file. 
+* [Contexts](https://reactjs.org/docs/context.html) are created in the `src/contexts` folder.
+* [Higher order components](https://reactjs.org/docs/higher-order-components.html) are created in the`src/hocs` folder.
+* [Custom hooks](https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook) are created in the`src/hooks`.
+* [Axios interceptors](https://github.com/axios/axios#interceptors) are created in the `src/interceptors` folder.
+* Utility functions are exported from `src/utils` folder.
+
+#### Components
+
+Components that can be used on all screens are created in the `src/components` folder. All components have created as a function that able to use [hooks](https://reactjs.org/docs/hooks-intro.html).
+
+#### Screens
+
+![react-native-navigation-structure](../images/react-native-navigation-structure.png)
+
+Screens are created by creating folders that separate their names in the `src/screens` folder. Certain parts of some screens can be split into components.
+
+Each screen is used in a navigator in the `src/navigators` folder.
+
+#### Navigation
+
+[React Navigation](https://reactnavigation.org/) is used as a navigation library. Navigators are created in the `src/navigators`. A [drawer](https://reactnavigation.org/docs/drawer-based-navigation/) navigator and several [stack](https://reactnavigation.org/docs/hello-react-navigation/#installing-the-stack-navigator-library) navigators have created in this folder. See the [above diagram](#screens) for navigation structure.
+
+#### State Management
+
+[Redux](https://redux.js.org/) is used as state management library. [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
+
+Actions, reducers, sagas, selectors are created in the `src/store` folder. Store folder as like below:
+
+![react-native-store-folder](../images/react-native-store-folder.png)
+
+* [**Store**](https://redux.js.org/basics/store) is defined in the `src/store/index.js` file.
+* [**Actions**](https://redux.js.org/basics/actions/) are payloads of information that send data from your application to your store.
+* [**Reducers**](https://redux.js.org/basics/reducers) specify how the application's state changes in response to actions sent to the store. 
+* [**Redux-Saga**](https://redux-saga.js.org/) is a library that aims to make application side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) easier to manage. Sagas are created in the `src/store/sagas` folder.
+* [**Reselect**](https://github.com/reduxjs/reselect) library is used to create memoized selectors. Selectors are created in the `src/store/selectors` folder.
+
+#### APIs
+
+[Axios](https://github.com/axios/axios) is used as an HTTP client library. An Axios instance has exported from  `src/api/API.js` file to make HTTP calls with the same config. `src/api` folder also has the API files that have been created for API calls.
+
+#### Theming
+
+[Native Base](https://nativebase.io/) is used as UI components library. Native Base components can customize easily. See the [Native Base customize](https://docs.nativebase.io/Customize.html#Customize) documentation. We followed the same way.
+
+* Native Base theme variables are in the `src/theme/variables` folder.
+* Native Base component styles are in the `src/theme/components` folder. These files have been generated with Native Base's `ejectTheme` script.
+* Styles of components override with the files under the `src/theme/overrides` folder.
+
+#### Testing
+
+Unit tests will be created.
+
+See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
+
+#### Depended Libraries
+
+* [Native Base](https://nativebase.io/) is used as UI components library.
+* [React Navigation](https://reactnavigation.org/) is used as navigation library.
+* [Axios](https://github.com/axios/axios) is used as HTTP client library.
+* [Redux](https://redux.js.org/) is used as state management library.
+* [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
+* [Redux-Saga](https://redux-saga.js.org/) is used to manage asynchronous processes.
+* [Redux Persist](https://github.com/rt2zz/redux-persist) is used as state persistance.
+* [Reselect](https://github.com/reduxjs/reselect) is used to create memoized selectors.
+* [i18n-js](https://github.com/fnando/i18n-js) is used as i18n library.
+* [expo-font](https://docs.expo.io/versions/latest/sdk/font/) library allows loading fonts easily.
+* [Formik](https://github.com/jaredpalmer/formik) is used to build forms.
+* [Yup](https://github.com/jquense/yup) is used for form validations.
+
+## Social / External Logins
+
+If you want to configure social/external logins for your application, please follow the [Social/External Logins](../Authentication/Social-External-Logins.md) document.
 
 ## What's Next?
 
-- See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
-- See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template.
+- [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
+- [The application development tutorial](../Tutorials/Part-1.md) explains step by step application development.

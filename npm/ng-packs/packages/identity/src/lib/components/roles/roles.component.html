@@ -4,138 +4,57 @@
       <div class="col col-md-6">
         <h5 class="card-title">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>
       </div>
-      <div class="text-right col col-md-6">
-        <button
-          [abpPermission]="'AbpIdentity.Roles.Create'"
-          id="create-role"
-          class="btn btn-primary"
-          type="button"
-          (click)="add()"
-        >
-          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
-        </button>
+      <div class="text-end col col-md-6">
+        <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
       </div>
     </div>
   </div>
 
   <div class="card-body">
-    <p-table
-      *ngIf="[150, 0] as columnWidths"
-      [value]="data$ | async"
-      [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
-      [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
-      [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
-    >
-      <ng-template pTemplate="colgroup">
-        <colgroup>
-          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
-        </colgroup>
-      </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentity"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
-            {{ 'AbpIdentity::RoleName' | abpLocalization }}
-            <abp-sort-order-icon
-              #sortOrderIcon
-              key="name"
-              [(selectedKey)]="sortKey"
-              [(order)]="sortOrder"
-            ></abp-sort-order-icon>
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-data>
-        <tr>
-          <td class="text-center">
-            <div ngbDropdown container="body" class="d-inline-block">
-              <button
-                class="btn btn-primary btn-sm dropdown-toggle"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                ngbDropdownToggle
-              >
-                <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
-              </button>
-              <div ngbDropdownMenu>
-                <button [abpPermission]="'AbpIdentity.Roles.Update'" ngbDropdownItem (click)="edit(data.id)">
-                  {{ 'AbpIdentity::Edit' | abpLocalization }}
-                </button>
-                <button
-                  [abpPermission]="'AbpIdentity.Roles.ManagePermissions'"
-                  ngbDropdownItem
-                  (click)="providerKey = data.name; visiblePermissions = true"
-                >
-                  {{ 'AbpIdentity::Permissions' | abpLocalization }}
-                </button>
-                <button
-                  [abpPermission]="'AbpIdentity.Roles.Delete'"
-                  ngbDropdownItem
-                  (click)="delete(data.id, data.name)"
-                >
-                  {{ 'AbpIdentity::Delete' | abpLocalization }}
-                </button>
-              </div>
-            </div>
-          </td>
-          <td>{{ data.name }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <abp-extensible-table
+      [data]="data.items"
+      [recordsTotal]="data.totalCount"
+      [list]="list"
+    ></abp-extensible-table>
   </div>
 </div>
 
-<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <div class="form-group">
-        <label for="role-name">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label
-        ><span> * </span>
-        <input autofocus type="text" id="role-name" class="form-control" formControlName="name" />
-      </div>
-
-      <div class="custom-checkbox custom-control mb-2">
-        <input type="checkbox" id="role-is-default" class="custom-control-input" formControlName="isDefault" />
-        <label class="custom-control-label" for="role-is-default">{{
-          'AbpIdentity::DisplayName:IsDefault' | abpLocalization
-        }}</label>
-      </div>
-
-      <div class="custom-checkbox custom-control mb-2">
-        <input type="checkbox" id="role-is-public" class="custom-control-input" formControlName="isPublic" />
-        <label class="custom-control-label" for="role-is-public">{{
-          'AbpIdentity::DisplayName:IsPublic' | abpLocalization
-        }}</label>
-      </div>
+    <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
     </form>
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{{
+      'AbpIdentity::Save' | abpLocalization
+    }}</abp-button>
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="R" [providerKey]="providerKey">
+<abp-permission-management
+  #abpPermissionManagement="abpPermissionManagement"
+  *abpReplaceableTemplate="
+    {
+      inputs: {
+        providerName: { value: 'R' },
+        providerKey: { value: providerKey },
+        visible: { value: visiblePermissions, twoWay: true },
+        hideBadges: { value: true }
+      },
+      outputs: { visibleChange: onVisiblePermissionChange },
+      componentKey: permissionManagementKey
+    };
+    let init = initTemplate
+  "
+  (abpInit)="init(abpPermissionManagement)"
+>
 </abp-permission-management>

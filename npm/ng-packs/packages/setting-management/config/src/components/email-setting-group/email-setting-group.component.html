@@ -1,0 +1,77 @@
+<h2>{{ 'AbpSettingManagement::Menu:Emailing' | abpLocalization }}</h2>
+
+<hr class="my-3" />
+
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()" [validateOnSubmit]="true">
+  <div class="mb-3 form-group">
+    <label class="form-label">{{
+      'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization
+    }}</label>
+    <input type="text" class="form-control" formControlName="defaultFromDisplayName" />
+  </div>
+  <div class="mb-3 form-group">
+    <label class="form-label">{{
+      'AbpSettingManagement::DefaultFromAddress' | abpLocalization
+    }}</label>
+    <input type="text" class="form-control" formControlName="defaultFromAddress" />
+  </div>
+  <div class="mb-3 form-group">
+    <label class="form-label">{{ 'AbpSettingManagement::SmtpHost' | abpLocalization }}</label>
+    <input type="text" class="form-control" formControlName="smtpHost" />
+  </div>
+  <div class="mb-3 form-group">
+    <label class="form-label">{{ 'AbpSettingManagement::SmtpPort' | abpLocalization }}</label>
+    <input type="number" class="form-control" formControlName="smtpPort" />
+  </div>
+
+  <div class="form-check mb-2">
+    <input
+      type="checkbox"
+      id="smtp-enable-ssl"
+      class="form-check-input"
+      formControlName="smtpEnableSsl"
+    />
+    <label class="form-check-label" for="smtp-enable-ssl">{{
+      'AbpSettingManagement::SmtpEnableSsl' | abpLocalization
+    }}</label>
+  </div>
+  <div class="form-check mb-2">
+    <input
+      type="checkbox"
+      id="smtp-use-default-credentials"
+      class="form-check-input"
+      formControlName="smtpUseDefaultCredentials"
+    />
+    <label class="form-check-label" for="smtp-use-default-credentials">{{
+      'AbpSettingManagement::SmtpUseDefaultCredentials' | abpLocalization
+    }}</label>
+  </div>
+
+  <div
+    [@collapse]="{
+      value: form.get('smtpUseDefaultCredentials')?.value ? 'collapsed' : 'expanded',
+      params: { time: '200ms', easing: 'linear' }
+    }"
+  >
+    <div class="mb-3 form-group">
+      <label class="form-label">{{ 'AbpSettingManagement::SmtpDomain' | abpLocalization }}</label>
+      <input type="text" class="form-control" formControlName="smtpDomain" />
+    </div>
+
+    <div class="mb-3 form-group">
+      <label class="form-label">{{ 'AbpSettingManagement::SmtpUserName' | abpLocalization }}</label>
+      <input type="text" class="form-control" formControlName="smtpUserName" />
+    </div>
+
+    <div class="mb-3 form-group">
+      <label class="form-label">{{ 'AbpSettingManagement::SmtpPassword' | abpLocalization }}</label>
+      <input type="text" class="form-control" formControlName="smtpPassword" />
+    </div>
+  </div>
+
+  <hr />
+
+  <button type="submit" class="btn btn-primary">
+    {{ 'AbpSettingManagement::Save' | abpLocalization }}
+  </button>
+</form>

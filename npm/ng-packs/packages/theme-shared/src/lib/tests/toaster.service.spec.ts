@@ -1,87 +1,121 @@
-import { CoreModule } from '@abp/ng.core';
-import { Component } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { NgxsModule } from '@ngxs/store';
+import { CoreTestingModule } from '@abp/ng.core/testing';
+import { NgModule } from '@angular/core';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { timer } from 'rxjs';
+import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
+import { ToastComponent } from '../components/toast/toast.component';
 import { ToasterService } from '../services/toaster.service';
-import { ThemeSharedModule } from '../theme-shared.module';
-import { RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MessageService } from 'primeng/components/common/messageservice';
 
-@Component({
-  selector: 'abp-dummy',
-  template: `
-    <abp-toast></abp-toast>
-  `,
+@NgModule({
+  exports: [ToastContainerComponent],
+  entryComponents: [ToastContainerComponent],
+  declarations: [ToastContainerComponent, ToastComponent],
+  imports: [CoreTestingModule.withConfig()],
 })
-class DummyComponent {
-  constructor(public toaster: ToasterService) {}
-}
+export class MockModule {}
+const toastClassPrefix = 'abp-toast';
 
 describe('ToasterService', () => {
-  let spectator: Spectator<DummyComponent>;
+  let spectator: SpectatorService<ToasterService>;
   let service: ToasterService;
-  const createComponent = createComponentFactory({
-    component: DummyComponent,
-    imports: [CoreModule, ThemeSharedModule, NgxsModule.forRoot(), RouterTestingModule],
-    providers: [MessageService],
+  const createService = createServiceFactory({
+    service: ToasterService,
+    imports: [CoreTestingModule.withConfig(), MockModule],
   });
 
   beforeEach(() => {
-    spectator = createComponent();
-    service = spectator.get(ToasterService);
+    spectator = createService();
+    service = spectator.service;
   });
 
-  it('should display an error toast', () => {
-    service.error('test', 'title');
-
-    spectator.detectChanges();
-
-    expect(spectator.query('p-toast')).toBeTruthy();
-    expect(spectator.query('p-toastitem')).toBeTruthy();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-times');
-    expect(spectator.query('div.ui-toast-summary')).toHaveText('title');
-    expect(spectator.query('div.ui-toast-detail')).toHaveText('test');
+  afterEach(() => {
+    clearElements();
   });
 
-  it('should display a warning toast', () => {
-    service.warn('test', 'title');
-    spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-exclamation-triangle');
+  test('should display a toast', async () => {
+    service.show('MESSAGE', 'TITLE');
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE');
   });
 
-  it('should display a success toast', () => {
-    service.success('test', 'title');
-    spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-check');
+  test.each`
+    type         | selector                          | icon
+    ${'info'}    | ${`.${toastClassPrefix}-info`}    | ${'.fa-info-circle'}
+    ${'success'} | ${`.${toastClassPrefix}-success`} | ${'.fa-check-circle'}
+    ${'warn'}    | ${`.${toastClassPrefix}-warning`} | ${'.fa-exclamation-triangle'}
+    ${'error'}   | ${`.${toastClassPrefix}-error`}   | ${'.fa-times-circle'}
+  `('should display $type toast', async ({ type, selector, icon }) => {
+    service[type]('MESSAGE', 'TITLE');
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE');
+    expect(selectToasterElement()).toBe(document.querySelector(selector));
+    expect(selectToasterElement(icon)).toBeTruthy();
   });
 
-  it('should display an info toast', () => {
-    service.info('test', 'title');
-    spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-info-circle');
+  test('should display multiple toasts', async () => {
+    service.show('MESSAGE_1', 'TITLE_1');
+    service.show('MESSAGE_2', 'TITLE_2');
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    const titles = document.querySelectorAll(`.${toastClassPrefix}-title`);
+    expect(titles.length).toBe(2);
+
+    const messages = document.querySelectorAll(`.${toastClassPrefix}-message`);
+    expect(messages.length).toBe(2);
   });
 
-  it('should display multiple toasts', () => {
-    service.addAll([{ summary: 'summary1', detail: 'detail1' }, { summary: 'summary2', detail: 'detail2' }]);
-    spectator.detectChanges();
-    expect(spectator.queryAll('div.ui-toast-summary').map(node => node.textContent.trim())).toEqual([
-      'summary1',
-      'summary2',
-    ]);
-    expect(spectator.queryAll('div.ui-toast-detail').map(node => node.textContent.trim())).toEqual([
-      'detail1',
-      'detail2',
-    ]);
+  test('should remove a toast when remove is called', async () => {
+    service.show('MESSAGE');
+    service.remove(0);
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    expect(selectToasterElement()).toBeNull();
   });
 
-  it('should remove the opened toast', () => {
-    service.info('test', 'title');
-    spectator.detectChanges();
-    expect(spectator.query('p-toastitem')).toBeTruthy();
-
+  test('should remove toasts when clear is called', async () => {
+    service.show('MESSAGE');
     service.clear();
-    spectator.detectChanges();
-    expect(spectator.query('p-toastitem')).toBeFalsy();
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    expect(selectToasterElement()).toBeNull();
+  });
+
+  test('should remove toasts based on containerKey when clear is called with key', async () => {
+    service.show('MESSAGE_1', 'TITLE_1', 'neutral', { containerKey: 'x' });
+    service.show('MESSAGE_2', 'TITLE_2', 'neutral', { containerKey: 'y' });
+    service.clear('x');
+
+    await timer(0).toPromise();
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE_2');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE_2');
   });
 });
+
+function clearElements(selector = `.${toastClassPrefix}`) {
+  document.querySelectorAll(selector).forEach(element => element.parentNode.removeChild(element));
+}
+
+function selectToasterContent(selector = `.${toastClassPrefix}`): string {
+  return selectToasterElement(selector).textContent.trim();
+}
+
+function selectToasterElement<T extends HTMLElement>(selector = `.${toastClassPrefix}`): T {
+  return document.querySelector(selector);
+}

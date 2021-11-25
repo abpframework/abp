@@ -2,78 +2,56 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Volo.Abp.Account.Web.Pages.Account
+namespace Volo.Abp.Account.Web.Pages.Account;
+
+public abstract class AccountPageModel : AbpPageModel
 {
-    public abstract class AccountPageModel : AbpPageModel
+    public IAccountAppService AccountAppService { get; set; }
+    public SignInManager<IdentityUser> SignInManager { get; set; }
+    public IdentityUserManager UserManager { get; set; }
+    public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
+    public IOptions<IdentityOptions> IdentityOptions { get; set; }
+    public IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; set; }
+
+    protected AccountPageModel()
     {
-        public SignInManager<IdentityUser> SignInManager { get; set; }
-        public IdentityUserManager UserManager { get; set; }
+        LocalizationResourceType = typeof(AccountResource);
+        ObjectMapperContext = typeof(AbpAccountWebModule);
+    }
 
-        protected AccountPageModel()
+    protected virtual void CheckCurrentTenant(Guid? tenantId)
+    {
+        if (CurrentTenant.Id != tenantId)
         {
-            LocalizationResourceType = typeof(AccountResource);
-            ObjectMapperContext = typeof(AbpAccountWebModule);
+            throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
+        }
+    }
+
+    protected virtual void CheckIdentityErrors(IdentityResult identityResult)
+    {
+        if (!identityResult.Succeeded)
+        {
+            throw new UserFriendlyException("Operation failed: " + identityResult.Errors.Select(e => $"[{e.Code}] {e.Description}").JoinAsString(", "));
         }
 
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
+    }
+
+    protected virtual string GetLocalizeExceptionMessage(Exception exception)
+    {
+        if (exception is ILocalizeErrorMessage || exception is IHasErrorCode)
         {
-            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+            return ExceptionToErrorInfoConverter.Convert(exception, false).Message;
         }
 
-        protected void CheckIdentityErrors(IdentityResult identityResult)
-        {
-            if (!identityResult.Succeeded)
-            {
-                throw new UserFriendlyException("Operation failed: " + identityResult.Errors.Select(e => $"[{e.Code}] {e.Description}").JoinAsString(", "));
-            }
-
-            //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
-        }
-
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
-        {
-            returnUrl = NormalizeReturnUrl(returnUrl);
-
-            if (!returnUrlHash.IsNullOrWhiteSpace())
-            {
-                returnUrl = returnUrl + returnUrlHash;
-            }
-
-            return returnUrl;
-        }
-
-        private string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return GetAppHomeUrl();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return GetAppHomeUrl();
-        }
-
-        protected virtual void CheckCurrentTenant(Guid? tenantId)
-        {
-            if (CurrentTenant.Id != tenantId)
-            {
-                throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
-            }
-        }
-
-        protected virtual string GetAppHomeUrl()
-        {
-            return "/"; //TODO: ???
-        }
+        return exception.Message;
     }
 }

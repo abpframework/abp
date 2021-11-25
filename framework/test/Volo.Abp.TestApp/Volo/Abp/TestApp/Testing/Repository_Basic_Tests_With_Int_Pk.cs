@@ -1,42 +1,44 @@
 ﻿using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing
+namespace Volo.Abp.TestApp.Testing;
+
+public abstract class Repository_Basic_Tests_With_Int_Pk<TStartupModule> : TestAppTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class Repository_Basic_Tests_With_Int_Pk<TStartupModule> : TestAppTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected readonly IRepository<EntityWithIntPk, int> EntityWithIntPkRepository;
+
+    protected Repository_Basic_Tests_With_Int_Pk()
     {
-        protected readonly IRepository<EntityWithIntPk, int> EntityWithIntPkRepository;
+        EntityWithIntPkRepository = GetRequiredService<IRepository<EntityWithIntPk, int>>();
+    }
 
-        protected Repository_Basic_Tests_With_Int_Pk()
+    [Fact]
+    public virtual async Task FirstOrDefault()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            EntityWithIntPkRepository = GetRequiredService<IRepository<EntityWithIntPk, int>>();
-        }
+            var entity = await EntityWithIntPkRepository.FirstOrDefaultAsync(e => e.Name == "Entity1");
+            entity.ShouldNotBeNull();
+            entity.Name.ShouldBe("Entity1");
+            return Task.CompletedTask;
+        });
+    }
 
-        [Fact]
-        public virtual void FirstOrDefault()
+    [Fact]
+    public virtual async Task Get()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            WithUnitOfWork(() =>
-            {
-                var entity = EntityWithIntPkRepository.FirstOrDefault(e => e.Name == "Entity1");
-                entity.ShouldNotBeNull();
-                entity.Name.ShouldBe("Entity1");
-            });
-        }
-
-        [Fact]
-        public virtual void Get()
-        {
-            WithUnitOfWork(() =>
-            {
-                var entity = EntityWithIntPkRepository.Get(1);
-                entity.ShouldNotBeNull();
-                entity.Name.ShouldBe("Entity1");
-            });
-        }
+            var entity = await EntityWithIntPkRepository.GetAsync(1);
+            entity.ShouldNotBeNull();
+            entity.Name.ShouldBe("Entity1");
+        });
     }
 }

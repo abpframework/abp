@@ -1,51 +1,60 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroundJobWorker
 {
-    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker
+    protected const string DistributedLockName = "AbpBackgroundJobWorker";
+
+    protected AbpBackgroundJobOptions JobOptions { get; }
+
+    protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
+
+    protected IAbpDistributedLock DistributedLock { get; }
+
+    public BackgroundJobWorker(
+        AbpAsyncTimer timer,
+        IOptions<AbpBackgroundJobOptions> jobOptions,
+        IOptions<AbpBackgroundJobWorkerOptions> workerOptions,
+        IServiceScopeFactory serviceScopeFactory,
+        IAbpDistributedLock distributedLock)
+        : base(
+            timer,
+            serviceScopeFactory)
     {
-        protected AbpBackgroundJobOptions JobOptions { get; }
+        DistributedLock = distributedLock;
+        WorkerOptions = workerOptions.Value;
+        JobOptions = jobOptions.Value;
+        Timer.Period = WorkerOptions.JobPollPeriod;
+    }
 
-        protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
-
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-        public BackgroundJobWorker(
-            AbpTimer timer,
-            IOptions<AbpBackgroundJobOptions> jobOptions,
-            IOptions<AbpBackgroundJobWorkerOptions> workerOptions,
-            IServiceScopeFactory serviceScopeFactory)
-            : base(timer)
+    protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+    {
+        await using (var handler = await DistributedLock.TryAcquireAsync(DistributedLockName, cancellationToken: StoppingToken))
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            WorkerOptions = workerOptions.Value;
-            JobOptions = jobOptions.Value;
-            Timer.Period = WorkerOptions.JobPollPeriod;
-        }
-
-        protected override void DoWork()
-        {
-            using (var scope = ServiceScopeFactory.CreateScope())
+            if (handler != null)
             {
-                var store = scope.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
+                var store = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
 
-                var waitingJobs = store.GetWaitingJobs(WorkerOptions.MaxJobFetchCount);
+                var waitingJobs = await store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount);
 
                 if (!waitingJobs.Any())
                 {
                     return;
                 }
 
-                var jobExecuter = scope.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
-                var clock = scope.ServiceProvider.GetRequiredService<IClock>();
-                var serializer = scope.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
+                var jobExecuter = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
+                var clock = workerContext.ServiceProvider.GetRequiredService<IClock>();
+                var serializer = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
 
                 foreach (var jobInfo in waitingJobs)
                 {
@@ -56,13 +65,16 @@ namespace Volo.Abp.BackgroundJobs
                     {
                         var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
                         var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
-                        var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, jobArgs);
+                        var context = new JobExecutionContext(
+                            workerContext.ServiceProvider,
+                            jobConfiguration.JobType,
+                            jobArgs);
 
                         try
                         {
-                            jobExecuter.Execute(context);
+                            await jobExecuter.ExecuteAsync(context);
 
-                            store.Delete(jobInfo.Id);
+                            await store.DeleteAsync(jobInfo.Id);
                         }
                         catch (BackgroundJobExecutionException)
                         {
@@ -77,43 +89,52 @@ namespace Volo.Abp.BackgroundJobs
                                 jobInfo.IsAbandoned = true;
                             }
 
-                            TryUpdate(store, jobInfo);
+                            await TryUpdateAsync(store, jobInfo);
                         }
                     }
                     catch (Exception ex)
                     {
                         Logger.LogException(ex);
                         jobInfo.IsAbandoned = true;
-                        TryUpdate(store, jobInfo);
+                        await TryUpdateAsync(store, jobInfo);
                     }
                 }
             }
+            else
+            {
+                try
+                {
+                    await Task.Delay(WorkerOptions.JobPollPeriod * 12, StoppingToken);
+                }
+                catch (TaskCanceledException) { }
+            }
         }
+    }
 
-        protected virtual void TryUpdate(IBackgroundJobStore store, BackgroundJobInfo jobInfo)
+    protected virtual async Task TryUpdateAsync(IBackgroundJobStore store, BackgroundJobInfo jobInfo)
+    {
+        try
         {
-            try
-            {
-                store.Update(jobInfo);
-            }
-            catch (Exception updateEx)
-            {
-                Logger.LogException(updateEx);
-            }
+            await store.UpdateAsync(jobInfo);
         }
-
-        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo, IClock clock)
+        catch (Exception updateEx)
         {
-            var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration * (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
-            var nextTryDate = jobInfo.LastTryTime?.AddSeconds(nextWaitDuration) ??
-                              clock.Now.AddSeconds(nextWaitDuration);
-
-            if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
-            {
-                return null;
-            }
-
-            return nextTryDate;
+            Logger.LogException(updateEx);
         }
+    }
+
+    protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo, IClock clock)
+    {
+        var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration *
+                               (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
+        var nextTryDate = jobInfo.LastTryTime?.AddSeconds(nextWaitDuration) ??
+                          clock.Now.AddSeconds(nextWaitDuration);
+
+        if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
+        {
+            return null;
+        }
+
+        return nextTryDate;
     }
 }

@@ -1,0 +1,15 @@
+{
+    "culture": "hu",
+    "texts": {
+      "VirtualFileExplorer" : "Virtuális file böngésző",
+      "VirtualFileType" : "Virtuális file típus",
+      "Menu:VirtualFileExplorer" : "Virtuális file böngésző",
+      "LastUpdateTime" : "Utolsó módosítás ideje",
+      "VirtualFileName" : "Virtuális file neve",
+      "FileContent" : "File tartalma",
+      "Size" : "Méret",
+      "BackToRoot" : "Vissza a fő mappába",
+      "EmptyFileInfoList" : "Nem találhatóak virtuális fileok"
+    }
+  }
+  

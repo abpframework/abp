@@ -6,64 +6,65 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public class ModuleManager : IModuleManager, ISingletonDependency
 {
-    public class ModuleManager : IModuleManager, ISingletonDependency
+    private readonly IModuleContainer _moduleContainer;
+    private readonly IEnumerable<IModuleLifecycleContributor> _lifecycleContributors;
+    private readonly ILogger<ModuleManager> _logger;
+
+    public ModuleManager(
+        IModuleContainer moduleContainer,
+        ILogger<ModuleManager> logger,
+        IOptions<AbpModuleLifecycleOptions> options,
+        IServiceProvider serviceProvider)
     {
-        private readonly IModuleContainer _moduleContainer;
-        private readonly IEnumerable<IModuleLifecycleContributor> _lifecycleContributors;
-        private readonly ILogger<ModuleManager> _logger;
+        _moduleContainer = moduleContainer;
+        _logger = logger;
 
-        public ModuleManager(
-            IModuleContainer moduleContainer,
-            ILogger<ModuleManager> logger,
-            IOptions<AbpModuleLifecycleOptions> options,
-            IServiceProvider serviceProvider)
+        _lifecycleContributors = options.Value
+            .Contributors
+            .Select(serviceProvider.GetRequiredService)
+            .Cast<IModuleLifecycleContributor>()
+            .ToArray();
+    }
+
+    public void InitializeModules(ApplicationInitializationContext context)
+    {
+        foreach (var contributor in _lifecycleContributors)
         {
-            _moduleContainer = moduleContainer;
-            _logger = logger;
-
-            _lifecycleContributors = options.Value
-                .Contributors
-                .Select(serviceProvider.GetRequiredService)
-                .Cast<IModuleLifecycleContributor>()
-                .ToArray();
-        }
-
-        public void InitializeModules(ApplicationInitializationContext context)
-        {
-            LogListOfModules();
-
-            foreach (var Contributor in _lifecycleContributors)
-            {
-                foreach (var module in _moduleContainer.Modules)
-                {
-                    Contributor.Initialize(context, module.Instance);
-                }
-            }
-
-            _logger.LogInformation("Initialized all ABP modules.");
-        }
-
-        private void LogListOfModules()
-        {
-            _logger.LogInformation("Loaded ABP modules:");
-
             foreach (var module in _moduleContainer.Modules)
             {
-                _logger.LogInformation("- " + module.Type.FullName);
+                try
+                {
+                    contributor.Initialize(context, module.Instance);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                }
             }
         }
 
-        public void ShutdownModules(ApplicationShutdownContext context)
-        {
-            var modules = _moduleContainer.Modules.Reverse().ToList();
+        _logger.LogInformation("Initialized all ABP modules.");
+    }
 
-            foreach (var Contributor in _lifecycleContributors)
+    public void ShutdownModules(ApplicationShutdownContext context)
+    {
+        var modules = _moduleContainer.Modules.Reverse().ToList();
+
+        foreach (var contributor in _lifecycleContributors)
+        {
+            foreach (var module in modules)
             {
-                foreach (var module in modules)
+                try
                 {
-                    Contributor.Shutdown(context, module.Instance);
+                    contributor.Shutdown(context, module.Instance);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpShutdownException($"An error occurred during the shutdown {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
                 }
             }
         }

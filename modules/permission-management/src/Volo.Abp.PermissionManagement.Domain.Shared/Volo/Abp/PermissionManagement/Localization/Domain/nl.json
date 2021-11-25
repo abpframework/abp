@@ -1,0 +1,10 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Permissions": "Rechten",
+    "OnlyProviderPermissons": "Alleen deze provider",
+    "All": "Alle",
+    "SelectAllInAllTabs": "Verleen alle rechten",
+    "SelectAllInThisTab": "Selecteer alles"
+  }
+}

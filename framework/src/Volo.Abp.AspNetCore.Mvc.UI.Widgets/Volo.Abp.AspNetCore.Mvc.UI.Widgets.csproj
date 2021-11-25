@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Widgets</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Widgets</PackageId>
     <IsPackable>true</IsPackable>
@@ -13,11 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
-    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
   </ItemGroup>
 
 </Project>

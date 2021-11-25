@@ -2,162 +2,96 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.DynamicProxy
+namespace Volo.Abp.DynamicProxy;
+
+public abstract class AbpInterceptionTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class AbpInterceptionTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected override void BeforeAddApplication(IServiceCollection services)
     {
-	    protected override void BeforeAddApplication(IServiceCollection services)
-	    {
-		    services.AddTransient<SimpleAsyncInterceptor>();
-		    services.AddTransient<SimpleSyncInterceptor>();
-		    services.AddTransient<SimpleAsyncInterceptor2>();
-		    services.AddTransient<SimpleInterceptionTargetClass>();
+        services.AddTransient<SimpleAsyncInterceptor>();
+        services.AddTransient<SimpleAsyncInterceptor2>();
+        services.AddTransient<SimpleInterceptionTargetClass>();
 
-			services.AddTransient<SimpleResultCacheTestInterceptor>();
-			services.AddTransient<CachedTestObject>();
+        services.AddTransient<SimpleResultCacheTestInterceptor>();
+        services.AddTransient<CachedTestObject>();
 
-			services.OnRegistred(registration =>
-		    {
-			    if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
-			    {
-				    registration.Interceptors.Add<SimpleAsyncInterceptor>();
-				    registration.Interceptors.Add<SimpleSyncInterceptor>();
-				    registration.Interceptors.Add<SimpleAsyncInterceptor2>();
-			    }
+        services.OnRegistred(registration =>
+        {
+            if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
+            {
+                registration.Interceptors.Add<SimpleAsyncInterceptor>();
+                registration.Interceptors.Add<SimpleAsyncInterceptor2>();
+            }
 
-			    if (typeof(CachedTestObject) == registration.ImplementationType)
-			    {
-				    registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
-			    }
-			});
-	    }
-		
-	    [Fact]
-	    public async Task Should_Intercept_Async_Method_Without_Return_Value()
-	    {
-		    //Arrange
+            if (typeof(CachedTestObject) == registration.ImplementationType)
+            {
+                registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
+            }
+        });
+    }
 
-		    var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
+    [Fact]
+    public async Task Should_Intercept_Async_Method_Without_Return_Value()
+    {
+        //Arrange
 
-		    //Act
+        var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
 
-		    await target.DoItAsync();
+        //Act
 
-		    //Assert
+        await target.DoItAsync();
 
-		    target.Logs.Count.ShouldBe(9);
-		    target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
-		    target.Logs[1].ShouldBe("SimpleSyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[2].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
-		    target.Logs[3].ShouldBe("EnterDoItAsync");
-		    target.Logs[4].ShouldBe("MiddleDoItAsync");
-		    target.Logs[5].ShouldBe("ExitDoItAsync");
-		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
-		    target.Logs[7].ShouldBe("SimpleSyncInterceptor_Intercept_AfterInvocation");
-		    target.Logs[8].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
-	    }
+        //Assert
 
-	    [Fact]
-	    public async Task Should_Intercept_Async_Method_With_Return_Value()
-	    {
-		    //Arrange
+        target.Logs.Count.ShouldBe(7);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterDoItAsync");
+        target.Logs[3].ShouldBe("MiddleDoItAsync");
+        target.Logs[4].ShouldBe("ExitDoItAsync");
+        target.Logs[5].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[6].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
 
-		    var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
+    [Fact]
+    public async Task Should_Intercept_Async_Method_With_Return_Value()
+    {
+        //Arrange
 
-		    //Act
+        var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
 
-		    var result = await target.GetValueAsync();
+        //Act
 
-		    //Assert
+        var result = await target.GetValueAsync();
 
-		    result.ShouldBe(42);
-		    target.Logs.Count.ShouldBe(9);
-		    target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
-		    target.Logs[1].ShouldBe("SimpleSyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[2].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
-		    target.Logs[3].ShouldBe("EnterGetValueAsync");
-		    target.Logs[4].ShouldBe("MiddleGetValueAsync");
-		    target.Logs[5].ShouldBe("ExitGetValueAsync");
-		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
-		    target.Logs[7].ShouldBe("SimpleSyncInterceptor_Intercept_AfterInvocation");
-		    target.Logs[8].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
-	    }
+        //Assert
 
-	    [Fact]
-	    public void Should_Intercept_Sync_Method_Without_Return_Value()
-	    {
-		    //Arrange
+        result.ShouldBe(42);
+        target.Logs.Count.ShouldBe(7);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterGetValueAsync");
+        target.Logs[3].ShouldBe("MiddleGetValueAsync");
+        target.Logs[4].ShouldBe("ExitGetValueAsync");
+        target.Logs[5].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[6].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
 
-		    var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
+    [Fact]
+    public async Task Should_Cache_Results_Async()
+    {
+        //Arrange
 
-		    //Act
+        var target = ServiceProvider.GetService<CachedTestObject>();
 
-		    target.DoIt();
+        //Act & Assert
 
-		    //Assert
-		    target.Logs.Count.ShouldBe(7);
-		    target.Logs[0].ShouldBe("SimpleAsyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[1].ShouldBe("SimpleSyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[2].ShouldBe("SimpleAsyncInterceptor2_Intercept_BeforeInvocation");
-		    target.Logs[3].ShouldBe("ExecutingDoIt");
-		    target.Logs[4].ShouldBe("SimpleAsyncInterceptor2_Intercept_AfterInvocation");
-		    target.Logs[5].ShouldBe("SimpleSyncInterceptor_Intercept_AfterInvocation");
-		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor_Intercept_AfterInvocation");
-	    }
-
-	    [Fact]
-	    public void Should_Intercept_Sync_Method_With_Return_Value()
-	    {
-		    //Arrange
-
-		    var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
-
-		    //Act
-
-		    var result = target.GetValue();
-
-		    //Assert
-
-		    result.ShouldBe(42);
-		    target.Logs.Count.ShouldBe(7);
-		    target.Logs[0].ShouldBe("SimpleAsyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[1].ShouldBe("SimpleSyncInterceptor_Intercept_BeforeInvocation");
-		    target.Logs[2].ShouldBe("SimpleAsyncInterceptor2_Intercept_BeforeInvocation");
-		    target.Logs[3].ShouldBe("ExecutingGetValue");
-		    target.Logs[4].ShouldBe("SimpleAsyncInterceptor2_Intercept_AfterInvocation");
-		    target.Logs[5].ShouldBe("SimpleSyncInterceptor_Intercept_AfterInvocation");
-		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor_Intercept_AfterInvocation");
-	    }
-
-	    [Fact]
-	    public void Should_Cache_Results()
-	    {
-		    //Arrange
-
-		    var target = ServiceProvider.GetService<CachedTestObject>();
-
-		    //Act & Assert
-
-		    target.GetValue(42).ShouldBe(42); //First run, not cached yet
-		    target.GetValue(43).ShouldBe(42); //First run, cached previous value
-		    target.GetValue(44).ShouldBe(42); //First run, cached previous value
-	    }
-
-	    [Fact]
-	    public async Task Should_Cache_Results_Async()
-	    {
-		    //Arrange
-
-		    var target = ServiceProvider.GetService<CachedTestObject>();
-
-		    //Act & Assert
-
-		    (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
-		    (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
-		    (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
-	    }
-	}
+        (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
+        (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
+        (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
+    }
 }

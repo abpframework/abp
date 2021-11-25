@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
+using Volo.Abp.Validation;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
 {
-    public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
-    {
-        [Required]
-        [StringLength(IdentityUserConsts.MaxPasswordLength)]
-        public string Password { get; set; }
-    }
+    [DisableAuditing]
+    [Required]
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+    public string Password { get; set; }
 }

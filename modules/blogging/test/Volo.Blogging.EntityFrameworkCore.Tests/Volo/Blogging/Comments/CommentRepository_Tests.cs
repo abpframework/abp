@@ -1,4 +1,5 @@
 ﻿using Volo.Blogging.Comments;
+using Volo.Blogging.EntityFrameworkCore;
 
 namespace Volo.Blogging
 {

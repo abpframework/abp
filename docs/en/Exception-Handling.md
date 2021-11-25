@@ -1,13 +1,13 @@
-## Exception Handling
+# Exception Handling
 
-ABP provides a built-in infrastructure and offers a standard model for handling exceptions in a web application.
+ABP provides a built-in infrastructure and offers a standard model for handling exceptions.
 
 * Automatically **handles all exceptions** and sends a standard **formatted error message** to the client for an API/AJAX request.
 * Automatically hides **internal infrastructure errors** and returns a standard error message.
-* Provides a configurable way to **localize** exception messages.
-* Automatically maps standard exceptions to **HTTP status codes** and provides a configurable option to map these to custom exceptions.
+* Provides an easy and configurable way to **localize** exception messages.
+* Automatically maps standard exceptions to **HTTP status codes** and provides a configurable option to map custom exceptions.
 
-### Automatic Exception Handling
+## Automatic Exception Handling
 
 `AbpExceptionFilter` handles an exception if **any of the following conditions** are met:
 
@@ -17,7 +17,7 @@ ABP provides a built-in infrastructure and offers a standard model for handling 
 
 If the exception is handled it's automatically **logged** and a formatted **JSON message** is returned to the client.
 
-#### Error Message Format
+### Error Message Format
 
 Error Message is an instance of the `RemoteServiceErrorResponse` class. The simplest error JSON has a **message** property as shown below:
 
@@ -83,11 +83,11 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 
 `AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have higly customised validation logic.
 
-#### Logging
+### Logging
 
-Caught exceptions are automatically logged. 
+Caught exceptions are automatically logged.
 
-##### Log Level
+#### Log Level
 
 Exceptions are logged with the `Error` level by default. The Log level can be determined by the exception if it implements the `IHasLogLevel` interface. Example:
 
@@ -100,7 +100,7 @@ public class MyException : Exception, IHasLogLevel
 }
 ````
 
-##### Self Logging Exceptions
+#### Self Logging Exceptions
 
 Some exception types may need to write additional logs. They can implement the `IExceptionWithSelfLogging` if needed. Example:
 
@@ -116,7 +116,7 @@ public class MyException : Exception, IExceptionWithSelfLogging
 
 > `ILogger.LogException` extension methods is used to write exception logs. You can use the same extension method when needed.
 
-### Business Exceptions
+## Business Exceptions
 
 Most of your own exceptions will be business exceptions. The `IBusinessException` interface is used to mark an exception as a business exception.
 
@@ -145,11 +145,11 @@ Volo.Qa:010002
 * You can **directly throw** a `BusinessException` or **derive** your own exception types from it when needed.
 * All properties are optional for the `BusinessException` class. But you generally set either `ErrorCode` or  `Message` property.
 
-### Exception Localization
+## Exception Localization
 
 One problem with throwing exceptions is how to localize error messages while sending it to the client. ABP offers two models and their variants.
 
-#### User Friendly Exception
+### User Friendly Exception
 
 If an exception implements the `IUserFriendlyException` interface, then ABP does not change it's `Message` and `Details` properties and directly send it to the client.
 
@@ -192,7 +192,7 @@ Then the localization text can be:
 
 * The `IUserFriendlyException` interface is derived from the `IBusinessException` and the `UserFriendlyException` class is derived from the `BusinessException` class.
 
-#### Using Error Codes
+### Using Error Codes
 
 `UserFriendlyException` is fine, but it has a few problems in advanced usages:
 
@@ -204,7 +204,7 @@ Instead of localizing the message while throwing the exception, you can separate
 First, define the **code-namespace** to **localization resource** mapping in the module configuration:
 
 ````C#
-services.Configure<ExceptionLocalizationOptions>(options =>
+services.Configure<AbpExceptionLocalizationOptions>(options =>
 {
     options.MapCodeNamespace("Volo.Qa", typeof(QaResource));
 });
@@ -230,7 +230,7 @@ throw new BusinessException(QaDomainErrorCodes.CanNotVoteYourOwnAnswer);
 * Throwing any exception implementing the `IHasErrorCode` interface behaves the same. So, the error code localization approach is not unique to the `BusinessException` class.
 * Defining localized string is not required for an error message. If it's not defined, ABP sends the default error message to the client. It does not use the `Message` property of the exception! if you want that, use the `UserFriendlyException` (or use an exception type that implements the `IUserFriendlyException` interface).
 
-##### Using Message Parameters
+#### Using Message Parameters
 
 If you have a parameterized error message, then you can set it with the exception's `Data` property. For example:
 
@@ -265,7 +265,7 @@ Then the localized text can contain the `UserName` parameter:
 
 * `WithData` can be chained with more than one parameter (like `.WithData(...).WithData(...)`).
 
-### HTTP Status Code Mapping
+## HTTP Status Code Mapping
 
 ABP tries to automatically determine the most suitable HTTP status code for common exception types by following these rules:
 
@@ -280,23 +280,61 @@ ABP tries to automatically determine the most suitable HTTP status code for comm
 
 The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP status code. The default implementation is the `DefaultHttpExceptionStatusCodeFinder` class. It can be replaced or extended as needed.
 
-#### Custom Mappings
+### Custom Mappings
 
 Automatic HTTP status code determination can be overrided by custom mappings. For example:
 
 ````C#
-services.Configure<ExceptionHttpStatusCodeOptions>(options =>
+services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 {
     options.Map("Volo.Qa:010002", HttpStatusCode.Conflict);
 });
 ````
 
-### Built-In Exceptions
+## Subscribing to the Exceptions
+
+It is possible to be informed when the ABP Framework **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](Logging.md), but you may want to do more.
+
+In this case, create a class derived from the `ExceptionSubscriber` class in your application:
+
+````csharp
+public class MyExceptionSubscriber : ExceptionSubscriber
+{
+    public async override Task HandleAsync(ExceptionNotificationContext context)
+    {
+        //TODO...
+    }
+}
+````
+
+The `context` object contains necessary information about the exception occurred.
+
+> You can have multiple subscribers, each gets a copy of the exception. Exceptions thrown by your subscriber is ignored (but still logged).
+
+## Built-In Exceptions
 
 Some exception types are automatically thrown by the framework:
 
-- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
-- `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
+- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](Authorization.md) for more.
+- `AbpValidationException` is thrown if the input of the current request is not valid. See [validation](Validation.md) for more.
 - `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
 
 You can also throw these type of exceptions in your code (although it's rarely needed).
+
+## AbpExceptionHandlingOptions
+
+`AbpExceptionHandlingOptions` is the main [options object](Options.md) to configure the exception handling system. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionsDetailsToClients = true;
+    options.SendStackTraceToClients = false;
+});
+````
+
+Here, a list of the options you can configure:
+
+* `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
+* `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
+

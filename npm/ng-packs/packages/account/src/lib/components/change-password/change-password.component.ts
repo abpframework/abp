@@ -1,59 +1,48 @@
-import { ChangePassword, ConfigState, ABP } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { comparePasswords, Validation, PasswordRules, validatePassword } from '@ngx-validate/core';
-import { Store } from '@ngxs/store';
-import snq from 'snq';
+import { ProfileService } from '@abp/ng.account.core/proxy';
+import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
+import { Component, Injector, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
+import { Account } from '../../models/account';
+import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
-const { minLength, required, maxLength } = Validators;
+const { required } = Validators;
 
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
 @Component({
   selector: 'abp-change-password-form',
   templateUrl: './change-password.component.html',
+  exportAs: 'abpChangePasswordForm',
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent
+  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;
 
+  hideCurrentPassword: boolean;
+
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(control.name) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
 
-  constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
+  constructor(
+    private fb: FormBuilder,
+    private injector: Injector,
+    private toasterService: ToasterService,
+    private profileService: ProfileService,
+    private manageProfileState: ManageProfileStateService,
+  ) {}
 
   ngOnInit(): void {
-    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
-    const passwordRulesArr = [] as PasswordRules;
-    let requiredLength = 1;
+    this.hideCurrentPassword = !this.manageProfileState.getProfile()?.hasPassword;
 
-    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('number');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('small');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('capital');
-    }
-
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
-      passwordRulesArr.push('special');
-    }
-
-    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
-      requiredLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
-    }
+    const passwordValidations = getPasswordValidators(this.injector);
 
     this.form = this.fb.group(
       {
@@ -61,40 +50,47 @@ export class ChangePasswordComponent implements OnInit {
         newPassword: [
           '',
           {
-            validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
+            validators: [required, ...passwordValidations],
           },
         ],
         repeatNewPassword: [
           '',
-          { validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)] },
+          {
+            validators: [required, ...passwordValidations],
+          },
         ],
       },
       {
         validators: [comparePasswords(PASSWORD_FIELDS)],
       },
     );
+
+    if (this.hideCurrentPassword) this.form.removeControl('password');
   }
 
   onSubmit() {
     if (this.form.invalid) return;
     this.inProgress = true;
-    this.store
-      .dispatch(
-        new ChangePassword({
-          currentPassword: this.form.get('password').value,
-          newPassword: this.form.get('newPassword').value,
-        }),
-      )
+    this.profileService
+      .changePassword({
+        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
+        newPassword: this.form.get('newPassword').value,
+      })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe({
         next: () => {
           this.form.reset();
-          this.toasterService.success('AbpAccount::PasswordChangedMessage', 'Success', { life: 5000 });
+          this.toasterService.success('AbpAccount::PasswordChangedMessage', '', {
+            life: 5000,
+          });
+
+          if (this.hideCurrentPassword) {
+            this.hideCurrentPassword = false;
+            this.form.addControl('password', new FormControl('', [required]));
+          }
         },
         error: err => {
-          this.toasterService.error(snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'), 'Error', {
-            life: 7000,
-          });
+          this.toasterService.error(err.error?.error?.message || 'AbpAccount::DefaultErrorMessage');
         },
       });
   }

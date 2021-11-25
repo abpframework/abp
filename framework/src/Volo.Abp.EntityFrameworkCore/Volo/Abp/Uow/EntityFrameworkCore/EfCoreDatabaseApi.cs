@@ -2,26 +2,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.Uow.EntityFrameworkCore
+namespace Volo.Abp.Uow.EntityFrameworkCore;
+
+public class EfCoreDatabaseApi : IDatabaseApi, ISupportsSavingChanges
 {
-    public class EfCoreDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
-        where TDbContext : IEfCoreDbContext
+    public IEfCoreDbContext DbContext { get; }
+
+    public EfCoreDatabaseApi(IEfCoreDbContext dbContext)
     {
-        public TDbContext DbContext { get; }
+        DbContext = dbContext;
+    }
 
-        public EfCoreDatabaseApi(TDbContext dbContext)
-        {
-            DbContext = dbContext;
-        }
-        
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return DbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        public void SaveChanges()
-        {
-            DbContext.SaveChanges();
-        }
+    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return DbContext.SaveChangesAsync(cancellationToken);
     }
 }

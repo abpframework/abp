@@ -1,15 +1,14 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Authorization.TestServices
+namespace Volo.Abp.Authorization.TestServices;
+
+public interface IMyAuthorizedService1
 {
-    public interface IMyAuthorizedService1
-    {
-        int Anonymous();
+    Task<int> Anonymous();
 
-        Task<int> AnonymousAsync();
+    Task<int> AnonymousAsync();
 
-        int ProtectedByClass();
+    Task<int> ProtectedByClass();
 
-        Task<int> ProtectedByClassAsync();
-    }
+    Task<int> ProtectedByClassAsync();
 }

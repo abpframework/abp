@@ -120,7 +120,7 @@ Dynamic bundling & minification system works on the virtual file system and allo
 
 This code creates a new style bundle on the fly by including bootstrap (and its dependencies if there are) and two more css files. These files are bundled & minified on production environment, but will be added individually on the development environment.
 
-See [the documentation](https://github.com/abpframework/abp/blob/master/docs/AspNetCore/Bundling-Minification.md) for more.
+See [the documentation](https://github.com/abpframework/abp/blob/master/docs/UI/AspNetCore/Bundling-Minification.md) for more.
 
 #### Distributed Event Bus
 In current ABP, there is an IEventBus service to trigger and handle events inside the application. In addition to this local event bus, we are creating a distributed event bus abstraction (and RabbitMQ integration) to implement distributed messaging patterns.
