@@ -591,17 +591,16 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
         </CardHeader>
         <CardBody>
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" 
-                  @onsubmit:preventDefault
-                  @onsubmit="() => Create()"
-                  class="form-inline">
-                <input type="text" 
-                       @bind-value="@NewTodoText"
-                       class="form-control me-2" 
-                       placeholder="enter text...">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <form id="NewItemForm" @onsubmit:preventDefault @onsubmit="() => Create()" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input name="NewTodoText" type="text" @bind-value="@NewTodoText" class="form-control" placeholder="enter text..." />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form>
-
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in TodoItems)
