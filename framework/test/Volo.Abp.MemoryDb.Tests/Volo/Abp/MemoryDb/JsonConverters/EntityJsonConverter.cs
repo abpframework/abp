@@ -13,12 +13,12 @@ namespace Volo.Abp.MemoryDb.JsonConverters
             var jsonDocument = JsonDocument.ParseValue(ref reader);
             if (jsonDocument.RootElement.ValueKind == JsonValueKind.Object)
             {
-                var entity = (TEntity)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), typeToConvert);
+                var entity = (TEntity)jsonDocument.RootElement.Deserialize(typeToConvert);
 
                 var idJsonElement = jsonDocument.RootElement.GetProperty(nameof(Entity<object>.Id));
                 if (idJsonElement.ValueKind != JsonValueKind.Undefined)
                 {
-                    var id = JsonSerializer.Deserialize<TKey>(idJsonElement.GetRawText());
+                    var id = idJsonElement.Deserialize<TKey>();
                     if (id != null)
                     {
                         EntityHelper.TrySetId(entity, () => id);

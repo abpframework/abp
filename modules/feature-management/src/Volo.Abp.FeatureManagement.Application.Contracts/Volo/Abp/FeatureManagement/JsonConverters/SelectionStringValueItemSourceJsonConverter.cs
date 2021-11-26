@@ -19,7 +19,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
                 var newOptions = JsonSerializerOptionsHelper.Create(options, this);
 
                 var selectionStringValueItem =
-                    JsonSerializer.Deserialize<LocalizableSelectionStringValueItem[]>(itemsJsonProperty.Value.GetRawText(), newOptions) ??
+                    itemsJsonProperty.Value.Deserialize<LocalizableSelectionStringValueItem[]>(newOptions) ??
                     Array.Empty<LocalizableSelectionStringValueItem>();
 
                 return new StaticSelectionStringValueItemSource(selectionStringValueItem.As<ISelectionStringValueItem[]>());
