@@ -2,25 +2,24 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Users.MongoDB;
 
-namespace Volo.Abp.Identity.MongoDB
+namespace Volo.Abp.Identity.MongoDB;
+
+[DependsOn(
+    typeof(AbpIdentityDomainModule),
+    typeof(AbpUsersMongoDbModule)
+    )]
+public class AbpIdentityMongoDbModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpIdentityDomainModule),
-        typeof(AbpUsersMongoDbModule)
-        )]
-    public class AbpIdentityMongoDbModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddMongoDbContext<AbpIdentityMongoDbContext>(options =>
         {
-            context.Services.AddMongoDbContext<AbpIdentityMongoDbContext>(options =>
-            {
-                options.AddRepository<IdentityUser, MongoIdentityUserRepository>();
-                options.AddRepository<IdentityRole, MongoIdentityRoleRepository>();
-                options.AddRepository<IdentityClaimType, MongoIdentityClaimTypeRepository>();
-                options.AddRepository<OrganizationUnit, MongoOrganizationUnitRepository>();
-                options.AddRepository<IdentitySecurityLog, MongoIdentitySecurityLogRepository>();
-                options.AddRepository<IdentityLinkUser, MongoIdentityLinkUserRepository>();
-            });
-        }
+            options.AddRepository<IdentityUser, MongoIdentityUserRepository>();
+            options.AddRepository<IdentityRole, MongoIdentityRoleRepository>();
+            options.AddRepository<IdentityClaimType, MongoIdentityClaimTypeRepository>();
+            options.AddRepository<OrganizationUnit, MongoOrganizationUnitRepository>();
+            options.AddRepository<IdentitySecurityLog, MongoIdentitySecurityLogRepository>();
+            options.AddRepository<IdentityLinkUser, MongoIdentityLinkUserRepository>();
+        });
     }
 }
