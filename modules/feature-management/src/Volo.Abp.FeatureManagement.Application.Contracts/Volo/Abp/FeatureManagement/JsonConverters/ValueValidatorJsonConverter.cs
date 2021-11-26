@@ -23,7 +23,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
                 if (propertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)
                 {
                     var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
-                    var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(propertiesJsonProperty.Value.GetRawText(), newOptions);
+                    var properties = propertiesJsonProperty.Value.Deserialize<IDictionary<string, object>>(newOptions);
                     if (properties != null && properties.Any())
                     {
                         foreach (var property in properties)

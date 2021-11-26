@@ -22,9 +22,9 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
 
                 return name switch
                 {
-                    "SelectionStringValueType" =>  JsonSerializer.Deserialize<SelectionStringValueType>(rootElement.GetRawText(), newOptions),
-                    "FreeTextStringValueType" => JsonSerializer.Deserialize<FreeTextStringValueType>(rootElement.GetRawText(), newOptions),
-                    "ToggleStringValueType" => JsonSerializer.Deserialize<ToggleStringValueType>(rootElement.GetRawText(), newOptions),
+                    "SelectionStringValueType" =>  rootElement.Deserialize<SelectionStringValueType>(newOptions),
+                    "FreeTextStringValueType" => rootElement.Deserialize<FreeTextStringValueType>(newOptions),
+                    "ToggleStringValueType" => rootElement.Deserialize<ToggleStringValueType>(newOptions),
                     _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
                 };
             }
