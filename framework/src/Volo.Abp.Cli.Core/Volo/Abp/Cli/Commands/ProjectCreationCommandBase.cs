@@ -296,6 +296,14 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
+        protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+        {
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+            {
+                CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
+            }
+        }
+
         protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);

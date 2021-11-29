@@ -5,33 +5,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Auth;
-using Volo.Abp.Cli.Build;
 using Volo.Abp.Cli.Commands.Services;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.ProjectBuilding.Templates.App;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
-using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
     public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
     {
         public ILogger<NewCommand> Logger { get; set; }
-        public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
@@ -86,17 +73,8 @@ namespace Volo.Abp.Cli.Commands
             ExtractProjectZip(result, projectArgs.OutputFolder);
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
-            
-            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
-            {
-                var projects = new List<DotNetProjectInfo>
-                {
-                    new DotNetProjectInfo(string.Empty, projectArgs.OutputFolder, true)
-                };
 
-                DotNetProjectBuilder.BuildProjects(projects, "/graphBuild");
-            }
-
+            RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
             OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
         }
 
