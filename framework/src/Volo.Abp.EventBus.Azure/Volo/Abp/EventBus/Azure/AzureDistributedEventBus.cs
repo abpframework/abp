@@ -180,7 +180,7 @@ namespace Volo.Abp.EventBus.Azure
 
         protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
-            await PublishAsync(eventType, eventData);
+            await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
         }
 
         protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
