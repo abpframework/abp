@@ -19,7 +19,7 @@ public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelect
             var newOptions = JsonSerializerOptionsHelper.Create(options, this);
 
             var selectionStringValueItem =
-                JsonSerializer.Deserialize<LocalizableSelectionStringValueItem[]>(itemsJsonProperty.Value.GetRawText(), newOptions) ??
+                itemsJsonProperty.Value.Deserialize<LocalizableSelectionStringValueItem[]>(newOptions) ??
                 Array.Empty<LocalizableSelectionStringValueItem>();
 
             return new StaticSelectionStringValueItemSource(selectionStringValueItem.As<ISelectionStringValueItem[]>());
@@ -27,6 +27,7 @@ public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelect
 
         throw new JsonException($"Can't to get the {nameof(ISelectionStringValueItemSource.Items)} property of {nameof(ISelectionStringValueItemSource)}!");
     }
+
 
     public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
     {
