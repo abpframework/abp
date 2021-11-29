@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+
+public interface IPageToolbarContributor
 {
-    public interface IPageToolbarContributor
-    {
-        Task ContributeAsync(PageToolbarContributionContext context);
-    }
+    Task ContributeAsync(PageToolbarContributionContext context);
 }

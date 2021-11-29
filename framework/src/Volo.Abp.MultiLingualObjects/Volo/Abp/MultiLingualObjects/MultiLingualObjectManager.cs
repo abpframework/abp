@@ -7,79 +7,78 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.MultiLingualObjects
+namespace Volo.Abp.MultiLingualObjects;
+
+public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientDependency
 {
-    public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientDependency
+    protected ISettingProvider SettingProvider { get; }
+
+    protected const int MaxCultureFallbackDepth = 5;
+
+    public MultiLingualObjectManager(ISettingProvider settingProvider)
     {
-        protected ISettingProvider SettingProvider { get; }
+        SettingProvider = settingProvider;
+    }
 
-        protected const int MaxCultureFallbackDepth = 5;
+    public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
+        TMultiLingual multiLingual,
+        string culture = null,
+        bool fallbackToParentCultures = true)
+        where TMultiLingual : IMultiLingualObject<TTranslation>
+        where TTranslation : class, IObjectTranslation
+    {
+        culture ??= CultureInfo.CurrentUICulture.Name;
 
-        public MultiLingualObjectManager(ISettingProvider settingProvider)
+        if (multiLingual.Translations.IsNullOrEmpty())
         {
-            SettingProvider = settingProvider;
+            return null;
         }
 
-        public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
-            TMultiLingual multiLingual,
-            string culture = null,
-            bool fallbackToParentCultures = true)
-            where TMultiLingual : IMultiLingualObject<TTranslation>
-            where TTranslation : class, IObjectTranslation
+        var translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == culture);
+        if (translation != null)
         {
-            culture ??= CultureInfo.CurrentUICulture.Name;
-
-            if (multiLingual.Translations.IsNullOrEmpty())
-            {
-                return null;
-            }
-
-            var translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == culture);
-            if (translation != null)
-            {
-                return translation;
-            }
-
-            if (fallbackToParentCultures)
-            {
-                translation = GetTranslationBasedOnCulturalRecursive(
-                    CultureInfo.CurrentUICulture.Parent,
-                    multiLingual.Translations,
-                    0
-                );
-                
-                if (translation != null)
-                {
-                    return translation;
-                }
-            }
-
-            var defaultLanguage = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
-
-            translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
-            if (translation != null)
-            {
-                return translation;
-            }
-
-            translation = multiLingual.Translations.FirstOrDefault();
             return translation;
         }
 
-        protected virtual TTranslation GetTranslationBasedOnCulturalRecursive<TTranslation>(
-            CultureInfo culture, ICollection<TTranslation> translations, int currentDepth)
-            where TTranslation : class, IObjectTranslation
+        if (fallbackToParentCultures)
         {
-            if (culture == null ||
-                culture.Name.IsNullOrWhiteSpace() ||
-                translations.IsNullOrEmpty() ||
-                currentDepth > MaxCultureFallbackDepth)
-            {
-                return null;
-            }
+            translation = GetTranslationBasedOnCulturalRecursive(
+                CultureInfo.CurrentUICulture.Parent,
+                multiLingual.Translations,
+                0
+            );
 
-            var translation = translations.FirstOrDefault(pt => pt.Language.Equals(culture.Name, StringComparison.OrdinalIgnoreCase));
-            return translation ?? GetTranslationBasedOnCulturalRecursive(culture.Parent, translations, currentDepth + 1);
+            if (translation != null)
+            {
+                return translation;
+            }
         }
+
+        var defaultLanguage = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+
+        translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
+        if (translation != null)
+        {
+            return translation;
+        }
+
+        translation = multiLingual.Translations.FirstOrDefault();
+        return translation;
+    }
+
+    protected virtual TTranslation GetTranslationBasedOnCulturalRecursive<TTranslation>(
+        CultureInfo culture, ICollection<TTranslation> translations, int currentDepth)
+        where TTranslation : class, IObjectTranslation
+    {
+        if (culture == null ||
+            culture.Name.IsNullOrWhiteSpace() ||
+            translations.IsNullOrEmpty() ||
+            currentDepth > MaxCultureFallbackDepth)
+        {
+            return null;
+        }
+
+        var translation = translations.FirstOrDefault(pt => pt.Language.Equals(culture.Name, StringComparison.OrdinalIgnoreCase));
+        return translation ?? GetTranslationBasedOnCulturalRecursive(culture.Parent, translations, currentDepth + 1);
     }
 }

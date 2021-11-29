@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Vous devez saisir au moins 3 caractères!",
     "Volo.AbpIo.Domain:060001": "L'URL source (\"{ArticleUrl}\") n'est pas une URL Github",
     "Volo.AbpIo.Domain:060002": "Le contenu de l'article n'est pas disponible à partir de la ressource Github(\"{ArticleUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Aucun contenu d'article trouvé !"
+    "Volo.AbpIo.Domain:060003": "Aucun contenu d'article trouvé !",
+    "SeeMore": "Voir Plus"
   }
 }

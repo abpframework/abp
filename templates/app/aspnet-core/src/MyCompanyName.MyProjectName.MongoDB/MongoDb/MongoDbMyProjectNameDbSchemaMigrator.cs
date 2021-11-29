@@ -7,38 +7,37 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDB
+namespace MyCompanyName.MyProjectName.MongoDB;
+
+public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator, ITransientDependency
 {
-    public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator , ITransientDependency
+    private readonly IServiceProvider _serviceProvider;
+
+    public MongoDbMyProjectNameDbSchemaMigrator(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public MongoDbMyProjectNameDbSchemaMigrator(IServiceProvider serviceProvider)
+    public async Task MigrateAsync()
+    {
+        var dbContexts = _serviceProvider.GetServices<IAbpMongoDbContext>();
+        var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
+
+        foreach (var dbContext in dbContexts)
         {
-            _serviceProvider = serviceProvider;
-        }
+            var connectionString =
+                await connectionStringResolver.ResolveAsync(
+                    ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType()));
+            var mongoUrl = new MongoUrl(connectionString);
+            var databaseName = mongoUrl.DatabaseName;
+            var client = new MongoClient(mongoUrl);
 
-        public async Task MigrateAsync()
-        {
-            var dbContexts = _serviceProvider.GetServices<IAbpMongoDbContext>();
-            var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
-
-            foreach (var dbContext in dbContexts)
+            if (databaseName.IsNullOrWhiteSpace())
             {
-                var connectionString =
-                    await connectionStringResolver.ResolveAsync(
-                        ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType()));
-                var mongoUrl = new MongoUrl(connectionString);
-                var databaseName = mongoUrl.DatabaseName;
-                var client = new MongoClient(mongoUrl);
-
-                if (databaseName.IsNullOrWhiteSpace())
-                {
-                    databaseName = ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType());
-                }
-
-                (dbContext as AbpMongoDbContext)?.InitializeCollections(client.GetDatabase(databaseName));
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType());
             }
+
+            (dbContext as AbpMongoDbContext)?.InitializeCollections(client.GetDatabase(databaseName));
         }
     }
 }

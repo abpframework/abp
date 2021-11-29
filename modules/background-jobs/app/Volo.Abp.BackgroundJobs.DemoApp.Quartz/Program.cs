@@ -1,24 +1,23 @@
 ﻿using System;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.Quartz
+namespace Volo.Abp.BackgroundJobs.DemoApp.Quartz;
+
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        using (var application = AbpApplicationFactory.Create<DemoAppQuartzModule>(options =>
         {
-            using (var application = AbpApplicationFactory.Create<DemoAppQuartzModule>(options =>
-            {
-                options.UseAutofac();
-            }))
-            {
-                application.Initialize();
+            options.UseAutofac();
+        }))
+        {
+            application.Initialize();
 
-                Console.WriteLine("Started: " + typeof(Program).Namespace);
-                Console.WriteLine("Press ENTER to stop the application..!");
-                Console.ReadLine();
+            Console.WriteLine("Started: " + typeof(Program).Namespace);
+            Console.WriteLine("Press ENTER to stop the application..!");
+            Console.ReadLine();
 
-                application.Shutdown();
-            }
+            application.Shutdown();
         }
     }
 }

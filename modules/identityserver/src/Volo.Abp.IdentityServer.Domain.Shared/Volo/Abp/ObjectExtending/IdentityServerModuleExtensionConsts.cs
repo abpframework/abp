@@ -1,18 +1,17 @@
-﻿namespace Volo.Abp.ObjectExtending
+﻿namespace Volo.Abp.ObjectExtending;
+
+public static class IdentityServerModuleExtensionConsts
 {
-    public static class IdentityServerModuleExtensionConsts
+    public const string ModuleName = "IdentityServer";
+
+    public static class EntityNames
     {
-        public const string ModuleName = "IdentityServer";
+        public const string Client = "Client";
 
-        public static class EntityNames
-        {
-            public const string Client = "Client";
+        public const string IdentityResource = "IdentityResource";
 
-            public const string IdentityResource = "IdentityResource";
+        public const string ApiResource = "ApiResource";
 
-            public const string ApiResource = "ApiResource";
-
-            public const string ApiScope = "ApiScope";
-        }
+        public const string ApiScope = "ApiScope";
     }
 }
