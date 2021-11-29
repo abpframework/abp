@@ -172,21 +172,15 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             .Locking(factories => factories.Remove(factory));
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
-    {
-        await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
-    }
-
     public override void UnsubscribeAll(Type eventType)
     {
         GetOrCreateHandlerFactories(eventType)
             .Locking(factories => factories.Clear());
     }
 
-
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishAsync(eventType, eventData);
+        await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
