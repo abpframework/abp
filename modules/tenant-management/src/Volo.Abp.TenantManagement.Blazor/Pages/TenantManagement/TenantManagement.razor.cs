@@ -53,6 +53,10 @@ public partial class TenantManagement
 
     protected override ValueTask SetToolbarItemsAsync()
     {
+        Toolbar.AddButton(L["ManageHostFeatures"],
+            async () => await FeatureManagementModal.OpenAsync(FeatureProviderName),
+            "fa fa-cog");
+
         Toolbar.AddButton(L["NewTenant"],
             OpenCreateModalAsync,
             IconName.Add,
