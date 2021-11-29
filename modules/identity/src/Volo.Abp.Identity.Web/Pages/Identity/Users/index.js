@@ -111,6 +111,13 @@
         var _$table = _$wrapper.find('table');
         _dataTable = _$table.DataTable(
             abp.libs.datatables.normalizeConfiguration({
+                // "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                //     /* Append the grade to the default row class name */
+                //     if ( aData[4] == "A" )
+                //     {
+                //         $('td:eq(4)', nRow).html( '<b>A</b>' );
+                //     }
+                // },
                 order: [[1, 'asc']],
                 processing: true,
                 serverSide: true,

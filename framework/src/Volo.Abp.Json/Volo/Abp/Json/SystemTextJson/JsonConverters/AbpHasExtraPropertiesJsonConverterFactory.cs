@@ -21,11 +21,6 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
             return this;
         }
 
-        public virtual IReadOnlyList<Type> GetExcludeTypes()
-        {
-            return _excludeTypes.ToImmutableList();
-        }
-
         public override bool CanConvert(Type typeToConvert)
         {
             if (_excludeTypes.Contains(typeToConvert))
