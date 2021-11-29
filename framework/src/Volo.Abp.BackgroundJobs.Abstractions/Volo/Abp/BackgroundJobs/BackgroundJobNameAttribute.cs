@@ -2,32 +2,31 @@
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+public class BackgroundJobNameAttribute : Attribute, IBackgroundJobNameProvider
 {
-    public class BackgroundJobNameAttribute : Attribute, IBackgroundJobNameProvider
+    public string Name { get; }
+
+    public BackgroundJobNameAttribute([NotNull] string name)
     {
-        public string Name { get; }
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+    }
 
-        public BackgroundJobNameAttribute([NotNull] string name)
-        {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
-        }
+    public static string GetName<TJobArgs>()
+    {
+        return GetName(typeof(TJobArgs));
+    }
 
-        public static string GetName<TJobArgs>()
-        {
-            return GetName(typeof(TJobArgs));
-        }
+    public static string GetName([NotNull] Type jobArgsType)
+    {
+        Check.NotNull(jobArgsType, nameof(jobArgsType));
 
-        public static string GetName([NotNull] Type jobArgsType)
-        {
-            Check.NotNull(jobArgsType, nameof(jobArgsType));
-
-            return jobArgsType
-                       .GetCustomAttributes(true)
-                       .OfType<IBackgroundJobNameProvider>()
-                       .FirstOrDefault()
-                       ?.Name
-                   ?? jobArgsType.FullName;
-        }
+        return jobArgsType
+                   .GetCustomAttributes(true)
+                   .OfType<IBackgroundJobNameProvider>()
+                   .FirstOrDefault()
+                   ?.Name
+               ?? jobArgsType.FullName;
     }
 }

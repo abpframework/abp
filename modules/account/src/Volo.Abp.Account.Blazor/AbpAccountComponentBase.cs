@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Components;
 
-namespace Volo.Abp.Account.Blazor
+namespace Volo.Abp.Account.Blazor;
+
+public abstract class AbpAccountComponentBase : AbpComponentBase
 {
-    public abstract class AbpAccountComponentBase : AbpComponentBase
+    protected AbpAccountComponentBase()
     {
-        protected AbpAccountComponentBase()
-        {
-            LocalizationResource = typeof(AccountResource);
-            ObjectMapperContext = typeof(AbpAccountBlazorModule);
-        }
+        LocalizationResource = typeof(AccountResource);
+        ObjectMapperContext = typeof(AbpAccountBlazorModule);
     }
 }

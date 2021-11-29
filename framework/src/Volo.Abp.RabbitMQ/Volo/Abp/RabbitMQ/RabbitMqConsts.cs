@@ -1,12 +1,11 @@
-﻿namespace Volo.Abp.RabbitMQ
-{
-    public static class RabbitMqConsts
-    {
-        public static class DeliveryModes
-        {
-            public const int NonPersistent = 1;
+﻿namespace Volo.Abp.RabbitMQ;
 
-            public const int Persistent = 2;
-        }
+public static class RabbitMqConsts
+{
+    public static class DeliveryModes
+    {
+        public const int NonPersistent = 1;
+
+        public const int Persistent = 2;
     }
 }

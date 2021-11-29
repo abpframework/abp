@@ -9,72 +9,71 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+
+public class ToolbarManager : IToolbarManager, ITransientDependency
 {
-    public class ToolbarManager : IToolbarManager, ITransientDependency
+    protected IThemeManager ThemeManager { get; }
+    protected AbpToolbarOptions Options { get; }
+    protected IServiceProvider ServiceProvider { get; }
+    protected ISimpleStateCheckerManager<ToolbarItem> SimpleStateCheckerManager { get; }
+
+    public ToolbarManager(
+        IOptions<AbpToolbarOptions> options,
+        IServiceProvider serviceProvider,
+        IThemeManager themeManager,
+        ISimpleStateCheckerManager<ToolbarItem> simpleStateCheckerManager)
     {
-        protected IThemeManager ThemeManager { get; }
-        protected AbpToolbarOptions Options { get; }
-        protected IServiceProvider ServiceProvider { get; }
-        protected ISimpleStateCheckerManager<ToolbarItem> SimpleStateCheckerManager { get; }
+        ThemeManager = themeManager;
+        SimpleStateCheckerManager = simpleStateCheckerManager;
+        ServiceProvider = serviceProvider;
+        Options = options.Value;
+    }
 
-        public ToolbarManager(
-            IOptions<AbpToolbarOptions> options,
-            IServiceProvider serviceProvider,
-            IThemeManager themeManager,
-            ISimpleStateCheckerManager<ToolbarItem> simpleStateCheckerManager)
+    public async Task<Toolbar> GetAsync(string name)
+    {
+        var toolbar = new Toolbar(name);
+
+        using (var scope = ServiceProvider.CreateScope())
         {
-            ThemeManager = themeManager;
-            SimpleStateCheckerManager = simpleStateCheckerManager;
-            ServiceProvider = serviceProvider;
-            Options = options.Value;
+            using (RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ToolbarItem>()))
+            {
+                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
+
+                foreach (var contributor in Options.Contributors)
+                {
+                    await contributor.ConfigureToolbarAsync(context);
+                }
+
+                await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+            }
         }
 
-        public async Task<Toolbar> GetAsync(string name)
+        return toolbar;
+    }
+
+    protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, Toolbar toolbar)
+    {
+        foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
         {
-            var toolbar = new Toolbar(name);
+            item.RequirePermissions(item.RequiredPermissionName);
+        }
 
-            using (var scope = ServiceProvider.CreateScope())
+        var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();
+        if (checkPermissionsToolbarItems.Any())
+        {
+            var result = await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsToolbarItems);
+
+            var toBeDeleted = new HashSet<ToolbarItem>();
+            foreach (var item in checkPermissionsToolbarItems)
             {
-                using (RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ToolbarItem>()))
+                if (!result[item])
                 {
-                    var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
-
-                    foreach (var contributor in Options.Contributors)
-                    {
-                        await contributor.ConfigureToolbarAsync(context);
-                    }
-
-                    await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                    toBeDeleted.Add(item);
                 }
             }
 
-            return toolbar;
-        }
-
-        protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, Toolbar toolbar)
-        {
-            foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
-            {
-                item.RequirePermissions(item.RequiredPermissionName);
-            }
-
-            var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();
-            if (checkPermissionsToolbarItems.Any())
-            {
-                var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsToolbarItems);
-
-                var toBeDeleted = new HashSet<ToolbarItem>();
-                foreach (var item in checkPermissionsToolbarItems)
-                {
-                    if (!result[item])
-                    {
-                        toBeDeleted.Add(item);
-                    }
-                }
-
-                toolbar.Items.RemoveAll(toBeDeleted.Contains);
-            }
+            toolbar.Items.RemoveAll(toBeDeleted.Contains);
         }
     }
 }
