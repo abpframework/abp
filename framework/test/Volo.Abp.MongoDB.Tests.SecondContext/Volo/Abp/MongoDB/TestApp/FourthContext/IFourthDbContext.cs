@@ -1,10 +1,9 @@
 ﻿using MongoDB.Driver;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 
-namespace Volo.Abp.MongoDB.TestApp.FourthContext
+namespace Volo.Abp.MongoDB.TestApp.FourthContext;
+
+public interface IFourthDbContext : IAbpMongoDbContext
 {
-    public interface IFourthDbContext : IAbpMongoDbContext
-    {
-        IMongoCollection<FourthDbContextDummyEntity> FourthDummyEntities { get;}
-    }
+    IMongoCollection<FourthDbContextDummyEntity> FourthDummyEntities { get; }
 }

@@ -2,13 +2,12 @@
 using System.Threading;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Security.Claims
+namespace Volo.Abp.Security.Claims;
+
+public class ThreadCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ISingletonDependency
 {
-    public class ThreadCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ISingletonDependency
+    protected override ClaimsPrincipal GetClaimsPrincipal()
     {
-        protected override ClaimsPrincipal GetClaimsPrincipal()
-        {
-            return Thread.CurrentPrincipal as ClaimsPrincipal;
-        }
+        return Thread.CurrentPrincipal as ClaimsPrincipal;
     }
 }

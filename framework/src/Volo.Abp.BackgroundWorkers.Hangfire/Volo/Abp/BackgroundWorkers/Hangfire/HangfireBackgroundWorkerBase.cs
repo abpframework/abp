@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.BackgroundWorkers.Hangfire
+namespace Volo.Abp.BackgroundWorkers.Hangfire;
+
+public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHangfireBackgroundWorker
 {
-    public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHangfireBackgroundWorker
-    {
-        public string RecurringJobId { get; set; }
+    public string RecurringJobId { get; set; }
 
-        public string CronExpression { get; set; }
+    public string CronExpression { get; set; }
 
-        public abstract Task DoWorkAsync();
-    }
+    public abstract Task DoWorkAsync();
 }

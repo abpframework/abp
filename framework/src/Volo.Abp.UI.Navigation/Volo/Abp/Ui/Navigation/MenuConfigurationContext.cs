@@ -6,48 +6,47 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.UI.Navigation;
+
+public class MenuConfigurationContext : IMenuConfigurationContext
 {
-    public class MenuConfigurationContext : IMenuConfigurationContext
+    public IServiceProvider ServiceProvider { get; }
+
+    private readonly IAbpLazyServiceProvider _lazyServiceProvider;
+
+    public IAuthorizationService AuthorizationService => _lazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
+
+    public IStringLocalizerFactory StringLocalizerFactory => _lazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
+
+    public ApplicationMenu Menu { get; }
+
+    public MenuConfigurationContext(ApplicationMenu menu, IServiceProvider serviceProvider)
     {
-        public IServiceProvider ServiceProvider { get; }
+        Menu = menu;
+        ServiceProvider = serviceProvider;
+        _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+    }
 
-        private readonly IAbpLazyServiceProvider _lazyServiceProvider;
+    public Task<bool> IsGrantedAsync(string policyName)
+    {
+        return AuthorizationService.IsGrantedAsync(policyName);
+    }
 
-        public IAuthorizationService AuthorizationService => _lazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
+    [CanBeNull]
+    public IStringLocalizer GetDefaultLocalizer()
+    {
+        return StringLocalizerFactory.CreateDefaultOrNull();
+    }
 
-        public IStringLocalizerFactory StringLocalizerFactory => _lazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
+    [NotNull]
+    public IStringLocalizer GetLocalizer<T>()
+    {
+        return StringLocalizerFactory.Create<T>();
+    }
 
-        public ApplicationMenu Menu { get; }
-
-        public MenuConfigurationContext(ApplicationMenu menu, IServiceProvider serviceProvider)
-        {
-            Menu = menu;
-            ServiceProvider = serviceProvider;
-            _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
-        }
-
-        public Task<bool> IsGrantedAsync(string policyName)
-        {
-            return AuthorizationService.IsGrantedAsync(policyName);
-        }
-
-        [CanBeNull]
-        public IStringLocalizer GetDefaultLocalizer()
-        {
-            return StringLocalizerFactory.CreateDefaultOrNull();
-        }
-
-        [NotNull]
-        public IStringLocalizer GetLocalizer<T>()
-        {
-            return StringLocalizerFactory.Create<T>();
-        }
-
-        [NotNull]
-        public IStringLocalizer GetLocalizer(Type resourceType)
-        {
-            return StringLocalizerFactory.Create(resourceType);
-        }
+    [NotNull]
+    public IStringLocalizer GetLocalizer(Type resourceType)
+    {
+        return StringLocalizerFactory.Create(resourceType);
     }
 }

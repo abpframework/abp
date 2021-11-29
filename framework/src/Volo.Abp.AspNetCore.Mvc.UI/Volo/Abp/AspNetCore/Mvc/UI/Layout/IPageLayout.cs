@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
+
+public interface IPageLayout
 {
-    public interface IPageLayout
-    {
-        ContentLayout Content { get; }
-    }
+    ContentLayout Content { get; }
 }
