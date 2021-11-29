@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Application.Services;
 using Volo.Abp.FeatureManagement.Localization;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public abstract class FeatureManagementAppServiceBase : ApplicationService
 {
-    public abstract class FeatureManagementAppServiceBase : ApplicationService
+    protected FeatureManagementAppServiceBase()
     {
-        protected FeatureManagementAppServiceBase()
-        {
-            ObjectMapperContext = typeof(AbpFeatureManagementApplicationModule);
-            LocalizationResource = typeof(AbpFeatureManagementResource);
-        }
+        ObjectMapperContext = typeof(AbpFeatureManagementApplicationModule);
+        LocalizationResource = typeof(AbpFeatureManagementResource);
     }
 }

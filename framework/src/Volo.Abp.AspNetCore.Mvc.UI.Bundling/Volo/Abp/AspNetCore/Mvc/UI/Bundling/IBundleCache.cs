@@ -1,11 +1,10 @@
 using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
-{
-    public interface IBundleCache
-    {
-        BundleCacheItem GetOrAdd(string bundleName, Func<BundleCacheItem> factory);
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-        bool Remove(string bundleName);
-    }
+public interface IBundleCache
+{
+    BundleCacheItem GetOrAdd(string bundleName, Func<BundleCacheItem> factory);
+
+    bool Remove(string bundleName);
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed
+namespace Volo.Abp.Domain.Entities.Events.Distributed;
+
+public class AutoEntityDistributedEventSelectorList : List<NamedTypeSelector>, IAutoEntityDistributedEventSelectorList
 {
-    public class AutoEntityDistributedEventSelectorList : List<NamedTypeSelector>, IAutoEntityDistributedEventSelectorList
-    {
-        
-    }
+
 }

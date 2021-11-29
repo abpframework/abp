@@ -4,35 +4,34 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Repositories.MongoDB
+namespace Volo.Abp.Domain.Repositories.MongoDB;
+
+public interface IMongoDbBulkOperationProvider
 {
-    public interface IMongoDbBulkOperationProvider
-    {
-        Task InsertManyAsync<TEntity>(
-           IMongoDbRepository<TEntity> repository,
-           IEnumerable<TEntity> entities,
-            IClientSessionHandle sessionHandle,
-           bool autoSave,
-           CancellationToken cancellationToken
-       )
-           where TEntity : class, IEntity;
+    Task InsertManyAsync<TEntity>(
+       IMongoDbRepository<TEntity> repository,
+       IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+       bool autoSave,
+       CancellationToken cancellationToken
+   )
+       where TEntity : class, IEntity;
 
-        Task UpdateManyAsync<TEntity>(
-            IMongoDbRepository<TEntity> repository,
-            IEnumerable<TEntity> entities,
-            IClientSessionHandle sessionHandle,
-            bool autoSave,
-            CancellationToken cancellationToken
-        )
-            where TEntity : class, IEntity;
+    Task UpdateManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken
+    )
+        where TEntity : class, IEntity;
 
-        Task DeleteManyAsync<TEntity>(
-            IMongoDbRepository<TEntity> repository,
-            IEnumerable<TEntity> entities,
-            IClientSessionHandle sessionHandle,
-            bool autoSave,
-            CancellationToken cancellationToken
-        )
-            where TEntity : class, IEntity;
-    }
+    Task DeleteManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken
+    )
+        where TEntity : class, IEntity;
 }

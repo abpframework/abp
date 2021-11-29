@@ -2,16 +2,15 @@
 using System.Threading.Tasks;
 using Quartz;
 
-namespace Volo.Abp.BackgroundWorkers.Quartz
+namespace Volo.Abp.BackgroundWorkers.Quartz;
+
+public interface IQuartzBackgroundWorker : IBackgroundWorker, IJob
 {
-    public interface IQuartzBackgroundWorker : IBackgroundWorker, IJob
-    {
-        ITrigger Trigger { get; set; }
+    ITrigger Trigger { get; set; }
 
-        IJobDetail JobDetail { get; set; }
-        
-        bool AutoRegister { get; set; }
+    IJobDetail JobDetail { get; set; }
 
-        Func<IScheduler,Task> ScheduleJob { get; set; }
-    }
+    bool AutoRegister { get; set; }
+
+    Func<IScheduler, Task> ScheduleJob { get; set; }
 }

@@ -3,70 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Http.Modeling
+namespace Volo.Abp.Http.Modeling;
+
+[Serializable]
+public class ModuleApiDescriptionModel
 {
-    [Serializable]
-    public class ModuleApiDescriptionModel
+    /// <summary>
+    /// "app".
+    /// </summary>
+    public const string DefaultRootPath = "app";
+
+    /// <summary>
+    /// "Default".
+    /// </summary>
+    public const string DefaultRemoteServiceName = "Default";
+
+    public string RootPath { get; set; }
+
+    public string RemoteServiceName { get; set; }
+
+    public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
+
+    public ModuleApiDescriptionModel()
     {
-        /// <summary>
-        /// "app".
-        /// </summary>
-        public const string DefaultRootPath = "app";
 
-        /// <summary>
-        /// "Default".
-        /// </summary>
-        public const string DefaultRemoteServiceName = "Default";
+    }
 
-        public string RootPath { get; set; }
-
-        public string RemoteServiceName { get; set; }
-
-        public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
-
-        public ModuleApiDescriptionModel()
+    public static ModuleApiDescriptionModel Create(string rootPath, string remoteServiceName)
+    {
+        return new ModuleApiDescriptionModel
         {
+            RootPath = rootPath,
+            RemoteServiceName = remoteServiceName,
+            Controllers = new Dictionary<string, ControllerApiDescriptionModel>()
+        };
+    }
 
+    public ControllerApiDescriptionModel AddController(ControllerApiDescriptionModel controller)
+    {
+        if (Controllers.ContainsKey(controller.Type))
+        {
+            throw new AbpException($"There is already a controller with type: {controller.Type} in module: {RootPath}");
         }
 
-        public static ModuleApiDescriptionModel Create(string rootPath, string remoteServiceName)
-        {
-            return new ModuleApiDescriptionModel
-            {
-                RootPath = rootPath,
-                RemoteServiceName = remoteServiceName,
-                Controllers = new Dictionary<string, ControllerApiDescriptionModel>()
-            };
-        }
+        return Controllers[controller.Type] = controller;
+    }
 
-        public ControllerApiDescriptionModel AddController(ControllerApiDescriptionModel controller)
+    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    {
+        return Controllers.GetOrAdd(type.FullName, () => ControllerApiDescriptionModel.Create(name, groupName, type, ignoredInterfaces));
+    }
+
+    public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
+    {
+        var subModel = Create(RootPath, RemoteServiceName);
+
+        foreach (var controller in Controllers.Values)
         {
-            if (Controllers.ContainsKey(controller.Type))
+            if (controllers == null || controllers.Contains(controller.ControllerName))
             {
-                throw new AbpException($"There is already a controller with type: {controller.Type} in module: {RootPath}");
+                subModel.AddController(controller.CreateSubModel(actions));
             }
-
-            return Controllers[controller.Type] = controller;
         }
 
-        public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
-        {
-            return Controllers.GetOrAdd(type.FullName, () => ControllerApiDescriptionModel.Create(name, groupName, type, ignoredInterfaces));
-        }
-
-        public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
-        {
-            var subModel = Create(RootPath, RemoteServiceName);
-
-            foreach (var controller in Controllers.Values)
-            {
-                if (controllers == null || controllers.Contains(controller.ControllerName))
-                {
-                    subModel.AddController(controller.CreateSubModel(actions));
-                }
-            }
-
-            return subModel;
-        }
+        return subModel;
     }
 }
