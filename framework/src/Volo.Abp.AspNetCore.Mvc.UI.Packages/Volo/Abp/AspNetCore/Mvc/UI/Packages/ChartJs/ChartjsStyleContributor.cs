@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.ChartJs;
-
-public class ChartjsStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.ChartJs
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class ChartjsStyleContributor : BundleContributor
     {
-        context.Files.Add("/libs/chart.js/Chart.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.Add("/libs/chart.js/Chart.css");
+        }
     }
 }

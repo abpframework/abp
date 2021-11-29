@@ -6,40 +6,41 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Public.Blogs;
-
-[RequiresGlobalFeature(typeof(BlogsFeature))]
-public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
+namespace Volo.CmsKit.Public.Blogs
 {
-    protected IBlogRepository BlogRepository { get; }
-
-    protected IBlogPostRepository BlogPostRepository { get; }
-
-    public BlogPostPublicAppService(
-        IBlogRepository blogRepository,
-        IBlogPostRepository blogPostRepository)
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
+    public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
     {
-        BlogRepository = blogRepository;
-        BlogPostRepository = blogPostRepository;
-    }
+        protected IBlogRepository BlogRepository { get; }
 
-    public virtual async Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug)
-    {
-        var blog = await BlogRepository.GetBySlugAsync(blogSlug);
+        protected IBlogPostRepository BlogPostRepository { get; }
 
-        var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
+        public BlogPostPublicAppService(
+            IBlogRepository blogRepository,
+            IBlogPostRepository blogPostRepository)
+        {
+            BlogRepository = blogRepository;
+            BlogPostRepository = blogPostRepository;
+        }
 
-        return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
-    }
+        public virtual async Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug)
+        {
+            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input)
-    {
-        var blog = await BlogRepository.GetBySlugAsync(blogSlug);
+            var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.MaxResultCount, input.SkipCount, input.Sorting);
+            return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
+        }
 
-        return new PagedResultDto<BlogPostPublicDto>(
-            await BlogPostRepository.GetCountAsync(blogId: blog.Id),
-            ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
+        public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input)
+        {
+            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
+
+            var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.MaxResultCount, input.SkipCount, input.Sorting);
+
+            return new PagedResultDto<BlogPostPublicDto>(
+                await BlogPostRepository.GetCountAsync(blogId: blog.Id),
+                ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
+        }
     }
 }

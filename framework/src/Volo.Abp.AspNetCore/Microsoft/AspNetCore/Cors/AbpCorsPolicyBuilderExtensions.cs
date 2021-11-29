@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace Microsoft.AspNetCore.Cors;
-
-public static class AbpCorsPolicyBuilderExtensions
+namespace Microsoft.AspNetCore.Cors
 {
-    public static CorsPolicyBuilder WithAbpExposedHeaders(this CorsPolicyBuilder corsPolicyBuilder)
+    public static class AbpCorsPolicyBuilderExtensions
     {
-        return corsPolicyBuilder.WithExposedHeaders("_AbpErrorFormat");
+        public static CorsPolicyBuilder WithAbpExposedHeaders(this CorsPolicyBuilder corsPolicyBuilder)
+        {
+            return corsPolicyBuilder.WithExposedHeaders("_AbpErrorFormat");
+        }
     }
 }

@@ -6,46 +6,47 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpClientConfigurationValidator_Tests : AbpIdentityServerTestBase
+namespace Volo.Abp.IdentityServer
 {
-    private readonly IClientConfigurationValidator _abpClientConfigurationValidator;
-
-    private readonly Client _testClient = new Client
+    public class AbpClientConfigurationValidator_Tests : AbpIdentityServerTestBase
     {
-        AllowedGrantTypes = GrantTypes.Code,
+        private readonly IClientConfigurationValidator _abpClientConfigurationValidator;
 
-        ClientSecrets = new List<IdentityServer4.Models.Secret>()
+        private readonly Client _testClient = new Client
+        {
+            AllowedGrantTypes = GrantTypes.Code,
+
+            ClientSecrets = new List<IdentityServer4.Models.Secret>()
             {
                 new IdentityServer4.Models.Secret("1q2w3e*")
             },
 
-        RedirectUris = new List<string>
+            RedirectUris = new List<string>
             {
                 "https://{0}.api.abp.io:8080",
                 "http://{0}.ng.abp.io",
                 "http://ng.abp.io"
             }
-    };
+        };
 
-    public AbpClientConfigurationValidator_Tests()
-    {
-        _abpClientConfigurationValidator = GetRequiredService<IClientConfigurationValidator>();
-    }
+        public AbpClientConfigurationValidator_Tests()
+        {
+            _abpClientConfigurationValidator = GetRequiredService<IClientConfigurationValidator>();
+        }
 
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        services.AddAbpClientConfigurationValidator();
-    }
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            services.AddAbpClientConfigurationValidator();
+        }
 
-    [Fact]
-    public async Task ValidateAsync()
-    {
-        var context = new ClientConfigurationValidationContext(_testClient);
+        [Fact]
+        public async Task ValidateAsync()
+        {
+            var context = new ClientConfigurationValidationContext(_testClient);
 
-        await _abpClientConfigurationValidator.ValidateAsync(context);
+            await _abpClientConfigurationValidator.ValidateAsync(context);
 
-        context.IsValid.ShouldBeTrue();
+            context.IsValid.ShouldBeTrue();
+        }
     }
 }

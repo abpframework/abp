@@ -1,15 +1,16 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
-
-public static class DatabaseProviderExtensions
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public static string ToProviderName(this DatabaseProvider databaseProvider)
+    public static class DatabaseProviderExtensions
     {
-        switch (databaseProvider)
+        public static string ToProviderName(this DatabaseProvider databaseProvider)
         {
-            case DatabaseProvider.EntityFrameworkCore: return "ef";
-            case DatabaseProvider.MongoDb: return "mongodb";
-            case DatabaseProvider.NotSpecified: return "NotSpecified";
-            default: return "NotSpecified";
+            switch (databaseProvider)
+            {
+                case DatabaseProvider.EntityFrameworkCore: return "ef";
+                case DatabaseProvider.MongoDb: return "mongodb";
+                case DatabaseProvider.NotSpecified: return "NotSpecified";
+                default: return "NotSpecified";
+            }
         }
     }
 }

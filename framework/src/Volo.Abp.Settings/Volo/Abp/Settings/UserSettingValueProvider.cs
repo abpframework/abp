@@ -3,39 +3,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Settings;
-
-public class UserSettingValueProvider : SettingValueProvider
+namespace Volo.Abp.Settings
 {
-    public const string ProviderName = "U";
-
-    public override string Name => ProviderName;
-
-    protected ICurrentUser CurrentUser { get; }
-
-    public UserSettingValueProvider(ISettingStore settingStore, ICurrentUser currentUser)
-        : base(settingStore)
+    public class UserSettingValueProvider : SettingValueProvider
     {
-        CurrentUser = currentUser;
-    }
+        public const string ProviderName = "U";
 
-    public override async Task<string> GetOrNullAsync(SettingDefinition setting)
-    {
-        if (CurrentUser.Id == null)
+        public override string Name => ProviderName;
+
+        protected ICurrentUser CurrentUser { get; }
+
+        public UserSettingValueProvider(ISettingStore settingStore, ICurrentUser currentUser)
+            : base(settingStore)
         {
-            return null;
+            CurrentUser = currentUser;
         }
 
-        return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
-    }
-
-    public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
-    {
-        if (CurrentUser.Id == null)
+        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
         {
-            return settings.Select(x => new SettingValue(x.Name, null)).ToList();
+            if (CurrentUser.Id == null)
+            {
+                return null;
+            }
+
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
         }
 
-        return await SettingStore.GetAllAsync(settings.Select(x => x.Name).ToArray(), Name, CurrentUser.Id.ToString());
+        public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        {
+            if (CurrentUser.Id == null)
+            {
+                return settings.Select(x => new SettingValue(x.Name, null)).ToList();
+            }
+
+            return await SettingStore.GetAllAsync(settings.Select(x => x.Name).ToArray(), Name, CurrentUser.Id.ToString());
+        }
     }
 }

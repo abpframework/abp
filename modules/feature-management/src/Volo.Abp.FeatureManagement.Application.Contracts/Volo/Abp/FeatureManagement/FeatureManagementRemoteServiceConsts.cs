@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.FeatureManagement;
-
-public class FeatureManagementRemoteServiceConsts
+﻿namespace Volo.Abp.FeatureManagement
 {
-    public const string RemoteServiceName = "AbpFeatureManagement";
+    public class FeatureManagementRemoteServiceConsts
+    {
+        public const string RemoteServiceName = "AbpFeatureManagement";
 
-    public const string ModuleName = "featureManagement";
+        public const string ModuleName = "featureManagement";
+    }
 }

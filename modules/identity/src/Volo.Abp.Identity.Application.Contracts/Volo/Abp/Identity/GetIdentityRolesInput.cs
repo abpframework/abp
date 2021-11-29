@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace Volo.Abp.Identity;
-
-public class GetIdentityRolesInput : PagedAndSortedResultRequestDto
+namespace Volo.Abp.Identity
 {
-    public string Filter { get; set; }
+    public class GetIdentityRolesInput : PagedAndSortedResultRequestDto
+    {
+        public string Filter { get; set; }
+    }
 }

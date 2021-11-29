@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Microsoft.AspNetCore.Routing;
-
-public class AbpEndpointRouterOptions
+namespace Microsoft.AspNetCore.Routing
 {
-    public List<Action<EndpointRouteBuilderContext>> EndpointConfigureActions { get; }
-
-    public AbpEndpointRouterOptions()
+    public class AbpEndpointRouterOptions
     {
-        EndpointConfigureActions = new List<Action<EndpointRouteBuilderContext>>();
+        public List<Action<EndpointRouteBuilderContext>> EndpointConfigureActions { get; }
+
+        public AbpEndpointRouterOptions()
+        {
+            EndpointConfigureActions = new List<Action<EndpointRouteBuilderContext>>();
+        }
     }
 }

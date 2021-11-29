@@ -2,18 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.Identity.EntityFrameworkCore;
-
-public class LazyLoading_Tests : LazyLoading_Tests<AbpIdentityEntityFrameworkCoreTestModule>
+namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    protected override void BeforeAddApplication(IServiceCollection services)
+    public class LazyLoading_Tests : LazyLoading_Tests<AbpIdentityEntityFrameworkCoreTestModule>
     {
-        services.Configure<AbpDbContextOptions>(options =>
+        protected override void BeforeAddApplication(IServiceCollection services)
         {
-            options.PreConfigure<IdentityDbContext>(context =>
+            services.Configure<AbpDbContextOptions>(options =>
             {
-                context.DbContextOptions.UseLazyLoadingProxies();
+                options.PreConfigure<IdentityDbContext>(context =>
+                {
+                    context.DbContextOptions.UseLazyLoadingProxies();
+                });
             });
-        });
+        }
     }
 }

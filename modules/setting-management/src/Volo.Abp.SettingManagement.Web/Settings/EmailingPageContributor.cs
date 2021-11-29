@@ -8,57 +8,58 @@ using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup;
 
-namespace Volo.Abp.SettingManagement.Web.Settings;
-
-public class EmailingPageContributor : ISettingPageContributor
+namespace Volo.Abp.SettingManagement.Web.Settings
 {
-    public async Task ConfigureAsync(SettingPageCreationContext context)
+    public class EmailingPageContributor: ISettingPageContributor
     {
-        if (!await CheckPermissionsInternalAsync(context))
+        public async Task ConfigureAsync(SettingPageCreationContext context)
         {
-            return;
+            if (!await CheckPermissionsInternalAsync(context))
+            {
+                return;
+            }
+
+            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
+            context.Groups.Add(
+                new SettingPageGroup(
+                    "Volo.Abp.EmailSetting",
+                    l["Menu:Emailing"],
+                    typeof(EmailSettingGroupViewComponent)
+                )
+            );
         }
 
-        var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
-        context.Groups.Add(
-            new SettingPageGroup(
-                "Volo.Abp.EmailSetting",
-                l["Menu:Emailing"],
-                typeof(EmailSettingGroupViewComponent)
-            )
-        );
-    }
-
-    public async Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
-    {
-        return await CheckPermissionsInternalAsync(context);
-    }
-
-    private async Task<bool> CheckPermissionsInternalAsync(SettingPageCreationContext context)
-    {
-        if (!await CheckFeatureAsync(context))
+        public async Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
         {
-            return false;
+            return await CheckPermissionsInternalAsync(context);
         }
 
-        var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-
-        return await authorizationService.IsGrantedAsync(SettingManagementPermissions.Emailing);
-    }
-
-    private async Task<bool> CheckFeatureAsync(SettingPageCreationContext context)
-    {
-        var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-        if (!await featureCheck.IsEnabledAsync(SettingManagementFeatures.Enable))
+        private async Task<bool> CheckPermissionsInternalAsync(SettingPageCreationContext context)
         {
-            return false;
+            if (!await CheckFeatureAsync(context))
+            {
+                return false;
+            }
+
+            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
+
+            return await authorizationService.IsGrantedAsync(SettingManagementPermissions.Emailing);
         }
 
-        if (context.ServiceProvider.GetRequiredService<ICurrentTenant>().IsAvailable)
+        private async Task<bool> CheckFeatureAsync(SettingPageCreationContext context)
         {
-            return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
-        }
+            var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            if (!await featureCheck.IsEnabledAsync(SettingManagementFeatures.Enable))
+            {
+                return false;
+            }
 
-        return true;
+            if (context.ServiceProvider.GetRequiredService<ICurrentTenant>().IsAvailable)
+            {
+                return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+            }
+
+            return true;
+        }
     }
 }

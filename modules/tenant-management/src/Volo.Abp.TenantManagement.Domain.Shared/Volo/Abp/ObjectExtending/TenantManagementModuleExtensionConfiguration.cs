@@ -1,16 +1,17 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace Volo.Abp.ObjectExtending;
-
-public class TenantManagementModuleExtensionConfiguration : ModuleExtensionConfiguration
+namespace Volo.Abp.ObjectExtending
 {
-    public TenantManagementModuleExtensionConfiguration ConfigureTenant(
-        Action<EntityExtensionConfiguration> configureAction)
+    public class TenantManagementModuleExtensionConfiguration : ModuleExtensionConfiguration
     {
-        return this.ConfigureEntity(
-            TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-            configureAction
-        );
+        public TenantManagementModuleExtensionConfiguration ConfigureTenant(
+            Action<EntityExtensionConfiguration> configureAction)
+        {
+            return this.ConfigureEntity(
+                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                configureAction
+            );
+        }
     }
 }

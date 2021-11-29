@@ -2,28 +2,29 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Domain.Values;
-
-public class ValueObject_Tests
+namespace Volo.Abp.Domain.Values
 {
-    [Fact]
-    public void ValueObjects_With_Same_Properties_Should_Be_Equals()
+    public class ValueObject_Tests
     {
-        var cityId = Guid.NewGuid();
-        var address1 = new Address(cityId, "Baris Manco", 42);
-        var address2 = new Address(cityId, "Baris Manco", 42);
+        [Fact]
+        public void ValueObjects_With_Same_Properties_Should_Be_Equals()
+        {
+            var cityId = Guid.NewGuid();
+            var address1 = new Address(cityId, "Baris Manco", 42);
+            var address2 = new Address(cityId, "Baris Manco", 42);
 
-        address1.ValueEquals(address2).ShouldBeTrue();
-    }
+            address1.ValueEquals(address2).ShouldBeTrue();
+        }
 
-    [Fact]
-    public void ValueObjects_With_Different_Properties_Should_Not_Be_Equals()
-    {
-        var cityId = Guid.NewGuid();
+        [Fact]
+        public void ValueObjects_With_Different_Properties_Should_Not_Be_Equals()
+        {
+            var cityId = Guid.NewGuid();
 
-        var address1 = new Address(cityId, "Baris Manco", 42);
-        var address2 = new Address(cityId, "Baris Manco", 43);
+            var address1 = new Address(cityId, "Baris Manco", 42);
+            var address2 = new Address(cityId, "Baris Manco", 43);
 
-        address1.ValueEquals(address2).ShouldBeFalse();
+            address1.ValueEquals(address2).ShouldBeFalse();
+        }
     }
 }

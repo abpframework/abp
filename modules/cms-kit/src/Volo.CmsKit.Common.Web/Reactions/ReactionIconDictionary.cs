@@ -2,18 +2,19 @@
 using Volo.Abp;
 using Volo.CmsKit.Web.Icons;
 
-namespace Volo.CmsKit.Web.Reactions;
-
-public class ReactionIconDictionary : Dictionary<string, LocalizableIconDictionary>
+namespace Volo.CmsKit.Web.Reactions
 {
-    public string GetLocalizedIcon(string name, string cultureName = null)
+    public class ReactionIconDictionary : Dictionary<string, LocalizableIconDictionary>
     {
-        var icon = this.GetOrDefault(name);
-        if (icon == null)
+        public string GetLocalizedIcon(string name, string cultureName = null)
         {
-            throw new AbpException($"No icon defined for the reaction with name '{name}'");
-        }
+            var icon = this.GetOrDefault(name);
+            if (icon == null)
+            {
+                throw new AbpException($"No icon defined for the reaction with name '{name}'");
+            }
 
-        return icon.GetLocalizedIconOrDefault(cultureName);
+            return icon.GetLocalizedIconOrDefault(cultureName);
+        }
     }
 }

@@ -8,58 +8,59 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Users;
 using Xunit;
 
-namespace Volo.CmsKit.Ratings;
-
-public class RatingManager_Test : CmsKitDomainTestBase
+namespace Volo.CmsKit.Ratings
 {
-    private readonly CmsKitTestData _cmsKitTestData;
-    private readonly RatingManager _ratingManager;
-    private readonly ICmsUserRepository _userRepository;
-
-    public RatingManager_Test()
+    public class RatingManager_Test : CmsKitDomainTestBase
     {
-        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        _ratingManager = GetRequiredService<RatingManager>();
-        _userRepository = GetRequiredService<ICmsUserRepository>();
-    }
+        private readonly CmsKitTestData _cmsKitTestData;
+        private readonly RatingManager _ratingManager;
+        private readonly ICmsUserRepository _userRepository;
 
-    [Fact]
-    public async Task SetStarAsync_ShouldCreate_WhenFirstCall()
-    {
-        var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
-        short starCount = 4;
+        public RatingManager_Test()
+        {
+            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            _ratingManager = GetRequiredService<RatingManager>();
+            _userRepository = GetRequiredService<ICmsUserRepository>();
+        }
 
-        var rating = await _ratingManager.SetStarAsync(user, _cmsKitTestData.EntityType1, _cmsKitTestData.BlogPost_1_Id.ToString(), starCount);
+        [Fact]
+        public async Task SetStarAsync_ShouldCreate_WhenFirstCall()
+        {
+            var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
+            short starCount = 4;
 
-        rating.ShouldNotBeNull();
-        rating.Id.ShouldNotBe(Guid.Empty);
-        rating.StarCount.ShouldBe(starCount);
-    }
+            var rating = await _ratingManager.SetStarAsync(user, _cmsKitTestData.EntityType1, _cmsKitTestData.BlogPost_1_Id.ToString(), starCount);
 
-    [Fact]
-    public async Task SetStarAsync_ShouldUpdate_WithExistingRating()
-    {
-        var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
-        short starCount = 2;
+            rating.ShouldNotBeNull();
+            rating.Id.ShouldNotBe(Guid.Empty);
+            rating.StarCount.ShouldBe(starCount);
+        }
 
-        var rating = await _ratingManager.SetStarAsync(user, _cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1, starCount);
+        [Fact]
+        public async Task SetStarAsync_ShouldUpdate_WithExistingRating()
+        {
+            var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
+            short starCount = 2;
 
-        rating.ShouldNotBeNull();
-        rating.Id.ShouldNotBe(Guid.Empty);
-        rating.StarCount.ShouldBe(starCount);
-    }
+            var rating = await _ratingManager.SetStarAsync(user, _cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1, starCount);
 
-    [Fact]
-    public async Task SetStarAsync_ShouldThrowException_WithNotConfiguredentityType()
-    {
-        var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
-        var notConfiguredEntityType = "AnyOtherEntityType";
-        short starCount = 3;
+            rating.ShouldNotBeNull();
+            rating.Id.ShouldNotBe(Guid.Empty);
+            rating.StarCount.ShouldBe(starCount);
+        }
 
-        var exception = await Should.ThrowAsync<EntityCantHaveRatingException>(async () =>
-                            await _ratingManager.SetStarAsync(user, notConfiguredEntityType, "1", starCount));
+        [Fact]
+        public async Task SetStarAsync_ShouldThrowException_WithNotConfiguredentityType()
+        {
+            var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
+            var notConfiguredEntityType = "AnyOtherEntityType";
+            short starCount = 3;
 
-        exception.ShouldNotBeNull();
-        exception.EntityType.ShouldBe(notConfiguredEntityType);
+            var exception = await Should.ThrowAsync<EntityCantHaveRatingException>(async () =>
+                                await _ratingManager.SetStarAsync(user, notConfiguredEntityType, "1", starCount));
+
+            exception.ShouldNotBeNull();
+            exception.EntityType.ShouldBe(notConfiguredEntityType);
+        }
     }
 }

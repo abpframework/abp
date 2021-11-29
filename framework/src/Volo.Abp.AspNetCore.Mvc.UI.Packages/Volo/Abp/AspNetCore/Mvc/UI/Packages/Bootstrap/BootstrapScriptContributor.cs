@@ -3,14 +3,15 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
-
-[DependsOn(typeof(JQueryScriptContributor))]
-public class BootstrapScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class BootstrapScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.bundle.js");
-        context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.enable.tooltips.everywhere.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.bundle.js");
+            context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.enable.tooltips.everywhere.js");
+        }
     }
 }

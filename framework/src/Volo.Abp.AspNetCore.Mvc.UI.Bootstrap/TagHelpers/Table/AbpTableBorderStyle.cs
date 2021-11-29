@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table;
-
-public enum AbpTableBorderStyle
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 {
-    Default,
-    Bordered,
-    Borderless
+    public enum AbpTableBorderStyle
+    {
+        Default,
+        Bordered,
+        Borderless
+    }
 }

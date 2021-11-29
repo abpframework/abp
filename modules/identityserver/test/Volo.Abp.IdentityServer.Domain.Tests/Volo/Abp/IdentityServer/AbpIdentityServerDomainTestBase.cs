@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpIdentityServerDomainTestBase : AbpIntegratedTest<AbpIdentityServerDomainTestModule>
+namespace Volo.Abp.IdentityServer
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpIdentityServerDomainTestBase : AbpIntegratedTest<AbpIdentityServerDomainTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

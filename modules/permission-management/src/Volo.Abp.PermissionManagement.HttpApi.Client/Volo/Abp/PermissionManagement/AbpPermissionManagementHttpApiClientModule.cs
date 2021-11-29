@@ -4,23 +4,24 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpPermissionManagementApplicationContractsModule),
-    typeof(AbpHttpClientModule))]
-public class AbpPermissionManagementHttpApiClientModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementApplicationContractsModule),
+        typeof(AbpHttpClientModule))]
+    public class AbpPermissionManagementHttpApiClientModule : AbpModule
     {
-        context.Services.AddStaticHttpClientProxies(
-            typeof(AbpPermissionManagementApplicationContractsModule).Assembly,
-            PermissionManagementRemoteServiceConsts.RemoteServiceName
-        );
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpPermissionManagementHttpApiClientModule>();
-        });
+            context.Services.AddStaticHttpClientProxies(
+                typeof(AbpPermissionManagementApplicationContractsModule).Assembly,
+                PermissionManagementRemoteServiceConsts.RemoteServiceName
+            );
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpPermissionManagementHttpApiClientModule>();
+            });
+        }
     }
 }

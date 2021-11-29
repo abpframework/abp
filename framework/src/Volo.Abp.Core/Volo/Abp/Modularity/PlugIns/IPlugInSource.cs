@@ -1,10 +1,11 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public interface IPlugInSource
+namespace Volo.Abp.Modularity.PlugIns
 {
-    [NotNull]
-    Type[] GetModules();
+    public interface IPlugInSource
+    {
+        [NotNull]
+        Type[] GetModules();
+    }
 }

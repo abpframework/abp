@@ -6,29 +6,30 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.Account;
-
-[DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpIdentityHttpApiModule),
-    typeof(AbpAspNetCoreMvcModule))]
-public class AbpAccountHttpApiModule : AbpModule
+namespace Volo.Abp.Account
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(AbpIdentityHttpApiModule),
+        typeof(AbpAspNetCoreMvcModule))]
+    public class AbpAccountHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<AccountResource>()
-                .AddBaseTypes(typeof(AbpUiResource));
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AccountResource>()
+                    .AddBaseTypes(typeof(AbpUiResource));
+            });
+        }
     }
 }

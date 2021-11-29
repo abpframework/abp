@@ -2,23 +2,24 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-[DependsOn(
-    typeof(AbpTextTemplatingTestModule)
-)]
-public class RazorTextTemplatingTestModule : AbpModule
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTextTemplatingTestModule)
+    )]
+    public class RazorTextTemplatingTestModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<RazorTextTemplatingTestModule>("Volo.Abp.TextTemplating.Razor");
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<RazorTextTemplatingTestModule>("Volo.Abp.TextTemplating.Razor");
+            });
 
-        Configure<AbpRazorTemplateCSharpCompilerOptions>(options =>
-        {
-            options.References.Add(MetadataReference.CreateFromFile(typeof(RazorTextTemplatingTestModule).Assembly.Location));
-        });
+            Configure<AbpRazorTemplateCSharpCompilerOptions>(options =>
+            {
+                options.References.Add(MetadataReference.CreateFromFile(typeof(RazorTextTemplatingTestModule).Assembly.Location));
+            });
+        }
     }
 }

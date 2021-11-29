@@ -8,49 +8,50 @@ using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.FeatureManagement;
-
-[DependsOn(
-    typeof(AbpFeatureManagementApplicationContractsModule),
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpAutoMapperModule)
-    )]
-public class AbpFeatureManagementWebModule : AbpModule
+namespace Volo.Abp.FeatureManagement
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpFeatureManagementApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAutoMapperModule)
+        )]
+    public class AbpFeatureManagementWebModule : AbpModule
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddAssemblyResource(typeof(AbpFeatureManagementResource), typeof(AbpFeatureManagementWebModule).Assembly);
-        });
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(AbpFeatureManagementResource), typeof(AbpFeatureManagementWebModule).Assembly);
+            });
 
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementWebModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementWebModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>();
+            });
 
-        context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);
+            });
 
-        Configure<RazorPagesOptions>(options =>
-        {
+            Configure<RazorPagesOptions>(options =>
+            {
                 //Configure authorization.
             });
 
-        Configure<DynamicJavaScriptProxyOptions>(options =>
-        {
-            options.DisableModule(FeatureManagementRemoteServiceConsts.ModuleName);
-        });
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(FeatureManagementRemoteServiceConsts.ModuleName);
+            });
+        }
     }
 }

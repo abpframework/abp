@@ -1,25 +1,26 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.UI.Navigation;
-
-public class AbpNavigationOptions
+namespace Volo.Abp.UI.Navigation
 {
-    [NotNull]
-    public List<IMenuContributor> MenuContributors { get; }
-
-    /// <summary>
-    /// Includes the <see cref="StandardMenus.Main"/> by default.
-    /// </summary>
-    public List<string> MainMenuNames { get; }
-
-    public AbpNavigationOptions()
+    public class AbpNavigationOptions
     {
-        MenuContributors = new List<IMenuContributor>();
+        [NotNull]
+        public List<IMenuContributor> MenuContributors { get; }
+        
+        /// <summary>
+        /// Includes the <see cref="StandardMenus.Main"/> by default.
+        /// </summary>
+        public List<string> MainMenuNames { get; }
 
-        MainMenuNames = new List<string>
+        public AbpNavigationOptions()
+        {
+            MenuContributors = new List<IMenuContributor>();
+            
+            MainMenuNames = new List<string>
             {
                 StandardMenus.Main
             };
+        }
     }
 }

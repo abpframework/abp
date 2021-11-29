@@ -3,50 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.ModuleInstalling;
-
-public class ModuleInstallingPipeline
+namespace Volo.Abp.Studio.ModuleInstalling
 {
-    public ModuleInstallingContext Context { get; }
-
-    public List<ModuleInstallingPipelineStep> Steps { get; }
-
-    public ModuleInstallingPipeline(ModuleInstallingContext context)
+    public class ModuleInstallingPipeline
     {
-        Context = context;
-        Steps = new List<ModuleInstallingPipelineStep>();
-    }
+        public ModuleInstallingContext Context { get; }
 
-    public async Task ExecuteAsync()
-    {
-        foreach (var step in Steps)
+        public List<ModuleInstallingPipelineStep> Steps { get; }
+
+        public ModuleInstallingPipeline(ModuleInstallingContext context)
         {
-            await step.ExecuteAsync(Context);
+            Context = context;
+            Steps = new List<ModuleInstallingPipelineStep>();
         }
-    }
 
-    public void Add(ModuleInstallingPipelineStep step)
-    {
-        Steps.Add(step);
-    }
+        public async Task ExecuteAsync()
+        {
+            foreach (var step in Steps)
+            {
+                await step.ExecuteAsync(Context);
+            }
+        }
 
-    public void Remove(Type stepType)
-    {
-        Steps.RemoveAll(step => step.GetType() == stepType);
-    }
+        public void Add(ModuleInstallingPipelineStep step)
+        {
+            Steps.Add(step);
+        }
 
-    public void Replace(Type stepType, ModuleInstallingPipelineStep step)
-    {
-        Steps.ReplaceOne(step => step.GetType() == stepType, step);
-    }
+        public void Remove(Type stepType)
+        {
+            Steps.RemoveAll(step => step.GetType() == stepType);
+        }
 
-    public void InsertAfter(Type stepType, ModuleInstallingPipelineStep step)
-    {
-        Steps.InsertAfter(step => step.GetType() == stepType, step);
-    }
+        public void Replace(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.ReplaceOne(step => step.GetType() == stepType , step);
+        }
 
-    public void InsertBefore(Type stepType, ModuleInstallingPipelineStep step)
-    {
-        Steps.InsertBefore(step => step.GetType() == stepType, step);
+        public void InsertAfter(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.InsertAfter(step => step.GetType() == stepType , step);
+        }
+
+        public void InsertBefore(Type stepType, ModuleInstallingPipelineStep step)
+        {
+            Steps.InsertBefore(step => step.GetType() == stepType , step);
+        }
     }
 }

@@ -5,38 +5,39 @@ using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Volo.Abp.Content;
 
-namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
-
-[Route("api/remote-stream-content-test")]
-public class RemoteStreamContentTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 {
-    [HttpGet]
-    [Route("Download")]
-    public async Task<IRemoteStreamContent> DownloadAsync()
+    [Route("api/remote-stream-content-test")]
+    public class RemoteStreamContentTestController : AbpController
     {
-        var memoryStream = new MemoryStream();
-        await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
-        memoryStream.Position = 0;
-        return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
-    }
-
-    [HttpPost]
-    [Route("Upload")]
-    public async Task<string> UploadAsync(IRemoteStreamContent file)
-    {
-        using (var reader = new StreamReader(file.GetStream()))
+        [HttpGet]
+        [Route("Download")]
+        public async Task<IRemoteStreamContent> DownloadAsync()
         {
-            return await reader.ReadToEndAsync() + ":" + file.ContentType + ":" + file.FileName;
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
+            memoryStream.Position = 0;
+            return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
         }
-    }
 
-    [HttpPost]
-    [Route("Upload-Raw")]
-    public async Task<string> UploadRawAsync(IRemoteStreamContent file)
-    {
-        using (var reader = new StreamReader(file.GetStream()))
+        [HttpPost]
+        [Route("Upload")]
+        public async Task<string> UploadAsync(IRemoteStreamContent file)
         {
-            return await reader.ReadToEndAsync() + ":" + file.ContentType;
+            using (var reader = new StreamReader(file.GetStream()))
+            {
+                return await reader.ReadToEndAsync() + ":" + file.ContentType + ":" + file.FileName;
+            }
+        }
+
+        [HttpPost]
+        [Route("Upload-Raw")]
+        public async Task<string> UploadRawAsync(IRemoteStreamContent file)
+        {
+            using (var reader = new StreamReader(file.GetStream()))
+            {
+                return await reader.ReadToEndAsync() + ":" + file.ContentType;
+            }
         }
     }
 }

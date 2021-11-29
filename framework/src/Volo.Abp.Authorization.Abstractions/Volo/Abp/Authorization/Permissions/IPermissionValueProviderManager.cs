@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public interface IPermissionValueProviderManager
+namespace Volo.Abp.Authorization.Permissions
 {
-    IReadOnlyList<IPermissionValueProvider> ValueProviders { get; }
+    public interface IPermissionValueProviderManager
+    {
+        IReadOnlyList<IPermissionValueProvider> ValueProviders { get; }
+    }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Analyticses;
-
-public interface ICliAnalyticsCollect
+namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
 {
-    Task CollectAsync(CliAnalyticsCollectInputDto input);
+    public interface ICliAnalyticsCollect
+    {
+        Task CollectAsync(CliAnalyticsCollectInputDto input);
+    }
 }

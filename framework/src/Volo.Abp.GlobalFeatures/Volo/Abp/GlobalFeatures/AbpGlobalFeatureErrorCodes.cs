@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.GlobalFeatures;
-
-public class AbpGlobalFeatureErrorCodes
+﻿namespace Volo.Abp.GlobalFeatures
 {
-    public const string GlobalFeatureIsNotEnabled = "Volo.GlobalFeature:010001";
+    public class AbpGlobalFeatureErrorCodes
+    {
+        public const string GlobalFeatureIsNotEnabled = "Volo.GlobalFeature:010001";
+    }
 }

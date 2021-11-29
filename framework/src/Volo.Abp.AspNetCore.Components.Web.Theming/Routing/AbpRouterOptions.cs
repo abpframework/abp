@@ -1,15 +1,16 @@
 ﻿using System.Reflection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-
-public class AbpRouterOptions
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Routing
 {
-    public Assembly AppAssembly { get; set; }
-
-    public RouterAssemblyList AdditionalAssemblies { get; }
-
-    public AbpRouterOptions()
+    public class AbpRouterOptions
     {
-        AdditionalAssemblies = new RouterAssemblyList();
+        public Assembly AppAssembly { get; set; }
+
+        public RouterAssemblyList AdditionalAssemblies { get; }
+
+        public AbpRouterOptions()
+        {
+            AdditionalAssemblies = new RouterAssemblyList();
+        }
     }
 }

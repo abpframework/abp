@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-[Serializable]
-public class ApplicationFeatureConfigurationDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    public Dictionary<string, string> Values { get; set; }
-
-    public ApplicationFeatureConfigurationDto()
+    [Serializable]
+    public class ApplicationFeatureConfigurationDto
     {
-        Values = new Dictionary<string, string>();
+        public Dictionary<string, string> Values { get; set; }
+
+        public ApplicationFeatureConfigurationDto()
+        {
+            Values = new Dictionary<string, string>();
+        }
     }
 }

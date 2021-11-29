@@ -4,21 +4,22 @@ using System.Text;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class TestPermissionManagementProvider : PermissionManagementProvider
+namespace Volo.Abp.PermissionManagement
 {
-    public override string Name => "Test";
-
-    public TestPermissionManagementProvider(
-        IPermissionGrantRepository permissionGrantRepository,
-        IGuidGenerator guidGenerator,
-        ICurrentTenant currentTenant)
-        : base(
-            permissionGrantRepository,
-            guidGenerator,
-            currentTenant)
+    public class TestPermissionManagementProvider : PermissionManagementProvider
     {
+        public override string Name => "Test";
 
+        public TestPermissionManagementProvider(
+            IPermissionGrantRepository permissionGrantRepository,
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
+            : base(
+                permissionGrantRepository,
+                guidGenerator,
+                currentTenant)
+        {
+
+        }
     }
 }

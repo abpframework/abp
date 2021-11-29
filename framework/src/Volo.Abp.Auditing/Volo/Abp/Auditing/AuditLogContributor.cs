@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.Auditing;
-
-public abstract class AuditLogContributor
+﻿namespace Volo.Abp.Auditing
 {
-    public virtual void PreContribute(AuditLogContributionContext context)
+    public abstract class AuditLogContributor
     {
+        public virtual void PreContribute(AuditLogContributionContext context)
+        {
 
-    }
+        }
 
-    public virtual void PostContribute(AuditLogContributionContext context)
-    {
+        public virtual void PostContribute(AuditLogContributionContext context)
+        {
 
+        }
     }
 }

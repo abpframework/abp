@@ -2,25 +2,26 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.TestServices;
-
-public class FakePermissionStore : IPermissionStore, ITransientDependency
+namespace Volo.Abp.Authorization.TestServices
 {
-    public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
+    public class FakePermissionStore : IPermissionStore, ITransientDependency
     {
-        return Task.FromResult(name == "MyPermission3" || name == "MyPermission5");
-    }
-
-    public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
-    {
-        var result = new MultiplePermissionGrantResult();
-        foreach (var name in names)
+        public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            result.Result.Add(name, name == "MyPermission3" || name == "MyPermission5"
-                ? PermissionGrantResult.Granted
-                : PermissionGrantResult.Prohibited);
+            return Task.FromResult(name == "MyPermission3" || name == "MyPermission5");
         }
 
-        return Task.FromResult(result);
+        public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
+        {
+            var result = new MultiplePermissionGrantResult();
+            foreach (var name in names)
+            {
+                result.Result.Add(name, name == "MyPermission3" || name == "MyPermission5"
+                    ? PermissionGrantResult.Granted
+                    : PermissionGrantResult.Prohibited);
+            }
+
+            return Task.FromResult(result);
+        }
     }
 }

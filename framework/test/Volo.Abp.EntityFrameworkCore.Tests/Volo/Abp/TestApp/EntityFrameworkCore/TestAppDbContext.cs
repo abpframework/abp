@@ -8,77 +8,78 @@ using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.EntityFrameworkCore;
-
-[ReplaceDbContext(typeof(IFourthDbContext))]
-public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext, IFourthDbContext
+namespace Volo.Abp.TestApp.EntityFrameworkCore
 {
-    private DbSet<FourthDbContextDummyEntity> _dummyEntities;
-    private DbSet<FourthDbContextDummyEntity> _dummyEntities1;
-    public DbSet<Person> People { get; set; }
-
-    public DbSet<City> Cities { get; set; }
-
-    public DbSet<PersonView> PersonView { get; set; }
-
-    public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
-
-    public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
-
-    public DbSet<Author> Author { get; set; }
-
-    public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
-
-    public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
-        : base(options)
+    [ReplaceDbContext(typeof(IFourthDbContext))]
+    public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext, IFourthDbContext
     {
+        private DbSet<FourthDbContextDummyEntity> _dummyEntities;
+        private DbSet<FourthDbContextDummyEntity> _dummyEntities1;
+        public DbSet<Person> People { get; set; }
 
-    }
+        public DbSet<City> Cities { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.ReplaceService<IModelCacheKeyFactory, UnitTestModelCacheKeyFactory>();
-        base.OnConfiguring(optionsBuilder);
-    }
+        public DbSet<PersonView> PersonView { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Owned<District>();
+        public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
-        base.OnModelCreating(modelBuilder);
+        public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
 
-        modelBuilder.Entity<Phone>(b =>
+        public DbSet<Author> Author { get; set; }
+
+        public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
+
+        public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
+            : base(options)
         {
-            b.HasKey(p => new { p.PersonId, p.Number });
 
-            b.ApplyObjectExtensionMappings();
-        });
+        }
 
-        modelBuilder.Entity<Person>(b =>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
-        });
+            optionsBuilder.ReplaceService<IModelCacheKeyFactory, UnitTestModelCacheKeyFactory>();
+            base.OnConfiguring(optionsBuilder);
+        }
 
-        modelBuilder
-            .Entity<PersonView>(p =>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Owned<District>();
+
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Phone>(b =>
             {
-                p.HasNoKey();
-                p.ToView("View_PersonView");
+                b.HasKey(p => new {p.PersonId, p.Number});
 
-                p.ApplyObjectExtensionMappings();
+                b.ApplyObjectExtensionMappings();
             });
 
-        modelBuilder.Entity<City>(b =>
-        {
-            b.OwnsMany(c => c.Districts, d =>
+            modelBuilder.Entity<Person>(b =>
             {
-                d.WithOwner().HasForeignKey(x => x.CityId);
-                d.HasKey(x => new { x.CityId, x.Name });
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
             });
 
-            b.ApplyObjectExtensionMappings();
-        });
+            modelBuilder
+                .Entity<PersonView>(p =>
+                {
+                    p.HasNoKey();
+                    p.ToView("View_PersonView");
 
-        modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
+                    p.ApplyObjectExtensionMappings();
+                });
+
+            modelBuilder.Entity<City>(b =>
+            {
+                b.OwnsMany(c => c.Districts, d =>
+                {
+                    d.WithOwner().HasForeignKey(x => x.CityId);
+                    d.HasKey(x => new {x.CityId, x.Name});
+                });
+
+                b.ApplyObjectExtensionMappings();
+            });
+
+            modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
+        }
     }
 }

@@ -1,21 +1,22 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Auditing.App.Entities;
-
-[Audited]
-public class AppEntityWithAudited : AggregateRoot<Guid>
+namespace Volo.Abp.Auditing.App.Entities
 {
-    protected AppEntityWithAudited()
+    [Audited]
+    public class AppEntityWithAudited : AggregateRoot<Guid>
     {
+        protected AppEntityWithAudited()
+        {
 
+        }
+
+        public AppEntityWithAudited(Guid id, string name)
+            : base(id)
+        {
+            Name = name;
+        }
+
+        public string Name { get; set; }
     }
-
-    public AppEntityWithAudited(Guid id, string name)
-        : base(id)
-    {
-        Name = name;
-    }
-
-    public string Name { get; set; }
 }

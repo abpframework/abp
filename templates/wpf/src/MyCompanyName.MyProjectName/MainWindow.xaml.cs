@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Windows;
 
-namespace MyCompanyName.MyProjectName;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace MyCompanyName.MyProjectName
 {
-    private readonly HelloWorldService _helloWorldService;
-
-    public MainWindow(HelloWorldService helloWorldService)
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-        _helloWorldService = helloWorldService;
-        InitializeComponent();
-    }
+        private readonly HelloWorldService _helloWorldService;
 
-    protected override void OnContentRendered(EventArgs e)
-    {
-        HelloLabel.Content = _helloWorldService.SayHello();
+        public MainWindow(HelloWorldService helloWorldService)
+        {
+            _helloWorldService = helloWorldService;
+            InitializeComponent();
+        }
+
+        protected override void OnContentRendered(EventArgs e)
+        {
+            HelloLabel.Content =_helloWorldService.SayHello();
+        }
     }
 }

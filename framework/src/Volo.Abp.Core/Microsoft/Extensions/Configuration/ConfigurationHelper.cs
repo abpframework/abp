@@ -1,51 +1,52 @@
 ﻿using System;
 using System.IO;
 
-namespace Microsoft.Extensions.Configuration;
-
-public static class ConfigurationHelper
+namespace Microsoft.Extensions.Configuration
 {
-    public static IConfigurationRoot BuildConfiguration(
-        AbpConfigurationBuilderOptions options = null,
-        Action<IConfigurationBuilder> builderAction = null)
+    public static class ConfigurationHelper
     {
-        options = options ?? new AbpConfigurationBuilderOptions();
-
-        if (options.BasePath.IsNullOrEmpty())
+        public static IConfigurationRoot BuildConfiguration(
+            AbpConfigurationBuilderOptions options = null, 
+            Action<IConfigurationBuilder> builderAction = null)
         {
-            options.BasePath = Directory.GetCurrentDirectory();
-        }
+            options = options ?? new AbpConfigurationBuilderOptions();
 
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(options.BasePath)
-            .AddJsonFile(options.FileName + ".json", optional: true, reloadOnChange: true);
-
-        if (!options.EnvironmentName.IsNullOrEmpty())
-        {
-            builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: true, reloadOnChange: true);
-        }
-
-        if (options.EnvironmentName == "Development")
-        {
-            if (options.UserSecretsId != null)
+            if (options.BasePath.IsNullOrEmpty())
             {
-                builder.AddUserSecrets(options.UserSecretsId);
+                options.BasePath = Directory.GetCurrentDirectory();
             }
-            else if (options.UserSecretsAssembly != null)
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(options.BasePath)
+                .AddJsonFile(options.FileName + ".json", optional: true, reloadOnChange: true);
+
+            if (!options.EnvironmentName.IsNullOrEmpty())
             {
-                builder.AddUserSecrets(options.UserSecretsAssembly, true);
+                builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
+
+            if (options.EnvironmentName == "Development")
+            {
+                if (options.UserSecretsId != null)
+                {
+                    builder.AddUserSecrets(options.UserSecretsId);
+                }
+                else if (options.UserSecretsAssembly != null)
+                {
+                    builder.AddUserSecrets(options.UserSecretsAssembly, true);
+                }
+            }
+
+            builder = builder.AddEnvironmentVariables(options.EnvironmentVariablesPrefix);
+
+            if (options.CommandLineArgs != null)
+            {
+                builder = builder.AddCommandLine(options.CommandLineArgs);
+            }
+
+            builderAction?.Invoke(builder);
+            
+            return builder.Build();
         }
-
-        builder = builder.AddEnvironmentVariables(options.EnvironmentVariablesPrefix);
-
-        if (options.CommandLineArgs != null)
-        {
-            builder = builder.AddCommandLine(options.CommandLineArgs);
-        }
-
-        builderAction?.Invoke(builder);
-
-        return builder.Build();
     }
 }

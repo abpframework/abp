@@ -1,24 +1,25 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Features;
-
-public class TenantFeatureValueProvider : FeatureValueProvider
+namespace Volo.Abp.Features
 {
-    public const string ProviderName = "T";
-
-    public override string Name => ProviderName;
-
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public TenantFeatureValueProvider(IFeatureStore featureStore, ICurrentTenant currentTenant)
-        : base(featureStore)
+    public class TenantFeatureValueProvider : FeatureValueProvider
     {
-        CurrentTenant = currentTenant;
-    }
+        public const string ProviderName = "T";
 
-    public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
-    {
-        return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString());
+        public override string Name => ProviderName;
+
+        protected ICurrentTenant CurrentTenant { get; }
+
+        public TenantFeatureValueProvider(IFeatureStore featureStore, ICurrentTenant currentTenant)
+            : base(featureStore)
+        {
+            CurrentTenant = currentTenant;
+        }
+
+        public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+        {
+            return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString());
+        }
     }
 }

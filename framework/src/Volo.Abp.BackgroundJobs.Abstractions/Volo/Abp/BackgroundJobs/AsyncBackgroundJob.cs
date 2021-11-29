@@ -2,18 +2,19 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public abstract class AsyncBackgroundJob<TArgs> : IAsyncBackgroundJob<TArgs>
+namespace Volo.Abp.BackgroundJobs
 {
-    //TODO: Add UOW, Localization and other useful properties..?
-
-    public ILogger<AsyncBackgroundJob<TArgs>> Logger { get; set; }
-
-    protected AsyncBackgroundJob()
+    public abstract class AsyncBackgroundJob<TArgs> : IAsyncBackgroundJob<TArgs>
     {
-        Logger = NullLogger<AsyncBackgroundJob<TArgs>>.Instance;
-    }
+        //TODO: Add UOW, Localization and other useful properties..?
 
-    public abstract Task ExecuteAsync(TArgs args);
+        public ILogger<AsyncBackgroundJob<TArgs>> Logger { get; set; }
+
+        protected AsyncBackgroundJob()
+        {
+            Logger = NullLogger<AsyncBackgroundJob<TArgs>>.Instance;
+        }
+
+        public abstract Task ExecuteAsync(TArgs args);
+    }
 }

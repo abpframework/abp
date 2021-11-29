@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.Nuget;
-
-public static class TemplateNugetPackageInfoProvider
+namespace Volo.Abp.Studio.Nuget
 {
-    public static string GetNugetPackageName(string template)
+    public static class TemplateNugetPackageInfoProvider
     {
-        switch (template)
+        public static string GetNugetPackageName(string template)
         {
-            case "app":
-                return "Cotur.Abp.Basic.Template"; // todo: replace with real template!
-            default:
-                return null;
+            switch (template)
+            {
+                case "app":
+                    return "Cotur.Abp.Basic.Template"; // todo: replace with real template!
+                default:
+                    return null;
+            }
         }
     }
 }

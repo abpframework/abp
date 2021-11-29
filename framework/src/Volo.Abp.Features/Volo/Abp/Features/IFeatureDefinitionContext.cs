@@ -1,13 +1,14 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.Features;
-
-public interface IFeatureDefinitionContext
+namespace Volo.Abp.Features
 {
-    FeatureGroupDefinition AddGroup([NotNull] string name, ILocalizableString displayName = null);
+    public interface IFeatureDefinitionContext
+    {
+        FeatureGroupDefinition AddGroup([NotNull] string name, ILocalizableString displayName = null);
 
-    FeatureGroupDefinition GetGroupOrNull(string name);
-
-    void RemoveGroup(string name);
+        FeatureGroupDefinition GetGroupOrNull(string name);
+        
+        void RemoveGroup(string name);
+    }
 }

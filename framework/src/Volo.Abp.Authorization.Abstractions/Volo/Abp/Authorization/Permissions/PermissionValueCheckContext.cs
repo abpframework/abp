@@ -1,23 +1,24 @@
 ﻿using System.Security.Claims;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public class PermissionValueCheckContext
+namespace Volo.Abp.Authorization.Permissions
 {
-    [NotNull]
-    public PermissionDefinition Permission { get; }
-
-    [CanBeNull]
-    public ClaimsPrincipal Principal { get; }
-
-    public PermissionValueCheckContext(
-        [NotNull] PermissionDefinition permission,
-        [CanBeNull] ClaimsPrincipal principal)
+    public class PermissionValueCheckContext
     {
-        Check.NotNull(permission, nameof(permission));
+        [NotNull]
+        public PermissionDefinition Permission { get; }
 
-        Permission = permission;
-        Principal = principal;
+        [CanBeNull]
+        public ClaimsPrincipal Principal { get; }
+
+        public PermissionValueCheckContext(
+            [NotNull] PermissionDefinition permission, 
+            [CanBeNull] ClaimsPrincipal principal)
+        {
+            Check.NotNull(permission, nameof(permission));
+
+            Permission = permission;
+            Principal = principal;
+        }
     }
 }

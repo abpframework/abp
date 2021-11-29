@@ -8,40 +8,41 @@ using Shouldly;
 using Volo.Abp.TextTemplating.Razor.SampleTemplates;
 using Xunit;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public class AbpCompiledViewProviderOptions_Tests : TemplateDefinitionTests<RazorTextTemplatingTestModule>
+namespace Volo.Abp.TextTemplating.Razor
 {
-    private readonly IAbpCompiledViewProvider _compiledViewProvider;
-    private readonly ITemplateDefinitionManager _templateDefinitionManager;
-
-    public AbpCompiledViewProviderOptions_Tests()
+    public class AbpCompiledViewProviderOptions_Tests : TemplateDefinitionTests<RazorTextTemplatingTestModule>
     {
-        _templateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
-        _compiledViewProvider = GetRequiredService<IAbpCompiledViewProvider>();
-    }
+        private readonly IAbpCompiledViewProvider _compiledViewProvider;
+        private readonly ITemplateDefinitionManager _templateDefinitionManager;
 
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        services.Configure<AbpCompiledViewProviderOptions>(options =>
+        public AbpCompiledViewProviderOptions_Tests()
         {
-            options.TemplateReferences.Add(RazorTestTemplates.TestTemplate, new List<Assembly>()
-                {
+            _templateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+            _compiledViewProvider = GetRequiredService<IAbpCompiledViewProvider>();
+        }
+
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            services.Configure<AbpCompiledViewProviderOptions>(options =>
+            {
+                options.TemplateReferences.Add(RazorTestTemplates.TestTemplate, new List<Assembly>()
+                    {
                         Assembly.Load("Microsoft.Extensions.Logging.Abstractions")
-                }
-                .Select(x => MetadataReference.CreateFromFile(x.Location))
-                .ToList());
-        });
-        base.AfterAddApplication(services);
-    }
+                    }
+                    .Select(x => MetadataReference.CreateFromFile(x.Location))
+                    .ToList());
+            });
+            base.AfterAddApplication(services);
+        }
 
-    [Fact]
-    public async Task Custom_TemplateReferences_Test()
-    {
-        var templateDefinition = _templateDefinitionManager.GetOrNull(RazorTestTemplates.TestTemplate);
+        [Fact]
+        public async Task Custom_TemplateReferences_Test()
+        {
+            var templateDefinition = _templateDefinitionManager.GetOrNull(RazorTestTemplates.TestTemplate);
 
-        var assembly = await _compiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var assembly = await _compiledViewProvider.GetAssemblyAsync(templateDefinition);
 
-        assembly.GetReferencedAssemblies().ShouldContain(x => x.Name == "Microsoft.Extensions.Logging.Abstractions");
+            assembly.GetReferencedAssemblies().ShouldContain(x => x.Name == "Microsoft.Extensions.Logging.Abstractions");
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.PermissionManagement;
-
-public class PermissionManagementRemoteServiceConsts
+﻿namespace Volo.Abp.PermissionManagement
 {
-    public const string RemoteServiceName = "AbpPermissionManagement";
+    public class PermissionManagementRemoteServiceConsts
+    {
+        public const string RemoteServiceName = "AbpPermissionManagement";
 
-    public const string ModuleName = "permissionManagement";
+        public const string ModuleName = "permissionManagement";
+    }
 }

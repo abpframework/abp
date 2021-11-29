@@ -2,14 +2,15 @@
 using Volo.Abp;
 using Volo.ClientSimulation.Scenarios;
 
-namespace Volo.ClientSimulation.Demo.Scenarios;
-
-public class DemoScenario : Scenario
+namespace Volo.ClientSimulation.Demo.Scenarios
 {
-    public DemoScenario(IServiceProvider serviceProvider) :
-        base(serviceProvider)
+    public class DemoScenario : Scenario
     {
-        AddStep(new SleepScenarioStep("Wait1", RandomHelper.GetRandom(1000, 5000)));
-        AddStep(new SleepScenarioStep("Wait2", RandomHelper.GetRandom(2000, 6000)));
+        public DemoScenario(IServiceProvider serviceProvider) : 
+            base(serviceProvider)
+        {
+            AddStep(new SleepScenarioStep("Wait1", RandomHelper.GetRandom(1000, 5000)));
+            AddStep(new SleepScenarioStep("Wait2", RandomHelper.GetRandom(2000, 6000)));
+        }
     }
 }

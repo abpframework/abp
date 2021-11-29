@@ -1,18 +1,19 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BlobStoring.Aliyun;
-
-public class AbpBlobStoringAliyunTestCommonBase : AbpIntegratedTest<AbpBlobStoringAliyunTestCommonModule>
+namespace Volo.Abp.BlobStoring.Aliyun
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringAliyunTestCommonBase : AbpIntegratedTest<AbpBlobStoringAliyunTestCommonModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
-}
-public class AbpBlobStoringAliyunTestBase : AbpIntegratedTest<AbpBlobStoringAliyunTestModule>
-{
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringAliyunTestBase : AbpIntegratedTest<AbpBlobStoringAliyunTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

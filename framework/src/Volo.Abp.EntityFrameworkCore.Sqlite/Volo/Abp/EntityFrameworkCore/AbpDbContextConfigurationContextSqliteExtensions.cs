@@ -4,29 +4,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public static class AbpDbContextConfigurationContextSqliteExtensions
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public static DbContextOptionsBuilder UseSqlite(
-        [NotNull] this AbpDbContextConfigurationContext context,
-        [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
+    public static class AbpDbContextConfigurationContextSqliteExtensions
     {
-        if (context.ExistingConnection != null)
+        public static DbContextOptionsBuilder UseSqlite(
+            [NotNull] this AbpDbContextConfigurationContext context,
+            [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
         {
-            return context.DbContextOptions.UseSqlite(context.ExistingConnection, optionsBuilder =>
+            if (context.ExistingConnection != null)
             {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                sqliteOptionsAction?.Invoke(optionsBuilder);
-            });
-        }
-        else
-        {
-            return context.DbContextOptions.UseSqlite(context.ConnectionString, optionsBuilder =>
+                return context.DbContextOptions.UseSqlite(context.ExistingConnection, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    sqliteOptionsAction?.Invoke(optionsBuilder);
+                });
+            }
+            else
             {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                sqliteOptionsAction?.Invoke(optionsBuilder);
-            });
+                return context.DbContextOptions.UseSqlite(context.ConnectionString, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    sqliteOptionsAction?.Invoke(optionsBuilder);
+                });
+            }
         }
     }
 }

@@ -10,45 +10,47 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Modularity;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpEntityFrameworkCoreSqlServerModule),
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
-)]
-public class ConsoleAppConsoleAppModule : AbpModule
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+    )]
+    public class ConsoleAppConsoleAppModule : AbpModule
     {
-        ConfigureEntityFramework(context);
-
-        context.Services.AddSingleton<IBlobProvider, DatabaseBlobProvider>();
-
-        Configure<AbpBlobStoringOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Containers.ConfigureDefault(container =>
+            ConfigureEntityFramework(context);
+
+            context.Services.AddSingleton<IBlobProvider, DatabaseBlobProvider>();
+
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                container.ProviderType = typeof(DatabaseBlobProvider);
+                options.Containers.ConfigureDefault(container =>
+                {
+                    container.ProviderType = typeof(DatabaseBlobProvider);
+                });
             });
-        });
-    }
+        }
 
-    private void ConfigureEntityFramework(ServiceConfigurationContext context)
-    {
-        Configure<AbpDbConnectionOptions>(options =>
+        private void ConfigureEntityFramework(ServiceConfigurationContext context)
         {
-            options.ConnectionStrings.Default = "Server=localhost;Database=BlobStoring_Host;Trusted_Connection=True";
-        });
+            Configure<AbpDbConnectionOptions>(options =>
+            {
+                options.ConnectionStrings.Default = "Server=localhost;Database=BlobStoring_Host;Trusted_Connection=True";
+            });
+            
+            context.Services.AddAbpDbContext<BlobStoringHostDbContext>(options =>
+            {
+                options.AddDefaultRepositories(true);
+            });
 
-        context.Services.AddAbpDbContext<BlobStoringHostDbContext>(options =>
-        {
-            options.AddDefaultRepositories(true);
-        });
-
-        Configure<AbpDbContextOptions>(x =>
-        {
-            x.UseSqlServer();
-        });
+            Configure<AbpDbContextOptions>(x =>
+            {
+                x.UseSqlServer();
+            });
+        }
     }
 }

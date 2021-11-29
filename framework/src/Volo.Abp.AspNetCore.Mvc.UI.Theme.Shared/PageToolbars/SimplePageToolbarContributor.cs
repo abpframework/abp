@@ -3,49 +3,50 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-
-public class SimplePageToolbarContributor : IPageToolbarContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
 {
-    public Type ComponentType { get; }
-
-    public object Argument { get; set; }
-
-    public int Order { get; }
-
-    public string RequiredPolicyName { get; }
-
-    public SimplePageToolbarContributor(
-        Type componentType,
-        object argument = null,
-        int order = 0,
-        string requiredPolicyName = null)
+    public class SimplePageToolbarContributor : IPageToolbarContributor
     {
-        ComponentType = componentType;
-        Argument = argument;
-        Order = order;
-        RequiredPolicyName = requiredPolicyName;
-    }
+        public Type ComponentType { get; }
 
-    public async Task ContributeAsync(PageToolbarContributionContext context)
-    {
-        if (await ShouldAddComponentAsync(context))
+        public object Argument { get; set; }
+
+        public int Order { get; }
+
+        public string RequiredPolicyName { get; }
+
+        public SimplePageToolbarContributor(
+            Type componentType,
+            object argument = null,
+            int order = 0,
+            string requiredPolicyName = null)
         {
-            context.Items.Add(new PageToolbarItem(ComponentType, Argument, Order));
+            ComponentType = componentType;
+            Argument = argument;
+            Order = order;
+            RequiredPolicyName = requiredPolicyName;
         }
-    }
 
-    protected virtual async Task<bool> ShouldAddComponentAsync(PageToolbarContributionContext context)
-    {
-        if (RequiredPolicyName != null)
+        public async Task ContributeAsync(PageToolbarContributionContext context)
         {
-            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-            if (!await authorizationService.IsGrantedAsync(RequiredPolicyName))
+            if(await ShouldAddComponentAsync(context))
             {
-                return false;
+                context.Items.Add(new PageToolbarItem(ComponentType, Argument, Order));
             }
         }
 
-        return true;
+        protected virtual async Task<bool> ShouldAddComponentAsync(PageToolbarContributionContext context)
+        {
+            if (RequiredPolicyName != null)
+            {
+                var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
+                if (!await authorizationService.IsGrantedAsync(RequiredPolicyName))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

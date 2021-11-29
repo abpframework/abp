@@ -6,64 +6,65 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 
-namespace Volo.Abp.Security;
-
-public class AbpSecurityModule : AbpModule
+namespace Volo.Abp.Security
 {
-    public override void PostConfigureServices(ServiceConfigurationContext context)
+    public class AbpSecurityModule : AbpModule
     {
-        AutoAddClaimsPrincipalContributors(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        var configuration = context.Services.GetConfiguration();
-        context.Services.Configure<AbpStringEncryptionOptions>(options =>
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            var keySize = configuration["StringEncryption:KeySize"];
-            if (!keySize.IsNullOrWhiteSpace())
+            AutoAddClaimsPrincipalContributors(context.Services);
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+            context.Services.Configure<AbpStringEncryptionOptions>(options =>
             {
-                if (int.TryParse(keySize, out var intValue))
+                var keySize = configuration["StringEncryption:KeySize"];
+                if (!keySize.IsNullOrWhiteSpace())
                 {
-                    options.Keysize = intValue;
+                    if (int.TryParse(keySize, out var intValue))
+                    {
+                        options.Keysize = intValue;
+                    }
                 }
-            }
 
-            var defaultPassPhrase = configuration["StringEncryption:DefaultPassPhrase"];
-            if (!defaultPassPhrase.IsNullOrWhiteSpace())
-            {
-                options.DefaultPassPhrase = defaultPassPhrase;
-            }
+                var defaultPassPhrase = configuration["StringEncryption:DefaultPassPhrase"];
+                if (!defaultPassPhrase.IsNullOrWhiteSpace())
+                {
+                    options.DefaultPassPhrase = defaultPassPhrase;
+                }
 
-            var initVectorBytes = configuration["StringEncryption:InitVectorBytes"];
-            if (!initVectorBytes.IsNullOrWhiteSpace())
-            {
-                options.InitVectorBytes = Encoding.ASCII.GetBytes(initVectorBytes); ;
-            }
+                var initVectorBytes = configuration["StringEncryption:InitVectorBytes"];
+                if (!initVectorBytes.IsNullOrWhiteSpace())
+                {
+                    options.InitVectorBytes = Encoding.ASCII.GetBytes(initVectorBytes);;
+                }
 
-            var defaultSalt = configuration["StringEncryption:DefaultSalt"];
-            if (!defaultSalt.IsNullOrWhiteSpace())
-            {
-                options.DefaultSalt = Encoding.ASCII.GetBytes(defaultSalt); ;
-            }
-        });
-    }
+                var defaultSalt = configuration["StringEncryption:DefaultSalt"];
+                if (!defaultSalt.IsNullOrWhiteSpace())
+                {
+                    options.DefaultSalt = Encoding.ASCII.GetBytes(defaultSalt);;
+                }
+            });
+        }
 
-    private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
-    {
-        var contributorTypes = new List<Type>();
-
-        services.OnRegistred(context =>
+        private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
         {
-            if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
-            {
-                contributorTypes.Add(context.ImplementationType);
-            }
-        });
+            var contributorTypes = new List<Type>();
 
-        services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.Contributors.AddIfNotContains(contributorTypes);
-        });
+            services.OnRegistred(context =>
+            {
+                if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contributorTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.Contributors.AddIfNotContains(contributorTypes);
+            });
+        }
     }
 }

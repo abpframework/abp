@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.App;
-
-public interface IHelloController : IRemoteService
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.App
 {
-    Task<string> GetAsync();
+    public interface IHelloController : IRemoteService
+    {
+        Task<string> GetAsync();
 
-    Task<string> PostAsyncV1();
+        Task<string> PostAsyncV1();
 
-    Task<string> PostAsyncV2();
+        Task<string> PostAsyncV2();
+    }
 }

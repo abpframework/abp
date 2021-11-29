@@ -2,19 +2,20 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Identity;
-
-public class UserRoleFinder : IUserRoleFinder, ITransientDependency
+namespace Volo.Abp.Identity
 {
-    protected IIdentityUserRepository IdentityUserRepository { get; }
-
-    public UserRoleFinder(IIdentityUserRepository identityUserRepository)
+    public class UserRoleFinder : IUserRoleFinder, ITransientDependency
     {
-        IdentityUserRepository = identityUserRepository;
-    }
+        protected IIdentityUserRepository IdentityUserRepository { get; }
 
-    public virtual async Task<string[]> GetRolesAsync(Guid userId)
-    {
-        return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();
+        public UserRoleFinder(IIdentityUserRepository identityUserRepository)
+        {
+            IdentityUserRepository = identityUserRepository;
+        }
+
+        public virtual async Task<string[]> GetRolesAsync(Guid userId)
+        {
+            return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();
+        }
     }
 }

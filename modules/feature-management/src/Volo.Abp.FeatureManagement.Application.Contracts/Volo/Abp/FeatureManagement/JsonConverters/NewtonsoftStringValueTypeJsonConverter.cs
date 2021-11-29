@@ -7,83 +7,84 @@ using Newtonsoft.Json.Linq;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Validation.StringValues;
 
-namespace Volo.Abp.FeatureManagement.JsonConverters;
-
-public class NewtonsoftStringValueTypeJsonConverter : JsonConverter, ITransientDependency
+namespace Volo.Abp.FeatureManagement.JsonConverters
 {
-    public override bool CanWrite => false;
-
-    public override bool CanConvert(Type objectType)
+    public class NewtonsoftStringValueTypeJsonConverter : JsonConverter, ITransientDependency
     {
-        return objectType == typeof(IStringValueType);
-    }
+        public override bool CanWrite => false;
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    {
-        throw new NotImplementedException("This method should not be called to write (since CanWrite is false).");
-    }
-
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    {
-        if (reader.TokenType != JsonToken.StartObject)
+        public override bool CanConvert(Type objectType)
         {
-            return null;
+            return objectType == typeof(IStringValueType);
         }
 
-        var jsonObject = JObject.Load(reader);
-
-        var stringValue = CreateStringValueTypeByName(jsonObject, jsonObject["name"].ToString());
-        foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
-            new JsonTextReader(new StringReader(jsonObject["properties"].ToString()))))
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            stringValue[o.Key] = o.Value;
+            throw new NotImplementedException("This method should not be called to write (since CanWrite is false).");
         }
 
-        stringValue.Validator = CreateValueValidatorByName(jsonObject["validator"], jsonObject["validator"]["name"].ToString());
-        foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
-            new JsonTextReader(new StringReader(jsonObject["validator"]["properties"].ToString()))))
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            stringValue.Validator[o.Key] = o.Value;
-        }
-
-        return stringValue;
-    }
-
-    protected virtual IStringValueType CreateStringValueTypeByName(JObject jObject, string name)
-    {
-        if (name == "SelectionStringValueType")
-        {
-            var selectionStringValueType = new SelectionStringValueType();
-            if (jObject["itemSource"].HasValues)
+            if (reader.TokenType != JsonToken.StartObject)
             {
-                selectionStringValueType.ItemSource = new StaticSelectionStringValueItemSource(jObject["itemSource"]["items"]
-                    .Select(item => new LocalizableSelectionStringValueItem()
-                    {
-                        Value = item["value"].ToString(),
-                        DisplayText = new LocalizableStringInfo(item["displayText"]["resourceName"].ToString(), item["displayText"]["name"].ToString())
-                    }).ToArray());
+                return null;
             }
 
-            return selectionStringValueType;
+            var jsonObject = JObject.Load(reader);
+
+            var stringValue = CreateStringValueTypeByName(jsonObject, jsonObject["name"].ToString());
+            foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
+                new JsonTextReader(new StringReader(jsonObject["properties"].ToString()))))
+            {
+                stringValue[o.Key] = o.Value;
+            }
+
+            stringValue.Validator = CreateValueValidatorByName(jsonObject["validator"], jsonObject["validator"]["name"].ToString());
+            foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
+                new JsonTextReader(new StringReader(jsonObject["validator"]["properties"].ToString()))))
+            {
+                stringValue.Validator[o.Key] = o.Value;
+            }
+
+            return stringValue;
         }
 
-        return name switch
+        protected virtual IStringValueType CreateStringValueTypeByName(JObject jObject, string name)
         {
-            "FreeTextStringValueType" => new FreeTextStringValueType(),
-            "ToggleStringValueType" => new ToggleStringValueType(),
-            _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
-        };
-    }
+            if (name == "SelectionStringValueType")
+            {
+                var selectionStringValueType = new SelectionStringValueType();
+                if (jObject["itemSource"].HasValues)
+                {
+                    selectionStringValueType.ItemSource = new StaticSelectionStringValueItemSource(jObject["itemSource"]["items"]
+                        .Select(item => new LocalizableSelectionStringValueItem()
+                        {
+                            Value = item["value"].ToString(),
+                            DisplayText = new LocalizableStringInfo(item["displayText"]["resourceName"].ToString(), item["displayText"]["name"].ToString())
+                        }).ToArray());
+                }
 
-    protected virtual IValueValidator CreateValueValidatorByName(JToken jObject, string name)
-    {
-        return name switch
+                return selectionStringValueType;
+            }
+
+            return name switch
+            {
+                "FreeTextStringValueType" => new FreeTextStringValueType(),
+                "ToggleStringValueType" => new ToggleStringValueType(),
+                _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
+            };
+        }
+
+        protected virtual IValueValidator CreateValueValidatorByName(JToken jObject, string name)
         {
-            "NULL" => new AlwaysValidValueValidator(),
-            "BOOLEAN" => new BooleanValueValidator(),
-            "NUMERIC" => new NumericValueValidator(),
-            "STRING" => new StringValueValidator(),
-            _ => throw new ArgumentException($"{nameof(IValueValidator)} named {name} was not found!")
-        };
+            return name switch
+            {
+                "NULL" => new AlwaysValidValueValidator(),
+                "BOOLEAN" => new BooleanValueValidator(),
+                "NUMERIC" => new NumericValueValidator(),
+                "STRING" => new StringValueValidator(),
+                _ => throw new ArgumentException($"{nameof(IValueValidator)} named {name} was not found!")
+            };
+        }
     }
 }

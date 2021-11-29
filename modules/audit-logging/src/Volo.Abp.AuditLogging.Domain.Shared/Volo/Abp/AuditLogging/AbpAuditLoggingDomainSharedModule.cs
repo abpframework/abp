@@ -2,15 +2,16 @@
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AuditLogging;
-
-public class AbpAuditLoggingDomainSharedModule : AbpModule
+namespace Volo.Abp.AuditLogging
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public class AbpAuditLoggingDomainSharedModule : AbpModule
     {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources.Add<AuditLoggingResource>("en");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources.Add<AuditLoggingResource>("en");
+            });
+        }
     }
 }

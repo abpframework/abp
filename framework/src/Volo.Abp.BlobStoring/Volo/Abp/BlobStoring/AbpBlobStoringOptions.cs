@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.BlobStoring;
-
-public class AbpBlobStoringOptions
+﻿namespace Volo.Abp.BlobStoring
 {
-    public BlobContainerConfigurations Containers { get; }
-
-    public AbpBlobStoringOptions()
+    public class AbpBlobStoringOptions
     {
-        Containers = new BlobContainerConfigurations();
+        public BlobContainerConfigurations Containers { get; }
+
+        public AbpBlobStoringOptions()
+        {
+            Containers = new BlobContainerConfigurations();
+        }
     }
 }

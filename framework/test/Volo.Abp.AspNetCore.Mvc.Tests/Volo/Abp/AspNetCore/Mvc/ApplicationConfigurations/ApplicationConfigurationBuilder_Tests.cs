@@ -2,18 +2,19 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-public class ApplicationConfigurationBuilder_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    [Fact]
-    public async Task ApplicationConfigurationBuilder_GetAsync()
+    public class ApplicationConfigurationBuilder_Tests : AspNetCoreMvcTestBase
     {
-        var applicationConfigurationBuilder = GetRequiredService<IAbpApplicationConfigurationAppService>();
+        [Fact]
+        public async Task ApplicationConfigurationBuilder_GetAsync()
+        {
+            var applicationConfigurationBuilder = GetRequiredService<IAbpApplicationConfigurationAppService>();
 
-        var config = await applicationConfigurationBuilder.GetAsync();
+            var config = await applicationConfigurationBuilder.GetAsync();
 
-        config.Auth.ShouldNotBeNull();
-        config.Localization.ShouldNotBeNull();
+            config.Auth.ShouldNotBeNull();
+            config.Localization.ShouldNotBeNull();
+        }
     }
 }

@@ -2,12 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-internal static class DbContextExtensions
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public static bool HasRelationalTransactionManager(this DbContext dbContext)
+    internal static class DbContextExtensions
     {
-        return dbContext.Database.GetService<IDbContextTransactionManager>() is IRelationalTransactionManager;
+        public static bool HasRelationalTransactionManager(this DbContext dbContext)
+        {
+            return dbContext.Database.GetService<IDbContextTransactionManager>() is IRelationalTransactionManager;
+        }
     }
 }

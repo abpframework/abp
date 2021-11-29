@@ -4,11 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-public interface IWidgetManager : ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    Task<bool> IsGrantedAsync(Type widgetComponentType);
+    public interface IWidgetManager : ITransientDependency
+    {
+        Task<bool> IsGrantedAsync(Type widgetComponentType);
 
-    Task<bool> IsGrantedAsync(string name);
+        Task<bool> IsGrantedAsync(string name);
+    }
 }

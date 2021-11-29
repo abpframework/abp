@@ -1,9 +1,10 @@
-﻿namespace MyCompanyName.MyProjectName.Settings;
-
-public static class MyProjectNameSettings
+﻿namespace MyCompanyName.MyProjectName.Settings
 {
-    private const string Prefix = "MyProjectName";
+    public static class MyProjectNameSettings
+    {
+        private const string Prefix = "MyProjectName";
 
-    //Add your own setting names here. Example:
-    //public const string MySetting1 = Prefix + ".MySetting1";
+        //Add your own setting names here. Example:
+        //public const string MySetting1 = Prefix + ".MySetting1";
+    }
 }

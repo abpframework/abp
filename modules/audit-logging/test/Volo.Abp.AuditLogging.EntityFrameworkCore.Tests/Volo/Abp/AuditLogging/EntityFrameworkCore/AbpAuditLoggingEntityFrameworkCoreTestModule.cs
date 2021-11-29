@@ -7,37 +7,38 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AuditLogging.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(AbpAuditLoggingTestBaseModule),
-    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
-)]
-public class AbpAuditLoggingEntityFrameworkCoreTestModule : AbpModule
+namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAuditLoggingTestBaseModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
+    )]
+    public class AbpAuditLoggingEntityFrameworkCoreTestModule : AbpModule
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
-
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configure(ctx =>
+            var sqliteConnection = CreateDatabaseAndGetConnection();
+
+            Configure<AbpDbContextOptions>(options =>
             {
-                ctx.DbContextOptions.UseSqlite(sqliteConnection);
+                options.Configure(ctx =>
+                {
+                    ctx.DbContextOptions.UseSqlite(sqliteConnection);
+                });
             });
-        });
-    }
+        }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
+        private static SqliteConnection CreateDatabaseAndGetConnection()
+        {
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
 
-        new AbpAuditLoggingDbContext(
-            new DbContextOptionsBuilder<AbpAuditLoggingDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+            new AbpAuditLoggingDbContext(
+                new DbContextOptionsBuilder<AbpAuditLoggingDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
-        return connection;
+            return connection;
+        }
     }
 }

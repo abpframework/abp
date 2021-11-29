@@ -2,20 +2,21 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit.Public.Web.Renderers;
-
-public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDependency
+namespace Volo.CmsKit.Public.Web.Renderers
 {
-    protected MarkdownPipeline MarkdownPipeline { get; }
-
-    public MarkdownToHtmlRenderer(MarkdownPipeline markdownPipeline)
+    public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDependency
     {
-        MarkdownPipeline = markdownPipeline;
-    }
+        protected MarkdownPipeline MarkdownPipeline { get; }
 
-    public Task<string> RenderAsync(string rawMarkdown)
-    {
-        return Task.FromResult(
-            Markdown.ToHtml(rawMarkdown, MarkdownPipeline));
+        public MarkdownToHtmlRenderer(MarkdownPipeline markdownPipeline)
+        {
+            MarkdownPipeline = markdownPipeline;
+        }
+
+        public Task<string> RenderAsync(string rawMarkdown)
+        {
+            return Task.FromResult(
+                Markdown.ToHtml(rawMarkdown, MarkdownPipeline));
+        }
     }
 }

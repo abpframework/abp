@@ -1,20 +1,21 @@
-﻿namespace System;
-
-/// <summary>
-/// Extension methods for the <see cref="DateTime"/>.
-/// </summary>
-public static class AbpDateTimeExtensions
+﻿namespace System
 {
-    public static DateTime ClearTime(this DateTime dateTime)
+    /// <summary>
+    /// Extension methods for the <see cref="DateTime"/>.
+    /// </summary>
+    public static class AbpDateTimeExtensions
     {
-        return dateTime.Subtract(
-            new TimeSpan(
-                0,
-                dateTime.Hour,
-                dateTime.Minute,
-                dateTime.Second,
-                dateTime.Millisecond
-            )
-        );
+        public static DateTime ClearTime(this DateTime dateTime)
+        {
+            return dateTime.Subtract(
+                new TimeSpan(
+                    0,
+                    dateTime.Hour,
+                    dateTime.Minute,
+                    dateTime.Second,
+                    dateTime.Millisecond
+                )
+            );
+        }
     }
 }

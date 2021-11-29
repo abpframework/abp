@@ -7,42 +7,43 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.PermissionManagement.Web;
-
-[DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
-[DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
-[DependsOn(typeof(AbpAutoMapperModule))]
-public class AbpPermissionManagementWebModule : AbpModule
+namespace Volo.Abp.PermissionManagement.Web
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAutoMapperModule))]
+    public class AbpPermissionManagementWebModule : AbpModule
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
-        });
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
+            });
 
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementWebModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementWebModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>();
+            });
 
-        context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
+            });
 
-        Configure<DynamicJavaScriptProxyOptions>(options =>
-        {
-            options.DisableModule(PermissionManagementRemoteServiceConsts.ModuleName);
-        });
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(PermissionManagementRemoteServiceConsts.ModuleName);
+            });
+        }
     }
 }

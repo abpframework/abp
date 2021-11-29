@@ -1,22 +1,23 @@
 using System;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class TenantResolveContext : ITenantResolveContext
+namespace Volo.Abp.MultiTenancy
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public string TenantIdOrName { get; set; }
-
-    public bool Handled { get; set; }
-
-    public bool HasResolvedTenantOrHost()
+    public class TenantResolveContext : ITenantResolveContext
     {
-        return Handled || TenantIdOrName != null;
-    }
+        public IServiceProvider ServiceProvider { get; }
 
-    public TenantResolveContext(IServiceProvider serviceProvider)
-    {
-        ServiceProvider = serviceProvider;
+        public string TenantIdOrName { get; set; }
+
+        public bool Handled { get; set; }
+
+        public bool HasResolvedTenantOrHost()
+        {
+            return Handled || TenantIdOrName != null;
+        }
+
+        public TenantResolveContext(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
     }
 }

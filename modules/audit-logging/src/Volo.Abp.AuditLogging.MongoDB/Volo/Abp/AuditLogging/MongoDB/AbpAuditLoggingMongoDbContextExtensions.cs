@@ -1,17 +1,18 @@
 ﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.AuditLogging.MongoDB;
-
-public static class AbpAuditLoggingMongoDbContextExtensions
+namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public static void ConfigureAuditLogging(
-        this IMongoModelBuilder builder)
+    public static class AbpAuditLoggingMongoDbContextExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<AuditLog>(b =>
+        public static void ConfigureAuditLogging(
+            this IMongoModelBuilder builder)
         {
-            b.CollectionName = AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogs";
-        });
+            Check.NotNull(builder, nameof(builder));
+
+            builder.Entity<AuditLog>(b =>
+            {
+                b.CollectionName = AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogs";
+            });
+        }
     }
 }

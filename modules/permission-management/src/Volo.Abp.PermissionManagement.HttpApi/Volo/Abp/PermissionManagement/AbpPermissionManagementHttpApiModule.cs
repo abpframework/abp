@@ -5,31 +5,32 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.PermissionManagement.HttpApi;
-
-[DependsOn(
-    typeof(AbpPermissionManagementApplicationContractsModule),
-    typeof(AbpAspNetCoreMvcModule)
-    )]
-public class AbpPermissionManagementHttpApiModule : AbpModule
+namespace Volo.Abp.PermissionManagement.HttpApi
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcModule)
+        )]
+    public class AbpPermissionManagementHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<AbpPermissionManagementResource>()
-                .AddBaseTypes(
-                    typeof(AbpUiResource)
-                );
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpPermissionManagementResource>()
+                    .AddBaseTypes(
+                        typeof(AbpUiResource)
+                    );
+            });
+        }
     }
 }

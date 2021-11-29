@@ -7,25 +7,26 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace Volo.CmsKit.EntityFrameworkCore;
-
-public class IdentityServerHostMigrationsDbContext : AbpDbContext<IdentityServerHostMigrationsDbContext>
+namespace Volo.CmsKit.EntityFrameworkCore
 {
-    public IdentityServerHostMigrationsDbContext(DbContextOptions<IdentityServerHostMigrationsDbContext> options)
-        : base(options)
+    public class IdentityServerHostMigrationsDbContext : AbpDbContext<IdentityServerHostMigrationsDbContext>
     {
+        public IdentityServerHostMigrationsDbContext(DbContextOptions<IdentityServerHostMigrationsDbContext> options)
+            : base(options)
+        {
 
-    }
+        }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ConfigurePermissionManagement();
-        modelBuilder.ConfigureSettingManagement();
-        modelBuilder.ConfigureAuditLogging();
-        modelBuilder.ConfigureIdentity();
-        modelBuilder.ConfigureIdentityServer();
-        modelBuilder.ConfigureTenantManagement();
+            modelBuilder.ConfigurePermissionManagement();
+            modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureAuditLogging();
+            modelBuilder.ConfigureIdentity();
+            modelBuilder.ConfigureIdentityServer();
+            modelBuilder.ConfigureTenantManagement();
+        }
     }
 }

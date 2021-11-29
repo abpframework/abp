@@ -5,27 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc;
-
-public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc
 {
-    private readonly FakeUserClaims _fakeUserClaims;
-
-    public FakeAuthenticationMiddleware(FakeUserClaims fakeUserClaims)
+    public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
     {
-        _fakeUserClaims = fakeUserClaims;
-    }
+        private readonly FakeUserClaims _fakeUserClaims;
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        if (_fakeUserClaims.Claims.Any())
+        public FakeAuthenticationMiddleware(FakeUserClaims fakeUserClaims)
         {
-            context.User = new ClaimsPrincipal(new List<ClaimsIdentity>
+            _fakeUserClaims = fakeUserClaims;
+        }
+
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            if (_fakeUserClaims.Claims.Any())
+            {
+                context.User = new ClaimsPrincipal(new List<ClaimsIdentity>
                 {
                     new ClaimsIdentity(_fakeUserClaims.Claims, "FakeSchema")
                 });
-        }
+            }
 
-        await next(context);
+            await next(context);
+        }
     }
 }

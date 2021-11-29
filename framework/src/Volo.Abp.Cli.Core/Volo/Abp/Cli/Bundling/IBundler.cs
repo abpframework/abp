@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Bundling;
 
-namespace Volo.Abp.Cli.Bundling;
-
-public interface IBundler
+namespace Volo.Abp.Cli.Bundling
 {
-    string Bundle(BundleOptions options, BundleContext context);
+    public interface IBundler
+    {
+        string Bundle(BundleOptions options, BundleContext context);
+    }
 }

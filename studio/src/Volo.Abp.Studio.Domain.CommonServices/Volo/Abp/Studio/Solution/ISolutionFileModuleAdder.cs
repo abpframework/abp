@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.Solution;
-
-public interface ISolutionFileModuleAdder
+namespace Volo.Abp.Studio.Solution
 {
-    Task AddAsync(string TargetModule, string ModuleName);
+    public interface ISolutionFileModuleAdder
+    {
+        Task AddAsync(string TargetModule, string ModuleName);
+    }
 }

@@ -4,47 +4,48 @@ using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.Configuration;
-
-public class ConfigurationAccessor_Tests
+namespace Volo.Abp.Configuration
 {
-    [Fact]
-    public void Should_Use_Empty_ConfigurationRoot_By_Default()
+    public class ConfigurationAccessor_Tests
     {
-        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+        [Fact]
+        public void Should_Use_Empty_ConfigurationRoot_By_Default()
         {
-            var configuration1 = application.Services.GetConfiguration();
-            configuration1.ShouldNotBeNull();
+            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+            {
+                var configuration1 = application.Services.GetConfiguration();
+                configuration1.ShouldNotBeNull();
 
-            application.Initialize();
+                application.Initialize();
 
-            var configuration2 = ResolveConfiguration(application);
+                var configuration2 = ResolveConfiguration(application);
 
-            configuration2.ShouldBe(configuration1);
+                configuration2.ShouldBe(configuration1);
+            }
         }
-    }
 
-    [Fact]
-    public void Should_Use_The_Registered_ConfigurationRoot()
-    {
-        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+        [Fact]
+        public void Should_Use_The_Registered_ConfigurationRoot()
         {
-            var myConfiguration = new ConfigurationBuilder().Build();
-            application.Services.ReplaceConfiguration(myConfiguration);
-            application.Services.GetConfiguration().ShouldBe(myConfiguration);
+            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+            {
+                var myConfiguration = new ConfigurationBuilder().Build();
+                application.Services.ReplaceConfiguration(myConfiguration);
+                application.Services.GetConfiguration().ShouldBe(myConfiguration);
 
-            application.Initialize();
+                application.Initialize();
 
-            var configuration = ResolveConfiguration(application);
+                var configuration = ResolveConfiguration(application);
 
-            configuration.ShouldBe(myConfiguration);
+                configuration.ShouldBe(myConfiguration);
+            }
         }
-    }
 
-    private static IConfiguration ResolveConfiguration(IAbpApplication application)
-    {
-        return application
-            .ServiceProvider
-            .GetRequiredService<IConfiguration>();
+        private static IConfiguration ResolveConfiguration(IAbpApplication application)
+        {
+            return application
+                .ServiceProvider
+                .GetRequiredService<IConfiguration>();
+        }
     }
 }

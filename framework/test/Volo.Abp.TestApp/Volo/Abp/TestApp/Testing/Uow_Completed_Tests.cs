@@ -5,35 +5,36 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing;
-
-public abstract class Uow_Completed_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.TestApp.Testing
 {
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly ICityRepository _cityRepository;
-
-    protected Uow_Completed_Tests()
+    public abstract class Uow_Completed_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-        _cityRepository = GetRequiredService<ICityRepository>();
-    }
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly ICityRepository _cityRepository;
 
-    [Fact]
-    public async Task Should_Be_Able_To_Perform_Database_Operation_On_Uow_Complete()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        protected Uow_Completed_Tests()
         {
-            //Perform an arbitrary database operation
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString()));
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _cityRepository = GetRequiredService<ICityRepository>();
+        }
 
-            uow.OnCompleted(async () =>
+        [Fact]
+        public async Task Should_Be_Able_To_Perform_Database_Operation_On_Uow_Complete()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
             {
+                //Perform an arbitrary database operation
+                await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString()));
+
+                uow.OnCompleted(async () =>
+                {
                     //Perform another database operation inside the OnCompleted handler
                     await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString()));
-            });
+                });
 
-            await uow.CompleteAsync();
+                await uow.CompleteAsync();
+            }
         }
     }
 }

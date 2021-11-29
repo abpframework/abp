@@ -1,6 +1,11 @@
-﻿namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public class FeatureManagementStore_Tests : FeatureManagementStore_Tests<AbpFeatureManagementEntityFrameworkCoreTestModule>
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
+    public class FeatureManagementStore_Tests : FeatureManagementStore_Tests<AbpFeatureManagementEntityFrameworkCoreTestModule>
+    {
 
+    }
 }

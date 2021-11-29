@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table;
-
-public class AbpTableStyleTagHelperService : AbpTagHelperService<AbpTableStyleTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpTableStyleTagHelperService : AbpTagHelperService<AbpTableStyleTagHelper>
     {
-        SetStyle(context, output);
-    }
-
-    protected virtual void SetStyle(TagHelperContext context, TagHelperOutput output)
-    {
-        if (TagHelper.TableStyle != AbpTableStyle.Default)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddClass("table-" + TagHelper.TableStyle.ToString().ToLowerInvariant());
+            SetStyle(context,output);
+        }
+
+        protected virtual void SetStyle(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.TableStyle != AbpTableStyle.Default)
+            {
+                output.Attributes.AddClass("table-" + TagHelper.TableStyle.ToString().ToLowerInvariant());
+            }
         }
     }
 }

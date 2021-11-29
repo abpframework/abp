@@ -5,34 +5,35 @@ using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 
-namespace Volo.Abp.AspNetCore.Authentication.OAuth.Claims;
-
-public class RemoveDuplicateClaimAction : ClaimAction
+namespace Volo.Abp.AspNetCore.Authentication.OAuth.Claims
 {
-    public RemoveDuplicateClaimAction(string claimType)
-        : base(claimType, ClaimValueTypes.String)
+    public class RemoveDuplicateClaimAction : ClaimAction
     {
-    }
-
-    /// <inheritdoc />
-    public override void Run(JsonElement userData, ClaimsIdentity identity, string issuer)
-    {
-        var claims = identity.Claims.Where(c => c.Type == ClaimType).ToArray();
-        if (claims.Length < 2)
+        public RemoveDuplicateClaimAction(string claimType)
+            : base(claimType, ClaimValueTypes.String)
         {
-            return;
         }
 
-        var previousValues = new List<string>();
-        foreach (var claim in claims)
+        /// <inheritdoc />
+        public override void Run(JsonElement userData, ClaimsIdentity identity, string issuer)
         {
-            if (claim.Value.IsIn(previousValues))
+            var claims = identity.Claims.Where(c => c.Type == ClaimType).ToArray();
+            if (claims.Length < 2)
             {
-                identity.RemoveClaim(claim);
+                return;
             }
-            else
+
+            var previousValues = new List<string>();
+            foreach (var claim in claims)
             {
-                previousValues.Add(claim.Value);
+                if (claim.Value.IsIn(previousValues))
+                {
+                    identity.RemoveClaim(claim);
+                }
+                else
+                {
+                    previousValues.Add(claim.Value);
+                }
             }
         }
     }

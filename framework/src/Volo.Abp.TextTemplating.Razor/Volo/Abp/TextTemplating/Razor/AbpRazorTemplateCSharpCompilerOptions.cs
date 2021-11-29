@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public class AbpRazorTemplateCSharpCompilerOptions
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public List<PortableExecutableReference> References { get; }
-
-    public AbpRazorTemplateCSharpCompilerOptions()
+    public class AbpRazorTemplateCSharpCompilerOptions
     {
-        References = new List<PortableExecutableReference>();
+        public List<PortableExecutableReference> References { get; }
+
+        public AbpRazorTemplateCSharpCompilerOptions()
+        {
+            References = new List<PortableExecutableReference>();
+        }
     }
 }

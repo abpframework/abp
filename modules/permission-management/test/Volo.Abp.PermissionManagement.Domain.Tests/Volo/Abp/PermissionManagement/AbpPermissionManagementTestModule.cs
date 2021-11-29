@@ -6,30 +6,31 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementTestBaseModule))]
-public class AbpPermissionManagementTestModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule), 
+        typeof(AbpPermissionManagementTestBaseModule))]
+    public class AbpPermissionManagementTestModule : AbpModule
     {
-        context.Services.AddEntityFrameworkInMemoryDatabase();
-
-        var databaseName = Guid.NewGuid().ToString();
-
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configure(abpDbContextConfigurationContext =>
+            context.Services.AddEntityFrameworkInMemoryDatabase();
+
+            var databaseName = Guid.NewGuid().ToString();
+
+            Configure<AbpDbContextOptions>(options =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
+                options.Configure(abpDbContextConfigurationContext =>
+                {
+                    abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
+                });
             });
-        });
 
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
-        {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
+        }
     }
 }

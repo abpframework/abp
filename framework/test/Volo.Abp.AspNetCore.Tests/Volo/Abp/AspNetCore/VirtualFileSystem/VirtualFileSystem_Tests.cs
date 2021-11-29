@@ -2,17 +2,18 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem;
-
-public class VirtualFileSystem_Tests : AbpAspNetCoreTestBase
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    [Fact]
-    public async Task Get_Virtual_File()
+    public class VirtualFileSystem_Tests : AbpAspNetCoreTestBase
     {
-        var result = await GetResponseAsStringAsync(
-            "/SampleFiles/test1.js"
-        );
+        [Fact]
+        public async Task Get_Virtual_File()
+        {
+            var result = await GetResponseAsStringAsync(
+                "/SampleFiles/test1.js"
+            );
 
-        result.ShouldBe("test1.js-content");
+            result.ShouldBe("test1.js-content");
+        }
     }
 }

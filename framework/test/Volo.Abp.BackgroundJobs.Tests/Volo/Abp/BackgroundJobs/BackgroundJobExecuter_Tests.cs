@@ -2,60 +2,61 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
+namespace Volo.Abp.BackgroundJobs
 {
-    private readonly IBackgroundJobExecuter _backgroundJobExecuter;
-
-    public BackgroundJobExecuter_Tests()
+    public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
     {
-        _backgroundJobExecuter = GetRequiredService<IBackgroundJobExecuter>();
-    }
+        private readonly IBackgroundJobExecuter _backgroundJobExecuter;
 
-    [Fact]
-    public async Task Should_Execute_Tasks()
-    {
-        //Arrange
+        public BackgroundJobExecuter_Tests()
+        {
+            _backgroundJobExecuter = GetRequiredService<IBackgroundJobExecuter>();
+        }
 
-        var jobObject = GetRequiredService<MyJob>();
-        jobObject.ExecutedValues.ShouldBeEmpty();
+        [Fact]
+        public async Task Should_Execute_Tasks()
+        {
+            //Arrange
 
-        //Act
+            var jobObject = GetRequiredService<MyJob>();
+            jobObject.ExecutedValues.ShouldBeEmpty();
 
-        await _backgroundJobExecuter.ExecuteAsync(
-            new JobExecutionContext(
-                ServiceProvider,
-                typeof(MyJob),
-                new MyJobArgs("42")
-            )
-        );
+            //Act
 
-        //Assert
+            await _backgroundJobExecuter.ExecuteAsync(
+                new JobExecutionContext(
+                    ServiceProvider,
+                    typeof(MyJob),
+                    new MyJobArgs("42")
+                )
+            );
 
-        jobObject.ExecutedValues.ShouldContain("42");
-    }
+            //Assert
 
-    [Fact]
-    public async Task Should_Execute_Async_Tasks()
-    {
-        //Arrange
+            jobObject.ExecutedValues.ShouldContain("42");
+        }
 
-        var jobObject = GetRequiredService<MyAsyncJob>();
-        jobObject.ExecutedValues.ShouldBeEmpty();
+        [Fact]
+        public async Task Should_Execute_Async_Tasks()
+        {
+            //Arrange
 
-        //Act
+            var jobObject = GetRequiredService<MyAsyncJob>();
+            jobObject.ExecutedValues.ShouldBeEmpty();
 
-        await _backgroundJobExecuter.ExecuteAsync(
-            new JobExecutionContext(
-                ServiceProvider,
-                typeof(MyAsyncJob),
-                new MyAsyncJobArgs("42")
-            )
-        );
+            //Act
 
-        //Assert
+            await _backgroundJobExecuter.ExecuteAsync(
+                new JobExecutionContext(
+                    ServiceProvider,
+                    typeof(MyAsyncJob),
+                    new MyAsyncJobArgs("42")
+                )
+            );
 
-        jobObject.ExecutedValues.ShouldContain("42");
+            //Assert
+
+            jobObject.ExecutedValues.ShouldContain("42");
+        }
     }
 }

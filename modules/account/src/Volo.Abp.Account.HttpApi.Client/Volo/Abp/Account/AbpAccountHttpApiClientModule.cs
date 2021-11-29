@@ -3,21 +3,22 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Account;
-
-[DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpHttpClientModule))]
-public class AbpAccountHttpApiClientModule : AbpModule
+namespace Volo.Abp.Account
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(AbpHttpClientModule))]
+    public class AbpAccountHttpApiClientModule : AbpModule
     {
-        context.Services.AddStaticHttpClientProxies(typeof(AbpAccountApplicationContractsModule).Assembly,
-            AccountRemoteServiceConsts.RemoteServiceName);
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAccountHttpApiClientModule>();
-        });
+            context.Services.AddStaticHttpClientProxies(typeof(AbpAccountApplicationContractsModule).Assembly,
+                AccountRemoteServiceConsts.RemoteServiceName);
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAccountHttpApiClientModule>();
+            });
+        }
     }
 }

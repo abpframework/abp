@@ -2,28 +2,29 @@
 using System.Security.Claims;
 using System.Threading;
 
-namespace Volo.Abp.Security.Claims;
-
-public abstract class CurrentPrincipalAccessorBase : ICurrentPrincipalAccessor
+namespace Volo.Abp.Security.Claims
 {
-    public ClaimsPrincipal Principal => _currentPrincipal.Value ?? GetClaimsPrincipal();
-
-    private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
-
-    protected abstract ClaimsPrincipal GetClaimsPrincipal();
-
-    public virtual IDisposable Change(ClaimsPrincipal principal)
+    public abstract class CurrentPrincipalAccessorBase : ICurrentPrincipalAccessor
     {
-        return SetCurrent(principal);
-    }
+        public ClaimsPrincipal Principal => _currentPrincipal.Value ?? GetClaimsPrincipal();
+        
+        private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
+        
+        protected abstract ClaimsPrincipal GetClaimsPrincipal();
 
-    private IDisposable SetCurrent(ClaimsPrincipal principal)
-    {
-        var parent = Principal;
-        _currentPrincipal.Value = principal;
-        return new DisposeAction(() =>
+        public virtual IDisposable Change(ClaimsPrincipal principal)
         {
-            _currentPrincipal.Value = parent;
-        });
+            return SetCurrent(principal);
+        }
+
+        private IDisposable SetCurrent(ClaimsPrincipal principal)
+        {
+            var parent = Principal;
+            _currentPrincipal.Value = principal;
+            return new DisposeAction(() =>
+            {
+                _currentPrincipal.Value = parent;
+            });
+        }
     }
 }

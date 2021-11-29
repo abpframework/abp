@@ -5,20 +5,21 @@ using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.SettingManagement;
-
-public class AllowTenantsToChangeEmailSettingsFeatureSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
+namespace Volo.Abp.SettingManagement
 {
-    public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
+    public class AllowTenantsToChangeEmailSettingsFeatureSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
     {
-        var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
-
-        if (!currentTenant.IsAvailable)
+        public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
         {
-            return true;
-        }
+            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
 
-        var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-        return await featureChecker.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+            if (!currentTenant.IsAvailable)
+            {
+                return true;
+            }
+
+            var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            return await featureChecker.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+        }
     }
 }

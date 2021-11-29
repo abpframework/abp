@@ -6,39 +6,40 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.ExceptionHandling;
-
-public class ExceptionNotifier : IExceptionNotifier, ITransientDependency
+namespace Volo.Abp.ExceptionHandling
 {
-    public ILogger<ExceptionNotifier> Logger { get; set; }
-
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-    public ExceptionNotifier(IServiceScopeFactory serviceScopeFactory)
+    public class ExceptionNotifier : IExceptionNotifier, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        Logger = NullLogger<ExceptionNotifier>.Instance;
-    }
+        public ILogger<ExceptionNotifier> Logger { get; set; }
 
-    public virtual async Task NotifyAsync([NotNull] ExceptionNotificationContext context)
-    {
-        Check.NotNull(context, nameof(context));
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public ExceptionNotifier(IServiceScopeFactory serviceScopeFactory)
         {
-            var exceptionSubscribers = scope.ServiceProvider
-                .GetServices<IExceptionSubscriber>();
+            ServiceScopeFactory = serviceScopeFactory;
+            Logger = NullLogger<ExceptionNotifier>.Instance;
+        }
 
-            foreach (var exceptionSubscriber in exceptionSubscribers)
+        public virtual async Task NotifyAsync([NotNull] ExceptionNotificationContext context)
+        {
+            Check.NotNull(context, nameof(context));
+
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                try
+                var exceptionSubscribers = scope.ServiceProvider
+                    .GetServices<IExceptionSubscriber>();
+
+                foreach (var exceptionSubscriber in exceptionSubscribers)
                 {
-                    await exceptionSubscriber.HandleAsync(context);
-                }
-                catch (Exception e)
-                {
-                    Logger.LogWarning($"Exception subscriber of type {exceptionSubscriber.GetType().AssemblyQualifiedName} has thrown an exception!");
-                    Logger.LogException(e, LogLevel.Warning);
+                    try
+                    {
+                        await exceptionSubscriber.HandleAsync(context);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogWarning($"Exception subscriber of type {exceptionSubscriber.GetType().AssemblyQualifiedName} has thrown an exception!");
+                        Logger.LogException(e, LogLevel.Warning);
+                    }
                 }
             }
         }

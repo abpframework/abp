@@ -2,56 +2,57 @@
 using Shouldly;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.AspNetCore.Mvc.Uow;
-
-[Route("api/unitofwork-test")]
-public class UnitOfWorkTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
-    private readonly TestUnitOfWorkConfig _testUnitOfWorkConfig;
-
-    public UnitOfWorkTestController(TestUnitOfWorkConfig testUnitOfWorkConfig)
+    [Route("api/unitofwork-test")]
+    public class UnitOfWorkTestController : AbpController
     {
-        _testUnitOfWorkConfig = testUnitOfWorkConfig;
-    }
+        private readonly TestUnitOfWorkConfig _testUnitOfWorkConfig;
 
-    [HttpGet]
-    [Route("ActionRequiresUow")]
-    public ActionResult ActionRequiresUow()
-    {
-        CurrentUnitOfWork.ShouldNotBeNull();
-        CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+        public UnitOfWorkTestController(TestUnitOfWorkConfig testUnitOfWorkConfig)
+        {
+            _testUnitOfWorkConfig = testUnitOfWorkConfig;
+        }
 
-        return Content("OK");
-    }
+        [HttpGet]
+        [Route("ActionRequiresUow")]
+        public ActionResult ActionRequiresUow()
+        {
+            CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
 
-    [HttpPost]
-    [Route("ActionRequiresUowPost")]
-    public ActionResult ActionRequiresUowPost()
-    {
-        CurrentUnitOfWork.ShouldNotBeNull();
-        CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
+            return Content("OK");
+        }
 
-        return Content("OK");
-    }
+        [HttpPost]
+        [Route("ActionRequiresUowPost")]
+        public ActionResult ActionRequiresUowPost()
+        {
+            CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
 
-    [HttpGet]
-    [Route("HandledException")]
-    [UnitOfWork(isTransactional: true)]
-    public void HandledException()
-    {
-        CurrentUnitOfWork.ShouldNotBeNull();
-        CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
+            return Content("OK");
+        }
 
-        throw new UserFriendlyException("This is a sample exception!");
-    }
+        [HttpGet]
+        [Route("HandledException")]
+        [UnitOfWork(isTransactional: true)]
+        public void HandledException()
+        {
+            CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
 
-    [HttpGet]
-    [Route("ExceptionOnComplete")]
-    public void ExceptionOnComplete()
-    {
-        CurrentUnitOfWork.ShouldNotBeNull();
-        CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+            throw new UserFriendlyException("This is a sample exception!");
+        }
 
-        _testUnitOfWorkConfig.ThrowExceptionOnComplete = true;
+        [HttpGet]
+        [Route("ExceptionOnComplete")]
+        public void ExceptionOnComplete()
+        {
+            CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+
+            _testUnitOfWorkConfig.ThrowExceptionOnComplete = true;
+        }
     }
 }

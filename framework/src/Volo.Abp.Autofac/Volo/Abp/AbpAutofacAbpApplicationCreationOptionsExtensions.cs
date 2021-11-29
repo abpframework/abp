@@ -2,27 +2,28 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 
-namespace Volo.Abp;
-
-public static class AbpAutofacAbpApplicationCreationOptionsExtensions
+namespace Volo.Abp
 {
-    public static void UseAutofac(this AbpApplicationCreationOptions options)
+    public static class AbpAutofacAbpApplicationCreationOptionsExtensions
     {
-        options.Services.AddAutofacServiceProviderFactory();
-    }
+        public static void UseAutofac(this AbpApplicationCreationOptions options)
+        {
+            options.Services.AddAutofacServiceProviderFactory();
+        }
 
-    public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services)
-    {
-        return services.AddAutofacServiceProviderFactory(new ContainerBuilder());
-    }
+        public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services)
+        {
+            return services.AddAutofacServiceProviderFactory(new ContainerBuilder());
+        }
 
-    public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services, ContainerBuilder containerBuilder)
-    {
-        var factory = new AbpAutofacServiceProviderFactory(containerBuilder);
+        public static AbpAutofacServiceProviderFactory AddAutofacServiceProviderFactory(this IServiceCollection services, ContainerBuilder containerBuilder)
+        {
+            var factory = new AbpAutofacServiceProviderFactory(containerBuilder);
 
-        services.AddObjectAccessor(containerBuilder);
-        services.AddSingleton((IServiceProviderFactory<ContainerBuilder>)factory);
+            services.AddObjectAccessor(containerBuilder);
+            services.AddSingleton((IServiceProviderFactory<ContainerBuilder>) factory);
 
-        return factory;
+            return factory;
+        }
     }
 }

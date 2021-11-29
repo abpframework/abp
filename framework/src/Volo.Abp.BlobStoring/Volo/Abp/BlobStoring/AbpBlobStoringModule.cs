@@ -3,25 +3,26 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BlobStoring;
-
-[DependsOn(
-    typeof(AbpMultiTenancyModule),
-    typeof(AbpThreadingModule)
-    )]
-public class AbpBlobStoringModule : AbpModule
+namespace Volo.Abp.BlobStoring
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpThreadingModule)
+        )]
+    public class AbpBlobStoringModule : AbpModule
     {
-        context.Services.AddTransient(
-            typeof(IBlobContainer<>),
-            typeof(BlobContainer<>)
-        );
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTransient(
+                typeof(IBlobContainer<>),
+                typeof(BlobContainer<>)
+            );
 
-        context.Services.AddTransient(
-            typeof(IBlobContainer),
-            serviceProvider => serviceProvider
-                .GetRequiredService<IBlobContainer<DefaultContainer>>()
-        );
+            context.Services.AddTransient(
+                typeof(IBlobContainer),
+                serviceProvider => serviceProvider
+                    .GetRequiredService<IBlobContainer<DefaultContainer>>()
+            );
+        }
     }
 }

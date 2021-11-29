@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.VirtualFileExplorer.Web.Localization;
 
-namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer;
-
-public abstract class VirtualFileExplorerPageModel : AbpPageModel
+namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
 {
-    protected VirtualFileExplorerPageModel()
+    public abstract class VirtualFileExplorerPageModel : AbpPageModel
     {
-        LocalizationResourceType = typeof(VirtualFileExplorerResource);
-        ObjectMapperContext = typeof(AbpVirtualFileExplorerWebModule);
+        protected VirtualFileExplorerPageModel()
+        {
+            LocalizationResourceType = typeof(VirtualFileExplorerResource);
+            ObjectMapperContext = typeof(AbpVirtualFileExplorerWebModule);
+        }
     }
 }

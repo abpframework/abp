@@ -11,60 +11,61 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
-
-public class BlogPostModel : CmsKitPublicPageModelBase
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs
 {
-    [BindProperty(SupportsGet = true)]
-    public string BlogSlug { get; set; }
-
-    [BindProperty(SupportsGet = true)]
-    public string BlogPostSlug { get; set; }
-
-    public BlogPostPublicDto BlogPost { get; private set; }
-
-    public BlogFeatureDto CommentsFeature { get; private set; }
-
-    public BlogFeatureDto ReactionsFeature { get; private set; }
-
-    public BlogFeatureDto RatingsFeature { get; private set; }
-
-    public BlogFeatureDto TagsFeature { get; private set; }
-
-    protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
-
-    protected IBlogFeatureAppService BlogFeatureAppService { get; }
-
-    public BlogPostModel(
-        IBlogPostPublicAppService blogPostPublicAppService,
-        IBlogFeatureAppService blogFeaturePublicAppService)
+    public class BlogPostModel : CmsKitPublicPageModelBase
     {
-        BlogPostPublicAppService = blogPostPublicAppService;
-        BlogFeatureAppService = blogFeaturePublicAppService;
-    }
+        [BindProperty(SupportsGet = true)]
+        public string BlogSlug { get; set; }
 
-    public virtual async Task OnGetAsync()
-    {
-        BlogPost = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
+        [BindProperty(SupportsGet = true)]
+        public string BlogPostSlug { get; set; }
 
-        if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        public BlogPostPublicDto BlogPost { get; private set; }
+
+        public BlogFeatureDto CommentsFeature { get; private set; }
+
+        public BlogFeatureDto ReactionsFeature { get; private set; }
+
+        public BlogFeatureDto RatingsFeature { get; private set; }
+
+        public BlogFeatureDto TagsFeature { get; private set; }
+
+        protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
+
+        protected IBlogFeatureAppService BlogFeatureAppService { get; }
+
+        public BlogPostModel(
+            IBlogPostPublicAppService blogPostPublicAppService,
+            IBlogFeatureAppService blogFeaturePublicAppService)
         {
-            CommentsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.CommentsFeature.Name);
+            BlogPostPublicAppService = blogPostPublicAppService;
+            BlogFeatureAppService = blogFeaturePublicAppService;
         }
 
-        if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        public virtual async Task OnGetAsync()
         {
-            ReactionsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.ReactionsFeature.Name);
-        }
+            BlogPost = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
 
-        if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
-        {
-            RatingsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.RatingsFeature.Name);
-        }
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+            {
+                CommentsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.CommentsFeature.Name);
+            }
 
-        if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
-        {
-            TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
+            if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+            {
+                ReactionsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.ReactionsFeature.Name);
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+            {
+                RatingsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.RatingsFeature.Name);
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
+            }
         }
     }
 }

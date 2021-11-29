@@ -1,17 +1,18 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-public static class MediaDescriptorChecks
+namespace Volo.CmsKit.MediaDescriptors
 {
-    public static bool IsValidMediaFileName(string name)
+    public static class MediaDescriptorChecks
     {
-        if (string.IsNullOrWhiteSpace(name))
+        public static bool IsValidMediaFileName(string name)
         {
-            return false;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+            
+            return !Path.GetInvalidFileNameChars().Any(name.Contains);
         }
-
-        return !Path.GetInvalidFileNameChars().Any(name.Contains);
     }
 }

@@ -12,299 +12,300 @@ using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Uow.MongoDB;
-
-public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
-    where TMongoDbContext : IAbpMongoDbContext
+namespace Volo.Abp.Uow.MongoDB
 {
-    public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
-
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly IConnectionStringResolver _connectionStringResolver;
-    private readonly ICancellationTokenProvider _cancellationTokenProvider;
-    private readonly ICurrentTenant _currentTenant;
-    private readonly AbpMongoDbContextOptions _options;
-
-    public UnitOfWorkMongoDbContextProvider(
-        IUnitOfWorkManager unitOfWorkManager,
-        IConnectionStringResolver connectionStringResolver,
-        ICancellationTokenProvider cancellationTokenProvider,
-        ICurrentTenant currentTenant,
-        IOptions<AbpMongoDbContextOptions> options)
+    public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
+        where TMongoDbContext : IAbpMongoDbContext
     {
-        _unitOfWorkManager = unitOfWorkManager;
-        _connectionStringResolver = connectionStringResolver;
-        _cancellationTokenProvider = cancellationTokenProvider;
-        _currentTenant = currentTenant;
-        _options = options.Value;
+        public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
 
-        Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
-    }
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly AbpMongoDbContextOptions _options;
 
-    [Obsolete("Use CreateDbContextAsync")]
-    public TMongoDbContext GetDbContext()
-    {
-        if (UnitOfWork.EnableObsoleteDbContextCreationWarning &&
-            !UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.Value)
+        public UnitOfWorkMongoDbContextProvider(
+            IUnitOfWorkManager unitOfWorkManager,
+            IConnectionStringResolver connectionStringResolver,
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICurrentTenant currentTenant,
+            IOptions<AbpMongoDbContextOptions> options)
         {
-            Logger.LogWarning(
-                "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
-                "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
-                "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
-            );
-            Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            _unitOfWorkManager = unitOfWorkManager;
+            _connectionStringResolver = connectionStringResolver;
+            _cancellationTokenProvider = cancellationTokenProvider;
+            _currentTenant = currentTenant;
+            _options = options.Value;
+
+            Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
         }
 
-        var unitOfWork = _unitOfWorkManager.Current;
-        if (unitOfWork == null)
+        [Obsolete("Use CreateDbContextAsync")]
+        public TMongoDbContext GetDbContext()
         {
-            throw new AbpException(
-                $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
+            if (UnitOfWork.EnableObsoleteDbContextCreationWarning &&
+                !UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.Value)
+            {
+                Logger.LogWarning(
+                    "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
+                    "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
+                    "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
+                );
+                Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            }
+
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
+            {
+                throw new AbpException(
+                    $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
+            }
+
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = ResolveConnectionString(targetDbContextType);
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+
+            var mongoUrl = new MongoUrl(connectionString);
+            var databaseName = mongoUrl.DatabaseName;
+            if (databaseName.IsNullOrWhiteSpace())
+            {
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
+            }
+
+            //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
+
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
-        var connectionString = ResolveConnectionString(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
-
-        var mongoUrl = new MongoUrl(connectionString);
-        var databaseName = mongoUrl.DatabaseName;
-        if (databaseName.IsNullOrWhiteSpace())
+        public async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
         {
-            databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
+            {
+                throw new AbpException(
+                    $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
+            }
+
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+
+            var mongoUrl = new MongoUrl(connectionString);
+            var databaseName = mongoUrl.DatabaseName;
+            if (databaseName.IsNullOrWhiteSpace())
+            {
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
+            }
+
+            //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
+            var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
+            if (databaseApi == null)
+            {
+                databaseApi = new MongoDbDatabaseApi(
+                    await CreateDbContextAsync(
+                        unitOfWork,
+                        mongoUrl,
+                        databaseName,
+                        cancellationToken
+                    )
+                );
+
+                unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
+            }
+
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
-        //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
-        var databaseApi = unitOfWork.GetOrAddDatabaseApi(
-            dbContextKey,
-            () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
+        [Obsolete("Use CreateDbContextAsync")]
 
-        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
-    }
-
-    public async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
-    {
-        var unitOfWork = _unitOfWorkManager.Current;
-        if (unitOfWork == null)
+        private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
         {
-            throw new AbpException(
-                $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
+            var client = CreateMongoClient(mongoUrl);
+            var database = client.GetDatabase(databaseName);
+
+            if (unitOfWork.Options.IsTransactional)
+            {
+                return CreateDbContextWithTransaction(unitOfWork, mongoUrl, client, database);
+            }
+
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+
+            return dbContext;
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
-        var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
-
-        var mongoUrl = new MongoUrl(connectionString);
-        var databaseName = mongoUrl.DatabaseName;
-        if (databaseName.IsNullOrWhiteSpace())
+        private async Task<TMongoDbContext> CreateDbContextAsync(
+            IUnitOfWork unitOfWork,
+            MongoUrl mongoUrl,
+            string databaseName,
+            CancellationToken cancellationToken = default)
         {
-            databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
-        }
+            var client = CreateMongoClient(mongoUrl);
+            var database = client.GetDatabase(databaseName);
 
-        //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
-        var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
-        if (databaseApi == null)
-        {
-            databaseApi = new MongoDbDatabaseApi(
-                await CreateDbContextAsync(
+            if (unitOfWork.Options.IsTransactional)
+            {
+                return await CreateDbContextWithTransactionAsync(
                     unitOfWork,
                     mongoUrl,
-                    databaseName,
+                    client,
+                    database,
                     cancellationToken
-                )
-            );
-
-            unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
-        }
-
-        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
-    }
-
-    [Obsolete("Use CreateDbContextAsync")]
-
-    private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
-    {
-        var client = CreateMongoClient(mongoUrl);
-        var database = client.GetDatabase(databaseName);
-
-        if (unitOfWork.Options.IsTransactional)
-        {
-            return CreateDbContextWithTransaction(unitOfWork, mongoUrl, client, database);
-        }
-
-        var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
-        dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
-
-        return dbContext;
-    }
-
-    private async Task<TMongoDbContext> CreateDbContextAsync(
-        IUnitOfWork unitOfWork,
-        MongoUrl mongoUrl,
-        string databaseName,
-        CancellationToken cancellationToken = default)
-    {
-        var client = CreateMongoClient(mongoUrl);
-        var database = client.GetDatabase(databaseName);
-
-        if (unitOfWork.Options.IsTransactional)
-        {
-            return await CreateDbContextWithTransactionAsync(
-                unitOfWork,
-                mongoUrl,
-                client,
-                database,
-                cancellationToken
-            );
-        }
-
-        var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
-        dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
-
-        return dbContext;
-    }
-
-    [Obsolete("Use CreateDbContextWithTransactionAsync")]
-    private TMongoDbContext CreateDbContextWithTransaction(
-        IUnitOfWork unitOfWork,
-        MongoUrl url,
-        MongoClient client,
-        IMongoDatabase database)
-    {
-        var transactionApiKey = $"MongoDb_{url}";
-        var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
-        var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
-
-        if (activeTransaction?.SessionHandle == null)
-        {
-            var session = client.StartSession();
-
-            if (unitOfWork.Options.Timeout.HasValue)
-            {
-                session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                );
             }
 
-            try
-            {
-                session.StartTransaction();
-            }
-            catch (NotSupportedException e)
-            {
-                Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
-                Logger.LogException(e);
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
 
-                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
-                return dbContext;
-            }
-
-            unitOfWork.AddTransactionApi(
-                transactionApiKey,
-                new MongoDbTransactionApi(
-                    session,
-                    _cancellationTokenProvider
-                )
-            );
-
-            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
+            return dbContext;
         }
-        else
+
+        [Obsolete("Use CreateDbContextWithTransactionAsync")]
+        private TMongoDbContext CreateDbContextWithTransaction(
+            IUnitOfWork unitOfWork,
+            MongoUrl url,
+            MongoClient client,
+            IMongoDatabase database)
         {
-            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, activeTransaction.SessionHandle);
+            var transactionApiKey = $"MongoDb_{url}";
+            var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+
+            if (activeTransaction?.SessionHandle == null)
+            {
+                var session = client.StartSession();
+
+                if (unitOfWork.Options.Timeout.HasValue)
+                {
+                    session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                }
+
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
+
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
+
+                unitOfWork.AddTransactionApi(
+                    transactionApiKey,
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
+                );
+
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
+            }
+            else
+            {
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, activeTransaction.SessionHandle);
+            }
+
+            return dbContext;
         }
 
-        return dbContext;
-    }
-
-    private async Task<TMongoDbContext> CreateDbContextWithTransactionAsync(
-        IUnitOfWork unitOfWork,
-        MongoUrl url,
-        MongoClient client,
-        IMongoDatabase database,
-        CancellationToken cancellationToken = default)
-    {
-        var transactionApiKey = $"MongoDb_{url}";
-        var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
-        var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
-
-        if (activeTransaction?.SessionHandle == null)
+        private async Task<TMongoDbContext> CreateDbContextWithTransactionAsync(
+            IUnitOfWork unitOfWork,
+            MongoUrl url,
+            MongoClient client,
+            IMongoDatabase database,
+            CancellationToken cancellationToken = default)
         {
-            var session = await client.StartSessionAsync(cancellationToken: GetCancellationToken(cancellationToken));
+            var transactionApiKey = $"MongoDb_{url}";
+            var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
-            if (unitOfWork.Options.Timeout.HasValue)
+            if (activeTransaction?.SessionHandle == null)
             {
-                session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                var session = await client.StartSessionAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+                if (unitOfWork.Options.Timeout.HasValue)
+                {
+                    session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                }
+
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                    Logger.LogException(e);
+
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
+                
+                unitOfWork.AddTransactionApi(
+                    transactionApiKey,
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
+                );
+
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
+            }
+            else
+            {
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, activeTransaction.SessionHandle);
             }
 
-            try
-            {
-                session.StartTransaction();
-            }
-            catch (NotSupportedException e)
-            {
-                Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
-                Logger.LogException(e);
-
-                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
-                return dbContext;
-            }
-
-            unitOfWork.AddTransactionApi(
-                transactionApiKey,
-                new MongoDbTransactionApi(
-                    session,
-                    _cancellationTokenProvider
-                )
-            );
-
-            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
+            return dbContext;
         }
-        else
+
+        private async Task<string> ResolveConnectionStringAsync(Type dbContextType)
         {
-            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, activeTransaction.SessionHandle);
-        }
-
-        return dbContext;
-    }
-
-    private async Task<string> ResolveConnectionStringAsync(Type dbContextType)
-    {
-        // Multi-tenancy unaware contexts should always use the host connection string
-        if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
-        {
-            using (_currentTenant.Change(null))
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
             {
-                return await _connectionStringResolver.ResolveAsync(dbContextType);
+                using (_currentTenant.Change(null))
+                {
+                    return await _connectionStringResolver.ResolveAsync(dbContextType);
+                }
             }
+
+            return await _connectionStringResolver.ResolveAsync(dbContextType);
         }
 
-        return await _connectionStringResolver.ResolveAsync(dbContextType);
-    }
-
-    [Obsolete("Use ResolveConnectionStringAsync method.")]
-    private string ResolveConnectionString(Type dbContextType)
-    {
-        // Multi-tenancy unaware contexts should always use the host connection string
-        if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+        [Obsolete("Use ResolveConnectionStringAsync method.")]
+        private string ResolveConnectionString(Type dbContextType)
         {
-            using (_currentTenant.Change(null))
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
             {
-                return _connectionStringResolver.Resolve(dbContextType);
+                using (_currentTenant.Change(null))
+                {
+                    return _connectionStringResolver.Resolve(dbContextType);
+                }
             }
+
+            return _connectionStringResolver.Resolve(dbContextType);
         }
 
-        return _connectionStringResolver.Resolve(dbContextType);
-    }
+        private MongoClient CreateMongoClient(MongoUrl mongoUrl)
+        {
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
 
-    private MongoClient CreateMongoClient(MongoUrl mongoUrl)
-    {
-        var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
-        _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
+            return new MongoClient(mongoClientSettings);
+        }
 
-        return new MongoClient(mongoClientSettings);
-    }
-
-    protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
-    {
-        return _cancellationTokenProvider.FallbackToProvider(preferredValue);
+        protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
+        {
+            return _cancellationTokenProvider.FallbackToProvider(preferredValue);
+        }
     }
 }

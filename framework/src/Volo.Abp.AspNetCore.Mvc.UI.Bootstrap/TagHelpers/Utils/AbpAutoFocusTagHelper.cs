@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Utils;
-
-[HtmlTargetElement(Attributes = "abp-auto-focus")]
-public class AbpAutoFocusTagHelper : AbpTagHelper
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Utils
 {
-    [HtmlAttributeName("abp-auto-focus")]
-    public bool AutoFocus { get; set; }
-
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    [HtmlTargetElement(Attributes = "abp-auto-focus")]
+    public class AbpAutoFocusTagHelper : AbpTagHelper
     {
-        if (AutoFocus)
+        [HtmlAttributeName("abp-auto-focus")]
+        public bool AutoFocus { get; set; }
+
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-auto-focus", "true");
+            if (AutoFocus)
+            {
+                output.Attributes.Add("data-auto-focus", "true");
+            }
         }
     }
 }

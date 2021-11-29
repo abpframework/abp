@@ -3,12 +3,13 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.MongoDB;
-
-[ConnectionStringName("TestApp")]
-public interface ITestAppMongoDbContext : IAbpMongoDbContext
+namespace Volo.Abp.TestApp.MongoDB
 {
-    IMongoCollection<Person> People { get; }
+    [ConnectionStringName("TestApp")]
+    public interface ITestAppMongoDbContext : IAbpMongoDbContext
+    {
+        IMongoCollection<Person> People { get; }
 
-    IMongoCollection<City> Cities { get; }
+        IMongoCollection<City> Cities { get; }
+    }
 }

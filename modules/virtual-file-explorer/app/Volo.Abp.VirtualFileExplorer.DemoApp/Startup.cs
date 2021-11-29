@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.VirtualFileExplorer.DemoApp;
-
-public class Startup
+namespace Volo.Abp.VirtualFileExplorer.DemoApp
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        services.AddApplication<AbpVirtualFileExplorerDemoAppModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<AbpVirtualFileExplorerDemoAppModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

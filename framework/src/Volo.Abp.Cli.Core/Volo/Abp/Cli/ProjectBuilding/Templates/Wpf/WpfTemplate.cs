@@ -1,15 +1,16 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
-
-public class WpfTemplate : WpfTemplateBase
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Wpf
 {
-    /// <summary>
-    /// "wpf".
-    /// </summary>
-    public const string TemplateName = "wpf";
-
-    public WpfTemplate()
-        : base(TemplateName)
+    public class WpfTemplate : WpfTemplateBase
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/WPF";
+        /// <summary>
+        /// "wpf".
+        /// </summary>
+        public const string TemplateName = "wpf";
+
+        public WpfTemplate()
+            : base(TemplateName)
+        {
+            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/WPF";
+        }
     }
 }

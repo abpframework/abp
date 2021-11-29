@@ -1,52 +1,53 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Http.Client;
-
-public static class RemoteServiceConfigurationExtensions
+namespace Volo.Abp.Http.Client
 {
-    public const string IdentityClientName = "IdentityClient";
-    public const string UseCurrentAccessTokenName = "UseCurrentAccessToken";
-
-    [CanBeNull]
-    public static string GetIdentityClient([NotNull] this RemoteServiceConfiguration configuration)
+    public static class RemoteServiceConfigurationExtensions
     {
-        Check.NotNullOrEmpty(configuration, nameof(configuration));
+        public const string IdentityClientName = "IdentityClient";
+        public const string UseCurrentAccessTokenName = "UseCurrentAccessToken";
 
-        return configuration.GetOrDefault(IdentityClientName);
-    }
-
-    public static RemoteServiceConfiguration SetIdentityClient([NotNull] this RemoteServiceConfiguration configuration, [CanBeNull] string value)
-    {
-        configuration[IdentityClientName] = value;
-        return configuration;
-    }
-
-    [CanBeNull]
-    public static bool? GetUseCurrentAccessToken([NotNull] this RemoteServiceConfiguration configuration)
-    {
-        Check.NotNullOrEmpty(configuration, nameof(configuration));
-
-        var value = configuration.GetOrDefault(UseCurrentAccessTokenName);
-        if (value == null)
+        [CanBeNull]
+        public static string GetIdentityClient([NotNull] this RemoteServiceConfiguration configuration)
         {
-            return null;
+            Check.NotNullOrEmpty(configuration, nameof(configuration));
+
+            return configuration.GetOrDefault(IdentityClientName);
         }
 
-        return bool.Parse(value);
-    }
-
-    public static RemoteServiceConfiguration SetUseCurrentAccessToken([NotNull] this RemoteServiceConfiguration configuration, [CanBeNull] bool? value)
-    {
-        if (value == null)
+        public static RemoteServiceConfiguration SetIdentityClient([NotNull] this RemoteServiceConfiguration configuration, [CanBeNull] string value)
         {
-            configuration.Remove(UseCurrentAccessTokenName);
-        }
-        else
-        {
-            configuration[UseCurrentAccessTokenName] = value.Value.ToString().ToLowerInvariant();
+            configuration[IdentityClientName] = value;
+            return configuration;
         }
 
-        return configuration;
+        [CanBeNull]
+        public static bool? GetUseCurrentAccessToken([NotNull] this RemoteServiceConfiguration configuration)
+        {
+            Check.NotNullOrEmpty(configuration, nameof(configuration));
+
+            var value = configuration.GetOrDefault(UseCurrentAccessTokenName);
+            if (value == null)
+            {
+                return null;
+            }
+
+            return bool.Parse(value);
+        }
+
+        public static RemoteServiceConfiguration SetUseCurrentAccessToken([NotNull] this RemoteServiceConfiguration configuration, [CanBeNull] bool? value)
+        {
+            if (value == null)
+            {
+                configuration.Remove(UseCurrentAccessTokenName);
+            }
+            else
+            {
+                configuration[UseCurrentAccessTokenName] = value.Value.ToString().ToLowerInvariant();
+            }
+
+            return configuration;
+        }
     }
 }

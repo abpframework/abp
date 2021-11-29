@@ -1,13 +1,14 @@
 ﻿using System.Text.Json;
 
-namespace Volo.Abp.Domain.Repositories.MemoryDb;
-
-public class Utf8JsonMemoryDbSerializerOptions
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public JsonSerializerOptions JsonSerializerOptions { get; }
-
-    public Utf8JsonMemoryDbSerializerOptions()
+    public class Utf8JsonMemoryDbSerializerOptions
     {
-        JsonSerializerOptions = new JsonSerializerOptions();
+        public JsonSerializerOptions JsonSerializerOptions { get; }
+
+        public Utf8JsonMemoryDbSerializerOptions()
+        {
+            JsonSerializerOptions = new JsonSerializerOptions();
+        }
     }
 }

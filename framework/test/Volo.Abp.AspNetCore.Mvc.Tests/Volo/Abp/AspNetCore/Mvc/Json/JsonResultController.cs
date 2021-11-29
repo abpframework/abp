@@ -2,23 +2,26 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json;
-
-[Route("api/json-result-test")]
-public class JsonResultController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    [HttpGet]
-    [Route("json-result-action")]
-    public Task<JsonResultModel> ObjectResultAction()
+    [Route("api/json-result-test")]
+    public class JsonResultController : AbpController
     {
-        return Task.FromResult(new JsonResultModel
+        [HttpGet]
+        [Route("json-result-action")]
+        public Task<JsonResultModel> ObjectResultAction()
         {
-            Time = DateTime.Parse("2019-01-01 11:59:59")
-        });
+            return Task.FromResult(new JsonResultModel
+            {
+                Time = DateTime.Parse("2019-01-01 11:59:59")
+            });
+        }
+
+        public class JsonResultModel
+        {
+            public DateTime Time { get; set; }
+        }
     }
 
-    public class JsonResultModel
-    {
-        public DateTime Time { get; set; }
-    }
+
 }

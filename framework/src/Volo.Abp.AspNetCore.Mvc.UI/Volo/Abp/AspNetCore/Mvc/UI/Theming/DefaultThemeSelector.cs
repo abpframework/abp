@@ -2,35 +2,36 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
-
-public class DefaultThemeSelector : IThemeSelector, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    protected AbpThemingOptions Options { get; }
-
-    public DefaultThemeSelector(IOptions<AbpThemingOptions> options)
+    public class DefaultThemeSelector : IThemeSelector, ITransientDependency
     {
-        Options = options.Value;
-    }
+        protected AbpThemingOptions Options { get; }
 
-    public virtual ThemeInfo GetCurrentThemeInfo()
-    {
-        if (!Options.Themes.Any())
+        public DefaultThemeSelector(IOptions<AbpThemingOptions> options)
         {
-            throw new AbpException($"No theme registered! Use {nameof(AbpThemingOptions)} to register themes.");
+            Options = options.Value;
         }
 
-        if (Options.DefaultThemeName == null)
+        public virtual ThemeInfo GetCurrentThemeInfo()
         {
-            return Options.Themes.Values.First();
-        }
+            if (!Options.Themes.Any())
+            {
+                throw new AbpException($"No theme registered! Use {nameof(AbpThemingOptions)} to register themes.");
+            }
 
-        var themeInfo = Options.Themes.Values.FirstOrDefault(t => t.Name == Options.DefaultThemeName);
-        if (themeInfo == null)
-        {
-            throw new AbpException("Default theme is configured but it's not found in the registered themes: " + Options.DefaultThemeName);
-        }
+            if (Options.DefaultThemeName == null)
+            {
+                return Options.Themes.Values.First();
+            }
 
-        return themeInfo;
+            var themeInfo = Options.Themes.Values.FirstOrDefault(t => t.Name == Options.DefaultThemeName);
+            if (themeInfo == null)
+            {
+                throw new AbpException("Default theme is configured but it's not found in the registered themes: " + Options.DefaultThemeName);
+            }
+
+            return themeInfo;
+        }
     }
 }

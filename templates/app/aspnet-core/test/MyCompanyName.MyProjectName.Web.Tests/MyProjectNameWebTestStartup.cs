@@ -4,17 +4,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName;
-
-public class MyProjectNameWebTestStartup
+namespace MyCompanyName.MyProjectName
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class MyProjectNameWebTestStartup
     {
-        services.AddApplication<MyProjectNameWebTestModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<MyProjectNameWebTestModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

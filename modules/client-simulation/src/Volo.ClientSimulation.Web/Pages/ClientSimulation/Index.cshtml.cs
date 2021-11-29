@@ -2,12 +2,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.ClientSimulation.Pages.ClientSimulation;
-
-public class IndexModel : PageModel
+namespace Volo.ClientSimulation.Pages.ClientSimulation
 {
-    public virtual Task<IActionResult> OnGetAsync()
+    public class IndexModel : PageModel
     {
-        return Task.FromResult<IActionResult>(Page());
+        public virtual Task<IActionResult> OnGetAsync()
+        {
+            return Task.FromResult<IActionResult>(Page());
+        }
     }
 }

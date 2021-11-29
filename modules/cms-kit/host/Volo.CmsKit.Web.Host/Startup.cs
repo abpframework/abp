@@ -2,17 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.CmsKit;
-
-public class Startup
+namespace Volo.CmsKit
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        services.AddApplication<CmsKitWebHostModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<CmsKitWebHostModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

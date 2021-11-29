@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem;
-
-public interface IDynamicFileProvider : IFileProvider
+namespace Volo.Abp.VirtualFileSystem
 {
-    void AddOrUpdate(IFileInfo fileInfo);
+    public interface IDynamicFileProvider : IFileProvider
+    {
+        void AddOrUpdate(IFileInfo fileInfo);
 
-    bool Delete(string filePath);
+        bool Delete(string filePath);
+    }
 }

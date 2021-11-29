@@ -1,18 +1,19 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem.Physical;
-
-public class PhysicalVirtualFileSetInfo : VirtualFileSetInfo
+namespace Volo.Abp.VirtualFileSystem.Physical
 {
-    public string Root { get; }
-
-    public PhysicalVirtualFileSetInfo(
-        [NotNull] IFileProvider fileProvider,
-        [NotNull] string root
-        )
-        : base(fileProvider)
+    public class PhysicalVirtualFileSetInfo : VirtualFileSetInfo
     {
-        Root = Check.NotNullOrWhiteSpace(root, nameof(root));
+        public string Root { get; }
+
+        public PhysicalVirtualFileSetInfo(
+            [NotNull] IFileProvider fileProvider,
+            [NotNull] string root
+            )
+            : base(fileProvider)
+        {
+            Root = Check.NotNullOrWhiteSpace(root, nameof(root));
+        }
     }
 }

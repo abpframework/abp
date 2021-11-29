@@ -4,41 +4,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class TenantResolver : ITenantResolver, ITransientDependency
+namespace Volo.Abp.MultiTenancy
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly AbpTenantResolveOptions _options;
-
-    public TenantResolver(IOptions<AbpTenantResolveOptions> options, IServiceProvider serviceProvider)
+    public class TenantResolver : ITenantResolver, ITransientDependency
     {
-        _serviceProvider = serviceProvider;
-        _options = options.Value;
-    }
+        private readonly IServiceProvider _serviceProvider;
+        private readonly AbpTenantResolveOptions _options;
 
-    public virtual async Task<TenantResolveResult> ResolveTenantIdOrNameAsync()
-    {
-        var result = new TenantResolveResult();
-
-        using (var serviceScope = _serviceProvider.CreateScope())
+        public TenantResolver(IOptions<AbpTenantResolveOptions> options, IServiceProvider serviceProvider)
         {
-            var context = new TenantResolveContext(serviceScope.ServiceProvider);
-
-            foreach (var tenantResolver in _options.TenantResolvers)
-            {
-                await tenantResolver.ResolveAsync(context);
-
-                result.AppliedResolvers.Add(tenantResolver.Name);
-
-                if (context.HasResolvedTenantOrHost())
-                {
-                    result.TenantIdOrName = context.TenantIdOrName;
-                    break;
-                }
-            }
+            _serviceProvider = serviceProvider;
+            _options = options.Value;
         }
 
-        return result;
+        public virtual async Task<TenantResolveResult> ResolveTenantIdOrNameAsync()
+        {
+            var result = new TenantResolveResult();
+
+            using (var serviceScope = _serviceProvider.CreateScope())
+            {
+                var context = new TenantResolveContext(serviceScope.ServiceProvider);
+
+                foreach (var tenantResolver in _options.TenantResolvers)
+                {
+                    await tenantResolver.ResolveAsync(context);
+
+                    result.AppliedResolvers.Add(tenantResolver.Name);
+
+                    if (context.HasResolvedTenantOrHost())
+                    {
+                        result.TenantIdOrName = context.TenantIdOrName;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

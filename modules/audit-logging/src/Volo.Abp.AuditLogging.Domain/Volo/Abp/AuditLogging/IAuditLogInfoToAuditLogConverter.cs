@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 
-namespace Volo.Abp.AuditLogging;
-
-public interface IAuditLogInfoToAuditLogConverter
+namespace Volo.Abp.AuditLogging
 {
-    Task<AuditLog> ConvertAsync(AuditLogInfo auditLogInfo);
+    public interface IAuditLogInfoToAuditLogConverter
+    {
+        Task<AuditLog> ConvertAsync(AuditLogInfo auditLogInfo);
+    }
 }

@@ -3,19 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json;
-
-public class AbpMvcNewtonsoftJsonOptionsSetup : IConfigureOptions<MvcNewtonsoftJsonOptions>
+namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    protected IServiceProvider ServiceProvider { get; }
-
-    public AbpMvcNewtonsoftJsonOptionsSetup(IServiceProvider serviceProvider)
+    public class AbpMvcNewtonsoftJsonOptionsSetup : IConfigureOptions<MvcNewtonsoftJsonOptions>
     {
-        ServiceProvider = serviceProvider;
-    }
+        protected IServiceProvider ServiceProvider { get; }
 
-    public void Configure(MvcNewtonsoftJsonOptions options)
-    {
-        options.SerializerSettings.ContractResolver = ServiceProvider.GetRequiredService<AbpMvcJsonContractResolver>();
+        public AbpMvcNewtonsoftJsonOptionsSetup(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
+
+        public void Configure(MvcNewtonsoftJsonOptions options)
+        {
+            options.SerializerSettings.ContractResolver = ServiceProvider.GetRequiredService<AbpMvcJsonContractResolver>();
+        }
     }
 }

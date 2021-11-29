@@ -5,37 +5,38 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.BackgroundJobs;
-
-[DependsOn(
-    typeof(AbpJsonModule)
-    )]
-public class AbpBackgroundJobsAbstractionsModule : AbpModule
+namespace Volo.Abp.BackgroundJobs
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpJsonModule)
+        )]
+    public class AbpBackgroundJobsAbstractionsModule : AbpModule
     {
-        RegisterJobs(context.Services);
-    }
-
-    private static void RegisterJobs(IServiceCollection services)
-    {
-        var jobTypes = new List<Type>();
-
-        services.OnRegistred(context =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
-                ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))
-            {
-                jobTypes.Add(context.ImplementationType);
-            }
-        });
+            RegisterJobs(context.Services);
+        }
 
-        services.Configure<AbpBackgroundJobOptions>(options =>
+        private static void RegisterJobs(IServiceCollection services)
         {
-            foreach (var jobType in jobTypes)
+            var jobTypes = new List<Type>();
+
+            services.OnRegistred(context =>
             {
-                options.AddJob(jobType);
-            }
-        });
+                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
+                    ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))
+                {
+                    jobTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpBackgroundJobOptions>(options =>
+            {
+                foreach (var jobType in jobTypes)
+                {
+                    options.AddJob(jobType);
+                }
+            });
+        }
     }
 }

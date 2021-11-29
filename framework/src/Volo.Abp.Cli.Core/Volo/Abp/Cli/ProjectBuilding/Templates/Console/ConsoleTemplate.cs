@@ -1,15 +1,16 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Console;
-
-public class ConsoleTemplate : ConsoleTemplateBase
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Console
 {
-    /// <summary>
-    /// "console".
-    /// </summary>
-    public const string TemplateName = "console";
-
-    public ConsoleTemplate()
-        : base(TemplateName)
+    public class ConsoleTemplate　: ConsoleTemplateBase
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Console";
+        /// <summary>
+        /// "console".
+        /// </summary>
+        public const string TemplateName = "console";
+
+        public ConsoleTemplate()
+            : base(TemplateName)
+        {
+            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Console";
+        }
     }
 }

@@ -1,23 +1,24 @@
 ﻿using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Localization;
-
-public class LocalizationSettingProvider : SettingDefinitionProvider
+namespace Volo.Abp.Localization
 {
-    public override void Define(ISettingDefinitionContext context)
+    public class LocalizationSettingProvider : SettingDefinitionProvider
     {
-        context.Add(
-            new SettingDefinition(LocalizationSettingNames.DefaultLanguage,
-                "en",
-                L("DisplayName:Abp.Localization.DefaultLanguage"),
-                L("Description:Abp.Localization.DefaultLanguage"),
-                isVisibleToClients: true)
-        );
-    }
+        public override void Define(ISettingDefinitionContext context)
+        {
+            context.Add(
+                new SettingDefinition(LocalizationSettingNames.DefaultLanguage,
+                    "en", 
+                    L("DisplayName:Abp.Localization.DefaultLanguage"),
+                    L("Description:Abp.Localization.DefaultLanguage"),
+                    isVisibleToClients: true)
+            );
+        }
 
-    private static LocalizableString L(string name)
-    {
-        return LocalizableString.Create<AbpLocalizationResource>(name);
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<AbpLocalizationResource>(name);
+        }
     }
 }

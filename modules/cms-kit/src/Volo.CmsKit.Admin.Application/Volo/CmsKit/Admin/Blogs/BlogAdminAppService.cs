@@ -9,75 +9,76 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.Blogs;
-
-[RequiresGlobalFeature(typeof(BlogsFeature))]
-[Authorize(CmsKitAdminPermissions.Blogs.Default)]
-public class BlogAdminAppService : CmsKitAdminAppServiceBase, IBlogAdminAppService
+namespace Volo.CmsKit.Admin.Blogs
 {
-    protected IBlogRepository BlogRepository { get; }
-    protected BlogManager BlogManager { get; }
-    protected BlogFeatureManager BlogFeatureManager { get; }
-
-    public BlogAdminAppService(
-        IBlogRepository blogRepository,
-        BlogManager blogManager,
-        BlogFeatureManager blogFeatureManager = null)
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
+    [Authorize(CmsKitAdminPermissions.Blogs.Default)]
+    public class BlogAdminAppService : CmsKitAdminAppServiceBase, IBlogAdminAppService
     {
-        BlogRepository = blogRepository;
-        BlogManager = blogManager;
-        BlogFeatureManager = blogFeatureManager;
-    }
+        protected IBlogRepository BlogRepository { get; }
+        protected BlogManager BlogManager { get; }
+        protected BlogFeatureManager BlogFeatureManager{ get; }
 
-    public virtual async Task<BlogDto> GetAsync(Guid id)
-    {
-        var blog = await BlogRepository.GetAsync(id);
+        public BlogAdminAppService(
+            IBlogRepository blogRepository, 
+            BlogManager blogManager, 
+            BlogFeatureManager blogFeatureManager = null)
+        {
+            BlogRepository = blogRepository;
+            BlogManager = blogManager;
+            BlogFeatureManager = blogFeatureManager;
+        }
 
-        return ObjectMapper.Map<Blog, BlogDto>(blog);
-    }
+        public virtual async Task<BlogDto> GetAsync(Guid id)
+        {
+            var blog = await BlogRepository.GetAsync(id);
 
-    public virtual async Task<PagedResultDto<BlogDto>> GetListAsync(BlogGetListInput input)
-    {
-        var totalCount = await BlogRepository.GetCountAsync(input.Filter);
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
 
-        var blogs = await BlogRepository.GetListAsync(
-            input.Filter,
-            input.Sorting,
-            input.MaxResultCount,
-            input.SkipCount);
+        public virtual async Task<PagedResultDto<BlogDto>> GetListAsync(BlogGetListInput input)
+        {
+            var totalCount = await BlogRepository.GetCountAsync(input.Filter);
 
-        return new PagedResultDto<BlogDto>(totalCount, ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs));
-    }
+            var blogs = await BlogRepository.GetListAsync(
+                input.Filter,
+                input.Sorting,
+                input.MaxResultCount,
+                input.SkipCount);
 
-    [Authorize(CmsKitAdminPermissions.Blogs.Create)]
-    public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
-    {
-        var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
+            return new PagedResultDto<BlogDto>(totalCount, ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs));
+        }
 
-        await BlogRepository.InsertAsync(blog, autoSave: true);
+        [Authorize(CmsKitAdminPermissions.Blogs.Create)]
+        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
+        {
+            var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
 
-        await BlogFeatureManager.SetDefaultsAsync(blog.Id);
+            await BlogRepository.InsertAsync(blog, autoSave: true);
 
-        return ObjectMapper.Map<Blog, BlogDto>(blog);
-    }
+            await BlogFeatureManager.SetDefaultsAsync(blog.Id);
 
-    [Authorize(CmsKitAdminPermissions.Blogs.Update)]
-    public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
-    {
-        var blog = await BlogRepository.GetAsync(id);
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
 
-        blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
+        [Authorize(CmsKitAdminPermissions.Blogs.Update)]
+        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+        {
+            var blog = await BlogRepository.GetAsync(id);
 
-        blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+            blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
 
-        await BlogRepository.UpdateAsync(blog);
+            blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        return ObjectMapper.Map<Blog, BlogDto>(blog);
-    }
+            await BlogRepository.UpdateAsync(blog);
 
-    [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
-    public virtual Task DeleteAsync(Guid id)
-    {
-        return BlogRepository.DeleteAsync(id);
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
+        public virtual Task DeleteAsync(Guid id)
+        {
+            return BlogRepository.DeleteAsync(id);
+        }
     }
 }

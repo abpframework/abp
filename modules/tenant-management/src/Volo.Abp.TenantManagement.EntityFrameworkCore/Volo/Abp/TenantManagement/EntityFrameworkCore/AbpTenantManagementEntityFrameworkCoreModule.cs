@@ -2,17 +2,18 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
-
-[DependsOn(typeof(AbpTenantManagementDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-public class AbpTenantManagementEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpTenantManagementDomainModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    public class AbpTenantManagementEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<TenantManagementDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<ITenantManagementDbContext>();
-        });
+            context.Services.AddAbpDbContext<TenantManagementDbContext>(options =>
+            {
+                options.AddDefaultRepositories<ITenantManagementDbContext>();
+            });
+        }
     }
 }

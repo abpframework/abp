@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.Identity;
-
-public class AbpIdentityOptions
+﻿namespace Volo.Abp.Identity
 {
-    public ExternalLoginProviderDictionary ExternalLoginProviders { get; }
-
-    public AbpIdentityOptions()
+    public class AbpIdentityOptions
     {
-        ExternalLoginProviders = new ExternalLoginProviderDictionary();
+        public ExternalLoginProviderDictionary ExternalLoginProviders { get; }
+
+        public AbpIdentityOptions()
+        {
+            ExternalLoginProviders = new ExternalLoginProviderDictionary();
+        }
     }
 }

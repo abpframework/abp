@@ -3,32 +3,33 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.MultiTenancy;
-
-public class QueryStringTenantResolveContributor : HttpTenantResolveContributorBase
+namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public const string ContributorName = "QueryString";
-
-    public override string Name => ContributorName;
-
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    public class QueryStringTenantResolveContributor : HttpTenantResolveContributorBase
     {
-        if (httpContext.Request.QueryString.HasValue)
+        public const string ContributorName = "QueryString";
+
+        public override string Name => ContributorName;
+
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            var tenantKey = context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey;
-            if (httpContext.Request.Query.ContainsKey(tenantKey))
+            if (httpContext.Request.QueryString.HasValue)
             {
-                var tenantValue = httpContext.Request.Query[tenantKey].ToString();
-                if (tenantValue.IsNullOrWhiteSpace())
+                var tenantKey = context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey;
+                if (httpContext.Request.Query.ContainsKey(tenantKey))
                 {
-                    context.Handled = true;
-                    return Task.FromResult<string>(null);
+                    var tenantValue = httpContext.Request.Query[tenantKey].ToString();
+                    if (tenantValue.IsNullOrWhiteSpace())
+                    {
+                        context.Handled = true;
+                        return Task.FromResult<string>(null);
+                    }
+
+                    return Task.FromResult(tenantValue);
                 }
-
-                return Task.FromResult(tenantValue);
             }
-        }
 
-        return Task.FromResult<string>(null);
+            return Task.FromResult<string>(null);
+        }
     }
 }

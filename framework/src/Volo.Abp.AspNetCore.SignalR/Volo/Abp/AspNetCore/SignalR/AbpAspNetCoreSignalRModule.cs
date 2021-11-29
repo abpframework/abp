@@ -14,139 +14,140 @@ using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-[DependsOn(
-    typeof(AbpAspNetCoreModule)
-    )]
-public class AbpAspNetCoreSignalRModule : AbpModule
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    private static readonly MethodInfo MapHubGenericMethodInfo =
-        typeof(AbpAspNetCoreSignalRModule)
-            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic);
-
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreModule)
+        )]
+    public class AbpAspNetCoreSignalRModule : AbpModule
     {
-        context.Services.AddConventionalRegistrar(new AbpSignalRConventionalRegistrar());
+        private static readonly MethodInfo MapHubGenericMethodInfo =
+            typeof(AbpAspNetCoreSignalRModule)
+                .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic);
 
-        AutoAddHubTypes(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        var routePatterns = new List<string> { "/signalr-hubs" };
-        var signalRServerBuilder = context.Services.AddSignalR(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddFilter<AbpHubContextAccessorHubFilter>();
-            options.AddFilter<AbpAuthenticationHubFilter>();
-            options.AddFilter<AbpAuditHubFilter>();
-        });
+            context.Services.AddConventionalRegistrar(new AbpSignalRConventionalRegistrar());
 
-        context.Services.ExecutePreConfiguredActions(signalRServerBuilder);
+            AutoAddHubTypes(context.Services);
+        }
 
-        Configure<AbpEndpointRouterOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.EndpointConfigureActions.Add(endpointContext =>
+            var routePatterns = new List<string> {"/signalr-hubs"};
+            var signalRServerBuilder = context.Services.AddSignalR(options =>
             {
-                var signalROptions = endpointContext
-                    .ScopeServiceProvider
-                    .GetRequiredService<IOptions<AbpSignalROptions>>()
-                    .Value;
+                options.AddFilter<AbpHubContextAccessorHubFilter>();
+                options.AddFilter<AbpAuthenticationHubFilter>();
+                options.AddFilter<AbpAuditHubFilter>();
+            });
 
-                foreach (var hubConfig in signalROptions.Hubs)
+            context.Services.ExecutePreConfiguredActions(signalRServerBuilder);
+
+            Configure<AbpEndpointRouterOptions>(options =>
+            {
+                options.EndpointConfigureActions.Add(endpointContext =>
                 {
-                    routePatterns.AddIfNotContains(hubConfig.RoutePattern);
+                    var signalROptions = endpointContext
+                        .ScopeServiceProvider
+                        .GetRequiredService<IOptions<AbpSignalROptions>>()
+                        .Value;
 
-                    MapHubType(
-                        hubConfig.HubType,
-                        endpointContext.Endpoints,
-                        hubConfig.RoutePattern,
-                        opts =>
-                        {
-                            foreach (var configureAction in hubConfig.ConfigureActions)
+                    foreach (var hubConfig in signalROptions.Hubs)
+                    {
+                        routePatterns.AddIfNotContains(hubConfig.RoutePattern);
+
+                        MapHubType(
+                            hubConfig.HubType,
+                            endpointContext.Endpoints,
+                            hubConfig.RoutePattern,
+                            opts =>
                             {
-                                configureAction(opts);
+                                foreach (var configureAction in hubConfig.ConfigureActions)
+                                {
+                                    configureAction(opts);
+                                }
                             }
-                        }
-                    );
+                        );
+                    }
+                });
+            });
+
+            Configure<AbpAspNetCoreAuditingOptions>(options =>
+            {
+                foreach (var routePattern in routePatterns)
+                {
+                    options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x), () => routePattern);
                 }
             });
-        });
 
-        Configure<AbpAspNetCoreAuditingOptions>(options =>
-        {
-            foreach (var routePattern in routePatterns)
+            Configure<AbpAuditingOptions>(options =>
             {
-                options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x), () => routePattern);
-            }
-        });
+                options.Contributors.Add(new AspNetCoreSignalRAuditLogContributor());
+            });
+        }
 
-        Configure<AbpAuditingOptions>(options =>
+        private void AutoAddHubTypes(IServiceCollection services)
         {
-            options.Contributors.Add(new AspNetCoreSignalRAuditLogContributor());
-        });
-    }
+            var hubTypes = new List<Type>();
 
-    private void AutoAddHubTypes(IServiceCollection services)
-    {
-        var hubTypes = new List<Type>();
-
-        services.OnRegistred(context =>
-        {
-            if (IsHubClass(context) && !IsDisabledForAutoMap(context))
+            services.OnRegistred(context =>
             {
-                hubTypes.Add(context.ImplementationType);
-            }
-        });
-
-        services.Configure<AbpSignalROptions>(options =>
-        {
-            foreach (var hubType in hubTypes)
-            {
-                options.Hubs.Add(HubConfig.Create(hubType));
-            }
-        });
-    }
-
-    private static bool IsHubClass(IOnServiceRegistredContext context)
-    {
-        return typeof(Hub).IsAssignableFrom(context.ImplementationType);
-    }
-
-    private static bool IsDisabledForAutoMap(IOnServiceRegistredContext context)
-    {
-        return context.ImplementationType.IsDefined(typeof(DisableAutoHubMapAttribute), true);
-    }
-
-    private void MapHubType(
-        Type hubType,
-        IEndpointRouteBuilder endpoints,
-        string pattern,
-        Action<HttpConnectionDispatcherOptions> configureOptions)
-    {
-        MapHubGenericMethodInfo
-            .MakeGenericMethod(hubType)
-            .Invoke(
-                this,
-                new object[]
+                if (IsHubClass(context) && !IsDisabledForAutoMap(context))
                 {
+                    hubTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpSignalROptions>(options =>
+            {
+                foreach (var hubType in hubTypes)
+                {
+                    options.Hubs.Add(HubConfig.Create(hubType));
+                }
+            });
+        }
+
+        private static bool IsHubClass(IOnServiceRegistredContext context)
+        {
+            return typeof(Hub).IsAssignableFrom(context.ImplementationType);
+        }
+
+        private static bool IsDisabledForAutoMap(IOnServiceRegistredContext context)
+        {
+            return context.ImplementationType.IsDefined(typeof(DisableAutoHubMapAttribute), true);
+        }
+
+        private void MapHubType(
+            Type hubType,
+            IEndpointRouteBuilder endpoints,
+            string pattern,
+            Action<HttpConnectionDispatcherOptions> configureOptions)
+        {
+            MapHubGenericMethodInfo
+                .MakeGenericMethod(hubType)
+                .Invoke(
+                    this,
+                    new object[]
+                    {
                         endpoints,
                         pattern,
                         configureOptions
-                }
-            );
-    }
+                    }
+                );
+        }
 
-    // ReSharper disable once UnusedMember.Local (used via reflection)
-    private static void MapHub<THub>(
-        IEndpointRouteBuilder endpoints,
-        string pattern,
-        Action<HttpConnectionDispatcherOptions> configureOptions)
-        where THub : Hub
-    {
-        endpoints.MapHub<THub>(
-            pattern,
-            configureOptions
-        );
+        // ReSharper disable once UnusedMember.Local (used via reflection)
+        private static void MapHub<THub>(
+            IEndpointRouteBuilder endpoints,
+            string pattern,
+            Action<HttpConnectionDispatcherOptions> configureOptions)
+            where THub : Hub
+        {
+            endpoints.MapHub<THub>(
+                pattern,
+                configureOptions
+            );
+        }
     }
 }

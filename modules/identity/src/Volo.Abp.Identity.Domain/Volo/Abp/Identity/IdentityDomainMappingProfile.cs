@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-public class IdentityDomainMappingProfile : Profile
+namespace Volo.Abp.Identity
 {
-    public IdentityDomainMappingProfile()
+    public class IdentityDomainMappingProfile : Profile
     {
-        CreateMap<IdentityUser, UserEto>();
-        CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
-        CreateMap<IdentityRole, IdentityRoleEto>();
-        CreateMap<OrganizationUnit, OrganizationUnitEto>();
+        public IdentityDomainMappingProfile()
+        {
+            CreateMap<IdentityUser, UserEto>();
+            CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
+            CreateMap<IdentityRole, IdentityRoleEto>();
+            CreateMap<OrganizationUnit, OrganizationUnitEto>();
+        }
     }
 }

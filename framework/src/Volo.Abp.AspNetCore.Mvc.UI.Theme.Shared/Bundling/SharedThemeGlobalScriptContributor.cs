@@ -14,29 +14,29 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-
-[DependsOn(
-    typeof(JQueryScriptContributor),
-    typeof(BootstrapScriptContributor),
-    typeof(LodashScriptContributor),
-    typeof(JQueryValidationUnobtrusiveScriptContributor),
-    typeof(JQueryFormScriptContributor),
-    typeof(Select2ScriptContributor),
-    typeof(DatatablesNetBs5ScriptContributor),
-    typeof(Sweetalert2ScriptContributor),
-    typeof(ToastrScriptBundleContributor),
-    typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
-    typeof(LuxonScriptContributor),
-    typeof(TimeagoScriptContributor),
-    typeof(BootstrapDatepickerScriptContributor)
-    )]
-public class SharedThemeGlobalScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(
+        typeof(JQueryScriptContributor),
+        typeof(BootstrapScriptContributor),
+        typeof(LodashScriptContributor),
+        typeof(JQueryValidationUnobtrusiveScriptContributor),
+        typeof(JQueryFormScriptContributor),
+        typeof(Select2ScriptContributor),
+        typeof(DatatablesNetBs5ScriptContributor),
+        typeof(Sweetalert2ScriptContributor),
+        typeof(ToastrScriptBundleContributor),
+        typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
+        typeof(LuxonScriptContributor),
+        typeof(TimeagoScriptContributor),
+        typeof(BootstrapDatepickerScriptContributor)
+        )]
+    public class SharedThemeGlobalScriptContributor : BundleContributor
     {
-        context.Files.AddRange(new[]
+        public override void ConfigureBundle(BundleConfigurationContext context)
         {
+            context.Files.AddRange(new[]
+            {
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js",
@@ -47,5 +47,6 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
             });
+        }
     }
 }

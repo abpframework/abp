@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class PostgreSqlInboxConfigExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void UseNpgsql<TDbContext>(this InboxConfig outboxConfig)
-        where TDbContext : IHasEventInbox
+    public static class PostgreSqlInboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(IPostgreSqlDbContextEventInbox<TDbContext>);
+        public static void UseNpgsql<TDbContext>(this InboxConfig outboxConfig)
+            where TDbContext : IHasEventInbox
+        {
+            outboxConfig.ImplementationType = typeof(IPostgreSqlDbContextEventInbox<TDbContext>);
+        }
     }
 }

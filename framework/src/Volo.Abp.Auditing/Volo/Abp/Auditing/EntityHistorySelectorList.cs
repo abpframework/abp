@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Auditing;
-
-internal class EntityHistorySelectorList : List<NamedTypeSelector>, IEntityHistorySelectorList
+namespace Volo.Abp.Auditing
 {
-    public bool RemoveByName(string name)
+    internal class EntityHistorySelectorList : List<NamedTypeSelector>, IEntityHistorySelectorList
     {
-        return RemoveAll(s => s.Name == name) > 0;
+        public bool RemoveByName(string name)
+        {
+            return RemoveAll(s => s.Name == name) > 0;
+        }
     }
 }

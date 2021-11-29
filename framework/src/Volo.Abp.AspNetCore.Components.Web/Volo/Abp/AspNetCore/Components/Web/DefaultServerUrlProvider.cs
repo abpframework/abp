@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Web;
-
-public class DefaultServerUrlProvider : IServerUrlProvider, ISingletonDependency
+namespace Volo.Abp.AspNetCore.Components.Web
 {
-    public Task<string> GetBaseUrlAsync(string remoteServiceName = null)
+    public class DefaultServerUrlProvider : IServerUrlProvider, ISingletonDependency
     {
-        return Task.FromResult("/");
+        public Task<string> GetBaseUrlAsync(string remoteServiceName = null)
+        {
+            return Task.FromResult("/");
+        }
     }
 }

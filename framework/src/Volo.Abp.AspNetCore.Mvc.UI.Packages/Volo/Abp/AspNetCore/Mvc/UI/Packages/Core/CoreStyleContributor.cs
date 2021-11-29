@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
-
-public class CoreStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class CoreStyleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/abp/core/abp.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/abp/core/abp.css");
+        }
     }
 }

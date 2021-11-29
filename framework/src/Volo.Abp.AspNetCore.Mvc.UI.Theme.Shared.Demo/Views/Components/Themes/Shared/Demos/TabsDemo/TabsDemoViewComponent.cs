@@ -2,18 +2,19 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.TabsDemo;
-
-[Widget(
-    StyleTypes = new[] { typeof(PrismjsStyleBundleContributor) },
-    ScriptTypes = new[] { typeof(PrismjsScriptBundleContributor) }
-)]
-public class TabsDemoViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.TabsDemo
 {
-    public const string ViewPath = "/Views/Components/Themes/Shared/Demos/TabsDemo/Default.cshtml";
-
-    public virtual IViewComponentResult Invoke()
+    [Widget(
+        StyleTypes = new []{ typeof(PrismjsStyleBundleContributor) },
+        ScriptTypes = new[]{ typeof(PrismjsScriptBundleContributor) }
+    )]
+    public class TabsDemoViewComponent : AbpViewComponent
     {
-        return View(ViewPath);
+        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/TabsDemo/Default.cshtml";
+
+        public virtual IViewComponentResult Invoke()
+        {
+            return View(ViewPath);
+        }
     }
 }

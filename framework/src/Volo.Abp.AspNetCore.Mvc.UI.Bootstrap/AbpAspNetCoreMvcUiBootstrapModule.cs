@@ -1,16 +1,17 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-
-[DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
-public class AbpAspNetCoreMvcUiBootstrapModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
+    public class AbpAspNetCoreMvcUiBootstrapModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");
+            });
+        }
     }
 }

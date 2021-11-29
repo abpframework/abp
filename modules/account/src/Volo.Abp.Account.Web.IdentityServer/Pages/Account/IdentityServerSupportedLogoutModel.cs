@@ -6,68 +6,69 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.Account.Web.Pages.Account;
-
-[ExposeServices(typeof(LogoutModel))]
-public class IdentityServerSupportedLogoutModel : LogoutModel
+namespace Volo.Abp.Account.Web.Pages.Account
 {
-    protected IIdentityServerInteractionService Interaction { get; }
-
-    public IdentityServerSupportedLogoutModel(IIdentityServerInteractionService interaction)
+    [ExposeServices(typeof(LogoutModel))]
+    public class IdentityServerSupportedLogoutModel : LogoutModel
     {
-        Interaction = interaction;
-    }
+        protected IIdentityServerInteractionService Interaction { get; }
 
-    public async override Task<IActionResult> OnGetAsync()
-    {
-        await SignInManager.SignOutAsync();
-
-        var logoutId = Request.Query["logoutId"].ToString();
-
-        if (!string.IsNullOrEmpty(logoutId))
+        public IdentityServerSupportedLogoutModel(IIdentityServerInteractionService interaction)
         {
-            var logoutContext = await Interaction.GetLogoutContextAsync(logoutId);
+            Interaction = interaction;
+        }
 
-            await SaveSecurityLogAsync(logoutContext?.ClientId);
-
+        public async override Task<IActionResult> OnGetAsync()
+        {
             await SignInManager.SignOutAsync();
 
-            HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+            var logoutId = Request.Query["logoutId"].ToString();
 
-            var vm = new LoggedOutModel()
+            if (!string.IsNullOrEmpty(logoutId))
             {
-                PostLogoutRedirectUri = logoutContext?.PostLogoutRedirectUri,
-                ClientName = logoutContext?.ClientName,
-                SignOutIframeUrl = logoutContext?.SignOutIFrameUrl
-            };
+                var logoutContext = await Interaction.GetLogoutContextAsync(logoutId);
 
-            Logger.LogInformation($"Redirecting to LoggedOut Page...");
+                await SaveSecurityLogAsync(logoutContext?.ClientId);
 
-            return RedirectToPage("./LoggedOut", vm);
+                await SignInManager.SignOutAsync();
+
+                HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+
+                var vm = new LoggedOutModel()
+                {
+                    PostLogoutRedirectUri = logoutContext?.PostLogoutRedirectUri,
+                    ClientName = logoutContext?.ClientName,
+                    SignOutIframeUrl = logoutContext?.SignOutIFrameUrl
+                };
+
+                Logger.LogInformation($"Redirecting to LoggedOut Page...");
+
+                return RedirectToPage("./LoggedOut", vm);
+            }
+
+            await SaveSecurityLogAsync();
+
+            if (ReturnUrl != null)
+            {
+                return LocalRedirect(ReturnUrl);
+            }
+
+            Logger.LogInformation(
+                $"IdentityServerSupportedLogoutModel couldn't find postLogoutUri... Redirecting to:/Account/Login..");
+            return RedirectToPage("/Account/Login");
         }
 
-        await SaveSecurityLogAsync();
-
-        if (ReturnUrl != null)
+        protected virtual async Task SaveSecurityLogAsync(string clientId = null)
         {
-            return LocalRedirect(ReturnUrl);
-        }
-
-        Logger.LogInformation(
-            $"IdentityServerSupportedLogoutModel couldn't find postLogoutUri... Redirecting to:/Account/Login..");
-        return RedirectToPage("/Account/Login");
-    }
-
-    protected virtual async Task SaveSecurityLogAsync(string clientId = null)
-    {
-        if (CurrentUser.IsAuthenticated)
-        {
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            if (CurrentUser.IsAuthenticated)
             {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                Action = IdentitySecurityLogActionConsts.Logout,
-                ClientId = clientId
-            });
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogActionConsts.Logout,
+                    ClientId = clientId
+                });
+            }
         }
     }
 }

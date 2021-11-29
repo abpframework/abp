@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.Identity.Web.Navigation;
-
-public class IdentityMenuNames
+﻿namespace Volo.Abp.Identity.Web.Navigation
 {
-    public const string GroupName = "AbpIdentity";
+    public class IdentityMenuNames
+    {
+        public const string GroupName = "AbpIdentity";
 
-    public const string Roles = GroupName + ".Roles";
-    public const string Users = GroupName + ".Users";
+        public const string Roles = GroupName + ".Roles";
+        public const string Users = GroupName + ".Users";
+    }
 }

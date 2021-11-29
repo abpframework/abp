@@ -1,8 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.DependencyInjection;
-
-public interface IHybridServiceScopeFactory : IServiceScopeFactory
+namespace Volo.Abp.DependencyInjection
 {
+    public interface IHybridServiceScopeFactory : IServiceScopeFactory
+    {
 
+    }
 }

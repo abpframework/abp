@@ -13,54 +13,55 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.EventBus;
-
-[DependsOn(
-    typeof(AbpEventBusAbstractionsModule),
-    typeof(AbpMultiTenancyModule),
-    typeof(AbpJsonModule),
-    typeof(AbpGuidsModule),
-    typeof(AbpBackgroundWorkersModule),
-    typeof(AbpDistributedLockingAbstractionsModule)
-    )]
-public class AbpEventBusModule : AbpModule
+namespace Volo.Abp.EventBus
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpEventBusAbstractionsModule),
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpJsonModule),
+        typeof(AbpGuidsModule),
+        typeof(AbpBackgroundWorkersModule),
+        typeof(AbpDistributedLockingAbstractionsModule)
+        )]
+    public class AbpEventBusModule : AbpModule
     {
-        AddEventHandlers(context.Services);
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        context.AddBackgroundWorker<OutboxSenderManager>();
-        context.AddBackgroundWorker<InboxProcessManager>();
-    }
-
-    private static void AddEventHandlers(IServiceCollection services)
-    {
-        var localHandlers = new List<Type>();
-        var distributedHandlers = new List<Type>();
-
-        services.OnRegistred(context =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(ILocalEventHandler<>)))
+            AddEventHandlers(context.Services);
+        }
+        
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.AddBackgroundWorker<OutboxSenderManager>();
+            context.AddBackgroundWorker<InboxProcessManager>();
+        }
+
+        private static void AddEventHandlers(IServiceCollection services)
+        {
+            var localHandlers = new List<Type>();
+            var distributedHandlers = new List<Type>();
+
+            services.OnRegistred(context =>
             {
-                localHandlers.Add(context.ImplementationType);
-            }
-            else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
+                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(ILocalEventHandler<>)))
+                {
+                    localHandlers.Add(context.ImplementationType);
+                }
+                else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
+                {
+                    distributedHandlers.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpLocalEventBusOptions>(options =>
             {
-                distributedHandlers.Add(context.ImplementationType);
-            }
-        });
+                options.Handlers.AddIfNotContains(localHandlers);
+            });
 
-        services.Configure<AbpLocalEventBusOptions>(options =>
-        {
-            options.Handlers.AddIfNotContains(localHandlers);
-        });
-
-        services.Configure<AbpDistributedEventBusOptions>(options =>
-        {
-            options.Handlers.AddIfNotContains(distributedHandlers);
-        });
+            services.Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                options.Handlers.AddIfNotContains(distributedHandlers);
+            });
+        }
     }
 }

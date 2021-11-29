@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Uow;
-
-public class AbpUnitOfWorkModule : AbpModule
+namespace Volo.Abp.Uow
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public class AbpUnitOfWorkModule : AbpModule
     {
-        context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+        }
     }
 }

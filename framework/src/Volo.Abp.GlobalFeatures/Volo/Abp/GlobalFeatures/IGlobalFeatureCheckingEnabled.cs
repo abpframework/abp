@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.GlobalFeatures;
-
-public interface IGlobalFeatureCheckingEnabled
+﻿namespace Volo.Abp.GlobalFeatures
 {
+    public interface IGlobalFeatureCheckingEnabled
+    {
 
+    }
 }

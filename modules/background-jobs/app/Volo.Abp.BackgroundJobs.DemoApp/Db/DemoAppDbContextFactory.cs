@@ -3,26 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.Db;
-
-public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
+namespace Volo.Abp.BackgroundJobs.DemoApp.Db
 {
-    public DemoAppDbContext CreateDbContext(string[] args)
+    public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
     {
-        var configuration = BuildConfiguration();
+        public DemoAppDbContext CreateDbContext(string[] args)
+        {
+            var configuration = BuildConfiguration();
 
-        var builder = new DbContextOptionsBuilder<DemoAppDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            var builder = new DbContextOptionsBuilder<DemoAppDbContext>()
+                .UseSqlServer(configuration.GetConnectionString("Default"));
 
-        return new DemoAppDbContext(builder.Options);
-    }
+            return new DemoAppDbContext(builder.Options);
+        }
 
-    private static IConfigurationRoot BuildConfiguration()
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false);
+        private static IConfigurationRoot BuildConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false);
 
-        return builder.Build();
+            return builder.Build();
+        }
     }
 }

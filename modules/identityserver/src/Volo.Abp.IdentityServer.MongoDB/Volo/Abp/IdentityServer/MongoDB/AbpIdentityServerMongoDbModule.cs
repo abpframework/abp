@@ -8,34 +8,35 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.IdentityServer.MongoDB;
-
-[DependsOn(
-    typeof(AbpIdentityServerDomainModule),
-    typeof(AbpMongoDbModule)
-)]
-public class AbpIdentityServerMongoDbModule : AbpModule
+namespace Volo.Abp.IdentityServer.MongoDB
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpMongoDbModule)
+    )]
+    public class AbpIdentityServerMongoDbModule : AbpModule
     {
-        context.Services.PreConfigure<IIdentityServerBuilder>(
-            builder =>
-            {
-                builder.AddAbpStores();
-            }
-        );
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<ApiResource, MongoApiResourceRepository>();
-            options.AddRepository<ApiScope, MongoApiScopeRepository>();
-            options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
-            options.AddRepository<Client, MongoClientRepository>();
-            options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
-            options.AddRepository<DeviceFlowCodes, MongoDeviceFlowCodesRepository>();
-        });
+            context.Services.PreConfigure<IIdentityServerBuilder>(
+                builder =>
+                {
+                    builder.AddAbpStores();
+                }
+            );
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>
+            {
+                options.AddRepository<ApiResource, MongoApiResourceRepository>();
+                options.AddRepository<ApiScope, MongoApiScopeRepository>();
+                options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
+                options.AddRepository<Client, MongoClientRepository>();
+                options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
+                options.AddRepository<DeviceFlowCodes, MongoDeviceFlowCodesRepository>();
+            });
+        }
     }
 }

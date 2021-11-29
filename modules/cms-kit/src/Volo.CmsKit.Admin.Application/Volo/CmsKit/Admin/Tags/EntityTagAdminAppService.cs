@@ -3,65 +3,66 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Admin.Tags;
-
-[RequiresGlobalFeature(typeof(TagsFeature))]
-public class EntityTagAdminAppService : CmsKitAdminAppServiceBase, IEntityTagAdminAppService
+namespace Volo.CmsKit.Admin.Tags
 {
-    protected ITagDefinitionStore TagDefinitionStore { get; }
-    protected EntityTagManager EntityTagManager { get; }
-    protected TagManager TagManager { get; }
-    protected ITagRepository TagRepository { get; }
-    protected IEntityTagRepository EntityTagRepository { get; }
-
-    public EntityTagAdminAppService(
-        ITagDefinitionStore tagDefinitionStore,
-        EntityTagManager entityTagManager,
-        TagManager tagManager,
-        ITagRepository tagRepository,
-        IEntityTagRepository entityTagRepository)
+    [RequiresGlobalFeature(typeof(TagsFeature))]
+    public class EntityTagAdminAppService : CmsKitAdminAppServiceBase, IEntityTagAdminAppService
     {
-        TagDefinitionStore = tagDefinitionStore;
-        EntityTagManager = entityTagManager;
-        TagManager = tagManager;
-        TagRepository = tagRepository;
-        EntityTagRepository = entityTagRepository;
-    }
+        protected ITagDefinitionStore TagDefinitionStore { get; }
+        protected EntityTagManager EntityTagManager { get; }
+        protected TagManager TagManager { get; }
+        protected ITagRepository TagRepository { get; }
+        protected IEntityTagRepository EntityTagRepository { get; }
 
-    public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
-    {
-        var definition = await TagDefinitionStore.GetAsync(input.EntityType);
+        public EntityTagAdminAppService(
+            ITagDefinitionStore tagDefinitionStore,
+            EntityTagManager entityTagManager,
+            TagManager tagManager,
+            ITagRepository tagRepository,
+            IEntityTagRepository entityTagRepository)
+        {
+            TagDefinitionStore = tagDefinitionStore;
+            EntityTagManager = entityTagManager;
+            TagManager = tagManager;
+            TagRepository = tagRepository;
+            EntityTagRepository = entityTagRepository;
+        }
 
-        await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
+        public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
+        {
+            var definition = await TagDefinitionStore.GetAsync(input.EntityType);
 
-        var tag = await TagManager.GetOrAddAsync(input.EntityType, input.TagName);
+            await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-        await EntityTagManager.AddTagToEntityAsync(
-            tag.Id,
-            input.EntityType,
-            input.EntityId,
-            CurrentTenant?.Id);
-    }
+            var tag = await TagManager.GetOrAddAsync(input.EntityType, input.TagName);
 
-    public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
-    {
-        var definition = await TagDefinitionStore.GetAsync(input.EntityType);
+            await EntityTagManager.AddTagToEntityAsync(
+                tag.Id,
+                input.EntityType,
+                input.EntityId,
+                CurrentTenant?.Id);
+        }
 
-        await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
+        public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
+        {
+            var definition = await TagDefinitionStore.GetAsync(input.EntityType);
 
-        await EntityTagManager.RemoveTagFromEntityAsync(
-            input.TagId,
-            input.EntityType,
-            input.EntityId,
-            CurrentTenant?.Id);
-    }
+            await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
 
-    public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
-    {
-        var definition = await TagDefinitionStore.GetAsync(input.EntityType);
+            await EntityTagManager.RemoveTagFromEntityAsync(
+                input.TagId,
+                input.EntityType,
+                input.EntityId,
+                CurrentTenant?.Id);
+        }
 
-        await CheckAnyOfPoliciesAsync(definition.UpdatePolicies);
+        public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
+        {
+            var definition = await TagDefinitionStore.GetAsync(input.EntityType);
 
-        await EntityTagManager.SetEntityTagsAsync(input.EntityType, input.EntityId, input.Tags);
+            await CheckAnyOfPoliciesAsync(definition.UpdatePolicies);
+
+            await EntityTagManager.SetEntityTagsAsync(input.EntityType, input.EntityId, input.Tags);
+        }
     }
 }

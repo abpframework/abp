@@ -4,23 +4,24 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.EntityFrameworkCore.DependencyInjection;
-
-public class AbpDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    public Dictionary<Type, object> AbpEntityOptions { get; }
-
-    public AbpDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
-        : base(originalDbContextType, services)
+    public class AbpDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
     {
-        AbpEntityOptions = new Dictionary<Type, object>();
-    }
+        public Dictionary<Type, object> AbpEntityOptions { get; }
 
-    public void Entity<TEntity>(Action<AbpEntityOptions<TEntity>> optionsAction) where TEntity : IEntity
-    {
-        Services.Configure<AbpEntityOptions>(options =>
+        public AbpDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
+            : base(originalDbContextType, services)
         {
-            options.Entity(optionsAction);
-        });
+            AbpEntityOptions = new Dictionary<Type, object>();
+        }
+
+        public void Entity<TEntity>(Action<AbpEntityOptions<TEntity>> optionsAction) where TEntity : IEntity
+        {
+            Services.Configure<AbpEntityOptions>(options =>
+            {
+                options.Entity(optionsAction);
+            });
+        }
     }
 }

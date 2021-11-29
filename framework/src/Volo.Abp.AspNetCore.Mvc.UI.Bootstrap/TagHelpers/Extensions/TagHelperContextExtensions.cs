@@ -3,17 +3,18 @@ using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
-
-public static class TagHelperContextExtensions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 {
-    public static T GetValue<T>(this TagHelperContext context, string key)
+    public static class TagHelperContextExtensions
     {
-        if (!context.Items.ContainsKey(key))
+        public static T GetValue<T>(this TagHelperContext context, string key)
         {
-            return default(T);
-        }
+            if (!context.Items.ContainsKey(key))
+            {
+                return default(T);
+            }
 
-        return (T)context.Items[key];
+            return (T)context.Items[key];
+        }
     }
 }

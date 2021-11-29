@@ -9,51 +9,52 @@ using Volo.Abp.Uow;
 using Volo.Abp.Users;
 using Xunit;
 
-namespace Volo.Abp.Identity;
-
-public class Distributed_User_Change_Event_Tests : AbpIdentityDomainTestBase
+namespace Volo.Abp.Identity
 {
-    private readonly IIdentityUserRepository _userRepository;
-    private readonly ILookupNormalizer _lookupNormalizer;
-    private readonly IdentityUserManager _userManager;
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly ITestCounter _testCounter;
-
-    public Distributed_User_Change_Event_Tests()
+    public class Distributed_User_Change_Event_Tests : AbpIdentityDomainTestBase
     {
-        _userRepository = GetRequiredService<IIdentityUserRepository>();
-        _userManager = GetRequiredService<IdentityUserManager>();
-        _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
-        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-        _testCounter = GetRequiredService<ITestCounter>();
-    }
+        private readonly IIdentityUserRepository _userRepository;
+        private readonly ILookupNormalizer _lookupNormalizer;
+        private readonly IdentityUserManager _userManager;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly ITestCounter _testCounter;
 
-    [Fact]
-    public void Should_Register_Handler()
-    {
-        GetRequiredService<IOptions<AbpDistributedEntityEventOptions>>()
-            .Value
-            .EtoMappings
-            .ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
-
-        GetRequiredService<IOptions<AbpDistributedEventBusOptions>>()
-            .Value
-            .Handlers
-            .ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
-    }
-
-    [Fact]
-    public async Task Should_Trigger_Distributed_EntityUpdated_Event()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        public Distributed_User_Change_Event_Tests()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
-            await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io");
-
-            _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(0);
-            await uow.CompleteAsync();
+            _userRepository = GetRequiredService<IIdentityUserRepository>();
+            _userManager = GetRequiredService<IdentityUserManager>();
+            _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _testCounter = GetRequiredService<ITestCounter>();
         }
 
-        _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(1);
+        [Fact]
+        public void Should_Register_Handler()
+        {
+            GetRequiredService<IOptions<AbpDistributedEntityEventOptions>>()
+                .Value
+                .EtoMappings
+                .ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
+            
+            GetRequiredService<IOptions<AbpDistributedEventBusOptions>>()
+                .Value
+                .Handlers
+                .ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
+        }
+
+        [Fact]
+        public async Task Should_Trigger_Distributed_EntityUpdated_Event()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
+                await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io");
+
+                _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(0);
+                await uow.CompleteAsync();
+            }
+
+            _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(1);
+        }
     }
 }

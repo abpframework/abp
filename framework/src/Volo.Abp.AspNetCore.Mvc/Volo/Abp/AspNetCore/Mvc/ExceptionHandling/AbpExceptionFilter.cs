@@ -16,84 +16,85 @@ using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
-
-public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    public async Task OnExceptionAsync(ExceptionContext context)
+    public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     {
-        if (!ShouldHandleException(context))
+        public async Task OnExceptionAsync(ExceptionContext context)
         {
-            return;
+            if (!ShouldHandleException(context))
+            {
+                return;
+            }
+
+            await HandleAndWrapException(context);
         }
 
-        await HandleAndWrapException(context);
-    }
-
-    protected virtual bool ShouldHandleException(ExceptionContext context)
-    {
-        //TODO: Create DontWrap attribute to control wrapping..?
-
-        if (context.ActionDescriptor.IsControllerAction() &&
-            context.ActionDescriptor.HasObjectResult())
+        protected virtual bool ShouldHandleException(ExceptionContext context)
         {
-            return true;
+            //TODO: Create DontWrap attribute to control wrapping..?
+
+            if (context.ActionDescriptor.IsControllerAction() &&
+                context.ActionDescriptor.HasObjectResult())
+            {
+                return true;
+            }
+
+            if (context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
+            {
+                return true;
+            }
+
+            if (context.HttpContext.Request.IsAjax())
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        if (context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
+        protected virtual async Task HandleAndWrapException(ExceptionContext context)
         {
-            return true;
+            //TODO: Trigger an AbpExceptionHandled event or something like that.
+
+            var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+            var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
+            var remoteServiceErrorInfo  = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
+            {
+                options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+            });
+
+            var logLevel = context.Exception.GetLogLevel();
+
+            var remoteServiceErrorInfoBuilder = new StringBuilder();
+            remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+            remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
+
+            var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
+
+            logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+
+            logger.LogException(context.Exception, logLevel);
+
+            await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
+
+            if (context.Exception is AbpAuthorizationException)
+            {
+                await context.HttpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                    .HandleAsync(context.Exception.As<AbpAuthorizationException>(), context.HttpContext);
+            }
+            else
+            {
+                context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+                context.HttpContext.Response.StatusCode = (int) context
+                    .GetRequiredService<IHttpExceptionStatusCodeFinder>()
+                    .GetStatusCode(context.HttpContext, context.Exception);
+
+                context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
+            }
+
+            context.Exception = null; //Handled!
         }
-
-        if (context.HttpContext.Request.IsAjax())
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected virtual async Task HandleAndWrapException(ExceptionContext context)
-    {
-        //TODO: Trigger an AbpExceptionHandled event or something like that.
-
-        var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
-        var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
-        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
-       {
-           options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-           options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
-       });
-
-        var logLevel = context.Exception.GetLogLevel();
-
-        var remoteServiceErrorInfoBuilder = new StringBuilder();
-        remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-        remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
-
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
-
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
-
-        logger.LogException(context.Exception, logLevel);
-
-        await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
-
-        if (context.Exception is AbpAuthorizationException)
-        {
-            await context.HttpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
-                .HandleAsync(context.Exception.As<AbpAuthorizationException>(), context.HttpContext);
-        }
-        else
-        {
-            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            context.HttpContext.Response.StatusCode = (int)context
-                .GetRequiredService<IHttpExceptionStatusCodeFinder>()
-                .GetStatusCode(context.HttpContext, context.Exception);
-
-            context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
-        }
-
-        context.Exception = null; //Handled!
     }
 }

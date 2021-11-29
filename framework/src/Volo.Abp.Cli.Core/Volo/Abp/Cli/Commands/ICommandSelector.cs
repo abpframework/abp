@@ -1,9 +1,10 @@
 ﻿using System;
 using Volo.Abp.Cli.Args;
 
-namespace Volo.Abp.Cli.Commands;
-
-public interface ICommandSelector
+namespace Volo.Abp.Cli.Commands
 {
-    Type Select(CommandLineArgs commandLineArgs);
+    public interface ICommandSelector
+    {
+        Type Select(CommandLineArgs commandLineArgs);
+    }
 }

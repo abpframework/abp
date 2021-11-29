@@ -2,15 +2,16 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public interface IPermissionChecker
+namespace Volo.Abp.Authorization.Permissions
 {
-    Task<bool> IsGrantedAsync([NotNull] string name);
+    public interface IPermissionChecker
+    {
+        Task<bool> IsGrantedAsync([NotNull]string name);
 
-    Task<bool> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull] string name);
+        Task<bool> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull]string name);
 
-    Task<MultiplePermissionGrantResult> IsGrantedAsync([NotNull] string[] names);
+        Task<MultiplePermissionGrantResult> IsGrantedAsync([NotNull]string[] names);
 
-    Task<MultiplePermissionGrantResult> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull] string[] names);
+        Task<MultiplePermissionGrantResult> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull]string[] names);
+    }
 }

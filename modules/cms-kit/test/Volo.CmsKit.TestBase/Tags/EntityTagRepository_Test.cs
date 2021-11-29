@@ -7,31 +7,32 @@ using System.Threading.Tasks;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.CmsKit.Tags;
-
-public abstract class EntityTagRepository_Test<TStartupModule> : CmsKitTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.CmsKit.Tags
 {
-    private CmsKitTestData _cmsKitTestData;
-    private IEntityTagRepository _entityTagRepository;
-    private ITagRepository _tagRepository;
-
-    public EntityTagRepository_Test()
+    public abstract class EntityTagRepository_Test<TStartupModule> : CmsKitTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        _entityTagRepository = GetRequiredService<IEntityTagRepository>();
-        _tagRepository = GetRequiredService<ITagRepository>();
-    }
+        private CmsKitTestData _cmsKitTestData;
+        private IEntityTagRepository _entityTagRepository;
+        private ITagRepository _tagRepository;
 
-    [Fact]
-    public async Task DeleteManyAsync_ShouldWorkProperly_WithExistingIds()
-    {
-        var relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
+        public EntityTagRepository_Test()
+        {
+            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            _entityTagRepository = GetRequiredService<IEntityTagRepository>();
+            _tagRepository = GetRequiredService<ITagRepository>();
+        }
 
-        await _entityTagRepository.DeleteManyAsync(relatedTags.Select(s => s.Id).ToArray());
+        [Fact]
+        public async Task DeleteManyAsync_ShouldWorkProperly_WithExistingIds()
+        {
+            var relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
 
-        relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
+            await _entityTagRepository.DeleteManyAsync(relatedTags.Select(s => s.Id).ToArray());
 
-        relatedTags.ShouldBeEmpty();
+            relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
+
+            relatedTags.ShouldBeEmpty();
+        }
     }
 }

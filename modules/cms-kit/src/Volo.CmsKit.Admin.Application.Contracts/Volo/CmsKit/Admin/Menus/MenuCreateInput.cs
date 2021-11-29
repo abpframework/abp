@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Admin.Menus;
-
-[Serializable]
-public class MenuCreateInput
+namespace Volo.CmsKit.Admin.Menus
 {
-    public string Name { get; set; }
+    [Serializable]
+    public class MenuCreateInput
+    {
+        public string Name { get; set; }
+    }
 }

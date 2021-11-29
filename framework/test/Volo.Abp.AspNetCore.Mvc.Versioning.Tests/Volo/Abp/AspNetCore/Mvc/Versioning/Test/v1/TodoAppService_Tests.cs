@@ -4,20 +4,21 @@ using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.Versioning.App.v1;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.v1;
-
-public class TodoAppService_Tests : AspNetCoreMvcVersioningTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.v1
 {
-    private readonly ITodoAppService _todoAppService;
-
-    public TodoAppService_Tests()
+    public class TodoAppService_Tests : AspNetCoreMvcVersioningTestBase
     {
-        _todoAppService = ServiceProvider.GetRequiredService<ITodoAppService>();
-    }
+        private readonly ITodoAppService _todoAppService;
 
-    [Fact]
-    public async Task GetAsync()
-    {
-        (await _todoAppService.GetAsync(42)).ShouldBe("Compat-42-1.0");
+        public TodoAppService_Tests()
+        {
+            _todoAppService = ServiceProvider.GetRequiredService<ITodoAppService>();
+        }
+
+        [Fact]
+        public async Task GetAsync()
+        {
+            (await _todoAppService.GetAsync(42)).ShouldBe("Compat-42-1.0");
+        }
     }
 }

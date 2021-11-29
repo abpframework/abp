@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.FeatureManagement;
-
-public class UpdateFeatureDto
+﻿namespace Volo.Abp.FeatureManagement
 {
-    public string Name { get; set; }
+    public class UpdateFeatureDto
+    {
+        public string Name { get; set; }
 
-    public string Value { get; set; }
+        public string Value { get; set; }
+    }
 }

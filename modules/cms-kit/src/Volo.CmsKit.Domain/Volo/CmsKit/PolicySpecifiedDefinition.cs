@@ -4,43 +4,44 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp;
 
-namespace Volo.CmsKit;
-
-public abstract class PolicySpecifiedDefinition : EntityTypeDefinition, IEquatable<PolicySpecifiedDefinition>
+namespace Volo.CmsKit
 {
-    public PolicySpecifiedDefinition(
-        [NotNull] string entityType,
-        IEnumerable<string> createPolicies = null,
-        IEnumerable<string> updatePolicies = null,
-        IEnumerable<string> deletePolicies = null) : base(entityType)
+    public abstract class PolicySpecifiedDefinition : EntityTypeDefinition, IEquatable<PolicySpecifiedDefinition>
     {
-        if (createPolicies != null)
+        public PolicySpecifiedDefinition(
+            [NotNull] string entityType,
+            IEnumerable<string> createPolicies = null,
+            IEnumerable<string> updatePolicies = null,
+            IEnumerable<string> deletePolicies = null) : base(entityType)
         {
-            CreatePolicies = CreatePolicies.Concat(createPolicies).ToList();
+            if (createPolicies != null)
+            {
+                CreatePolicies = CreatePolicies.Concat(createPolicies).ToList();
+            }
+
+            if (updatePolicies != null)
+            {
+                UpdatePolicies = UpdatePolicies.Concat(updatePolicies).ToList();
+            }
+
+            if (deletePolicies != null)
+            {
+                DeletePolicies = DeletePolicies.Concat(deletePolicies).ToList();
+            }
         }
 
-        if (updatePolicies != null)
+        [NotNull]
+        public virtual ICollection<string> CreatePolicies { get; } = new List<string>();
+
+        [NotNull]
+        public virtual ICollection<string> UpdatePolicies { get; } = new List<string>();
+
+        [NotNull]
+        public virtual ICollection<string> DeletePolicies { get; } = new List<string>();
+
+        public bool Equals(PolicySpecifiedDefinition other)
         {
-            UpdatePolicies = UpdatePolicies.Concat(updatePolicies).ToList();
+            return other?.EntityType == EntityType;
         }
-
-        if (deletePolicies != null)
-        {
-            DeletePolicies = DeletePolicies.Concat(deletePolicies).ToList();
-        }
-    }
-
-    [NotNull]
-    public virtual ICollection<string> CreatePolicies { get; } = new List<string>();
-
-    [NotNull]
-    public virtual ICollection<string> UpdatePolicies { get; } = new List<string>();
-
-    [NotNull]
-    public virtual ICollection<string> DeletePolicies { get; } = new List<string>();
-
-    public bool Equals(PolicySpecifiedDefinition other)
-    {
-        return other?.EntityType == EntityType;
     }
 }

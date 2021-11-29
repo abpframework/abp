@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
-
-public interface IToolbarContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
-    Task ConfigureToolbarAsync(IToolbarConfigurationContext context);
+    public interface IToolbarContributor
+    {
+        Task ConfigureToolbarAsync(IToolbarConfigurationContext context);
+    }
 }

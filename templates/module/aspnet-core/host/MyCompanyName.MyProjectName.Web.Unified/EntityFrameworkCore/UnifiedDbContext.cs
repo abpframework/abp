@@ -7,26 +7,27 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
-
-public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public UnifiedDbContext(DbContextOptions<UnifiedDbContext> options)
-        : base(options)
+    public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
     {
+        public UnifiedDbContext(DbContextOptions<UnifiedDbContext> options)
+            : base(options)
+        {
 
-    }
+        }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ConfigurePermissionManagement();
-        modelBuilder.ConfigureSettingManagement();
-        modelBuilder.ConfigureAuditLogging();
-        modelBuilder.ConfigureIdentity();
-        modelBuilder.ConfigureFeatureManagement();
-        modelBuilder.ConfigureTenantManagement();
-        modelBuilder.ConfigureMyProjectName();
+            modelBuilder.ConfigurePermissionManagement();
+            modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureAuditLogging();
+            modelBuilder.ConfigureIdentity();
+            modelBuilder.ConfigureFeatureManagement();
+            modelBuilder.ConfigureTenantManagement();
+            modelBuilder.ConfigureMyProjectName();
+        }
     }
 }

@@ -1,13 +1,14 @@
-namespace Volo.Abp.Application.Dtos;
-
-/// <summary>
-/// This interface is defined to standardize to request a limited result.
-/// </summary>
-public interface ILimitedResultRequest
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
-    /// Maximum result count should be returned.
-    /// This is generally used to limit result count on paging.
+    /// This interface is defined to standardize to request a limited result.
     /// </summary>
-    int MaxResultCount { get; set; }
+    public interface ILimitedResultRequest
+    {
+        /// <summary>
+        /// Maximum result count should be returned.
+        /// This is generally used to limit result count on paging.
+        /// </summary>
+        int MaxResultCount { get; set; }
+    }
 }

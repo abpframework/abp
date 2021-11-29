@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.BackgroundWorkers;
-
-public class AbpBackgroundWorkerOptions
+﻿namespace Volo.Abp.BackgroundWorkers
 {
-    /// <summary>
-    /// Default: true.
-    /// </summary>
-    public bool IsEnabled { get; set; } = true;
+    public class AbpBackgroundWorkerOptions
+    {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
+    }
 }

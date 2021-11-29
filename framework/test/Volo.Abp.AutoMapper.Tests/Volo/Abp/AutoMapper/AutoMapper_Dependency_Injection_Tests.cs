@@ -5,72 +5,73 @@ using Volo.Abp.Testing;
 using Xunit;
 using IObjectMapper = Volo.Abp.ObjectMapping.IObjectMapper;
 
-namespace Volo.Abp.AutoMapper;
-
-public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMapperTestModule>
+namespace Volo.Abp.AutoMapper
 {
-    private readonly IObjectMapper _objectMapper;
-
-    public AutoMapper_Dependency_Injection_Tests()
+    public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMapperTestModule>
     {
-        _objectMapper = GetRequiredService<IObjectMapper>();
-    }
+        private readonly IObjectMapper _objectMapper;
 
-    [Fact]
-    public void Should_Registered_AutoMapper_Service()
-    {
-        GetService<CustomMappingAction>().ShouldNotBeNull();
-    }
-
-    [Fact]
-    public void Custom_MappingAction_Test()
-    {
-        var sourceModel = new SourceModel
+        public AutoMapper_Dependency_Injection_Tests()
         {
-            Name = "Source"
-        };
-
-        _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
-    }
-
-    public class SourceModel
-    {
-        public string Name { get; set; }
-    }
-
-    public class DestModel
-    {
-        public string Name { get; set; }
-    }
-
-    public class MapperActionProfile : Profile
-    {
-        public MapperActionProfile()
-        {
-            CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
-        }
-    }
-
-    public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
-    {
-        private readonly CustomMappingActionService _customMappingActionService;
-
-        public CustomMappingAction(CustomMappingActionService customMappingActionService)
-        {
-            _customMappingActionService = customMappingActionService;
+            _objectMapper = GetRequiredService<IObjectMapper>();
         }
 
-        public void Process(SourceModel source, DestModel destination, ResolutionContext context)
+        [Fact]
+        public void Should_Registered_AutoMapper_Service()
         {
-            destination.Name = _customMappingActionService.GetName();
+            GetService<CustomMappingAction>().ShouldNotBeNull();
         }
-    }
 
-    public class CustomMappingActionService : ITransientDependency
-    {
-        public string GetName()
+        [Fact]
+        public void Custom_MappingAction_Test()
         {
-            return nameof(CustomMappingActionService);
+            var sourceModel = new SourceModel
+            {
+                Name = "Source"
+            };
+
+            _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
+        }
+
+        public class SourceModel
+        {
+            public string Name { get; set; }
+        }
+
+        public class DestModel
+        {
+            public string Name { get; set; }
+        }
+
+        public class MapperActionProfile : Profile
+        {
+            public MapperActionProfile()
+            {
+                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
+            }
+        }
+
+        public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
+        {
+            private readonly CustomMappingActionService _customMappingActionService;
+
+            public CustomMappingAction(CustomMappingActionService customMappingActionService)
+            {
+                _customMappingActionService = customMappingActionService;
+            }
+
+            public void Process(SourceModel source, DestModel destination, ResolutionContext context)
+            {
+                destination.Name = _customMappingActionService.GetName();
+            }
+        }
+
+        public class CustomMappingActionService : ITransientDependency
+        {
+            public string GetName()
+            {
+                return nameof(CustomMappingActionService);
+            }
         }
     }
 }

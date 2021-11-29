@@ -1,6 +1,7 @@
-﻿namespace MyCompanyName.MyProjectName.Samples;
-
-public class SampleDto
+﻿namespace MyCompanyName.MyProjectName.Samples
 {
-    public int Value { get; set; }
+    public class SampleDto
+    {
+        public int Value { get; set; }
+    }
 }

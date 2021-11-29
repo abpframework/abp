@@ -10,31 +10,32 @@ using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.Uow;
 
-namespace MyCompanyName.MyProjectName.MongoDB;
-
-[DependsOn(
-    typeof(MyProjectNameDomainModule),
-    typeof(AbpPermissionManagementMongoDbModule),
-    typeof(AbpSettingManagementMongoDbModule),
-    typeof(AbpIdentityMongoDbModule),
-    typeof(AbpIdentityServerMongoDbModule),
-    typeof(AbpBackgroundJobsMongoDbModule),
-    typeof(AbpAuditLoggingMongoDbModule),
-    typeof(AbpTenantManagementMongoDbModule),
-    typeof(AbpFeatureManagementMongoDbModule)
-    )]
-public class MyProjectNameMongoDbModule : AbpModule
+namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameDomainModule),
+        typeof(AbpPermissionManagementMongoDbModule),
+        typeof(AbpSettingManagementMongoDbModule),
+        typeof(AbpIdentityMongoDbModule),
+        typeof(AbpIdentityServerMongoDbModule),
+        typeof(AbpBackgroundJobsMongoDbModule),
+        typeof(AbpAuditLoggingMongoDbModule),
+        typeof(AbpTenantManagementMongoDbModule),
+        typeof(AbpFeatureManagementMongoDbModule)
+        )]
+    public class MyProjectNameMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories();
-        });
+            context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
+            });
 
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
-        {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
-        });
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+            });
+        }
     }
 }

@@ -9,48 +9,49 @@ using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.TenantManagement.Blazor;
-
-[DependsOn(
-    typeof(AbpAutoMapperModule),
-    typeof(AbpTenantManagementApplicationContractsModule),
-    typeof(AbpFeatureManagementBlazorModule)
-)]
-public class AbpTenantManagementBlazorModule : AbpModule
+namespace Volo.Abp.TenantManagement.Blazor
 {
-    private static readonly OneTimeRunner OneTimeRunner = new();
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutoMapperModule),
+        typeof(AbpTenantManagementApplicationContractsModule),
+        typeof(AbpFeatureManagementBlazorModule)
+    )]
+    public class AbpTenantManagementBlazorModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpTenantManagementBlazorModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
+        private static readonly OneTimeRunner OneTimeRunner = new();
+        
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<AbpTenantManagementBlazorAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpTenantManagementBlazorModule>();
 
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new TenantManagementBlazorMenuContributor());
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpTenantManagementBlazorAutoMapperProfile>(validate: true);
+            });
 
-        Configure<AbpRouterOptions>(options =>
-        {
-            options.AdditionalAssemblies.Add(typeof(AbpTenantManagementBlazorModule).Assembly);
-        });
-    }
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new TenantManagementBlazorMenuContributor());
+            });
 
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        OneTimeRunner.Run(() =>
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AdditionalAssemblies.Add(typeof(AbpTenantManagementBlazorModule).Assembly);
+            });
+        }
+        
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper
-                .ApplyEntityConfigurationToUi(
-                    TenantManagementModuleExtensionConsts.ModuleName,
-                    TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-                    createFormTypes: new[] { typeof(TenantCreateDto) },
-                    editFormTypes: new[] { typeof(TenantUpdateDto) }
-                );
-        });
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper
+                    .ApplyEntityConfigurationToUi(
+                        TenantManagementModuleExtensionConsts.ModuleName,
+                        TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                        createFormTypes: new[] { typeof(TenantCreateDto) },
+                        editFormTypes: new[] { typeof(TenantUpdateDto) }
+                    );
+            });
+        }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Identity;
-
-public interface IUserRoleFinder
+namespace Volo.Abp.Identity
 {
-    Task<string[]> GetRolesAsync(Guid userId);
+    public interface IUserRoleFinder
+    {
+        Task<string[]> GetRolesAsync(Guid userId);
+    }
 }

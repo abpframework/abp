@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 
-namespace Microsoft.AspNetCore.RequestLocalization;
-
-public class AbpRequestLocalizationOptions
+namespace Microsoft.AspNetCore.RequestLocalization
 {
-    public List<Func<IServiceProvider, RequestLocalizationOptions, Task>> RequestLocalizationOptionConfigurators { get; }
-
-    public AbpRequestLocalizationOptions()
+    public class AbpRequestLocalizationOptions
     {
-        RequestLocalizationOptionConfigurators = new List<Func<IServiceProvider, RequestLocalizationOptions, Task>>();
+        public List<Func<IServiceProvider, RequestLocalizationOptions, Task>> RequestLocalizationOptionConfigurators { get; }
+
+        public AbpRequestLocalizationOptions()
+        {
+            RequestLocalizationOptionConfigurators = new List<Func<IServiceProvider, RequestLocalizationOptions, Task>>();
+        }
     }
 }

@@ -8,59 +8,60 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.SimpleStateChecking;
 using Xunit;
 
-namespace Volo.Abp.Authorization;
-
-public abstract class PermissionStateProvider_Tests : AuthorizationTestBase
+namespace Volo.Abp.Authorization
 {
-    protected ISimpleStateCheckerManager<PermissionDefinition> StateCheckerManager { get; }
-    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
-    protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
-
-    public PermissionStateProvider_Tests()
+    public abstract class PermissionStateProvider_Tests : AuthorizationTestBase
     {
-        StateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<PermissionDefinition>>();
-        PermissionDefinitionManager = GetRequiredService<IPermissionDefinitionManager>();
-        CurrentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
-    }
-}
+        protected ISimpleStateCheckerManager<PermissionDefinition> StateCheckerManager { get; }
+        protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
 
-public class SpecifyPermissionStateProvider : PermissionStateProvider_Tests
-{
-    [Fact]
-    public async Task PermissionState_Test()
-    {
-        var myPermission1 = PermissionDefinitionManager.Get("MyPermission1");
-        myPermission1.StateCheckers.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionSimpleStateChecker));
-
-        (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
-
-        using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.EditionId, Guid.NewGuid().ToString())))
+        public PermissionStateProvider_Tests()
         {
-            (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeTrue();
+            StateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<PermissionDefinition>>();
+            PermissionDefinitionManager = GetRequiredService<IPermissionDefinitionManager>();
+            CurrentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
     }
-}
 
-public class GlobalPermissionStateProvider : PermissionStateProvider_Tests
-{
-    protected override void AfterAddApplication(IServiceCollection services)
+    public class SpecifyPermissionStateProvider : PermissionStateProvider_Tests
     {
-        services.Configure<AbpSimpleStateCheckerOptions<PermissionDefinition>>(options =>
+        [Fact]
+        public async Task PermissionState_Test()
         {
-            options.GlobalStateCheckers.Add<TestGlobalRequireRolePermissionSimpleStateChecker>();
-        });
+            var myPermission1 = PermissionDefinitionManager.Get("MyPermission1");
+            myPermission1.StateCheckers.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionSimpleStateChecker));
+
+            (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
+
+            using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.EditionId, Guid.NewGuid().ToString())))
+            {
+                (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeTrue();
+            }
+        }
     }
 
-    [Fact]
-    public async Task Global_PermissionState_Test()
+    public class GlobalPermissionStateProvider : PermissionStateProvider_Tests
     {
-        var myPermission2 = PermissionDefinitionManager.Get("MyPermission2");
-
-        (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeFalse();
-
-        using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "admin")))
+        protected override void AfterAddApplication(IServiceCollection services)
         {
-            (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeTrue();
+            services.Configure<AbpSimpleStateCheckerOptions<PermissionDefinition>>(options =>
+            {
+                options.GlobalStateCheckers.Add<TestGlobalRequireRolePermissionSimpleStateChecker>();
+            });
+        }
+
+        [Fact]
+        public async Task Global_PermissionState_Test()
+        {
+            var myPermission2 = PermissionDefinitionManager.Get("MyPermission2");
+
+            (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeFalse();
+
+            using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "admin")))
+            {
+                (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeTrue();
+            }
         }
     }
 }

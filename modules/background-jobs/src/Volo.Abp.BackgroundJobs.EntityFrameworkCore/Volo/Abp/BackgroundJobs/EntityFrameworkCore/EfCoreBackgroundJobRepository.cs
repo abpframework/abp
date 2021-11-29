@@ -8,35 +8,36 @@ using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore;
-
-public class EfCoreBackgroundJobRepository : EfCoreRepository<IBackgroundJobsDbContext, BackgroundJobRecord, Guid>, IBackgroundJobRepository
+namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
-    protected IClock Clock { get; }
-
-    public EfCoreBackgroundJobRepository(
-        IDbContextProvider<IBackgroundJobsDbContext> dbContextProvider,
-        IClock clock)
-        : base(dbContextProvider)
+    public class EfCoreBackgroundJobRepository : EfCoreRepository<IBackgroundJobsDbContext, BackgroundJobRecord, Guid>, IBackgroundJobRepository
     {
-        Clock = clock;
-    }
+        protected IClock Clock { get; }
 
-    public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
-        int maxResultCount,
-        CancellationToken cancellationToken = default)
-    {
-        return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
-    }
+        public EfCoreBackgroundJobRepository(
+            IDbContextProvider<IBackgroundJobsDbContext> dbContextProvider,
+            IClock clock)
+            : base(dbContextProvider)
+        {
+            Clock = clock;
+        }
 
-    protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQueryAsync(int maxResultCount)
-    {
-        var now = Clock.Now;
-        return (await GetDbSetAsync())
-            .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
-            .OrderByDescending(t => t.Priority)
-            .ThenBy(t => t.TryCount)
-            .ThenBy(t => t.NextTryTime)
-            .Take(maxResultCount);
+        public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
+            int maxResultCount,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQueryAsync(int maxResultCount)
+        {
+            var now = Clock.Now;
+            return (await GetDbSetAsync())
+                .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
+                .OrderByDescending(t => t.Priority)
+                .ThenBy(t => t.TryCount)
+                .ThenBy(t => t.NextTryTime)
+                .Take(maxResultCount);
+        }
     }
 }

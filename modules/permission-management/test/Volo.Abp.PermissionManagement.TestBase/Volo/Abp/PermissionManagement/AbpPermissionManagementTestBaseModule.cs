@@ -4,35 +4,36 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpPermissionManagementDomainModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule)
-    )]
-public class AbpPermissionManagementTestBaseModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementDomainModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule)
+        )]
+    public class AbpPermissionManagementTestBaseModule : AbpModule
     {
-        context.Services.Configure<PermissionManagementOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ManagementProviders.Add<TestPermissionManagementProvider>();
-        });
-    }
+            context.Services.Configure<PermissionManagementOptions>(options =>
+            {
+                options.ManagementProviders.Add<TestPermissionManagementProvider>();
+            });
+        }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<PermissionTestDataBuilder>()
-                .BuildAsync());
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<PermissionTestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

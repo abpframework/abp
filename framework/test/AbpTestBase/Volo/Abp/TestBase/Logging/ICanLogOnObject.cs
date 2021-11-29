@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.TestBase.Logging;
-
-public interface ICanLogOnObject
+namespace Volo.Abp.TestBase.Logging
 {
-    List<string> Logs { get; }
+    public interface ICanLogOnObject
+    {
+        List<string> Logs { get; }
+    }
 }

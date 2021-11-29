@@ -5,39 +5,41 @@ using Volo.Abp.SecurityLog;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.Security.SecurityLog;
-
-public class SecurityLogManager_Tests : AbpIntegratedTest<AbpSecurityTestModule>
+namespace Volo.Abp.Security.SecurityLog
 {
-    private readonly ISecurityLogManager _securityLogManager;
 
-    private ISecurityLogStore _auditingStore;
-
-    public SecurityLogManager_Tests()
+    public class SecurityLogManager_Tests : AbpIntegratedTest<AbpSecurityTestModule>
     {
-        _securityLogManager = GetRequiredService<ISecurityLogManager>();
-    }
+        private readonly ISecurityLogManager _securityLogManager;
 
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        _auditingStore = Substitute.For<ISecurityLogStore>();
-        services.AddSingleton(_auditingStore);
-    }
+        private ISecurityLogStore _auditingStore;
 
-    [Fact]
-    public async Task SaveAsync()
-    {
-        await _securityLogManager.SaveAsync(securityLog =>
+        public SecurityLogManager_Tests()
         {
-            securityLog.Identity = "Test";
-            securityLog.Action = "Test-Action";
-            securityLog.UserName = "Test-User";
-        });
+            _securityLogManager = GetRequiredService<ISecurityLogManager>();
+        }
 
-        await _auditingStore.Received().SaveAsync(Arg.Is<SecurityLogInfo>(log =>
-            log.ApplicationName == "AbpSecurityTest" &&
-            log.Identity == "Test" &&
-            log.Action == "Test-Action" &&
-            log.UserName == "Test-User"));
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _auditingStore = Substitute.For<ISecurityLogStore>();
+            services.AddSingleton(_auditingStore);
+        }
+
+        [Fact]
+        public async Task SaveAsync()
+        {
+            await _securityLogManager.SaveAsync(securityLog =>
+            {
+                securityLog.Identity = "Test";
+                securityLog.Action = "Test-Action";
+                securityLog.UserName = "Test-User";
+            });
+
+            await _auditingStore.Received().SaveAsync(Arg.Is<SecurityLogInfo>(log =>
+                log.ApplicationName == "AbpSecurityTest" &&
+                log.Identity == "Test" &&
+                log.Action == "Test-Action" &&
+                log.UserName == "Test-User"));
+        }
     }
 }

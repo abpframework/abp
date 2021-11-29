@@ -3,63 +3,64 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 
-namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
-
-public class AbpExceptionHandlingLogger : ILogger
+namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 {
-    private readonly IServiceCollection _serviceCollection;
-    private IUserExceptionInformer _userExceptionInformer;
-
-    public AbpExceptionHandlingLogger(IServiceCollection serviceCollection)
+    public class AbpExceptionHandlingLogger : ILogger
     {
-        _serviceCollection = serviceCollection;
-    }
+        private readonly IServiceCollection _serviceCollection;
+        private IUserExceptionInformer _userExceptionInformer;
 
-    public virtual void Log<TState>(
-        LogLevel logLevel,
-        EventId eventId,
-        TState state,
-        Exception exception,
-        Func<TState, Exception, string> formatter)
-    {
-        if (exception == null)
+        public AbpExceptionHandlingLogger(IServiceCollection serviceCollection)
         {
-            return;
+            _serviceCollection = serviceCollection;
         }
 
-        if (logLevel != LogLevel.Critical && logLevel != LogLevel.Error)
+        public virtual void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception exception,
+            Func<TState, Exception, string> formatter)
         {
-            return;
+            if (exception == null)
+            {
+                return;
+            }
+
+            if (logLevel != LogLevel.Critical && logLevel != LogLevel.Error)
+            {
+                return;
+            }
+
+            TryInitialize();
+
+            if (_userExceptionInformer == null)
+            {
+                return;
+            }
+
+            _userExceptionInformer.Inform(new UserExceptionInformerContext(exception));
         }
 
-        TryInitialize();
-
-        if (_userExceptionInformer == null)
+        protected virtual void TryInitialize()
         {
-            return;
+            var serviceProvider = _serviceCollection.GetServiceProviderOrNull();
+            if (serviceProvider == null)
+            {
+                return;
+            }
+
+            _userExceptionInformer = serviceProvider.GetRequiredService<IUserExceptionInformer>();
         }
 
-        _userExceptionInformer.Inform(new UserExceptionInformerContext(exception));
-    }
-
-    protected virtual void TryInitialize()
-    {
-        var serviceProvider = _serviceCollection.GetServiceProviderOrNull();
-        if (serviceProvider == null)
+        public virtual bool IsEnabled(LogLevel logLevel)
         {
-            return;
+            return logLevel == LogLevel.Critical || logLevel == LogLevel.Error;
         }
 
-        _userExceptionInformer = serviceProvider.GetRequiredService<IUserExceptionInformer>();
-    }
-
-    public virtual bool IsEnabled(LogLevel logLevel)
-    {
-        return logLevel == LogLevel.Critical || logLevel == LogLevel.Error;
-    }
-
-    public virtual IDisposable BeginScope<TState>(TState state)
-    {
-        return NullDisposable.Instance;
+        public virtual IDisposable BeginScope<TState>(TState state)
+        {
+            return NullDisposable.Instance;
+        }
     }
 }

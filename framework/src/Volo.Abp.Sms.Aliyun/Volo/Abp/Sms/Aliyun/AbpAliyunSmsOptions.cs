@@ -1,10 +1,11 @@
-namespace Volo.Abp.Sms.Aliyun;
-
-public class AbpAliyunSmsOptions
+namespace Volo.Abp.Sms.Aliyun
 {
-    public string AccessKeySecret { get; set; }
+    public class AbpAliyunSmsOptions
+    {
+        public string AccessKeySecret { get; set; }
 
-    public string AccessKeyId { get; set; }
+        public string AccessKeyId { get; set; }
 
-    public string EndPoint { get; set; }
+        public string EndPoint { get; set; }
+    }
 }

@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Volo.Abp;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpWebAssemblyServiceCollectionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static WebAssemblyHostBuilder GetHostBuilder(
-        [NotNull] this IServiceCollection services)
+    public static class AbpWebAssemblyServiceCollectionExtensions
     {
-        Check.NotNull(services, nameof(services));
+        public static WebAssemblyHostBuilder GetHostBuilder(
+            [NotNull] this IServiceCollection services)
+        {
+            Check.NotNull(services, nameof(services));
 
-        return services.GetSingletonInstance<WebAssemblyHostBuilder>();
+            return services.GetSingletonInstance<WebAssemblyHostBuilder>();
+        }
     }
 }

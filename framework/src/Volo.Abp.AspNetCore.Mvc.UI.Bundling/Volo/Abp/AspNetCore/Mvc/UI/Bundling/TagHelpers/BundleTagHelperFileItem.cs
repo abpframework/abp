@@ -1,24 +1,25 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
-
-public class BundleTagHelperFileItem : BundleTagHelperItem
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    [NotNull]
-    public string File { get; }
-
-    public BundleTagHelperFileItem([NotNull] string file)
+    public class BundleTagHelperFileItem : BundleTagHelperItem
     {
-        File = Check.NotNull(file, nameof(file));
-    }
+        [NotNull]
+        public string File { get; }
 
-    public override string ToString()
-    {
-        return File;
-    }
+        public BundleTagHelperFileItem([NotNull] string file)
+        {
+            File = Check.NotNull(file, nameof(file));
+        }
 
-    public override void AddToConfiguration(BundleConfiguration configuration)
-    {
-        configuration.AddFiles(File);
+        public override string ToString()
+        {
+            return File;
+        }
+
+        public override void AddToConfiguration(BundleConfiguration configuration)
+        {
+            configuration.AddFiles(File);
+        }
     }
 }

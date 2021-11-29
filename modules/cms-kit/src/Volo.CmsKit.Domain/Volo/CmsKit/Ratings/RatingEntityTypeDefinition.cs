@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.CmsKit.Ratings;
-
-public class RatingEntityTypeDefinition : EntityTypeDefinition
+namespace Volo.CmsKit.Ratings
 {
-    public RatingEntityTypeDefinition(
-        [NotNull] string entityType) : base(entityType)
+    public class RatingEntityTypeDefinition : EntityTypeDefinition
     {
+        public RatingEntityTypeDefinition(
+            [NotNull] string entityType) : base(entityType)
+        {
+        }
     }
 }

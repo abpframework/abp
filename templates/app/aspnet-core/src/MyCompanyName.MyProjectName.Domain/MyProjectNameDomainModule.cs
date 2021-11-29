@@ -14,32 +14,33 @@ using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(MyProjectNameDomainSharedModule),
-    typeof(AbpAuditLoggingDomainModule),
-    typeof(AbpBackgroundJobsDomainModule),
-    typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpIdentityDomainModule),
-    typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpIdentityServerDomainModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
-    typeof(AbpSettingManagementDomainModule),
-    typeof(AbpTenantManagementDomainModule),
-    typeof(AbpEmailingModule)
-)]
-public class MyProjectNameDomainModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameDomainSharedModule),
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpEmailingModule)
+    )]
+    public class MyProjectNameDomainModule : AbpModule
     {
-        Configure<AbpMultiTenancyOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.IsEnabled = MultiTenancyConsts.IsEnabled;
-        });
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
 
 #if DEBUG
-        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
+        }
     }
 }

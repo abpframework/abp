@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
-
-public class ProjectResult
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public byte[] ZipContent { get; set; }
+    public class ProjectResult
+    {
+        public byte[] ZipContent { get; set; }
+    }
 }

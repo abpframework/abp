@@ -5,28 +5,29 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(MyProjectNameApplicationContractsModule),
-    typeof(AbpAspNetCoreMvcModule))]
-public class MyProjectNameHttpApiModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcModule))]
+    public class MyProjectNameHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(MyProjectNameHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(MyProjectNameHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<MyProjectNameResource>()
-                .AddBaseTypes(typeof(AbpUiResource));
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<MyProjectNameResource>()
+                    .AddBaseTypes(typeof(AbpUiResource));
+            });
+        }
     }
 }

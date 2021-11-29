@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.TextTemplating.Scriban;
-
-public class ScribanTemplateDefinitionTests : TemplateDefinitionTests<ScribanTextTemplatingTestModule>
+﻿namespace Volo.Abp.TextTemplating.Scriban
 {
+    public class ScribanTemplateDefinitionTests : TemplateDefinitionTests<ScribanTextTemplatingTestModule>
+    {
 
+    }
 }

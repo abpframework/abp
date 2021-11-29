@@ -1,42 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Volo.Abp.TextTemplating;
-
-public class TemplateDefinitionContext : ITemplateDefinitionContext
+namespace Volo.Abp.TextTemplating
 {
-    protected Dictionary<string, TemplateDefinition> Templates { get; }
-
-    public TemplateDefinitionContext(Dictionary<string, TemplateDefinition> templates)
+    public class TemplateDefinitionContext : ITemplateDefinitionContext
     {
-        Templates = templates;
-    }
+        protected Dictionary<string, TemplateDefinition> Templates { get; }
 
-    public IReadOnlyList<TemplateDefinition> GetAll(string name)
-    {
-        return Templates.Values.ToImmutableList();
-    }
-
-    public virtual TemplateDefinition GetOrNull(string name)
-    {
-        return Templates.GetOrDefault(name);
-    }
-
-    public virtual IReadOnlyList<TemplateDefinition> GetAll()
-    {
-        return Templates.Values.ToImmutableList();
-    }
-
-    public virtual void Add(params TemplateDefinition[] definitions)
-    {
-        if (definitions.IsNullOrEmpty())
+        public TemplateDefinitionContext(Dictionary<string, TemplateDefinition> templates)
         {
-            return;
+            Templates = templates;
         }
 
-        foreach (var definition in definitions)
+        public IReadOnlyList<TemplateDefinition> GetAll(string name)
         {
-            Templates[definition.Name] = definition;
+            return Templates.Values.ToImmutableList();
+        }
+
+        public virtual TemplateDefinition GetOrNull(string name)
+        {
+            return Templates.GetOrDefault(name);
+        }
+
+        public virtual IReadOnlyList<TemplateDefinition> GetAll()
+        {
+            return Templates.Values.ToImmutableList();
+        }
+
+        public virtual void Add(params TemplateDefinition[] definitions)
+        {
+            if (definitions.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            foreach (var definition in definitions)
+            {
+                Templates[definition.Name] = definition;
+            }
         }
     }
 }

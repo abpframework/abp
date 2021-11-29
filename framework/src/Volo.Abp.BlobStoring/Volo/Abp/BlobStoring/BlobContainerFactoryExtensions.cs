@@ -1,20 +1,21 @@
-﻿namespace Volo.Abp.BlobStoring;
-
-public static class BlobContainerFactoryExtensions
+﻿namespace Volo.Abp.BlobStoring
 {
-    /// <summary>
-    /// Gets a named container.
-    /// </summary>
-    /// <param name="blobContainerFactory">The blob container manager</param>
-    /// <returns>
-    /// The container object.
-    /// </returns>
-    public static IBlobContainer Create<TContainer>(
-        this IBlobContainerFactory blobContainerFactory
-    )
+    public static class BlobContainerFactoryExtensions
     {
-        return blobContainerFactory.Create(
-            BlobContainerNameAttribute.GetContainerName<TContainer>()
-        );
+        /// <summary>
+        /// Gets a named container.
+        /// </summary>
+        /// <param name="blobContainerFactory">The blob container manager</param>
+        /// <returns>
+        /// The container object.
+        /// </returns>
+        public static IBlobContainer Create<TContainer>(
+            this IBlobContainerFactory blobContainerFactory
+        )
+        {
+            return blobContainerFactory.Create(
+                BlobContainerNameAttribute.GetContainerName<TContainer>()
+            );
+        }
     }
 }

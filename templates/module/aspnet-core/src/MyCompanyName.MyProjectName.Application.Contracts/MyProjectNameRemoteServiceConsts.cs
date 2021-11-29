@@ -1,8 +1,9 @@
-﻿namespace MyCompanyName.MyProjectName;
-
-public class MyProjectNameRemoteServiceConsts
+﻿namespace MyCompanyName.MyProjectName
 {
-    public const string RemoteServiceName = "MyProjectName";
+    public class MyProjectNameRemoteServiceConsts
+    {
+        public const string RemoteServiceName = "MyProjectName";
 
-    public const string ModuleName = "myProjectName";
+        public const string ModuleName = "myProjectName";
+    }
 }

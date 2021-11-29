@@ -5,60 +5,61 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-public class WidgetManager : IWidgetManager
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    protected AbpWidgetOptions Options { get; }
-    protected IAuthorizationService AuthorizationService { get; }
-    protected ICurrentUser CurrentUser { get; }
-
-    public WidgetManager(
-        IOptions<AbpWidgetOptions> widgetOptions,
-        IAuthorizationService authorizationService,
-        ICurrentUser currentUser)
+    public class WidgetManager : IWidgetManager
     {
-        AuthorizationService = authorizationService;
-        CurrentUser = currentUser;
-        Options = widgetOptions.Value;
-    }
+        protected AbpWidgetOptions Options { get; }
+        protected IAuthorizationService AuthorizationService { get; }
+        protected ICurrentUser CurrentUser { get; }
 
-    public async Task<bool> IsGrantedAsync(Type widgetComponentType)
-    {
-        var widget = Options.Widgets.Find(widgetComponentType);
-
-        return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
-    }
-
-    public async Task<bool> IsGrantedAsync(string name)
-    {
-        var widget = Options.Widgets.Find(name);
-
-        return await IsGrantedAsyncInternal(widget, name);
-    }
-
-    private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
-    {
-        if (widget == null)
+        public WidgetManager(
+            IOptions<AbpWidgetOptions> widgetOptions,
+            IAuthorizationService authorizationService,
+            ICurrentUser currentUser)
         {
-            throw new ArgumentNullException(wantedWidgetName);
+            AuthorizationService = authorizationService;
+            CurrentUser = currentUser;
+            Options = widgetOptions.Value;
         }
 
-        if (widget.RequiredPolicies.Any())
+        public async Task<bool> IsGrantedAsync(Type widgetComponentType)
         {
-            foreach (var requiredPolicy in widget.RequiredPolicies)
+            var widget = Options.Widgets.Find(widgetComponentType);
+
+            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
+        }
+
+        public async Task<bool> IsGrantedAsync(string name)
+        {
+            var widget = Options.Widgets.Find(name);
+
+            return await IsGrantedAsyncInternal(widget, name);
+        }
+
+        private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
+        {
+            if (widget == null)
             {
-                if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy)).Succeeded)
+                throw new ArgumentNullException(wantedWidgetName);
+            }
+
+            if (widget.RequiredPolicies.Any())
+            {
+                foreach (var requiredPolicy in widget.RequiredPolicies)
                 {
-                    return false;
+                    if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy)).Succeeded)
+                    {
+                        return false;
+                    }
                 }
             }
-        }
-        else if (widget.RequiresAuthentication && !CurrentUser.IsAuthenticated)
-        {
-            return false;
-        }
+            else if (widget.RequiresAuthentication && !CurrentUser.IsAuthenticated)
+            {
+                return false;
+            }
 
-        return true;
+            return true;
+        }
     }
 }

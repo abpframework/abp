@@ -7,32 +7,33 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.TenantManagement;
-
-[DependsOn(
-    typeof(AbpTenantManagementApplicationContractsModule),
-    typeof(AbpFeatureManagementHttpApiModule),
-    typeof(AbpAspNetCoreMvcModule)
-    )]
-public class AbpTenantManagementHttpApiModule : AbpModule
+namespace Volo.Abp.TenantManagement
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTenantManagementApplicationContractsModule),
+        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpAspNetCoreMvcModule)
+        )]
+    public class AbpTenantManagementHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTenantManagementHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTenantManagementHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<AbpTenantManagementResource>()
-                .AddBaseTypes(
-                    typeof(AbpFeatureManagementResource),
-                    typeof(AbpUiResource));
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpTenantManagementResource>()
+                    .AddBaseTypes(
+                        typeof(AbpFeatureManagementResource),
+                        typeof(AbpUiResource));
+            });
+        }
     }
 }

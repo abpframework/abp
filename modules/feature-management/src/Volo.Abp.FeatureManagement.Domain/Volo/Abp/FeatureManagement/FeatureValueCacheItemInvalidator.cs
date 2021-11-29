@@ -4,32 +4,33 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 
-namespace Volo.Abp.FeatureManagement;
-
-public class FeatureValueCacheItemInvalidator :
-    ILocalEventHandler<EntityChangedEventData<FeatureValue>>,
-    ITransientDependency
+namespace Volo.Abp.FeatureManagement
 {
-    protected IDistributedCache<FeatureValueCacheItem> Cache { get; }
-
-    public FeatureValueCacheItemInvalidator(IDistributedCache<FeatureValueCacheItem> cache)
+    public class FeatureValueCacheItemInvalidator :
+        ILocalEventHandler<EntityChangedEventData<FeatureValue>>,
+        ITransientDependency
     {
-        Cache = cache;
-    }
+        protected IDistributedCache<FeatureValueCacheItem> Cache { get; }
 
-    public virtual async Task HandleEventAsync(EntityChangedEventData<FeatureValue> eventData)
-    {
-        var cacheKey = CalculateCacheKey(
-            eventData.Entity.Name,
-            eventData.Entity.ProviderName,
-            eventData.Entity.ProviderKey
-        );
+        public FeatureValueCacheItemInvalidator(IDistributedCache<FeatureValueCacheItem> cache)
+        {
+            Cache = cache;
+        }
 
-        await Cache.RemoveAsync(cacheKey, considerUow: true);
-    }
+        public virtual async Task HandleEventAsync(EntityChangedEventData<FeatureValue> eventData)
+        {
+            var cacheKey = CalculateCacheKey(
+                eventData.Entity.Name,
+                eventData.Entity.ProviderName,
+                eventData.Entity.ProviderKey
+            );
 
-    protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
-    {
-        return FeatureValueCacheItem.CalculateCacheKey(name, providerName, providerKey);
+            await Cache.RemoveAsync(cacheKey, considerUow: true);
+        }
+
+        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
+        {
+            return FeatureValueCacheItem.CalculateCacheKey(name, providerName, providerKey);
+        }
     }
 }

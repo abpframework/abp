@@ -4,22 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JsTree;
-
-public class JsTreeStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JsTree
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class JsTreeStyleContributor : BundleContributor
     {
-        var options = context
-            .ServiceProvider
-            .GetRequiredService<IOptions<JsTreeOptions>>()
-            .Value;
-
-        if (options.StylePath.IsNullOrEmpty())
+        public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            return;
-        }
+            var options = context
+                .ServiceProvider
+                .GetRequiredService<IOptions<JsTreeOptions>>()
+                .Value;
 
-        context.Files.AddIfNotContains(options.StylePath);
+            if (options.StylePath.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            context.Files.AddIfNotContains(options.StylePath);
+        }
     }
 }

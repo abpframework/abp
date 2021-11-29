@@ -2,19 +2,20 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpStudioModuleInstallerModule),
-    typeof(AbpVirtualFileSystemModule)
-    )]
-public class AbpPermissionManagementInstallerModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpStudioModuleInstallerModule),
+        typeof(AbpVirtualFileSystemModule)
+        )]
+    public class AbpPermissionManagementInstallerModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpPermissionManagementInstallerModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpPermissionManagementInstallerModule>();
+            });
+        }
     }
 }

@@ -8,48 +8,49 @@ using Volo.Abp.Cli.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.Cli.ServiceProxying;
-
-public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator where T : IServiceProxyGenerator
+namespace Volo.Abp.Cli.ServiceProxying
 {
-    public IJsonSerializer JsonSerializer { get; }
-
-    public CliHttpClientFactory CliHttpClientFactory { get; }
-
-    public ILogger<T> Logger { get; set; }
-
-    protected ServiceProxyGeneratorBase(CliHttpClientFactory cliHttpClientFactory, IJsonSerializer jsonSerializer)
+    public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator where T: IServiceProxyGenerator
     {
-        CliHttpClientFactory = cliHttpClientFactory;
-        JsonSerializer = jsonSerializer;
-        Logger = NullLogger<T>.Instance;
-    }
+        public IJsonSerializer JsonSerializer { get; }
 
-    public abstract Task GenerateProxyAsync(GenerateProxyArgs args);
+        public CliHttpClientFactory CliHttpClientFactory { get; }
 
-    protected virtual async Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(GenerateProxyArgs args)
-    {
-        Check.NotNull(args.Url, nameof(args.Url));
+        public ILogger<T> Logger { get; set; }
 
-        var client = CliHttpClientFactory.CreateClient();
-
-        var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url));
-        var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
-
-        var moduleDefinition = apiDefinition.Modules.FirstOrDefault(x => string.Equals(x.Key, args.Module, StringComparison.CurrentCultureIgnoreCase)).Value;
-        if (moduleDefinition == null)
+        protected ServiceProxyGeneratorBase(CliHttpClientFactory cliHttpClientFactory, IJsonSerializer jsonSerializer)
         {
-            throw new CliUsageException($"Module name: {args.Module} is invalid");
+            CliHttpClientFactory = cliHttpClientFactory;
+            JsonSerializer = jsonSerializer;
+            Logger = NullLogger<T>.Instance;
         }
 
-        var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
-        apiDescriptionModel.AddModule(moduleDefinition);
+        public abstract Task GenerateProxyAsync(GenerateProxyArgs args);
 
-        return apiDescriptionModel;
-    }
+        protected virtual async Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(GenerateProxyArgs args)
+        {
+            Check.NotNull(args.Url, nameof(args.Url));
 
-    protected string GetLoggerOutputPath(string path, string workDirectory)
-    {
-        return path.Replace(workDirectory, string.Empty).TrimStart(Path.DirectorySeparatorChar);
+            var client = CliHttpClientFactory.CreateClient();
+
+            var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url));
+            var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
+
+            var moduleDefinition = apiDefinition.Modules.FirstOrDefault(x => string.Equals(x.Key, args.Module, StringComparison.CurrentCultureIgnoreCase)).Value;
+            if (moduleDefinition == null)
+            {
+                throw new CliUsageException($"Module name: {args.Module} is invalid");
+            }
+
+            var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
+            apiDescriptionModel.AddModule(moduleDefinition);
+
+            return apiDescriptionModel;
+        }
+
+        protected string GetLoggerOutputPath(string path, string workDirectory)
+        {
+            return path.Replace(workDirectory, string.Empty).TrimStart(Path.DirectorySeparatorChar);
+        }
     }
 }

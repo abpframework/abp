@@ -6,44 +6,45 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
-
-public class AbpTagHelperLocalizer : IAbpTagHelperLocalizer
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    private readonly IStringLocalizerFactory _stringLocalizerFactory;
-    private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
-
-    public AbpTagHelperLocalizer(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+    public class AbpTagHelperLocalizer : IAbpTagHelperLocalizer
     {
-        _stringLocalizerFactory = stringLocalizerFactory;
-        _options = options.Value;
-    }
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
 
-    public string GetLocalizedText(string text, ModelExplorer explorer)
-    {
-        var localizer = GetLocalizerOrNull(explorer);
-        return localizer == null
-            ? text
-            : localizer[text].Value;
-    }
+        public AbpTagHelperLocalizer(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        {
+            _stringLocalizerFactory = stringLocalizerFactory;
+            _options = options.Value;
+        }
 
-    public IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer)
-    {
-        return GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
-    }
+        public string GetLocalizedText(string text, ModelExplorer explorer)
+        {
+            var localizer = GetLocalizerOrNull(explorer);
+            return localizer == null
+                ? text
+                : localizer[text].Value;
+        }
 
-    public IStringLocalizer GetLocalizerOrNull(Assembly assembly)
-    {
-        var resourceType = GetResourceType(assembly);
-        return resourceType == null
-            ? _stringLocalizerFactory.CreateDefaultOrNull()
-            : _stringLocalizerFactory.Create(resourceType);
-    }
+        public IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer)
+        {
+            return GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+        }
 
-    private Type GetResourceType(Assembly assembly)
-    {
-        return _options
-            .AssemblyResources
-            .GetOrDefault(assembly);
+        public IStringLocalizer GetLocalizerOrNull(Assembly assembly)
+        {
+            var resourceType = GetResourceType(assembly);
+            return resourceType == null
+                ? _stringLocalizerFactory.CreateDefaultOrNull()
+                : _stringLocalizerFactory.Create(resourceType);
+        }
+
+        private Type GetResourceType(Assembly assembly)
+        {
+            return _options
+                .AssemblyResources
+                .GetOrDefault(assembly);
+        }
     }
 }

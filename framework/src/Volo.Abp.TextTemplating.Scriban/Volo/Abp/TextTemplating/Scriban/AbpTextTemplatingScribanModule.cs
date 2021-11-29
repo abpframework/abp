@@ -1,18 +1,19 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TextTemplating.Scriban;
-
-[DependsOn(
-    typeof(AbpTextTemplatingCoreModule)
-)]
-public class AbpTextTemplatingScribanModule : AbpModule
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTextTemplatingCoreModule)
+    )]
+    public class AbpTextTemplatingScribanModule : AbpModule
     {
-        Configure<AbpTextTemplatingOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.DefaultRenderingEngine = ScribanTemplateRenderingEngine.EngineName;
-            options.RenderingEngines[ScribanTemplateRenderingEngine.EngineName] = typeof(ScribanTemplateRenderingEngine);
-        });
+            Configure<AbpTextTemplatingOptions>(options =>
+            {
+                options.DefaultRenderingEngine = ScribanTemplateRenderingEngine.EngineName;
+                options.RenderingEngines[ScribanTemplateRenderingEngine.EngineName] = typeof(ScribanTemplateRenderingEngine);
+            });
+        }
     }
 }

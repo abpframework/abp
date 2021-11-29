@@ -4,66 +4,67 @@ using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.CmsKit.Comments;
-
-public abstract class CommentRepository_Tests<TStartupModule> : CmsKitTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.CmsKit.Comments
 {
-    private readonly CmsKitTestData _cmsKitTestData;
-    private readonly ICommentRepository _commentRepository;
-
-    public CommentRepository_Tests()
+    public abstract class CommentRepository_Tests<TStartupModule> : CmsKitTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        _commentRepository = GetRequiredService<ICommentRepository>();
-    }
+        private readonly CmsKitTestData _cmsKitTestData;
+        private readonly ICommentRepository _commentRepository;
 
-    [Fact]
-    public async Task GetList_ShouldWork()
-    {
-        var comments = await _commentRepository.GetListAsync();
+        public CommentRepository_Tests()
+        {
+            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            _commentRepository = GetRequiredService<ICommentRepository>();
+        }
 
-        comments.ShouldNotBeNull();
-        comments.Count.ShouldBe(6);
+        [Fact]
+        public async Task GetList_ShouldWork()
+        {
+            var comments = await _commentRepository.GetListAsync();
 
-        var headCommentId = comments.First(x => x.Comment.RepliedCommentId != null).Comment.RepliedCommentId;
+            comments.ShouldNotBeNull();
+            comments.Count.ShouldBe(6);
+            
+            var headCommentId = comments.First(x => x.Comment.RepliedCommentId != null).Comment.RepliedCommentId;
+            
+            var replies = await _commentRepository.GetListAsync(repliedCommentId: headCommentId);
 
-        var replies = await _commentRepository.GetListAsync(repliedCommentId: headCommentId);
+            replies.ShouldNotBeNull();
+            replies.Count.ShouldBeLessThan(6);
+            replies.Count.ShouldBeGreaterThanOrEqualTo(1);
+        }
+        
+        [Fact]
+        public async Task GetCount_ShouldWork()
+        {
+            var commentsCount = await _commentRepository.GetCountAsync();
 
-        replies.ShouldNotBeNull();
-        replies.Count.ShouldBeLessThan(6);
-        replies.Count.ShouldBeGreaterThanOrEqualTo(1);
-    }
+            commentsCount.ShouldBe(6);
+        }
 
-    [Fact]
-    public async Task GetCount_ShouldWork()
-    {
-        var commentsCount = await _commentRepository.GetCountAsync();
+        [Fact]
+        public async Task GetListWithAuthorsAsync()
+        {
+            var list = await _commentRepository.GetListWithAuthorsAsync(_cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1);
 
-        commentsCount.ShouldBe(6);
-    }
+            list.Count.ShouldBe(4);
+            list.Any(x=>x.Comment == null).ShouldBeFalse();
+            list.Any(x=>x.Author == null).ShouldBeFalse();
+        }
 
-    [Fact]
-    public async Task GetListWithAuthorsAsync()
-    {
-        var list = await _commentRepository.GetListWithAuthorsAsync(_cmsKitTestData.EntityType1,
-            _cmsKitTestData.EntityId1);
+        [Fact]
+        public async Task DeleteWithRepliesAsync()
+        {
+            var comment = await _commentRepository.GetAsync(_cmsKitTestData.CommentWithChildId);
+            await _commentRepository.DeleteWithRepliesAsync(comment);
 
-        list.Count.ShouldBe(4);
-        list.Any(x => x.Comment == null).ShouldBeFalse();
-        list.Any(x => x.Author == null).ShouldBeFalse();
-    }
+            var list = await _commentRepository.GetListAsync();
 
-    [Fact]
-    public async Task DeleteWithRepliesAsync()
-    {
-        var comment = await _commentRepository.GetAsync(_cmsKitTestData.CommentWithChildId);
-        await _commentRepository.DeleteWithRepliesAsync(comment);
-
-        var list = await _commentRepository.GetListAsync();
-
-        list.Any(x =>
-                x.Comment.Id == _cmsKitTestData.CommentWithChildId || x.Comment.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
-            .ShouldBeFalse();
+            list.Any(x=>
+                    x.Comment.Id == _cmsKitTestData.CommentWithChildId || x.Comment.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
+                .ShouldBeFalse();
+        }
     }
 }

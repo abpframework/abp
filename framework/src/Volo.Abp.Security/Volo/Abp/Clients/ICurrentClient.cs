@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Clients;
-
-public interface ICurrentClient
+﻿namespace Volo.Abp.Clients
 {
-    string Id { get; }
+    public interface ICurrentClient
+    {
+        string Id { get; }
 
-    bool IsAuthenticated { get; }
+        bool IsAuthenticated { get; }
+    }
 }

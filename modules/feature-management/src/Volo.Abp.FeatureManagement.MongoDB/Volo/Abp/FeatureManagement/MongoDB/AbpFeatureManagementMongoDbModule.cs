@@ -2,21 +2,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.FeatureManagement.MongoDB;
-
-[DependsOn(
-    typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class AbpFeatureManagementMongoDbModule : AbpModule
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class AbpFeatureManagementMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<FeatureManagementMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<IFeatureManagementMongoDbContext>();
+            context.Services.AddMongoDbContext<FeatureManagementMongoDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IFeatureManagementMongoDbContext>();
 
-            options.AddRepository<FeatureValue, MongoFeatureValueRepository>();
-        });
+                options.AddRepository<FeatureValue, MongoFeatureValueRepository>();
+            });
+        }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace Volo.Abp.DependencyInjection;
-
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class ReplaceDbContextAttribute : Attribute
+namespace Volo.Abp.DependencyInjection
 {
-    public Type[] ReplacedDbContextTypes { get; }
-
-    public ReplaceDbContextAttribute(params Type[] replacedDbContextTypes)
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ReplaceDbContextAttribute : Attribute
     {
-        ReplacedDbContextTypes = replacedDbContextTypes;
+        public Type[] ReplacedDbContextTypes { get; }
+
+        public ReplaceDbContextAttribute(params Type[] replacedDbContextTypes)
+        {
+            ReplacedDbContextTypes = replacedDbContextTypes;
+        }
     }
 }

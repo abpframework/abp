@@ -1,8 +1,9 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity;
-
-public interface IOnPostApplicationInitialization
+namespace Volo.Abp.Modularity
 {
-    void OnPostApplicationInitialization([NotNull] ApplicationInitializationContext context);
+    public interface IOnPostApplicationInitialization
+    {
+        void OnPostApplicationInitialization([NotNull] ApplicationInitializationContext context);
+    }
 }

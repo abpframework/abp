@@ -5,33 +5,34 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp;
-
-public class ConsoleTestAppHostedService : IHostedService
+namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 {
-    private readonly IConfiguration _configuration;
-
-    public ConsoleTestAppHostedService(IConfiguration configuration)
+    public class ConsoleTestAppHostedService : IHostedService
     {
-        _configuration = configuration;
-    }
+        private readonly IConfiguration _configuration;
 
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        using (var application = AbpApplicationFactory.Create<MyProjectNameConsoleApiClientModule>(options =>
+        public ConsoleTestAppHostedService(IConfiguration configuration)
         {
-            options.Services.ReplaceConfiguration(_configuration);
-            options.UseAutofac();
-        }))
-        {
-            application.Initialize();
-
-            var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
-            await demo.RunAsync();
-
-            application.Shutdown();
+            _configuration = configuration;
         }
-    }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            using (var application = AbpApplicationFactory.Create<MyProjectNameConsoleApiClientModule>(options =>
+            {
+                options.Services.ReplaceConfiguration(_configuration);
+                options.UseAutofac();
+            }))
+            {
+                application.Initialize();
+
+                var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
+                await demo.RunAsync();
+
+                application.Shutdown();
+            }
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
 }

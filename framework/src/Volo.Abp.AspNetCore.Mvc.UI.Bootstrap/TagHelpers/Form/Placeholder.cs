@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-
-[AttributeUsage(AttributeTargets.Property)]
-public class Placeholder : Attribute
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    public string Value { get; set; }
-
-    public Placeholder(string value)
+    [AttributeUsage(AttributeTargets.Property)]
+    public class Placeholder : Attribute
     {
-        Value = value;
+        public string Value { get; set; }
+
+        public Placeholder(string value)
+        {
+            Value = value;
+        }
     }
 }

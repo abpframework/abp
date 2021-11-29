@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Web.Contents;
-
-public interface IContentRenderer
+namespace Volo.CmsKit.Web.Contents
 {
-    Task<string> RenderAsync(string value);
+    public interface IContentRenderer
+    {
+        Task<string> RenderAsync(string value);
+    }
 }

@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.Http.Client;
-
-public class AbpRemoteServiceOptions
+﻿namespace Volo.Abp.Http.Client
 {
-    public RemoteServiceConfigurationDictionary RemoteServices { get; set; }
-
-    public AbpRemoteServiceOptions()
+    public class AbpRemoteServiceOptions
     {
-        RemoteServices = new RemoteServiceConfigurationDictionary();
+        public RemoteServiceConfigurationDictionary RemoteServices { get; set; }
+
+        public AbpRemoteServiceOptions()
+        {
+            RemoteServices = new RemoteServiceConfigurationDictionary();
+        }
     }
 }

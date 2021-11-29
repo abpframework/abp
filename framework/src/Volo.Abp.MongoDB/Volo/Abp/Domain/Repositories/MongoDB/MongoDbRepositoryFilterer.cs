@@ -5,95 +5,96 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Domain.Repositories.MongoDB;
-
-public class MongoDbRepositoryFilterer<TEntity> : IMongoDbRepositoryFilterer<TEntity>
-    where TEntity : class, IEntity
+namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    protected IDataFilter DataFilter { get; }
-
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public MongoDbRepositoryFilterer(IDataFilter dataFilter, ICurrentTenant currentTenant)
+    public class MongoDbRepositoryFilterer<TEntity> : IMongoDbRepositoryFilterer<TEntity>
+        where TEntity : class, IEntity
     {
-        DataFilter = dataFilter;
-        CurrentTenant = currentTenant;
-    }
+        protected IDataFilter DataFilter { get; }
 
-    public virtual void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
-    {
-        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
+        protected ICurrentTenant CurrentTenant { get; }
+
+        public MongoDbRepositoryFilterer(IDataFilter dataFilter, ICurrentTenant currentTenant)
         {
-            filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete)e).IsDeleted, false));
+            DataFilter = dataFilter;
+            CurrentTenant = currentTenant;
         }
 
-        if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+        public virtual void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
         {
-            var tenantId = CurrentTenant.Id;
-            filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant)e).TenantId, tenantId));
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
+            {
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete)e).IsDeleted, false));
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant)e).TenantId, tenantId));
+            }
         }
     }
-}
 
-public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFilterer<TEntity>,
-    IMongoDbRepositoryFilterer<TEntity, TKey>
-    where TEntity : class, IEntity<TKey>
-{
-    public MongoDbRepositoryFilterer(IDataFilter dataFilter, ICurrentTenant currentTenant)
-        : base(dataFilter, currentTenant)
+    public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFilterer<TEntity>,
+        IMongoDbRepositoryFilterer<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
-    }
+        public MongoDbRepositoryFilterer(IDataFilter dataFilter, ICurrentTenant currentTenant)
+            : base(dataFilter, currentTenant)
+        {
+        }
 
-    public FilterDefinition<TEntity> CreateEntityFilter(TKey id, bool applyFilters = false)
-    {
-        var filters = new List<FilterDefinition<TEntity>>
+        public FilterDefinition<TEntity> CreateEntityFilter(TKey id, bool applyFilters = false)
+        {
+            var filters = new List<FilterDefinition<TEntity>>
             {
                 Builders<TEntity>.Filter.Eq(e => e.Id, id)
             };
 
-        if (applyFilters)
-        {
-            AddGlobalFilters(filters);
+            if (applyFilters)
+            {
+                AddGlobalFilters(filters);
+            }
+
+            return Builders<TEntity>.Filter.And(filters);
         }
 
-        return Builders<TEntity>.Filter.And(filters);
-    }
-
-    public FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
-    {
-        if (!withConcurrencyStamp || !(entity is IHasConcurrencyStamp entityWithConcurrencyStamp))
+        public FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
-            return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+            if (!withConcurrencyStamp || !(entity is IHasConcurrencyStamp entityWithConcurrencyStamp))
+            {
+                return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+            }
+
+            if (concurrencyStamp == null)
+            {
+                concurrencyStamp = entityWithConcurrencyStamp.ConcurrencyStamp;
+            }
+
+            return Builders<TEntity>.Filter.And(
+                Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id),
+                Builders<TEntity>.Filter.Eq(e => ((IHasConcurrencyStamp)e).ConcurrencyStamp, concurrencyStamp)
+            );
         }
 
-        if (concurrencyStamp == null)
+        public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool applyFilters = false)
         {
-            concurrencyStamp = entityWithConcurrencyStamp.ConcurrencyStamp;
+            return CreateEntitiesFilter(entities.Select(s => s.Id), applyFilters);
         }
 
-        return Builders<TEntity>.Filter.And(
-            Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id),
-            Builders<TEntity>.Filter.Eq(e => ((IHasConcurrencyStamp)e).ConcurrencyStamp, concurrencyStamp)
-        );
-    }
-
-    public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool applyFilters = false)
-    {
-        return CreateEntitiesFilter(entities.Select(s => s.Id), applyFilters);
-    }
-
-    public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TKey> ids, bool applyFilters = false)
-    {
-        var filters = new List<FilterDefinition<TEntity>>()
+        public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TKey> ids, bool applyFilters = false)
+        {
+            var filters = new List<FilterDefinition<TEntity>>()
             {
                 Builders<TEntity>.Filter.In(e => e.Id, ids),
             };
 
-        if (applyFilters)
-        {
-            AddGlobalFilters(filters);
-        }
+            if (applyFilters)
+            {
+                AddGlobalFilters(filters);
+            }
 
-        return Builders<TEntity>.Filter.And(filters);
+            return Builders<TEntity>.Filter.And(filters);
+        }
     }
 }

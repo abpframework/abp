@@ -4,25 +4,26 @@ using System.Linq;
 using System.Text;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class RemoveRootFolderStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public override void Execute(ProjectBuildContext context)
+    public class RemoveRootFolderStep : ProjectBuildPipelineStep
     {
-        foreach (var file in context.Files)
+        public override void Execute(ProjectBuildContext context)
         {
-            file.SetName(RemoveRootFolder(file.Name));
-        }
-    }
-
-    private string RemoveRootFolder(string fileName)
-    {
-        if (!fileName.Contains('/'))
-        {
-            return fileName;
+            foreach (var file in context.Files)
+            {
+                file.SetName(RemoveRootFolder(file.Name));
+            }
         }
 
-        return string.Join("/", fileName.Split('/').Skip(1));
+        private string RemoveRootFolder(string fileName)
+        {
+            if (!fileName.Contains('/'))
+            {
+                return fileName;
+            }
+
+            return string.Join("/", fileName.Split('/').Skip(1));
+        }
     }
 }

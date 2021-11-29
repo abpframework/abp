@@ -5,38 +5,39 @@ using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpIdentityDomainModule),
-    typeof(AbpAuthorizationModule)
-    )]
-public class AbpIdentityTestBaseModule : AbpModule
+namespace Volo.Abp.Identity
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpAuthorizationModule)
+        )]
+    public class AbpIdentityTestBaseModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
-            AsyncHelper.RunSync(async () =>
+            context.Services.AddAlwaysAllowAuthorization();
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
             {
-                await dataSeeder.SeedAsync();
-                await scope.ServiceProvider
-                    .GetRequiredService<AbpIdentityTestDataBuilder>()
-                    .Build();
-            });
+                var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+                AsyncHelper.RunSync(async () =>
+                {
+                    await dataSeeder.SeedAsync();
+                    await scope.ServiceProvider
+                        .GetRequiredService<AbpIdentityTestDataBuilder>()
+                        .Build();
+                });
+            }
         }
     }
 }

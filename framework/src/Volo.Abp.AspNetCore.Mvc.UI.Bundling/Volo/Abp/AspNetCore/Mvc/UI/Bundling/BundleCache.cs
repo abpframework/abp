@@ -3,24 +3,25 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-public class BundleCache : IBundleCache, ISingletonDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    private readonly ConcurrentDictionary<string, BundleCacheItem> _cache;
-
-    public BundleCache()
+    public class BundleCache : IBundleCache, ISingletonDependency
     {
-        _cache = new ConcurrentDictionary<string, BundleCacheItem>();
-    }
+        private readonly ConcurrentDictionary<string, BundleCacheItem> _cache;
 
-    public BundleCacheItem GetOrAdd(string bundleName, Func<BundleCacheItem> factory)
-    {
-        return _cache.GetOrAdd(bundleName, factory);
-    }
+        public BundleCache()
+        {
+            _cache = new ConcurrentDictionary<string, BundleCacheItem>();
+        }
 
-    public bool Remove(string bundleName)
-    {
-        return _cache.TryRemove(bundleName, out _);
+        public BundleCacheItem GetOrAdd(string bundleName, Func<BundleCacheItem> factory)
+        {
+            return _cache.GetOrAdd(bundleName, factory);
+        }
+
+        public bool Remove(string bundleName)
+        {
+            return _cache.TryRemove(bundleName, out _);
+        }
     }
 }

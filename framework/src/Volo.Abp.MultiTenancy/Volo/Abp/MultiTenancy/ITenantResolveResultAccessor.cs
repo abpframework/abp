@@ -1,9 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.MultiTenancy;
-
-public interface ITenantResolveResultAccessor
+namespace Volo.Abp.MultiTenancy
 {
-    [CanBeNull]
-    TenantResolveResult Result { get; set; }
+    public interface ITenantResolveResultAccessor
+    {
+        [CanBeNull]
+        TenantResolveResult Result { get; set; }
+    }
 }

@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Threading;
 
-namespace Volo.Abp.Domain.Repositories.MemoryDb;
-
-internal class InMemoryIdGenerator
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    private int _lastInt;
-    private long _lastLong;
-
-    public TKey GenerateNext<TKey>()
+    internal class InMemoryIdGenerator
     {
-        if (typeof(TKey) == typeof(Guid))
-        {
-            return (TKey)(object)Guid.NewGuid();
-        }
+        private int _lastInt;
+        private long _lastLong;
 
-        if (typeof(TKey) == typeof(int))
+        public TKey GenerateNext<TKey>()
         {
-            return (TKey)(object)Interlocked.Increment(ref _lastInt);
-        }
+            if (typeof(TKey) == typeof(Guid))
+            {
+                return (TKey)(object)Guid.NewGuid();
+            }
 
-        if (typeof(TKey) == typeof(long))
-        {
-            return (TKey)(object)Interlocked.Increment(ref _lastLong);
-        }
+            if (typeof(TKey) == typeof(int))
+            {
+                return (TKey)(object)Interlocked.Increment(ref _lastInt);
+            }
 
-        throw new AbpException("Not supported PrimaryKey type: " + typeof(TKey).FullName);
+            if (typeof(TKey) == typeof(long))
+            {
+                return (TKey)(object)Interlocked.Increment(ref _lastLong);
+            }
+
+            throw new AbpException("Not supported PrimaryKey type: " + typeof(TKey).FullName);
+        }
     }
 }

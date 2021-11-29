@@ -1,31 +1,32 @@
 ﻿using System.Linq;
 using Volo.Abp.Studio.ModuleInstalling.Steps;
 
-namespace Volo.Abp.Studio.ModuleInstalling;
-
-public abstract class ModuleInstallingPipelineBuilderBase
+namespace Volo.Abp.Studio.ModuleInstalling
 {
-    protected ModuleInstallingPipeline GetBasePipeline(ModuleInstallingContext context)
+    public abstract class ModuleInstallingPipelineBuilderBase
     {
-        var pipeline = new ModuleInstallingPipeline(context);
-
-        if (context.WithSourceCode)
+        protected ModuleInstallingPipeline GetBasePipeline(ModuleInstallingContext context)
         {
-            pipeline.Add(new SourceCodeDownloadStep());
+            var pipeline = new ModuleInstallingPipeline(context);
 
-            if (context.AddToSolutionFile)
+            if (context.WithSourceCode)
             {
-                pipeline.Add(new AddToSolutionFileStep());
+                pipeline.Add(new SourceCodeDownloadStep());
+
+                if (context.AddToSolutionFile)
+                {
+                    pipeline.Add(new AddToSolutionFileStep());
+                }
             }
+
+            pipeline.Add(new PackageReferencingStep());
+
+            if (context.EfCoreConfigurationMethodDeclarations.Any())
+            {
+                pipeline.Add(new AddEfCoreConfigurationMethodStep());
+            }
+
+            return pipeline;
         }
-
-        pipeline.Add(new PackageReferencingStep());
-
-        if (context.EfCoreConfigurationMethodDeclarations.Any())
-        {
-            pipeline.Add(new AddEfCoreConfigurationMethodStep());
-        }
-
-        return pipeline;
     }
 }

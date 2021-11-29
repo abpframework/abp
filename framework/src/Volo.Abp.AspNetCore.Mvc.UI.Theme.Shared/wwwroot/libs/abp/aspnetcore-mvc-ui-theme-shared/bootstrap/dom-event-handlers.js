@@ -81,7 +81,6 @@
                 var itemsPropertyName = $(this).data("autocompleteItemsProperty");
                 var filterParamName = $(this).data("autocompleteFilterParamName");
                 var selectedText = $(this).data("autocompleteSelectedItemName");
-                var parentSelector = $(this).data("autocompleteParentSelector");
                 var name = $(this).attr("name");
                 var selectedTextInputName = name.substring(0, name.length - 1) + "_Text]";
                 var selectedTextInput = $('<input>', {
@@ -120,8 +119,7 @@
                             };
                         }
                     },
-                    width: '100%',
-                    dropdownParent: parentSelector ? $(parentSelector) : $('body'),
+                    width: '100%'
                 });
                 $select.on('select2:select', function (e) {
                     selectedTextInput.val(e.params.data.text);

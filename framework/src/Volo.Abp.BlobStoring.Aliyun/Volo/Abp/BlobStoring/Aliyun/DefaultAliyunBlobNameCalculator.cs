@@ -1,21 +1,22 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.BlobStoring.Aliyun;
-
-public class DefaultAliyunBlobNameCalculator : IAliyunBlobNameCalculator, ITransientDependency
+namespace Volo.Abp.BlobStoring.Aliyun
 {
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public DefaultAliyunBlobNameCalculator(ICurrentTenant currentTenant)
+    public class DefaultAliyunBlobNameCalculator: IAliyunBlobNameCalculator, ITransientDependency
     {
-        CurrentTenant = currentTenant;
-    }
+        protected ICurrentTenant CurrentTenant { get; }
 
-    public virtual string Calculate(BlobProviderArgs args)
-    {
-        return CurrentTenant.Id == null
-            ? $"host/{args.BlobName}"
-            : $"tenants/{CurrentTenant.Id.Value:D}/{args.BlobName}";
+        public DefaultAliyunBlobNameCalculator(ICurrentTenant currentTenant)
+        {
+            CurrentTenant = currentTenant;
+        }
+
+        public virtual string Calculate(BlobProviderArgs args)
+        {
+            return CurrentTenant.Id == null
+                ? $"host/{args.BlobName}"
+                : $"tenants/{CurrentTenant.Id.Value:D}/{args.BlobName}";
+        }
     }
 }

@@ -1,40 +1,41 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.EventBus;
-
-/// <summary>
-/// This <see cref="IEventHandlerFactory"/> implementation is used to handle events
-/// by a single instance object. 
-/// </summary>
-/// <remarks>
-/// This class always gets the same single instance of handler.
-/// </remarks>
-public class SingleInstanceHandlerFactory : IEventHandlerFactory
+namespace Volo.Abp.EventBus
 {
     /// <summary>
-    /// The event handler instance.
+    /// This <see cref="IEventHandlerFactory"/> implementation is used to handle events
+    /// by a single instance object. 
     /// </summary>
-    public IEventHandler HandlerInstance { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="handler"></param>
-    public SingleInstanceHandlerFactory(IEventHandler handler)
+    /// <remarks>
+    /// This class always gets the same single instance of handler.
+    /// </remarks>
+    public class SingleInstanceHandlerFactory : IEventHandlerFactory
     {
-        HandlerInstance = handler;
-    }
+        /// <summary>
+        /// The event handler instance.
+        /// </summary>
+        public IEventHandler HandlerInstance { get; }
 
-    public IEventHandlerDisposeWrapper GetHandler()
-    {
-        return new EventHandlerDisposeWrapper(HandlerInstance);
-    }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="handler"></param>
+        public SingleInstanceHandlerFactory(IEventHandler handler)
+        {
+            HandlerInstance = handler;
+        }
 
-    public bool IsInFactories(List<IEventHandlerFactory> handlerFactories)
-    {
-        return handlerFactories
-            .OfType<SingleInstanceHandlerFactory>()
-            .Any(f => f.HandlerInstance == HandlerInstance);
+        public IEventHandlerDisposeWrapper GetHandler()
+        {
+            return new EventHandlerDisposeWrapper(HandlerInstance);
+        }
+
+        public bool IsInFactories(List<IEventHandlerFactory> handlerFactories)
+        {
+            return handlerFactories
+                .OfType<SingleInstanceHandlerFactory>()
+                .Any(f => f.HandlerInstance == HandlerInstance);
+        }
     }
 }

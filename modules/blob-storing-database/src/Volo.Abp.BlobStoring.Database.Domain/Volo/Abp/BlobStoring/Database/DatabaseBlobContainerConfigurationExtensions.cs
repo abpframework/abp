@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.BlobStoring.Database;
-
-public static class DatabaseBlobContainerConfigurationExtensions
+﻿namespace Volo.Abp.BlobStoring.Database
 {
-    public static BlobContainerConfiguration UseDatabase(
-        this BlobContainerConfiguration containerConfiguration)
+    public static class DatabaseBlobContainerConfigurationExtensions
     {
-        containerConfiguration.ProviderType = typeof(DatabaseBlobProvider);
-        return containerConfiguration;
+        public static BlobContainerConfiguration UseDatabase(
+            this BlobContainerConfiguration containerConfiguration)
+        {
+            containerConfiguration.ProviderType = typeof(DatabaseBlobProvider);
+            return containerConfiguration;
+        }
     }
 }

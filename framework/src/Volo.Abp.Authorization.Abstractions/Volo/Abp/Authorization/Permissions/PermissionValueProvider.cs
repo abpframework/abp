@@ -2,20 +2,21 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public abstract class PermissionValueProvider : IPermissionValueProvider, ITransientDependency
+namespace Volo.Abp.Authorization.Permissions
 {
-    public abstract string Name { get; }
-
-    protected IPermissionStore PermissionStore { get; }
-
-    protected PermissionValueProvider(IPermissionStore permissionStore)
+    public abstract class PermissionValueProvider : IPermissionValueProvider, ITransientDependency
     {
-        PermissionStore = permissionStore;
+        public abstract string Name { get; }
+
+        protected IPermissionStore PermissionStore { get; }
+
+        protected PermissionValueProvider(IPermissionStore permissionStore)
+        {
+            PermissionStore = permissionStore;
+        }
+
+        public abstract Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
+
+        public abstract Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
     }
-
-    public abstract Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
-
-    public abstract Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
 }

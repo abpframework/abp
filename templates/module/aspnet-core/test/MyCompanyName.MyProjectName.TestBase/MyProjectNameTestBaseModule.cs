@@ -6,36 +6,37 @@ using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAuthorizationModule),
-    typeof(MyProjectNameDomainModule)
-    )]
-public class MyProjectNameTestBaseModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAuthorizationModule),
+        typeof(MyProjectNameDomainModule)
+        )]
+    public class MyProjectNameTestBaseModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(async () =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
+            context.Services.AddAlwaysAllowAuthorization();
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            AsyncHelper.RunSync(async () =>
             {
-                await scope.ServiceProvider
-                    .GetRequiredService<IDataSeeder>()
-                    .SeedAsync();
-            }
-        });
+                using (var scope = context.ServiceProvider.CreateScope())
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
+        }
     }
 }

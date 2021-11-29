@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpClaimsService : DefaultClaimsService
+namespace Volo.Abp.IdentityServer
 {
-    protected readonly AbpClaimsServiceOptions Options;
-
-    private static readonly string[] AdditionalOptionalClaimNames =
+    public class AbpClaimsService : DefaultClaimsService
     {
+        protected readonly AbpClaimsServiceOptions Options;
+
+        private static readonly string[] AdditionalOptionalClaimNames =
+        {
             AbpClaimTypes.TenantId,
             AbpClaimTypes.ImpersonatorTenantId,
             AbpClaimTypes.ImpersonatorUserId,
@@ -25,35 +25,36 @@ public class AbpClaimsService : DefaultClaimsService
             JwtClaimTypes.FamilyName,
         };
 
-    public AbpClaimsService(
-        IProfileService profile,
-        ILogger<DefaultClaimsService> logger,
-        IOptions<AbpClaimsServiceOptions> options)
-        : base(profile, logger)
-    {
-        Options = options.Value;
-    }
-
-    protected override IEnumerable<string> FilterRequestedClaimTypes(IEnumerable<string> claimTypes)
-    {
-        return base.FilterRequestedClaimTypes(claimTypes)
-            .Union(Options.RequestedClaims);
-    }
-
-    protected override IEnumerable<Claim> GetOptionalClaims(ClaimsPrincipal subject)
-    {
-        return base.GetOptionalClaims(subject)
-            .Union(GetAdditionalOptionalClaims(subject));
-    }
-
-    protected virtual IEnumerable<Claim> GetAdditionalOptionalClaims(ClaimsPrincipal subject)
-    {
-        foreach (var claimName in AdditionalOptionalClaimNames)
+        public AbpClaimsService(
+            IProfileService profile,
+            ILogger<DefaultClaimsService> logger,
+            IOptions<AbpClaimsServiceOptions> options)
+            : base(profile, logger)
         {
-            var claim = subject.FindFirst(claimName);
-            if (claim != null)
+            Options = options.Value;
+        }
+
+        protected override IEnumerable<string> FilterRequestedClaimTypes(IEnumerable<string> claimTypes)
+        {
+            return base.FilterRequestedClaimTypes(claimTypes)
+                .Union(Options.RequestedClaims);
+        }
+
+        protected override IEnumerable<Claim> GetOptionalClaims(ClaimsPrincipal subject)
+        {
+            return base.GetOptionalClaims(subject)
+                .Union(GetAdditionalOptionalClaims(subject));
+        }
+
+        protected virtual IEnumerable<Claim> GetAdditionalOptionalClaims(ClaimsPrincipal subject)
+        {
+            foreach (var claimName in AdditionalOptionalClaimNames)
             {
-                yield return claim;
+                var claim = subject.FindFirst(claimName);
+                if (claim != null)
+                {
+                    yield return claim;
+                }
             }
         }
     }

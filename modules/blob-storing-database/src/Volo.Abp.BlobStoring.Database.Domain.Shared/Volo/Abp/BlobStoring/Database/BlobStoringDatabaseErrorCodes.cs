@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.Database;
-
-public static class BlobStoringDatabaseErrorCodes
+﻿namespace Volo.Abp.BlobStoring.Database
 {
-    //Add your business exception error codes here...
+    public static class BlobStoringDatabaseErrorCodes
+    {
+        //Add your business exception error codes here...
+    }
 }

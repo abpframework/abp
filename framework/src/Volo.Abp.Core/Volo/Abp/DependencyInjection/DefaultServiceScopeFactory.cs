@@ -1,22 +1,23 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.DependencyInjection;
-
-[ExposeServices(
-    typeof(IHybridServiceScopeFactory),
-    typeof(DefaultServiceScopeFactory)
-    )]
-public class DefaultServiceScopeFactory : IHybridServiceScopeFactory, ITransientDependency
+namespace Volo.Abp.DependencyInjection
 {
-    protected IServiceScopeFactory Factory { get; }
-
-    public DefaultServiceScopeFactory(IServiceScopeFactory factory)
+    [ExposeServices(
+        typeof(IHybridServiceScopeFactory), 
+        typeof(DefaultServiceScopeFactory)
+        )]
+    public class DefaultServiceScopeFactory : IHybridServiceScopeFactory, ITransientDependency
     {
-        Factory = factory;
-    }
+        protected IServiceScopeFactory Factory { get; }
 
-    public IServiceScope CreateScope()
-    {
-        return Factory.CreateScope();
+        public DefaultServiceScopeFactory(IServiceScopeFactory factory)
+        {
+            Factory = factory;
+        }
+
+        public IServiceScope CreateScope()
+        {
+            return Factory.CreateScope();
+        }
     }
 }

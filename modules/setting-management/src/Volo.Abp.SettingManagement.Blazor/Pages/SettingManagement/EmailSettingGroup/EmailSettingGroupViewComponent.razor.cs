@@ -6,54 +6,55 @@ using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.SettingManagement.Localization;
 
-namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup;
-
-public partial class EmailSettingGroupViewComponent
+namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup
 {
-    [Inject]
-    protected IEmailSettingsAppService EmailSettingsAppService { get; set; }
-
-    [Inject]
-    private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
-
-    [Inject]
-    protected IUiMessageService UiMessageService { get; set; }
-
-    protected EmailSettingsDto EmailSettings;
-
-    protected Validations IdentitySettingValidation;
-
-    public EmailSettingGroupViewComponent()
+    public partial class EmailSettingGroupViewComponent
     {
-        ObjectMapperContext = typeof(AbpSettingManagementBlazorModule);
-        LocalizationResource = typeof(AbpSettingManagementResource);
-    }
+        [Inject]
+        protected IEmailSettingsAppService EmailSettingsAppService { get; set; }
+        
+        [Inject]
+        private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
+        [Inject]
+        protected IUiMessageService UiMessageService { get; set; }
+
+        protected EmailSettingsDto EmailSettings;
+
+        protected Validations IdentitySettingValidation;
+
+        public EmailSettingGroupViewComponent()
         {
-            EmailSettings = await EmailSettingsAppService.GetAsync();
+            ObjectMapperContext = typeof(AbpSettingManagementBlazorModule);
+            LocalizationResource = typeof(AbpSettingManagementResource);
         }
-        catch (Exception ex)
+        
+        protected override async Task OnInitializedAsync()
         {
-            await HandleErrorAsync(ex);
+            try
+            {
+                EmailSettings = await EmailSettingsAppService.GetAsync();
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
-    }
 
-    protected virtual async Task UpdateSettingsAsync()
-    {
-        try
+        protected virtual async Task UpdateSettingsAsync()
         {
-            await EmailSettingsAppService.UpdateAsync(ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsDto>(EmailSettings));
+            try
+            {
+                await EmailSettingsAppService.UpdateAsync(ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsDto>(EmailSettings));
+                
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
-            await CurrentApplicationConfigurationCacheResetService.ResetAsync();
-
-            await UiMessageService.Success(L["SuccessfullySaved"]);
-        }
-        catch (Exception ex)
-        {
-            await HandleErrorAsync(ex);
+                await UiMessageService.Success(L["SuccessfullySaved"]);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
     }
 }

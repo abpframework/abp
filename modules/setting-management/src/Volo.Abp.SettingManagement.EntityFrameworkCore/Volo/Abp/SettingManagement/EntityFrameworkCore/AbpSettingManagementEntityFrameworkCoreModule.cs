@@ -2,21 +2,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(AbpSettingManagementDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
-    )]
-public class AbpSettingManagementEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+        )]
+    public class AbpSettingManagementEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<SettingManagementDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<ISettingManagementDbContext>();
+            context.Services.AddAbpDbContext<SettingManagementDbContext>(options =>
+            {
+                options.AddDefaultRepositories<ISettingManagementDbContext>();
 
-            options.AddRepository<Setting, EfCoreSettingRepository>();
-        });
+                options.AddRepository<Setting, EfCoreSettingRepository>();
+            });
+        }
     }
 }

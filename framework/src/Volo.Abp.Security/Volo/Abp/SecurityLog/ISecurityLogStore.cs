@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.SecurityLog;
-
-public interface ISecurityLogStore
+namespace Volo.Abp.SecurityLog
 {
-    Task SaveAsync(SecurityLogInfo securityLogInfo);
+    public interface ISecurityLogStore
+    {
+        Task SaveAsync(SecurityLogInfo securityLogInfo);
+    }
 }

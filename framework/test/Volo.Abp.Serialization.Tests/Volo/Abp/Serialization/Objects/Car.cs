@@ -1,19 +1,20 @@
 ﻿using System;
 
-namespace Volo.Abp.Serialization.Objects;
-
-[Serializable]
-public class Car
+namespace Volo.Abp.Serialization.Objects
 {
-    public string Name { get; set; }
-
-    private Car()
+    [Serializable]
+    public class Car
     {
+        public string Name { get; set; }
 
-    }
+        private Car()
+        {
 
-    public Car(string name)
-    {
-        Name = name;
+        }
+
+        public Car(string name)
+        {
+            Name = name;
+        }
     }
 }

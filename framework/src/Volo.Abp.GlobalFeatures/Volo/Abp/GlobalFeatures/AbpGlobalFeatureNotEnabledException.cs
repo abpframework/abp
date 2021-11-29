@@ -1,22 +1,23 @@
 ﻿using System;
 using Volo.Abp.ExceptionHandling;
 
-namespace Volo.Abp.GlobalFeatures;
-
-[Serializable]
-public class AbpGlobalFeatureNotEnabledException : AbpException, IHasErrorCode
+namespace Volo.Abp.GlobalFeatures
 {
-    public string Code { get; }
-
-    public AbpGlobalFeatureNotEnabledException(string message = null, string code = null, Exception innerException = null)
-        : base(message, innerException)
+    [Serializable]
+    public class AbpGlobalFeatureNotEnabledException : AbpException, IHasErrorCode
     {
-        Code = code;
-    }
+        public string Code { get; }
 
-    public AbpGlobalFeatureNotEnabledException WithData(string name, object value)
-    {
-        Data[name] = value;
-        return this;
+        public AbpGlobalFeatureNotEnabledException(string message = null, string code = null, Exception innerException = null)
+            : base(message, innerException)
+        {
+            Code = code;
+        }
+
+        public AbpGlobalFeatureNotEnabledException WithData(string name, object value)
+        {
+            Data[name] = value;
+            return this;
+        }
     }
 }

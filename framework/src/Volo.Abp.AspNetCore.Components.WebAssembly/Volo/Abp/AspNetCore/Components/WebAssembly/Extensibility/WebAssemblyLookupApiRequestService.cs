@@ -11,56 +11,57 @@ using Volo.Abp.Http.Client;
 using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility;
-
-public class WebAssemblyLookupApiRequestService : ILookupApiRequestService, ITransientDependency
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility
 {
-    public IHttpClientFactory HttpClientFactory { get; }
-    public IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
-    public IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
-    public ICurrentTenant CurrentTenant { get; }
-
-    public WebAssemblyLookupApiRequestService(IHttpClientFactory httpClientFactory,
-        IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
-        ICurrentTenant currentTenant,
-        IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
+    public class WebAssemblyLookupApiRequestService : ILookupApiRequestService, ITransientDependency
     {
-        HttpClientFactory = httpClientFactory;
-        HttpClientAuthenticator = httpClientAuthenticator;
-        CurrentTenant = currentTenant;
-        RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
-    }
+        public IHttpClientFactory HttpClientFactory { get; }
+        public IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
+        public IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
+        public ICurrentTenant CurrentTenant { get; }
 
-    public async Task<string> SendAsync(string url)
-    {
-        var client = HttpClientFactory.CreateClient();
-        var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-        AddHeaders(requestMessage);
-
-        var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-        if (!uri.IsAbsoluteUri)
+        public WebAssemblyLookupApiRequestService(IHttpClientFactory httpClientFactory,
+            IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
+            ICurrentTenant currentTenant,
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
-            client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
-            await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
+            HttpClientFactory = httpClientFactory;
+            HttpClientAuthenticator = httpClientAuthenticator;
+            CurrentTenant = currentTenant;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
         }
 
-        var response = await client.SendAsync(requestMessage);
-
-        return await response.Content.ReadAsStringAsync();
-    }
-
-    protected virtual void AddHeaders(HttpRequestMessage requestMessage)
-    {
-        if (CurrentTenant.Id.HasValue)
+        public async Task<string> SendAsync(string url)
         {
-            requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            var client = HttpClientFactory.CreateClient();
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            AddHeaders(requestMessage);
+
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            if (!uri.IsAbsoluteUri)
+            {
+                var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
+                client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
+                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
+            }
+
+            var response = await client.SendAsync(requestMessage);
+            
+            return await response.Content.ReadAsStringAsync();
         }
-
-        var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
-        if (!currentCulture.IsNullOrEmpty())
+        
+        protected virtual void AddHeaders(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.AcceptLanguage.Add(new(currentCulture));
+            if (CurrentTenant.Id.HasValue)
+            {
+                requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
+
+            var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
+            if (!currentCulture.IsNullOrEmpty())
+            {
+                requestMessage.Headers.AcceptLanguage.Add(new (currentCulture));
+            }
         }
     }
 }

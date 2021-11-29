@@ -2,20 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar;
-
-public class MainNavbarToolbarViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
 {
-    protected IToolbarManager ToolbarManager { get; }
-
-    public MainNavbarToolbarViewComponent(IToolbarManager toolbarManager)
+    public class MainNavbarToolbarViewComponent : AbpViewComponent
     {
-        ToolbarManager = toolbarManager;
-    }
+        protected IToolbarManager ToolbarManager { get; }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync()
-    {
-        var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
-        return View("~/Themes/Basic/Components/Toolbar/Default.cshtml", toolbar);
+        public MainNavbarToolbarViewComponent(IToolbarManager toolbarManager)
+        {
+            ToolbarManager = toolbarManager;
+        }
+
+        public virtual async Task<IViewComponentResult> InvokeAsync()
+        {
+            var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
+            return View("~/Themes/Basic/Components/Toolbar/Default.cshtml", toolbar);
+        }
     }
 }

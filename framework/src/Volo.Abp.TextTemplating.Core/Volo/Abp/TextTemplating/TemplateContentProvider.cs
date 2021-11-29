@@ -8,89 +8,67 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.TextTemplating;
-
-public class TemplateContentProvider : ITemplateContentProvider, ITransientDependency
+namespace Volo.Abp.TextTemplating
 {
-    public IServiceScopeFactory ServiceScopeFactory { get; }
-    public AbpTextTemplatingOptions Options { get; }
-    private readonly ITemplateDefinitionManager _templateDefinitionManager;
-
-    public TemplateContentProvider(
-        ITemplateDefinitionManager templateDefinitionManager,
-        IServiceScopeFactory serviceScopeFactory,
-        IOptions<AbpTextTemplatingOptions> options)
+    public class TemplateContentProvider : ITemplateContentProvider, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        Options = options.Value;
-        _templateDefinitionManager = templateDefinitionManager;
-    }
+        public IServiceScopeFactory ServiceScopeFactory { get; }
+        public AbpTextTemplatingOptions Options { get; }
+        private readonly ITemplateDefinitionManager _templateDefinitionManager;
 
-    public virtual Task<string> GetContentOrNullAsync(
-        [NotNull] string templateName,
-        [CanBeNull] string cultureName = null,
-        bool tryDefaults = true,
-        bool useCurrentCultureIfCultureNameIsNull = true)
-    {
-        var template = _templateDefinitionManager.Get(templateName);
-        return GetContentOrNullAsync(template, cultureName);
-    }
-
-    public virtual async Task<string> GetContentOrNullAsync(
-        [NotNull] TemplateDefinition templateDefinition,
-        [CanBeNull] string cultureName = null,
-        bool tryDefaults = true,
-        bool useCurrentCultureIfCultureNameIsNull = true)
-    {
-        Check.NotNull(templateDefinition, nameof(templateDefinition));
-
-        if (!Options.ContentContributors.Any())
+        public TemplateContentProvider(
+            ITemplateDefinitionManager templateDefinitionManager,
+            IServiceScopeFactory serviceScopeFactory,
+            IOptions<AbpTextTemplatingOptions> options)
         {
-            throw new AbpException(
-                $"No template content contributor was registered. Use {nameof(AbpTextTemplatingOptions)} to register contributors!"
-            );
+            ServiceScopeFactory = serviceScopeFactory;
+            Options = options.Value;
+            _templateDefinitionManager = templateDefinitionManager;
         }
 
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public virtual Task<string> GetContentOrNullAsync(
+            [NotNull] string templateName,
+            [CanBeNull] string cultureName = null,
+            bool tryDefaults = true,
+            bool useCurrentCultureIfCultureNameIsNull = true)
         {
-            string templateString = null;
+            var template = _templateDefinitionManager.Get(templateName);
+            return GetContentOrNullAsync(template, cultureName);
+        }
 
-            if (cultureName == null && useCurrentCultureIfCultureNameIsNull)
+        public virtual async Task<string> GetContentOrNullAsync(
+            [NotNull] TemplateDefinition templateDefinition,
+            [CanBeNull] string cultureName = null,
+            bool tryDefaults = true,
+            bool useCurrentCultureIfCultureNameIsNull = true)
+        {
+            Check.NotNull(templateDefinition, nameof(templateDefinition));
+
+            if (!Options.ContentContributors.Any())
             {
-                cultureName = CultureInfo.CurrentUICulture.Name;
+                throw new AbpException(
+                    $"No template content contributor was registered. Use {nameof(AbpTextTemplatingOptions)} to register contributors!"
+                );
             }
 
-            var contributors = CreateTemplateContentContributors(scope.ServiceProvider);
-
-            //Try to get from the requested culture
-            templateString = await GetContentOrNullAsync(
-                contributors,
-                new TemplateContentContributorContext(
-                    templateDefinition,
-                    scope.ServiceProvider,
-                    cultureName
-                )
-            );
-
-            if (templateString != null)
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                return templateString;
-            }
+                string templateString = null;
 
-            if (!tryDefaults)
-            {
-                return null;
-            }
+                if (cultureName == null && useCurrentCultureIfCultureNameIsNull)
+                {
+                    cultureName = CultureInfo.CurrentUICulture.Name;
+                }
 
-            //Try to get from same culture without country code
-            if (cultureName != null && cultureName.Contains("-")) //Example: "tr-TR"
-            {
+                var contributors = CreateTemplateContentContributors(scope.ServiceProvider);
+
+                //Try to get from the requested culture
                 templateString = await GetContentOrNullAsync(
                     contributors,
                     new TemplateContentContributorContext(
                         templateDefinition,
                         scope.ServiceProvider,
-                        CultureHelper.GetBaseCultureName(cultureName)
+                        cultureName
                     )
                 );
 
@@ -98,36 +76,21 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
                 {
                     return templateString;
                 }
-            }
 
-            if (templateDefinition.IsInlineLocalized)
-            {
-                //Try to get culture independent content
-                templateString = await GetContentOrNullAsync(
-                    contributors,
-                    new TemplateContentContributorContext(
-                        templateDefinition,
-                        scope.ServiceProvider,
-                        null
-                    )
-                );
-
-                if (templateString != null)
+                if (!tryDefaults)
                 {
-                    return templateString;
+                    return null;
                 }
-            }
-            else
-            {
-                //Try to get from default culture
-                if (templateDefinition.DefaultCultureName != null)
+
+                //Try to get from same culture without country code
+                if (cultureName != null && cultureName.Contains("-")) //Example: "tr-TR"
                 {
                     templateString = await GetContentOrNullAsync(
                         contributors,
                         new TemplateContentContributorContext(
                             templateDefinition,
                             scope.ServiceProvider,
-                            templateDefinition.DefaultCultureName
+                            CultureHelper.GetBaseCultureName(cultureName)
                         )
                     );
 
@@ -136,34 +99,72 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
                         return templateString;
                     }
                 }
+
+                if (templateDefinition.IsInlineLocalized)
+                {
+                    //Try to get culture independent content
+                    templateString = await GetContentOrNullAsync(
+                        contributors,
+                        new TemplateContentContributorContext(
+                            templateDefinition,
+                            scope.ServiceProvider,
+                            null
+                        )
+                    );
+
+                    if (templateString != null)
+                    {
+                        return templateString;
+                    }
+                }
+                else
+                {
+                    //Try to get from default culture
+                    if (templateDefinition.DefaultCultureName != null)
+                    {
+                        templateString = await GetContentOrNullAsync(
+                            contributors,
+                            new TemplateContentContributorContext(
+                                templateDefinition,
+                                scope.ServiceProvider,
+                                templateDefinition.DefaultCultureName
+                            )
+                        );
+
+                        if (templateString != null)
+                        {
+                            return templateString;
+                        }
+                    }
+                }
             }
+
+            //Not found
+            return null;
         }
 
-        //Not found
-        return null;
-    }
-
-    protected virtual ITemplateContentContributor[] CreateTemplateContentContributors(IServiceProvider serviceProvider)
-    {
-        return Options.ContentContributors
-            .Select(type => (ITemplateContentContributor)serviceProvider.GetRequiredService(type))
-            .Reverse()
-            .ToArray();
-    }
-
-    protected virtual async Task<string> GetContentOrNullAsync(
-        ITemplateContentContributor[] contributors,
-        TemplateContentContributorContext context)
-    {
-        foreach (var contributor in contributors)
+        protected virtual ITemplateContentContributor[] CreateTemplateContentContributors(IServiceProvider serviceProvider)
         {
-            var templateString = await contributor.GetOrNullAsync(context);
-            if (templateString != null)
-            {
-                return templateString;
-            }
+            return Options.ContentContributors
+                .Select(type => (ITemplateContentContributor)serviceProvider.GetRequiredService(type))
+                .Reverse()
+                .ToArray();
         }
 
-        return null;
+        protected virtual async Task<string> GetContentOrNullAsync(
+            ITemplateContentContributor[] contributors,
+            TemplateContentContributorContext context)
+        {
+            foreach (var contributor in contributors)
+            {
+                var templateString = await contributor.GetOrNullAsync(context);
+                if (templateString != null)
+                {
+                    return templateString;
+                }
+            }
+
+            return null;
+        }
     }
 }

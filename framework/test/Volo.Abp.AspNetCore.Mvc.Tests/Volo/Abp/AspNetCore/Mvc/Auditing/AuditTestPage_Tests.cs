@@ -8,84 +8,85 @@ using NSubstitute;
 using Volo.Abp.Auditing;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Auditing;
-
-public class AuditTestPage_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
-    private readonly AbpAuditingOptions _options;
-    private IAuditingStore _auditingStore;
-
-    public AuditTestPage_Tests()
+    public class AuditTestPage_Tests : AspNetCoreMvcTestBase
     {
-        _options = ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
-    }
+        private readonly AbpAuditingOptions _options;
+        private IAuditingStore _auditingStore;
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        _auditingStore = Substitute.For<IAuditingStore>();
-        services.Replace(ServiceDescriptor.Singleton(_auditingStore));
-        base.ConfigureServices(context, services);
-    }
-
-    [Fact]
-    public async Task Should_Get_Correct_ServiceName_And_MethodName()
-    {
-        _options.IsEnabledForGetRequests = true;
-        _options.AlwaysLogOnException = false;
-        await GetResponseAsync("/Auditing/AuditTestPage");
-        await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
-            x.Actions.Any(a => a.ServiceName == typeof(AuditTestPage).FullName) &&
-            x.Actions.Any(a => a.MethodName == nameof(AuditTestPage.OnGet))));
-    }
-
-    [Fact]
-    public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_GetRequests()
-    {
-        _options.IsEnabledForGetRequests = true;
-        _options.AlwaysLogOnException = false;
-        await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditSuccessForGetRequests");
-        await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
-    }
-
-    [Fact]
-    public async Task Should_Trigger_Middleware_And_AuditLog_Exception_Always()
-    {
-        _options.IsEnabled = true;
-        _options.AlwaysLogOnException = true;
-
-        try
+        public AuditTestPage_Tests()
         {
-            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequests", System.Net.HttpStatusCode.Forbidden);
+            _options = ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
         }
-        catch { }
 
-        await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
-    }
-
-    [Fact]
-    public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Returns_Object()
-    {
-        _options.IsEnabled = true;
-        _options.AlwaysLogOnException = true;
-
-        await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequestsReturningObject", System.Net.HttpStatusCode.Forbidden);
-
-        await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
-    }
-
-    [Fact]
-    public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Activate_Page_Failed()
-    {
-        _options.IsEnabledForGetRequests = true;
-        _options.AlwaysLogOnException = true;
-
-        try
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditActivateFailed", System.Net.HttpStatusCode.InternalServerError);
+            _auditingStore = Substitute.For<IAuditingStore>();
+            services.Replace(ServiceDescriptor.Singleton(_auditingStore));
+            base.ConfigureServices(context, services);
         }
-        catch { }
 
-        await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+        [Fact]
+        public async Task Should_Get_Correct_ServiceName_And_MethodName()
+        {
+            _options.IsEnabledForGetRequests = true;
+            _options.AlwaysLogOnException = false;
+            await GetResponseAsync("/Auditing/AuditTestPage");
+            await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
+                x.Actions.Any(a => a.ServiceName == typeof(AuditTestPage).FullName) &&
+                x.Actions.Any(a => a.MethodName == nameof(AuditTestPage.OnGet))));
+        }
+
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_GetRequests()
+        {
+            _options.IsEnabledForGetRequests = true;
+            _options.AlwaysLogOnException = false;
+            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditSuccessForGetRequests");
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Exception_Always()
+        {
+            _options.IsEnabled = true;
+            _options.AlwaysLogOnException = true;
+
+            try
+            {
+                await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequests", System.Net.HttpStatusCode.Forbidden);
+            }
+            catch { }
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Returns_Object()
+        {
+            _options.IsEnabled = true;
+            _options.AlwaysLogOnException = true;
+
+            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequestsReturningObject", System.Net.HttpStatusCode.Forbidden);
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Activate_Page_Failed()
+        {
+            _options.IsEnabledForGetRequests = true;
+            _options.AlwaysLogOnException = true;
+
+            try
+            {
+                await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditActivateFailed", System.Net.HttpStatusCode.InternalServerError);
+            }
+            catch { }
+
+            await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+        }
     }
 }

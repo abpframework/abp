@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
-
-public interface IAbpTagHelperLocalizer : ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    string GetLocalizedText(string text, ModelExplorer explorer);
+    public interface IAbpTagHelperLocalizer : ITransientDependency
+    {
+        string GetLocalizedText(string text, ModelExplorer explorer);
 
-    IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer);
+        IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer);
 
-    IStringLocalizer GetLocalizerOrNull(Assembly assembly);
+        IStringLocalizer GetLocalizerOrNull(Assembly assembly);
+    }
 }

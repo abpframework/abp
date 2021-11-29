@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Razor.Language;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-internal class EmptyProjectFileSystem : RazorProjectFileSystem
+namespace Volo.Abp.TextTemplating.Razor
 {
-    internal static readonly RazorProjectFileSystem Empty = new EmptyProjectFileSystem();
-
-    public override IEnumerable<RazorProjectItem> EnumerateItems(string basePath)
+    internal class EmptyProjectFileSystem : RazorProjectFileSystem
     {
-        NormalizeAndEnsureValidPath(basePath);
-        return Enumerable.Empty<RazorProjectItem>();
-    }
+        internal static readonly RazorProjectFileSystem Empty = new EmptyProjectFileSystem();
 
-    [Obsolete("Use GetItem(string path, string fileKind) instead.")]
-    public override RazorProjectItem GetItem(string path)
-    {
-        return GetItem(path, fileKind: null);
-    }
+        public override IEnumerable<RazorProjectItem> EnumerateItems(string basePath)
+        {
+            NormalizeAndEnsureValidPath(basePath);
+            return Enumerable.Empty<RazorProjectItem>();
+        }
 
-    public override RazorProjectItem GetItem(string path, string fileKind)
-    {
-        NormalizeAndEnsureValidPath(path);
-        return new NotFoundProjectItem(string.Empty, path, fileKind);
+        [Obsolete("Use GetItem(string path, string fileKind) instead.")]
+        public override RazorProjectItem GetItem(string path)
+        {
+            return GetItem(path, fileKind: null);
+        }
+
+        public override RazorProjectItem GetItem(string path, string fileKind)
+        {
+            NormalizeAndEnsureValidPath(path);
+            return new NotFoundProjectItem(string.Empty, path, fileKind);
+        }
     }
 }

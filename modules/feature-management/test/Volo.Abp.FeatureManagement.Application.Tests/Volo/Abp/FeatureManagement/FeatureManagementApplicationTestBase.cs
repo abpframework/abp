@@ -1,6 +1,11 @@
-﻿namespace Volo.Abp.FeatureManagement;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public class FeatureManagementApplicationTestBase : FeatureManagementTestBase<FeatureManagementApplicationTestModule>
+namespace Volo.Abp.FeatureManagement
 {
+    public class FeatureManagementApplicationTestBase : FeatureManagementTestBase<FeatureManagementApplicationTestModule>
+    {
 
+    }
 }

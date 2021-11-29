@@ -1,93 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.Build;
-
-/// <summary>
-/// Represents a source code repository
-/// </summary>
-public class GitRepository
+namespace Volo.Abp.Cli.Build
 {
     /// <summary>
-    /// Name of the repository
+    /// Represents a source code repository
     /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
-    /// Branch of the repository
-    /// </summary>
-    public string BranchName { get; set; }
-
-    /// <summary>
-    /// Root path of the repository which contains .git folder
-    /// </summary>
-    public string RootPath { get; set; }
-
-    public List<GitRepository> DependingRepositories { get; set; }
-
-    public List<string> IgnoredDirectories { get; set; }
-
-    public GitRepository(string name, string branchName, string rootPath)
+    public class GitRepository
     {
-        Name = name;
-        BranchName = branchName;
-        RootPath = rootPath;
-        DependingRepositories = new List<GitRepository>();
-        IgnoredDirectories = new List<string>();
-    }
+        /// <summary>
+        /// Name of the repository
+        /// </summary>
+        public string Name { get; set; }
 
-    public string GetUniqueName(string prefix)
-    {
-        var name = Name + "_" + BranchName;
-        foreach (var dependingRepository in DependingRepositories)
+        /// <summary>
+        /// Branch of the repository
+        /// </summary>
+        public string BranchName { get; set; }
+
+        /// <summary>
+        /// Root path of the repository which contains .git folder
+        /// </summary>
+        public string RootPath { get; set; }
+
+        public List<GitRepository> DependingRepositories { get; set; }
+        
+        public List<string> IgnoredDirectories { get; set; }
+
+        public GitRepository(string name, string branchName, string rootPath)
         {
-            AddToUniqueName(dependingRepository, name);
+            Name = name;
+            BranchName = branchName;
+            RootPath = rootPath;
+            DependingRepositories = new List<GitRepository>();
+            IgnoredDirectories = new List<string>();
         }
 
-        return (prefix.IsNullOrEmpty() ? "" : prefix + "_") + name.ToMd5();
-    }
-
-    private void AddToUniqueName(GitRepository gitRepository, string name)
-    {
-        name += "_" + gitRepository.Name + "_" + gitRepository.BranchName;
-
-        foreach (var dependingRepository in gitRepository.DependingRepositories)
+        public string GetUniqueName(string prefix)
         {
-            AddToUniqueName(dependingRepository, name);
-        }
-    }
-
-    public string FindRepositoryOf(string csProjFilePath)
-    {
-        if (csProjFilePath.StartsWith(RootPath))
-        {
-            return Name;
-        }
-
-        foreach (var dependingRepository in DependingRepositories)
-        {
-            var name = FindRepositoryOfInternal(dependingRepository, csProjFilePath);
-            if (!string.IsNullOrEmpty(name))
+            var name = Name + "_" + BranchName;
+            foreach (var dependingRepository in DependingRepositories)
             {
-                return name;
+                AddToUniqueName(dependingRepository, name);
+            }
+
+            return (prefix.IsNullOrEmpty() ? "" : prefix + "_") + name.ToMd5();
+        }
+
+        private void AddToUniqueName(GitRepository gitRepository, string name)
+        {
+            name += "_" + gitRepository.Name + "_" + gitRepository.BranchName;
+
+            foreach (var dependingRepository in gitRepository.DependingRepositories)
+            {
+                AddToUniqueName(dependingRepository, name);
             }
         }
 
-        return null;
-    }
-
-    private string FindRepositoryOfInternal(GitRepository repository, string csProjFilePath)
-    {
-        if (csProjFilePath.StartsWith(repository.RootPath))
+        public string FindRepositoryOf(string csProjFilePath)
         {
-            return repository.Name;
+            if (csProjFilePath.StartsWith(RootPath))
+            {
+                return Name;
+            }
+
+            foreach (var dependingRepository in DependingRepositories)
+            {
+                var name = FindRepositoryOfInternal(dependingRepository, csProjFilePath);
+                if (!string.IsNullOrEmpty(name))
+                {
+                    return name;
+                }
+            }
+
+            return null;
         }
 
-        foreach (var dependingRepository in repository.DependingRepositories)
+        private string FindRepositoryOfInternal(GitRepository repository, string csProjFilePath)
         {
-            return FindRepositoryOfInternal(dependingRepository, csProjFilePath);
-        }
+            if (csProjFilePath.StartsWith(repository.RootPath))
+            {
+                return repository.Name;
+            }
 
-        return null;
+            foreach (var dependingRepository in repository.DependingRepositories)
+            {
+                return FindRepositoryOfInternal(dependingRepository, csProjFilePath);
+            }
+
+            return null;
+        }
     }
 }

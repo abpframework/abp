@@ -2,20 +2,21 @@
 using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Permissions;
-
-public class CmsKitPermissionDefinitionProvider : PermissionDefinitionProvider
+namespace Volo.CmsKit.Permissions
 {
-    public override void Define(IPermissionDefinitionContext context)
+    public class CmsKitPermissionDefinitionProvider : PermissionDefinitionProvider
     {
-        var myGroup = context.AddGroup(
-            CmsKitPermissions.GroupName,
-            L("Permission:CmsKit.Public")
-        );
-    }
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            var myGroup = context.AddGroup(
+                CmsKitPermissions.GroupName,
+                L("Permission:CmsKit.Public")
+            );
+        }
 
-    private static LocalizableString L(string name)
-    {
-        return LocalizableString.Create<CmsKitResource>(name);
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<CmsKitResource>(name);
+        }
     }
 }

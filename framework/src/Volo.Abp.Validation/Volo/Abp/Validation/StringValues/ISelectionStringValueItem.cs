@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Validation.StringValues;
-
-public interface ISelectionStringValueItem
+﻿namespace Volo.Abp.Validation.StringValues
 {
-    string Value { get; set; }
+    public interface ISelectionStringValueItem
+    {
+        string Value { get; set; }
 
-    LocalizableStringInfo DisplayText { get; set; }
+        LocalizableStringInfo DisplayText { get; set; }
+    }
 }

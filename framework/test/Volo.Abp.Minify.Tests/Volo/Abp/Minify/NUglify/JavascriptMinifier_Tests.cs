@@ -3,25 +3,27 @@ using Volo.Abp.Minify.Scripts;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.Minify.NUglify;
-
-public class JavascriptMinifier_Tests : AbpIntegratedTest<AbpMinifyModule>
+namespace Volo.Abp.Minify.NUglify
 {
-    private readonly IJavascriptMinifier _javascriptMinifier;
-
-    public JavascriptMinifier_Tests()
+    public class JavascriptMinifier_Tests : AbpIntegratedTest<AbpMinifyModule>
     {
-        _javascriptMinifier = GetRequiredService<IJavascriptMinifier>();
+        private readonly IJavascriptMinifier _javascriptMinifier;
+
+        public JavascriptMinifier_Tests()
+        {
+            _javascriptMinifier = GetRequiredService<IJavascriptMinifier>();
+        }
+
+        [Fact]
+        public void Should_Minify_Simple_Code()
+        {
+            const string source = "var x = 5; var y = 6;";
+
+            var minified = _javascriptMinifier.Minify(source);
+
+            minified.Length.ShouldBeGreaterThan(0);
+            minified.Length.ShouldBeLessThan(source.Length);
+        }
     }
 
-    [Fact]
-    public void Should_Minify_Simple_Code()
-    {
-        const string source = "var x = 5; var y = 6;";
-
-        var minified = _javascriptMinifier.Minify(source);
-
-        minified.Length.ShouldBeGreaterThan(0);
-        minified.Length.ShouldBeLessThan(source.Length);
-    }
 }

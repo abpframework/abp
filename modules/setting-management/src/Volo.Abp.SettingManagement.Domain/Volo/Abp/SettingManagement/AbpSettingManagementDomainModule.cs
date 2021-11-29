@@ -3,25 +3,26 @@ using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.SettingManagement;
-
-[DependsOn(
-    typeof(AbpSettingsModule),
-    typeof(AbpDddDomainModule),
-    typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpCachingModule)
-    )]
-public class AbpSettingManagementDomainModule : AbpModule
+namespace Volo.Abp.SettingManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpSettingsModule),
+        typeof(AbpDddDomainModule),
+        typeof(AbpSettingManagementDomainSharedModule), 
+        typeof(AbpCachingModule)
+        )]
+    public class AbpSettingManagementDomainModule : AbpModule
     {
-        Configure<SettingManagementOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Providers.Add<DefaultValueSettingManagementProvider>();
-            options.Providers.Add<ConfigurationSettingManagementProvider>();
-            options.Providers.Add<GlobalSettingManagementProvider>();
-            options.Providers.Add<TenantSettingManagementProvider>();
-            options.Providers.Add<UserSettingManagementProvider>();
-        });
+            Configure<SettingManagementOptions>(options =>
+            {
+                options.Providers.Add<DefaultValueSettingManagementProvider>();
+                options.Providers.Add<ConfigurationSettingManagementProvider>();
+                options.Providers.Add<GlobalSettingManagementProvider>();
+                options.Providers.Add<TenantSettingManagementProvider>();
+                options.Providers.Add<UserSettingManagementProvider>();
+            });
+        }
     }
 }

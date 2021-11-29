@@ -1,5 +1,6 @@
-﻿namespace Volo.Abp.DependencyInjection;
-
-public interface IScopedDependency
+﻿namespace Volo.Abp.DependencyInjection
 {
+    public interface IScopedDependency
+    {
+    }
 }

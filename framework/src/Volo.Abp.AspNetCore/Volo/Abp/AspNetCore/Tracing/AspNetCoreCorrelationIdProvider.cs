@@ -4,48 +4,49 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Tracing;
 
-namespace Volo.Abp.AspNetCore.Tracing;
-
-[Dependency(ReplaceServices = true)]
-public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransientDependency
+namespace Volo.Abp.AspNetCore.Tracing
 {
-    protected IHttpContextAccessor HttpContextAccessor { get; }
-    protected AbpCorrelationIdOptions Options { get; }
-
-    public AspNetCoreCorrelationIdProvider(
-        IHttpContextAccessor httpContextAccessor,
-        IOptions<AbpCorrelationIdOptions> options)
+    [Dependency(ReplaceServices = true)]
+    public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransientDependency
     {
-        HttpContextAccessor = httpContextAccessor;
-        Options = options.Value;
-    }
+        protected IHttpContextAccessor HttpContextAccessor { get; }
+        protected AbpCorrelationIdOptions Options { get; }
 
-    public virtual string Get()
-    {
-        if (HttpContextAccessor.HttpContext?.Request?.Headers == null)
+        public AspNetCoreCorrelationIdProvider(
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<AbpCorrelationIdOptions> options)
         {
-            return CreateNewCorrelationId();
+            HttpContextAccessor = httpContextAccessor;
+            Options = options.Value;
         }
 
-        string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
-
-        if (correlationId.IsNullOrEmpty())
+        public virtual string Get()
         {
-            lock (HttpContextAccessor.HttpContext.Request.Headers)
+            if (HttpContextAccessor.HttpContext?.Request?.Headers == null)
             {
-                if (correlationId.IsNullOrEmpty())
+                return CreateNewCorrelationId();
+            }
+
+            string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
+
+            if (correlationId.IsNullOrEmpty())
+            {
+                lock (HttpContextAccessor.HttpContext.Request.Headers)
                 {
-                    correlationId = CreateNewCorrelationId();
-                    HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
+                    if (correlationId.IsNullOrEmpty())
+                    {
+                        correlationId = CreateNewCorrelationId();
+                        HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
+                    }
                 }
             }
+
+            return correlationId;
         }
 
-        return correlationId;
-    }
-
-    protected virtual string CreateNewCorrelationId()
-    {
-        return Guid.NewGuid().ToString("N");
+        protected virtual string CreateNewCorrelationId()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
     }
 }

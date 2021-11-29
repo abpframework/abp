@@ -1,9 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace Microsoft.Extensions.Localization;
-
-public interface IAbpStringLocalizerFactoryWithDefaultResourceSupport
+namespace Microsoft.Extensions.Localization
 {
-    [CanBeNull]
-    IStringLocalizer CreateDefaultOrNull();
+    public interface IAbpStringLocalizerFactoryWithDefaultResourceSupport
+    {
+        [CanBeNull]
+        IStringLocalizer CreateDefaultOrNull();
+    }
 }

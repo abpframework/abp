@@ -2,29 +2,30 @@
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.SettingManagement;
-
-public class UserSettingManagementProvider : SettingManagementProvider, ITransientDependency
+namespace Volo.Abp.SettingManagement
 {
-    public override string Name => UserSettingValueProvider.ProviderName;
-
-    protected ICurrentUser CurrentUser { get; }
-
-    public UserSettingManagementProvider(
-        ISettingManagementStore settingManagementStore,
-        ICurrentUser currentUser)
-        : base(settingManagementStore)
+    public class UserSettingManagementProvider : SettingManagementProvider, ITransientDependency
     {
-        CurrentUser = currentUser;
-    }
+        public override string Name => UserSettingValueProvider.ProviderName;
 
-    protected override string NormalizeProviderKey(string providerKey)
-    {
-        if (providerKey != null)
+        protected ICurrentUser CurrentUser { get; }
+
+        public UserSettingManagementProvider(
+            ISettingManagementStore settingManagementStore,
+            ICurrentUser currentUser)
+            : base(settingManagementStore)
         {
-            return providerKey;
+            CurrentUser = currentUser;
         }
 
-        return CurrentUser.Id?.ToString();
+        protected override string NormalizeProviderKey(string providerKey)
+        {
+            if (providerKey != null)
+            {
+                return providerKey;
+            }
+
+            return CurrentUser.Id?.ToString();
+        }
     }
 }

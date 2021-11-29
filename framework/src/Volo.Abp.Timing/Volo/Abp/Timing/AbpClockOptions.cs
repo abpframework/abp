@@ -1,16 +1,17 @@
 using System;
 
-namespace Volo.Abp.Timing;
-
-public class AbpClockOptions
+namespace Volo.Abp.Timing
 {
-    /// <summary>
-    /// Default: <see cref="DateTimeKind.Unspecified"/>
-    /// </summary>
-    public DateTimeKind Kind { get; set; }
-
-    public AbpClockOptions()
+    public class AbpClockOptions
     {
-        Kind = DateTimeKind.Unspecified;
+        /// <summary>
+        /// Default: <see cref="DateTimeKind.Unspecified"/>
+        /// </summary>
+        public DateTimeKind Kind { get; set; }
+
+        public AbpClockOptions()
+        {
+            Kind = DateTimeKind.Unspecified;
+        }
     }
 }

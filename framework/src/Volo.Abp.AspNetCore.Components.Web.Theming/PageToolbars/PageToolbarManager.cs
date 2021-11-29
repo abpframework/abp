@@ -5,35 +5,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
-
-public class PageToolbarManager : IPageToolbarManager, ITransientDependency
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars
 {
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-
-    public PageToolbarManager(
-        IHybridServiceScopeFactory serviceScopeFactory)
+    public class PageToolbarManager : IPageToolbarManager, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-    }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
-    public virtual async Task<PageToolbarItem[]> GetItemsAsync(PageToolbar toolbar)
-    {
-        if (toolbar == null || !toolbar.Contributors.Any())
+        public PageToolbarManager(
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            return Array.Empty<PageToolbarItem>();
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public virtual async Task<PageToolbarItem[]> GetItemsAsync(PageToolbar toolbar)
         {
-            var context = new PageToolbarContributionContext(scope.ServiceProvider);
-
-            foreach (var contributor in toolbar.Contributors)
+            if (toolbar == null || !toolbar.Contributors.Any())
             {
-                await contributor.ContributeAsync(context);
+                return Array.Empty<PageToolbarItem>();
             }
 
-            return context.Items.OrderBy(i => i.Order).ToArray();
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var context = new PageToolbarContributionContext(scope.ServiceProvider);
+
+                foreach (var contributor in toolbar.Contributors)
+                {
+                    await contributor.ContributeAsync(context);
+                }
+
+                return context.Items.OrderBy(i => i.Order).ToArray();
+            }
         }
     }
 }

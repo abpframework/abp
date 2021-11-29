@@ -1,18 +1,19 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public abstract class BackgroundJob<TArgs> : IBackgroundJob<TArgs>
+namespace Volo.Abp.BackgroundJobs
 {
-    //TODO: Add UOW, Localization and other useful properties..?
-
-    public ILogger<BackgroundJob<TArgs>> Logger { get; set; }
-
-    protected BackgroundJob()
+    public abstract class BackgroundJob<TArgs> : IBackgroundJob<TArgs>
     {
-        Logger = NullLogger<BackgroundJob<TArgs>>.Instance;
-    }
+        //TODO: Add UOW, Localization and other useful properties..?
 
-    public abstract void Execute(TArgs args);
+        public ILogger<BackgroundJob<TArgs>> Logger { get; set; }
+
+        protected BackgroundJob()
+        {
+            Logger = NullLogger<BackgroundJob<TArgs>>.Instance;
+        }
+
+        public abstract void Execute(TArgs args);
+    }
 }

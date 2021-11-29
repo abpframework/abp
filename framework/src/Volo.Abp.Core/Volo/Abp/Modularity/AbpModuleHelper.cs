@@ -4,58 +4,59 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Modularity;
-
-internal static class AbpModuleHelper
+namespace Volo.Abp.Modularity
 {
-    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
+    internal static class AbpModuleHelper
     {
-        var moduleTypes = new List<Type>();
-        logger.Log(LogLevel.Information, "Loaded ABP modules:");
-        AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
-        return moduleTypes;
-    }
-
-    public static List<Type> FindDependedModuleTypes(Type moduleType)
-    {
-        AbpModule.CheckAbpModuleType(moduleType);
-
-        var dependencies = new List<Type>();
-
-        var dependencyDescriptors = moduleType
-            .GetCustomAttributes()
-            .OfType<IDependedTypesProvider>();
-
-        foreach (var descriptor in dependencyDescriptors)
+        public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
         {
-            foreach (var dependedModuleType in descriptor.GetDependedTypes())
+            var moduleTypes = new List<Type>();
+            logger.Log(LogLevel.Information, "Loaded ABP modules:");
+            AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
+            return moduleTypes;
+        }
+
+        public static List<Type> FindDependedModuleTypes(Type moduleType)
+        {
+            AbpModule.CheckAbpModuleType(moduleType);
+
+            var dependencies = new List<Type>();
+
+            var dependencyDescriptors = moduleType
+                .GetCustomAttributes()
+                .OfType<IDependedTypesProvider>();
+
+            foreach (var descriptor in dependencyDescriptors)
             {
-                dependencies.AddIfNotContains(dependedModuleType);
+                foreach (var dependedModuleType in descriptor.GetDependedTypes())
+                {
+                    dependencies.AddIfNotContains(dependedModuleType);
+                }
             }
+
+            return dependencies;
         }
 
-        return dependencies;
-    }
-
-    private static void AddModuleAndDependenciesRecursively(
-        List<Type> moduleTypes,
-        Type moduleType,
-        ILogger logger,
-        int depth = 0)
-    {
-        AbpModule.CheckAbpModuleType(moduleType);
-
-        if (moduleTypes.Contains(moduleType))
+        private static void AddModuleAndDependenciesRecursively(
+            List<Type> moduleTypes,
+            Type moduleType,
+            ILogger logger,
+            int depth = 0)
         {
-            return;
-        }
+            AbpModule.CheckAbpModuleType(moduleType);
 
-        moduleTypes.Add(moduleType);
-        logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
+            if (moduleTypes.Contains(moduleType))
+            {
+                return;
+            }
 
-        foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
-        {
-            AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
+            moduleTypes.Add(moduleType);
+            logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
+
+            foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
+            {
+                AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
+            }
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity;
-
-public interface IDependedTypesProvider
+namespace Volo.Abp.Modularity
 {
-    [NotNull]
-    Type[] GetDependedTypes();
+    public interface IDependedTypesProvider
+    {
+        [NotNull]
+        Type[] GetDependedTypes();
+    }
 }

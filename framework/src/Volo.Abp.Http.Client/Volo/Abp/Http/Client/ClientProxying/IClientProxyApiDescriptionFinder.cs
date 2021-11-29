@@ -1,10 +1,11 @@
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.Client.ClientProxying;
-
-public interface IClientProxyApiDescriptionFinder
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    ActionApiDescriptionModel FindAction(string methodName);
+    public interface IClientProxyApiDescriptionFinder
+    {
+        ActionApiDescriptionModel FindAction(string methodName);
 
-    ApplicationApiDescriptionModel GetApiDescription();
+        ApplicationApiDescriptionModel GetApiDescription();
+    }
 }

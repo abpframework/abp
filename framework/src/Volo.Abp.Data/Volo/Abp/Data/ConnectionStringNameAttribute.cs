@@ -2,34 +2,35 @@
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Data;
-
-public class ConnectionStringNameAttribute : Attribute
+namespace Volo.Abp.Data
 {
-    [NotNull]
-    public string Name { get; }
-
-    public ConnectionStringNameAttribute([NotNull] string name)
+    public class ConnectionStringNameAttribute : Attribute
     {
-        Check.NotNull(name, nameof(name));
+        [NotNull]
+        public string Name { get; }
 
-        Name = name;
-    }
-
-    public static string GetConnStringName<T>()
-    {
-        return GetConnStringName(typeof(T));
-    }
-
-    public static string GetConnStringName(Type type)
-    {
-        var nameAttribute = type.GetTypeInfo().GetCustomAttribute<ConnectionStringNameAttribute>();
-
-        if (nameAttribute == null)
+        public ConnectionStringNameAttribute([NotNull] string name)
         {
-            return type.FullName;
+            Check.NotNull(name, nameof(name));
+
+            Name = name;
         }
 
-        return nameAttribute.Name;
+        public static string GetConnStringName<T>()
+        {
+            return GetConnStringName(typeof(T));
+        }
+
+        public static string GetConnStringName(Type type)
+        {
+            var nameAttribute = type.GetTypeInfo().GetCustomAttribute<ConnectionStringNameAttribute>();
+
+            if (nameAttribute == null)
+            {
+                return type.FullName;
+            }
+
+            return nameAttribute.Name;
+        }
     }
 }

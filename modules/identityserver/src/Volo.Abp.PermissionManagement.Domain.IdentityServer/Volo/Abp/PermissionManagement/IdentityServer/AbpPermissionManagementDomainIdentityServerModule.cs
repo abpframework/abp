@@ -2,21 +2,22 @@
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.PermissionManagement.IdentityServer;
-
-[DependsOn(
-    typeof(AbpIdentityServerDomainSharedModule),
-    typeof(AbpPermissionManagementDomainModule)
-)]
-public class AbpPermissionManagementDomainIdentityServerModule : AbpModule
+namespace Volo.Abp.PermissionManagement.IdentityServer
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityServerDomainSharedModule),
+        typeof(AbpPermissionManagementDomainModule)
+    )]
+    public class AbpPermissionManagementDomainIdentityServerModule : AbpModule
     {
-        Configure<PermissionManagementOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ManagementProviders.Add<ClientPermissionManagementProvider>();
+            Configure<PermissionManagementOptions>(options =>
+            {
+                options.ManagementProviders.Add<ClientPermissionManagementProvider>();
 
-            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "IdentityServer.Client.ManagePermissions";
-        });
+                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "IdentityServer.Client.ManagePermissions";
+            });
+        }
     }
 }

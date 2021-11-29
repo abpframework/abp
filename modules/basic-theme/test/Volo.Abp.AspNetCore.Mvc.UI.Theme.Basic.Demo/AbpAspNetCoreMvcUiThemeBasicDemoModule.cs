@@ -11,52 +11,53 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    typeof(AbpAspNetCoreMvcUiThemeSharedDemoModule),
-    typeof(AbpAutofacModule)
-    )]
-public class AbpAspNetCoreMvcUiThemeBasicDemoModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedDemoModule),
+        typeof(AbpAutofacModule)
+        )]
+    public class AbpAspNetCoreMvcUiThemeBasicDemoModule : AbpModule
     {
-        var env = context.Services.GetHostingEnvironment();
-
-        if (env.IsDevelopment())
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
+            var env = context.Services.GetHostingEnvironment();
+
+            if (env.IsDevelopment())
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedDemoModule>(Path.Combine(env.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo", Path.DirectorySeparatorChar)));
+                Configure<AbpVirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedDemoModule>(Path.Combine(env.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo", Path.DirectorySeparatorChar)));
+                });
+            }
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles
+                    .Get(StandardBundles.Styles.Global)
+                    .AddFiles("/demo/styles/main.css");
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BasicThemeDemoMenuContributor());
             });
         }
 
-        Configure<AbpBundlingOptions>(options =>
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.StyleBundles
-                .Get(StandardBundles.Styles.Global)
-                .AddFiles("/demo/styles/main.css");
-        });
+            var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new BasicThemeDemoMenuContributor());
-        });
-    }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-        var env = context.GetEnvironment();
-
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseConfiguredEndpoints();
         }
-
-        app.UseStaticFiles();
-        app.UseRouting();
-        app.UseConfiguredEndpoints();
     }
 }

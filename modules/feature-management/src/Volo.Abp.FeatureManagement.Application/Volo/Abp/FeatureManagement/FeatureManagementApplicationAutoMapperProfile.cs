@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.FeatureManagement;
-
-public class FeatureManagementApplicationAutoMapperProfile : Profile
+namespace Volo.Abp.FeatureManagement
 {
-    public FeatureManagementApplicationAutoMapperProfile()
+    public class FeatureManagementApplicationAutoMapperProfile : Profile
     {
-
+        public FeatureManagementApplicationAutoMapperProfile()
+        {
+            
+        }
     }
 }

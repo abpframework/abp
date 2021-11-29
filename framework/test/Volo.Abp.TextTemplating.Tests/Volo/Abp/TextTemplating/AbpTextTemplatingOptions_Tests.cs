@@ -2,22 +2,23 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.TextTemplating;
-
-public class AbpTextTemplatingOptions_Tests : AbpTextTemplatingTestBase<AbpTextTemplatingTestModule>
+namespace Volo.Abp.TextTemplating
 {
-    private readonly AbpTextTemplatingOptions _options;
-
-    public AbpTextTemplatingOptions_Tests()
+    public class AbpTextTemplatingOptions_Tests : AbpTextTemplatingTestBase<AbpTextTemplatingTestModule>
     {
-        _options = GetRequiredService<IOptions<AbpTextTemplatingOptions>>().Value;
-    }
+        private readonly AbpTextTemplatingOptions _options;
 
-    [Fact]
-    public void Should_Auto_Add_TemplateDefinitionProviders_To_Options()
-    {
-        _options
-            .DefinitionProviders
-            .ShouldContain(typeof(TestTemplateDefinitionProvider));
+        public AbpTextTemplatingOptions_Tests()
+        {
+            _options = GetRequiredService<IOptions<AbpTextTemplatingOptions>>().Value;
+        }
+
+        [Fact]
+        public void Should_Auto_Add_TemplateDefinitionProviders_To_Options()
+        {
+            _options
+                .DefinitionProviders
+                .ShouldContain(typeof(TestTemplateDefinitionProvider));
+        }
     }
 }

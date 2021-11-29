@@ -12,58 +12,59 @@ using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts;
-
-public class CreateModel : CmsKitAdminPageModel
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 {
-    protected IBlogPostAdminAppService BlogPostAdminAppService { get; }
-
-    [BindProperty]
-    public CreateBlogPostViewModel ViewModel { get; set; }
-
-    public CreateModel(
-        IBlogPostAdminAppService blogPostAdminAppService)
+    public class CreateModel : CmsKitAdminPageModel
     {
-        BlogPostAdminAppService = blogPostAdminAppService;
-    }
+        protected IBlogPostAdminAppService BlogPostAdminAppService { get; }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var dto = ObjectMapper.Map<CreateBlogPostViewModel, CreateBlogPostDto>(ViewModel);
+        [BindProperty]
+        public CreateBlogPostViewModel ViewModel { get; set; }
 
-        var created = await BlogPostAdminAppService.CreateAsync(dto);
+        public CreateModel(
+            IBlogPostAdminAppService blogPostAdminAppService)
+        {
+            BlogPostAdminAppService = blogPostAdminAppService;
+        }
 
-        return new OkObjectResult(created);
-    }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var dto = ObjectMapper.Map<CreateBlogPostViewModel, CreateBlogPostDto>(ViewModel);
 
-    [AutoMap(typeof(CreateBlogPostDto), ReverseMap = true)]
-    public class CreateBlogPostViewModel
-    {
-        [Required]
-        [DynamicFormIgnore]
-        public Guid BlogId { get; set; }
+            var created = await BlogPostAdminAppService.CreateAsync(dto);
 
-        [Required]
-        [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
-        [DynamicFormIgnore]
-        public string Title { get; set; }
+            return new OkObjectResult(created);
+        }
 
-        [Required]
-        [DynamicStringLength(
-            typeof(BlogPostConsts),
-            nameof(BlogPostConsts.MaxSlugLength),
-            nameof(BlogPostConsts.MinSlugLength))]
-        [DynamicFormIgnore]
-        public string Slug { get; set; }
+        [AutoMap(typeof(CreateBlogPostDto), ReverseMap = true)]
+        public class CreateBlogPostViewModel
+        {
+            [Required]
+            [DynamicFormIgnore]
+            public Guid BlogId { get; set; }
 
-        [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]
-        public string ShortDescription { get; set; }
+            [Required]
+            [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
+            [DynamicFormIgnore]
+            public string Title { get; set; }
 
-        [HiddenInput]
-        [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxContentLength))]
-        public string Content { get; set; }
+            [Required]
+            [DynamicStringLength(
+                typeof(BlogPostConsts),
+                nameof(BlogPostConsts.MaxSlugLength),
+                nameof(BlogPostConsts.MinSlugLength))]
+            [DynamicFormIgnore]
+            public string Slug { get; set; }
 
-        [HiddenInput]
-        public Guid? CoverImageMediaId { get; set; }
+            [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]
+            public string ShortDescription { get; set; }
+            
+            [HiddenInput]
+            [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxContentLength))]
+            public string Content { get; set; }
+
+            [HiddenInput]
+            public Guid? CoverImageMediaId { get; set; }
+        }
     }
 }

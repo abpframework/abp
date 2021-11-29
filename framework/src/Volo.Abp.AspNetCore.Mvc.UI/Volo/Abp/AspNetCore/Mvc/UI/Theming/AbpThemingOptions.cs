@@ -1,13 +1,14 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
-
-public class AbpThemingOptions
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    public ThemeDictionary Themes { get; }
-
-    public string DefaultThemeName { get; set; }
-
-    public AbpThemingOptions()
+    public class AbpThemingOptions
     {
-        Themes = new ThemeDictionary();
+        public ThemeDictionary Themes { get; }
+
+        public string DefaultThemeName { get; set; }
+
+        public AbpThemingOptions()
+        {
+            Themes = new ThemeDictionary();
+        }
     }
 }

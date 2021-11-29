@@ -6,33 +6,34 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer;
-
-public class FileContentModal : PageModel
+namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
 {
-    [Required]
-    [BindProperty(SupportsGet = true)]
-    public string FilePath { get; set; }
-
-    public string Content { get; set; }
-
-    protected IVirtualFileProvider VirtualFileProvider { get; }
-
-    public FileContentModal(IVirtualFileProvider virtualFileProvider)
+    public class FileContentModal : PageModel
     {
-        VirtualFileProvider = virtualFileProvider;
-    }
+        [Required]
+        [BindProperty(SupportsGet = true)]
+        public string FilePath { get; set; }
 
-    public virtual async Task<IActionResult> OnGetAsync()
-    {
-        var fileInfo = VirtualFileProvider.GetFileInfo(FilePath);
-        if (fileInfo == null || fileInfo.IsDirectory)
+        public string Content { get; set; }
+
+        protected IVirtualFileProvider VirtualFileProvider { get; }
+
+        public FileContentModal(IVirtualFileProvider virtualFileProvider)
         {
-            return NotFound();
+            VirtualFileProvider = virtualFileProvider;
         }
 
-        Content = await fileInfo.ReadAsStringAsync();
+        public virtual async Task<IActionResult> OnGetAsync()
+        {
+            var fileInfo = VirtualFileProvider.GetFileInfo(FilePath);
+            if (fileInfo == null || fileInfo.IsDirectory)
+            {
+                return NotFound();
+            }
 
-        return Page();
+            Content = await fileInfo.ReadAsStringAsync();
+
+            return Page();
+        }
     }
 }

@@ -2,20 +2,21 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Validation;
-
-public static class ValidationInterceptorRegistrar
+namespace Volo.Abp.Validation
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static class ValidationInterceptorRegistrar
     {
-        if (ShouldIntercept(context.ImplementationType))
+        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            context.Interceptors.TryAdd<ValidationInterceptor>();
+            if (ShouldIntercept(context.ImplementationType))
+            {
+                context.Interceptors.TryAdd<ValidationInterceptor>();
+            }
         }
-    }
-
-    private static bool ShouldIntercept(Type type)
-    {
-        return !DynamicProxyIgnoreTypes.Contains(type) && typeof(IValidationEnabled).IsAssignableFrom(type);
+        
+         private static bool ShouldIntercept(Type type)
+         {
+             return !DynamicProxyIgnoreTypes.Contains(type) && typeof(IValidationEnabled).IsAssignableFrom(type);
+         }
     }
 }

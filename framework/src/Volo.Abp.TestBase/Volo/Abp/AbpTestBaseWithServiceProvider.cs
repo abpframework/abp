@@ -1,19 +1,20 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp;
-
-public abstract class AbpTestBaseWithServiceProvider
+namespace Volo.Abp
 {
-    protected abstract IServiceProvider ServiceProvider { get; }
-
-    protected virtual T GetService<T>()
+    public abstract class AbpTestBaseWithServiceProvider
     {
-        return ServiceProvider.GetService<T>();
-    }
+        protected abstract IServiceProvider ServiceProvider { get; }
+        
+        protected virtual T GetService<T>()
+        {
+            return ServiceProvider.GetService<T>();
+        }
 
-    protected virtual T GetRequiredService<T>()
-    {
-        return ServiceProvider.GetRequiredService<T>();
+        protected virtual T GetRequiredService<T>()
+        {
+            return ServiceProvider.GetRequiredService<T>();
+        }
     }
 }

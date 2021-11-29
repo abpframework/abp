@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Features;
-
-public interface IFeatureValueProvider
+namespace Volo.Abp.Features
 {
-    string Name { get; }
+    public interface IFeatureValueProvider
+    {
+        string Name { get; }
 
-    Task<string> GetOrNullAsync([NotNull] FeatureDefinition feature);
+        Task<string> GetOrNullAsync([NotNull] FeatureDefinition feature);
+    }
 }

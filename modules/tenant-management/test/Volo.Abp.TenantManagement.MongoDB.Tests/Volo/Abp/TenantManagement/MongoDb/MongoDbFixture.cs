@@ -3,21 +3,22 @@ using Mongo2Go;
 using MongoDB.Driver;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDB;
-
-public class MongoDbFixture : IDisposable
+namespace Volo.Abp.TenantManagement.MongoDB
 {
-    private static readonly MongoDbRunner MongoDbRunner;
-    public static readonly string ConnectionString;
-
-    static MongoDbFixture()
+    public class MongoDbFixture : IDisposable
     {
-        MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
-        ConnectionString = MongoDbRunner.ConnectionString;
-    }
+        private static readonly MongoDbRunner MongoDbRunner;
+        public static readonly string ConnectionString;
 
-    public void Dispose()
-    {
-        MongoDbRunner?.Dispose();
+        static MongoDbFixture()
+        {
+            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
+            ConnectionString = MongoDbRunner.ConnectionString;
+        }
+
+        public void Dispose()
+        {
+            MongoDbRunner?.Dispose();
+        }
     }
 }

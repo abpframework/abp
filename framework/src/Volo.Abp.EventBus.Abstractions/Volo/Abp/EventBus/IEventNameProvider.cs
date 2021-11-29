@@ -1,8 +1,9 @@
 ﻿using System;
 
-namespace Volo.Abp.EventBus;
-
-public interface IEventNameProvider
+namespace Volo.Abp.EventBus
 {
-    string GetName(Type eventType);
+    public interface IEventNameProvider
+    {
+        string GetName(Type eventType);
+    }
 }

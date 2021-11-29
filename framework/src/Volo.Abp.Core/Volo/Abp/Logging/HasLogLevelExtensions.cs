@@ -1,17 +1,18 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Logging;
-
-public static class HasLogLevelExtensions
+namespace Volo.Abp.Logging
 {
-    public static TException WithLogLevel<TException>([NotNull] this TException exception, LogLevel logLevel)
-        where TException : IHasLogLevel
+    public static class HasLogLevelExtensions
     {
-        Check.NotNull(exception, nameof(exception));
+        public static TException WithLogLevel<TException>([NotNull] this TException exception, LogLevel logLevel)
+            where TException : IHasLogLevel
+        {
+            Check.NotNull(exception, nameof(exception));
 
-        exception.LogLevel = logLevel;
+            exception.LogLevel = logLevel;
 
-        return exception;
+            return exception;
+        }
     }
 }

@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-public class BundleCacheItem
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public List<string> Files { get; }
-
-    public List<IDisposable> WatchDisposeHandles { get; }
-
-    public BundleCacheItem(List<string> files)
+    public class BundleCacheItem
     {
-        Files = files;
-        WatchDisposeHandles = new List<IDisposable>();
+        public List<string> Files { get; }
+
+        public List<IDisposable> WatchDisposeHandles { get; }
+
+        public BundleCacheItem(List<string> files)
+        {
+            Files = files;
+            WatchDisposeHandles = new List<IDisposable>();
+        }
     }
 }

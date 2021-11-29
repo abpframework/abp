@@ -1,18 +1,19 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TextTemplating.Scriban;
-
-[DependsOn(
-    typeof(AbpTextTemplatingTestModule)
-)]
-public class ScribanTextTemplatingTestModule : AbpModule
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTextTemplatingTestModule)
+    )]
+    public class ScribanTextTemplatingTestModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<ScribanTextTemplatingTestModule>("Volo.Abp.TextTemplating.Scriban");
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<ScribanTextTemplatingTestModule>("Volo.Abp.TextTemplating.Scriban");
+            });
+        }
     }
 }

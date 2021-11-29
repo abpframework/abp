@@ -1,12 +1,13 @@
-﻿namespace Volo.Abp.Localization;
-
-public interface ILanguageInfo
+﻿namespace Volo.Abp.Localization
 {
-    string CultureName { get; }
+    public interface ILanguageInfo
+    {
+        string CultureName { get; }
 
-    string UiCultureName { get; }
+        string UiCultureName { get; }
 
-    string DisplayName { get; }
+        string DisplayName { get; }
 
-    string FlagIcon { get; }
+        string FlagIcon { get; }
+    }
 }

@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.SignalR;
-
-public class AbpSignalROptions
+﻿namespace Volo.Abp.AspNetCore.SignalR
 {
-    public HubConfigList Hubs { get; }
-
-    public AbpSignalROptions()
+    public class AbpSignalROptions
     {
-        Hubs = new HubConfigList();
+        public HubConfigList Hubs { get; }
+
+        public AbpSignalROptions()
+        {
+            Hubs = new HubConfigList();
+        }
     }
 }

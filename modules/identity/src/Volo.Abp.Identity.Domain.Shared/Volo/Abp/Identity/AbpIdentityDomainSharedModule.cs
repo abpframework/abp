@@ -9,34 +9,35 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Identity;
-
-[DependsOn(
-    typeof(AbpUsersDomainSharedModule),
-    typeof(AbpValidationModule),
-    typeof(AbpFeaturesModule)
-    )]
-public class AbpIdentityDomainSharedModule : AbpModule
+namespace Volo.Abp.Identity
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpUsersDomainSharedModule),
+        typeof(AbpValidationModule),
+        typeof(AbpFeaturesModule)
+        )]
+    public class AbpIdentityDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpIdentityDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<IdentityResource>("en")
-                .AddBaseTypes(
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/Volo/Abp/Identity/Localization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<IdentityResource>("en")
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/Identity/Localization");
+            });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
-        });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
+            });
+        }
     }
 }

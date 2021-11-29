@@ -1,23 +1,24 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace MyCompanyName.MyProjectName.Blazor.Host;
-
-public class Program
+namespace MyCompanyName.MyProjectName.Blazor.Host
 {
-    public static async Task Main(string[] args)
+    public class Program
     {
-        var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
-        var application = builder.AddApplication<MyProjectNameBlazorHostModule>(options =>
+        public static async Task Main(string[] args)
         {
-            options.UseAutofac();
-        });
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-        var host = builder.Build();
+            var application = builder.AddApplication<MyProjectNameBlazorHostModule>(options =>
+            {
+                options.UseAutofac();
+            });
 
-        await application.InitializeAsync(host.Services);
+            var host = builder.Build();
 
-        await host.RunAsync();
+            await application.InitializeAsync(host.Services);
+
+            await host.RunAsync();
+        }
     }
 }

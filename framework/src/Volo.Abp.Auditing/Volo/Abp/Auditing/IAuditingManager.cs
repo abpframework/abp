@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Auditing;
-
-public interface IAuditingManager
+namespace Volo.Abp.Auditing
 {
-    [CanBeNull]
-    IAuditLogScope Current { get; }
+    public interface IAuditingManager
+    {
+        [CanBeNull]
+        IAuditLogScope Current { get; }
 
-    IAuditLogSaveHandle BeginScope();
+        IAuditLogSaveHandle BeginScope();
+    }
 }

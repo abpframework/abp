@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp;
-
-public static class ServiceProviderAccessorExtensions
+namespace Volo.Abp
 {
-    [CanBeNull]
-    public static HttpContext GetHttpContext(this IServiceProviderAccessor serviceProviderAccessor)
+    public static class ServiceProviderAccessorExtensions
     {
-        return serviceProviderAccessor.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+        [CanBeNull]
+        public static HttpContext GetHttpContext(this IServiceProviderAccessor serviceProviderAccessor)
+        {
+            return serviceProviderAccessor.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+        }
     }
 }

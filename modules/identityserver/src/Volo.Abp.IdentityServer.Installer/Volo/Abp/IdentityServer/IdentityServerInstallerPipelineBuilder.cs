@@ -3,21 +3,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.ModuleInstalling;
 
-namespace Volo.Abp.IdentityServer;
-
-[Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-[ExposeServices(typeof(IModuleInstallingPipelineBuilder))]
-public class IdentityServerInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
+namespace Volo.Abp.IdentityServer
 {
-    public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
+    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+    [ExposeServices(typeof(IModuleInstallingPipelineBuilder))]
+    public class IdentityServerInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
     {
-        context.AddEfCoreConfigurationMethodDeclaration(
-            new EfCoreConfigurationMethodDeclaration(
-                "Volo.Abp.IdentityServer.EntityFrameworkCore",
-                "ConfigureIdentityServer"
-            )
-        );
-
-        return GetBasePipeline(context);
+        public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
+        {
+            context.AddEfCoreConfigurationMethodDeclaration(
+                new EfCoreConfigurationMethodDeclaration(
+                    "Volo.Abp.IdentityServer.EntityFrameworkCore",
+                    "ConfigureIdentityServer"
+                )
+            );
+            
+            return GetBasePipeline(context);
+        }
     }
 }

@@ -5,23 +5,24 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpPermissionManagementApplicationModule),
-    typeof(AbpPermissionManagementTestModule)
-)]
-public class AbpPermissionManagementApplicationTestModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementTestModule)
+    )]
+    public class AbpPermissionManagementApplicationTestModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
-
-        context.Services.Configure<PermissionManagementOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ProviderPolicies[UserPermissionValueProvider.ProviderName] = UserPermissionValueProvider.ProviderName;
-            options.ProviderPolicies["Test"] = "Test";
-            options.ManagementProviders.Add<TestPermissionManagementProvider>();
-        });
+            context.Services.AddAlwaysAllowAuthorization();
+
+            context.Services.Configure<PermissionManagementOptions>(options =>
+            {
+                options.ProviderPolicies[UserPermissionValueProvider.ProviderName] = UserPermissionValueProvider.ProviderName;
+                options.ProviderPolicies["Test"] = "Test";
+                options.ManagementProviders.Add<TestPermissionManagementProvider>();
+            });
+        }
     }
 }

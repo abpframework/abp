@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
-
-public class ReactionSelectionStyleBundleContributor : BundleContributor
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class ReactionSelectionStyleBundleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/Pages/CmsKit/Shared/Components/ReactionSelection/default.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/Pages/CmsKit/Shared/Components/ReactionSelection/default.css");
+        }
     }
 }

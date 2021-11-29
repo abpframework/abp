@@ -8,42 +8,43 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore
+namespace Volo.CmsKit.MediaDescriptors
 {
-    protected CmsKitMediaOptions Options { get; }
-
-    public DefaultMediaDescriptorDefinitionStore(IOptions<CmsKitMediaOptions> options)
+    public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore
     {
-        Options = options.Value;
-    }
+        protected CmsKitMediaOptions Options { get; }
 
-    /// <summary>
-    /// Gets single <see cref="MediaDescriptorDefinition"/> by entityType.
-    /// </summary>
-    /// <param name="entityType">EntityType to get definition.</param>
-    /// <exception cref="EntityCantHaveMediaException">Thrown when EntityType is not configured as taggable.</exception>
-    /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
-    public virtual Task<MediaDescriptorDefinition> GetAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+        public DefaultMediaDescriptorDefinitionStore(IOptions<CmsKitMediaOptions> options)
+        {
+            Options = options.Value;
+        }
 
-        var definition = Options.EntityTypes.SingleOrDefault(
-            x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
-        ) ?? throw new EntityCantHaveMediaException(entityType);
+        /// <summary>
+        /// Gets single <see cref="MediaDescriptorDefinition"/> by entityType.
+        /// </summary>
+        /// <param name="entityType">EntityType to get definition.</param>
+        /// <exception cref="EntityCantHaveMediaException">Thrown when EntityType is not configured as taggable.</exception>
+        /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
+        public virtual Task<MediaDescriptorDefinition> GetAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return Task.FromResult(definition);
-    }
+            var definition = Options.EntityTypes.SingleOrDefault(
+                x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            ) ?? throw new EntityCantHaveMediaException(entityType);
 
-    public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrEmpty(entityType, nameof(entityType));
+            return Task.FromResult(definition);
+        }
 
-        var isDefined = Options.EntityTypes.Any(
-            a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
-        );
+        public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
 
-        return Task.FromResult(isDefined);
+            var isDefined = Options.EntityTypes.Any(
+                a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            );
+
+            return Task.FromResult(isDefined);
+        }
     }
 }

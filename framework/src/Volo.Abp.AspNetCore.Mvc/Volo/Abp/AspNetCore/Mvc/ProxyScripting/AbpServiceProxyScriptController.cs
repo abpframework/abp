@@ -5,41 +5,42 @@ using Volo.Abp.Http;
 using Volo.Abp.Http.ProxyScripting;
 using Volo.Abp.Minify.Scripts;
 
-namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting;
-
-[Area("Abp")]
-[Route("Abp/ServiceProxyScript")]
-[DisableAuditing]
-[RemoteService(false)]
-[ApiExplorerSettings(IgnoreApi = true)]
-public class AbpServiceProxyScriptController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
 {
-    private readonly IProxyScriptManager _proxyScriptManager;
-    private readonly AbpAspNetCoreMvcOptions _options;
-    private readonly IJavascriptMinifier _javascriptMinifier;
-
-    public AbpServiceProxyScriptController(IProxyScriptManager proxyScriptManager,
-        IOptions<AbpAspNetCoreMvcOptions> options,
-        IJavascriptMinifier javascriptMinifier)
+    [Area("Abp")]
+    [Route("Abp/ServiceProxyScript")]
+    [DisableAuditing]
+    [RemoteService(false)]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public class AbpServiceProxyScriptController : AbpController
     {
-        _proxyScriptManager = proxyScriptManager;
-        _options = options.Value;
-        _javascriptMinifier = javascriptMinifier;
-    }
+        private readonly IProxyScriptManager _proxyScriptManager;
+        private readonly AbpAspNetCoreMvcOptions _options;
+        private readonly IJavascriptMinifier _javascriptMinifier;
 
-    [HttpGet]
-    [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public ActionResult GetAll(ServiceProxyGenerationModel model)
-    {
-        model.Normalize();
+        public AbpServiceProxyScriptController(IProxyScriptManager proxyScriptManager,
+            IOptions<AbpAspNetCoreMvcOptions> options,
+            IJavascriptMinifier javascriptMinifier)
+        {
+            _proxyScriptManager = proxyScriptManager;
+            _options = options.Value;
+            _javascriptMinifier = javascriptMinifier;
+        }
 
-        var script = _proxyScriptManager.GetScript(model.CreateOptions());
+        [HttpGet]
+        [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
+        public ActionResult GetAll(ServiceProxyGenerationModel model)
+        {
+            model.Normalize();
 
-        return Content(
-            _options.MinifyGeneratedScript == true
-                ? _javascriptMinifier.Minify(script)
-                : script,
-            MimeTypes.Application.Javascript
-        );
+            var script = _proxyScriptManager.GetScript(model.CreateOptions());
+
+            return Content(
+                _options.MinifyGeneratedScript == true
+                    ? _javascriptMinifier.Minify(script)
+                    : script,
+                MimeTypes.Application.Javascript
+            );
+        }
     }
 }

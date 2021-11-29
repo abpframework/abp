@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.ObjectExtending;
-
-public static class MvcUiObjectExtensionPropertyInfoExtensions
+namespace Volo.Abp.ObjectExtending
 {
-    private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+    public static class MvcUiObjectExtensionPropertyInfoExtensions
+    {
+        private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
             typeof(int),
             typeof(long),
             typeof(byte),
@@ -35,122 +35,123 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
             typeof(decimal?)
         };
 
-    public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
-    {
-        var formatString = property.GetDataFormatStringOrNull();
-
-        if (!formatString.IsNullOrWhiteSpace())
+        public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
         {
-            return formatString;
-        }
+            var formatString = property.GetDataFormatStringOrNull();
 
-        if (property.IsDate())
-        {
-            return "{0:yyyy-MM-dd}";
-        }
+            if (!formatString.IsNullOrWhiteSpace())
+            {
+                return formatString;
+            }
 
-        if (property.IsDateTime())
-        {
-            return "{0:yyyy-MM-ddTHH:mm}";
-        }
+            if (property.IsDate())
+            {
+                return "{0:yyyy-MM-dd}";
+            }
 
-        return null;
-    }
+            if (property.IsDateTime())
+            {
+                return "{0:yyyy-MM-ddTHH:mm}";
+            }
 
-    public static string GetInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object value)
-    {
-        if (value == null)
-        {
             return null;
         }
 
-        if (TypeHelper.IsFloatingType(property.Type))
+        public static string GetInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object value)
         {
-            return value.ToString()?.Replace(',', '.');
-        }
-
-        /* Let the ASP.NET Core handle it! */
-        return null;
-    }
-
-    public static string GetInputType(this ObjectExtensionPropertyInfo propertyInfo)
-    {
-        foreach (var attribute in propertyInfo.Attributes)
-        {
-            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
-            if (inputTypeByAttribute != null)
+            if (value == null)
             {
-                return inputTypeByAttribute;
+                return null;
             }
-        }
 
-        return GetInputTypeFromTypeOrNull(propertyInfo.Type)
-               ?? "text"; //default
-    }
-
-    private static string GetInputTypeFromAttributeOrNull(Attribute attribute)
-    {
-        if (attribute is EmailAddressAttribute)
-        {
-            return "email";
-        }
-
-        if (attribute is UrlAttribute)
-        {
-            return "url";
-        }
-
-        if (attribute is HiddenInputAttribute)
-        {
-            return "hidden";
-        }
-
-        if (attribute is PhoneAttribute)
-        {
-            return "tel";
-        }
-
-        if (attribute is DataTypeAttribute dataTypeAttribute)
-        {
-            switch (dataTypeAttribute.DataType)
+            if (TypeHelper.IsFloatingType(property.Type))
             {
-                case DataType.Password:
-                    return "password";
-                case DataType.Date:
-                    return "date";
-                case DataType.Time:
-                    return "time";
-                case DataType.EmailAddress:
-                    return "email";
-                case DataType.Url:
-                    return "url";
-                case DataType.PhoneNumber:
-                    return "tel";
-                case DataType.DateTime:
-                    return "datetime-local";
+                return value.ToString()?.Replace(',', '.');
             }
+
+            /* Let the ASP.NET Core handle it! */
+            return null;
         }
 
-        return null;
-    }
-
-    private static string GetInputTypeFromTypeOrNull(Type type)
-    {
-        if (type == typeof(bool))
+        public static string GetInputType(this ObjectExtensionPropertyInfo propertyInfo)
         {
-            return "checkbox";
+            foreach (var attribute in propertyInfo.Attributes)
+            {
+                var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
+                if (inputTypeByAttribute != null)
+                {
+                    return inputTypeByAttribute;
+                }
+            }
+
+            return GetInputTypeFromTypeOrNull(propertyInfo.Type)
+                   ?? "text"; //default
         }
 
-        if (type == typeof(DateTime))
+        private static string GetInputTypeFromAttributeOrNull(Attribute attribute)
         {
-            return "datetime-local";
+            if (attribute is EmailAddressAttribute)
+            {
+                return "email";
+            }
+
+            if (attribute is UrlAttribute)
+            {
+                return "url";
+            }
+
+            if (attribute is HiddenInputAttribute)
+            {
+                return "hidden";
+            }
+
+            if (attribute is PhoneAttribute)
+            {
+                return "tel";
+            }
+
+            if (attribute is DataTypeAttribute dataTypeAttribute)
+            {
+                switch (dataTypeAttribute.DataType)
+                {
+                    case DataType.Password:
+                        return "password";
+                    case DataType.Date:
+                        return "date";
+                    case DataType.Time:
+                        return "time";
+                    case DataType.EmailAddress:
+                        return "email";
+                    case DataType.Url:
+                        return "url";
+                    case DataType.PhoneNumber:
+                        return "tel";
+                    case DataType.DateTime:
+                        return "datetime-local";
+                }
+            }
+
+            return null;
         }
 
-        if (NumberTypes.Contains(type))
+        private static string GetInputTypeFromTypeOrNull(Type type)
         {
-            return "number";
-        }
+            if (type == typeof(bool))
+            {
+                return "checkbox";
+            }
 
-        return null;
+            if (type == typeof(DateTime))
+            {
+                return "datetime-local";
+            }
+
+            if (NumberTypes.Contains(type))
+            {
+                return "number";
+            }
+
+            return null;
+        }
     }
 }

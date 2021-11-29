@@ -1,12 +1,13 @@
 using Volo.Abp.AspNetCore.Serilog;
 
-namespace Microsoft.AspNetCore.Builder;
-
-public static class AbpAspNetCoreSerilogApplicationBuilderExtensions
+namespace Microsoft.AspNetCore.Builder
 {
-    public static IApplicationBuilder UseAbpSerilogEnrichers(this IApplicationBuilder app)
+    public static class AbpAspNetCoreSerilogApplicationBuilderExtensions
     {
-        return app
-            .UseMiddleware<AbpSerilogMiddleware>();
+        public static IApplicationBuilder UseAbpSerilogEnrichers(this IApplicationBuilder app)
+        {
+            return app
+                .UseMiddleware<AbpSerilogMiddleware>();
+        }
     }
 }

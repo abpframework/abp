@@ -9,35 +9,36 @@ using Microsoft.Extensions.Primitives;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization;
-
-public class LocalizationTestController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
-    class TestRequestCultureProvider : RequestCultureProvider
+    public class LocalizationTestController_Tests : AspNetCoreMvcTestBase
     {
-        public override Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
+        class TestRequestCultureProvider : RequestCultureProvider
         {
-            return Task.FromResult(new ProviderCultureResult((StringSegment)"tr", (StringSegment)"hu"));
-        }
-    }
-
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        services.Configure<AbpRequestLocalizationOptions>(options =>
-        {
-            options.RequestLocalizationOptionConfigurators.Add((serviceProvider, localizationOptions) =>
+            public override Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
             {
-                localizationOptions.RequestCultureProviders.Insert(0, new TestRequestCultureProvider());
-                return Task.CompletedTask;
-            });
-        });
-    }
+                return Task.FromResult(new ProviderCultureResult((StringSegment) "tr", (StringSegment) "hu"));
+            }
+        }
 
-    [Fact]
-    public async Task TestRequestCultureProvider_Test()
-    {
-        var response = await GetResponseAsync("api/LocalizationTestController", HttpStatusCode.OK);
-        var resultAsString = await response.Content.ReadAsStringAsync();
-        resultAsString.ToLower().ShouldBe("tr:hu");
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
+            services.Configure<AbpRequestLocalizationOptions>(options =>
+            {
+                options.RequestLocalizationOptionConfigurators.Add((serviceProvider, localizationOptions) =>
+                {
+                    localizationOptions.RequestCultureProviders.Insert(0, new TestRequestCultureProvider());
+                    return Task.CompletedTask;
+                });
+            });
+        }
+
+        [Fact]
+        public async Task TestRequestCultureProvider_Test()
+        {
+            var response = await GetResponseAsync("api/LocalizationTestController", HttpStatusCode.OK);
+            var resultAsString = await response.Content.ReadAsStringAsync();
+            resultAsString.ToLower().ShouldBe("tr:hu");
+        }
     }
 }

@@ -6,42 +6,43 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel.Web;
-
-[Dependency(ReplaceServices = true)]
-public class HttpContextIdentityModelRemoteServiceHttpClientAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator
+namespace Volo.Abp.Http.Client.IdentityModel.Web
 {
-    public IHttpContextAccessor HttpContextAccessor { get; set; }
-
-    public HttpContextIdentityModelRemoteServiceHttpClientAuthenticator(
-        IIdentityModelAuthenticationService identityModelAuthenticationService)
-        : base(identityModelAuthenticationService)
+    [Dependency(ReplaceServices = true)]
+    public class HttpContextIdentityModelRemoteServiceHttpClientAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator
     {
-    }
+        public IHttpContextAccessor HttpContextAccessor { get; set; }
 
-    public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
-    {
-        if (context.RemoteService.GetUseCurrentAccessToken() != false)
+        public HttpContextIdentityModelRemoteServiceHttpClientAuthenticator(
+            IIdentityModelAuthenticationService identityModelAuthenticationService)
+            : base(identityModelAuthenticationService)
         {
-            var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
-            if (accessToken != null)
+        }
+
+        public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+        {
+            if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {
-                context.Request.SetBearerToken(accessToken);
-                return;
+                var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
+                if (accessToken != null)
+                {
+                    context.Request.SetBearerToken(accessToken);
+                    return;
+                }
             }
+
+            await base.Authenticate(context);
         }
 
-        await base.Authenticate(context);
-    }
-
-    protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
-    {
-        var httpContext = HttpContextAccessor?.HttpContext;
-        if (httpContext == null)
+        protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
         {
-            return null;
-        }
+            var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext == null)
+            {
+                return null;
+            }
 
-        return await httpContext.GetTokenAsync("access_token");
+            return await httpContext.GetTokenAsync("access_token");
+        }
     }
 }

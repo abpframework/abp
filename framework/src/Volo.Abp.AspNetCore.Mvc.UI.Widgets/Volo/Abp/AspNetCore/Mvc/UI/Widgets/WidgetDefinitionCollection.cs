@@ -4,66 +4,67 @@ using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-public class WidgetDefinitionCollection
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    private readonly Dictionary<string, WidgetDefinition> _widgetsByName;
-    private readonly Dictionary<Type, WidgetDefinition> _widgetsByType;
-
-    public WidgetDefinitionCollection()
+    public class WidgetDefinitionCollection
     {
-        _widgetsByName = new Dictionary<string, WidgetDefinition>();
-        _widgetsByType = new Dictionary<Type, WidgetDefinition>();
-    }
+        private readonly Dictionary<string, WidgetDefinition> _widgetsByName;
+        private readonly Dictionary<Type, WidgetDefinition> _widgetsByType;
 
-    public void Add(WidgetDefinition widget)
-    {
-        var existingWidget = _widgetsByName.GetOrDefault(widget.Name);
-        if (existingWidget != null)
+        public WidgetDefinitionCollection()
         {
-            _widgetsByType[existingWidget.ViewComponentType] = widget;
+            _widgetsByName = new Dictionary<string, WidgetDefinition>();
+            _widgetsByType = new Dictionary<Type, WidgetDefinition>();
         }
 
-        _widgetsByName[widget.Name] = widget;
-        _widgetsByType[widget.ViewComponentType] = widget;
-    }
+        public void Add(WidgetDefinition widget)
+        {
+            var existingWidget = _widgetsByName.GetOrDefault(widget.Name);
+            if (existingWidget != null)
+            {
+                _widgetsByType[existingWidget.ViewComponentType] = widget;
+            }
 
-    public WidgetDefinition Add<TViewComponent>(
-        [CanBeNull] ILocalizableString displayName = null)
-    {
-        return Add(typeof(TViewComponent), displayName);
-    }
+            _widgetsByName[widget.Name] = widget;
+            _widgetsByType[widget.ViewComponentType] = widget;
+        }
 
-    public WidgetDefinition Add(
-        [NotNull] Type viewComponentType,
-        [CanBeNull] ILocalizableString displayName = null)
-    {
-        var widget = new WidgetDefinition(viewComponentType, displayName);
-        Add(widget);
-        return widget;
-    }
+        public WidgetDefinition Add<TViewComponent>(
+            [CanBeNull] ILocalizableString displayName = null)
+        {
+            return Add(typeof(TViewComponent), displayName);
+        }
 
-    [CanBeNull]
-    public WidgetDefinition Find(string name)
-    {
-        return _widgetsByName.GetOrDefault(name);
-    }
+        public WidgetDefinition Add(
+            [NotNull] Type viewComponentType, 
+            [CanBeNull] ILocalizableString displayName = null)
+        {
+            var widget = new WidgetDefinition(viewComponentType, displayName);
+            Add(widget);
+            return widget;
+        }
 
-    [CanBeNull]
-    public WidgetDefinition Find<TViewComponent>()
-    {
-        return Find(typeof(TViewComponent));
-    }
+        [CanBeNull]
+        public WidgetDefinition Find(string name)
+        {
+            return _widgetsByName.GetOrDefault(name);
+        }
 
-    [CanBeNull]
-    public WidgetDefinition Find(Type viewComponentType)
-    {
-        return _widgetsByType.GetOrDefault(viewComponentType);
-    }
+        [CanBeNull]
+        public WidgetDefinition Find<TViewComponent>()
+        {
+            return Find(typeof(TViewComponent));
+        }
 
-    public IReadOnlyCollection<WidgetDefinition> GetAll()
-    {
-        return _widgetsByName.Values.ToImmutableArray();
+        [CanBeNull]
+        public WidgetDefinition Find(Type viewComponentType)
+        {
+            return _widgetsByType.GetOrDefault(viewComponentType);
+        }
+
+        public IReadOnlyCollection<WidgetDefinition> GetAll()
+        {
+            return _widgetsByName.Values.ToImmutableArray();
+        }
     }
 }

@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.MongoDB;
-
-public class MongoDbContextModel
+namespace Volo.Abp.MongoDB
 {
-    public IReadOnlyDictionary<Type, IMongoEntityModel> Entities { get; }
-
-    public MongoDbContextModel(IReadOnlyDictionary<Type, IMongoEntityModel> entities)
+    public class MongoDbContextModel
     {
-        Entities = entities;
+        public IReadOnlyDictionary<Type, IMongoEntityModel> Entities { get; }
+
+        public MongoDbContextModel(IReadOnlyDictionary<Type, IMongoEntityModel> entities)
+        {
+            Entities = entities;
+        }
     }
 }

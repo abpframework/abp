@@ -4,27 +4,28 @@ using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Security.Claims;
-
-public class ClaimsMapTestController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Security.Claims
 {
-    private readonly FakeUserClaims _fakeRequiredService;
-
-    public ClaimsMapTestController_Tests()
+    public class ClaimsMapTestController_Tests : AspNetCoreMvcTestBase
     {
-        _fakeRequiredService = GetRequiredService<FakeUserClaims>();
-    }
+        private readonly FakeUserClaims _fakeRequiredService;
 
-    [Fact]
-    public async Task Claims_Should_Be_Mapped()
-    {
-        _fakeRequiredService.Claims.AddRange(new[]
+        public ClaimsMapTestController_Tests()
         {
+            _fakeRequiredService = GetRequiredService<FakeUserClaims>();
+        }
+
+        [Fact]
+        public async Task Claims_Should_Be_Mapped()
+        {
+            _fakeRequiredService.Claims.AddRange(new[]
+            {
                 new Claim("SerialNumber", "123456"),
                 new Claim("DateOfBirth", "2020")
             });
 
-        var result = await GetResponseAsStringAsync("/ClaimsMapTest/ClaimsMapTest");
-        result.ShouldBe("OK");
+            var result = await GetResponseAsStringAsync("/ClaimsMapTest/ClaimsMapTest");
+            result.ShouldBe("OK");
+        }
     }
 }

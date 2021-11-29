@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown;
-
-public enum DropdownDirection
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 {
-    Down,
-    Up,
-    Right,
-    Left
+    public enum DropdownDirection
+    {
+        Down,
+        Up,
+        Right,
+        Left
+    }
 }

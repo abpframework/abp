@@ -5,27 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Settings;
-
-public class SettingValueProviderManager : ISettingValueProviderManager, ISingletonDependency
+namespace Volo.Abp.Settings
 {
-    public List<ISettingValueProvider> Providers => _lazyProviders.Value;
-    protected AbpSettingOptions Options { get; }
-    private readonly Lazy<List<ISettingValueProvider>> _lazyProviders;
-
-    public SettingValueProviderManager(
-        IServiceProvider serviceProvider,
-        IOptions<AbpSettingOptions> options)
+    public class SettingValueProviderManager : ISettingValueProviderManager, ISingletonDependency
     {
+        public List<ISettingValueProvider> Providers => _lazyProviders.Value;
+        protected AbpSettingOptions Options { get; }
+        private readonly Lazy<List<ISettingValueProvider>> _lazyProviders;
 
-        Options = options.Value;
+        public SettingValueProviderManager(
+            IServiceProvider serviceProvider,
+            IOptions<AbpSettingOptions> options)
+        {
 
-        _lazyProviders = new Lazy<List<ISettingValueProvider>>(
-            () => Options
-                .ValueProviders
-                .Select(type => serviceProvider.GetRequiredService(type) as ISettingValueProvider)
-                .ToList(),
-            true
-        );
+            Options = options.Value;
+
+            _lazyProviders = new Lazy<List<ISettingValueProvider>>(
+                () => Options
+                    .ValueProviders
+                    .Select(type => serviceProvider.GetRequiredService(type) as ISettingValueProvider)
+                    .ToList(),
+                true
+            );
+        }
     }
 }

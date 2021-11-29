@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.Build;
-
-public class DotNetProjectInfoEqualityComparer : EqualityComparer<DotNetProjectInfo>
+namespace Volo.Abp.Cli.Build
 {
-    public override bool Equals(DotNetProjectInfo x, DotNetProjectInfo y)
+    public class DotNetProjectInfoEqualityComparer : EqualityComparer<DotNetProjectInfo>
     {
-        return (x == null && y == null) || (x != null && y != null && x.CsProjPath == y.CsProjPath);
-    }
+        public override bool Equals(DotNetProjectInfo x, DotNetProjectInfo y)
+        {
+            return (x == null && y == null) || (x != null && y != null && x.CsProjPath == y.CsProjPath);
+        }
 
-    public override int GetHashCode(DotNetProjectInfo obj)
-    {
-        return obj == null ? 0 : obj.CsProjPath.GetHashCode();
+        public override int GetHashCode(DotNetProjectInfo obj)
+        {
+            return obj == null ? 0 : obj.CsProjPath.GetHashCode();
+        }
     }
 }

@@ -142,7 +142,6 @@
     "MinimumSearchContent": "يجب عليك إدخال 3 أحرف على الأقل!",
     "Volo.AbpIo.Domain:060001": "عنوان URL المصدر (\"{ArticleUrl}\") ليس عنوان URL لـ Github",
     "Volo.AbpIo.Domain:060002": "محتوى المقالة غير متوفر من مورد Github (\"{ArticleUrl}\").",
-    "Volo.AbpIo.Domain:060003": "لم يتم العثور على محتوى مقال!",
-    "SeeMore": "شاهد المزيد"
+    "Volo.AbpIo.Domain:060003": "لم يتم العثور على محتوى مقال!"
   }
 }

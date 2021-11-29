@@ -1,44 +1,45 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Volo.Abp.Identity.EntityFrameworkCore;
-
-public static class IdentityEfCoreQueryableExtensions
+namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    public static IQueryable<IdentityUser> IncludeDetails(this IQueryable<IdentityUser> queryable, bool include = true)
+    public static class IdentityEfCoreQueryableExtensions
     {
-        if (!include)
+        public static IQueryable<IdentityUser> IncludeDetails(this IQueryable<IdentityUser> queryable, bool include = true)
         {
-            return queryable;
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .Include(x => x.Roles)
+                .Include(x => x.Logins)
+                .Include(x => x.Claims)
+                .Include(x => x.Tokens)
+                .Include(x => x.OrganizationUnits);
         }
 
-        return queryable
-            .Include(x => x.Roles)
-            .Include(x => x.Logins)
-            .Include(x => x.Claims)
-            .Include(x => x.Tokens)
-            .Include(x => x.OrganizationUnits);
-    }
-
-    public static IQueryable<IdentityRole> IncludeDetails(this IQueryable<IdentityRole> queryable, bool include = true)
-    {
-        if (!include)
+        public static IQueryable<IdentityRole> IncludeDetails(this IQueryable<IdentityRole> queryable, bool include = true)
         {
-            return queryable;
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .Include(x => x.Claims);
         }
 
-        return queryable
-            .Include(x => x.Claims);
-    }
-
-    public static IQueryable<OrganizationUnit> IncludeDetails(this IQueryable<OrganizationUnit> queryable, bool include = true)
-    {
-        if (!include)
+        public static IQueryable<OrganizationUnit> IncludeDetails(this IQueryable<OrganizationUnit> queryable, bool include = true)
         {
-            return queryable;
-        }
+            if (!include)
+            {
+                return queryable;
+            }
 
-        return queryable
-            .Include(x => x.Roles);
+            return queryable
+                .Include(x => x.Roles);
+        }
     }
 }

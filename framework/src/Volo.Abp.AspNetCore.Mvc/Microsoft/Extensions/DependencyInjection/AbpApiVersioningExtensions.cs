@@ -8,53 +8,54 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Versioning;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpApiVersioningExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddAbpApiVersioning(this IServiceCollection services, Action<ApiVersioningOptions> setupAction)
+    public static class AbpApiVersioningExtensions
     {
-        services.AddTransient<IRequestedApiVersion, HttpContextRequestedApiVersion>();
-        services.AddTransient<IApiControllerSpecification, AbpConventionalApiControllerSpecification>();
-
-        services.AddApiVersioning(setupAction);
-
-        return services;
-    }
-
-    public static void ConfigureAbp(this ApiVersioningOptions options, AbpAspNetCoreMvcOptions mvcOptions)
-    {
-        foreach (var setting in mvcOptions.ConventionalControllers.ConventionalControllerSettings)
+        public static IServiceCollection AddAbpApiVersioning(this IServiceCollection services, Action<ApiVersioningOptions> setupAction)
         {
-            if (setting.ApiVersionConfigurer == null)
-            {
-                ConfigureApiVersionsByConvention(options, setting);
-            }
-            else
-            {
-                setting.ApiVersionConfigurer.Invoke(options);
-            }
+            services.AddTransient<IRequestedApiVersion, HttpContextRequestedApiVersion>();
+            services.AddTransient<IApiControllerSpecification, AbpConventionalApiControllerSpecification>();
+
+            services.AddApiVersioning(setupAction);
+
+            return services;
         }
-    }
 
-    private static void ConfigureApiVersionsByConvention(ApiVersioningOptions options, ConventionalControllerSetting setting)
-    {
-        foreach (var controllerType in setting.ControllerTypes)
+        public static void ConfigureAbp(this ApiVersioningOptions options, AbpAspNetCoreMvcOptions mvcOptions)
         {
-            var controllerBuilder = options.Conventions.Controller(controllerType);
-
-            if (setting.ApiVersions.Any())
+            foreach (var setting in mvcOptions.ConventionalControllers.ConventionalControllerSettings)
             {
-                foreach (var apiVersion in setting.ApiVersions)
+                if (setting.ApiVersionConfigurer == null)
                 {
-                    controllerBuilder.HasApiVersion(apiVersion);
+                    ConfigureApiVersionsByConvention(options, setting);
+                }
+                else
+                {
+                    setting.ApiVersionConfigurer.Invoke(options);
                 }
             }
-            else
+        }
+
+        private static void ConfigureApiVersionsByConvention(ApiVersioningOptions options, ConventionalControllerSetting setting)
+        {
+            foreach (var controllerType in setting.ControllerTypes)
             {
-                if (!controllerType.IsDefined(typeof(ApiVersionAttribute), true))
+                var controllerBuilder = options.Conventions.Controller(controllerType);
+
+                if (setting.ApiVersions.Any())
                 {
-                    controllerBuilder.IsApiVersionNeutral();
+                    foreach (var apiVersion in setting.ApiVersions)
+                    {
+                        controllerBuilder.HasApiVersion(apiVersion);
+                    }
+                }
+                else
+                {
+                    if (!controllerType.IsDefined(typeof(ApiVersionAttribute), true))
+                    {
+                        controllerBuilder.IsApiVersionNeutral();
+                    }
                 }
             }
         }

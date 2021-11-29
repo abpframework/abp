@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table;
-
-public class AbpTableHeadScopeTagHelperService : AbpTagHelperService<AbpTableHeadScopeTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpTableHeadScopeTagHelperService : AbpTagHelperService<AbpTableHeadScopeTagHelper>
     {
-        SetScope(context, output);
-    }
-
-    protected virtual void SetScope(TagHelperContext context, TagHelperOutput output)
-    {
-        switch (TagHelper.Scope)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            case AbpThScope.Default:
-                return;
-            case AbpThScope.Row:
-                output.Attributes.Add("scope", "row");
-                return;
-            case AbpThScope.Column:
-                output.Attributes.Add("scope", "col");
-                return;
+            SetScope(context, output);
+        }
+
+        protected virtual void SetScope(TagHelperContext context, TagHelperOutput output)
+        {
+            switch (TagHelper.Scope)
+            {
+                case AbpThScope.Default:
+                    return;
+                case AbpThScope.Row:
+                    output.Attributes.Add("scope", "row");
+                    return;
+                case AbpThScope.Column:
+                    output.Attributes.Add("scope","col");
+                    return;
+            }
         }
     }
 }

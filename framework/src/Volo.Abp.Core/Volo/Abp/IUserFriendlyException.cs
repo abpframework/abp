@@ -1,6 +1,7 @@
-namespace Volo.Abp;
-
-public interface IUserFriendlyException : IBusinessException
+namespace Volo.Abp
 {
+    public interface IUserFriendlyException : IBusinessException
+    {
 
+    }
 }

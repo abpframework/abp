@@ -1,10 +1,11 @@
-﻿namespace Microsoft.Extensions.Localization;
-
-public static class AbpStringLocalizerFactoryExtensions
+﻿namespace Microsoft.Extensions.Localization
 {
-    public static IStringLocalizer CreateDefaultOrNull(this IStringLocalizerFactory localizerFactory)
+    public static class AbpStringLocalizerFactoryExtensions
     {
-        return (localizerFactory as IAbpStringLocalizerFactoryWithDefaultResourceSupport)
-            ?.CreateDefaultOrNull();
+        public static IStringLocalizer CreateDefaultOrNull(this IStringLocalizerFactory localizerFactory)
+        {
+            return (localizerFactory as IAbpStringLocalizerFactoryWithDefaultResourceSupport)
+                ?.CreateDefaultOrNull();
+        }
     }
 }

@@ -2,37 +2,38 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.Account.Web.Pages.Account;
-
-public class LogoutModel : AccountPageModel
+namespace Volo.Abp.Account.Web.Pages.Account
 {
-    [HiddenInput]
-    [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
-
-    [HiddenInput]
-    [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
-
-    public virtual async Task<IActionResult> OnGetAsync()
+    public class LogoutModel : AccountPageModel
     {
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-        {
-            Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = IdentitySecurityLogActionConsts.Logout
-        });
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
 
-        await SignInManager.SignOutAsync();
-        if (ReturnUrl != null)
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrlHash { get; set; }
+
+        public virtual async Task<IActionResult> OnGetAsync()
         {
-            return RedirectSafely(ReturnUrl, ReturnUrlHash);
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
+            await SignInManager.SignOutAsync();
+            if (ReturnUrl != null)
+            {
+                return RedirectSafely(ReturnUrl, ReturnUrlHash);
+            }
+
+            return RedirectToPage("/Account/Login");
         }
 
-        return RedirectToPage("/Account/Login");
-    }
-
-    public virtual Task<IActionResult> OnPostAsync()
-    {
-        return Task.FromResult<IActionResult>(Page());
+        public virtual Task<IActionResult> OnPostAsync()
+        {
+            return Task.FromResult<IActionResult>(Page());
+        }
     }
 }

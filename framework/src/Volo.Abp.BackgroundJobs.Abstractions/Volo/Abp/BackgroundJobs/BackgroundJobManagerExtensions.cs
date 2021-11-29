@@ -1,20 +1,21 @@
 ﻿using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.BackgroundJobs;
-
-/// <summary>
-/// Some extension methods for <see cref="IBackgroundJobManager"/>.
-/// </summary>
-public static class BackgroundJobManagerExtensions
+namespace Volo.Abp.BackgroundJobs
 {
     /// <summary>
-    /// Checks if background job system has a real implementation.
-    /// It returns false if the current implementation is <see cref="NullBackgroundJobManager"/>.
+    /// Some extension methods for <see cref="IBackgroundJobManager"/>.
     /// </summary>
-    /// <param name="backgroundJobManager"></param>
-    /// <returns></returns>
-    public static bool IsAvailable(this IBackgroundJobManager backgroundJobManager)
+    public static class BackgroundJobManagerExtensions
     {
-        return !(ProxyHelper.UnProxy(backgroundJobManager) is NullBackgroundJobManager);
+        /// <summary>
+        /// Checks if background job system has a real implementation.
+        /// It returns false if the current implementation is <see cref="NullBackgroundJobManager"/>.
+        /// </summary>
+        /// <param name="backgroundJobManager"></param>
+        /// <returns></returns>
+        public static bool IsAvailable(this IBackgroundJobManager backgroundJobManager)
+        {
+            return !(ProxyHelper.UnProxy(backgroundJobManager) is NullBackgroundJobManager);
+        }
     }
 }

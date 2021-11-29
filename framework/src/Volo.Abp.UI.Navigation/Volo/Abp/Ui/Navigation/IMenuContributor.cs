@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
 
-namespace Volo.Abp.UI.Navigation;
-
-public interface IMenuContributor
+namespace Volo.Abp.UI.Navigation
 {
-    Task ConfigureMenuAsync(MenuConfigurationContext context);
+    public interface IMenuContributor
+    {
+        Task ConfigureMenuAsync(MenuConfigurationContext context);
+    }
 }

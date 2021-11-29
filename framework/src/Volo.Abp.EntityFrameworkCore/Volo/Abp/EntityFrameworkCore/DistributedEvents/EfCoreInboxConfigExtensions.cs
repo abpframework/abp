@@ -1,12 +1,13 @@
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class EfCoreInboxConfigExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void UseDbContext<TDbContext>(this InboxConfig outboxConfig)
-        where TDbContext : IHasEventInbox
+    public static class EfCoreInboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(IDbContextEventInbox<TDbContext>);
+        public static void UseDbContext<TDbContext>(this InboxConfig outboxConfig)
+            where TDbContext : IHasEventInbox
+        {
+            outboxConfig.ImplementationType = typeof(IDbContextEventInbox<TDbContext>);
+        }
     }
 }

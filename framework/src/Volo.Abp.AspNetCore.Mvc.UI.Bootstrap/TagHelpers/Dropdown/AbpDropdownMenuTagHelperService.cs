@@ -1,28 +1,29 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown;
-
-public class AbpDropdownMenuTagHelperService : AbpTagHelperService<AbpDropdownMenuTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpDropdownMenuTagHelperService : AbpTagHelperService<AbpDropdownMenuTagHelper>
     {
-        output.TagName = "div";
-        output.Attributes.AddClass("dropdown-menu");
-        output.TagMode = TagMode.StartTagAndEndTag;
-
-        SetAlign(context, output);
-    }
-
-    protected virtual void SetAlign(TagHelperContext context, TagHelperOutput output)
-    {
-        switch (TagHelper.Align)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            case DropdownAlign.End:
-                output.Attributes.AddClass("dropdown-menu-end");
-                return;
-            case DropdownAlign.Start:
-                return;
+            output.TagName = "div";
+            output.Attributes.AddClass("dropdown-menu");
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            SetAlign(context, output);
+        }
+
+        protected virtual void SetAlign(TagHelperContext context, TagHelperOutput output)
+        {
+            switch (TagHelper.Align)
+            {
+                case DropdownAlign.End:
+                    output.Attributes.AddClass("dropdown-menu-end");
+                    return;
+                case DropdownAlign.Start:
+                    return;
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public interface IHasEventOutbox : IEfCoreDbContext
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    DbSet<OutgoingEventRecord> OutgoingEvents { get; set; }
+    public interface IHasEventOutbox : IEfCoreDbContext
+    {
+        DbSet<OutgoingEventRecord> OutgoingEvents { get; set; }
+    }
 }

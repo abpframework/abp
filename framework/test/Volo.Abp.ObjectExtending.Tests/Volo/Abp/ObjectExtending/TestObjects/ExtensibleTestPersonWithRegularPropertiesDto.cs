@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.ObjectExtending.TestObjects;
-
-public class ExtensibleTestPersonWithRegularPropertiesDto : ExtensibleObject
+﻿namespace Volo.Abp.ObjectExtending.TestObjects
 {
-    public string Name { get; set; }
+    public class ExtensibleTestPersonWithRegularPropertiesDto : ExtensibleObject
+    {
+        public string Name { get; set; }
 
-    public int Age { get; set; }
+        public int Age { get; set; }
 
-    public bool IsActive { get; set; }
+        public bool IsActive { get; set; }
+    }
 }

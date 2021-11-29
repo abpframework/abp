@@ -6,38 +6,39 @@ using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs;
-
-public class CreateModalModel : CmsKitAdminPageModel
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
 {
-    protected IBlogAdminAppService BlogAdminAppService { get; }
-
-    [BindProperty]
-    public CreateBlogViewModel ViewModel { get; set; }
-
-    public CreateModalModel(IBlogAdminAppService blogAdminAppService)
+    public class CreateModalModel : CmsKitAdminPageModel
     {
-        BlogAdminAppService = blogAdminAppService;
-    }
+        protected IBlogAdminAppService BlogAdminAppService { get; }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var dto = ObjectMapper.Map<CreateBlogViewModel, CreateBlogDto>(ViewModel);
+        [BindProperty]
+        public CreateBlogViewModel ViewModel { get; set; }
 
-        await BlogAdminAppService.CreateAsync(dto);
+        public CreateModalModel(IBlogAdminAppService blogAdminAppService)
+        {
+            BlogAdminAppService = blogAdminAppService;
+        }
 
-        return NoContent();
-    }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var dto = ObjectMapper.Map<CreateBlogViewModel, CreateBlogDto>(ViewModel);
 
-    [AutoMap(typeof(CreateBlogDto), ReverseMap = true)]
-    public class CreateBlogViewModel
-    {
-        [Required]
-        [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]
-        public string Name { get; set; }
+            await BlogAdminAppService.CreateAsync(dto);
 
-        [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxSlugLength))]
-        [Required]
-        public string Slug { get; set; }
+            return NoContent();
+        }
+
+        [AutoMap(typeof(CreateBlogDto), ReverseMap = true)]
+        public class CreateBlogViewModel
+        {
+            [Required]
+            [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]
+            public string Name { get; set; }
+
+            [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxSlugLength))]
+            [Required]
+            public string Slug { get; set; }
+        }
     }
 }

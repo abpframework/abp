@@ -2,14 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Studio.Solution;
 
-namespace Volo.Abp.Studio.ModuleInstalling.Steps;
-
-public class AddToSolutionFileStep : ModuleInstallingPipelineStep
+namespace Volo.Abp.Studio.ModuleInstalling.Steps
 {
-    public override async Task ExecuteAsync(ModuleInstallingContext context)
+    public class AddToSolutionFileStep : ModuleInstallingPipelineStep
     {
-        var _solutionFileModuleAdder = context.ServiceProvider.GetRequiredService<ISolutionFileModuleAdder>();
+        public override async Task ExecuteAsync(ModuleInstallingContext context)
+        {
+            var _solutionFileModuleAdder = context.ServiceProvider.GetRequiredService<ISolutionFileModuleAdder>();
 
-        await _solutionFileModuleAdder.AddAsync(context.TargetModule, context.ModuleName);
+            await _solutionFileModuleAdder.AddAsync(context.TargetModule, context.ModuleName);
+        }
     }
 }

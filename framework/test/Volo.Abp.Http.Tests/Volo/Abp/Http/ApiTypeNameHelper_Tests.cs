@@ -5,68 +5,69 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 using Xunit;
 
-namespace Volo.Abp.Http;
-
-public class ApiTypeNameHelper_Tests
+namespace Volo.Abp.Http
 {
-    [Fact]
-    public void GetTypeName_Test()
+    public class ApiTypeNameHelper_Tests
     {
-        ApiTypeNameHelper.GetTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass)));
-        ApiTypeNameHelper.GetTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass2)));
-        ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass4))}]");
-    }
-
-    [Fact]
-    public void GetSimpleTypeName_Test()
-    {
-        ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass)));
-        ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass2)));
-        ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetSimplifiedName(typeof(CycleClass4))}]");
-    }
-
-    class CycleClass : IEnumerable<CycleClass>
-    {
-        public IEnumerator<CycleClass> GetEnumerator()
+        [Fact]
+        public void GetTypeName_Test()
         {
-            yield return new CycleClass();
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass)));
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass2)));
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass4))}]");
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        [Fact]
+        public void GetSimpleTypeName_Test()
         {
-            return GetEnumerator();
-        }
-    }
-
-    class CycleClass2 : Dictionary<CycleClass2, CycleClass2>
-    {
-
-    }
-
-    class CycleClass3 : IEnumerable<CycleClass4>
-    {
-
-        public IEnumerator<CycleClass4> GetEnumerator()
-        {
-            yield return new CycleClass4();
+            ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass)));
+            ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass2)));
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetSimplifiedName(typeof(CycleClass4))}]");
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        class CycleClass : IEnumerable<CycleClass>
         {
-            return GetEnumerator();
-        }
-    }
+            public IEnumerator<CycleClass> GetEnumerator()
+            {
+                yield return new CycleClass();
+            }
 
-    class CycleClass4 : IEnumerable<CycleClass3>
-    {
-        public IEnumerator<CycleClass3> GetEnumerator()
-        {
-            yield return new CycleClass3();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        class CycleClass2 : Dictionary<CycleClass2, CycleClass2>
         {
-            return GetEnumerator();
+
+        }
+
+        class CycleClass3 : IEnumerable<CycleClass4>
+        {
+
+            public IEnumerator<CycleClass4> GetEnumerator()
+            {
+                yield return new CycleClass4();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+        class CycleClass4 : IEnumerable<CycleClass3>
+        {
+            public IEnumerator<CycleClass3> GetEnumerator()
+            {
+                yield return new CycleClass3();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
     }
 }

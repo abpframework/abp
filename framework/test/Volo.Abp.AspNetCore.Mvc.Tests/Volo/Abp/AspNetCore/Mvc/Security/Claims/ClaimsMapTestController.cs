@@ -2,20 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 
-namespace Volo.Abp.AspNetCore.Mvc.Security.Claims;
-
-public class ClaimsMapTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Security.Claims
 {
-    public ActionResult ClaimsMapTest()
+    public class ClaimsMapTestController : AbpController
     {
-        var serialNumber = CurrentUser.FindClaim(ClaimTypes.SerialNumber);
-        serialNumber.ShouldNotBeNull();
-        serialNumber.Value.ShouldBe("123456");
+        public ActionResult ClaimsMapTest()
+        {
+            var serialNumber = CurrentUser.FindClaim(ClaimTypes.SerialNumber);
+            serialNumber.ShouldNotBeNull();
+            serialNumber.Value.ShouldBe("123456");
 
-        var dateOfBirth = CurrentUser.FindClaim(ClaimTypes.DateOfBirth);
-        dateOfBirth.ShouldNotBeNull();
-        dateOfBirth.Value.ShouldBe("2020");
+            var dateOfBirth = CurrentUser.FindClaim(ClaimTypes.DateOfBirth);
+            dateOfBirth.ShouldNotBeNull();
+            dateOfBirth.Value.ShouldBe("2020");
 
-        return Content("OK");
+            return Content("OK");
+        }
     }
 }

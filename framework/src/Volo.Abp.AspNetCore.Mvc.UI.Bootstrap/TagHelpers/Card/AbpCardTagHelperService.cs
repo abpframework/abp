@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
-
-public class AbpCardTagHelperService : AbpTagHelperService<AbpCardTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpCardTagHelperService : AbpTagHelperService<AbpCardTagHelper>
     {
-        output.TagName = "div";
-        output.Attributes.AddClass("card");
-
-        SetBorder(context, output);
-    }
-    protected virtual void SetBorder(TagHelperContext context, TagHelperOutput output)
-    {
-        if (TagHelper.Border == AbpCardBorderColorType.Default)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            return;
-        }
+            output.TagName = "div";
+            output.Attributes.AddClass("card");
 
-        output.Attributes.AddClass("border-" + TagHelper.Border.ToString().ToLowerInvariant());
+            SetBorder(context, output);
+        }
+        protected virtual void SetBorder(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Border == AbpCardBorderColorType.Default)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("border-" + TagHelper.Border.ToString().ToLowerInvariant());
+        }
     }
 }

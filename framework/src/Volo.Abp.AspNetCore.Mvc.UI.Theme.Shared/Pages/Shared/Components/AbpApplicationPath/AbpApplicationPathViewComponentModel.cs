@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpApplicationPath;
-
-public class AbpApplicationPathViewComponentModel
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpApplicationPath
 {
-    public string ApplicationPath { get; set; }
+    public class AbpApplicationPathViewComponentModel
+    {
+        public string ApplicationPath { get; set; }
+    }
 }

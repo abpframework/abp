@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions;
-
-public class ConventionalControllerSettingList : List<ConventionalControllerSetting>
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    [CanBeNull]
-    public ConventionalControllerSetting GetSettingOrNull(Type controllerType)
+    public class ConventionalControllerSettingList : List<ConventionalControllerSetting>
     {
-        return this.FirstOrDefault(controllerSetting => controllerSetting.ControllerTypes.Contains(controllerType));
+        [CanBeNull]
+        public ConventionalControllerSetting GetSettingOrNull(Type controllerType)
+        {
+            return this.FirstOrDefault(controllerSetting => controllerSetting.ControllerTypes.Contains(controllerType));
+        }
     }
 }

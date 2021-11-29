@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.SimpleStateChecking;
-
-public class SimpleStateCheckerResult<TState> : Dictionary<TState, bool>
-    where TState : IHasSimpleStateCheckers<TState>
+namespace Volo.Abp.SimpleStateChecking
 {
-    public SimpleStateCheckerResult()
+    public class SimpleStateCheckerResult<TState> : Dictionary<TState, bool>
+        where TState : IHasSimpleStateCheckers<TState>
     {
-
-    }
-
-    public SimpleStateCheckerResult(IEnumerable<TState> states, bool initValue = true)
-    {
-        foreach (var state in states)
+        public SimpleStateCheckerResult()
         {
-            Add(state, initValue);
+
+        }
+
+        public SimpleStateCheckerResult(IEnumerable<TState> states, bool initValue = true)
+        {
+            foreach (var state in states)
+            {
+                Add(state, initValue);
+            }
         }
     }
 }

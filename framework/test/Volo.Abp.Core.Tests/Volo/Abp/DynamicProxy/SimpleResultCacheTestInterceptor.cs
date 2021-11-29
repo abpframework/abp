@@ -2,26 +2,27 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.DynamicProxy;
-
-public class SimpleResultCacheTestInterceptor : AbpInterceptor
+namespace Volo.Abp.DynamicProxy
 {
-    private readonly ConcurrentDictionary<MethodInfo, object> _cache;
-
-    public SimpleResultCacheTestInterceptor()
+    public class SimpleResultCacheTestInterceptor : AbpInterceptor
     {
-        _cache = new ConcurrentDictionary<MethodInfo, object>();
-    }
+	    private readonly ConcurrentDictionary<MethodInfo, object> _cache;
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
-    {
-        if (_cache.ContainsKey(invocation.Method))
-        {
-            invocation.ReturnValue = _cache[invocation.Method];
-            return;
-        }
+	    public SimpleResultCacheTestInterceptor()
+	    {
+		    _cache = new ConcurrentDictionary<MethodInfo, object>();
+	    }
 
-        await invocation.ProceedAsync();
-        _cache[invocation.Method] = invocation.ReturnValue;
+	    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+	    {
+		    if (_cache.ContainsKey(invocation.Method))
+		    {
+			    invocation.ReturnValue = _cache[invocation.Method];
+				return;
+		    }
+
+            await invocation.ProceedAsync();
+		    _cache[invocation.Method] = invocation.ReturnValue;
+	    }
     }
 }

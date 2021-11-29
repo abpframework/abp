@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Linq;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class MoveFolderStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    private readonly string _sourceFolder;
-    private readonly string _targetFolder;
-
-    public MoveFolderStep(string sourceFolder, string targetFolder)
+    public class MoveFolderStep : ProjectBuildPipelineStep
     {
-        _sourceFolder = sourceFolder;
-        _targetFolder = targetFolder;
-    }
+        private readonly string _sourceFolder;
+        private readonly string _targetFolder;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        var fileEntries = context.Files.Where(file => file.Name.StartsWith(_sourceFolder)).ToList();
-        foreach (var fileEntry in fileEntries)
+        public MoveFolderStep(string sourceFolder, string targetFolder)
         {
-            var newName = fileEntry.Name.ReplaceFirst(_sourceFolder, _targetFolder);
+            _sourceFolder = sourceFolder;
+            _targetFolder = targetFolder;
+        }
 
-            if (newName.IsIn("", "/"))
+        public override void Execute(ProjectBuildContext context)
+        {
+            var fileEntries = context.Files.Where(file => file.Name.StartsWith(_sourceFolder)).ToList();
+            foreach (var fileEntry in fileEntries)
             {
-                context.Files.Remove(fileEntry);
-                continue;
-            }
+                var newName = fileEntry.Name.ReplaceFirst(_sourceFolder, _targetFolder);
 
-            fileEntry.SetName(newName);
+                if (newName.IsIn("", "/"))
+                {
+                    context.Files.Remove(fileEntry);
+                    continue;
+                }
+
+                fileEntry.SetName(newName);
+            }
         }
     }
 }

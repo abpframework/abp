@@ -8,38 +8,39 @@ using Volo.Abp.TextTemplating.Razor;
 using Volo.Abp.TextTemplating.Scriban;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TextTemplating;
-
-[DependsOn(
-    typeof(AbpTextTemplatingScribanModule),
-    typeof(AbpTextTemplatingRazorModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpLocalizationModule)
-)]
-public class AbpTextTemplatingTestModule : AbpModule
+namespace Volo.Abp.TextTemplating
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTextTemplatingScribanModule),
+        typeof(AbpTextTemplatingRazorModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpLocalizationModule)
+    )]
+    public class AbpTextTemplatingTestModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpTextTemplatingTestModule>("Volo.Abp.TextTemplating");
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpTextTemplatingTestModule>("Volo.Abp.TextTemplating");
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<TestLocalizationSource>("en")
-                .AddVirtualJson("/Localization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<TestLocalizationSource>("en")
+                    .AddVirtualJson("/Localization");
+            });
 
-        Configure<AbpCompiledViewProviderOptions>(options =>
-        {
-            options.TemplateReferences.Add(TestTemplates.HybridTemplateRazor,
-                new List<PortableExecutableReference>()
-                {
+            Configure<AbpCompiledViewProviderOptions>(options =>
+            {
+                options.TemplateReferences.Add(TestTemplates.HybridTemplateRazor,
+                    new List<PortableExecutableReference>()
+                    {
                         MetadataReference.CreateFromFile(typeof(AbpTextTemplatingTestModule).Assembly.Location)
-                });
-        });
+                    });
+            });
+        }
     }
 }

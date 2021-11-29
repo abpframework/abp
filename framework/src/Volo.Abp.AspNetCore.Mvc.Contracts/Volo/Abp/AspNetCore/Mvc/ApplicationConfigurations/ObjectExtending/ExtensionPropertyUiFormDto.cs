@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-[Serializable]
-public class ExtensionPropertyUiFormDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    public bool IsVisible { get; set; }
+    [Serializable]
+    public class ExtensionPropertyUiFormDto
+    {
+        public bool IsVisible { get; set; }
+    }
 }

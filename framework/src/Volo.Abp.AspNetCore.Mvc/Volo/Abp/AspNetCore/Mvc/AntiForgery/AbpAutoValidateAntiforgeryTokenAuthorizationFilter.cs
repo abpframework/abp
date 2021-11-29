@@ -6,59 +6,60 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
-
-public class AbpAutoValidateAntiforgeryTokenAuthorizationFilter : AbpValidateAntiforgeryTokenAuthorizationFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
-    private readonly AbpAntiForgeryOptions _options;
-
-    public AbpAutoValidateAntiforgeryTokenAuthorizationFilter(
-        IAntiforgery antiforgery,
-        AbpAntiForgeryCookieNameProvider antiForgeryCookieNameProvider,
-        IOptions<AbpAntiForgeryOptions> options,
-        ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
-        : base(
-            antiforgery,
-            antiForgeryCookieNameProvider,
-            logger)
+    public class AbpAutoValidateAntiforgeryTokenAuthorizationFilter : AbpValidateAntiforgeryTokenAuthorizationFilter, ITransientDependency
     {
-        _options = options.Value;
-    }
+        private readonly AbpAntiForgeryOptions _options;
 
-    protected override bool ShouldValidate(AuthorizationFilterContext context)
-    {
-        if (!_options.AutoValidate)
+        public AbpAutoValidateAntiforgeryTokenAuthorizationFilter(
+            IAntiforgery antiforgery,
+            AbpAntiForgeryCookieNameProvider antiForgeryCookieNameProvider,
+            IOptions<AbpAntiForgeryOptions> options,
+            ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
+            : base(
+                antiforgery,
+                antiForgeryCookieNameProvider,
+                logger)
         {
-            return false;
+            _options = options.Value;
         }
 
-        if (context.ActionDescriptor.IsControllerAction())
+        protected override bool ShouldValidate(AuthorizationFilterContext context)
         {
-            var controllerType = context.ActionDescriptor
-                .AsControllerActionDescriptor()
-                .ControllerTypeInfo
-                .AsType();
-
-            if (!_options.AutoValidateFilter(controllerType))
+            if (!_options.AutoValidate)
             {
                 return false;
             }
+
+            if(context.ActionDescriptor.IsControllerAction())
+            {
+                var controllerType = context.ActionDescriptor
+                    .AsControllerActionDescriptor()
+                    .ControllerTypeInfo
+                    .AsType();
+
+                if (!_options.AutoValidateFilter(controllerType))
+                {
+                    return false;
+                }
+            }
+
+            if (IsIgnoredHttpMethod(context))
+            {
+                return false;
+            }
+
+            return base.ShouldValidate(context);
         }
 
-        if (IsIgnoredHttpMethod(context))
+        protected virtual bool IsIgnoredHttpMethod(AuthorizationFilterContext context)
         {
-            return false;
+            return context.HttpContext
+                .Request
+                .Method
+                .ToUpperInvariant()
+                .IsIn(_options.AutoValidateIgnoredHttpMethods);
         }
-
-        return base.ShouldValidate(context);
-    }
-
-    protected virtual bool IsIgnoredHttpMethod(AuthorizationFilterContext context)
-    {
-        return context.HttpContext
-            .Request
-            .Method
-            .ToUpperInvariant()
-            .IsIn(_options.AutoValidateIgnoredHttpMethods);
     }
 }

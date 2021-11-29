@@ -2,14 +2,15 @@
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName;
-
-public class MyProjectNameTestDataSeedContributor : IDataSeedContributor, ITransientDependency
+namespace MyCompanyName.MyProjectName
 {
-    public Task SeedAsync(DataSeedContext context)
+    public class MyProjectNameTestDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
-        /* Seed additional test data... */
+        public Task SeedAsync(DataSeedContext context)
+        {
+            /* Seed additional test data... */
 
-        return Task.CompletedTask;
+            return Task.CompletedTask;
+        }
     }
 }

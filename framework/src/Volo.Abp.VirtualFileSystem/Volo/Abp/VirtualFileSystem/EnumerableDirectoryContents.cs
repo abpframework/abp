@@ -3,28 +3,29 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem;
-
-internal class EnumerableDirectoryContents : IDirectoryContents
+namespace Volo.Abp.VirtualFileSystem
 {
-    private readonly IEnumerable<IFileInfo> _entries;
-
-    public EnumerableDirectoryContents([NotNull] IEnumerable<IFileInfo> entries)
+    internal class EnumerableDirectoryContents : IDirectoryContents
     {
-        Check.NotNull(entries, nameof(entries));
+        private readonly IEnumerable<IFileInfo> _entries;
 
-        _entries = entries;
-    }
+        public EnumerableDirectoryContents([NotNull] IEnumerable<IFileInfo> entries)
+        {
+            Check.NotNull(entries, nameof(entries));
 
-    public bool Exists => true;
+            _entries = entries;
+        }
 
-    public IEnumerator<IFileInfo> GetEnumerator()
-    {
-        return _entries.GetEnumerator();
-    }
+        public bool Exists => true;
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _entries.GetEnumerator();
+        public IEnumerator<IFileInfo> GetEnumerator()
+        {
+            return _entries.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _entries.GetEnumerator();
+        }
     }
 }

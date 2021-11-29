@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants;
-
-public abstract class TenantManagementPageModel : AbpPageModel
+namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    public TenantManagementPageModel()
+    public abstract class TenantManagementPageModel : AbpPageModel
     {
-        ObjectMapperContext = typeof(AbpTenantManagementWebModule);
+        public TenantManagementPageModel()
+        {
+            ObjectMapperContext = typeof(AbpTenantManagementWebModule);
+        }
     }
 }

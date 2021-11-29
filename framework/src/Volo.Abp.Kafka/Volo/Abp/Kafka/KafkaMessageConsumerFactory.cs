@@ -2,29 +2,30 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Kafka;
-
-public class KafkaMessageConsumerFactory : IKafkaMessageConsumerFactory, ISingletonDependency, IDisposable
+namespace Volo.Abp.Kafka
 {
-    protected IServiceScope ServiceScope { get; }
-
-    public KafkaMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
+    public class KafkaMessageConsumerFactory : IKafkaMessageConsumerFactory, ISingletonDependency, IDisposable
     {
-        ServiceScope = serviceScopeFactory.CreateScope();
-    }
+        protected IServiceScope ServiceScope { get; }
 
-    public IKafkaMessageConsumer Create(
-        string topicName,
-        string groupId,
-        string connectionName = null)
-    {
-        var consumer = ServiceScope.ServiceProvider.GetRequiredService<KafkaMessageConsumer>();
-        consumer.Initialize(topicName, groupId, connectionName);
-        return consumer;
-    }
+        public KafkaMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
+        {
+            ServiceScope = serviceScopeFactory.CreateScope();
+        }
 
-    public void Dispose()
-    {
-        ServiceScope?.Dispose();
+        public IKafkaMessageConsumer Create(
+            string topicName,
+            string groupId,
+            string connectionName = null)
+        {
+            var consumer = ServiceScope.ServiceProvider.GetRequiredService<KafkaMessageConsumer>();
+            consumer.Initialize(topicName, groupId, connectionName);
+            return consumer;
+        }
+
+        public void Dispose()
+        {
+            ServiceScope?.Dispose();
+        }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Application.Services;
-
-public interface IDeleteAppService<in TKey> : IApplicationService
+namespace Volo.Abp.Application.Services
 {
-    Task DeleteAsync(TKey id);
+    public interface IDeleteAppService<in TKey> : IApplicationService
+    {
+        Task DeleteAsync(TKey id);
+    }
 }

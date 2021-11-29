@@ -2,29 +2,30 @@
 using System.Linq;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization;
-
-public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
+namespace Volo.Abp.Localization
 {
-    public LocalizedString GetOrNull(string cultureName, string name)
+    public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
     {
-        foreach (var contributor in this.AsQueryable().Reverse())
+        public LocalizedString GetOrNull(string cultureName, string name)
         {
-            var localString = contributor.GetOrNull(cultureName, name);
-            if (localString != null)
+            foreach (var contributor in this.AsQueryable().Reverse())
             {
-                return localString;
+                var localString = contributor.GetOrNull(cultureName, name);
+                if (localString != null)
+                {
+                    return localString;
+                }
             }
+
+            return null;
         }
 
-        return null;
-    }
-
-    public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
-    {
-        foreach (var contributor in this)
+        public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
         {
-            contributor.Fill(cultureName, dictionary);
+            foreach (var contributor in this)
+            {
+                contributor.Fill(cultureName, dictionary);
+            }
         }
     }
 }

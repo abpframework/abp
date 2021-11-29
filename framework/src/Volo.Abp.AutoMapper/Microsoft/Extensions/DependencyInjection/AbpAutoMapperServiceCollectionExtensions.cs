@@ -2,21 +2,22 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ObjectMapping;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpAutoMapperServiceCollectionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddAutoMapperObjectMapper(this IServiceCollection services)
+    public static class AbpAutoMapperServiceCollectionExtensions
     {
-        return services.Replace(
-            ServiceDescriptor.Transient<IAutoObjectMappingProvider, AutoMapperAutoObjectMappingProvider>()
-        );
-    }
+        public static IServiceCollection AddAutoMapperObjectMapper(this IServiceCollection services)
+        {
+            return services.Replace(
+                ServiceDescriptor.Transient<IAutoObjectMappingProvider, AutoMapperAutoObjectMappingProvider>()
+            );
+        }
 
-    public static IServiceCollection AddAutoMapperObjectMapper<TContext>(this IServiceCollection services)
-    {
-        return services.Replace(
-            ServiceDescriptor.Transient<IAutoObjectMappingProvider<TContext>, AutoMapperAutoObjectMappingProvider<TContext>>()
-        );
+        public static IServiceCollection AddAutoMapperObjectMapper<TContext>(this IServiceCollection services)
+        {
+            return services.Replace(
+                ServiceDescriptor.Transient<IAutoObjectMappingProvider<TContext>, AutoMapperAutoObjectMappingProvider<TContext>>()
+            );
+        }
     }
 }

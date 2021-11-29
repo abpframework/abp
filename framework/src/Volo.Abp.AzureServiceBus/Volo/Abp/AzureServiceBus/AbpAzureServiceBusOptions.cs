@@ -1,11 +1,12 @@
-namespace Volo.Abp.AzureServiceBus;
-
-public class AbpAzureServiceBusOptions
+namespace Volo.Abp.AzureServiceBus
 {
-    public AzureServiceBusConnections Connections { get; }
-
-    public AbpAzureServiceBusOptions()
+    public class AbpAzureServiceBusOptions
     {
-        Connections = new AzureServiceBusConnections();
+        public AzureServiceBusConnections Connections { get; }
+
+        public AbpAzureServiceBusOptions()
+        {
+            Connections = new AzureServiceBusConnections();
+        }
     }
 }

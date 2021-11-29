@@ -4,19 +4,20 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public static class PlugInSourceExtensions
+namespace Volo.Abp.Modularity.PlugIns
 {
-    [NotNull]
-    public static Type[] GetModulesWithAllDependencies([NotNull] this IPlugInSource plugInSource, ILogger logger)
+    public static class PlugInSourceExtensions
     {
-        Check.NotNull(plugInSource, nameof(plugInSource));
+        [NotNull]
+        public static Type[] GetModulesWithAllDependencies([NotNull] this IPlugInSource plugInSource, ILogger logger)
+        {
+            Check.NotNull(plugInSource, nameof(plugInSource));
 
-        return plugInSource
-            .GetModules()
-            .SelectMany(type => AbpModuleHelper.FindAllModuleTypes(type, logger))
-            .Distinct()
-            .ToArray();
+            return plugInSource
+                .GetModules()
+                .SelectMany(type => AbpModuleHelper.FindAllModuleTypes(type, logger))
+                .Distinct()
+                .ToArray();
+        }
     }
 }

@@ -1,22 +1,23 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EventBus.Distributed;
-
-public class MySimpleDistributedTransientEventHandler : IDistributedEventHandler<MySimpleEventData>, IDisposable
+namespace Volo.Abp.EventBus.Distributed
 {
-    public static int HandleCount { get; set; }
-
-    public static int DisposeCount { get; set; }
-
-    public Task HandleEventAsync(MySimpleEventData eventData)
+    public class MySimpleDistributedTransientEventHandler : IDistributedEventHandler<MySimpleEventData>, IDisposable
     {
-        ++HandleCount;
-        return Task.CompletedTask;
-    }
+        public static int HandleCount { get; set; }
 
-    public void Dispose()
-    {
-        ++DisposeCount;
+        public static int DisposeCount { get; set; }
+
+        public Task HandleEventAsync(MySimpleEventData eventData)
+        {
+            ++HandleCount;
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            ++DisposeCount;
+        }
     }
 }

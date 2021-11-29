@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class MySQLOutboxConfigExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void UseMySQL<TDbContext>(this OutboxConfig outboxConfig)
-        where TDbContext : IHasEventOutbox
+    public static class MySQLOutboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(ISqlRawDbContextEventOutbox<TDbContext>);
+        public static void UseMySQL<TDbContext>(this OutboxConfig outboxConfig)
+            where TDbContext : IHasEventOutbox
+        {
+            outboxConfig.ImplementationType = typeof(ISqlRawDbContextEventOutbox<TDbContext>);
+        }
     }
 }

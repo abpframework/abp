@@ -1,12 +1,13 @@
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.MongoDB.DistributedEvents;
-
-public static class MongoDbInboxConfigExtensions
+namespace Volo.Abp.MongoDB.DistributedEvents
 {
-    public static void UseMongoDbContext<TMongoDbContext>(this InboxConfig outboxConfig)
-        where TMongoDbContext : IHasEventInbox
+    public static class MongoDbInboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(IMongoDbContextEventInbox<TMongoDbContext>);
+        public static void UseMongoDbContext<TMongoDbContext>(this InboxConfig outboxConfig)
+            where TMongoDbContext : IHasEventInbox
+        {
+            outboxConfig.ImplementationType = typeof(IMongoDbContextEventInbox<TMongoDbContext>);
+        }
     }
 }

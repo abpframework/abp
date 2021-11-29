@@ -4,14 +4,15 @@ using System.Text;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Application.Services;
 
-namespace MyCompanyName.MyProjectName;
-
-/* Inherit your application services from this class.
- */
-public abstract class MyProjectNameAppService : ApplicationService
+namespace MyCompanyName.MyProjectName
 {
-    protected MyProjectNameAppService()
+    /* Inherit your application services from this class.
+     */
+    public abstract class MyProjectNameAppService : ApplicationService
     {
-        LocalizationResource = typeof(MyProjectNameResource);
+        protected MyProjectNameAppService()
+        {
+            LocalizationResource = typeof(MyProjectNameResource);
+        }
     }
 }

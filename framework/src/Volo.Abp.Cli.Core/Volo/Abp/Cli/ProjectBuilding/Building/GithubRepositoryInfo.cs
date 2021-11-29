@@ -1,24 +1,25 @@
 ﻿using System;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building;
-
-public class GithubRepositoryInfo
+namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public string RepositoryNameWithOrganization { get; }
-
-    public string RepositoryName { get; }
-
-    public string AccessToken { get; }
-
-    public GithubRepositoryInfo(string repositoryNameWithOrganization, string accessToken)
+    public class GithubRepositoryInfo
     {
-        if (!repositoryNameWithOrganization.Contains("/"))
-        {
-            throw new ApplicationException($"{nameof(repositoryNameWithOrganization)} '{repositoryNameWithOrganization}' is not valid! It should be formatted as 'organization-name/repository-name'.");
-        }
+        public string RepositoryNameWithOrganization { get; }
 
-        RepositoryNameWithOrganization = repositoryNameWithOrganization;
-        RepositoryName = repositoryNameWithOrganization.Split('/')[1];
-        AccessToken = accessToken;
+        public string RepositoryName { get; }
+
+        public string AccessToken { get; }
+
+        public GithubRepositoryInfo(string repositoryNameWithOrganization, string accessToken)
+        {
+            if (!repositoryNameWithOrganization.Contains("/"))
+            {
+                throw new ApplicationException($"{nameof(repositoryNameWithOrganization)} '{repositoryNameWithOrganization}' is not valid! It should be formatted as 'organization-name/repository-name'." );
+            }
+
+            RepositoryNameWithOrganization = repositoryNameWithOrganization;
+            RepositoryName = repositoryNameWithOrganization.Split('/')[1];
+            AccessToken = accessToken;
+        }
     }
 }

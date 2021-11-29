@@ -5,31 +5,32 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Features;
-
-public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Features
 {
-    public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+    public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
     {
-        return Task.CompletedTask;
-    }
-
-    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-    {
-        if (context.HandlerMethod == null || !context.ActionDescriptor.IsPageAction())
+        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
-            await next();
-            return;
+            return Task.CompletedTask;
         }
 
-        var methodInfo = context.HandlerMethod.MethodInfo;
-
-        using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
+        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
-            await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
+            if (context.HandlerMethod == null || !context.ActionDescriptor.IsPageAction())
+            {
+                await next();
+                return;
+            }
 
-            await next();
+            var methodInfo = context.HandlerMethod.MethodInfo;
+
+            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
+            {
+                var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
+                await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
+
+                await next();
+            }
         }
     }
 }

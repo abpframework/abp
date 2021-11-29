@@ -1,17 +1,18 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
-
-public class ModuleTemplate : ModuleTemplateBase
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 {
-    /// <summary>
-    /// "module".
-    /// </summary>
-    public const string TemplateName = "module";
-
-    public ModuleTemplate()
-        : base(TemplateName)
+    public class ModuleTemplate : ModuleTemplateBase
     {
-        DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Module";
+        /// <summary>
+        /// "module".
+        /// </summary>
+        public const string TemplateName = "module";
+
+        public ModuleTemplate()
+            : base(TemplateName)
+        {
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Module";
+        }
     }
 }

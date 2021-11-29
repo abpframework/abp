@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.Licensing;
-
-public interface IApiKeyService
+namespace Volo.Abp.Cli.Licensing
 {
-    Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false);
+    public interface IApiKeyService
+    {
+        Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false);
+    }
 }

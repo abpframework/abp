@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization;
-
-public interface ITemplateLocalizer
+namespace Volo.Abp.Localization
 {
-    string Localize(IStringLocalizer localizer, string text);
+    public interface ITemplateLocalizer
+    {
+        string Localize(IStringLocalizer localizer, string text);
+    }
 }

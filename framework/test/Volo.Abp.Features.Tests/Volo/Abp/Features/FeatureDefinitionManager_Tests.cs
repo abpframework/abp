@@ -1,34 +1,35 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Features;
-
-public class FeatureDefinitionManager_Tests : FeatureTestBase
+namespace Volo.Abp.Features
 {
-    private readonly IFeatureDefinitionManager _featureDefinitionManager;
-
-    public FeatureDefinitionManager_Tests()
+    public class FeatureDefinitionManager_Tests : FeatureTestBase
     {
-        _featureDefinitionManager = GetRequiredService<IFeatureDefinitionManager>();
-    }
+        private readonly IFeatureDefinitionManager _featureDefinitionManager;
 
-    [Fact]
-    public void Should_Get_Defined_Features()
-    {
-        _featureDefinitionManager.GetOrNull("BooleanTestFeature1").ShouldNotBeNull();
-        _featureDefinitionManager.Get("BooleanTestFeature1").Name.ShouldBe("BooleanTestFeature1");
-
-        _featureDefinitionManager.GetOrNull("IntegerTestFeature1").ShouldNotBeNull();
-        _featureDefinitionManager.Get("IntegerTestFeature1").Name.ShouldBe("IntegerTestFeature1");
-    }
-
-    [Fact]
-    public void Should_Not_Get_Undefined_Features()
-    {
-        _featureDefinitionManager.GetOrNull("UndefinedFeature").ShouldBeNull();
-        Assert.Throws<AbpException>(() =>
+        public FeatureDefinitionManager_Tests()
         {
-            _featureDefinitionManager.Get("UndefinedFeature");
-        });
+            _featureDefinitionManager = GetRequiredService<IFeatureDefinitionManager>();
+        }
+
+        [Fact]
+        public void Should_Get_Defined_Features()
+        {
+            _featureDefinitionManager.GetOrNull("BooleanTestFeature1").ShouldNotBeNull();
+            _featureDefinitionManager.Get("BooleanTestFeature1").Name.ShouldBe("BooleanTestFeature1");
+
+            _featureDefinitionManager.GetOrNull("IntegerTestFeature1").ShouldNotBeNull();
+            _featureDefinitionManager.Get("IntegerTestFeature1").Name.ShouldBe("IntegerTestFeature1");
+        }
+
+        [Fact]
+        public void Should_Not_Get_Undefined_Features()
+        {
+            _featureDefinitionManager.GetOrNull("UndefinedFeature").ShouldBeNull();
+            Assert.Throws<AbpException>(() =>
+            {
+                _featureDefinitionManager.Get("UndefinedFeature");
+            });
+        }
     }
 }

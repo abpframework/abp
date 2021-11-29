@@ -2,17 +2,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-
-public class Startup
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        services.AddApplication<AbpAspNetCoreMvcUiThemeSharedTestModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<AbpAspNetCoreMvcUiThemeSharedTestModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

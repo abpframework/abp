@@ -2,42 +2,43 @@
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
-
-public class ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
-    public override void Execute(ProjectBuildContext context)
+    public class ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
     {
-        var fileEntry = context.Files.FirstOrDefault(x =>
-            !x.IsDirectory &&
-            x.Name.EndsWith($"{MobileApp.ReactNative.GetFolderName()}/Environment.js",
-                StringComparison.InvariantCultureIgnoreCase)
-        );
-
-        if (fileEntry == null)
+        public override void Execute(ProjectBuildContext context)
         {
-            return;
-        }
+            var fileEntry = context.Files.FirstOrDefault(x =>
+                !x.IsDirectory &&
+                x.Name.EndsWith($"{MobileApp.ReactNative.GetFolderName()}/Environment.js",
+                    StringComparison.InvariantCultureIgnoreCase)
+            );
 
-        fileEntry.NormalizeLineEndings();
-        var lines = fileEntry.GetLines();
-
-        for (var i = 0; i < lines.Length; i++)
-        {
-            var line = lines[i];
-
-            if (line.Contains("issuer") && line.Contains("localhost"))
+            if (fileEntry == null)
             {
-                line = line.Replace("44305", "44301");
-            }
-            else if (line.Contains("apiUrl") && line.Contains("localhost"))
-            {
-                line = line.Replace("44305", "44300");
+                return;
             }
 
-            lines[i] = line;
-        }
+            fileEntry.NormalizeLineEndings();
+            var lines = fileEntry.GetLines();
 
-        fileEntry.SetLines(lines);
+            for (var i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+
+                if (line.Contains("issuer") && line.Contains("localhost"))
+                {
+                    line = line.Replace("44305", "44301");
+                }
+                else if (line.Contains("apiUrl") && line.Contains("localhost"))
+                {
+                    line = line.Replace("44305", "44300");
+                }
+
+                lines[i] = line;
+            }
+
+            fileEntry.SetLines(lines);
+        }
     }
 }

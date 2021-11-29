@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Uow;
-
-public interface IAmbientUnitOfWork : IUnitOfWorkAccessor
+﻿namespace Volo.Abp.Uow
 {
-    IUnitOfWork GetCurrentByChecking();
+    public interface IAmbientUnitOfWork : IUnitOfWorkAccessor
+    {
+        IUnitOfWork GetCurrentByChecking();
+    }
 }

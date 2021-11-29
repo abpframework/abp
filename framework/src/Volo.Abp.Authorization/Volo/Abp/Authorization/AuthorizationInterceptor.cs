@@ -2,29 +2,30 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Authorization;
-
-public class AuthorizationInterceptor : AbpInterceptor, ITransientDependency
+namespace Volo.Abp.Authorization
 {
-    private readonly IMethodInvocationAuthorizationService _methodInvocationAuthorizationService;
-
-    public AuthorizationInterceptor(IMethodInvocationAuthorizationService methodInvocationAuthorizationService)
+    public class AuthorizationInterceptor : AbpInterceptor, ITransientDependency
     {
-        _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
-    }
+        private readonly IMethodInvocationAuthorizationService _methodInvocationAuthorizationService;
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
-    {
-        await AuthorizeAsync(invocation);
-        await invocation.ProceedAsync();
-    }
+        public AuthorizationInterceptor(IMethodInvocationAuthorizationService methodInvocationAuthorizationService)
+        {
+            _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
+        }
 
-    protected virtual async Task AuthorizeAsync(IAbpMethodInvocation invocation)
-    {
-        await _methodInvocationAuthorizationService.CheckAsync(
-            new MethodInvocationAuthorizationContext(
-                invocation.Method
-            )
-        );
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        {
+            await AuthorizeAsync(invocation);
+            await invocation.ProceedAsync();
+        }
+
+        protected virtual async Task AuthorizeAsync(IAbpMethodInvocation invocation)
+        {
+            await _methodInvocationAuthorizationService.CheckAsync(
+                new MethodInvocationAuthorizationContext(
+                    invocation.Method
+                )
+            );
+        }
     }
 }

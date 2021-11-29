@@ -4,30 +4,31 @@ using System;
 using Devart.Data.Oracle.Entity;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public static class AbpDbContextConfigurationContextOracleDevartExtensions
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public static DbContextOptionsBuilder UseOracle(
-       [NotNull] this AbpDbContextConfigurationContext context,
-       [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
-       bool useExistingConnectionIfAvailable = false)
+    public static class AbpDbContextConfigurationContextOracleDevartExtensions
     {
-        if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
+        public static DbContextOptionsBuilder UseOracle(
+           [NotNull] this AbpDbContextConfigurationContext context,
+           [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
+           bool useExistingConnectionIfAvailable = false)
         {
-            return context.DbContextOptions.UseOracle(context.ExistingConnection, optionsBuilder =>
+            if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
             {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                oracleOptionsAction?.Invoke(optionsBuilder);
-            });
-        }
-        else
-        {
-            return context.DbContextOptions.UseOracle(context.ConnectionString, optionsBuilder =>
+                return context.DbContextOptions.UseOracle(context.ExistingConnection, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    oracleOptionsAction?.Invoke(optionsBuilder);
+                });
+            }
+            else
             {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                oracleOptionsAction?.Invoke(optionsBuilder);
-            });
+                return context.DbContextOptions.UseOracle(context.ConnectionString, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    oracleOptionsAction?.Invoke(optionsBuilder);
+                });
+            }
         }
     }
 }

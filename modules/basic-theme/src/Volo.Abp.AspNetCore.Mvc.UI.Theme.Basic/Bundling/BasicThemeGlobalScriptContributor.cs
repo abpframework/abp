@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
-
-public class BasicThemeGlobalScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class BasicThemeGlobalScriptContributor : BundleContributor
     {
-        context.Files.Add("/themes/basic/layout.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.Add("/themes/basic/layout.js");
+        }
     }
 }

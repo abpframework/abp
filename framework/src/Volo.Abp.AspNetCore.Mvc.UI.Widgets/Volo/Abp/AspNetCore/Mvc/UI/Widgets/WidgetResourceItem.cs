@@ -1,23 +1,24 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-public class WidgetResourceItem
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    [CanBeNull]
-    public string Src { get; }
-
-    [CanBeNull]
-    public Type Type { get; }
-
-    public WidgetResourceItem([NotNull] string src)
+    public class WidgetResourceItem
     {
-        Src = Check.NotNullOrWhiteSpace(src, nameof(src));
-    }
+        [CanBeNull]
+        public string Src { get; }
 
-    public WidgetResourceItem([NotNull] Type type)
-    {
-        Type = Check.NotNull(type, nameof(type));
+        [CanBeNull]
+        public Type Type { get; }
+
+        public WidgetResourceItem([NotNull] string src)
+        {
+            Src = Check.NotNullOrWhiteSpace(src, nameof(src));
+        }
+
+        public WidgetResourceItem([NotNull] Type type)
+        {
+            Type = Check.NotNull(type, nameof(type));
+        }
     }
 }

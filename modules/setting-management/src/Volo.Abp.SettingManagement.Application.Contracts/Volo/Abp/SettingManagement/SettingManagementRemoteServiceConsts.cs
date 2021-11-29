@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.SettingManagement;
-
-public class SettingManagementRemoteServiceConsts
+﻿namespace Volo.Abp.SettingManagement
 {
-    public const string RemoteServiceName = "SettingManagement";
+    public class SettingManagementRemoteServiceConsts
+    {
+        public const string RemoteServiceName = "SettingManagement";
 
-    public const string ModuleName = "settingManagement";
+        public const string ModuleName = "settingManagement";
+    }
 }

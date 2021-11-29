@@ -6,50 +6,51 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants;
-
-public class EditModalModel : TenantManagementPageModel
+namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    [BindProperty]
-    public TenantInfoModel Tenant { get; set; }
-
-    protected ITenantAppService TenantAppService { get; }
-
-    public EditModalModel(ITenantAppService tenantAppService)
+    public class EditModalModel : TenantManagementPageModel
     {
-        TenantAppService = tenantAppService;
-    }
+        [BindProperty]
+        public TenantInfoModel Tenant { get; set; }
 
-    public virtual async Task<IActionResult> OnGetAsync(Guid id)
-    {
-        Tenant = ObjectMapper.Map<TenantDto, TenantInfoModel>(
-            await TenantAppService.GetAsync(id)
-        );
+        protected ITenantAppService TenantAppService { get; }
 
-        return Page();
-    }
+        public EditModalModel(ITenantAppService tenantAppService)
+        {
+            TenantAppService = tenantAppService;
+        }
 
-    public virtual async Task<IActionResult> OnPostAsync()
-    {
-        ValidateModel();
+        public virtual async Task<IActionResult> OnGetAsync(Guid id)
+        {
+            Tenant = ObjectMapper.Map<TenantDto, TenantInfoModel>(
+                await TenantAppService.GetAsync(id)
+            );
 
-        var input = ObjectMapper.Map<TenantInfoModel, TenantUpdateDto>(Tenant);
-        await TenantAppService.UpdateAsync(Tenant.Id, input);
+            return Page();
+        }
 
-        return NoContent();
-    }
+        public virtual async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
 
-    public class TenantInfoModel : ExtensibleObject, IHasConcurrencyStamp
-    {
-        [HiddenInput]
-        public Guid Id { get; set; }
+            var input = ObjectMapper.Map<TenantInfoModel, TenantUpdateDto>(Tenant);
+            await TenantAppService.UpdateAsync(Tenant.Id, input);
 
-        [Required]
-        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
-        [Display(Name = "DisplayName:TenantName")]
-        public string Name { get; set; }
+            return NoContent();
+        }
 
-        [HiddenInput]
-        public string ConcurrencyStamp { get; set; }
+        public class TenantInfoModel : ExtensibleObject, IHasConcurrencyStamp
+        {
+            [HiddenInput]
+            public Guid Id { get; set; }
+
+            [Required]
+            [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
+            [Display(Name = "DisplayName:TenantName")]
+            public string Name { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
+        }
     }
 }

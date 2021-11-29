@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-public class CmsKitMediaOptions
+namespace Volo.CmsKit.MediaDescriptors
 {
-    [NotNull]
-    public List<MediaDescriptorDefinition> EntityTypes { get; } = new();
+    public class CmsKitMediaOptions
+    {
+        [NotNull]
+        public List<MediaDescriptorDefinition> EntityTypes { get; } = new();
+    }
 }

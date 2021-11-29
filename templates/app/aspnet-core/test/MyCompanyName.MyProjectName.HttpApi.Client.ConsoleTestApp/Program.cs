@@ -3,20 +3,21 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp;
-
-class Program
+namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 {
-    static async Task Main(string[] args)
+    class Program
     {
-        await CreateHostBuilder(args).RunConsoleAsync();
-    }
+        static async Task Main(string[] args)
+        {
+            await CreateHostBuilder(args).RunConsoleAsync();
+        }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .AddAppSettingsSecretsJson()
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddHostedService<ConsoleTestAppHostedService>();
-            });
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .AddAppSettingsSecretsJson()
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<ConsoleTestAppHostedService>();
+                });
+    }
 }

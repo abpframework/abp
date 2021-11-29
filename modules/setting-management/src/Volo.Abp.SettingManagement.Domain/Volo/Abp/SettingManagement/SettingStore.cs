@@ -3,24 +3,25 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.SettingManagement;
-
-public class SettingStore : ISettingStore, ITransientDependency
+namespace Volo.Abp.SettingManagement
 {
-    protected ISettingManagementStore ManagementStore { get; }
-
-    public SettingStore(ISettingManagementStore managementStore)
+    public class SettingStore : ISettingStore, ITransientDependency
     {
-        ManagementStore = managementStore;
-    }
+        protected ISettingManagementStore ManagementStore { get; }
 
-    public virtual Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
-    {
-        return ManagementStore.GetOrNullAsync(name, providerName, providerKey);
-    }
+        public SettingStore(ISettingManagementStore managementStore)
+        {
+            ManagementStore = managementStore;
+        }
 
-    public virtual Task<List<SettingValue>> GetAllAsync(string[] names, string providerName, string providerKey)
-    {
-        return ManagementStore.GetListAsync(names, providerName, providerKey);
+        public virtual Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        {
+            return ManagementStore.GetOrNullAsync(name, providerName, providerKey);
+        }
+
+        public virtual Task<List<SettingValue>> GetAllAsync(string[] names, string providerName, string providerKey)
+        {
+            return ManagementStore.GetListAsync(names, providerName, providerKey);
+        }
     }
 }

@@ -12,232 +12,233 @@ using Volo.Abp.Timing;
 using Volo.Abp.Tracing;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Auditing;
-
-public class AuditingHelper : IAuditingHelper, ITransientDependency
+namespace Volo.Abp.Auditing
 {
-    protected ILogger<AuditingHelper> Logger { get; }
-    protected IAuditingStore AuditingStore { get; }
-    protected ICurrentUser CurrentUser { get; }
-    protected ICurrentTenant CurrentTenant { get; }
-    protected ICurrentClient CurrentClient { get; }
-    protected IClock Clock { get; }
-    protected AbpAuditingOptions Options;
-    protected IAuditSerializer AuditSerializer;
-    protected IServiceProvider ServiceProvider;
-    protected ICorrelationIdProvider CorrelationIdProvider { get; }
-
-    public AuditingHelper(
-        IAuditSerializer auditSerializer,
-        IOptions<AbpAuditingOptions> options,
-        ICurrentUser currentUser,
-        ICurrentTenant currentTenant,
-        ICurrentClient currentClient,
-        IClock clock,
-        IAuditingStore auditingStore,
-        ILogger<AuditingHelper> logger,
-        IServiceProvider serviceProvider,
-        ICorrelationIdProvider correlationIdProvider)
+    public class AuditingHelper : IAuditingHelper, ITransientDependency
     {
-        Options = options.Value;
-        AuditSerializer = auditSerializer;
-        CurrentUser = currentUser;
-        CurrentTenant = currentTenant;
-        CurrentClient = currentClient;
-        Clock = clock;
-        AuditingStore = auditingStore;
+        protected ILogger<AuditingHelper> Logger { get; }
+        protected IAuditingStore AuditingStore { get; }
+        protected ICurrentUser CurrentUser { get; }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected ICurrentClient CurrentClient { get; }
+        protected IClock Clock { get; }
+        protected AbpAuditingOptions Options;
+        protected IAuditSerializer AuditSerializer;
+        protected IServiceProvider ServiceProvider;
+        protected ICorrelationIdProvider CorrelationIdProvider { get; }
 
-        Logger = logger;
-        ServiceProvider = serviceProvider;
-        CorrelationIdProvider = correlationIdProvider;
-    }
-
-    public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
-    {
-        if (methodInfo == null)
+        public AuditingHelper(
+            IAuditSerializer auditSerializer,
+            IOptions<AbpAuditingOptions> options,
+            ICurrentUser currentUser,
+            ICurrentTenant currentTenant,
+            ICurrentClient currentClient,
+            IClock clock,
+            IAuditingStore auditingStore,
+            ILogger<AuditingHelper> logger,
+            IServiceProvider serviceProvider,
+            ICorrelationIdProvider correlationIdProvider)
         {
-            return false;
+            Options = options.Value;
+            AuditSerializer = auditSerializer;
+            CurrentUser = currentUser;
+            CurrentTenant = currentTenant;
+            CurrentClient = currentClient;
+            Clock = clock;
+            AuditingStore = auditingStore;
+
+            Logger = logger;
+            ServiceProvider = serviceProvider;
+            CorrelationIdProvider = correlationIdProvider;
         }
 
-        if (!methodInfo.IsPublic)
+        public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
         {
-            return false;
-        }
-
-        if (methodInfo.IsDefined(typeof(AuditedAttribute), true))
-        {
-            return true;
-        }
-
-        if (methodInfo.IsDefined(typeof(DisableAuditingAttribute), true))
-        {
-            return false;
-        }
-
-        var classType = methodInfo.DeclaringType;
-        if (classType != null)
-        {
-            var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType);
-            if (shouldAudit != null)
+            if (methodInfo == null)
             {
-                return shouldAudit.Value;
+                return false;
             }
-        }
 
-        return defaultValue;
-    }
+            if (!methodInfo.IsPublic)
+            {
+                return false;
+            }
 
-    public virtual bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false)
-    {
-        if (!entityType.IsPublic)
-        {
-            return false;
-        }
-
-        if (Options.IgnoredTypes.Any(t => t.IsAssignableFrom(entityType)))
-        {
-            return false;
-        }
-
-        if (entityType.IsDefined(typeof(AuditedAttribute), true))
-        {
-            return true;
-        }
-
-        foreach (var propertyInfo in entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-        {
-            if (propertyInfo.IsDefined(typeof(AuditedAttribute)))
+            if (methodInfo.IsDefined(typeof(AuditedAttribute), true))
             {
                 return true;
             }
-        }
 
-        if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
-        {
-            return false;
-        }
-
-        if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
-        {
-            return true;
-        }
-
-        return defaultValue;
-    }
-
-    public virtual AuditLogInfo CreateAuditLogInfo()
-    {
-        var auditInfo = new AuditLogInfo
-        {
-            ApplicationName = Options.ApplicationName,
-            TenantId = CurrentTenant.Id,
-            TenantName = CurrentTenant.Name,
-            UserId = CurrentUser.Id,
-            UserName = CurrentUser.UserName,
-            ClientId = CurrentClient.Id,
-            CorrelationId = CorrelationIdProvider.Get(),
-            ImpersonatorUserId = CurrentUser.FindImpersonatorUserId(),
-            ImpersonatorTenantId = CurrentUser.FindImpersonatorTenantId(),
-            ExecutionTime = Clock.Now
-        };
-
-        ExecutePreContributors(auditInfo);
-
-        return auditInfo;
-    }
-
-    public virtual AuditLogActionInfo CreateAuditLogAction(
-        AuditLogInfo auditLog,
-        Type type,
-        MethodInfo method,
-        object[] arguments)
-    {
-        return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
-    }
-
-    public virtual AuditLogActionInfo CreateAuditLogAction(
-        AuditLogInfo auditLog,
-        Type type,
-        MethodInfo method,
-        IDictionary<string, object> arguments)
-    {
-        var actionInfo = new AuditLogActionInfo
-        {
-            ServiceName = type != null
-                ? type.FullName
-                : "",
-            MethodName = method.Name,
-            Parameters = SerializeConvertArguments(arguments),
-            ExecutionTime = Clock.Now
-        };
-
-        //TODO Execute contributors
-
-        return actionInfo;
-    }
-
-    protected virtual void ExecutePreContributors(AuditLogInfo auditLogInfo)
-    {
-        using (var scope = ServiceProvider.CreateScope())
-        {
-            var context = new AuditLogContributionContext(scope.ServiceProvider, auditLogInfo);
-
-            foreach (var contributor in Options.Contributors)
+            if (methodInfo.IsDefined(typeof(DisableAuditingAttribute), true))
             {
-                try
+                return false;
+            }
+
+            var classType = methodInfo.DeclaringType;
+            if (classType != null)
+            {
+                var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType);
+                if (shouldAudit != null)
                 {
-                    contributor.PreContribute(context);
+                    return shouldAudit.Value;
                 }
-                catch (Exception ex)
+            }
+
+            return defaultValue;
+        }
+
+        public virtual bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false)
+        {
+            if (!entityType.IsPublic)
+            {
+                return false;
+            }
+
+            if (Options.IgnoredTypes.Any(t => t.IsAssignableFrom(entityType)))
+            {
+                return false;
+            }
+
+            if (entityType.IsDefined(typeof(AuditedAttribute), true))
+            {
+                return true;
+            }
+
+            foreach (var propertyInfo in entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if(propertyInfo.IsDefined(typeof(AuditedAttribute)))
                 {
-                    Logger.LogException(ex, LogLevel.Warning);
+                    return true;
+                }
+            }
+
+            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
+            {
+                return false;
+            }
+
+            if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
+            {
+                return true;
+            }
+
+            return defaultValue;
+        }
+
+        public virtual AuditLogInfo CreateAuditLogInfo()
+        {
+            var auditInfo = new AuditLogInfo
+            {
+                ApplicationName = Options.ApplicationName,
+                TenantId = CurrentTenant.Id,
+                TenantName = CurrentTenant.Name,
+                UserId = CurrentUser.Id,
+                UserName = CurrentUser.UserName,
+                ClientId = CurrentClient.Id,
+                CorrelationId = CorrelationIdProvider.Get(),
+                ImpersonatorUserId = CurrentUser.FindImpersonatorUserId(),
+                ImpersonatorTenantId = CurrentUser.FindImpersonatorTenantId(),
+                ExecutionTime = Clock.Now
+            };
+
+            ExecutePreContributors(auditInfo);
+
+            return auditInfo;
+        }
+
+        public virtual AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type,
+            MethodInfo method,
+            object[] arguments)
+        {
+            return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
+        }
+
+        public virtual AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type,
+            MethodInfo method,
+            IDictionary<string, object> arguments)
+        {
+            var actionInfo = new AuditLogActionInfo
+            {
+                ServiceName = type != null
+                    ? type.FullName
+                    : "",
+                MethodName = method.Name,
+                Parameters = SerializeConvertArguments(arguments),
+                ExecutionTime = Clock.Now
+            };
+
+            //TODO Execute contributors
+
+            return actionInfo;
+        }
+
+        protected virtual void ExecutePreContributors(AuditLogInfo auditLogInfo)
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var context = new AuditLogContributionContext(scope.ServiceProvider, auditLogInfo);
+
+                foreach (var contributor in Options.Contributors)
+                {
+                    try
+                    {
+                        contributor.PreContribute(context);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex, LogLevel.Warning);
+                    }
                 }
             }
         }
-    }
 
-    protected virtual string SerializeConvertArguments(IDictionary<string, object> arguments)
-    {
-        try
+        protected virtual string SerializeConvertArguments(IDictionary<string, object> arguments)
         {
-            if (arguments.IsNullOrEmpty())
+            try
             {
+                if (arguments.IsNullOrEmpty())
+                {
+                    return "{}";
+                }
+
+                var dictionary = new Dictionary<string, object>();
+
+                foreach (var argument in arguments)
+                {
+                    if (argument.Value != null && Options.IgnoredTypes.Any(t => t.IsInstanceOfType(argument.Value)))
+                    {
+                        dictionary[argument.Key] = null;
+                    }
+                    else
+                    {
+                        dictionary[argument.Key] = argument.Value;
+                    }
+                }
+
+                return AuditSerializer.Serialize(dictionary);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, LogLevel.Warning);
                 return "{}";
             }
+        }
 
+        protected virtual Dictionary<string, object> CreateArgumentsDictionary(MethodInfo method, object[] arguments)
+        {
+            var parameters = method.GetParameters();
             var dictionary = new Dictionary<string, object>();
 
-            foreach (var argument in arguments)
+            for (var i = 0; i < parameters.Length; i++)
             {
-                if (argument.Value != null && Options.IgnoredTypes.Any(t => t.IsInstanceOfType(argument.Value)))
-                {
-                    dictionary[argument.Key] = null;
-                }
-                else
-                {
-                    dictionary[argument.Key] = argument.Value;
-                }
+                dictionary[parameters[i].Name] = arguments[i];
             }
 
-            return AuditSerializer.Serialize(dictionary);
+            return dictionary;
         }
-        catch (Exception ex)
-        {
-            Logger.LogException(ex, LogLevel.Warning);
-            return "{}";
-        }
-    }
-
-    protected virtual Dictionary<string, object> CreateArgumentsDictionary(MethodInfo method, object[] arguments)
-    {
-        var parameters = method.GetParameters();
-        var dictionary = new Dictionary<string, object>();
-
-        for (var i = 0; i < parameters.Length; i++)
-        {
-            dictionary[parameters[i].Name] = arguments[i];
-        }
-
-        return dictionary;
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.DependencyInjection;
-
-public interface IOnServiceExposingContext
+namespace Volo.Abp.DependencyInjection
 {
-    Type ImplementationType { get; }
+    public interface IOnServiceExposingContext
+    {
+        Type ImplementationType { get; }
 
-    List<Type> ExposedTypes { get; }
+        List<Type> ExposedTypes { get; }
+    }
 }

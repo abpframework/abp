@@ -1,26 +1,27 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-
-public class PageToolbarContributionContext
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
 {
-    [NotNull]
-    public string PageName { get; }
-
-    [NotNull]
-    public IServiceProvider ServiceProvider { get; }
-
-    [NotNull]
-    public PageToolbarItemList Items { get; }
-
-    public PageToolbarContributionContext(
-        [NotNull] string pageName,
-        [NotNull] IServiceProvider serviceProvider)
+    public class PageToolbarContributionContext
     {
-        PageName = Check.NotNull(pageName, nameof(pageName));
-        ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
+        [NotNull]
+        public string PageName { get; }
 
-        Items = new PageToolbarItemList();
+        [NotNull]
+        public IServiceProvider ServiceProvider { get; }
+
+        [NotNull]
+        public PageToolbarItemList Items { get; }
+
+        public PageToolbarContributionContext(
+            [NotNull] string pageName,
+            [NotNull] IServiceProvider serviceProvider)
+        {
+            PageName = Check.NotNull(pageName, nameof(pageName));
+            ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+            Items = new PageToolbarItemList();
+        }
     }
 }

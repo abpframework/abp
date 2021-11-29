@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.ExceptionHandling;
-
-public interface IExceptionNotifier
+namespace Volo.Abp.ExceptionHandling
 {
-    Task NotifyAsync([NotNull] ExceptionNotificationContext context);
+    public interface IExceptionNotifier
+    {
+        Task NotifyAsync([NotNull] ExceptionNotificationContext context);
+    }
 }

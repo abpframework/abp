@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.BackgroundJobs;
-
-public enum JobExecutionResult
+﻿namespace Volo.Abp.BackgroundJobs
 {
-    Success,
-    Failed
+    public enum JobExecutionResult
+    {
+        Success,
+        Failed
+    }
 }

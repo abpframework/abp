@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.Modeling;
-
-public class AbpApiDescriptionModelOptions
+namespace Volo.Abp.Http.Modeling
 {
-    public HashSet<Type> IgnoredInterfaces { get; }
-
-    public AbpApiDescriptionModelOptions()
+    public class AbpApiDescriptionModelOptions
     {
-        IgnoredInterfaces = new HashSet<Type>
+        public HashSet<Type> IgnoredInterfaces { get; }
+
+        public AbpApiDescriptionModelOptions()
+        {
+            IgnoredInterfaces = new HashSet<Type>
             {
                 typeof(ITransientDependency),
                 typeof(ISingletonDependency),
                 typeof(IDisposable),
                 typeof(IAvoidDuplicateCrossCuttingConcerns)
             };
+        }
     }
 }

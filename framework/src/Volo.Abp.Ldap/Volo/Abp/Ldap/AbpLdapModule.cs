@@ -8,31 +8,32 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Ldap;
-
-[DependsOn(
-    typeof(AbpSettingsModule),
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpLocalizationModule))]
-public class AbpLdapModule : AbpModule
+namespace Volo.Abp.Ldap
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpSettingsModule),
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpLocalizationModule))]
+    public class AbpLdapModule : AbpModule
     {
-        context.Services.AddAbpDynamicOptions<AbpLdapOptions, AbpAbpLdapOptionsManager>();
-
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpLdapModule>();
-        });
+            context.Services.AddAbpDynamicOptions<AbpLdapOptions, AbpAbpLdapOptionsManager>();
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<LdapResource>("en")
-                .AddVirtualJson("/Volo/Abp/Ldap/Localization");
-        });
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpLdapModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<LdapResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Ldap/Localization");
+            });
+        }
     }
 }

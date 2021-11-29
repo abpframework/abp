@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-public static class BundleContributorCollectionExtensions
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public static void AddFiles(this BundleContributorCollection contributors, params string[] files)
+    public static class BundleContributorCollectionExtensions
     {
-        contributors.Add(new BundleFileContributor(files));
+        public static void AddFiles(this BundleContributorCollection contributors, params string[] files)
+        {
+            contributors.Add(new BundleFileContributor(files));
+        }
     }
 }

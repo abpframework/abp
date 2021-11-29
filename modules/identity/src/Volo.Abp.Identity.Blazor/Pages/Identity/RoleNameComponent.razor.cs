@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Volo.Abp.Identity.Blazor.Pages.Identity;
-
-public partial class RoleNameComponent : ComponentBase
+namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    [Parameter] public object Data { get; set; }
+    public partial class RoleNameComponent : ComponentBase
+    {
+        [Parameter] public object Data { get; set; }
+    }
 }

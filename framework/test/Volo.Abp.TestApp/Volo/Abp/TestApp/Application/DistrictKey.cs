@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.TestApp.Application;
-
-public class DistrictKey
+namespace Volo.Abp.TestApp.Application
 {
-    public Guid CityId { get; set; }
+    public class DistrictKey
+    {
+        public Guid CityId { get; set; }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
+    }
 }

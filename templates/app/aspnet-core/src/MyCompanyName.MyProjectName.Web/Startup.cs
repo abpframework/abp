@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName.Web;
-
-public class Startup
+namespace MyCompanyName.MyProjectName.Web
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        services.AddApplication<MyProjectNameWebModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<MyProjectNameWebModule>();
+        }
 
-    public void Configure(IApplicationBuilder app)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app)
+        {
+            app.InitializeApplication();
+        }
     }
 }

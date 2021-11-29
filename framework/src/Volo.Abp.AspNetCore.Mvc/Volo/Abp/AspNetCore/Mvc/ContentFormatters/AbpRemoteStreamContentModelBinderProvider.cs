@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.Content;
 
-namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
-
-public class AbpRemoteStreamContentModelBinderProvider : IModelBinderProvider
+namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    public class AbpRemoteStreamContentModelBinderProvider : IModelBinderProvider
     {
-        if (context == null)
+        public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            throw new ArgumentNullException(nameof(context));
-        }
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
-        if (context.Metadata.ModelType == typeof(IRemoteStreamContent) ||
-            context.Metadata.ModelType == typeof(RemoteStreamContent) ||
-            typeof(IEnumerable<IRemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType) ||
-            typeof(IEnumerable<RemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType))
-        {
-            return new AbpRemoteStreamContentModelBinder();
-        }
+            if (context.Metadata.ModelType == typeof(IRemoteStreamContent) ||
+                context.Metadata.ModelType == typeof(RemoteStreamContent) ||
+                typeof(IEnumerable<IRemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType) ||
+                typeof(IEnumerable<RemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType))
+            {
+                return new AbpRemoteStreamContentModelBinder();
+            }
 
-        return null;
+            return null;
+        }
     }
 }

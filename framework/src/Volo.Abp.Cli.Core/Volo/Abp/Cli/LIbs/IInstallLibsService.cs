@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.LIbs;
-
-public interface IInstallLibsService
+namespace Volo.Abp.Cli.LIbs
 {
-    Task InstallLibsAsync(string directory);
+    public interface IInstallLibsService
+    {
+        Task InstallLibsAsync(string directory);
+    }
 }

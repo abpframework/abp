@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Domain.Entities;
-
-//TODO: Re-consider this interface
-
-public interface IGeneratesDomainEvents
+namespace Volo.Abp.Domain.Entities
 {
-    IEnumerable<DomainEventRecord> GetLocalEvents();
+    //TODO: Re-consider this interface
 
-    IEnumerable<DomainEventRecord> GetDistributedEvents();
+    public interface IGeneratesDomainEvents
+    {
+        IEnumerable<DomainEventRecord> GetLocalEvents();
 
-    void ClearLocalEvents();
+        IEnumerable<DomainEventRecord> GetDistributedEvents();
 
-    void ClearDistributedEvents();
+        void ClearLocalEvents();
+
+        void ClearDistributedEvents();
+    }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public interface IAbpHubContextAccessor
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    AbpHubContext Context { get; }
+    public interface IAbpHubContextAccessor
+    {
+        AbpHubContext Context { get; }
 
-    IDisposable Change(AbpHubContext context);
+        IDisposable Change(AbpHubContext context);
+    }
 }
 

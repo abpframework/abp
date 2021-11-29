@@ -1,13 +1,14 @@
 using Volo.Abp.Collections;
 
-namespace Volo.Abp.EventBus.Local;
-
-public class AbpLocalEventBusOptions
+namespace Volo.Abp.EventBus.Local
 {
-    public ITypeList<IEventHandler> Handlers { get; }
-
-    public AbpLocalEventBusOptions()
+    public class AbpLocalEventBusOptions
     {
-        Handlers = new TypeList<IEventHandler>();
+        public ITypeList<IEventHandler> Handlers { get; }
+
+        public AbpLocalEventBusOptions()
+        {
+            Handlers = new TypeList<IEventHandler>();
+        }
     }
 }

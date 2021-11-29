@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.ExceptionHandling;
-
-[ExposeServices(typeof(IExceptionSubscriber))]
-public abstract class ExceptionSubscriber : IExceptionSubscriber, ITransientDependency
+namespace Volo.Abp.ExceptionHandling
 {
-    public abstract Task HandleAsync(ExceptionNotificationContext context);
+    [ExposeServices(typeof(IExceptionSubscriber))]
+    public abstract class ExceptionSubscriber : IExceptionSubscriber, ITransientDependency
+    {
+        public abstract Task HandleAsync(ExceptionNotificationContext context);
+    }
 }

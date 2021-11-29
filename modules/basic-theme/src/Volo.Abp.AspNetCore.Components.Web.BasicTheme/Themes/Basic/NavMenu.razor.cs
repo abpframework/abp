@@ -4,32 +4,33 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
-
-public partial class NavMenu : IDisposable
+namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 {
-    [Inject]
-    protected IMenuManager MenuManager { get; set; }
-
-    [Inject]
-    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    protected ApplicationMenu Menu { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    public partial class NavMenu : IDisposable
     {
-        Menu = await MenuManager.GetMainMenuAsync();
-        AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
-    }
+        [Inject]
+        protected IMenuManager MenuManager { get; set; }
+        
+        [Inject]
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    public void Dispose()
-    {
-        AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
-    }
+        protected ApplicationMenu Menu { get; set; }
 
-    private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
-    {
-        Menu = await MenuManager.GetMainMenuAsync();
-        await InvokeAsync(StateHasChanged);
+        protected override async Task OnInitializedAsync()
+        {
+            Menu = await MenuManager.GetMainMenuAsync();
+            AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
+        }
+        
+        public void Dispose()
+        {
+            AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+        }
+
+        private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            Menu = await MenuManager.GetMainMenuAsync();
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }

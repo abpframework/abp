@@ -6,35 +6,36 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Http.Client.DynamicProxying;
-
-public class ApiDescriptionCache : IApiDescriptionCache, ISingletonDependency
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
-    private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
-    private readonly SemaphoreSlim _semaphore;
-
-    public ApiDescriptionCache(ICancellationTokenProvider cancellationTokenProvider)
+    public class ApiDescriptionCache : IApiDescriptionCache, ISingletonDependency
     {
-        CancellationTokenProvider = cancellationTokenProvider;
-        _cache = new Dictionary<string, ApplicationApiDescriptionModel>();
-        _semaphore = new SemaphoreSlim(1, 1);
-    }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-    public async Task<ApplicationApiDescriptionModel> GetAsync(
-        string baseUrl,
-        Func<Task<ApplicationApiDescriptionModel>> factory)
-    {
-        using (await _semaphore.LockAsync(CancellationTokenProvider.Token))
+        private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
+        private readonly SemaphoreSlim _semaphore;
+
+        public ApiDescriptionCache(ICancellationTokenProvider cancellationTokenProvider)
         {
-            var model = _cache.GetOrDefault(baseUrl);
-            if (model == null)
-            {
-                _cache[baseUrl] = model = await factory();
-            }
+            CancellationTokenProvider = cancellationTokenProvider;
+            _cache = new Dictionary<string, ApplicationApiDescriptionModel>();
+            _semaphore = new SemaphoreSlim(1, 1);
+        }
 
-            return model;
+        public async Task<ApplicationApiDescriptionModel> GetAsync(
+            string baseUrl,
+            Func<Task<ApplicationApiDescriptionModel>> factory)
+        {
+            using (await _semaphore.LockAsync(CancellationTokenProvider.Token))
+            {
+                var model = _cache.GetOrDefault(baseUrl);
+                if (model == null)
+                {
+                    _cache[baseUrl] = model = await factory();
+                }
+
+                return model;
+            }
         }
     }
 }

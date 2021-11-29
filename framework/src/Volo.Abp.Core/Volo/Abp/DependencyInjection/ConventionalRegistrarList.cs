@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.DependencyInjection;
-
-internal class ConventionalRegistrarList : List<IConventionalRegistrar>
+namespace Volo.Abp.DependencyInjection
 {
+    internal class ConventionalRegistrarList : List<IConventionalRegistrar>
+    {
 
+    }
 }

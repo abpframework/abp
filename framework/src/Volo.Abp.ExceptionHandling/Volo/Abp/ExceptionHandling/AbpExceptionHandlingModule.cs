@@ -3,30 +3,31 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.ExceptionHandling;
-
-/* TODO: This package is introduced in a later time by gathering
- * classes from multiple packages.
- * So, didn't change the original namespaces of the types to not introduce breaking changes.
- * We will re-design this package in a later time, probably with v5.0.
- */
-[DependsOn(
-    typeof(AbpLocalizationModule)
-    )]
-public class AbpExceptionHandlingModule : AbpModule
+namespace Volo.Abp.ExceptionHandling
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    /* TODO: This package is introduced in a later time by gathering
+     * classes from multiple packages.
+     * So, didn't change the original namespaces of the types to not introduce breaking changes.
+     * We will re-design this package in a later time, probably with v5.0.
+     */
+    [DependsOn(
+        typeof(AbpLocalizationModule)
+        )]
+    public class AbpExceptionHandlingModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpExceptionHandlingModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpExceptionHandlingModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpExceptionHandlingResource>("en")
-                .AddVirtualJson("/Volo/Abp/ExceptionHandling/Localization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpExceptionHandlingResource>("en")
+                    .AddVirtualJson("/Volo/Abp/ExceptionHandling/Localization");
+            });
+        }
     }
 }

@@ -2,13 +2,14 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public abstract class BackgroundJobsTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.BackgroundJobs
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class BackgroundJobsTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
+        where TStartupModule : IAbpModule
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

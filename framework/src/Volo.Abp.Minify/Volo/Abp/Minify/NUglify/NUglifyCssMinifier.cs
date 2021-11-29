@@ -1,12 +1,13 @@
 using NUglify;
 using Volo.Abp.Minify.Styles;
 
-namespace Volo.Abp.Minify.NUglify;
-
-public class NUglifyCssMinifier : NUglifyMinifierBase, ICssMinifier
+namespace Volo.Abp.Minify.NUglify
 {
-    protected override UglifyResult UglifySource(string source, string fileName)
+    public class NUglifyCssMinifier : NUglifyMinifierBase, ICssMinifier
     {
-        return Uglify.Css(source, fileName);
+        protected override UglifyResult UglifySource(string source, string fileName)
+        {
+            return Uglify.Css(source, fileName);
+        }
     }
 }

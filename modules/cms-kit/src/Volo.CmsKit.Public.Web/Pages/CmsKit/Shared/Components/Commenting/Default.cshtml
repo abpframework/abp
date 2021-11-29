@@ -57,16 +57,7 @@
     Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, string text) =>
     @<div class="cms-comment-content-area" data-id="@id.ToString()">
         <p class="m-0">
-            @{
-                var lines = text.SplitToLines();
-                if (lines.Any())
-                {
-                    foreach (var line in lines)
-                    {
-                        @line <br />
-                    }
-                }
-            }
+            @text
         </p>
     </div>;
 }

@@ -1,21 +1,22 @@
 ﻿using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EntityFrameworkCore.SqlServer;
-
-[DependsOn(
-    typeof(AbpEntityFrameworkCoreModule)
-    )]
-public class AbpEntityFrameworkCoreSqlServerModule : AbpModule
+namespace Volo.Abp.EntityFrameworkCore.SqlServer
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpEntityFrameworkCoreModule)
+        )]
+    public class AbpEntityFrameworkCoreSqlServerModule : AbpModule
     {
-        Configure<AbpSequentialGuidGeneratorOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            if (options.DefaultSequentialGuidType == null)
+            Configure<AbpSequentialGuidGeneratorOptions>(options =>
             {
-                options.DefaultSequentialGuidType = SequentialGuidType.SequentialAtEnd;
-            }
-        });
+                if (options.DefaultSequentialGuidType == null)
+                {
+                    options.DefaultSequentialGuidType = SequentialGuidType.SequentialAtEnd;
+                }
+            });
+        }
     }
 }

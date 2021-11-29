@@ -1,24 +1,25 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.ObjectMapping;
-
-public static class TestContextRegistrar
+namespace Volo.Abp.ObjectMapping
 {
-    public static IServiceCollection AddTest1AutoObjectMappingProvider<TContext>(this IServiceCollection services)
+    public static class TestContextRegistrar
     {
-        return services
-            .AddTransient<
-                IAutoObjectMappingProvider<TContext>,
-                Test1AutoObjectMappingProvider<TContext>
-            >();
-    }
+        public static IServiceCollection AddTest1AutoObjectMappingProvider<TContext>(this IServiceCollection services)
+        {
+            return services
+                .AddTransient<
+                    IAutoObjectMappingProvider<TContext>,
+                    Test1AutoObjectMappingProvider<TContext>
+                >();
+        }
 
-    public static IServiceCollection AddTest2AutoObjectMappingProvider<TContext>(this IServiceCollection services)
-    {
-        return services
-            .AddTransient<
-                IAutoObjectMappingProvider<TContext>,
-                Test2AutoObjectMappingProvider<TContext>
-            >();
+        public static IServiceCollection AddTest2AutoObjectMappingProvider<TContext>(this IServiceCollection services)
+        {
+            return services
+                .AddTransient<
+                    IAutoObjectMappingProvider<TContext>,
+                    Test2AutoObjectMappingProvider<TContext>
+                >();
+        }
     }
 }

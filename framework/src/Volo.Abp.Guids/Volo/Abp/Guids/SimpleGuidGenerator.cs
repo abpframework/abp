@@ -1,16 +1,17 @@
 ﻿using System;
 
-namespace Volo.Abp.Guids;
-
-/// <summary>
-/// Implements <see cref="IGuidGenerator"/> by using <see cref="Guid.NewGuid"/>.
-/// </summary>
-public class SimpleGuidGenerator : IGuidGenerator
+namespace Volo.Abp.Guids
 {
-    public static SimpleGuidGenerator Instance { get; } = new SimpleGuidGenerator();
-
-    public virtual Guid Create()
+    /// <summary>
+    /// Implements <see cref="IGuidGenerator"/> by using <see cref="Guid.NewGuid"/>.
+    /// </summary>
+    public class SimpleGuidGenerator : IGuidGenerator
     {
-        return Guid.NewGuid();
+        public static SimpleGuidGenerator Instance { get; } = new SimpleGuidGenerator();
+
+        public virtual Guid Create()
+        {
+            return Guid.NewGuid();
+        }
     }
 }

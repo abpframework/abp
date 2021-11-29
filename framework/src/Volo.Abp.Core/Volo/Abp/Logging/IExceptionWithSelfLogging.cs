@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Logging;
-
-public interface IExceptionWithSelfLogging
+namespace Volo.Abp.Logging
 {
-    void Log(ILogger logger);
+    public interface IExceptionWithSelfLogging
+    {
+        void Log(ILogger logger);
+    }
 }

@@ -2,17 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Identity.AspNetCore;
-
-public class AbpIdentityAspNetCoreTestStartup
+namespace Volo.Abp.Identity.AspNetCore
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class AbpIdentityAspNetCoreTestStartup
     {
-        services.AddApplication<AbpIdentityAspNetCoreTestModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<AbpIdentityAspNetCoreTestModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

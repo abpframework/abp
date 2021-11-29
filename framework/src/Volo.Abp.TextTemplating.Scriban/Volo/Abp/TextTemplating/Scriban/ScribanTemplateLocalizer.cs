@@ -7,58 +7,59 @@ using Scriban;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-namespace Volo.Abp.TextTemplating.Scriban;
-
-public class ScribanTemplateLocalizer : IScriptCustomFunction
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    private readonly IStringLocalizer _localizer;
-
-    public ScribanTemplateLocalizer(IStringLocalizer localizer)
+    public class ScribanTemplateLocalizer : IScriptCustomFunction
     {
-        _localizer = localizer;
-    }
+        private readonly IStringLocalizer _localizer;
 
-    public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
-        ScriptBlockStatement blockStatement)
-    {
-        return GetString(arguments);
-    }
-
-    public ValueTask<object> InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
-        ScriptBlockStatement blockStatement)
-    {
-        return new ValueTask<object>(GetString(arguments));
-    }
-
-    private string GetString(ScriptArray arguments)
-    {
-        if (arguments.IsNullOrEmpty())
+        public ScribanTemplateLocalizer(IStringLocalizer localizer)
         {
-            return string.Empty;
+            _localizer = localizer;
         }
 
-        var name = arguments[0];
-        if (name == null || name.ToString().IsNullOrWhiteSpace())
+        public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
+            ScriptBlockStatement blockStatement)
         {
-            return string.Empty;
+            return GetString(arguments);
         }
 
-        var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).ToArray();
-        return args.Any() ? _localizer[name.ToString(), args] : _localizer[name.ToString()];
-    }
+        public ValueTask<object> InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
+            ScriptBlockStatement blockStatement)
+        {
+            return new ValueTask<object>(GetString(arguments));
+        }
 
-    public int RequiredParameterCount => 1;
+        private string GetString(ScriptArray arguments)
+        {
+            if (arguments.IsNullOrEmpty())
+            {
+                return string.Empty;
+            }
 
-    public int ParameterCount => ScriptFunctionCall.MaximumParameterCount - 1;
+            var name = arguments[0];
+            if (name == null || name.ToString().IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
 
-    public ScriptVarParamKind VarParamKind => ScriptVarParamKind.Direct;
+            var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).ToArray();
+            return args.Any() ? _localizer[name.ToString(), args] : _localizer[name.ToString()];
+        }
 
-    public Type ReturnType => typeof(object);
+        public int RequiredParameterCount => 1;
 
-    public ScriptParameterInfo GetParameterInfo(int index)
-    {
-        return index == 0
-            ? new ScriptParameterInfo(typeof(string), "template_name")
-            : new ScriptParameterInfo(typeof(object), "value");
+        public int ParameterCount => ScriptFunctionCall.MaximumParameterCount - 1;
+
+        public ScriptVarParamKind VarParamKind => ScriptVarParamKind.Direct;
+
+        public Type ReturnType => typeof(object);
+
+        public ScriptParameterInfo GetParameterInfo(int index)
+        {
+            return index == 0
+                ? new ScriptParameterInfo(typeof(string), "template_name")
+                : new ScriptParameterInfo(typeof(object), "value");
+        }
     }
 }

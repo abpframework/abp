@@ -8,86 +8,87 @@ using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Auditing;
-
-public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
-    public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+    public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
     {
-        return Task.CompletedTask;
-    }
-
-    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-    {
-        if (context.HandlerMethod == null || !ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
+        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
-            await next();
-            return;
+            return Task.CompletedTask;
         }
 
-        using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.Auditing))
+        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            var stopwatch = Stopwatch.StartNew();
-
-            try
+            if (context.HandlerMethod == null || !ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
             {
-                var result = await next();
+                await next();
+                return;
+            }
 
-                if (result.Exception != null && !result.ExceptionHandled)
+            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.Auditing))
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                try
                 {
-                    auditLog.Exceptions.Add(result.Exception);
+                    var result = await next();
+
+                    if (result.Exception != null && !result.ExceptionHandled)
+                    {
+                        auditLog.Exceptions.Add(result.Exception);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    auditLog.Exceptions.Add(ex);
+                    throw;
+                }
+                finally
+                {
+                    stopwatch.Stop();
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog.Actions.Add(auditLogAction);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+        {
+            auditLog = null;
+            auditLogAction = null;
+
+            var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            if (!options.IsEnabled)
             {
-                auditLog.Exceptions.Add(ex);
-                throw;
+                return false;
             }
-            finally
+
+            if (!context.ActionDescriptor.IsPageAction())
             {
-                stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
+                return false;
             }
+
+            var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
+            if (auditLogScope == null)
+            {
+                return false;
+            }
+
+            var auditingHelper = context.GetRequiredService<IAuditingHelper>();
+            if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
+            {
+                return false;
+            }
+
+            auditLog = auditLogScope.Log;
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                context.HandlerMethod.MethodInfo.DeclaringType,
+                context.HandlerMethod.MethodInfo,
+                context.HandlerArguments
+            );
+
+            return true;
         }
-    }
-
-    private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
-    {
-        auditLog = null;
-        auditLogAction = null;
-
-        var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        if (!options.IsEnabled)
-        {
-            return false;
-        }
-
-        if (!context.ActionDescriptor.IsPageAction())
-        {
-            return false;
-        }
-
-        var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
-        if (auditLogScope == null)
-        {
-            return false;
-        }
-
-        var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
-        {
-            return false;
-        }
-
-        auditLog = auditLogScope.Log;
-        auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            context.HandlerMethod.MethodInfo.DeclaringType,
-            context.HandlerMethod.MethodInfo,
-            context.HandlerArguments
-        );
-
-        return true;
     }
 }

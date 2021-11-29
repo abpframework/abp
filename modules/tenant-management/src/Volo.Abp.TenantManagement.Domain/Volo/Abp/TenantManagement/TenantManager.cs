@@ -2,41 +2,42 @@
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 
-namespace Volo.Abp.TenantManagement;
-
-public class TenantManager : DomainService, ITenantManager
+namespace Volo.Abp.TenantManagement
 {
-    protected ITenantRepository TenantRepository { get; }
-
-    public TenantManager(ITenantRepository tenantRepository)
+    public class TenantManager : DomainService, ITenantManager
     {
-        TenantRepository = tenantRepository;
+        protected ITenantRepository TenantRepository { get; }
 
-    }
-
-    public virtual async Task<Tenant> CreateAsync(string name)
-    {
-        Check.NotNull(name, nameof(name));
-
-        await ValidateNameAsync(name);
-        return new Tenant(GuidGenerator.Create(), name);
-    }
-
-    public virtual async Task ChangeNameAsync(Tenant tenant, string name)
-    {
-        Check.NotNull(tenant, nameof(tenant));
-        Check.NotNull(name, nameof(name));
-
-        await ValidateNameAsync(name, tenant.Id);
-        tenant.SetName(name);
-    }
-
-    protected virtual async Task ValidateNameAsync(string name, Guid? expectedId = null)
-    {
-        var tenant = await TenantRepository.FindByNameAsync(name);
-        if (tenant != null && tenant.Id != expectedId)
+        public TenantManager(ITenantRepository tenantRepository)
         {
-            throw new UserFriendlyException("Duplicate tenancy name: " + name); //TODO: A domain exception would be better..?
+            TenantRepository = tenantRepository;
+
+        }
+
+        public virtual async Task<Tenant> CreateAsync(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            await ValidateNameAsync(name);
+            return new Tenant(GuidGenerator.Create(), name);
+        }
+
+        public virtual async Task ChangeNameAsync(Tenant tenant, string name)
+        {
+            Check.NotNull(tenant, nameof(tenant));
+            Check.NotNull(name, nameof(name));
+
+            await ValidateNameAsync(name, tenant.Id);
+            tenant.SetName(name);
+        }
+
+        protected virtual async Task ValidateNameAsync(string name, Guid? expectedId = null)
+        {
+            var tenant = await TenantRepository.FindByNameAsync(name);
+            if (tenant != null && tenant.Id != expectedId)
+            {
+                throw new UserFriendlyException("Duplicate tenancy name: " + name); //TODO: A domain exception would be better..?
+            }
         }
     }
 }

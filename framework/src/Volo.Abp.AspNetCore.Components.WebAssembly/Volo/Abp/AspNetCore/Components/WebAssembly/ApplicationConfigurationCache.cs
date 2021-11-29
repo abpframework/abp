@@ -1,19 +1,20 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly;
-
-public class ApplicationConfigurationCache : ISingletonDependency
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    protected ApplicationConfigurationDto Configuration { get; set; }
-
-    public virtual ApplicationConfigurationDto Get()
+    public class ApplicationConfigurationCache : ISingletonDependency
     {
-        return Configuration;
-    }
+        protected ApplicationConfigurationDto Configuration { get; set; }
 
-    public void Set(ApplicationConfigurationDto configuration)
-    {
-        Configuration = configuration;
+        public virtual ApplicationConfigurationDto Get()
+        {
+            return Configuration;
+        }
+
+        public void Set(ApplicationConfigurationDto configuration)
+        {
+            Configuration = configuration;
+        }
     }
 }

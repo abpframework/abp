@@ -5,27 +5,28 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Volo.Abp;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp;
-
-public class ConsoleAppConsoleAppHostedService : IHostedService
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
 {
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public class ConsoleAppConsoleAppHostedService : IHostedService
     {
-        using (var application = AbpApplicationFactory.Create<ConsoleAppConsoleAppModule>(options =>
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            options.UseAutofac();
-            options.Services.AddLogging(c => c.AddSerilog());
-        }))
-        {
-            application.Initialize();
+            using (var application = AbpApplicationFactory.Create<ConsoleAppConsoleAppModule>(options =>
+            {
+                options.UseAutofac();
+                options.Services.AddLogging(c => c.AddSerilog());
+            }))
+            {
+                application.Initialize();
 
-            var blobService = application.ServiceProvider.GetService<BlobService>();
+                var blobService = application.ServiceProvider.GetService<BlobService>();
 
-            await blobService.SaveFile("Test File 2", "Test Content 2");
+                await blobService.SaveFile("Test File 2", "Test Content 2");
 
-            application.Shutdown();
+                application.Shutdown();
+            }
         }
-    }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
 }

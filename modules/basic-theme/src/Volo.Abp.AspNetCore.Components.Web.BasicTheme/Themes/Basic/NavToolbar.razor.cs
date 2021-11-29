@@ -6,49 +6,50 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 
-namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
-
-public partial class NavToolbar : IDisposable
+namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 {
-    [Inject]
-    private IToolbarManager ToolbarManager { get; set; }
-
-    [Inject]
-    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
-
-    protected override async Task OnInitializedAsync()
+    public partial class NavToolbar : IDisposable
     {
-        await GetToolbarItemRendersAsync();
-        AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
-    }
+        [Inject]
+        private IToolbarManager ToolbarManager { get; set; }
 
-    private async Task GetToolbarItemRendersAsync()
-    {
-        var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
+        [Inject]
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        ToolbarItemRenders.Clear();
+        private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
 
-        var sequence = 0;
-        foreach (var item in toolbar.Items)
+        protected override async Task OnInitializedAsync()
         {
-            ToolbarItemRenders.Add(builder =>
-            {
-                builder.OpenComponent(sequence++, item.ComponentType);
-                builder.CloseComponent();
-            });
+            await GetToolbarItemRendersAsync();
+            AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
         }
-    }
 
-    private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
-    {
-        await GetToolbarItemRendersAsync();
-        await InvokeAsync(StateHasChanged);
-    }
+        private async Task GetToolbarItemRendersAsync()
+        {
+            var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
 
-    public void Dispose()
-    {
-        AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+            ToolbarItemRenders.Clear();
+
+            var sequence = 0;
+            foreach (var item in toolbar.Items)
+            {
+                ToolbarItemRenders.Add(builder =>
+                {
+                    builder.OpenComponent(sequence++, item.ComponentType);
+                    builder.CloseComponent();
+                });
+            }
+        }
+
+        private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            await GetToolbarItemRendersAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public void Dispose()
+        {
+            AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+        }
     }
 }

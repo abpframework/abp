@@ -5,18 +5,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
-namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-
-public static class AbpWebAssemblyApplicationCreationOptionsAutofacExtensions
+namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
-    public static void UseAutofac(
-        [NotNull] this AbpWebAssemblyApplicationCreationOptions options,
-        [CanBeNull] Action<ContainerBuilder> configure = null)
+    public static class AbpWebAssemblyApplicationCreationOptionsAutofacExtensions
     {
-        options.HostBuilder.Services.AddAutofacServiceProviderFactory();
-        options.HostBuilder.ConfigureContainer(
-            options.HostBuilder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>(),
-            configure
-        );
+        public static void UseAutofac(
+            [NotNull] this AbpWebAssemblyApplicationCreationOptions options,
+            [CanBeNull] Action<ContainerBuilder> configure = null)
+        {
+            options.HostBuilder.Services.AddAutofacServiceProviderFactory();
+            options.HostBuilder.ConfigureContainer(
+                options.HostBuilder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>(),
+                configure
+            );
+        }
     }
 }

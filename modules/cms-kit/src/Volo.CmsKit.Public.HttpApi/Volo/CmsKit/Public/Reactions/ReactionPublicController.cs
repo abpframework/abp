@@ -5,39 +5,40 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Public.Reactions;
-
-[RequiresGlobalFeature(typeof(ReactionsFeature))]
-[RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-public/reactions")]
-public class ReactionPublicController : CmsKitPublicControllerBase, IReactionPublicAppService
+namespace Volo.CmsKit.Public.Reactions
 {
-    protected IReactionPublicAppService ReactionPublicAppService { get; }
-
-    public ReactionPublicController(IReactionPublicAppService reactionPublicAppService)
+    [RequiresGlobalFeature(typeof(ReactionsFeature))]
+    [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-public/reactions")]
+    public class ReactionPublicController : CmsKitPublicControllerBase, IReactionPublicAppService
     {
-        ReactionPublicAppService = reactionPublicAppService;
-    }
+        protected IReactionPublicAppService ReactionPublicAppService { get; }
 
-    [HttpGet]
-    [Route("{entityType}/{entityId}")]
-    public virtual Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
-    {
-        return ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
-    }
+        public ReactionPublicController(IReactionPublicAppService reactionPublicAppService)
+        {
+            ReactionPublicAppService = reactionPublicAppService;
+        }
 
-    [HttpPut]
-    [Route("{entityType}/{entityId}/{reaction}")]
-    public virtual Task CreateAsync(string entityType, string entityId, string reaction)
-    {
-        return ReactionPublicAppService.CreateAsync(entityType, entityId, reaction);
-    }
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        public virtual Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
+        {
+            return ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
+        }
 
-    [HttpDelete]
-    [Route("{entityType}/{entityId}/{reaction}")]
-    public virtual Task DeleteAsync(string entityType, string entityId, string reaction)
-    {
-        return ReactionPublicAppService.DeleteAsync(entityType, entityId, reaction);
+        [HttpPut]
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task CreateAsync(string entityType, string entityId, string reaction)
+        {
+            return ReactionPublicAppService.CreateAsync(entityType, entityId, reaction);
+        }
+
+        [HttpDelete]
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task DeleteAsync(string entityType, string entityId, string reaction)
+        {
+            return ReactionPublicAppService.DeleteAsync(entityType, entityId, reaction);
+        }
     }
 }

@@ -2,35 +2,36 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Localization;
-
-public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResource>
+namespace Volo.Abp.Localization
 {
-    public LocalizationResource Add<TResouce>([CanBeNull] string defaultCultureName = null)
+    public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResource>
     {
-        return Add(typeof(TResouce), defaultCultureName);
-    }
-
-    public LocalizationResource Add(Type resourceType, [CanBeNull] string defaultCultureName = null)
-    {
-        if (ContainsKey(resourceType))
+        public LocalizationResource Add<TResouce>([CanBeNull] string defaultCultureName = null)
         {
-            throw new AbpException("This resource is already added before: " + resourceType.AssemblyQualifiedName);
+            return Add(typeof(TResouce), defaultCultureName);
         }
 
-        return this[resourceType] = new LocalizationResource(resourceType, defaultCultureName);
-    }
-
-    public LocalizationResource Get<TResource>()
-    {
-        var resourceType = typeof(TResource);
-
-        var resource = this.GetOrDefault(resourceType);
-        if (resource == null)
+        public LocalizationResource Add(Type resourceType, [CanBeNull] string defaultCultureName = null)
         {
-            throw new AbpException("Can not find a resource with given type: " + resourceType.AssemblyQualifiedName);
+            if (ContainsKey(resourceType))
+            {
+                throw new AbpException("This resource is already added before: " + resourceType.AssemblyQualifiedName);
+            }
+
+            return this[resourceType] = new LocalizationResource(resourceType, defaultCultureName);
         }
 
-        return resource;
+        public LocalizationResource Get<TResource>()
+        {
+            var resourceType = typeof(TResource);
+
+            var resource = this.GetOrDefault(resourceType);
+            if (resource == null)
+            {
+                throw new AbpException("Can not find a resource with given type: " + resourceType.AssemblyQualifiedName);
+            }
+
+            return resource;
+        }
     }
 }

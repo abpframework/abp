@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading;
 
-namespace Volo.Abp.Threading;
-
-public static class AsyncLocalSimpleScopeExtensions
+namespace Volo.Abp.Threading
 {
-    public static IDisposable SetScoped<T>(this AsyncLocal<T> asyncLocal, T value)
+    public static class AsyncLocalSimpleScopeExtensions
     {
-        var previousValue = asyncLocal.Value;
-        asyncLocal.Value = value;
-        return new DisposeAction(() =>
+        public static IDisposable SetScoped<T>(this AsyncLocal<T> asyncLocal, T value)
         {
-            asyncLocal.Value = previousValue;
-        });
+            var previousValue = asyncLocal.Value;
+            asyncLocal.Value = value;
+            return new DisposeAction(() =>
+            {
+                asyncLocal.Value = previousValue;
+            });
+        }
     }
 }

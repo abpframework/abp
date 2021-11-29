@@ -3,13 +3,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JsTree;
-
-[DependsOn(typeof(JQueryScriptContributor))]
-public class JsTreeScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JsTree
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class JsTreeScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/jstree/jstree.min.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/jstree/jstree.min.js");
+        }
     }
 }

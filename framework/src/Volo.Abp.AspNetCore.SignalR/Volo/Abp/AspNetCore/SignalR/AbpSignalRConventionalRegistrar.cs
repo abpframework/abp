@@ -3,22 +3,23 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public class AbpSignalRConventionalRegistrar : DefaultConventionalRegistrar
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    protected override bool IsConventionalRegistrationDisabled(Type type)
+    public class AbpSignalRConventionalRegistrar : DefaultConventionalRegistrar
     {
-        return !IsHub(type) || base.IsConventionalRegistrationDisabled(type);
-    }
+        protected override bool IsConventionalRegistrationDisabled(Type type)
+        {
+            return !IsHub(type) || base.IsConventionalRegistrationDisabled(type);
+        }
 
-    private static bool IsHub(Type type)
-    {
-        return typeof(Hub).IsAssignableFrom(type);
-    }
+        private static bool IsHub(Type type)
+        {
+            return typeof(Hub).IsAssignableFrom(type);
+        }
 
-    protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
-    {
-        return ServiceLifetime.Transient;
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
+        }
     }
 }

@@ -7,70 +7,71 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
+namespace Volo.Abp.Identity
 {
-    protected IIdentityUserRepository UserRepository { get; }
-    protected ILookupNormalizer LookupNormalizer { get; }
-
-    public IdentityUserRepositoryExternalUserLookupServiceProvider(
-        IIdentityUserRepository userRepository,
-        ILookupNormalizer lookupNormalizer)
+    public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
     {
-        UserRepository = userRepository;
-        LookupNormalizer = lookupNormalizer;
-    }
+        protected IIdentityUserRepository UserRepository { get; }
+        protected ILookupNormalizer LookupNormalizer { get; }
 
-    public virtual async Task<IUserData> FindByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
-    {
-        return (
-                await UserRepository.FindAsync(
-                    id,
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            )?.ToAbpUserData();
-    }
+        public IdentityUserRepositoryExternalUserLookupServiceProvider(
+            IIdentityUserRepository userRepository, 
+            ILookupNormalizer lookupNormalizer)
+        {
+            UserRepository = userRepository;
+            LookupNormalizer = lookupNormalizer;
+        }
 
-    public virtual async Task<IUserData> FindByUserNameAsync(
-        string userName,
-        CancellationToken cancellationToken = default)
-    {
-        return (
-                await UserRepository.FindByNormalizedUserNameAsync(
-                    LookupNormalizer.NormalizeName(userName),
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            )?.ToAbpUserData();
-    }
+        public virtual async Task<IUserData> FindByIdAsync(
+            Guid id, 
+            CancellationToken cancellationToken = default)
+        {
+            return (
+                    await UserRepository.FindAsync(
+                        id,
+                        includeDetails: false,
+                        cancellationToken: cancellationToken
+                    )
+                )?.ToAbpUserData();
+        }
 
-    public virtual async Task<List<IUserData>> SearchAsync(
-        string sorting = null,
-        string filter = null,
-        int maxResultCount = int.MaxValue,
-        int skipCount = 0,
-        CancellationToken cancellationToken = default)
-    {
-        var users = await UserRepository.GetListAsync(
-            sorting: sorting,
-            maxResultCount: maxResultCount,
-            skipCount: skipCount,
-            filter: filter,
-            includeDetails: false,
-            cancellationToken: cancellationToken
-        );
+        public virtual async Task<IUserData> FindByUserNameAsync(
+            string userName, 
+            CancellationToken cancellationToken = default)
+        {
+            return (
+                    await UserRepository.FindByNormalizedUserNameAsync(
+                        LookupNormalizer.NormalizeName(userName),
+                        includeDetails: false,
+                        cancellationToken: cancellationToken
+                    )
+                )?.ToAbpUserData();
+        }
 
-        return users.Select(u => u.ToAbpUserData()).ToList();
-    }
+        public virtual async Task<List<IUserData>> SearchAsync(
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default)
+        {
+            var users = await UserRepository.GetListAsync(
+                sorting: sorting,
+                maxResultCount: maxResultCount,
+                skipCount: skipCount,
+                filter: filter,
+                includeDetails: false,
+                cancellationToken: cancellationToken
+            );
 
-    public async Task<long> GetCountAsync(
-        string filter = null,
-        CancellationToken cancellationToken = new CancellationToken())
-    {
-        return await UserRepository.GetCountAsync(filter, cancellationToken: cancellationToken);
+            return users.Select(u => u.ToAbpUserData()).ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserRepository.GetCountAsync(filter, cancellationToken: cancellationToken);
+        }
     }
 }

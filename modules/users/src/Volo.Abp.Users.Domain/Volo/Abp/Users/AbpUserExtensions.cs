@@ -1,19 +1,20 @@
-namespace Volo.Abp.Users;
-
-public static class AbpUserExtensions
+namespace Volo.Abp.Users
 {
-    public static IUserData ToAbpUserData(this IUser user)
+    public static class AbpUserExtensions
     {
-        return new UserData(
-            id: user.Id,
-            userName: user.UserName,
-            email: user.Email,
-            name: user.Name,
-            surname: user.Surname,
-            emailConfirmed: user.EmailConfirmed,
-            phoneNumber: user.PhoneNumber,
-            phoneNumberConfirmed: user.PhoneNumberConfirmed,
-            tenantId: user.TenantId
-        );
+        public static IUserData ToAbpUserData(this IUser user)
+        {
+            return new UserData(
+                id: user.Id,
+                userName: user.UserName,
+                email: user.Email,
+                name: user.Name,
+                surname: user.Surname,
+                emailConfirmed: user.EmailConfirmed,
+                phoneNumber: user.PhoneNumber,
+                phoneNumberConfirmed: user.PhoneNumberConfirmed,
+                tenantId: user.TenantId
+            );
+        }
     }
 }

@@ -3,22 +3,23 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.Public;
-
-[DependsOn(
-    typeof(CmsKitCommonApplicationModule),
-    typeof(CmsKitPublicApplicationContractsModule),
-    typeof(AbpCachingModule)
-    )]
-public class CmsKitPublicApplicationModule : AbpModule
+namespace Volo.CmsKit.Public
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(CmsKitCommonApplicationModule),
+        typeof(CmsKitPublicApplicationContractsModule),
+        typeof(AbpCachingModule)
+        )]
+    public class CmsKitPublicApplicationModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<CmsKitPublicApplicationModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddMaps<CmsKitPublicApplicationModule>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<CmsKitPublicApplicationModule>();
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<CmsKitPublicApplicationModule>(validate: true);
+            });
+        }
     }
 }

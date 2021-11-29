@@ -6,27 +6,28 @@ using Shouldly;
 using Volo.Abp.Json;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json;
-
-public class JsonResultController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    public class JsonResultController_Tests : AspNetCoreMvcTestBase
     {
-        services.Configure<AbpJsonOptions>(options =>
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            options.DefaultDateTimeFormat = "yyyy*MM*dd";
-        });
+            services.Configure<AbpJsonOptions>(options =>
+            {
+                options.DefaultDateTimeFormat = "yyyy*MM*dd";
+            });
 
-        base.ConfigureServices(context, services);
-    }
+            base.ConfigureServices(context, services);
+        }
 
-    [Fact]
-    public async Task DateFormatString_Test()
-    {
-        var time = await GetResponseAsStringAsync(
-            "/api/json-result-test/json-result-action"
-        );
+        [Fact]
+        public async Task DateFormatString_Test()
+        {
+            var time = await GetResponseAsStringAsync(
+                "/api/json-result-test/json-result-action"
+            );
 
-        time.ShouldContain("2019*01*01");
+            time.ShouldContain("2019*01*01");
+        }
     }
 }

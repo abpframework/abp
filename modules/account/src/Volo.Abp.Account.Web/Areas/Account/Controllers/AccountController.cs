@@ -15,173 +15,174 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Volo.Abp.Account.Web.Areas.Account.Controllers;
-
-[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
-[Controller]
-[ControllerName("Login")]
-[Area("account")]
-[Route("api/account")]
-public class AccountController : AbpControllerBase
+namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 {
-    protected SignInManager<IdentityUser> SignInManager { get; }
-    protected IdentityUserManager UserManager { get; }
-    protected ISettingProvider SettingProvider { get; }
-    protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
-    protected IOptions<IdentityOptions> IdentityOptions { get; }
-
-    public AccountController(
-        SignInManager<IdentityUser> signInManager,
-        IdentityUserManager userManager,
-        ISettingProvider settingProvider,
-        IdentitySecurityLogManager identitySecurityLogManager,
-        IOptions<IdentityOptions> identityOptions)
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+    [Controller]
+    [ControllerName("Login")]
+    [Area("account")]
+    [Route("api/account")]
+    public class AccountController : AbpControllerBase
     {
-        LocalizationResource = typeof(AccountResource);
+        protected SignInManager<IdentityUser> SignInManager { get; }
+        protected IdentityUserManager UserManager { get; }
+        protected ISettingProvider SettingProvider { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
-        SignInManager = signInManager;
-        UserManager = userManager;
-        SettingProvider = settingProvider;
-        IdentitySecurityLogManager = identitySecurityLogManager;
-        IdentityOptions = identityOptions;
-    }
-
-    [HttpPost]
-    [Route("login")]
-    public virtual async Task<AbpLoginResult> Login(UserLoginInfo login)
-    {
-        await CheckLocalLoginAsync();
-
-        ValidateLoginInfo(login);
-
-        await ReplaceEmailToUsernameOfInputIfNeeds(login);
-        var signInResult = await SignInManager.PasswordSignInAsync(
-            login.UserNameOrEmailAddress,
-            login.Password,
-            login.RememberMe,
-            true
-        );
-
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        public AccountController(
+            SignInManager<IdentityUser> signInManager,
+            IdentityUserManager userManager,
+            ISettingProvider settingProvider,
+            IdentitySecurityLogManager identitySecurityLogManager,
+            IOptions<IdentityOptions> identityOptions)
         {
-            Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = signInResult.ToIdentitySecurityLogAction(),
-            UserName = login.UserNameOrEmailAddress
-        });
+            LocalizationResource = typeof(AccountResource);
 
-        return GetAbpLoginResult(signInResult);
-    }
-
-    [HttpGet]
-    [Route("logout")]
-    public virtual async Task Logout()
-    {
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-        {
-            Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = IdentitySecurityLogActionConsts.Logout
-        });
-
-        await SignInManager.SignOutAsync();
-    }
-
-    [HttpPost]
-    [Route("checkPassword")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
-    {
-        return CheckPassword(login);
-    }
-
-    [HttpPost]
-    [Route("check-password")]
-    public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
-    {
-        ValidateLoginInfo(login);
-
-        await ReplaceEmailToUsernameOfInputIfNeeds(login);
-
-        var identityUser = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
-
-        if (identityUser == null)
-        {
-            return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
+            SignInManager = signInManager;
+            UserManager = userManager;
+            SettingProvider = settingProvider;
+            IdentitySecurityLogManager = identitySecurityLogManager;
+            IdentityOptions = identityOptions;
         }
 
-        await IdentityOptions.SetAsync();
-        return GetAbpLoginResult(await SignInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
-    }
-
-    protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
-    {
-        if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
+        [HttpPost]
+        [Route("login")]
+        public virtual async Task<AbpLoginResult> Login(UserLoginInfo login)
         {
-            return;
+            await CheckLocalLoginAsync();
+
+            ValidateLoginInfo(login);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
+            var signInResult = await SignInManager.PasswordSignInAsync(
+                login.UserNameOrEmailAddress,
+                login.Password,
+                login.RememberMe,
+                true
+            );
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = signInResult.ToIdentitySecurityLogAction(),
+                UserName = login.UserNameOrEmailAddress
+            });
+
+            return GetAbpLoginResult(signInResult);
         }
 
-        var userByUsername = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
-        if (userByUsername != null)
+        [HttpGet]
+        [Route("logout")]
+        public virtual async Task Logout()
         {
-            return;
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
+            await SignInManager.SignOutAsync();
         }
 
-        var userByEmail = await UserManager.FindByEmailAsync(login.UserNameOrEmailAddress);
-        if (userByEmail == null)
+        [HttpPost]
+        [Route("checkPassword")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
         {
-            return;
+            return CheckPassword(login);
         }
 
-        login.UserNameOrEmailAddress = userByEmail.UserName;
-    }
-
-    private static AbpLoginResult GetAbpLoginResult(SignInResult result)
-    {
-        if (result.IsLockedOut)
+        [HttpPost]
+        [Route("check-password")]
+        public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
-            return new AbpLoginResult(LoginResultType.LockedOut);
+            ValidateLoginInfo(login);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
+
+            var identityUser = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
+
+            if (identityUser == null)
+            {
+                return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
+            }
+
+            await IdentityOptions.SetAsync();
+            return GetAbpLoginResult(await SignInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
         }
 
-        if (result.RequiresTwoFactor)
+        protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
         {
-            return new AbpLoginResult(LoginResultType.RequiresTwoFactor);
+            if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            {
+                return;
+            }
+
+            var userByUsername = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
+            if (userByUsername != null)
+            {
+                return;
+            }
+
+            var userByEmail = await UserManager.FindByEmailAsync(login.UserNameOrEmailAddress);
+            if (userByEmail == null)
+            {
+                return;
+            }
+
+            login.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
-        if (result.IsNotAllowed)
+        private static AbpLoginResult GetAbpLoginResult(SignInResult result)
         {
-            return new AbpLoginResult(LoginResultType.NotAllowed);
+            if (result.IsLockedOut)
+            {
+                return new AbpLoginResult(LoginResultType.LockedOut);
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                return new AbpLoginResult(LoginResultType.RequiresTwoFactor);
+            }
+
+            if (result.IsNotAllowed)
+            {
+                return new AbpLoginResult(LoginResultType.NotAllowed);
+            }
+
+            if (!result.Succeeded)
+            {
+                return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
+            }
+
+            return new AbpLoginResult(LoginResultType.Success);
         }
 
-        if (!result.Succeeded)
+        protected virtual void ValidateLoginInfo(UserLoginInfo login)
         {
-            return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
+            if (login == null)
+            {
+                throw new ArgumentException(nameof(login));
+            }
+
+            if (login.UserNameOrEmailAddress.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(login.UserNameOrEmailAddress));
+            }
+
+            if (login.Password.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(login.Password));
+            }
         }
 
-        return new AbpLoginResult(LoginResultType.Success);
-    }
-
-    protected virtual void ValidateLoginInfo(UserLoginInfo login)
-    {
-        if (login == null)
+        protected virtual async Task CheckLocalLoginAsync()
         {
-            throw new ArgumentException(nameof(login));
-        }
-
-        if (login.UserNameOrEmailAddress.IsNullOrEmpty())
-        {
-            throw new ArgumentNullException(nameof(login.UserNameOrEmailAddress));
-        }
-
-        if (login.Password.IsNullOrEmpty())
-        {
-            throw new ArgumentNullException(nameof(login.Password));
-        }
-    }
-
-    protected virtual async Task CheckLocalLoginAsync()
-    {
-        if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
-        {
-            throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            }
         }
     }
 }

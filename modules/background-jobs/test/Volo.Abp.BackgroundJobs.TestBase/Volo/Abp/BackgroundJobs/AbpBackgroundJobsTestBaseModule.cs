@@ -3,35 +3,36 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundJobs;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpBackgroundJobsDomainModule)
-    )]
-public class AbpBackgroundJobsTestBaseModule : AbpModule
+namespace Volo.Abp.BackgroundJobs
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpBackgroundJobsDomainModule)
+        )]
+    public class AbpBackgroundJobsTestBaseModule : AbpModule
     {
-        Configure<AbpBackgroundJobOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.IsJobExecutionEnabled = false;
-        });
-    }
+            Configure<AbpBackgroundJobOptions>(options =>
+            {
+                options.IsJobExecutionEnabled = false;
+            });
+        }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<BackgroundJobsTestDataBuilder>()
-                .BuildAsync());
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<BackgroundJobsTestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

@@ -1,20 +1,21 @@
 ﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Settings;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpSettingsModule),
-    typeof(AbpTestBaseModule)
-    )]
-public class AbpSettingsTestModule : AbpModule
+namespace Volo.Abp.Settings
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpSettingsModule),
+        typeof(AbpTestBaseModule)
+        )]
+    public class AbpSettingsTestModule : AbpModule
     {
-        Configure<AbpSettingOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ValueProviders.Add<TestSettingValueProvider>();
-        });
+            Configure<AbpSettingOptions>(options =>
+            {
+                options.ValueProviders.Add<TestSettingValueProvider>();
+            });
+        }
     }
 }

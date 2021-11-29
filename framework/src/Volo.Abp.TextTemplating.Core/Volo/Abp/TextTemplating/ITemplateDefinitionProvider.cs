@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.TextTemplating;
-
-public interface ITemplateDefinitionProvider
+﻿namespace Volo.Abp.TextTemplating
 {
-    void PreDefine(ITemplateDefinitionContext context);
+    public interface ITemplateDefinitionProvider
+    {
+        void PreDefine(ITemplateDefinitionContext context);
+        
+        void Define(ITemplateDefinitionContext context);
 
-    void Define(ITemplateDefinitionContext context);
-
-    void PostDefine(ITemplateDefinitionContext context);
+        void PostDefine(ITemplateDefinitionContext context);
+    }
 }

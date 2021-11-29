@@ -1,14 +1,15 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.BlobStoring;
-
-public static class BlobProviderSelectorExtensions
+namespace Volo.Abp.BlobStoring
 {
-    public static IBlobProvider Get<TContainer>(
-        [NotNull] this IBlobProviderSelector selector)
+    public static class BlobProviderSelectorExtensions
     {
-        Check.NotNull(selector, nameof(selector));
+        public static IBlobProvider Get<TContainer>(
+            [NotNull] this IBlobProviderSelector selector)
+        {
+            Check.NotNull(selector, nameof(selector));
 
-        return selector.Get(BlobContainerNameAttribute.GetContainerName<TContainer>());
+            return selector.Get(BlobContainerNameAttribute.GetContainerName<TContainer>());
+        }
     }
 }

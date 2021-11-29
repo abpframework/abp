@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
-
-public enum DatabaseProvider
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    NotSpecified = 0,
-    EntityFrameworkCore = 1,
-    MongoDb = 2
+    public enum DatabaseProvider
+    {
+        NotSpecified = 0,
+        EntityFrameworkCore = 1,
+        MongoDb = 2
+    }
 }

@@ -6,62 +6,63 @@ using Volo.Abp.ObjectExtending.TestObjects;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace AutoMapper;
-
-public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<AutoMapperTestModule>
+namespace AutoMapper
 {
-    private readonly Volo.Abp.ObjectMapping.IObjectMapper _objectMapper;
-
-    public AbpAutoMapperExtensibleDtoExtensions_Tests()
+    public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<AutoMapperTestModule>
     {
-        _objectMapper = ServiceProvider.GetRequiredService<Volo.Abp.ObjectMapping.IObjectMapper>();
-    }
+        private readonly Volo.Abp.ObjectMapping.IObjectMapper _objectMapper;
 
-    [Fact]
-    public void MapExtraPropertiesTo_Should_Only_Map_Defined_Properties_By_Default()
-    {
-        var person = new ExtensibleTestPerson()
-            .SetProperty("Name", "John")
-            .SetProperty("Age", 42)
-            .SetProperty("ChildCount", 2)
-            .SetProperty("Sex", "male")
-            .SetProperty("CityName", "Adana");
+        public AbpAutoMapperExtensibleDtoExtensions_Tests()
+        {
+            _objectMapper = ServiceProvider.GetRequiredService<Volo.Abp.ObjectMapping.IObjectMapper>();
+        }
 
-        var personDto = new ExtensibleTestPersonDto()
-            .SetProperty("ExistingDtoProperty", "existing-value");
+        [Fact]
+        public void MapExtraPropertiesTo_Should_Only_Map_Defined_Properties_By_Default()
+        {
+            var person = new ExtensibleTestPerson()
+                .SetProperty("Name", "John")
+                .SetProperty("Age", 42)
+                .SetProperty("ChildCount", 2)
+                .SetProperty("Sex", "male")
+                .SetProperty("CityName", "Adana");
 
-        _objectMapper.Map(person, personDto);
+            var personDto = new ExtensibleTestPersonDto()
+                .SetProperty("ExistingDtoProperty", "existing-value");
 
-        personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
-        personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
-        personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
-        personDto.GetProperty("CityName").ShouldBeNull(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
-        personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
-        personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
-    }
+            _objectMapper.Map(person, personDto);
 
-    [Fact]
-    public void MapExtraProperties_Also_Should_Map_To_RegularProperties()
-    {
-        var person = new ExtensibleTestPerson()
-            .SetProperty("Name", "John")
-            .SetProperty("Age", 42);
+            personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+            personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
+            personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
+            personDto.GetProperty("CityName").ShouldBeNull(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
+            personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
+            personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+        }
 
-        var personDto = new ExtensibleTestPersonWithRegularPropertiesDto()
-            .SetProperty("IsActive", true);
+        [Fact]
+        public void MapExtraProperties_Also_Should_Map_To_RegularProperties()
+        {
+            var person = new ExtensibleTestPerson()
+                .SetProperty("Name", "John")
+                .SetProperty("Age", 42);
 
-        _objectMapper.Map(person, personDto);
+            var personDto = new ExtensibleTestPersonWithRegularPropertiesDto()
+                .SetProperty("IsActive", true);
 
-        //Defined in both classes
-        personDto.HasProperty("Name").ShouldBe(false);
-        personDto.Name.ShouldBe("John");
+            _objectMapper.Map(person, personDto);
 
-        //Defined in both classes
-        personDto.HasProperty("Age").ShouldBe(false);
-        personDto.Age.ShouldBe(42);
+            //Defined in both classes
+            personDto.HasProperty("Name").ShouldBe(false);
+            personDto.Name.ShouldBe("John");
 
-        //Should not clear existing values
-        personDto.HasProperty("IsActive").ShouldBe(false);
-        personDto.IsActive.ShouldBe(true);
+            //Defined in both classes
+            personDto.HasProperty("Age").ShouldBe(false);
+            personDto.Age.ShouldBe(42);
+
+            //Should not clear existing values
+            personDto.HasProperty("IsActive").ShouldBe(false);
+            personDto.IsActive.ShouldBe(true);
+        }
     }
 }

@@ -1,47 +1,48 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
-
-public static class BlobStoringDbContextModelCreatingExtensions
+namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public static void ConfigureBlobStoring(
-        this ModelBuilder builder)
+    public static class BlobStoringDbContextModelCreatingExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<DatabaseBlobContainer>(b =>
+        public static void ConfigureBlobStoring(
+            this ModelBuilder builder)
         {
-            b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers", BlobStoringDatabaseDbProperties.DbSchema);
+            Check.NotNull(builder, nameof(builder));
 
-            b.ConfigureByConvention();
+            builder.Entity<DatabaseBlobContainer>(b =>
+            {
+                b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers", BlobStoringDatabaseDbProperties.DbSchema);
 
-            b.Property(p => p.Name).IsRequired().HasMaxLength(DatabaseContainerConsts.MaxNameLength);
+                b.ConfigureByConvention();
 
-            b.HasMany<DatabaseBlob>().WithOne().HasForeignKey(p => p.ContainerId);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(DatabaseContainerConsts.MaxNameLength);
 
-            b.HasIndex(x => new { x.TenantId, x.Name });
+                b.HasMany<DatabaseBlob>().WithOne().HasForeignKey(p => p.ContainerId);
 
-            b.ApplyObjectExtensionMappings();
-        });
+                b.HasIndex(x => new {x.TenantId, x.Name});
 
-        builder.Entity<DatabaseBlob>(b =>
-        {
-            b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs", BlobStoringDatabaseDbProperties.DbSchema);
+                b.ApplyObjectExtensionMappings();
+            });
 
-            b.ConfigureByConvention();
+            builder.Entity<DatabaseBlob>(b =>
+            {
+                b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs", BlobStoringDatabaseDbProperties.DbSchema);
 
-            b.Property(p => p.ContainerId).IsRequired(); //TODO: Foreign key!
+                b.ConfigureByConvention();
+
+                b.Property(p => p.ContainerId).IsRequired(); //TODO: Foreign key!
                 b.Property(p => p.Name).IsRequired().HasMaxLength(DatabaseBlobConsts.MaxNameLength);
-            b.Property(p => p.Content).HasMaxLength(DatabaseBlobConsts.MaxContentLength);
+                b.Property(p => p.Content).HasMaxLength(DatabaseBlobConsts.MaxContentLength);
 
-            b.HasOne<DatabaseBlobContainer>().WithMany().HasForeignKey(p => p.ContainerId);
+                b.HasOne<DatabaseBlobContainer>().WithMany().HasForeignKey(p => p.ContainerId);
 
-            b.HasIndex(x => new { x.TenantId, x.ContainerId, x.Name });
+                b.HasIndex(x => new {x.TenantId, x.ContainerId, x.Name});
 
-            b.ApplyObjectExtensionMappings();
-        });
+                b.ApplyObjectExtensionMappings();
+            });
 
-        builder.TryConfigureObjectExtensions<BlobStoringDbContext>();
+            builder.TryConfigureObjectExtensions<BlobStoringDbContext>();
+        }
     }
 }

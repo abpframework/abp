@@ -2,13 +2,14 @@
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.Account;
-
-public interface IProfileAppService : IApplicationService
+namespace Volo.Abp.Account
 {
-    Task<ProfileDto> GetAsync();
+    public interface IProfileAppService : IApplicationService
+    {
+        Task<ProfileDto> GetAsync();
 
-    Task<ProfileDto> UpdateAsync(UpdateProfileDto input);
+        Task<ProfileDto> UpdateAsync(UpdateProfileDto input);
 
-    Task ChangePasswordAsync(ChangePasswordInput input);
+        Task ChangePasswordAsync(ChangePasswordInput input);
+    }
 }

@@ -8,40 +8,41 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.Comments;
-
-[Authorize(CmsKitAdminPermissions.Comments.Default)]
-[RequiresGlobalFeature(typeof(CommentsFeature))]
-[RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-admin/comments")]
-public class CommentAdminController : CmsKitAdminController, ICommentAdminAppService
+namespace Volo.CmsKit.Admin.Comments
 {
-    protected ICommentAdminAppService CommentAdminAppService { get; }
-
-    public CommentAdminController(ICommentAdminAppService commentAdminAppService)
+    [Authorize(CmsKitAdminPermissions.Comments.Default)]
+    [RequiresGlobalFeature(typeof(CommentsFeature))]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-admin/comments")]
+    public class CommentAdminController : CmsKitAdminController, ICommentAdminAppService
     {
-        CommentAdminAppService = commentAdminAppService;
-    }
+        protected ICommentAdminAppService CommentAdminAppService { get; }
 
-    [HttpGet]
-    public virtual Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
-    {
-        return CommentAdminAppService.GetListAsync(input);
-    }
+        public CommentAdminController(ICommentAdminAppService commentAdminAppService)
+        {
+            CommentAdminAppService = commentAdminAppService;
+        }
 
-    [HttpGet]
-    [Route("{id}")]
-    public virtual Task<CommentWithAuthorDto> GetAsync(Guid id)
-    {
-        return CommentAdminAppService.GetAsync(id);
-    }
+        [HttpGet]
+        public virtual Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
+        {
+            return CommentAdminAppService.GetListAsync(input);
+        }
 
-    [HttpDelete]
-    [Route("{id}")]
-    [Authorize(CmsKitAdminPermissions.Comments.Delete)]
-    public virtual Task DeleteAsync(Guid id)
-    {
-        return CommentAdminAppService.DeleteAsync(id);
+        [HttpGet]
+        [Route("{id}")]
+        public virtual Task<CommentWithAuthorDto> GetAsync(Guid id)
+        {
+            return CommentAdminAppService.GetAsync(id);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize(CmsKitAdminPermissions.Comments.Delete)]
+        public virtual Task DeleteAsync(Guid id)
+        {
+            return CommentAdminAppService.DeleteAsync(id);
+        }
     }
 }

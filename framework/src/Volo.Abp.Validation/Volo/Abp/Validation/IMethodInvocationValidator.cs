@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Validation;
-
-public interface IMethodInvocationValidator
+namespace Volo.Abp.Validation
 {
-    Task ValidateAsync(MethodInvocationValidationContext context);
+    public interface IMethodInvocationValidator
+    {
+        Task ValidateAsync(MethodInvocationValidationContext context);
+    }
 }

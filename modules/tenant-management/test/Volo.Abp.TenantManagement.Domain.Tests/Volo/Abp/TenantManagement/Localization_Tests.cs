@@ -5,36 +5,37 @@ using Volo.Abp.Localization;
 using Volo.Abp.TenantManagement.Localization;
 using Xunit;
 
-namespace Volo.Abp.TenantManagement;
-
-public class Localization_Tests : AbpTenantManagementDomainTestBase
+namespace Volo.Abp.TenantManagement
 {
-    private readonly IStringLocalizer<AbpTenantManagementResource> _stringLocalizer;
-
-    public Localization_Tests()
+    public class Localization_Tests : AbpTenantManagementDomainTestBase
     {
-        _stringLocalizer = GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
-    }
+        private readonly IStringLocalizer<AbpTenantManagementResource> _stringLocalizer;
 
-    [Fact]
-    public void Test()
-    {
-        using (CultureHelper.Use("en"))
+        public Localization_Tests()
         {
-            _stringLocalizer["TenantDeletionConfirmationMessage"].Value
-                .ShouldBe("Tenant '{0}' will be deleted. Do you confirm that?");
+            _stringLocalizer = GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
         }
 
-        using (CultureHelper.Use("en-gb"))
+        [Fact]
+        public void Test()
         {
-            _stringLocalizer["TenantDeletionConfirmationMessage"].Value
-                .ShouldBe("Tenant '{0}' will be deleted. Is that OK?");
-        }
+            using (CultureHelper.Use("en"))
+            {
+                _stringLocalizer["TenantDeletionConfirmationMessage"].Value
+                    .ShouldBe("Tenant '{0}' will be deleted. Do you confirm that?");
+            }
 
-        using (CultureHelper.Use("tr"))
-        {
-            _stringLocalizer["TenantDeletionConfirmationMessage"].Value
-                .ShouldBe("'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?");
+            using (CultureHelper.Use("en-gb"))
+            {
+                _stringLocalizer["TenantDeletionConfirmationMessage"].Value
+                    .ShouldBe("Tenant '{0}' will be deleted. Is that OK?");
+            }
+
+            using (CultureHelper.Use("tr"))
+            {
+                _stringLocalizer["TenantDeletionConfirmationMessage"].Value
+                    .ShouldBe("'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?");
+            }
         }
     }
 }

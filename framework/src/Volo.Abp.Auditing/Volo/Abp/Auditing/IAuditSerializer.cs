@@ -1,6 +1,7 @@
-namespace Volo.Abp.Auditing;
-
-public interface IAuditSerializer
+namespace Volo.Abp.Auditing
 {
-    string Serialize(object obj);
+    public interface IAuditSerializer
+    {
+        string Serialize(object obj);
+    }
 }

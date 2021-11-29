@@ -1,24 +1,25 @@
 ﻿using System;
 
-namespace Volo.Abp.BlobStoring.FileSystem;
-
-public static class FileSystemBlobContainerConfigurationExtensions
+namespace Volo.Abp.BlobStoring.FileSystem
 {
-    public static FileSystemBlobProviderConfiguration GetFileSystemConfiguration(
-        this BlobContainerConfiguration containerConfiguration)
+    public static class FileSystemBlobContainerConfigurationExtensions
     {
-        return new FileSystemBlobProviderConfiguration(containerConfiguration);
-    }
+        public static FileSystemBlobProviderConfiguration GetFileSystemConfiguration(
+            this BlobContainerConfiguration containerConfiguration)
+        {
+            return new FileSystemBlobProviderConfiguration(containerConfiguration);
+        }
 
-    public static BlobContainerConfiguration UseFileSystem(
-        this BlobContainerConfiguration containerConfiguration,
-        Action<FileSystemBlobProviderConfiguration> fileSystemConfigureAction)
-    {
-        containerConfiguration.ProviderType = typeof(FileSystemBlobProvider);
-        containerConfiguration.NamingNormalizers.TryAdd<FileSystemBlobNamingNormalizer>();
+        public static BlobContainerConfiguration UseFileSystem(
+            this BlobContainerConfiguration containerConfiguration,
+            Action<FileSystemBlobProviderConfiguration> fileSystemConfigureAction)
+        {
+            containerConfiguration.ProviderType = typeof(FileSystemBlobProvider);
+            containerConfiguration.NamingNormalizers.TryAdd<FileSystemBlobNamingNormalizer>();
 
-        fileSystemConfigureAction(new FileSystemBlobProviderConfiguration(containerConfiguration));
+            fileSystemConfigureAction(new FileSystemBlobProviderConfiguration(containerConfiguration));
 
-        return containerConfiguration;
+            return containerConfiguration;
+        }
     }
 }

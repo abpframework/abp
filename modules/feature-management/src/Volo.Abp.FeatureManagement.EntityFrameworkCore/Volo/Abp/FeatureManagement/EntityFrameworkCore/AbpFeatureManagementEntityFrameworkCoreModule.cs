@@ -2,21 +2,22 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
-)]
-public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+    )]
+    public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<FeatureManagementDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<IFeatureManagementDbContext>();
+            context.Services.AddAbpDbContext<FeatureManagementDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IFeatureManagementDbContext>();
 
-            options.AddRepository<FeatureValue, EfCoreFeatureValueRepository>();
-        });
+                options.AddRepository<FeatureValue, EfCoreFeatureValueRepository>();
+            });
+        }
     }
 }

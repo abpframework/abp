@@ -1,6 +1,7 @@
-﻿namespace Volo.CmsKit.MediaDescriptors;
-
-public interface IMediaDescriptorDefinitionStore : IEntityTypeDefinitionStore<MediaDescriptorDefinition>
+﻿namespace Volo.CmsKit.MediaDescriptors
 {
+    public interface IMediaDescriptorDefinitionStore : IEntityTypeDefinitionStore<MediaDescriptorDefinition>
+    {
 
+    }
 }

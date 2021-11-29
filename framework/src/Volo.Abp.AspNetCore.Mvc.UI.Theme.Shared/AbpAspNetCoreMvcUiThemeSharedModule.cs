@@ -7,39 +7,40 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiBootstrapModule),
-    typeof(AbpAspNetCoreMvcUiPackagesModule),
-    typeof(AbpAspNetCoreMvcUiWidgetsModule)
-    )]
-public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiPackagesModule),
+        typeof(AbpAspNetCoreMvcUiWidgetsModule)
+        )]
+    public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiThemeSharedModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiThemeSharedModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
+            });
 
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options
-                .StyleBundles
-                .Add(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor)); });
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Add(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor)); });
 
-            options
-                .ScriptBundles
-                .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
-        });
+                options
+                    .ScriptBundles
+                    .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
+            });
+        }
     }
 }

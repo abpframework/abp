@@ -10,60 +10,61 @@ using Volo.Abp.Http;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Analyticses;
-
-public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
+namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
 {
-    private readonly ICancellationTokenProvider _cancellationTokenProvider;
-    private readonly IJsonSerializer _jsonSerializer;
-    private readonly ILogger<CliAnalyticsCollect> _logger;
-    private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
-
-    public CliAnalyticsCollect(
-        ICancellationTokenProvider cancellationTokenProvider,
-        IJsonSerializer jsonSerializer,
-        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        CliHttpClientFactory cliHttpClientFactory)
+    public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
     {
-        _cancellationTokenProvider = cancellationTokenProvider;
-        _jsonSerializer = jsonSerializer;
-        _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
-        _cliHttpClientFactory = cliHttpClientFactory;
-        _logger = NullLogger<CliAnalyticsCollect>.Instance;
-    }
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly IJsonSerializer _jsonSerializer;
+        private readonly ILogger<CliAnalyticsCollect> _logger;
+        private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
-    public async Task CollectAsync(CliAnalyticsCollectInputDto input)
-    {
-        var postData = _jsonSerializer.Serialize(input);
-        var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
-
-        try
+        public CliAnalyticsCollect(
+            ICancellationTokenProvider cancellationTokenProvider,
+            IJsonSerializer jsonSerializer,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            CliHttpClientFactory cliHttpClientFactory)
         {
-            var client = _cliHttpClientFactory.CreateClient();
-
-            var responseMessage = await client.PostAsync(
-                url,
-                new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                _cancellationTokenProvider.Token
-            );
-
-            if (!responseMessage.IsSuccessStatusCode)
-            {
-                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-                if (remoteServiceErrorMessage != null)
-                {
-                    exceptionMessage += remoteServiceErrorMessage;
-                }
-
-                _logger.LogInformation(exceptionMessage);
-            }
+            _cancellationTokenProvider = cancellationTokenProvider;
+            _jsonSerializer = jsonSerializer;
+            _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            _cliHttpClientFactory = cliHttpClientFactory;
+            _logger = NullLogger<CliAnalyticsCollect>.Instance;
         }
-        catch (Exception)
+
+        public async Task CollectAsync(CliAnalyticsCollectInputDto input)
         {
-            // ignored
+            var postData = _jsonSerializer.Serialize(input);
+            var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
+
+            try
+            {
+                var client = _cliHttpClientFactory.CreateClient();
+
+                var responseMessage = await client.PostAsync(
+                    url,
+                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                    _cancellationTokenProvider.Token
+                );
+
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+
+                    if (remoteServiceErrorMessage != null)
+                    {
+                        exceptionMessage += remoteServiceErrorMessage;
+                    }
+
+                    _logger.LogInformation(exceptionMessage);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

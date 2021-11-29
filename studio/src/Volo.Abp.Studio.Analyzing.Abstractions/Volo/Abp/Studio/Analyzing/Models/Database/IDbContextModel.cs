@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Studio.Analyzing.Models.Database;
-
-public interface IDbContextModel
+﻿namespace Volo.Abp.Studio.Analyzing.Models.Database
 {
-    string ConnectionStringName { get; set; }
+    public interface IDbContextModel
+    {
+        string ConnectionStringName { get; set; }
+    }
 }

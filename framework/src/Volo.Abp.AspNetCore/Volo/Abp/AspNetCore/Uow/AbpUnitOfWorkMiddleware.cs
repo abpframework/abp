@@ -5,39 +5,40 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.AspNetCore.Uow;
-
-public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
+namespace Volo.Abp.AspNetCore.Uow
 {
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly AbpAspNetCoreUnitOfWorkOptions _options;
-
-    public AbpUnitOfWorkMiddleware(
-        IUnitOfWorkManager unitOfWorkManager,
-        IOptions<AbpAspNetCoreUnitOfWorkOptions> options)
+    public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
     {
-        _unitOfWorkManager = unitOfWorkManager;
-        _options = options.Value;
-    }
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly AbpAspNetCoreUnitOfWorkOptions _options;
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        if (IsIgnoredUrl(context))
+        public AbpUnitOfWorkMiddleware(
+            IUnitOfWorkManager unitOfWorkManager,
+            IOptions<AbpAspNetCoreUnitOfWorkOptions> options)
         {
-            await next(context);
-            return;
+            _unitOfWorkManager = unitOfWorkManager;
+            _options = options.Value;
         }
 
-        using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            await next(context);
-            await uow.CompleteAsync(context.RequestAborted);
+            if (IsIgnoredUrl(context))
+            {
+                await next(context);
+                return;
+            }
+            
+            using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
+            {
+                await next(context);
+                await uow.CompleteAsync(context.RequestAborted);
+            }
         }
-    }
 
-    private bool IsIgnoredUrl(HttpContext context)
-    {
-        return context.Request.Path.Value != null &&
-               _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
+        private bool IsIgnoredUrl(HttpContext context)
+        {
+            return context.Request.Path.Value != null &&
+                   _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
+        }
     }
 }

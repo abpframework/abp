@@ -5,39 +5,40 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDependency
+namespace Volo.Abp.PermissionManagement
 {
-    protected ICurrentTenant CurrentTenant { get; }
-    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
-    protected IPermissionDataSeeder PermissionDataSeeder { get; }
-
-    public PermissionDataSeedContributor(
-        IPermissionDefinitionManager permissionDefinitionManager,
-        IPermissionDataSeeder permissionDataSeeder,
-        ICurrentTenant currentTenant)
+    public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
-        PermissionDefinitionManager = permissionDefinitionManager;
-        PermissionDataSeeder = permissionDataSeeder;
-        CurrentTenant = currentTenant;
-    }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+        protected IPermissionDataSeeder PermissionDataSeeder { get; }
 
-    public virtual Task SeedAsync(DataSeedContext context)
-    {
-        var multiTenancySide = CurrentTenant.GetMultiTenancySide();
-        var permissionNames = PermissionDefinitionManager
-            .GetPermissions()
-            .Where(p => p.MultiTenancySide.HasFlag(multiTenancySide))
-            .Where(p => !p.Providers.Any() || p.Providers.Contains(RolePermissionValueProvider.ProviderName))
-            .Select(p => p.Name)
-            .ToArray();
+        public PermissionDataSeedContributor(
+            IPermissionDefinitionManager permissionDefinitionManager,
+            IPermissionDataSeeder permissionDataSeeder,
+            ICurrentTenant currentTenant)
+        {
+            PermissionDefinitionManager = permissionDefinitionManager;
+            PermissionDataSeeder = permissionDataSeeder;
+            CurrentTenant = currentTenant;
+        }
 
-        return PermissionDataSeeder.SeedAsync(
-            RolePermissionValueProvider.ProviderName,
-            "admin",
-            permissionNames,
-            context?.TenantId
-        );
+        public virtual Task SeedAsync(DataSeedContext context)
+        {
+            var multiTenancySide = CurrentTenant.GetMultiTenancySide();
+            var permissionNames = PermissionDefinitionManager
+                .GetPermissions()
+                .Where(p => p.MultiTenancySide.HasFlag(multiTenancySide))
+                .Where(p => !p.Providers.Any() || p.Providers.Contains(RolePermissionValueProvider.ProviderName))
+                .Select(p => p.Name)
+                .ToArray();
+
+            return PermissionDataSeeder.SeedAsync(
+                RolePermissionValueProvider.ProviderName,
+                "admin",
+                permissionNames,
+                context?.TenantId
+            );
+        }
     }
 }

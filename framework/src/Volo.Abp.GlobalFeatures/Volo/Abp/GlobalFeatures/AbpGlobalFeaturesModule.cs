@@ -6,38 +6,39 @@ using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.GlobalFeatures;
-
-[DependsOn(
-    typeof(AbpLocalizationModule),
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpAuthorizationAbstractionsModule)
-)]
-public class AbpGlobalFeaturesModule : AbpModule
+namespace Volo.Abp.GlobalFeatures
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpLocalizationModule),
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpAuthorizationAbstractionsModule)
+    )]
+    public class AbpGlobalFeaturesModule : AbpModule
     {
-        context.Services.OnRegistred(GlobalFeatureInterceptorRegistrar.RegisterIfNeeded);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpGlobalFeatureResource>();
-        });
+            context.Services.OnRegistred(GlobalFeatureInterceptorRegistrar.RegisterIfNeeded);
+        }
 
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Add<AbpGlobalFeatureResource>("en")
-                .AddVirtualJson("/Volo/Abp/GlobalFeatures/Localization");
-        });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.GlobalFeature", typeof(AbpGlobalFeatureResource));
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpGlobalFeatureResource>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpGlobalFeatureResource>("en")
+                    .AddVirtualJson("/Volo/Abp/GlobalFeatures/Localization");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.GlobalFeature", typeof(AbpGlobalFeatureResource));
+            });
+        }
     }
 }

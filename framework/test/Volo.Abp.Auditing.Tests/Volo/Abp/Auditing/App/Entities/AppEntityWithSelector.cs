@@ -1,15 +1,16 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Auditing.App.Entities;
-
-public class AppEntityWithSelector : AggregateRoot<Guid>
+namespace Volo.Abp.Auditing.App.Entities
 {
-    public AppEntityWithSelector(Guid id, string name)
-        : base(id)
+    public class AppEntityWithSelector : AggregateRoot<Guid>
     {
-        Name = name;
-    }
+        public AppEntityWithSelector(Guid id, string name)
+            : base(id)
+        {
+            Name = name;
+        }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
+    }
 }

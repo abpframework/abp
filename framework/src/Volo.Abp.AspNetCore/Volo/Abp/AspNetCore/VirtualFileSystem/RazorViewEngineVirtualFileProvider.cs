@@ -5,54 +5,55 @@ using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem;
-
-public class RazorViewEngineVirtualFileProvider : IFileProvider
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    private readonly Lazy<IFileProvider> _fileProvider;
-    private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
-
-    public RazorViewEngineVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
+    public class RazorViewEngineVirtualFileProvider : IFileProvider
     {
-        _serviceProviderAccessor = serviceProviderAccessor;
-        _fileProvider = new Lazy<IFileProvider>(
-            () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
-            true
-        );
-    }
+        private readonly Lazy<IFileProvider> _fileProvider;
+        private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
 
-    public IFileInfo GetFileInfo(string subpath)
-    {
-        if (!IsInitialized())
+        public RazorViewEngineVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
         {
-            return new NotFoundFileInfo(subpath);
+            _serviceProviderAccessor = serviceProviderAccessor;
+            _fileProvider = new Lazy<IFileProvider>(
+                () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
+                true
+            );
         }
 
-        return _fileProvider.Value.GetFileInfo(subpath);
-    }
-
-    public IDirectoryContents GetDirectoryContents(string subpath)
-    {
-        if (!IsInitialized())
+        public IFileInfo GetFileInfo(string subpath)
         {
-            return new NotFoundDirectoryContents();
+            if (!IsInitialized())
+            {
+                return new NotFoundFileInfo(subpath);
+            }
+
+            return _fileProvider.Value.GetFileInfo(subpath);
         }
 
-        return _fileProvider.Value.GetDirectoryContents(subpath);
-    }
-
-    public IChangeToken Watch(string filter)
-    {
-        if (!IsInitialized())
+        public IDirectoryContents GetDirectoryContents(string subpath)
         {
-            return NullChangeToken.Singleton;
+            if (!IsInitialized())
+            {
+                return new NotFoundDirectoryContents();
+            }
+
+            return _fileProvider.Value.GetDirectoryContents(subpath);
         }
 
-        return _fileProvider.Value.Watch(filter);
-    }
+        public IChangeToken Watch(string filter)
+        {
+            if (!IsInitialized())
+            {
+                return NullChangeToken.Singleton;
+            }
 
-    private bool IsInitialized()
-    {
-        return _serviceProviderAccessor.Value != null;
+            return _fileProvider.Value.Watch(filter);
+        }
+
+        private bool IsInitialized()
+        {
+            return _serviceProviderAccessor.Value != null;
+        }
     }
 }

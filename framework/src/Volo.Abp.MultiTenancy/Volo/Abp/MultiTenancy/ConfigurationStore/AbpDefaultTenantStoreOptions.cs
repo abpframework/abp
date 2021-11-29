@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.MultiTenancy.ConfigurationStore;
-
-public class AbpDefaultTenantStoreOptions
+﻿namespace Volo.Abp.MultiTenancy.ConfigurationStore
 {
-    public TenantConfiguration[] Tenants { get; set; }
-
-    public AbpDefaultTenantStoreOptions()
+    public class AbpDefaultTenantStoreOptions
     {
-        Tenants = new TenantConfiguration[0];
+        public TenantConfiguration[] Tenants { get; set; }
+
+        public AbpDefaultTenantStoreOptions()
+        {
+            Tenants = new TenantConfiguration[0];
+        }
     }
 }

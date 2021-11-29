@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo;
-
-public class IndexModel : PageModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
 {
-    public void OnGet()
+    public class IndexModel : PageModel
     {
+        public void OnGet()
+        {
 
+        }
     }
 }

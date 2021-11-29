@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-
-public class AbpErrorPageOptions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 {
-    public readonly IDictionary<string, string> ErrorViewUrls;
-
-    public AbpErrorPageOptions()
+    public class AbpErrorPageOptions
     {
-        ErrorViewUrls = new Dictionary<string, string>();
+        public readonly IDictionary<string, string> ErrorViewUrls;
+
+        public AbpErrorPageOptions()
+        {
+            ErrorViewUrls = new Dictionary<string, string>();
+        }
     }
 }

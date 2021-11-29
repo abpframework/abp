@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.MemoryDb;
-
-public abstract class MemoryDbTestBase : AbpIntegratedTest<AbpMemoryDbTestModule>
+namespace Volo.Abp.MemoryDb
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class MemoryDbTestBase : AbpIntegratedTest<AbpMemoryDbTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

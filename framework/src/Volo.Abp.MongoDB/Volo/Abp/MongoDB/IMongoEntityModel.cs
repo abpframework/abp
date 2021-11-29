@@ -1,10 +1,11 @@
 using System;
 
-namespace Volo.Abp.MongoDB;
-
-public interface IMongoEntityModel
+namespace Volo.Abp.MongoDB
 {
-    Type EntityType { get; }
+    public interface IMongoEntityModel
+    {
+        Type EntityType { get; }
 
-    string CollectionName { get; }
+        string CollectionName { get; }
+    }
 }

@@ -2,28 +2,29 @@ using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public static class AbpDbContextOptionsSqliteExtensions
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public static void UseSqlite(
-        [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
+    public static class AbpDbContextOptionsSqliteExtensions
     {
-        options.Configure(context =>
+        public static void UseSqlite(
+            [NotNull] this AbpDbContextOptions options,
+            [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
         {
-            context.UseSqlite(sqliteOptionsAction);
-        });
-    }
+            options.Configure(context =>
+            {
+                context.UseSqlite(sqliteOptionsAction);
+            });
+        }
 
-    public static void UseSqlite<TDbContext>(
-        [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
-        where TDbContext : AbpDbContext<TDbContext>
-    {
-        options.Configure<TDbContext>(context =>
+        public static void UseSqlite<TDbContext>(
+            [NotNull] this AbpDbContextOptions options,
+            [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
+            where TDbContext : AbpDbContext<TDbContext>
         {
-            context.UseSqlite(sqliteOptionsAction);
-        });
+            options.Configure<TDbContext>(context =>
+            {
+                context.UseSqlite(sqliteOptionsAction);
+            });
+        }
     }
 }

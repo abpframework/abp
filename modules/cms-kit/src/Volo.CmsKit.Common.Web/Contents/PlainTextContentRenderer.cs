@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit.Web.Contents;
-
-public class PlainTextContentRenderer : IContentRenderer, ITransientDependency
+namespace Volo.CmsKit.Web.Contents
 {
-    public Task<string> RenderAsync(string value)
+    public class PlainTextContentRenderer : IContentRenderer, ITransientDependency
     {
-        return Task.FromResult(value);
+        public Task<string> RenderAsync(string value)
+        {
+            return Task.FromResult(value);
+        }
     }
 }

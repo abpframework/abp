@@ -3,23 +3,24 @@ using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.PermissionManagement.MongoDB;
-
-[DependsOn(
-    typeof(AbpPermissionManagementMongoDbModule),
-    typeof(AbpPermissionManagementTestBaseModule))]
-public class AbpPermissionManagementMongoDbTestModule : AbpModule
+namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementMongoDbModule),
+        typeof(AbpPermissionManagementTestBaseModule))]
+    public class AbpPermissionManagementMongoDbTestModule : AbpModule
     {
-        var stringArray = MongoDbFixture.ConnectionString.Split('?');
-        var connectionString = stringArray[0].EnsureEndsWith('/') +
-                                   "Db_" +
-                               Guid.NewGuid().ToString("N") + "/?" + stringArray[1];
-
-        Configure<AbpDbConnectionOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ConnectionStrings.Default = connectionString;
-        });
+            var stringArray = MongoDbFixture.ConnectionString.Split('?');
+            var connectionString = stringArray[0].EnsureEndsWith('/')  +
+                                       "Db_" +
+                                   Guid.NewGuid().ToString("N") + "/?" + stringArray[1];
+
+            Configure<AbpDbConnectionOptions>(options =>
+            {
+                options.ConnectionStrings.Default = connectionString;
+            });
+        }
     }
 }

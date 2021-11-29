@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.Data;
 
-namespace Volo.Abp.FeatureManagement;
-
-public static class FeatureManagementDbProperties
+namespace Volo.Abp.FeatureManagement
 {
-    public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
+    public static class FeatureManagementDbProperties
+    {
+        public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 
-    public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
+        public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
-    public const string ConnectionStringName = "AbpFeatureManagement";
+        public const string ConnectionStringName = "AbpFeatureManagement";
+    }
 }

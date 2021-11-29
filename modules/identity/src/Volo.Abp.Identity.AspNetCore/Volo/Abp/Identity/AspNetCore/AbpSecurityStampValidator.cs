@@ -8,46 +8,47 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Identity.AspNetCore;
-
-public class AbpSecurityStampValidator : SecurityStampValidator<IdentityUser>
+namespace Volo.Abp.Identity.AspNetCore
 {
-    protected ITenantConfigurationProvider TenantConfigurationProvider { get; }
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public AbpSecurityStampValidator(
-        IOptions<SecurityStampValidatorOptions> options,
-        SignInManager<IdentityUser> signInManager,
-        ISystemClock systemClock,
-        ILoggerFactory loggerFactory,
-        ITenantConfigurationProvider tenantConfigurationProvider,
-        ICurrentTenant currentTenant)
-        : base(
-            options,
-            signInManager,
-            systemClock,
-            loggerFactory)
+    public class AbpSecurityStampValidator : SecurityStampValidator<IdentityUser>
     {
-        TenantConfigurationProvider = tenantConfigurationProvider;
-        CurrentTenant = currentTenant;
-    }
+        protected ITenantConfigurationProvider TenantConfigurationProvider { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
-    [UnitOfWork]
-    public override async Task ValidateAsync(CookieValidatePrincipalContext context)
-    {
-        TenantConfiguration tenant = null;
-        try
+        public AbpSecurityStampValidator(
+            IOptions<SecurityStampValidatorOptions> options,
+            SignInManager<IdentityUser> signInManager,
+            ISystemClock systemClock,
+            ILoggerFactory loggerFactory,
+            ITenantConfigurationProvider tenantConfigurationProvider,
+            ICurrentTenant currentTenant)
+            : base(
+                options,
+                signInManager,
+                systemClock,
+                loggerFactory)
         {
-            tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);
-        }
-        catch (Exception e)
-        {
-            Logger.LogException(e);
+            TenantConfigurationProvider = tenantConfigurationProvider;
+            CurrentTenant = currentTenant;
         }
 
-        using (CurrentTenant.Change(tenant?.Id, tenant?.Name))
+        [UnitOfWork]
+        public override async Task ValidateAsync(CookieValidatePrincipalContext context)
         {
-            await base.ValidateAsync(context);
+            TenantConfiguration tenant = null;
+            try
+            {
+                tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);
+            }
+            catch (Exception e)
+            {
+                Logger.LogException(e);
+            }
+
+            using (CurrentTenant.Change(tenant?.Id, tenant?.Name))
+            {
+                await base.ValidateAsync(context);
+            }
         }
     }
 }

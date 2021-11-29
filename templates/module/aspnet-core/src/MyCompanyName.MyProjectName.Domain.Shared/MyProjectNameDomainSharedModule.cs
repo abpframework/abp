@@ -6,31 +6,32 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(AbpValidationModule)
-)]
-public class MyProjectNameDomainSharedModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpValidationModule)
+    )]
+    public class MyProjectNameDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<MyProjectNameResource>("en")
-                .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/MyProjectName");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<MyProjectNameResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Localization/MyProjectName");
+            });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
-        });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+            });
+        }
     }
 }

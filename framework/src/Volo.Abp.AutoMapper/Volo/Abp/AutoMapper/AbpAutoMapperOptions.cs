@@ -4,71 +4,72 @@ using System.Linq;
 using AutoMapper;
 using Volo.Abp.Collections;
 
-namespace Volo.Abp.AutoMapper;
-
-public class AbpAutoMapperOptions
+namespace Volo.Abp.AutoMapper
 {
-    public List<Action<IAbpAutoMapperConfigurationContext>> Configurators { get; }
-
-    public ITypeList<Profile> ValidatingProfiles { get; set; }
-
-    public AbpAutoMapperOptions()
+    public class AbpAutoMapperOptions
     {
-        Configurators = new List<Action<IAbpAutoMapperConfigurationContext>>();
-        ValidatingProfiles = new TypeList<Profile>();
-    }
+        public List<Action<IAbpAutoMapperConfigurationContext>> Configurators { get; }
 
-    public void AddMaps<TModule>(bool validate = false)
-    {
-        var assembly = typeof(TModule).Assembly;
+        public ITypeList<Profile> ValidatingProfiles { get; set; }
 
-        Configurators.Add(context =>
+        public AbpAutoMapperOptions()
         {
-            context.MapperConfiguration.AddMaps(assembly);
-        });
+            Configurators = new List<Action<IAbpAutoMapperConfigurationContext>>();
+            ValidatingProfiles = new TypeList<Profile>();
+        }
 
-        if (validate)
+        public void AddMaps<TModule>(bool validate = false)
         {
-            var profileTypes = assembly
-                .DefinedTypes
-                .Where(type => typeof(Profile).IsAssignableFrom(type) && !type.IsAbstract && !type.IsGenericType);
+            var assembly = typeof(TModule).Assembly;
 
-            foreach (var profileType in profileTypes)
+            Configurators.Add(context =>
             {
-                ValidatingProfiles.Add(profileType);
+                context.MapperConfiguration.AddMaps(assembly);
+            });
+
+            if (validate)
+            {
+                var profileTypes = assembly
+                    .DefinedTypes
+                    .Where(type => typeof(Profile).IsAssignableFrom(type) && !type.IsAbstract && !type.IsGenericType);
+
+                foreach (var profileType in profileTypes)
+                {
+                    ValidatingProfiles.Add(profileType);
+                }
             }
         }
-    }
 
-    public void AddProfile<TProfile>(bool validate = false)
-        where TProfile : Profile, new()
-    {
-        Configurators.Add(context =>
+        public void AddProfile<TProfile>(bool validate = false)
+            where TProfile : Profile, new()
         {
-            context.MapperConfiguration.AddProfile<TProfile>();
-        });
+            Configurators.Add(context =>
+            {
+                context.MapperConfiguration.AddProfile<TProfile>();
+            });
 
-        if (validate)
-        {
-            ValidateProfile(typeof(TProfile));
+            if (validate)
+            {
+                ValidateProfile(typeof(TProfile));
+            }
         }
-    }
 
-    public void ValidateProfile<TProfile>(bool validate = true)
-        where TProfile : Profile
-    {
-        ValidateProfile(typeof(TProfile), validate);
-    }
-
-    public void ValidateProfile(Type profileType, bool validate = true)
-    {
-        if (validate)
+        public void ValidateProfile<TProfile>(bool validate = true)
+            where TProfile : Profile
         {
-            ValidatingProfiles.AddIfNotContains(profileType);
+            ValidateProfile(typeof(TProfile), validate);
         }
-        else
+
+        public void ValidateProfile(Type profileType, bool validate = true)
         {
-            ValidatingProfiles.Remove(profileType);
+            if (validate)
+            {
+                ValidatingProfiles.AddIfNotContains(profileType);
+            }
+            else
+            {
+                ValidatingProfiles.Remove(profileType);
+            }
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.VirtualFileSystem;
-
-public class VirtualFilePathHelper_Tests
+namespace Volo.Abp.VirtualFileSystem
 {
-    [Fact]
-    public void NormalizePath()
+    public class VirtualFilePathHelper_Tests
     {
-        VirtualFilePathHelper.NormalizePath("~/test-one/test-two/test-three.js").ShouldBe("~/test_one/test_two/test-three.js");
+        [Fact]
+        public void NormalizePath()
+        {
+            VirtualFilePathHelper.NormalizePath("~/test-one/test-two/test-three.js").ShouldBe("~/test_one/test_two/test-three.js");
+        }
     }
 }

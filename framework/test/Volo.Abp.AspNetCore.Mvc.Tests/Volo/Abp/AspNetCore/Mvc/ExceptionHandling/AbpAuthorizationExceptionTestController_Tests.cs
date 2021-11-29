@@ -11,58 +11,59 @@ using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Security.Claims;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
-
-public class AbpAuthorizationExceptionTestController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    protected IExceptionSubscriber FakeExceptionSubscriber;
-
-    protected FakeUserClaims FakeRequiredService;
-
-    public AbpAuthorizationExceptionTestController_Tests()
+    public class AbpAuthorizationExceptionTestController_Tests : AspNetCoreMvcTestBase
     {
-        FakeRequiredService = GetRequiredService<FakeUserClaims>();
-    }
+        protected IExceptionSubscriber FakeExceptionSubscriber;
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        base.ConfigureServices(context, services);
+        protected FakeUserClaims FakeRequiredService;
 
-        FakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
-
-        services.AddSingleton(FakeExceptionSubscriber);
-
-        services.Configure<AbpAuthorizationExceptionHandlerOptions>(options =>
+        public AbpAuthorizationExceptionTestController_Tests()
         {
-            options.AuthenticationScheme = "Cookie";
-        });
-    }
+            FakeRequiredService = GetRequiredService<FakeUserClaims>();
+        }
 
-    [Fact]
-    public virtual async Task Should_Handle_By_Cookie_AuthenticationScheme_For_AbpAuthorizationException()
-    {
-        var result = await GetResponseAsync("/api/exception-test/AbpAuthorizationException", HttpStatusCode.Redirect);
-        result.Headers.Location.ToString().ShouldContain("http://localhost/Account/Login");
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
+            base.ConfigureServices(context, services);
+
+            FakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
+
+            services.AddSingleton(FakeExceptionSubscriber);
+
+            services.Configure<AbpAuthorizationExceptionHandlerOptions>(options =>
+            {
+                options.AuthenticationScheme = "Cookie";
+            });
+        }
+
+        [Fact]
+        public virtual async Task Should_Handle_By_Cookie_AuthenticationScheme_For_AbpAuthorizationException()
+        {
+            var result = await GetResponseAsync("/api/exception-test/AbpAuthorizationException", HttpStatusCode.Redirect);
+            result.Headers.Location.ToString().ShouldContain("http://localhost/Account/Login");
 
 #pragma warning disable 4014
-        FakeExceptionSubscriber
-            .Received()
-            .HandleAsync(Arg.Any<ExceptionNotificationContext>());
+            FakeExceptionSubscriber
+                .Received()
+                .HandleAsync(Arg.Any<ExceptionNotificationContext>());
 #pragma warning restore 4014
 
 
-        FakeRequiredService.Claims.AddRange(new[]
-        {
+            FakeRequiredService.Claims.AddRange(new[]
+            {
                 new Claim(AbpClaimTypes.UserId, Guid.NewGuid().ToString())
             });
 
-        result = await GetResponseAsync("/api/exception-test/AbpAuthorizationException", HttpStatusCode.Redirect);
-        result.Headers.Location.ToString().ShouldContain("http://localhost/Account/AccessDenied");
+            result = await GetResponseAsync("/api/exception-test/AbpAuthorizationException", HttpStatusCode.Redirect);
+            result.Headers.Location.ToString().ShouldContain("http://localhost/Account/AccessDenied");
 
 #pragma warning disable 4014
-        FakeExceptionSubscriber
-            .Received()
-            .HandleAsync(Arg.Any<ExceptionNotificationContext>());
+            FakeExceptionSubscriber
+                .Received()
+                .HandleAsync(Arg.Any<ExceptionNotificationContext>());
 #pragma warning restore 4014
+        }
     }
 }

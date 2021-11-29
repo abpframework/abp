@@ -1,12 +1,13 @@
 ﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.AspNetCore.Components;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
-
-public abstract class MyProjectNameComponentBase : AbpComponentBase
+namespace MyCompanyName.MyProjectName.Blazor.Server.Host
 {
-    protected MyProjectNameComponentBase()
+    public abstract class MyProjectNameComponentBase : AbpComponentBase
     {
-        LocalizationResource = typeof(MyProjectNameResource);
+        protected MyProjectNameComponentBase()
+        {
+            LocalizationResource = typeof(MyProjectNameResource);
+        }
     }
 }

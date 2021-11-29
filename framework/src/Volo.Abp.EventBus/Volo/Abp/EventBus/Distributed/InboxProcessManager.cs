@@ -7,41 +7,42 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EventBus.Boxes;
-
-public class InboxProcessManager : IBackgroundWorker
+namespace Volo.Abp.EventBus.Boxes
 {
-    protected AbpDistributedEventBusOptions Options { get; }
-    protected IServiceProvider ServiceProvider { get; }
-    protected List<IInboxProcessor> Processors { get; }
-
-    public InboxProcessManager(
-        IOptions<AbpDistributedEventBusOptions> options,
-        IServiceProvider serviceProvider)
+    public class InboxProcessManager : IBackgroundWorker
     {
-        ServiceProvider = serviceProvider;
-        Options = options.Value;
-        Processors = new List<IInboxProcessor>();
-    }
+        protected AbpDistributedEventBusOptions Options { get; }
+        protected IServiceProvider ServiceProvider { get; }
+        protected List<IInboxProcessor> Processors { get; }
 
-    public async Task StartAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var inboxConfig in Options.Inboxes.Values)
+        public InboxProcessManager(
+            IOptions<AbpDistributedEventBusOptions> options,
+            IServiceProvider serviceProvider)
         {
-            if (inboxConfig.IsProcessingEnabled)
+            ServiceProvider = serviceProvider;
+            Options = options.Value;
+            Processors = new List<IInboxProcessor>();
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var inboxConfig in Options.Inboxes.Values)
             {
-                var processor = ServiceProvider.GetRequiredService<IInboxProcessor>();
-                await processor.StartAsync(inboxConfig, cancellationToken);
-                Processors.Add(processor);
+                if (inboxConfig.IsProcessingEnabled)
+                {
+                    var processor = ServiceProvider.GetRequiredService<IInboxProcessor>();
+                    await processor.StartAsync(inboxConfig, cancellationToken);
+                    Processors.Add(processor);
+                }
             }
         }
-    }
 
-    public async Task StopAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var processor in Processors)
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            await processor.StopAsync(cancellationToken);
+            foreach (var processor in Processors)
+            {
+                await processor.StopAsync(cancellationToken);
+            }
         }
     }
 }

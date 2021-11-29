@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Cli.Build;
-
-public interface IGitRepositoryHelper
+﻿namespace Volo.Abp.Cli.Build
 {
-    string GetLastCommitId(GitRepository repository);
+    public interface IGitRepositoryHelper
+    {
+        string GetLastCommitId(GitRepository repository);
 
-    string GetFriendlyName(GitRepository repository);
+        string GetFriendlyName(GitRepository repository);
+    }
 }

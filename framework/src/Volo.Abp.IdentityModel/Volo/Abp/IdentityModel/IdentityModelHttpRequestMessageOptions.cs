@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace Volo.Abp.IdentityModel;
-
-public class IdentityModelHttpRequestMessageOptions
+namespace Volo.Abp.IdentityModel
 {
-    public Action<HttpRequestMessage> ConfigureHttpRequestMessage { get; set; }
+    public class IdentityModelHttpRequestMessageOptions
+    {
+        public Action<HttpRequestMessage> ConfigureHttpRequestMessage { get; set; }
+    }
 }

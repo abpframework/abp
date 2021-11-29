@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.EntityFrameworkCore;
-
-public interface IAbpEfCoreDbContext : IEfCoreDbContext
+﻿namespace Volo.Abp.EntityFrameworkCore
 {
-    void Initialize(AbpEfCoreDbContextInitializationContext initializationContext);
+    public interface IAbpEfCoreDbContext : IEfCoreDbContext
+    {
+        void Initialize(AbpEfCoreDbContextInitializationContext initializationContext);
+    }
 }

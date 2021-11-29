@@ -2,24 +2,25 @@
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application.Services;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v1;
-
-public class TodoAppService : ApplicationService, ITodoAppService
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v1
 {
-    private readonly IRequestedApiVersion _requestedApiVersion;
-
-    public TodoAppService(IRequestedApiVersion requestedApiVersion)
+    public class TodoAppService : ApplicationService, ITodoAppService
     {
-        _requestedApiVersion = requestedApiVersion;
-    }
+        private readonly IRequestedApiVersion _requestedApiVersion;
 
-    public Task<string> GetAsync(int id)
-    {
-        return Task.FromResult($"Compat-{id}-{GetVersionOrNone()}");
-    }
+        public TodoAppService(IRequestedApiVersion requestedApiVersion)
+        {
+            _requestedApiVersion = requestedApiVersion;
+        }
 
-    private string GetVersionOrNone()
-    {
-        return _requestedApiVersion.Current ?? "NONE";
+        public Task<string> GetAsync(int id)
+        {
+            return Task.FromResult($"Compat-{id}-{GetVersionOrNone()}");
+        }
+
+        private string GetVersionOrNone()
+        {
+            return _requestedApiVersion.Current ?? "NONE";
+        }
     }
 }

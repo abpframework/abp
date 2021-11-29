@@ -1,13 +1,14 @@
 using System.Threading;
 
-namespace Volo.Abp.Uow;
-
-public static class EventOrderGenerator
+namespace Volo.Abp.Uow
 {
-    private static long _lastOrder;
-
-    public static long GetNext()
+    public static class EventOrderGenerator
     {
-        return Interlocked.Increment(ref _lastOrder);
+        private static long _lastOrder;
+
+        public static long GetNext()
+        {
+            return Interlocked.Increment(ref _lastOrder);
+        }
     }
 }

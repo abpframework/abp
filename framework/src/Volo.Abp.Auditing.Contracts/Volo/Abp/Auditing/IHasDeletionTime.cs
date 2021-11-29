@@ -1,15 +1,16 @@
 using System;
 
-namespace Volo.Abp.Auditing;
-
-/// <summary>
-/// A standard interface to add DeletionTime property to a class.
-/// It also makes the class soft delete (see <see cref="ISoftDelete"/>).
-/// </summary>
-public interface IHasDeletionTime : ISoftDelete
+namespace Volo.Abp.Auditing
 {
     /// <summary>
-    /// Deletion time.
+    /// A standard interface to add DeletionTime property to a class.
+    /// It also makes the class soft delete (see <see cref="ISoftDelete"/>).
     /// </summary>
-    DateTime? DeletionTime { get; set; }
+    public interface IHasDeletionTime : ISoftDelete
+    {
+        /// <summary>
+        /// Deletion time.
+        /// </summary>
+        DateTime? DeletionTime { get; set; }
+    }
 }

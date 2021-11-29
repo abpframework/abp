@@ -1,10 +1,11 @@
-namespace Volo.Abp.Auditing;
-
-public enum EntityChangeType : byte
+namespace Volo.Abp.Auditing
 {
-    Created = 0,
+    public enum EntityChangeType : byte
+    {
+        Created = 0,
 
-    Updated = 1,
+        Updated = 1,
 
-    Deleted = 2
+        Deleted = 2
+    }
 }

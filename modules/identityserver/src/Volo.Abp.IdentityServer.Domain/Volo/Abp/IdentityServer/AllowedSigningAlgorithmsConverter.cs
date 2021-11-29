@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AllowedSigningAlgorithmsConverter :
-    IValueConverter<ICollection<string>, string>,
-    IValueConverter<string, ICollection<string>>
+namespace Volo.Abp.IdentityServer
 {
-    public static AllowedSigningAlgorithmsConverter Converter = new AllowedSigningAlgorithmsConverter();
-
-    public string Convert(ICollection<string> sourceMember, ResolutionContext context)
+    public class AllowedSigningAlgorithmsConverter :
+        IValueConverter<ICollection<string>, string>,
+        IValueConverter<string, ICollection<string>>
     {
-        if (sourceMember == null || !sourceMember.Any())
-        {
-            return null;
-        }
-        return sourceMember.Aggregate((x, y) => $"{x},{y}");
-    }
+        public static AllowedSigningAlgorithmsConverter Converter = new AllowedSigningAlgorithmsConverter();
 
-    public ICollection<string> Convert(string sourceMember, ResolutionContext context)
-    {
-        var list = new HashSet<string>();
-        if (!String.IsNullOrWhiteSpace(sourceMember))
+        public string Convert(ICollection<string> sourceMember, ResolutionContext context)
         {
-            sourceMember = sourceMember.Trim();
-            foreach (var item in sourceMember.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Distinct())
+            if (sourceMember == null || !sourceMember.Any())
             {
-                list.Add(item);
+                return null;
             }
+            return sourceMember.Aggregate((x, y) => $"{x},{y}");
         }
-        return list;
+
+        public ICollection<string> Convert(string sourceMember, ResolutionContext context)
+        {
+            var list = new HashSet<string>();
+            if (!String.IsNullOrWhiteSpace(sourceMember))
+            {
+                sourceMember = sourceMember.Trim();
+                foreach (var item in sourceMember.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Distinct())
+                {
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
     }
 }

@@ -14,92 +14,93 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.ProjectBuilding;
-
-public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
+namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public ILogger<TemplateInfoProvider> Logger { get; set; }
-
-    public ICancellationTokenProvider CancellationTokenProvider { get; }
-    public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-    public AuthService AuthService { get; }
-
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
-
-    public TemplateInfoProvider(ICancellationTokenProvider cancellationTokenProvider,
-        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        AuthService authService,
-        CliHttpClientFactory cliHttpClientFactory)
+    public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
     {
-        CancellationTokenProvider = cancellationTokenProvider;
-        RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-        AuthService = authService;
-        _cliHttpClientFactory = cliHttpClientFactory;
+        public ILogger<TemplateInfoProvider> Logger { get; set; }
 
-        Logger = NullLogger<TemplateInfoProvider>.Instance;
-    }
+        public ICancellationTokenProvider CancellationTokenProvider { get; }
+        public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        public AuthService AuthService { get; }
 
-    public async Task<TemplateInfo> GetDefaultAsync()
-    {
-        var defaultTemplateName = await CheckProLicenseAsync() ? AppProTemplate.TemplateName : AppTemplate.TemplateName;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
-        return Get(defaultTemplateName);
-    }
-
-    public TemplateInfo Get(string name)
-    {
-        switch (name)
+        public TemplateInfoProvider(ICancellationTokenProvider cancellationTokenProvider,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            AuthService authService,
+            CliHttpClientFactory cliHttpClientFactory)
         {
-            case AppTemplate.TemplateName:
-                return new AppTemplate();
-            case AppProTemplate.TemplateName:
-                return new AppProTemplate();
-            case MicroserviceProTemplate.TemplateName:
-                return new MicroserviceProTemplate();
-            case MicroserviceServiceProTemplate.TemplateName:
-                return new MicroserviceServiceProTemplate();
-            case ModuleTemplate.TemplateName:
-                return new ModuleTemplate();
-            case ModuleProTemplate.TemplateName:
-                return new ModuleProTemplate();
-            case ConsoleTemplate.TemplateName:
-                return new ConsoleTemplate();
-            case WpfTemplate.TemplateName:
-                return new WpfTemplate();
-            default:
-                throw new Exception("There is no template found with given name: " + name);
-        }
-    }
+            CancellationTokenProvider = cancellationTokenProvider;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            AuthService = authService;
+            _cliHttpClientFactory = cliHttpClientFactory;
 
-
-    private async Task<bool> CheckProLicenseAsync()
-    {
-        if (!AuthService.IsLoggedIn())
-        {
-            return false;
+            Logger = NullLogger<TemplateInfoProvider>.Instance;
         }
 
-        try
+        public async Task<TemplateInfo> GetDefaultAsync()
         {
-            var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
-            var client = _cliHttpClientFactory.CreateClient();
+            var defaultTemplateName = await CheckProLicenseAsync() ? AppProTemplate.TemplateName : AppTemplate.TemplateName;
 
-            using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+            return Get(defaultTemplateName);
+        }
+
+        public TemplateInfo Get(string name)
+        {
+            switch (name)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
-                }
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<bool>(responseContent);
+                case AppTemplate.TemplateName:
+                    return new AppTemplate();
+                case AppProTemplate.TemplateName:
+                    return new AppProTemplate();
+                case MicroserviceProTemplate.TemplateName:
+                    return new MicroserviceProTemplate();
+                case MicroserviceServiceProTemplate.TemplateName:
+                    return new MicroserviceServiceProTemplate();
+                case ModuleTemplate.TemplateName:
+                    return new ModuleTemplate();
+                case ModuleProTemplate.TemplateName:
+                    return new ModuleProTemplate();
+                case ConsoleTemplate.TemplateName:
+                    return new ConsoleTemplate();
+                case WpfTemplate.TemplateName:
+                    return new WpfTemplate();
+                default:
+                    throw new Exception("There is no template found with given name: " + name);
             }
         }
-        catch (Exception)
+
+
+        private async Task<bool> CheckProLicenseAsync()
         {
-            return false;
+            if (!AuthService.IsLoggedIn())
+            {
+                return false;
+            }
+
+            try
+            {
+                var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
+                var client = _cliHttpClientFactory.CreateClient();
+
+                using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+                {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    }
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<bool>(responseContent);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

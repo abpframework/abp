@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.TestApp.Domain;
-
-public interface ICityRepository : IBasicRepository<City, Guid>
+namespace Volo.Abp.TestApp.Domain
 {
-    Task<City> FindByNameAsync(string name);
+    public interface ICityRepository : IBasicRepository<City, Guid>
+    {
+        Task<City> FindByNameAsync(string name);
 
-    Task<List<Person>> GetPeopleInTheCityAsync(string cityName);
+        Task<List<Person>> GetPeopleInTheCityAsync(string cityName);
+    }
 }

@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.UI.Navigation.Urls;
-
-public class AppUrlOptions
+namespace Volo.Abp.UI.Navigation.Urls
 {
-    public ApplicationUrlDictionary Applications { get; }
-
-    public List<string> RedirectAllowedUrls { get; }
-
-    public AppUrlOptions()
+    public class AppUrlOptions
     {
-        Applications = new ApplicationUrlDictionary();
-        RedirectAllowedUrls = new List<string>();
+        public ApplicationUrlDictionary Applications { get; }
+
+        public List<string> RedirectAllowedUrls { get; }
+
+        public AppUrlOptions()
+        {
+            Applications = new ApplicationUrlDictionary();
+            RedirectAllowedUrls = new List<string>();
+        }
     }
 }

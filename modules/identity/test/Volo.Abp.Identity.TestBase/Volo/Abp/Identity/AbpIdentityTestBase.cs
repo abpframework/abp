@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.Identity;
-
-public abstract class AbpIdentityTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.Identity
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class AbpIdentityTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
+        where TStartupModule : IAbpModule
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization;
-
-public interface IAbpAuthorizationService : IAuthorizationService, IServiceProviderAccessor
+namespace Volo.Abp.Authorization
 {
-    ClaimsPrincipal CurrentPrincipal { get; }
+    public interface IAbpAuthorizationService : IAuthorizationService, IServiceProviderAccessor
+    {
+        ClaimsPrincipal CurrentPrincipal { get; }
+    }
 }

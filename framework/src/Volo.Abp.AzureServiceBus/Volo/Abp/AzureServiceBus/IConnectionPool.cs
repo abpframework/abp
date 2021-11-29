@@ -2,11 +2,12 @@ using System;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public interface IConnectionPool : IAsyncDisposable
+namespace Volo.Abp.AzureServiceBus
 {
-    ServiceBusClient GetClient(string connectionName);
+    public interface IConnectionPool : IAsyncDisposable
+    {
+        ServiceBusClient GetClient(string connectionName);
 
-    ServiceBusAdministrationClient GetAdministrationClient(string connectionName);
+        ServiceBusAdministrationClient GetAdministrationClient(string connectionName);
+    }
 }

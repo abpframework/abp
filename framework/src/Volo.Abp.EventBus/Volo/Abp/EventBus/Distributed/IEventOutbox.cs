@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EventBus.Distributed;
-
-public interface IEventOutbox
+namespace Volo.Abp.EventBus.Distributed
 {
-    Task EnqueueAsync(OutgoingEventInfo outgoingEvent);
+    public interface IEventOutbox
+    {
+        Task EnqueueAsync(OutgoingEventInfo outgoingEvent);
 
-    Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default);
+        Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default);
 
-    Task DeleteAsync(Guid id);
+        Task DeleteAsync(Guid id);
+    }
 }

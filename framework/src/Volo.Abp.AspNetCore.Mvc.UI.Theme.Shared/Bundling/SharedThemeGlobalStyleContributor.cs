@@ -9,25 +9,26 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-
-[DependsOn(
-    typeof(CoreStyleContributor),
-    typeof(BootstrapStyleContributor),
-    typeof(FontAwesomeStyleContributor),
-    typeof(ToastrStyleBundleContributor),
-    typeof(Select2StyleContributor),
-    typeof(MalihuCustomScrollbarPluginStyleBundleContributor),
-    typeof(DatatablesNetBs5StyleContributor),
-    typeof(BootstrapDatepickerStyleContributor)
-)]
-public class SharedThemeGlobalStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(
+        typeof(CoreStyleContributor),
+        typeof(BootstrapStyleContributor),
+        typeof(FontAwesomeStyleContributor),
+        typeof(ToastrStyleBundleContributor),
+        typeof(Select2StyleContributor),
+        typeof(MalihuCustomScrollbarPluginStyleBundleContributor),
+        typeof(DatatablesNetBs5StyleContributor),
+        typeof(BootstrapDatepickerStyleContributor)
+    )]
+    public class SharedThemeGlobalStyleContributor : BundleContributor
     {
-        context.Files.AddRange(new[]
+        public override void ConfigureBundle(BundleConfigurationContext context)
         {
+            context.Files.AddRange(new[]
+            {
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css"
             });
+        }
     }
 }

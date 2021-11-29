@@ -1,22 +1,23 @@
 ﻿using System;
 
-namespace Volo.Abp.Http.Modeling;
-
-[Serializable]
-public class ControllerInterfaceApiDescriptionModel
+namespace Volo.Abp.Http.Modeling
 {
-    public string Type { get; set; }
-
-    public ControllerInterfaceApiDescriptionModel()
+    [Serializable]
+    public class ControllerInterfaceApiDescriptionModel
     {
+        public string Type { get; set; }
 
-    }
-
-    public static ControllerInterfaceApiDescriptionModel Create(Type type)
-    {
-        return new ControllerInterfaceApiDescriptionModel
+        public ControllerInterfaceApiDescriptionModel()
         {
-            Type = type.FullName
-        };
+
+        }
+
+        public static ControllerInterfaceApiDescriptionModel Create(Type type)
+        {
+            return new ControllerInterfaceApiDescriptionModel
+            {
+                Type = type.FullName
+            };
+        }
     }
 }

@@ -6,55 +6,56 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
-
-public class RemoteStreamContentTestController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 {
-    [Fact]
-    public async Task DownloadAsync()
+    public class RemoteStreamContentTestController_Tests : AspNetCoreMvcTestBase
     {
-        var result = await GetResponseAsync("/api/remote-stream-content-test/download");
-        result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
-        result.Content.Headers.ContentDisposition?.FileName.ShouldBe("download.rtf");
-        (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
-    }
-
-    [Fact]
-    public async Task UploadAsync()
-    {
-        using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload"))
+        [Fact]
+        public async Task DownloadAsync()
         {
-            var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
-            memoryStream.Position = 0;
-
-            var streamContent = new StreamContent(memoryStream);
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/rtf");
-            requestMessage.Content = new MultipartFormDataContent { { streamContent, "file", "upload.rtf" } };
-
-            var response = await Client.SendAsync(requestMessage);
-
-            (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf:upload.rtf");
+            var result = await GetResponseAsync("/api/remote-stream-content-test/download");
+            result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
+            result.Content.Headers.ContentDisposition?.FileName.ShouldBe("download.rtf");
+            (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
         }
-    }
 
-    [Fact]
-    public async Task UploadRawAsync()
-    {
-        using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload-raw"))
+        [Fact]
+        public async Task UploadAsync()
         {
-            var memoryStream = new MemoryStream();
-            var text = @"{ ""hello"": ""world"" }";
-            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes(text));
-            memoryStream.Position = 0;
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload"))
+            {
+                var memoryStream = new MemoryStream();
+                await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
+                memoryStream.Position = 0;
 
-            var streamContent = new StreamContent(memoryStream);
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var streamContent = new StreamContent(memoryStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/rtf");
+                requestMessage.Content = new MultipartFormDataContent {{ streamContent, "file", "upload.rtf" }};
 
-            requestMessage.Content = streamContent;
+                var response = await Client.SendAsync(requestMessage);
 
-            var response = await Client.SendAsync(requestMessage);
-            (await response.Content.ReadAsStringAsync()).ShouldBe($"{text}:application/json");
+                (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf:upload.rtf");
+            }
+        }
+
+        [Fact]
+        public async Task UploadRawAsync()
+        {
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload-raw"))
+            {
+                var memoryStream = new MemoryStream();
+                var text = @"{ ""hello"": ""world"" }";
+                await memoryStream.WriteAsync(Encoding.UTF8.GetBytes(text));
+                memoryStream.Position = 0;
+
+                var streamContent = new StreamContent(memoryStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                requestMessage.Content = streamContent;
+
+                var response = await Client.SendAsync(requestMessage);
+                (await response.Content.ReadAsStringAsync()).ShouldBe($"{text}:application/json");
+            }
         }
     }
 }

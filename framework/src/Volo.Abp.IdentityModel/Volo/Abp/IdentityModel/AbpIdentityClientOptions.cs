@@ -3,39 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.IdentityModel;
-
-public class AbpIdentityClientOptions
+namespace Volo.Abp.IdentityModel
 {
-    public IdentityClientConfigurationDictionary IdentityClients { get; set; }
-
-    public AbpIdentityClientOptions()
+    public class AbpIdentityClientOptions
     {
-        IdentityClients = new IdentityClientConfigurationDictionary();
-    }
+        public IdentityClientConfigurationDictionary IdentityClients { get; set; }
 
-    public IdentityClientConfiguration GetClientConfiguration(ICurrentTenant currentTenant, string identityClientName = null)
-    {
-        if (identityClientName.IsNullOrWhiteSpace())
+        public AbpIdentityClientOptions()
         {
-            identityClientName = IdentityClientConfigurationDictionary.DefaultName;
+            IdentityClients = new IdentityClientConfigurationDictionary();
         }
 
-        if (currentTenant.Id.HasValue)
+        public IdentityClientConfiguration GetClientConfiguration(ICurrentTenant currentTenant, string identityClientName = null)
         {
-            var tenantConfiguration = IdentityClients.FirstOrDefault(x => x.Key == $"{identityClientName}.{currentTenant.Id}");
-            if (tenantConfiguration.Key == null && !currentTenant.Name.IsNullOrWhiteSpace())
+            if (identityClientName.IsNullOrWhiteSpace())
             {
-                tenantConfiguration = IdentityClients.FirstOrDefault(x => x.Key == $"{identityClientName}.{currentTenant.Name}");
+                identityClientName = IdentityClientConfigurationDictionary.DefaultName;
             }
 
-            if (tenantConfiguration.Key != null)
+            if (currentTenant.Id.HasValue)
             {
-                return tenantConfiguration.Value;
+                var tenantConfiguration = IdentityClients.FirstOrDefault(x => x.Key == $"{identityClientName}.{currentTenant.Id}");
+                if (tenantConfiguration.Key == null && !currentTenant.Name.IsNullOrWhiteSpace())
+                {
+                    tenantConfiguration = IdentityClients.FirstOrDefault(x => x.Key == $"{identityClientName}.{currentTenant.Name}");
+                }
+
+                if (tenantConfiguration.Key != null)
+                {
+                    return tenantConfiguration.Value;
+                }
             }
+
+            return IdentityClients.GetOrDefault(identityClientName) ??
+                   IdentityClients.Default;
         }
-
-        return IdentityClients.GetOrDefault(identityClientName) ??
-               IdentityClients.Default;
     }
 }

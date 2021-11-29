@@ -12,51 +12,52 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error;
 using Volo.Abp.Http;
 
-namespace Volo.Abp.Account.Web.Areas.Account.Controllers;
-
-[Area("account")]
-public class ErrorController : AbpController
+namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 {
-    private readonly IIdentityServerInteractionService _interaction;
-    private readonly IWebHostEnvironment _environment;
-    private readonly AbpErrorPageOptions _abpErrorPageOptions;
-
-    public ErrorController(
-        IIdentityServerInteractionService interaction,
-        IWebHostEnvironment environment,
-        IOptions<AbpErrorPageOptions> abpErrorPageOptions)
+    [Area("account")]
+    public class ErrorController : AbpController
     {
-        _interaction = interaction;
-        _environment = environment;
-        _abpErrorPageOptions = abpErrorPageOptions.Value;
-    }
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IWebHostEnvironment _environment;
+        private readonly AbpErrorPageOptions _abpErrorPageOptions;
 
-    public virtual async Task<IActionResult> Index(string errorId)
-    {
-        var errorMessage = await _interaction.GetErrorContextAsync(errorId) ?? new ErrorMessage
+        public ErrorController(
+            IIdentityServerInteractionService interaction,
+            IWebHostEnvironment environment,
+            IOptions<AbpErrorPageOptions> abpErrorPageOptions)
         {
-            Error = L["Error"]
-        };
-
-        if (!_environment.IsDevelopment())
-        {
-            // Only show in development
-            errorMessage.ErrorDescription = null;
+            _interaction = interaction;
+            _environment = environment;
+            _abpErrorPageOptions = abpErrorPageOptions.Value;
         }
 
-        const int statusCode = (int)HttpStatusCode.InternalServerError;
-
-        return View(GetErrorPageUrl(statusCode), new AbpErrorViewModel
+        public virtual async Task<IActionResult> Index(string errorId)
         {
-            ErrorInfo = new RemoteServiceErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
-            HttpStatusCode = statusCode
-        });
-    }
+            var errorMessage = await _interaction.GetErrorContextAsync(errorId) ?? new ErrorMessage
+            {
+                Error = L["Error"]
+            };
 
-    protected virtual string GetErrorPageUrl(int statusCode)
-    {
-        var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
+            if (!_environment.IsDevelopment())
+            {
+                // Only show in development
+                errorMessage.ErrorDescription = null;
+            }
 
-        return string.IsNullOrWhiteSpace(page) ? "~/Views/Error/Default.cshtml" : page;
+            const int statusCode = (int)HttpStatusCode.InternalServerError;
+
+            return View(GetErrorPageUrl(statusCode), new AbpErrorViewModel
+            {
+                ErrorInfo = new RemoteServiceErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
+                HttpStatusCode = statusCode
+            });
+        }
+
+        protected virtual string GetErrorPageUrl(int statusCode)
+        {
+            var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
+
+            return string.IsNullOrWhiteSpace(page) ? "~/Views/Error/Default.cshtml" : page;
+        }
     }
 }

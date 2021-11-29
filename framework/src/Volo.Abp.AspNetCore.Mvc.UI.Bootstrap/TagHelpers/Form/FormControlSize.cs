@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-
-[AttributeUsage(AttributeTargets.Property)]
-public class FormControlSize : Attribute
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    public AbpFormControlSize Size { get; set; }
-
-    public FormControlSize(AbpFormControlSize size)
+    [AttributeUsage(AttributeTargets.Property)]
+    public class FormControlSize : Attribute
     {
-        Size = size;
+        public AbpFormControlSize Size { get; set; }
+
+        public FormControlSize(AbpFormControlSize size)
+        {
+            Size = size;
+        }
     }
 }

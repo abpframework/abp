@@ -2,71 +2,72 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.DistributedLocking;
-
-public class LocalDistributedLock_Tests : AbpDistributedLockingAbstractionsTestBase
+namespace Volo.Abp.DistributedLocking
 {
-    private readonly IAbpDistributedLock _distributedLock;
-
-    public LocalDistributedLock_Tests()
+    public class LocalDistributedLock_Tests : AbpDistributedLockingAbstractionsTestBase
     {
-        _distributedLock = GetRequiredService<IAbpDistributedLock>();
-    }
+        private readonly IAbpDistributedLock _distributedLock;
 
-    [Fact]
-    public void Should_Be_Instance_Of_LocalAbpDistributedLock()
-    {
-        _distributedLock.ShouldBeOfType<LocalAbpDistributedLock>();
-    }
-
-    [Fact]
-    public async Task Should_Lock_With_TryAcquire()
-    {
-        await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
+        public LocalDistributedLock_Tests()
         {
-            handle.ShouldNotBeNull();
-        }
-    }
-
-    [Fact]
-    public async Task Should_Not_Acquire_If_Already_Locked()
-    {
-        await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
-        {
-            handle.ShouldNotBeNull();
-
-            await Task.Run(async () =>
-            {
-                await using (var handle2 = await _distributedLock.TryAcquireAsync("lock1"))
-                {
-                    handle2.ShouldBeNull();
-                }
-            });
+            _distributedLock = GetRequiredService<IAbpDistributedLock>();
         }
 
-        await Task.Run(async () =>
+        [Fact]
+        public void Should_Be_Instance_Of_LocalAbpDistributedLock()
+        {
+            _distributedLock.ShouldBeOfType<LocalAbpDistributedLock>();
+        }
+
+        [Fact]
+        public async Task Should_Lock_With_TryAcquire()
         {
             await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
             {
                 handle.ShouldNotBeNull();
             }
-        });
-    }
-
-    [Fact]
-    public async Task Should_Obtain_Multiple_Locks()
-    {
-        await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
+        }
+        
+        [Fact]
+        public async Task Should_Not_Acquire_If_Already_Locked()
         {
-            handle.ShouldNotBeNull();
+            await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
+            {
+                handle.ShouldNotBeNull();
 
+                await Task.Run(async () =>
+                {
+                    await using (var handle2 = await _distributedLock.TryAcquireAsync("lock1"))
+                    {
+                        handle2.ShouldBeNull();
+                    }
+                });
+            }
+            
             await Task.Run(async () =>
             {
-                await using (var handle2 = await _distributedLock.TryAcquireAsync("lock2"))
+                await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
                 {
-                    handle2.ShouldNotBeNull();
+                    handle.ShouldNotBeNull();
                 }
             });
+        }
+        
+        [Fact]
+        public async Task Should_Obtain_Multiple_Locks()
+        {
+            await using (var handle = await _distributedLock.TryAcquireAsync("lock1"))
+            {
+                handle.ShouldNotBeNull();
+
+                await Task.Run(async () =>
+                {
+                    await using (var handle2 = await _distributedLock.TryAcquireAsync("lock2"))
+                    {
+                        handle2.ShouldNotBeNull();
+                    }
+                });
+            }
         }
     }
 }

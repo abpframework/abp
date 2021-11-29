@@ -4,34 +4,35 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Domain.Repositories;
-
-/* Repositories are not injected by class by default.
- * This class specializes repository registration to apply this rule.
- */
-public class AbpRepositoryConventionalRegistrar : DefaultConventionalRegistrar
+namespace Volo.Abp.Domain.Repositories
 {
-    public static bool ExposeRepositoryClasses { get; set; }
-
-    protected override bool IsConventionalRegistrationDisabled(Type type)
+    /* Repositories are not injected by class by default.
+     * This class specializes repository registration to apply this rule.
+     */
+    public class AbpRepositoryConventionalRegistrar : DefaultConventionalRegistrar
     {
-        return !typeof(IRepository).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
-    }
+        public static bool ExposeRepositoryClasses { get; set; }
 
-    protected override List<Type> GetExposedServiceTypes(Type type)
-    {
-        if (ExposeRepositoryClasses)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            return base.GetExposedServiceTypes(type);
+            return !typeof(IRepository).IsAssignableFrom(type) || base.IsConventionalRegistrationDisabled(type);
         }
 
-        return base.GetExposedServiceTypes(type)
-            .Where(x => x.IsInterface)
-            .ToList();
-    }
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
+            if (ExposeRepositoryClasses)
+            {
+                return base.GetExposedServiceTypes(type);
+            }
 
-    protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
-    {
-        return ServiceLifetime.Transient;
+            return base.GetExposedServiceTypes(type)
+                .Where(x => x.IsInterface)
+                .ToList();
+        }
+
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
+        }
     }
 }

@@ -4,54 +4,55 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Tracing;
 
-namespace Volo.Abp.AspNetCore.Tracing;
-
-public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
+namespace Volo.Abp.AspNetCore.Tracing
 {
-    private readonly AbpCorrelationIdOptions _options;
-    private readonly ICorrelationIdProvider _correlationIdProvider;
-
-    public AbpCorrelationIdMiddleware(IOptions<AbpCorrelationIdOptions> options,
-        ICorrelationIdProvider correlationIdProvider)
+    public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     {
-        _options = options.Value;
-        _correlationIdProvider = correlationIdProvider;
-    }
+        private readonly AbpCorrelationIdOptions _options;
+        private readonly ICorrelationIdProvider _correlationIdProvider;
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        var correlationId = _correlationIdProvider.Get();
-
-        try
+        public AbpCorrelationIdMiddleware(IOptions<AbpCorrelationIdOptions> options,
+            ICorrelationIdProvider correlationIdProvider)
         {
-            await next(context);
-        }
-        finally
-        {
-            CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
-        }
-    }
-
-    protected virtual void CheckAndSetCorrelationIdOnResponse(
-        HttpContext httpContext,
-        AbpCorrelationIdOptions options,
-        string correlationId)
-    {
-        if (httpContext.Response.HasStarted)
-        {
-            return;
+            _options = options.Value;
+            _correlationIdProvider = correlationIdProvider;
         }
 
-        if (!options.SetResponseHeader)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            return;
+            var correlationId = _correlationIdProvider.Get();
+
+            try
+            {
+                await next(context);
+            }
+            finally
+            {
+                CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            }
         }
 
-        if (httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+        protected virtual void CheckAndSetCorrelationIdOnResponse(
+            HttpContext httpContext,
+            AbpCorrelationIdOptions options,
+            string correlationId)
         {
-            return;
-        }
+            if (httpContext.Response.HasStarted)
+            {
+                return;
+            }
 
-        httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            if (!options.SetResponseHeader)
+            {
+                return;
+            }
+
+            if (httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+            {
+                return;
+            }
+
+            httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+        }
     }
 }

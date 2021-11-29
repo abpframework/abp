@@ -2,20 +2,21 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.BlobStoring.Database.MongoDB;
-
-[DependsOn(
-    typeof(BlobStoringDatabaseDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class BlobStoringDatabaseMongoDbModule : AbpModule
+namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(BlobStoringDatabaseDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class BlobStoringDatabaseMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<BlobStoringMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<DatabaseBlobContainer, MongoDbDatabaseBlobContainerRepository>();
-            options.AddRepository<DatabaseBlob, MongoDbDatabaseBlobRepository>();
-        });
+            context.Services.AddMongoDbContext<BlobStoringMongoDbContext>(options =>
+            {
+                options.AddRepository<DatabaseBlobContainer, MongoDbDatabaseBlobContainerRepository>();
+                options.AddRepository<DatabaseBlob, MongoDbDatabaseBlobRepository>();
+            });
+        }
     }
 }

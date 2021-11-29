@@ -1,10 +1,11 @@
 ﻿using Volo.Abp.Http;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error;
-
-public class AbpErrorViewModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error
 {
-    public RemoteServiceErrorInfo ErrorInfo { get; set; }
+    public class AbpErrorViewModel
+    {
+        public RemoteServiceErrorInfo ErrorInfo { get; set; }
 
-    public int HttpStatusCode { get; set; }
+        public int HttpStatusCode { get; set; }
+    }
 }

@@ -1,35 +1,36 @@
 using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class CurrentTenant : ICurrentTenant, ITransientDependency
+namespace Volo.Abp.MultiTenancy
 {
-    public virtual bool IsAvailable => Id.HasValue;
-
-    public virtual Guid? Id => _currentTenantAccessor.Current?.TenantId;
-
-    public string Name => _currentTenantAccessor.Current?.Name;
-
-    private readonly ICurrentTenantAccessor _currentTenantAccessor;
-
-    public CurrentTenant(ICurrentTenantAccessor currentTenantAccessor)
+    public class CurrentTenant : ICurrentTenant, ITransientDependency
     {
-        _currentTenantAccessor = currentTenantAccessor;
-    }
+        public virtual bool IsAvailable => Id.HasValue;
 
-    public IDisposable Change(Guid? id, string name = null)
-    {
-        return SetCurrent(id, name);
-    }
+        public virtual Guid? Id => _currentTenantAccessor.Current?.TenantId;
 
-    private IDisposable SetCurrent(Guid? tenantId, string name = null)
-    {
-        var parentScope = _currentTenantAccessor.Current;
-        _currentTenantAccessor.Current = new BasicTenantInfo(tenantId, name);
-        return new DisposeAction(() =>
+        public string Name => _currentTenantAccessor.Current?.Name;
+
+        private readonly ICurrentTenantAccessor _currentTenantAccessor;
+
+        public CurrentTenant(ICurrentTenantAccessor currentTenantAccessor)
         {
-            _currentTenantAccessor.Current = parentScope;
-        });
+            _currentTenantAccessor = currentTenantAccessor;
+        }
+
+        public IDisposable Change(Guid? id, string name = null)
+        {
+            return SetCurrent(id, name);
+        }
+
+        private IDisposable SetCurrent(Guid? tenantId, string name = null)
+        {
+            var parentScope = _currentTenantAccessor.Current;
+            _currentTenantAccessor.Current = new BasicTenantInfo(tenantId, name);
+            return new DisposeAction(() =>
+            {
+                _currentTenantAccessor.Current = parentScope;
+            });
+        }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace Volo.Abp.ObjectExtending;
-
-public static class IdentityModuleExtensionConfigurationDictionaryExtensions
+namespace Volo.Abp.ObjectExtending
 {
-    public static ModuleExtensionConfigurationDictionary ConfigureIdentity(
-        this ModuleExtensionConfigurationDictionary modules,
-        Action<IdentityModuleExtensionConfiguration> configureAction)
+    public static class IdentityModuleExtensionConfigurationDictionaryExtensions
     {
-        return modules.ConfigureModule(
-            IdentityModuleExtensionConsts.ModuleName,
-            configureAction
-        );
+        public static ModuleExtensionConfigurationDictionary ConfigureIdentity(
+            this ModuleExtensionConfigurationDictionary modules,
+            Action<IdentityModuleExtensionConfiguration> configureAction)
+        {
+            return modules.ConfigureModule(
+                IdentityModuleExtensionConsts.ModuleName,
+                configureAction
+            );
+        }
     }
 }

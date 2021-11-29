@@ -6,119 +6,120 @@ using System.Linq;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Data;
-
-//TODO: Move to Volo.Abp.Data.ObjectExtending namespace at v3.0
-
-public static class HasExtraPropertiesExtensions
+namespace Volo.Abp.Data
 {
-    public static bool HasProperty(this IHasExtraProperties source, string name)
-    {
-        return source.ExtraProperties.ContainsKey(name);
-    }
+    //TODO: Move to Volo.Abp.Data.ObjectExtending namespace at v3.0
 
-    public static object GetProperty(this IHasExtraProperties source, string name, object defaultValue = null)
+    public static class HasExtraPropertiesExtensions
     {
-        return source.ExtraProperties?.GetOrDefault(name)
-               ?? defaultValue;
-    }
-
-    public static TProperty GetProperty<TProperty>(this IHasExtraProperties source, string name, TProperty defaultValue = default)
-    {
-        var value = source.GetProperty(name);
-        if (value == null)
+        public static bool HasProperty(this IHasExtraProperties source, string name)
         {
-            return defaultValue;
+            return source.ExtraProperties.ContainsKey(name);
         }
 
-        if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
+        public static object GetProperty(this IHasExtraProperties source, string name, object defaultValue = null)
         {
-            var conversionType = typeof(TProperty);
-            if (TypeHelper.IsNullable(conversionType))
+            return source.ExtraProperties?.GetOrDefault(name)
+                   ?? defaultValue;
+        }
+
+        public static TProperty GetProperty<TProperty>(this IHasExtraProperties source, string name, TProperty defaultValue = default)
+        {
+            var value = source.GetProperty(name);
+            if (value == null)
             {
-                conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+                return defaultValue;
             }
 
-            if (conversionType == typeof(Guid))
+            if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
             {
-                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                var conversionType = typeof(TProperty);
+                if (TypeHelper.IsNullable(conversionType))
+                {
+                    conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+                }
+
+                if (conversionType == typeof(Guid))
+                {
+                    return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                }
+
+                return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
             }
 
-            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+            throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
         }
 
-        throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
-    }
-
-    public static TSource SetProperty<TSource>(
-        this TSource source,
-        string name,
-        object value,
-        bool validate = true)
-        where TSource : IHasExtraProperties
-    {
-        if (validate)
+        public static TSource SetProperty<TSource>(
+            this TSource source,
+            string name,
+            object value,
+            bool validate = true)
+            where TSource : IHasExtraProperties
         {
-            ExtensibleObjectValidator.CheckValue(source, name, value);
-        }
-
-        source.ExtraProperties[name] = value;
-
-        return source;
-    }
-
-    public static TSource RemoveProperty<TSource>(this TSource source, string name)
-        where TSource : IHasExtraProperties
-    {
-        source.ExtraProperties.Remove(name);
-        return source;
-    }
-
-    public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
-        where TSource : IHasExtraProperties
-    {
-        if (objectType == null)
-        {
-            objectType = typeof(TSource);
-        }
-
-        var properties = ObjectExtensionManager.Instance
-            .GetProperties(objectType);
-
-        foreach (var property in properties)
-        {
-            if (source.HasProperty(property.Name))
+            if (validate)
             {
-                continue;
+                ExtensibleObjectValidator.CheckValue(source, name, value);
             }
 
-            source.ExtraProperties[property.Name] = property.GetDefaultValue();
+            source.ExtraProperties[name] = value;
+
+            return source;
         }
 
-        return source;
-    }
-
-    public static void SetDefaultsForExtraProperties(object source, Type objectType)
-    {
-        if (!(source is IHasExtraProperties))
+        public static TSource RemoveProperty<TSource>(this TSource source, string name)
+            where TSource : IHasExtraProperties
         {
-            throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
+            source.ExtraProperties.Remove(name);
+            return source;
         }
 
-        ((IHasExtraProperties)source).SetDefaultsForExtraProperties(objectType);
-    }
-
-    public static void SetExtraPropertiesToRegularProperties(this IHasExtraProperties source)
-    {
-        var properties = source.GetType().GetProperties()
-            .Where(x => source.ExtraProperties.ContainsKey(x.Name)
-                        && x.GetSetMethod(true) != null)
-            .ToList();
-
-        foreach (var property in properties)
+        public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
+            where TSource : IHasExtraProperties
         {
-            property.SetValue(source, source.ExtraProperties[property.Name]);
-            source.RemoveProperty(property.Name);
+            if (objectType == null)
+            {
+                objectType = typeof(TSource);
+            }
+
+            var properties = ObjectExtensionManager.Instance
+                .GetProperties(objectType);
+
+            foreach (var property in properties)
+            {
+                if (source.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                source.ExtraProperties[property.Name] = property.GetDefaultValue();
+            }
+
+            return source;
+        }
+
+        public static void SetDefaultsForExtraProperties(object source, Type objectType)
+        {
+            if (!(source is IHasExtraProperties))
+            {
+                throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
+            }
+
+            ((IHasExtraProperties)source).SetDefaultsForExtraProperties(objectType);
+        }
+
+        public static void SetExtraPropertiesToRegularProperties(this IHasExtraProperties source)
+        {
+            var properties = source.GetType().GetProperties()
+                .Where(x => source.ExtraProperties.ContainsKey(x.Name)
+                            && x.GetSetMethod(true) != null)
+                .ToList();
+
+            foreach (var property in properties)
+            {
+                property.SetValue(source, source.ExtraProperties[property.Name]);
+                source.RemoveProperty(property.Name);
+            }
         }
     }
 }

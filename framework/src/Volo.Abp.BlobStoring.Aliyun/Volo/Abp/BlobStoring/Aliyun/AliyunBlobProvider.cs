@@ -4,104 +4,105 @@ using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlobStoring.Aliyun;
-
-public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
+namespace Volo.Abp.BlobStoring.Aliyun
 {
-    protected IOssClientFactory OssClientFactory { get; }
-    protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
-    protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
-
-    public AliyunBlobProvider(
-        IOssClientFactory ossClientFactory,
-        IAliyunBlobNameCalculator aliyunBlobNameCalculator,
-        IBlobNormalizeNamingService blobNormalizeNamingService)
+    public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
     {
-        OssClientFactory = ossClientFactory;
-        AliyunBlobNameCalculator = aliyunBlobNameCalculator;
-        BlobNormalizeNamingService = blobNormalizeNamingService;
-    }
+        protected IOssClientFactory OssClientFactory { get; }
+        protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
-    protected virtual IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
-    {
-        var aliyunConfig = blobContainerConfiguration.GetAliyunConfiguration();
-        return OssClientFactory.Create(aliyunConfig);
-    }
-
-    protected virtual IOss GetOssClient(AliyunBlobProviderConfiguration aliyunConfig)
-    {
-        return OssClientFactory.Create(aliyunConfig);
-    }
-
-
-    public override Task SaveAsync(BlobProviderSaveArgs args)
-    {
-        var containerName = GetContainerName(args);
-        var blobName = AliyunBlobNameCalculator.Calculate(args);
-        var aliyunConfig = args.Configuration.GetAliyunConfiguration();
-        var ossClient = GetOssClient(aliyunConfig);
-        if (!args.OverrideExisting && BlobExists(ossClient, containerName, blobName))
+        public AliyunBlobProvider(
+            IOssClientFactory ossClientFactory,
+            IAliyunBlobNameCalculator aliyunBlobNameCalculator,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
-            throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{containerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
+            OssClientFactory = ossClientFactory;
+            AliyunBlobNameCalculator = aliyunBlobNameCalculator;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
-        if (aliyunConfig.CreateContainerIfNotExists)
+
+        protected virtual IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
         {
-            if (!ossClient.DoesBucketExist(containerName))
+            var aliyunConfig = blobContainerConfiguration.GetAliyunConfiguration();
+            return OssClientFactory.Create(aliyunConfig);
+        }
+
+        protected virtual IOss GetOssClient(AliyunBlobProviderConfiguration aliyunConfig)
+        {
+            return OssClientFactory.Create(aliyunConfig);
+        }
+
+
+        public override Task SaveAsync(BlobProviderSaveArgs args)
+        {
+            var containerName = GetContainerName(args);
+            var blobName = AliyunBlobNameCalculator.Calculate(args);
+            var aliyunConfig = args.Configuration.GetAliyunConfiguration();
+            var ossClient = GetOssClient(aliyunConfig);
+            if (!args.OverrideExisting && BlobExists(ossClient, containerName, blobName))
             {
-                ossClient.CreateBucket(containerName);
+                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{containerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
+            if (aliyunConfig.CreateContainerIfNotExists)
+            {
+                if (!ossClient.DoesBucketExist(containerName))
+                {
+                    ossClient.CreateBucket(containerName);
+                }
+            }
+            ossClient.PutObject(containerName, blobName, args.BlobStream);
+            return Task.CompletedTask;
         }
-        ossClient.PutObject(containerName, blobName, args.BlobStream);
-        return Task.CompletedTask;
-    }
 
-    public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
-    {
-        var containerName = GetContainerName(args);
-        var blobName = AliyunBlobNameCalculator.Calculate(args);
-        var ossClient = GetOssClient(args.Configuration);
-        if (!BlobExists(ossClient, containerName, blobName))
+        public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
-            return Task.FromResult(false);
+            var containerName = GetContainerName(args);
+            var blobName = AliyunBlobNameCalculator.Calculate(args);
+            var ossClient = GetOssClient(args.Configuration);
+            if(!BlobExists(ossClient, containerName, blobName))
+            {
+                return Task.FromResult(false);
+            }
+            ossClient.DeleteObject(containerName, blobName);
+            return Task.FromResult(true);
         }
-        ossClient.DeleteObject(containerName, blobName);
-        return Task.FromResult(true);
-    }
 
-    public override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
-    {
-        var containerName = GetContainerName(args);
-        var blobName = AliyunBlobNameCalculator.Calculate(args);
-        var ossClient = GetOssClient(args.Configuration);
-        return Task.FromResult(BlobExists(ossClient, containerName, blobName));
-    }
-
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
-    {
-        var containerName = GetContainerName(args);
-        var blobName = AliyunBlobNameCalculator.Calculate(args);
-        var ossClient = GetOssClient(args.Configuration);
-        if (!BlobExists(ossClient, containerName, blobName))
+        public override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
-            return null;
+            var containerName = GetContainerName(args);
+            var blobName = AliyunBlobNameCalculator.Calculate(args);
+            var ossClient = GetOssClient(args.Configuration);
+            return Task.FromResult(BlobExists(ossClient, containerName, blobName));
         }
-        var result = ossClient.GetObject(containerName, blobName);
-        return await TryCopyToMemoryStreamAsync(result.Content, args.CancellationToken);
-    }
 
-    protected virtual string GetContainerName(BlobProviderArgs args)
-    {
-        var configuration = args.Configuration.GetAliyunConfiguration();
-        return configuration.ContainerName.IsNullOrWhiteSpace()
-            ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
-    }
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        {
+            var containerName = GetContainerName(args);
+            var blobName = AliyunBlobNameCalculator.Calculate(args);
+            var ossClient = GetOssClient(args.Configuration);
+            if (!BlobExists(ossClient, containerName, blobName))
+            {
+                return null;
+            }
+            var result = ossClient.GetObject(containerName, blobName);
+            return await TryCopyToMemoryStreamAsync(result.Content, args.CancellationToken);
+        }
 
-    protected virtual bool BlobExists(IOss ossClient, string containerName, string blobName)
-    {
-        // Make sure Blob Container exists.
-        return ossClient.DoesBucketExist(containerName) &&
-               ossClient.DoesObjectExist(containerName, blobName);
-    }
+        protected virtual string GetContainerName(BlobProviderArgs args)
+        {
+            var configuration = args.Configuration.GetAliyunConfiguration();
+            return configuration.ContainerName.IsNullOrWhiteSpace()
+                ? args.ContainerName
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+        }
 
+        protected  virtual bool BlobExists(IOss ossClient,string containerName, string blobName)
+        {
+            // Make sure Blob Container exists.
+            return ossClient.DoesBucketExist(containerName) &&
+                   ossClient.DoesObjectExist(containerName, blobName);
+        }
+
+    }
 }

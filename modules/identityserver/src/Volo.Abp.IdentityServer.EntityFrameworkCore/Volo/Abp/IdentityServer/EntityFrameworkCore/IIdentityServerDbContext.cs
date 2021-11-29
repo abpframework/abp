@@ -9,71 +9,72 @@ using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.IdentityServer.EntityFrameworkCore;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
-public interface IIdentityServerDbContext : IEfCoreDbContext
+namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    #region ApiResource
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
+    public interface IIdentityServerDbContext : IEfCoreDbContext
+    {
+        #region ApiResource
 
-    DbSet<ApiResource> ApiResources { get; }
+        DbSet<ApiResource> ApiResources { get; }
 
-    DbSet<ApiResourceSecret> ApiResourceSecrets { get; }
+        DbSet<ApiResourceSecret> ApiResourceSecrets { get; }
 
-    DbSet<ApiResourceClaim> ApiResourceClaims { get; }
+        DbSet<ApiResourceClaim> ApiResourceClaims { get; }
 
-    DbSet<ApiResourceScope> ApiResourceScopes { get; }
+        DbSet<ApiResourceScope> ApiResourceScopes { get; }
 
-    DbSet<ApiResourceProperty> ApiResourceProperties { get; }
+        DbSet<ApiResourceProperty> ApiResourceProperties { get; }
 
-    #endregion
+        #endregion
 
-    #region ApiScope
+        #region ApiScope
 
-    DbSet<ApiScope> ApiScopes { get; }
+        DbSet<ApiScope> ApiScopes { get; }
 
-    DbSet<ApiScopeClaim> ApiScopeClaims { get; }
+        DbSet<ApiScopeClaim> ApiScopeClaims { get; }
 
-    DbSet<ApiScopeProperty> ApiScopeProperties { get; }
+        DbSet<ApiScopeProperty> ApiScopeProperties { get; }
 
-    #endregion
+        #endregion
 
-    #region IdentityResource
+        #region IdentityResource
 
-    DbSet<IdentityResource> IdentityResources { get; }
+        DbSet<IdentityResource> IdentityResources { get; }
 
-    DbSet<IdentityResourceClaim> IdentityClaims { get; }
+        DbSet<IdentityResourceClaim> IdentityClaims { get; }
 
-    DbSet<IdentityResourceProperty> IdentityResourceProperties { get; }
+        DbSet<IdentityResourceProperty> IdentityResourceProperties { get; }
 
-    #endregion
+        #endregion
 
-    #region Client
+        #region Client
 
-    DbSet<Client> Clients { get; }
+        DbSet<Client> Clients { get; }
 
-    DbSet<ClientGrantType> ClientGrantTypes { get; }
+        DbSet<ClientGrantType> ClientGrantTypes { get; }
 
-    DbSet<ClientRedirectUri> ClientRedirectUris { get; }
+        DbSet<ClientRedirectUri> ClientRedirectUris { get; }
 
-    DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; }
+        DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; }
 
-    DbSet<ClientScope> ClientScopes { get; }
+        DbSet<ClientScope> ClientScopes { get; }
 
-    DbSet<ClientSecret> ClientSecrets { get; }
+        DbSet<ClientSecret> ClientSecrets { get; }
 
-    DbSet<ClientClaim> ClientClaims { get; }
+        DbSet<ClientClaim> ClientClaims { get; }
 
-    DbSet<ClientIdPRestriction> ClientIdPRestrictions { get; }
+        DbSet<ClientIdPRestriction> ClientIdPRestrictions { get; }
 
-    DbSet<ClientCorsOrigin> ClientCorsOrigins { get; }
+        DbSet<ClientCorsOrigin> ClientCorsOrigins { get; }
 
-    DbSet<ClientProperty> ClientProperties { get; }
+        DbSet<ClientProperty> ClientProperties { get; }
 
-    #endregion
+            #endregion
 
-    DbSet<PersistedGrant> PersistedGrants { get; }
+        DbSet<PersistedGrant> PersistedGrants { get; }
 
-    DbSet<DeviceFlowCodes> DeviceFlowCodes { get; }
+        DbSet<DeviceFlowCodes> DeviceFlowCodes { get; }
+    }
 }

@@ -5,33 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Ratings;
-
-public class DefaultRatingEntityTypeDefinitionStore : IRatingEntityTypeDefinitionStore
+namespace Volo.CmsKit.Ratings
 {
-    protected CmsKitRatingOptions Options { get; }
-
-    public DefaultRatingEntityTypeDefinitionStore(IOptions<CmsKitRatingOptions> options)
+    public class DefaultRatingEntityTypeDefinitionStore : IRatingEntityTypeDefinitionStore
     {
-        Options = options.Value;
-    }
+        protected CmsKitRatingOptions Options { get; }
 
-    public virtual Task<RatingEntityTypeDefinition> GetAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+        public DefaultRatingEntityTypeDefinitionStore(IOptions<CmsKitRatingOptions> options)
+        {
+            Options = options.Value;
+        }
 
-        var definition = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
-                     throw new EntityCantHaveRatingException(entityType);
+        public virtual Task<RatingEntityTypeDefinition> GetAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return Task.FromResult(definition);
-    }
+            var definition = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
+                         throw new EntityCantHaveRatingException(entityType);
 
-    public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            return Task.FromResult(definition);
+        }
 
-        var isDefined = Options.EntityTypes.Any(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
+        public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return Task.FromResult(isDefined);
+            var isDefined = Options.EntityTypes.Any(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
+
+            return Task.FromResult(isDefined);
+        }
     }
 }

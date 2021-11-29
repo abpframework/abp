@@ -1,10 +1,11 @@
-namespace Volo.Abp.EventBus.Azure;
-
-public class AbpAzureEventBusOptions
+namespace Volo.Abp.EventBus.Azure
 {
-    public string ConnectionName { get; set; }
+    public class AbpAzureEventBusOptions
+    {
+        public string ConnectionName { get; set; }
 
-    public string SubscriberName { get; set; }
+        public string SubscriberName { get; set; }
 
-    public string TopicName { get; set; }
+        public string TopicName { get; set; }
+    }
 }

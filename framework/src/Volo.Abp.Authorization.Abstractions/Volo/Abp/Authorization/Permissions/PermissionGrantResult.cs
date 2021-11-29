@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Authorization.Permissions;
-
-public enum PermissionGrantResult
+﻿namespace Volo.Abp.Authorization.Permissions
 {
-    Undefined,
-    Granted,
-    Prohibited
+    public enum PermissionGrantResult
+    {
+        Undefined,
+        Granted,
+        Prohibited
+    }
 }

@@ -3,17 +3,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Language;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public class DefaultAbpRazorProjectEngineFactory : IAbpRazorProjectEngineFactory, ITransientDependency
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public virtual async Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder> configure = null)
+    public class DefaultAbpRazorProjectEngineFactory : IAbpRazorProjectEngineFactory, ITransientDependency
     {
-        return RazorProjectEngine.Create(await CreateRazorConfigurationAsync(), EmptyProjectFileSystem.Empty, configure);
-    }
+        public virtual async Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder> configure = null)
+        {
+            return RazorProjectEngine.Create(await CreateRazorConfigurationAsync(), EmptyProjectFileSystem.Empty, configure);
+        }
 
-    protected virtual Task<RazorConfiguration> CreateRazorConfigurationAsync()
-    {
-        return Task.FromResult(RazorConfiguration.Default);
+        protected virtual Task<RazorConfiguration> CreateRazorConfigurationAsync()
+        {
+            return Task.FromResult(RazorConfiguration.Default);
+        }
     }
 }

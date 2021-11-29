@@ -4,85 +4,86 @@ using System.IO;
 using JetBrains.Annotations;
 using Volo.Abp.Studio.Packages;
 
-namespace Volo.Abp.Studio.ModuleInstalling;
-
-public class ModuleInstallingContext
+namespace Volo.Abp.Studio.ModuleInstalling
 {
-    public string ModuleName { get; set; }
-
-    public string TargetModule { get; set; }
-
-    public bool WithSourceCode { get; set; }
-
-    public bool AddToSolutionFile { get; set; }
-
-    public string Version { get; set; }
-
-    public List<EfCoreConfigurationMethodDeclaration> EfCoreConfigurationMethodDeclarations { get; }
-
-    public List<PackageInfo> TargetModulePackages { get; protected set; }
-
-    public List<PackageInfoWithAnalyze> ReferenceModulePackages { get; protected set; }
-
-    public Dictionary<string, string> Options { get; }
-
-    public IServiceProvider ServiceProvider { get; }
-
-    public ModuleInstallingContext(
-        string moduleName,
-        string targetModule,
-        bool withSourceCode,
-        bool addToSolutionFile,
-        string version,
-        Dictionary<string, string> options,
-        IServiceProvider serviceProvider)
+    public class ModuleInstallingContext
     {
-        ModuleName = moduleName;
-        TargetModule = targetModule;
-        WithSourceCode = withSourceCode;
-        AddToSolutionFile = addToSolutionFile;
-        Version = version;
-        Options = options;
+        public string ModuleName { get; set; }
 
-        TargetModulePackages = new List<PackageInfo>();
-        ReferenceModulePackages = new List<PackageInfoWithAnalyze>();
+        public string TargetModule { get; set; }
 
-        EfCoreConfigurationMethodDeclarations = new List<EfCoreConfigurationMethodDeclaration>();
+        public bool WithSourceCode { get; set; }
 
-        ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
-    }
+        public bool AddToSolutionFile { get; set; }
 
-    public void AddEfCoreConfigurationMethodDeclaration(params EfCoreConfigurationMethodDeclaration[] methodNames)
-    {
-        foreach (var methodName in methodNames)
+        public string Version { get; set; }
+
+        public List<EfCoreConfigurationMethodDeclaration> EfCoreConfigurationMethodDeclarations { get; }
+
+        public List<PackageInfo> TargetModulePackages { get; protected set; }
+
+        public List<PackageInfoWithAnalyze> ReferenceModulePackages { get; protected set; }
+
+        public Dictionary<string,string> Options { get; }
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public ModuleInstallingContext(
+            string moduleName,
+            string targetModule,
+            bool withSourceCode,
+            bool addToSolutionFile,
+            string version,
+            Dictionary<string,string> options,
+            IServiceProvider serviceProvider)
         {
-            Check.NotNull(methodName, nameof(methodName));
+            ModuleName = moduleName;
+            TargetModule = targetModule;
+            WithSourceCode = withSourceCode;
+            AddToSolutionFile = addToSolutionFile;
+            Version = version;
+            Options = options;
 
-            EfCoreConfigurationMethodDeclarations.Add(methodName);
+            TargetModulePackages = new List<PackageInfo>();
+            ReferenceModulePackages = new List<PackageInfoWithAnalyze>();
+
+            EfCoreConfigurationMethodDeclarations = new List<EfCoreConfigurationMethodDeclaration>();
+
+            ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
         }
-    }
 
-    public void SetReferenceModulePackages([NotNull] List<PackageInfoWithAnalyze> referenceModulePackages)
-    {
-        Check.NotNull(referenceModulePackages, nameof(referenceModulePackages));
+        public void AddEfCoreConfigurationMethodDeclaration(params EfCoreConfigurationMethodDeclaration[] methodNames)
+        {
+            foreach (var methodName in methodNames)
+            {
+                Check.NotNull(methodName, nameof(methodName));
 
-        ReferenceModulePackages = referenceModulePackages;
-    }
+                EfCoreConfigurationMethodDeclarations.Add(methodName);
+            }
+        }
 
-    public void SetTargetModulePackages([NotNull] List<PackageInfo> targetModulePackages)
-    {
-        Check.NotNull(targetModulePackages, nameof(targetModulePackages));
+        public void SetReferenceModulePackages([NotNull] List<PackageInfoWithAnalyze> referenceModulePackages)
+        {
+            Check.NotNull(referenceModulePackages, nameof(referenceModulePackages));
 
-        TargetModulePackages = targetModulePackages;
-    }
+            ReferenceModulePackages = referenceModulePackages;
+        }
 
-    public string GetTargetSourceCodeFolder()
-    {
-        return CalculateTargetSourceCodeFolder(TargetModule, ModuleName);
-    }
+        public void SetTargetModulePackages([NotNull] List<PackageInfo> targetModulePackages)
+        {
+            Check.NotNull(targetModulePackages, nameof(targetModulePackages));
 
-    public static string CalculateTargetSourceCodeFolder(string targetModule, string moduleName)
-    {
-        return Path.Combine(Path.GetDirectoryName(targetModule), "modules", moduleName);
+            TargetModulePackages = targetModulePackages;
+        }
+
+        public string GetTargetSourceCodeFolder()
+        {
+            return CalculateTargetSourceCodeFolder(TargetModule, ModuleName);
+        }
+
+        public static string CalculateTargetSourceCodeFolder(string targetModule, string moduleName)
+        {
+            return Path.Combine(Path.GetDirectoryName(targetModule), "modules", moduleName);
+        }
     }
 }

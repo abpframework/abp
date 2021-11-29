@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly;
-
-public class AbpWebAssemblyApplicationCreationOptions
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public WebAssemblyHostBuilder HostBuilder { get; }
-
-    public AbpApplicationCreationOptions ApplicationCreationOptions { get; }
-
-    public AbpWebAssemblyApplicationCreationOptions(
-        WebAssemblyHostBuilder hostBuilder,
-        AbpApplicationCreationOptions applicationCreationOptions)
+    public class AbpWebAssemblyApplicationCreationOptions
     {
-        HostBuilder = hostBuilder;
-        ApplicationCreationOptions = applicationCreationOptions;
+        public WebAssemblyHostBuilder HostBuilder { get; }
+
+        public AbpApplicationCreationOptions ApplicationCreationOptions { get; }
+
+        public AbpWebAssemblyApplicationCreationOptions(
+            WebAssemblyHostBuilder hostBuilder,
+            AbpApplicationCreationOptions applicationCreationOptions)
+        {
+            HostBuilder = hostBuilder;
+            ApplicationCreationOptions = applicationCreationOptions;
+        }
     }
 }

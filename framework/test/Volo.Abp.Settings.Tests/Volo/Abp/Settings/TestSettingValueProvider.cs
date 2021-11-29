@@ -3,28 +3,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Settings;
-
-public class TestSettingValueProvider : ISettingValueProvider, ITransientDependency
+namespace Volo.Abp.Settings
 {
-    public const string ProviderName = "Test";
-
-    private readonly Dictionary<string, string> _values;
-
-    public string Name => ProviderName;
-
-    public TestSettingValueProvider()
+    public class TestSettingValueProvider : ISettingValueProvider, ITransientDependency
     {
-        _values = new Dictionary<string, string>();
-    }
+        public const string ProviderName = "Test";
 
-    public Task<string> GetOrNullAsync(SettingDefinition setting)
-    {
-        return Task.FromResult(_values.GetOrDefault(setting.Name));
-    }
+        private readonly Dictionary<string, string> _values;
 
-    public Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
-    {
-        return Task.FromResult(settings.Select(x => new SettingValue(x.Name, _values.GetOrDefault(x.Name))).ToList());
+        public string Name => ProviderName;
+
+        public TestSettingValueProvider()
+        {
+            _values = new Dictionary<string, string>();
+        }
+
+        public Task<string> GetOrNullAsync(SettingDefinition setting)
+        {
+            return Task.FromResult(_values.GetOrDefault(setting.Name));
+        }
+
+        public Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        {
+            return Task.FromResult(settings.Select(x => new SettingValue(x.Name, _values.GetOrDefault(x.Name))).ToList());
+        }
     }
 }

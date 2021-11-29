@@ -3,45 +3,46 @@ using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.AspNetCore.Components.Web;
-
-public class AbpBlazorMessageLocalizerHelper<T>
+namespace Volo.Abp.AspNetCore.Components.Web
 {
-    private readonly IStringLocalizer<T> stringLocalizer;
-
-    public AbpBlazorMessageLocalizerHelper(IStringLocalizer<T> stringLocalizer)
+    public class AbpBlazorMessageLocalizerHelper<T>
     {
-        this.stringLocalizer = stringLocalizer;
-    }
+        private readonly IStringLocalizer<T> stringLocalizer;
 
-    public string Localize(string message, [CanBeNull] IEnumerable<string> arguments)
-    {
-        try
+        public AbpBlazorMessageLocalizerHelper(IStringLocalizer<T> stringLocalizer)
         {
-            return arguments?.Count() > 0
-                ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()]
-                : stringLocalizer[message];
+            this.stringLocalizer = stringLocalizer;
         }
-        catch
-        {
-            return stringLocalizer[message];
-        }
-    }
 
-    private IEnumerable<string> LocalizeMessageArguments(IEnumerable<string> arguments)
-    {
-        foreach (var argument in arguments)
+        public string Localize(string message, [CanBeNull] IEnumerable<string> arguments)
         {
-            // first try to localize with "DisplayName:{Name}"
-            var localization = stringLocalizer[$"DisplayName:{argument}"];
-
-            if (localization.ResourceNotFound)
+            try
             {
-                // then try to localize with just "{Name}"
-                localization = stringLocalizer[argument];
+                return arguments?.Count() > 0
+                    ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()]
+                    : stringLocalizer[message];
             }
+            catch
+            {
+                return stringLocalizer[message];
+            }
+        }
 
-            yield return localization;
+        private IEnumerable<string> LocalizeMessageArguments(IEnumerable<string> arguments)
+        {
+            foreach (var argument in arguments)
+            {
+                // first try to localize with "DisplayName:{Name}"
+                var localization = stringLocalizer[$"DisplayName:{argument}"];
+
+                if (localization.ResourceNotFound)
+                {
+                    // then try to localize with just "{Name}"
+                    localization = stringLocalizer[argument];
+                }
+
+                yield return localization;
+            }
         }
     }
 }

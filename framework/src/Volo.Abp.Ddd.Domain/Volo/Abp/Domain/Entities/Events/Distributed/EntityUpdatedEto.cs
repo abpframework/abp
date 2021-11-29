@@ -2,28 +2,29 @@
 using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-[Serializable]
-[GenericEventName(Postfix = ".Updated")]
-public class EntityUpdatedEto<TEntityEto> : IEventDataMayHaveTenantId
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    public TEntityEto Entity { get; set; }
-
-    public EntityUpdatedEto(TEntityEto entity)
+    [Serializable]
+    [GenericEventName(Postfix = ".Updated")]
+    public class EntityUpdatedEto<TEntityEto> : IEventDataMayHaveTenantId
     {
-        Entity = entity;
-    }
+        public TEntityEto Entity { get; set; }
 
-    public virtual bool IsMultiTenant(out Guid? tenantId)
-    {
-        if (Entity is IMultiTenant multiTenantEntity)
+        public EntityUpdatedEto(TEntityEto entity)
         {
-            tenantId = multiTenantEntity.TenantId;
-            return true;
+            Entity = entity;
         }
 
-        tenantId = null;
-        return false;
+        public virtual bool IsMultiTenant(out Guid? tenantId)
+        {
+            if (Entity is IMultiTenant multiTenantEntity)
+            {
+                tenantId = multiTenantEntity.TenantId;
+                return true;
+            }
+
+            tenantId = null;
+            return false;
+        }
     }
 }

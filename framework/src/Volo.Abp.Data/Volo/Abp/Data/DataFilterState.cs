@@ -1,16 +1,17 @@
-﻿namespace Volo.Abp.Data;
-
-public class DataFilterState
+﻿namespace Volo.Abp.Data
 {
-    public bool IsEnabled { get; set; }
-
-    public DataFilterState(bool isEnabled)
+    public class DataFilterState
     {
-        IsEnabled = isEnabled;
-    }
+        public bool IsEnabled { get; set; }
 
-    public DataFilterState Clone()
-    {
-        return new DataFilterState(IsEnabled);
+        public DataFilterState(bool isEnabled)
+        {
+            IsEnabled = isEnabled;
+        }
+        
+        public DataFilterState Clone()
+        {
+            return new DataFilterState(IsEnabled);
+        }
     }
 }

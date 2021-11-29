@@ -2,24 +2,25 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Volo.Abp.Auditing;
 
-namespace Volo.Abp.EntityFrameworkCore.EntityHistory;
-
-public class NullEntityHistoryHelper : IEntityHistoryHelper
+namespace Volo.Abp.EntityFrameworkCore.EntityHistory
 {
-    public static NullEntityHistoryHelper Instance { get; } = new NullEntityHistoryHelper();
-
-    private NullEntityHistoryHelper()
+    public class NullEntityHistoryHelper : IEntityHistoryHelper
     {
+        public static NullEntityHistoryHelper Instance { get; } = new NullEntityHistoryHelper();
 
-    }
+        private NullEntityHistoryHelper()
+        {
 
-    public List<EntityChangeInfo> CreateChangeList(ICollection<EntityEntry> entityEntries)
-    {
-        return new List<EntityChangeInfo>();
-    }
+        }
 
-    public void UpdateChangeList(List<EntityChangeInfo> entityChanges)
-    {
+        public List<EntityChangeInfo> CreateChangeList(ICollection<EntityEntry> entityEntries)
+        {
+            return new List<EntityChangeInfo>();
+        }
 
+        public void UpdateChangeList(List<EntityChangeInfo> entityChanges)
+        {
+            
+        }
     }
 }

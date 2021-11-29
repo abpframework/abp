@@ -3,35 +3,36 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.RabbitMQ;
-
-[DependsOn(
-    typeof(AbpJsonModule),
-    typeof(AbpThreadingModule)
-    )]
-public class AbpRabbitMqModule : AbpModule
+namespace Volo.Abp.RabbitMQ
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpJsonModule),
+        typeof(AbpThreadingModule)
+        )]
+    public class AbpRabbitMqModule : AbpModule
     {
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpRabbitMqOptions>(configuration.GetSection("RabbitMQ"));
-        Configure<AbpRabbitMqOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            foreach (var connectionFactory in options.Connections.Values)
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpRabbitMqOptions>(configuration.GetSection("RabbitMQ"));
+            Configure<AbpRabbitMqOptions>(options =>
             {
-                connectionFactory.DispatchConsumersAsync = true;
-            }
-        });
-    }
+                foreach (var connectionFactory in options.Connections.Values)
+                {
+                    connectionFactory.DispatchConsumersAsync = true;
+                }
+            });
+        }
 
-    public override void OnApplicationShutdown(ApplicationShutdownContext context)
-    {
-        context.ServiceProvider
-            .GetRequiredService<IChannelPool>()
-            .Dispose();
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            context.ServiceProvider
+                .GetRequiredService<IChannelPool>()
+                .Dispose();
 
-        context.ServiceProvider
-            .GetRequiredService<IConnectionPool>()
-            .Dispose();
+            context.ServiceProvider
+                .GetRequiredService<IConnectionPool>()
+                .Dispose();
+        }
     }
 }

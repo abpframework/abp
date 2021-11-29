@@ -5,25 +5,26 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TenantManagement;
-
-[DependsOn(typeof(AbpValidationModule))]
-public class AbpTenantManagementDomainSharedModule : AbpModule
+namespace Volo.Abp.TenantManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpValidationModule))]
+    public class AbpTenantManagementDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpTenantManagementDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpTenantManagementDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpTenantManagementResource>("en")
-                .AddBaseTypes(
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/Volo/Abp/TenantManagement/Localization/Resources");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpTenantManagementResource>("en")
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/TenantManagement/Localization/Resources");
+            });
+        }
     }
 }

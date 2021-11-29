@@ -2,24 +2,25 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.Caching;
-
-public class Utf8JsonDistributedCacheSerializer : IDistributedCacheSerializer, ITransientDependency
+namespace Volo.Abp.Caching
 {
-    protected IJsonSerializer JsonSerializer { get; }
-
-    public Utf8JsonDistributedCacheSerializer(IJsonSerializer jsonSerializer)
+    public class Utf8JsonDistributedCacheSerializer : IDistributedCacheSerializer, ITransientDependency
     {
-        JsonSerializer = jsonSerializer;
-    }
+        protected IJsonSerializer JsonSerializer { get; }
 
-    public byte[] Serialize<T>(T obj)
-    {
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj));
-    }
+        public Utf8JsonDistributedCacheSerializer(IJsonSerializer jsonSerializer)
+        {
+            JsonSerializer = jsonSerializer;
+        }
 
-    public T Deserialize<T>(byte[] bytes)
-    {
-        return (T)JsonSerializer.Deserialize(typeof(T), Encoding.UTF8.GetString(bytes));
+        public byte[] Serialize<T>(T obj)
+        {
+            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj));
+        }
+
+        public T Deserialize<T>(byte[] bytes)
+        {
+            return (T)JsonSerializer.Deserialize(typeof(T), Encoding.UTF8.GetString(bytes));
+        }
     }
 }

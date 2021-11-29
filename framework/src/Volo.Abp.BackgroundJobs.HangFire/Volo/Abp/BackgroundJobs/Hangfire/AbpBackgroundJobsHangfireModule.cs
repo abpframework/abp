@@ -6,33 +6,34 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BackgroundJobs.Hangfire;
-
-[DependsOn(
-    typeof(AbpBackgroundJobsAbstractionsModule),
-    typeof(AbpHangfireModule)
-)]
-public class AbpBackgroundJobsHangfireModule : AbpModule
+namespace Volo.Abp.BackgroundJobs.Hangfire
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBackgroundJobsAbstractionsModule),
+        typeof(AbpHangfireModule)
+    )]
+    public class AbpBackgroundJobsHangfireModule : AbpModule
     {
-        context.Services.AddTransient(serviceProvider =>
-            serviceProvider.GetRequiredService<AbpDashboardOptionsProvider>().Get());
-    }
-
-    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-        if (!options.IsJobExecutionEnabled)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
-            hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
+            context.Services.AddTransient(serviceProvider =>
+                serviceProvider.GetRequiredService<AbpDashboardOptionsProvider>().Get());
         }
-    }
 
-    private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
-    {
-        serviceProvider.GetRequiredService<JobStorage>();
-        return null;
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
+            if (!options.IsJobExecutionEnabled)
+            {
+                var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+                hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
+            }
+        }
+
+        private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetRequiredService<JobStorage>();
+            return null;
+        }
     }
 }

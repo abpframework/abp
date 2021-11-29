@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-
-public enum AbpReadonlyInputType
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    False,
-    True,
-    True_PlainText
+    public enum AbpReadonlyInputType
+    {
+        False,
+        True,
+        True_PlainText
+    }
 }

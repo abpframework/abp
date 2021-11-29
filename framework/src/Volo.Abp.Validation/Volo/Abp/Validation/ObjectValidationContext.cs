@@ -2,18 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Validation;
-
-public class ObjectValidationContext
+namespace Volo.Abp.Validation
 {
-    [NotNull]
-    public object ValidatingObject { get; }
-
-    public List<ValidationResult> Errors { get; }
-
-    public ObjectValidationContext([NotNull] object validatingObject)
+    public class ObjectValidationContext
     {
-        ValidatingObject = Check.NotNull(validatingObject, nameof(validatingObject));
-        Errors = new List<ValidationResult>();
+        [NotNull]
+        public object ValidatingObject { get; }
+
+        public List<ValidationResult> Errors { get; }
+
+        public ObjectValidationContext([NotNull] object validatingObject)
+        {
+            ValidatingObject = Check.NotNull(validatingObject, nameof(validatingObject));
+            Errors = new List<ValidationResult>();
+        }
     }
 }

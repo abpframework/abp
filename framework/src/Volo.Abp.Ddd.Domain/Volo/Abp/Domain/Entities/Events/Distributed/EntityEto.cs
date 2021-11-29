@@ -1,22 +1,23 @@
 ﻿using System;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-[Serializable]
-public class EntityEto : EtoBase
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    public string EntityType { get; set; }
-
-    public string KeysAsString { get; set; }
-
-    public EntityEto()
+    [Serializable]
+    public class EntityEto : EtoBase
     {
+        public string EntityType { get; set; }
 
-    }
+        public string KeysAsString { get; set; }
 
-    public EntityEto(string entityType, string keysAsString)
-    {
-        EntityType = entityType;
-        KeysAsString = keysAsString;
+        public EntityEto()
+        {
+
+        }
+
+        public EntityEto(string entityType, string keysAsString)
+        {
+            EntityType = entityType;
+            KeysAsString = keysAsString;
+        }
     }
 }

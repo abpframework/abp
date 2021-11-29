@@ -8,33 +8,34 @@ using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.FeatureManagement.JsonConverters;
 
-namespace Volo.Abp.FeatureManagement;
-
-[DependsOn(
-    typeof(AbpFeatureManagementApplicationContractsModule),
-    typeof(AbpAspNetCoreMvcModule))]
-public class AbpFeatureManagementHttpApiModule : AbpModule
+namespace Volo.Abp.FeatureManagement
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpFeatureManagementApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcModule))]
+    public class AbpFeatureManagementHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<AbpFeatureManagementResource>()
-                .AddBaseTypes(typeof(AbpUiResource));
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpFeatureManagementResource>()
+                    .AddBaseTypes(typeof(AbpUiResource));
+            });
 
-        Configure<JsonOptions>(options =>
-        {
-            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
-        });
+            Configure<JsonOptions>(options =>
+            {
+                options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
+            });
+        }
     }
 }

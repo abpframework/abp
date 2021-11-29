@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Linq;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
-
-public class ContentLayout
+namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
 {
-    public string Title { get; set; }
-
-    public BreadCrumb BreadCrumb { get; }
-
-    public string MenuItemName { get; set; }
-
-    public ContentLayout()
+    public class ContentLayout
     {
-        BreadCrumb = new BreadCrumb();
-    }
+        public string Title { get; set; }
 
-    public virtual bool ShouldShowBreadCrumb()
-    {
-        if (BreadCrumb.Items.Any())
+        public BreadCrumb BreadCrumb { get; }
+
+        public string MenuItemName { get; set; }
+
+        public ContentLayout()
         {
-            return true;
+            BreadCrumb = new BreadCrumb();
         }
 
-        if (BreadCrumb.ShowCurrent && !Title.IsNullOrEmpty())
+        public virtual bool ShouldShowBreadCrumb()
         {
-            return true;
-        }
+            if (BreadCrumb.Items.Any())
+            {
+                return true;
+            }
 
-        return false;
+            if (BreadCrumb.ShowCurrent && !Title.IsNullOrEmpty())
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

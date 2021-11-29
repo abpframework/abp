@@ -5,62 +5,63 @@ using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly;
-
-[ExposeServices(
-    typeof(WebAssemblyCachedApplicationConfigurationClient),
-    typeof(ICachedApplicationConfigurationClient),
-    typeof(IAsyncInitialize)
-    )]
-public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
-
-    protected ApplicationConfigurationCache Cache { get; }
-
-    protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
-
-    public WebAssemblyCachedApplicationConfigurationClient(
-        AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
-        ApplicationConfigurationCache cache,
-        ICurrentTenantAccessor currentTenantAccessor)
+    [ExposeServices(
+        typeof(WebAssemblyCachedApplicationConfigurationClient),
+        typeof(ICachedApplicationConfigurationClient),
+        typeof(IAsyncInitialize)
+        )]
+    public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
-        ApplicationConfigurationAppService = applicationConfigurationAppService;
-        Cache = cache;
-        CurrentTenantAccessor = currentTenantAccessor;
-    }
+        protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
 
-    public virtual async Task InitializeAsync()
-    {
-        var configurationDto = await ApplicationConfigurationAppService.GetAsync();
+        protected ApplicationConfigurationCache Cache { get; }
 
-        Cache.Set(configurationDto);
+        protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
-        CurrentTenantAccessor.Current = new BasicTenantInfo(
-            configurationDto.CurrentTenant.Id,
-            configurationDto.CurrentTenant.Name
-        );
-    }
-
-    public virtual Task<ApplicationConfigurationDto> GetAsync()
-    {
-        return Task.FromResult(GetConfigurationByChecking());
-    }
-
-    public virtual ApplicationConfigurationDto Get()
-    {
-        return GetConfigurationByChecking();
-    }
-
-    private ApplicationConfigurationDto GetConfigurationByChecking()
-    {
-        var configuration = Cache.Get();
-        if (configuration == null)
+        public WebAssemblyCachedApplicationConfigurationClient(
+            AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
+            ApplicationConfigurationCache cache,
+            ICurrentTenantAccessor currentTenantAccessor)
         {
-            throw new AbpException(
-                $"{nameof(WebAssemblyCachedApplicationConfigurationClient)} should be initialized before using it.");
+            ApplicationConfigurationAppService = applicationConfigurationAppService;
+            Cache = cache;
+            CurrentTenantAccessor = currentTenantAccessor;
         }
 
-        return configuration;
+        public virtual async Task InitializeAsync()
+        {
+            var configurationDto = await ApplicationConfigurationAppService.GetAsync();
+
+            Cache.Set(configurationDto);
+
+            CurrentTenantAccessor.Current = new BasicTenantInfo(
+                configurationDto.CurrentTenant.Id,
+                configurationDto.CurrentTenant.Name
+            );
+        }
+
+        public virtual Task<ApplicationConfigurationDto> GetAsync()
+        {
+            return Task.FromResult(GetConfigurationByChecking());
+        }
+
+        public virtual ApplicationConfigurationDto Get()
+        {
+            return GetConfigurationByChecking();
+        }
+
+        private ApplicationConfigurationDto GetConfigurationByChecking()
+        {
+            var configuration = Cache.Get();
+            if (configuration == null)
+            {
+                throw new AbpException(
+                    $"{nameof(WebAssemblyCachedApplicationConfigurationClient)} should be initialized before using it.");
+            }
+
+            return configuration;
+        }
     }
 }

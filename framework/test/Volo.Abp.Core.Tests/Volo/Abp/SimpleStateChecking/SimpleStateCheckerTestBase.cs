@@ -5,100 +5,101 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.SimpleStateChecking;
-
-public abstract class SimpleStateCheckerTestBase : AbpIntegratedTest<AbpTestModule>
+namespace Volo.Abp.SimpleStateChecking
 {
-    protected readonly ISimpleStateCheckerManager<MyStateEntity> SimpleStateCheckerManager;
-
-    public SimpleStateCheckerTestBase()
+    public abstract class SimpleStateCheckerTestBase : AbpIntegratedTest<AbpTestModule>
     {
-        SimpleStateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<MyStateEntity>>();
-    }
+        protected readonly ISimpleStateCheckerManager<MyStateEntity> SimpleStateCheckerManager;
 
-    public class MyStateEntity : IHasSimpleStateCheckers<MyStateEntity>
-    {
-        public int CheckCount { get; set; }
-
-        public int GlobalCheckCount { get; set; }
-
-        public int MultipleCheckCount { get; set; }
-
-        public int MultipleGlobalCheckCount { get; set; }
-
-        public DateTime CreationTime { get; set; }
-
-        public DateTime? LastModificationTime { get; set; }
-
-        public List<ISimpleStateChecker<MyStateEntity>> StateCheckers { get; }
-
-        public MyStateEntity()
+        public SimpleStateCheckerTestBase()
         {
-            StateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
+            SimpleStateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<MyStateEntity>>();
         }
 
-        public MyStateEntity AddSimpleStateChecker(ISimpleStateChecker<MyStateEntity> checker)
+        public class MyStateEntity : IHasSimpleStateCheckers<MyStateEntity>
         {
-            StateCheckers.Add(checker);
-            return this;
-        }
-    }
+            public int CheckCount { get; set; }
 
-    public class MySimpleStateChecker : ISimpleStateChecker<SimpleStateCheckerTestBase.MyStateEntity>
-    {
-        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
-        {
-            context.State.CheckCount += 1;
-            return Task.FromResult(context.State.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture));
-        }
-    }
+            public int GlobalCheckCount { get; set; }
 
-    public class MyGlobalSimpleStateChecker : ISimpleStateChecker<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
-    {
-        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
-        {
-            context.State.GlobalCheckCount += 1;
-            return Task.FromResult(context.State.LastModificationTime.HasValue);
-        }
-    }
+            public int MultipleCheckCount { get; set; }
 
-    public class MySimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>
-    {
-        public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
-        {
-            foreach (var state in context.States)
+            public int MultipleGlobalCheckCount { get; set; }
+
+            public DateTime CreationTime { get; set; }
+
+            public DateTime? LastModificationTime { get; set; }
+
+            public List<ISimpleStateChecker<MyStateEntity>> StateCheckers { get; }
+
+            public MyStateEntity()
             {
-                state.MultipleCheckCount += 1;
+                StateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
             }
 
-            var result = new SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>(context.States);
-
-            foreach (var x in result)
+            public MyStateEntity AddSimpleStateChecker(ISimpleStateChecker<MyStateEntity> checker)
             {
-                result[x.Key] = x.Key.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture);
+                StateCheckers.Add(checker);
+                return this;
             }
-
-            return Task.FromResult(result);
         }
-    }
 
-    public class MyGlobalSimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
-    {
-        public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
+        public class MySimpleStateChecker : ISimpleStateChecker<SimpleStateCheckerTestBase.MyStateEntity>
         {
-            foreach (var state in context.States)
+            public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
             {
-                state.MultipleGlobalCheckCount += 1;
+                context.State.CheckCount += 1;
+                return Task.FromResult(context.State.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture));
             }
+        }
 
-            var result = new SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>(context.States);
-
-            foreach (var x in result)
+        public class MyGlobalSimpleStateChecker : ISimpleStateChecker<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
+        {
+            public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
             {
-                result[x.Key] = x.Key.LastModificationTime.HasValue;
+                context.State.GlobalCheckCount += 1;
+                return Task.FromResult(context.State.LastModificationTime.HasValue);
             }
+        }
 
-            return Task.FromResult(result);
+        public class MySimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>
+        {
+            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
+            {
+                foreach (var state in context.States)
+                {
+                    state.MultipleCheckCount += 1;
+                }
+
+                var result = new SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>(context.States);
+
+                foreach (var x in result)
+                {
+                    result[x.Key] = x.Key.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture);
+                }
+
+                return Task.FromResult(result);
+            }
+        }
+
+        public class MyGlobalSimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
+        {
+            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
+            {
+                foreach (var state in context.States)
+                {
+                    state.MultipleGlobalCheckCount += 1;
+                }
+
+                var result = new SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>(context.States);
+
+                foreach (var x in result)
+                {
+                    result[x.Key] = x.Key.LastModificationTime.HasValue;
+                }
+
+                return Task.FromResult(result);
+            }
         }
     }
 }

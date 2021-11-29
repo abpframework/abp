@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.BackgroundWorkers.Quartz;
-
-public class AbpBackgroundWorkerQuartzOptions
+﻿namespace Volo.Abp.BackgroundWorkers.Quartz
 {
-    /// <summary>
-    /// Default : true.
-    /// </summary>
-    public bool IsAutoRegisterEnabled { get; set; } = true;
+    public class AbpBackgroundWorkerQuartzOptions
+    {
+        /// <summary>
+        /// Default : true.
+        /// </summary>
+        public bool IsAutoRegisterEnabled { get; set; } = true;
+    }
 }

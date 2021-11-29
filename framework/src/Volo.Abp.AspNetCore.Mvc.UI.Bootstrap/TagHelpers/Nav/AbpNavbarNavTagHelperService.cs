@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
-
-public class AbpNavbarNavTagHelperService : AbpTagHelperService<AbpNavbarNavTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpNavbarNavTagHelperService : AbpTagHelperService<AbpNavbarNavTagHelper>
     {
-        output.TagName = "ul";
-        output.Attributes.AddClass("navbar-nav");
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagName = "ul";
+            output.Attributes.AddClass("navbar-nav");
+        }
     }
 }

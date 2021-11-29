@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.EntityFrameworkCore;
-
-public static class AbpOracleModelBuilderExtensions
+namespace Microsoft.EntityFrameworkCore
 {
-    public static void UseOracle(
-        this ModelBuilder modelBuilder)
+    public static class AbpOracleModelBuilderExtensions
     {
-        modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Oracle);
+        public static void UseOracle(
+            this ModelBuilder modelBuilder)
+        {
+            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Oracle);
+        }
     }
 }

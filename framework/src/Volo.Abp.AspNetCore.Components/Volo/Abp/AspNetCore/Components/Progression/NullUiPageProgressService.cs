@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Progression;
-
-public class NullUiPageProgressService : IUiPageProgressService, ISingletonDependency
+namespace Volo.Abp.AspNetCore.Components.Progression
 {
-    public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
-
-    public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
+    public class NullUiPageProgressService : IUiPageProgressService, ISingletonDependency
     {
-        return Task.CompletedTask;
+        public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
+
+        public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

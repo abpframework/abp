@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Account.Settings;
-
-public class AccountSettingNames
+﻿namespace Volo.Abp.Account.Settings
 {
-    public const string IsSelfRegistrationEnabled = "Abp.Account.IsSelfRegistrationEnabled";
+    public class AccountSettingNames
+    {
+        public const string IsSelfRegistrationEnabled = "Abp.Account.IsSelfRegistrationEnabled";
 
-    public const string EnableLocalLogin = "Abp.Account.EnableLocalLogin";
+        public const string EnableLocalLogin = "Abp.Account.EnableLocalLogin";
+    }
 }

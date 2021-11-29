@@ -1,20 +1,21 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public class TypePlugInSource : IPlugInSource
+namespace Volo.Abp.Modularity.PlugIns
 {
-    private readonly Type[] _moduleTypes;
-
-    public TypePlugInSource(params Type[] moduleTypes)
+    public class TypePlugInSource : IPlugInSource
     {
-        _moduleTypes = moduleTypes ?? new Type[0];
-    }
+        private readonly Type[] _moduleTypes;
 
-    [NotNull]
-    public Type[] GetModules()
-    {
-        return _moduleTypes;
+        public TypePlugInSource(params Type[] moduleTypes)
+        {
+            _moduleTypes = moduleTypes ?? new Type[0];
+        }
+
+        [NotNull]
+        public Type[] GetModules()
+        {
+            return _moduleTypes;
+        }
     }
 }

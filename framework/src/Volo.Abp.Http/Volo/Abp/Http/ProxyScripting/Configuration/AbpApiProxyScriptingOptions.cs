@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Http.ProxyScripting.Configuration;
-
-public class AbpApiProxyScriptingOptions
+namespace Volo.Abp.Http.ProxyScripting.Configuration
 {
-    public IDictionary<string, Type> Generators { get; }
-
-    public AbpApiProxyScriptingOptions()
+    public class AbpApiProxyScriptingOptions
     {
-        Generators = new Dictionary<string, Type>();
+        public IDictionary<string, Type> Generators { get; }
+
+        public AbpApiProxyScriptingOptions()
+        {
+            Generators = new Dictionary<string, Type>();
+        }
     }
 }

@@ -4,33 +4,34 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.Server.Theming;
-
-[DependsOn(
-    typeof(AbpAspNetCoreComponentsServerModule),
-    typeof(AbpAspNetCoreMvcUiPackagesModule),
-    typeof(AbpAspNetCoreComponentsWebThemingModule),
-    typeof(AbpAspNetCoreMvcUiBundlingModule)
-    )]
-public class AbpAspNetCoreComponentsServerThemingModule : AbpModule
+namespace Volo.Abp.AspNetCore.Components.Server.Theming
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreComponentsServerModule),
+        typeof(AbpAspNetCoreMvcUiPackagesModule),
+        typeof(AbpAspNetCoreComponentsWebThemingModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule)
+        )]
+    public class AbpAspNetCoreComponentsServerThemingModule : AbpModule
     {
-        Configure<AbpBundlingOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options
-                .StyleBundles
-                .Add(BlazorStandardBundles.Styles.Global, bundle =>
-                {
-                    bundle.AddContributors(typeof(BlazorGlobalStyleContributor));
-                });
-
-            options
-                .ScriptBundles
-                .Add(BlazorStandardBundles.Scripts.Global, bundle =>
-                {
-                    bundle.AddContributors(typeof(BlazorGlobalScriptContributor));
-                });
-        });
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Add(BlazorStandardBundles.Styles.Global, bundle =>
+                    {
+                        bundle.AddContributors(typeof(BlazorGlobalStyleContributor));
+                    });
+                
+                options
+                    .ScriptBundles
+                    .Add(BlazorStandardBundles.Scripts.Global, bundle =>
+                    {
+                        bundle.AddContributors(typeof(BlazorGlobalScriptContributor));
+                    });
+            });
+        }
     }
 }

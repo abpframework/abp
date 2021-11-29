@@ -7,52 +7,53 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization;
-
-public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider, IAbpAuthorizationPolicyProvider, ITransientDependency
+namespace Volo.Abp.Authorization
 {
-    private readonly AuthorizationOptions _options;
-    private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-
-    public AbpAuthorizationPolicyProvider(
-        IOptions<AuthorizationOptions> options,
-        IPermissionDefinitionManager permissionDefinitionManager)
-        : base(options)
+    public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider, IAbpAuthorizationPolicyProvider, ITransientDependency
     {
-        _permissionDefinitionManager = permissionDefinitionManager;
-        _options = options.Value;
-    }
+        private readonly AuthorizationOptions _options;
+        private readonly IPermissionDefinitionManager _permissionDefinitionManager;
 
-    public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
-    {
-        var policy = await base.GetPolicyAsync(policyName);
-        if (policy != null)
+        public AbpAuthorizationPolicyProvider(
+            IOptions<AuthorizationOptions> options,
+            IPermissionDefinitionManager permissionDefinitionManager)
+            : base(options)
         {
-            return policy;
+            _permissionDefinitionManager = permissionDefinitionManager;
+            _options = options.Value;
         }
 
-        var permission = _permissionDefinitionManager.GetOrNull(policyName);
-        if (permission != null)
+        public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
-            //TODO: Optimize & Cache!
-            var policyBuilder = new AuthorizationPolicyBuilder(Array.Empty<string>());
-            policyBuilder.Requirements.Add(new PermissionRequirement(policyName));
-            return policyBuilder.Build();
+            var policy = await base.GetPolicyAsync(policyName);
+            if (policy != null)
+            {
+                return policy;
+            }
+
+            var permission = _permissionDefinitionManager.GetOrNull(policyName);
+            if (permission != null)
+            {
+                //TODO: Optimize & Cache!
+                var policyBuilder = new AuthorizationPolicyBuilder(Array.Empty<string>());
+                policyBuilder.Requirements.Add(new PermissionRequirement(policyName));
+                return policyBuilder.Build();
+            }
+
+            return null;
         }
 
-        return null;
-    }
-
-    public Task<List<string>> GetPoliciesNamesAsync()
-    {
-        return Task.FromResult(
-            _options.GetPoliciesNames()
-                .Union(
-                    _permissionDefinitionManager
-                        .GetPermissions()
-                        .Select(p => p.Name)
-                )
-                .ToList()
-        );
+        public Task<List<string>> GetPoliciesNamesAsync()
+        {
+            return Task.FromResult(
+                _options.GetPoliciesNames()
+                    .Union(
+                        _permissionDefinitionManager
+                            .GetPermissions()
+                            .Select(p => p.Name)
+                    )
+                    .ToList()
+            );
+        }
     }
 }

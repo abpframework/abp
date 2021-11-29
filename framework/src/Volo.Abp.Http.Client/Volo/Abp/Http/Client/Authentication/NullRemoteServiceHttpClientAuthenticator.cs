@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.Client.Authentication;
-
-[Dependency(TryRegister = true)]
-public class NullRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ISingletonDependency
+namespace Volo.Abp.Http.Client.Authentication
 {
-    public Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+    [Dependency(TryRegister = true)]
+    public class NullRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ISingletonDependency
     {
-        return Task.CompletedTask;
+        public Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

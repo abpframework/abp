@@ -7,23 +7,24 @@ using Volo.Abp.Validation;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.Client.DynamicProxying;
 
-namespace Volo.Abp.Http.Client;
-
-[DependsOn(
-    typeof(AbpHttpModule),
-    typeof(AbpCastleCoreModule),
-    typeof(AbpThreadingModule),
-    typeof(AbpMultiTenancyModule),
-    typeof(AbpValidationModule),
-    typeof(AbpExceptionHandlingModule)
-    )]
-public class AbpHttpClientModule : AbpModule
+namespace Volo.Abp.Http.Client
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpHttpModule),
+        typeof(AbpCastleCoreModule),
+        typeof(AbpThreadingModule),
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpValidationModule),
+        typeof(AbpExceptionHandlingModule)
+        )]
+    public class AbpHttpClientModule : AbpModule
     {
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpRemoteServiceOptions>(configuration);
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpRemoteServiceOptions>(configuration);
 
-        context.Services.AddTransient(typeof(DynamicHttpProxyInterceptorClientProxy<>));
+            context.Services.AddTransient(typeof(DynamicHttpProxyInterceptorClientProxy<>));
+        }
     }
 }

@@ -3,11 +3,12 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.MediaDescriptors;
 
-namespace Volo.CmsKit.MongoDB.MediaDescriptors;
-
-public class MongoMediaDescriptorRepository : MongoDbRepository<ICmsKitMongoDbContext, MediaDescriptor, Guid>, IMediaDescriptorRepository
+namespace Volo.CmsKit.MongoDB.MediaDescriptors
 {
-    public MongoMediaDescriptorRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+    public class MongoMediaDescriptorRepository : MongoDbRepository<ICmsKitMongoDbContext, MediaDescriptor, Guid>, IMediaDescriptorRepository
     {
+        public MongoMediaDescriptorRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        {
+        }
     }
 }

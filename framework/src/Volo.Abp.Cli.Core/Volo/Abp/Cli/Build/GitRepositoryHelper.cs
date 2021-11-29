@@ -1,23 +1,24 @@
 ﻿using LibGit2Sharp;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Build;
-
-public class GitRepositoryHelper : IGitRepositoryHelper, ITransientDependency
+namespace Volo.Abp.Cli.Build
 {
-    public string GetLastCommitId(GitRepository repository)
+    public class GitRepositoryHelper : IGitRepositoryHelper, ITransientDependency
     {
-        using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
+        public string GetLastCommitId(GitRepository repository)
         {
-            return repo.Head.Tip.Id.ToString();
+            using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
+            {
+                return repo.Head.Tip.Id.ToString();
+            }
         }
-    }
 
-    public string GetFriendlyName(GitRepository repository)
-    {
-        using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
+        public string GetFriendlyName(GitRepository repository)
         {
-            return repo.Head.FriendlyName;
+            using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
+            {
+                return repo.Head.FriendlyName;
+            }
         }
     }
 }

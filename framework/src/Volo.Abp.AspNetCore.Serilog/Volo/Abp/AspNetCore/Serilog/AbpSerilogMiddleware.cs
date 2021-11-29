@@ -11,58 +11,59 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Tracing;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Serilog;
-
-public class AbpSerilogMiddleware : IMiddleware, ITransientDependency
+namespace Volo.Abp.AspNetCore.Serilog
 {
-    private readonly ICurrentClient _currentClient;
-    private readonly ICurrentTenant _currentTenant;
-    private readonly ICurrentUser _currentUser;
-    private readonly ICorrelationIdProvider _correlationIdProvider;
-    private readonly AbpAspNetCoreSerilogOptions _options;
-
-    public AbpSerilogMiddleware(
-        ICurrentTenant currentTenant,
-        ICurrentUser currentUser,
-        ICurrentClient currentClient,
-        ICorrelationIdProvider correlationIdProvider,
-        IOptions<AbpAspNetCoreSerilogOptions> options)
+    public class AbpSerilogMiddleware : IMiddleware, ITransientDependency
     {
-        _currentTenant = currentTenant;
-        _currentUser = currentUser;
-        _currentClient = currentClient;
-        _correlationIdProvider = correlationIdProvider;
-        _options = options.Value;
-    }
+        private readonly ICurrentClient _currentClient;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly ICurrentUser _currentUser;
+        private readonly ICorrelationIdProvider _correlationIdProvider;
+        private readonly AbpAspNetCoreSerilogOptions _options;
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        var enrichers = new List<ILogEventEnricher>();
-
-        if (_currentTenant?.Id != null)
+        public AbpSerilogMiddleware(
+            ICurrentTenant currentTenant,
+            ICurrentUser currentUser,
+            ICurrentClient currentClient,
+            ICorrelationIdProvider correlationIdProvider,
+            IOptions<AbpAspNetCoreSerilogOptions> options)
         {
-            enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.TenantId, _currentTenant.Id));
+            _currentTenant = currentTenant;
+            _currentUser = currentUser;
+            _currentClient = currentClient;
+            _correlationIdProvider = correlationIdProvider;
+            _options = options.Value;
         }
 
-        if (_currentUser?.Id != null)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.UserId, _currentUser.Id));
-        }
+            var enrichers = new List<ILogEventEnricher>();
 
-        if (_currentClient?.Id != null)
-        {
-            enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.ClientId, _currentClient.Id));
-        }
+            if (_currentTenant?.Id != null)
+            {
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.TenantId, _currentTenant.Id));
+            }
 
-        var correlationId = _correlationIdProvider.Get();
-        if (!string.IsNullOrEmpty(correlationId))
-        {
-            enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.CorrelationId, correlationId));
-        }
+            if (_currentUser?.Id != null)
+            {
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.UserId, _currentUser.Id));
+            }
 
-        using (LogContext.Push(enrichers.ToArray()))
-        {
-            await next(context);
+            if (_currentClient?.Id != null)
+            {
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.ClientId, _currentClient.Id));
+            }
+
+            var correlationId = _correlationIdProvider.Get();
+            if (!string.IsNullOrEmpty(correlationId))
+            {
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.CorrelationId, correlationId));
+            }
+
+            using (LogContext.Push(enrichers.ToArray()))
+            {
+                await next(context);
+            }
         }
     }
 }

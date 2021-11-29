@@ -6,40 +6,41 @@ using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Comments;
-
-public class CommentManager : DomainService
+namespace Volo.CmsKit.Comments
 {
-    protected ICommentEntityTypeDefinitionStore DefinitionStore { get; }
-
-    public CommentManager(ICommentEntityTypeDefinitionStore definitionStore)
+    public class CommentManager : DomainService
     {
-        DefinitionStore = definitionStore;
-    }
+        protected ICommentEntityTypeDefinitionStore DefinitionStore { get; }
 
-    public virtual async Task<Comment> CreateAsync([NotNull] CmsUser creator,
-                                                   [NotNull] string entityType,
-                                                   [NotNull] string entityId,
-                                                   [NotNull] string text,
-                                                   [CanBeNull] Guid? repliedCommentId = null)
-    {
-        Check.NotNull(creator, nameof(creator));
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);
-        Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
-        Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
-
-        if (!await DefinitionStore.IsDefinedAsync(entityType))
+        public CommentManager(ICommentEntityTypeDefinitionStore definitionStore)
         {
-            throw new EntityNotCommentableException(entityType);
+            DefinitionStore = definitionStore;
         }
 
-        return new Comment(
-                GuidGenerator.Create(),
-                entityType,
-                entityId,
-                text,
-                repliedCommentId,
-                creator.Id,
-                CurrentTenant.Id);
+        public virtual async Task<Comment> CreateAsync([NotNull] CmsUser creator,
+                                                       [NotNull] string entityType,
+                                                       [NotNull] string entityId,
+                                                       [NotNull] string text,
+                                                       [CanBeNull] Guid? repliedCommentId = null)
+        {
+            Check.NotNull(creator, nameof(creator));
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
+            Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
+
+            if (!await DefinitionStore.IsDefinedAsync(entityType))
+            {
+                throw new EntityNotCommentableException(entityType);
+            }
+
+            return new Comment(
+                    GuidGenerator.Create(),
+                    entityType,
+                    entityId,
+                    text,
+                    repliedCommentId,
+                    creator.Id,
+                    CurrentTenant.Id);
+        }
     }
 }

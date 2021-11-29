@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.Nuget;
-
-public interface INugetSourceCodeStore
+namespace Volo.Abp.Studio.Nuget
 {
-    Task<string> GetCachedSourceCodeFilePathAsync(string name,
-        string type,
-        string version = null,
-        bool includePreReleases = false);
+    public interface INugetSourceCodeStore
+    {
+        Task<string> GetCachedSourceCodeFilePathAsync(string name,
+            string type,
+            string version = null,
+            bool includePreReleases = false);
 
-    Task<string> GetCachedDllFilePathAsync(string name,
-        string type,
-        string version = null,
-        bool includePreReleases = false,
-        bool includeDependencies = false);
+        Task<string> GetCachedDllFilePathAsync(string name,
+            string type,
+            string version = null,
+            bool includePreReleases = false,
+            bool includeDependencies = false);
+    }
 }

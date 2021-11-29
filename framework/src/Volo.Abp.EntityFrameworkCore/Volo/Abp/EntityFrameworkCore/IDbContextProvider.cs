@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public interface IDbContextProvider<TDbContext>
-    where TDbContext : IEfCoreDbContext
+namespace Volo.Abp.EntityFrameworkCore
 {
-    [Obsolete("Use GetDbContextAsync method.")]
-    TDbContext GetDbContext();
+    public interface IDbContextProvider<TDbContext>
+        where TDbContext : IEfCoreDbContext
+    {
+        [Obsolete("Use GetDbContextAsync method.")]
+        TDbContext GetDbContext();
 
-    Task<TDbContext> GetDbContextAsync();
+        Task<TDbContext> GetDbContextAsync();
+    }
 }

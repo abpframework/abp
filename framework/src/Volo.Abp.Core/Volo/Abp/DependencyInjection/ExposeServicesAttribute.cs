@@ -3,64 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Volo.Abp.DependencyInjection;
-
-public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
+namespace Volo.Abp.DependencyInjection
 {
-    public Type[] ServiceTypes { get; }
-
-    public bool IncludeDefaults { get; set; }
-
-    public bool IncludeSelf { get; set; }
-
-    public ExposeServicesAttribute(params Type[] serviceTypes)
+    public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
     {
-        ServiceTypes = serviceTypes ?? new Type[0];
-    }
+        public Type[] ServiceTypes { get; }
 
-    public Type[] GetExposedServiceTypes(Type targetType)
-    {
-        var serviceList = ServiceTypes.ToList();
+        public bool IncludeDefaults { get; set; }
 
-        if (IncludeDefaults)
+        public bool IncludeSelf { get; set; }
+
+        public ExposeServicesAttribute(params Type[] serviceTypes)
         {
-            foreach (var type in GetDefaultServices(targetType))
-            {
-                serviceList.AddIfNotContains(type);
-            }
+            ServiceTypes = serviceTypes ?? new Type[0];
+        }
 
-            if (IncludeSelf)
+        public Type[] GetExposedServiceTypes(Type targetType)
+        {
+            var serviceList = ServiceTypes.ToList();
+
+            if (IncludeDefaults)
+            {
+                foreach (var type in GetDefaultServices(targetType))
+                {
+                    serviceList.AddIfNotContains(type);
+                }
+
+                if (IncludeSelf)
+                {
+                    serviceList.AddIfNotContains(targetType);
+                }
+            }
+            else if (IncludeSelf)
             {
                 serviceList.AddIfNotContains(targetType);
             }
-        }
-        else if (IncludeSelf)
-        {
-            serviceList.AddIfNotContains(targetType);
+
+            return serviceList.ToArray();
         }
 
-        return serviceList.ToArray();
-    }
-
-    private static List<Type> GetDefaultServices(Type type)
-    {
-        var serviceTypes = new List<Type>();
-
-        foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
+        private static List<Type> GetDefaultServices(Type type)
         {
-            var interfaceName = interfaceType.Name;
+            var serviceTypes = new List<Type>();
 
-            if (interfaceName.StartsWith("I"))
+            foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
             {
-                interfaceName = interfaceName.Right(interfaceName.Length - 1);
+                var interfaceName = interfaceType.Name;
+
+                if (interfaceName.StartsWith("I"))
+                {
+                    interfaceName = interfaceName.Right(interfaceName.Length - 1);
+                }
+
+                if (type.Name.EndsWith(interfaceName))
+                {
+                    serviceTypes.Add(interfaceType);
+                }
             }
 
-            if (type.Name.EndsWith(interfaceName))
-            {
-                serviceTypes.Add(interfaceType);
-            }
+            return serviceTypes;
         }
-
-        return serviceTypes;
     }
 }

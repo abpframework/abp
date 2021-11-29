@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-public class AbpDistributedEntityEventOptions
+﻿namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    public IAutoEntityDistributedEventSelectorList AutoEventSelectors { get; }
-
-    public EtoMappingDictionary EtoMappings { get; set; }
-
-    public AbpDistributedEntityEventOptions()
+    public class AbpDistributedEntityEventOptions
     {
-        AutoEventSelectors = new AutoEntityDistributedEventSelectorList();
-        EtoMappings = new EtoMappingDictionary();
+        public IAutoEntityDistributedEventSelectorList AutoEventSelectors { get; }
+        
+        public EtoMappingDictionary EtoMappings { get; set; }
+
+        public AbpDistributedEntityEventOptions()
+        {
+            AutoEventSelectors = new AutoEntityDistributedEventSelectorList();
+            EtoMappings = new EtoMappingDictionary();
+        }
     }
 }

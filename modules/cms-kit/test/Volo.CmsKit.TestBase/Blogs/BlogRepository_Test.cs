@@ -8,84 +8,85 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.CmsKit.Blogs;
-
-public abstract class BlogRepository_Test<TStartupModule> : CmsKitTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.CmsKit.Blogs
 {
-    private readonly CmsKitTestData testData;
-    private readonly IBlogRepository blogRepository;
-
-    public BlogRepository_Test()
+    public abstract class BlogRepository_Test<TStartupModule> : CmsKitTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        this.testData = GetRequiredService<CmsKitTestData>();
-        this.blogRepository = GetRequiredService<IBlogRepository>();
-    }
+        private readonly CmsKitTestData testData;
+        private readonly IBlogRepository blogRepository;
 
-    [Fact]
-    public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
-    {
-        var blog = await blogRepository.GetBySlugAsync(testData.BlogSlug);
+        public BlogRepository_Test()
+        {
+            this.testData = GetRequiredService<CmsKitTestData>();
+            this.blogRepository = GetRequiredService<IBlogRepository>();
+        }
 
-        blog.ShouldNotBeNull();
-        blog.Slug.ShouldBe(testData.BlogSlug);
-        blog.Id.ShouldBe(testData.Blog_Id);
-    }
+        [Fact]
+        public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
+        {
+            var blog = await blogRepository.GetBySlugAsync(testData.BlogSlug);
 
-    [Fact]
-    public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingSlug()
-    {
-        var nonExistingSlug = "some-blog-slug-that-doesnt-exist";
+            blog.ShouldNotBeNull();
+            blog.Slug.ShouldBe(testData.BlogSlug);
+            blog.Id.ShouldBe(testData.Blog_Id);
+        }
 
-        var exception = await Should.ThrowAsync<EntityNotFoundException>(
-                async () => await blogRepository.GetBySlugAsync(nonExistingSlug));
+        [Fact]
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingSlug()
+        {
+            var nonExistingSlug = "some-blog-slug-that-doesnt-exist";
 
-        exception.ShouldNotBeNull();
-        exception.EntityType.ShouldBe(typeof(Blog));
-    }
+            var exception = await Should.ThrowAsync<EntityNotFoundException>(
+                    async () => await blogRepository.GetBySlugAsync(nonExistingSlug));
 
-    [Fact]
-    public async Task ExistsAsync_ShouldReturnTrue_WithExistingId()
-    {
-        var result = await blogRepository.ExistsAsync(testData.Blog_Id);
+            exception.ShouldNotBeNull();
+            exception.EntityType.ShouldBe(typeof(Blog));
+        }
 
-        result.ShouldBeTrue();
-    }
+        [Fact]
+        public async Task ExistsAsync_ShouldReturnTrue_WithExistingId()
+        {
+            var result = await blogRepository.ExistsAsync(testData.Blog_Id);
 
-    [Fact]
-    public async Task ExistsAsync_ShouldReturnFalse_WithExistingId()
-    {
-        var nonExistingId = Guid.NewGuid();
+            result.ShouldBeTrue();
+        }
 
-        var result = await blogRepository.ExistsAsync(nonExistingId);
+        [Fact]
+        public async Task ExistsAsync_ShouldReturnFalse_WithExistingId()
+        {
+            var nonExistingId = Guid.NewGuid();
 
-        result.ShouldBeFalse();
-    }
+            var result = await blogRepository.ExistsAsync(nonExistingId);
 
-    [Fact]
-    public async Task GetList_ShouldWorkProperly()
-    {
-        var list = await blogRepository.GetListAsync();
+            result.ShouldBeFalse();
+        }
 
-        list.ShouldNotBeNull();
-        list.Count.ShouldBeGreaterThan(0);
-    }
+        [Fact]
+        public async Task GetList_ShouldWorkProperly()
+        {
+            var list = await blogRepository.GetListAsync();
 
-    [Fact]
-    public async Task GetCount_ShouldWorkProperly()
-    {
-        var count = await blogRepository.GetCountAsync();
+            list.ShouldNotBeNull();
+            list.Count.ShouldBeGreaterThan(0);
+        }
+                
+        [Fact]
+        public async Task GetCount_ShouldWorkProperly()
+        {
+            var count = await blogRepository.GetCountAsync();
 
-        count.ShouldBeGreaterThan(0);
-    }
+            count.ShouldBeGreaterThan(0);
+        }
 
-    [Fact]
-    public async Task SlugExistAsync_ShouldWorkProperly()
-    {
-        var exists = await blogRepository.SlugExistsAsync(testData.BlogSlug);
-        var notExists = await blogRepository.SlugExistsAsync("not-existing-blog-slug");
-
-        exists.ShouldBeTrue();
-        notExists.ShouldBeFalse();
+        [Fact]
+        public async Task SlugExistAsync_ShouldWorkProperly()
+        {
+            var exists = await blogRepository.SlugExistsAsync(testData.BlogSlug);
+            var notExists = await blogRepository.SlugExistsAsync("not-existing-blog-slug");
+            
+            exists.ShouldBeTrue();
+            notExists.ShouldBeFalse();
+        }
     }
 }

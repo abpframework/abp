@@ -2,23 +2,24 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class CurrentUserTenantResolveContributor : TenantResolveContributorBase
+namespace Volo.Abp.MultiTenancy
 {
-    public const string ContributorName = "CurrentUser";
-
-    public override string Name => ContributorName;
-
-    public override Task ResolveAsync(ITenantResolveContext context)
+    public class CurrentUserTenantResolveContributor : TenantResolveContributorBase
     {
-        var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-        if (currentUser.IsAuthenticated)
-        {
-            context.Handled = true;
-            context.TenantIdOrName = currentUser.TenantId?.ToString();
-        }
+        public const string ContributorName = "CurrentUser";
 
-        return Task.CompletedTask;
+        public override string Name => ContributorName;
+
+        public override Task ResolveAsync(ITenantResolveContext context)
+        {
+            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+            if (currentUser.IsAuthenticated)
+            {
+                context.Handled = true;
+                context.TenantIdOrName = currentUser.TenantId?.ToString();
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

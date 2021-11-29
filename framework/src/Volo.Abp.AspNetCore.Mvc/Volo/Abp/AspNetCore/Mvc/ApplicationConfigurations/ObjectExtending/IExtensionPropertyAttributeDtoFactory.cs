@@ -1,8 +1,9 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-public interface IExtensionPropertyAttributeDtoFactory
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    ExtensionPropertyAttributeDto Create(Attribute attribute);
+    public interface IExtensionPropertyAttributeDtoFactory
+    {
+        ExtensionPropertyAttributeDto Create(Attribute attribute);
+    }
 }

@@ -1,16 +1,17 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Studio.Analyzing.Models.Database;
-
-[PackageContentItemName(ContentTypeName)]
-public class DatabaseCollectionModel : PackageContentItemModel
+namespace Volo.Abp.Studio.Analyzing.Models.Database
 {
-    public const string ContentTypeName = "databaseCollection";
-
-    public string EntityFullName { get; private set; }
-
-    public DatabaseCollectionModel([NotNull] string name, string entityFullName) : base(name)
+    [PackageContentItemName(ContentTypeName)]
+    public class DatabaseCollectionModel : PackageContentItemModel
     {
-        EntityFullName = Check.NotNullOrWhiteSpace(entityFullName, nameof(entityFullName));
+        public const string ContentTypeName = "databaseCollection";
+        
+        public string EntityFullName { get; private set; }
+
+        public DatabaseCollectionModel([NotNull] string name, string entityFullName) : base(name)
+        {
+            EntityFullName = Check.NotNullOrWhiteSpace(entityFullName, nameof(entityFullName));
+        }
     }
 }

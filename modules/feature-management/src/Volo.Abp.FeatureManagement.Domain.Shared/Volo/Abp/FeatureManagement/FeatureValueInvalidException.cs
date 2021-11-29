@@ -1,13 +1,14 @@
 ﻿using System;
 
-namespace Volo.Abp.FeatureManagement;
-
-[Serializable]
-public class FeatureValueInvalidException : BusinessException
+namespace Volo.Abp.FeatureManagement
 {
-    public FeatureValueInvalidException(string name) :
-        base(FeatureManagementDomainErrorCodes.FeatureValueInvalid)
+    [Serializable]
+    public class FeatureValueInvalidException : BusinessException
     {
-        WithData("0", name);
+        public FeatureValueInvalidException(string name) :
+            base(FeatureManagementDomainErrorCodes.FeatureValueInvalid)
+        {
+            WithData("0", name);
+        }
     }
 }

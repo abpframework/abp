@@ -5,104 +5,105 @@ using Volo.Abp.Domain.Repositories.MemoryDb;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Uow.MemoryDb;
-
-public class UnitOfWorkMemoryDatabaseProvider<TMemoryDbContext> : IMemoryDatabaseProvider<TMemoryDbContext>
-    where TMemoryDbContext : MemoryDbContext
+namespace Volo.Abp.Uow.MemoryDb
 {
-    public TMemoryDbContext DbContext { get; }
-
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly IConnectionStringResolver _connectionStringResolver;
-    private readonly MemoryDatabaseManager _memoryDatabaseManager;
-    private readonly ICurrentTenant _currentTenant;
-
-    public UnitOfWorkMemoryDatabaseProvider(
-        IUnitOfWorkManager unitOfWorkManager,
-        IConnectionStringResolver connectionStringResolver,
-        TMemoryDbContext dbContext,
-        MemoryDatabaseManager memoryDatabaseManager,
-        ICurrentTenant currentTenant)
+    public class UnitOfWorkMemoryDatabaseProvider<TMemoryDbContext> : IMemoryDatabaseProvider<TMemoryDbContext>
+        where TMemoryDbContext : MemoryDbContext
     {
-        _unitOfWorkManager = unitOfWorkManager;
-        _connectionStringResolver = connectionStringResolver;
-        DbContext = dbContext;
-        _memoryDatabaseManager = memoryDatabaseManager;
-        _currentTenant = currentTenant;
-    }
+        public TMemoryDbContext DbContext { get; }
 
-    public Task<TMemoryDbContext> GetDbContextAsync()
-    {
-        return Task.FromResult(DbContext);
-    }
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly MemoryDatabaseManager _memoryDatabaseManager;
+        private readonly ICurrentTenant _currentTenant;
 
-    [Obsolete("Use GetDatabaseAsync method.")]
-    public IMemoryDatabase GetDatabase()
-    {
-        var unitOfWork = _unitOfWorkManager.Current;
-        if (unitOfWork == null)
+        public UnitOfWorkMemoryDatabaseProvider(
+            IUnitOfWorkManager unitOfWorkManager,
+            IConnectionStringResolver connectionStringResolver,
+            TMemoryDbContext dbContext,
+            MemoryDatabaseManager memoryDatabaseManager,
+            ICurrentTenant currentTenant)
         {
-            throw new AbpException($"A {nameof(IMemoryDatabase)} instance can only be created inside a unit of work!");
+            _unitOfWorkManager = unitOfWorkManager;
+            _connectionStringResolver = connectionStringResolver;
+            DbContext = dbContext;
+            _memoryDatabaseManager = memoryDatabaseManager;
+            _currentTenant = currentTenant;
         }
 
-        var connectionString = _connectionStringResolver.Resolve<TMemoryDbContext>();
-        var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
-
-        var databaseApi = unitOfWork.GetOrAddDatabaseApi(
-            dbContextKey,
-            () => new MemoryDbDatabaseApi(
-                _memoryDatabaseManager.Get(connectionString)
-            ));
-
-        return ((MemoryDbDatabaseApi)databaseApi).Database;
-    }
-
-    public async Task<IMemoryDatabase> GetDatabaseAsync()
-    {
-        var unitOfWork = _unitOfWorkManager.Current;
-        if (unitOfWork == null)
+        public Task<TMemoryDbContext> GetDbContextAsync()
         {
-            throw new AbpException($"A {nameof(IMemoryDatabase)} instance can only be created inside a unit of work!");
+            return Task.FromResult(DbContext);
         }
 
-        var connectionString = await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
-        var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
-
-        var databaseApi = unitOfWork.GetOrAddDatabaseApi(
-            dbContextKey,
-            () => new MemoryDbDatabaseApi(
-                _memoryDatabaseManager.Get(connectionString)
-            ));
-
-        return ((MemoryDbDatabaseApi)databaseApi).Database;
-    }
-
-    private async Task<string> ResolveConnectionStringAsync()
-    {
-        // Multi-tenancy unaware contexts should always use the host connection string
-        if (typeof(TMemoryDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+        [Obsolete("Use GetDatabaseAsync method.")]
+        public IMemoryDatabase GetDatabase()
         {
-            using (_currentTenant.Change(null))
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
             {
-                return await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
+                throw new AbpException($"A {nameof(IMemoryDatabase)} instance can only be created inside a unit of work!");
             }
+
+            var connectionString = _connectionStringResolver.Resolve<TMemoryDbContext>();
+            var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
+
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new MemoryDbDatabaseApi(
+                    _memoryDatabaseManager.Get(connectionString)
+                ));
+
+            return ((MemoryDbDatabaseApi)databaseApi).Database;
         }
 
-        return await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
-    }
-
-    [Obsolete("Use ResolveConnectionStringAsync method.")]
-    private string ResolveConnectionString()
-    {
-        // Multi-tenancy unaware contexts should always use the host connection string
-        if (typeof(TMemoryDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+        public async Task<IMemoryDatabase> GetDatabaseAsync()
         {
-            using (_currentTenant.Change(null))
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
             {
-                return _connectionStringResolver.Resolve<TMemoryDbContext>();
+                throw new AbpException($"A {nameof(IMemoryDatabase)} instance can only be created inside a unit of work!");
             }
+
+            var connectionString = await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
+            var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
+
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new MemoryDbDatabaseApi(
+                    _memoryDatabaseManager.Get(connectionString)
+                ));
+
+            return ((MemoryDbDatabaseApi)databaseApi).Database;
         }
 
-        return _connectionStringResolver.Resolve<TMemoryDbContext>();
+        private async Task<string> ResolveConnectionStringAsync()
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMemoryDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
+                }
+            }
+
+            return await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
+        }
+
+        [Obsolete("Use ResolveConnectionStringAsync method.")]
+        private string ResolveConnectionString()
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMemoryDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return _connectionStringResolver.Resolve<TMemoryDbContext>();
+                }
+            }
+
+            return _connectionStringResolver.Resolve<TMemoryDbContext>();
+        }
     }
 }

@@ -2,17 +2,18 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.AuditLogging.MongoDB;
-
-[ConnectionStringName(AbpAuditLoggingDbProperties.ConnectionStringName)]
-public class AuditLoggingMongoDbContext : AbpMongoDbContext, IAuditLoggingMongoDbContext
+namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public IMongoCollection<AuditLog> AuditLogs => Collection<AuditLog>();
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [ConnectionStringName(AbpAuditLoggingDbProperties.ConnectionStringName)]
+    public class AuditLoggingMongoDbContext : AbpMongoDbContext, IAuditLoggingMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<AuditLog> AuditLogs => Collection<AuditLog>();
 
-        modelBuilder.ConfigureAuditLogging();
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureAuditLogging();
+        }
     }
 }

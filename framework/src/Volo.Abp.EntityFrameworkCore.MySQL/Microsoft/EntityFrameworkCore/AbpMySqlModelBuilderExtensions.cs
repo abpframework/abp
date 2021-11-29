@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.EntityFrameworkCore;
-
-public static class AbpMySqlModelBuilderExtensions
+namespace Microsoft.EntityFrameworkCore
 {
-    public static void UseMySQL(
-        this ModelBuilder modelBuilder)
+    public static class AbpMySqlModelBuilderExtensions
     {
-        modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.MySql);
+        public static void UseMySQL(
+            this ModelBuilder modelBuilder)
+        {
+            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.MySql);
+        }
     }
 }

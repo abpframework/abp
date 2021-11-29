@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Localization;
-
-public interface ILanguageProvider
+namespace Volo.Abp.Localization
 {
-    Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync();
+    public interface ILanguageProvider
+    {
+        Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync();
+    }
 }

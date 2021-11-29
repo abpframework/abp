@@ -3,55 +3,56 @@ using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Progression;
 
-namespace Volo.Abp.BlazoriseUI.Components;
-
-public partial class UiPageProgress : ComponentBase, IDisposable
+namespace Volo.Abp.BlazoriseUI.Components
 {
-    protected PageProgress PageProgressRef { get; set; }
-
-    protected int? Percentage { get; set; }
-
-    protected bool Visible { get; set; }
-
-    protected Color Color { get; set; }
-
-    [Inject] protected IUiPageProgressService UiPageProgressService { get; set; }
-
-    protected override void OnInitialized()
+    public partial class UiPageProgress : ComponentBase, IDisposable
     {
-        base.OnInitialized();
+        protected PageProgress PageProgressRef { get; set; }
 
-        UiPageProgressService.ProgressChanged += OnProgressChanged;
-    }
+        protected int? Percentage { get; set; }
 
-    private async void OnProgressChanged(object sender, UiPageProgressEventArgs e)
-    {
-        Percentage = e.Percentage;
-        Visible = e.Percentage == null || (e.Percentage >= 0 && e.Percentage <= 100);
-        Color = GetColor(e.Options.Type);
+        protected bool Visible { get; set; }
 
-        await PageProgressRef.SetValueAsync(e.Percentage);
+        protected Color Color { get; set; }
 
-        await InvokeAsync(StateHasChanged);
-    }
+        [Inject] protected IUiPageProgressService UiPageProgressService { get; set; }
 
-    public virtual void Dispose()
-    {
-        if (UiPageProgressService != null)
+        protected override void OnInitialized()
         {
-            UiPageProgressService.ProgressChanged -= OnProgressChanged;
+            base.OnInitialized();
+
+            UiPageProgressService.ProgressChanged += OnProgressChanged;
         }
-    }
 
-    protected virtual Color GetColor(UiPageProgressType pageProgressType)
-    {
-        return pageProgressType switch
+        private async void OnProgressChanged(object sender, UiPageProgressEventArgs e)
         {
-            UiPageProgressType.Info => Color.Info,
-            UiPageProgressType.Success => Color.Success,
-            UiPageProgressType.Warning => Color.Warning,
-            UiPageProgressType.Error => Color.Danger,
-            _ => Color.None,
-        };
+            Percentage = e.Percentage;
+            Visible = e.Percentage == null || (e.Percentage >= 0 && e.Percentage <= 100);
+            Color = GetColor(e.Options.Type);
+
+            await PageProgressRef.SetValueAsync(e.Percentage);
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public virtual void Dispose()
+        {
+            if (UiPageProgressService != null)
+            {
+                UiPageProgressService.ProgressChanged -= OnProgressChanged;
+            }
+        }
+
+        protected virtual Color GetColor(UiPageProgressType pageProgressType)
+        {
+            return pageProgressType switch
+            {
+                UiPageProgressType.Info => Color.Info,
+                UiPageProgressType.Success => Color.Success,
+                UiPageProgressType.Warning => Color.Warning,
+                UiPageProgressType.Error => Color.Danger,
+                _ => Color.None,
+            };
+        }
     }
 }

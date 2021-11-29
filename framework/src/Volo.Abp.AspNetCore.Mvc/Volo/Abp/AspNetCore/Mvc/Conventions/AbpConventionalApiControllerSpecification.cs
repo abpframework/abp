@@ -1,24 +1,25 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions;
-
-public class AbpConventionalApiControllerSpecification : IApiControllerSpecification
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    private readonly AbpAspNetCoreMvcOptions _options;
-
-    public AbpConventionalApiControllerSpecification(IOptions<AbpAspNetCoreMvcOptions> options)
+    public class AbpConventionalApiControllerSpecification : IApiControllerSpecification
     {
-        _options = options.Value;
-    }
+        private readonly AbpAspNetCoreMvcOptions _options;
 
-    public bool IsSatisfiedBy(ControllerModel controller)
-    {
-        var configuration = _options
-            .ConventionalControllers
-            .ConventionalControllerSettings
-            .GetSettingOrNull(controller.ControllerType.AsType());
+        public AbpConventionalApiControllerSpecification(IOptions<AbpAspNetCoreMvcOptions> options)
+        {
+            _options = options.Value;
+        }
 
-        return configuration != null;
+        public bool IsSatisfiedBy(ControllerModel controller)
+        {
+            var configuration = _options
+                .ConventionalControllers
+                .ConventionalControllerSettings
+                .GetSettingOrNull(controller.ControllerType.AsType());
+
+             return configuration != null;
+        }
     }
 }

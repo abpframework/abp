@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 
-namespace Volo.Abp.AuditLogging;
-
-public class AuditLogsTestBase : AuditLoggingTestBase<AbpAuditLoggingTestModule>
+namespace Volo.Abp.AuditLogging
 {
-    protected virtual void UsingDbContext(Action<IAuditLoggingDbContext> action)
+    public class AuditLogsTestBase : AuditLoggingTestBase<AbpAuditLoggingTestModule>
     {
-        using (var dbContext = GetRequiredService<IAuditLoggingDbContext>())
+        protected virtual void UsingDbContext(Action<IAuditLoggingDbContext> action)
         {
-            action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<IAuditLoggingDbContext>())
+            {
+                action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected virtual T UsingDbContext<T>(Func<IAuditLoggingDbContext, T> action)
-    {
-        using (var dbContext = GetRequiredService<IAuditLoggingDbContext>())
+        protected virtual T UsingDbContext<T>(Func<IAuditLoggingDbContext, T> action)
         {
-            return action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<IAuditLoggingDbContext>())
+            {
+                return action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected List<AuditLog> GetAuditLogsFromDbContext()
-    {
-        return UsingDbContext(context =>
-            context.AuditLogs.IncludeDetails().ToList()
-        );
+        protected List<AuditLog> GetAuditLogsFromDbContext()
+        {
+            return UsingDbContext(context =>
+                context.AuditLogs.IncludeDetails().ToList()
+            );
+        }
     }
 }

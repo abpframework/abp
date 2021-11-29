@@ -5,38 +5,39 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class PermissionGrantCacheItemInvalidator :
-    ILocalEventHandler<EntityChangedEventData<PermissionGrant>>,
-    ITransientDependency
+namespace Volo.Abp.PermissionManagement
 {
-    protected ICurrentTenant CurrentTenant { get; }
-
-    protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
-
-    public PermissionGrantCacheItemInvalidator(IDistributedCache<PermissionGrantCacheItem> cache, ICurrentTenant currentTenant)
+    public class PermissionGrantCacheItemInvalidator : 
+        ILocalEventHandler<EntityChangedEventData<PermissionGrant>>, 
+        ITransientDependency
     {
-        Cache = cache;
-        CurrentTenant = currentTenant;
-    }
+        protected ICurrentTenant CurrentTenant { get; }
 
-    public virtual async Task HandleEventAsync(EntityChangedEventData<PermissionGrant> eventData)
-    {
-        var cacheKey = CalculateCacheKey(
-            eventData.Entity.Name,
-            eventData.Entity.ProviderName,
-            eventData.Entity.ProviderKey
-        );
+        protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
-        using (CurrentTenant.Change(eventData.Entity.TenantId))
+        public PermissionGrantCacheItemInvalidator(IDistributedCache<PermissionGrantCacheItem> cache, ICurrentTenant currentTenant)
         {
-            await Cache.RemoveAsync(cacheKey);
+            Cache = cache;
+            CurrentTenant = currentTenant;
         }
-    }
 
-    protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
-    {
-        return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);
+        public virtual async Task HandleEventAsync(EntityChangedEventData<PermissionGrant> eventData)
+        {
+            var cacheKey = CalculateCacheKey(
+                eventData.Entity.Name,
+                eventData.Entity.ProviderName,
+                eventData.Entity.ProviderKey
+            );
+
+            using (CurrentTenant.Change(eventData.Entity.TenantId))
+            {
+                await Cache.RemoveAsync(cacheKey);
+            }
+        }
+
+        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
+        {
+            return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);
+        }
     }
 }

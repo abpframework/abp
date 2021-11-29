@@ -1,11 +1,12 @@
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Admin.Menus;
-
-public class PageLookupDto : EntityDto<Guid>
+namespace Volo.CmsKit.Admin.Menus
 {
-    public string Title { get; set; }
+    public class PageLookupDto : EntityDto<Guid>
+    {
+        public string Title { get; set; }
 
-    public string Slug { get; set; }
+        public string Slug { get; set; }
+    }
 }

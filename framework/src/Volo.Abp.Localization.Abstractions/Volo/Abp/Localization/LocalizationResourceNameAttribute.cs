@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Linq;
 
-namespace Volo.Abp.Localization;
-
-public class LocalizationResourceNameAttribute : Attribute
+namespace Volo.Abp.Localization
 {
-    public string Name { get; }
-
-    public LocalizationResourceNameAttribute(string name)
+    public class LocalizationResourceNameAttribute : Attribute
     {
-        Name = name;
-    }
+        public string Name { get; }
 
-    public static LocalizationResourceNameAttribute GetOrNull(Type resourceType)
-    {
-        return resourceType
-            .GetCustomAttributes(true)
-            .OfType<LocalizationResourceNameAttribute>()
-            .FirstOrDefault();
-    }
+        public LocalizationResourceNameAttribute(string name)
+        {
+            Name = name;
+        }
 
-    public static string GetName(Type resourceType)
-    {
-        return GetOrNull(resourceType)?.Name ?? resourceType.FullName;
+        public static LocalizationResourceNameAttribute GetOrNull(Type resourceType)
+        {
+            return resourceType
+                .GetCustomAttributes(true)
+                .OfType<LocalizationResourceNameAttribute>()
+                .FirstOrDefault();
+        }
+
+        public static string GetName(Type resourceType)
+        {
+            return GetOrNull(resourceType)?.Name ?? resourceType.FullName;
+        }
     }
 }

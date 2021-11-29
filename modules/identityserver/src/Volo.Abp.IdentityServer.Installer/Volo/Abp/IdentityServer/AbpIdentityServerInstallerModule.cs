@@ -2,19 +2,20 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.IdentityServer;
-
-[DependsOn(
-    typeof(AbpStudioModuleInstallerModule),
-    typeof(AbpVirtualFileSystemModule)
-    )]
-public class AbpIdentityServerInstallerModule : AbpModule
+namespace Volo.Abp.IdentityServer
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpStudioModuleInstallerModule),
+        typeof(AbpVirtualFileSystemModule)
+        )]
+    public class AbpIdentityServerInstallerModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpIdentityServerInstallerModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityServerInstallerModule>();
+            });
+        }
     }
 }

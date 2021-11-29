@@ -1,33 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
-
-public static class MyProjectNameDbContextModelCreatingExtensions
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public static void ConfigureMyProjectName(
-        this ModelBuilder builder)
+    public static class MyProjectNameDbContextModelCreatingExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        /* Configure all entities here. Example:
-
-        builder.Entity<Question>(b =>
+        public static void ConfigureMyProjectName(
+            this ModelBuilder builder)
         {
-            //Configure table & schema name
-            b.ToTable(MyProjectNameDbProperties.DbTablePrefix + "Questions", MyProjectNameDbProperties.DbSchema);
+            Check.NotNull(builder, nameof(builder));
 
-            b.ConfigureByConvention();
+            /* Configure all entities here. Example:
 
-            //Properties
-            b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
+            builder.Entity<Question>(b =>
+            {
+                //Configure table & schema name
+                b.ToTable(MyProjectNameDbProperties.DbTablePrefix + "Questions", MyProjectNameDbProperties.DbSchema);
 
-            //Relations
-            b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+                b.ConfigureByConvention();
 
-            //Indexes
-            b.HasIndex(q => q.CreationTime);
-        });
-        */
+                //Properties
+                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
+
+                //Relations
+                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+
+                //Indexes
+                b.HasIndex(q => q.CreationTime);
+            });
+            */
+        }
     }
 }

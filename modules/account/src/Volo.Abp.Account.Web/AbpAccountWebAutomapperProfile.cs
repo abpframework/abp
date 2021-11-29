@@ -3,12 +3,13 @@ using Volo.Abp.Identity;
 using AutoMapper;
 using Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
 
-namespace Volo.Abp.Account.Web;
-
-public class AbpAccountWebAutoMapperProfile : Profile
+namespace Volo.Abp.Account.Web
 {
-    public AbpAccountWebAutoMapperProfile()
+    public class AbpAccountWebAutoMapperProfile : Profile
     {
-        CreateMap<ProfileDto, AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>();
+        public AbpAccountWebAutoMapperProfile()
+        {
+            CreateMap<ProfileDto, AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>();
+        }
     }
 }

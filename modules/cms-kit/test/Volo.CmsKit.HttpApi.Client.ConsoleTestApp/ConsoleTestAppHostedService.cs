@@ -4,22 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 
-namespace Volo.CmsKit;
-
-public class ConsoleTestAppHostedService : IHostedService
+namespace Volo.CmsKit
 {
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public class ConsoleTestAppHostedService : IHostedService
     {
-        using (var application = AbpApplicationFactory.Create<CmsKitConsoleApiClientModule>())
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            application.Initialize();
+            using (var application = AbpApplicationFactory.Create<CmsKitConsoleApiClientModule>())
+            {
+                application.Initialize();
 
-            var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
-            await demo.RunAsync();
+                var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
+                await demo.RunAsync();
 
-            application.Shutdown();
+                application.Shutdown();
+            }
         }
-    }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
 }

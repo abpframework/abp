@@ -1,9 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Auditing;
-
-public interface IAuditLogScope
+namespace Volo.Abp.Auditing
 {
-    [NotNull]
-    AuditLogInfo Log { get; }
+    public interface IAuditLogScope
+    {
+        [NotNull]
+        AuditLogInfo Log { get; }
+    }
 }

@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.TenantManagement;
-
-public class TenantManagementRemoteServiceConsts
+﻿namespace Volo.Abp.TenantManagement
 {
-    public const string RemoteServiceName = "AbpTenantManagement";
+    public class TenantManagementRemoteServiceConsts
+    {
+        public const string RemoteServiceName = "AbpTenantManagement";
 
-    public const string ModuleName = "multi-tenancy";
+        public const string ModuleName = "multi-tenancy";
+    }
 }

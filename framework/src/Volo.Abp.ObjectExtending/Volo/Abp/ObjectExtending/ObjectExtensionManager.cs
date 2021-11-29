@@ -5,75 +5,76 @@ using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
-namespace Volo.Abp.ObjectExtending;
-
-public class ObjectExtensionManager
+namespace Volo.Abp.ObjectExtending
 {
-    public static ObjectExtensionManager Instance { get; protected set; } = new ObjectExtensionManager();
-
-    [NotNull]
-    public ConcurrentDictionary<object, object> Configuration { get; }
-
-    protected ConcurrentDictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
-
-    protected internal ObjectExtensionManager()
+    public class ObjectExtensionManager
     {
-        ObjectsExtensions = new ConcurrentDictionary<Type, ObjectExtensionInfo>();
-        Configuration = new ConcurrentDictionary<object, object>();
-    }
+        public static ObjectExtensionManager Instance { get; protected set; } = new ObjectExtensionManager();
 
-    [NotNull]
-    public virtual ObjectExtensionManager AddOrUpdate<TObject>(
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
-    {
-        return AddOrUpdate(typeof(TObject), configureAction);
-    }
+        [NotNull]
+        public ConcurrentDictionary<object, object> Configuration { get; }
 
-    [NotNull]
-    public virtual ObjectExtensionManager AddOrUpdate(
-        [NotNull] Type[] types,
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
-    {
-        Check.NotNull(types, nameof(types));
+        protected ConcurrentDictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
 
-        foreach (var type in types)
+        protected internal ObjectExtensionManager()
         {
-            AddOrUpdate(type, configureAction);
+            ObjectsExtensions = new ConcurrentDictionary<Type, ObjectExtensionInfo>();
+            Configuration = new ConcurrentDictionary<object, object>();
         }
 
-        return this;
-    }
+        [NotNull]
+        public virtual ObjectExtensionManager AddOrUpdate<TObject>(
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        {
+            return AddOrUpdate(typeof(TObject), configureAction);
+        }
 
-    [NotNull]
-    public virtual ObjectExtensionManager AddOrUpdate(
-        [NotNull] Type type,
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
-    {
-        var extensionInfo = ObjectsExtensions.GetOrAdd(
-            type,
-            _ => new ObjectExtensionInfo(type)
-        );
+        [NotNull]
+        public virtual ObjectExtensionManager AddOrUpdate(
+            [NotNull] Type[] types,
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        {
+            Check.NotNull(types, nameof(types));
 
-        configureAction?.Invoke(extensionInfo);
+            foreach (var type in types)
+            {
+                AddOrUpdate(type, configureAction);
+            }
 
-        return this;
-    }
+            return this;
+        }
 
-    [CanBeNull]
-    public virtual ObjectExtensionInfo GetOrNull<TObject>()
-    {
-        return GetOrNull(typeof(TObject));
-    }
+        [NotNull]
+        public virtual ObjectExtensionManager AddOrUpdate(
+            [NotNull] Type type,
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        {
+            var extensionInfo = ObjectsExtensions.GetOrAdd(
+                type,
+                _ => new ObjectExtensionInfo(type)
+            );
 
-    [CanBeNull]
-    public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
-    {
-        return ObjectsExtensions.GetOrDefault(type);
-    }
+            configureAction?.Invoke(extensionInfo);
 
-    [NotNull]
-    public virtual ImmutableList<ObjectExtensionInfo> GetExtendedObjects()
-    {
-        return ObjectsExtensions.Values.ToImmutableList();
+            return this;
+        }
+
+        [CanBeNull]
+        public virtual ObjectExtensionInfo GetOrNull<TObject>()
+        {
+            return GetOrNull(typeof(TObject));
+        }
+
+        [CanBeNull]
+        public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
+        {
+            return ObjectsExtensions.GetOrDefault(type);
+        }
+
+        [NotNull]
+        public virtual ImmutableList<ObjectExtensionInfo> GetExtendedObjects()
+        {
+            return ObjectsExtensions.Values.ToImmutableList();
+        }
     }
 }

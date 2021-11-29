@@ -3,27 +3,28 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.SecurityLog;
-
-public class SimpleSecurityLogStore : ISecurityLogStore, ITransientDependency
+namespace Volo.Abp.SecurityLog
 {
-    public ILogger<SimpleSecurityLogStore> Logger { get; set; }
-    protected AbpSecurityLogOptions SecurityLogOptions { get; }
-
-    public SimpleSecurityLogStore(ILogger<SimpleSecurityLogStore> logger, IOptions<AbpSecurityLogOptions> securityLogOptions)
+    public class SimpleSecurityLogStore : ISecurityLogStore, ITransientDependency
     {
-        Logger = logger;
-        SecurityLogOptions = securityLogOptions.Value;
-    }
+        public ILogger<SimpleSecurityLogStore> Logger { get; set; }
+        protected AbpSecurityLogOptions SecurityLogOptions { get; }
 
-    public Task SaveAsync(SecurityLogInfo securityLogInfo)
-    {
-        if (!SecurityLogOptions.IsEnabled)
+        public SimpleSecurityLogStore(ILogger<SimpleSecurityLogStore> logger, IOptions<AbpSecurityLogOptions> securityLogOptions)
         {
-            return Task.CompletedTask;
+            Logger = logger;
+            SecurityLogOptions = securityLogOptions.Value;
         }
 
-        Logger.LogInformation(securityLogInfo.ToString());
-        return Task.CompletedTask;
+        public Task SaveAsync(SecurityLogInfo securityLogInfo)
+        {
+            if (!SecurityLogOptions.IsEnabled)
+            {
+                return Task.CompletedTask;
+            }
+
+            Logger.LogInformation(securityLogInfo.ToString());
+            return Task.CompletedTask;
+        }
     }
 }

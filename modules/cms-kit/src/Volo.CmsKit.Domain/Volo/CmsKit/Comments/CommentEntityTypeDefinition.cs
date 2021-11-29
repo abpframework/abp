@@ -2,12 +2,13 @@
 using System;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Comments;
-
-public class CommentEntityTypeDefinition : EntityTypeDefinition
+namespace Volo.CmsKit.Comments
 {
-    public CommentEntityTypeDefinition([NotNull] string entityType) : base(entityType)
+    public class CommentEntityTypeDefinition : EntityTypeDefinition
     {
-        EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType));
+        public CommentEntityTypeDefinition([NotNull] string entityType) : base(entityType)
+        {
+            EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType));
+        }
     }
 }

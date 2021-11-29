@@ -2,29 +2,30 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.PermissionManagement;
-
-[RemoteService(Name = PermissionManagementRemoteServiceConsts.RemoteServiceName)]
-[Area(PermissionManagementRemoteServiceConsts.ModuleName)]
-[Route("api/permission-management/permissions")]
-public class PermissionsController : AbpControllerBase, IPermissionAppService
+namespace Volo.Abp.PermissionManagement
 {
-    protected IPermissionAppService PermissionAppService { get; }
-
-    public PermissionsController(IPermissionAppService permissionAppService)
+    [RemoteService(Name = PermissionManagementRemoteServiceConsts.RemoteServiceName)]
+    [Area(PermissionManagementRemoteServiceConsts.ModuleName)]
+    [Route("api/permission-management/permissions")]
+    public class PermissionsController : AbpControllerBase, IPermissionAppService
     {
-        PermissionAppService = permissionAppService;
-    }
+        protected IPermissionAppService PermissionAppService { get; }
 
-    [HttpGet]
-    public virtual Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
-    {
-        return PermissionAppService.GetAsync(providerName, providerKey);
-    }
+        public PermissionsController(IPermissionAppService permissionAppService)
+        {
+            PermissionAppService = permissionAppService;
+        }
 
-    [HttpPut]
-    public virtual Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
-    {
-        return PermissionAppService.UpdateAsync(providerName, providerKey, input);
+        [HttpGet]
+        public virtual Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
+        {
+            return PermissionAppService.GetAsync(providerName, providerKey);
+        }
+
+        [HttpPut]
+        public virtual Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
+        {
+            return PermissionAppService.UpdateAsync(providerName, providerKey, input);
+        }
     }
 }

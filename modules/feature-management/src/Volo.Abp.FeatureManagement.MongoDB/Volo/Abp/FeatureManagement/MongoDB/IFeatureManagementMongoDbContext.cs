@@ -3,11 +3,12 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.FeatureManagement.MongoDB;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
-public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    IMongoCollection<FeatureValue> FeatureValues { get; }
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
+    public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
+    {
+        IMongoCollection<FeatureValue> FeatureValues { get; }
+    }
 }

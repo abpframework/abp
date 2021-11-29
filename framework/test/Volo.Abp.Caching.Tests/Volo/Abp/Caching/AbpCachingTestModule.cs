@@ -4,31 +4,32 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Caching;
-
-[DependsOn(typeof(AbpCachingModule))]
-public class AbpCachingTestModule : AbpModule
+namespace Volo.Abp.Caching
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpCachingModule))]
+    public class AbpCachingTestModule : AbpModule
     {
-        Configure<AbpDistributedCacheOptions>(option =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            option.CacheConfigurators.Add(cacheName =>
+            Configure<AbpDistributedCacheOptions>(option =>
             {
-                if (cacheName == CacheNameAttribute.GetCacheName(typeof(Sail.Testing.Caching.PersonCacheItem)))
+                option.CacheConfigurators.Add(cacheName =>
                 {
-                    return new DistributedCacheEntryOptions()
+                    if (cacheName == CacheNameAttribute.GetCacheName(typeof(Sail.Testing.Caching.PersonCacheItem)))
                     {
-                        AbsoluteExpiration = DateTime.Parse("2099-01-01 12:00:00")
-                    };
-                }
+                        return new DistributedCacheEntryOptions()
+                        {
+                            AbsoluteExpiration = DateTime.Parse("2099-01-01 12:00:00")
+                        };
+                    }
 
-                return null;
+                    return null;
+                });
+
+                option.GlobalCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(20));
             });
 
-            option.GlobalCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(20));
-        });
-
-        context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, TestMemoryDistributedCache>());
+            context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, TestMemoryDistributedCache>());
+        }
     }
 }

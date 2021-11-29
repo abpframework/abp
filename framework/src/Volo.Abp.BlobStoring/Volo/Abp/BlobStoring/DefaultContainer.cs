@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.BlobStoring;
-
-[BlobContainerName(Name)]
-public class DefaultContainer
+﻿namespace Volo.Abp.BlobStoring
 {
-    public const string Name = "default";
+    [BlobContainerName(Name)]
+    public class DefaultContainer
+    {
+        public const string Name = "default";
+    }
 }

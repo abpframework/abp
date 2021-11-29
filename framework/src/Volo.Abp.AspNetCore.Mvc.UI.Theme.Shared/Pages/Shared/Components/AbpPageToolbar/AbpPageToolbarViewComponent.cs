@@ -2,20 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar;
-
-public class AbpPageToolbarViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 {
-    protected IPageToolbarManager ToolbarManager { get; }
-
-    public AbpPageToolbarViewComponent(IPageToolbarManager toolbarManager)
+    public class AbpPageToolbarViewComponent : AbpViewComponent
     {
-        ToolbarManager = toolbarManager;
-    }
+        protected IPageToolbarManager ToolbarManager { get; }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync(string pageName)
-    {
-        var items = await ToolbarManager.GetItemsAsync(pageName);
-        return View("~/Pages/Shared/Components/AbpPageToolbar/Default.cshtml", items);
+        public AbpPageToolbarViewComponent(IPageToolbarManager toolbarManager)
+        {
+            ToolbarManager = toolbarManager;
+        }
+
+        public virtual async Task<IViewComponentResult> InvokeAsync(string pageName)
+        {
+            var items = await ToolbarManager.GetItemsAsync(pageName);
+            return View("~/Pages/Shared/Components/AbpPageToolbar/Default.cshtml", items);
+        }
     }
 }

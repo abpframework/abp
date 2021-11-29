@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.ObjectExtending.Modularity;
-
-public class ModuleExtensionConfiguration
+namespace Volo.Abp.ObjectExtending.Modularity
 {
-    [NotNull]
-    public EntityExtensionConfigurationDictionary Entities { get; }
-
-    [NotNull]
-    public Dictionary<string, object> Configuration { get; }
-
-    public ModuleExtensionConfiguration()
+    public class ModuleExtensionConfiguration
     {
-        Entities = new EntityExtensionConfigurationDictionary();
-        Configuration = new Dictionary<string, object>();
+        [NotNull]
+        public EntityExtensionConfigurationDictionary Entities { get; }
+
+        [NotNull]
+        public Dictionary<string, object> Configuration { get; }
+
+        public ModuleExtensionConfiguration()
+        {
+            Entities = new EntityExtensionConfigurationDictionary();
+            Configuration = new Dictionary<string, object>();
+        }
     }
 }

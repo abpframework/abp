@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Http.Client.ClientProxying;
-
-public class AbpHttpClientProxyingOptions
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    public Dictionary<Type, Type> QueryStringConverts { get; set; }
-
-    public Dictionary<Type, Type> FormDataConverts { get; set; }
-
-    public AbpHttpClientProxyingOptions()
+    public class AbpHttpClientProxyingOptions
     {
-        QueryStringConverts = new Dictionary<Type, Type>();
-        FormDataConverts = new Dictionary<Type, Type>();
+        public Dictionary<Type, Type> QueryStringConverts { get; set; }
+
+        public Dictionary<Type, Type> FormDataConverts { get; set; }
+
+        public AbpHttpClientProxyingOptions()
+        {
+            QueryStringConverts = new Dictionary<Type, Type>();
+            FormDataConverts = new Dictionary<Type, Type>();
+        }
     }
 }

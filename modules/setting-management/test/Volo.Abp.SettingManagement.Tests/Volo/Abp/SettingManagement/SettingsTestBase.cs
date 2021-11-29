@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace Volo.Abp.SettingManagement;
-
-public class SettingsTestBase : SettingManagementTestBase<AbpSettingManagementTestModule>
+namespace Volo.Abp.SettingManagement
 {
-    protected virtual void UsingDbContext(Action<ISettingManagementDbContext> action)
+    public class SettingsTestBase : SettingManagementTestBase<AbpSettingManagementTestModule>
     {
-        using (var dbContext = GetRequiredService<ISettingManagementDbContext>())
+        protected virtual void UsingDbContext(Action<ISettingManagementDbContext> action)
         {
-            action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<ISettingManagementDbContext>())
+            {
+                action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected virtual T UsingDbContext<T>(Func<ISettingManagementDbContext, T> action)
-    {
-        using (var dbContext = GetRequiredService<ISettingManagementDbContext>())
+        protected virtual T UsingDbContext<T>(Func<ISettingManagementDbContext, T> action)
         {
-            return action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<ISettingManagementDbContext>())
+            {
+                return action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected List<Setting> GetSettingsFromDbContext(string entityType, string entityId, string name)
-    {
-        return UsingDbContext(context =>
-            context.Settings.Where(
-                s =>
-                    s.ProviderName == entityType &&
-                    s.ProviderKey == entityId &&
-                    s.Name == name
-            ).ToList()
-        );
+        protected List<Setting> GetSettingsFromDbContext(string entityType, string entityId, string name)
+        {
+            return UsingDbContext(context =>
+                context.Settings.Where(
+                    s =>
+                        s.ProviderName == entityType &&
+                        s.ProviderKey == entityId &&
+                        s.Name == name
+                ).ToList()
+            );
+        }
     }
 }

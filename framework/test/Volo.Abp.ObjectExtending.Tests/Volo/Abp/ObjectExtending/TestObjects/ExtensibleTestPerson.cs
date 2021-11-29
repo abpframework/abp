@@ -1,15 +1,16 @@
-﻿namespace Volo.Abp.ObjectExtending.TestObjects;
-
-public class ExtensibleTestPerson : ExtensibleObject
+﻿namespace Volo.Abp.ObjectExtending.TestObjects
 {
-    public ExtensibleTestPerson()
+    public class ExtensibleTestPerson : ExtensibleObject
     {
+        public ExtensibleTestPerson()
+        {
 
-    }
+        }
 
-    public ExtensibleTestPerson(bool setDefaultsForExtraProperties)
-        : base(setDefaultsForExtraProperties)
-    {
+        public ExtensibleTestPerson(bool setDefaultsForExtraProperties)
+            : base(setDefaultsForExtraProperties)
+        {
 
+        }
     }
 }

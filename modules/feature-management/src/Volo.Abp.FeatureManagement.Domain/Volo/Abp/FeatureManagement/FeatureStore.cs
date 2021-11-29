@@ -2,22 +2,23 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.FeatureManagement;
-
-public class FeatureStore : IFeatureStore, ITransientDependency
+namespace Volo.Abp.FeatureManagement
 {
-    protected IFeatureManagementStore FeatureManagementStore { get; }
-
-    public FeatureStore(IFeatureManagementStore featureManagementStore)
+    public class FeatureStore : IFeatureStore, ITransientDependency
     {
-        FeatureManagementStore = featureManagementStore;
-    }
+        protected IFeatureManagementStore FeatureManagementStore { get; }
 
-    public virtual Task<string> GetOrNullAsync(
-        string name,
-        string providerName,
-        string providerKey)
-    {
-        return FeatureManagementStore.GetOrNullAsync(name, providerName, providerKey);
+        public FeatureStore(IFeatureManagementStore featureManagementStore)
+        {
+            FeatureManagementStore = featureManagementStore;
+        }
+
+        public virtual Task<string> GetOrNullAsync(
+            string name,
+            string providerName,
+            string providerKey)
+        {
+            return FeatureManagementStore.GetOrNullAsync(name, providerName, providerKey);
+        }
     }
 }

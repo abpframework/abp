@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Volo.Abp.ObjectMapping;
-
-public static class ObjectMapperExtensions
+namespace Volo.Abp.ObjectMapping
 {
-    private static readonly MethodInfo MapToNewObjectMethod;
-    private static readonly MethodInfo MapToExistingObjectMethod;
-
-    static ObjectMapperExtensions()
+    public static class ObjectMapperExtensions
     {
-        var methods = typeof(IObjectMapper).GetMethods();
-        foreach (var method in methods)
+        private static readonly MethodInfo MapToNewObjectMethod;
+        private static readonly MethodInfo MapToExistingObjectMethod;
+
+        static ObjectMapperExtensions()
         {
-            if (method.Name == nameof(IObjectMapper.Map) && method.IsGenericMethodDefinition)
+            var methods = typeof(IObjectMapper).GetMethods();
+            foreach (var method in methods)
             {
-                var parameters = method.GetParameters();
-                if (parameters.Length == 1)
+                if (method.Name == nameof(IObjectMapper.Map) && method.IsGenericMethodDefinition)
                 {
-                    MapToNewObjectMethod = method;
-                }
-                else if (parameters.Length == 2)
-                {
-                    MapToExistingObjectMethod = method;
+                    var parameters = method.GetParameters();
+                    if (parameters.Length == 1)
+                    {
+                        MapToNewObjectMethod = method;
+                    }
+                    else if (parameters.Length == 2)
+                    {
+                        MapToExistingObjectMethod = method;
+                    }
                 }
             }
         }
-    }
 
-    public static object Map(this IObjectMapper objectMapper, Type sourceType, Type destinationType, object source)
-    {
-        return MapToNewObjectMethod
-            .MakeGenericMethod(sourceType, destinationType)
-            .Invoke(objectMapper, new[] { source });
-    }
+        public static object Map(this IObjectMapper objectMapper, Type sourceType, Type destinationType, object source)
+        {
+            return MapToNewObjectMethod
+                .MakeGenericMethod(sourceType, destinationType)
+                .Invoke(objectMapper, new[] { source });
+        }
 
-    public static object Map(this IObjectMapper objectMapper, Type sourceType, Type destinationType, object source, object destination)
-    {
-        return MapToExistingObjectMethod
-            .MakeGenericMethod(sourceType, destinationType)
-            .Invoke(objectMapper, new[] { source, destination });
+        public static object Map(this IObjectMapper objectMapper, Type sourceType, Type destinationType, object source, object destination)
+        {
+            return MapToExistingObjectMethod
+                .MakeGenericMethod(sourceType, destinationType)
+                .Invoke(objectMapper, new[] { source, destination });
+        }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.ProjectModification;
-
-public class MyGetApiResponse
+namespace Volo.Abp.Cli.ProjectModification
 {
-    public string _date { get; set; }
+    public class MyGetApiResponse
+    {
+        public string _date { get; set; }
 
-    public List<MyGetPackage> Packages { get; set; }
+        public List<MyGetPackage> Packages { get; set; }
+    }
 }

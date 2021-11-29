@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.Studio.Package;
-
-public enum ReferenceType
+﻿namespace Volo.Abp.Studio.Package
 {
-    Project = 1,
-    Package = 2
+    public enum ReferenceType
+    {
+        Project = 1,
+        Package = 2
+    }
 }

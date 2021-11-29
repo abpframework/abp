@@ -3,53 +3,54 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement.IdentityServer;
-
-public class ClientPermissionManagementProvider : PermissionManagementProvider
+namespace Volo.Abp.PermissionManagement.IdentityServer
 {
-    public override string Name => ClientPermissionValueProvider.ProviderName;
-
-    public ClientPermissionManagementProvider(
-        IPermissionGrantRepository permissionGrantRepository,
-        IGuidGenerator guidGenerator,
-        ICurrentTenant currentTenant)
-        : base(
-            permissionGrantRepository,
-            guidGenerator,
-            currentTenant)
+    public class ClientPermissionManagementProvider : PermissionManagementProvider
     {
+        public override string Name => ClientPermissionValueProvider.ProviderName;
 
-    }
-
-    public override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
-    {
-        using (CurrentTenant.Change(null))
+        public ClientPermissionManagementProvider(
+            IPermissionGrantRepository permissionGrantRepository,
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
+            : base(
+                permissionGrantRepository,
+                guidGenerator,
+                currentTenant)
         {
-            return base.CheckAsync(name, providerName, providerKey);
+
         }
-    }
 
-    protected override Task GrantAsync(string name, string providerKey)
-    {
-        using (CurrentTenant.Change(null))
+        public override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
-            return base.GrantAsync(name, providerKey);
+            using (CurrentTenant.Change(null))
+            {
+                return base.CheckAsync(name, providerName, providerKey);
+            }
         }
-    }
 
-    protected override Task RevokeAsync(string name, string providerKey)
-    {
-        using (CurrentTenant.Change(null))
+        protected override Task GrantAsync(string name, string providerKey)
         {
-            return base.RevokeAsync(name, providerKey);
+            using (CurrentTenant.Change(null))
+            {
+                return base.GrantAsync(name, providerKey);
+            }
         }
-    }
 
-    public override Task SetAsync(string name, string providerKey, bool isGranted)
-    {
-        using (CurrentTenant.Change(null))
+        protected override Task RevokeAsync(string name, string providerKey)
         {
-            return base.SetAsync(name, providerKey, isGranted);
+            using (CurrentTenant.Change(null))
+            {
+                return base.RevokeAsync(name, providerKey);
+            }
+        }
+
+        public override Task SetAsync(string name, string providerKey, bool isGranted)
+        {
+            using (CurrentTenant.Change(null))
+            {
+                return base.SetAsync(name, providerKey, isGranted);
+            }
         }
     }
 }

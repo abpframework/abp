@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Data;
-
-public class AbpDataFilterOptions
+namespace Volo.Abp.Data
 {
-    public Dictionary<Type, DataFilterState> DefaultStates { get; }
-
-    public AbpDataFilterOptions()
+    public class AbpDataFilterOptions
     {
-        DefaultStates = new Dictionary<Type, DataFilterState>();
+        public Dictionary<Type, DataFilterState> DefaultStates { get; }
+
+        public AbpDataFilterOptions()
+        {
+            DefaultStates = new Dictionary<Type, DataFilterState>();
+        }
     }
 }

@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.Auditing;
-
-public interface IAuditPropertySetter
+﻿namespace Volo.Abp.Auditing
 {
-    void SetCreationProperties(object targetObject);
+    public interface IAuditPropertySetter
+    {
+        void SetCreationProperties(object targetObject);
 
-    void SetModificationProperties(object targetObject);
+        void SetModificationProperties(object targetObject);
 
-    void SetDeletionProperties(object targetObject);
+        void SetDeletionProperties(object targetObject);
+    }
 }

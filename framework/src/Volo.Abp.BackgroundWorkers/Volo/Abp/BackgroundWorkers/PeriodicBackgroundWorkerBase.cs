@@ -6,57 +6,58 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers;
-
-/// <summary>
-/// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer.
-/// </summary>
-public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
+namespace Volo.Abp.BackgroundWorkers
 {
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-    protected AbpTimer Timer { get; }
-
-    protected PeriodicBackgroundWorkerBase(
-        AbpTimer timer,
-        IServiceScopeFactory serviceScopeFactory)
+    /// <summary>
+    /// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer.
+    /// </summary>
+    public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        Timer = timer;
-        Timer.Elapsed += Timer_Elapsed;
-    }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpTimer Timer { get; }
 
-    public override async Task StartAsync(CancellationToken cancellationToken = default)
-    {
-        await base.StartAsync(cancellationToken);
-        Timer.Start(cancellationToken);
-    }
-
-    public override async Task StopAsync(CancellationToken cancellationToken = default)
-    {
-        Timer.Stop(cancellationToken);
-        await base.StopAsync(cancellationToken);
-    }
-
-    private void Timer_Elapsed(object sender, System.EventArgs e)
-    {
-        using (var scope = ServiceScopeFactory.CreateScope())
+        protected PeriodicBackgroundWorkerBase(
+            AbpTimer timer,
+            IServiceScopeFactory serviceScopeFactory)
         {
-            try
-            {
-                DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
-            }
-            catch (Exception ex)
-            {
-                var exceptionNotifier = scope.ServiceProvider.GetRequiredService<IExceptionNotifier>();
-                AsyncHelper.RunSync(() => exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(ex)));
+            ServiceScopeFactory = serviceScopeFactory;
+            Timer = timer;
+            Timer.Elapsed += Timer_Elapsed;
+        }
 
-                Logger.LogException(ex);
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            await base.StartAsync(cancellationToken);
+            Timer.Start(cancellationToken);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            Timer.Stop(cancellationToken);
+            await base.StopAsync(cancellationToken);
+        }
+
+        private void Timer_Elapsed(object sender, System.EventArgs e)
+        {
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                try
+                {
+                    DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
+                }
+                catch (Exception ex)
+                {
+                    var exceptionNotifier = scope.ServiceProvider.GetRequiredService<IExceptionNotifier>();
+                    AsyncHelper.RunSync(() => exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(ex)));
+
+                    Logger.LogException(ex);
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Periodic works should be done by implementing this method.
-    /// </summary>
-    protected abstract void DoWork(PeriodicBackgroundWorkerContext workerContext);
+        /// <summary>
+        /// Periodic works should be done by implementing this method.
+        /// </summary>
+        protected abstract void DoWork(PeriodicBackgroundWorkerContext workerContext);
+    }
 }

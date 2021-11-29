@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar;
-
-public class MainNavbarViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
 {
-    public virtual IViewComponentResult Invoke()
+    public class MainNavbarViewComponent : AbpViewComponent
     {
-        return View("~/Themes/Basic/Components/MainNavbar/Default.cshtml");
+        public virtual IViewComponentResult Invoke()
+        {
+            return View("~/Themes/Basic/Components/MainNavbar/Default.cshtml");
+        }
     }
 }

@@ -1,19 +1,20 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Auditing.App.Entities;
-
-public class AppEntityWithSoftDelete : AggregateRoot<Guid>, IHasDeletionTime
+namespace Volo.Abp.Auditing.App.Entities
 {
-    public AppEntityWithSoftDelete(Guid id, string name)
-        : base(id)
+    public class AppEntityWithSoftDelete : AggregateRoot<Guid>, IHasDeletionTime
     {
-        Name = name;
+        public AppEntityWithSoftDelete(Guid id, string name)
+            : base(id)
+        {
+            Name = name;
+        }
+
+        public string Name { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletionTime { get; set; }
     }
-
-    public string Name { get; set; }
-
-    public bool IsDeleted { get; set; }
-
-    public DateTime? DeletionTime { get; set; }
 }

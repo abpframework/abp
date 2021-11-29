@@ -6,47 +6,48 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class PermissionDataSeeder : IPermissionDataSeeder, ITransientDependency
+namespace Volo.Abp.PermissionManagement
 {
-    protected IPermissionGrantRepository PermissionGrantRepository { get; }
-    protected IGuidGenerator GuidGenerator { get; }
-
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public PermissionDataSeeder(
-        IPermissionGrantRepository permissionGrantRepository,
-        IGuidGenerator guidGenerator,
-        ICurrentTenant currentTenant)
+    public class PermissionDataSeeder : IPermissionDataSeeder, ITransientDependency
     {
-        PermissionGrantRepository = permissionGrantRepository;
-        GuidGenerator = guidGenerator;
-        CurrentTenant = currentTenant;
-    }
+        protected IPermissionGrantRepository PermissionGrantRepository { get; }
+        protected IGuidGenerator GuidGenerator { get; }
 
-    public virtual async Task SeedAsync(
-        string providerName,
-        string providerKey,
-        IEnumerable<string> grantedPermissions,
-        Guid? tenantId = null)
-    {
-        using (CurrentTenant.Change(tenantId))
+        protected ICurrentTenant CurrentTenant { get; }
+
+        public PermissionDataSeeder(
+            IPermissionGrantRepository permissionGrantRepository,
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
-            var names = grantedPermissions.ToArray();
-            var existsPermissionGrants = (await PermissionGrantRepository.GetListAsync(names, providerName, providerKey)).Select(x => x.Name).ToList();
+            PermissionGrantRepository = permissionGrantRepository;
+            GuidGenerator = guidGenerator;
+            CurrentTenant = currentTenant;
+        }
 
-            foreach (var permissionName in names.Except(existsPermissionGrants))
+        public virtual async Task SeedAsync(
+            string providerName,
+            string providerKey,
+            IEnumerable<string> grantedPermissions,
+            Guid? tenantId = null)
+        {
+            using (CurrentTenant.Change(tenantId))
             {
-                await PermissionGrantRepository.InsertAsync(
-                    new PermissionGrant(
-                        GuidGenerator.Create(),
-                        permissionName,
-                        providerName,
-                        providerKey,
-                        tenantId
-                    )
-                );
+                var names = grantedPermissions.ToArray();
+                var existsPermissionGrants = (await PermissionGrantRepository.GetListAsync(names, providerName, providerKey)).Select(x => x.Name).ToList();
+
+                foreach (var permissionName in names.Except(existsPermissionGrants))
+                {
+                    await PermissionGrantRepository.InsertAsync(
+                        new PermissionGrant(
+                            GuidGenerator.Create(),
+                            permissionName,
+                            providerName,
+                            providerKey,
+                            tenantId
+                        )
+                    );
+                }
             }
         }
     }

@@ -1,13 +1,14 @@
-﻿namespace Volo.Abp.BackgroundJobs;
-
-/// <summary>
-/// Defines interface of a background job.
-/// </summary>
-public interface IBackgroundJob<in TArgs>
+﻿namespace Volo.Abp.BackgroundJobs
 {
     /// <summary>
-    /// Executes the job with the <paramref name="args"/>.
+    /// Defines interface of a background job.
     /// </summary>
-    /// <param name="args">Job arguments.</param>
-    void Execute(TArgs args);
+    public interface IBackgroundJob<in TArgs>
+    {
+        /// <summary>
+        /// Executes the job with the <paramref name="args"/>.
+        /// </summary>
+        /// <param name="args">Job arguments.</param>
+        void Execute(TArgs args);
+    }
 }

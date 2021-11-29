@@ -10,163 +10,164 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing;
-
-public abstract class HardDelete_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.TestApp.Testing
 {
-    protected readonly IRepository<Person, Guid> PersonRepository;
-    protected readonly IDataFilter DataFilter;
-    protected readonly IUnitOfWorkManager UnitOfWorkManager;
-
-    protected HardDelete_Tests()
+    public abstract class HardDelete_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
-        DataFilter = GetRequiredService<IDataFilter>();
-        UnitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-    }
+        protected readonly IRepository<Person, Guid> PersonRepository;
+        protected readonly IDataFilter DataFilter;
+        protected readonly IUnitOfWorkManager UnitOfWorkManager;
 
-    [Fact]
-    public async Task Should_HardDelete_Entities()
-    {
-        var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
-        await PersonRepository.HardDeleteAsync(douglas);
-
-        using (DataFilter.Disable<ISoftDelete>())
+        protected HardDelete_Tests()
         {
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-            douglas.ShouldBeNull();
-        }
-    }
-
-    [Fact]
-    public async Task Should_HardDelete_Entities_With_Predicate()
-    {
-        await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId || x.Id == TestDataBuilder.UserJohnDeletedId);
-
-        using (DataFilter.Disable<ISoftDelete>())
-        {
-            var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-            douglas.ShouldBeNull();
-
-            var john = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
-            john.ShouldBeNull();
-        }
-    }
-
-    [Fact]
-    public async Task Should_HardDelete_Entities_With_IEnumerable()
-    {
-        using (DataFilter.Disable<ISoftDelete>())
-        {
-            var persons = await PersonRepository.GetListAsync();
-            await PersonRepository.HardDeleteAsync(persons);
-
-            var personCount = await PersonRepository.GetCountAsync();
-            personCount.ShouldBe(0);
-        }
-    }
-
-    [Fact]
-    public async Task Should_HardDelete_Soft_Deleted_Entities()
-    {
-        var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
-        await PersonRepository.DeleteAsync(douglas);
-
-        douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-        douglas.ShouldBeNull();
-
-        using (DataFilter.Disable<ISoftDelete>())
-        {
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-            douglas.ShouldNotBeNull();
-            douglas.IsDeleted.ShouldBeTrue();
-            douglas.DeletionTime.ShouldNotBeNull();
+            PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
+            DataFilter = GetRequiredService<IDataFilter>();
+            UnitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
-        using (var uow = UnitOfWorkManager.Begin())
+        [Fact]
+        public async Task Should_HardDelete_Entities()
+        {
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            await PersonRepository.HardDeleteAsync(douglas);
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldBeNull();
+            }
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_Entities_With_Predicate()
+        {
+            await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId || x.Id == TestDataBuilder.UserJohnDeletedId);
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldBeNull();
+
+                var john = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
+                john.ShouldBeNull();
+            }
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_Entities_With_IEnumerable()
         {
             using (DataFilter.Disable<ISoftDelete>())
             {
-                douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+                var persons = await PersonRepository.GetListAsync();
+                await PersonRepository.HardDeleteAsync(persons);
+
+                var personCount = await PersonRepository.GetCountAsync();
+                personCount.ShouldBe(0);
+            }
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_Soft_Deleted_Entities()
+        {
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            await PersonRepository.DeleteAsync(douglas);
+
+            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            douglas.ShouldBeNull();
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldNotBeNull();
+                douglas.IsDeleted.ShouldBeTrue();
+                douglas.DeletionTime.ShouldNotBeNull();
             }
 
-            await PersonRepository.HardDeleteAsync(douglas);
-            await uow.CompleteAsync();
+            using (var uow = UnitOfWorkManager.Begin())
+            {
+                using (DataFilter.Disable<ISoftDelete>())
+                {
+                    douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+                }
+
+                await PersonRepository.HardDeleteAsync(douglas);
+                await uow.CompleteAsync();
+            }
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldBeNull();
+            }
         }
 
-        using (DataFilter.Disable<ISoftDelete>())
+        [Fact]
+        public async Task Should_HardDelete_Soft_Deleted_Entities_With_Predicate()
         {
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-            douglas.ShouldBeNull();
-        }
-    }
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            await PersonRepository.DeleteAsync(douglas);
 
-    [Fact]
-    public async Task Should_HardDelete_Soft_Deleted_Entities_With_Predicate()
-    {
-        var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
-        await PersonRepository.DeleteAsync(douglas);
-
-        douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-        douglas.ShouldBeNull();
-
-        using (DataFilter.Disable<ISoftDelete>())
-        {
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-            douglas.ShouldNotBeNull();
-            douglas.IsDeleted.ShouldBeTrue();
-            douglas.DeletionTime.ShouldNotBeNull();
-        }
-
-        using (var uow = UnitOfWorkManager.Begin())
-        {
-            await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId || x.Id == TestDataBuilder.UserJohnDeletedId);
-            await uow.CompleteAsync();
-        }
-
-        using (DataFilter.Disable<ISoftDelete>())
-        {
             douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
             douglas.ShouldBeNull();
 
-            var john = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
-            john.ShouldBeNull();
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldNotBeNull();
+                douglas.IsDeleted.ShouldBeTrue();
+                douglas.DeletionTime.ShouldNotBeNull();
+            }
+
+            using (var uow = UnitOfWorkManager.Begin())
+            {
+                await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId || x.Id == TestDataBuilder.UserJohnDeletedId);
+                await uow.CompleteAsync();
+            }
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldBeNull();
+
+                var john = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
+                john.ShouldBeNull();
+            }
         }
-    }
 
-    [Fact]
-    public async Task Should_HardDelete_WithDeleteMany()
-    {
-        var persons = await PersonRepository.GetListAsync();
-
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task Should_HardDelete_WithDeleteMany()
         {
-            var hardDeleteEntities = (HashSet<IEntity>)UnitOfWorkManager.Current.Items.GetOrAdd(
-                  UnitOfWorkItemNames.HardDeletedEntities,
-                  () => new HashSet<IEntity>()
-                  );
-            hardDeleteEntities.UnionWith(persons);
-            await PersonRepository.DeleteManyAsync(persons);
-        });
+            var persons = await PersonRepository.GetListAsync();
 
-        var personsCount = await PersonRepository.GetCountAsync();
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var hardDeleteEntities = (HashSet<IEntity>)UnitOfWorkManager.Current.Items.GetOrAdd(
+                      UnitOfWorkItemNames.HardDeletedEntities,
+                      () => new HashSet<IEntity>()
+                      );
+                hardDeleteEntities.UnionWith(persons);
+                await PersonRepository.DeleteManyAsync(persons);
+            });
 
-        personsCount.ShouldBe(0);
-    }
+            var personsCount = await PersonRepository.GetCountAsync();
 
-    [Fact]
-    public async Task Should_HardDelete_WithDeleteMany_WithPredicate()
-    {
-        await WithUnitOfWorkAsync(async () =>
+            personsCount.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_WithDeleteMany_WithPredicate()
         {
-            await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId);
+            await WithUnitOfWorkAsync(async () =>
+            {
+                await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId);
 
-            await PersonRepository.DeleteManyAsync(new[] { TestDataBuilder.UserDouglasId });
-        });
+                await PersonRepository.DeleteManyAsync(new[] { TestDataBuilder.UserDouglasId });
+            });
 
-        var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-
-        douglas.ShouldBeNull();
+            var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            
+            douglas.ShouldBeNull();
+        }
     }
 }

@@ -3,24 +3,25 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
-public class SettingManagementDbContext : AbpDbContext<SettingManagementDbContext>, ISettingManagementDbContext
+namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    public DbSet<Setting> Settings { get; set; }
-
-    public SettingManagementDbContext(DbContextOptions<SettingManagementDbContext> options)
-        : base(options)
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
+    public class SettingManagementDbContext : AbpDbContext<SettingManagementDbContext>, ISettingManagementDbContext
     {
+        public DbSet<Setting> Settings { get; set; }
 
-    }
+        public SettingManagementDbContext(DbContextOptions<SettingManagementDbContext> options)
+            : base(options)
+        {
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
+        }
 
-        builder.ConfigureSettingManagement();
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ConfigureSettingManagement();
+        }
     }
 }

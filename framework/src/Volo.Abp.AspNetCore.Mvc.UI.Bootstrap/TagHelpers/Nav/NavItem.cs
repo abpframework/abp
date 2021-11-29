@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
-
-public class NavItem
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 {
-    public string Html { get; set; }
+    public class NavItem
+    {
+        public string Html { get; set; }
 
-    public bool Active { get; set; }
+        public bool Active { get; set; }
+    }
 }

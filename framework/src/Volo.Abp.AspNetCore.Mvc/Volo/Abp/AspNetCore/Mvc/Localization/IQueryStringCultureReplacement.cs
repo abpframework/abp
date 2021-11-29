@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization;
-
-public interface IQueryStringCultureReplacement
+namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
-    Task ReplaceAsync(QueryStringCultureReplacementContext context);
+    public interface IQueryStringCultureReplacement
+    {
+        Task ReplaceAsync(QueryStringCultureReplacementContext context);
+    }
 }

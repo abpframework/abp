@@ -2,12 +2,13 @@
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Castle;
-
-public class AbpCastleCoreModule : AbpModule
+namespace Volo.Abp.Castle
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public class AbpCastleCoreModule : AbpModule
     {
-        context.Services.AddTransient(typeof(AbpAsyncDeterminationInterceptor<>));
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTransient(typeof(AbpAsyncDeterminationInterceptor<>));
+        }
     }
 }

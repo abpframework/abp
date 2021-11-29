@@ -2,41 +2,42 @@
 using System.Data;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Uow;
-
-public static class UnitOfWorkManagerExtensions
+namespace Volo.Abp.Uow
 {
-    [NotNull]
-    public static IUnitOfWork Begin(
-        [NotNull] this IUnitOfWorkManager unitOfWorkManager,
-        bool requiresNew = false,
-        bool isTransactional = false,
-        IsolationLevel? isolationLevel = null,
-        int? timeout = null)
+    public static class UnitOfWorkManagerExtensions
     {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
-
-        return unitOfWorkManager.Begin(new AbpUnitOfWorkOptions
+        [NotNull]
+        public static IUnitOfWork Begin(
+            [NotNull] this IUnitOfWorkManager unitOfWorkManager,
+            bool requiresNew = false,
+            bool isTransactional = false,
+            IsolationLevel? isolationLevel = null,
+            int? timeout = null)
         {
-            IsTransactional = isTransactional,
-            IsolationLevel = isolationLevel,
-            Timeout = timeout
-        }, requiresNew);
-    }
+            Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
 
-    public static void BeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
-    {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
-        Check.NotNull(reservationName, nameof(reservationName));
+            return unitOfWorkManager.Begin(new AbpUnitOfWorkOptions
+            {
+                IsTransactional = isTransactional,
+                IsolationLevel = isolationLevel,
+                Timeout = timeout
+            }, requiresNew);
+        }
 
-        unitOfWorkManager.BeginReserved(reservationName, new AbpUnitOfWorkOptions());
-    }
+        public static void BeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+        {
+            Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+            Check.NotNull(reservationName, nameof(reservationName));
 
-    public static void TryBeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
-    {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
-        Check.NotNull(reservationName, nameof(reservationName));
+            unitOfWorkManager.BeginReserved(reservationName, new AbpUnitOfWorkOptions());
+        }
 
-        unitOfWorkManager.TryBeginReserved(reservationName, new AbpUnitOfWorkOptions());
+        public static void TryBeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+        {
+            Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+            Check.NotNull(reservationName, nameof(reservationName));
+
+            unitOfWorkManager.TryBeginReserved(reservationName, new AbpUnitOfWorkOptions());
+        }
     }
 }

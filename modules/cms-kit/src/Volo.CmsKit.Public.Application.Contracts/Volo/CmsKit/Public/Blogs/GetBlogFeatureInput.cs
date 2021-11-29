@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.CmsKit.Public.Blogs;
-
-[Serializable]
-public class GetBlogFeatureInput
+namespace Volo.CmsKit.Public.Blogs
 {
-    public List<string> FeatureNames { get; set; }
+    [Serializable]
+    public class GetBlogFeatureInput
+    {
+        public List<string> FeatureNames { get; set; }
+    }
 }

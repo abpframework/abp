@@ -3,38 +3,39 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
-
-public class DefaultThemeManager : IThemeManager, IScopedDependency, IServiceProviderAccessor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    private const string CurrentThemeHttpContextKey = "__AbpCurrentTheme";
-
-    public IServiceProvider ServiceProvider { get; }
-    public ITheme CurrentTheme => GetCurrentTheme();
-
-    protected IThemeSelector ThemeSelector { get; }
-    protected IHttpContextAccessor HttpContextAccessor { get; }
-
-    public DefaultThemeManager(
-        IServiceProvider serviceProvider,
-        IThemeSelector themeSelector,
-        IHttpContextAccessor httpContextAccessor)
+    public class DefaultThemeManager : IThemeManager, IScopedDependency, IServiceProviderAccessor
     {
-        HttpContextAccessor = httpContextAccessor;
-        ServiceProvider = serviceProvider;
-        ThemeSelector = themeSelector;
-    }
+        private const string CurrentThemeHttpContextKey = "__AbpCurrentTheme";
 
-    protected virtual ITheme GetCurrentTheme()
-    {
-        var preSelectedTheme = HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] as ITheme;
+        public IServiceProvider ServiceProvider { get; }
+        public ITheme CurrentTheme => GetCurrentTheme();
 
-        if (preSelectedTheme == null)
+        protected IThemeSelector ThemeSelector { get; }
+        protected IHttpContextAccessor HttpContextAccessor { get; }
+
+        public DefaultThemeManager(
+            IServiceProvider serviceProvider,
+            IThemeSelector themeSelector,
+            IHttpContextAccessor httpContextAccessor)
         {
-            preSelectedTheme = (ITheme)ServiceProvider.GetRequiredService(ThemeSelector.GetCurrentThemeInfo().ThemeType);
-            HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] = preSelectedTheme;
+            HttpContextAccessor = httpContextAccessor;
+            ServiceProvider = serviceProvider;
+            ThemeSelector = themeSelector;
         }
 
-        return preSelectedTheme;
+        protected virtual ITheme GetCurrentTheme()
+        {
+            var preSelectedTheme = HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] as ITheme;
+
+            if (preSelectedTheme == null)
+            {
+                preSelectedTheme = (ITheme)ServiceProvider.GetRequiredService(ThemeSelector.GetCurrentThemeInfo().ThemeType);
+                HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] = preSelectedTheme;
+            }
+
+            return preSelectedTheme;
+        }
     }
 }

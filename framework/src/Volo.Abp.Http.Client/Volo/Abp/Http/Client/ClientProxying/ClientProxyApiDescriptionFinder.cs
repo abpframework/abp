@@ -8,97 +8,98 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Json;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Http.Client.ClientProxying;
-
-public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder, ISingletonDependency
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    protected IVirtualFileProvider VirtualFileProvider { get; }
-    protected IJsonSerializer JsonSerializer { get; }
-    protected Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
-    protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; }
-
-    public ClientProxyApiDescriptionFinder(
-        IVirtualFileProvider virtualFileProvider,
-        IJsonSerializer jsonSerializer)
+    public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder, ISingletonDependency
     {
-        VirtualFileProvider = virtualFileProvider;
-        JsonSerializer = jsonSerializer;
-        ActionApiDescriptionModels = new Dictionary<string, ActionApiDescriptionModel>();
+        protected IVirtualFileProvider VirtualFileProvider { get; }
+        protected IJsonSerializer JsonSerializer { get; }
+        protected Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
+        protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; }
 
-        Initialize();
-    }
-
-    public ActionApiDescriptionModel FindAction(string methodName)
-    {
-        return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
-    }
-
-    public ApplicationApiDescriptionModel GetApiDescription()
-    {
-        return ApplicationApiDescriptionModel;
-    }
-
-    private void Initialize()
-    {
-        ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
-        var controllers = ApplicationApiDescriptionModel.Modules.Select(x => x.Value).SelectMany(x => x.Controllers.Values).ToList();
-
-        foreach (var controller in controllers.Where(x => x.Interfaces.Any()))
+        public ClientProxyApiDescriptionFinder(
+            IVirtualFileProvider virtualFileProvider,
+            IJsonSerializer jsonSerializer)
         {
-            var appServiceType = controller.Interfaces.Last().Type;
+            VirtualFileProvider = virtualFileProvider;
+            JsonSerializer = jsonSerializer;
+            ActionApiDescriptionModels = new Dictionary<string, ActionApiDescriptionModel>();
 
-            foreach (var actionItem in controller.Actions.Values)
-            {
-                var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
-
-                if (!ActionApiDescriptionModels.ContainsKey(actionKey))
-                {
-                    ActionApiDescriptionModels.Add(actionKey, actionItem);
-                }
-            }
+            Initialize();
         }
-    }
 
-    private ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
-    {
-        var applicationApiDescription = ApplicationApiDescriptionModel.Create();
-        var fileInfoList = new List<IFileInfo>();
-        GetGenerateProxyFileInfos(fileInfoList);
-
-        foreach (var fileInfo in fileInfoList)
+        public ActionApiDescriptionModel FindAction(string methodName)
         {
-            using (var streamReader = new StreamReader(fileInfo.CreateReadStream()))
+            return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
+        }
+
+        public ApplicationApiDescriptionModel GetApiDescription()
+        {
+            return ApplicationApiDescriptionModel;
+        }
+
+        private void Initialize()
+        {
+            ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
+            var controllers = ApplicationApiDescriptionModel.Modules.Select(x=>x.Value).SelectMany(x => x.Controllers.Values).ToList();
+
+            foreach (var controller in controllers.Where(x => x.Interfaces.Any()))
             {
-                var content = streamReader.ReadToEnd();
+                var appServiceType = controller.Interfaces.Last().Type;
 
-                var subApplicationApiDescription = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content);
-
-                foreach (var module in subApplicationApiDescription.Modules)
+                foreach (var actionItem in controller.Actions.Values)
                 {
-                    if (!applicationApiDescription.Modules.ContainsKey(module.Key))
+                    var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
+
+                    if (!ActionApiDescriptionModels.ContainsKey(actionKey))
                     {
-                        applicationApiDescription.AddModule(module.Value);
+                        ActionApiDescriptionModels.Add(actionKey, actionItem);
                     }
                 }
             }
         }
 
-        return applicationApiDescription;
-    }
-
-    private void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
-    {
-        foreach (var directoryContent in VirtualFileProvider.GetDirectoryContents(path))
+        private ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
         {
-            if (directoryContent.IsDirectory)
+            var applicationApiDescription = ApplicationApiDescriptionModel.Create();
+            var fileInfoList = new List<IFileInfo>();
+            GetGenerateProxyFileInfos(fileInfoList);
+
+            foreach (var fileInfo in fileInfoList)
             {
-                GetGenerateProxyFileInfos(fileInfoList, directoryContent.PhysicalPath);
-            }
-            else
-            {
-                if (directoryContent.Name.EndsWith("generate-proxy.json"))
+                using (var streamReader = new StreamReader(fileInfo.CreateReadStream()))
                 {
-                    fileInfoList.Add(VirtualFileProvider.GetFileInfo(directoryContent.GetVirtualOrPhysicalPathOrNull()));
+                    var content = streamReader.ReadToEnd();
+
+                    var subApplicationApiDescription = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content);
+
+                    foreach (var module in subApplicationApiDescription.Modules)
+                    {
+                        if (!applicationApiDescription.Modules.ContainsKey(module.Key))
+                        {
+                            applicationApiDescription.AddModule(module.Value);
+                        }
+                    }
+                }
+            }
+
+            return applicationApiDescription;
+        }
+
+        private void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
+        {
+            foreach (var directoryContent in VirtualFileProvider.GetDirectoryContents(path))
+            {
+                if (directoryContent.IsDirectory)
+                {
+                    GetGenerateProxyFileInfos(fileInfoList, directoryContent.PhysicalPath);
+                }
+                else
+                {
+                    if (directoryContent.Name.EndsWith("generate-proxy.json"))
+                    {
+                        fileInfoList.Add(VirtualFileProvider.GetFileInfo(directoryContent.GetVirtualOrPhysicalPathOrNull()));
+                    }
                 }
             }
         }

@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Components.Progression;
-
-public enum UiPageProgressType
+﻿namespace Volo.Abp.AspNetCore.Components.Progression
 {
-    Default,
-    Info,
-    Success,
-    Warning,
-    Error,
+    public enum UiPageProgressType
+    {
+        Default,
+        Info,
+        Success,
+        Warning,
+        Error,
+    }
 }

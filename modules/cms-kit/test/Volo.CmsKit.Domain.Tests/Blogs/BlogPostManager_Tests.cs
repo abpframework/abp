@@ -10,77 +10,78 @@ using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 using Xunit;
 
-namespace Volo.CmsKit.Blogs;
-
-public class BlogPostManager_Tests : CmsKitDomainTestBase
+namespace Volo.CmsKit.Blogs
 {
-    private readonly BlogPostManager blogPostManager;
-    private readonly IGuidGenerator guidGenerator;
-    private readonly IBlogPostRepository blogPostRepository;
-    private readonly IBlogRepository blogRepository;
-    private readonly ICmsUserRepository userRepository;
-    private readonly CmsKitTestData cmsKitTestData;
-
-    public BlogPostManager_Tests()
+    public class BlogPostManager_Tests : CmsKitDomainTestBase
     {
-        blogPostManager = GetRequiredService<BlogPostManager>();
-        guidGenerator = GetRequiredService<IGuidGenerator>();
-        blogPostRepository = GetRequiredService<IBlogPostRepository>();
-        blogRepository = GetRequiredService<IBlogRepository>();
-        cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        userRepository = GetRequiredService<ICmsUserRepository>();
-    }
+        private readonly BlogPostManager blogPostManager;
+        private readonly IGuidGenerator guidGenerator;
+        private readonly IBlogPostRepository blogPostRepository;
+        private readonly IBlogRepository blogRepository;
+        private readonly ICmsUserRepository userRepository;
+        private readonly CmsKitTestData cmsKitTestData;
 
-    [Fact]
-    public async Task CreateAsync_ShouldWorkProperly_WithExistingUserAndBlog()
-    {
-        var title = "New blog post";
-        var slug = "new-blog-post";
+        public BlogPostManager_Tests()
+        {
+            blogPostManager = GetRequiredService<BlogPostManager>();
+            guidGenerator = GetRequiredService<IGuidGenerator>();
+            blogPostRepository = GetRequiredService<IBlogPostRepository>();
+            blogRepository = GetRequiredService<IBlogRepository>();
+            cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            userRepository = GetRequiredService<ICmsUserRepository>();
+        }
 
-        var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
+        [Fact]
+        public async Task CreateAsync_ShouldWorkProperly_WithExistingUserAndBlog()
+        {
+            var title = "New blog post";
+            var slug = "new-blog-post";
 
-        var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
+            var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
 
-        var blogPost = await blogPostManager.CreateAsync(author, blog, title, slug);
+            var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
-        blogPost.Id.ShouldNotBe(Guid.Empty);
-        blogPost.Title.ShouldBe(title);
-        blogPost.Slug.ShouldBe(slug);
-    }
+            var blogPost = await blogPostManager.CreateAsync(author, blog, title, slug);
 
-    [Fact]
-    public async Task CreateAsync_ShouldThrowException_WhenSlugAlreadyExists()
-    {
+            blogPost.Id.ShouldNotBe(Guid.Empty);
+            blogPost.Title.ShouldBe(title);
+            blogPost.Slug.ShouldBe(slug);
+        }
 
-        var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
+        [Fact]
+        public async Task CreateAsync_ShouldThrowException_WhenSlugAlreadyExists()
+        {
 
-        var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
+            var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
 
-        await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
-            await blogPostManager.CreateAsync(author, blog, "Any New Title", cmsKitTestData.BlogPost_1_Slug));
-    }
+            var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
-    [Fact]
-    public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
-    {
-        var newSlug = "yet-another-post";
+            await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
+                await blogPostManager.CreateAsync(author, blog, "Any New Title", cmsKitTestData.BlogPost_1_Slug));
+        }
 
-        var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
+        [Fact]
+        public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
+        {
+            var newSlug = "yet-another-post";
 
-        await blogPostManager.SetSlugUrlAsync(blogPost, newSlug);
+            var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
 
-        blogPost.Slug.ShouldBe(newSlug);
-    }
+            await blogPostManager.SetSlugUrlAsync(blogPost, newSlug);
 
-    [Fact]
-    public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
-    {
-        var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
+            blogPost.Slug.ShouldBe(newSlug);
+        }
 
-        var exception = await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
-            await blogPostManager.SetSlugUrlAsync(blogPost, cmsKitTestData.BlogPost_2_Slug));
+        [Fact]
+        public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
+        {
+            var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
 
-        exception.BlogId.ShouldBe(blogPost.BlogId);
-        exception.Slug.ShouldBe(cmsKitTestData.BlogPost_2_Slug);
+            var exception = await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
+                await blogPostManager.SetSlugUrlAsync(blogPost, cmsKitTestData.BlogPost_2_Slug));
+
+            exception.BlogId.ShouldBe(blogPost.BlogId);
+            exception.Slug.ShouldBe(cmsKitTestData.BlogPost_2_Slug);
+        }
     }
 }

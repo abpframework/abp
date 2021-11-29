@@ -1,15 +1,16 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions;
-
-public interface IConventionalRouteBuilder
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    string Build(
-        string rootPath,
-        string controllerName,
-        ActionModel action,
-        string httpMethod,
-        [CanBeNull] ConventionalControllerSetting configuration
-    );
+    public interface IConventionalRouteBuilder
+    {
+        string Build(
+            string rootPath,
+            string controllerName,
+            ActionModel action,
+            string httpMethod,
+            [CanBeNull] ConventionalControllerSetting configuration
+        );
+    }
 }

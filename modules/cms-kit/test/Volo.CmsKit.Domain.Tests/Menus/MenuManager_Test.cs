@@ -5,77 +5,78 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Pages;
 using Xunit;
 
-namespace Volo.CmsKit.Menus;
-
-public class MenuManager_Test : CmsKitDomainTestBase
+namespace Volo.CmsKit.Menus
 {
-    private readonly MenuItemManager menuManager;
-    private readonly CmsKitTestData testData;
-    private readonly IMenuItemRepository menuItemRepository;
-    private readonly IPageRepository pageRepository;
-
-    public MenuManager_Test()
+    public class MenuManager_Test : CmsKitDomainTestBase
     {
-        menuManager = GetRequiredService<MenuItemManager>();
-        testData = GetRequiredService<CmsKitTestData>();
-        menuItemRepository = GetRequiredService<IMenuItemRepository>();
-        pageRepository = GetRequiredService<IPageRepository>();
-    }
+        private readonly MenuItemManager menuManager;
+        private readonly CmsKitTestData testData;
+        private readonly IMenuItemRepository menuItemRepository;
+        private readonly IPageRepository pageRepository;
 
-    [Fact]
-    public async Task SetPageUrl_ShouldSetUrlSameWithPage_WithExistingPage()
-    {
-        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+        public MenuManager_Test()
+        {
+            menuManager = GetRequiredService<MenuItemManager>();
+            testData = GetRequiredService<CmsKitTestData>();
+            menuItemRepository = GetRequiredService<IMenuItemRepository>();
+            pageRepository = GetRequiredService<IPageRepository>();
+        }
 
-        var menuItem = await menuItemRepository.GetAsync(testData.MenuItem_1_Id);
+        [Fact]
+        public async Task SetPageUrl_ShouldSetUrlSameWithPage_WithExistingPage()
+        {
+            var page = await pageRepository.GetAsync(testData.Page_1_Id);
 
-        menuManager.SetPageUrl(menuItem, page);
+            var menuItem = await menuItemRepository.GetAsync(testData.MenuItem_1_Id);
 
-        menuItem.Url.ShouldNotBeNullOrEmpty();
-        menuItem.Url.ShouldBe(PageConsts.UrlPrefix + page.Slug);
-    }
+            menuManager.SetPageUrl(menuItem, page);
 
-    [Fact]
-    public async Task MoveAsync_ShouldMoveCorrectly_UnderAnotherMenu()
-    {
-        await menuManager.MoveAsync(testData.MenuItem_3_Id, testData.MenuItem_1_Id);
+            menuItem.Url.ShouldNotBeNullOrEmpty();
+            menuItem.Url.ShouldBe(PageConsts.UrlPrefix + page.Slug);
+        }
 
-        var menu = await menuItemRepository.GetAsync(testData.MenuItem_3_Id);
+        [Fact]
+        public async Task MoveAsync_ShouldMoveCorrectly_UnderAnotherMenu()
+        {
+            await menuManager.MoveAsync(testData.MenuItem_3_Id, testData.MenuItem_1_Id);
 
-        menu.ParentId.ShouldBe(testData.MenuItem_1_Id);
-    }
+            var menu = await menuItemRepository.GetAsync(testData.MenuItem_3_Id);
 
-    [Fact]
-    public async Task MoveAsync_ShouldChangePositionCorrectly_UnderRoot()
-    {
-        await menuManager.MoveAsync(testData.MenuItem_2_Id, null, 0);
+            menu.ParentId.ShouldBe(testData.MenuItem_1_Id);
+        }
 
-        var menuItems = await menuItemRepository.GetListAsync();
+        [Fact]
+        public async Task MoveAsync_ShouldChangePositionCorrectly_UnderRoot()
+        {
+            await menuManager.MoveAsync(testData.MenuItem_2_Id, null, 0);
 
-        var menuItem1 = menuItems.First(x => x.Id == testData.MenuItem_1_Id);
-        var menuItem2 = menuItems.First(x => x.Id == testData.MenuItem_2_Id);
+            var menuItems = await menuItemRepository.GetListAsync();
 
-        menuItem1.Order.ShouldBeGreaterThan(menuItem2.Order);
-    }
+            var menuItem1 = menuItems.First(x => x.Id == testData.MenuItem_1_Id);
+            var menuItem2 = menuItems.First(x => x.Id == testData.MenuItem_2_Id);
 
-    [Fact]
-    public async Task OrganizeTreeOrderForMenuItem_ShouldWorkProperly_WithNewMenuItem()
-    {
-        var menu3Id = Guid.NewGuid();
+            menuItem1.Order.ShouldBeGreaterThan(menuItem2.Order);
+        }
 
-        var menuItems = await menuItemRepository.GetListAsync();
+        [Fact]
+        public async Task OrganizeTreeOrderForMenuItem_ShouldWorkProperly_WithNewMenuItem()
+        {
+            var menu3Id = Guid.NewGuid();
 
-        var menuItem1 = menuItems.First(x => x.Id == testData.MenuItem_1_Id);
-        var menuItem2 = menuItems.First(x => x.Id == testData.MenuItem_2_Id);
-        var menuItem3 = new MenuItem(menu3Id, "Menu 3", "#");
+            var menuItems = await menuItemRepository.GetListAsync();
 
-        menuItems.Add(menuItem3);
+            var menuItem1 = menuItems.First(x => x.Id == testData.MenuItem_1_Id);
+            var menuItem2 = menuItems.First(x => x.Id == testData.MenuItem_2_Id);
+            var menuItem3 = new MenuItem(menu3Id, "Menu 3", "#");
 
-        menuItem3.Order = 0;
+            menuItems.Add(menuItem3);
 
-        menuManager.OrganizeTreeOrderForMenuItem(menuItems, menuItem3);
+            menuItem3.Order = 0;
 
-        menuItem3.Order.ShouldBeLessThan(menuItem1.Order);
-        menuItem3.Order.ShouldBeLessThan(menuItem2.Order);
+            menuManager.OrganizeTreeOrderForMenuItem(menuItems, menuItem3);
+
+            menuItem3.Order.ShouldBeLessThan(menuItem1.Order);
+            menuItem3.Order.ShouldBeLessThan(menuItem2.Order);
+        }
     }
 }

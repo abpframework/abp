@@ -7,18 +7,19 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
 
-namespace Volo.Abp.AspNetCore.Components;
-
-[DependsOn(
-    typeof(AbpObjectMappingModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
-    )]
-public class AbpAspNetCoreComponentsModule : AbpModule
+namespace Volo.Abp.AspNetCore.Components
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpObjectMappingModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpLocalizationModule)
+        )]
+    public class AbpAspNetCoreComponentsModule : AbpModule
     {
-        DynamicProxyIgnoreTypes.Add<ComponentBase>();
-        context.Services.AddConventionalRegistrar(new AbpWebAssemblyConventionalRegistrar());
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            DynamicProxyIgnoreTypes.Add<ComponentBase>();
+            context.Services.AddConventionalRegistrar(new AbpWebAssemblyConventionalRegistrar());
+        }
     }
 }

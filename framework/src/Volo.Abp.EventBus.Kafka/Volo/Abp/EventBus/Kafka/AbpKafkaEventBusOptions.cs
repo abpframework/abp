@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.EventBus.Kafka;
-
-public class AbpKafkaEventBusOptions
+﻿namespace Volo.Abp.EventBus.Kafka
 {
+    public class AbpKafkaEventBusOptions
+    {
 
-    public string ConnectionName { get; set; }
+        public string ConnectionName { get; set; }
 
-    public string TopicName { get; set; }
+        public string TopicName { get; set; }
 
-    public string GroupId { get; set; }
+        public string GroupId { get; set; }
+    }
 }

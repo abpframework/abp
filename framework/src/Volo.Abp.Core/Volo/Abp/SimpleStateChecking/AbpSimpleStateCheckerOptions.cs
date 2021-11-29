@@ -1,14 +1,15 @@
 ﻿using Volo.Abp.Collections;
 
-namespace Volo.Abp.SimpleStateChecking;
-
-public class AbpSimpleStateCheckerOptions<TState>
-    where TState : IHasSimpleStateCheckers<TState>
+namespace Volo.Abp.SimpleStateChecking
 {
-    public ITypeList<ISimpleStateChecker<TState>> GlobalStateCheckers { get; }
-
-    public AbpSimpleStateCheckerOptions()
+    public class AbpSimpleStateCheckerOptions<TState>
+        where TState : IHasSimpleStateCheckers<TState>
     {
-        GlobalStateCheckers = new TypeList<ISimpleStateChecker<TState>>();
+        public ITypeList<ISimpleStateChecker<TState>> GlobalStateCheckers { get; }
+
+        public AbpSimpleStateCheckerOptions()
+        {
+            GlobalStateCheckers = new TypeList<ISimpleStateChecker<TState>>();
+        }
     }
 }

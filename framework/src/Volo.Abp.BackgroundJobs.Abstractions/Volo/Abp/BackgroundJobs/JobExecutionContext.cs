@@ -1,20 +1,21 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public class JobExecutionContext : IServiceProviderAccessor
+namespace Volo.Abp.BackgroundJobs
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public Type JobType { get; }
-
-    public object JobArgs { get; }
-
-    public JobExecutionContext(IServiceProvider serviceProvider, Type jobType, object jobArgs)
+    public class JobExecutionContext : IServiceProviderAccessor
     {
-        ServiceProvider = serviceProvider;
-        JobType = jobType;
-        JobArgs = jobArgs;
+        public IServiceProvider ServiceProvider { get; }
+
+        public Type JobType { get; }
+
+        public object JobArgs { get; }
+
+        public JobExecutionContext(IServiceProvider serviceProvider, Type jobType, object jobArgs)
+        {
+            ServiceProvider = serviceProvider;
+            JobType = jobType;
+            JobArgs = jobArgs;
+        }
     }
 }

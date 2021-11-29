@@ -1,24 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Microsoft.Extensions.Hosting;
-
-public static class AbpHostingHostBuilderExtensions
+namespace Microsoft.Extensions.Hosting
 {
-    public const string AppSettingsSecretJsonPath = "appsettings.secrets.json";
-
-    public static IHostBuilder AddAppSettingsSecretsJson(
-        this IHostBuilder hostBuilder,
-        bool optional = true,
-        bool reloadOnChange = true,
-        string path = AppSettingsSecretJsonPath)
+    public static class AbpHostingHostBuilderExtensions
     {
-        return hostBuilder.ConfigureAppConfiguration((_, builder) =>
+        public const string AppSettingsSecretJsonPath = "appsettings.secrets.json";
+
+        public static IHostBuilder AddAppSettingsSecretsJson(
+            this IHostBuilder hostBuilder,
+            bool optional = true,
+            bool reloadOnChange = true,
+            string path = AppSettingsSecretJsonPath)
         {
-            builder.AddJsonFile(
-                path: AppSettingsSecretJsonPath,
-                optional: optional,
-                reloadOnChange: reloadOnChange
-            );
-        });
+            return hostBuilder.ConfigureAppConfiguration((_, builder) =>
+            {
+                builder.AddJsonFile(
+                    path: AppSettingsSecretJsonPath,
+                    optional: optional,
+                    reloadOnChange: reloadOnChange
+                );
+            });
+        }
     }
 }

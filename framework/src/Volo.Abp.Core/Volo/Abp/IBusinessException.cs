@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp;
-
-public interface IBusinessException
+﻿namespace Volo.Abp
 {
-
+    public interface IBusinessException
+    {
+        
+    }
 }

@@ -4,28 +4,29 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Localization.Resource;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.UI.Navigation;
-
-[DependsOn(typeof(AbpUiModule), typeof(AbpAuthorizationModule))]
-public class AbpUiNavigationModule : AbpModule
+namespace Volo.Abp.UI.Navigation
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpUiModule), typeof(AbpAuthorizationModule))]
+    public class AbpUiNavigationModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpUiNavigationModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpUiNavigationModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpUiNavigationResource>("en")
-                .AddVirtualJson("/Volo/Abp/Ui/Navigation/Localization/Resource");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpUiNavigationResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Ui/Navigation/Localization/Resource");
+            });
 
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new DefaultMenuContributor());
-        });
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new DefaultMenuContributor());
+            });
+        }
     }
 }

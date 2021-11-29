@@ -4,22 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore;
-
-public class BlobStoringHostDbSchemaMigrator : IBlobStoringHostDbSchemaMigrator, ITransientDependency
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public BlobStoringHostDbSchemaMigrator(IServiceProvider serviceProvider)
+    public class BlobStoringHostDbSchemaMigrator : IBlobStoringHostDbSchemaMigrator, ITransientDependency
     {
-        _serviceProvider = serviceProvider;
-    }
+        private readonly IServiceProvider _serviceProvider;
 
-    public async Task MigrateAsync()
-    {
-        await _serviceProvider
-            .GetRequiredService<BlobStoringHostDbContext>()
-            .Database
-            .MigrateAsync();
+        public BlobStoringHostDbSchemaMigrator(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public async Task MigrateAsync()
+        {
+            await _serviceProvider
+                .GetRequiredService<BlobStoringHostDbContext>()
+                .Database
+                .MigrateAsync();
+        }
     }
 }

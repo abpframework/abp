@@ -2,28 +2,29 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public static class AbpDbContextOptionsSqlServerExtensions
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public static void UseSqlServer(
-        [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
+    public static class AbpDbContextOptionsSqlServerExtensions
     {
-        options.Configure(context =>
+        public static void UseSqlServer(
+            [NotNull] this AbpDbContextOptions options,
+            [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
         {
-            context.UseSqlServer(sqlServerOptionsAction);
-        });
-    }
+            options.Configure(context =>
+            {
+                context.UseSqlServer(sqlServerOptionsAction);
+            });
+        }
 
-    public static void UseSqlServer<TDbContext>(
-        [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
-        where TDbContext : AbpDbContext<TDbContext>
-    {
-        options.Configure<TDbContext>(context =>
+        public static void UseSqlServer<TDbContext>(
+            [NotNull] this AbpDbContextOptions options,
+            [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
+            where TDbContext : AbpDbContext<TDbContext>
         {
-            context.UseSqlServer(sqlServerOptionsAction);
-        });
+            options.Configure<TDbContext>(context =>
+            {
+                context.UseSqlServer(sqlServerOptionsAction);
+            });
+        }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Volo.Abp;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDB;
-
-public static class MyProjectNameMongoDbContextExtensions
+namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public static void ConfigureMyProjectName(
-        this IMongoModelBuilder builder)
+    public static class MyProjectNameMongoDbContextExtensions
     {
-        Check.NotNull(builder, nameof(builder));
+        public static void ConfigureMyProjectName(
+            this IMongoModelBuilder builder)
+        {
+            Check.NotNull(builder, nameof(builder));
+        }
     }
 }

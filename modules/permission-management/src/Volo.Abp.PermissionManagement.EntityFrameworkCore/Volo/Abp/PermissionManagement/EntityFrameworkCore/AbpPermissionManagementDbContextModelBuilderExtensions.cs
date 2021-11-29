@@ -2,30 +2,31 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
-
-public static class AbpPermissionManagementDbContextModelBuilderExtensions
+namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
-    public static void ConfigurePermissionManagement(
-        [NotNull] this ModelBuilder builder)
+    public static class AbpPermissionManagementDbContextModelBuilderExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<PermissionGrant>(b =>
+        public static void ConfigurePermissionManagement(
+            [NotNull] this ModelBuilder builder)
         {
-            b.ToTable(AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants", AbpPermissionManagementDbProperties.DbSchema);
+            Check.NotNull(builder, nameof(builder));
 
-            b.ConfigureByConvention();
+            builder.Entity<PermissionGrant>(b =>
+            {
+                b.ToTable(AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants", AbpPermissionManagementDbProperties.DbSchema);
 
-            b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
-            b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
-            b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
+                b.ConfigureByConvention();
 
-            b.HasIndex(x => new { x.TenantId, x.Name, x.ProviderName, x.ProviderKey }).IsUnique(true);
+                b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
+                b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
+                b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
 
-            b.ApplyObjectExtensionMappings();
-        });
+                b.HasIndex(x => new {x.TenantId, x.Name, x.ProviderName, x.ProviderKey}).IsUnique(true);
 
-        builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();
+                b.ApplyObjectExtensionMappings();
+            });
+
+            builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();
+        }
     }
 }

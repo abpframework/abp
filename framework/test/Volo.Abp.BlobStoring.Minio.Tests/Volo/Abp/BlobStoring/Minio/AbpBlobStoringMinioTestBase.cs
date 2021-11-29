@@ -1,19 +1,20 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BlobStoring.Minio;
-
-public class AbpBlobStoringMinioTestCommonBase : AbpIntegratedTest<AbpBlobStoringMinioTestCommonModule>
+namespace Volo.Abp.BlobStoring.Minio
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringMinioTestCommonBase : AbpIntegratedTest<AbpBlobStoringMinioTestCommonModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
-}
 
-public class AbpBlobStoringMinioTestBase : AbpIntegratedTest<AbpBlobStoringMinioTestModule>
-{
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringMinioTestBase : AbpIntegratedTest<AbpBlobStoringMinioTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

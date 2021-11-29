@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.IdentityServer;
-
-public static class AbpIdentityServerDbProperties
+﻿namespace Volo.Abp.IdentityServer
 {
-    public static string DbTablePrefix { get; set; } = "IdentityServer";
+    public static class AbpIdentityServerDbProperties
+    {
+        public static string DbTablePrefix { get; set; } = "IdentityServer";
 
-    public static string DbSchema { get; set; } = null;
+        public static string DbSchema { get; set; } = null;
 
-    public const string ConnectionStringName = "AbpIdentityServer";
+        public const string ConnectionStringName = "AbpIdentityServer";
+    }
 }

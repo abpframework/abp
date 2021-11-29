@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.Response;
-
-public class TestResultFilter : Attribute, IAsyncActionFilter
+namespace Volo.Abp.AspNetCore.Mvc.Response
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public class TestResultFilter : Attribute, IAsyncActionFilter
     {
-        await next();
-        context.Result = new ObjectResult("TestResultFilter");
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            await next();
+            context.Result = new ObjectResult("TestResultFilter");
+        }
     }
 }

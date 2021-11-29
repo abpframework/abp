@@ -1,23 +1,24 @@
 ﻿using System;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire;
-
-class Program
+namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
 {
-    static void Main(string[] args)
+    class Program
     {
-        using (var application = AbpApplicationFactory.Create<DemoAppHangfireModule>(options =>
+        static void Main(string[] args)
         {
-            options.UseAutofac();
-        }))
-        {
-            application.Initialize();
+            using (var application = AbpApplicationFactory.Create<DemoAppHangfireModule>(options =>
+            {
+                options.UseAutofac();
+            }))
+            {
+                application.Initialize();
 
-            Console.WriteLine("Started: " + typeof(Program).Namespace);
-            Console.WriteLine("Press ENTER to stop the application..!");
-            Console.ReadLine();
+                Console.WriteLine("Started: " + typeof(Program).Namespace);
+                Console.WriteLine("Press ENTER to stop the application..!");
+                Console.ReadLine();
 
-            application.Shutdown();
+                application.Shutdown();
+            }
         }
     }
 }

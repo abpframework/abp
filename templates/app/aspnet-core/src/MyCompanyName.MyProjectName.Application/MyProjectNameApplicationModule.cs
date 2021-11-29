@@ -7,25 +7,26 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(MyProjectNameDomainModule),
-    typeof(AbpAccountApplicationModule),
-    typeof(MyProjectNameApplicationContractsModule),
-    typeof(AbpIdentityApplicationModule),
-    typeof(AbpPermissionManagementApplicationModule),
-    typeof(AbpTenantManagementApplicationModule),
-    typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule)
-    )]
-public class MyProjectNameApplicationModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameDomainModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(MyProjectNameApplicationContractsModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpTenantManagementApplicationModule),
+        typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpSettingManagementApplicationModule)
+        )]
+    public class MyProjectNameApplicationModule : AbpModule
     {
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddMaps<MyProjectNameApplicationModule>();
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<MyProjectNameApplicationModule>();
+            });
+        }
     }
 }

@@ -6,71 +6,72 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.Identity.AspNetCore;
-
-public class AbpSignInManager : SignInManager<IdentityUser>
+namespace Volo.Abp.Identity.AspNetCore
 {
-    protected AbpIdentityOptions AbpOptions { get; }
-
-    public AbpSignInManager(
-        IdentityUserManager userManager,
-        IHttpContextAccessor contextAccessor,
-        IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
-        IOptions<IdentityOptions> optionsAccessor,
-        ILogger<SignInManager<IdentityUser>> logger,
-        IAuthenticationSchemeProvider schemes,
-        IUserConfirmation<IdentityUser> confirmation,
-        IOptions<AbpIdentityOptions> options
-    ) : base(
-        userManager,
-        contextAccessor,
-        claimsFactory,
-        optionsAccessor,
-        logger,
-        schemes,
-        confirmation)
+    public class AbpSignInManager : SignInManager<IdentityUser>
     {
-        AbpOptions = options.Value;
-    }
+        protected AbpIdentityOptions AbpOptions { get; }
 
-    public override async Task<SignInResult> PasswordSignInAsync(
-        string userName,
-        string password,
-        bool isPersistent,
-        bool lockoutOnFailure)
-    {
-        foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
+        public AbpSignInManager(
+            IdentityUserManager userManager,
+            IHttpContextAccessor contextAccessor,
+            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+            IOptions<IdentityOptions> optionsAccessor,
+            ILogger<SignInManager<IdentityUser>> logger,
+            IAuthenticationSchemeProvider schemes,
+            IUserConfirmation<IdentityUser> confirmation,
+            IOptions<AbpIdentityOptions> options
+        ) : base(
+            userManager,
+            contextAccessor,
+            claimsFactory,
+            optionsAccessor,
+            logger,
+            schemes,
+            confirmation)
         {
-            var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
-                .GetRequiredService(externalLoginProviderInfo.Type);
+            AbpOptions = options.Value;
+        }
 
-            if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
+        public override async Task<SignInResult> PasswordSignInAsync(
+            string userName,
+            string password,
+            bool isPersistent,
+            bool lockoutOnFailure)
+        {
+            foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
             {
-                var user = await UserManager.FindByNameAsync(userName);
-                if (user == null)
-                {
-                    user = await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name);
-                }
-                else
-                {
-                    await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
-                }
+                var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
+                    .GetRequiredService(externalLoginProviderInfo.Type);
 
-                return await SignInOrTwoFactorAsync(user, isPersistent);
+                if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
+                {
+                    var user = await UserManager.FindByNameAsync(userName);
+                    if (user == null)
+                    {
+                        user = await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name);
+                    }
+                    else
+                    {
+                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                    }
+
+                    return await SignInOrTwoFactorAsync(user, isPersistent);
+                }
             }
+
+            return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
 
-        return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
-    }
-
-    protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
-    {
-        if (!user.IsActive)
+        protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
         {
-            Logger.LogWarning($"The user is not active therefore cannot login! (username: \"{user.UserName}\", id:\"{user.Id}\")");
-            return SignInResult.NotAllowed;
-        }
+            if (!user.IsActive)
+            {
+                Logger.LogWarning($"The user is not active therefore cannot login! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+                return SignInResult.NotAllowed;
+            }
 
-        return await base.PreSignInCheck(user);
+            return await base.PreSignInCheck(user);
+        }
     }
 }

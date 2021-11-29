@@ -4,48 +4,49 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TextTemplating.VirtualFiles;
-
-public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
+namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    private Dictionary<string, string> _dictionary;
-    private readonly string[] _fileExtension;
-
-    public VirtualFolderLocalizedTemplateContentReader(string[] fileExtension)
+    public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
     {
-        _fileExtension = fileExtension;
-    }
+        private Dictionary<string, string> _dictionary;
+        private readonly string[] _fileExtension;
 
-    public async Task ReadContentsAsync(
-        IVirtualFileProvider virtualFileProvider,
-        string virtualPath)
-    {
-        _dictionary = new Dictionary<string, string>();
-
-        var directoryContents = virtualFileProvider.GetDirectoryContents(virtualPath);
-        if (!directoryContents.Exists)
+        public VirtualFolderLocalizedTemplateContentReader(string[] fileExtension)
         {
-            throw new AbpException("Could not find a folder at the location: " + virtualPath);
+            _fileExtension = fileExtension;
         }
 
-        foreach (var file in directoryContents)
+        public async Task ReadContentsAsync(
+            IVirtualFileProvider virtualFileProvider,
+            string virtualPath)
         {
-            if (file.IsDirectory)
+            _dictionary = new Dictionary<string, string>();
+
+            var directoryContents = virtualFileProvider.GetDirectoryContents(virtualPath);
+            if (!directoryContents.Exists)
             {
-                continue;
+                throw new AbpException("Could not find a folder at the location: " + virtualPath);
             }
 
-            _dictionary.Add(file.Name.RemovePostFix(_fileExtension), await file.ReadAsStringAsync());
-        }
-    }
+            foreach (var file in directoryContents)
+            {
+                if (file.IsDirectory)
+                {
+                    continue;
+                }
 
-    public string GetContentOrNull(string cultureName)
-    {
-        if (cultureName == null)
+                _dictionary.Add(file.Name.RemovePostFix(_fileExtension), await file.ReadAsStringAsync());
+            }
+        }
+
+        public string GetContentOrNull(string cultureName)
         {
-            return null;
-        }
+            if (cultureName == null)
+            {
+                return null;
+            }
 
-        return _dictionary.GetOrDefault(cultureName);
+            return _dictionary.GetOrDefault(cultureName);
+        }
     }
 }

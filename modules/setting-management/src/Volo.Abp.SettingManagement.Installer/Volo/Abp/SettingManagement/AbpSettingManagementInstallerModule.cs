@@ -2,19 +2,20 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.SettingManagement;
-
-[DependsOn(
-    typeof(AbpStudioModuleInstallerModule),
-    typeof(AbpVirtualFileSystemModule)
-    )]
-public class AbpSettingManagementInstallerModule : AbpModule
+namespace Volo.Abp.SettingManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpStudioModuleInstallerModule),
+        typeof(AbpVirtualFileSystemModule)
+        )]
+    public class AbpSettingManagementInstallerModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpSettingManagementInstallerModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpSettingManagementInstallerModule>();
+            });
+        }
     }
 }

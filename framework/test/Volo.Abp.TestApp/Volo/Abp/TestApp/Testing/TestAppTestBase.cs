@@ -5,56 +5,57 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.TestApp.Testing;
-
-public abstract class TestAppTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.TestApp.Testing
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class TestAppTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
+        where TStartupModule : IAbpModule
     {
-        options.UseAutofac();
-    }
-
-    #region WithUnitOfWork
-
-    protected virtual Task WithUnitOfWorkAsync(Func<Task> func)
-    {
-        return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
-    }
-
-    protected virtual async Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
-    {
-        using (var scope = ServiceProvider.CreateScope())
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
-            var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            options.UseAutofac();
+        }
+        
+        #region WithUnitOfWork
 
-            using (var uow = uowManager.Begin(options))
+        protected virtual Task WithUnitOfWorkAsync(Func<Task> func)
+        {
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
+        }
+
+        protected virtual async Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
+        {
+            using (var scope = ServiceProvider.CreateScope())
             {
-                await action();
-                await uow.CompleteAsync();
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin(options))
+                {
+                    await action();
+                    await uow.CompleteAsync();
+                }
             }
         }
-    }
 
-    protected virtual Task<TResult> WithUnitOfWorkAsync<TResult>(Func<Task<TResult>> func)
-    {
-        return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
-    }
-
-    protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
-    {
-        using (var scope = ServiceProvider.CreateScope())
+        protected virtual Task<TResult> WithUnitOfWorkAsync<TResult>(Func<Task<TResult>> func)
         {
-            var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
+        }
 
-            using (var uow = uowManager.Begin(options))
+        protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
+        {
+            using (var scope = ServiceProvider.CreateScope())
             {
-                var result = await func();
-                await uow.CompleteAsync();
-                return result;
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin(options))
+                {
+                    var result = await func();
+                    await uow.CompleteAsync();
+                    return result;
+                }
             }
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }

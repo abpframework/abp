@@ -7,33 +7,34 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client;
-
-[DependsOn(
-    typeof(AbpHttpClientModule),
-    typeof(AbpAspNetCoreMvcContractsModule),
-    typeof(AbpCachingModule),
-    typeof(AbpLocalizationModule),
-    typeof(AbpAuthorizationModule),
-    typeof(AbpFeaturesModule),
-    typeof(AbpVirtualFileSystemModule)
-)]
-public class AbpAspNetCoreMvcClientCommonModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public const string RemoteServiceName = "AbpMvcClient";
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpHttpClientModule),
+        typeof(AbpAspNetCoreMvcContractsModule),
+        typeof(AbpCachingModule),
+        typeof(AbpLocalizationModule),
+        typeof(AbpAuthorizationModule),
+        typeof(AbpFeaturesModule),
+        typeof(AbpVirtualFileSystemModule)
+    )]
+    public class AbpAspNetCoreMvcClientCommonModule : AbpModule
     {
-        context.Services.AddStaticHttpClientProxies(typeof(AbpAspNetCoreMvcContractsModule).Assembly, RemoteServiceName);
+        public const string RemoteServiceName = "AbpMvcClient";
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcClientCommonModule>();
-        });
+            context.Services.AddStaticHttpClientProxies(typeof(AbpAspNetCoreMvcContractsModule).Assembly, RemoteServiceName);
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.GlobalContributors.Add<RemoteLocalizationContributor>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcClientCommonModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.GlobalContributors.Add<RemoteLocalizationContributor>();
+            });
+        }
     }
 }

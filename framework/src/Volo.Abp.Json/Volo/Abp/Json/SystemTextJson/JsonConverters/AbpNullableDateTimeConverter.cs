@@ -6,60 +6,61 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Json.SystemTextJson.JsonConverters;
-
-public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransientDependency
+namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
-    private readonly IClock _clock;
-    private readonly AbpJsonOptions _options;
-
-    public AbpNullableDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
+    public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransientDependency
     {
-        _clock = clock;
-        _options = abpJsonOptions.Value;
-    }
+        private readonly IClock _clock;
+        private readonly AbpJsonOptions _options;
 
-    public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (!_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
+        public AbpNullableDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
         {
-            if (reader.TokenType == JsonTokenType.String)
+            _clock = clock;
+            _options = abpJsonOptions.Value;
+        }
+
+        public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (!_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
             {
-                var s = reader.GetString();
-                if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
+                if (reader.TokenType == JsonTokenType.String)
                 {
-                    return _clock.Normalize(d1);
+                    var s = reader.GetString();
+                    if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
+                    {
+                        return  _clock.Normalize(d1);
+                    }
+
+                    throw new JsonException($"'{s}' can't parse to DateTime({_options.DefaultDateTimeFormat})!");
                 }
 
-                throw new JsonException($"'{s}' can't parse to DateTime({_options.DefaultDateTimeFormat})!");
+                throw new JsonException("Reader's TokenType is not String!");
             }
 
-            throw new JsonException("Reader's TokenType is not String!");
-        }
-
-        if (reader.TryGetDateTime(out var d2))
-        {
-            return _clock.Normalize(d2);
-        }
-
-        return null;
-    }
-
-    public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
-    {
-        if (value == null)
-        {
-            writer.WriteNullValue();
-        }
-        else
-        {
-            if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
+            if (reader.TryGetDateTime(out var d2))
             {
-                writer.WriteStringValue(_clock.Normalize(value.Value));
+                return  _clock.Normalize(d2);
+            }
+
+            return null;
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNullValue();
             }
             else
             {
-                writer.WriteStringValue(_clock.Normalize(value.Value).ToString(_options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture));
+                if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
+                {
+                    writer.WriteStringValue(_clock.Normalize(value.Value));
+                }
+                else
+                {
+                    writer.WriteStringValue(_clock.Normalize(value.Value).ToString(_options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture));
+                }
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover;
-
-public enum PopoverDirectory
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 {
-    Default,
-    Right,
-    Left,
-    Bottom,
-    Top
+    public enum PopoverDirectory
+    {
+        Default,
+        Right,
+        Left,
+        Bottom,
+        Top
+    }
 }

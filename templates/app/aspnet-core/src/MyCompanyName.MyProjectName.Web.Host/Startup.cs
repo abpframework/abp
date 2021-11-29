@@ -2,17 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace MyCompanyName.MyProjectName.Web;
-
-public class Startup
+namespace MyCompanyName.MyProjectName.Web
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        services.AddApplication<MyProjectNameWebModule>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<MyProjectNameWebModule>();
+        }
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            app.InitializeApplication();
+        }
     }
 }

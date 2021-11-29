@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.DependencyInjection;
-
-public class OnServiceExposingContext : IOnServiceExposingContext
+namespace Volo.Abp.DependencyInjection
 {
-    public Type ImplementationType { get; }
-
-    public List<Type> ExposedTypes { get; }
-
-    public OnServiceExposingContext([NotNull] Type implementationType, List<Type> exposedTypes)
+    public class OnServiceExposingContext : IOnServiceExposingContext
     {
-        ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
-        ExposedTypes = Check.NotNull(exposedTypes, nameof(exposedTypes));
+        public Type ImplementationType { get; }
+
+        public List<Type> ExposedTypes { get; }
+
+        public OnServiceExposingContext([NotNull] Type implementationType, List<Type> exposedTypes)
+        {
+            ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
+            ExposedTypes = Check.NotNull(exposedTypes, nameof(exposedTypes));
+        }
     }
 }

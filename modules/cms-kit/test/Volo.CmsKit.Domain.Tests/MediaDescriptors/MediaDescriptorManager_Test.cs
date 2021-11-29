@@ -7,37 +7,38 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Blogs;
 using Xunit;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-public class MediaDescriptorManager_Test : CmsKitDomainTestBase
+namespace Volo.CmsKit.MediaDescriptors
 {
-    private readonly MediaDescriptorManager manager;
-    private readonly CmsKitTestData testData;
-
-    public MediaDescriptorManager_Test()
+    public class MediaDescriptorManager_Test : CmsKitDomainTestBase
     {
-        manager = GetRequiredService<MediaDescriptorManager>();
-        testData = GetRequiredService<CmsKitTestData>();
-    }
+        private readonly MediaDescriptorManager manager;
+        private readonly CmsKitTestData testData;
 
-    [Fact]
-    public async Task CreateAsync_ShouldWorkProperly_WithDefinedEntityType()
-    {
-        var created = await manager.CreateAsync(testData.Media_1_EntityType, "MyAwesomeImage.png", "image/png", 128000);
+        public MediaDescriptorManager_Test()
+        {
+            manager = GetRequiredService<MediaDescriptorManager>();
+            testData = GetRequiredService<CmsKitTestData>();
+        }
 
-        created.ShouldNotBeNull();
-        created.Id.ShouldNotBe(Guid.Empty);
-    }
+        [Fact]
+        public async Task CreateAsync_ShouldWorkProperly_WithDefinedEntityType()
+        {
+            var created = await manager.CreateAsync(testData.Media_1_EntityType, "MyAwesomeImage.png", "image/png", 128000);
 
-    [Fact]
-    public async Task CreateAsync_ShouldThrowException_WithUndefinedEntityType()
-    {
-        var undefinedEntityType = "My.Any.EntityType";
+            created.ShouldNotBeNull();
+            created.Id.ShouldNotBe(Guid.Empty);
+        }
 
-        var exception = await Should.ThrowAsync<EntityCantHaveMediaException>(async () =>
-                            await manager.CreateAsync(undefinedEntityType, "import.json", "application/json", 256000));
+        [Fact]
+        public async Task CreateAsync_ShouldThrowException_WithUndefinedEntityType()
+        {
+            var undefinedEntityType = "My.Any.EntityType";
 
-        exception.ShouldNotBeNull();
-        exception.EntityType.ShouldBe(undefinedEntityType);
+            var exception = await Should.ThrowAsync<EntityCantHaveMediaException>(async () =>
+                                await manager.CreateAsync(undefinedEntityType, "import.json", "application/json", 256000));
+
+            exception.ShouldNotBeNull();
+            exception.EntityType.ShouldBe(undefinedEntityType);
+        }
     }
 }

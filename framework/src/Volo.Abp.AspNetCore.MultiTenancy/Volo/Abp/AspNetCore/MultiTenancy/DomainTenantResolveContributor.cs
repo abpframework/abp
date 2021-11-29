@@ -4,37 +4,38 @@ using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Text.Formatting;
 
-namespace Volo.Abp.AspNetCore.MultiTenancy;
-
-//TODO: Create a better domain format. We can accept regex for example.
-
-public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
+namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public const string ContributorName = "Domain";
+    //TODO: Create a better domain format. We can accept regex for example.
 
-    public override string Name => ContributorName;
-
-    private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
-
-    private readonly string _domainFormat;
-
-    public DomainTenantResolveContributor(string domainFormat)
+    public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
     {
-        _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
-    }
+        public const string ContributorName = "Domain";
 
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
-    {
-        if (!httpContext.Request.Host.HasValue)
+        public override string Name => ContributorName;
+
+        private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
+
+        private readonly string _domainFormat;
+
+        public DomainTenantResolveContributor(string domainFormat)
         {
-            return Task.FromResult<string>(null);
+            _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
         }
 
-        var hostName = httpContext.Request.Host.Value.RemovePreFix(ProtocolPrefixes);
-        var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+        {
+            if (!httpContext.Request.Host.HasValue)
+            {
+                return Task.FromResult<string>(null);
+            }
 
-        context.Handled = true;
+            var hostName = httpContext.Request.Host.Value.RemovePreFix(ProtocolPrefixes);
+            var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
-        return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
+            context.Handled = true;
+
+            return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
+        }
     }
 }

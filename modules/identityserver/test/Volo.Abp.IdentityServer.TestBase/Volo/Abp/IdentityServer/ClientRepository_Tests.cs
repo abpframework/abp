@@ -6,28 +6,29 @@ using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.IdentityServer;
-
-public abstract class ClientRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.IdentityServer
 {
-    protected IClientRepository clientRepository { get; }
-
-    protected ClientRepository_Tests()
+    public abstract class ClientRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        clientRepository = ServiceProvider.GetRequiredService<IClientRepository>();
-    }
+        protected IClientRepository clientRepository { get; }
 
-    [Fact]
-    public async Task FindByClientIdAsync()
-    {
-        (await clientRepository.FindByClientIdAsync("ClientId2")).ShouldNotBeNull();
-    }
+        protected ClientRepository_Tests()
+        {
+            clientRepository = ServiceProvider.GetRequiredService<IClientRepository>();
+        }
 
-    [Fact]
-    public async Task GetAllDistinctAllowedCorsOriginsAsync()
-    {
-        var origins = await clientRepository.GetAllDistinctAllowedCorsOriginsAsync();
-        origins.Any().ShouldBeTrue();
+        [Fact]
+        public async Task FindByClientIdAsync()
+        {
+            (await clientRepository.FindByClientIdAsync("ClientId2")).ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task GetAllDistinctAllowedCorsOriginsAsync()
+        {
+            var origins = await clientRepository.GetAllDistinctAllowedCorsOriginsAsync();
+            origins.Any().ShouldBeTrue();
+        }
     }
 }

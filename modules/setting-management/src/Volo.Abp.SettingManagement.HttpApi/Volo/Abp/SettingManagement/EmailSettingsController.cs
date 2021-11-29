@@ -2,29 +2,30 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.SettingManagement;
-
-[RemoteService(Name = SettingManagementRemoteServiceConsts.RemoteServiceName)]
-[Area(SettingManagementRemoteServiceConsts.ModuleName)]
-[Route("api/setting-management/emailing")]
-public class EmailSettingsController : AbpControllerBase, IEmailSettingsAppService
+namespace Volo.Abp.SettingManagement
 {
-    private readonly IEmailSettingsAppService _emailSettingsAppService;
-
-    public EmailSettingsController(IEmailSettingsAppService emailSettingsAppService)
+    [RemoteService(Name = SettingManagementRemoteServiceConsts.RemoteServiceName)]
+    [Area(SettingManagementRemoteServiceConsts.ModuleName)]
+    [Route("api/setting-management/emailing")]
+    public class EmailSettingsController : AbpControllerBase, IEmailSettingsAppService
     {
-        _emailSettingsAppService = emailSettingsAppService;
-    }
+        private readonly IEmailSettingsAppService _emailSettingsAppService;
 
-    [HttpGet]
-    public Task<EmailSettingsDto> GetAsync()
-    {
-        return _emailSettingsAppService.GetAsync();
-    }
+        public EmailSettingsController(IEmailSettingsAppService emailSettingsAppService)
+        {
+            _emailSettingsAppService = emailSettingsAppService;
+        }
 
-    [HttpPost]
-    public Task UpdateAsync(UpdateEmailSettingsDto input)
-    {
-        return _emailSettingsAppService.UpdateAsync(input);
+        [HttpGet]
+        public Task<EmailSettingsDto> GetAsync()
+        {
+            return _emailSettingsAppService.GetAsync();
+        }
+
+        [HttpPost]
+        public Task UpdateAsync(UpdateEmailSettingsDto input)
+        {
+            return _emailSettingsAppService.UpdateAsync(input);
+        }
     }
 }

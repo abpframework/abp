@@ -3,44 +3,45 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.IdentityServer;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpIdentityServerDomainModule)
-)]
-public class AbpIdentityServerTestBaseModule : AbpModule
+namespace Volo.Abp.IdentityServer
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpIdentityServerDomainModule)
+    )]
+    public class AbpIdentityServerTestBaseModule : AbpModule
     {
-        PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDeveloperSigningCredential = false;
-        });
+            PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+            {
+                options.AddDeveloperSigningCredential = false;
+            });
 
-        PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
+            PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
+            {
+                identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
+            });
+        }
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
-        });
-    }
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddAlwaysAllowAuthorization();
-    }
+            context.Services.AddAlwaysAllowAuthorization();
+        }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                .BuildAsync());
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<AbpIdentityServerTestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

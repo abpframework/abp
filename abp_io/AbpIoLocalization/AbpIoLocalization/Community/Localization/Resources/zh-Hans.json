@@ -142,7 +142,6 @@
     "MinimumSearchContent": "您必须输入至少 3 个字符！",
     "Volo.AbpIo.Domain:060001": "源 URL(\"{ArticleUrl}\") 不是 Github URL",
     "Volo.AbpIo.Domain:060002": "文章内容无法从 Github(\"{ArticleUrl}\") 资源中获得。",
-    "Volo.AbpIo.Domain:060003": "没有找到文章内容！",
-    "SeeMore": "查看更多"
+    "Volo.AbpIo.Domain:060003": "没有找到文章内容！"
   }
 }

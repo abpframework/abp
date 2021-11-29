@@ -1,29 +1,30 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation.Localization.Resource;
 
-namespace Volo.Abp.UI.Navigation;
-
-public class DefaultMenuContributor : IMenuContributor
+namespace Volo.Abp.UI.Navigation
 {
-    public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
+    public class DefaultMenuContributor : IMenuContributor
     {
-        Configure(context);
-        return Task.CompletedTask;
-    }
-
-    protected virtual void Configure(MenuConfigurationContext context)
-    {
-        var l = context.GetLocalizer<AbpUiNavigationResource>();
-
-        if (context.Menu.Name == StandardMenus.Main)
+        public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            context.Menu.AddItem(
-                new ApplicationMenuItem(
-                    DefaultMenuNames.Application.Main.Administration,
-                    l["Menu:Administration"],
-                    icon: "fa fa-wrench"
-                )
-            );
+            Configure(context);
+            return Task.CompletedTask;
+        }
+
+        protected virtual void Configure(MenuConfigurationContext context)
+        {
+            var l = context.GetLocalizer<AbpUiNavigationResource>();
+
+            if (context.Menu.Name == StandardMenus.Main)
+            {
+                context.Menu.AddItem(
+                    new ApplicationMenuItem(
+                        DefaultMenuNames.Application.Main.Administration,
+                        l["Menu:Administration"],
+                        icon: "fa fa-wrench"
+                    )
+                );
+            }
         }
     }
 }

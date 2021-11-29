@@ -1,18 +1,19 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
-
-public static class TenantManagementEfCoreQueryableExtensions
+namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    public static IQueryable<Tenant> IncludeDetails(this IQueryable<Tenant> queryable, bool include = true)
+    public static class TenantManagementEfCoreQueryableExtensions
     {
-        if (!include)
+        public static IQueryable<Tenant> IncludeDetails(this IQueryable<Tenant> queryable, bool include = true)
         {
-            return queryable;
-        }
+            if (!include)
+            {
+                return queryable;
+            }
 
-        return queryable
-            .Include(x => x.ConnectionStrings);
+            return queryable
+                .Include(x => x.ConnectionStrings);
+        }
     }
 }

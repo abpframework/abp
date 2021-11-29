@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper;
-
-public class PopperJsScriptBundleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class PopperJsScriptBundleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/@popperjs/popper.min.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/@popperjs/popper.min.js");
+        }
     }
 }

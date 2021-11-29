@@ -2,25 +2,26 @@
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Localization;
-
-public static class LanguageInfoExtensions
+namespace Volo.Abp.Localization
 {
-    public static T FindByCulture<T>(
-        [NotNull] this IEnumerable<T> languages,
-        [NotNull] string cultureName,
-        [CanBeNull] string uiCultureName = null)
-    where T : class, ILanguageInfo
+    public static class LanguageInfoExtensions
     {
-        if (uiCultureName == null)
+        public static T FindByCulture<T>(
+            [NotNull] this IEnumerable<T> languages,
+            [NotNull] string cultureName,
+            [CanBeNull] string uiCultureName = null)
+        where T : class, ILanguageInfo
         {
-            uiCultureName = cultureName;
+            if (uiCultureName == null)
+            {
+                uiCultureName = cultureName;
+            }
+
+            var languageList = languages.ToList();
+
+            return languageList.FirstOrDefault(l => l.CultureName == cultureName && l.UiCultureName == uiCultureName)
+                   ?? languageList.FirstOrDefault(l => l.CultureName == cultureName)
+                   ?? languageList.FirstOrDefault(l => l.UiCultureName == uiCultureName);
         }
-
-        var languageList = languages.ToList();
-
-        return languageList.FirstOrDefault(l => l.CultureName == cultureName && l.UiCultureName == uiCultureName)
-               ?? languageList.FirstOrDefault(l => l.CultureName == cultureName)
-               ?? languageList.FirstOrDefault(l => l.UiCultureName == uiCultureName);
     }
 }

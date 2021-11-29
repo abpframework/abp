@@ -4,26 +4,27 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 
-namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
-
-public class SecondContextTestDataBuilder : ITransientDependency
+namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
-    private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;
-    private readonly IGuidGenerator _guidGenerator;
-
-    public SecondContextTestDataBuilder(IBasicRepository<BookInSecondDbContext, Guid> bookRepository, IGuidGenerator guidGenerator)
+    public class SecondContextTestDataBuilder : ITransientDependency
     {
-        _bookRepository = bookRepository;
-        _guidGenerator = guidGenerator;
-    }
+        private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IGuidGenerator _guidGenerator;
 
-    public async Task BuildAsync()
-    {
-        await _bookRepository.InsertAsync(
-            new BookInSecondDbContext(
-                _guidGenerator.Create(),
-                "TestBook1"
-            )
-        );
+        public SecondContextTestDataBuilder(IBasicRepository<BookInSecondDbContext, Guid> bookRepository, IGuidGenerator guidGenerator)
+        {
+            _bookRepository = bookRepository;
+            _guidGenerator = guidGenerator;
+        }
+
+        public async Task BuildAsync()
+        {
+            await _bookRepository.InsertAsync(
+                new BookInSecondDbContext(
+                    _guidGenerator.Create(),
+                    "TestBook1"
+                )
+            );
+        }
     }
 }

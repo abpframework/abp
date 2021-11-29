@@ -4,26 +4,27 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
 
-namespace Volo.Abp.BackgroundJobs.Quartz;
-
-[DependsOn(
-    typeof(AbpBackgroundJobsAbstractionsModule),
-    typeof(AbpQuartzModule)
-)]
-public class AbpBackgroundJobsQuartzModule : AbpModule
+namespace Volo.Abp.BackgroundJobs.Quartz
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBackgroundJobsAbstractionsModule),
+        typeof(AbpQuartzModule)
+    )]
+    public class AbpBackgroundJobsQuartzModule : AbpModule
     {
-        context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
-    }
-
-    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var options = context.ServiceProvider.GetService<IOptions<AbpBackgroundJobOptions>>().Value;
-        if (!options.IsJobExecutionEnabled)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var quartzOptions = context.ServiceProvider.GetService<IOptions<AbpQuartzOptions>>().Value;
-            quartzOptions.StartSchedulerFactory = scheduler => Task.CompletedTask;
+            context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
+        }
+
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var options = context.ServiceProvider.GetService<IOptions<AbpBackgroundJobOptions>>().Value;
+            if (!options.IsJobExecutionEnabled)
+            {
+                var quartzOptions = context.ServiceProvider.GetService<IOptions<AbpQuartzOptions>>().Value;
+                quartzOptions.StartSchedulerFactory  = scheduler => Task.CompletedTask;
+            }
         }
     }
 }

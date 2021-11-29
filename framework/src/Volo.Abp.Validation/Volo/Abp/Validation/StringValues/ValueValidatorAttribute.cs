@@ -2,25 +2,26 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Volo.Abp.Validation.StringValues;
-
-[AttributeUsage(AttributeTargets.Class)]
-public class ValueValidatorAttribute : Attribute
+namespace Volo.Abp.Validation.StringValues
 {
-    public string Name { get; set; }
-
-    public ValueValidatorAttribute(string name)
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ValueValidatorAttribute : Attribute
     {
-        Name = name;
-    }
+        public string Name { get; set; }
 
-    public static string GetName(Type type)
-    {
-        if (type.IsDefined(typeof(ValueValidatorAttribute)))
+        public ValueValidatorAttribute(string name)
         {
-            return type.GetCustomAttributes(typeof(ValueValidatorAttribute)).Cast<ValueValidatorAttribute>().First().Name;
+            Name = name;
         }
 
-        return type.Name;
+        public static string GetName(Type type)
+        {
+            if (type.IsDefined(typeof(ValueValidatorAttribute)))
+            {
+                return type.GetCustomAttributes(typeof(ValueValidatorAttribute)).Cast<ValueValidatorAttribute>().First().Name;
+            }
+
+            return type.Name;
+        }
     }
 }

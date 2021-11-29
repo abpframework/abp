@@ -1,17 +1,18 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
-
-public class BreadCrumbItem
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
 {
-    public string Text { get; set; }
-
-    public string Icon { get; set; }
-
-    public string Url { get; set; }
-
-    public BreadCrumbItem(string text, string url = null, string icon = null)
+    public class BreadCrumbItem
     {
-        Text = text;
-        Url = url;
-        Icon = icon;
+        public string Text { get; set; }
+
+        public string Icon { get; set; }
+
+        public string Url { get; set; }
+
+        public BreadCrumbItem(string text, string url = null, string icon = null)
+        {
+            Text = text;
+            Url = url;
+            Icon = icon;
+        }
     }
 }

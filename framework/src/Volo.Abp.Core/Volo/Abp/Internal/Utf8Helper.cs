@@ -1,29 +1,30 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Volo.Abp.Internal;
-
-public static class Utf8Helper
+namespace Volo.Abp.Internal
 {
-    public static string ReadStringFromStream(Stream stream)
+    public static class Utf8Helper
     {
-        var bytes = stream.GetAllBytes();
-        var skipCount = HasBom(bytes) ? 3 : 0;
-        return Encoding.UTF8.GetString(bytes, skipCount, bytes.Length - skipCount);
-    }
-
-    private static bool HasBom(byte[] bytes)
-    {
-        if (bytes.Length < 3)
+        public static string ReadStringFromStream(Stream stream)
         {
-            return false;
+            var bytes = stream.GetAllBytes();
+            var skipCount = HasBom(bytes) ? 3 : 0;
+            return Encoding.UTF8.GetString(bytes, skipCount, bytes.Length - skipCount);
         }
 
-        if (!(bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF))
+        private static bool HasBom(byte[] bytes)
         {
-            return false;
-        }
+            if (bytes.Length < 3)
+            {
+                return false;
+            }
 
-        return true;
+            if (!(bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

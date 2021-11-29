@@ -6,84 +6,85 @@ using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Cli.Utils;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class ReplaceCommonPropsStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public override void Execute(ProjectBuildContext context)
+    public class ReplaceCommonPropsStep : ProjectBuildPipelineStep
     {
-        new CommonPropsReplacer(context.Files).Run();
-    }
-
-    private class CommonPropsReplacer
-    {
-        private readonly List<FileEntry> _entries;
-
-        public CommonPropsReplacer(
-            List<FileEntry> entries)
+        public override void Execute(ProjectBuildContext context)
         {
-            _entries = entries;
+            new CommonPropsReplacer(context.Files).Run();
         }
 
-        public void Run()
+        private class CommonPropsReplacer
         {
-            foreach (var fileEntry in _entries)
+            private readonly List<FileEntry> _entries;
+
+            public CommonPropsReplacer(
+                List<FileEntry> entries)
             {
-                if (fileEntry.Name.EndsWith(".csproj"))
+                _entries = entries;
+            }
+
+            public void Run()
+            {
+                foreach (var fileEntry in _entries)
                 {
-                    fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
+                    if (fileEntry.Name.EndsWith(".csproj"))
+                    {
+                        fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
+                    }
                 }
             }
-        }
 
-        private string ProcessFileContent(string content)
-        {
-            Check.NotNull(content, nameof(content));
-
-            using (var stream = StreamHelper.GenerateStreamFromString(content))
+            private string ProcessFileContent(string content)
             {
-                var doc = new XmlDocument() { PreserveWhitespace = true };
-                doc.Load(stream);
-                return ProcessReferenceNodes(doc, content);
-            }
-        }
+                Check.NotNull(content, nameof(content));
 
-        private string ProcessReferenceNodes(XmlDocument doc, string content)
-        {
-            Check.NotNull(content, nameof(content));
-
-            var importNodes = doc.SelectNodes("/Project/Import[@Project]");
-
-            if (importNodes == null)
-            {
-                return doc.OuterXml;
-            }
-
-            foreach (XmlNode node in importNodes)
-            {
-                var value = node.Attributes?["Project"]?.Value;
-
-                if (value == null || (!value.EndsWith("\\common.props") && !value.EndsWith("\\common.test.props")))
+                using (var stream = StreamHelper.GenerateStreamFromString(content))
                 {
-                    continue;
+                    var doc = new XmlDocument() { PreserveWhitespace = true };
+                    doc.Load(stream);
+                    return ProcessReferenceNodes(doc, content);
+                }
+            }
+
+            private string ProcessReferenceNodes(XmlDocument doc, string content)
+            {
+                Check.NotNull(content, nameof(content));
+
+                var importNodes = doc.SelectNodes("/Project/Import[@Project]");
+
+                if (importNodes == null)
+                {
+                    return doc.OuterXml;
                 }
 
-                node.ParentNode?.RemoveChild(node);
-            }
+                foreach (XmlNode node in importNodes)
+                {
+                    var value = node.Attributes?["Project"]?.Value;
 
-            var propertyGroupNodes = doc.SelectNodes("/Project/PropertyGroup");
+                    if (value == null || (!value.EndsWith("\\common.props") && !value.EndsWith("\\common.test.props")))
+                    {
+                        continue;
+                    }
 
-            if (propertyGroupNodes == null || propertyGroupNodes.Count < 1)
-            {
+                    node.ParentNode?.RemoveChild(node);
+                }
+
+                var propertyGroupNodes = doc.SelectNodes("/Project/PropertyGroup");
+
+                if (propertyGroupNodes == null || propertyGroupNodes.Count < 1)
+                {
+                    return doc.OuterXml;
+                }
+
+                var firstPropertyGroupNode = propertyGroupNodes.Item(0);
+                var langNode = doc.CreateElement("LangVersion");
+                langNode.InnerText = "latest";
+                firstPropertyGroupNode?.PrependChild(langNode);
+
                 return doc.OuterXml;
             }
-
-            var firstPropertyGroupNode = propertyGroupNodes.Item(0);
-            var langNode = doc.CreateElement("LangVersion");
-            langNode.InnerText = "latest";
-            firstPropertyGroupNode?.PrependChild(langNode);
-
-            return doc.OuterXml;
         }
     }
 }

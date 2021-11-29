@@ -15,84 +15,85 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Account.Web;
-
-[DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpAutoMapperModule),
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpExceptionHandlingModule)
-    )]
-public class AbpAccountWebModule : AbpModule
+namespace Volo.Abp.Account.Web
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpExceptionHandlingModule)
+        )]
+    public class AbpAccountWebModule : AbpModule
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddAssemblyResource(typeof(AccountResource), typeof(AbpAccountWebModule).Assembly);
-        });
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(AccountResource), typeof(AbpAccountWebModule).Assembly);
+            });
 
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountWebModule).Assembly);
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountWebModule).Assembly);
-        });
-    }
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAccountWebModule>();
+            });
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new AbpAccountUserMenuContributor());
+            });
+
+            Configure<AbpToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new AccountModuleToolbarContributor());
+            });
+
+            ConfigureProfileManagementPage();
+
+            context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(AccountRemoteServiceConsts.ModuleName);
+            });
+        }
+
+        private void ConfigureProfileManagementPage()
         {
-            options.FileSets.AddEmbedded<AbpAccountWebModule>();
-        });
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Account/Manage");
+            });
 
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new AbpAccountUserMenuContributor());
-        });
+            Configure<ProfileManagementPageOptions>(options =>
+            {
+                options.Contributors.Add(new AccountProfileManagementPageContributor());
+            });
 
-        Configure<AbpToolbarOptions>(options =>
-        {
-            options.Contributors.Add(new AccountModuleToolbarContributor());
-        });
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.ScriptBundles
+                    .Configure(typeof(ManageModel).FullName,
+                        configuration =>
+                        {
+                            configuration.AddFiles("/client-proxies/account-proxy.js");
+                            configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
+                            configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/PersonalInfo/Default.js");
+                        });
+            });
 
-        ConfigureProfileManagementPage();
-
-        context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
-        });
-
-        Configure<DynamicJavaScriptProxyOptions>(options =>
-        {
-            options.DisableModule(AccountRemoteServiceConsts.ModuleName);
-        });
-    }
-
-    private void ConfigureProfileManagementPage()
-    {
-        Configure<RazorPagesOptions>(options =>
-        {
-            options.Conventions.AuthorizePage("/Account/Manage");
-        });
-
-        Configure<ProfileManagementPageOptions>(options =>
-        {
-            options.Contributors.Add(new AccountProfileManagementPageContributor());
-        });
-
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.ScriptBundles
-                .Configure(typeof(ManageModel).FullName,
-                    configuration =>
-                    {
-                        configuration.AddFiles("/client-proxies/account-proxy.js");
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/PersonalInfo/Default.js");
-                    });
-        });
-
+        }
     }
 }

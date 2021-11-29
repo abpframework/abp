@@ -1,14 +1,15 @@
 ﻿using Volo.Abp.Authorization.Permissions;
 
-namespace Volo.Abp.AspNetCore.Mvc.Authorization;
-
-public class TestPermissionDefinitionProvider : PermissionDefinitionProvider
+namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
-    public override void Define(IPermissionDefinitionContext context)
+    public class TestPermissionDefinitionProvider : PermissionDefinitionProvider
     {
-        var testGroup = context.AddGroup("TestGroup");
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            var testGroup = context.AddGroup("TestGroup");
 
-        testGroup.AddPermission("TestPermission1");
-        testGroup.AddPermission("TestPermission2");
+            testGroup.AddPermission("TestPermission1");
+            testGroup.AddPermission("TestPermission2");
+        }
     }
 }

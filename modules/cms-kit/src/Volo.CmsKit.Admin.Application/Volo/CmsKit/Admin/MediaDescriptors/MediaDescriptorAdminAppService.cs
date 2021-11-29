@@ -5,53 +5,54 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
 
-namespace Volo.CmsKit.Admin.MediaDescriptors;
-
-[RequiresGlobalFeature(typeof(MediaFeature))]
-public class MediaDescriptorAdminAppService : CmsKitAdminAppServiceBase, IMediaDescriptorAdminAppService
+namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    protected IBlobContainer<MediaContainer> MediaContainer { get; }
-    protected IMediaDescriptorRepository MediaDescriptorRepository { get; }
-    protected MediaDescriptorManager MediaDescriptorManager { get; }
-    protected IMediaDescriptorDefinitionStore MediaDescriptorDefinitionStore { get; }
-
-    public MediaDescriptorAdminAppService(
-        IBlobContainer<MediaContainer> mediaContainer,
-        IMediaDescriptorRepository mediaDescriptorRepository,
-        MediaDescriptorManager mediaDescriptorManager,
-        IMediaDescriptorDefinitionStore mediaDescriptorDefinitionStore)
+    [RequiresGlobalFeature(typeof(MediaFeature))]
+    public class MediaDescriptorAdminAppService : CmsKitAdminAppServiceBase, IMediaDescriptorAdminAppService
     {
-        MediaContainer = mediaContainer;
-        MediaDescriptorRepository = mediaDescriptorRepository;
-        MediaDescriptorManager = mediaDescriptorManager;
-        MediaDescriptorDefinitionStore = mediaDescriptorDefinitionStore;
-    }
+        protected IBlobContainer<MediaContainer> MediaContainer { get; }
+        protected IMediaDescriptorRepository MediaDescriptorRepository { get; }
+        protected MediaDescriptorManager MediaDescriptorManager { get; }
+        protected IMediaDescriptorDefinitionStore MediaDescriptorDefinitionStore { get; }
 
-    public virtual async Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
-    {
-        var definition = await MediaDescriptorDefinitionStore.GetAsync(entityType);
+        public MediaDescriptorAdminAppService(
+            IBlobContainer<MediaContainer> mediaContainer,
+            IMediaDescriptorRepository mediaDescriptorRepository,
+            MediaDescriptorManager mediaDescriptorManager,
+            IMediaDescriptorDefinitionStore mediaDescriptorDefinitionStore)
+        {
+            MediaContainer = mediaContainer;
+            MediaDescriptorRepository = mediaDescriptorRepository;
+            MediaDescriptorManager = mediaDescriptorManager;
+            MediaDescriptorDefinitionStore = mediaDescriptorDefinitionStore;
+        }
 
-        /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
-        await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
+        public virtual async Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
+        {
+            var definition = await MediaDescriptorDefinitionStore.GetAsync(entityType);
 
-        var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
+            /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
+            await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-        await MediaContainer.SaveAsync(newEntity.Id.ToString(), inputStream.File.GetStream());
-        await MediaDescriptorRepository.InsertAsync(newEntity);
+            var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
 
-        return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
-    }
+            await MediaContainer.SaveAsync(newEntity.Id.ToString(), inputStream.File.GetStream());
+            await MediaDescriptorRepository.InsertAsync(newEntity);
 
-    public virtual async Task DeleteAsync(Guid id)
-    {
-        var mediaDescriptor = await MediaDescriptorRepository.GetAsync(id);
+            return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
+        }
 
-        var definition = await MediaDescriptorDefinitionStore.GetAsync(mediaDescriptor.EntityType);
+        public virtual async Task DeleteAsync(Guid id)
+        {
+            var mediaDescriptor = await MediaDescriptorRepository.GetAsync(id);
 
-        /* TODO: Shouldn't DeletePolicies be a dictionary and we check for inputStream.EntityType? */
-        await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
+            var definition = await MediaDescriptorDefinitionStore.GetAsync(mediaDescriptor.EntityType);
 
-        await MediaContainer.DeleteAsync(id.ToString());
-        await MediaDescriptorRepository.DeleteAsync(id);
+            /* TODO: Shouldn't DeletePolicies be a dictionary and we check for inputStream.EntityType? */
+            await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
+
+            await MediaContainer.DeleteAsync(id.ToString());
+            await MediaDescriptorRepository.DeleteAsync(id);
+        }
     }
 }

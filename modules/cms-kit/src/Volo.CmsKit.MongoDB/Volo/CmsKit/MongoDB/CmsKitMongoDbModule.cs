@@ -21,30 +21,31 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.MongoDB;
-
-[DependsOn(
-    typeof(CmsKitDomainModule),
-    typeof(AbpUsersMongoDbModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class CmsKitMongoDbModule : AbpModule
+namespace Volo.CmsKit.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(CmsKitDomainModule),
+        typeof(AbpUsersMongoDbModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class CmsKitMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<CmsKitMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<CmsUser, MongoCmsUserRepository>();
-            options.AddRepository<UserReaction, MongoUserReactionRepository>();
-            options.AddRepository<Comment, MongoCommentRepository>();
-            options.AddRepository<Rating, MongoRatingRepository>();
-            options.AddRepository<Tag, MongoTagRepository>();
-            options.AddRepository<EntityTag, MongoEntityTagRepository>();
-            options.AddRepository<Page, MongoPageRepository>();
-            options.AddRepository<Blog, MongoBlogRepository>();
-            options.AddRepository<BlogPost, MongoBlogPostRepository>();
-            options.AddRepository<MediaDescriptor, MongoMediaDescriptorRepository>();
-            options.AddRepository<MenuItem, MongoMenuItemRepository>();
-        });
+            context.Services.AddMongoDbContext<CmsKitMongoDbContext>(options =>
+            {
+                options.AddRepository<CmsUser, MongoCmsUserRepository>();
+                options.AddRepository<UserReaction, MongoUserReactionRepository>();
+                options.AddRepository<Comment, MongoCommentRepository>();
+                options.AddRepository<Rating, MongoRatingRepository>();
+                options.AddRepository<Tag, MongoTagRepository>();
+                options.AddRepository<EntityTag, MongoEntityTagRepository>();
+                options.AddRepository<Page, MongoPageRepository>();
+                options.AddRepository<Blog, MongoBlogRepository>();
+                options.AddRepository<BlogPost, MongoBlogPostRepository>();
+                options.AddRepository<MediaDescriptor, MongoMediaDescriptorRepository>();
+                options.AddRepository<MenuItem, MongoMenuItemRepository>();
+            });
+        }
     }
 }

@@ -10,11 +10,12 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Menus;
 
-namespace Volo.CmsKit.MongoDB.Menus;
-
-public class MongoMenuItemRepository : MongoDbRepository<ICmsKitMongoDbContext, MenuItem, Guid>, IMenuItemRepository
+namespace Volo.CmsKit.MongoDB.Menus
 {
-    public MongoMenuItemRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+    public class MongoMenuItemRepository : MongoDbRepository<ICmsKitMongoDbContext, MenuItem, Guid>, IMenuItemRepository
     {
+        public MongoMenuItemRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        {
+        }
     }
 }

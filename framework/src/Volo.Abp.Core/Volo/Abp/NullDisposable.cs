@@ -1,18 +1,19 @@
 using System;
 
-namespace Volo.Abp;
-
-public sealed class NullDisposable : IDisposable
+namespace Volo.Abp
 {
-    public static NullDisposable Instance { get; } = new NullDisposable();
-
-    private NullDisposable()
+    public sealed class NullDisposable : IDisposable
     {
+        public static NullDisposable Instance { get; } = new NullDisposable();
 
-    }
+        private NullDisposable()
+        {
+            
+        }
 
-    public void Dispose()
-    {
+        public void Dispose()
+        {
 
+        }
     }
 }

@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.SettingManagement.Blazor;
-
-public class SettingComponentCreationContext : IServiceProviderAccessor
+namespace Volo.Abp.SettingManagement.Blazor
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public List<SettingComponentGroup> Groups { get; }
-
-    public SettingComponentCreationContext(IServiceProvider serviceProvider)
+    public class SettingComponentCreationContext : IServiceProviderAccessor
     {
-        ServiceProvider = serviceProvider;
+        public IServiceProvider ServiceProvider { get; }
 
-        Groups = new List<SettingComponentGroup>();
+        public List<SettingComponentGroup> Groups { get; }
+
+        public SettingComponentCreationContext(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+
+            Groups = new List<SettingComponentGroup>();
+        }
     }
 }

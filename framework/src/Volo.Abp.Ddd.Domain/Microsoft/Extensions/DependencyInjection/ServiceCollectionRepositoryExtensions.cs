@@ -3,92 +3,93 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class ServiceCollectionRepositoryExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddDefaultRepository(
-        this IServiceCollection services,
-        Type entityType,
-        Type repositoryImplementationType,
-        bool replaceExisting = false)
+    public static class ServiceCollectionRepositoryExtensions
     {
-        //IReadOnlyBasicRepository<TEntity>
-        var readOnlyBasicRepositoryInterface = typeof(IReadOnlyBasicRepository<>).MakeGenericType(entityType);
-        if (readOnlyBasicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
+        public static IServiceCollection AddDefaultRepository(
+            this IServiceCollection services,
+            Type entityType,
+            Type repositoryImplementationType,
+            bool replaceExisting = false)
         {
-            RegisterService(services, readOnlyBasicRepositoryInterface, repositoryImplementationType, replaceExisting);
-
-            //IReadOnlyRepository<TEntity>
-            var readOnlyRepositoryInterface = typeof(IReadOnlyRepository<>).MakeGenericType(entityType);
-            if (readOnlyRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
+            //IReadOnlyBasicRepository<TEntity>
+            var readOnlyBasicRepositoryInterface = typeof(IReadOnlyBasicRepository<>).MakeGenericType(entityType);
+            if (readOnlyBasicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
             {
-                RegisterService(services, readOnlyRepositoryInterface, repositoryImplementationType, replaceExisting);
-            }
+                RegisterService(services, readOnlyBasicRepositoryInterface, repositoryImplementationType, replaceExisting);
 
-            //IBasicRepository<TEntity>
-            var basicRepositoryInterface = typeof(IBasicRepository<>).MakeGenericType(entityType);
-            if (basicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
-            {
-                RegisterService(services, basicRepositoryInterface, repositoryImplementationType, replaceExisting);
-
-                //IRepository<TEntity>
-                var repositoryInterface = typeof(IRepository<>).MakeGenericType(entityType);
-                if (repositoryInterface.IsAssignableFrom(repositoryImplementationType))
+                //IReadOnlyRepository<TEntity>
+                var readOnlyRepositoryInterface = typeof(IReadOnlyRepository<>).MakeGenericType(entityType);
+                if (readOnlyRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
                 {
-                    RegisterService(services, repositoryInterface, repositoryImplementationType, replaceExisting);
-                }
-            }
-        }
-
-        var primaryKeyType = EntityHelper.FindPrimaryKeyType(entityType);
-        if (primaryKeyType != null)
-        {
-            //IReadOnlyBasicRepository<TEntity, TKey>
-            var readOnlyBasicRepositoryInterfaceWithPk = typeof(IReadOnlyBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
-            if (readOnlyBasicRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
-            {
-                RegisterService(services, readOnlyBasicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
-
-                //IReadOnlyRepository<TEntity, TKey>
-                var readOnlyRepositoryInterfaceWithPk = typeof(IReadOnlyRepository<,>).MakeGenericType(entityType, primaryKeyType);
-                if (readOnlyRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
-                {
-                    RegisterService(services, readOnlyRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                    RegisterService(services, readOnlyRepositoryInterface, repositoryImplementationType, replaceExisting);
                 }
 
-                //IBasicRepository<TEntity, TKey>
-                var basicRepositoryInterfaceWithPk = typeof(IBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
-                if (basicRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                //IBasicRepository<TEntity>
+                var basicRepositoryInterface = typeof(IBasicRepository<>).MakeGenericType(entityType);
+                if (basicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
                 {
-                    RegisterService(services, basicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                    RegisterService(services, basicRepositoryInterface, repositoryImplementationType, replaceExisting);
 
-                    //IRepository<TEntity, TKey>
-                    var repositoryInterfaceWithPk = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
-                    if (repositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                    //IRepository<TEntity>
+                    var repositoryInterface = typeof(IRepository<>).MakeGenericType(entityType);
+                    if (repositoryInterface.IsAssignableFrom(repositoryImplementationType))
                     {
-                        RegisterService(services, repositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                        RegisterService(services, repositoryInterface, repositoryImplementationType, replaceExisting);
                     }
                 }
             }
-        }
 
-        return services;
-    }
+            var primaryKeyType = EntityHelper.FindPrimaryKeyType(entityType);
+            if (primaryKeyType != null)
+            {
+                //IReadOnlyBasicRepository<TEntity, TKey>
+                var readOnlyBasicRepositoryInterfaceWithPk = typeof(IReadOnlyBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                if (readOnlyBasicRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                {
+                    RegisterService(services, readOnlyBasicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
 
-    private static void RegisterService(
-        IServiceCollection services,
-        Type serviceType,
-        Type implementationType,
-        bool replaceExisting)
-    {
-        if (replaceExisting)
-        {
-            services.Replace(ServiceDescriptor.Transient(serviceType, implementationType));
+                    //IReadOnlyRepository<TEntity, TKey>
+                    var readOnlyRepositoryInterfaceWithPk = typeof(IReadOnlyRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                    if (readOnlyRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                    {
+                        RegisterService(services, readOnlyRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                    }
+
+                    //IBasicRepository<TEntity, TKey>
+                    var basicRepositoryInterfaceWithPk = typeof(IBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                    if (basicRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                    {
+                        RegisterService(services, basicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+
+                        //IRepository<TEntity, TKey>
+                        var repositoryInterfaceWithPk = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                        if (repositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
+                        {
+                            RegisterService(services, repositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                        }
+                    }
+                }
+            }
+
+            return services;
         }
-        else
+        
+        private static void RegisterService(
+            IServiceCollection services,
+            Type serviceType,
+            Type implementationType,
+            bool replaceExisting)
         {
-            services.TryAddTransient(serviceType, implementationType);
+            if (replaceExisting)
+            {
+                services.Replace(ServiceDescriptor.Transient(serviceType, implementationType));
+            }
+            else
+            {
+                services.TryAddTransient(serviceType, implementationType);
+            }
         }
     }
 }

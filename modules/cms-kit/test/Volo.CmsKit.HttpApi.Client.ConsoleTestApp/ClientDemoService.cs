@@ -2,18 +2,19 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit;
-
-public class ClientDemoService : ITransientDependency
+namespace Volo.CmsKit
 {
-    public async Task RunAsync()
+    public class ClientDemoService : ITransientDependency
     {
-        await TestWithDynamicProxiesAsync();
-    }
+        public async Task RunAsync()
+        {
+            await TestWithDynamicProxiesAsync();
+        }
 
-    private async Task TestWithDynamicProxiesAsync()
-    {
-        Console.WriteLine();
-        Console.WriteLine($"***** {nameof(TestWithDynamicProxiesAsync)} *****");
+        private async Task TestWithDynamicProxiesAsync()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"***** {nameof(TestWithDynamicProxiesAsync)} *****");
+        }
     }
 }

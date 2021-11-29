@@ -3,78 +3,79 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Volo.Abp.ObjectExtending;
-
-public static class EfCoreObjectExtensionPropertyInfoExtensions
+namespace Volo.Abp.ObjectExtending
 {
-    public const string EfCorePropertyConfigurationName = "EfCoreMapping";
-
-    [NotNull]
-    public static ObjectExtensionPropertyInfo MapEfCore(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
+    public static class EfCoreObjectExtensionPropertyInfoExtensions
     {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
+        public const string EfCorePropertyConfigurationName = "EfCoreMapping";
 
-        propertyExtension.Configuration[EfCorePropertyConfigurationName] =
-            new ObjectExtensionPropertyInfoEfCoreMappingOptions(
-                propertyExtension
-            );
+        [NotNull]
+        public static ObjectExtensionPropertyInfo MapEfCore(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
 
-        return propertyExtension;
-    }
+            propertyExtension.Configuration[EfCorePropertyConfigurationName] =
+                new ObjectExtensionPropertyInfoEfCoreMappingOptions(
+                    propertyExtension
+                );
 
-    [Obsolete("Use MapEfCore with EntityTypeAndPropertyBuildAction parameters.")]
-    [NotNull]
-    public static ObjectExtensionPropertyInfo MapEfCore(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-        [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
-    {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
+            return propertyExtension;
+        }
 
-        propertyExtension.Configuration[EfCorePropertyConfigurationName] =
-            new ObjectExtensionPropertyInfoEfCoreMappingOptions(
-                propertyExtension,
-                propertyBuildAction
-            );
+        [Obsolete("Use MapEfCore with EntityTypeAndPropertyBuildAction parameters.")]
+        [NotNull]
+        public static ObjectExtensionPropertyInfo MapEfCore(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
 
-        return propertyExtension;
-    }
+            propertyExtension.Configuration[EfCorePropertyConfigurationName] =
+                new ObjectExtensionPropertyInfoEfCoreMappingOptions(
+                    propertyExtension,
+                    propertyBuildAction
+                );
 
-    [NotNull]
-    public static ObjectExtensionPropertyInfo MapEfCore(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-        [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
-    {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
+            return propertyExtension;
+        }
 
-        propertyExtension.Configuration[EfCorePropertyConfigurationName] =
-            new ObjectExtensionPropertyInfoEfCoreMappingOptions(
-                propertyExtension,
-                entityTypeAndPropertyBuildAction
-            );
+        [NotNull]
+        public static ObjectExtensionPropertyInfo MapEfCore(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
 
-        return propertyExtension;
-    }
+            propertyExtension.Configuration[EfCorePropertyConfigurationName] =
+                new ObjectExtensionPropertyInfoEfCoreMappingOptions(
+                    propertyExtension,
+                    entityTypeAndPropertyBuildAction
+                );
 
-    [CanBeNull]
-    public static ObjectExtensionPropertyInfoEfCoreMappingOptions GetEfCoreMappingOrNull(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
-    {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
+            return propertyExtension;
+        }
 
-        return propertyExtension
+        [CanBeNull]
+        public static ObjectExtensionPropertyInfoEfCoreMappingOptions GetEfCoreMappingOrNull(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
+
+            return propertyExtension
+                    .Configuration
+                    .GetOrDefault(EfCorePropertyConfigurationName)
+                as ObjectExtensionPropertyInfoEfCoreMappingOptions;
+        }
+
+        public static bool IsMappedToFieldForEfCore(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
+
+            return propertyExtension
                 .Configuration
-                .GetOrDefault(EfCorePropertyConfigurationName)
-            as ObjectExtensionPropertyInfoEfCoreMappingOptions;
-    }
-
-    public static bool IsMappedToFieldForEfCore(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
-    {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
-
-        return propertyExtension
-            .Configuration
-            .ContainsKey(EfCorePropertyConfigurationName);
+                .ContainsKey(EfCorePropertyConfigurationName);
+        }
     }
 }

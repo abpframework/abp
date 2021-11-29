@@ -2,31 +2,32 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Validation;
-
-public class ValidationInterceptor : AbpInterceptor, ITransientDependency
+namespace Volo.Abp.Validation
 {
-    private readonly IMethodInvocationValidator _methodInvocationValidator;
-
-    public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator)
+    public class ValidationInterceptor : AbpInterceptor, ITransientDependency
     {
-        _methodInvocationValidator = methodInvocationValidator;
-    }
+        private readonly IMethodInvocationValidator _methodInvocationValidator;
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
-    {
-        await ValidateAsync(invocation);
-        await invocation.ProceedAsync();
-    }
+        public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator)
+        {
+            _methodInvocationValidator = methodInvocationValidator;
+        }
 
-    protected virtual async Task ValidateAsync(IAbpMethodInvocation invocation)
-    {
-        await _methodInvocationValidator.ValidateAsync(
-            new MethodInvocationValidationContext(
-                invocation.TargetObject,
-                invocation.Method,
-                invocation.Arguments
-            )
-        );
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        {
+            await ValidateAsync(invocation);
+            await invocation.ProceedAsync();
+        }
+
+        protected virtual async Task ValidateAsync(IAbpMethodInvocation invocation)
+        {
+            await _methodInvocationValidator.ValidateAsync(
+                new MethodInvocationValidationContext(
+                    invocation.TargetObject,
+                    invocation.Method,
+                    invocation.Arguments
+                )
+            );
+        }
     }
 }

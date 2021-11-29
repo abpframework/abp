@@ -3,50 +3,51 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.DependencyInjection;
-
-[ExposeServices(
-    typeof(IHybridServiceScopeFactory),
-    typeof(HttpContextServiceScopeFactory)
-    )]
-[Dependency(ReplaceServices = true)]
-public class HttpContextServiceScopeFactory : IHybridServiceScopeFactory, ITransientDependency
+namespace Volo.Abp.AspNetCore.DependencyInjection
 {
-    protected IHttpContextAccessor HttpContextAccessor { get; }
-
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-    public HttpContextServiceScopeFactory(
-        IHttpContextAccessor httpContextAccessor,
-        IServiceScopeFactory serviceScopeFactory)
+    [ExposeServices(
+        typeof(IHybridServiceScopeFactory),
+        typeof(HttpContextServiceScopeFactory)
+        )]
+    [Dependency(ReplaceServices = true)]
+    public class HttpContextServiceScopeFactory : IHybridServiceScopeFactory, ITransientDependency
     {
-        HttpContextAccessor = httpContextAccessor;
-        ServiceScopeFactory = serviceScopeFactory;
-    }
+        protected IHttpContextAccessor HttpContextAccessor { get; }
 
-    public virtual IServiceScope CreateScope()
-    {
-        var httpContext = HttpContextAccessor.HttpContext;
-        if (httpContext == null)
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+
+        public HttpContextServiceScopeFactory(
+            IHttpContextAccessor httpContextAccessor, 
+            IServiceScopeFactory serviceScopeFactory)
         {
-            return ServiceScopeFactory.CreateScope();
+            HttpContextAccessor = httpContextAccessor;
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
-        return new NonDisposedHttpContextServiceScope(httpContext.RequestServices);
-    }
-
-    protected class NonDisposedHttpContextServiceScope : IServiceScope
-    {
-        public IServiceProvider ServiceProvider { get; }
-
-        public NonDisposedHttpContextServiceScope(IServiceProvider serviceProvider)
+        public virtual IServiceScope CreateScope()
         {
-            ServiceProvider = serviceProvider;
+            var httpContext = HttpContextAccessor.HttpContext;
+            if (httpContext == null)
+            {
+                return ServiceScopeFactory.CreateScope();
+            }
+
+            return new NonDisposedHttpContextServiceScope(httpContext.RequestServices);
         }
 
-        public void Dispose()
+        protected class NonDisposedHttpContextServiceScope : IServiceScope
         {
+            public IServiceProvider ServiceProvider { get; }
 
+            public NonDisposedHttpContextServiceScope(IServiceProvider serviceProvider)
+            {
+                ServiceProvider = serviceProvider;
+            }
+
+            public void Dispose()
+            {
+                
+            }
         }
     }
 }

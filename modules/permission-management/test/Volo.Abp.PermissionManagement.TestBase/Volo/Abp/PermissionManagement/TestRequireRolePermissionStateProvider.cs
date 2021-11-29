@@ -6,20 +6,21 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class TestRequireRolePermissionStateProvider : ISimpleStateChecker<PermissionDefinition>
+namespace Volo.Abp.PermissionManagement
 {
-    private readonly List<string> _allowRoles = new List<string>();
-
-    public TestRequireRolePermissionStateProvider(params string[] roles)
+    public class TestRequireRolePermissionStateProvider : ISimpleStateChecker<PermissionDefinition>
     {
-        _allowRoles.AddRange(roles);
-    }
+        private readonly List<string> _allowRoles = new List<string>();
 
-    public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
-    {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        return Task.FromResult(currentPrincipalAccessor.Principal != null && _allowRoles.Any(role => currentPrincipalAccessor.Principal.IsInRole(role)));
+        public TestRequireRolePermissionStateProvider(params string[] roles)
+        {
+            _allowRoles.AddRange(roles);
+        }
+
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
+        {
+            var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
+            return Task.FromResult(currentPrincipalAccessor.Principal != null && _allowRoles.Any(role => currentPrincipalAccessor.Principal.IsInRole(role)));
+        }
     }
 }

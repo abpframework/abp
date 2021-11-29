@@ -3,24 +3,25 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel;
-
-[Dependency(ReplaceServices = true)]
-public class IdentityModelRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ITransientDependency
+namespace Volo.Abp.Http.Client.IdentityModel
 {
-    protected IIdentityModelAuthenticationService IdentityModelAuthenticationService { get; }
-
-    public IdentityModelRemoteServiceHttpClientAuthenticator(
-        IIdentityModelAuthenticationService identityModelAuthenticationService)
+    [Dependency(ReplaceServices = true)]
+    public class IdentityModelRemoteServiceHttpClientAuthenticator : IRemoteServiceHttpClientAuthenticator, ITransientDependency
     {
-        IdentityModelAuthenticationService = identityModelAuthenticationService;
-    }
+        protected IIdentityModelAuthenticationService IdentityModelAuthenticationService { get; }
 
-    public virtual async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
-    {
-        await IdentityModelAuthenticationService.TryAuthenticateAsync(
-            context.Client,
-            context.RemoteService.GetIdentityClient() ?? context.RemoteServiceName
-        );
+        public IdentityModelRemoteServiceHttpClientAuthenticator(
+            IIdentityModelAuthenticationService identityModelAuthenticationService)
+        {
+            IdentityModelAuthenticationService = identityModelAuthenticationService;
+        }
+
+        public virtual async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+        {
+            await IdentityModelAuthenticationService.TryAuthenticateAsync(
+                context.Client,
+                context.RemoteService.GetIdentityClient() ?? context.RemoteServiceName
+            );
+        }
     }
 }

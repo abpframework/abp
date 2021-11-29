@@ -2,41 +2,42 @@
 using System.Collections.Generic;
 using System.Runtime.Loader;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public class FilePlugInSource : IPlugInSource
+namespace Volo.Abp.Modularity.PlugIns
 {
-    public string[] FilePaths { get; }
-
-    public FilePlugInSource(params string[] filePaths)
+    public class FilePlugInSource : IPlugInSource
     {
-        FilePaths = filePaths ?? new string[0];
-    }
+        public string[] FilePaths { get; }
 
-    public Type[] GetModules()
-    {
-        var modules = new List<Type>();
-
-        foreach (var filePath in FilePaths)
+        public FilePlugInSource(params string[] filePaths)
         {
-            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
-
-            try
-            {
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (AbpModule.IsAbpModule(type))
-                    {
-                        modules.AddIfNotContains(type);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new AbpException("Could not get module types from assembly: " + assembly.FullName, ex);
-            }
+            FilePaths = filePaths ?? new string[0];
         }
 
-        return modules.ToArray();
+        public Type[] GetModules()
+        {
+            var modules = new List<Type>();
+
+            foreach (var filePath in FilePaths)
+            {
+                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
+
+                try
+                {
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if (AbpModule.IsAbpModule(type))
+                        {
+                            modules.AddIfNotContains(type);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpException("Could not get module types from assembly: " + assembly.FullName, ex);
+                }
+            }
+
+            return modules.ToArray();
+        }
     }
 }

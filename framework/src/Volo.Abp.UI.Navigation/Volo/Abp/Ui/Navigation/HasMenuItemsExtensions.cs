@@ -1,27 +1,28 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.UI.Navigation;
-
-public static class HasMenuItemsExtensions
+namespace Volo.Abp.UI.Navigation
 {
-    [CanBeNull]
-    public static ApplicationMenuItem FindMenuItem(this IHasMenuItems container, string menuItemName)
+    public static class HasMenuItemsExtensions
     {
-        foreach (var menuItem in container.Items)
+        [CanBeNull]
+        public static ApplicationMenuItem FindMenuItem(this IHasMenuItems container, string menuItemName)
         {
-            if (menuItem.Name == menuItemName)
+            foreach (var menuItem in container.Items)
             {
-                return menuItem;
+                if (menuItem.Name == menuItemName)
+                {
+                    return menuItem;
+                }
+
+                var subItem = FindMenuItem(menuItem, menuItemName);
+                if (subItem != null)
+                {
+                    return subItem;
+                }
             }
 
-            var subItem = FindMenuItem(menuItem, menuItemName);
-            if (subItem != null)
-            {
-                return subItem;
-            }
+            return null;
         }
-
-        return null;
     }
 }

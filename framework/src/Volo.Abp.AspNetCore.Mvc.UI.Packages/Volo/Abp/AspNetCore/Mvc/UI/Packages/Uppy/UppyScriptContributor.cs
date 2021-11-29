@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy;
-
-public class UppyScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class UppyScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/uppy/uppy.min.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/uppy/uppy.min.js");
+        }
     }
 }

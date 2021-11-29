@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
-
-public class AbpContainerTagHelper : AbpTagHelper<AbpContainerTagHelper, AbpContainerTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    public AbpContainerTagHelper(AbpContainerTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpContainerTagHelper : AbpTagHelper<AbpContainerTagHelper, AbpContainerTagHelperService>
     {
+        public AbpContainerTagHelper(AbpContainerTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
 
+        }
     }
 }

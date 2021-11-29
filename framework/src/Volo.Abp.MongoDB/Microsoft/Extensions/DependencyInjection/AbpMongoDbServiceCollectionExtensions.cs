@@ -6,45 +6,46 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MongoDB.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpMongoDbServiceCollectionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddMongoDbContext<TMongoDbContext>(this IServiceCollection services, Action<IAbpMongoDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
-        where TMongoDbContext : AbpMongoDbContext
+    public static class AbpMongoDbServiceCollectionExtensions
     {
-        var options = new AbpMongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
-
-        var replacedDbContextTypes = typeof(TMongoDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
-            .SelectMany(x => x.ReplacedDbContextTypes).ToList();
-
-        foreach (var dbContextType in replacedDbContextTypes)
+        public static IServiceCollection AddMongoDbContext<TMongoDbContext>(this IServiceCollection services, Action<IAbpMongoDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
+            where TMongoDbContext : AbpMongoDbContext
         {
-            options.ReplaceDbContext(dbContextType);
-        }
+            var options = new AbpMongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
 
-        optionsBuilder?.Invoke(options);
+            var replacedDbContextTypes = typeof(TMongoDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
+                .SelectMany( x => x.ReplacedDbContextTypes).ToList();
 
-        foreach (var entry in options.ReplacedDbContextTypes)
-        {
-            var originalDbContextType = entry.Key;
-            var targetDbContextType = entry.Value ?? typeof(TMongoDbContext);
-
-            services.Replace(
-                ServiceDescriptor.Transient(
-                    originalDbContextType,
-                    sp => sp.GetRequiredService(targetDbContextType)
-                )
-            );
-
-            services.Configure<AbpMongoDbContextOptions>(opts =>
+            foreach (var dbContextType in replacedDbContextTypes)
             {
-                opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
-            });
+                options.ReplaceDbContext(dbContextType);
+            }
+
+            optionsBuilder?.Invoke(options);
+
+            foreach (var entry in options.ReplacedDbContextTypes)
+            {
+                var originalDbContextType = entry.Key;
+                var targetDbContextType = entry.Value ?? typeof(TMongoDbContext);
+                
+                services.Replace(
+                    ServiceDescriptor.Transient(
+                        originalDbContextType,
+                        sp => sp.GetRequiredService(targetDbContextType)
+                    )
+                );
+
+                services.Configure<AbpMongoDbContextOptions>(opts =>
+                {
+                    opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
+                });
+            }
+
+            new MongoDbRepositoryRegistrar(options).AddRepositories();
+
+            return services;
         }
-
-        new MongoDbRepositoryRegistrar(options).AddRepositories();
-
-        return services;
     }
 }

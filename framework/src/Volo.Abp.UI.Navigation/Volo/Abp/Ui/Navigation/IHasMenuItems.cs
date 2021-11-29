@@ -1,11 +1,12 @@
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.UI.Navigation;
-
-public interface IHasMenuItems
+namespace Volo.Abp.UI.Navigation
 {
-    /// <summary>
-    /// Menu items.
-    /// </summary>
-    ApplicationMenuItemList Items { get; }
+    public interface IHasMenuItems
+    {
+        /// <summary>
+        /// Menu items.
+        /// </summary>
+        ApplicationMenuItemList Items { get; }
+    }
 }

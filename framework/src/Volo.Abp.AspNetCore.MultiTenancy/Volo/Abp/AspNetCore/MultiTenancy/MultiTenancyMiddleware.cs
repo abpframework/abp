@@ -11,111 +11,112 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.AspNetCore.MultiTenancy;
-
-public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
+namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
-    private readonly ICurrentTenant _currentTenant;
-    private readonly AbpAspNetCoreMultiTenancyOptions _options;
-    private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
-
-    public MultiTenancyMiddleware(
-        ITenantConfigurationProvider tenantConfigurationProvider,
-        ICurrentTenant currentTenant,
-        IOptions<AbpAspNetCoreMultiTenancyOptions> options,
-        ITenantResolveResultAccessor tenantResolveResultAccessor)
+    public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
     {
-        _tenantConfigurationProvider = tenantConfigurationProvider;
-        _currentTenant = currentTenant;
-        _tenantResolveResultAccessor = tenantResolveResultAccessor;
-        _options = options.Value;
-    }
+        private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly AbpAspNetCoreMultiTenancyOptions _options;
+        private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        TenantConfiguration tenant;
-        try
+        public MultiTenancyMiddleware(
+            ITenantConfigurationProvider tenantConfigurationProvider,
+            ICurrentTenant currentTenant,
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options,
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
-            tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
-        }
-        catch (Exception e)
-        {
-            await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e);
-            return;
+            _tenantConfigurationProvider = tenantConfigurationProvider;
+            _currentTenant = currentTenant;
+            _tenantResolveResultAccessor = tenantResolveResultAccessor;
+            _options = options.Value;
         }
 
-        if (tenant?.Id != _currentTenant.Id)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            using (_currentTenant.Change(tenant?.Id, tenant?.Name))
+            TenantConfiguration tenant;
+            try
             {
-                if (_tenantResolveResultAccessor.Result != null &&
-                    _tenantResolveResultAccessor.Result.AppliedResolvers.Contains(QueryStringTenantResolveContributor.ContributorName))
-                {
-                    AbpMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
-                }
+                tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
+            }
+            catch (Exception e)
+            {
+                await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e);
+                return;
+            }
 
-                var requestCulture = await TryGetRequestCultureAsync(context);
-                if (requestCulture != null)
+            if (tenant?.Id != _currentTenant.Id)
+            {
+                using (_currentTenant.Change(tenant?.Id, tenant?.Name))
                 {
-                    CultureInfo.CurrentCulture = requestCulture.Culture;
-                    CultureInfo.CurrentUICulture = requestCulture.UICulture;
-                    AbpRequestCultureCookieHelper.SetCultureCookie(
-                        context,
-                        requestCulture
-                    );
-                    context.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
-                }
+                    if (_tenantResolveResultAccessor.Result != null &&
+                        _tenantResolveResultAccessor.Result.AppliedResolvers.Contains(QueryStringTenantResolveContributor.ContributorName))
+                    {
+                        AbpMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
+                    }
 
+                    var requestCulture = await TryGetRequestCultureAsync(context);
+                    if (requestCulture != null)
+                    {
+                        CultureInfo.CurrentCulture = requestCulture.Culture;
+                        CultureInfo.CurrentUICulture = requestCulture.UICulture;
+                        AbpRequestCultureCookieHelper.SetCultureCookie(
+                            context,
+                            requestCulture
+                        );
+                        context.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
+                    }
+
+                    await next(context);
+                }
+            }
+            else
+            {
                 await next(context);
             }
         }
-        else
+
+        private async Task<RequestCulture> TryGetRequestCultureAsync(HttpContext httpContext)
         {
-            await next(context);
+            var requestCultureFeature = httpContext.Features.Get<IRequestCultureFeature>();
+
+            /* If requestCultureFeature == null, that means the RequestLocalizationMiddleware was not used
+             * and we don't want to set the culture. */
+            if (requestCultureFeature == null)
+            {
+                return null;
+            }
+
+            /* If requestCultureFeature.Provider is not null, that means RequestLocalizationMiddleware
+             * already picked a language, so we don't need to set the default. */
+            if (requestCultureFeature.Provider != null)
+            {
+                return null;
+            }
+
+            var settingProvider = httpContext.RequestServices.GetRequiredService<ISettingProvider>();
+            var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+            if (defaultLanguage.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            string culture;
+            string uiCulture;
+
+            if (defaultLanguage.Contains(';'))
+            {
+                var splitted = defaultLanguage.Split(';');
+                culture = splitted[0];
+                uiCulture = splitted[1];
+            }
+            else
+            {
+                culture = defaultLanguage;
+                uiCulture = defaultLanguage;
+            }
+
+            return new RequestCulture(culture, uiCulture);
         }
-    }
-
-    private async Task<RequestCulture> TryGetRequestCultureAsync(HttpContext httpContext)
-    {
-        var requestCultureFeature = httpContext.Features.Get<IRequestCultureFeature>();
-
-        /* If requestCultureFeature == null, that means the RequestLocalizationMiddleware was not used
-         * and we don't want to set the culture. */
-        if (requestCultureFeature == null)
-        {
-            return null;
-        }
-
-        /* If requestCultureFeature.Provider is not null, that means RequestLocalizationMiddleware
-         * already picked a language, so we don't need to set the default. */
-        if (requestCultureFeature.Provider != null)
-        {
-            return null;
-        }
-
-        var settingProvider = httpContext.RequestServices.GetRequiredService<ISettingProvider>();
-        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
-        if (defaultLanguage.IsNullOrWhiteSpace())
-        {
-            return null;
-        }
-
-        string culture;
-        string uiCulture;
-
-        if (defaultLanguage.Contains(';'))
-        {
-            var splitted = defaultLanguage.Split(';');
-            culture = splitted[0];
-            uiCulture = splitted[1];
-        }
-        else
-        {
-            culture = defaultLanguage;
-            uiCulture = defaultLanguage;
-        }
-
-        return new RequestCulture(culture, uiCulture);
     }
 }

@@ -6,49 +6,50 @@ using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.SignalR.Auditing;
-
-public class AspNetCoreSignalRAuditLogContributor : AuditLogContributor, ITransientDependency
+namespace Volo.Abp.AspNetCore.SignalR.Auditing
 {
-    public ILogger<AspNetCoreSignalRAuditLogContributor> Logger { get; set; }
-
-    public AspNetCoreSignalRAuditLogContributor()
+    public class AspNetCoreSignalRAuditLogContributor : AuditLogContributor, ITransientDependency
     {
-        Logger = NullLogger<AspNetCoreSignalRAuditLogContributor>.Instance;
-    }
+        public ILogger<AspNetCoreSignalRAuditLogContributor> Logger { get; set; }
 
-    public override void PreContribute(AuditLogContributionContext context)
-    {
-        var hubContext = context.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>().Context;
-        if (hubContext == null)
+        public AspNetCoreSignalRAuditLogContributor()
         {
-            return;
+            Logger = NullLogger<AspNetCoreSignalRAuditLogContributor>.Instance;
         }
 
-        var clientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
-        if (context.AuditInfo.ClientIpAddress == null)
+        public override void PreContribute(AuditLogContributionContext context)
         {
-            context.AuditInfo.ClientIpAddress = clientInfoProvider.ClientIpAddress;
+            var hubContext = context.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>().Context;
+            if (hubContext == null)
+            {
+                return;
+            }
+
+            var clientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
+            if (context.AuditInfo.ClientIpAddress == null)
+            {
+                context.AuditInfo.ClientIpAddress = clientInfoProvider.ClientIpAddress;
+            }
+
+            if (context.AuditInfo.BrowserInfo == null)
+            {
+                context.AuditInfo.BrowserInfo = clientInfoProvider.BrowserInfo;
+            }
+
+            //TODO: context.AuditInfo.ClientName
         }
 
-        if (context.AuditInfo.BrowserInfo == null)
+        public override void PostContribute(AuditLogContributionContext context)
         {
-            context.AuditInfo.BrowserInfo = clientInfoProvider.BrowserInfo;
+            var hubContext = context.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>().Context;
+            if (hubContext == null)
+            {
+                return;
+            }
+
+            var firstAction = context.AuditInfo.Actions.FirstOrDefault();
+            context.AuditInfo.Url = firstAction?.ServiceName + "." + firstAction?.MethodName;
+            context.AuditInfo.HttpStatusCode = null;
         }
-
-        //TODO: context.AuditInfo.ClientName
-    }
-
-    public override void PostContribute(AuditLogContributionContext context)
-    {
-        var hubContext = context.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>().Context;
-        if (hubContext == null)
-        {
-            return;
-        }
-
-        var firstAction = context.AuditInfo.Actions.FirstOrDefault();
-        context.AuditInfo.Url = firstAction?.ServiceName + "." + firstAction?.MethodName;
-        context.AuditInfo.HttpStatusCode = null;
     }
 }

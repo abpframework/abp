@@ -4,19 +4,20 @@ using System.Text;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Swashbuckle;
-
-public class SwaggerHtmlResolver : ISwaggerHtmlResolver, ITransientDependency
+namespace Volo.Abp.Swashbuckle
 {
-    public virtual Stream Resolver()
+    public class SwaggerHtmlResolver : ISwaggerHtmlResolver, ITransientDependency
     {
-        var stream = typeof(SwaggerUIOptions).GetTypeInfo().Assembly
-            .GetManifestResourceStream("Swashbuckle.AspNetCore.SwaggerUI.index.html");
+        public virtual Stream Resolver()
+        {
+            var stream = typeof(SwaggerUIOptions).GetTypeInfo().Assembly
+                .GetManifestResourceStream("Swashbuckle.AspNetCore.SwaggerUI.index.html");
 
-        var html = new StreamReader(stream)
-            .ReadToEnd()
-            .Replace("SwaggerUIBundle(configObject)", "abp.SwaggerUIBundle(configObject)");
+            var html = new StreamReader(stream)
+                .ReadToEnd()
+                .Replace("SwaggerUIBundle(configObject)", "abp.SwaggerUIBundle(configObject)");
 
-        return new MemoryStream(Encoding.UTF8.GetBytes(html));
+            return new MemoryStream(Encoding.UTF8.GetBytes(html));
+        }
     }
 }

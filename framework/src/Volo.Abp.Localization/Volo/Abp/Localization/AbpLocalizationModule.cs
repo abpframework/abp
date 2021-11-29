@@ -3,34 +3,35 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Localization;
-
-[DependsOn(
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpSettingsModule),
-    typeof(AbpLocalizationAbstractionsModule)
-    )]
-public class AbpLocalizationModule : AbpModule
+namespace Volo.Abp.Localization
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpSettingsModule),
+        typeof(AbpLocalizationAbstractionsModule)
+        )]
+    public class AbpLocalizationModule : AbpModule
     {
-        AbpStringLocalizerFactory.Replace(context.Services);
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
-        });
+            AbpStringLocalizerFactory.Replace(context.Services);
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options
-                .Resources
-                .Add<DefaultResource>("en");
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
+            });
 
-            options
-                .Resources
-                .Add<AbpLocalizationResource>("en")
-                .AddVirtualJson("/Localization/Resources/AbpLocalization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options
+                    .Resources
+                    .Add<DefaultResource>("en");
+
+                options
+                    .Resources
+                    .Add<AbpLocalizationResource>("en")
+                    .AddVirtualJson("/Localization/Resources/AbpLocalization");
+            });
+        }
     }
 }

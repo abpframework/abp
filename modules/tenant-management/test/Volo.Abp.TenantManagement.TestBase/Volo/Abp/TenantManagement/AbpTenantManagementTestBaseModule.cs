@@ -2,27 +2,28 @@
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TenantManagement;
-
-[DependsOn(
-    typeof(AbpTenantManagementDomainModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule)
-    )]
-public class AbpTenantManagementTestBaseModule : AbpModule
+namespace Volo.Abp.TenantManagement
 {
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    [DependsOn(
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule)
+        )]
+    public class AbpTenantManagementTestBaseModule : AbpModule
     {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            scope.ServiceProvider
-                .GetRequiredService<AbpTenantManagementTestDataBuilder>()
-                .Build();
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                scope.ServiceProvider
+                    .GetRequiredService<AbpTenantManagementTestDataBuilder>()
+                    .Build();
+            }
         }
     }
 }

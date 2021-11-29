@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.ApiVersioning;
-
-public class AbpApiVersioningAbstractionsModule : AbpModule
+namespace Volo.Abp.ApiVersioning
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public class AbpApiVersioningAbstractionsModule : AbpModule
     {
-        context.Services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
+        }
     }
 }

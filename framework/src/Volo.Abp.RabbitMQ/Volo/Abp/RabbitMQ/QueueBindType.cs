@@ -1,1 +1,4 @@
-﻿namespace Volo.Abp.RabbitMQ;
+﻿namespace Volo.Abp.RabbitMQ
+{
+
+}

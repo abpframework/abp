@@ -3,26 +3,27 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Xunit;
 
-namespace Volo.CmsKit.Features;
-
-public class GlobalCmsKitFeatures_Tests : CmsKitDomainTestBase
+namespace Volo.CmsKit.Features
 {
-    private readonly GlobalCmsKitFeatures _cmsKitFeatures;
-
-    public GlobalCmsKitFeatures_Tests()
+    public class GlobalCmsKitFeatures_Tests : CmsKitDomainTestBase
     {
-        _cmsKitFeatures = new GlobalCmsKitFeatures(GlobalFeatureManager.Instance);
-    }
+        private readonly GlobalCmsKitFeatures _cmsKitFeatures;
 
-    [Fact]
-    public void Page_Feature_Should_Enable_Dependent_Features()
-    {
-        _cmsKitFeatures.DisableAll();
-        _cmsKitFeatures.User.IsEnabled.ShouldBeFalse();
-        _cmsKitFeatures.Pages.IsEnabled.ShouldBeFalse();
+        public GlobalCmsKitFeatures_Tests()
+        {
+            _cmsKitFeatures = new GlobalCmsKitFeatures(GlobalFeatureManager.Instance);
+        }
 
-        _cmsKitFeatures.Pages.Enable();
-        _cmsKitFeatures.User.IsEnabled.ShouldBeTrue();
-        _cmsKitFeatures.Pages.IsEnabled.ShouldBeTrue();
+        [Fact]
+        public void Page_Feature_Should_Enable_Dependent_Features()
+        {
+            _cmsKitFeatures.DisableAll();
+            _cmsKitFeatures.User.IsEnabled.ShouldBeFalse();
+            _cmsKitFeatures.Pages.IsEnabled.ShouldBeFalse();
+            
+            _cmsKitFeatures.Pages.Enable();
+            _cmsKitFeatures.User.IsEnabled.ShouldBeTrue();
+            _cmsKitFeatures.Pages.IsEnabled.ShouldBeTrue();
+        }
     }
 }

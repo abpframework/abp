@@ -5,59 +5,60 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-[Authorize(IdentityPermissions.UserLookup.Default)]
-public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUserLookupAppService
+namespace Volo.Abp.Identity
 {
-    protected IdentityUserRepositoryExternalUserLookupServiceProvider UserLookupServiceProvider { get; }
-
-    public IdentityUserLookupAppService(
-        IdentityUserRepositoryExternalUserLookupServiceProvider userLookupServiceProvider)
+    [Authorize(IdentityPermissions.UserLookup.Default)]
+    public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUserLookupAppService
     {
-        UserLookupServiceProvider = userLookupServiceProvider;
-    }
+        protected IdentityUserRepositoryExternalUserLookupServiceProvider UserLookupServiceProvider { get; }
 
-    public virtual async Task<UserData> FindByIdAsync(Guid id)
-    {
-        var userData = await UserLookupServiceProvider.FindByIdAsync(id);
-        if (userData == null)
+        public IdentityUserLookupAppService(
+            IdentityUserRepositoryExternalUserLookupServiceProvider userLookupServiceProvider)
         {
-            return null;
+            UserLookupServiceProvider = userLookupServiceProvider;
         }
 
-        return new UserData(userData);
-    }
-
-    public virtual async Task<UserData> FindByUserNameAsync(string userName)
-    {
-        var userData = await UserLookupServiceProvider.FindByUserNameAsync(userName);
-        if (userData == null)
+        public virtual async Task<UserData> FindByIdAsync(Guid id)
         {
-            return null;
+            var userData = await UserLookupServiceProvider.FindByIdAsync(id);
+            if (userData == null)
+            {
+                return null;
+            }
+
+            return new UserData(userData);
         }
 
-        return new UserData(userData);
-    }
+        public virtual async Task<UserData> FindByUserNameAsync(string userName)
+        {
+            var userData = await UserLookupServiceProvider.FindByUserNameAsync(userName);
+            if (userData == null)
+            {
+                return null;
+            }
 
-    public async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
-    {
-        var users = await UserLookupServiceProvider.SearchAsync(
-            input.Sorting,
-            input.Filter,
-            input.MaxResultCount,
-            input.SkipCount
-        );
+            return new UserData(userData);
+        }
 
-        return new ListResultDto<UserData>(
-            users
-                .Select(u => new UserData(u))
-                .ToList()
-        );
-    }
+        public async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
+        {
+            var users = await UserLookupServiceProvider.SearchAsync(
+                input.Sorting,
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount
+            );
 
-    public async Task<long> GetCountAsync(UserLookupCountInputDto input)
-    {
-        return await UserLookupServiceProvider.GetCountAsync(input.Filter);
+            return new ListResultDto<UserData>(
+                users
+                    .Select(u => new UserData(u))
+                    .ToList()
+            );
+        }
+
+        public async Task<long> GetCountAsync(UserLookupCountInputDto input)
+        {
+            return await UserLookupServiceProvider.GetCountAsync(input.Filter);
+        }
     }
 }

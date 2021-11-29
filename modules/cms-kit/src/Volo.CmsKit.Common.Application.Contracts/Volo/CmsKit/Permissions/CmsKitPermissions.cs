@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace Volo.CmsKit.Permissions;
-
-public class CmsKitPermissions
+namespace Volo.CmsKit.Permissions
 {
-    public const string GroupName = "CmsKit.Public";
-
-    public static string[] GetAll()
+    public class CmsKitPermissions
     {
-        return ReflectionHelper.GetPublicConstantsRecursively(typeof(CmsKitPermissions));
+        public const string GroupName = "CmsKit.Public";
+
+        public static string[] GetAll()
+        {
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(CmsKitPermissions));
+        }
     }
 }

@@ -4,24 +4,25 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public class NullPermissionStore : IPermissionStore, ISingletonDependency
+namespace Volo.Abp.Authorization.Permissions
 {
-    public ILogger<NullPermissionStore> Logger { get; set; }
-
-    public NullPermissionStore()
+    public class NullPermissionStore : IPermissionStore, ISingletonDependency
     {
-        Logger = NullLogger<NullPermissionStore>.Instance;
-    }
+        public ILogger<NullPermissionStore> Logger { get; set; }
 
-    public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
-    {
-        return TaskCache.FalseResult;
-    }
+        public NullPermissionStore()
+        {
+            Logger = NullLogger<NullPermissionStore>.Instance;
+        }
 
-    public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
-    {
-        return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Prohibited));
+        public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
+        {
+            return TaskCache.FalseResult;
+        }
+
+        public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
+        {
+            return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Prohibited));
+        }
     }
 }

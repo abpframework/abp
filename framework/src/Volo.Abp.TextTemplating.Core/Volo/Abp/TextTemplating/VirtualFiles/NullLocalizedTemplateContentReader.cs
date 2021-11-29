@@ -1,16 +1,17 @@
-﻿namespace Volo.Abp.TextTemplating.VirtualFiles;
-
-public class NullLocalizedTemplateContentReader : ILocalizedTemplateContentReader
+﻿namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public static NullLocalizedTemplateContentReader Instance { get; } = new NullLocalizedTemplateContentReader();
-
-    private NullLocalizedTemplateContentReader()
+    public class NullLocalizedTemplateContentReader : ILocalizedTemplateContentReader
     {
+        public static NullLocalizedTemplateContentReader Instance { get; } = new NullLocalizedTemplateContentReader();
 
-    }
+        private NullLocalizedTemplateContentReader()
+        {
+            
+        }
 
-    public string GetContentOrNull(string culture)
-    {
-        return null;
+        public string GetContentOrNull(string culture)
+        {
+            return null;
+        }
     }
 }

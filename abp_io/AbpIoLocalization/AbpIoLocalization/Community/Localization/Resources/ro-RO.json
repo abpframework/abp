@@ -142,7 +142,6 @@
     "MinimumSearchContent": "Trebuie să introduceţi cel putin 3 caractere!",
     "Volo.AbpIo.Domain:060001": "Sursa URL(\"{ArticleUrl}\") nu este URL GitHub",
     "Volo.AbpIo.Domain:060002": "Conţinutul articolului nu este disponibil din resursa de pe GitHub(\"{ArticleUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Nu a fost găsit conţinutul articolului!",
-    "SeeMore": "Vezi mai mult"
+    "Volo.AbpIo.Domain:060003": "Nu a fost găsit conţinutul articolului!"
   }
 }

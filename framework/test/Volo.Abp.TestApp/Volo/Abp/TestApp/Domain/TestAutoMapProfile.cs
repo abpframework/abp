@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.TestApp.Domain;
-
-public class TestAutoMapProfile : Profile
+namespace Volo.Abp.TestApp.Domain
 {
-    public TestAutoMapProfile()
+    public class TestAutoMapProfile : Profile
     {
-        CreateMap<PersonEto, Person>().ReverseMap();
+        public TestAutoMapProfile()
+        {
+            CreateMap<PersonEto, Person>().ReverseMap();
+        }
     }
 }

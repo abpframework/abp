@@ -1,21 +1,22 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-public class AutoEntityDistributedEventSelectorListExtensions_Tests
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    [Fact]
-    public void Add_Entity()
+    public class AutoEntityDistributedEventSelectorListExtensions_Tests
     {
-        var selectors = new AutoEntityDistributedEventSelectorList();
-        selectors.Add<MyEntity>();
+        [Fact]
+        public void Add_Entity()
+        {
+            var selectors = new AutoEntityDistributedEventSelectorList();
+            selectors.Add<MyEntity>();
+            
+            selectors.IsMatch(typeof(MyEntity)).ShouldBeTrue();
+        }
 
-        selectors.IsMatch(typeof(MyEntity)).ShouldBeTrue();
-    }
-
-    private class MyEntity : Entity<string>
-    {
-
+        private class MyEntity : Entity<string>
+        {
+            
+        }
     }
 }

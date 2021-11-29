@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Uow;
-
-public interface IUnitOfWorkTransactionBehaviourProvider
+﻿namespace Volo.Abp.Uow
 {
-    bool? IsTransactional { get; }
+    public interface IUnitOfWorkTransactionBehaviourProvider
+    {
+        bool? IsTransactional { get; }
+    }
 }

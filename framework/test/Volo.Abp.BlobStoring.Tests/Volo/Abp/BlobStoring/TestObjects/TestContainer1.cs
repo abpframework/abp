@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.TestObjects;
-
-public class TestContainer1
+﻿namespace Volo.Abp.BlobStoring.TestObjects
 {
-
+    public class TestContainer1
+    {
+        
+    }
 }

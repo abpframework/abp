@@ -1,50 +1,51 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Volo.Abp.Cli.Utils;
-
-public class PlatformHelper
+namespace Volo.Abp.Cli.Utils
 {
-    public static OSPlatform GetOperatingSystem()
+    public class PlatformHelper
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        public static OSPlatform GetOperatingSystem()
         {
-            //MAC
-            return OSPlatform.OSX;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                //MAC
+                return OSPlatform.OSX;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return OSPlatform.Linux;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return OSPlatform.Windows;
+            }
+
+            throw new Exception("Cannot determine operating system!");
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        public static RuntimePlatform GetPlatform()
         {
-            return OSPlatform.Linux;
-        }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+                RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return RuntimePlatform.LinuxOrMacOs;
+            }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            return OSPlatform.Windows;
-        }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return RuntimePlatform.Windows;
+            }
 
-        throw new Exception("Cannot determine operating system!");
+            throw new Exception("Cannot determine runtime platform!");
+        }
     }
 
-    public static RuntimePlatform GetPlatform()
+    public enum RuntimePlatform
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
-            RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            return RuntimePlatform.LinuxOrMacOs;
-        }
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            return RuntimePlatform.Windows;
-        }
-
-        throw new Exception("Cannot determine runtime platform!");
+        Windows = 1,
+        LinuxOrMacOs = 2
     }
-}
-
-public enum RuntimePlatform
-{
-    Windows = 1,
-    LinuxOrMacOs = 2
 }

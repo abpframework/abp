@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Volo.Abp.AspNetCore.ExceptionHandling;
-
-public class AbpExceptionHttpStatusCodeOptions
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
-    public IDictionary<string, HttpStatusCode> ErrorCodeToHttpStatusCodeMappings { get; }
-
-    public AbpExceptionHttpStatusCodeOptions()
+    public class AbpExceptionHttpStatusCodeOptions
     {
-        ErrorCodeToHttpStatusCodeMappings = new Dictionary<string, HttpStatusCode>();
-    }
+        public IDictionary<string, HttpStatusCode> ErrorCodeToHttpStatusCodeMappings { get; }
 
-    public void Map(string errorCode, HttpStatusCode httpStatusCode)
-    {
-        ErrorCodeToHttpStatusCodeMappings[errorCode] = httpStatusCode;
+        public AbpExceptionHttpStatusCodeOptions()
+        {
+            ErrorCodeToHttpStatusCodeMappings = new Dictionary<string, HttpStatusCode>();
+        }
+
+        public void Map(string errorCode, HttpStatusCode httpStatusCode)
+        {
+            ErrorCodeToHttpStatusCodeMappings[errorCode] = httpStatusCode;
+        }
     }
 }

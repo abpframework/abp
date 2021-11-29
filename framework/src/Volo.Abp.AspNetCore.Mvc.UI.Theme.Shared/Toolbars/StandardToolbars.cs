@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
-
-public static class StandardToolbars
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
-    public const string Main = "Main";
+    public static class StandardToolbars
+    {
+        public const string Main = "Main";
+    }
 }

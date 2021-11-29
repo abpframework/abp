@@ -7,41 +7,42 @@ using Volo.Abp.MongoDB.DependencyInjection;
 using Volo.Abp.Uow.MongoDB;
 using Volo.Abp.MongoDB.DistributedEvents;
 
-namespace Volo.Abp.MongoDB;
-
-[DependsOn(typeof(AbpDddDomainModule))]
-public class AbpMongoDbModule : AbpModule
+namespace Volo.Abp.MongoDB
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpDddDomainModule))]
+    public class AbpMongoDbModule : AbpModule
     {
-        context.Services.AddConventionalRegistrar(new AbpMongoDbConventionalRegistrar());
-    }
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpMongoDbConventionalRegistrar());
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.TryAddTransient(
-            typeof(IMongoDbContextProvider<>),
-            typeof(UnitOfWorkMongoDbContextProvider<>)
-        );
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.TryAddTransient(
+                typeof(IMongoDbContextProvider<>),
+                typeof(UnitOfWorkMongoDbContextProvider<>)
+            );
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<>),
-            typeof(MongoDbRepositoryFilterer<>)
-        );
+            context.Services.TryAddTransient(
+                typeof(IMongoDbRepositoryFilterer<>),
+                typeof(MongoDbRepositoryFilterer<>)
+            );
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<,>),
-            typeof(MongoDbRepositoryFilterer<,>)
-        );
+            context.Services.TryAddTransient(
+                typeof(IMongoDbRepositoryFilterer<,>),
+                typeof(MongoDbRepositoryFilterer<,>)
+            );
 
-        context.Services.AddTransient(
-            typeof(IMongoDbContextEventOutbox<>),
-            typeof(MongoDbContextEventOutbox<>)
-        );
-
-        context.Services.AddTransient(
-            typeof(IMongoDbContextEventInbox<>),
-            typeof(MongoDbContextEventInbox<>)
-        );
+            context.Services.AddTransient(
+                typeof(IMongoDbContextEventOutbox<>),
+                typeof(MongoDbContextEventOutbox<>)
+            );
+            
+            context.Services.AddTransient(
+                typeof(IMongoDbContextEventInbox<>),
+                typeof(MongoDbContextEventInbox<>)
+            );
+        }
     }
 }

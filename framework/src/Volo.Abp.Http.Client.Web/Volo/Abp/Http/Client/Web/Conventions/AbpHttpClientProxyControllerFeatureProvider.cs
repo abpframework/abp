@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
-namespace Volo.Abp.Http.Client.Web.Conventions;
-
-public class AbpHttpClientProxyControllerFeatureProvider : ControllerFeatureProvider
+namespace Volo.Abp.Http.Client.Web.Conventions
 {
-    protected override bool IsController(TypeInfo typeInfo)
+    public class AbpHttpClientProxyControllerFeatureProvider : ControllerFeatureProvider
     {
-        return AbpHttpClientProxyHelper.IsClientProxyService(typeInfo);
+        protected override bool IsController(TypeInfo typeInfo)
+        {
+            return AbpHttpClientProxyHelper.IsClientProxyService(typeInfo);
+        }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.SettingManagement.Blazor;
-
-public class SettingManagementBlazorAutoMapperProfile : Profile
+namespace Volo.Abp.SettingManagement.Blazor
 {
-    public SettingManagementBlazorAutoMapperProfile()
+    public class SettingManagementBlazorAutoMapperProfile : Profile
     {
-        CreateMap<EmailSettingsDto, UpdateEmailSettingsDto>();
+        public SettingManagementBlazorAutoMapperProfile()
+        {
+            CreateMap<EmailSettingsDto, UpdateEmailSettingsDto>();
+        }
     }
 }

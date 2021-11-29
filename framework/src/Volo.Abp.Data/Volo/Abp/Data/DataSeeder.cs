@@ -4,34 +4,35 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Data;
-
-//TODO: Create a Volo.Abp.Data.Seeding namespace?
-public class DataSeeder : IDataSeeder, ITransientDependency
+namespace Volo.Abp.Data
 {
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-    protected AbpDataSeedOptions Options { get; }
-
-    public DataSeeder(
-        IOptions<AbpDataSeedOptions> options,
-        IServiceScopeFactory serviceScopeFactory)
+    //TODO: Create a Volo.Abp.Data.Seeding namespace?
+    public class DataSeeder : IDataSeeder, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        Options = options.Value;
-    }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpDataSeedOptions Options { get; }
 
-    [UnitOfWork]
-    public virtual async Task SeedAsync(DataSeedContext context)
-    {
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public DataSeeder(
+            IOptions<AbpDataSeedOptions> options,
+            IServiceScopeFactory serviceScopeFactory)
         {
-            foreach (var contributorType in Options.Contributors)
-            {
-                var contributor = (IDataSeedContributor)scope
-                    .ServiceProvider
-                    .GetRequiredService(contributorType);
+            ServiceScopeFactory = serviceScopeFactory;
+            Options = options.Value;
+        }
 
-                await contributor.SeedAsync(context);
+        [UnitOfWork]
+        public virtual async Task SeedAsync(DataSeedContext context)
+        {
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                foreach (var contributorType in Options.Contributors)
+                {
+                    var contributor = (IDataSeedContributor) scope
+                        .ServiceProvider
+                        .GetRequiredService(contributorType);
+
+                    await contributor.SeedAsync(context);
+                }
             }
         }
     }

@@ -2,37 +2,38 @@
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.EventBus;
-
-[AttributeUsage(AttributeTargets.Class)]
-public class EventNameAttribute : Attribute, IEventNameProvider
+namespace Volo.Abp.EventBus
 {
-    public virtual string Name { get; }
-
-    public EventNameAttribute([NotNull] string name)
+    [AttributeUsage(AttributeTargets.Class)]
+    public class EventNameAttribute : Attribute, IEventNameProvider
     {
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
-    }
+        public virtual string Name { get; }
 
-    public static string GetNameOrDefault<TEvent>()
-    {
-        return GetNameOrDefault(typeof(TEvent));
-    }
+        public EventNameAttribute([NotNull] string name)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+        }
 
-    public static string GetNameOrDefault([NotNull] Type eventType)
-    {
-        Check.NotNull(eventType, nameof(eventType));
+        public static string GetNameOrDefault<TEvent>()
+        {
+            return GetNameOrDefault(typeof(TEvent));
+        }
 
-        return eventType
-                   .GetCustomAttributes(true)
-                   .OfType<IEventNameProvider>()
-                   .FirstOrDefault()
-                   ?.GetName(eventType)
-               ?? eventType.FullName;
-    }
+        public static string GetNameOrDefault([NotNull] Type eventType)
+        {
+            Check.NotNull(eventType, nameof(eventType));
 
-    public string GetName(Type eventType)
-    {
-        return Name;
+            return eventType
+                       .GetCustomAttributes(true)
+                       .OfType<IEventNameProvider>()
+                       .FirstOrDefault()
+                       ?.GetName(eventType)
+                   ?? eventType.FullName;
+        }
+
+        public string GetName(Type eventType)
+        {
+            return Name;
+        }
     }
 }

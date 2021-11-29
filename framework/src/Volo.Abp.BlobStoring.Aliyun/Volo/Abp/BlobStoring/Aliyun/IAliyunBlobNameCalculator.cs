@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.Aliyun;
-
-public interface IAliyunBlobNameCalculator
+﻿namespace Volo.Abp.BlobStoring.Aliyun
 {
-    string Calculate(BlobProviderArgs args);
+    public interface IAliyunBlobNameCalculator
+    {
+        string Calculate(BlobProviderArgs args);
+    }
 }

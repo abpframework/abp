@@ -1,40 +1,41 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Primitives;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem;
-
-/* Inspired from the Microsoft.Extensions.FileProviders.Physical package. */
-internal static class PathUtils
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    private static readonly char[] PathSeparators = { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-
-    public static bool PathNavigatesAboveRoot(string path)
+    /* Inspired from the Microsoft.Extensions.FileProviders.Physical package. */
+    internal static class PathUtils
     {
-        var tokenizer = new StringTokenizer(path, PathSeparators);
-        var depth = 0;
+        private static readonly char[] PathSeparators = {Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar};
 
-        foreach (var segment in tokenizer)
+        public static bool PathNavigatesAboveRoot(string path)
         {
-            if (segment.Equals(".") || segment.Equals(""))
-            {
-                continue;
-            }
+            var tokenizer = new StringTokenizer(path, PathSeparators);
+            var depth = 0;
 
-            if (segment.Equals(".."))
+            foreach (var segment in tokenizer)
             {
-                depth--;
-
-                if (depth == -1)
+                if (segment.Equals(".") || segment.Equals(""))
                 {
-                    return true;
+                    continue;
+                }
+
+                if (segment.Equals(".."))
+                {
+                    depth--;
+
+                    if (depth == -1)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    depth++;
                 }
             }
-            else
-            {
-                depth++;
-            }
-        }
 
-        return false;
+            return false;
+        }
     }
 }

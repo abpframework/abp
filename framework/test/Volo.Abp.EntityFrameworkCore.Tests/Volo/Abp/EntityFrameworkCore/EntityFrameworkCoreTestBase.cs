@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public abstract class EntityFrameworkCoreTestBase : AbpIntegratedTest<AbpEntityFrameworkCoreTestModule>
+namespace Volo.Abp.EntityFrameworkCore
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class EntityFrameworkCoreTestBase : AbpIntegratedTest<AbpEntityFrameworkCoreTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

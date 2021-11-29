@@ -2,29 +2,30 @@
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.SettingManagement;
-
-public class TenantSettingManagementProvider : SettingManagementProvider, ITransientDependency
+namespace Volo.Abp.SettingManagement
 {
-    public override string Name => TenantSettingValueProvider.ProviderName;
-
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public TenantSettingManagementProvider(
-        ISettingManagementStore settingManagementStore,
-        ICurrentTenant currentTenant)
-        : base(settingManagementStore)
+    public class TenantSettingManagementProvider : SettingManagementProvider, ITransientDependency
     {
-        CurrentTenant = currentTenant;
-    }
+        public override string Name => TenantSettingValueProvider.ProviderName;
 
-    protected override string NormalizeProviderKey(string providerKey)
-    {
-        if (providerKey != null)
+        protected ICurrentTenant CurrentTenant { get; }
+
+        public TenantSettingManagementProvider(
+            ISettingManagementStore settingManagementStore,
+            ICurrentTenant currentTenant)
+            : base(settingManagementStore)
         {
-            return providerKey;
+            CurrentTenant = currentTenant;
         }
 
-        return CurrentTenant.Id?.ToString();
+        protected override string NormalizeProviderKey(string providerKey)
+        {
+            if (providerKey != null)
+            {
+                return providerKey;
+            }
+
+            return CurrentTenant.Id?.ToString();
+        }
     }
 }

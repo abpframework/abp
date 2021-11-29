@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
-
-public class AbpCardTextColorTagHelperService : AbpTagHelperService<AbpCardTextColorTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpCardTextColorTagHelperService : AbpTagHelperService<AbpCardTextColorTagHelper>
     {
-        SetTextColor(context, output);
-    }
-
-    protected virtual void SetTextColor(TagHelperContext context, TagHelperOutput output)
-    {
-        if (TagHelper.TextColor == AbpCardTextColorType.Default)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            return;
+            SetTextColor(context, output);
         }
 
-        output.Attributes.AddClass("text-" + TagHelper.TextColor.ToString().ToLowerInvariant());
+        protected virtual void SetTextColor(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.TextColor == AbpCardTextColorType.Default)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("text-" + TagHelper.TextColor.ToString().ToLowerInvariant());
+        }
     }
 }

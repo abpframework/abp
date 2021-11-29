@@ -6,34 +6,35 @@ using Volo.Abp.Settings;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Emailing;
-
-[DependsOn(
-    typeof(AbpSettingsModule),
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpBackgroundJobsAbstractionsModule),
-    typeof(AbpLocalizationModule),
-    typeof(AbpTextTemplatingModule)
-    )]
-public class AbpEmailingModule : AbpModule
+namespace Volo.Abp.Emailing
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpSettingsModule),
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpBackgroundJobsAbstractionsModule),
+        typeof(AbpLocalizationModule),
+        typeof(AbpTextTemplatingModule)
+        )]
+    public class AbpEmailingModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpEmailingModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpEmailingModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<EmailingResource>("en")
-                .AddVirtualJson("/Volo/Abp/Emailing/Localization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<EmailingResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Emailing/Localization");
+            });
 
-        Configure<AbpBackgroundJobOptions>(options =>
-        {
-            options.AddJob<BackgroundEmailSendingJob>();
-        });
+            Configure<AbpBackgroundJobOptions>(options =>
+            {
+                options.AddJob<BackgroundEmailSendingJob>();
+            });
+        }
     }
 }

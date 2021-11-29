@@ -2,33 +2,34 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
-
-public class AbpAntiForgeryCookieNameProvider : ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
-    private readonly IOptionsMonitor<CookieAuthenticationOptions> _namedOptionsAccessor;
-    private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
-
-    public AbpAntiForgeryCookieNameProvider(
-        IOptionsMonitor<CookieAuthenticationOptions> namedOptionsAccessor,
-        IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions)
+    public class AbpAntiForgeryCookieNameProvider : ITransientDependency
     {
-        _namedOptionsAccessor = namedOptionsAccessor;
-        _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
-    }
+        private readonly IOptionsMonitor<CookieAuthenticationOptions> _namedOptionsAccessor;
+        private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
 
-    public virtual string GetAuthCookieNameOrNull()
-    {
-        if (_abpAntiForgeryOptions.AuthCookieSchemaName == null)
+        public AbpAntiForgeryCookieNameProvider(
+            IOptionsMonitor<CookieAuthenticationOptions> namedOptionsAccessor,
+            IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions)
         {
-            return null;
+            _namedOptionsAccessor = namedOptionsAccessor;
+            _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
         }
 
-        return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
-    }
+        public virtual string GetAuthCookieNameOrNull()
+        {
+            if (_abpAntiForgeryOptions.AuthCookieSchemaName == null)
+            {
+                return null;
+            }
 
-    public virtual string GetAntiForgeryCookieNameOrNull()
-    {
-        return _abpAntiForgeryOptions.TokenCookie.Name;
+            return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
+        }
+
+        public virtual string GetAntiForgeryCookieNameOrNull()
+        {
+            return _abpAntiForgeryOptions.TokenCookie.Name;
+        }
     }
 }

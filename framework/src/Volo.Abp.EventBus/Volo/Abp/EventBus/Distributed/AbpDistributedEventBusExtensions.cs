@@ -1,17 +1,18 @@
 ﻿using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EventBus.Boxes;
-
-public static class AbpDistributedEventBusExtensions
+namespace Volo.Abp.EventBus.Boxes
 {
-    public static ISupportsEventBoxes AsSupportsEventBoxes(this IDistributedEventBus eventBus)
+    public static class AbpDistributedEventBusExtensions
     {
-        var supportsEventBoxes = eventBus as ISupportsEventBoxes;
-        if (supportsEventBoxes == null)
+        public static ISupportsEventBoxes AsSupportsEventBoxes(this IDistributedEventBus eventBus)
         {
-            throw new AbpException($"Given type ({eventBus.GetType().AssemblyQualifiedName}) should implement {nameof(ISupportsEventBoxes)}!");
-        }
-
-        return supportsEventBoxes;
+            var supportsEventBoxes = eventBus as ISupportsEventBoxes;
+            if (supportsEventBoxes == null)
+            {
+                throw new AbpException($"Given type ({eventBus.GetType().AssemblyQualifiedName}) should implement {nameof(ISupportsEventBoxes)}!");
+            }
+            
+            return supportsEventBoxes;
+        } 
     }
 }

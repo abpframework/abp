@@ -10,48 +10,49 @@ using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore.Repositories;
-
-public class Repository_Queryable_Tests : Repository_Queryable_Tests<AbpEntityFrameworkCoreTestModule>
+namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
-    private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
-    private readonly IRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
-
-    public Repository_Queryable_Tests()
+    public class Repository_Queryable_Tests : Repository_Queryable_Tests<AbpEntityFrameworkCoreTestModule>
     {
-        _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
-        _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext>>();
-    }
+        private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
 
-    [Fact]
-    public async Task GetBookList()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        public Repository_Queryable_Tests()
         {
-            (await _bookRepository.AnyAsync()).ShouldBeTrue();
-            return Task.CompletedTask;
-        });
-    }
+            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
+            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext>>();
+        }
 
-    [Fact]
-    public async Task GetPhoneInSecondDbContextList()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task GetBookList()
         {
-            (await _phoneInSecondDbContextRepository.AnyAsync()).ShouldBeTrue();
-            return Task.CompletedTask;
-        });
-    }
+            await WithUnitOfWorkAsync(async () =>
+            {
+                (await _bookRepository.AnyAsync()).ShouldBeTrue();
+                return Task.CompletedTask;
+            });
+        }
 
-    [Fact]
-    public async Task EfCore_Include_Extension()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task GetPhoneInSecondDbContextList()
         {
-            var person = await (await PersonRepository.GetDbSetAsync()).Include(p => p.Phones).SingleAsync(p => p.Id == TestDataBuilder.UserDouglasId);
-            person.Name.ShouldBe("Douglas");
-            person.Phones.Count.ShouldBe(2);
-            return Task.CompletedTask;
-        });
+            await WithUnitOfWorkAsync(async () =>
+            {
+                (await _phoneInSecondDbContextRepository.AnyAsync()).ShouldBeTrue();
+                return Task.CompletedTask;
+            });
+        }
+
+        [Fact]
+        public async Task EfCore_Include_Extension()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var person = await (await PersonRepository.GetDbSetAsync()).Include(p => p.Phones).SingleAsync(p => p.Id == TestDataBuilder.UserDouglasId);
+                person.Name.ShouldBe("Douglas");
+                person.Phones.Count.ShouldBe(2);
+                return Task.CompletedTask;
+            });
+        }
     }
 }

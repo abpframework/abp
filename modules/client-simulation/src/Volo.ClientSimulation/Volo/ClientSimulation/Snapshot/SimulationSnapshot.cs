@@ -2,66 +2,67 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.ClientSimulation.Snapshot;
-
-[Serializable]
-public class SimulationSnapshot
+namespace Volo.ClientSimulation.Snapshot
 {
-    public SimulationState State { get; set; }
-
-    public List<ClientSnapshot> Clients { get; set; }
-
-    public List<ScenarioSummarySnapshot> Scenarios { get; set; }
-
-    public void CreateSummaries()
+    [Serializable]
+    public class SimulationSnapshot
     {
-        var scenarioDictionary = new Dictionary<string, ScenarioSummarySnapshot>();
+        public SimulationState State { get; set; }
 
-        foreach (var client in Clients)
+        public List<ClientSnapshot> Clients { get; set; }
+
+        public List<ScenarioSummarySnapshot> Scenarios { get; set; }
+
+        public void CreateSummaries()
         {
-            var scenarioSummary = scenarioDictionary.GetOrAdd(
-                client.Scenario.DisplayText,
-                () => new ScenarioSummarySnapshot
-                {
-                    DisplayText = client.Scenario.DisplayText,
-                    Steps = new List<ScenarioStepSummarySnapshot>()
-                }
-            );
+            var scenarioDictionary = new Dictionary<string, ScenarioSummarySnapshot>();
 
-            foreach (var scenarioStep in client.Scenario.Steps)
+            foreach (var client in Clients)
             {
-                var scenarioStepSummary = scenarioSummary.Steps.FirstOrDefault(s => s.DisplayText == scenarioStep.DisplayText);
-                if (scenarioStepSummary == null)
-                {
-                    scenarioStepSummary = new ScenarioStepSummarySnapshot
+                var scenarioSummary = scenarioDictionary.GetOrAdd(
+                    client.Scenario.DisplayText,
+                    () => new ScenarioSummarySnapshot
                     {
-                        DisplayText = scenarioStep.DisplayText
-                    };
+                        DisplayText = client.Scenario.DisplayText,
+                        Steps = new List<ScenarioStepSummarySnapshot>()
+                    }
+                );
 
-                    scenarioSummary.Steps.Add(scenarioStepSummary);
-                }
-
-                scenarioStepSummary.ExecutionCount += scenarioStep.ExecutionCount;
-                scenarioStepSummary.SuccessCount += scenarioStep.SuccessCount;
-                scenarioStepSummary.FailCount += scenarioStep.FailCount;
-                scenarioStepSummary.TotalExecutionDuration += scenarioStep.TotalExecutionDuration;
-
-                if (scenarioStepSummary.MinExecutionDuration > scenarioStep.MinExecutionDuration)
+                foreach (var scenarioStep in client.Scenario.Steps)
                 {
-                    scenarioStepSummary.MinExecutionDuration = scenarioStep.MinExecutionDuration;
-                }
+                    var scenarioStepSummary = scenarioSummary.Steps.FirstOrDefault(s => s.DisplayText == scenarioStep.DisplayText);
+                    if (scenarioStepSummary == null)
+                    {
+                        scenarioStepSummary = new ScenarioStepSummarySnapshot
+                        {
+                            DisplayText = scenarioStep.DisplayText
+                        };
 
-                if (scenarioStepSummary.MaxExecutionDuration < scenarioStep.MaxExecutionDuration)
-                {
-                    scenarioStepSummary.MaxExecutionDuration = scenarioStep.MaxExecutionDuration;
-                }
+                        scenarioSummary.Steps.Add(scenarioStepSummary);
+                    }
 
-                scenarioStepSummary.AvgExecutionDuration = scenarioStepSummary.SuccessCount == 0
-                    ? 0.0
-                    : scenarioStepSummary.TotalExecutionDuration / scenarioStepSummary.SuccessCount;
+                    scenarioStepSummary.ExecutionCount += scenarioStep.ExecutionCount;
+                    scenarioStepSummary.SuccessCount += scenarioStep.SuccessCount;
+                    scenarioStepSummary.FailCount += scenarioStep.FailCount;
+                    scenarioStepSummary.TotalExecutionDuration += scenarioStep.TotalExecutionDuration;
+
+                    if (scenarioStepSummary.MinExecutionDuration > scenarioStep.MinExecutionDuration)
+                    {
+                        scenarioStepSummary.MinExecutionDuration = scenarioStep.MinExecutionDuration;
+                    }
+
+                    if (scenarioStepSummary.MaxExecutionDuration < scenarioStep.MaxExecutionDuration)
+                    {
+                        scenarioStepSummary.MaxExecutionDuration = scenarioStep.MaxExecutionDuration;
+                    }
+
+                    scenarioStepSummary.AvgExecutionDuration = scenarioStepSummary.SuccessCount == 0
+                        ? 0.0
+                        : scenarioStepSummary.TotalExecutionDuration / scenarioStepSummary.SuccessCount;
+                }
             }
-        }
 
-        Scenarios = scenarioDictionary.Values.ToList();
+            Scenarios = scenarioDictionary.Values.ToList();
+        }
     }
 }

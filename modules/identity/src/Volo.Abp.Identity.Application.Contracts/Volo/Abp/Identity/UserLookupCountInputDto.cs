@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Identity;
-
-public class UserLookupCountInputDto
+﻿namespace Volo.Abp.Identity
 {
-    public string Filter { get; set; }
+    public class UserLookupCountInputDto
+    {
+        public string Filter { get; set; }
+    }
 }

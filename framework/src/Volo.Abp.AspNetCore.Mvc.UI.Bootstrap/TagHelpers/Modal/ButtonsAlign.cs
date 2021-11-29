@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
-
-public enum ButtonsAlign
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
-    Default,
-    Start,
-    Center,
-    Around,
-    Between,
-    End
+    public enum ButtonsAlign
+    {
+        Default,
+        Start,
+        Center,
+        Around,
+        Between,
+        End
+    }
 }

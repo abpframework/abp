@@ -4,25 +4,26 @@ using System.Collections.Generic;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands;
-
-public class CommandSelector : ICommandSelector, ITransientDependency
+namespace Volo.Abp.Cli.Commands
 {
-    protected AbpCliOptions Options { get; }
-
-    public CommandSelector(IOptions<AbpCliOptions> options)
+    public class CommandSelector : ICommandSelector, ITransientDependency
     {
-        Options = options.Value;
-    }
+        protected AbpCliOptions Options { get; }
 
-    public Type Select(CommandLineArgs commandLineArgs)
-    {
-        if (commandLineArgs.Command.IsNullOrWhiteSpace())
+        public CommandSelector(IOptions<AbpCliOptions> options)
         {
-            return typeof(HelpCommand);
+            Options = options.Value;
         }
 
-        return Options.Commands.GetOrDefault(commandLineArgs.Command)
-               ?? typeof(HelpCommand);
+        public Type Select(CommandLineArgs commandLineArgs)
+        {
+            if (commandLineArgs.Command.IsNullOrWhiteSpace())
+            {
+                return typeof(HelpCommand);
+            }
+
+            return Options.Commands.GetOrDefault(commandLineArgs.Command)
+                   ?? typeof(HelpCommand);
+        }
     }
 }

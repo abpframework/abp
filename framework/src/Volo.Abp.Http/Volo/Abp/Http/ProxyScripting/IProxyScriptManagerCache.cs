@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.Http.ProxyScripting;
-
-public interface IProxyScriptManagerCache
+namespace Volo.Abp.Http.ProxyScripting
 {
-    string GetOrAdd(string key, Func<string> factory);
+    public interface IProxyScriptManagerCache
+    {
+        string GetOrAdd(string key, Func<string> factory);
 
-    void Set(string key, string value);
+        void Set(string key, string value);
+    }
 }

@@ -1,8 +1,9 @@
 using AutoMapper;
 
-namespace Volo.Abp.AutoMapper;
-
-internal class MapperAccessor : IMapperAccessor
+namespace Volo.Abp.AutoMapper
 {
-    public IMapper Mapper { get; set; }
+    internal class MapperAccessor : IMapperAccessor
+    {
+        public IMapper Mapper { get; set; }
+    }
 }

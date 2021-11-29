@@ -6,30 +6,31 @@ using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.EntityFrameworkCore;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-[DependsOn(typeof(AbpDddDomainModule))]
-public class AbpEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpDddDomainModule))]
+    public class AbpEntityFrameworkCoreModule : AbpModule
     {
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.PreConfigure(abpDbContextConfigurationContext =>
+            Configure<AbpDbContextOptions>(options =>
             {
-                abpDbContextConfigurationContext.DbContextOptions
-                    .ConfigureWarnings(warnings =>
-                    {
-                        warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
-                    });
+                options.PreConfigure(abpDbContextConfigurationContext =>
+                {
+                    abpDbContextConfigurationContext.DbContextOptions
+                        .ConfigureWarnings(warnings =>
+                        {
+                            warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
+                        });
+                });
             });
-        });
 
-        context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
-        context.Services.AddTransient(typeof(IDbContextEventOutbox<>), typeof(DbContextEventOutbox<>));
-        context.Services.AddTransient(typeof(IDbContextEventInbox<>), typeof(DbContextEventInbox<>));
+            context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+            context.Services.AddTransient(typeof(IDbContextEventOutbox<>), typeof(DbContextEventOutbox<>));
+            context.Services.AddTransient(typeof(IDbContextEventInbox<>), typeof(DbContextEventInbox<>));
 
-        context.Services.AddTransient(typeof(ISqlRawDbContextEventOutbox<>), typeof(SqlRawDbContextEventOutbox<>));
-        context.Services.AddTransient(typeof(ISqlRawDbContextEventInbox<>), typeof(SqlRawDbContextEventInbox<>));
+            context.Services.AddTransient(typeof(ISqlRawDbContextEventOutbox<>), typeof(SqlRawDbContextEventOutbox<>));
+            context.Services.AddTransient(typeof(ISqlRawDbContextEventInbox<>), typeof(SqlRawDbContextEventInbox<>));
+        }
     }
 }

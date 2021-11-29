@@ -2,21 +2,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.PermissionManagement.MongoDB;
-
-[DependsOn(
-    typeof(AbpPermissionManagementDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class AbpPermissionManagementMongoDbModule : AbpModule
+namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpPermissionManagementDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class AbpPermissionManagementMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<PermissionManagementMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<IPermissionManagementMongoDbContext>();
+            context.Services.AddMongoDbContext<PermissionManagementMongoDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IPermissionManagementMongoDbContext>();
 
-            options.AddRepository<PermissionGrant, MongoPermissionGrantRepository>();
-        });
+                options.AddRepository<PermissionGrant, MongoPermissionGrantRepository>();
+            });
+        }
     }
 }

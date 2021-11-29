@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Account.Web.ProfileManagement;
-
-public class ProfileManagementPageCreationContext
+namespace Volo.Abp.Account.Web.ProfileManagement
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public List<ProfileManagementPageGroup> Groups { get; }
-
-    public ProfileManagementPageCreationContext(IServiceProvider serviceProvider)
+    public class ProfileManagementPageCreationContext
     {
-        ServiceProvider = serviceProvider;
+        public IServiceProvider ServiceProvider { get; }
 
-        Groups = new List<ProfileManagementPageGroup>();
+        public List<ProfileManagementPageGroup> Groups { get; }
+
+        public ProfileManagementPageCreationContext(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+
+            Groups = new List<ProfileManagementPageGroup>();
+        }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace System.Runtime;
-
-public interface IOSPlatformProvider
+namespace System.Runtime
 {
-    OSPlatform GetCurrentOSPlatform();
+    public interface IOSPlatformProvider
+    {
+        OSPlatform GetCurrentOSPlatform();
+    }
 }

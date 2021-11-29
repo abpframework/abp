@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.UI.Navigation;
-
-public interface IMenuManager
+namespace Volo.Abp.UI.Navigation
 {
-    Task<ApplicationMenu> GetAsync(string name);
-
-    Task<ApplicationMenu> GetMainMenuAsync();
+    public interface IMenuManager
+    {
+        Task<ApplicationMenu> GetAsync(string name);
+        
+        Task<ApplicationMenu> GetMainMenuAsync();
+    }
 }

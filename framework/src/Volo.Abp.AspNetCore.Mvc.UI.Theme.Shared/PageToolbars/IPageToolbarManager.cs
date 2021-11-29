@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-
-public interface IPageToolbarManager
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
 {
-    Task<PageToolbarItem[]> GetItemsAsync(string pageName);
+    public interface IPageToolbarManager
+    {
+        Task<PageToolbarItem[]> GetItemsAsync(string pageName);
+    }
 }

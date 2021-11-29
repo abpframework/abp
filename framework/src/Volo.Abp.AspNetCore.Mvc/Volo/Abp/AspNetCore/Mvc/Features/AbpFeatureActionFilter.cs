@@ -5,26 +5,27 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Features;
-
-public class AbpFeatureActionFilter : IAsyncActionFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Features
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public class AbpFeatureActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        if (!context.ActionDescriptor.IsControllerAction())
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            await next();
-            return;
-        }
+            if (!context.ActionDescriptor.IsControllerAction())
+            {
+                await next();
+                return;
+            }
 
-        var methodInfo = context.ActionDescriptor.GetMethodInfo();
+            var methodInfo = context.ActionDescriptor.GetMethodInfo();
 
-        using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.FeatureChecking))
-        {
-            var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
-            await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
+            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.FeatureChecking))
+            {
+                var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
+                await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
 
-            await next();
+                await next();
+            }
         }
     }
 }

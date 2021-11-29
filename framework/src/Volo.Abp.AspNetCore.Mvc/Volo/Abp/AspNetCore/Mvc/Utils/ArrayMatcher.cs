@@ -1,41 +1,42 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.Utils;
-
-internal static class ArrayMatcher
+namespace Volo.Abp.AspNetCore.Mvc.Utils
 {
-    public static T[] Match<T>(T[] sourceArray, T[] destinationArray)
+    internal static class ArrayMatcher
     {
-        var result = new List<T>();
-
-        var currentMethodParamIndex = 0;
-        var parentItem = default(T);
-
-        foreach (var sourceItem in sourceArray)
+        public static T[] Match<T>(T[] sourceArray, T[] destinationArray)
         {
-            if (currentMethodParamIndex < destinationArray.Length)
-            {
-                var destinationItem = destinationArray[currentMethodParamIndex];
+            var result = new List<T>();
 
-                if (EqualityComparer<T>.Default.Equals(sourceItem, destinationItem))
+            var currentMethodParamIndex = 0;
+            var parentItem = default(T);
+
+            foreach (var sourceItem in sourceArray)
+            {
+                if (currentMethodParamIndex < destinationArray.Length)
                 {
-                    parentItem = default;
-                    currentMethodParamIndex++;
-                }
-                else
-                {
-                    if (parentItem == null)
+                    var destinationItem = destinationArray[currentMethodParamIndex];
+                    
+                    if (EqualityComparer<T>.Default.Equals(sourceItem, destinationItem))
                     {
-                        parentItem = destinationItem;
+                        parentItem = default;
                         currentMethodParamIndex++;
                     }
+                    else
+                    {
+                        if (parentItem == null)
+                        {
+                            parentItem = destinationItem;
+                            currentMethodParamIndex++;
+                        }
+                    }
                 }
+
+                var resultItem = EqualityComparer<T>.Default.Equals(parentItem, default) ? sourceItem : parentItem;
+                result.Add(resultItem);
             }
 
-            var resultItem = EqualityComparer<T>.Default.Equals(parentItem, default) ? sourceItem : parentItem;
-            result.Add(resultItem);
+            return result.ToArray();
         }
-
-        return result.ToArray();
     }
 }

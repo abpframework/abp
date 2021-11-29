@@ -4,26 +4,27 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    typeof(AbpAutofacModule)
-    )]
-public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAutofacModule)
+        )]
+    public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
     {
-        var app = context.GetApplicationBuilder();
-        var env = context.GetEnvironment();
-
-        if (env.IsDevelopment())
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            app.UseDeveloperExceptionPage();
-        }
+            var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
-        app.UseRouting();
-        app.UseStaticFiles();
-        app.UseConfiguredEndpoints();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseRouting();
+            app.UseStaticFiles();
+            app.UseConfiguredEndpoints();
+        }
     }
 }

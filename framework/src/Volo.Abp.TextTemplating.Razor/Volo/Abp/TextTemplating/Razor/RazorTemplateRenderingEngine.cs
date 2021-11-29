@@ -10,53 +10,42 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public const string EngineName = "Razor";
-    public override string Name => EngineName;
-
-    protected readonly IServiceScopeFactory ServiceScopeFactory;
-    protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
-
-    public RazorTemplateRenderingEngine(
-        IServiceScopeFactory serviceScopeFactory,
-        IAbpCompiledViewProvider abpCompiledViewProvider,
-        ITemplateDefinitionManager templateDefinitionManager,
-        ITemplateContentProvider templateContentProvider,
-        IStringLocalizerFactory stringLocalizerFactory)
-        : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
+    public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        AbpCompiledViewProvider = abpCompiledViewProvider;
-    }
+        public const string EngineName = "Razor";
+        public override string Name => EngineName;
 
-    public override async Task<string> RenderAsync(
-        [NotNull] string templateName,
-        [CanBeNull] object model = null,
-        [CanBeNull] string cultureName = null,
-        [CanBeNull] Dictionary<string, object> globalContext = null)
-    {
-        Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
+        protected readonly IServiceScopeFactory ServiceScopeFactory;
+        protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
 
-        if (globalContext == null)
+        public RazorTemplateRenderingEngine(
+            IServiceScopeFactory serviceScopeFactory,
+            IAbpCompiledViewProvider abpCompiledViewProvider,
+            ITemplateDefinitionManager templateDefinitionManager,
+            ITemplateContentProvider templateContentProvider,
+            IStringLocalizerFactory stringLocalizerFactory)
+            : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
         {
-            globalContext = new Dictionary<string, object>();
+            ServiceScopeFactory = serviceScopeFactory;
+            AbpCompiledViewProvider = abpCompiledViewProvider;
         }
 
-        if (cultureName == null)
+        public override async Task<string> RenderAsync(
+            [NotNull] string templateName,
+            [CanBeNull] object model = null,
+            [CanBeNull] string cultureName = null,
+            [CanBeNull] Dictionary<string, object> globalContext = null)
         {
-            return await RenderInternalAsync(
-                templateName,
-                null,
-                globalContext,
-                model
-            );
-        }
-        else
-        {
-            using (CultureHelper.Use(cultureName))
+            Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
+
+            if (globalContext == null)
+            {
+                globalContext = new Dictionary<string, object>();
+            }
+
+            if (cultureName == null)
             {
                 return await RenderInternalAsync(
                     templateName,
@@ -65,93 +54,105 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
                     model
                 );
             }
+            else
+            {
+                using (CultureHelper.Use(cultureName))
+                {
+                    return await RenderInternalAsync(
+                        templateName,
+                        null,
+                        globalContext,
+                        model
+                    );
+                }
+            }
         }
-    }
 
-    protected virtual async Task<string> RenderInternalAsync(
-        string templateName,
-        string body,
-        Dictionary<string, object> globalContext,
-        object model = null)
-    {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
-
-        var renderedContent = await RenderSingleTemplateAsync(
-            templateDefinition,
-            body,
-            globalContext,
-            model
-        );
-
-        if (templateDefinition.Layout != null)
+        protected virtual async Task<string> RenderInternalAsync(
+            string templateName,
+            string body,
+            Dictionary<string, object> globalContext,
+            object model = null)
         {
-            renderedContent = await RenderInternalAsync(
-                templateDefinition.Layout,
-                renderedContent,
-                globalContext
+            var templateDefinition = TemplateDefinitionManager.Get(templateName);
+
+            var renderedContent = await RenderSingleTemplateAsync(
+                templateDefinition,
+                body,
+                globalContext,
+                model
+            );
+
+            if (templateDefinition.Layout != null)
+            {
+                renderedContent = await RenderInternalAsync(
+                    templateDefinition.Layout,
+                    renderedContent,
+                    globalContext
+                );
+            }
+
+            return renderedContent;
+        }
+
+        protected virtual async Task<string> RenderSingleTemplateAsync(
+            TemplateDefinition templateDefinition,
+            string body,
+            Dictionary<string, object> globalContext,
+            object model = null)
+        {
+            return await RenderTemplateContentWithRazorAsync(
+                templateDefinition,
+                body,
+                globalContext,
+                model
             );
         }
 
-        return renderedContent;
-    }
-
-    protected virtual async Task<string> RenderSingleTemplateAsync(
-        TemplateDefinition templateDefinition,
-        string body,
-        Dictionary<string, object> globalContext,
-        object model = null)
-    {
-        return await RenderTemplateContentWithRazorAsync(
-            templateDefinition,
-            body,
-            globalContext,
-            model
-        );
-    }
-
-    protected virtual async Task<string> RenderTemplateContentWithRazorAsync(
-        TemplateDefinition templateDefinition,
-        string body,
-        Dictionary<string, object> globalContext,
-        object model = null)
-    {
-        var assembly = await AbpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
-        var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
-        var template = (IRazorTemplatePage)Activator.CreateInstance(templateType);
-
-        using (var scope = ServiceScopeFactory.CreateScope())
+        protected virtual async Task<string> RenderTemplateContentWithRazorAsync(
+            TemplateDefinition templateDefinition,
+            string body,
+            Dictionary<string, object> globalContext,
+            object model = null)
         {
-            var modelType = templateType
-                .GetInterfaces()
-                .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRazorTemplatePage<>))
-                .Select(x => x.GenericTypeArguments.FirstOrDefault())
-                .FirstOrDefault();
+            var assembly = await AbpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
+            var template = (IRazorTemplatePage) Activator.CreateInstance(templateType);
 
-            if (modelType != null)
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                GetType().GetMethod(nameof(SetModel), BindingFlags.Instance | BindingFlags.NonPublic)
-                    ?.MakeGenericMethod(modelType).Invoke(this, new[] { template, model });
+                var modelType = templateType
+                    .GetInterfaces()
+                    .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRazorTemplatePage<>))
+                    .Select(x => x.GenericTypeArguments.FirstOrDefault())
+                    .FirstOrDefault();
+
+                if (modelType != null)
+                {
+                    GetType().GetMethod(nameof(SetModel), BindingFlags.Instance | BindingFlags.NonPublic)
+                        ?.MakeGenericMethod(modelType).Invoke(this, new[] {template, model});
+                }
+
+                template.ServiceProvider = scope.ServiceProvider;
+                template.Localizer = GetLocalizerOrNull(templateDefinition);
+                template.HtmlEncoder = scope.ServiceProvider.GetService<HtmlEncoder>();
+                template.JavaScriptEncoder = scope.ServiceProvider.GetService<JavaScriptEncoder>();
+                template.UrlEncoder = scope.ServiceProvider.GetService<UrlEncoder>();
+                template.Body = body;
+                template.GlobalContext = globalContext;
+
+                await template.ExecuteAsync();
+
+                return await template.GetOutputAsync();
             }
-
-            template.ServiceProvider = scope.ServiceProvider;
-            template.Localizer = GetLocalizerOrNull(templateDefinition);
-            template.HtmlEncoder = scope.ServiceProvider.GetService<HtmlEncoder>();
-            template.JavaScriptEncoder = scope.ServiceProvider.GetService<JavaScriptEncoder>();
-            template.UrlEncoder = scope.ServiceProvider.GetService<UrlEncoder>();
-            template.Body = body;
-            template.GlobalContext = globalContext;
-
-            await template.ExecuteAsync();
-
-            return await template.GetOutputAsync();
         }
-    }
 
-    private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object model = null)
-    {
-        if (razorTemplatePage is IRazorTemplatePage<TModel> razorTemplatePageWithModel)
+        private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object model = null)
         {
-            razorTemplatePageWithModel.Model = (TModel)model;
+            if (razorTemplatePage is IRazorTemplatePage<TModel> razorTemplatePageWithModel)
+            {
+                razorTemplatePageWithModel.Model = (TModel)model;
+            }
         }
     }
 }

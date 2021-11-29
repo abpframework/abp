@@ -2,26 +2,27 @@
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Studio;
-
-public class AbpStudioException : BusinessException
+namespace Volo.Abp.Studio
 {
-    public AbpStudioException(
-        string code = null,
-        string message = null,
-        string details = null,
-        Exception innerException = null,
-        LogLevel logLevel = LogLevel.Warning)
-        : base(code, message, details, innerException, logLevel)
+    public class AbpStudioException : BusinessException
     {
-        Code = code;
-        Details = details;
-        LogLevel = logLevel;
-    }
+        public AbpStudioException(
+            string code = null, 
+            string message = null, 
+            string details = null, 
+            Exception innerException = null,
+            LogLevel logLevel = LogLevel.Warning)
+            : base(code, message, details, innerException, logLevel)
+        {
+            Code = code;
+            Details = details;
+            LogLevel = logLevel;
+        }
 
-    public AbpStudioException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    {
+        public AbpStudioException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context)
+        {
 
+        }
     }
 }

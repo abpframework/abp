@@ -4,40 +4,41 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands;
-
-public class SwitchToPreviewCommand : IConsoleCommand, ITransientDependency
+namespace Volo.Abp.Cli.Commands
 {
-    private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
-
-    public SwitchToPreviewCommand(PackagePreviewSwitcher packagePreviewSwitcher)
+    public class SwitchToPreviewCommand : IConsoleCommand, ITransientDependency
     {
-        _packagePreviewSwitcher = packagePreviewSwitcher;
-    }
+        private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
 
-    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
-    {
-        await _packagePreviewSwitcher.SwitchToPreview(commandLineArgs);
-    }
+        public SwitchToPreviewCommand(PackagePreviewSwitcher packagePreviewSwitcher)
+        {
+            _packagePreviewSwitcher = packagePreviewSwitcher;
+        }
 
-    public string GetUsageInfo()
-    {
-        var sb = new StringBuilder();
+        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        {
+            await _packagePreviewSwitcher.SwitchToPreview(commandLineArgs);
+        }
 
-        sb.AppendLine("");
-        sb.AppendLine("Usage:");
-        sb.AppendLine("  abp switch-to-preview [options]");
-        sb.AppendLine("");
-        sb.AppendLine("Options:");
-        sb.AppendLine("-sd|--solution-directory");
-        sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        public string GetUsageInfo()
+        {
+            var sb = new StringBuilder();
 
-        return sb.ToString();
-    }
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("  abp switch-to-preview [options]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("-sd|--solution-directory");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
-    public string GetShortDescription()
-    {
-        return "Switches packages to preview ABP version.";
+            return sb.ToString();
+        }
+
+        public string GetShortDescription()
+        {
+            return "Switches packages to preview ABP version.";
+        }
     }
 }

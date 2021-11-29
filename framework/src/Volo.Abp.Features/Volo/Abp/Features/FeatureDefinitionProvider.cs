@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Features;
-
-public abstract class FeatureDefinitionProvider : IFeatureDefinitionProvider, ITransientDependency
+namespace Volo.Abp.Features
 {
-    public abstract void Define(IFeatureDefinitionContext context);
+    public abstract class FeatureDefinitionProvider : IFeatureDefinitionProvider, ITransientDependency
+    {
+        public abstract void Define(IFeatureDefinitionContext context);
+    }
 }

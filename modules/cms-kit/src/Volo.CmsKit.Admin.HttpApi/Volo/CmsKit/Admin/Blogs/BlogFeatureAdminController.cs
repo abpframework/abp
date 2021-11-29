@@ -9,31 +9,32 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.Blogs;
-
-[RequiresGlobalFeature(typeof(BlogsFeature))]
-[RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
-[Authorize(CmsKitAdminPermissions.Blogs.Features)]
-[Route("api/cms-kit-admin/blogs/{blogId}/features")]
-public class BlogFeatureAdminController : CmsKitAdminController, IBlogFeatureAdminAppService
+namespace Volo.CmsKit.Admin.Blogs
 {
-    protected IBlogFeatureAdminAppService BlogFeatureAdminAppService { get; }
-
-    public BlogFeatureAdminController(IBlogFeatureAdminAppService blogFeatureAdminAppService)
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
+    [Authorize(CmsKitAdminPermissions.Blogs.Features)]
+    [Route("api/cms-kit-admin/blogs/{blogId}/features")]
+    public class BlogFeatureAdminController : CmsKitAdminController, IBlogFeatureAdminAppService
     {
-        BlogFeatureAdminAppService = blogFeatureAdminAppService;
-    }
+        protected IBlogFeatureAdminAppService BlogFeatureAdminAppService { get; }
 
-    [HttpGet]
-    public Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
-    {
-        return BlogFeatureAdminAppService.GetListAsync(blogId);
-    }
+        public BlogFeatureAdminController(IBlogFeatureAdminAppService blogFeatureAdminAppService)
+        {
+            BlogFeatureAdminAppService = blogFeatureAdminAppService;
+        }
 
-    [HttpPut]
-    public Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
-    {
-        return BlogFeatureAdminAppService.SetAsync(blogId, dto);
+        [HttpGet]
+        public Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
+        {
+            return BlogFeatureAdminAppService.GetListAsync(blogId);
+        }
+
+        [HttpPut]
+        public Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
+        {
+            return BlogFeatureAdminAppService.SetAsync(blogId, dto);
+        }
     }
 }

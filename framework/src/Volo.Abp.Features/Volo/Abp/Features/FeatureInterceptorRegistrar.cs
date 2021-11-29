@@ -4,34 +4,35 @@ using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Features;
-
-public static class FeatureInterceptorRegistrar
+namespace Volo.Abp.Features
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static class FeatureInterceptorRegistrar
     {
-        if (ShouldIntercept(context.ImplementationType))
+        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            context.Interceptors.TryAdd<FeatureInterceptor>();
+            if (ShouldIntercept(context.ImplementationType))
+            {
+                context.Interceptors.TryAdd<FeatureInterceptor>();
+            }
         }
-    }
 
-    private static bool ShouldIntercept(Type type)
-    {
-        return !DynamicProxyIgnoreTypes.Contains(type) &&
-               (type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
-                AnyMethodHasRequiresFeatureAttribute(type));
-    }
+        private static bool ShouldIntercept(Type type)
+        {
+            return !DynamicProxyIgnoreTypes.Contains(type) &&
+                   (type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
+                    AnyMethodHasRequiresFeatureAttribute(type));
+        }
 
-    private static bool AnyMethodHasRequiresFeatureAttribute(Type implementationType)
-    {
-        return implementationType
-            .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-            .Any(HasRequiresFeatureAttribute);
-    }
+        private static bool AnyMethodHasRequiresFeatureAttribute(Type implementationType)
+        {
+            return implementationType
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Any(HasRequiresFeatureAttribute);
+        }
 
-    private static bool HasRequiresFeatureAttribute(MemberInfo methodInfo)
-    {
-        return methodInfo.IsDefined(typeof(RequiresFeatureAttribute), true);
+        private static bool HasRequiresFeatureAttribute(MemberInfo methodInfo)
+        {
+            return methodInfo.IsDefined(typeof(RequiresFeatureAttribute), true);
+        }
     }
 }

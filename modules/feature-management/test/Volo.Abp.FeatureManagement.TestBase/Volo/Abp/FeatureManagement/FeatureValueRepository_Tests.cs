@@ -4,72 +4,73 @@ using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.FeatureManagement;
-
-public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureManagementTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.FeatureManagement
 {
-    protected IFeatureValueRepository Repository { get; set; }
-
-    protected FeatureValueRepository_Tests()
+    public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureManagementTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        Repository = GetRequiredService<IFeatureValueRepository>();
-    }
+        protected IFeatureValueRepository Repository { get; set; }
 
-    [Fact]
-    public async Task FindAsync()
-    {
-        //feature value does exists
+        protected FeatureValueRepository_Tests()
+        {
+            Repository = GetRequiredService<IFeatureValueRepository>();
+        }
 
-        var featureValue = await Repository.FindAsync(
-            TestFeatureDefinitionProvider.ProjectCount,
-            EditionFeatureValueProvider.ProviderName,
-            TestEditionIds.Enterprise.ToString()
-        );
+        [Fact]
+        public async Task FindAsync()
+        {
+            //feature value does exists
 
-        featureValue.ShouldNotBeNull();
-        featureValue.Value.ShouldBe("3");
+            var featureValue = await Repository.FindAsync(
+                TestFeatureDefinitionProvider.ProjectCount,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
 
-        //feature value does not exists
-        featureValue = await Repository.FindAsync(
-            TestFeatureDefinitionProvider.ProjectCount,
-            EditionFeatureValueProvider.ProviderName,
-            "undefined-edition-id"
-        );
+            featureValue.ShouldNotBeNull();
+            featureValue.Value.ShouldBe("3");
 
-        featureValue.ShouldBeNull();
-    }
+            //feature value does not exists
+            featureValue = await Repository.FindAsync(
+                TestFeatureDefinitionProvider.ProjectCount,
+                EditionFeatureValueProvider.ProviderName,
+                "undefined-edition-id"
+            );
 
-    [Fact]
-    public async Task FindAllAsync()
-    {
-        var featureValues = await Repository.FindAllAsync(
-            TestFeatureDefinitionProvider.ProjectCount,
-            EditionFeatureValueProvider.ProviderName,
-            TestEditionIds.Enterprise.ToString()
-        );
+            featureValue.ShouldBeNull();
+        }
 
-        featureValues.Count.ShouldBe(1);
-    }
+        [Fact]
+        public async Task FindAllAsync()
+        {
+            var featureValues = await Repository.FindAllAsync(
+                TestFeatureDefinitionProvider.ProjectCount,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
 
-    [Fact]
-    public async Task GetListAsync()
-    {
-        var featureValues = await Repository.GetListAsync(
-            EditionFeatureValueProvider.ProviderName,
-            TestEditionIds.Enterprise.ToString()
-        );
+            featureValues.Count.ShouldBe(1);
+        }
 
-        featureValues.Count.ShouldBeGreaterThan(0);
+        [Fact]
+        public async Task GetListAsync()
+        {
+            var featureValues = await Repository.GetListAsync(
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
 
-        featureValues.ShouldContain(
-            fv => fv.Name == TestFeatureDefinitionProvider.SocialLogins &&
-                  fv.Value == "true"
-        );
+            featureValues.Count.ShouldBeGreaterThan(0);
 
-        featureValues.ShouldContain(
-            fv => fv.Name == TestFeatureDefinitionProvider.ProjectCount &&
-                  fv.Value == "3"
-        );
+            featureValues.ShouldContain(
+                fv => fv.Name == TestFeatureDefinitionProvider.SocialLogins &&
+                      fv.Value == "true"
+            );
+
+            featureValues.ShouldContain(
+                fv => fv.Name == TestFeatureDefinitionProvider.ProjectCount &&
+                      fv.Value == "3"
+            );
+        }
     }
 }

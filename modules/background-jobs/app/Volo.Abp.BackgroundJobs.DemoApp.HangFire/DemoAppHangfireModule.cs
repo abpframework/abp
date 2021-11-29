@@ -6,22 +6,23 @@ using Volo.Abp.Modularity;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp.BackgroundJobs.Hangfire;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire;
-
-[DependsOn(
-    typeof(DemoAppSharedModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpBackgroundJobsHangfireModule)
-)]
-public class DemoAppHangfireModule : AbpModule
+namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(DemoAppSharedModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpBackgroundJobsHangfireModule)
+    )]
+    public class DemoAppHangfireModule : AbpModule
     {
-        var configuration = context.Services.GetConfiguration();
-
-        context.Services.PreConfigure<IGlobalConfiguration>(hangfireConfiguration =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            hangfireConfiguration.UseSqlServerStorage(configuration.GetConnectionString("Default"));
-        });
+            var configuration = context.Services.GetConfiguration();
+
+            context.Services.PreConfigure<IGlobalConfiguration>(hangfireConfiguration =>
+            {
+                hangfireConfiguration.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+            });
+        }
     }
 }

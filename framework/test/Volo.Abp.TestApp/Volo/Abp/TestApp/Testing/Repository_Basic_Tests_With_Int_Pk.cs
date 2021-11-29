@@ -7,38 +7,39 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing;
-
-public abstract class Repository_Basic_Tests_With_Int_Pk<TStartupModule> : TestAppTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.TestApp.Testing
 {
-    protected readonly IRepository<EntityWithIntPk, int> EntityWithIntPkRepository;
-
-    protected Repository_Basic_Tests_With_Int_Pk()
+    public abstract class Repository_Basic_Tests_With_Int_Pk<TStartupModule> : TestAppTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        EntityWithIntPkRepository = GetRequiredService<IRepository<EntityWithIntPk, int>>();
-    }
+        protected readonly IRepository<EntityWithIntPk, int> EntityWithIntPkRepository;
 
-    [Fact]
-    public virtual async Task FirstOrDefault()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        protected Repository_Basic_Tests_With_Int_Pk()
         {
-            var entity = await EntityWithIntPkRepository.FirstOrDefaultAsync(e => e.Name == "Entity1");
-            entity.ShouldNotBeNull();
-            entity.Name.ShouldBe("Entity1");
-            return Task.CompletedTask;
-        });
-    }
+            EntityWithIntPkRepository = GetRequiredService<IRepository<EntityWithIntPk, int>>();
+        }
 
-    [Fact]
-    public virtual async Task Get()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public virtual async Task FirstOrDefault()
         {
-            var entity = await EntityWithIntPkRepository.GetAsync(1);
-            entity.ShouldNotBeNull();
-            entity.Name.ShouldBe("Entity1");
-        });
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var entity = await EntityWithIntPkRepository.FirstOrDefaultAsync(e => e.Name == "Entity1");
+                entity.ShouldNotBeNull();
+                entity.Name.ShouldBe("Entity1");
+                return Task.CompletedTask;
+            });
+        }
+
+        [Fact]
+        public virtual async Task Get()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var entity = await EntityWithIntPkRepository.GetAsync(1);
+                entity.ShouldNotBeNull();
+                entity.Name.ShouldBe("Entity1");
+            });
+        }
     }
 }

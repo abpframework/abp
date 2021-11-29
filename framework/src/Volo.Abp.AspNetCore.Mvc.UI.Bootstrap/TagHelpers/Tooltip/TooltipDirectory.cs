@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip;
-
-public enum TooltipDirectory
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 {
-    Default,
-    Right,
-    Left,
-    Bottom,
-    Top
+    public enum TooltipDirectory
+    {
+        Default,
+        Right,
+        Left,
+        Bottom,
+        Top
+    }
 }

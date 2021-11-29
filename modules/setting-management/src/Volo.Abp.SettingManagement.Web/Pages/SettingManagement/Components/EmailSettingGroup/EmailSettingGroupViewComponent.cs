@@ -2,22 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup;
-
-public class EmailSettingGroupViewComponent : AbpViewComponent
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup
 {
-    protected IEmailSettingsAppService EmailSettingsAppService { get; }
-
-    public EmailSettingGroupViewComponent(IEmailSettingsAppService emailSettingsAppService)
+    public class EmailSettingGroupViewComponent : AbpViewComponent
     {
-        ObjectMapperContext = typeof(AbpSettingManagementWebModule);
-        EmailSettingsAppService = emailSettingsAppService;
-    }
+        protected IEmailSettingsAppService EmailSettingsAppService { get; }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync()
-    {
-        var model = await EmailSettingsAppService.GetAsync();
+        public EmailSettingGroupViewComponent(IEmailSettingsAppService emailSettingsAppService)
+        {
+            ObjectMapperContext = typeof(AbpSettingManagementWebModule);
+            EmailSettingsAppService = emailSettingsAppService;
+        }
 
-        return View("~/Pages/SettingManagement/Components/EmailSettingGroup/Default.cshtml", model);
+        public virtual async Task<IViewComponentResult> InvokeAsync()
+        {
+            var model = await EmailSettingsAppService.GetAsync();
+
+            return View("~/Pages/SettingManagement/Components/EmailSettingGroup/Default.cshtml", model);
+        }
     }
 }

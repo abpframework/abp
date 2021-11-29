@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Validation;
-
-public class DefaultAttributeValidationResultProvider : IAttributeValidationResultProvider, ITransientDependency
+namespace Volo.Abp.Validation
 {
-    public virtual ValidationResult GetOrDefault(ValidationAttribute validationAttribute, object validatingObject, ValidationContext validationContext)
+    public class DefaultAttributeValidationResultProvider : IAttributeValidationResultProvider, ITransientDependency
     {
-        return validationAttribute.GetValidationResult(validatingObject, validationContext);
+        public virtual ValidationResult GetOrDefault(ValidationAttribute validationAttribute, object validatingObject, ValidationContext validationContext)
+        {
+            return validationAttribute.GetValidationResult(validatingObject, validationContext);
+        }
     }
 }

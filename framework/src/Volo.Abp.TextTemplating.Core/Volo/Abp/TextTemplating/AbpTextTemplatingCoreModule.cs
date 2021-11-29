@@ -5,41 +5,42 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TextTemplating;
-
-[DependsOn(
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpLocalizationAbstractionsModule)
-    )]
-public class AbpTextTemplatingCoreModule : AbpModule
+namespace Volo.Abp.TextTemplating
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpLocalizationAbstractionsModule)
+        )]
+    public class AbpTextTemplatingCoreModule : AbpModule
     {
-        AutoAddProvidersAndContributors(context.Services);
-    }
-
-    private static void AutoAddProvidersAndContributors(IServiceCollection services)
-    {
-        var definitionProviders = new List<Type>();
-        var contentContributors = new List<Type>();
-
-        services.OnRegistred(context =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            if (typeof(ITemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-            {
-                definitionProviders.Add(context.ImplementationType);
-            }
+            AutoAddProvidersAndContributors(context.Services);
+        }
 
-            if (typeof(ITemplateContentContributor).IsAssignableFrom(context.ImplementationType))
-            {
-                contentContributors.Add(context.ImplementationType);
-            }
-        });
-
-        services.Configure<AbpTextTemplatingOptions>(options =>
+        private static void AutoAddProvidersAndContributors(IServiceCollection services)
         {
-            options.DefinitionProviders.AddIfNotContains(definitionProviders);
-            options.ContentContributors.AddIfNotContains(contentContributors);
-        });
+            var definitionProviders = new List<Type>();
+            var contentContributors = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(ITemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+                {
+                    definitionProviders.Add(context.ImplementationType);
+                }
+
+                if (typeof(ITemplateContentContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contentContributors.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpTextTemplatingOptions>(options =>
+            {
+                options.DefinitionProviders.AddIfNotContains(definitionProviders);
+                options.ContentContributors.AddIfNotContains(contentContributors);
+            });
+        }
     }
 }

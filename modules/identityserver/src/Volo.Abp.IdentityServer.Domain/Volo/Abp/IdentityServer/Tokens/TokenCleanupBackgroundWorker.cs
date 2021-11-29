@@ -4,29 +4,30 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.IdentityServer.Tokens;
-
-public class TokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
+namespace Volo.Abp.IdentityServer.Tokens
 {
-    protected TokenCleanupOptions Options { get; }
-
-    public TokenCleanupBackgroundWorker(
-        AbpAsyncTimer timer,
-        IServiceScopeFactory serviceScopeFactory,
-        IOptions<TokenCleanupOptions> options)
-        : base(
-            timer,
-            serviceScopeFactory)
+    public class TokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        Options = options.Value;
-        timer.Period = Options.CleanupPeriod;
-    }
+        protected TokenCleanupOptions Options { get; }
 
-    protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
-    {
-        await workerContext
-            .ServiceProvider
-            .GetRequiredService<TokenCleanupService>()
-            .CleanAsync();
+        public TokenCleanupBackgroundWorker(
+            AbpAsyncTimer timer,
+            IServiceScopeFactory serviceScopeFactory,
+            IOptions<TokenCleanupOptions> options)
+            : base(
+                timer,
+                serviceScopeFactory)
+        {
+            Options = options.Value;
+            timer.Period = Options.CleanupPeriod;
+        }
+
+        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+        {
+            await workerContext
+                .ServiceProvider
+                .GetRequiredService<TokenCleanupService>()
+                .CleanAsync();
+        }
     }
 }

@@ -1,16 +1,17 @@
 using System;
 
-namespace Volo.Abp.Http.Client.Proxying;
-
-public class HttpClientProxyConfig
+namespace Volo.Abp.Http.Client.Proxying
 {
-    public Type Type { get; }
-
-    public string RemoteServiceName { get; }
-
-    public HttpClientProxyConfig(Type type, string remoteServiceName)
+    public class HttpClientProxyConfig
     {
-        Type = type;
-        RemoteServiceName = remoteServiceName;
+        public Type Type { get; }
+
+        public string RemoteServiceName { get; }
+
+        public HttpClientProxyConfig(Type type, string remoteServiceName)
+        {
+            Type = type;
+            RemoteServiceName = remoteServiceName;
+        }
     }
 }

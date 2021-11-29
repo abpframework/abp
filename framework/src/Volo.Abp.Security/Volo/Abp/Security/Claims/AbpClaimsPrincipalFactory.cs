@@ -4,41 +4,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Security.Claims;
-
-public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientDependency
+namespace Volo.Abp.Security.Claims
 {
-    public static string AuthenticationType => "Abp.Application";
-
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-    protected AbpClaimsPrincipalFactoryOptions Options { get; }
-
-    public AbpClaimsPrincipalFactory(
-        IServiceScopeFactory serviceScopeFactory,
-        IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimOptions)
+    public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientDependency
     {
-        ServiceScopeFactory = serviceScopeFactory;
-        Options = abpClaimOptions.Value;
-    }
+        public static string AuthenticationType => "Abp.Application";
 
-    public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal existsClaimsPrincipal = null)
-    {
-        using (var scope = ServiceScopeFactory.CreateScope())
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpClaimsPrincipalFactoryOptions Options { get; }
+
+        public AbpClaimsPrincipalFactory(
+            IServiceScopeFactory serviceScopeFactory,
+            IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimOptions)
         {
-            var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
-                AuthenticationType,
-                AbpClaimTypes.UserName,
-                AbpClaimTypes.Role));
+            ServiceScopeFactory = serviceScopeFactory;
+            Options = abpClaimOptions.Value;
+        }
 
-            var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
-
-            foreach (var contributorType in Options.Contributors)
+        public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal existsClaimsPrincipal = null)
+        {
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
-                await contributor.ContributeAsync(context);
-            }
+                var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
+                    AuthenticationType,
+                    AbpClaimTypes.UserName,
+                    AbpClaimTypes.Role));
 
-            return claimsPrincipal;
+                var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
+
+                foreach (var contributorType in Options.Contributors)
+                {
+                    var contributor = (IAbpClaimsPrincipalContributor) scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.ContributeAsync(context);
+                }
+
+                return claimsPrincipal;
+            }
         }
     }
 }

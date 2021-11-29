@@ -3,20 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public class AbpHubContextAccessorHubFilter : IHubFilter
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+    public class AbpHubContextAccessorHubFilter : IHubFilter
     {
-        var hubContextAccessor = invocationContext.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>();
-        using (hubContextAccessor.Change(new AbpHubContext(
-                   invocationContext.ServiceProvider,
-                   invocationContext.Hub,
-                   invocationContext.HubMethod,
-                   invocationContext.HubMethodArguments)))
+        public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
         {
-            return await next(invocationContext);
+            var hubContextAccessor = invocationContext.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>();
+            using (hubContextAccessor.Change(new AbpHubContext(
+                       invocationContext.ServiceProvider,
+                       invocationContext.Hub,
+                       invocationContext.HubMethod,
+                       invocationContext.HubMethodArguments)))
+            {
+                return await next(invocationContext);
+            }
         }
     }
 }

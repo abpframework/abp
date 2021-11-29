@@ -1,23 +1,24 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates;
-
-public class TemplateProjectRenameStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
-    private readonly string _oldProjectName;
-    private readonly string _newProjectName;
-
-    public TemplateProjectRenameStep(
-        string oldProjectName,
-        string newProjectName)
+    public class TemplateProjectRenameStep : ProjectBuildPipelineStep
     {
-        _oldProjectName = oldProjectName;
-        _newProjectName = newProjectName;
-    }
+        private readonly string _oldProjectName;
+        private readonly string _newProjectName;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        RenameHelper.RenameAll(context.Files, _oldProjectName, _newProjectName);
+        public TemplateProjectRenameStep(
+            string oldProjectName,
+            string newProjectName)
+        {
+            _oldProjectName = oldProjectName;
+            _newProjectName = newProjectName;
+        }
+
+        public override void Execute(ProjectBuildContext context)
+        {
+            RenameHelper.RenameAll(context.Files, _oldProjectName, _newProjectName);
+        }
     }
 }

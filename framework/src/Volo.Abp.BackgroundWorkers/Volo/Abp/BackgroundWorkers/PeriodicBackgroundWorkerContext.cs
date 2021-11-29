@@ -1,13 +1,14 @@
 using System;
 
-namespace Volo.Abp.BackgroundWorkers;
-
-public class PeriodicBackgroundWorkerContext
+namespace Volo.Abp.BackgroundWorkers
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public PeriodicBackgroundWorkerContext(IServiceProvider serviceProvider)
+    public class PeriodicBackgroundWorkerContext
     {
-        ServiceProvider = serviceProvider;
+        public IServiceProvider ServiceProvider { get; }
+
+        public PeriodicBackgroundWorkerContext(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
     }
 }

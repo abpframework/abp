@@ -9,33 +9,34 @@ using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(MyProjectNameApplicationContractsModule),
-    typeof(AbpAccountHttpApiModule),
-    typeof(AbpIdentityHttpApiModule),
-    typeof(AbpPermissionManagementHttpApiModule),
-    typeof(AbpTenantManagementHttpApiModule),
-    typeof(AbpFeatureManagementHttpApiModule),
-    typeof(AbpSettingManagementHttpApiModule)
-    )]
-public class MyProjectNameHttpApiModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameApplicationContractsModule),
+        typeof(AbpAccountHttpApiModule),
+        typeof(AbpIdentityHttpApiModule),
+        typeof(AbpPermissionManagementHttpApiModule),
+        typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpSettingManagementHttpApiModule)
+        )]
+    public class MyProjectNameHttpApiModule : AbpModule
     {
-        ConfigureLocalization();
-    }
-
-    private void ConfigureLocalization()
-    {
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Get<MyProjectNameResource>()
-                .AddBaseTypes(
-                    typeof(AbpUiResource)
-                );
-        });
+            ConfigureLocalization();
+        }
+
+        private void ConfigureLocalization()
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<MyProjectNameResource>()
+                    .AddBaseTypes(
+                        typeof(AbpUiResource)
+                    );
+            });
+        }
     }
 }

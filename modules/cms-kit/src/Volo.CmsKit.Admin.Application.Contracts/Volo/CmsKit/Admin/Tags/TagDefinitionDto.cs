@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Volo.CmsKit.Admin.Tags;
-
-[Serializable]
-public class TagDefinitionDto
+namespace Volo.CmsKit.Admin.Tags
 {
-    public string EntityType { get; set; }
+    [Serializable]
+    public class TagDefinitionDto
+    {
+        public string EntityType { get; set; }
 
-    public string DisplayName { get; set; }
+        public string DisplayName { get; set; }
+    }
 }

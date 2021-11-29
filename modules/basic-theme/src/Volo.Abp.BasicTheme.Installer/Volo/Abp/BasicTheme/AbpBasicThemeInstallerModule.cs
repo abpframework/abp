@@ -2,19 +2,20 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.BasicTheme;
-
-[DependsOn(
-    typeof(AbpStudioModuleInstallerModule),
-    typeof(AbpVirtualFileSystemModule)
-    )]
-public class AbpBasicThemeInstallerModule : AbpModule
+namespace Volo.Abp.BasicTheme
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpStudioModuleInstallerModule),
+        typeof(AbpVirtualFileSystemModule)
+        )]
+    public class AbpBasicThemeInstallerModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpBasicThemeInstallerModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpBasicThemeInstallerModule>();
+            });
+        }
     }
 }

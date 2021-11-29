@@ -1,16 +1,17 @@
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EventBus.Distributed;
-
-public interface ISupportsEventBoxes
+namespace Volo.Abp.EventBus.Distributed
 {
-    Task PublishFromOutboxAsync(
-        OutgoingEventInfo outgoingEvent,
-        OutboxConfig outboxConfig
-    );
+    public interface ISupportsEventBoxes
+    {
+        Task PublishFromOutboxAsync(
+            OutgoingEventInfo outgoingEvent,
+            OutboxConfig outboxConfig
+        );
 
-    Task ProcessFromInboxAsync(
-        IncomingEventInfo incomingEvent,
-        InboxConfig inboxConfig
-    );
+        Task ProcessFromInboxAsync(
+            IncomingEventInfo incomingEvent,
+            InboxConfig inboxConfig 
+        );
+    }
 }

@@ -7,71 +7,72 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.PermissionManagement.Identity;
-
-public class RolePermissionManagementProvider : PermissionManagementProvider
+namespace Volo.Abp.PermissionManagement.Identity
 {
-    public override string Name => RolePermissionValueProvider.ProviderName;
-
-    protected IUserRoleFinder UserRoleFinder { get; }
-
-    public RolePermissionManagementProvider(
-        IPermissionGrantRepository permissionGrantRepository,
-        IGuidGenerator guidGenerator,
-        ICurrentTenant currentTenant,
-        IUserRoleFinder userRoleFinder)
-        : base(
-            permissionGrantRepository,
-            guidGenerator,
-            currentTenant)
+    public class RolePermissionManagementProvider : PermissionManagementProvider
     {
-        UserRoleFinder = userRoleFinder;
-    }
+        public override string Name => RolePermissionValueProvider.ProviderName;
 
-    public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
-    {
-        var multipleGrantInfo = await CheckAsync(new[] { name }, providerName, providerKey);
+        protected IUserRoleFinder UserRoleFinder { get; }
 
-        return multipleGrantInfo.Result.Values.First();
-    }
-
-    public override async Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
-    {
-        var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);
-        var permissionGrants = new List<PermissionGrant>();
-
-        if (providerName == Name)
+        public RolePermissionManagementProvider(
+            IPermissionGrantRepository permissionGrantRepository,
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant,
+            IUserRoleFinder userRoleFinder)
+            : base(
+                permissionGrantRepository,
+                guidGenerator,
+                currentTenant)
         {
-            permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, providerName, providerKey));
-
+            UserRoleFinder = userRoleFinder;
         }
 
-        if (providerName == UserPermissionValueProvider.ProviderName)
+        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
-            var userId = Guid.Parse(providerKey);
-            var roleNames = await UserRoleFinder.GetRolesAsync(userId);
+            var multipleGrantInfo = await CheckAsync(new[] {name}, providerName, providerKey);
 
-            foreach (var roleName in roleNames)
+            return multipleGrantInfo.Result.Values.First();
+        }
+
+        public override async Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
+        {
+            var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);
+            var permissionGrants = new List<PermissionGrant>();
+
+            if (providerName == Name)
             {
-                permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, roleName));
-            }
-        }
+                 permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, providerName, providerKey));
 
-        permissionGrants = permissionGrants.Distinct().ToList();
-        if (!permissionGrants.Any())
-        {
+            }
+
+            if (providerName == UserPermissionValueProvider.ProviderName)
+            {
+                var userId = Guid.Parse(providerKey);
+                var roleNames = await UserRoleFinder.GetRolesAsync(userId);
+
+                foreach (var roleName in roleNames)
+                {
+                    permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, roleName));
+                }
+            }
+
+            permissionGrants = permissionGrants.Distinct().ToList();
+            if (!permissionGrants.Any())
+            {
+                return multiplePermissionValueProviderGrantInfo;
+            }
+
+            foreach (var permissionName in names)
+            {
+                var permissionGrant = permissionGrants.FirstOrDefault(x => x.Name == permissionName);
+                if (permissionGrant != null)
+                {
+                    multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(true, permissionGrant.ProviderKey);
+                }
+            }
+
             return multiplePermissionValueProviderGrantInfo;
         }
-
-        foreach (var permissionName in names)
-        {
-            var permissionGrant = permissionGrants.FirstOrDefault(x => x.Name == permissionName);
-            if (permissionGrant != null)
-            {
-                multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(true, permissionGrant.ProviderKey);
-            }
-        }
-
-        return multiplePermissionValueProviderGrantInfo;
     }
 }

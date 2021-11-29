@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Http.Client;
-
-public interface IRemoteServiceConfigurationProvider
+namespace Volo.Abp.Http.Client
 {
-    [ItemNotNull]
-    Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name);
-
-    [ItemCanBeNull]
-    Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name);
+    public interface IRemoteServiceConfigurationProvider
+    {
+        [ItemNotNull]
+        Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name);
+        
+        [ItemCanBeNull]
+        Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name);
+    }
 }

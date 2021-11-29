@@ -2,9 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public interface IAzureServiceBusMessageConsumer
+namespace Volo.Abp.AzureServiceBus
 {
-    void OnMessageReceived(Func<ServiceBusReceivedMessage, Task> callback);
+    public interface IAzureServiceBusMessageConsumer
+    {
+        void OnMessageReceived(Func<ServiceBusReceivedMessage, Task> callback);
+    }
 }

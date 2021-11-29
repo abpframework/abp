@@ -1,18 +1,19 @@
 using System;
 using Volo.Abp.Auditing;
 
-namespace Volo.Abp.Domain.Entities.Events;
-
-[Serializable]
-public class EntityChangeEntry
+namespace Volo.Abp.Domain.Entities.Events
 {
-    public object Entity { get; set; }
-
-    public EntityChangeType ChangeType { get; set; }
-
-    public EntityChangeEntry(object entity, EntityChangeType changeType)
+    [Serializable]
+    public class EntityChangeEntry
     {
-        Entity = entity;
-        ChangeType = changeType;
+        public object Entity { get; set; }
+
+        public EntityChangeType ChangeType { get; set; }
+
+        public EntityChangeEntry(object entity, EntityChangeType changeType)
+        {
+            Entity = entity;
+            ChangeType = changeType;
+        }
     }
 }

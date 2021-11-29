@@ -6,25 +6,26 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Blogs;
-
-[RequiresGlobalFeature(typeof(BlogsFeature))]
-[RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitCommonRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit/blogs/{blogId}/features")]
-public class BlogFeatureController : CmsKitControllerBase, IBlogFeatureAppService
+namespace Volo.CmsKit.Blogs
 {
-    protected IBlogFeatureAppService BlogFeatureAppService { get; }
-
-    public BlogFeatureController(IBlogFeatureAppService blogFeatureAppService)
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
+    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitCommonRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit/blogs/{blogId}/features")]
+    public class BlogFeatureController : CmsKitControllerBase, IBlogFeatureAppService
     {
-        BlogFeatureAppService = blogFeatureAppService;
-    }
+        protected IBlogFeatureAppService BlogFeatureAppService { get; }
 
-    [HttpGet]
-    [Route("{featureName}")]
-    public Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
-    {
-        return BlogFeatureAppService.GetOrDefaultAsync(blogId, featureName);
+        public BlogFeatureController(IBlogFeatureAppService blogFeatureAppService)
+        {
+            BlogFeatureAppService = blogFeatureAppService;
+        }
+
+        [HttpGet]
+        [Route("{featureName}")]
+        public Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
+        {
+            return BlogFeatureAppService.GetOrDefaultAsync(blogId, featureName);
+        }
     }
 }

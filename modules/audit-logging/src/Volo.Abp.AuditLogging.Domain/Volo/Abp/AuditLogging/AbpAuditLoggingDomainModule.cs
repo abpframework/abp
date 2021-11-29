@@ -7,38 +7,39 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.AuditLogging;
-
-[DependsOn(typeof(AbpAuditingModule))]
-[DependsOn(typeof(AbpDddDomainModule))]
-[DependsOn(typeof(AbpAuditLoggingDomainSharedModule))]
-[DependsOn(typeof(AbpExceptionHandlingModule))]
-[DependsOn(typeof(AbpJsonModule))]
-public class AbpAuditLoggingDomainModule : AbpModule
+namespace Volo.Abp.AuditLogging
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public override void PostConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpAuditingModule))]
+    [DependsOn(typeof(AbpDddDomainModule))]
+    [DependsOn(typeof(AbpAuditLoggingDomainSharedModule))]
+    [DependsOn(typeof(AbpExceptionHandlingModule))]
+    [DependsOn(typeof(AbpJsonModule))]
+    public class AbpAuditLoggingDomainModule : AbpModule
     {
-        OneTimeRunner.Run(() =>
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-            AuditLoggingModuleExtensionConsts.ModuleName,
-            AuditLoggingModuleExtensionConsts.EntityNames.AuditLog,
-            typeof(AuditLog)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.AuditLogAction,
-                typeof(AuditLogAction)
-            );
+                AuditLoggingModuleExtensionConsts.EntityNames.AuditLog,
+                typeof(AuditLog)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.EntityChange,
-                typeof(EntityChange)
-            );
-        });
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    AuditLoggingModuleExtensionConsts.ModuleName,
+                    AuditLoggingModuleExtensionConsts.EntityNames.AuditLogAction,
+                    typeof(AuditLogAction)
+                );
+
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    AuditLoggingModuleExtensionConsts.ModuleName,
+                    AuditLoggingModuleExtensionConsts.EntityNames.EntityChange,
+                    typeof(EntityChange)
+                );
+            });
+        }
     }
 }

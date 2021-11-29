@@ -8,76 +8,77 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 
-namespace Volo.Abp.AspNetCore.Mvc;
-
-public class AspNetCoreApiDescriptionModelProviderOptions
+namespace Volo.Abp.AspNetCore.Mvc
 {
-    public Func<Type, ConventionalControllerSetting, string> ControllerNameGenerator { get; set; }
-
-    public Func<MethodInfo, string> ActionNameGenerator { get; set; }
-
-    public Func<ApiParameterDescription, string> ApiParameterNameGenerator { get; set; }
-
-    public AspNetCoreApiDescriptionModelProviderOptions()
+    public class AspNetCoreApiDescriptionModelProviderOptions
     {
-        ControllerNameGenerator = (controllerType, setting) =>
+        public Func<Type, ConventionalControllerSetting, string> ControllerNameGenerator { get; set; }
+
+        public Func<MethodInfo, string> ActionNameGenerator { get; set; }
+
+        public Func<ApiParameterDescription, string> ApiParameterNameGenerator { get; set; }
+
+        public AspNetCoreApiDescriptionModelProviderOptions()
         {
-            var controllerName = controllerType.Name.RemovePostFix("Controller")
-                .RemovePostFix(ApplicationService.CommonPostfixes);
-
-            if (setting?.UrlControllerNameNormalizer != null)
+            ControllerNameGenerator = (controllerType, setting) =>
             {
-                controllerName =
-                    setting.UrlControllerNameNormalizer(
-                        new UrlControllerNameNormalizerContext(setting.RootPath, controllerName));
-            }
+                var controllerName = controllerType.Name.RemovePostFix("Controller")
+                    .RemovePostFix(ApplicationService.CommonPostfixes);
 
-            return controllerName;
-        };
-
-        ActionNameGenerator = (method) =>
-        {
-            var methodNameBuilder = new StringBuilder(method.Name);
-
-            var parameters = method.GetParameters();
-            if (parameters.Any())
-            {
-                methodNameBuilder.Append("By");
-
-                for (var i = 0; i < parameters.Length; i++)
+                if (setting?.UrlControllerNameNormalizer != null)
                 {
-                    if (i > 0)
+                    controllerName =
+                        setting.UrlControllerNameNormalizer(
+                            new UrlControllerNameNormalizerContext(setting.RootPath, controllerName));
+                }
+
+                return controllerName;
+            };
+
+            ActionNameGenerator = (method) =>
+            {
+                var methodNameBuilder = new StringBuilder(method.Name);
+
+                var parameters = method.GetParameters();
+                if (parameters.Any())
+                {
+                    methodNameBuilder.Append("By");
+
+                    for (var i = 0; i < parameters.Length; i++)
                     {
-                        methodNameBuilder.Append("And");
+                        if (i > 0)
+                        {
+                            methodNameBuilder.Append("And");
+                        }
+
+                        methodNameBuilder.Append(parameters[i].Name.ToPascalCase());
+                    }
+                }
+
+                return methodNameBuilder.ToString();
+            };
+
+            ApiParameterNameGenerator = (apiParameterDescription) =>
+            {
+                if (apiParameterDescription.ModelMetadata is DefaultModelMetadata defaultModelMetadata)
+                {
+                    var jsonPropertyNameAttribute = (System.Text.Json.Serialization.JsonPropertyNameAttribute)
+                        defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is System.Text.Json.Serialization.JsonPropertyNameAttribute);
+                    if (jsonPropertyNameAttribute != null)
+                    {
+                        return jsonPropertyNameAttribute.Name;
                     }
 
-                    methodNameBuilder.Append(parameters[i].Name.ToPascalCase());
-                }
-            }
-
-            return methodNameBuilder.ToString();
-        };
-
-        ApiParameterNameGenerator = (apiParameterDescription) =>
-        {
-            if (apiParameterDescription.ModelMetadata is DefaultModelMetadata defaultModelMetadata)
-            {
-                var jsonPropertyNameAttribute = (System.Text.Json.Serialization.JsonPropertyNameAttribute)
-                    defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is System.Text.Json.Serialization.JsonPropertyNameAttribute);
-                if (jsonPropertyNameAttribute != null)
-                {
-                    return jsonPropertyNameAttribute.Name;
+                    var jsonPropertyAttribute = (Newtonsoft.Json.JsonPropertyAttribute)
+                        defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is Newtonsoft.Json.JsonPropertyAttribute);
+                    if (jsonPropertyAttribute != null)
+                    {
+                        return jsonPropertyAttribute.PropertyName;
+                    }
                 }
 
-                var jsonPropertyAttribute = (Newtonsoft.Json.JsonPropertyAttribute)
-                    defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is Newtonsoft.Json.JsonPropertyAttribute);
-                if (jsonPropertyAttribute != null)
-                {
-                    return jsonPropertyAttribute.PropertyName;
-                }
-            }
-
-            return null;
-        };
+                return null;
+            };
+        }
     }
 }

@@ -5,52 +5,53 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.VirtualFileSystem;
-
-public class VirtualFileProvider : IVirtualFileProvider, ISingletonDependency
+namespace Volo.Abp.VirtualFileSystem
 {
-    private readonly IFileProvider _hybridFileProvider;
-    private readonly AbpVirtualFileSystemOptions _options;
-
-    public VirtualFileProvider(
-        IOptions<AbpVirtualFileSystemOptions> options,
-        IDynamicFileProvider dynamicFileProvider)
+    public class VirtualFileProvider : IVirtualFileProvider, ISingletonDependency
     {
-        _options = options.Value;
-        _hybridFileProvider = CreateHybridProvider(dynamicFileProvider);
-    }
+        private readonly IFileProvider _hybridFileProvider;
+        private readonly AbpVirtualFileSystemOptions _options;
 
-    public virtual IFileInfo GetFileInfo(string subpath)
-    {
-        return _hybridFileProvider.GetFileInfo(subpath);
-    }
-
-    public virtual IDirectoryContents GetDirectoryContents(string subpath)
-    {
-        if (subpath == "")
+        public VirtualFileProvider(
+            IOptions<AbpVirtualFileSystemOptions> options,
+            IDynamicFileProvider dynamicFileProvider)
         {
-            subpath = "/";
+            _options = options.Value;
+            _hybridFileProvider = CreateHybridProvider(dynamicFileProvider);
         }
 
-        return _hybridFileProvider.GetDirectoryContents(subpath);
-    }
-
-    public virtual IChangeToken Watch(string filter)
-    {
-        return _hybridFileProvider.Watch(filter);
-    }
-
-    protected virtual IFileProvider CreateHybridProvider(IDynamicFileProvider dynamicFileProvider)
-    {
-        var fileProviders = new List<IFileProvider>();
-
-        fileProviders.Add(dynamicFileProvider);
-
-        foreach (var fileSet in _options.FileSets.AsEnumerable().Reverse())
+        public virtual IFileInfo GetFileInfo(string subpath)
         {
-            fileProviders.Add(fileSet.FileProvider);
+            return _hybridFileProvider.GetFileInfo(subpath);
         }
 
-        return new CompositeFileProvider(fileProviders);
+        public virtual IDirectoryContents GetDirectoryContents(string subpath)
+        {
+            if (subpath == "")
+            {
+                subpath = "/";
+            }
+            
+            return _hybridFileProvider.GetDirectoryContents(subpath);
+        }
+
+        public virtual IChangeToken Watch(string filter)
+        {
+            return _hybridFileProvider.Watch(filter);
+        }
+
+        protected virtual IFileProvider CreateHybridProvider(IDynamicFileProvider dynamicFileProvider)
+        {
+            var fileProviders = new List<IFileProvider>();
+
+            fileProviders.Add(dynamicFileProvider);
+
+            foreach (var fileSet in _options.FileSets.AsEnumerable().Reverse())
+            {
+                fileProviders.Add(fileSet.FileProvider);
+            }
+
+            return new CompositeFileProvider(fileProviders);
+        }
     }
 }

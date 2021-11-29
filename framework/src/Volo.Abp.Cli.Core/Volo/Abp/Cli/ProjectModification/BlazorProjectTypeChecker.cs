@@ -1,13 +1,14 @@
 ﻿using System.IO;
 
-namespace Volo.Abp.Cli.ProjectModification;
-
-public static class BlazorProjectTypeChecker
+namespace Volo.Abp.Cli.ProjectModification
 {
-    public static bool IsBlazorServerProject(string blazorProjectPath)
+    public static class BlazorProjectTypeChecker
     {
-        var blazorProjectCsprojContent = File.ReadAllText(blazorProjectPath);
+        public static bool IsBlazorServerProject(string blazorProjectPath)
+        {
+            var blazorProjectCsprojContent = File.ReadAllText(blazorProjectPath);
 
-        return !blazorProjectCsprojContent.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
+            return !blazorProjectCsprojContent.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
+        }
     }
 }

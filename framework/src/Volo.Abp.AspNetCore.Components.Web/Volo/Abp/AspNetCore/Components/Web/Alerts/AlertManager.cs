@@ -1,14 +1,15 @@
 ﻿using Volo.Abp.AspNetCore.Components.Alerts;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Alerts;
-
-public class AlertManager : IAlertManager, IScopedDependency
+namespace Volo.Abp.AspNetCore.Components.Web.Alerts
 {
-    public AlertList Alerts { get; }
-
-    public AlertManager()
+    public class AlertManager : IAlertManager, IScopedDependency
     {
-        Alerts = new AlertList();
+        public AlertList Alerts { get; }
+
+        public AlertManager()
+        {
+            Alerts = new AlertList();
+        }
     }
 }

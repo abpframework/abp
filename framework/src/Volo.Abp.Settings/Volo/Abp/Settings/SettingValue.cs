@@ -1,18 +1,19 @@
 ﻿using System;
 
-namespace Volo.Abp.Settings;
-
-[Serializable]
-public class SettingValue : NameValue
+namespace Volo.Abp.Settings
 {
-    public SettingValue()
+    [Serializable]
+    public class SettingValue : NameValue
     {
+        public SettingValue()
+        {
 
-    }
+        }
 
-    public SettingValue(string name, string value)
-    {
-        Name = name;
-        Value = value;
+        public SettingValue(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }

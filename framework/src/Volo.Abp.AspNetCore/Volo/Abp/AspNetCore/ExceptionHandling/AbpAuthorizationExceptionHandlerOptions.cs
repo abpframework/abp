@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.ExceptionHandling;
-
-public class AbpAuthorizationExceptionHandlerOptions
+﻿namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
-    public string AuthenticationScheme { get; set; }
+    public class AbpAuthorizationExceptionHandlerOptions
+    {
+        public string AuthenticationScheme { get; set; }
+    }
 }

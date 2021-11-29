@@ -1,31 +1,32 @@
 ﻿using System;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
-
-public class AbpLinkButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpLinkButtonTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpLinkButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpLinkButtonTagHelper>
     {
-        base.Process(context, output);
-        AddType(context, output);
-        AddRole(context, output);
-    }
-
-    protected virtual void AddType(TagHelperContext context, TagHelperOutput output)
-    {
-        if (!output.Attributes.ContainsName("type") &&
-            output.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("type", "button");
+            base.Process(context, output);
+            AddType(context, output);
+            AddRole(context, output);
         }
-    }
 
-    protected virtual void AddRole(TagHelperContext context, TagHelperOutput output)
-    {
-        if (!output.Attributes.ContainsName("role"))
+        protected virtual void AddType(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("role", "button");
+            if (!output.Attributes.ContainsName("type") &&
+                output.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+            {
+                output.Attributes.Add("type", "button");
+            }
+        }
+
+        protected virtual void AddRole(TagHelperContext context, TagHelperOutput output)
+        {
+            if (!output.Attributes.ContainsName("role"))
+            {
+                output.Attributes.Add("role", "button");
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Uow;
-
-public interface IUnitOfWorkManagerAccessor
+﻿namespace Volo.Abp.Uow
 {
-    IUnitOfWorkManager UnitOfWorkManager { get; }
+    public interface IUnitOfWorkManagerAccessor
+    {
+        IUnitOfWorkManager UnitOfWorkManager { get; }
+    }
 }

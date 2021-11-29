@@ -2,19 +2,20 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
-
-[DependsOn(typeof(AbpPermissionManagementDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpPermissionManagementDomainModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<PermissionManagementDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<IPermissionManagementDbContext>();
+            context.Services.AddAbpDbContext<PermissionManagementDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IPermissionManagementDbContext>();
 
-            options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
-        });
+                options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
+            });
+        }
     }
 }

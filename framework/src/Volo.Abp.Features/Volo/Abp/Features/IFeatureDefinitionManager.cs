@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Features;
-
-public interface IFeatureDefinitionManager
+namespace Volo.Abp.Features
 {
-    [NotNull]
-    FeatureDefinition Get([NotNull] string name);
+    public interface IFeatureDefinitionManager
+    {
+        [NotNull]
+        FeatureDefinition Get([NotNull] string name);
 
-    IReadOnlyList<FeatureDefinition> GetAll();
+        IReadOnlyList<FeatureDefinition> GetAll();
 
-    FeatureDefinition GetOrNull(string name);
+        FeatureDefinition GetOrNull(string name);
 
-    IReadOnlyList<FeatureGroupDefinition> GetGroups();
+        IReadOnlyList<FeatureGroupDefinition> GetGroups();
+    }
 }

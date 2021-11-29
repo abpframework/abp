@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.WebClientInfo;
-
-public interface IWebClientInfoProvider
+﻿namespace Volo.Abp.AspNetCore.WebClientInfo
 {
-    string BrowserInfo { get; }
+    public interface IWebClientInfoProvider
+    {
+        string BrowserInfo { get; }
 
-    string ClientIpAddress { get; }
+        string ClientIpAddress { get; }
+    }
 }

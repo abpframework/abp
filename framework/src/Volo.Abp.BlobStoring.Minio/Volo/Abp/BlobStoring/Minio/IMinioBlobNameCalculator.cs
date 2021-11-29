@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.Minio;
-
-public interface IMinioBlobNameCalculator
+﻿namespace Volo.Abp.BlobStoring.Minio
 {
-    string Calculate(BlobProviderArgs args);
+    public interface IMinioBlobNameCalculator
+    {
+        string Calculate(BlobProviderArgs args);
+    }
 }

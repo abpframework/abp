@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore;
-
-public interface IBlobStoringHostDbSchemaMigrator
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore
 {
-    Task MigrateAsync();
+    public interface IBlobStoringHostDbSchemaMigrator
+    {
+        Task MigrateAsync();
+    }
 }

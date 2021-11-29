@@ -1,48 +1,49 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
-
-public class PageItem
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 {
-    public int Index { get; }
-
-    public bool IsGap { get; set; }
-
-    public PageItem(int index)
+    public class PageItem
     {
-        Index = index;
-    }
+        public int Index { get; }
 
-    public PageItem(bool isGap)
-    {
-        IsGap = isGap;
-    }
+        public bool IsGap { get; set; }
 
-    public override bool Equals(object obj)
-    {
-        if (!(obj is PageItem item))
+        public PageItem(int index)
         {
-            return false;
+            Index = index;
         }
 
-        return Index.Equals(item.Index);
-    }
-
-    public override int GetHashCode()
-    {
-        return Index.GetHashCode();
-    }
-
-    public int CompareTo(PageItem other)
-    {
-        if (Index > other.Index)
+        public PageItem(bool isGap)
         {
-            return 1;
+            IsGap = isGap;
         }
 
-        if (Index < other.Index)
+        public override bool Equals(object obj)
         {
-            return -1;
+            if (!(obj is PageItem item))
+            {
+                return false;
+            }
+
+            return Index.Equals(item.Index);
         }
 
-        return 0;
+        public override int GetHashCode()
+        {
+            return Index.GetHashCode();
+        }
+
+        public int CompareTo(PageItem other)
+        {
+            if (Index > other.Index)
+            {
+                return 1;
+            }
+
+            if (Index < other.Index)
+            {
+                return -1;
+            }
+
+            return 0;
+        }
     }
 }

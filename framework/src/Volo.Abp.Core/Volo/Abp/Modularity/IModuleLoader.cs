@@ -3,14 +3,15 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity.PlugIns;
 
-namespace Volo.Abp.Modularity;
-
-public interface IModuleLoader
+namespace Volo.Abp.Modularity
 {
-    [NotNull]
-    IAbpModuleDescriptor[] LoadModules(
-        [NotNull] IServiceCollection services,
-        [NotNull] Type startupModuleType,
-        [NotNull] PlugInSourceList plugInSources
-    );
+    public interface IModuleLoader
+    {
+        [NotNull]
+        IAbpModuleDescriptor[] LoadModules(
+            [NotNull] IServiceCollection services,
+            [NotNull] Type startupModuleType,
+            [NotNull] PlugInSourceList plugInSources
+        );
+    }
 }

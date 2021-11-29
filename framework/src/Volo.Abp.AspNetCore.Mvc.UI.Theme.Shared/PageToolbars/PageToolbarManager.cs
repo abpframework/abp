@@ -5,39 +5,40 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-
-public class PageToolbarManager : IPageToolbarManager, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
 {
-    protected AbpPageToolbarOptions Options { get; }
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-
-    public PageToolbarManager(
-        IOptions<AbpPageToolbarOptions> options,
-        IHybridServiceScopeFactory serviceScopeFactory)
+    public class PageToolbarManager : IPageToolbarManager, ITransientDependency
     {
-        Options = options.Value;
-        ServiceScopeFactory = serviceScopeFactory;
-    }
+        protected AbpPageToolbarOptions Options { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
-    public virtual async Task<PageToolbarItem[]> GetItemsAsync(string pageName)
-    {
-        var toolbar = Options.Toolbars.GetOrDefault(pageName);
-        if (toolbar == null || !toolbar.Contributors.Any())
+        public PageToolbarManager(
+            IOptions<AbpPageToolbarOptions> options,
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            return Array.Empty<PageToolbarItem>();
+            Options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public virtual async Task<PageToolbarItem[]> GetItemsAsync(string pageName)
         {
-            var context = new PageToolbarContributionContext(pageName, scope.ServiceProvider);
-
-            foreach (var contributor in toolbar.Contributors)
+            var toolbar = Options.Toolbars.GetOrDefault(pageName);
+            if (toolbar == null || !toolbar.Contributors.Any())
             {
-                await contributor.ContributeAsync(context);
+                return Array.Empty<PageToolbarItem>();
             }
 
-            return context.Items.OrderBy(i => i.Order).ToArray();
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var context = new PageToolbarContributionContext(pageName, scope.ServiceProvider);
+
+                foreach (var contributor in toolbar.Contributors)
+                {
+                    await contributor.ContributeAsync(context);
+                }
+
+                return context.Items.OrderBy(i => i.Order).ToArray();
+            }
         }
     }
 }

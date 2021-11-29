@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts;
-
-public class PageAlertsViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 {
-    protected IAlertManager AlertManager { get; }
-
-    public PageAlertsViewComponent(IAlertManager alertManager)
+    public class PageAlertsViewComponent : AbpViewComponent
     {
-        AlertManager = alertManager;
-    }
+        protected IAlertManager AlertManager { get; }
 
-    public IViewComponentResult Invoke(string name)
-    {
-        return View("~/Themes/Basic/Components/PageAlerts/Default.cshtml", AlertManager.Alerts);
+        public PageAlertsViewComponent(IAlertManager alertManager)
+        {
+            AlertManager = alertManager;
+        }
+
+        public IViewComponentResult Invoke(string name)
+        {
+            return View("~/Themes/Basic/Components/PageAlerts/Default.cshtml", AlertManager.Alerts);
+        }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.TenantManagement;
-
-[Serializable]
-public class TenantEto
+namespace Volo.Abp.TenantManagement
 {
-    public Guid Id { get; set; }
+    [Serializable]
+    public class TenantEto
+    {
+        public Guid Id { get; set; }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
+    }
 }

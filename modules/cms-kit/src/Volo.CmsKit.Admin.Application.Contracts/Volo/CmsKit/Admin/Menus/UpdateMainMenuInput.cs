@@ -1,9 +1,10 @@
 using System;
 
-namespace Volo.CmsKit.Admin.Menus;
-
-[Serializable]
-public class UpdateMainMenuInput
+namespace Volo.CmsKit.Admin.Menus
 {
-    public bool IsMainMenu { get; set; }
+    [Serializable]
+    public class UpdateMainMenuInput
+    {
+        public bool IsMainMenu { get; set; }
+    }
 }

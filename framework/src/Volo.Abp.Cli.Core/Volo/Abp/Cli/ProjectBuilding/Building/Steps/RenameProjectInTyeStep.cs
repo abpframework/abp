@@ -2,35 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class RenameProjectInTyeStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    private readonly string _oldName;
-    private readonly string _newName;
-
-    public RenameProjectInTyeStep(string oldName, string newName)
+    public class RenameProjectInTyeStep : ProjectBuildPipelineStep
     {
-        _oldName = oldName;
-        _newName = newName;
-    }
+        private readonly string _oldName;
+        private readonly string _newName;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/tye.yaml");
-
-        if (tyeFile == null)
+        public RenameProjectInTyeStep(string oldName, string newName)
         {
-            return;
+            _oldName = oldName;
+            _newName = newName;
         }
 
-        var lines = tyeFile.GetLines();
-        var oldNameLine = $"- name: {_oldName}";
-        var newNameLine = $"- name: {_newName}";
+        public override void Execute(ProjectBuildContext context)
+        {
+            var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/tye.yaml");
 
-        var newLines = lines.Select(line => line.Equals(oldNameLine) ? newNameLine : line).ToList();
+            if (tyeFile == null)
+            {
+                return;
+            }
 
-        tyeFile.SetContent(string.Join(Environment.NewLine, newLines));
+            var lines = tyeFile.GetLines();
+            var oldNameLine = $"- name: {_oldName}";
+            var newNameLine = $"- name: {_newName}";
+
+            var newLines = lines.Select(line => line.Equals(oldNameLine) ? newNameLine : line).ToList();
+
+            tyeFile.SetContent(string.Join(Environment.NewLine, newLines));
+        }
+
     }
-
 }

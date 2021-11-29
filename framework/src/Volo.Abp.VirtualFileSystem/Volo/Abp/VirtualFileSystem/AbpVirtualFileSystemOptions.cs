@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.VirtualFileSystem;
-
-public class AbpVirtualFileSystemOptions
+﻿namespace Volo.Abp.VirtualFileSystem
 {
-    public VirtualFileSetList FileSets { get; }
-
-    public AbpVirtualFileSystemOptions()
+    public class AbpVirtualFileSystemOptions
     {
-        FileSets = new VirtualFileSetList();
+        public VirtualFileSetList FileSets { get; }
+        
+        public AbpVirtualFileSystemOptions()
+        {
+            FileSets = new VirtualFileSetList();
+        }
     }
 }

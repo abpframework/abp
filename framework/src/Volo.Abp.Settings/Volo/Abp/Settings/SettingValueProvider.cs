@@ -2,20 +2,21 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Settings;
-
-public abstract class SettingValueProvider : ISettingValueProvider, ITransientDependency
+namespace Volo.Abp.Settings
 {
-    public abstract string Name { get; }
-
-    protected ISettingStore SettingStore { get; }
-
-    protected SettingValueProvider(ISettingStore settingStore)
+    public abstract class SettingValueProvider : ISettingValueProvider, ITransientDependency
     {
-        SettingStore = settingStore;
+        public abstract string Name { get; }
+
+        protected ISettingStore SettingStore { get; }
+
+        protected SettingValueProvider(ISettingStore settingStore)
+        {
+            SettingStore = settingStore;
+        }
+
+        public abstract Task<string> GetOrNullAsync(SettingDefinition setting);
+
+        public abstract Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings);
     }
-
-    public abstract Task<string> GetOrNullAsync(SettingDefinition setting);
-
-    public abstract Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings);
 }

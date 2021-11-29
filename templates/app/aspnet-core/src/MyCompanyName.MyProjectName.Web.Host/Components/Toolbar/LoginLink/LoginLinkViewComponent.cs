@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace MyCompanyName.MyProjectName.Web.Components.Toolbar.LoginLink;
-
-public class LoginLinkViewComponent : AbpViewComponent
+namespace MyCompanyName.MyProjectName.Web.Components.Toolbar.LoginLink
 {
-    public virtual IViewComponentResult Invoke()
+    public class LoginLinkViewComponent : AbpViewComponent
     {
-        return View("~/Components/Toolbar/LoginLink/Default.cshtml");
+        public virtual IViewComponentResult Invoke()
+        {
+            return View("~/Components/Toolbar/LoginLink/Default.cshtml");
+        }
     }
 }

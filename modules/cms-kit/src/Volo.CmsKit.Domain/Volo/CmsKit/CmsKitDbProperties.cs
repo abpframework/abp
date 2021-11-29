@@ -1,10 +1,11 @@
-﻿namespace Volo.CmsKit;
-
-public static class CmsKitDbProperties
+﻿namespace Volo.CmsKit
 {
-    public static string DbTablePrefix { get; set; } = "Cms";
+    public static class CmsKitDbProperties
+    {
+        public static string DbTablePrefix { get; set; } = "Cms";
 
-    public static string DbSchema { get; set; } = null;
+        public static string DbSchema { get; set; } = null;
 
-    public const string ConnectionStringName = "CmsKit";
+        public const string ConnectionStringName = "CmsKit";
+    }
 }

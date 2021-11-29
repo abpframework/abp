@@ -1,24 +1,26 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Validation.StringValues;
-
-[Serializable]
-public abstract class ValueValidatorBase : IValueValidator
+namespace Volo.Abp.Validation.StringValues
 {
-    public virtual string Name => ValueValidatorAttribute.GetName(GetType());
-
-    public object this[string key] {
-        get => Properties.GetOrDefault(key);
-        set => Properties[key] = value;
-    }
-
-    public IDictionary<string, object> Properties { get; }
-
-    protected ValueValidatorBase()
+    [Serializable]
+    public abstract class ValueValidatorBase : IValueValidator
     {
-        Properties = new Dictionary<string, object>();
-    }
+        public virtual string Name => ValueValidatorAttribute.GetName(GetType());
 
-    public abstract bool IsValid(object value);
+        public object this[string key]
+        {
+            get => Properties.GetOrDefault(key);
+            set => Properties[key] = value;
+        }
+
+        public IDictionary<string, object> Properties { get; }
+
+        protected ValueValidatorBase()
+        {
+            Properties = new Dictionary<string, object>();
+        }
+
+        public abstract bool IsValid(object value);
+    }
 }

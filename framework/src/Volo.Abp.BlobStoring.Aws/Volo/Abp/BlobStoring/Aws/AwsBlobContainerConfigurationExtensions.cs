@@ -1,24 +1,25 @@
 ﻿using System;
 
-namespace Volo.Abp.BlobStoring.Aws;
-
-public static class AwsBlobContainerConfigurationExtensions
+namespace Volo.Abp.BlobStoring.Aws
 {
-    public static AwsBlobProviderConfiguration GetAwsConfiguration(
-        this BlobContainerConfiguration containerConfiguration)
+    public static class AwsBlobContainerConfigurationExtensions
     {
-        return new AwsBlobProviderConfiguration(containerConfiguration);
-    }
+        public static AwsBlobProviderConfiguration GetAwsConfiguration(
+            this BlobContainerConfiguration containerConfiguration)
+        {
+            return new AwsBlobProviderConfiguration(containerConfiguration);
+        }
 
-    public static BlobContainerConfiguration UseAws(
-        this BlobContainerConfiguration containerConfiguration,
-        Action<AwsBlobProviderConfiguration> awsConfigureAction)
-    {
-        containerConfiguration.ProviderType = typeof(AwsBlobProvider);
-        containerConfiguration.NamingNormalizers.TryAdd<AwsBlobNamingNormalizer>();
+        public static BlobContainerConfiguration UseAws(
+            this BlobContainerConfiguration containerConfiguration,
+            Action<AwsBlobProviderConfiguration> awsConfigureAction)
+        {
+            containerConfiguration.ProviderType = typeof(AwsBlobProvider);
+            containerConfiguration.NamingNormalizers.TryAdd<AwsBlobNamingNormalizer>();
 
-        awsConfigureAction(new AwsBlobProviderConfiguration(containerConfiguration));
+            awsConfigureAction(new AwsBlobProviderConfiguration(containerConfiguration));
 
-        return containerConfiguration;
+            return containerConfiguration;
+        }
     }
 }

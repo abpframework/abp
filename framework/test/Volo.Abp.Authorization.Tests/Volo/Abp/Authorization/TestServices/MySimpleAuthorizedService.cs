@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.TestServices;
-
-[Authorize]
-public class MySimpleAuthorizedService : IMySimpleAuthorizedService, ITransientDependency
+namespace Volo.Abp.Authorization.TestServices
 {
-    public Task<int> ProtectedByClassAsync()
+    [Authorize]
+    public class MySimpleAuthorizedService : IMySimpleAuthorizedService, ITransientDependency
     {
-        return Task.FromResult(42);
-    }
+        public Task<int> ProtectedByClassAsync()
+        {
+            return Task.FromResult(42);
+        }
 
-    [AllowAnonymous]
-    public Task<int> AnonymousAsync()
-    {
-        return Task.FromResult(42);
+        [AllowAnonymous]
+        public Task<int> AnonymousAsync()
+        {
+            return Task.FromResult(42);
+        }
     }
 }

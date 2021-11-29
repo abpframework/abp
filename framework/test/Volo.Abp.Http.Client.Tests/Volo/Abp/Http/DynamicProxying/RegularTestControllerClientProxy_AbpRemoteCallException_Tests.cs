@@ -9,52 +9,53 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.Proxying;
 using Xunit;
 
-namespace Volo.Abp.Http.DynamicProxying;
-
-public class RegularTestControllerClientProxy_AbpRemoteCallException_Tests : AbpHttpClientTestBase
+namespace Volo.Abp.Http.DynamicProxying
 {
-    private readonly IRegularTestController _controller;
-
-    public RegularTestControllerClientProxy_AbpRemoteCallException_Tests()
+    public class RegularTestControllerClientProxy_AbpRemoteCallException_Tests : AbpHttpClientTestBase
     {
-        _controller = ServiceProvider.GetRequiredService<IRegularTestController>();
-    }
+        private readonly IRegularTestController _controller;
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        services.Replace(ServiceDescriptor.Singleton<IProxyHttpClientFactory, TestProxyHttpClientFactory>());
-    }
-
-    [Fact]
-    public async Task AbpRemoteCallException_On_SendAsync_Test()
-    {
-        var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(default));
-        exception.Message.ShouldContain("An error occurred during the ABP remote HTTP request.");
-    }
-
-    class TestProxyHttpClientFactory : IProxyHttpClientFactory
-    {
-        private readonly ITestServerAccessor _testServerAccessor;
-
-        private int _count;
-
-        public TestProxyHttpClientFactory(ITestServerAccessor testServerAccessor)
+        public RegularTestControllerClientProxy_AbpRemoteCallException_Tests()
         {
-            _testServerAccessor = testServerAccessor;
+            _controller = ServiceProvider.GetRequiredService<IRegularTestController>();
         }
 
-        public HttpClient Create(string name) => Create();
-
-        public HttpClient Create()
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            if (_count++ > 0)
+            services.Replace(ServiceDescriptor.Singleton<IProxyHttpClientFactory, TestProxyHttpClientFactory>());
+        }
+
+        [Fact]
+        public async Task AbpRemoteCallException_On_SendAsync_Test()
+        {
+            var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(default));
+            exception.Message.ShouldContain("An error occurred during the ABP remote HTTP request.");
+        }
+
+        class TestProxyHttpClientFactory : IProxyHttpClientFactory
+        {
+            private readonly ITestServerAccessor _testServerAccessor;
+
+            private int _count;
+
+            public TestProxyHttpClientFactory(ITestServerAccessor testServerAccessor)
             {
-                //Will get an error on the SendAsync method.
-                return new HttpClient();
+                _testServerAccessor = testServerAccessor;
             }
 
-            // for DynamicHttpProxyInterceptor.GetActionApiDescriptionModel
-            return _testServerAccessor.Server.CreateClient();
+            public HttpClient Create(string name) => Create();
+
+            public HttpClient Create()
+            {
+                if (_count++ > 0)
+                {
+                    //Will get an error on the SendAsync method.
+                    return new HttpClient();
+                }
+
+                // for DynamicHttpProxyInterceptor.GetActionApiDescriptionModel
+                return _testServerAccessor.Server.CreateClient();
+            }
         }
     }
 }

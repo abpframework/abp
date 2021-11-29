@@ -6,44 +6,45 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Caching;
 using Volo.Abp.ObjectMapping;
 
-namespace Volo.Abp.IdentityServer.Clients;
-
-public class ClientStore : IClientStore
+namespace Volo.Abp.IdentityServer.Clients
 {
-    protected IClientRepository ClientRepository { get; }
-    protected IObjectMapper<AbpIdentityServerDomainModule> ObjectMapper { get; }
-    protected IDistributedCache<IdentityServer4.Models.Client> Cache { get; }
-    protected IdentityServerOptions Options { get; }
-
-    public ClientStore(
-        IClientRepository clientRepository,
-        IObjectMapper<AbpIdentityServerDomainModule> objectMapper,
-        IDistributedCache<IdentityServer4.Models.Client> cache,
-        IOptions<IdentityServerOptions> options)
+    public class ClientStore : IClientStore
     {
-        ClientRepository = clientRepository;
-        ObjectMapper = objectMapper;
-        Cache = cache;
-        Options = options.Value;
-    }
+        protected IClientRepository ClientRepository { get; }
+        protected IObjectMapper<AbpIdentityServerDomainModule> ObjectMapper { get; }
+        protected IDistributedCache<IdentityServer4.Models.Client> Cache { get; }
+        protected IdentityServerOptions Options { get; }
 
-    public virtual async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
-    {
-        return await GetCacheItemAsync(clientId);
-    }
+        public ClientStore(
+            IClientRepository clientRepository,
+            IObjectMapper<AbpIdentityServerDomainModule> objectMapper,
+            IDistributedCache<IdentityServer4.Models.Client> cache,
+            IOptions<IdentityServerOptions> options)
+        {
+            ClientRepository = clientRepository;
+            ObjectMapper = objectMapper;
+            Cache = cache;
+            Options = options.Value;
+        }
 
-    protected virtual async Task<IdentityServer4.Models.Client> GetCacheItemAsync(string clientId)
-    {
-        return await Cache.GetOrAddAsync(clientId, async () =>
-            {
-                var client = await ClientRepository.FindByClientIdAsync(clientId);
-                return ObjectMapper.Map<Client, IdentityServer4.Models.Client>(client);
-            },
-            optionsFactory: () => new DistributedCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = Options.Caching.ClientStoreExpiration
-            },
-            considerUow: true);
+        public virtual async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
+        {
+            return await GetCacheItemAsync(clientId);
+        }
 
+        protected virtual async Task<IdentityServer4.Models.Client> GetCacheItemAsync(string clientId)
+        {
+            return await Cache.GetOrAddAsync(clientId, async () =>
+                {
+                    var client = await ClientRepository.FindByClientIdAsync(clientId);
+                    return ObjectMapper.Map<Client, IdentityServer4.Models.Client>(client);
+                },
+                optionsFactory: () => new DistributedCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = Options.Caching.ClientStoreExpiration
+                },
+                considerUow: true);
+
+        }
     }
 }

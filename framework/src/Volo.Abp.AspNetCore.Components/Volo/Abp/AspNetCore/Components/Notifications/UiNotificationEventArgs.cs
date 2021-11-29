@@ -1,22 +1,23 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Components.Notifications;
-
-public class UiNotificationEventArgs : EventArgs
+namespace Volo.Abp.AspNetCore.Components.Notifications
 {
-    public UiNotificationEventArgs(UiNotificationType notificationType, string message, string title, UiNotificationOptions options)
+    public class UiNotificationEventArgs : EventArgs
     {
-        NotificationType = notificationType;
-        Message = message;
-        Title = title;
-        Options = options;
+        public UiNotificationEventArgs(UiNotificationType notificationType, string message, string title, UiNotificationOptions options)
+        {
+            NotificationType = notificationType;
+            Message = message;
+            Title = title;
+            Options = options;
+        }
+
+        public UiNotificationType NotificationType { get; set; }
+
+        public string Message { get; }
+
+        public string Title { get; }
+
+        public UiNotificationOptions Options { get; }
     }
-
-    public UiNotificationType NotificationType { get; set; }
-
-    public string Message { get; }
-
-    public string Title { get; }
-
-    public UiNotificationOptions Options { get; }
 }

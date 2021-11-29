@@ -5,25 +5,26 @@ using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.SettingManagement;
-
-[DependsOn(typeof(AbpLocalizationModule),
-    typeof(AbpValidationModule),
-    typeof(AbpFeaturesModule))]
-public class AbpSettingManagementDomainSharedModule : AbpModule
+namespace Volo.Abp.SettingManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpLocalizationModule),
+        typeof(AbpValidationModule),
+        typeof(AbpFeaturesModule))]
+    public class AbpSettingManagementDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpSettingManagementDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpSettingManagementDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpSettingManagementResource>("en")
-                .AddVirtualJson("/Volo/Abp/SettingManagement/Localization/Resources/AbpSettingManagement");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpSettingManagementResource>("en")
+                    .AddVirtualJson("/Volo/Abp/SettingManagement/Localization/Resources/AbpSettingManagement");
+            });
+        }
     }
 }

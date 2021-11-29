@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.Public;
-
-[DependsOn(
-    typeof(CmsKitPublicApplicationContractsModule),
-    typeof(CmsKitCommonHttpApiModule))]
-public class CmsKitPublicHttpApiModule : AbpModule
+namespace Volo.CmsKit.Public
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(CmsKitPublicApplicationContractsModule),
+        typeof(CmsKitCommonHttpApiModule))]
+    public class CmsKitPublicHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicHttpApiModule).Assembly);
-        });
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicHttpApiModule).Assembly);
+            });
+        }
     }
 }

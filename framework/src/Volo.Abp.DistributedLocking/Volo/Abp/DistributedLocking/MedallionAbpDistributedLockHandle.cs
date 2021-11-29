@@ -1,19 +1,20 @@
 ﻿using System.Threading.Tasks;
 using Medallion.Threading;
 
-namespace Volo.Abp.DistributedLocking;
-
-public class MedallionAbpDistributedLockHandle : IAbpDistributedLockHandle
+namespace Volo.Abp.DistributedLocking
 {
-    public IDistributedSynchronizationHandle Handle { get; }
-
-    public MedallionAbpDistributedLockHandle(IDistributedSynchronizationHandle handle)
+    public class MedallionAbpDistributedLockHandle : IAbpDistributedLockHandle
     {
-        Handle = handle;
-    }
+        public IDistributedSynchronizationHandle Handle { get; }
 
-    public ValueTask DisposeAsync()
-    {
-        return Handle.DisposeAsync();
+        public MedallionAbpDistributedLockHandle(IDistributedSynchronizationHandle handle)
+        {
+            Handle = handle;
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return Handle.DisposeAsync();
+        }
     }
 }

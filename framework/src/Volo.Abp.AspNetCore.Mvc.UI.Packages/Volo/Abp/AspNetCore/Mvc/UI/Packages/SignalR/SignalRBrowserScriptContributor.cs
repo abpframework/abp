@@ -3,13 +3,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
-
-[DependsOn(typeof(CoreScriptContributor))]
-public class SignalRBrowserScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(CoreScriptContributor))]
+    public class SignalRBrowserScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/signalr/browser/signalr.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/signalr/browser/signalr.js");
+        }
     }
 }

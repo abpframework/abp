@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization;
-
-public class FixedLocalizableString : ILocalizableString
+namespace Volo.Abp.Localization
 {
-    public string Value { get; }
-
-    public FixedLocalizableString(string value)
+    public class FixedLocalizableString : ILocalizableString
     {
-        Value = value;
-    }
+        public string Value { get; }
 
-    public LocalizedString Localize(IStringLocalizerFactory stringLocalizerFactory)
-    {
-        return new LocalizedString(Value, Value);
+        public FixedLocalizableString(string value)
+        {
+            Value = value;
+        }
+
+        public LocalizedString Localize(IStringLocalizerFactory stringLocalizerFactory)
+        {
+            return new LocalizedString(Value, Value);
+        }
     }
 }

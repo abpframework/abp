@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Vue;
-
-public class VueScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Vue
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class VueScriptContributor : BundleContributor
     {
-        context.Files.Add("/libs/vue/vue.min.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.Add("/libs/vue/vue.min.js");
+        }
     }
 }

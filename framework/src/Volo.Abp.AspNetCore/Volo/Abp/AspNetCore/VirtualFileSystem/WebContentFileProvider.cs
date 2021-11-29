@@ -9,107 +9,108 @@ using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem;
-
-public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    private readonly IVirtualFileProvider _virtualFileProvider;
-    private readonly IFileProvider _fileProvider;
-    private readonly IWebHostEnvironment _hostingEnvironment;
-    private string _rootPath = "/wwwroot";
-
-    protected AbpAspNetCoreContentOptions Options { get; }
-
-    public WebContentFileProvider(
-        IVirtualFileProvider virtualFileProvider,
-        IWebHostEnvironment hostingEnvironment,
-        IOptions<AbpAspNetCoreContentOptions> options)
+    public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
     {
-        _virtualFileProvider = virtualFileProvider;
-        _hostingEnvironment = hostingEnvironment;
-        Options = options.Value;
+        private readonly IVirtualFileProvider _virtualFileProvider;
+        private readonly IFileProvider _fileProvider;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private string _rootPath = "/wwwroot";
 
-        _fileProvider = CreateFileProvider();
-    }
+        protected AbpAspNetCoreContentOptions Options { get; }
 
-    public virtual IFileInfo GetFileInfo(string subpath)
-    {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
-
-        if (PathUtils.PathNavigatesAboveRoot(subpath))
+        public WebContentFileProvider(
+            IVirtualFileProvider virtualFileProvider,
+            IWebHostEnvironment hostingEnvironment,
+            IOptions<AbpAspNetCoreContentOptions> options)
         {
-            return new NotFoundFileInfo(subpath);
+            _virtualFileProvider = virtualFileProvider;
+            _hostingEnvironment = hostingEnvironment;
+            Options = options.Value;
+
+            _fileProvider = CreateFileProvider();
         }
 
-        if (ExtraAllowedFolder(subpath) && ExtraAllowedExtension(subpath))
+        public virtual IFileInfo GetFileInfo(string subpath)
         {
-            var fileInfo = _fileProvider.GetFileInfo(subpath);
-            if (fileInfo.Exists)
+            Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (PathUtils.PathNavigatesAboveRoot(subpath))
             {
-                return fileInfo;
+                return new NotFoundFileInfo(subpath);
             }
-        }
 
-        return _fileProvider.GetFileInfo(_rootPath + subpath);
-    }
-
-    public virtual IDirectoryContents GetDirectoryContents([NotNull] string subpath)
-    {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
-
-        if (PathUtils.PathNavigatesAboveRoot(subpath))
-        {
-            return NotFoundDirectoryContents.Singleton;
-        }
-
-        if (ExtraAllowedFolder(subpath))
-        {
-            var directory = _fileProvider.GetDirectoryContents(subpath);
-            if (directory.Exists)
+            if (ExtraAllowedFolder(subpath) && ExtraAllowedExtension(subpath))
             {
-                return directory;
+                var fileInfo = _fileProvider.GetFileInfo(subpath);
+                if (fileInfo.Exists)
+                {
+                    return fileInfo;
+                }
             }
+
+            return _fileProvider.GetFileInfo(_rootPath + subpath);
         }
 
-        return _fileProvider.GetDirectoryContents(_rootPath + subpath);
-    }
-
-    public virtual IChangeToken Watch(string filter)
-    {
-        if (!ExtraAllowedFolder(filter))
+        public virtual IDirectoryContents GetDirectoryContents([NotNull] string subpath)
         {
-            return _fileProvider.Watch(_rootPath + filter);
+            Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (PathUtils.PathNavigatesAboveRoot(subpath))
+            {
+                return NotFoundDirectoryContents.Singleton;
+            }
+
+            if (ExtraAllowedFolder(subpath))
+            {
+                var directory = _fileProvider.GetDirectoryContents(subpath);
+                if (directory.Exists)
+                {
+                    return directory;
+                }
+            }
+
+            return _fileProvider.GetDirectoryContents(_rootPath + subpath);
         }
 
-        return new CompositeChangeToken(
-            new[]
+        public virtual IChangeToken Watch(string filter)
+        {
+            if (!ExtraAllowedFolder(filter))
             {
+                return _fileProvider.Watch(_rootPath + filter);
+            }
+
+            return new CompositeChangeToken(
+                new[]
+                {
                     _fileProvider.Watch(_rootPath + filter),
                     _fileProvider.Watch(filter)
-            }
-        );
-    }
+                }
+            );
+        }
 
-    protected virtual IFileProvider CreateFileProvider()
-    {
-        var fileProviders = new List<IFileProvider>
+        protected virtual IFileProvider CreateFileProvider()
+        {
+            var fileProviders = new List<IFileProvider>
             {
                 new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
                 _virtualFileProvider
             };
 
-        return new CompositeFileProvider(
-            fileProviders
-        );
-    }
+            return new CompositeFileProvider(
+                fileProviders
+            );
+        }
 
-    protected virtual bool ExtraAllowedFolder(string path)
-    {
-        return Options.AllowedExtraWebContentFolders.Any(s => path.StartsWith(s, StringComparison.OrdinalIgnoreCase));
-    }
+        protected virtual bool ExtraAllowedFolder(string path)
+        {
+            return Options.AllowedExtraWebContentFolders.Any(s => path.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
 
-    protected virtual bool ExtraAllowedExtension(string path)
-    {
-        return Options.AllowedExtraWebContentFileExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
+        protected virtual bool ExtraAllowedExtension(string path)
+        {
+            return Options.AllowedExtraWebContentFileExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

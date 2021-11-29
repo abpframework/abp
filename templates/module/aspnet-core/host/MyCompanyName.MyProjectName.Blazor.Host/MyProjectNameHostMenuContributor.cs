@@ -4,39 +4,40 @@ using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Account.Localization;
-namespace MyCompanyName.MyProjectName.Blazor.Host;
-
-public class MyProjectNameHostMenuContributor : IMenuContributor
+namespace MyCompanyName.MyProjectName.Blazor.Host
 {
-    private readonly IConfiguration _configuration;
-
-    public MyProjectNameHostMenuContributor(IConfiguration configuration)
+    public class MyProjectNameHostMenuContributor : IMenuContributor
     {
-        _configuration = configuration;
-    }
+        private readonly IConfiguration _configuration;
 
-    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
-    {
-        if (context.Menu.Name == StandardMenus.User)
+        public MyProjectNameHostMenuContributor(IConfiguration configuration)
         {
-            await ConfigureUserMenuAsync(context);
+            _configuration = configuration;
         }
-    }
 
-    private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
-    {
-        var accountStringLocalizer = context.GetLocalizer<AccountResource>();
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name == StandardMenus.User)
+            {
+                await ConfigureUserMenuAsync(context);
+            }
+        }
 
-        var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
+        private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
+        {
+            var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
-        context.Menu.AddItem(new ApplicationMenuItem(
-            "Account.Manage",
-            accountStringLocalizer["ManageYourProfile"],
-            $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
-            icon: "fa fa-cog",
-            order: 1000,
-            null).RequireAuthenticated());
+            var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
 
-        return Task.CompletedTask;
+            context.Menu.AddItem(new ApplicationMenuItem(
+                "Account.Manage",
+                accountStringLocalizer["ManageYourProfile"],
+                $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
+                icon: "fa fa-cog",
+                order: 1000,
+                null).RequireAuthenticated());
+
+            return Task.CompletedTask;
+        }
     }
 }

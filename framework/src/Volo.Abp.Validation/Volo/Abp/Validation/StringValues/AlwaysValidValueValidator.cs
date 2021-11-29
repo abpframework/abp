@@ -1,13 +1,14 @@
 using System;
 
-namespace Volo.Abp.Validation.StringValues;
-
-[Serializable]
-[ValueValidator("NULL")]
-public class AlwaysValidValueValidator : ValueValidatorBase
+namespace Volo.Abp.Validation.StringValues
 {
-    public override bool IsValid(object value)
+    [Serializable]
+    [ValueValidator("NULL")]
+    public class AlwaysValidValueValidator : ValueValidatorBase
     {
-        return true;
+        public override bool IsValid(object value)
+        {
+            return true;
+        }
     }
 }

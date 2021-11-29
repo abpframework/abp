@@ -1,23 +1,24 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Studio.Analyzing.Models.Authorization;
-
-[PackageContentItemName(ContentTypeName)]
-public class PermissionModel : PackageContentItemModel
+namespace Volo.Abp.Studio.Analyzing.Models.Authorization
 {
-    public const string ContentTypeName = "permission";
-
-    public string DisplayName { get; }
-
-    public bool IsEnabled { get; }
-
-    public PermissionModel(
-        [NotNull] string name,
-        string displayName,
-        bool isEnabled)
-        : base(name)
+    [PackageContentItemName(ContentTypeName)]
+    public class PermissionModel : PackageContentItemModel
     {
-        DisplayName = displayName;
-        IsEnabled = isEnabled;
+        public const string ContentTypeName = "permission";
+
+        public string DisplayName { get; }
+        
+        public bool IsEnabled { get; }
+        
+        public PermissionModel(
+            [NotNull] string name,
+            string displayName,
+            bool isEnabled)
+            : base(name)
+        {
+            DisplayName = displayName;
+            IsEnabled = isEnabled;
+        }
     }
 }

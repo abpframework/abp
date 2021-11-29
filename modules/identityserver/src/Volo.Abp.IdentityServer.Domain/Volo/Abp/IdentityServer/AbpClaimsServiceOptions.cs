@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpClaimsServiceOptions
+namespace Volo.Abp.IdentityServer
 {
-    public List<string> RequestedClaims { get; }
-
-    public AbpClaimsServiceOptions()
+    public class AbpClaimsServiceOptions
     {
-        RequestedClaims = new List<string>();
+        public List<string> RequestedClaims { get; }
+
+        public AbpClaimsServiceOptions()
+        {
+            RequestedClaims = new List<string>();
+        }
     }
 }

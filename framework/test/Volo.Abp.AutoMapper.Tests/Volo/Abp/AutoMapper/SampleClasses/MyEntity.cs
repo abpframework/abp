@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.AutoMapper.SampleClasses;
-
-public class MyEntity
+namespace Volo.Abp.AutoMapper.SampleClasses
 {
-    public Guid Id { get; set; }
+    public class MyEntity
+    {
+        public Guid Id { get; set; }
 
-    public int Number { get; set; }
+        public int Number { get; set; }
+    }
 }

@@ -1,32 +1,33 @@
 ﻿using System;
 
-namespace Volo.Abp.Threading;
-
-/// <summary>
-/// This class is used to ensure running of a code block only once.
-/// It can be instantiated as a static object to ensure that the code block runs only once in the application lifetime.
-/// </summary>
-public class OneTimeRunner
+namespace Volo.Abp.Threading
 {
-    private volatile bool _runBefore;
-
-    public void Run(Action action)
+    /// <summary>
+    /// This class is used to ensure running of a code block only once.
+    /// It can be instantiated as a static object to ensure that the code block runs only once in the application lifetime.
+    /// </summary>
+    public class OneTimeRunner
     {
-        if (_runBefore)
-        {
-            return;
-        }
+        private volatile bool _runBefore;
 
-        lock (this)
+        public void Run(Action action)
         {
             if (_runBefore)
             {
                 return;
             }
 
-            action();
+            lock (this)
+            {
+                if (_runBefore)
+                {
+                    return;
+                }
 
-            _runBefore = true;
+                action();
+
+                _runBefore = true;
+            }
         }
     }
 }

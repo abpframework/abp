@@ -1,6 +1,7 @@
-﻿namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp;
-
-public class ProfilePictureContainer
+﻿namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
 {
-
+    public class ProfilePictureContainer
+    {
+        
+    }
 }

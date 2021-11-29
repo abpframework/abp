@@ -1,28 +1,29 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.CmsKit.GlobalFeatures;
-
-[GlobalFeatureName(Name)]
-public class MediaFeature : GlobalFeature
+namespace Volo.CmsKit.GlobalFeatures
 {
-    public const string Name = "CmsKit.Medias";
-
-    internal MediaFeature(
-        [NotNull] GlobalCmsKitFeatures cmsKit
-    ) : base(cmsKit)
+    [GlobalFeatureName(Name)]
+    public class MediaFeature : GlobalFeature
     {
-
-    }
-
-    public override void Enable()
-    {
-        var userFeature = FeatureManager.Modules.CmsKit().User;
-        if (!userFeature.IsEnabled)
+        public const string Name = "CmsKit.Medias";
+        
+        internal MediaFeature(
+            [NotNull] GlobalCmsKitFeatures cmsKit
+        ) : base(cmsKit)
         {
-            userFeature.Enable();
+            
         }
 
-        base.Enable();
+        public override void Enable()
+        {
+            var userFeature = FeatureManager.Modules.CmsKit().User;
+            if (!userFeature.IsEnabled)
+            {
+                userFeature.Enable();
+            }
+
+            base.Enable();
+        }
     }
 }

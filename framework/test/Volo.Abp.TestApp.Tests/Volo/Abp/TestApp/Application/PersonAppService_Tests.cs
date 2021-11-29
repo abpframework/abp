@@ -10,59 +10,60 @@ using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Application;
-
-public class PersonAppService_Tests : TestAppTestBase
+namespace Volo.Abp.TestApp.Application
 {
-    private readonly IPeopleAppService _peopleAppService;
-    private ICurrentTenant _fakeCurrentTenant;
-
-    public PersonAppService_Tests()
+    public class PersonAppService_Tests : TestAppTestBase
     {
-        _peopleAppService = ServiceProvider.GetRequiredService<IPeopleAppService>();
-    }
+        private readonly IPeopleAppService _peopleAppService;
+        private ICurrentTenant _fakeCurrentTenant;
 
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        _fakeCurrentTenant = Substitute.For<ICurrentTenant>();
-        services.AddSingleton(_fakeCurrentTenant);
-    }
+        public PersonAppService_Tests()
+        {
+            _peopleAppService = ServiceProvider.GetRequiredService<IPeopleAppService>();
+        }
 
-    [Fact]
-    public async Task GetList()
-    {
-        var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
-            ;
-        people.Items.Count.ShouldBeGreaterThan(0);
-    }
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _fakeCurrentTenant = Substitute.For<ICurrentTenant>();
+            services.AddSingleton(_fakeCurrentTenant);
+        }
 
-    [Fact]
-    public async Task Create()
-    {
-        var uniquePersonName = Guid.NewGuid().ToString();
-        var personDto = await _peopleAppService.CreateAsync(new PersonDto { Name = uniquePersonName });
+        [Fact]
+        public async Task GetList()
+        {
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
+                ;
+            people.Items.Count.ShouldBeGreaterThan(0);
+        }
 
-        var repository = ServiceProvider.GetService<IRepository<Person, Guid>>();
-        var person = await repository.FindAsync(personDto.Id);
+        [Fact]
+        public async Task Create()
+        {
+            var uniquePersonName = Guid.NewGuid().ToString();
+            var personDto = await _peopleAppService.CreateAsync(new PersonDto {Name = uniquePersonName});
 
-        person.ShouldNotBeNull();
-        person.TenantId.ShouldBeNull();
-    }
+            var repository = ServiceProvider.GetService<IRepository<Person, Guid>>();
+            var person = await repository.FindAsync(personDto.Id);
 
-    [Fact]
-    public async Task Create_SetsTenantId()
-    {
-        _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
+            person.ShouldNotBeNull();
+            person.TenantId.ShouldBeNull();
+        }
 
-        var uniquePersonName = Guid.NewGuid().ToString();
-        var personDto = await _peopleAppService.CreateAsync(new PersonDto { Name = uniquePersonName });
+        [Fact]
+        public async Task Create_SetsTenantId()
+        {
+            _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
 
-        var repository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
-        var person = await repository.FindAsync(personDto.Id);
+            var uniquePersonName = Guid.NewGuid().ToString();
+            var personDto = await _peopleAppService.CreateAsync(new PersonDto {Name = uniquePersonName});
 
-        person.ShouldNotBeNull();
-        person.TenantId.ShouldNotBeNull();
-        person.TenantId.ShouldNotBe(Guid.Empty);
-        person.TenantId.ShouldBe(TestDataBuilder.TenantId1);
+            var repository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
+            var person = await repository.FindAsync(personDto.Id);
+
+            person.ShouldNotBeNull();
+            person.TenantId.ShouldNotBeNull();
+            person.TenantId.ShouldNotBe(Guid.Empty);
+            person.TenantId.ShouldBe(TestDataBuilder.TenantId1);
+        }
     }
 }

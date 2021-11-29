@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Identity;
-
-public class IdentityRoleUpdateDto : IdentityRoleCreateOrUpdateDtoBase, IHasConcurrencyStamp
+namespace Volo.Abp.Identity
 {
-    public string ConcurrencyStamp { get; set; }
+    public class IdentityRoleUpdateDto : IdentityRoleCreateOrUpdateDtoBase, IHasConcurrencyStamp
+    {
+        public string ConcurrencyStamp { get; set; }
+    }
 }

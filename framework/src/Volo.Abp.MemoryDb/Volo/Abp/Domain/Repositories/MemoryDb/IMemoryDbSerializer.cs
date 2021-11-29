@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.Domain.Repositories.MemoryDb;
-
-public interface IMemoryDbSerializer
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    byte[] Serialize(object obj);
+    public interface IMemoryDbSerializer
+    {
+        byte[] Serialize(object obj);
 
-    object Deserialize(byte[] value, Type type);
+        object Deserialize(byte[] value, Type type);
+    }
 }

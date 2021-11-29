@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror;
-
-public class CodemirrorStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class CodemirrorStyleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/codemirror/codemirror.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/codemirror/codemirror.css");
+        }
     }
 }

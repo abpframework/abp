@@ -4,41 +4,42 @@ using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
-
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-public class AbpEfCoreTestSecondContextModule : AbpModule
+namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    public class AbpEfCoreTestSecondContextModule : AbpModule
     {
-        context.Services.AddAbpDbContext<SecondDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories();
-        });
+            context.Services.AddAbpDbContext<SecondDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
+            });
 
-        context.Services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            context.Services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IThirdDbContext>();
+            });
+
+            context.Services.AddAbpDbContext<FourthDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IFourthDbContext>();
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.AddDefaultRepositories<IThirdDbContext>();
-        });
+            SeedTestData(context);
+        }
 
-        context.Services.AddAbpDbContext<FourthDbContext>(options =>
+        private static void SeedTestData(ApplicationInitializationContext context)
         {
-            options.AddDefaultRepositories<IFourthDbContext>();
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
-        {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<SecondContextTestDataBuilder>()
-                .BuildAsync());
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<SecondContextTestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Cli.Build;
-
-public interface IRepositoryBuildStatusStore
+﻿namespace Volo.Abp.Cli.Build
 {
-    GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository);
+    public interface IRepositoryBuildStatusStore
+    {
+        GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository);
 
-    void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status);
+        void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status);
+    }
 }

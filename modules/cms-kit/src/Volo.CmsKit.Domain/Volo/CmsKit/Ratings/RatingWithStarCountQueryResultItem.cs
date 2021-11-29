@@ -1,8 +1,9 @@
-﻿namespace Volo.CmsKit.Ratings;
-
-public class RatingWithStarCountQueryResultItem
+﻿namespace Volo.CmsKit.Ratings
 {
-    public short StarCount { get; set; }
+    public class RatingWithStarCountQueryResultItem
+    {
+        public short StarCount { get; set; }
 
-    public int Count { get; set; }
+        public int Count { get; set; }
+    }
 }

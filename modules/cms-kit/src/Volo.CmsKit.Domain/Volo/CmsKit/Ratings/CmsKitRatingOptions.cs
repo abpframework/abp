@@ -1,10 +1,11 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
 
-namespace Volo.CmsKit.Ratings;
-
-public class CmsKitRatingOptions
+namespace Volo.CmsKit.Ratings
 {
-    [NotNull]
-    public List<RatingEntityTypeDefinition> EntityTypes { get; } = new();
+    public class CmsKitRatingOptions
+    {
+        [NotNull]
+        public List<RatingEntityTypeDefinition> EntityTypes { get; } = new ();
+    }
 }

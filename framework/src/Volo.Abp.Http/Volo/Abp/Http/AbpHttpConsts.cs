@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Http;
-
-public static class AbpHttpConsts
+﻿namespace Volo.Abp.Http
 {
-    public const string AbpErrorFormat = "_AbpErrorFormat";
+    public static class AbpHttpConsts
+    {
+        public const string AbpErrorFormat = "_AbpErrorFormat";
+    }
 }

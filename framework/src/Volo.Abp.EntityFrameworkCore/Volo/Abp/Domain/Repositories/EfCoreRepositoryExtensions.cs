@@ -4,44 +4,45 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 
-namespace Volo.Abp.Domain.Repositories;
-
-public static class EfCoreRepositoryExtensions
+namespace Volo.Abp.Domain.Repositories
 {
-    [Obsolete("Use GetDbContextAsync method.")]
-    public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
+    public static class EfCoreRepositoryExtensions
     {
-        return repository.ToEfCoreRepository().DbContext;
-    }
-
-    public static Task<DbContext> GetDbContextAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToEfCoreRepository().GetDbContextAsync();
-    }
-
-    [Obsolete("Use GetDbSetAsync method.")]
-    public static DbSet<TEntity> GetDbSet<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToEfCoreRepository().DbSet;
-    }
-
-    public static Task<DbSet<TEntity>> GetDbSetAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToEfCoreRepository().GetDbSetAsync();
-    }
-
-    public static IEfCoreRepository<TEntity> ToEfCoreRepository<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        if (repository is IEfCoreRepository<TEntity> efCoreRepository)
+        [Obsolete("Use GetDbContextAsync method.")]
+        public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
         {
-            return efCoreRepository;
+            return repository.ToEfCoreRepository().DbContext;
         }
 
-        throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity>).AssemblyQualifiedName, nameof(repository));
+        public static Task<DbContext> GetDbContextAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
+        {
+            return repository.ToEfCoreRepository().GetDbContextAsync();
+        }
+
+        [Obsolete("Use GetDbSetAsync method.")]
+        public static DbSet<TEntity> GetDbSet<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
+        {
+            return repository.ToEfCoreRepository().DbSet;
+        }
+
+        public static Task<DbSet<TEntity>> GetDbSetAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
+        {
+            return repository.ToEfCoreRepository().GetDbSetAsync();
+        }
+
+        public static IEfCoreRepository<TEntity> ToEfCoreRepository<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
+        {
+            if (repository is IEfCoreRepository<TEntity> efCoreRepository)
+            {
+                return efCoreRepository;
+            }
+
+            throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity>).AssemblyQualifiedName, nameof(repository));
+        }
     }
 }

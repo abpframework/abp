@@ -2,21 +2,22 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BackgroundJobs;
-
-[DependsOn(
-    typeof(AbpBackgroundJobsDomainSharedModule),
-    typeof(AbpBackgroundJobsModule),
-    typeof(AbpAutoMapperModule)
-    )]
-public class AbpBackgroundJobsDomainModule : AbpModule
+namespace Volo.Abp.BackgroundJobs
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsModule),
+        typeof(AbpAutoMapperModule)
+        )]
+    public class AbpBackgroundJobsDomainModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpBackgroundJobsDomainModule>();
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<BackgroundJobsDomainAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpBackgroundJobsDomainModule>();
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BackgroundJobsDomainAutoMapperProfile>(validate: true);
+            });
+        }
     }
 }

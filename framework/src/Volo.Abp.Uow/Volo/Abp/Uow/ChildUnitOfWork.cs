@@ -4,129 +4,130 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Uow;
-
-internal class ChildUnitOfWork : IUnitOfWork
+namespace Volo.Abp.Uow
 {
-    public Guid Id => _parent.Id;
-
-    public IAbpUnitOfWorkOptions Options => _parent.Options;
-
-    public IUnitOfWork Outer => _parent.Outer;
-
-    public bool IsReserved => _parent.IsReserved;
-
-    public bool IsDisposed => _parent.IsDisposed;
-
-    public bool IsCompleted => _parent.IsCompleted;
-
-    public string ReservationName => _parent.ReservationName;
-
-    public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-    public event EventHandler<UnitOfWorkEventArgs> Disposed;
-
-    public IServiceProvider ServiceProvider => _parent.ServiceProvider;
-
-    public Dictionary<string, object> Items => _parent.Items;
-
-    private readonly IUnitOfWork _parent;
-
-    public ChildUnitOfWork([NotNull] IUnitOfWork parent)
+    internal class ChildUnitOfWork : IUnitOfWork
     {
-        Check.NotNull(parent, nameof(parent));
+        public Guid Id => _parent.Id;
 
-        _parent = parent;
+        public IAbpUnitOfWorkOptions Options => _parent.Options;
 
-        _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender, args); };
-        _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender, args); };
-    }
+        public IUnitOfWork Outer => _parent.Outer;
 
-    public void SetOuter(IUnitOfWork outer)
-    {
-        _parent.SetOuter(outer);
-    }
+        public bool IsReserved => _parent.IsReserved;
 
-    public void Initialize(AbpUnitOfWorkOptions options)
-    {
-        _parent.Initialize(options);
-    }
+        public bool IsDisposed => _parent.IsDisposed;
 
-    public void Reserve(string reservationName)
-    {
-        _parent.Reserve(reservationName);
-    }
+        public bool IsCompleted => _parent.IsCompleted;
 
-    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        return _parent.SaveChangesAsync(cancellationToken);
-    }
+        public string ReservationName => _parent.ReservationName;
 
-    public Task CompleteAsync(CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
+        public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+        public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
-    public Task RollbackAsync(CancellationToken cancellationToken = default)
-    {
-        return _parent.RollbackAsync(cancellationToken);
-    }
+        public IServiceProvider ServiceProvider => _parent.ServiceProvider;
 
-    public void OnCompleted(Func<Task> handler)
-    {
-        _parent.OnCompleted(handler);
-    }
+        public Dictionary<string, object> Items => _parent.Items;
 
-    public void AddOrReplaceLocalEvent(
-        UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
-    {
-        _parent.AddOrReplaceLocalEvent(eventRecord, replacementSelector);
-    }
+        private readonly IUnitOfWork _parent;
 
-    public void AddOrReplaceDistributedEvent(
-        UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
-    {
-        _parent.AddOrReplaceDistributedEvent(eventRecord, replacementSelector);
-    }
+        public ChildUnitOfWork([NotNull] IUnitOfWork parent)
+        {
+            Check.NotNull(parent, nameof(parent));
 
-    public IDatabaseApi FindDatabaseApi(string key)
-    {
-        return _parent.FindDatabaseApi(key);
-    }
+            _parent = parent;
 
-    public void AddDatabaseApi(string key, IDatabaseApi api)
-    {
-        _parent.AddDatabaseApi(key, api);
-    }
+            _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender, args); };
+            _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender, args); };
+        }
 
-    public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
-    {
-        return _parent.GetOrAddDatabaseApi(key, factory);
-    }
+        public void SetOuter(IUnitOfWork outer)
+        {
+            _parent.SetOuter(outer);
+        }
 
-    public ITransactionApi FindTransactionApi(string key)
-    {
-        return _parent.FindTransactionApi(key);
-    }
+        public void Initialize(AbpUnitOfWorkOptions options)
+        {
+            _parent.Initialize(options);
+        }
 
-    public void AddTransactionApi(string key, ITransactionApi api)
-    {
-        _parent.AddTransactionApi(key, api);
-    }
+        public void Reserve(string reservationName)
+        {
+            _parent.Reserve(reservationName);
+        }
 
-    public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
-    {
-        return _parent.GetOrAddTransactionApi(key, factory);
-    }
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return _parent.SaveChangesAsync(cancellationToken);
+        }
 
-    public void Dispose()
-    {
+        public Task CompleteAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
 
-    }
+        public Task RollbackAsync(CancellationToken cancellationToken = default)
+        {
+            return _parent.RollbackAsync(cancellationToken);
+        }
 
-    public override string ToString()
-    {
-        return $"[UnitOfWork {Id}]";
+        public void OnCompleted(Func<Task> handler)
+        {
+            _parent.OnCompleted(handler);
+        }
+
+        public void AddOrReplaceLocalEvent(
+            UnitOfWorkEventRecord eventRecord, 
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            _parent.AddOrReplaceLocalEvent(eventRecord, replacementSelector);
+        }
+
+        public void AddOrReplaceDistributedEvent(
+            UnitOfWorkEventRecord eventRecord,
+            Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        {
+            _parent.AddOrReplaceDistributedEvent(eventRecord, replacementSelector);
+        }
+
+        public IDatabaseApi FindDatabaseApi(string key)
+        {
+            return _parent.FindDatabaseApi(key);
+        }
+
+        public void AddDatabaseApi(string key, IDatabaseApi api)
+        {
+            _parent.AddDatabaseApi(key, api);
+        }
+
+        public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
+        {
+            return _parent.GetOrAddDatabaseApi(key, factory);
+        }
+
+        public ITransactionApi FindTransactionApi(string key)
+        {
+            return _parent.FindTransactionApi(key);
+        }
+
+        public void AddTransactionApi(string key, ITransactionApi api)
+        {
+            _parent.AddTransactionApi(key, api);
+        }
+
+        public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
+        {
+            return _parent.GetOrAddTransactionApi(key, factory);
+        }
+
+        public void Dispose()
+        {
+
+        }
+
+        public override string ToString()
+        {
+            return $"[UnitOfWork {Id}]";
+        }
     }
 }

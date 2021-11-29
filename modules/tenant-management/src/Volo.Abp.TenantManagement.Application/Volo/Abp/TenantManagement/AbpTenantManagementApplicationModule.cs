@@ -3,19 +3,20 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TenantManagement;
-
-[DependsOn(typeof(AbpTenantManagementDomainModule))]
-[DependsOn(typeof(AbpTenantManagementApplicationContractsModule))]
-[DependsOn(typeof(AbpDddApplicationModule))]
-public class AbpTenantManagementApplicationModule : AbpModule
+namespace Volo.Abp.TenantManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpTenantManagementDomainModule))]
+    [DependsOn(typeof(AbpTenantManagementApplicationContractsModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
+    public class AbpTenantManagementApplicationModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpTenantManagementApplicationModule>();
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpTenantManagementApplicationModule>();
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
+            });
+        }
     }
 }

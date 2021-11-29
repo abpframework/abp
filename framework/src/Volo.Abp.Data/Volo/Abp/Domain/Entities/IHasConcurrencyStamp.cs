@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Domain.Entities;
-
-public interface IHasConcurrencyStamp
+﻿namespace Volo.Abp.Domain.Entities
 {
-    string ConcurrencyStamp { get; set; }
+    public interface IHasConcurrencyStamp
+    {
+        string ConcurrencyStamp { get; set; }
+    }
 }

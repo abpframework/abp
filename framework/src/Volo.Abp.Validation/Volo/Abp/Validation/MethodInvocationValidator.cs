@@ -6,103 +6,104 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Validation;
-
-public class MethodInvocationValidator : IMethodInvocationValidator, ITransientDependency
+namespace Volo.Abp.Validation
 {
-    private readonly IObjectValidator _objectValidator;
-
-    public MethodInvocationValidator(IObjectValidator objectValidator)
+    public class MethodInvocationValidator : IMethodInvocationValidator, ITransientDependency
     {
-        _objectValidator = objectValidator;
-    }
+        private readonly IObjectValidator _objectValidator;
 
-    public virtual async Task ValidateAsync(MethodInvocationValidationContext context)
-    {
-        Check.NotNull(context, nameof(context));
-
-        if (context.Parameters.IsNullOrEmpty())
+        public MethodInvocationValidator(IObjectValidator objectValidator)
         {
-            return;
+            _objectValidator = objectValidator;
         }
 
-        if (!context.Method.IsPublic)
+        public virtual async Task ValidateAsync(MethodInvocationValidationContext context)
         {
-            return;
+            Check.NotNull(context, nameof(context));
+
+            if (context.Parameters.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            if (!context.Method.IsPublic)
+            {
+                return;
+            }
+
+            if (IsValidationDisabled(context))
+            {
+                return;
+            }
+
+            if (context.Parameters.Length != context.ParameterValues.Length)
+            {
+                throw new Exception("Method parameter count does not match with argument count!");
+            }
+
+            //todo: consider to remove this condition
+            if (context.Errors.Any() && HasSingleNullArgument(context))
+            {
+                ThrowValidationError(context);
+            }
+
+            await AddMethodParameterValidationErrorsAsync(context);
+
+            if (context.Errors.Any())
+            {
+                ThrowValidationError(context);
+            }
         }
 
-        if (IsValidationDisabled(context))
+        protected virtual bool IsValidationDisabled(MethodInvocationValidationContext context)
         {
-            return;
-        }
+            if (context.Method.IsDefined(typeof(EnableValidationAttribute), true))
+            {
+                return false;
+            }
 
-        if (context.Parameters.Length != context.ParameterValues.Length)
-        {
-            throw new Exception("Method parameter count does not match with argument count!");
-        }
+            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Method) != null)
+            {
+                return true;
+            }
 
-        //todo: consider to remove this condition
-        if (context.Errors.Any() && HasSingleNullArgument(context))
-        {
-            ThrowValidationError(context);
-        }
-
-        await AddMethodParameterValidationErrorsAsync(context);
-
-        if (context.Errors.Any())
-        {
-            ThrowValidationError(context);
-        }
-    }
-
-    protected virtual bool IsValidationDisabled(MethodInvocationValidationContext context)
-    {
-        if (context.Method.IsDefined(typeof(EnableValidationAttribute), true))
-        {
             return false;
         }
 
-        if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Method) != null)
+        protected virtual bool HasSingleNullArgument(MethodInvocationValidationContext context)
         {
-            return true;
+            return context.Parameters.Length == 1 && context.ParameterValues[0] == null;
         }
 
-        return false;
-    }
-
-    protected virtual bool HasSingleNullArgument(MethodInvocationValidationContext context)
-    {
-        return context.Parameters.Length == 1 && context.ParameterValues[0] == null;
-    }
-
-    protected virtual void ThrowValidationError(MethodInvocationValidationContext context)
-    {
-        throw new AbpValidationException(
-            "Method arguments are not valid! See ValidationErrors for details.",
-            context.Errors
-        );
-    }
-
-    protected virtual async Task AddMethodParameterValidationErrorsAsync(MethodInvocationValidationContext context)
-    {
-        for (var i = 0; i < context.Parameters.Length; i++)
+        protected virtual void ThrowValidationError(MethodInvocationValidationContext context)
         {
-            await AddMethodParameterValidationErrorsAsync(context, context.Parameters[i], context.ParameterValues[i]);
+            throw new AbpValidationException(
+                "Method arguments are not valid! See ValidationErrors for details.",
+                context.Errors
+            );
         }
-    }
 
-    protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
-    {
-        var allowNulls = parameterInfo.IsOptional ||
-                         parameterInfo.IsOut ||
-                         TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
+        protected virtual async Task AddMethodParameterValidationErrorsAsync(MethodInvocationValidationContext context)
+        {
+            for (var i = 0; i < context.Parameters.Length; i++)
+            {
+                await AddMethodParameterValidationErrorsAsync(context, context.Parameters[i], context.ParameterValues[i]);
+            }
+        }
 
-        context.Errors.AddRange(
-             await _objectValidator.GetErrorsAsync(
-                parameterValue,
-                parameterInfo.Name,
-                allowNulls
-            )
-        );
+        protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
+        {
+            var allowNulls = parameterInfo.IsOptional ||
+                             parameterInfo.IsOut ||
+                             TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
+
+            context.Errors.AddRange(
+                 await _objectValidator.GetErrorsAsync(
+                    parameterValue,
+                    parameterInfo.Name,
+                    allowNulls
+                )
+            );
+        }
     }
 }

@@ -6,56 +6,57 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Roles;
-
-public class EditModalModel : IdentityPageModel
+namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
-    [BindProperty]
-    public RoleInfoModel Role { get; set; }
-
-    protected IIdentityRoleAppService IdentityRoleAppService { get; }
-
-    public EditModalModel(IIdentityRoleAppService identityRoleAppService)
+    public class EditModalModel : IdentityPageModel
     {
-        IdentityRoleAppService = identityRoleAppService;
-    }
+        [BindProperty]
+        public RoleInfoModel Role { get; set; }
 
-    public virtual async Task OnGetAsync(Guid id)
-    {
-        Role = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
-            await IdentityRoleAppService.GetAsync(id)
-        );
-    }
+        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
-    public virtual async Task<IActionResult> OnPostAsync()
-    {
-        ValidateModel();
+        public EditModalModel(IIdentityRoleAppService identityRoleAppService)
+        {
+            IdentityRoleAppService = identityRoleAppService;
+        }
 
-        var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(Role);
-        await IdentityRoleAppService.UpdateAsync(Role.Id, input);
+        public virtual async Task OnGetAsync(Guid id)
+        {
+            Role = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
+                await IdentityRoleAppService.GetAsync(id)
+            );
+        }
 
-        return NoContent();
-    }
+        public virtual async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
 
-    public class RoleInfoModel : ExtensibleObject, IHasConcurrencyStamp
-    {
-        [HiddenInput]
-        public Guid Id { get; set; }
+            var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(Role);
+            await IdentityRoleAppService.UpdateAsync(Role.Id, input);
 
-        [HiddenInput]
-        public string ConcurrencyStamp { get; set; }
+            return NoContent();
+        }
 
-        [Required]
-        [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
-        [Display(Name = "DisplayName:RoleName")]
-        public string Name { get; set; }
+        public class RoleInfoModel : ExtensibleObject, IHasConcurrencyStamp
+        {
+            [HiddenInput]
+            public Guid Id { get; set; }
 
-        [Display(Name = "DisplayName:IsDefault")]
-        public bool IsDefault { get; set; }
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
 
-        public bool IsStatic { get; set; }
+            [Required]
+            [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
+            [Display(Name = "DisplayName:RoleName")]
+            public string Name { get; set; }
 
-        [Display(Name = "DisplayName:IsPublic")]
-        public bool IsPublic { get; set; }
+            [Display(Name = "DisplayName:IsDefault")]
+            public bool IsDefault { get; set; }
+
+            public bool IsStatic { get; set; }
+
+            [Display(Name = "DisplayName:IsPublic")]
+            public bool IsPublic { get; set; }
+        }
     }
 }

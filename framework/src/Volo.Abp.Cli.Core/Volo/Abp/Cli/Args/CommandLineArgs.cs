@@ -3,64 +3,65 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Cli.Args;
-
-public class CommandLineArgs
+namespace Volo.Abp.Cli.Args
 {
-    [CanBeNull]
-    public string Command { get; }
-
-    [CanBeNull]
-    public string Target { get; }
-
-    [NotNull]
-    public AbpCommandLineOptions Options { get; }
-
-    public CommandLineArgs([CanBeNull] string command = null, [CanBeNull] string target = null)
+    public class CommandLineArgs
     {
-        Command = command;
-        Target = target;
-        Options = new AbpCommandLineOptions();
-    }
+        [CanBeNull]
+        public string Command { get; }
 
-    public static CommandLineArgs Empty()
-    {
-        return new CommandLineArgs();
-    }
+        [CanBeNull]
+        public string Target { get; }
 
-    public bool IsCommand(string command)
-    {
-        return string.Equals(Command, command, StringComparison.OrdinalIgnoreCase);
-    }
+        [NotNull]
+        public AbpCommandLineOptions Options { get; }
 
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-
-        if (Command != null)
+        public CommandLineArgs([CanBeNull] string command = null, [CanBeNull] string target = null)
         {
-            sb.AppendLine($"Command: {Command}");
+            Command = command;
+            Target = target;
+            Options = new AbpCommandLineOptions();
         }
 
-        if (Target != null)
+        public static CommandLineArgs Empty()
         {
-            sb.AppendLine($"Target: {Target}");
+            return new CommandLineArgs();
         }
 
-        if (Options.Any())
+        public bool IsCommand(string command)
         {
-            sb.AppendLine("Options:");
-            foreach (var option in Options)
+            return string.Equals(Command, command, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            if (Command != null)
             {
-                sb.AppendLine($" - {option.Key} = {option.Value}");
+                sb.AppendLine($"Command: {Command}");
             }
-        }
 
-        if (sb.Length <= 0)
-        {
-            sb.Append("<EMPTY>");
-        }
+            if (Target != null)
+            {
+                sb.AppendLine($"Target: {Target}");
+            }
 
-        return sb.ToString();
+            if (Options.Any())
+            {
+                sb.AppendLine("Options:");
+                foreach (var option in Options)
+                {
+                    sb.AppendLine($" - {option.Key} = {option.Value}");
+                }
+            }
+
+            if (sb.Length <= 0)
+            {
+                sb.Append("<EMPTY>");
+            }
+
+            return sb.ToString();
+        }
     }
 }

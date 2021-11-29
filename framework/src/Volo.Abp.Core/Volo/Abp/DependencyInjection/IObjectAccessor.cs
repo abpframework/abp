@@ -1,9 +1,10 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.DependencyInjection;
-
-public interface IObjectAccessor<out T>
+namespace Volo.Abp.DependencyInjection
 {
-    [CanBeNull]
-    T Value { get; }
+    public interface IObjectAccessor<out T>
+    {
+        [CanBeNull]
+        T Value { get; }
+    }
 }

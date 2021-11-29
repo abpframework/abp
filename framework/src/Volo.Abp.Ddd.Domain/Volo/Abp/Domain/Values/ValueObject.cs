@@ -1,41 +1,42 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.Domain.Values;
-
-//Inspired from https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/implement-value-objects
-
-public abstract class ValueObject
+namespace Volo.Abp.Domain.Values
 {
-    protected abstract IEnumerable<object> GetAtomicValues();
+    //Inspired from https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/implement-value-objects
 
-    public bool ValueEquals(object obj)
+    public abstract class ValueObject
     {
-        if (obj == null || obj.GetType() != GetType())
+        protected abstract IEnumerable<object> GetAtomicValues();
+
+        public bool ValueEquals(object obj)
         {
-            return false;
-        }
-
-        ValueObject other = (ValueObject)obj;
-
-        IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
-        IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
-
-        while (thisValues.MoveNext() && otherValues.MoveNext())
-        {
-            if (ReferenceEquals(thisValues.Current, null) ^
-                ReferenceEquals(otherValues.Current, null))
+            if (obj == null || obj.GetType() != GetType())
             {
                 return false;
             }
 
-            if (thisValues.Current != null &&
-                !thisValues.Current.Equals(otherValues.Current))
-            {
-                return false;
-            }
-        }
+            ValueObject other = (ValueObject)obj;
 
-        return !thisValues.MoveNext() && !otherValues.MoveNext();
+            IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
+            IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
+
+            while (thisValues.MoveNext() && otherValues.MoveNext())
+            {
+                if (ReferenceEquals(thisValues.Current, null) ^
+                    ReferenceEquals(otherValues.Current, null))
+                {
+                    return false;
+                }
+
+                if (thisValues.Current != null &&
+                    !thisValues.Current.Equals(otherValues.Current))
+                {
+                    return false;
+                }
+            }
+
+            return !thisValues.MoveNext() && !otherValues.MoveNext();
+        }
     }
 }

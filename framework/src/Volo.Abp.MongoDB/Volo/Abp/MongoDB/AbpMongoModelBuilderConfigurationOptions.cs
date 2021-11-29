@@ -1,23 +1,26 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.MongoDB;
-
-public class AbpMongoModelBuilderConfigurationOptions
+namespace Volo.Abp.MongoDB
 {
-    [NotNull]
-    public string CollectionPrefix {
-        get => _collectionPrefix;
-        set {
-            Check.NotNull(value, nameof(value), $"{nameof(CollectionPrefix)} can not be null! Set to empty string if you don't want a collection prefix.");
-            _collectionPrefix = value;
-        }
-    }
-    private string _collectionPrefix;
-
-    public AbpMongoModelBuilderConfigurationOptions([NotNull] string collectionPrefix = "")
+    public class AbpMongoModelBuilderConfigurationOptions
     {
-        Check.NotNull(collectionPrefix, nameof(collectionPrefix));
+        [NotNull]
+        public string CollectionPrefix
+        {
+            get => _collectionPrefix;
+            set
+            {
+                Check.NotNull(value, nameof(value), $"{nameof(CollectionPrefix)} can not be null! Set to empty string if you don't want a collection prefix.");
+                _collectionPrefix = value;
+            }
+        }
+        private string _collectionPrefix;
 
-        CollectionPrefix = collectionPrefix;
+        public AbpMongoModelBuilderConfigurationOptions([NotNull] string collectionPrefix = "")
+        {
+            Check.NotNull(collectionPrefix, nameof(collectionPrefix));
+
+            CollectionPrefix = collectionPrefix;
+        }
     }
 }

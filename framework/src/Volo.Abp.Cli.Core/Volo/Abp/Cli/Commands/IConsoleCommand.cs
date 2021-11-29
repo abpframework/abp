@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 
-namespace Volo.Abp.Cli.Commands;
-
-public interface IConsoleCommand
+namespace Volo.Abp.Cli.Commands
 {
-    Task ExecuteAsync(CommandLineArgs commandLineArgs);
+    public interface IConsoleCommand
+    {
+        Task ExecuteAsync(CommandLineArgs commandLineArgs);
 
-    string GetUsageInfo();
+        string GetUsageInfo();
 
-    string GetShortDescription();
+        string GetShortDescription();
+    }
 }

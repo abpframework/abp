@@ -1,14 +1,15 @@
 using MongoDB.Driver;
 
-namespace Volo.Abp.MongoDB;
-
-public interface IAbpMongoDbContext
+namespace Volo.Abp.MongoDB
 {
-    IMongoClient Client { get; }
+    public interface IAbpMongoDbContext
+    {
+        IMongoClient Client { get; }
 
-    IMongoDatabase Database { get; }
+        IMongoDatabase Database { get; }
 
-    IMongoCollection<T> Collection<T>();
+        IMongoCollection<T> Collection<T>();
 
-    IClientSessionHandle SessionHandle { get; }
+        IClientSessionHandle SessionHandle { get; }
+    }
 }

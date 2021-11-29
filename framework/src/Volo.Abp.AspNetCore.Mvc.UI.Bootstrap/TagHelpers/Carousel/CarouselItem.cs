@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel;
-
-public class CarouselItem
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 {
-    public CarouselItem(string html, bool active)
+    public class CarouselItem
     {
-        Html = html;
-        Active = active;
+        public CarouselItem(string html, bool active)
+        {
+            Html = html;
+            Active = active;
+        }
+
+        public string Html { get; set; }
+
+        public bool Active { get; set; }
     }
-
-    public string Html { get; set; }
-
-    public bool Active { get; set; }
 }

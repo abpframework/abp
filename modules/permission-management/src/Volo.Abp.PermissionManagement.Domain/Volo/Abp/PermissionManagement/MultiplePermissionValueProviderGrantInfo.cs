@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class MultiplePermissionValueProviderGrantInfo
+namespace Volo.Abp.PermissionManagement
 {
-    public Dictionary<string, PermissionValueProviderGrantInfo> Result { get; }
-
-    public MultiplePermissionValueProviderGrantInfo()
+    public class MultiplePermissionValueProviderGrantInfo
     {
-        Result = new Dictionary<string, PermissionValueProviderGrantInfo>();
-    }
+        public Dictionary<string, PermissionValueProviderGrantInfo> Result { get; }
 
-    public MultiplePermissionValueProviderGrantInfo(string[] names)
-    {
-        Check.NotNull(names, nameof(names));
-
-        Result = new Dictionary<string, PermissionValueProviderGrantInfo>();
-
-        foreach (var name in names)
+        public MultiplePermissionValueProviderGrantInfo()
         {
-            Result.Add(name, PermissionValueProviderGrantInfo.NonGranted);
+            Result = new Dictionary<string, PermissionValueProviderGrantInfo>();
+        }
+
+        public MultiplePermissionValueProviderGrantInfo(string[] names)
+        {
+            Check.NotNull(names, nameof(names));
+
+            Result = new Dictionary<string, PermissionValueProviderGrantInfo>();
+
+            foreach (var name in names)
+            {
+                Result.Add(name, PermissionValueProviderGrantInfo.NonGranted);
+            }
         }
     }
 }

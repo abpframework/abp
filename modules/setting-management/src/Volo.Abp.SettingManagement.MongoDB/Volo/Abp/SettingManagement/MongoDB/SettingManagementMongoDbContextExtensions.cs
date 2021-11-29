@@ -1,17 +1,18 @@
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.SettingManagement.MongoDB;
-
-public static class SettingManagementMongoDbContextExtensions
+namespace Volo.Abp.SettingManagement.MongoDB
 {
-    public static void ConfigureSettingManagement(
-        this IMongoModelBuilder builder)
+    public static class SettingManagementMongoDbContextExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<Setting>(b =>
+        public static void ConfigureSettingManagement(
+            this IMongoModelBuilder builder)
         {
-            b.CollectionName = AbpSettingManagementDbProperties.DbTablePrefix + "Settings";
-        });
+            Check.NotNull(builder, nameof(builder));
+
+            builder.Entity<Setting>(b =>
+            {
+                b.CollectionName = AbpSettingManagementDbProperties.DbTablePrefix + "Settings";
+            });
+        }
     }
 }

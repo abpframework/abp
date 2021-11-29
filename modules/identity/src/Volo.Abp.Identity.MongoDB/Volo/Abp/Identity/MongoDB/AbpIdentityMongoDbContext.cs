@@ -2,27 +2,28 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.Identity.MongoDB;
-
-[ConnectionStringName(AbpIdentityDbProperties.ConnectionStringName)]
-public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbContext
+namespace Volo.Abp.Identity.MongoDB
 {
-    public IMongoCollection<IdentityUser> Users => Collection<IdentityUser>();
-
-    public IMongoCollection<IdentityRole> Roles => Collection<IdentityRole>();
-
-    public IMongoCollection<IdentityClaimType> ClaimTypes => Collection<IdentityClaimType>();
-
-    public IMongoCollection<OrganizationUnit> OrganizationUnits => Collection<OrganizationUnit>();
-
-    public IMongoCollection<IdentitySecurityLog> SecurityLogs => Collection<IdentitySecurityLog>();
-
-    public IMongoCollection<IdentityLinkUser> LinkUsers => Collection<IdentityLinkUser>();
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [ConnectionStringName(AbpIdentityDbProperties.ConnectionStringName)]
+    public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<IdentityUser> Users => Collection<IdentityUser>();
 
-        modelBuilder.ConfigureIdentity();
+        public IMongoCollection<IdentityRole> Roles => Collection<IdentityRole>();
+
+        public IMongoCollection<IdentityClaimType> ClaimTypes => Collection<IdentityClaimType>();
+
+        public IMongoCollection<OrganizationUnit> OrganizationUnits => Collection<OrganizationUnit>();
+
+        public IMongoCollection<IdentitySecurityLog> SecurityLogs => Collection<IdentitySecurityLog>();
+
+        public IMongoCollection<IdentityLinkUser> LinkUsers => Collection<IdentityLinkUser>();
+
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureIdentity();
+        }
     }
 }

@@ -1,53 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Data;
-
-public class AbpDbConnectionOptions
+namespace Volo.Abp.Data
 {
-    public ConnectionStrings ConnectionStrings { get; set; }
-
-    public AbpDatabaseInfoDictionary Databases { get; set; }
-
-    public AbpDbConnectionOptions()
+    public class AbpDbConnectionOptions
     {
-        ConnectionStrings = new ConnectionStrings();
-        Databases = new AbpDatabaseInfoDictionary();
-    }
+        public ConnectionStrings ConnectionStrings { get; set; }
+        
+        public AbpDatabaseInfoDictionary Databases { get; set; }
 
-    public string GetConnectionStringOrNull(
-        string connectionStringName,
-        bool fallbackToDatabaseMappings = true,
-        bool fallbackToDefault = true)
-    {
-        var connectionString = ConnectionStrings.GetOrDefault(connectionStringName);
-        if (!connectionString.IsNullOrEmpty())
+        public AbpDbConnectionOptions()
         {
-            return connectionString;
+            ConnectionStrings = new ConnectionStrings();
+            Databases = new AbpDatabaseInfoDictionary();
         }
 
-        if (fallbackToDatabaseMappings)
+        public string GetConnectionStringOrNull(
+            string connectionStringName,
+            bool fallbackToDatabaseMappings = true,
+            bool fallbackToDefault = true)
         {
-            var database = Databases.GetMappedDatabaseOrNull(connectionStringName);
-            if (database != null)
+            var connectionString = ConnectionStrings.GetOrDefault(connectionStringName);
+            if (!connectionString.IsNullOrEmpty())
             {
-                connectionString = ConnectionStrings.GetOrDefault(database.DatabaseName);
-                if (!connectionString.IsNullOrEmpty())
+                return connectionString;
+            }
+
+            if (fallbackToDatabaseMappings)
+            {
+                var database = Databases.GetMappedDatabaseOrNull(connectionStringName);
+                if (database != null)
+                {
+                    connectionString = ConnectionStrings.GetOrDefault(database.DatabaseName);
+                    if (!connectionString.IsNullOrEmpty())
+                    {
+                        return connectionString;
+                    }
+                }
+            }
+
+            if (fallbackToDefault)
+            {
+                connectionString = ConnectionStrings.Default;
+                if (!connectionString.IsNullOrWhiteSpace())
                 {
                     return connectionString;
                 }
             }
-        }
 
-        if (fallbackToDefault)
-        {
-            connectionString = ConnectionStrings.Default;
-            if (!connectionString.IsNullOrWhiteSpace())
-            {
-                return connectionString;
-            }
+            return null;
         }
-
-        return null;
     }
 }

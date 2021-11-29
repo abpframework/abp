@@ -2,15 +2,16 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.FluentValidation;
-
-[DependsOn(
-    typeof(AbpValidationModule)
-    )]
-public class AbpFluentValidationModule : AbpModule
+namespace Volo.Abp.FluentValidation
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpValidationModule)
+        )]
+    public class AbpFluentValidationModule : AbpModule
     {
-        context.Services.AddConventionalRegistrar(new AbpFluentValidationConventionalRegistrar());
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpFluentValidationConventionalRegistrar());
+        }
     }
 }

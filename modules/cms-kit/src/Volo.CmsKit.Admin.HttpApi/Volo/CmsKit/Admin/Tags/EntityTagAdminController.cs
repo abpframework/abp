@@ -6,36 +6,37 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.Tags;
-
-[RequiresGlobalFeature(typeof(TagsFeature))]
-[RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-admin/entity-tags")]
-public class EntityTagAdminController : CmsKitAdminController, IEntityTagAdminAppService
+namespace Volo.CmsKit.Admin.Tags
 {
-    protected IEntityTagAdminAppService EntityTagAdminAppService { get; }
-
-    public EntityTagAdminController(IEntityTagAdminAppService entityTagAdminAppService)
+    [RequiresGlobalFeature(typeof(TagsFeature))]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-admin/entity-tags")]
+    public class EntityTagAdminController : CmsKitAdminController, IEntityTagAdminAppService
     {
-        EntityTagAdminAppService = entityTagAdminAppService;
-    }
+        protected IEntityTagAdminAppService EntityTagAdminAppService { get; }
 
-    [HttpPost]
-    public Task AddTagToEntityAsync(EntityTagCreateDto input)
-    {
-        return EntityTagAdminAppService.AddTagToEntityAsync(input);
-    }
+        public EntityTagAdminController(IEntityTagAdminAppService entityTagAdminAppService)
+        {
+            EntityTagAdminAppService = entityTagAdminAppService;
+        }
 
-    [HttpDelete]
-    public Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
-    {
-        return EntityTagAdminAppService.RemoveTagFromEntityAsync(input);
-    }
+        [HttpPost]
+        public Task AddTagToEntityAsync(EntityTagCreateDto input)
+        {
+            return EntityTagAdminAppService.AddTagToEntityAsync(input);
+        }
 
-    [HttpPut]
-    public Task SetEntityTagsAsync(EntityTagSetDto input)
-    {
-        return EntityTagAdminAppService.SetEntityTagsAsync(input);
+        [HttpDelete]
+        public Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
+        {
+            return EntityTagAdminAppService.RemoveTagFromEntityAsync(input);
+        }
+
+        [HttpPut]
+        public Task SetEntityTagsAsync(EntityTagSetDto input)
+        {
+            return EntityTagAdminAppService.SetEntityTagsAsync(input);
+        }
     }
 }

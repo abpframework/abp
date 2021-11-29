@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Features;
-
-public interface IMethodInvocationFeatureCheckerService
+namespace Volo.Abp.Features
 {
-    Task CheckAsync(
-        MethodInvocationFeatureCheckerContext context
-    );
+    public interface IMethodInvocationFeatureCheckerService
+    {
+        Task CheckAsync(
+            MethodInvocationFeatureCheckerContext context
+        );
+    }
 }

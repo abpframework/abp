@@ -1,24 +1,25 @@
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public static class ServiceBusAdministrationClientExtensions
+namespace Volo.Abp.AzureServiceBus
 {
-    public static async Task SetupTopicAsync(this ServiceBusAdministrationClient client, string topicName)
+    public static class ServiceBusAdministrationClientExtensions
     {
-        if (!await client.TopicExistsAsync(topicName))
+        public static async Task SetupTopicAsync(this ServiceBusAdministrationClient client, string topicName)
         {
-            await client.CreateTopicAsync(topicName);
+            if (!await client.TopicExistsAsync(topicName))
+            {
+                await client.CreateTopicAsync(topicName);   
+            }
         }
-    }
 
-    public static async Task SetupSubscriptionAsync(this ServiceBusAdministrationClient client, string topicName, string subscriptionName)
-    {
-        await client.SetupTopicAsync(topicName);
-        if (!await client.SubscriptionExistsAsync(topicName, subscriptionName))
+        public static async Task SetupSubscriptionAsync(this ServiceBusAdministrationClient client, string topicName, string subscriptionName)
         {
-            await client.CreateSubscriptionAsync(topicName, subscriptionName);
+            await client.SetupTopicAsync(topicName);
+            if (!await client.SubscriptionExistsAsync(topicName, subscriptionName))
+            {
+                await client.CreateSubscriptionAsync(topicName, subscriptionName);
+            }
         }
     }
 }

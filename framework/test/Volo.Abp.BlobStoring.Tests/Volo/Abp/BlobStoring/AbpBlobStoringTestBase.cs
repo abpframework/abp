@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BlobStoring;
-
-public abstract class AbpBlobStoringTestBase : AbpIntegratedTest<AbpBlobStoringTestModule>
+namespace Volo.Abp.BlobStoring
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class AbpBlobStoringTestBase : AbpIntegratedTest<AbpBlobStoringTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

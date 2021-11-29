@@ -4,76 +4,77 @@ using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.Identity;
-
-public abstract class IdentityLinkUserRepository_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.Identity
 {
-    protected IIdentityUserRepository UserRepository { get; }
-    protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
-    protected IdentityTestData TestData { get; }
-
-    public IdentityLinkUserRepository_Tests()
+    public abstract class IdentityLinkUserRepository_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        UserRepository = GetRequiredService<IIdentityUserRepository>();
-        IdentityLinkUserRepository = GetRequiredService<IIdentityLinkUserRepository>();
-        TestData = GetRequiredService<IdentityTestData>();
-    }
+        protected IIdentityUserRepository UserRepository { get; }
+        protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
+        protected IdentityTestData TestData { get; }
 
-    [Fact]
-    public async Task FindAsync()
-    {
-        var john = await UserRepository.GetAsync(TestData.UserJohnId);
-        var david = await UserRepository.GetAsync(TestData.UserDavidId);
-        var neo = await UserRepository.GetAsync(TestData.UserNeoId);
+        public IdentityLinkUserRepository_Tests()
+        {
+            UserRepository = GetRequiredService<IIdentityUserRepository>();
+            IdentityLinkUserRepository = GetRequiredService<IIdentityLinkUserRepository>();
+            TestData = GetRequiredService<IdentityTestData>();
+        }
 
-        var johnAndDavidLinkUser = await IdentityLinkUserRepository.FindAsync(
-            new IdentityLinkUserInfo(john.Id, john.TenantId),
-            new IdentityLinkUserInfo(david.Id, david.TenantId));
+        [Fact]
+        public async Task FindAsync()
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var david = await UserRepository.GetAsync(TestData.UserDavidId);
+            var neo = await UserRepository.GetAsync(TestData.UserNeoId);
 
-        johnAndDavidLinkUser.ShouldNotBeNull();
-        johnAndDavidLinkUser.SourceUserId.ShouldBe(john.Id);
-        johnAndDavidLinkUser.SourceTenantId.ShouldBe(john.TenantId);
-        johnAndDavidLinkUser.TargetUserId.ShouldBe(david.Id);
-        johnAndDavidLinkUser.TargetTenantId.ShouldBe(david.TenantId);
+            var johnAndDavidLinkUser = await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId));
 
-        (await IdentityLinkUserRepository.FindAsync(
-            new IdentityLinkUserInfo(john.Id, john.TenantId),
-            new IdentityLinkUserInfo(neo.Id, neo.TenantId))).ShouldBeNull();
-    }
+            johnAndDavidLinkUser.ShouldNotBeNull();
+            johnAndDavidLinkUser.SourceUserId.ShouldBe(john.Id);
+            johnAndDavidLinkUser.SourceTenantId.ShouldBe(john.TenantId);
+            johnAndDavidLinkUser.TargetUserId.ShouldBe(david.Id);
+            johnAndDavidLinkUser.TargetTenantId.ShouldBe(david.TenantId);
 
-    [Fact]
-    public async Task GetListAsync()
-    {
-        var john = await UserRepository.GetAsync(TestData.UserJohnId);
-        var david = await UserRepository.GetAsync(TestData.UserDavidId);
-        var neo = await UserRepository.GetAsync(TestData.UserNeoId);
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(neo.Id, neo.TenantId))).ShouldBeNull();
+        }
 
-        var davidLinkUsers = await IdentityLinkUserRepository.GetListAsync(new IdentityLinkUserInfo(david.Id, david.TenantId));
-        davidLinkUsers.ShouldNotBeNull();
+        [Fact]
+        public async Task GetListAsync()
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var david = await UserRepository.GetAsync(TestData.UserDavidId);
+            var neo = await UserRepository.GetAsync(TestData.UserNeoId);
 
-        davidLinkUsers.ShouldContain(x => x.SourceUserId == john.Id && x.SourceTenantId == john.TenantId);
-        davidLinkUsers.ShouldContain(x => x.TargetUserId == neo.Id && x.TargetTenantId == neo.TenantId);
-    }
+            var davidLinkUsers = await IdentityLinkUserRepository.GetListAsync(new IdentityLinkUserInfo(david.Id, david.TenantId));
+            davidLinkUsers.ShouldNotBeNull();
 
-    [Fact]
-    public async Task DeleteAsync()
-    {
-        var john = await UserRepository.GetAsync(TestData.UserJohnId);
-        var david = await UserRepository.GetAsync(TestData.UserDavidId);
+            davidLinkUsers.ShouldContain(x => x.SourceUserId == john.Id && x.SourceTenantId == john.TenantId);
+            davidLinkUsers.ShouldContain(x => x.TargetUserId == neo.Id && x.TargetTenantId == neo.TenantId);
+        }
 
-        (await IdentityLinkUserRepository.FindAsync(
-            new IdentityLinkUserInfo(john.Id, john.TenantId),
-            new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldNotBeNull();
+        [Fact]
+        public async Task DeleteAsync()
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var david = await UserRepository.GetAsync(TestData.UserDavidId);
 
-        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(david.Id, david.TenantId));
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldNotBeNull();
 
-        (await IdentityLinkUserRepository.FindAsync(
-            new IdentityLinkUserInfo(john.Id, john.TenantId),
-            new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldBeNull();
+            await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(david.Id, david.TenantId));
 
-        (await IdentityLinkUserRepository.FindAsync(
-            new IdentityLinkUserInfo(david.Id, david.TenantId),
-            new IdentityLinkUserInfo(john.Id, john.TenantId))).ShouldBeNull();
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldBeNull();
+
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(david.Id, david.TenantId),
+                new IdentityLinkUserInfo(john.Id, john.TenantId))).ShouldBeNull();
+        }
     }
 }

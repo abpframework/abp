@@ -3,57 +3,58 @@ using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
 
-namespace Volo.Abp.Cli.Build;
-
-public class FileSystemRepositoryBuildStatusStore : IRepositoryBuildStatusStore, ITransientDependency
+namespace Volo.Abp.Cli.Build
 {
-    public GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository)
+    public class FileSystemRepositoryBuildStatusStore : IRepositoryBuildStatusStore, ITransientDependency
     {
-        if (!Directory.Exists(CliPaths.Build))
+        public GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository)
         {
-            Directory.CreateDirectory(CliPaths.Build);
-        }
-
-        var buildStatusFile = Path.Combine(CliPaths.Build, repository.GetUniqueName(buildNamePrefix)) +
-                              ".json";
-
-        if (!File.Exists(buildStatusFile))
-        {
-            return null;
-        }
-
-        var buildStatusText = File.ReadAllText(buildStatusFile);
-        return JsonConvert.DeserializeObject<GitRepositoryBuildStatus>(buildStatusText);
-    }
-
-    public void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status)
-    {
-        var existingRepositoryStatus = Get(buildNamePrefix, repository);
-
-        var buildStatusFile = Path.Combine(
-            CliPaths.Build,
-            status.GetUniqueName(buildNamePrefix)
-        ) + ".json";
-
-        if (File.Exists(buildStatusFile))
-        {
-            FileHelper.DeleteIfExists(buildStatusFile);
-        }
-
-        if (existingRepositoryStatus != null)
-        {
-            existingRepositoryStatus.MergeWith(status);
-
-            using (var file = File.CreateText(buildStatusFile))
+            if (!Directory.Exists(CliPaths.Build))
             {
-                new JsonSerializer { Formatting = Formatting.Indented }.Serialize(file, existingRepositoryStatus);
+                Directory.CreateDirectory(CliPaths.Build);
             }
-        }
-        else
-        {
-            using (var file = File.CreateText(buildStatusFile))
+
+            var buildStatusFile = Path.Combine(CliPaths.Build, repository.GetUniqueName(buildNamePrefix)) +
+                                  ".json";
+
+            if (!File.Exists(buildStatusFile))
             {
-                new JsonSerializer { Formatting = Formatting.Indented }.Serialize(file, status);
+                return null;
+            }
+
+            var buildStatusText = File.ReadAllText(buildStatusFile);
+            return JsonConvert.DeserializeObject<GitRepositoryBuildStatus>(buildStatusText);
+        }
+
+        public void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status)
+        {
+            var existingRepositoryStatus = Get(buildNamePrefix, repository);
+
+            var buildStatusFile = Path.Combine(
+                CliPaths.Build,
+                status.GetUniqueName(buildNamePrefix)
+            ) + ".json";
+
+            if (File.Exists(buildStatusFile))
+            {
+                FileHelper.DeleteIfExists(buildStatusFile);
+            }
+
+            if (existingRepositoryStatus != null)
+            {
+                existingRepositoryStatus.MergeWith(status);
+
+                using (var file = File.CreateText(buildStatusFile))
+                {
+                    new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, existingRepositoryStatus);
+                }
+            }
+            else
+            {
+                using (var file = File.CreateText(buildStatusFile))
+                {
+                    new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, status);
+                }
             }
         }
     }

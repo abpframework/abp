@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
-
-public class HighlightJsStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class HighlightJsStyleContributor : BundleContributor
     {
-        //TODO: Make this configurable
-        context.Files.AddIfNotContains("/libs/highlight.js/styles/github.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            //TODO: Make this configurable
+            context.Files.AddIfNotContains("/libs/highlight.js/styles/github.css");
+        }
     }
 }

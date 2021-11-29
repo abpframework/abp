@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Linq;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class RemoveFolderStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    private readonly string _folderPath;
-
-    public RemoveFolderStep(string folderPath)
+    public class RemoveFolderStep : ProjectBuildPipelineStep
     {
-        _folderPath = folderPath;
-    }
+        private readonly string _folderPath;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        //Remove the folder content
-        var folderPathWithSlash = _folderPath.EnsureEndsWith('/');
-        context.Files.RemoveAll(file => file.Name.StartsWith(folderPathWithSlash));
-
-        //Remove the folder
-        var folder = context.Files.FirstOrDefault(file => file.Name == _folderPath);
-        if (folder != null)
+        public RemoveFolderStep(string folderPath)
         {
-            context.Files.Remove(folder);
+            _folderPath = folderPath;
+        }
+
+        public override void Execute(ProjectBuildContext context)
+        {
+            //Remove the folder content
+            var folderPathWithSlash = _folderPath.EnsureEndsWith('/');
+            context.Files.RemoveAll(file => file.Name.StartsWith(folderPathWithSlash));
+
+            //Remove the folder
+            var folder = context.Files.FirstOrDefault(file => file.Name == _folderPath);
+            if (folder != null)
+            {
+                context.Files.Remove(folder);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Uow;
-
-public interface IDatabaseApi
+﻿namespace Volo.Abp.Uow
 {
-
+    public interface IDatabaseApi
+    {
+        
+    }
 }

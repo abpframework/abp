@@ -1,20 +1,21 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-[Serializable]
-public class LocalizableStringDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    [NotNull]
-    public string Name { get; private set; }
-
-    [CanBeNull]
-    public string Resource { get; set; }
-
-    public LocalizableStringDto([NotNull] string name, string resource = null)
+    [Serializable]
+    public class LocalizableStringDto
     {
-        Name = Check.NotNullOrEmpty(name, nameof(name));
-        Resource = resource;
+        [NotNull]
+        public string Name { get; private set; }
+
+        [CanBeNull]
+        public string Resource { get; set; }
+
+        public LocalizableStringDto([NotNull] string name, string resource = null)
+        {
+            Name = Check.NotNullOrEmpty(name, nameof(name));
+            Resource = resource;
+        }
     }
 }

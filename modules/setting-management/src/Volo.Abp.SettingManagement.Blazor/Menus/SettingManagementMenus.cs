@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.SettingManagement.Blazor.Menus;
-
-public class SettingManagementMenus
+﻿namespace Volo.Abp.SettingManagement.Blazor.Menus
 {
-    public const string GroupName = "SettingManagement";
+    public class SettingManagementMenus
+    {
+        public const string GroupName = "SettingManagement";
+    }
 }

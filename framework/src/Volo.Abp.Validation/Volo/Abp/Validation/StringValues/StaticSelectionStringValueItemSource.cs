@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Validation.StringValues;
-
-public class StaticSelectionStringValueItemSource : ISelectionStringValueItemSource
+namespace Volo.Abp.Validation.StringValues
 {
-    public ICollection<ISelectionStringValueItem> Items { get; }
-
-    public StaticSelectionStringValueItemSource(params ISelectionStringValueItem[] items)
+    public class StaticSelectionStringValueItemSource : ISelectionStringValueItemSource
     {
-        Items = Check.NotNullOrEmpty(items, nameof(items));
+        public ICollection<ISelectionStringValueItem> Items { get; }
+
+        public StaticSelectionStringValueItemSource(params ISelectionStringValueItem[] items)
+        {
+            Items = Check.NotNullOrEmpty(items, nameof(items));
+        }
     }
 }

@@ -6,51 +6,51 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
-namespace Volo.Abp.Data.MultiTenancy;
-
-public class MultiTenantConnectionStringResolver_Tests : MultiTenancyTestBase
+namespace Volo.Abp.Data.MultiTenancy
 {
-    private readonly Guid _tenant1Id = Guid.NewGuid();
-    private readonly Guid _tenant2Id = Guid.NewGuid();
-
-    private readonly IConnectionStringResolver _connectionResolver;
-    private readonly ICurrentTenant _currentTenant;
-
-    public MultiTenantConnectionStringResolver_Tests()
+    public class MultiTenantConnectionStringResolver_Tests : MultiTenancyTestBase
     {
-        _connectionResolver = ServiceProvider.GetRequiredService<IConnectionStringResolver>();
-        _connectionResolver.ShouldBeOfType<MultiTenantConnectionStringResolver>();
+        private readonly Guid _tenant1Id = Guid.NewGuid();
+        private readonly Guid _tenant2Id = Guid.NewGuid();
 
-        _currentTenant = ServiceProvider.GetRequiredService<ICurrentTenant>();
-    }
+        private readonly IConnectionStringResolver _connectionResolver;
+        private readonly ICurrentTenant _currentTenant;
 
-    protected override void BeforeAddApplication(IServiceCollection services)
-    {
-        services.Configure<AbpDbConnectionOptions>(options =>
+        public MultiTenantConnectionStringResolver_Tests()
         {
-            options.ConnectionStrings.Default = "default-value";
-            options.ConnectionStrings["db1"] = "db1-default-value";
-            options.ConnectionStrings["Saas"] = "Saas-default-value";
-            options.ConnectionStrings["Admin"] = "Admin-default-value";
+            _connectionResolver = ServiceProvider.GetRequiredService<IConnectionStringResolver>();
+            _connectionResolver.ShouldBeOfType<MultiTenantConnectionStringResolver>();
 
-            options.Databases.Configure("Saas", database =>
+            _currentTenant = ServiceProvider.GetRequiredService<ICurrentTenant>();
+        }
+
+        protected override void BeforeAddApplication(IServiceCollection services)
+        {
+            services.Configure<AbpDbConnectionOptions>(options =>
             {
-                database.MappedConnections.Add("Saas1");
-                database.MappedConnections.Add("Saas2");
-                database.IsUsedByTenants = false;
+                options.ConnectionStrings.Default = "default-value";
+                options.ConnectionStrings["db1"] = "db1-default-value";
+                options.ConnectionStrings["Saas"] = "Saas-default-value";
+                options.ConnectionStrings["Admin"] = "Admin-default-value";
+
+                options.Databases.Configure("Saas", database =>
+                {
+                    database.MappedConnections.Add("Saas1");
+                    database.MappedConnections.Add("Saas2");
+                    database.IsUsedByTenants = false;
+                });
+
+                options.Databases.Configure("Admin", database =>
+                {
+                    database.MappedConnections.Add("Admin1");
+                    database.MappedConnections.Add("Admin2");
+                });
             });
 
-            options.Databases.Configure("Admin", database =>
+            services.Configure<AbpDefaultTenantStoreOptions>(options =>
             {
-                database.MappedConnections.Add("Admin1");
-                database.MappedConnections.Add("Admin2");
-            });
-        });
-
-        services.Configure<AbpDefaultTenantStoreOptions>(options =>
-        {
-            options.Tenants = new[]
-            {
+                options.Tenants = new[]
+                {
                     new TenantConfiguration(_tenant1Id, "tenant1")
                     {
                         ConnectionStrings =
@@ -61,39 +61,40 @@ public class MultiTenantConnectionStringResolver_Tests : MultiTenancyTestBase
 }
                     },
                     new TenantConfiguration(_tenant2Id, "tenant2")
-            };
-        });
-    }
-
-    [Fact]
-    public async Task All_Tests()
-    {
-        //No tenant in current context
-        (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
-        (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
-        (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("Saas-default-value");
-        (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("Admin-default-value");
-
-        //Overriden connection strings for tenant1
-        using (_currentTenant.Change(_tenant1Id))
-        {
-            (await _connectionResolver.ResolveAsync()).ShouldBe("tenant1-default-value");
-            (await _connectionResolver.ResolveAsync("db1")).ShouldBe("tenant1-db1-value");
-            (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("tenant1-default-value");
-            (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("tenant1-Admin-value");
+                };
+            });
         }
 
-        //No tenant in current context
-        (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
-        (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
-
-        //Undefined connection strings for tenant2
-        using (_currentTenant.Change(_tenant2Id))
+        [Fact]
+        public async Task All_Tests()
         {
+            //No tenant in current context
             (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
             (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
             (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("Saas-default-value");
             (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("Admin-default-value");
+
+            //Overriden connection strings for tenant1
+            using (_currentTenant.Change(_tenant1Id))
+            {
+                (await _connectionResolver.ResolveAsync()).ShouldBe("tenant1-default-value");
+                (await _connectionResolver.ResolveAsync("db1")).ShouldBe("tenant1-db1-value");
+                (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("tenant1-default-value");
+                (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("tenant1-Admin-value");
+            }
+
+            //No tenant in current context
+            (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
+            (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
+
+            //Undefined connection strings for tenant2
+            using (_currentTenant.Change(_tenant2Id))
+            {
+                (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
+                (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
+                (await _connectionResolver.ResolveAsync("Saas1")).ShouldBe("Saas-default-value");
+                (await _connectionResolver.ResolveAsync("Admin2")).ShouldBe("Admin-default-value");
+            }
         }
     }
 }

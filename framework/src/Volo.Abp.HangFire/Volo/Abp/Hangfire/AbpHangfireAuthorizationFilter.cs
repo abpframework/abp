@@ -5,49 +5,50 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Hangfire;
-
-public class AbpHangfireAuthorizationFilter : IDashboardAsyncAuthorizationFilter
+namespace Volo.Abp.Hangfire
 {
-    private readonly bool _enableTenant;
-    private readonly string _requiredPermissionName;
-
-    public AbpHangfireAuthorizationFilter(bool enableTenant = false, string requiredPermissionName = null)
+    public class AbpHangfireAuthorizationFilter : IDashboardAsyncAuthorizationFilter
     {
-        _enableTenant = requiredPermissionName.IsNullOrWhiteSpace() ? enableTenant : true;
-        _requiredPermissionName = requiredPermissionName;
-    }
+        private readonly bool _enableTenant;
+        private readonly string _requiredPermissionName;
 
-    public async Task<bool> AuthorizeAsync(DashboardContext context)
-    {
-        if (!IsLoggedIn(context, _enableTenant))
+        public AbpHangfireAuthorizationFilter(bool enableTenant = false, string requiredPermissionName = null)
         {
-            return false;
+            _enableTenant = requiredPermissionName.IsNullOrWhiteSpace() ? enableTenant : true; 
+            _requiredPermissionName = requiredPermissionName;
         }
 
-        if (_requiredPermissionName.IsNullOrEmpty())
+        public async Task<bool> AuthorizeAsync(DashboardContext context)
         {
-            return true;
+            if (!IsLoggedIn(context, _enableTenant))
+            {
+                return false;
+            }
+
+            if (_requiredPermissionName.IsNullOrEmpty())
+            {
+                return true;
+            }
+
+            return await IsPermissionGrantedAsync(context, _requiredPermissionName);
         }
 
-        return await IsPermissionGrantedAsync(context, _requiredPermissionName);
-    }
-
-    private static bool IsLoggedIn(DashboardContext context, bool enableTenant)
-    {
-        var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
-
-        if (!enableTenant)
+        private static bool IsLoggedIn(DashboardContext context, bool enableTenant)
         {
-            return currentUser.IsAuthenticated && !currentUser.TenantId.HasValue;
+            var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
+
+            if (!enableTenant)
+            {
+                return currentUser.IsAuthenticated && !currentUser.TenantId.HasValue;
+            }
+            
+            return currentUser.IsAuthenticated;
         }
 
-        return currentUser.IsAuthenticated;
-    }
-
-    private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string requiredPermissionName)
-    {
-        var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IPermissionChecker>();
-        return await permissionChecker.IsGrantedAsync(requiredPermissionName);
+        private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string requiredPermissionName)
+        {
+            var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IPermissionChecker>();
+            return await permissionChecker.IsGrantedAsync(requiredPermissionName);
+        }
     }
 }

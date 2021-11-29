@@ -4,73 +4,74 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.TenantManagement;
-
-[Controller]
-[RemoteService(Name = TenantManagementRemoteServiceConsts.RemoteServiceName)]
-[Area(TenantManagementRemoteServiceConsts.ModuleName)]
-[Route("api/multi-tenancy/tenants")]
-public class TenantController : AbpControllerBase, ITenantAppService //TODO: Throws exception on validation if we inherit from Controller
+namespace Volo.Abp.TenantManagement
 {
-    protected ITenantAppService TenantAppService { get; }
-
-    public TenantController(ITenantAppService tenantAppService)
+    [Controller]
+    [RemoteService(Name = TenantManagementRemoteServiceConsts.RemoteServiceName)]
+    [Area(TenantManagementRemoteServiceConsts.ModuleName)]
+    [Route("api/multi-tenancy/tenants")]
+    public class TenantController : AbpControllerBase, ITenantAppService //TODO: Throws exception on validation if we inherit from Controller
     {
-        TenantAppService = tenantAppService;
-    }
+        protected ITenantAppService TenantAppService { get; }
 
-    [HttpGet]
-    [Route("{id}")]
-    public virtual Task<TenantDto> GetAsync(Guid id)
-    {
-        return TenantAppService.GetAsync(id);
-    }
+        public TenantController(ITenantAppService tenantAppService)
+        {
+            TenantAppService = tenantAppService;
+        }
 
-    [HttpGet]
-    public virtual Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
-    {
-        return TenantAppService.GetListAsync(input);
-    }
+        [HttpGet]
+        [Route("{id}")]
+        public virtual Task<TenantDto> GetAsync(Guid id)
+        {
+            return TenantAppService.GetAsync(id);
+        }
 
-    [HttpPost]
-    public virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
-    {
-        ValidateModel();
-        return TenantAppService.CreateAsync(input);
-    }
+        [HttpGet]
+        public virtual Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
+        {
+            return TenantAppService.GetListAsync(input);
+        }
 
-    [HttpPut]
-    [Route("{id}")]
-    public virtual Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
-    {
-        return TenantAppService.UpdateAsync(id, input);
-    }
+        [HttpPost]
+        public virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
+        {
+            ValidateModel();
+            return TenantAppService.CreateAsync(input);
+        }
 
-    [HttpDelete]
-    [Route("{id}")]
-    public virtual Task DeleteAsync(Guid id)
-    {
-        return TenantAppService.DeleteAsync(id);
-    }
+        [HttpPut]
+        [Route("{id}")]
+        public virtual Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
+        {
+            return TenantAppService.UpdateAsync(id, input);
+        }
 
-    [HttpGet]
-    [Route("{id}/default-connection-string")]
-    public virtual Task<string> GetDefaultConnectionStringAsync(Guid id)
-    {
-        return TenantAppService.GetDefaultConnectionStringAsync(id);
-    }
+        [HttpDelete]
+        [Route("{id}")]
+        public virtual Task DeleteAsync(Guid id)
+        {
+            return TenantAppService.DeleteAsync(id);
+        }
 
-    [HttpPut]
-    [Route("{id}/default-connection-string")]
-    public virtual Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
-    {
-        return TenantAppService.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
-    }
+        [HttpGet]
+        [Route("{id}/default-connection-string")]
+        public virtual Task<string> GetDefaultConnectionStringAsync(Guid id)
+        {
+            return TenantAppService.GetDefaultConnectionStringAsync(id);
+        }
 
-    [HttpDelete]
-    [Route("{id}/default-connection-string")]
-    public virtual Task DeleteDefaultConnectionStringAsync(Guid id)
-    {
-        return TenantAppService.DeleteDefaultConnectionStringAsync(id);
+        [HttpPut]
+        [Route("{id}/default-connection-string")]
+        public virtual Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+        {
+            return TenantAppService.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
+        }
+
+        [HttpDelete]
+        [Route("{id}/default-connection-string")]
+        public virtual Task DeleteDefaultConnectionStringAsync(Guid id)
+        {
+            return TenantAppService.DeleteDefaultConnectionStringAsync(id);
+        }
     }
 }

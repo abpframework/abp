@@ -142,7 +142,6 @@
     "MinimumSearchContent": "Sinun on annettava vähintään 3 merkkiä!",
     "Volo.AbpIo.Domain:060001": "Lähteen URL-osoite (\"{ArticleUrl}\") ei ole Githubin URL-osoite",
     "Volo.AbpIo.Domain:060002": "Artikkelin sisältö ei ole saatavilla Githubin (\"{ArticleUrl}\") -resurssista.",
-    "Volo.AbpIo.Domain:060003": "Artikkelin sisältöä ei löytynyt!",
-    "SeeMore": "Katso Lisää"
+    "Volo.AbpIo.Domain:060003": "Artikkelin sisältöä ei löytynyt!"
   }
 }

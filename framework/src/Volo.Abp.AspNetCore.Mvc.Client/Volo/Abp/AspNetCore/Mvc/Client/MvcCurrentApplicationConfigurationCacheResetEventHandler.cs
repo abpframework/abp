@@ -5,29 +5,30 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client;
-
-public class MvcCurrentApplicationConfigurationCacheResetEventHandler :
-    ILocalEventHandler<CurrentApplicationConfigurationCacheResetEventData>,
-    ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    protected ICurrentUser CurrentUser { get; }
-    protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
-
-    public MvcCurrentApplicationConfigurationCacheResetEventHandler(ICurrentUser currentUser,
-        IDistributedCache<ApplicationConfigurationDto> cache)
+    public class MvcCurrentApplicationConfigurationCacheResetEventHandler :
+        ILocalEventHandler<CurrentApplicationConfigurationCacheResetEventData>,
+        ITransientDependency
     {
-        CurrentUser = currentUser;
-        Cache = cache;
-    }
+        protected ICurrentUser CurrentUser { get; }
+        protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
 
-    public virtual async Task HandleEventAsync(CurrentApplicationConfigurationCacheResetEventData eventData)
-    {
-        await Cache.RemoveAsync(CreateCacheKey());
-    }
+        public MvcCurrentApplicationConfigurationCacheResetEventHandler(ICurrentUser currentUser,
+            IDistributedCache<ApplicationConfigurationDto> cache)
+        {
+            CurrentUser = currentUser;
+            Cache = cache;
+        }
 
-    protected virtual string CreateCacheKey()
-    {
-        return MvcCachedApplicationConfigurationClientHelper.CreateCacheKey(CurrentUser);
+        public virtual async Task HandleEventAsync(CurrentApplicationConfigurationCacheResetEventData eventData)
+        {
+            await Cache.RemoveAsync(CreateCacheKey());
+        }
+
+        protected virtual string CreateCacheKey()
+        {
+            return MvcCachedApplicationConfigurationClientHelper.CreateCacheKey(CurrentUser);
+        }
     }
 }

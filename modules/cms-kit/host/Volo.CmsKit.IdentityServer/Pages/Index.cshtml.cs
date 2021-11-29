@@ -1,10 +1,11 @@
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Volo.CmsKit.Pages;
-
-public class IndexModel : AbpPageModel
+namespace Volo.CmsKit.Pages
 {
-    public void OnGet()
+    public class IndexModel : AbpPageModel
     {
+        public void OnGet()
+        {
+        }
     }
 }

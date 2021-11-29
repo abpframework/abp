@@ -2,17 +2,18 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AuditLogging.EntityFrameworkCore;
-
-[DependsOn(typeof(AbpAuditLoggingDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-public class AbpAuditLoggingEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpAuditLoggingDomainModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    public class AbpAuditLoggingEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<AbpAuditLoggingDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
-        });
+            context.Services.AddAbpDbContext<AbpAuditLoggingDbContext>(options =>
+            {
+                options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
+            });
+        }
     }
 }

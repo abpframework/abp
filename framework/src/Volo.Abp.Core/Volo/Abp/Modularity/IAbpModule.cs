@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Modularity;
-
-public interface IAbpModule
+﻿namespace Volo.Abp.Modularity
 {
-    void ConfigureServices(ServiceConfigurationContext context);
+    public interface IAbpModule
+    {
+        void ConfigureServices(ServiceConfigurationContext context);
+    }
 }

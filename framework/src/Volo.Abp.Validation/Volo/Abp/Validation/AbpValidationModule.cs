@@ -6,50 +6,51 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Validation;
-
-[DependsOn(
-    typeof(AbpValidationAbstractionsModule),
-    typeof(AbpLocalizationModule)
-    )]
-public class AbpValidationModule : AbpModule
+namespace Volo.Abp.Validation
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpValidationAbstractionsModule),
+        typeof(AbpLocalizationModule)
+        )]
+    public class AbpValidationModule : AbpModule
     {
-        context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
-        AutoAddObjectValidationContributors(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpValidationResource>();
-        });
+            context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+            AutoAddObjectValidationContributors(context.Services);
+        }
 
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Add<AbpValidationResource>("en")
-                .AddVirtualJson("/Volo/Abp/Validation/Localization");
-        });
-    }
-
-    private static void AutoAddObjectValidationContributors(IServiceCollection services)
-    {
-        var contributorTypes = new List<Type>();
-
-        services.OnRegistred(context =>
-        {
-            if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                contributorTypes.Add(context.ImplementationType);
-            }
-        });
+                options.FileSets.AddEmbedded<AbpValidationResource>();
+            });
 
-        services.Configure<AbpValidationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpValidationResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Validation/Localization");
+            });
+        }
+
+        private static void AutoAddObjectValidationContributors(IServiceCollection services)
         {
-            options.ObjectValidationContributors.AddIfNotContains(contributorTypes);
-        });
+            var contributorTypes = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contributorTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpValidationOptions>(options =>
+            {
+                options.ObjectValidationContributors.AddIfNotContains(contributorTypes);
+            });
+        }
     }
 }

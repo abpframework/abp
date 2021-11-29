@@ -1,23 +1,24 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Features;
-
-[RequiresFeature("BooleanTestFeature1")]
-public class ClassFeatureTestService : ITransientDependency
+namespace Volo.Abp.Features
 {
-    /* Since this class is used with the class reference,
-     * need to virtual keywords, otherwise dynamic proxy can not work.
-     */
-
-    [RequiresFeature("BooleanTestFeature2")]
-    public virtual Task<int> Feature2Async()
+    [RequiresFeature("BooleanTestFeature1")]
+    public class ClassFeatureTestService : ITransientDependency
     {
-        return Task.FromResult(42);
-    }
+        /* Since this class is used with the class reference,
+         * need to virtual keywords, otherwise dynamic proxy can not work.
+         */
 
-    public virtual Task NoAdditionalFeatureAsync()
-    {
-        return Task.CompletedTask;
+        [RequiresFeature("BooleanTestFeature2")]
+        public virtual Task<int> Feature2Async()
+        {
+            return Task.FromResult(42);
+        }
+
+        public virtual Task NoAdditionalFeatureAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

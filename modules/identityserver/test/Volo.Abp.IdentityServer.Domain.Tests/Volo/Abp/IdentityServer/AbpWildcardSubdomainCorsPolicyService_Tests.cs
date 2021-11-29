@@ -4,38 +4,39 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpWildcardSubdomainCorsPolicyService_Tests : AbpIdentityServerTestBase
+namespace Volo.Abp.IdentityServer
 {
-    private readonly ICorsPolicyService _corsPolicyService;
-
-    public AbpWildcardSubdomainCorsPolicyService_Tests()
+    public class AbpWildcardSubdomainCorsPolicyService_Tests : AbpIdentityServerTestBase
     {
-        _corsPolicyService = GetRequiredService<ICorsPolicyService>();
-    }
+        private readonly ICorsPolicyService _corsPolicyService;
 
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        services.AddAbpWildcardSubdomainCorsPolicyService();
-    }
+        public AbpWildcardSubdomainCorsPolicyService_Tests()
+        {
+            _corsPolicyService = GetRequiredService<ICorsPolicyService>();
+        }
 
-    [Fact]
-    public void Should_Register_AbpWildcardSubdomainCorsPolicyService()
-    {
-        _corsPolicyService.GetType().ShouldBe(typeof(AbpWildcardSubdomainCorsPolicyService));
-    }
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            services.AddAbpWildcardSubdomainCorsPolicyService();
+        }
 
-    [Fact]
-    public async Task IsOriginAllowedAsync()
-    {
-        (await _corsPolicyService.IsOriginAllowedAsync("https://client1-origin.com")).ShouldBeTrue();
-        (await _corsPolicyService.IsOriginAllowedAsync("https://client2-origin.com")).ShouldBeFalse();
+        [Fact]
+        public void Should_Register_AbpWildcardSubdomainCorsPolicyService()
+        {
+            _corsPolicyService.GetType().ShouldBe(typeof(AbpWildcardSubdomainCorsPolicyService));
+        }
 
-        (await _corsPolicyService.IsOriginAllowedAsync("https://abp.io")).ShouldBeTrue();
-        (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io")).ShouldBeTrue();
-        (await _corsPolicyService.IsOriginAllowedAsync("https://t1.ng.abp.io")).ShouldBeTrue();
+        [Fact]
+        public async Task IsOriginAllowedAsync()
+        {
+            (await _corsPolicyService.IsOriginAllowedAsync("https://client1-origin.com")).ShouldBeTrue();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://client2-origin.com")).ShouldBeFalse();
 
-        (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io.mydomain.com")).ShouldBeFalse();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://abp.io")).ShouldBeTrue();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io")).ShouldBeTrue();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://t1.ng.abp.io")).ShouldBeTrue();
+
+            (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io.mydomain.com")).ShouldBeFalse();
+        }
     }
 }

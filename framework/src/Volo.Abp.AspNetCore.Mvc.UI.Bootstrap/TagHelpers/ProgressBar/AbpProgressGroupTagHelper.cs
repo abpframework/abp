@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar;
-
-public class AbpProgressGroupTagHelper : AbpTagHelper<AbpProgressGroupTagHelper, AbpProgressGroupTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
 {
-    public AbpProgressGroupTagHelper(AbpProgressGroupTagHelperService groupTagHelperService)
-        : base(groupTagHelperService)
+    public class AbpProgressGroupTagHelper : AbpTagHelper<AbpProgressGroupTagHelper, AbpProgressGroupTagHelperService>
     {
+        public AbpProgressGroupTagHelper(AbpProgressGroupTagHelperService groupTagHelperService)
+            : base(groupTagHelperService)
+        {
 
+        }
     }
 }

@@ -5,16 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Users;
-
-[Serializable]
-public class CmsUserDto : EntityDto<Guid>
+namespace Volo.CmsKit.Users
 {
-    public virtual Guid? TenantId { get; protected set; }
+    [Serializable]
+    public class CmsUserDto : EntityDto<Guid>
+    {
+        public virtual Guid? TenantId { get; protected set; }
 
-    public virtual string UserName { get; protected set; }
+        public virtual string UserName { get; protected set; }
 
-    public virtual string Name { get; set; }
+        public virtual string Name { get; set; }
 
-    public virtual string Surname { get; set; }
+        public virtual string Surname { get; set; }
+    }
 }

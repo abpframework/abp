@@ -4,38 +4,39 @@ using Volo.Abp.AspNetCore.App;
 using Volo.Abp.UI;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc;
-
-public class SimpleController_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc
 {
-    [Fact]
-    public async Task ActionResult_ContentResult()
+    public class SimpleController_Tests : AspNetCoreMvcTestBase
     {
-        var result = await GetResponseAsStringAsync(
-            GetUrl<SimpleController>(nameof(SimpleController.Index))
-        );
-
-        result.ShouldBe("Index-Result");
-    }
-
-    [Fact]
-    public async Task ActionResult_ViewResult()
-    {
-        var result = await GetResponseAsStringAsync(
-            GetUrl<SimpleController>(nameof(SimpleController.About))
-        );
-
-        result.Trim().ShouldBe("<h2>About</h2>");
-    }
-
-    [Fact]
-    public async Task ActionResult_ViewResult_Exception()
-    {
-        await Assert.ThrowsAsync<UserFriendlyException>(async () =>
+        [Fact]
+        public async Task ActionResult_ContentResult()
         {
-            await GetResponseAsStringAsync(
-                GetUrl<SimpleController>(nameof(SimpleController.ExceptionOnRazor))
+            var result = await GetResponseAsStringAsync(
+                GetUrl<SimpleController>(nameof(SimpleController.Index))
             );
-        });
+
+            result.ShouldBe("Index-Result");
+        }
+
+        [Fact]
+        public async Task ActionResult_ViewResult()
+        {
+            var result = await GetResponseAsStringAsync(
+                GetUrl<SimpleController>(nameof(SimpleController.About))
+            );
+
+            result.Trim().ShouldBe("<h2>About</h2>");
+        }
+
+        [Fact]
+        public async Task ActionResult_ViewResult_Exception()
+        {
+            await Assert.ThrowsAsync<UserFriendlyException>(async () =>
+            {
+                await GetResponseAsStringAsync(
+                    GetUrl<SimpleController>(nameof(SimpleController.ExceptionOnRazor))
+                );
+            });
+        }
     }
 }

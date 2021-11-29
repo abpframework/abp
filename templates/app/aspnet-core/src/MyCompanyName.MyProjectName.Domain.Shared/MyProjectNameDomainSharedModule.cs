@@ -13,46 +13,47 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(AbpAuditLoggingDomainSharedModule),
-    typeof(AbpBackgroundJobsDomainSharedModule),
-    typeof(AbpFeatureManagementDomainSharedModule),
-    typeof(AbpIdentityDomainSharedModule),
-    typeof(AbpIdentityServerDomainSharedModule),
-    typeof(AbpPermissionManagementDomainSharedModule),
-    typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)
-    )]
-public class MyProjectNameDomainSharedModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAuditLoggingDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
+        typeof(AbpFeatureManagementDomainSharedModule),
+        typeof(AbpIdentityDomainSharedModule),
+        typeof(AbpIdentityServerDomainSharedModule),
+        typeof(AbpPermissionManagementDomainSharedModule),
+        typeof(AbpSettingManagementDomainSharedModule),
+        typeof(AbpTenantManagementDomainSharedModule)
+        )]
+    public class MyProjectNameDomainSharedModule : AbpModule
     {
-        MyProjectNameGlobalFeatureConfigurator.Configure();
-        MyProjectNameModuleExtensionConfigurator.Configure();
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
-        });
+            MyProjectNameGlobalFeatureConfigurator.Configure();
+            MyProjectNameModuleExtensionConfigurator.Configure();
+        }
 
-        Configure<AbpLocalizationOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Resources
-                .Add<MyProjectNameResource>("en")
-                .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/MyProjectName");
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
+            });
 
-            options.DefaultResourceType = typeof(MyProjectNameResource);
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<MyProjectNameResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Localization/MyProjectName");
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
-        });
+                options.DefaultResourceType = typeof(MyProjectNameResource);
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+            });
+        }
     }
 }

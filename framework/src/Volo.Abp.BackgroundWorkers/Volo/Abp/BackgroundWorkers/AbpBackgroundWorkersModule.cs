@@ -3,36 +3,37 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers;
-
-[DependsOn(
-    typeof(AbpThreadingModule)
-    )]
-public class AbpBackgroundWorkersModule : AbpModule
+namespace Volo.Abp.BackgroundWorkers
 {
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    [DependsOn(
+        typeof(AbpThreadingModule)
+        )]
+    public class AbpBackgroundWorkersModule : AbpModule
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
-        if (options.IsEnabled)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(
-                () => context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .StartAsync()
-            );
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
+            if (options.IsEnabled)
+            {
+                AsyncHelper.RunSync(
+                    () => context.ServiceProvider
+                        .GetRequiredService<IBackgroundWorkerManager>()
+                        .StartAsync()
+                );
+            }
         }
-    }
 
-    public override void OnApplicationShutdown(ApplicationShutdownContext context)
-    {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
-        if (options.IsEnabled)
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            AsyncHelper.RunSync(
-                () => context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .StopAsync()
-            );
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
+            if (options.IsEnabled)
+            {
+                AsyncHelper.RunSync(
+                    () => context.ServiceProvider
+                        .GetRequiredService<IBackgroundWorkerManager>()
+                        .StopAsync()
+                );
+            }
         }
     }
 }

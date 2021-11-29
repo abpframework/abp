@@ -5,29 +5,30 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 
-namespace Volo.Abp.Json.SystemTextJson;
-
-public class AbpSystemTextJsonSerializerOptionsSetup : IConfigureOptions<AbpSystemTextJsonSerializerOptions>
+namespace Volo.Abp.Json.SystemTextJson
 {
-    protected IServiceProvider ServiceProvider { get; }
-
-    public AbpSystemTextJsonSerializerOptionsSetup(IServiceProvider serviceProvider)
+    public class AbpSystemTextJsonSerializerOptionsSetup : IConfigureOptions<AbpSystemTextJsonSerializerOptions>
     {
-        ServiceProvider = serviceProvider;
-    }
+        protected IServiceProvider ServiceProvider { get; }
 
-    public void Configure(AbpSystemTextJsonSerializerOptions options)
-    {
-        options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
-        options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
+        public AbpSystemTextJsonSerializerOptionsSetup(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
 
-        options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
-        options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+        public void Configure(AbpSystemTextJsonSerializerOptions options)
+        {
+            options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+            options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
 
-        options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
-        options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
 
-        // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
-        options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
+
+            // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
+            options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        }
     }
 }

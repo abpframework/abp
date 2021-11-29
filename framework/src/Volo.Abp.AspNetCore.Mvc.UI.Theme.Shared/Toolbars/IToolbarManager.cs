@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
-
-public interface IToolbarManager
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
-    Task<Toolbar> GetAsync(string name);
+    public interface IToolbarManager
+    {
+        Task<Toolbar> GetAsync(string name);
+    }
 }

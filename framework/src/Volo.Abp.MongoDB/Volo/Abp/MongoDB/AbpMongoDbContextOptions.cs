@@ -3,39 +3,40 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace Volo.Abp.MongoDB;
-
-public class AbpMongoDbContextOptions
+namespace Volo.Abp.MongoDB
 {
-    internal Dictionary<Type, Type> DbContextReplacements { get; }
-
-    public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
-
-    public AbpMongoDbContextOptions()
+    public class AbpMongoDbContextOptions
     {
-        DbContextReplacements = new Dictionary<Type, Type>();
-    }
+        internal Dictionary<Type, Type> DbContextReplacements { get; }
 
-    internal Type GetReplacedTypeOrSelf(Type dbContextType)
-    {
-        var replacementType = dbContextType;
-        while (true)
+        public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
+
+        public AbpMongoDbContextOptions()
         {
-            if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
-            {
-                if (foundType == dbContextType)
-                {
-                    throw new AbpException(
-                        "Circular DbContext replacement found for " +
-                        dbContextType.AssemblyQualifiedName
-                    );
-                }
+            DbContextReplacements = new Dictionary<Type, Type>();
+        }
 
-                replacementType = foundType;
-            }
-            else
+        internal Type GetReplacedTypeOrSelf(Type dbContextType)
+        {
+            var replacementType = dbContextType;
+            while (true)
             {
-                return replacementType;
+                if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
+                {
+                    if (foundType == dbContextType)
+                    {
+                        throw new AbpException(
+                            "Circular DbContext replacement found for " +
+                            dbContextType.AssemblyQualifiedName
+                        );
+                    }
+
+                    replacementType = foundType;
+                }
+                else
+                {
+                    return replacementType;
+                }
             }
         }
     }

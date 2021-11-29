@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.ObjectExtending;
-
-public class TenantManagementModuleExtensionConsts
+﻿namespace Volo.Abp.ObjectExtending
 {
-    public const string ModuleName = "TenantManagement";
-
-    public static class EntityNames
+    public class TenantManagementModuleExtensionConsts
     {
-        public const string Tenant = "Tenant";
+        public const string ModuleName = "TenantManagement";
+
+        public static class EntityNames
+        {
+            public const string Tenant = "Tenant";
+        }
     }
 }

@@ -3,116 +3,117 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Volo.Abp.EventBus.Local;
-
-public class ActionBasedEventHandlerTest : EventBusTestBase
+namespace Volo.Abp.EventBus.Local
 {
-    [Fact]
-    public async Task Should_Call_Action_On_Event_With_Correct_Source()
+    public class ActionBasedEventHandlerTest : EventBusTestBase
     {
-        var totalData = 0;
+        [Fact]
+        public async Task Should_Call_Action_On_Event_With_Correct_Source()
+        {
+            var totalData = 0;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(
-            eventData =>
-            {
-                totalData += eventData.Value;
-                return Task.CompletedTask;
-            });
+            LocalEventBus.Subscribe<MySimpleEventData>(
+                eventData =>
+                {
+                    totalData += eventData.Value;
+                    return Task.CompletedTask;
+                });
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(1));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(2));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(3));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
-        Assert.Equal(10, totalData);
-    }
+            Assert.Equal(10, totalData);
+        }
 
-    [Fact]
-    public async Task Should_Call_Handler_With_Non_Generic_Trigger()
-    {
-        var totalData = 0;
+        [Fact]
+        public async Task Should_Call_Handler_With_Non_Generic_Trigger()
+        {
+            var totalData = 0;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(
-            eventData =>
-            {
-                totalData += eventData.Value;
-                return Task.CompletedTask;
-            });
+            LocalEventBus.Subscribe<MySimpleEventData>(
+                eventData =>
+                {
+                    totalData += eventData.Value;
+                    return Task.CompletedTask;
+                });
 
-        await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(1));
-        await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(2));
-        await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(3));
-        await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(4));
 
-        Assert.Equal(10, totalData);
-    }
+            Assert.Equal(10, totalData);
+        }
 
-    [Fact]
-    public async Task Should_Not_Call_Action_After_Unregister_1()
-    {
-        var totalData = 0;
+        [Fact]
+        public async Task Should_Not_Call_Action_After_Unregister_1()
+        {
+            var totalData = 0;
 
-        var registerDisposer = LocalEventBus.Subscribe<MySimpleEventData>(
-            eventData =>
-            {
-                totalData += eventData.Value;
-                return Task.CompletedTask;
-            });
+            var registerDisposer = LocalEventBus.Subscribe<MySimpleEventData>(
+                eventData =>
+                {
+                    totalData += eventData.Value;
+                    return Task.CompletedTask;
+                });
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(1));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(2));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
-        registerDisposer.Dispose();
+            registerDisposer.Dispose();
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
-        Assert.Equal(6, totalData);
-    }
+            Assert.Equal(6, totalData);
+        }
 
-    [Fact]
-    public async Task Should_Not_Call_Action_After_Unregister_2()
-    {
-        var totalData = 0;
+        [Fact]
+        public async Task Should_Not_Call_Action_After_Unregister_2()
+        {
+            var totalData = 0;
 
-        var action = new Func<MySimpleEventData, Task>(
-            eventData =>
-            {
-                totalData += eventData.Value;
-                return Task.CompletedTask;
-            });
+            var action = new Func<MySimpleEventData, Task>(
+                eventData =>
+                {
+                    totalData += eventData.Value;
+                    return Task.CompletedTask;
+                });
 
-        LocalEventBus.Subscribe(action);
+            LocalEventBus.Subscribe(action);
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(1));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(2));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
-        LocalEventBus.Unsubscribe(action);
+            LocalEventBus.Unsubscribe(action);
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
-        Assert.Equal(6, totalData);
-    }
+            Assert.Equal(6, totalData);
+        }
 
-    [Fact]
-    public async Task Should_Call_Action_On_Event_With_Correct_Source_Async()
-    {
-        int totalData = 0;
+        [Fact]
+        public async Task Should_Call_Action_On_Event_With_Correct_Source_Async()
+        {
+            int totalData = 0;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(
-            async eventData =>
-            {
-                await Task.Delay(20);
-                Interlocked.Add(ref totalData, eventData.Value);
-                await Task.Delay(20);
-            });
+            LocalEventBus.Subscribe<MySimpleEventData>(
+                async eventData =>
+                {
+                    await Task.Delay(20);
+                    Interlocked.Add(ref totalData, eventData.Value);
+                    await Task.Delay(20);
+                });
 
-        await LocalEventBus.PublishAsync(new MySimpleEventData(1));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(2));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(3));
-        await LocalEventBus.PublishAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
-        Assert.Equal(10, totalData);
+            Assert.Equal(10, totalData);
+        }
     }
 }

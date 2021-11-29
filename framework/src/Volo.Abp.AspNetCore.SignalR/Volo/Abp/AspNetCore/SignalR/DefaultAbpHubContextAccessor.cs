@@ -2,21 +2,22 @@
 using System.Threading;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public class DefaultAbpHubContextAccessor : IAbpHubContextAccessor, ISingletonDependency
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    public AbpHubContext Context => _currentHubContext.Value;
-
-    private readonly AsyncLocal<AbpHubContext> _currentHubContext = new AsyncLocal<AbpHubContext>();
-
-    public virtual IDisposable Change(AbpHubContext context)
+    public class DefaultAbpHubContextAccessor : IAbpHubContextAccessor, ISingletonDependency
     {
-        var parent = Context;
-        _currentHubContext.Value = context;
-        return new DisposeAction(() =>
+        public AbpHubContext Context => _currentHubContext.Value;
+
+        private readonly AsyncLocal<AbpHubContext> _currentHubContext = new AsyncLocal<AbpHubContext>();
+
+        public virtual IDisposable Change(AbpHubContext context)
         {
-            _currentHubContext.Value = parent;
-        });
+            var parent = Context;
+            _currentHubContext.Value = context;
+            return new DisposeAction(() =>
+            {
+                _currentHubContext.Value = parent;
+            });
+        }
     }
 }

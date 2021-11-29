@@ -10,82 +10,83 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.SignalR.Auditing;
-
-public class AbpAuditHubFilter : IHubFilter
+namespace Volo.Abp.AspNetCore.SignalR.Auditing
 {
-    public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+    public class AbpAuditHubFilter : IHubFilter
     {
-        var options = invocationContext.ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        if (!options.IsEnabled)
+        public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
         {
-            return await next(invocationContext);
-        }
-
-        var hasError = false;
-        var auditingManager = invocationContext.ServiceProvider.GetRequiredService<IAuditingManager>();
-        using (var saveHandle = auditingManager.BeginScope())
-        {
-            Debug.Assert(auditingManager.Current != null);
-            object result;
-            try
+            var options = invocationContext.ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            if (!options.IsEnabled)
             {
-                result = await next(invocationContext);
+                return await next(invocationContext);
+            }
 
-                if (auditingManager.Current.Log.Exceptions.Any())
+            var hasError = false;
+            var auditingManager = invocationContext.ServiceProvider.GetRequiredService<IAuditingManager>();
+            using (var saveHandle = auditingManager.BeginScope())
+            {
+                Debug.Assert(auditingManager.Current != null);
+                object result;
+                try
+                {
+                    result = await next(invocationContext);
+
+                    if (auditingManager.Current.Log.Exceptions.Any())
+                    {
+                        hasError = true;
+                    }
+                }
+                catch (Exception ex)
                 {
                     hasError = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                hasError = true;
 
-                if (!auditingManager.Current.Log.Exceptions.Contains(ex))
-                {
-                    auditingManager.Current.Log.Exceptions.Add(ex);
-                }
-
-                throw;
-            }
-            finally
-            {
-                if (ShouldWriteAuditLog(invocationContext.ServiceProvider, hasError))
-                {
-                    var unitOfWorkManager = invocationContext.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-                    if (unitOfWorkManager.Current != null)
+                    if (!auditingManager.Current.Log.Exceptions.Contains(ex))
                     {
-                        await unitOfWorkManager.Current.SaveChangesAsync();
+                        auditingManager.Current.Log.Exceptions.Add(ex);
                     }
 
-                    await saveHandle.SaveAsync();
+                    throw;
                 }
+                finally
+                {
+                    if (ShouldWriteAuditLog(invocationContext.ServiceProvider, hasError))
+                    {
+                        var unitOfWorkManager = invocationContext.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                        if (unitOfWorkManager.Current != null)
+                        {
+                            await unitOfWorkManager.Current.SaveChangesAsync();
+                        }
+
+                        await saveHandle.SaveAsync();
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        private bool ShouldWriteAuditLog(IServiceProvider serviceProvider, bool hasError)
+        {
+            var options = serviceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            if (options.AlwaysLogOnException && hasError)
+            {
+                return true;
             }
 
-            return result;
-        }
-    }
+            if (!options.IsEnabledForAnonymousUsers && !serviceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            {
+                return false;
+            }
 
-    private bool ShouldWriteAuditLog(IServiceProvider serviceProvider, bool hasError)
-    {
-        var options = serviceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        if (options.AlwaysLogOnException && hasError)
-        {
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+            if (auditingManager.Current == null ||
+                auditingManager.Current.Log.Actions.IsNullOrEmpty())
+            {
+                return false;
+            }
+
             return true;
         }
-
-        if (!options.IsEnabledForAnonymousUsers && !serviceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
-        {
-            return false;
-        }
-
-        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
-        if (auditingManager.Current == null ||
-            auditingManager.Current.Log.Actions.IsNullOrEmpty())
-        {
-            return false;
-        }
-
-        return true;
     }
 }

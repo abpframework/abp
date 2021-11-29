@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.Auditing;
-
-public class AuditLogScope : IAuditLogScope
+﻿namespace Volo.Abp.Auditing
 {
-    public AuditLogInfo Log { get; }
-
-    public AuditLogScope(AuditLogInfo log)
+    public class AuditLogScope : IAuditLogScope
     {
-        Log = log;
+        public AuditLogInfo Log { get; }
+
+        public AuditLogScope(AuditLogInfo log)
+        {
+            Log = log;
+        }
     }
 }

@@ -5,37 +5,38 @@ using Volo.Abp.Caching;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Blogs;
-
-[RequiresGlobalFeature(typeof(BlogsFeature))]
-public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
+namespace Volo.CmsKit.Blogs
 {
-    protected virtual IBlogFeatureRepository BlogFeatureRepository { get; }
-
-    protected virtual IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> Cache { get; }
-
-    public BlogFeatureAppService(
-        IBlogFeatureRepository blogFeatureRepository,
-        IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> blogFeatureCacheManager)
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
+    public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
     {
-        BlogFeatureRepository = blogFeatureRepository;
-        Cache = blogFeatureCacheManager;
-    }
+        protected virtual IBlogFeatureRepository BlogFeatureRepository { get; }
 
-    public virtual async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
-    {
-        var cacheItem = await Cache.GetOrAddAsync(
-                                new BlogFeatureCacheKey(blogId, featureName),
-                                () => GetOrDefaultFroRepositoryAsync(blogId, featureName));
+        protected virtual IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> Cache { get; }
 
-        return ObjectMapper.Map<BlogFeatureCacheItem, BlogFeatureDto>(cacheItem);
-    }
+        public BlogFeatureAppService(
+            IBlogFeatureRepository blogFeatureRepository,
+            IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> blogFeatureCacheManager)
+        {
+            BlogFeatureRepository = blogFeatureRepository;
+            Cache = blogFeatureCacheManager;
+        }
 
-    protected virtual async Task<BlogFeatureCacheItem> GetOrDefaultFroRepositoryAsync(Guid blogId, string featureName)
-    {
-        var feature = await BlogFeatureRepository.FindAsync(blogId, featureName);
-        var blogFeature = feature ?? new BlogFeature(blogId, featureName);
+        public virtual async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
+        {
+            var cacheItem = await Cache.GetOrAddAsync(
+                                    new BlogFeatureCacheKey(blogId, featureName),
+                                    ()=> GetOrDefaultFroRepositoryAsync(blogId, featureName));
 
-        return ObjectMapper.Map<BlogFeature, BlogFeatureCacheItem>(blogFeature);
+            return ObjectMapper.Map<BlogFeatureCacheItem, BlogFeatureDto>(cacheItem);
+        }
+
+        protected virtual async Task<BlogFeatureCacheItem> GetOrDefaultFroRepositoryAsync(Guid blogId, string featureName)
+        {
+            var feature = await BlogFeatureRepository.FindAsync(blogId, featureName);
+            var blogFeature = feature ?? new BlogFeature(blogId, featureName);
+
+            return ObjectMapper.Map<BlogFeature, BlogFeatureCacheItem>(blogFeature);
+        }
     }
 }

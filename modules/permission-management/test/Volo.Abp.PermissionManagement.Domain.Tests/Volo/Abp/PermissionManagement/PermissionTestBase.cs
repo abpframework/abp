@@ -1,23 +1,24 @@
 ﻿using System;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 
-namespace Volo.Abp.PermissionManagement;
-
-public abstract class PermissionTestBase : PermissionManagementTestBase<AbpPermissionManagementTestModule>
+namespace Volo.Abp.PermissionManagement
 {
-    protected virtual void UsingDbContext(Action<IPermissionManagementDbContext> action)
+    public abstract class PermissionTestBase : PermissionManagementTestBase<AbpPermissionManagementTestModule>
     {
-        using (var dbContext = GetRequiredService<IPermissionManagementDbContext>())
+        protected virtual void UsingDbContext(Action<IPermissionManagementDbContext> action)
         {
-            action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<IPermissionManagementDbContext>())
+            {
+                action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected virtual T UsingDbContext<T>(Func<IPermissionManagementDbContext, T> action)
-    {
-        using (var dbContext = GetRequiredService<IPermissionManagementDbContext>())
+        protected virtual T UsingDbContext<T>(Func<IPermissionManagementDbContext, T> action)
         {
-            return action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<IPermissionManagementDbContext>())
+            {
+                return action.Invoke(dbContext);
+            }
         }
     }
 }

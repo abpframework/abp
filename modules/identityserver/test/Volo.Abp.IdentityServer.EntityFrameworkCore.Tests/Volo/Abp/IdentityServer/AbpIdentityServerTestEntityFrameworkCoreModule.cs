@@ -10,42 +10,43 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.IdentityServer;
-
-[DependsOn(
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerTestBaseModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
-    )]
-public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.IdentityServer
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
+        )]
+    public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
-
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configure(abpDbContextConfigurationContext =>
+            var sqliteConnection = CreateDatabaseAndGetConnection();
+
+            Configure<AbpDbContextOptions>(options =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                options.Configure(abpDbContextConfigurationContext =>
+                {
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                });
             });
-        });
-    }
+        }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
+        private static SqliteConnection CreateDatabaseAndGetConnection()
+        {
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
 
-        new IdentityDbContext(
-            new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+            new IdentityDbContext(
+                new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
-        new IdentityServerDbContext(
-            new DbContextOptionsBuilder<IdentityServerDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+            new IdentityServerDbContext(
+                new DbContextOptionsBuilder<IdentityServerDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
-        return connection;
+            return connection;
+        }
     }
 }

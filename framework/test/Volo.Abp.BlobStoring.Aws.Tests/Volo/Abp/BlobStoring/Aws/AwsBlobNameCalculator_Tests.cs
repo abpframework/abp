@@ -3,54 +3,55 @@ using Shouldly;
 using Volo.Abp.MultiTenancy;
 using Xunit;
 
-namespace Volo.Abp.BlobStoring.Aws;
-
-public class AwsBlobNameCalculatorTests : AbpBlobStoringAwsTestCommonBase
+namespace Volo.Abp.BlobStoring.Aws
 {
-    private readonly IAwsBlobNameCalculator _calculator;
-    private readonly ICurrentTenant _currentTenant;
-
-    private const string AwsContainerName = "/";
-    private const string AwsSeparator = "/";
-
-    public AwsBlobNameCalculatorTests()
+    public class AwsBlobNameCalculatorTests : AbpBlobStoringAwsTestCommonBase
     {
-        _calculator = GetRequiredService<IAwsBlobNameCalculator>();
-        _currentTenant = GetRequiredService<ICurrentTenant>();
-    }
+        private readonly IAwsBlobNameCalculator _calculator;
+        private readonly ICurrentTenant _currentTenant;
 
-    [Fact]
-    public void Default_Settings()
-    {
-        _calculator.Calculate(
-            GetArgs("my-container", "my-blob")
-        ).ShouldBe($"host{AwsSeparator}my-blob");
-    }
+        private const string AwsContainerName = "/";
+        private const string AwsSeparator = "/";
 
-    [Fact]
-    public void Default_Settings_With_TenantId()
-    {
-        var tenantId = Guid.NewGuid();
+        public AwsBlobNameCalculatorTests()
+        {
+            _calculator = GetRequiredService<IAwsBlobNameCalculator>();
+            _currentTenant = GetRequiredService<ICurrentTenant>();
+        }
 
-        using (_currentTenant.Change(tenantId))
+        [Fact]
+        public void Default_Settings()
         {
             _calculator.Calculate(
                 GetArgs("my-container", "my-blob")
-            ).ShouldBe($"tenants{AwsSeparator}{tenantId:D}{AwsSeparator}my-blob");
+            ).ShouldBe($"host{AwsSeparator}my-blob");
         }
-    }
 
-    private static BlobProviderArgs GetArgs(
-        string containerName,
-        string blobName)
-    {
-        return new BlobProviderGetArgs(
-            containerName,
-            new BlobContainerConfiguration().UseAws(x =>
+        [Fact]
+        public void Default_Settings_With_TenantId()
+        {
+            var tenantId = Guid.NewGuid();
+
+            using (_currentTenant.Change(tenantId))
             {
-                x.ContainerName = containerName;
-            }),
-            blobName
-        );
+                _calculator.Calculate(
+                    GetArgs("my-container", "my-blob")
+                ).ShouldBe($"tenants{AwsSeparator}{tenantId:D}{AwsSeparator}my-blob");
+            }
+        }
+
+        private static BlobProviderArgs GetArgs(
+            string containerName,
+            string blobName)
+        {
+            return new BlobProviderGetArgs(
+                containerName,
+                new BlobContainerConfiguration().UseAws(x =>
+                {
+                    x.ContainerName = containerName;
+                }),
+                blobName
+            );
+        }
     }
 }

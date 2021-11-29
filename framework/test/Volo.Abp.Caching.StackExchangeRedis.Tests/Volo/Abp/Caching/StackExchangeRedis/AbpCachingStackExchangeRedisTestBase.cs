@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.Caching.StackExchangeRedis;
-
-public abstract class AbpCachingStackExchangeRedisTestBase : AbpIntegratedTest<AbpCachingStackExchangeRedisTestModule>
+namespace Volo.Abp.Caching.StackExchangeRedis
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class AbpCachingStackExchangeRedisTestBase : AbpIntegratedTest<AbpCachingStackExchangeRedisTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

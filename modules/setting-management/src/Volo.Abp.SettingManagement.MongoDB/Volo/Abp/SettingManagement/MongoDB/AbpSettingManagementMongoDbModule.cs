@@ -2,21 +2,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.SettingManagement.MongoDB;
-
-[DependsOn(
-    typeof(AbpSettingManagementDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class AbpSettingManagementMongoDbModule : AbpModule
+namespace Volo.Abp.SettingManagement.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class AbpSettingManagementMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<SettingManagementMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories<ISettingManagementMongoDbContext>();
+            context.Services.AddMongoDbContext<SettingManagementMongoDbContext>(options =>
+            {
+                options.AddDefaultRepositories<ISettingManagementMongoDbContext>();
 
-            options.AddRepository<Setting, MongoSettingRepository>();
-        });
+                options.AddRepository<Setting, MongoSettingRepository>();
+            });
+        }
     }
 }

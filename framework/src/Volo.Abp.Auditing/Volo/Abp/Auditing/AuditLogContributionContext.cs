@@ -1,17 +1,18 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Auditing;
-
-public class AuditLogContributionContext : IServiceProviderAccessor
+namespace Volo.Abp.Auditing
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public AuditLogInfo AuditInfo { get; }
-
-    public AuditLogContributionContext(IServiceProvider serviceProvider, AuditLogInfo auditInfo)
+    public class AuditLogContributionContext : IServiceProviderAccessor
     {
-        ServiceProvider = serviceProvider;
-        AuditInfo = auditInfo;
+        public IServiceProvider ServiceProvider { get; }
+
+        public AuditLogInfo AuditInfo { get; }
+
+        public AuditLogContributionContext(IServiceProvider serviceProvider, AuditLogInfo auditInfo)
+        {
+            ServiceProvider = serviceProvider;
+            AuditInfo = auditInfo;
+        }
     }
 }

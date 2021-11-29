@@ -9,51 +9,52 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpAspNetCoreMultiTenancyModule)
-    )]
-public class AbpAspNetCoreMvcUiMultiTenancyModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
+        )]
+    public class AbpAspNetCoreMvcUiMultiTenancyModule : AbpModule
     {
-        PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddAssemblyResource(
-                typeof(AbpUiMultiTenancyResource),
-                typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly
-            );
-        });
-
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly);
-        });
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiMultiTenancyModule>();
-        });
-
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpUiMultiTenancyResource>("en")
-                .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization");
-        });
-
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.ScriptBundles
-                .Get(StandardBundles.Scripts.Global)
-                .AddFiles(
-                    "/Pages/Abp/MultiTenancy/tenant-switch.js"
+            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(
+                    typeof(AbpUiMultiTenancyResource),
+                    typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly
                 );
-        });
+            });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly);
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiMultiTenancyModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpUiMultiTenancyResource>("en")
+                    .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization");
+            });
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.ScriptBundles
+                    .Get(StandardBundles.Scripts.Global)
+                    .AddFiles(
+                        "/Pages/Abp/MultiTenancy/tenant-switch.js"
+                    );
+            });
+        }
     }
 }

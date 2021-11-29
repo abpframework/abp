@@ -5,49 +5,50 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.ObjectMapping;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    protected IServiceScopeFactory HybridServiceScopeFactory { get; }
-
-    protected AbpDistributedEntityEventOptions Options { get; }
-
-    public EntityToEtoMapper(
-        IOptions<AbpDistributedEntityEventOptions> options,
-        IServiceScopeFactory hybridServiceScopeFactory)
+    public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
     {
-        HybridServiceScopeFactory = hybridServiceScopeFactory;
-        Options = options.Value;
-    }
+        protected IServiceScopeFactory HybridServiceScopeFactory { get; }
 
-    public object Map(object entityObj)
-    {
-        Check.NotNull(entityObj, nameof(entityObj));
+        protected AbpDistributedEntityEventOptions Options { get; }
 
-        var entity = entityObj as IEntity;
-        if (entity == null)
+        public EntityToEtoMapper(
+            IOptions<AbpDistributedEntityEventOptions> options,
+            IServiceScopeFactory hybridServiceScopeFactory)
         {
-            return null;
+            HybridServiceScopeFactory = hybridServiceScopeFactory;
+            Options = options.Value;
         }
 
-        var entityType = ProxyHelper.UnProxy(entity).GetType();
-        var etoMappingItem = Options.EtoMappings.GetOrDefault(entityType);
-        if (etoMappingItem == null)
+        public object Map(object entityObj)
         {
-            var keys = entity.GetKeys().JoinAsString(",");
-            return new EntityEto(entityType.FullName, keys);
-        }
+            Check.NotNull(entityObj, nameof(entityObj));
 
-        using (var scope = HybridServiceScopeFactory.CreateScope())
-        {
-            var objectMapperType = etoMappingItem.ObjectMappingContextType == null
-                ? typeof(IObjectMapper)
-                : typeof(IObjectMapper<>).MakeGenericType(etoMappingItem.ObjectMappingContextType);
+            var entity = entityObj as IEntity;
+            if (entity == null)
+            {
+                return null;
+            }
 
-            var objectMapper = (IObjectMapper)scope.ServiceProvider.GetRequiredService(objectMapperType);
+            var entityType = ProxyHelper.UnProxy(entity).GetType();
+            var etoMappingItem = Options.EtoMappings.GetOrDefault(entityType);
+            if (etoMappingItem == null)
+            {
+                var keys = entity.GetKeys().JoinAsString(",");
+                return new EntityEto(entityType.FullName, keys);
+            }
 
-            return objectMapper.Map(entityType, etoMappingItem.EtoType, entityObj);
+            using (var scope = HybridServiceScopeFactory.CreateScope())
+            {
+                var objectMapperType = etoMappingItem.ObjectMappingContextType == null
+                    ? typeof(IObjectMapper)
+                    : typeof(IObjectMapper<>).MakeGenericType(etoMappingItem.ObjectMappingContextType);
+
+                var objectMapper = (IObjectMapper) scope.ServiceProvider.GetRequiredService(objectMapperType);
+
+                return objectMapper.Map(entityType, etoMappingItem.EtoType, entityObj);
+            }
         }
     }
 }

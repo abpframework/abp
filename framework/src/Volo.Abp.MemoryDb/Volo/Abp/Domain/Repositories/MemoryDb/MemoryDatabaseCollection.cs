@@ -3,53 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Repositories.MemoryDb;
-
-public class MemoryDatabaseCollection<TEntity> : IMemoryDatabaseCollection<TEntity>
-    where TEntity : class, IEntity
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    private readonly Dictionary<string, byte[]> _dictionary = new Dictionary<string, byte[]>();
-
-    private readonly IMemoryDbSerializer _memoryDbSerializer;
-
-    public MemoryDatabaseCollection(IMemoryDbSerializer memoryDbSerializer)
+    public class MemoryDatabaseCollection<TEntity> : IMemoryDatabaseCollection<TEntity>
+        where TEntity : class, IEntity
     {
-        _memoryDbSerializer = memoryDbSerializer;
-    }
+        private readonly Dictionary<string, byte[]> _dictionary = new Dictionary<string, byte[]>();
 
-    public IEnumerator<TEntity> GetEnumerator()
-    {
-        foreach (var entity in _dictionary.Values)
+        private readonly IMemoryDbSerializer _memoryDbSerializer;
+
+        public MemoryDatabaseCollection(IMemoryDbSerializer memoryDbSerializer)
         {
-            yield return _memoryDbSerializer.Deserialize(entity, typeof(TEntity)).As<TEntity>();
+            _memoryDbSerializer = memoryDbSerializer;
         }
-    }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Add(TEntity entity)
-    {
-        _dictionary.Add(GetEntityKey(entity), _memoryDbSerializer.Serialize(entity));
-    }
-
-    public void Update(TEntity entity)
-    {
-        if (_dictionary.ContainsKey(GetEntityKey(entity)))
+        public IEnumerator<TEntity> GetEnumerator()
         {
-            _dictionary[GetEntityKey(entity)] = _memoryDbSerializer.Serialize(entity);
+            foreach (var entity in _dictionary.Values)
+            {
+                yield return _memoryDbSerializer.Deserialize(entity, typeof(TEntity)).As<TEntity>();
+            }
         }
-    }
 
-    public void Remove(TEntity entity)
-    {
-        _dictionary.Remove(GetEntityKey(entity));
-    }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-    private string GetEntityKey(TEntity entity)
-    {
-        return entity.GetKeys().JoinAsString(",");
+        public void Add(TEntity entity)
+        {
+            _dictionary.Add(GetEntityKey(entity), _memoryDbSerializer.Serialize(entity));
+        }
+
+        public void Update(TEntity entity)
+        {
+            if (_dictionary.ContainsKey(GetEntityKey(entity)))
+            {
+                _dictionary[GetEntityKey(entity)] = _memoryDbSerializer.Serialize(entity);
+            }
+        }
+
+        public void Remove(TEntity entity)
+        {
+            _dictionary.Remove(GetEntityKey(entity));
+        }
+
+        private string GetEntityKey(TEntity entity)
+        {
+            return entity.GetKeys().JoinAsString(",");
+        }
     }
 }

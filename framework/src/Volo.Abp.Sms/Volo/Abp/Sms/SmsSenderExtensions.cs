@@ -1,13 +1,14 @@
 ﻿using JetBrains.Annotations;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Sms;
-
-public static class SmsSenderExtensions
+namespace Volo.Abp.Sms
 {
-    public static Task SendAsync([NotNull] this ISmsSender smsSender, [NotNull] string phoneNumber, [NotNull] string text)
+    public static class SmsSenderExtensions
     {
-        Check.NotNull(smsSender, nameof(smsSender));
-        return smsSender.SendAsync(new SmsMessage(phoneNumber, text));
+        public static Task SendAsync([NotNull] this ISmsSender smsSender, [NotNull] string phoneNumber, [NotNull] string text)
+        {
+            Check.NotNull(smsSender, nameof(smsSender));
+            return smsSender.SendAsync(new SmsMessage(phoneNumber, text));
+        }
     }
 }

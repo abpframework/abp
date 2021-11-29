@@ -7,36 +7,37 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Public.Blogs;
 using Xunit;
 
-namespace Volo.CmsKit.Blogs;
-
-public class BlogFeaturePublicAppService_Test : CmsKitApplicationTestBase
+namespace Volo.CmsKit.Blogs
 {
-    private readonly CmsKitTestData testData;
-    private readonly IBlogFeatureAppService blogFeatureAppService;
-
-    public BlogFeaturePublicAppService_Test()
+    public class BlogFeaturePublicAppService_Test : CmsKitApplicationTestBase
     {
-        testData = GetRequiredService<CmsKitTestData>();
-        blogFeatureAppService = GetRequiredService<IBlogFeatureAppService>();
-    }
+        private readonly CmsKitTestData testData;
+        private readonly IBlogFeatureAppService blogFeatureAppService;
 
-    [Fact]
-    public async Task GetAsync_ShouldWorkProperly_WithExistingFeatureName()
-    {
-        var result = await blogFeatureAppService.GetOrDefaultAsync(testData.Blog_Id, testData.BlogFeature_1_FeatureName);
+        public BlogFeaturePublicAppService_Test()
+        {
+            testData = GetRequiredService<CmsKitTestData>();
+            blogFeatureAppService = GetRequiredService<IBlogFeatureAppService>();
+        }
 
-        result.ShouldNotBeNull();
-        result.FeatureName.ShouldBe(testData.BlogFeature_1_FeatureName);
-    }
+        [Fact]
+        public async Task GetAsync_ShouldWorkProperly_WithExistingFeatureName()
+        {
+            var result = await blogFeatureAppService.GetOrDefaultAsync(testData.Blog_Id, testData.BlogFeature_1_FeatureName);
 
-    [Fact]
-    public async Task GetAsync_ShouldReturnDefault_WithNonExistingFeatureName()
-    {
-        var nonExistingFeatureName = "AnyOtherFeature";
-        var result = await blogFeatureAppService.GetOrDefaultAsync(testData.Blog_Id, nonExistingFeatureName);
+            result.ShouldNotBeNull();
+            result.FeatureName.ShouldBe(testData.BlogFeature_1_FeatureName);
+        }
 
-        var defaultFeature = new BlogFeature(Guid.Empty, nonExistingFeatureName);
-        result.ShouldNotBeNull();
-        result.IsEnabled.ShouldBe(defaultFeature.IsEnabled);
+        [Fact]
+        public async Task GetAsync_ShouldReturnDefault_WithNonExistingFeatureName()
+        {
+            var nonExistingFeatureName = "AnyOtherFeature";
+            var result = await blogFeatureAppService.GetOrDefaultAsync(testData.Blog_Id, nonExistingFeatureName);
+
+            var defaultFeature = new BlogFeature(Guid.Empty, nonExistingFeatureName);
+            result.ShouldNotBeNull();
+            result.IsEnabled.ShouldBe(defaultFeature.IsEnabled);
+        }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public interface IAbpCompiledViewProvider
+namespace Volo.Abp.TextTemplating.Razor
 {
-    Task<Assembly> GetAssemblyAsync(TemplateDefinition templateDefinition);
+    public interface IAbpCompiledViewProvider
+    {
+        Task<Assembly> GetAssemblyAsync(TemplateDefinition templateDefinition);
+    }
 }

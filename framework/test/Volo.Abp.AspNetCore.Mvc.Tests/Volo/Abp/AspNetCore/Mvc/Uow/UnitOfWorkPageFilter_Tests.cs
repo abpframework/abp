@@ -2,20 +2,21 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Uow;
-
-public class UnitOfWorkPageFilter_Tests : AspNetCoreMvcTestBase
+namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
-    [Fact]
-    public async Task Get_Actions_Should_Not_Be_Transactional()
+    public class UnitOfWorkPageFilter_Tests: AspNetCoreMvcTestBase
     {
-        await GetResponseAsStringAsync("/Uow/UnitOfWorkTestPage?handler=RequiresUow");
-    }
-
-    [Fact]
-    public async Task Non_Get_Actions_Should_Be_Transactional()
-    {
-        var result = await Client.PostAsync("/Uow/UnitOfWorkTestPage?handler=RequiresUow", null);
-        result.IsSuccessStatusCode.ShouldBeTrue();
+        [Fact]
+        public async Task Get_Actions_Should_Not_Be_Transactional()
+        {
+            await GetResponseAsStringAsync("/Uow/UnitOfWorkTestPage?handler=RequiresUow");
+        }
+        
+        [Fact]
+        public async Task Non_Get_Actions_Should_Be_Transactional()
+        {
+            var result = await Client.PostAsync("/Uow/UnitOfWorkTestPage?handler=RequiresUow", null);
+            result.IsSuccessStatusCode.ShouldBeTrue();
+        }
     }
 }

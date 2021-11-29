@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-[Serializable]
-public abstract class EtoBase
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    public Dictionary<string, string> Properties { get; set; }
-
-    protected EtoBase()
+    [Serializable]
+    public abstract class EtoBase
     {
-        Properties = new Dictionary<string, string>();
+        public Dictionary<string, string> Properties { get; set; }
+
+        protected EtoBase()
+        {
+            Properties = new Dictionary<string, string>();
+        }
     }
 }

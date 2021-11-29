@@ -6,31 +6,32 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Account;
-
-[DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpIdentityApplicationModule),
-    typeof(AbpUiNavigationModule),
-    typeof(AbpEmailingModule)
-)]
-public class AbpAccountApplicationModule : AbpModule
+namespace Volo.Abp.Account
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpUiNavigationModule),
+        typeof(AbpEmailingModule)
+    )]
+    public class AbpAccountApplicationModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
+            });
 
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpAccountApplicationModuleAutoMapperProfile>(validate: true);
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpAccountApplicationModuleAutoMapperProfile>(validate: true);
+            });
 
-        Configure<AppUrlOptions>(options =>
-        {
-            options.Applications["MVC"].Urls[AccountUrlNames.PasswordReset] = "Account/ResetPassword";
-        });
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].Urls[AccountUrlNames.PasswordReset] = "Account/ResetPassword";
+            });
+        }
     }
 }

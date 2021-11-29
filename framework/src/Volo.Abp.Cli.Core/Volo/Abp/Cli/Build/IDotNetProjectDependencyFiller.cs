@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.Build;
-
-public interface IDotNetProjectDependencyFiller
+namespace Volo.Abp.Cli.Build
 {
-    void Fill(List<DotNetProjectInfo> projects);
+    public interface IDotNetProjectDependencyFiller
+    {
+        void Fill(List<DotNetProjectInfo> projects);
+    }
 }

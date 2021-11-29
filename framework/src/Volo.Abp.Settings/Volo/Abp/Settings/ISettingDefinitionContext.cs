@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.Settings;
-
-public interface ISettingDefinitionContext
+namespace Volo.Abp.Settings
 {
-    SettingDefinition GetOrNull(string name);
+    public interface ISettingDefinitionContext
+    {
+        SettingDefinition GetOrNull(string name);
+        
+        IReadOnlyList<SettingDefinition> GetAll();
 
-    IReadOnlyList<SettingDefinition> GetAll();
-
-    void Add(params SettingDefinition[] definitions);
+        void Add(params SettingDefinition[] definitions);
+    }
 }

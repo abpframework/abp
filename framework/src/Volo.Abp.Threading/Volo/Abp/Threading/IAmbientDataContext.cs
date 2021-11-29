@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Threading;
-
-public interface IAmbientDataContext
+﻿namespace Volo.Abp.Threading
 {
-    void SetData(string key, object value);
+    public interface IAmbientDataContext
+    {
+        void SetData(string key, object value);
 
-    object GetData(string key);
+        object GetData(string key);
+    }
 }

@@ -2,29 +2,30 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.ObjectMapping;
-
-public class AbpObjectMappingModule : AbpModule
+namespace Volo.Abp.ObjectMapping
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public class AbpObjectMappingModule : AbpModule
     {
-        context.Services.OnExposing(onServiceExposingContext =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.OnExposing(onServiceExposingContext =>
+            {
                 //Register types for IObjectMapper<TSource, TDestination> if implements
                 onServiceExposingContext.ExposedTypes.AddRange(
-                ReflectionHelper.GetImplementedGenericTypes(
-                    onServiceExposingContext.ImplementationType,
-                    typeof(IObjectMapper<,>)
-                )
-            );
-        });
-    }
+                    ReflectionHelper.GetImplementedGenericTypes(
+                        onServiceExposingContext.ImplementationType,
+                        typeof(IObjectMapper<,>)
+                    )
+                );
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddTransient(
-            typeof(IObjectMapper<>),
-            typeof(DefaultObjectMapper<>)
-        );
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTransient(
+                typeof(IObjectMapper<>),
+                typeof(DefaultObjectMapper<>)
+            );
+        }
     }
 }

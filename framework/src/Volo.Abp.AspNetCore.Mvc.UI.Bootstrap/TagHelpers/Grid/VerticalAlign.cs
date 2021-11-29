@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
-
-public enum VerticalAlign
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    Default,
-    Start,
-    Center,
-    End
+    public enum VerticalAlign
+    {
+        Default,
+        Start,
+        Center,
+        End
+    }
 }

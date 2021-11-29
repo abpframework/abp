@@ -3,18 +3,19 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.BackgroundJobs.MongoDB;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
-public class BackgroundJobsMongoDbContext : AbpMongoDbContext, IBackgroundJobsMongoDbContext
+namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    public IMongoCollection<BackgroundJobRecord> BackgroundJobs { get; set; }
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
+    public class BackgroundJobsMongoDbContext : AbpMongoDbContext, IBackgroundJobsMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<BackgroundJobRecord> BackgroundJobs { get; set; }
 
-        modelBuilder.ConfigureBackgroundJobs();
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureBackgroundJobs();
+        }
     }
 }

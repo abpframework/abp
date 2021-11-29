@@ -2,28 +2,29 @@
 using Shouldly;
 using Xunit;
 
-namespace MyCompanyName.MyProjectName.Samples;
-
-public class SampleAppService_Tests : MyProjectNameApplicationTestBase
+namespace MyCompanyName.MyProjectName.Samples
 {
-    private readonly ISampleAppService _sampleAppService;
-
-    public SampleAppService_Tests()
+    public class SampleAppService_Tests : MyProjectNameApplicationTestBase
     {
-        _sampleAppService = GetRequiredService<ISampleAppService>();
-    }
+        private readonly ISampleAppService _sampleAppService;
 
-    [Fact]
-    public async Task GetAsync()
-    {
-        var result = await _sampleAppService.GetAsync();
-        result.Value.ShouldBe(42);
-    }
+        public SampleAppService_Tests()
+        {
+            _sampleAppService = GetRequiredService<ISampleAppService>();
+        }
 
-    [Fact]
-    public async Task GetAuthorizedAsync()
-    {
-        var result = await _sampleAppService.GetAuthorizedAsync();
-        result.Value.ShouldBe(42);
+        [Fact]
+        public async Task GetAsync()
+        {
+            var result = await _sampleAppService.GetAsync();
+            result.Value.ShouldBe(42);
+        }
+
+        [Fact]
+        public async Task GetAuthorizedAsync()
+        {
+            var result = await _sampleAppService.GetAuthorizedAsync();
+            result.Value.ShouldBe(42);
+        }
     }
 }

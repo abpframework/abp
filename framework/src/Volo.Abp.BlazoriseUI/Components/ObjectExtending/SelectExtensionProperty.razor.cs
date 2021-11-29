@@ -6,54 +6,56 @@ using Volo.Abp.Data;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
 
-namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
-
-public partial class SelectExtensionProperty<TEntity, TResourceType> : ComponentBase
-    where TEntity : IHasExtraProperties
+namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
 {
-    protected List<SelectItem<int>> SelectItems = new();
-
-    [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
-
-    [Parameter] public TEntity Entity { get; set; }
-
-    [Parameter] public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
-
-    public int SelectedValue {
-        get { return Entity.GetProperty<int>(PropertyInfo.Name); }
-        set { Entity.SetProperty(PropertyInfo.Name, value, false); }
-    }
-
-    protected virtual List<SelectItem<int>> GetSelectItemsFromEnum()
+    public partial class SelectExtensionProperty<TEntity, TResourceType> : ComponentBase
+        where TEntity : IHasExtraProperties
     {
-        var selectItems = new List<SelectItem<int>>();
+        protected List<SelectItem<int>> SelectItems = new ();
+        
+        [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
-        foreach (var enumValue in PropertyInfo.Type.GetEnumValues())
+        [Parameter] public TEntity Entity { get; set; }
+
+        [Parameter] public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
+
+        public int SelectedValue
         {
-            selectItems.Add(new SelectItem<int>
+            get { return Entity.GetProperty<int>(PropertyInfo.Name); }
+            set { Entity.SetProperty(PropertyInfo.Name, value, false); }
+        }
+        
+        protected virtual List<SelectItem<int>> GetSelectItemsFromEnum()
+        {
+            var selectItems = new List<SelectItem<int>>();
+            
+            foreach (var enumValue in PropertyInfo.Type.GetEnumValues())
             {
-                Value = (int)enumValue,
-                Text = EnumHelper.GetLocalizedMemberName(PropertyInfo.Type, enumValue, StringLocalizerFactory)
-            });
+                selectItems.Add( new SelectItem<int>
+                {
+                    Value = (int) enumValue,
+                    Text = EnumHelper.GetLocalizedMemberName(PropertyInfo.Type, enumValue, StringLocalizerFactory)
+                });
+            }
+
+            return selectItems;
         }
 
-        return selectItems;
-    }
-
-    protected override void OnParametersSet()
-    {
-        SelectItems = GetSelectItemsFromEnum();
-        StateHasChanged();
-
-        if (!Entity.HasProperty(PropertyInfo.Name))
+        protected override void OnParametersSet()
         {
-            SelectedValue = (int)PropertyInfo.Type.GetEnumValues().GetValue(0);
+            SelectItems = GetSelectItemsFromEnum();
+            StateHasChanged();
+
+            if (!Entity.HasProperty(PropertyInfo.Name))
+            {
+                SelectedValue = (int)PropertyInfo.Type.GetEnumValues().GetValue(0);
+            }
         }
     }
-}
 
-public class SelectItem<TValue>
-{
-    public string Text { get; set; }
-    public TValue Value { get; set; }
+    public class SelectItem<TValue>
+    {
+        public string Text { get; set; }
+        public TValue Value { get; set; }
+    }
 }

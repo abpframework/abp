@@ -4,26 +4,27 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.Http.Client.Proxying;
 
-namespace Volo.Abp.AspNetCore.TestBase.DynamicProxying;
-
-[Dependency(ReplaceServices = true)]
-public class AspNetCoreTestProxyHttpClientFactory : IProxyHttpClientFactory, ITransientDependency
+namespace Volo.Abp.AspNetCore.TestBase.DynamicProxying
 {
-    private readonly ITestServerAccessor _testServerAccessor;
-
-    public AspNetCoreTestProxyHttpClientFactory(
-        ITestServerAccessor testServerAccessor)
+    [Dependency(ReplaceServices = true)]
+    public class AspNetCoreTestProxyHttpClientFactory : IProxyHttpClientFactory, ITransientDependency
     {
-        _testServerAccessor = testServerAccessor;
-    }
+        private readonly ITestServerAccessor _testServerAccessor;
 
-    public HttpClient Create()
-    {
-        return _testServerAccessor.Server.CreateClient();
-    }
+        public AspNetCoreTestProxyHttpClientFactory(
+            ITestServerAccessor testServerAccessor)
+        {
+            _testServerAccessor = testServerAccessor;
+        }
 
-    public HttpClient Create(string name)
-    {
-        return Create();
+        public HttpClient Create()
+        {
+            return _testServerAccessor.Server.CreateClient();
+        }
+
+        public HttpClient Create(string name)
+        {
+            return Create();
+        }
     }
 }

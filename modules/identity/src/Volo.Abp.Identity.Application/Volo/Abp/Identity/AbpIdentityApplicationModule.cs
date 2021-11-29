@@ -3,23 +3,24 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 
-namespace Volo.Abp.Identity;
-
-[DependsOn(
-    typeof(AbpIdentityDomainModule),
-    typeof(AbpIdentityApplicationContractsModule),
-    typeof(AbpAutoMapperModule),
-    typeof(AbpPermissionManagementApplicationModule)
-    )]
-public class AbpIdentityApplicationModule : AbpModule
+namespace Volo.Abp.Identity
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpIdentityApplicationContractsModule), 
+        typeof(AbpAutoMapperModule),
+        typeof(AbpPermissionManagementApplicationModule)
+        )]
+    public class AbpIdentityApplicationModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityApplicationModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityApplicationModule>();
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>(validate: true);
+            });
+        }
     }
 }

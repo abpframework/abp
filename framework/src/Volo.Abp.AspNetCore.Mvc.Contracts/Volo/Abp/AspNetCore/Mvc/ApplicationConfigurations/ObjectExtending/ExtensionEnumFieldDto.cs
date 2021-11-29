@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-[Serializable]
-public class ExtensionEnumFieldDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    public string Name { get; set; }
+    [Serializable]
+    public class ExtensionEnumFieldDto
+    {
+        public string Name { get; set; }
 
-    public object Value { get; set; }
+        public object Value { get; set; }
+    }
 }

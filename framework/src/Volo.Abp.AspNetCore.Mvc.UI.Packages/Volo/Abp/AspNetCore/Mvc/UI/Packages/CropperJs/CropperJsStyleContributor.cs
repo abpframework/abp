@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.CropperJs;
-
-public class CropperJsStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.CropperJs
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class CropperJsStyleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/cropperjs/css/cropper.min.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/cropperjs/css/cropper.min.css");
+        }
     }
 }

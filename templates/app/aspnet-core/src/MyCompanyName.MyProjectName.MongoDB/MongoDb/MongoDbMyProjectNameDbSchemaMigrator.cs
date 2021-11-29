@@ -7,37 +7,38 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDB;
-
-public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator, ITransientDependency
+namespace MyCompanyName.MyProjectName.MongoDB
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public MongoDbMyProjectNameDbSchemaMigrator(IServiceProvider serviceProvider)
+    public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator , ITransientDependency
     {
-        _serviceProvider = serviceProvider;
-    }
+        private readonly IServiceProvider _serviceProvider;
 
-    public async Task MigrateAsync()
-    {
-        var dbContexts = _serviceProvider.GetServices<IAbpMongoDbContext>();
-        var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
-
-        foreach (var dbContext in dbContexts)
+        public MongoDbMyProjectNameDbSchemaMigrator(IServiceProvider serviceProvider)
         {
-            var connectionString =
-                await connectionStringResolver.ResolveAsync(
-                    ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType()));
-            var mongoUrl = new MongoUrl(connectionString);
-            var databaseName = mongoUrl.DatabaseName;
-            var client = new MongoClient(mongoUrl);
+            _serviceProvider = serviceProvider;
+        }
 
-            if (databaseName.IsNullOrWhiteSpace())
+        public async Task MigrateAsync()
+        {
+            var dbContexts = _serviceProvider.GetServices<IAbpMongoDbContext>();
+            var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
+
+            foreach (var dbContext in dbContexts)
             {
-                databaseName = ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType());
-            }
+                var connectionString =
+                    await connectionStringResolver.ResolveAsync(
+                        ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType()));
+                var mongoUrl = new MongoUrl(connectionString);
+                var databaseName = mongoUrl.DatabaseName;
+                var client = new MongoClient(mongoUrl);
 
-            (dbContext as AbpMongoDbContext)?.InitializeCollections(client.GetDatabase(databaseName));
+                if (databaseName.IsNullOrWhiteSpace())
+                {
+                    databaseName = ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType());
+                }
+
+                (dbContext as AbpMongoDbContext)?.InitializeCollections(client.GetDatabase(databaseName));
+            }
         }
     }
 }

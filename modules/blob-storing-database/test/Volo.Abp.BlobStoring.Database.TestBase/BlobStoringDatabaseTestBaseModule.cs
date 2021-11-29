@@ -3,27 +3,28 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring.Database;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAuthorizationModule),
-    typeof(BlobStoringDatabaseDomainModule),
-    typeof(AbpBlobStoringTestModule)
-    )]
-public class BlobStoringDatabaseTestBaseModule : AbpModule
+namespace Volo.Abp.BlobStoring.Database
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAuthorizationModule),
+        typeof(BlobStoringDatabaseDomainModule),
+        typeof(AbpBlobStoringTestModule)
+        )]
+    public class BlobStoringDatabaseTestBaseModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
-
-        Configure<AbpBlobStoringOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            context.Services.AddAlwaysAllowAuthorization();
+
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                containerConfiguration.UseDatabase();
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.UseDatabase();
+                });
             });
-        });
+        }
     }
 }

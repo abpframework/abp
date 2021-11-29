@@ -10,63 +10,64 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpAspNetCoreMvcUiMultiTenancyModule)
-    )]
-public class AbpAspNetCoreMvcUiBasicThemeModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule)
+        )]
+    public class AbpAspNetCoreMvcUiBasicThemeModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiBasicThemeModule).Assembly);
-        });
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpThemingOptions>(options =>
-        {
-            options.Themes.Add<BasicTheme>();
-
-            if (options.DefaultThemeName == null)
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                options.DefaultThemeName = BasicTheme.Name;
-            }
-        });
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiBasicThemeModule).Assembly);
+            });
+        }
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBasicThemeModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic");
-        });
+            Configure<AbpThemingOptions>(options =>
+            {
+                options.Themes.Add<BasicTheme>();
 
-        Configure<AbpToolbarOptions>(options =>
-        {
-            options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
-        });
-
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options
-                .StyleBundles
-                .Add(BasicThemeBundles.Styles.Global, bundle =>
+                if (options.DefaultThemeName == null)
                 {
-                    bundle
-                        .AddBaseBundles(StandardBundles.Styles.Global)
-                        .AddContributors(typeof(BasicThemeGlobalStyleContributor));
-                });
+                    options.DefaultThemeName = BasicTheme.Name;
+                }
+            });
 
-            options
-                .ScriptBundles
-                .Add(BasicThemeBundles.Scripts.Global, bundle =>
-                {
-                    bundle
-                        .AddBaseBundles(StandardBundles.Scripts.Global)
-                        .AddContributors(typeof(BasicThemeGlobalScriptContributor));
-                });
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBasicThemeModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic");
+            });
+
+            Configure<AbpToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
+            });
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Add(BasicThemeBundles.Styles.Global, bundle =>
+                    {
+                        bundle
+                            .AddBaseBundles(StandardBundles.Styles.Global)
+                            .AddContributors(typeof(BasicThemeGlobalStyleContributor));
+                    });
+
+                options
+                    .ScriptBundles
+                    .Add(BasicThemeBundles.Scripts.Global, bundle =>
+                    {
+                        bundle
+                            .AddBaseBundles(StandardBundles.Scripts.Global)
+                            .AddContributors(typeof(BasicThemeGlobalScriptContributor));
+                    });
+            });
+        }
     }
 }

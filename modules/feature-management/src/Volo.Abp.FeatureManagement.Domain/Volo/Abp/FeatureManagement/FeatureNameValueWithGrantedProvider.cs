@@ -1,18 +1,19 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.FeatureManagement;
-
-[Serializable]
-public class FeatureNameValueWithGrantedProvider : NameValue
+namespace Volo.Abp.FeatureManagement
 {
-    public FeatureValueProviderInfo Provider { get; set; }
-
-    public FeatureNameValueWithGrantedProvider([NotNull] string name, string value)
+    [Serializable]
+    public class FeatureNameValueWithGrantedProvider : NameValue
     {
-        Check.NotNull(name, nameof(name));
+        public FeatureValueProviderInfo Provider { get; set; }
 
-        Name = name;
-        Value = value;
+        public FeatureNameValueWithGrantedProvider([NotNull] string name, string value)
+        {
+            Check.NotNull(name, nameof(name));
+
+            Name = name;
+            Value = value;
+        }
     }
 }

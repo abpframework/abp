@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class OracleInboxConfigExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void UseOracle<TDbContext>(this InboxConfig outboxConfig)
-        where TDbContext : IHasEventInbox
+    public static class OracleInboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(IOracleDbContextEventInbox<TDbContext>);
+        public static void UseOracle<TDbContext>(this InboxConfig outboxConfig)
+            where TDbContext : IHasEventInbox
+        {
+            outboxConfig.ImplementationType = typeof(IOracleDbContextEventInbox<TDbContext>);
+        }
     }
 }

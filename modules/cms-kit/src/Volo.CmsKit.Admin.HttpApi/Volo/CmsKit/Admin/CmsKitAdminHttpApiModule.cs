@@ -3,27 +3,28 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 using Volo.CmsKit.Admin.MediaDescriptors;
 
-namespace Volo.CmsKit.Admin;
-
-[DependsOn(
-    typeof(CmsKitAdminApplicationContractsModule),
-    typeof(CmsKitCommonHttpApiModule)
-    )]
-public class CmsKitAdminHttpApiModule : AbpModule
+namespace Volo.CmsKit.Admin
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(CmsKitAdminApplicationContractsModule),
+        typeof(CmsKitCommonHttpApiModule)
+        )]
+    public class CmsKitAdminHttpApiModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitAdminHttpApiModule).Assembly);
-        });
-    }
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitAdminHttpApiModule).Assembly);
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
-        });
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
+            });
+        }
     }
 }

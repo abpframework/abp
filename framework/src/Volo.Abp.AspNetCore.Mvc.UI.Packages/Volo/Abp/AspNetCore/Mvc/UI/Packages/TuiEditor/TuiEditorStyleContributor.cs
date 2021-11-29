@@ -4,16 +4,17 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor;
-
-[DependsOn(
-    typeof(CodemirrorStyleContributor),
-    typeof(HighlightJsStyleContributor)
-)]
-public class TuiEditorStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(
+        typeof(CodemirrorStyleContributor),
+        typeof(HighlightJsStyleContributor)
+    )]
+    public class TuiEditorStyleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/tui-editor/toastui-editor.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/tui-editor/toastui-editor.css");
+        }
     }
 }

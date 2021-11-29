@@ -3,26 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore;
-
-public class BlobStoringHostDbContextFactory : IDesignTimeDbContextFactory<BlobStoringHostDbContext>
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.EfCore
 {
-    public BlobStoringHostDbContext CreateDbContext(string[] args)
+    public class BlobStoringHostDbContextFactory : IDesignTimeDbContextFactory<BlobStoringHostDbContext>
     {
-        var configuration = BuildConfiguration();
+        public BlobStoringHostDbContext CreateDbContext(string[] args)
+        {
+            var configuration = BuildConfiguration();
 
-        var builder = new DbContextOptionsBuilder<BlobStoringHostDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            var builder = new DbContextOptionsBuilder<BlobStoringHostDbContext>()
+                .UseSqlServer(configuration.GetConnectionString("Default"));
 
-        return new BlobStoringHostDbContext(builder.Options);
-    }
+            return new BlobStoringHostDbContext(builder.Options);
+        }
 
-    private static IConfigurationRoot BuildConfiguration()
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false);
+        private static IConfigurationRoot BuildConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false);
 
-        return builder.Build();
+            return builder.Build();
+        }
     }
 }

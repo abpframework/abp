@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Figure;
-
-public class AbpFigureImageTagHelperService : AbpTagHelperService<AbpFigureImageTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Figure
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpFigureImageTagHelperService : AbpTagHelperService<AbpFigureImageTagHelper>
     {
-        output.Attributes.AddClass("figure-img");
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.AddClass("figure-img");
+        }
     }
 }

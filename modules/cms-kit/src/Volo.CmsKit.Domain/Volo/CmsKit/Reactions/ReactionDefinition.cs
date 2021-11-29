@@ -3,21 +3,22 @@ using System;
 using Volo.Abp;
 using Volo.Abp.Localization;
 
-namespace Volo.CmsKit.Reactions;
-
-public class ReactionDefinition
+namespace Volo.CmsKit.Reactions
 {
-    [NotNull]
-    public string Name { get; }
-
-    [CanBeNull]
-    public ILocalizableString DisplayName { get; set; }
-
-    public ReactionDefinition(
-        [NotNull] string name,
-        [CanBeNull] ILocalizableString displayName = null)
+    public class ReactionDefinition
     {
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
-        DisplayName = displayName;
+        [NotNull]
+        public string Name { get; }
+
+        [CanBeNull]
+        public ILocalizableString DisplayName { get; set; }
+
+        public ReactionDefinition(
+            [NotNull] string name,
+            [CanBeNull] ILocalizableString displayName = null)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            DisplayName = displayName;
+        }
     }
 }

@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.RabbitMQ;
-
-public class AbpRabbitMqOptions
+﻿namespace Volo.Abp.RabbitMQ
 {
-    public RabbitMqConnections Connections { get; }
-
-    public AbpRabbitMqOptions()
+    public class AbpRabbitMqOptions
     {
-        Connections = new RabbitMqConnections();
+        public RabbitMqConnections Connections { get; }
+
+        public AbpRabbitMqOptions()
+        {
+            Connections = new RabbitMqConnections();
+        }
     }
 }

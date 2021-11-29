@@ -5,25 +5,26 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation;
-
-[DependsOn(typeof(JQueryScriptContributor))]
-public class JQueryValidationScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
 {
-    public const string PackageName = "jquery-validation";
-
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class JQueryValidationScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/jquery-validation/jquery.validate.js");
-    }
+        public const string PackageName = "jquery-validation";
 
-    public override void ConfigureDynamicResources(BundleConfigurationContext context)
-    {
-        var fileName = context.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpLocalizationOptions>>().Value.GetCurrentUICultureLanguageFilesMap(PackageName);
-        var filePath = $"/libs/jquery-validation/localization/messages_{fileName}.js";
-        if (context.FileProvider.GetFileInfo(filePath).Exists)
+        public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains(filePath);
+            context.Files.AddIfNotContains("/libs/jquery-validation/jquery.validate.js");
+        }
+
+        public override void ConfigureDynamicResources(BundleConfigurationContext context)
+        {
+            var fileName = context.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpLocalizationOptions>>().Value.GetCurrentUICultureLanguageFilesMap(PackageName);
+            var filePath = $"/libs/jquery-validation/localization/messages_{fileName}.js";
+            if (context.FileProvider.GetFileInfo(filePath).Exists)
+            {
+                context.Files.AddIfNotContains(filePath);
+            }
         }
     }
 }

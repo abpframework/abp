@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.Cli.Bundling;
-
-internal class BundleTypeDefinition
+namespace Volo.Abp.Cli.Bundling
 {
-    public int Level { get; set; }
+    internal class BundleTypeDefinition
+    {
+        public int Level { get; set; }
 
-    public Type BundleContributorType { get; set; }
+        public Type BundleContributorType { get; set; }
+    }
 }

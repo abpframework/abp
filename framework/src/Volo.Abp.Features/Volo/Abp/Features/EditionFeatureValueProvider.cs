@@ -2,30 +2,31 @@
 using System.Threading.Tasks;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.Features;
-
-public class EditionFeatureValueProvider : FeatureValueProvider
+namespace Volo.Abp.Features
 {
-    public const string ProviderName = "E";
-
-    public override string Name => ProviderName;
-
-    protected ICurrentPrincipalAccessor PrincipalAccessor;
-
-    public EditionFeatureValueProvider(IFeatureStore featureStore, ICurrentPrincipalAccessor principalAccessor)
-        : base(featureStore)
+    public class EditionFeatureValueProvider : FeatureValueProvider
     {
-        PrincipalAccessor = principalAccessor;
-    }
+        public const string ProviderName = "E";
 
-    public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
-    {
-        var editionId = PrincipalAccessor.Principal?.FindEditionId();
-        if (editionId == null)
+        public override string Name => ProviderName;
+
+        protected ICurrentPrincipalAccessor PrincipalAccessor;
+
+        public EditionFeatureValueProvider(IFeatureStore featureStore, ICurrentPrincipalAccessor principalAccessor)
+            : base(featureStore)
         {
-            return null;
+            PrincipalAccessor = principalAccessor;
         }
 
-        return await FeatureStore.GetOrNullAsync(feature.Name, Name, editionId.Value.ToString());
+        public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+        {
+            var editionId = PrincipalAccessor.Principal?.FindEditionId();
+            if (editionId == null)
+            {
+                return null;
+            }
+
+            return await FeatureStore.GetOrNullAsync(feature.Name, Name, editionId.Value.ToString());
+        }
     }
 }

@@ -8,52 +8,52 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc;
-
-public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
+namespace Volo.Abp.AspNetCore.Mvc
 {
-    private const string PropertyLocalizationKeyPrefix = "DisplayName:";
-
-    private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
-    private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
-
-    public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
+    public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
     {
-        _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
-        _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
-    }
+        private const string PropertyLocalizationKeyPrefix = "DisplayName:";
 
-    public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
-    {
-        var displayMetadata = context.DisplayMetadata;
-        if (displayMetadata.DisplayName != null)
+        private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
+        private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
+
+        public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
         {
-            return;
+            _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
+            _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
         }
 
-        var attributes = context.Attributes;
-
-        if (attributes.OfType<DisplayAttribute>().Any() ||
-            attributes.OfType<DisplayNameAttribute>().Any())
+        public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
         {
-            return;
-        }
+            var displayMetadata = context.DisplayMetadata;
+            if (displayMetadata.DisplayName != null)
+            {
+                return;
+            }
 
-        if (context.Key.Name.IsNullOrWhiteSpace())
-        {
-            return;
-        }
+            var attributes = context.Attributes;
 
-        if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
-        {
-            return;
-        }
+            if (attributes.OfType<DisplayAttribute>().Any() ||
+                attributes.OfType<DisplayNameAttribute>().Any())
+            {
+                return;
+            }
 
-        var containerType = context.Key.ContainerType ?? context.Key.ModelType;
-        var localizer = _localizationOptions.Value.Value.DataAnnotationLocalizerProvider(containerType, _stringLocalizerFactory.Value);
+            if (context.Key.Name.IsNullOrWhiteSpace())
+            {
+                return;
+            }
 
-        displayMetadata.DisplayName = () =>
-        {
+            if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
+            {
+                return;
+            }
+
+            var containerType = context.Key.ContainerType ?? context.Key.ModelType;
+            var localizer = _localizationOptions.Value.Value.DataAnnotationLocalizerProvider(containerType, _stringLocalizerFactory.Value);
+
+            displayMetadata.DisplayName = () =>
+            {
                 /*
                  * DisplayName:ClassName:PropertyName
                  * DisplayName:PropertyName
@@ -61,29 +61,30 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
                  * PropertyName
                  */
 
-            LocalizedString localizedString = null;
+                LocalizedString localizedString = null;
 
-            if (context.Key.ContainerType != null)
-            {
-                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
-            }
+                if (context.Key.ContainerType != null)
+                {
+                    localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
+                }
 
-            if (localizedString == null || localizedString.ResourceNotFound)
-            {
-                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
-            }
+                if (localizedString == null || localizedString.ResourceNotFound)
+                {
+                    localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+                }
 
-            if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
-            {
-                localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
-            }
+                if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
+                {
+                    localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
+                }
 
-            if (localizedString.ResourceNotFound)
-            {
-                localizedString = localizer[context.Key.Name];
-            }
+                if (localizedString.ResourceNotFound)
+                {
+                    localizedString = localizer[context.Key.Name];
+                }
 
-            return localizedString;
-        };
+                return localizedString;
+            };
+        }
     }
 }

@@ -4,29 +4,30 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.PermissionManagement.Identity;
-
-public class RoleUpdateEventHandler :
-    IDistributedEventHandler<IdentityRoleNameChangedEto>,
-    ITransientDependency
+namespace Volo.Abp.PermissionManagement.Identity
 {
-    protected IPermissionManager PermissionManager { get; }
-    protected IPermissionGrantRepository PermissionGrantRepository { get; }
-
-    public RoleUpdateEventHandler(
-        IPermissionManager permissionManager,
-        IPermissionGrantRepository permissionGrantRepository)
+    public class RoleUpdateEventHandler :
+        IDistributedEventHandler<IdentityRoleNameChangedEto>,
+        ITransientDependency
     {
-        PermissionManager = permissionManager;
-        PermissionGrantRepository = permissionGrantRepository;
-    }
-
-    public async Task HandleEventAsync(IdentityRoleNameChangedEto eventData)
-    {
-        var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync(RolePermissionValueProvider.ProviderName, eventData.OldName);
-        foreach (var permissionGrant in permissionGrantsInRole)
+        protected IPermissionManager PermissionManager { get; }
+        protected IPermissionGrantRepository PermissionGrantRepository { get; }
+    
+        public RoleUpdateEventHandler(
+            IPermissionManager permissionManager,
+            IPermissionGrantRepository permissionGrantRepository)
         {
-            await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.Name);
+            PermissionManager = permissionManager;
+            PermissionGrantRepository = permissionGrantRepository;
+        }
+
+        public async Task HandleEventAsync(IdentityRoleNameChangedEto eventData)
+        {
+            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync(RolePermissionValueProvider.ProviderName, eventData.OldName);
+            foreach (var permissionGrant in permissionGrantsInRole)
+            {
+                await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.Name);
+            }
         }
     }
 }

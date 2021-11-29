@@ -1,13 +1,14 @@
 ﻿using System.Threading;
 
-namespace Volo.Abp.Threading;
-
-public static class CancellationTokenProviderExtensions
+namespace Volo.Abp.Threading
 {
-    public static CancellationToken FallbackToProvider(this ICancellationTokenProvider provider, CancellationToken prefferedValue = default)
+    public static class CancellationTokenProviderExtensions
     {
-        return prefferedValue == default || prefferedValue == CancellationToken.None
-            ? provider.Token
-            : prefferedValue;
+        public static CancellationToken FallbackToProvider(this ICancellationTokenProvider provider, CancellationToken prefferedValue = default)
+        {
+            return prefferedValue == default || prefferedValue == CancellationToken.None
+                ? provider.Token
+                : prefferedValue;
+        }
     }
 }

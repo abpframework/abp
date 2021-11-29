@@ -2,31 +2,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Features;
-
-[Route("api/feature-test")]
-public class FeatureTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Features
 {
-    [HttpGet]
-    [Route("allowed-feature")]
-    [RequiresFeature("AllowedFeature")]
-    public Task AllowedFeatureAsync()
+    [Route("api/feature-test")]
+    public class FeatureTestController : AbpController
     {
-        return Task.CompletedTask;
-    }
+        [HttpGet]
+        [Route("allowed-feature")]
+        [RequiresFeature("AllowedFeature")]
+        public Task AllowedFeatureAsync()
+        {
+            return Task.CompletedTask;
+        }
 
-    [HttpGet]
-    [Route("not-allowed-feature")]
-    [RequiresFeature("NotAllowedFeature")]
-    public void NotAllowedFeature()
-    {
+        [HttpGet]
+        [Route("not-allowed-feature")]
+        [RequiresFeature("NotAllowedFeature")]
+        public void NotAllowedFeature()
+        {
+            
+        }
 
-    }
-
-    [HttpGet]
-    [Route("no-feature")]
-    public int NoFeature()
-    {
-        return 42;
+        [HttpGet]
+        [Route("no-feature")]
+        public int NoFeature()
+        {
+            return 42;
+        }
     }
 }

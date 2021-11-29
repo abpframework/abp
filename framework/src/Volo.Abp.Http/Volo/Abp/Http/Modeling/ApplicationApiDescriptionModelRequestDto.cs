@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Http.Modeling;
-
-public class ApplicationApiDescriptionModelRequestDto
+﻿namespace Volo.Abp.Http.Modeling
 {
-    public bool IncludeTypes { get; set; }
+    public class ApplicationApiDescriptionModelRequestDto
+    {
+        public bool IncludeTypes { get; set; }
+    }
 }

@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace Microsoft.AspNetCore.Builder;
-
-public static class ApplicationBuilderAbpJwtTokenMiddlewareExtension
+namespace Microsoft.AspNetCore.Builder
 {
-    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema = JwtBearerDefaults.AuthenticationScheme)
+    public static class ApplicationBuilderAbpJwtTokenMiddlewareExtension
     {
-        return app.Use(async (ctx, next) =>
+        public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema = JwtBearerDefaults.AuthenticationScheme)
         {
-            if (ctx.User.Identity?.IsAuthenticated != true)
+            return app.Use(async (ctx, next) =>
             {
-                var result = await ctx.AuthenticateAsync(schema);
-                if (result.Succeeded && result.Principal != null)
+                if (ctx.User.Identity?.IsAuthenticated != true)
                 {
-                    ctx.User = result.Principal;
+                    var result = await ctx.AuthenticateAsync(schema);
+                    if (result.Succeeded && result.Principal != null)
+                    {
+                        ctx.User = result.Principal;
+                    }
                 }
-            }
 
-            await next();
-        });
+                await next();
+            });
+        }
     }
 }

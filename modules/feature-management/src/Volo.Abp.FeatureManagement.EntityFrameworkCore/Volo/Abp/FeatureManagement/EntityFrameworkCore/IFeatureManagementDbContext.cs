@@ -3,11 +3,12 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
-public interface IFeatureManagementDbContext : IEfCoreDbContext
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    DbSet<FeatureValue> FeatureValues { get; }
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
+    public interface IFeatureManagementDbContext : IEfCoreDbContext
+    {
+        DbSet<FeatureValue> FeatureValues { get; }
+    }
 }

@@ -1,18 +1,19 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
-
-public static class UiFrameworkExtensions
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public static string ToFrameworkName(this UiFramework uiFramework)
+    public static class UiFrameworkExtensions
     {
-        switch (uiFramework)
+        public static string ToFrameworkName(this UiFramework uiFramework)
         {
-            case UiFramework.None: return "none";
-            case UiFramework.Mvc: return "mvc";
-            case UiFramework.Angular: return "angular";
-            case UiFramework.Blazor: return "blazor";
-            case UiFramework.BlazorServer: return "blazor-server";
-            case UiFramework.NotSpecified: return "NotSpecified";
-            default: return "NotSpecified";
+            switch (uiFramework)
+            {
+                case UiFramework.None: return "none";
+                case UiFramework.Mvc: return "mvc";
+                case UiFramework.Angular: return "angular";
+                case UiFramework.Blazor: return "blazor";
+                case UiFramework.BlazorServer: return "blazor-server";
+                case UiFramework.NotSpecified: return "NotSpecified";
+                default: return "NotSpecified";
+            }
         }
     }
 }

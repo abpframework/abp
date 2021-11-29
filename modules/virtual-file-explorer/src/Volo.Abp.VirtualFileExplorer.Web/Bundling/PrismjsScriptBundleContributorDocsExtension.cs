@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.VirtualFileExplorer.Web.Bundling;
-
-public class PrismjsScriptBundleContributorDocsExtension : BundleContributor
+namespace Volo.Abp.VirtualFileExplorer.Web.Bundling
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class PrismjsScriptBundleContributorDocsExtension : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.js");
-        context.Files.AddIfNotContains("/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.js");
+            context.Files.AddIfNotContains("/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js");
+        }
     }
 }

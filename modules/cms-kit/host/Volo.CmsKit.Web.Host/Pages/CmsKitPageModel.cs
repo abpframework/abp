@@ -1,12 +1,13 @@
 ﻿using Volo.CmsKit.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Volo.CmsKit.Pages;
-
-public abstract class CmsKitPageModel : AbpPageModel
+namespace Volo.CmsKit.Pages
 {
-    protected CmsKitPageModel()
+    public abstract class CmsKitPageModel : AbpPageModel
     {
-        LocalizationResourceType = typeof(CmsKitResource);
+        protected CmsKitPageModel()
+        {
+            LocalizationResourceType = typeof(CmsKitResource);
+        }
     }
 }

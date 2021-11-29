@@ -13,83 +13,84 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-[DependsOn(
-    typeof(AbpDddDomainModule),
-    typeof(AbpIdentityDomainSharedModule),
-    typeof(AbpUsersDomainModule),
-    typeof(AbpAutoMapperModule)
-    )]
-public class AbpIdentityDomainModule : AbpModule
+namespace Volo.Abp.Identity
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpDddDomainModule),
+        typeof(AbpIdentityDomainSharedModule),
+        typeof(AbpUsersDomainModule),
+        typeof(AbpAutoMapperModule)
+        )]
+    public class AbpIdentityDomainModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<IdentityDomainMappingProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
 
-        Configure<AbpDistributedEntityEventOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<IdentityDomainMappingProfile>(validate: true);
+            });
+
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
+                
+                options.AutoEventSelectors.Add<IdentityUser>();
+                options.AutoEventSelectors.Add<IdentityRole>();
+            });
+
+            var identityBuilder = context.Services.AddAbpIdentity(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            });
+
+            context.Services.AddObjectAccessor(identityBuilder);
+            context.Services.ExecutePreConfiguredActions(identityBuilder);
+
+            Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserIdClaimType = AbpClaimTypes.UserId;
+                options.ClaimsIdentity.UserNameClaimType = AbpClaimTypes.UserName;
+                options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
+            });
+
+            context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.User,
+                    typeof(IdentityUser)
+                );
 
-            options.AutoEventSelectors.Add<IdentityUser>();
-            options.AutoEventSelectors.Add<IdentityRole>();
-        });
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.Role,
+                    typeof(IdentityRole)
+                );
 
-        var identityBuilder = context.Services.AddAbpIdentity(options =>
-        {
-            options.User.RequireUniqueEmail = true;
-        });
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.ClaimType,
+                    typeof(IdentityClaimType)
+                );
 
-        context.Services.AddObjectAccessor(identityBuilder);
-        context.Services.ExecutePreConfiguredActions(identityBuilder);
-
-        Configure<IdentityOptions>(options =>
-        {
-            options.ClaimsIdentity.UserIdClaimType = AbpClaimTypes.UserId;
-            options.ClaimsIdentity.UserNameClaimType = AbpClaimTypes.UserName;
-            options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
-        });
-
-        context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
-    }
-
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        OneTimeRunner.Run(() =>
-        {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.User,
-                typeof(IdentityUser)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.Role,
-                typeof(IdentityRole)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.ClaimType,
-                typeof(IdentityClaimType)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
-                typeof(OrganizationUnit)
-            );
-        });
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
+                    typeof(OrganizationUnit)
+                );
+            });
+        }
     }
 }

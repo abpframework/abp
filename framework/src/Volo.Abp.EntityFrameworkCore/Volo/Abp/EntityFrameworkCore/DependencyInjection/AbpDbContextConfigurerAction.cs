@@ -1,31 +1,32 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.EntityFrameworkCore.DependencyInjection;
-
-public class AbpDbContextConfigurerAction : IAbpDbContextConfigurer
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    [NotNull]
-    public Action<AbpDbContextConfigurationContext> Action { get; }
-
-    public AbpDbContextConfigurerAction([NotNull] Action<AbpDbContextConfigurationContext> action)
+    public class AbpDbContextConfigurerAction : IAbpDbContextConfigurer
     {
-        Check.NotNull(action, nameof(action));
+        [NotNull]
+        public Action<AbpDbContextConfigurationContext> Action { get; }
 
-        Action = action;
+        public AbpDbContextConfigurerAction([NotNull] Action<AbpDbContextConfigurationContext> action)
+        {
+            Check.NotNull(action, nameof(action));
+
+            Action = action;
+        }
+
+        public void Configure(AbpDbContextConfigurationContext context)
+        {
+            Action.Invoke(context);
+        }
     }
 
-    public void Configure(AbpDbContextConfigurationContext context)
+    public class AbpDbContextConfigurerAction<TDbContext> : AbpDbContextConfigurerAction
+        where TDbContext : AbpDbContext<TDbContext>
     {
-        Action.Invoke(context);
-    }
-}
-
-public class AbpDbContextConfigurerAction<TDbContext> : AbpDbContextConfigurerAction
-    where TDbContext : AbpDbContext<TDbContext>
-{
-    public AbpDbContextConfigurerAction([NotNull] Action<AbpDbContextConfigurationContext> action)
-        : base(action)
-    {
+        public AbpDbContextConfigurerAction([NotNull] Action<AbpDbContextConfigurationContext> action) 
+            : base(action)
+        {
+        }
     }
 }

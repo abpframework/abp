@@ -5,38 +5,39 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
-namespace Volo.CmsKit.Public.Menus;
-
-[RequiresGlobalFeature(typeof(MenuFeature))]
-public class MenuItemPublicAppService : CmsKitPublicAppServiceBase, IMenuItemPublicAppService
+namespace Volo.CmsKit.Public.Menus
 {
-    protected IMenuItemRepository MenuItemRepository { get; }
-    protected IDistributedCache<List<MenuItemDto>> DistributedCache { get; }
-
-    public MenuItemPublicAppService(
-        IMenuItemRepository menuRepository,
-        IDistributedCache<List<MenuItemDto>> distributedCache)
+    [RequiresGlobalFeature(typeof(MenuFeature))]
+    public class MenuItemPublicAppService : CmsKitPublicAppServiceBase, IMenuItemPublicAppService
     {
-        MenuItemRepository = menuRepository;
-        DistributedCache = distributedCache;
-    }
+        protected IMenuItemRepository MenuItemRepository { get; }
+        protected IDistributedCache<List<MenuItemDto>> DistributedCache { get; }
 
-    public async Task<List<MenuItemDto>> GetListAsync()
-    {
-        var cachedMenu = await DistributedCache.GetOrAddAsync(
-            MenuApplicationConsts.MainMenuCacheKey,
-            async () =>
-            {
-                var menuItems = await MenuItemRepository.GetListAsync();
+        public MenuItemPublicAppService(
+            IMenuItemRepository menuRepository,
+            IDistributedCache<List<MenuItemDto>> distributedCache)
+        {
+            MenuItemRepository = menuRepository;
+            DistributedCache = distributedCache;
+        }
 
-                if (menuItems == null)
+        public async Task<List<MenuItemDto>> GetListAsync()
+        {
+            var cachedMenu = await DistributedCache.GetOrAddAsync(
+                MenuApplicationConsts.MainMenuCacheKey,
+                async () =>
                 {
-                    return new();
-                }
+                    var menuItems = await MenuItemRepository.GetListAsync();
 
-                return ObjectMapper.Map<List<MenuItem>, List<MenuItemDto>>(menuItems);
-            });
+                    if (menuItems == null)
+                    {
+                        return new(); 
+                    }
 
-        return cachedMenu;
+                    return ObjectMapper.Map<List<MenuItem>, List<MenuItemDto>>(menuItems);
+                });
+
+            return cachedMenu;
+        }
     }
 }

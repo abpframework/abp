@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.AspNetCore.Security.Claims;
-
-public class HttpContextCurrentPrincipalAccessor : ThreadCurrentPrincipalAccessor
+namespace Volo.Abp.AspNetCore.Security.Claims
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public HttpContextCurrentPrincipalAccessor(IHttpContextAccessor httpContextAccessor)
+    public class HttpContextCurrentPrincipalAccessor : ThreadCurrentPrincipalAccessor
     {
-        _httpContextAccessor = httpContextAccessor;
-    }
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-    protected override ClaimsPrincipal GetClaimsPrincipal()
-    {
-        return _httpContextAccessor.HttpContext?.User ?? base.GetClaimsPrincipal();
+        public HttpContextCurrentPrincipalAccessor(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        protected override ClaimsPrincipal GetClaimsPrincipal()
+        {
+            return _httpContextAccessor.HttpContext?.User ?? base.GetClaimsPrincipal();
+        }
     }
 }

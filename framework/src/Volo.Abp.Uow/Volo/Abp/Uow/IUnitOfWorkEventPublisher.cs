@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Uow;
-
-public interface IUnitOfWorkEventPublisher
+namespace Volo.Abp.Uow
 {
-    Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents);
+    public interface IUnitOfWorkEventPublisher
+    {
+        Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents);
 
-    Task PublishDistributedEventsAsync(IEnumerable<UnitOfWorkEventRecord> distributedEvents);
+        Task PublishDistributedEventsAsync(IEnumerable<UnitOfWorkEventRecord> distributedEvents);
+    }
 }

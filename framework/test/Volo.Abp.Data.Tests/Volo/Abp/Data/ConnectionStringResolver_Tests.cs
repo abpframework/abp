@@ -5,50 +5,51 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.Data;
-
-public class ConnectionStringResolver_Tests : AbpIntegratedTest<ConnectionStringResolver_Tests.TestModule>
+namespace Volo.Abp.Data
 {
-    private const string DefaultConnString = "default-value";
-    private const string Database1Name = "Database1";
-    private const string Database1ConnString = "database-1-value";
-    private const string Database2Name = "Database2";
-
-    private readonly IConnectionStringResolver _connectionStringResolver;
-
-    public ConnectionStringResolver_Tests()
+    public class ConnectionStringResolver_Tests : AbpIntegratedTest<ConnectionStringResolver_Tests.TestModule>
     {
-        _connectionStringResolver = ServiceProvider.GetRequiredService<IConnectionStringResolver>();
-    }
+        private const string DefaultConnString = "default-value";
+        private const string Database1Name = "Database1";
+        private const string Database1ConnString = "database-1-value";
+        private const string Database2Name = "Database2";
 
-    [Fact]
-    public async Task Should_Get_Default_ConnString_By_Default()
-    {
-        (await _connectionStringResolver.ResolveAsync()).ShouldBe(DefaultConnString);
-    }
+        private readonly IConnectionStringResolver _connectionStringResolver;
 
-    [Fact]
-    public async Task Should_Get_Specific_ConnString_IfDefined()
-    {
-        (await _connectionStringResolver.ResolveAsync(Database1Name)).ShouldBe(Database1ConnString);
-    }
-
-    [Fact]
-    public async Task Should_Get_Default_ConnString_If_Not_Specified()
-    {
-        (await _connectionStringResolver.ResolveAsync(Database2Name)).ShouldBe(DefaultConnString);
-    }
-
-    [DependsOn(typeof(AbpDataModule))]
-    public class TestModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public ConnectionStringResolver_Tests()
         {
-            Configure<AbpDbConnectionOptions>(options =>
+            _connectionStringResolver = ServiceProvider.GetRequiredService<IConnectionStringResolver>();
+        }
+
+        [Fact]
+        public async Task Should_Get_Default_ConnString_By_Default()
+        {
+            (await _connectionStringResolver.ResolveAsync()).ShouldBe(DefaultConnString);
+        }
+
+        [Fact]
+        public async Task Should_Get_Specific_ConnString_IfDefined()
+        {
+            (await _connectionStringResolver.ResolveAsync(Database1Name)).ShouldBe(Database1ConnString);
+        }
+
+        [Fact]
+        public async Task Should_Get_Default_ConnString_If_Not_Specified()
+        {
+            (await _connectionStringResolver.ResolveAsync(Database2Name)).ShouldBe(DefaultConnString);
+        }
+
+        [DependsOn(typeof(AbpDataModule))]
+        public class TestModule : AbpModule
+        {
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                options.ConnectionStrings.Default = DefaultConnString;
-                options.ConnectionStrings[Database1Name] = Database1ConnString;
-            });
+                Configure<AbpDbConnectionOptions>(options =>
+                {
+                    options.ConnectionStrings.Default = DefaultConnString;
+                    options.ConnectionStrings[Database1Name] = Database1ConnString;
+                });
+            }
         }
     }
 }

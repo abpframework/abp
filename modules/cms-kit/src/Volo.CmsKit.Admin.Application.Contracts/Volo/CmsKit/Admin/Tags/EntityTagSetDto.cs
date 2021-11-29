@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Admin.Tags;
-
-[Serializable]
-public class EntityTagSetDto
+namespace Volo.CmsKit.Admin.Tags
 {
-    public string EntityId { get; set; }
-    public string EntityType { get; set; }
-    public List<string> Tags { get; set; }
+    [Serializable]
+    public class EntityTagSetDto
+    {
+        public string EntityId { get; set; }
+        public string EntityType { get; set; }
+        public List<string> Tags { get; set; }
+    }
 }

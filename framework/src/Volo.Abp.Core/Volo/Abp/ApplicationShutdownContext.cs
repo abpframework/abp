@@ -1,16 +1,17 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp;
-
-public class ApplicationShutdownContext
+namespace Volo.Abp
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public ApplicationShutdownContext([NotNull] IServiceProvider serviceProvider)
+    public class ApplicationShutdownContext
     {
-        Check.NotNull(serviceProvider, nameof(serviceProvider));
+        public IServiceProvider ServiceProvider { get; }
 
-        ServiceProvider = serviceProvider;
+        public ApplicationShutdownContext([NotNull] IServiceProvider serviceProvider)
+        {
+            Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+            ServiceProvider = serviceProvider;
+        }
     }
 }

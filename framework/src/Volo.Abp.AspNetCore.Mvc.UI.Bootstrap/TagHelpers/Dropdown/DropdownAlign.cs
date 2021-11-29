@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown;
-
-public enum DropdownAlign
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 {
-    Start,
-    End
+    public enum DropdownAlign
+    {
+        Start,
+        End
+    }
 }

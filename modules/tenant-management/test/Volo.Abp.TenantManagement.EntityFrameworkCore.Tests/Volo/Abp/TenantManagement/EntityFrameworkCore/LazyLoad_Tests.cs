@@ -2,18 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
-
-public class LazyLoad_Tests : LazyLoad_Tests<AbpTenantManagementEntityFrameworkCoreTestModule>
+namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    protected override void BeforeAddApplication(IServiceCollection services)
+    public class LazyLoad_Tests : LazyLoad_Tests<AbpTenantManagementEntityFrameworkCoreTestModule>
     {
-        services.Configure<AbpDbContextOptions>(options =>
+        protected override void BeforeAddApplication(IServiceCollection services)
         {
-            options.PreConfigure<TenantManagementDbContext>(context =>
+            services.Configure<AbpDbContextOptions>(options =>
             {
-                context.DbContextOptions.UseLazyLoadingProxies();
+                options.PreConfigure<TenantManagementDbContext>(context =>
+                {
+                    context.DbContextOptions.UseLazyLoadingProxies();
+                });
             });
-        });
+        }
     }
 }

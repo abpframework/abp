@@ -6,38 +6,39 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.MultiTenancy;
-
-public abstract class HttpTenantResolveContributorBase : TenantResolveContributorBase
+namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public override async Task ResolveAsync(ITenantResolveContext context)
+    public abstract class HttpTenantResolveContributorBase : TenantResolveContributorBase
     {
-        var httpContext = context.GetHttpContext();
-        if (httpContext == null)
+        public override async Task ResolveAsync(ITenantResolveContext context)
         {
-            return;
+            var httpContext = context.GetHttpContext();
+            if (httpContext == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await ResolveFromHttpContextAsync(context, httpContext);
+            }
+            catch (Exception e)
+            {
+                context.ServiceProvider
+                    .GetRequiredService<ILogger<HttpTenantResolveContributorBase>>()
+                    .LogWarning(e.ToString());
+            }
         }
 
-        try
+        protected virtual async Task ResolveFromHttpContextAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            await ResolveFromHttpContextAsync(context, httpContext);
+            var tenantIdOrName = await GetTenantIdOrNameFromHttpContextOrNullAsync(context, httpContext);
+            if (!tenantIdOrName.IsNullOrEmpty())
+            {
+                context.TenantIdOrName = tenantIdOrName;
+            }
         }
-        catch (Exception e)
-        {
-            context.ServiceProvider
-                .GetRequiredService<ILogger<HttpTenantResolveContributorBase>>()
-                .LogWarning(e.ToString());
-        }
+
+        protected abstract Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
     }
-
-    protected virtual async Task ResolveFromHttpContextAsync(ITenantResolveContext context, HttpContext httpContext)
-    {
-        var tenantIdOrName = await GetTenantIdOrNameFromHttpContextOrNullAsync(context, httpContext);
-        if (!tenantIdOrName.IsNullOrEmpty())
-        {
-            context.TenantIdOrName = tenantIdOrName;
-        }
-    }
-
-    protected abstract Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
 }

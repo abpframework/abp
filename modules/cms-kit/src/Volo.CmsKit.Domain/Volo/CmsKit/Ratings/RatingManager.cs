@@ -6,46 +6,47 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Ratings;
-
-public class RatingManager : DomainService
+namespace Volo.CmsKit.Ratings
 {
-    protected IRatingRepository RatingRepository { get; }
-    protected IRatingEntityTypeDefinitionStore RatingDefinitionStore { get; }
-
-    public RatingManager(
-        IRatingRepository ratingRepository,
-        IRatingEntityTypeDefinitionStore ratingDefinitionStore)
+    public class RatingManager : DomainService
     {
-        RatingRepository = ratingRepository;
-        RatingDefinitionStore = ratingDefinitionStore;
-    }
+        protected IRatingRepository RatingRepository { get; }
+        protected IRatingEntityTypeDefinitionStore RatingDefinitionStore { get; }
 
-    public async Task<Rating> SetStarAsync(CmsUser user, string entityType, string entityId, short starCount)
-    {
-        var currentUserRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, user.Id);
-
-        if (currentUserRating != null)
+        public RatingManager(
+            IRatingRepository ratingRepository,
+            IRatingEntityTypeDefinitionStore ratingDefinitionStore)
         {
-            currentUserRating.SetStarCount(starCount);
-
-            return await RatingRepository.UpdateAsync(currentUserRating);
+            RatingRepository = ratingRepository;
+            RatingDefinitionStore = ratingDefinitionStore;
         }
 
-        if (!await RatingDefinitionStore.IsDefinedAsync(entityType))
+        public async Task<Rating> SetStarAsync(CmsUser user, string entityType, string entityId, short starCount)
         {
-            throw new EntityCantHaveRatingException(entityType);
-        }
+            var currentUserRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, user.Id);
 
-        return await RatingRepository.InsertAsync(
-            new Rating(
-                GuidGenerator.Create(),
-                entityType,
-                entityId,
-                starCount,
-                user.Id,
-                CurrentTenant.Id
-            )
-        );
+            if (currentUserRating != null)
+            {
+                currentUserRating.SetStarCount(starCount);
+
+                return await RatingRepository.UpdateAsync(currentUserRating);
+            }
+
+            if (!await RatingDefinitionStore.IsDefinedAsync(entityType))
+            {
+                throw new EntityCantHaveRatingException(entityType);
+            }
+
+            return await RatingRepository.InsertAsync(
+                new Rating(
+                    GuidGenerator.Create(),
+                    entityType,
+                    entityId,
+                    starCount,
+                    user.Id,
+                    CurrentTenant.Id
+                )
+            );
+        }
     }
 }

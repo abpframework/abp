@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.PermissionManagement.Web.Utils;
-
-public class FlatTreeDepthFinder<T>
-    where T : class, IFlatTreeItem
+namespace Volo.Abp.PermissionManagement.Web.Utils
 {
-    public virtual void SetDepths(List<T> items)
+    public class FlatTreeDepthFinder<T>
+        where T : class, IFlatTreeItem
     {
-        SetDepths(items, null, 0);
-    }
-
-    private static void SetDepths(List<T> items, string currentParent, int currentDepth)
-    {
-        foreach (var item in items)
+        public virtual void SetDepths(List<T> items)
         {
-            if (item.ParentName == currentParent)
+            SetDepths(items, null, 0);
+        }
+
+        private static void SetDepths(List<T> items, string currentParent, int currentDepth)
+        {
+            foreach (var item in items)
             {
-                item.Depth = currentDepth;
-                SetDepths(items, item.Name, currentDepth + 1);
+                if (item.ParentName == currentParent)
+                {
+                    item.Depth = currentDepth;
+                    SetDepths(items, item.Name, currentDepth + 1);
+                }
             }
         }
     }

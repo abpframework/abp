@@ -4,9 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.TestApp.Domain;
-
-public interface IPersonRepository : IBasicRepository<Person, Guid>
+namespace Volo.Abp.TestApp.Domain
 {
-    Task<PersonView> GetViewAsync(string name);
+    public interface IPersonRepository : IBasicRepository<Person, Guid>
+    {
+        Task<PersonView> GetViewAsync(string name);
+    }
 }

@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.Validation.StringValues;
-
-public class LocalizableStringInfo
+﻿namespace Volo.Abp.Validation.StringValues
 {
-    public string ResourceName { get; }
-
-    public string Name { get; }
-
-    public LocalizableStringInfo(string resourceName, string name)
+    public class LocalizableStringInfo
     {
-        ResourceName = resourceName;
-        Name = name;
+        public string ResourceName { get; }
+
+        public string Name { get; }
+
+        public LocalizableStringInfo(string resourceName, string name)
+        {
+            ResourceName = resourceName;
+            Name = name;
+        }
     }
 }

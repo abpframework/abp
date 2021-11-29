@@ -6,118 +6,119 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    private readonly string _projectName;
-    private string _solutionFilePath;
-    private string _projectFolderPath;
-
-    private string ProjectNameWithQuotes => $"\"{_projectName}\"";
-
-    public RemoveProjectFromSolutionStep(
-        string projectName,
-        string solutionFilePath = null,
-        string projectFolderPath = null)
+    public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
     {
-        _projectName = projectName;
-        _solutionFilePath = solutionFilePath;
-        _projectFolderPath = projectFolderPath;
-    }
+        private readonly string _projectName;
+        private string _solutionFilePath;
+        private string _projectFolderPath;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        SetSolutionAndProjectPathsIfNull(context);
+        private string ProjectNameWithQuotes => $"\"{_projectName}\"";
 
-        if (_solutionFilePath == null || _projectFolderPath == null)
+        public RemoveProjectFromSolutionStep(
+            string projectName,
+            string solutionFilePath = null,
+            string projectFolderPath = null)
         {
-            return;
+            _projectName = projectName;
+            _solutionFilePath = solutionFilePath;
+            _projectFolderPath = projectFolderPath;
         }
 
-        new RemoveFolderStep(_projectFolderPath).Execute(context);
-        var solutionFile = context.GetFile(_solutionFilePath);
-        solutionFile.NormalizeLineEndings();
-        solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));
-
-        RemoveProjectFromAbpmdlFile(context);
-    }
-
-    private void RemoveProjectFromAbpmdlFile(ProjectBuildContext context)
-    {
-        var abpmdlFile = context.FindFile(_solutionFilePath.RemovePostFix(".sln") + ".abpmdl.json");
-
-        if (abpmdlFile == null)
+        public override void Execute(ProjectBuildContext context)
         {
-            return;
-        }
+            SetSolutionAndProjectPathsIfNull(context);
 
-        var jsonRoot = JObject.Parse(abpmdlFile.Content);
-        var packagesObj = (JObject)jsonRoot["packages"];
-
-        packagesObj?.Remove(_projectName);
-
-        abpmdlFile.SetContent(jsonRoot.ToString(Formatting.Indented));
-    }
-
-    private List<string> RemoveProject(List<string> solutionFileLines)
-    {
-        var projectKey = FindProjectKey(solutionFileLines);
-
-        if (projectKey == null)
-        {
-            return solutionFileLines;
-        }
-
-        var newSolutionFileLines = new List<string>();
-        var firstOccurence = true;
-
-        for (var i = 0; i < solutionFileLines.Count; ++i)
-        {
-            if (solutionFileLines[i].Contains(projectKey))
+            if (_solutionFilePath == null || _projectFolderPath == null)
             {
-                if (firstOccurence)
+                return;
+            }
+
+            new RemoveFolderStep(_projectFolderPath).Execute(context);
+            var solutionFile = context.GetFile(_solutionFilePath);
+            solutionFile.NormalizeLineEndings();
+            solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));
+
+            RemoveProjectFromAbpmdlFile(context);
+        }
+
+        private void RemoveProjectFromAbpmdlFile(ProjectBuildContext context)
+        {
+            var abpmdlFile = context.FindFile(_solutionFilePath.RemovePostFix(".sln") + ".abpmdl.json");
+
+            if (abpmdlFile == null)
+            {
+                return;
+            }
+
+            var jsonRoot = JObject.Parse(abpmdlFile.Content);
+            var packagesObj = (JObject) jsonRoot["packages"];
+
+            packagesObj?.Remove(_projectName);
+
+            abpmdlFile.SetContent(jsonRoot.ToString(Formatting.Indented));
+        }
+
+        private List<string> RemoveProject(List<string> solutionFileLines)
+        {
+            var projectKey = FindProjectKey(solutionFileLines);
+
+            if (projectKey == null)
+            {
+                return solutionFileLines;
+            }
+
+            var newSolutionFileLines = new List<string>();
+            var firstOccurence = true;
+
+            for (var i = 0; i < solutionFileLines.Count; ++i)
+            {
+                if (solutionFileLines[i].Contains(projectKey))
                 {
-                    firstOccurence = false;
-                    ++i; //Skip "EndProject" line too.
+                    if (firstOccurence)
+                    {
+                        firstOccurence = false;
+                        ++i; //Skip "EndProject" line too.
+                    }
+
+                    continue;
                 }
 
-                continue;
+                newSolutionFileLines.Add(solutionFileLines[i]);
             }
 
-            newSolutionFileLines.Add(solutionFileLines[i]);
+            return newSolutionFileLines;
         }
 
-        return newSolutionFileLines;
-    }
-
-    private string FindProjectKey(List<string> solutionFileLines)
-    {
-        foreach (var solutionFileLine in solutionFileLines)
+        private string FindProjectKey(List<string> solutionFileLines)
         {
-            if (solutionFileLine.Contains(ProjectNameWithQuotes))
+            foreach (var solutionFileLine in solutionFileLines)
             {
-                var curlyBracketStartIndex = solutionFileLine.LastIndexOf("{", StringComparison.OrdinalIgnoreCase);
-                var curlyBracketEndIndex = solutionFileLine.LastIndexOf("}", StringComparison.OrdinalIgnoreCase);
-                return solutionFileLine.Substring(curlyBracketStartIndex + 1, curlyBracketEndIndex - curlyBracketStartIndex - 1);
+                if (solutionFileLine.Contains(ProjectNameWithQuotes))
+                {
+                    var curlyBracketStartIndex = solutionFileLine.LastIndexOf("{", StringComparison.OrdinalIgnoreCase);
+                    var curlyBracketEndIndex = solutionFileLine.LastIndexOf("}", StringComparison.OrdinalIgnoreCase);
+                    return solutionFileLine.Substring(curlyBracketStartIndex + 1, curlyBracketEndIndex - curlyBracketStartIndex - 1);
+                }
             }
+
+            return null;
         }
 
-        return null;
-    }
-
-    private void SetSolutionAndProjectPathsIfNull(ProjectBuildContext context)
-    {
-        if (_solutionFilePath == null)
+        private void SetSolutionAndProjectPathsIfNull(ProjectBuildContext context)
         {
-            _solutionFilePath = context.FindFile("/aspnet-core/MyCompanyName.MyProjectName.sln")?.Name ??
-                                context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name ??
-                                context.FindFile("/MyCompanyName.MyProjectName.MicroserviceName.sln")?.Name;
-        }
-        if (_projectFolderPath == null)
-        {
-            _projectFolderPath = context.FindFile("/aspnet-core/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
-                                 context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name;
+            if (_solutionFilePath == null)
+            {
+                _solutionFilePath = context.FindFile("/aspnet-core/MyCompanyName.MyProjectName.sln")?.Name ??
+                                    context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name ??
+                                    context.FindFile("/MyCompanyName.MyProjectName.MicroserviceName.sln")?.Name;
+            }
+            if (_projectFolderPath == null)
+            {
+                _projectFolderPath = context.FindFile("/aspnet-core/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
+                                     context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name;
+            }
         }
     }
 }

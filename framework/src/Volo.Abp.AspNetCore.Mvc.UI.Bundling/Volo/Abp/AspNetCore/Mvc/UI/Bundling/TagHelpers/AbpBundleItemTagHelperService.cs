@@ -3,40 +3,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
-
-public abstract class AbpBundleItemTagHelperService<TTagHelper, TService> : AbpTagHelperService<TTagHelper>
-    where TTagHelper : AbpTagHelper<TTagHelper, TService>, IBundleItemTagHelper
-    where TService : class, IAbpTagHelperService<TTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    protected AbpTagHelperResourceService ResourceService { get; }
-
-    protected AbpBundleItemTagHelperService(AbpTagHelperResourceService resourceService)
+    public abstract class AbpBundleItemTagHelperService<TTagHelper, TService> : AbpTagHelperService<TTagHelper>
+        where TTagHelper : AbpTagHelper<TTagHelper, TService>, IBundleItemTagHelper
+        where TService : class, IAbpTagHelperService<TTagHelper>
     {
-        ResourceService = resourceService;
-    }
+        protected AbpTagHelperResourceService ResourceService { get; }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var tagHelperItems = context.Items.GetOrDefault(AbpTagHelperConsts.ContextBundleItemListKey) as List<BundleTagHelperItem>;
-        if (tagHelperItems != null)
+        protected AbpBundleItemTagHelperService(AbpTagHelperResourceService resourceService)
         {
-            output.SuppressOutput();
-            tagHelperItems.Add(TagHelper.CreateBundleTagHelperItem());
+            ResourceService = resourceService;
         }
-        else
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            await ResourceService.ProcessAsync(
-                TagHelper.ViewContext,
-                TagHelper,
-                context,
-                output,
-                new List<BundleTagHelperItem>
-                {
+            var tagHelperItems = context.Items.GetOrDefault(AbpTagHelperConsts.ContextBundleItemListKey) as List<BundleTagHelperItem>;
+            if (tagHelperItems != null)
+            {
+                output.SuppressOutput();
+                tagHelperItems.Add(TagHelper.CreateBundleTagHelperItem());
+            }
+            else
+            {
+                await ResourceService.ProcessAsync(
+                    TagHelper.ViewContext,
+                    TagHelper,
+                    context,
+                    output,
+                    new List<BundleTagHelperItem>
+                    {
                         TagHelper.CreateBundleTagHelperItem()
-                },
-                TagHelper.GetNameOrNull()
-            );
+                    },
+                    TagHelper.GetNameOrNull()
+                );
+            }
         }
     }
 }

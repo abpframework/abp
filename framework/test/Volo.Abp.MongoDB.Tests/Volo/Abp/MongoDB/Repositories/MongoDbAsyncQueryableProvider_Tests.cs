@@ -8,68 +8,69 @@ using Volo.Abp.TestApp.Testing;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.MongoDB.Repositories;
-
-[Collection(MongoTestCollection.Name)]
-public class MongoDbAsyncQueryableProvider_Tests : TestAppTestBase<AbpMongoDbTestModule>
+namespace Volo.Abp.MongoDB.Repositories
 {
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly IRepository<Person, Guid> _personRepository;
-    private readonly MongoDbAsyncQueryableProvider _mongoDbAsyncQueryableProvider;
-
-    public MongoDbAsyncQueryableProvider_Tests()
+    [Collection(MongoTestCollection.Name)]
+    public class MongoDbAsyncQueryableProvider_Tests : TestAppTestBase<AbpMongoDbTestModule>
     {
-        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-        _personRepository = GetRequiredService<IRepository<Person, Guid>>();
-        _mongoDbAsyncQueryableProvider = GetRequiredService<MongoDbAsyncQueryableProvider>();
-    }
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IRepository<Person, Guid> _personRepository;
+        private readonly MongoDbAsyncQueryableProvider _mongoDbAsyncQueryableProvider;
 
-    [Fact]
-    public async Task CanExecuteAsync()
-    {
-        _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.GetQueryableAsync()).ShouldBeTrue();
-        _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.WithDetailsAsync()).ShouldBeTrue();
-    }
-
-    [Fact]
-    public async Task FirstOrDefaultAsync()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        public MongoDbAsyncQueryableProvider_Tests()
         {
-            (await _mongoDbAsyncQueryableProvider.FirstOrDefaultAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldNotBeNull();
-            await uow.CompleteAsync();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
+            _mongoDbAsyncQueryableProvider = GetRequiredService<MongoDbAsyncQueryableProvider>();
         }
-    }
 
-    [Fact]
-    public async Task AnyAsync()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        [Fact]
+        public async Task CanExecuteAsync()
         {
-            (await _mongoDbAsyncQueryableProvider.AnyAsync(await _personRepository.GetQueryableAsync(), p => p.Name == "Douglas")).ShouldBeTrue();
-            await uow.CompleteAsync();
+            _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.GetQueryableAsync()).ShouldBeTrue();
+            _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.WithDetailsAsync()).ShouldBeTrue();
         }
-    }
 
-    [Fact]
-    public async Task CountAsync()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        [Fact]
+        public async Task FirstOrDefaultAsync()
         {
-            (await _mongoDbAsyncQueryableProvider.CountAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldBeGreaterThan(0);
-            await uow.CompleteAsync();
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                (await _mongoDbAsyncQueryableProvider.FirstOrDefaultAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldNotBeNull();
+                await uow.CompleteAsync();
+            }
         }
-    }
 
-    [Fact]
-    public async Task LongCountAsync()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        [Fact]
+        public async Task AnyAsync()
         {
-            (await _mongoDbAsyncQueryableProvider.LongCountAsync(await _personRepository.GetQueryableAsync())).ShouldBeGreaterThan(0);
-            await uow.CompleteAsync();
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                (await _mongoDbAsyncQueryableProvider.AnyAsync(await _personRepository.GetQueryableAsync(), p => p.Name == "Douglas")).ShouldBeTrue();
+                await uow.CompleteAsync();
+            }
         }
-    }
 
-    //More MongoDbAsyncQueryableProvider's method test.
+        [Fact]
+        public async Task CountAsync()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                (await _mongoDbAsyncQueryableProvider.CountAsync((await _personRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas"))).ShouldBeGreaterThan(0);
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task LongCountAsync()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                (await _mongoDbAsyncQueryableProvider.LongCountAsync(await _personRepository.GetQueryableAsync())).ShouldBeGreaterThan(0);
+                await uow.CompleteAsync();
+            }
+        }
+
+        //More MongoDbAsyncQueryableProvider's method test.
+    }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.Build;
-
-public interface IBuildProjectListSorter
+namespace Volo.Abp.Cli.Build
 {
-    List<DotNetProjectInfo> SortByDependencies(
-        List<DotNetProjectInfo> source,
-        IEqualityComparer<DotNetProjectInfo> comparer = null);
+    public interface IBuildProjectListSorter
+    {
+        List<DotNetProjectInfo> SortByDependencies(
+            List<DotNetProjectInfo> source,
+            IEqualityComparer<DotNetProjectInfo> comparer = null);
+    }
 }

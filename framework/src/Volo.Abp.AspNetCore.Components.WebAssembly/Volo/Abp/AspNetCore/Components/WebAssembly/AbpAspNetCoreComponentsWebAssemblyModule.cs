@@ -7,30 +7,31 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcClientCommonModule),
-    typeof(AbpUiModule),
-    typeof(AbpAspNetCoreComponentsWebModule)
-    )]
-public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcClientCommonModule),
+        typeof(AbpUiModule),
+        typeof(AbpAspNetCoreComponentsWebModule)
+        )]
+    public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
     {
-        PreConfigure<AbpHttpClientBuilderOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.ProxyClientBuildActions.Add((_, builder) =>
+            PreConfigure<AbpHttpClientBuilderOptions>(options =>
             {
-                builder.AddHttpMessageHandler<AbpBlazorClientHttpMessageHandler>();
+                options.ProxyClientBuildActions.Add((_, builder) =>
+                {
+                    builder.AddHttpMessageHandler<AbpBlazorClientHttpMessageHandler>();
+                });
             });
-        });
-    }
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services
-            .GetHostBuilder().Logging
-            .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services
+                .GetHostBuilder().Logging
+                .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+        }
     }
 }

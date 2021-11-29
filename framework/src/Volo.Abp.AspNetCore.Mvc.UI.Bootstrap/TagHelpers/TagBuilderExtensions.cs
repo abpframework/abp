@@ -2,21 +2,22 @@
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
-
-internal static class TagBuilderExtensions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    public static string ToHtmlString(this TagBuilder tagBuilder)
+    internal static class TagBuilderExtensions
     {
-        return tagBuilder.ToHtmlString(HtmlEncoder.Default);
-    }
-
-    public static string ToHtmlString(this TagBuilder tagBuilder, HtmlEncoder htmlEncoder)
-    {
-        using (var writer = new StringWriter())
+        public static string ToHtmlString(this TagBuilder tagBuilder)
         {
-            tagBuilder.WriteTo(writer, htmlEncoder);
-            return writer.ToString();
+            return tagBuilder.ToHtmlString(HtmlEncoder.Default);
+        }
+
+        public static string ToHtmlString(this TagBuilder tagBuilder, HtmlEncoder htmlEncoder)
+        {
+            using (var writer = new StringWriter())
+            {
+                tagBuilder.WriteTo(writer, htmlEncoder);
+                return writer.ToString();
+            }
         }
     }
 }

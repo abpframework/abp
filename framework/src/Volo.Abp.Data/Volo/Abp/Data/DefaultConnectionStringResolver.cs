@@ -3,43 +3,44 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Data;
-
-public class DefaultConnectionStringResolver : IConnectionStringResolver, ITransientDependency
+namespace Volo.Abp.Data
 {
-    protected AbpDbConnectionOptions Options { get; }
-
-    public DefaultConnectionStringResolver(
-        IOptionsMonitor<AbpDbConnectionOptions> options)
+    public class DefaultConnectionStringResolver : IConnectionStringResolver, ITransientDependency
     {
-        Options = options.CurrentValue;
-    }
+        protected AbpDbConnectionOptions Options { get; }
 
-    [Obsolete("Use ResolveAsync method.")]
-    public virtual string Resolve(string connectionStringName = null)
-    {
-        return ResolveInternal(connectionStringName);
-    }
-
-    public virtual Task<string> ResolveAsync(string connectionStringName = null)
-    {
-        return Task.FromResult(ResolveInternal(connectionStringName));
-    }
-
-    private string ResolveInternal(string connectionStringName)
-    {
-        if (connectionStringName == null)
+        public DefaultConnectionStringResolver(
+            IOptionsMonitor<AbpDbConnectionOptions> options)
         {
-            return Options.ConnectionStrings.Default;
+            Options = options.CurrentValue;
         }
 
-        var connectionString = Options.GetConnectionStringOrNull(connectionStringName);
-
-        if (!connectionString.IsNullOrEmpty())
+        [Obsolete("Use ResolveAsync method.")]
+        public virtual string Resolve(string connectionStringName = null)
         {
-            return connectionString;
+            return ResolveInternal(connectionStringName);
         }
 
-        return null;
+        public virtual Task<string> ResolveAsync(string connectionStringName = null)
+        {
+            return Task.FromResult(ResolveInternal(connectionStringName));
+        }
+
+        private string ResolveInternal(string connectionStringName)
+        {
+            if (connectionStringName == null)
+            {
+                return Options.ConnectionStrings.Default;
+            }
+
+            var connectionString = Options.GetConnectionStringOrNull(connectionStringName);
+
+            if (!connectionString.IsNullOrEmpty())
+            {
+                return connectionString;
+            }
+
+            return null;
+        }
     }
 }

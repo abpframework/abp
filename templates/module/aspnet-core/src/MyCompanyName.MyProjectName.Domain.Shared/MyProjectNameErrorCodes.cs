@@ -1,6 +1,7 @@
-﻿namespace MyCompanyName.MyProjectName;
-
-public static class MyProjectNameErrorCodes
+﻿namespace MyCompanyName.MyProjectName
 {
-    //Add your business exception error codes here...
+    public static class MyProjectNameErrorCodes
+    {
+        //Add your business exception error codes here...
+    }
 }

@@ -3,23 +3,24 @@ using Hangfire;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BackgroundJobs.Hangfire;
-
-public class AbpDashboardOptionsProvider : ITransientDependency
+namespace Volo.Abp.BackgroundJobs.Hangfire
 {
-    protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
-
-    public AbpDashboardOptionsProvider(IOptions<AbpBackgroundJobOptions> abpBackgroundJobOptions)
+    public class AbpDashboardOptionsProvider : ITransientDependency
     {
-        AbpBackgroundJobOptions = abpBackgroundJobOptions.Value;
-    }
+        protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
 
-    public virtual DashboardOptions Get()
-    {
-        return new DashboardOptions
+        public AbpDashboardOptionsProvider(IOptions<AbpBackgroundJobOptions> abpBackgroundJobOptions)
         {
-            DisplayNameFunc = (dashboardContext, job) =>
-                AbpBackgroundJobOptions.GetJob(job.Args.First().GetType()).JobName
-        };
+            AbpBackgroundJobOptions = abpBackgroundJobOptions.Value;
+        }
+
+        public virtual DashboardOptions Get()
+        {
+            return new DashboardOptions
+            {
+                DisplayNameFunc = (dashboardContext, job) =>
+                    AbpBackgroundJobOptions.GetJob(job.Args.First().GetType()).JobName
+            };
+        }
     }
 }

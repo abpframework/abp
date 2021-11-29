@@ -1,37 +1,38 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
-
-public class AbpExceptionHandlingLoggerProvider : ILoggerProvider
+namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 {
-    private AbpExceptionHandlingLogger _logger;
-    private static readonly object SyncObj = new object();
-    private readonly IServiceCollection _serviceCollection;
-
-    public AbpExceptionHandlingLoggerProvider(IServiceCollection serviceCollection)
+    public class AbpExceptionHandlingLoggerProvider : ILoggerProvider
     {
-        _serviceCollection = serviceCollection;
-    }
+        private AbpExceptionHandlingLogger _logger;
+        private static readonly object SyncObj = new object();
+        private readonly IServiceCollection _serviceCollection;
 
-    public ILogger CreateLogger(string categoryName)
-    {
-        if (_logger == null)
+        public AbpExceptionHandlingLoggerProvider(IServiceCollection serviceCollection)
         {
-            lock (SyncObj)
-            {
-                if (_logger == null)
-                {
-                    _logger = new AbpExceptionHandlingLogger(_serviceCollection);
-                }
-            }
+            _serviceCollection = serviceCollection;
         }
 
-        return _logger;
-    }
+        public ILogger CreateLogger(string categoryName)
+        {
+            if (_logger == null)
+            {
+                lock (SyncObj)
+                {
+                    if (_logger == null)
+                    {
+                        _logger = new AbpExceptionHandlingLogger(_serviceCollection);
+                    }
+                }
+            }
 
-    public void Dispose()
-    {
+            return _logger;
+        }
 
+        public void Dispose()
+        {
+
+        }
     }
 }

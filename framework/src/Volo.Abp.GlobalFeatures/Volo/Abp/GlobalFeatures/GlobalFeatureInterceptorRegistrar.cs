@@ -2,20 +2,21 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.GlobalFeatures;
-
-public static class GlobalFeatureInterceptorRegistrar
+namespace Volo.Abp.GlobalFeatures
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static class GlobalFeatureInterceptorRegistrar
     {
-        if (ShouldIntercept(context.ImplementationType))
+        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            context.Interceptors.TryAdd<GlobalFeatureInterceptor>();
+            if (ShouldIntercept(context.ImplementationType))
+            {
+                context.Interceptors.TryAdd<GlobalFeatureInterceptor>();
+            }
         }
-    }
 
-    private static bool ShouldIntercept(Type type)
-    {
-        return !DynamicProxyIgnoreTypes.Contains(type) && typeof(IGlobalFeatureCheckingEnabled).IsAssignableFrom(type);
+        private static bool ShouldIntercept(Type type)
+        {
+            return !DynamicProxyIgnoreTypes.Contains(type) && typeof(IGlobalFeatureCheckingEnabled).IsAssignableFrom(type);
+        }
     }
 }

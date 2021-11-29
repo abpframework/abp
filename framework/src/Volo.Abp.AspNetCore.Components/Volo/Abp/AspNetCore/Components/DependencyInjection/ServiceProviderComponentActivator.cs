@@ -1,31 +1,32 @@
 ﻿using System;
 using Microsoft.AspNetCore.Components;
 
-namespace Volo.Abp.AspNetCore.Components.DependencyInjection;
-
-public class ServiceProviderComponentActivator : IComponentActivator
+namespace Volo.Abp.AspNetCore.Components.DependencyInjection
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public ServiceProviderComponentActivator(IServiceProvider serviceProvider)
+    public class ServiceProviderComponentActivator : IComponentActivator
     {
-        ServiceProvider = serviceProvider;
-    }
+        public IServiceProvider ServiceProvider { get; }
 
-    public IComponent CreateInstance(Type componentType)
-    {
-        var instance = ServiceProvider.GetService(componentType);
-
-        if (instance == null)
+        public ServiceProviderComponentActivator(IServiceProvider serviceProvider)
         {
-            instance = Activator.CreateInstance(componentType);
+            ServiceProvider = serviceProvider;
         }
 
-        if (!(instance is IComponent component))
+        public IComponent CreateInstance(Type componentType)
         {
-            throw new ArgumentException($"The type {componentType.FullName} does not implement {nameof(IComponent)}.", nameof(componentType));
-        }
+            var instance = ServiceProvider.GetService(componentType);
 
-        return component;
+            if (instance == null)
+            {
+                instance = Activator.CreateInstance(componentType);
+            }
+
+            if (!(instance is IComponent component))
+            {
+                throw new ArgumentException($"The type {componentType.FullName} does not implement {nameof(IComponent)}.", nameof(componentType));
+            }
+
+            return component;
+        }
     }
 }

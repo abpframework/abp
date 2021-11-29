@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components;
-
-public class BordersModel : PageModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 {
-    public void OnGet()
+    public class BordersModel : PageModel
     {
+        public void OnGet()
+        {
 
+        }
     }
 }

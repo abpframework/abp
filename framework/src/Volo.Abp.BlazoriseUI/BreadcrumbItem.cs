@@ -1,19 +1,20 @@
 ﻿using Blazorise;
 
-namespace Volo.Abp.BlazoriseUI;
-
-public class BreadcrumbItem
+namespace Volo.Abp.BlazoriseUI
 {
-    public string Text { get; set; }
-
-    public object Icon { get; set; }
-
-    public string Url { get; set; }
-
-    public BreadcrumbItem(string text, string url = null, object icon = null)
+    public class BreadcrumbItem
     {
-        Text = text;
-        Url = url;
-        Icon = icon;
+        public string Text { get; set; }
+
+        public object Icon { get; set; }
+
+        public string Url { get; set; }
+
+        public BreadcrumbItem(string text, string url = null, object icon = null)
+        {
+            Text = text;
+            Url = url;
+            Icon = icon;
+        }
     }
 }

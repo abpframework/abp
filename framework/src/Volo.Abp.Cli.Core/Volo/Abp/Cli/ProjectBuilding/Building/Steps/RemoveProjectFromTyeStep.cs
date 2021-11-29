@@ -2,52 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class RemoveProjectFromTyeStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    private readonly string _name;
-
-    public RemoveProjectFromTyeStep(string name)
+    public class RemoveProjectFromTyeStep : ProjectBuildPipelineStep
     {
-        _name = name;
-    }
+        private readonly string _name;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/tye.yaml");
-
-        if (tyeFile == null)
+        public RemoveProjectFromTyeStep(string name)
         {
-            return;
+            _name = name;
         }
 
-        var lines = tyeFile.GetLines();
-        var newLines = new List<string>();
-
-        var nameLine = $"- name:";
-        var isOneOfTargetLines = false;
-
-        foreach (var line in lines)
+        public override void Execute(ProjectBuildContext context)
         {
-            if (line.Trim().Equals($"{nameLine} {_name}"))
+            var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/tye.yaml");
+
+            if (tyeFile == null)
             {
-                isOneOfTargetLines = true;
-                continue;
+                return;
             }
 
-            if (line.Trim().StartsWith(nameLine))
+            var lines = tyeFile.GetLines();
+            var newLines = new List<string>();
+
+            var nameLine = $"- name:";
+            var isOneOfTargetLines = false;
+
+            foreach (var line in lines)
             {
-                isOneOfTargetLines = false;
+                if (line.Trim().Equals($"{nameLine} {_name}"))
+                {
+                    isOneOfTargetLines = true;
+                    continue;
+                }
+
+                if (line.Trim().StartsWith(nameLine))
+                {
+                    isOneOfTargetLines = false;
+                }
+
+                if (!isOneOfTargetLines)
+                {
+                    newLines.Add(line);
+                }
             }
 
-            if (!isOneOfTargetLines)
-            {
-                newLines.Add(line);
-            }
+            tyeFile.SetContent(String.Join(Environment.NewLine, newLines));
         }
 
-        tyeFile.SetContent(String.Join(Environment.NewLine, newLines));
     }
-
 }

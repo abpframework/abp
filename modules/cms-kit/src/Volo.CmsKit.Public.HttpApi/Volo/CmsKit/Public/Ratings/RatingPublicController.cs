@@ -5,39 +5,40 @@ using Volo.Abp;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Public.Ratings;
-
-[RequiresGlobalFeature(typeof(RatingsFeature))]
-[RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-public/ratings")]
-public class RatingPublicController : CmsKitPublicControllerBase, IRatingPublicAppService
+namespace Volo.CmsKit.Public.Ratings
 {
-    protected IRatingPublicAppService RatingPublicAppService { get; }
-
-    public RatingPublicController(IRatingPublicAppService ratingPublicAppService)
+    [RequiresGlobalFeature(typeof(RatingsFeature))]
+    [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-public/ratings")]
+    public class RatingPublicController : CmsKitPublicControllerBase, IRatingPublicAppService
     {
-        RatingPublicAppService = ratingPublicAppService;
-    }
+        protected IRatingPublicAppService RatingPublicAppService { get; }
 
-    [HttpPut]
-    [Route("{entityType}/{entityId}")]
-    public virtual Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
-    {
-        return RatingPublicAppService.CreateAsync(entityType, entityId, input);
-    }
+        public RatingPublicController(IRatingPublicAppService ratingPublicAppService)
+        {
+            RatingPublicAppService = ratingPublicAppService;
+        }
+        
+        [HttpPut]
+        [Route("{entityType}/{entityId}")]
+        public virtual Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
+        {
+            return RatingPublicAppService.CreateAsync(entityType, entityId, input);
+        }
 
-    [HttpDelete]
-    [Route("{entityType}/{entityId}")]
-    public virtual Task DeleteAsync(string entityType, string entityId)
-    {
-        return RatingPublicAppService.DeleteAsync(entityType, entityId);
-    }
+        [HttpDelete]
+        [Route("{entityType}/{entityId}")]
+        public virtual Task DeleteAsync(string entityType, string entityId)
+        {
+            return RatingPublicAppService.DeleteAsync(entityType, entityId);
+        }
 
-    [HttpGet]
-    [Route("{entityType}/{entityId}")]
-    public virtual Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
-    {
-        return RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        public virtual Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+        {
+            return RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
+        }
     }
 }

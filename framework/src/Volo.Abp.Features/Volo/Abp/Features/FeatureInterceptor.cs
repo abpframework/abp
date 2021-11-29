@@ -5,38 +5,39 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Features;
-
-public class FeatureInterceptor : AbpInterceptor, ITransientDependency
+namespace Volo.Abp.Features
 {
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-
-    public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory)
+    public class FeatureInterceptor : AbpInterceptor, ITransientDependency
     {
-        _serviceScopeFactory = serviceScopeFactory;
-    }
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
-    {
-        if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
+        public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            await invocation.ProceedAsync();
-            return;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
-        await CheckFeaturesAsync(invocation);
-        await invocation.ProceedAsync();
-    }
-
-    protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
-    {
-        using (var scope = _serviceScopeFactory.CreateScope())
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            await scope.ServiceProvider.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
-                new MethodInvocationFeatureCheckerContext(
-                    invocation.Method
-                )
-            );
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            await CheckFeaturesAsync(invocation);
+            await invocation.ProceedAsync();
+        }
+
+        protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                await scope.ServiceProvider.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
+                    new MethodInvocationFeatureCheckerContext(
+                        invocation.Method
+                    )
+                );
+            }
         }
     }
 }

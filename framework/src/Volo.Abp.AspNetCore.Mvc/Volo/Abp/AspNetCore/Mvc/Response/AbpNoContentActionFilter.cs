@@ -4,28 +4,29 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Response;
-
-public class AbpNoContentActionFilter : IAsyncActionFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Response
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public class AbpNoContentActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        if (!context.ActionDescriptor.IsControllerAction())
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            await next();
-            return;
-        }
-
-        await next();
-
-        if (!context.HttpContext.Response.HasStarted &&
-            context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK &&
-            context.Result == null)
-        {
-            var returnType = context.ActionDescriptor.GetReturnType();
-            if (returnType == typeof(Task) || returnType == typeof(void))
+            if (!context.ActionDescriptor.IsControllerAction())
             {
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
+                await next();
+                return;
+            }
+
+            await next();
+
+            if (!context.HttpContext.Response.HasStarted &&
+                context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK &&
+                context.Result == null)
+            {
+                var returnType = context.ActionDescriptor.GetReturnType();
+                if (returnType == typeof(Task) || returnType == typeof(void))
+                {
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
+                }
             }
         }
     }

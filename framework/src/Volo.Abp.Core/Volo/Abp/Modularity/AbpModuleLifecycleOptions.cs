@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Collections;
 
-namespace Volo.Abp.Modularity;
-
-public class AbpModuleLifecycleOptions
+namespace Volo.Abp.Modularity
 {
-    public ITypeList<IModuleLifecycleContributor> Contributors { get; }
-
-    public AbpModuleLifecycleOptions()
+    public class AbpModuleLifecycleOptions
     {
-        Contributors = new TypeList<IModuleLifecycleContributor>();
+        public ITypeList<IModuleLifecycleContributor> Contributors { get; }
+
+        public AbpModuleLifecycleOptions()
+        {
+            Contributors = new TypeList<IModuleLifecycleContributor>();
+        }
     }
 }

@@ -2,65 +2,66 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Testing;
-
-public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.Testing
 {
-    protected IAbpApplication Application { get; }
-
-    protected override IServiceProvider ServiceProvider => Application.ServiceProvider;
-
-    protected IServiceProvider RootServiceProvider { get; }
-
-    protected IServiceScope TestServiceScope { get; }
-
-    protected AbpIntegratedTest()
+    public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
+        where TStartupModule : IAbpModule
     {
-        var services = CreateServiceCollection();
+        protected IAbpApplication Application { get; }
 
-        BeforeAddApplication(services);
+        protected override IServiceProvider ServiceProvider => Application.ServiceProvider;
 
-        var application = services.AddApplication<TStartupModule>(SetAbpApplicationCreationOptions);
-        Application = application;
+        protected IServiceProvider RootServiceProvider { get; }
 
-        AfterAddApplication(services);
+        protected IServiceScope TestServiceScope { get; }
 
-        RootServiceProvider = CreateServiceProvider(services);
-        TestServiceScope = RootServiceProvider.CreateScope();
+        protected AbpIntegratedTest()
+        {
+            var services = CreateServiceCollection();
 
-        application.Initialize(TestServiceScope.ServiceProvider);
-    }
+            BeforeAddApplication(services);
 
-    protected virtual IServiceCollection CreateServiceCollection()
-    {
-        return new ServiceCollection();
-    }
+            var application = services.AddApplication<TStartupModule>(SetAbpApplicationCreationOptions);
+            Application = application;
 
-    protected virtual void BeforeAddApplication(IServiceCollection services)
-    {
+            AfterAddApplication(services);
 
-    }
+            RootServiceProvider = CreateServiceProvider(services);
+            TestServiceScope = RootServiceProvider.CreateScope();
 
-    protected virtual void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-    {
+            application.Initialize(TestServiceScope.ServiceProvider);
+        }
 
-    }
+        protected virtual IServiceCollection CreateServiceCollection()
+        {
+            return new ServiceCollection();
+        }
 
-    protected virtual void AfterAddApplication(IServiceCollection services)
-    {
+        protected virtual void BeforeAddApplication(IServiceCollection services)
+        {
+            
+        }
 
-    }
+        protected virtual void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
 
-    protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
-    {
-        return services.BuildServiceProviderFromFactory();
-    }
+        }
 
-    public virtual void Dispose()
-    {
-        Application.Shutdown();
-        TestServiceScope.Dispose();
-        Application.Dispose();
+        protected virtual void AfterAddApplication(IServiceCollection services)
+        {
+
+        }
+
+        protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
+        {
+	        return services.BuildServiceProviderFromFactory();
+        }
+        
+        public virtual void Dispose()
+        {
+            Application.Shutdown();
+            TestServiceScope.Dispose();
+            Application.Dispose();
+        }
     }
 }

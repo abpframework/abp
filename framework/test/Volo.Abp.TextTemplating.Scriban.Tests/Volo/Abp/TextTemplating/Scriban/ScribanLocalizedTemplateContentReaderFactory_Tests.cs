@@ -2,18 +2,19 @@
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.TextTemplating.VirtualFiles;
 
-namespace Volo.Abp.TextTemplating.Scriban;
-
-public class ScribanLocalizedTemplateContentReaderFactory_Tests : LocalizedTemplateContentReaderFactory_Tests<ScribanTextTemplatingTestModule>
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public ScribanLocalizedTemplateContentReaderFactory_Tests()
+    public class ScribanLocalizedTemplateContentReaderFactory_Tests : LocalizedTemplateContentReaderFactory_Tests<ScribanTextTemplatingTestModule>
     {
-        LocalizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
-            new PhysicalFileVirtualFileProvider(
-                new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
-                    "Volo", "Abp", "TextTemplating", "Scriban"))));
+        public ScribanLocalizedTemplateContentReaderFactory_Tests()
+        {
+            LocalizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
+                new PhysicalFileVirtualFileProvider(
+                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
+                        "Volo", "Abp", "TextTemplating", "Scriban"))));
 
-        WelcomeEmailEnglishContent = "Welcome {{model.name}} to the abp.io!";
-        WelcomeEmailTurkishContent = "Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!";
+            WelcomeEmailEnglishContent = "Welcome {{model.name}} to the abp.io!";
+            WelcomeEmailTurkishContent = "Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!";
+        }
     }
 }

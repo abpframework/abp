@@ -1,9 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.BlobStoring;
-
-public interface IBlobProviderSelector
+namespace Volo.Abp.BlobStoring
 {
-    [NotNull]
-    IBlobProvider Get([NotNull] string containerName);
+    public interface IBlobProviderSelector
+    {
+        [NotNull]
+        IBlobProvider Get([NotNull] string containerName);
+    }
 }

@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components;
-
-public class CarouselsModel : PageModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 {
-    public void OnGet()
+    public class CarouselsModel : PageModel
     {
+        public void OnGet()
+        {
 
+        }
     }
 }

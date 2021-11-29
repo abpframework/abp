@@ -3,55 +3,56 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.Authentication;
-
-public abstract class ChallengeAccountController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Authentication
 {
-    protected string[] ChallengeAuthenticationSchemas { get; }
-    protected string AuthenticationType { get; }
-
-    protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
+    public abstract class ChallengeAccountController : AbpController
     {
-        ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
-        AuthenticationType = "Identity.Application";
-    }
+        protected string[] ChallengeAuthenticationSchemas { get; }
+        protected string AuthenticationType { get; }
 
-    [HttpGet]
-    public ActionResult Login(string returnUrl = "", string returnUrlHash = "")
-    {
-        if (CurrentUser.IsAuthenticated)
+        protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
         {
-            return RedirectSafely(returnUrl, returnUrlHash);
+            ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
+            AuthenticationType = "Identity.Application";
         }
 
-        return Challenge(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
-    }
-
-    [HttpGet]
-    public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
-    {
-        await HttpContext.SignOutAsync();
-
-        if (HttpContext.User.Identity?.AuthenticationType == AuthenticationType)
+        [HttpGet]
+        public ActionResult Login(string returnUrl = "", string returnUrlHash = "")
         {
-            return RedirectSafely(returnUrl, returnUrlHash);
-        }
-
-        return SignOut(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> FrontChannelLogout(string sid)
-    {
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            var currentSid = User.FindFirst("sid")?.Value ?? string.Empty;
-            if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+            if (CurrentUser.IsAuthenticated)
             {
-                await Logout();
+                return RedirectSafely(returnUrl, returnUrlHash);
             }
+
+            return Challenge(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
         }
 
-        return NoContent();
+        [HttpGet]
+        public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
+        {
+            await HttpContext.SignOutAsync();
+
+            if (HttpContext.User.Identity?.AuthenticationType == AuthenticationType)
+            {
+                return RedirectSafely(returnUrl, returnUrlHash);
+            }
+
+            return SignOut(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FrontChannelLogout(string sid)
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var currentSid = User.FindFirst("sid")?.Value ?? string.Empty;
+                if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+                {
+                    await Logout();
+                }
+            }
+
+            return NoContent();
+        }
     }
 }

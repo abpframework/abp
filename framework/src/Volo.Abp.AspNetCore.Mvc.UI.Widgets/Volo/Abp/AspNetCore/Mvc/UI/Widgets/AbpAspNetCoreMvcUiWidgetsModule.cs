@@ -7,52 +7,53 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-[DependsOn(
-    typeof(AbpAspNetCoreMvcUiBootstrapModule),
-    typeof(AbpAspNetCoreMvcUiBundlingModule)
-)]
-public class AbpAspNetCoreMvcUiWidgetsModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule)
+    )]
+    public class AbpAspNetCoreMvcUiWidgetsModule : AbpModule
     {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiWidgetsModule).Assembly);
-        });
-
-        AutoAddWidgets(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddTransient<DefaultViewComponentHelper>();
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiWidgetsModule>();
-        });
-    }
-
-    private static void AutoAddWidgets(IServiceCollection services)
-    {
-        var widgetTypes = new List<Type>();
-
-        services.OnRegistred(context =>
-        {
-            if (WidgetAttribute.IsWidget(context.ImplementationType))
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                widgetTypes.Add(context.ImplementationType);
-            }
-        });
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiWidgetsModule).Assembly);
+            });
 
-        services.Configure<AbpWidgetOptions>(options =>
+            AutoAddWidgets(context.Services);
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            foreach (var widgetType in widgetTypes)
+            context.Services.AddTransient<DefaultViewComponentHelper>();
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.Widgets.Add(new WidgetDefinition(widgetType));
-            }
-        });
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiWidgetsModule>();
+            });
+        }
+
+        private static void AutoAddWidgets(IServiceCollection services)
+        {
+            var widgetTypes = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (WidgetAttribute.IsWidget(context.ImplementationType))
+                {
+                    widgetTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpWidgetOptions>(options =>
+            {
+                foreach (var widgetType in widgetTypes)
+                {
+                    options.Widgets.Add(new WidgetDefinition(widgetType));
+                }
+            });
+        }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
-
-public class AbpCardTitleTagHelperService : AbpTagHelperService<AbpCardTitleTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpCardTitleTagHelperService : AbpTagHelperService<AbpCardTitleTagHelper>
     {
-        output.TagName = TagHelper.Heading.ToHtmlTag();
-        output.Attributes.AddClass("card-title");
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagName = TagHelper.Heading.ToHtmlTag();
+            output.Attributes.AddClass("card-title");
+        }
     }
 }

@@ -3,50 +3,51 @@ using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 using Xunit;
 
-namespace Volo.Abp.Features;
-
-public class FeatureChecker_Tests : FeatureTestBase
+namespace Volo.Abp.Features
 {
-    private readonly IFeatureChecker _featureChecker;
-    private readonly ICurrentTenant _currentTenant;
-
-    public FeatureChecker_Tests()
+    public class FeatureChecker_Tests : FeatureTestBase
     {
-        _featureChecker = GetRequiredService<IFeatureChecker>();
-        _currentTenant = GetRequiredService<ICurrentTenant>();
-    }
+        private readonly IFeatureChecker _featureChecker;
+        private readonly ICurrentTenant _currentTenant;
 
-    [Fact]
-    public async Task IsEnabledAsync()
-    {
-        //Tenant is unknown
-        (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeFalse();
-
-        using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
+        public FeatureChecker_Tests()
         {
-            (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeTrue();
+            _featureChecker = GetRequiredService<IFeatureChecker>();
+            _currentTenant = GetRequiredService<ICurrentTenant>();
         }
 
-        using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
+        [Fact]
+        public async Task IsEnabledAsync()
         {
+            //Tenant is unknown
             (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeFalse();
+
+            using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
+            {
+                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeTrue();
+            }
+
+            using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
+            {
+                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeFalse();
+            }
         }
-    }
 
-    [Fact]
-    public async Task GetOrNullAsync()
-    {
-        //Tenant is unknown
-        (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("1");
-
-        using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
+        [Fact]
+        public async Task GetOrNullAsync()
         {
+            //Tenant is unknown
             (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("1");
-        }
 
-        using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
-        {
-            (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("34");
+            using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
+            {
+                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("1");
+            }
+
+            using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
+            {
+                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("34");
+            }
         }
     }
 }

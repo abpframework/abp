@@ -1,15 +1,16 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
-
-public class MicroserviceProTemplate : MicroserviceTemplateBase
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 {
-    /// <summary>
-    /// "microservice-pro".
-    /// </summary>
-    public const string TemplateName = "microservice-pro";
-
-    public MicroserviceProTemplate()
-        : base(TemplateName)
+    public class MicroserviceProTemplate : MicroserviceTemplateBase
     {
-        DocumentUrl = null; // todo: set this
+        /// <summary>
+        /// "microservice-pro".
+        /// </summary>
+        public const string TemplateName = "microservice-pro";
+
+        public MicroserviceProTemplate()
+            : base(TemplateName)
+        {
+            DocumentUrl = null; // todo: set this
+        }
     }
 }

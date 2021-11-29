@@ -1,21 +1,22 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem.Embedded;
-
-public class EmbeddedVirtualFileSetInfo : VirtualFileSetInfo
+namespace Volo.Abp.VirtualFileSystem.Embedded
 {
-    public Assembly Assembly { get; }
-
-    public string BaseFolder { get; }
-
-    public EmbeddedVirtualFileSetInfo(
-        IFileProvider fileProvider,
-        Assembly assembly,
-        string baseFolder = null)
-        : base(fileProvider)
+    public class EmbeddedVirtualFileSetInfo : VirtualFileSetInfo
     {
-        Assembly = assembly;
-        BaseFolder = baseFolder;
+        public Assembly Assembly { get; }
+
+        public string BaseFolder { get; }
+
+        public EmbeddedVirtualFileSetInfo(
+            IFileProvider fileProvider, 
+            Assembly assembly,
+            string baseFolder = null) 
+            : base(fileProvider)
+        {
+            Assembly = assembly;
+            BaseFolder = baseFolder;
+        }
     }
 }

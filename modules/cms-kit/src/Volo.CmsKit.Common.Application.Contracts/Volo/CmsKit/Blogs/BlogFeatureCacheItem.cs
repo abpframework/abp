@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Volo.CmsKit.Blogs;
-
-[Serializable]
-public class BlogFeatureCacheItem
+namespace Volo.CmsKit.Blogs
 {
-    public Guid Id { get; set; }
-    public string FeatureName { get; set; }
-    public bool IsEnabled { get; set; }
+    [Serializable]
+    public class BlogFeatureCacheItem
+    {
+        public Guid Id { get; set; }
+        public string FeatureName { get; set; }
+        public bool IsEnabled { get; set; }
+    }
 }

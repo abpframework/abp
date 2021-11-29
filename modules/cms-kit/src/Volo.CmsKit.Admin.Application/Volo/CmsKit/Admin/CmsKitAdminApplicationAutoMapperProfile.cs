@@ -14,35 +14,36 @@ using Volo.CmsKit.Users;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Admin.Menus;
 
-namespace Volo.CmsKit.Admin;
-
-public class CmsKitAdminApplicationAutoMapperProfile : Profile
+namespace Volo.CmsKit.Admin
 {
-    public CmsKitAdminApplicationAutoMapperProfile()
+    public class CmsKitAdminApplicationAutoMapperProfile : Profile
     {
-        CreateMap<CmsUser, Comments.CmsUserDto>();
+        public CmsKitAdminApplicationAutoMapperProfile()
+        {
+            CreateMap<CmsUser, Comments.CmsUserDto>();
 
-        CreateMap<Comment, CommentDto>();
-        CreateMap<Comment, CommentWithAuthorDto>()
-            .Ignore(x => x.Author);
+            CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, CommentWithAuthorDto>()
+                .Ignore(x => x.Author);
 
-        CreateMap<Page, PageDto>();
-        CreateMap<Page, PageLookupDto>();
+            CreateMap<Page, PageDto>();
+            CreateMap<Page, PageLookupDto>();
 
-        CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
-        CreateMap<BlogPost, BlogPostListDto>()
-            .Ignore(d => d.BlogName);
-        CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source);
-        CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source);
+            CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
+            CreateMap<BlogPost, BlogPostListDto>()
+                .Ignore(d => d.BlogName);
+            CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source);
+            CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source);
 
-        CreateMap<Blog, BlogDto>();
+            CreateMap<Blog, BlogDto>();
 
-        CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
+            CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
 
-        CreateMap<Tag, TagDto>();
+            CreateMap<Tag, TagDto>();
 
-        CreateMap<MediaDescriptor, MediaDescriptorDto>();
+            CreateMap<MediaDescriptor, MediaDescriptorDto>();
 
-        CreateMap<MenuItem, MenuItemDto>();
+            CreateMap<MenuItem, MenuItemDto>();
+        }
     }
 }

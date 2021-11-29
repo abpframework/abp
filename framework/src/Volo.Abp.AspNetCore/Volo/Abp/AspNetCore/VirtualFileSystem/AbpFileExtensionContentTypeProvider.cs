@@ -2,37 +2,38 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem;
-
-public class AbpFileExtensionContentTypeProvider : IContentTypeProvider, ITransientDependency
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    protected AbpAspNetCoreContentOptions Options { get; }
-
-    public AbpFileExtensionContentTypeProvider(IOptions<AbpAspNetCoreContentOptions> abpAspNetCoreContentOptions)
+    public class AbpFileExtensionContentTypeProvider : IContentTypeProvider, ITransientDependency
     {
-        Options = abpAspNetCoreContentOptions.Value;
-    }
+        protected AbpAspNetCoreContentOptions Options { get; }
 
-    public bool TryGetContentType(string subpath, out string contentType)
-    {
-        var extension = GetExtension(subpath);
-        if (extension == null)
+        public AbpFileExtensionContentTypeProvider(IOptions<AbpAspNetCoreContentOptions> abpAspNetCoreContentOptions)
         {
-            contentType = null;
-            return false;
+            Options = abpAspNetCoreContentOptions.Value;
         }
 
-        return Options.ContentTypeMaps.TryGetValue(extension, out contentType);
-    }
-
-    protected virtual string GetExtension(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path))
+        public bool TryGetContentType(string subpath, out string contentType)
         {
-            return null;
+            var extension = GetExtension(subpath);
+            if (extension == null)
+            {
+                contentType = null;
+                return false;
+            }
+
+            return Options.ContentTypeMaps.TryGetValue(extension, out contentType);
         }
 
-        var index = path.LastIndexOf('.');
-        return index < 0 ? null : path.Substring(index);
+        protected virtual string GetExtension(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return null;
+            }
+
+            var index = path.LastIndexOf('.');
+            return index < 0 ? null : path.Substring(index);
+        }
     }
 }

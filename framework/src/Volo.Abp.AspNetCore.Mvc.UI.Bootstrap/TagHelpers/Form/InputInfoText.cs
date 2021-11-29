@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-
-[AttributeUsage(AttributeTargets.Property)]
-public class InputInfoText : Attribute
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    public string Text { get; set; }
-
-    public InputInfoText(string text)
+    [AttributeUsage(AttributeTargets.Property)]
+    public class InputInfoText : Attribute
     {
-        Text = text;
+        public string Text { get; set; }
+
+        public InputInfoText(string text)
+        {
+            Text = text;
+        }
     }
 }

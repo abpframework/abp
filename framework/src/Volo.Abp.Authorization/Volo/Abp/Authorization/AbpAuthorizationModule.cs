@@ -11,70 +11,71 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Authorization;
-
-[DependsOn(
-    typeof(AbpAuthorizationAbstractionsModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
-)]
-public class AbpAuthorizationModule : AbpModule
+namespace Volo.Abp.Authorization
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAuthorizationAbstractionsModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpLocalizationModule)
+    )]
+    public class AbpAuthorizationModule : AbpModule
     {
-        context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
-        AutoAddDefinitionProviders(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddAuthorizationCore();
-
-        context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
-        context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
-
-        context.Services.TryAddTransient<DefaultAuthorizationPolicyProvider>();
-
-        Configure<AbpPermissionOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.ValueProviders.Add<UserPermissionValueProvider>();
-            options.ValueProviders.Add<RolePermissionValueProvider>();
-            options.ValueProviders.Add<ClientPermissionValueProvider>();
-        });
+            context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+            AutoAddDefinitionProviders(context.Services);
+        }
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAuthorizationResource>();
-        });
+            context.Services.AddAuthorizationCore();
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpAuthorizationResource>("en")
-                .AddVirtualJson("/Volo/Abp/Authorization/Localization");
-        });
+            context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+            context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.Authorization", typeof(AbpAuthorizationResource));
-        });
-    }
+            context.Services.TryAddTransient<DefaultAuthorizationPolicyProvider>();
 
-    private static void AutoAddDefinitionProviders(IServiceCollection services)
-    {
-        var definitionProviders = new List<Type>();
-
-        services.OnRegistred(context =>
-        {
-            if (typeof(IPermissionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+            Configure<AbpPermissionOptions>(options =>
             {
-                definitionProviders.Add(context.ImplementationType);
-            }
-        });
+                options.ValueProviders.Add<UserPermissionValueProvider>();
+                options.ValueProviders.Add<RolePermissionValueProvider>();
+                options.ValueProviders.Add<ClientPermissionValueProvider>();
+            });
 
-        services.Configure<AbpPermissionOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAuthorizationResource>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpAuthorizationResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Authorization/Localization");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Authorization", typeof(AbpAuthorizationResource));
+            });
+        }
+
+        private static void AutoAddDefinitionProviders(IServiceCollection services)
         {
-            options.DefinitionProviders.AddIfNotContains(definitionProviders);
-        });
+            var definitionProviders = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(IPermissionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+                {
+                    definitionProviders.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpPermissionOptions>(options =>
+            {
+                options.DefinitionProviders.AddIfNotContains(definitionProviders);
+            });
+        }
     }
 }

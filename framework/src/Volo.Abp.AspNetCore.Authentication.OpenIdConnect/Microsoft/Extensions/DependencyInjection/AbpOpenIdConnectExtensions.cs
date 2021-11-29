@@ -7,58 +7,59 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpOpenIdConnectExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder)
-        => builder.AddAbpOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, _ => { });
-
-    public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, Action<OpenIdConnectOptions> configureOptions)
-        => builder.AddAbpOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, configureOptions);
-
-    public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, Action<OpenIdConnectOptions> configureOptions)
-        => builder.AddAbpOpenIdConnect(authenticationScheme, OpenIdConnectDefaults.DisplayName, configureOptions);
-
-    public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<OpenIdConnectOptions> configureOptions)
+    public static class AbpOpenIdConnectExtensions
     {
-        return builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
+        public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder)
+            => builder.AddAbpOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, _ => { });
+
+        public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, Action<OpenIdConnectOptions> configureOptions)
+            => builder.AddAbpOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, configureOptions);
+
+        public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, Action<OpenIdConnectOptions> configureOptions)
+            => builder.AddAbpOpenIdConnect(authenticationScheme, OpenIdConnectDefaults.DisplayName, configureOptions);
+
+        public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<OpenIdConnectOptions> configureOptions)
         {
-            options.ClaimActions.MapAbpClaimTypes();
-
-            configureOptions?.Invoke(options);
-
-            options.Events ??= new OpenIdConnectEvents();
-            var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
-
-            options.Events.OnAuthorizationCodeReceived = receivedContext =>
+            return builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
             {
-                SetAbpTenantId(receivedContext);
-                return authorizationCodeReceived.Invoke(receivedContext);
-            };
+                options.ClaimActions.MapAbpClaimTypes();
 
-            options.Events.OnRemoteFailure = remoteFailureContext =>
-            {
-                if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
-                    remoteFailureContext.Failure.Message.Contains("access_denied"))
+                configureOptions?.Invoke(options);
+
+                options.Events ??= new OpenIdConnectEvents();
+                var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
+
+                options.Events.OnAuthorizationCodeReceived = receivedContext =>
                 {
-                    remoteFailureContext.HandleResponse();
-                    remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
-                }
-                return Task.CompletedTask;
-            };
-        });
-    }
+                    SetAbpTenantId(receivedContext);
+                    return authorizationCodeReceived.Invoke(receivedContext);
+                };
 
-    private static void SetAbpTenantId(AuthorizationCodeReceivedContext receivedContext)
-    {
-        var tenantKey = receivedContext.HttpContext.RequestServices
-            .GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+                options.Events.OnRemoteFailure = remoteFailureContext =>
+                {
+                    if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
+                        remoteFailureContext.Failure.Message.Contains("access_denied"))
+                    {
+                        remoteFailureContext.HandleResponse();
+                        remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
+                    }
+                    return Task.CompletedTask;
+                };
+            });
+        }
 
-        if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
+        private static void SetAbpTenantId(AuthorizationCodeReceivedContext receivedContext)
         {
-            receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
-                receivedContext.Request.Cookies[tenantKey]);
+            var tenantKey = receivedContext.HttpContext.RequestServices
+                .GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+
+            if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
+            {
+                receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
+                    receivedContext.Request.Cookies[tenantKey]);
+            }
         }
     }
 }

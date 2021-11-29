@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 
-namespace System.Reflection;
-
-public static class AbpAssemblyExtensions
+namespace System.Reflection
 {
-    public static string GetFileVersion(this Assembly assembly)
+    public static class AbpAssemblyExtensions
     {
-        return FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+        public static string GetFileVersion(this Assembly assembly)
+        {
+            return FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+        }
     }
 }

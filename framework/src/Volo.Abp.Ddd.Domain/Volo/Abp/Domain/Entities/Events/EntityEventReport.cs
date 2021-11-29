@@ -1,21 +1,22 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.Domain.Entities.Events;
-
-public class EntityEventReport
+namespace Volo.Abp.Domain.Entities.Events
 {
-    public List<DomainEventEntry> DomainEvents { get; }
-
-    public List<DomainEventEntry> DistributedEvents { get; }
-
-    public EntityEventReport()
+    public class EntityEventReport
     {
-        DomainEvents = new List<DomainEventEntry>();
-        DistributedEvents = new List<DomainEventEntry>();
-    }
+        public List<DomainEventEntry> DomainEvents { get; }
 
-    public override string ToString()
-    {
-        return $"[{nameof(EntityEventReport)}] DomainEvents: {DomainEvents.Count}, DistributedEvents: {DistributedEvents.Count}";
+        public List<DomainEventEntry> DistributedEvents { get; }
+
+        public EntityEventReport()
+        {
+            DomainEvents = new List<DomainEventEntry>();
+            DistributedEvents = new List<DomainEventEntry>();
+        }
+
+        public override string ToString()
+        {
+            return $"[{nameof(EntityEventReport)}] DomainEvents: {DomainEvents.Count}, DistributedEvents: {DistributedEvents.Count}";
+        }
     }
 }

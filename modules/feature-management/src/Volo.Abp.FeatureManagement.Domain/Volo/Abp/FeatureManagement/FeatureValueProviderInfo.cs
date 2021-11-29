@@ -1,20 +1,21 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.FeatureManagement;
-
-[Serializable]
-public class FeatureValueProviderInfo
+namespace Volo.Abp.FeatureManagement
 {
-    public string Name { get; }
-
-    public string Key { get; }
-
-    public FeatureValueProviderInfo([NotNull] string name, string key)
+    [Serializable]
+    public class FeatureValueProviderInfo
     {
-        Check.NotNull(name, nameof(name));
+        public string Name { get; }
 
-        Name = name;
-        Key = key;
+        public string Key { get; }
+
+        public FeatureValueProviderInfo([NotNull]string name, string key)
+        {
+            Check.NotNull(name, nameof(name));
+
+            Name = name;
+            Key = key;
+        }
     }
 }

@@ -5,23 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Tags;
-
-public class TagAppService : CmsKitAppServiceBase, ITagAppService
+namespace Volo.CmsKit.Tags
 {
-    protected ITagRepository TagRepository { get; }
-
-    public TagAppService(ITagRepository tagRepository)
+    public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
-        TagRepository = tagRepository;
-    }
+        protected ITagRepository TagRepository { get; }
 
-    public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
-    {
-        var entities = await TagRepository.GetAllRelatedTagsAsync(
-            entityType,
-            entityId);
+        public TagAppService(ITagRepository tagRepository)
+        {
+            TagRepository = tagRepository;
+        }
 
-        return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
+        public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
+        {
+            var entities = await TagRepository.GetAllRelatedTagsAsync(
+                entityType,
+                entityId);
+
+            return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
+        }
     }
 }

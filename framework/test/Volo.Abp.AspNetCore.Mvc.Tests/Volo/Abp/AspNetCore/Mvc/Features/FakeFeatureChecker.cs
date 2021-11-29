@@ -2,25 +2,26 @@
 using System.Threading.Tasks;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Features;
-
-public class FakeFeatureChecker : FeatureCheckerBase
+namespace Volo.Abp.AspNetCore.Mvc.Features
 {
-    public override Task<string> GetOrNullAsync(string name)
+    public class FakeFeatureChecker : FeatureCheckerBase
     {
-        return Task.FromResult(GetOrNull(name));
-    }
-
-    private static string GetOrNull(string name)
-    {
-        switch (name)
+        public override Task<string> GetOrNullAsync(string name)
         {
-            case "AllowedFeature":
-                return true.ToString();
-            case "NotAllowedFeature":
-                return null; //or false, doesn't matter
+            return Task.FromResult(GetOrNull(name));
         }
 
-        throw new ApplicationException($"Unknown feature: '{name}'");
+        private static string GetOrNull(string name)
+        {
+            switch (name)
+            {
+                case "AllowedFeature":
+                    return true.ToString();
+                case "NotAllowedFeature":
+                    return null; //or false, doesn't matter
+            }
+
+            throw new ApplicationException($"Unknown feature: '{name}'");
+        }
     }
 }

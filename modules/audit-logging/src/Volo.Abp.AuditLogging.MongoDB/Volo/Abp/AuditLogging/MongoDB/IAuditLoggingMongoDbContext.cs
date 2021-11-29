@@ -2,10 +2,11 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.AuditLogging.MongoDB;
-
-[ConnectionStringName(AbpAuditLoggingDbProperties.ConnectionStringName)]
-public interface IAuditLoggingMongoDbContext : IAbpMongoDbContext
+namespace Volo.Abp.AuditLogging.MongoDB
 {
-    IMongoCollection<AuditLog> AuditLogs { get; }
+    [ConnectionStringName(AbpAuditLoggingDbProperties.ConnectionStringName)]
+    public interface IAuditLoggingMongoDbContext : IAbpMongoDbContext
+    {
+        IMongoCollection<AuditLog> AuditLogs { get; }
+    }
 }

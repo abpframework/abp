@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote;
-
-public class AbpBlockquoteParagraphTagHelperService : AbpTagHelperService<AbpBlockquoteParagraphTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpBlockquoteParagraphTagHelperService : AbpTagHelperService<AbpBlockquoteParagraphTagHelper>
     {
-        output.Attributes.AddClass("mb-0");
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.AddClass("mb-0");
+        }
+        
     }
-
 }

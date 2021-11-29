@@ -2,21 +2,22 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(BlobStoringDatabaseDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
-)]
-public class BlobStoringDatabaseEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(BlobStoringDatabaseDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+    )]
+    public class BlobStoringDatabaseEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<BlobStoringDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<DatabaseBlobContainer, EfCoreDatabaseBlobContainerRepository>();
+            context.Services.AddAbpDbContext<BlobStoringDbContext>(options =>
+            {
+                 options.AddRepository<DatabaseBlobContainer, EfCoreDatabaseBlobContainerRepository>();
 
-            options.AddRepository<DatabaseBlob, EfCoreDatabaseBlobRepository>();
-        });
+                 options.AddRepository<DatabaseBlob, EfCoreDatabaseBlobRepository>();
+            });
+        }
     }
 }

@@ -7,40 +7,41 @@ using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.DbMigrator;
-
-public class DbMigratorHostedService : IHostedService
+namespace MyCompanyName.MyProjectName.DbMigrator
 {
-    private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly IConfiguration _configuration;
-
-    public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
+    public class DbMigratorHostedService : IHostedService
     {
-        _hostApplicationLifetime = hostApplicationLifetime;
-        _configuration = configuration;
-    }
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
+        private readonly IConfiguration _configuration;
 
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        using (var application = AbpApplicationFactory.Create<MyProjectNameDbMigratorModule>(options =>
+        public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
         {
-            options.Services.ReplaceConfiguration(_configuration);
-            options.UseAutofac();
-            options.Services.AddLogging(c => c.AddSerilog());
-        }))
-        {
-            application.Initialize();
-
-            await application
-                .ServiceProvider
-                .GetRequiredService<MyProjectNameDbMigrationService>()
-                .MigrateAsync();
-
-            application.Shutdown();
-
-            _hostApplicationLifetime.StopApplication();
+            _hostApplicationLifetime = hostApplicationLifetime;
+            _configuration = configuration;
         }
-    }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            using (var application = AbpApplicationFactory.Create<MyProjectNameDbMigratorModule>(options =>
+            {
+                options.Services.ReplaceConfiguration(_configuration);
+                options.UseAutofac();
+                options.Services.AddLogging(c => c.AddSerilog());
+            }))
+            {
+                application.Initialize();
+
+                await application
+                    .ServiceProvider
+                    .GetRequiredService<MyProjectNameDbMigrationService>()
+                    .MigrateAsync();
+
+                application.Shutdown();
+
+                _hostApplicationLifetime.StopApplication();
+            }
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
 }

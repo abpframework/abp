@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Collapse;
-
-public class IndexModel : PageModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Collapse
 {
-    public void OnGet()
+    public class IndexModel : PageModel
     {
+        public void OnGet()
+        {
 
+        }
     }
 }

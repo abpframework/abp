@@ -1,17 +1,18 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace Volo.Abp.ObjectExtending;
-
-public static class AuditLoggingModuleExtensionConfigurationDictionaryExtensions
+namespace Volo.Abp.ObjectExtending
 {
-    public static ModuleExtensionConfigurationDictionary ConfigureAuditLogging(
-        this ModuleExtensionConfigurationDictionary modules,
-        Action<AuditLoggingModuleExtensionConfiguration> configureAction)
+    public static class AuditLoggingModuleExtensionConfigurationDictionaryExtensions
     {
-        return modules.ConfigureModule(
-            AuditLoggingModuleExtensionConsts.ModuleName,
-            configureAction
-        );
+        public static ModuleExtensionConfigurationDictionary ConfigureAuditLogging(
+            this ModuleExtensionConfigurationDictionary modules,
+            Action<AuditLoggingModuleExtensionConfiguration> configureAction)
+        {
+            return modules.ConfigureModule(
+                AuditLoggingModuleExtensionConsts.ModuleName,
+                configureAction
+            );
+        }
     }
 }

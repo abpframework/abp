@@ -1,26 +1,27 @@
 ﻿using System;
 using Volo.CmsKit.EntityFrameworkCore;
 
-namespace Volo.CmsKit;
-
-/* Inherit from this class for your domain layer tests.
- * See SampleManager_Tests for example.
- */
-public abstract class CmsKitDomainTestBase : CmsKitTestBase<CmsKitDomainTestModule>
+namespace Volo.CmsKit
 {
-    protected virtual void UsingDbContext(Action<ICmsKitDbContext> action)
+    /* Inherit from this class for your domain layer tests.
+     * See SampleManager_Tests for example.
+     */
+    public abstract class CmsKitDomainTestBase : CmsKitTestBase<CmsKitDomainTestModule>
     {
-        using (var dbContext = GetRequiredService<ICmsKitDbContext>())
+        protected virtual void UsingDbContext(Action<ICmsKitDbContext> action)
         {
-            action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<ICmsKitDbContext>())
+            {
+                action.Invoke(dbContext);
+            }
         }
-    }
 
-    protected virtual T UsingDbContext<T>(Func<ICmsKitDbContext, T> action)
-    {
-        using (var dbContext = GetRequiredService<ICmsKitDbContext>())
+        protected virtual T UsingDbContext<T>(Func<ICmsKitDbContext, T> action)
         {
-            return action.Invoke(dbContext);
+            using (var dbContext = GetRequiredService<ICmsKitDbContext>())
+            {
+                return action.Invoke(dbContext);
+            }
         }
     }
 }

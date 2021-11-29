@@ -7,52 +7,53 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Data;
-
-[DependsOn(
-    typeof(AbpObjectExtendingModule),
-    typeof(AbpUnitOfWorkModule),
-    typeof(AbpEventBusAbstractionsModule)
-)]
-public class AbpDataModule : AbpModule
+namespace Volo.Abp.Data
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpObjectExtendingModule),
+        typeof(AbpUnitOfWorkModule),
+        typeof(AbpEventBusAbstractionsModule)
+    )]
+    public class AbpDataModule : AbpModule
     {
-        AutoAddDataSeedContributors(context.Services);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        var configuration = context.Services.GetConfiguration();
-
-        Configure<AbpDbConnectionOptions>(configuration);
-
-        context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
-    }
-
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpDbConnectionOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            options.Databases.RefreshIndexes();
-        });
-    }
+            AutoAddDataSeedContributors(context.Services);
+        }
 
-    private static void AutoAddDataSeedContributors(IServiceCollection services)
-    {
-        var contributors = new List<Type>();
-
-        services.OnRegistred(context =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            if (typeof(IDataSeedContributor).IsAssignableFrom(context.ImplementationType))
+            var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpDbConnectionOptions>(configuration);
+
+            context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpDbConnectionOptions>(options =>
             {
-                contributors.Add(context.ImplementationType);
-            }
-        });
+                options.Databases.RefreshIndexes();
+            });
+        }
 
-        services.Configure<AbpDataSeedOptions>(options =>
+        private static void AutoAddDataSeedContributors(IServiceCollection services)
         {
-            options.Contributors.AddIfNotContains(contributors);
-        });
+            var contributors = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(IDataSeedContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contributors.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpDataSeedOptions>(options =>
+            {
+                options.Contributors.AddIfNotContains(contributors);
+            });
+        }
     }
 }

@@ -5,60 +5,60 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.SimpleStateChecking;
-
-public class SimpleStateChecker_Tests : SimpleStateCheckerTestBase
+namespace Volo.Abp.SimpleStateChecking
 {
-    protected override void AfterAddApplication(IServiceCollection services)
+    public class SimpleStateChecker_Tests : SimpleStateCheckerTestBase
     {
-        services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
+        protected override void AfterAddApplication(IServiceCollection services)
         {
-            options.GlobalStateCheckers.Add<MyGlobalSimpleStateChecker>();
-            options.GlobalStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
-        });
+            services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
+            {
+                options.GlobalStateCheckers.Add<MyGlobalSimpleStateChecker>();
+                options.GlobalStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
+            });
 
-        base.AfterAddApplication(services);
-    }
+            base.AfterAddApplication(services);
+        }
 
-    [Fact]
-    public async Task State_Check_Should_Be_Works()
-    {
-        var myStateEntity = new MyStateEntity()
+        [Fact]
+        public async Task State_Check_Should_Be_Works()
         {
-            CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture),
-            LastModificationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
-        };
-        myStateEntity.AddSimpleStateChecker(new MySimpleStateChecker());
+            var myStateEntity = new MyStateEntity()
+            {
+                CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture),
+                LastModificationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
+            };
+            myStateEntity.AddSimpleStateChecker(new MySimpleStateChecker());
 
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
 
-        myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
+            myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
 
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
-    }
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+        }
 
-    [Fact]
-    public async Task Global_State_Check_Should_Be_Works()
-    {
-        var myStateEntity = new MyStateEntity()
+        [Fact]
+        public async Task Global_State_Check_Should_Be_Works()
         {
-            CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
-        };
+            var myStateEntity = new MyStateEntity()
+            {
+                CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
+            };
 
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
 
-        myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
+            myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
 
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
-    }
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
+        }
 
-    [Fact]
-    public async Task Multiple_State_Check_Should_Be_Works()
-    {
-        var checker = new MySimpleBatchStateChecker();
-
-        var myStateEntities = new MyStateEntity[]
+        [Fact]
+        public async Task Multiple_State_Check_Should_Be_Works()
         {
+            var checker = new MySimpleBatchStateChecker();
+
+            var myStateEntities = new MyStateEntity[]
+            {
                 new MyStateEntity()
                 {
                     CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture),
@@ -70,35 +70,36 @@ public class SimpleStateChecker_Tests : SimpleStateCheckerTestBase
                     CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture),
                     LastModificationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
                 }
-        };
+            };
 
-        foreach (var myStateEntity in myStateEntities)
-        {
-            myStateEntity.AddSimpleStateChecker(checker);
+            foreach (var myStateEntity in myStateEntities)
+            {
+                myStateEntity.AddSimpleStateChecker(checker);
+            }
+
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => x.Value);
+
+            foreach (var myStateEntity in myStateEntities)
+            {
+                myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
+            }
+
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => !x.Value);
         }
 
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => x.Value);
-
-        foreach (var myStateEntity in myStateEntities)
+        [Fact]
+        public async Task Multiple_Global_State_Check_Should_Be_Works()
         {
-            myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
+            var myStateEntity = new MyStateEntity()
+            {
+                CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
+            };
+
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+
+            myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
+
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
         }
-
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => !x.Value);
-    }
-
-    [Fact]
-    public async Task Multiple_Global_State_Check_Should_Be_Works()
-    {
-        var myStateEntity = new MyStateEntity()
-        {
-            CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
-        };
-
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
-
-        myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
-
-        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
     }
 }

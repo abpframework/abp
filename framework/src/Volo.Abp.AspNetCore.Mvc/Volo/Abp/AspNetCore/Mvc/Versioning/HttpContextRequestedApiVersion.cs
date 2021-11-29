@@ -2,16 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.ApiVersioning;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning;
-
-public class HttpContextRequestedApiVersion : IRequestedApiVersion
+namespace Volo.Abp.AspNetCore.Mvc.Versioning
 {
-    public string Current => _httpContextAccessor.HttpContext?.GetRequestedApiVersion().ToString();
-
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public HttpContextRequestedApiVersion(IHttpContextAccessor httpContextAccessor)
+    public class HttpContextRequestedApiVersion : IRequestedApiVersion
     {
-        _httpContextAccessor = httpContextAccessor;
+        public string Current => _httpContextAccessor.HttpContext?.GetRequestedApiVersion().ToString();
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public HttpContextRequestedApiVersion(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
     }
 }

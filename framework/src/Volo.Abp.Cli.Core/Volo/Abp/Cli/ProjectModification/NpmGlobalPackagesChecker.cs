@@ -3,48 +3,49 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.ProjectModification;
-
-public class NpmGlobalPackagesChecker : ITransientDependency
+namespace Volo.Abp.Cli.ProjectModification
 {
-    public ICmdHelper CmdHelper { get; }
-    public ILogger<NpmGlobalPackagesChecker> Logger { get; set; }
-
-    public NpmGlobalPackagesChecker(ICmdHelper cmdHelper)
+    public class NpmGlobalPackagesChecker : ITransientDependency
     {
-        CmdHelper = cmdHelper;
-        Logger = NullLogger<NpmGlobalPackagesChecker>.Instance;
-    }
+        public ICmdHelper CmdHelper { get; }
+        public ILogger<NpmGlobalPackagesChecker> Logger { get; set; }
 
-    public void Check()
-    {
-        var installedNpmPackages = GetInstalledNpmPackages();
-
-        if (!installedNpmPackages.Contains(" yarn@"))
+        public NpmGlobalPackagesChecker(ICmdHelper cmdHelper)
         {
-            InstallYarn();
+            CmdHelper = cmdHelper;
+            Logger = NullLogger<NpmGlobalPackagesChecker>.Instance;
         }
-        if (!installedNpmPackages.Contains(" gulp@"))
+
+        public void Check()
         {
-            InstallGulp();
+            var installedNpmPackages = GetInstalledNpmPackages();
+
+            if (!installedNpmPackages.Contains(" yarn@"))
+            {
+                InstallYarn();
+            }
+            if (!installedNpmPackages.Contains(" gulp@"))
+            {
+                InstallGulp();
+            }
         }
-    }
 
-    protected virtual string GetInstalledNpmPackages()
-    {
-        Logger.LogInformation("Checking installed npm global packages...");
-        return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent", out int exitCode);
-    }
+        protected virtual string GetInstalledNpmPackages()
+        {
+            Logger.LogInformation("Checking installed npm global packages...");
+            return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent", out int exitCode);
+        }
 
-    protected virtual void InstallYarn()
-    {
-        Logger.LogInformation("Installing yarn...");
-        CmdHelper.RunCmd("npm install yarn -g");
-    }
+        protected virtual void InstallYarn()
+        {
+            Logger.LogInformation("Installing yarn...");
+            CmdHelper.RunCmd("npm install yarn -g");
+        }
 
-    protected virtual void InstallGulp()
-    {
-        Logger.LogInformation("Installing gulp...");
-        CmdHelper.RunCmd("npm install gulp -g");
+        protected virtual void InstallGulp()
+        {
+            Logger.LogInformation("Installing gulp...");
+            CmdHelper.RunCmd("npm install gulp -g");
+        }
     }
 }

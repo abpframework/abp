@@ -1,12 +1,13 @@
 using System;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public interface IAzureServiceBusSerializer
+namespace Volo.Abp.AzureServiceBus
 {
-    byte[] Serialize(object obj);
+    public interface IAzureServiceBusSerializer
+    {
+        byte[] Serialize(object obj);
 
-    object Deserialize(byte[] value, Type type);
+        object Deserialize(byte[] value, Type type);
 
-    T Deserialize<T>(byte[] value);
+        T Deserialize<T>(byte[] value);
+    }
 }

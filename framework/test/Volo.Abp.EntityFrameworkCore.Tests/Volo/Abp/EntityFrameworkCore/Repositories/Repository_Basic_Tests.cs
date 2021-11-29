@@ -5,27 +5,28 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore.Repositories;
-
-public class Repository_Basic_Tests : Repository_Basic_Tests<AbpEntityFrameworkCoreTestModule>
+namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
-    [Fact]
-    public async Task EFCore_QueryableExtension_ToListAsync()
+    public class Repository_Basic_Tests : Repository_Basic_Tests<AbpEntityFrameworkCoreTestModule>
     {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task EFCore_QueryableExtension_ToListAsync()
         {
-            var persons = await PersonRepository.ToListAsync();
-            persons.Count.ShouldBeGreaterThan(0);
-        });
-    }
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var persons = await PersonRepository.ToListAsync();
+                persons.Count.ShouldBeGreaterThan(0);
+            });
+        }
 
-    [Fact]
-    public async Task EFCore_QueryableExtension_CountAsync()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task EFCore_QueryableExtension_CountAsync()
         {
-            var count = await PersonRepository.CountAsync();
-            count.ShouldBeGreaterThan(0);
-        });
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var count = await PersonRepository.CountAsync();
+                count.ShouldBeGreaterThan(0);
+            });
+        }
     }
 }

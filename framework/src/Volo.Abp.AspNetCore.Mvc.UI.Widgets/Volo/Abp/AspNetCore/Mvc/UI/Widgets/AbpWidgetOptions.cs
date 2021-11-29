@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-public class AbpWidgetOptions
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    public WidgetDefinitionCollection Widgets { get; }
-
-    public AbpWidgetOptions()
+    public class AbpWidgetOptions
     {
-        Widgets = new WidgetDefinitionCollection();
+        public WidgetDefinitionCollection Widgets { get; }
+
+        public AbpWidgetOptions()
+        {
+            Widgets = new WidgetDefinitionCollection();
+        }
     }
 }

@@ -3,13 +3,14 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
-public interface ITenantManagementDbContext : IEfCoreDbContext
+namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    DbSet<Tenant> Tenants { get; }
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
+    public interface ITenantManagementDbContext : IEfCoreDbContext
+    {
+        DbSet<Tenant> Tenants { get; }
 
-    DbSet<TenantConnectionString> TenantConnectionStrings { get; }
+        DbSet<TenantConnectionString> TenantConnectionStrings { get; }
+    }
 }

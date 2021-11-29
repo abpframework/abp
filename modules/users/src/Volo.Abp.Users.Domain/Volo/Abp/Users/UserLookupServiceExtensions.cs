@@ -3,31 +3,32 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Users;
-
-public static class UserLookupServiceExtensions
+namespace Volo.Abp.Users
 {
-    public static async Task<TUser> GetByIdAsync<TUser>(this IUserLookupService<TUser> userLookupService, Guid id, CancellationToken cancellationToken = default)
-        where TUser : class, IUser
+    public static class UserLookupServiceExtensions
     {
-        var user = await userLookupService.FindByIdAsync(id, cancellationToken);
-        if (user == null)
+        public static async Task<TUser> GetByIdAsync<TUser>(this IUserLookupService<TUser> userLookupService, Guid id, CancellationToken cancellationToken = default)
+            where TUser : class, IUser
         {
-            throw new EntityNotFoundException(typeof(TUser), id);
+            var user = await userLookupService.FindByIdAsync(id, cancellationToken);
+            if (user == null)
+            {
+                throw new EntityNotFoundException(typeof(TUser), id);
+            }
+
+            return user;
         }
 
-        return user;
-    }
-
-    public static async Task<TUser> GetByUserNameAsync<TUser>(this IUserLookupService<TUser> userLookupService, string userName, CancellationToken cancellationToken = default)
-        where TUser : class, IUser
-    {
-        var user = await userLookupService.FindByUserNameAsync(userName, cancellationToken);
-        if (user == null)
+        public static async Task<TUser> GetByUserNameAsync<TUser>(this IUserLookupService<TUser> userLookupService, string userName, CancellationToken cancellationToken = default)
+            where TUser : class, IUser
         {
-            throw new EntityNotFoundException(typeof(TUser), userName);
-        }
+            var user = await userLookupService.FindByUserNameAsync(userName, cancellationToken);
+            if (user == null)
+            {
+                throw new EntityNotFoundException(typeof(TUser), userName);
+            }
 
-        return user;
+            return user;
+        }
     }
 }

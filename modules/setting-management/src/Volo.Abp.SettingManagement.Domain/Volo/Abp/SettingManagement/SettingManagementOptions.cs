@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Collections;
 
-namespace Volo.Abp.SettingManagement;
-
-public class SettingManagementOptions
+namespace Volo.Abp.SettingManagement
 {
-    public ITypeList<ISettingManagementProvider> Providers { get; }
-
-    public SettingManagementOptions()
+    public class SettingManagementOptions
     {
-        Providers = new TypeList<ISettingManagementProvider>();
+        public ITypeList<ISettingManagementProvider> Providers { get; }
+
+        public SettingManagementOptions()
+        {
+            Providers = new TypeList<ISettingManagementProvider>();
+        }
     }
 }

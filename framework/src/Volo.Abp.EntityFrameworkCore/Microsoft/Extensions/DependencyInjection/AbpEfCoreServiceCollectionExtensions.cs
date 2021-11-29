@@ -6,51 +6,52 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpEfCoreServiceCollectionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddAbpDbContext<TDbContext>(
-        this IServiceCollection services,
-        Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
-        where TDbContext : AbpDbContext<TDbContext>
+    public static class AbpEfCoreServiceCollectionExtensions
     {
-        services.AddMemoryCache();
-
-        var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
-
-        var replacedDbContextTypes = typeof(TDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
-            .SelectMany(x => x.ReplacedDbContextTypes).ToList();
-
-        foreach (var dbContextType in replacedDbContextTypes)
+        public static IServiceCollection AddAbpDbContext<TDbContext>(
+            this IServiceCollection services,
+            Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
+            where TDbContext : AbpDbContext<TDbContext>
         {
-            options.ReplaceDbContext(dbContextType);
-        }
+            services.AddMemoryCache();
 
-        optionsBuilder?.Invoke(options);
+            var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
 
-        services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
+            var replacedDbContextTypes = typeof(TDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
+                .SelectMany( x => x.ReplacedDbContextTypes).ToList();
 
-        foreach (var entry in options.ReplacedDbContextTypes)
-        {
-            var originalDbContextType = entry.Key;
-            var targetDbContextType = entry.Value ?? typeof(TDbContext);
-
-            services.Replace(
-                ServiceDescriptor.Transient(
-                    originalDbContextType,
-                    sp => sp.GetRequiredService(targetDbContextType)
-                )
-            );
-
-            services.Configure<AbpDbContextOptions>(opts =>
+            foreach (var dbContextType in replacedDbContextTypes)
             {
-                opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
-            });
+                options.ReplaceDbContext(dbContextType);
+            }
+
+            optionsBuilder?.Invoke(options);
+
+            services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
+
+            foreach (var entry in options.ReplacedDbContextTypes)
+            {
+                var originalDbContextType = entry.Key;
+                var targetDbContextType = entry.Value ?? typeof(TDbContext);
+                
+                services.Replace(
+                    ServiceDescriptor.Transient(
+                        originalDbContextType,
+                        sp => sp.GetRequiredService(targetDbContextType)
+                    )
+                );
+
+                services.Configure<AbpDbContextOptions>(opts =>
+                {
+                    opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
+                });
+            }
+
+            new EfCoreRepositoryRegistrar(options).AddRepositories();
+
+            return services;
         }
-
-        new EfCoreRepositoryRegistrar(options).AddRepositories();
-
-        return services;
     }
 }

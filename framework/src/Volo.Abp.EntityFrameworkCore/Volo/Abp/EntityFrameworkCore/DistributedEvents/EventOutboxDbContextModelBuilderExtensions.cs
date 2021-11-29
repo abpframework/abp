@@ -3,20 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class EventOutboxDbContextModelBuilderExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void ConfigureEventOutbox([NotNull] this ModelBuilder builder)
+    public static class EventOutboxDbContextModelBuilderExtensions
     {
-        builder.Entity<OutgoingEventRecord>(b =>
+        public static void ConfigureEventOutbox([NotNull] this ModelBuilder builder)
         {
-            b.ToTable(AbpCommonDbProperties.DbTablePrefix + "EventOutbox", AbpCommonDbProperties.DbSchema);
-            b.ConfigureByConvention();
-            b.Property(x => x.EventName).IsRequired().HasMaxLength(OutgoingEventRecord.MaxEventNameLength);
-            b.Property(x => x.EventData).IsRequired();
+            builder.Entity<OutgoingEventRecord>(b =>
+            {
+                b.ToTable(AbpCommonDbProperties.DbTablePrefix + "EventOutbox", AbpCommonDbProperties.DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.EventName).IsRequired().HasMaxLength(OutgoingEventRecord.MaxEventNameLength);
+                b.Property(x => x.EventData).IsRequired();
 
-            b.HasIndex(x => x.CreationTime);
-        });
+                b.HasIndex(x => x.CreationTime);
+            });
+        }
     }
 }

@@ -9,29 +9,30 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
-
-public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        if (!context.ActionDescriptor.IsControllerAction())
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            await next();
-            return;
-        }
+            if (!context.ActionDescriptor.IsControllerAction())
+            {
+                await next();
+                return;
+            }
 
-        if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
-        {
-            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-            logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
-            context.Result = new NotFoundResult();
-            return;
-        }
+            if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
+            {
+                var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
+                logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
+                context.Result = new NotFoundResult();
+                return;
+            }
 
-        using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.GlobalFeatureChecking))
-        {
-            await next();
+            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.GlobalFeatureChecking))
+            {
+                await next();
+            }
         }
     }
 }

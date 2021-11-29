@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.AuditLogging;
-
-public class AuditLoggingTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.AuditLogging
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AuditLoggingTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

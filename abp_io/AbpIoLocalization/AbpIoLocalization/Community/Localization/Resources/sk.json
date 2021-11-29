@@ -142,7 +142,6 @@
     "MinimumSearchContent": "Musíte zadať aspoň 3 znaky!",
     "Volo.AbpIo.Domain:060001": "Zdrojová URL(\"{ArticleUrl}\") nie je URL Githubu",
     "Volo.AbpIo.Domain:060002": "Obsah článku nie je dostupný v Github zdroji(\"{ArticleUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Nenašiel sa žiadny obsah článku!",
-    "SeeMore": "Vidět Víc"
+    "Volo.AbpIo.Domain:060003": "Nenašiel sa žiadny obsah článku!"
   }
 }

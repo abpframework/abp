@@ -1,18 +1,19 @@
 ﻿using System;
 
-namespace Volo.Abp.FeatureManagement;
-
-[Serializable]
-public class FeatureNameValue : NameValue
+namespace Volo.Abp.FeatureManagement
 {
-    public FeatureNameValue()
+    [Serializable]
+    public class FeatureNameValue : NameValue
     {
+        public FeatureNameValue()
+        {
 
-    }
+        }
 
-    public FeatureNameValue(string name, string value)
-    {
-        Name = name;
-        Value = value;
+        public FeatureNameValue(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }

@@ -2,27 +2,28 @@
 using System.Collections.Generic;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-[Serializable]
-public class ApplicationLocalizationConfigurationDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    //TODO: Rename to Texts?
-    public Dictionary<string, Dictionary<string, string>> Values { get; set; }
-
-    public List<LanguageInfo> Languages { get; set; }
-
-    public CurrentCultureDto CurrentCulture { get; set; }
-
-    public string DefaultResourceName { get; set; }
-
-    public Dictionary<string, List<NameValue>> LanguagesMap { get; set; }
-
-    public Dictionary<string, List<NameValue>> LanguageFilesMap { get; set; }
-
-    public ApplicationLocalizationConfigurationDto()
+    [Serializable]
+    public class ApplicationLocalizationConfigurationDto
     {
-        Values = new Dictionary<string, Dictionary<string, string>>();
-        Languages = new List<LanguageInfo>();
+        //TODO: Rename to Texts?
+        public Dictionary<string, Dictionary<string, string>> Values { get; set; }
+
+        public List<LanguageInfo> Languages { get; set; }
+
+        public CurrentCultureDto CurrentCulture { get; set; }
+
+        public string DefaultResourceName { get; set; }
+
+        public Dictionary<string, List<NameValue>> LanguagesMap  { get; set; }
+
+        public Dictionary<string, List<NameValue>> LanguageFilesMap { get; set; }
+
+        public ApplicationLocalizationConfigurationDto()
+        {
+            Values = new Dictionary<string, Dictionary<string, string>>();
+            Languages = new List<LanguageInfo>();
+        }
     }
 }

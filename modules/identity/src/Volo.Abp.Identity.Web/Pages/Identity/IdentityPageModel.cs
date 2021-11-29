@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity;
-
-public abstract class IdentityPageModel : AbpPageModel
+namespace Volo.Abp.Identity.Web.Pages.Identity
 {
-    protected IdentityPageModel()
+    public abstract class IdentityPageModel : AbpPageModel
     {
-        ObjectMapperContext = typeof(AbpIdentityWebModule);
+        protected IdentityPageModel()
+        {
+            ObjectMapperContext = typeof(AbpIdentityWebModule);
+        }
     }
 }

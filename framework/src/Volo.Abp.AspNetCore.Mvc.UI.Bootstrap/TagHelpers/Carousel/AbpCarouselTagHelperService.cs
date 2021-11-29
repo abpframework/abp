@@ -8,173 +8,174 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel;
-
-public class AbpCarouselTagHelperService : AbpTagHelperService<AbpCarouselTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 {
-    protected IStringLocalizer<AbpUiResource> L { get; }
-
-    public AbpCarouselTagHelperService(IStringLocalizer<AbpUiResource> localizer)
+    public class AbpCarouselTagHelperService : AbpTagHelperService<AbpCarouselTagHelper>
     {
-        L = localizer;
-    }
+        protected IStringLocalizer<AbpUiResource> L { get; }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        output.TagName = "div";
-
-        SetRandomIdIfNotProvided();
-        AddBasicAttributes(context, output);
-
-        var itemList = InitilizeCarouselItemsContentsContext(context, output);
-
-        await output.GetChildContentAsync();
-
-        SetOneItemAsActive(context, output, itemList);
-        SetItems(context, output, itemList);
-        SetControls(context, output, itemList);
-        SetIndicators(context, output, itemList);
-    }
-
-
-    protected virtual List<CarouselItem> InitilizeCarouselItemsContentsContext(TagHelperContext context, TagHelperOutput output)
-    {
-        var items = new List<CarouselItem>();
-        context.Items[CarouselItemsContent] = items;
-        return items;
-    }
-
-    protected virtual void SetItems(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
-    {
-        var wrapper = new TagBuilder("div");
-        wrapper.AddCssClass("carousel-inner");
-
-        foreach (var carouselItem in itemList)
+        public AbpCarouselTagHelperService(IStringLocalizer<AbpUiResource> localizer)
         {
-            SetActiveIfActive(carouselItem);
-
-            wrapper.InnerHtml.AppendHtml(carouselItem.Html);
+            L = localizer;
         }
 
-        output.Content.SetHtmlContent(wrapper);
-    }
-
-    protected virtual void SetControls(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
-    {
-        if (!TagHelper.Controls ?? false)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            return;
+            output.TagName = "div";
+
+            SetRandomIdIfNotProvided();
+            AddBasicAttributes(context, output);
+
+            var itemList = InitilizeCarouselItemsContentsContext(context, output);
+
+            await output.GetChildContentAsync();
+
+            SetOneItemAsActive(context, output, itemList);
+            SetItems(context, output, itemList);
+            SetControls(context, output, itemList);
+            SetIndicators(context, output, itemList);
         }
 
-        // create 'previous' item
-        var prevIcon = new TagBuilder("span");
-        prevIcon.AddCssClass("carousel-control-prev-icon");
-        prevIcon.Attributes.Add("aria-hidden", "true");
 
-        var prevText = new TagBuilder("span");
-        prevText.AddCssClass("visually-hidden");
-        prevText.InnerHtml.Append(L["Previous"].Value);
-
-        var prevAnchor = new TagBuilder("a");
-        prevAnchor.AddCssClass("carousel-control-prev");
-        prevAnchor.Attributes.Add("href", "#" + TagHelper.Id);
-        prevAnchor.Attributes.Add("role", "button");
-        prevAnchor.Attributes.Add("data-bs-slide", "prev");
-
-        prevAnchor.InnerHtml.AppendHtml(prevIcon);
-        prevAnchor.InnerHtml.AppendHtml(prevText);
-
-        // create 'next' item
-        var nextIcon = new TagBuilder("span");
-        nextIcon.AddCssClass("carousel-control-next-icon");
-        nextIcon.Attributes.Add("aria-hidden", "true");
-
-        var nextText = new TagBuilder("span");
-        nextText.AddCssClass("visually-hidden");
-        nextText.InnerHtml.Append(L["Next"].Value);
-
-        var nextAnchor = new TagBuilder("a");
-        nextAnchor.AddCssClass("carousel-control-next");
-        nextAnchor.Attributes.Add("href", "#" + TagHelper.Id);
-        nextAnchor.Attributes.Add("role", "button");
-        nextAnchor.Attributes.Add("data-bs-slide", "next");
-
-        nextAnchor.InnerHtml.AppendHtml(nextIcon);
-        nextAnchor.InnerHtml.AppendHtml(nextText);
-
-        // append post content
-        output.PostContent.AppendHtml(prevAnchor);
-        output.PostContent.AppendHtml(nextAnchor);
-    }
-
-    protected virtual void SetIndicators(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
-    {
-        if (!TagHelper.Indicators ?? false)
+        protected virtual List<CarouselItem> InitilizeCarouselItemsContentsContext(TagHelperContext context, TagHelperOutput output)
         {
-            return;
+            var items = new List<CarouselItem>();
+            context.Items[CarouselItemsContent] = items;
+            return items;
         }
 
-        var list = new TagBuilder("ol");
-        list.AddCssClass("carousel-indicators");
-
-        for (var i = 0; i < itemList.Count; i++)
+        protected virtual void SetItems(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            var listItem = new TagBuilder("li");
-            listItem.Attributes.Add("data-bs-target", "#" + TagHelper.Id);
-            listItem.Attributes.Add("data-bs-slide-to", i.ToString());
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("carousel-inner");
 
-            if (itemList[i].Active)
+            foreach (var carouselItem in itemList)
             {
-                listItem.AddCssClass("active");
+                SetActiveIfActive(carouselItem);
+
+                wrapper.InnerHtml.AppendHtml(carouselItem.Html);
             }
 
-            list.InnerHtml.AppendHtml(listItem);
+            output.Content.SetHtmlContent(wrapper);
         }
 
-        output.PreContent.SetHtmlContent(list);
-    }
-
-    protected virtual void SetOneItemAsActive(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
-    {
-        if (!itemList.Any(it => it.Active) && itemList.Count > 0)
+        protected virtual void SetControls(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            itemList.FirstOrDefault().Active = true;
+            if (!TagHelper.Controls ?? false)
+            {
+                return;
+            }
+
+            // create 'previous' item
+            var prevIcon = new TagBuilder("span");
+            prevIcon.AddCssClass("carousel-control-prev-icon");
+            prevIcon.Attributes.Add("aria-hidden", "true");
+
+            var prevText = new TagBuilder("span");
+            prevText.AddCssClass("visually-hidden");
+            prevText.InnerHtml.Append(L["Previous"].Value);
+
+            var prevAnchor = new TagBuilder("a");
+            prevAnchor.AddCssClass("carousel-control-prev");
+            prevAnchor.Attributes.Add("href", "#" + TagHelper.Id);
+            prevAnchor.Attributes.Add("role", "button");
+            prevAnchor.Attributes.Add("data-bs-slide", "prev");
+
+            prevAnchor.InnerHtml.AppendHtml(prevIcon);
+            prevAnchor.InnerHtml.AppendHtml(prevText);
+
+            // create 'next' item
+            var nextIcon = new TagBuilder("span");
+            nextIcon.AddCssClass("carousel-control-next-icon");
+            nextIcon.Attributes.Add("aria-hidden", "true");
+
+            var nextText = new TagBuilder("span");
+            nextText.AddCssClass("visually-hidden");
+            nextText.InnerHtml.Append(L["Next"].Value);
+
+            var nextAnchor = new TagBuilder("a");
+            nextAnchor.AddCssClass("carousel-control-next");
+            nextAnchor.Attributes.Add("href", "#" + TagHelper.Id);
+            nextAnchor.Attributes.Add("role", "button");
+            nextAnchor.Attributes.Add("data-bs-slide", "next");
+
+            nextAnchor.InnerHtml.AppendHtml(nextIcon);
+            nextAnchor.InnerHtml.AppendHtml(nextText);
+
+            // append post content
+            output.PostContent.AppendHtml(prevAnchor);
+            output.PostContent.AppendHtml(nextAnchor);
         }
-    }
 
-    protected virtual void AddBasicAttributes(TagHelperContext context, TagHelperOutput output)
-    {
-        output.Attributes.Add("data-bs-ride", "carousel");
-        output.Attributes.Add("id", TagHelper.Id);
-        AddBasicClasses(context, output);
-    }
-
-    protected virtual void AddBasicClasses(TagHelperContext context, TagHelperOutput output)
-    {
-        output.Attributes.AddClass("carousel");
-        output.Attributes.AddClass("slide");
-        SetFadeAnimation(context, output);
-    }
-
-    protected virtual void SetFadeAnimation(TagHelperContext context, TagHelperOutput output)
-    {
-        if (TagHelper.Crossfade ?? false)
+        protected virtual void SetIndicators(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            output.Attributes.AddClass("carousel-fade");
-        }
-    }
+            if (!TagHelper.Indicators ?? false)
+            {
+                return;
+            }
 
-    protected virtual void SetRandomIdIfNotProvided()
-    {
-        if (string.IsNullOrWhiteSpace(TagHelper.Id))
+            var list = new TagBuilder("ol");
+            list.AddCssClass("carousel-indicators");
+
+            for (var i = 0; i < itemList.Count; i++)
+            {
+                var listItem = new TagBuilder("li");
+                listItem.Attributes.Add("data-bs-target", "#" + TagHelper.Id);
+                listItem.Attributes.Add("data-bs-slide-to", i.ToString());
+
+                if (itemList[i].Active)
+                {
+                    listItem.AddCssClass("active");
+                }
+
+                list.InnerHtml.AppendHtml(listItem);
+            }
+
+            output.PreContent.SetHtmlContent(list);
+        }
+
+        protected virtual void SetOneItemAsActive(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            TagHelper.Id = "C" + Guid.NewGuid().ToString("N");
+            if (!itemList.Any(it => it.Active) && itemList.Count > 0)
+            {
+                itemList.FirstOrDefault().Active = true;
+            }
         }
-    }
 
-    protected virtual void SetActiveIfActive(CarouselItem item)
-    {
-        item.Html = item.Html.Replace(AbpCarouselItemActivePlaceholder, item.Active ? "active" : "");
-    }
+        protected virtual void AddBasicAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.Add("data-bs-ride", "carousel");
+            output.Attributes.Add("id", TagHelper.Id);
+            AddBasicClasses(context, output);
+        }
 
+        protected virtual void AddBasicClasses(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.AddClass("carousel");
+            output.Attributes.AddClass("slide");
+            SetFadeAnimation(context, output);
+        }
+
+        protected virtual void SetFadeAnimation(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Crossfade ?? false)
+            {
+                output.Attributes.AddClass("carousel-fade");
+            }
+        }
+
+        protected virtual void SetRandomIdIfNotProvided()
+        {
+            if (string.IsNullOrWhiteSpace(TagHelper.Id))
+            {
+                TagHelper.Id = "C" + Guid.NewGuid().ToString("N");
+            }
+        }
+
+        protected virtual void SetActiveIfActive(CarouselItem item)
+        {
+            item.Html = item.Html.Replace(AbpCarouselItemActivePlaceholder, item.Active ? "active" : "");
+        }
+
+    }
 }

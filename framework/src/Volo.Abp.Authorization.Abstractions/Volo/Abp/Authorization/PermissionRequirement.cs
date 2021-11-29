@@ -1,21 +1,22 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Volo.Abp.Authorization;
-
-public class PermissionRequirement : IAuthorizationRequirement
+namespace Volo.Abp.Authorization
 {
-    public string PermissionName { get; }
-
-    public PermissionRequirement([NotNull] string permissionName)
+    public class PermissionRequirement : IAuthorizationRequirement
     {
-        Check.NotNull(permissionName, nameof(permissionName));
+        public string PermissionName { get; }
 
-        PermissionName = permissionName;
-    }
+        public PermissionRequirement([NotNull]string permissionName)
+        {
+            Check.NotNull(permissionName, nameof(permissionName));
 
-    public override string ToString()
-    {
-        return $"PermissionRequirement: {PermissionName}";
+            PermissionName = permissionName;
+        }
+
+        public override string ToString()
+        {
+            return $"PermissionRequirement: {PermissionName}";
+        }
     }
 }

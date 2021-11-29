@@ -5,25 +5,26 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.MongoDB;
-
-public class PersonRepository : MongoDbRepository<ITestAppMongoDbContext, Person, Guid>, IPersonRepository
+namespace Volo.Abp.TestApp.MongoDB
 {
-    public PersonRepository(IMongoDbContextProvider<ITestAppMongoDbContext> dbContextProvider)
-        : base(dbContextProvider)
+    public class PersonRepository : MongoDbRepository<ITestAppMongoDbContext, Person, Guid>, IPersonRepository
     {
-
-    }
-
-    public async Task<PersonView> GetViewAsync(string name)
-    {
-        var person = await (await (await GetCollectionAsync()).FindAsync(x => x.Name == name)).FirstOrDefaultAsync();
-        return new PersonView()
+        public PersonRepository(IMongoDbContextProvider<ITestAppMongoDbContext> dbContextProvider)
+            : base(dbContextProvider)
         {
-            Name = person.Name,
-            CreationTime = person.CreationTime,
-            Birthday = person.Birthday,
-            LastActive = person.LastActive
-        };
+
+        }
+
+        public async Task<PersonView> GetViewAsync(string name)
+        {
+            var person = await (await (await GetCollectionAsync()).FindAsync(x => x.Name == name)).FirstOrDefaultAsync();
+            return new PersonView()
+            {
+                Name = person.Name,
+                CreationTime = person.CreationTime,
+                Birthday = person.Birthday,
+                LastActive = person.LastActive
+            };
+        }
     }
 }

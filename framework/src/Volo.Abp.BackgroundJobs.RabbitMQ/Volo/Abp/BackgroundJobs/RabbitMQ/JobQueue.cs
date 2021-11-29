@@ -13,213 +13,214 @@ using Volo.Abp.ExceptionHandling;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundJobs.RabbitMQ;
-
-public class JobQueue<TArgs> : IJobQueue<TArgs>
+namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
-    private const string ChannelPrefix = "JobQueue.";
-
-    protected BackgroundJobConfiguration JobConfiguration { get; }
-    protected JobQueueConfiguration QueueConfiguration { get; }
-    protected IChannelAccessor ChannelAccessor { get; private set; }
-    protected AsyncEventingBasicConsumer Consumer { get; private set; }
-
-    public ILogger<JobQueue<TArgs>> Logger { get; set; }
-
-    protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
-    protected AbpRabbitMqBackgroundJobOptions AbpRabbitMqBackgroundJobOptions { get; }
-    protected IChannelPool ChannelPool { get; }
-    protected IRabbitMqSerializer Serializer { get; }
-    protected IBackgroundJobExecuter JobExecuter { get; }
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-    protected IExceptionNotifier ExceptionNotifier { get; }
-
-    protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
-    protected bool IsDiposed { get; private set; }
-
-    public JobQueue(
-        IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
-        IOptions<AbpRabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
-        IChannelPool channelPool,
-        IRabbitMqSerializer serializer,
-        IBackgroundJobExecuter jobExecuter,
-        IServiceScopeFactory serviceScopeFactory,
-        IExceptionNotifier exceptionNotifier)
+    public class JobQueue<TArgs> : IJobQueue<TArgs>
     {
-        AbpBackgroundJobOptions = backgroundJobOptions.Value;
-        AbpRabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
-        Serializer = serializer;
-        JobExecuter = jobExecuter;
-        ServiceScopeFactory = serviceScopeFactory;
-        ExceptionNotifier = exceptionNotifier;
-        ChannelPool = channelPool;
+        private const string ChannelPrefix = "JobQueue.";
 
-        JobConfiguration = AbpBackgroundJobOptions.GetJob(typeof(TArgs));
-        QueueConfiguration = GetOrCreateJobQueueConfiguration();
+        protected BackgroundJobConfiguration JobConfiguration { get; }
+        protected JobQueueConfiguration QueueConfiguration { get; }
+        protected IChannelAccessor ChannelAccessor { get; private set; }
+        protected AsyncEventingBasicConsumer Consumer { get; private set; }
 
-        Logger = NullLogger<JobQueue<TArgs>>.Instance;
-    }
+        public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
-    protected virtual JobQueueConfiguration GetOrCreateJobQueueConfiguration()
-    {
-        return AbpRabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
-               new JobQueueConfiguration(
-                   typeof(TArgs),
-                   AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName,
-                   AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName
-               );
-    }
+        protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
+        protected AbpRabbitMqBackgroundJobOptions AbpRabbitMqBackgroundJobOptions { get; }
+        protected IChannelPool ChannelPool { get; }
+        protected IRabbitMqSerializer Serializer { get; }
+        protected IBackgroundJobExecuter JobExecuter { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected IExceptionNotifier ExceptionNotifier { get; }
 
-    public virtual async Task<string> EnqueueAsync(
-        TArgs args,
-        BackgroundJobPriority priority = BackgroundJobPriority.Normal,
-        TimeSpan? delay = null)
-    {
-        CheckDisposed();
+        protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
+        protected bool IsDiposed { get; private set; }
 
-        using (await SyncObj.LockAsync())
+        public JobQueue(
+            IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
+            IOptions<AbpRabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
+            IChannelPool channelPool,
+            IRabbitMqSerializer serializer,
+            IBackgroundJobExecuter jobExecuter,
+            IServiceScopeFactory serviceScopeFactory,
+            IExceptionNotifier exceptionNotifier)
         {
-            await EnsureInitializedAsync();
+            AbpBackgroundJobOptions = backgroundJobOptions.Value;
+            AbpRabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
+            Serializer = serializer;
+            JobExecuter = jobExecuter;
+            ServiceScopeFactory = serviceScopeFactory;
+            ExceptionNotifier = exceptionNotifier;
+            ChannelPool = channelPool;
 
-            await PublishAsync(args, priority, delay);
+            JobConfiguration = AbpBackgroundJobOptions.GetJob(typeof(TArgs));
+            QueueConfiguration = GetOrCreateJobQueueConfiguration();
 
-            return null;
-        }
-    }
-
-    public virtual async Task StartAsync(CancellationToken cancellationToken = default)
-    {
-        CheckDisposed();
-
-        if (!AbpBackgroundJobOptions.IsJobExecutionEnabled)
-        {
-            return;
+            Logger = NullLogger<JobQueue<TArgs>>.Instance;
         }
 
-        using (await SyncObj.LockAsync(cancellationToken))
+        protected virtual JobQueueConfiguration GetOrCreateJobQueueConfiguration()
         {
-            await EnsureInitializedAsync();
-        }
-    }
-
-    public virtual Task StopAsync(CancellationToken cancellationToken = default)
-    {
-        Dispose();
-        return Task.CompletedTask;
-    }
-
-    public virtual void Dispose()
-    {
-        if (IsDiposed)
-        {
-            return;
+            return AbpRabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
+                   new JobQueueConfiguration(
+                       typeof(TArgs),
+                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName,
+                       AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName
+                   );
         }
 
-        IsDiposed = true;
-
-        ChannelAccessor?.Dispose();
-    }
-
-    protected virtual Task EnsureInitializedAsync()
-    {
-        if (ChannelAccessor != null)
+        public virtual async Task<string> EnqueueAsync(
+            TArgs args,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+            TimeSpan? delay = null)
         {
+            CheckDisposed();
+
+            using (await SyncObj.LockAsync())
+            {
+                await EnsureInitializedAsync();
+
+                await PublishAsync(args, priority, delay);
+
+                return null;
+            }
+        }
+
+        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            CheckDisposed();
+
+            if (!AbpBackgroundJobOptions.IsJobExecutionEnabled)
+            {
+                return;
+            }
+
+            using (await SyncObj.LockAsync(cancellationToken))
+            {
+                await EnsureInitializedAsync();
+            }
+        }
+
+        public virtual Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            Dispose();
             return Task.CompletedTask;
         }
 
-        ChannelAccessor = ChannelPool.Acquire(
-            ChannelPrefix + QueueConfiguration.QueueName,
-            QueueConfiguration.ConnectionName
-        );
-
-        var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
-        Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
-
-        // Declare delayed queue
-        QueueConfiguration.DeclareDelayed(ChannelAccessor.Channel);
-
-        if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
+        public virtual void Dispose()
         {
-            Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
-            Consumer.Received += MessageReceived;
+            if (IsDiposed)
+            {
+                return;
+            }
 
-            //TODO: What BasicConsume returns?
-            ChannelAccessor.Channel.BasicConsume(
-                queue: QueueConfiguration.QueueName,
-                autoAck: false,
-                consumer: Consumer
-            );
+            IsDiposed = true;
+
+            ChannelAccessor?.Dispose();
         }
 
-        return Task.CompletedTask;
-    }
-
-    protected virtual Task PublishAsync(
-        TArgs args,
-        BackgroundJobPriority priority = BackgroundJobPriority.Normal,
-        TimeSpan? delay = null)
-    {
-        //TODO: How to handle priority
-
-        var routingKey = QueueConfiguration.QueueName;
-        var basicProperties = CreateBasicPropertiesToPublish();
-
-        if (delay.HasValue)
+        protected virtual Task EnsureInitializedAsync()
         {
-            routingKey = QueueConfiguration.DelayedQueueName;
-            basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
-        }
+            if (ChannelAccessor != null)
+            {
+                return Task.CompletedTask;
+            }
 
-        ChannelAccessor.Channel.BasicPublish(
-            exchange: "",
-            routingKey: routingKey,
-            basicProperties: basicProperties,
-            body: Serializer.Serialize(args)
-        );
-
-        return Task.CompletedTask;
-    }
-
-    protected virtual IBasicProperties CreateBasicPropertiesToPublish()
-    {
-        var properties = ChannelAccessor.Channel.CreateBasicProperties();
-        properties.Persistent = true;
-        return properties;
-    }
-
-    protected virtual async Task MessageReceived(object sender, BasicDeliverEventArgs ea)
-    {
-        using (var scope = ServiceScopeFactory.CreateScope())
-        {
-            var context = new JobExecutionContext(
-                scope.ServiceProvider,
-                JobConfiguration.JobType,
-                Serializer.Deserialize(ea.Body.ToArray(), typeof(TArgs))
+            ChannelAccessor = ChannelPool.Acquire(
+                ChannelPrefix + QueueConfiguration.QueueName,
+                QueueConfiguration.ConnectionName
             );
 
-            try
+            var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
+            Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
+
+            // Declare delayed queue
+            QueueConfiguration.DeclareDelayed(ChannelAccessor.Channel);
+
+            if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
-                await JobExecuter.ExecuteAsync(context);
-                ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
+                Consumer.Received += MessageReceived;
+
+                //TODO: What BasicConsume returns?
+                ChannelAccessor.Channel.BasicConsume(
+                    queue: QueueConfiguration.QueueName,
+                    autoAck: false,
+                    consumer: Consumer
+                );
             }
-            catch (BackgroundJobExecutionException)
+
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task PublishAsync(
+            TArgs args,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+            TimeSpan? delay = null)
+        {
+            //TODO: How to handle priority
+
+            var routingKey = QueueConfiguration.QueueName;
+            var basicProperties = CreateBasicPropertiesToPublish();
+
+            if (delay.HasValue)
             {
-                //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
+                routingKey = QueueConfiguration.DelayedQueueName;
+                basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
             }
-            catch (Exception)
+
+            ChannelAccessor.Channel.BasicPublish(
+                exchange: "",
+                routingKey: routingKey,
+                basicProperties: basicProperties,
+                body: Serializer.Serialize(args)
+            );
+
+            return Task.CompletedTask;
+        }
+
+        protected virtual IBasicProperties CreateBasicPropertiesToPublish()
+        {
+            var properties = ChannelAccessor.Channel.CreateBasicProperties();
+            properties.Persistent = true;
+            return properties;
+        }
+
+        protected virtual async Task MessageReceived(object sender, BasicDeliverEventArgs ea)
+        {
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+                var context = new JobExecutionContext(
+                    scope.ServiceProvider,
+                    JobConfiguration.JobType,
+                    Serializer.Deserialize(ea.Body.ToArray(), typeof(TArgs))
+                );
+
+                try
+                {
+                    await JobExecuter.ExecuteAsync(context);
+                    ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                }
+                catch (BackgroundJobExecutionException)
+                {
+                    //TODO: Reject like that?
+                    ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
+                }
+                catch (Exception)
+                {
+                    //TODO: Reject like that?
+                    ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+                }
             }
         }
-    }
 
-    protected void CheckDisposed()
-    {
-        if (IsDiposed)
+        protected void CheckDisposed()
         {
-            throw new AbpException("This object is disposed!");
+            if (IsDiposed)
+            {
+                throw new AbpException("This object is disposed!");
+            }
         }
     }
 }

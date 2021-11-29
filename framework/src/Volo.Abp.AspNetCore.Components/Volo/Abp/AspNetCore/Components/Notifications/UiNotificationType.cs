@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Components.Notifications;
-
-public enum UiNotificationType
+﻿namespace Volo.Abp.AspNetCore.Components.Notifications
 {
-    Info,
-    Success,
-    Warning,
-    Error,
+    public enum UiNotificationType
+    {
+        Info,
+        Success,
+        Warning,
+        Error,
+    }
 }

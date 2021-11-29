@@ -6,98 +6,99 @@ using Volo.Abp;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.VirtualFileSystem.Embedded;
 
-namespace Microsoft.Extensions.FileProviders;
-
-public static class AbpFileInfoExtensions
+namespace Microsoft.Extensions.FileProviders
 {
-    /// <summary>
-    /// Reads file content as string using <see cref="Encoding.UTF8"/> encoding.
-    /// </summary>
-    public static string ReadAsString([NotNull] this IFileInfo fileInfo)
+    public static class AbpFileInfoExtensions
     {
-        return fileInfo.ReadAsString(Encoding.UTF8);
-    }
-
-    /// <summary>
-    /// Reads file content as string using <see cref="Encoding.UTF8"/> encoding.
-    /// </summary>
-    public static Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo)
-    {
-        return fileInfo.ReadAsStringAsync(Encoding.UTF8);
-    }
-
-    /// <summary>
-    /// Reads file content as string using the given <paramref name="encoding"/>.
-    /// </summary>
-    public static string ReadAsString([NotNull] this IFileInfo fileInfo, Encoding encoding)
-    {
-        Check.NotNull(fileInfo, nameof(fileInfo));
-
-        using (var stream = fileInfo.CreateReadStream())
+        /// <summary>
+        /// Reads file content as string using <see cref="Encoding.UTF8"/> encoding.
+        /// </summary>
+        public static string ReadAsString([NotNull] this IFileInfo fileInfo)
         {
-            using (var streamReader = new StreamReader(stream, encoding, true))
+            return fileInfo.ReadAsString(Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Reads file content as string using <see cref="Encoding.UTF8"/> encoding.
+        /// </summary>
+        public static Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo)
+        {
+            return fileInfo.ReadAsStringAsync(Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Reads file content as string using the given <paramref name="encoding"/>.
+        /// </summary>
+        public static string ReadAsString([NotNull] this IFileInfo fileInfo, Encoding encoding)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            using (var stream = fileInfo.CreateReadStream())
             {
-                return streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(stream, encoding, true))
+                {
+                    return streamReader.ReadToEnd();
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Reads file content as string using the given <paramref name="encoding"/>.
-    /// </summary>
-    public static async Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo, Encoding encoding)
-    {
-        Check.NotNull(fileInfo, nameof(fileInfo));
-
-        using (var stream = fileInfo.CreateReadStream())
+        /// <summary>
+        /// Reads file content as string using the given <paramref name="encoding"/>.
+        /// </summary>
+        public static async Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo, Encoding encoding)
         {
-            using (var streamReader = new StreamReader(stream, encoding, true))
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            using (var stream = fileInfo.CreateReadStream())
             {
-                return await streamReader.ReadToEndAsync();
+                using (var streamReader = new StreamReader(stream, encoding, true))
+                {
+                    return await streamReader.ReadToEndAsync();
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Reads file content as byte[].
-    /// </summary>
-    public static byte[] ReadBytes([NotNull] this IFileInfo fileInfo)
-    {
-        Check.NotNull(fileInfo, nameof(fileInfo));
-
-        using (var stream = fileInfo.CreateReadStream())
+        /// <summary>
+        /// Reads file content as byte[].
+        /// </summary>
+        public static byte[] ReadBytes([NotNull] this IFileInfo fileInfo)
         {
-            return stream.GetAllBytes();
-        }
-    }
+            Check.NotNull(fileInfo, nameof(fileInfo));
 
-    /// <summary>
-    /// Reads file content as byte[].
-    /// </summary>
-    public static async Task<byte[]> ReadBytesAsync([NotNull] this IFileInfo fileInfo)
-    {
-        Check.NotNull(fileInfo, nameof(fileInfo));
-
-        using (var stream = fileInfo.CreateReadStream())
-        {
-            return await stream.GetAllBytesAsync();
-        }
-    }
-
-    public static string GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
-    {
-        Check.NotNull(fileInfo, nameof(fileInfo));
-
-        if (fileInfo is EmbeddedResourceFileInfo embeddedFileInfo)
-        {
-            return embeddedFileInfo.VirtualPath;
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                return stream.GetAllBytes();
+            }
         }
 
-        if (fileInfo is InMemoryFileInfo inMemoryFileInfo)
+        /// <summary>
+        /// Reads file content as byte[].
+        /// </summary>
+        public static async Task<byte[]> ReadBytesAsync([NotNull] this IFileInfo fileInfo)
         {
-            return inMemoryFileInfo.DynamicPath;
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                return await stream.GetAllBytesAsync();
+            }
         }
 
-        return fileInfo.PhysicalPath;
+        public static string GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            if (fileInfo is EmbeddedResourceFileInfo embeddedFileInfo)
+            {
+                return embeddedFileInfo.VirtualPath;
+            }
+
+            if (fileInfo is InMemoryFileInfo inMemoryFileInfo)
+            {
+                return inMemoryFileInfo.DynamicPath;
+            }
+
+            return fileInfo.PhysicalPath;
+        }
     }
 }

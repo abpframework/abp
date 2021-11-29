@@ -6,22 +6,22 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectModification;
 using Xunit;
 
-namespace Volo.Abp.Cli;
-
-public class ProjectNameValidation_Tests : AbpCliTestBase
+namespace Volo.Abp.Cli
 {
-    private readonly NewCommand _newCommand;
-
-    public ProjectNameValidation_Tests()
+    public class ProjectNameValidation_Tests : AbpCliTestBase
     {
-        _newCommand = GetRequiredService<NewCommand>();
-    }
+        private readonly NewCommand _newCommand;
 
-    [Fact]
-    public async Task Illegal_ProjectName_Test()
-    {
-        var illegalProjectNames = new[]
+        public ProjectNameValidation_Tests()
         {
+            _newCommand = GetRequiredService<NewCommand>();
+        }
+
+        [Fact]
+        public async Task Illegal_ProjectName_Test()
+        {
+            var illegalProjectNames = new[]
+            {
                 "MyCompanyName.MyProjectName",
                 "MyProjectName",
                 "CON", //Windows doesn't accept these names as file name
@@ -31,29 +31,30 @@ public class ProjectNameValidation_Tests : AbpCliTestBase
                 "LPT2"
             };
 
-        foreach (var illegalProjectName in illegalProjectNames)
-        {
-            var args = new CommandLineArgs("new", illegalProjectName);
-            await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+            foreach (var illegalProjectName in illegalProjectNames)
+            {
+                var args = new CommandLineArgs("new", illegalProjectName);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+            }
         }
-    }
 
-    [Fact]
-    public async Task Contains_Illegal_Keyword_Test()
-    {
-        var illegalKeywords = new[]
+        [Fact]
+        public async Task Contains_Illegal_Keyword_Test()
         {
+            var illegalKeywords = new[]
+            {
                 "Blazor"
             };
 
-        foreach (var illegalKeyword in illegalKeywords)
-        {
-            var args = new CommandLineArgs("new", illegalKeyword);
-            await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+            foreach (var illegalKeyword in illegalKeywords)
+            {
+                var args = new CommandLineArgs("new", illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
 
-            args = new CommandLineArgs("new", "Acme." + illegalKeyword);
-            await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+                args = new CommandLineArgs("new", "Acme." + illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+            }
         }
-    }
 
+    }
 }

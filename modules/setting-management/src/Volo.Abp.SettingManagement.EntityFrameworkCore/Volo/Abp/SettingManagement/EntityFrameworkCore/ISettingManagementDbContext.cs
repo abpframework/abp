@@ -3,11 +3,12 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
-public interface ISettingManagementDbContext : IEfCoreDbContext
+namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    DbSet<Setting> Settings { get; }
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
+    public interface ISettingManagementDbContext : IEfCoreDbContext
+    {
+        DbSet<Setting> Settings { get; }
+    }
 }

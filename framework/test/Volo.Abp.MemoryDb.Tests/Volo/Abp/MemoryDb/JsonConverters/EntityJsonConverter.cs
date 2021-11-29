@@ -3,36 +3,37 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.MemoryDb.JsonConverters;
-
-public class EntityJsonConverter<TEntity, TKey> : JsonConverter<TEntity>
-    where TEntity : Entity<TKey>
+namespace Volo.Abp.MemoryDb.JsonConverters
 {
-    public override TEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public class EntityJsonConverter<TEntity, TKey> : JsonConverter<TEntity>
+        where TEntity : Entity<TKey>
     {
-        var jsonDocument = JsonDocument.ParseValue(ref reader);
-        if (jsonDocument.RootElement.ValueKind == JsonValueKind.Object)
+        public override TEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var entity = (TEntity)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), typeToConvert);
-
-            var idJsonElement = jsonDocument.RootElement.GetProperty(nameof(Entity<object>.Id));
-            if (idJsonElement.ValueKind != JsonValueKind.Undefined)
+            var jsonDocument = JsonDocument.ParseValue(ref reader);
+            if (jsonDocument.RootElement.ValueKind == JsonValueKind.Object)
             {
-                var id = JsonSerializer.Deserialize<TKey>(idJsonElement.GetRawText());
-                if (id != null)
+                var entity = (TEntity)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), typeToConvert);
+
+                var idJsonElement = jsonDocument.RootElement.GetProperty(nameof(Entity<object>.Id));
+                if (idJsonElement.ValueKind != JsonValueKind.Undefined)
                 {
-                    EntityHelper.TrySetId(entity, () => id);
+                    var id = JsonSerializer.Deserialize<TKey>(idJsonElement.GetRawText());
+                    if (id != null)
+                    {
+                        EntityHelper.TrySetId(entity, () => id);
+                    }
                 }
+                return entity;
             }
-            return entity;
+
+            throw new JsonException("RootElement's ValueKind is not Object!");
         }
 
-        throw new JsonException("RootElement's ValueKind is not Object!");
-    }
-
-    public override void Write(Utf8JsonWriter writer, TEntity value, JsonSerializerOptions options)
-    {
-        var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-        JsonSerializer.Serialize(writer, value, newOptions);
+        public override void Write(Utf8JsonWriter writer, TEntity value, JsonSerializerOptions options)
+        {
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+            JsonSerializer.Serialize(writer, value, newOptions);
+        }
     }
 }

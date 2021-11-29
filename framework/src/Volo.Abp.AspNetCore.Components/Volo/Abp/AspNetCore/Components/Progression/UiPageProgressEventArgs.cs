@@ -1,16 +1,17 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Components.Progression;
-
-public class UiPageProgressEventArgs : EventArgs
+namespace Volo.Abp.AspNetCore.Components.Progression
 {
-    public UiPageProgressEventArgs(int? percentage, UiPageProgressOptions options)
+    public class UiPageProgressEventArgs : EventArgs
     {
-        Percentage = percentage;
-        Options = options;
+        public UiPageProgressEventArgs(int? percentage, UiPageProgressOptions options)
+        {
+            Percentage = percentage;
+            Options = options;
+        }
+
+        public int? Percentage { get; }
+
+        public UiPageProgressOptions Options { get; }
     }
-
-    public int? Percentage { get; }
-
-    public UiPageProgressOptions Options { get; }
 }

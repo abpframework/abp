@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Settings;
 
-namespace Volo.CmsKit.Settings;
-
-public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
+namespace Volo.CmsKit.Settings
 {
-    public override void Define(ISettingDefinitionContext context)
+    public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
     {
-        /* Define module settings here.
-         * Use names from CmsKitSettings class.
-         */
+        public override void Define(ISettingDefinitionContext context)
+        {
+            /* Define module settings here.
+             * Use names from CmsKitSettings class.
+             */
+        }
     }
 }

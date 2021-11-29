@@ -9,112 +9,113 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Domain.Repositories;
-
-public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
-    where TEntity : class, IEntity
+namespace Volo.Abp.Domain.Repositories
 {
-    [Obsolete("Use WithDetailsAsync method.")]
-    public virtual IQueryable<TEntity> WithDetails()
+    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
+        where TEntity : class, IEntity
     {
-        return GetQueryable();
-    }
-
-    [Obsolete("Use WithDetailsAsync method.")]
-    public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
-    {
-        return GetQueryable();
-    }
-
-    public virtual Task<IQueryable<TEntity>> WithDetailsAsync()
-    {
-        return GetQueryableAsync();
-    }
-
-    public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
-    {
-        return GetQueryableAsync();
-    }
-
-    [Obsolete("Use GetQueryableAsync method.")]
-    protected abstract IQueryable<TEntity> GetQueryable();
-
-    public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
-
-    public abstract Task<TEntity> FindAsync(
-        Expression<Func<TEntity, bool>> predicate,
-        bool includeDetails = true,
-        CancellationToken cancellationToken = default);
-
-    public async Task<TEntity> GetAsync(
-        Expression<Func<TEntity, bool>> predicate,
-        bool includeDetails = true,
-        CancellationToken cancellationToken = default)
-    {
-        var entity = await FindAsync(predicate, includeDetails, cancellationToken);
-
-        if (entity == null)
+        [Obsolete("Use WithDetailsAsync method.")]
+        public virtual IQueryable<TEntity> WithDetails()
         {
-            throw new EntityNotFoundException(typeof(TEntity));
+            return GetQueryable();
         }
 
-        return entity;
-    }
-
-    public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
-
-    protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
-        where TQueryable : IQueryable<TEntity>
-    {
-        return ApplyDataFilters<TQueryable, TEntity>(query);
-    }
-
-    protected virtual TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
-        where TQueryable : IQueryable<TOtherEntity>
-    {
-        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TOtherEntity)))
+        [Obsolete("Use WithDetailsAsync method.")]
+        public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            return GetQueryable();
         }
 
-        if (typeof(IMultiTenant).IsAssignableFrom(typeof(TOtherEntity)))
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync()
         {
-            var tenantId = CurrentTenant.Id;
-            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            return GetQueryableAsync();
         }
 
-        return query;
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return GetQueryableAsync();
+        }
+
+        [Obsolete("Use GetQueryableAsync method.")]
+        protected abstract IQueryable<TEntity> GetQueryable();
+
+        public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
+
+        public abstract Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default);
+
+        public async Task<TEntity> GetAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(predicate, includeDetails, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity));
+            }
+
+            return entity;
+        }
+
+        public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
+
+        protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
+            where TQueryable : IQueryable<TEntity>
+        {
+            return ApplyDataFilters<TQueryable, TEntity>(query);
+        }
+
+        protected virtual TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
+            where TQueryable : IQueryable<TOtherEntity>
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TOtherEntity)))
+            {
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TOtherEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
+        }
     }
-}
 
-public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
-    where TEntity : class, IEntity<TKey>
-{
-    public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
-
-    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
-
-    public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
+    public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
-        var entity = await FindAsync(id, cancellationToken: cancellationToken);
-        if (entity == null)
+        public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+        public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+        public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            return;
+            var entity = await FindAsync(id, cancellationToken: cancellationToken);
+            if (entity == null)
+            {
+                return;
+            }
+
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
 
-        await DeleteAsync(entity, autoSave, cancellationToken);
-    }
-
-    public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
-    {
-        foreach (var id in ids)
+        public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            await DeleteAsync(id, cancellationToken: cancellationToken);
-        }
+            foreach (var id in ids)
+            {
+                await DeleteAsync(id, cancellationToken: cancellationToken);
+            }
 
-        if (autoSave)
-        {
-            await SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

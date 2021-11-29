@@ -2,16 +2,17 @@
 using System.IO;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Studio.Packages;
-
-public static class PackageHelper
+namespace Volo.Abp.Studio.Packages
 {
-    public static string GetNameFromPath([NotNull] string path)
+    public static class PackageHelper
     {
-        Check.NotNullOrWhiteSpace(path, nameof(path));
+        public static string GetNameFromPath([NotNull] string path)
+        {
+            Check.NotNullOrWhiteSpace(path, nameof(path));
 
-        return Path
-            .GetFileName(path)
-            .RemovePostFix(StringComparison.OrdinalIgnoreCase, PackageConsts.FileExtension);
+            return Path
+                .GetFileName(path)
+                .RemovePostFix(StringComparison.OrdinalIgnoreCase, PackageConsts.FileExtension);
+        }
     }
 }

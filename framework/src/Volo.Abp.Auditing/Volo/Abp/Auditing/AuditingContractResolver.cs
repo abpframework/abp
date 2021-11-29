@@ -5,38 +5,39 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Volo.Abp.Auditing;
-
-public class AuditingContractResolver : CamelCasePropertyNamesContractResolver
+namespace Volo.Abp.Auditing
 {
-    private readonly List<Type> _ignoredTypes;
-
-    public AuditingContractResolver(List<Type> ignoredTypes)
+    public class AuditingContractResolver : CamelCasePropertyNamesContractResolver
     {
-        _ignoredTypes = ignoredTypes;
-    }
+        private readonly List<Type> _ignoredTypes;
 
-    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-    {
-        var property = base.CreateProperty(member, memberSerialization);
-
-        if (_ignoredTypes.Any(ignoredType => ignoredType.GetTypeInfo().IsAssignableFrom(property.PropertyType)))
+        public AuditingContractResolver(List<Type> ignoredTypes)
         {
-            property.ShouldSerialize = instance => false;
+            _ignoredTypes = ignoredTypes;
+        }
+
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var property = base.CreateProperty(member, memberSerialization);
+
+            if (_ignoredTypes.Any(ignoredType => ignoredType.GetTypeInfo().IsAssignableFrom(property.PropertyType)))
+            {
+                property.ShouldSerialize = instance => false;
+                return property;
+            }
+
+            if (member.DeclaringType != null && (member.DeclaringType.IsDefined(typeof(DisableAuditingAttribute)) || member.DeclaringType.IsDefined(typeof(JsonIgnoreAttribute))))
+            {
+                property.ShouldSerialize = instance => false;
+                return property;
+            }
+
+            if (member.IsDefined(typeof(DisableAuditingAttribute)) || member.IsDefined(typeof(JsonIgnoreAttribute)))
+            {
+                property.ShouldSerialize = instance => false;
+            }
+
             return property;
         }
-
-        if (member.DeclaringType != null && (member.DeclaringType.IsDefined(typeof(DisableAuditingAttribute)) || member.DeclaringType.IsDefined(typeof(JsonIgnoreAttribute))))
-        {
-            property.ShouldSerialize = instance => false;
-            return property;
-        }
-
-        if (member.IsDefined(typeof(DisableAuditingAttribute)) || member.IsDefined(typeof(JsonIgnoreAttribute)))
-        {
-            property.ShouldSerialize = instance => false;
-        }
-
-        return property;
     }
 }

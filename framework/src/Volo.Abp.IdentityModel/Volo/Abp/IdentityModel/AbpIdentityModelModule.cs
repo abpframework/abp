@@ -4,21 +4,22 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.IdentityModel;
-
-[DependsOn(
-    typeof(AbpThreadingModule),
-    typeof(AbpMultiTenancyModule),
-    typeof(AbpCachingModule)
-    )]
-public class AbpIdentityModelModule : AbpModule
+namespace Volo.Abp.IdentityModel
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpThreadingModule),
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpCachingModule)
+        )]
+    public class AbpIdentityModelModule : AbpModule
     {
-        var configuration = context.Services.GetConfiguration();
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
 
-        context.Services.AddHttpClient(IdentityModelAuthenticationService.HttpClientName);
+            context.Services.AddHttpClient(IdentityModelAuthenticationService.HttpClientName);
 
-        Configure<AbpIdentityClientOptions>(configuration);
+            Configure<AbpIdentityClientOptions>(configuration);
+        }
     }
 }

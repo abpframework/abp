@@ -1,17 +1,18 @@
 ﻿using System;
 
-namespace Volo.Abp.SimpleStateChecking;
-
-public class SimpleStateCheckerContext<TState>
-    where TState : IHasSimpleStateCheckers<TState>
+namespace Volo.Abp.SimpleStateChecking
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    public TState State { get; }
-
-    public SimpleStateCheckerContext(IServiceProvider serviceProvider, TState state)
+    public class SimpleStateCheckerContext<TState>
+        where TState : IHasSimpleStateCheckers<TState>
     {
-        ServiceProvider = serviceProvider;
-        State = state;
+        public IServiceProvider ServiceProvider { get; }
+
+        public TState State { get; }
+
+        public SimpleStateCheckerContext(IServiceProvider serviceProvider, TState state)
+        {
+            ServiceProvider = serviceProvider;
+            State = state;
+        }
     }
 }

@@ -3,28 +3,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Authorization.Permissions;
 
-namespace Volo.Abp.Authorization;
-
-public class PermissionsRequirementHandler : AuthorizationHandler<PermissionsRequirement>
+namespace Volo.Abp.Authorization
 {
-    private readonly IPermissionChecker _permissionChecker;
-
-    public PermissionsRequirementHandler(IPermissionChecker permissionChecker)
+    public class PermissionsRequirementHandler : AuthorizationHandler<PermissionsRequirement>
     {
-        _permissionChecker = permissionChecker;
-    }
+        private readonly IPermissionChecker _permissionChecker;
 
-    protected override async Task HandleRequirementAsync(
-        AuthorizationHandlerContext context,
-        PermissionsRequirement requirement)
-    {
-        var multiplePermissionGrantResult = await _permissionChecker.IsGrantedAsync(context.User, requirement.PermissionNames);
-
-        if (requirement.RequiresAll ?
-            multiplePermissionGrantResult.AllGranted :
-            multiplePermissionGrantResult.Result.Any(x => x.Value == PermissionGrantResult.Granted))
+        public PermissionsRequirementHandler(IPermissionChecker permissionChecker)
         {
-            context.Succeed(requirement);
+            _permissionChecker = permissionChecker;
+        }
+
+        protected override async Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            PermissionsRequirement requirement)
+        {
+            var multiplePermissionGrantResult = await _permissionChecker.IsGrantedAsync(context.User, requirement.PermissionNames);
+
+            if (requirement.RequiresAll ?
+                multiplePermissionGrantResult.AllGranted :
+                multiplePermissionGrantResult.Result.Any(x => x.Value == PermissionGrantResult.Granted))
+            {
+                context.Succeed(requirement);
+            }
         }
     }
 }

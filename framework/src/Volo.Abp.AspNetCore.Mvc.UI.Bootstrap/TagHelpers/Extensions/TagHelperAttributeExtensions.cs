@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
-
-public static class TagHelperAttributeExtensions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 {
-    public static string ToHtmlAttributeAsString(this TagHelperAttribute attribute)
+    public static class TagHelperAttributeExtensions
     {
-        return attribute.Name + "=\"" + attribute.Value + "\"";
-    }
-
-    public static string ToHtmlAttributesAsString(this List<TagHelperAttribute> attributes)
-    {
-        var attributesAsString = "";
-
-        foreach (var attribute in attributes)
+        public static string ToHtmlAttributeAsString(this TagHelperAttribute attribute)
         {
-            attributesAsString += attribute.ToHtmlAttributeAsString() + " ";
+            return attribute.Name + "=\"" + attribute.Value + "\"";
         }
 
-        return attributesAsString;
+        public static string ToHtmlAttributesAsString(this List<TagHelperAttribute> attributes)
+        {
+            var attributesAsString = "";
+
+            foreach (var attribute in attributes)
+            {
+                attributesAsString += attribute.ToHtmlAttributeAsString() + " ";
+            }
+
+            return attributesAsString;
+        }
     }
 }

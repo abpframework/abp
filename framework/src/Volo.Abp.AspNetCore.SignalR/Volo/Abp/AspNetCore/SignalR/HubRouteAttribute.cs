@@ -2,36 +2,37 @@
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public class HubRouteAttribute : Attribute
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    public string RoutePattern { get; set; }
-
-    public HubRouteAttribute(string routePattern)
+    public class HubRouteAttribute : Attribute
     {
-        RoutePattern = routePattern;
-    }
+        public string RoutePattern { get; set; }
 
-    public virtual string GetRoutePatternForType(Type hubType)
-    {
-        return RoutePattern;
-    }
-
-    public static string GetRoutePattern<THub>()
-        where THub : Hub
-    {
-        return GetRoutePattern(typeof(THub));
-    }
-
-    public static string GetRoutePattern(Type hubType)
-    {
-        var routeAttribute = hubType.GetSingleAttributeOrNull<HubRouteAttribute>();
-        if (routeAttribute != null)
+        public HubRouteAttribute(string routePattern)
         {
-            return routeAttribute.GetRoutePatternForType(hubType);
+            RoutePattern = routePattern;
         }
 
-        return "/signalr-hubs/" + hubType.Name.RemovePostFix("Hub").ToKebabCase();
+        public virtual string GetRoutePatternForType(Type hubType)
+        {
+            return RoutePattern;
+        }
+
+        public static string GetRoutePattern<THub>()
+            where THub : Hub
+        {
+            return GetRoutePattern(typeof(THub));
+        }
+
+        public static string GetRoutePattern(Type hubType)
+        {
+            var routeAttribute = hubType.GetSingleAttributeOrNull<HubRouteAttribute>();
+            if (routeAttribute != null)
+            {
+                return routeAttribute.GetRoutePatternForType(hubType);
+            }
+
+            return "/signalr-hubs/" + hubType.Name.RemovePostFix("Hub").ToKebabCase();
+        }
     }
 }

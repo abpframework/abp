@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar;
-
-public class MalihuCustomScrollbarPluginStyleBundleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class MalihuCustomScrollbarPluginStyleBundleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css");
+        }
     }
 }

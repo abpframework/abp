@@ -1,13 +1,14 @@
 ﻿using System.Threading;
 
-namespace Volo.Abp.Threading;
-
-public class CancellationTokenOverride
+namespace Volo.Abp.Threading
 {
-    public CancellationToken CancellationToken { get; }
-
-    public CancellationTokenOverride(CancellationToken cancellationToken)
+    public class CancellationTokenOverride
     {
-        CancellationToken = cancellationToken;
+        public CancellationToken CancellationToken { get; }
+
+        public CancellationTokenOverride(CancellationToken cancellationToken)
+        {
+            CancellationToken = cancellationToken;
+        }
     }
 }

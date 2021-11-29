@@ -7,89 +7,90 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlazoriseUI;
-
-[Dependency(ReplaceServices = true)]
-public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
+namespace Volo.Abp.BlazoriseUI
 {
-    /// <summary>
-    /// An event raised after the message is received. Used to notify the message dialog.
-    /// </summary>
-    public event EventHandler<UiMessageEventArgs> MessageReceived;
-
-    private readonly IStringLocalizer<AbpUiResource> localizer;
-
-    public ILogger<BlazoriseUiMessageService> Logger { get; set; }
-
-    public BlazoriseUiMessageService(
-        IStringLocalizer<AbpUiResource> localizer)
+    [Dependency(ReplaceServices = true)]
+    public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
     {
-        this.localizer = localizer;
+        /// <summary>
+        /// An event raised after the message is received. Used to notify the message dialog.
+        /// </summary>
+        public event EventHandler<UiMessageEventArgs> MessageReceived;
 
-        Logger = NullLogger<BlazoriseUiMessageService>.Instance;
-    }
+        private readonly IStringLocalizer<AbpUiResource> localizer;
 
-    public Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
-    {
-        var uiMessageOptions = CreateDefaultOptions();
-        options?.Invoke(uiMessageOptions);
+        public ILogger<BlazoriseUiMessageService> Logger { get; set; }
 
-        MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Info, message, title, uiMessageOptions));
-
-        return Task.CompletedTask;
-    }
-
-    public Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
-    {
-        var uiMessageOptions = CreateDefaultOptions();
-        options?.Invoke(uiMessageOptions);
-
-        MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Success, message, title, uiMessageOptions));
-
-        return Task.CompletedTask;
-    }
-
-    public Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
-    {
-        var uiMessageOptions = CreateDefaultOptions();
-        options?.Invoke(uiMessageOptions);
-
-        MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Warning, message, title, uiMessageOptions));
-
-        return Task.CompletedTask;
-    }
-
-    public Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
-    {
-        var uiMessageOptions = CreateDefaultOptions();
-        options?.Invoke(uiMessageOptions);
-
-        MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Error, message, title, uiMessageOptions));
-
-        return Task.CompletedTask;
-    }
-
-    public Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
-    {
-        var uiMessageOptions = CreateDefaultOptions();
-        options?.Invoke(uiMessageOptions);
-
-        var callback = new TaskCompletionSource<bool>();
-
-        MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, uiMessageOptions, callback));
-
-        return callback.Task;
-    }
-
-    protected virtual UiMessageOptions CreateDefaultOptions()
-    {
-        return new UiMessageOptions
+        public BlazoriseUiMessageService(
+            IStringLocalizer<AbpUiResource> localizer)
         {
-            CenterMessage = true,
-            ShowMessageIcon = true,
-            OkButtonText = localizer["Ok"],
-            CancelButtonText = localizer["Cancel"],
-            ConfirmButtonText = localizer["Yes"],
-        };
+            this.localizer = localizer;
+
+            Logger = NullLogger<BlazoriseUiMessageService>.Instance;
+        }
+
+        public Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
+        {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Info, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
+        }
+
+        public Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
+        {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Success, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
+        }
+
+        public Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
+        {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Warning, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
+        }
+
+        public Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
+        {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Error, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
+        {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            var callback = new TaskCompletionSource<bool>();
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, uiMessageOptions, callback));
+
+            return callback.Task;
+        }
+
+        protected virtual UiMessageOptions CreateDefaultOptions()
+        {
+            return new UiMessageOptions
+            {
+                CenterMessage = true,
+                ShowMessageIcon = true,
+                OkButtonText = localizer["Ok"],
+                CancelButtonText = localizer["Cancel"],
+                ConfirmButtonText = localizer["Yes"],
+            };
+        }
     }
 }

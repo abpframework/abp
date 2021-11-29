@@ -11,61 +11,62 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Admin.Tags;
-
-[RequiresGlobalFeature(typeof(TagsFeature))]
-[RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
-[Authorize(CmsKitAdminPermissions.Tags.Default)]
-[Route("api/cms-kit-admin/tags")]
-public class TagAdminController : CmsKitAdminController, ITagAdminAppService
+namespace Volo.CmsKit.Admin.Tags
 {
-    protected ITagAdminAppService TagAdminAppService { get; }
-
-    public TagAdminController(ITagAdminAppService tagAdminAppService)
-    {
-        TagAdminAppService = tagAdminAppService;
-    }
-
-    [HttpPost]
-    [Authorize(CmsKitAdminPermissions.Tags.Create)]
-    public Task<TagDto> CreateAsync(TagCreateDto input)
-    {
-        return TagAdminAppService.CreateAsync(input);
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize(CmsKitAdminPermissions.Tags.Delete)]
-    public Task DeleteAsync(Guid id)
-    {
-        return TagAdminAppService.DeleteAsync(id);
-    }
-
-    [HttpGet("{id}")]
+    [RequiresGlobalFeature(typeof(TagsFeature))]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public Task<TagDto> GetAsync(Guid id)
+    [Route("api/cms-kit-admin/tags")]
+    public class TagAdminController : CmsKitAdminController, ITagAdminAppService
     {
-        return TagAdminAppService.GetAsync(id);
-    }
+        protected ITagAdminAppService TagAdminAppService { get; }
 
-    [HttpGet]
-    [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
-    {
-        return TagAdminAppService.GetListAsync(input);
-    }
+        public TagAdminController(ITagAdminAppService tagAdminAppService)
+        {
+            TagAdminAppService = tagAdminAppService;
+        }
 
-    [HttpPut("{id}")]
-    [Authorize(CmsKitAdminPermissions.Tags.Update)]
-    public Task<TagDto> UpdateAsync(Guid id, [FromBody] TagUpdateDto input)
-    {
-        return TagAdminAppService.UpdateAsync(id, input);
-    }
+        [HttpPost]
+        [Authorize(CmsKitAdminPermissions.Tags.Create)]
+        public Task<TagDto> CreateAsync(TagCreateDto input)
+        {
+            return TagAdminAppService.CreateAsync(input);
+        }
 
-    [HttpGet]
-    [Route("tag-definitions")]
-    public Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
-    {
-        return TagAdminAppService.GetTagDefinitionsAsync();
+        [HttpDelete("{id}")]
+        [Authorize(CmsKitAdminPermissions.Tags.Delete)]
+        public Task DeleteAsync(Guid id)
+        {
+            return TagAdminAppService.DeleteAsync(id);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(CmsKitAdminPermissions.Tags.Default)]
+        public Task<TagDto> GetAsync(Guid id)
+        {
+            return TagAdminAppService.GetAsync(id);
+        }
+
+        [HttpGet]
+        [Authorize(CmsKitAdminPermissions.Tags.Default)]
+        public Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
+        {
+            return TagAdminAppService.GetListAsync(input);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(CmsKitAdminPermissions.Tags.Update)]
+        public Task<TagDto> UpdateAsync(Guid id, [FromBody] TagUpdateDto input)
+        {
+            return TagAdminAppService.UpdateAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("tag-definitions")]
+        public Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        {
+            return TagAdminAppService.GetTagDefinitionsAsync();
+        }
     }
 }

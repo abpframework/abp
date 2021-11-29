@@ -6,47 +6,48 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
-
-[RequiresFeature(SettingManagementFeatures.Enable)]
-public class IndexModel : AbpPageModel
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
 {
-    public SettingPageCreationContext SettingPageCreationContext { get; private set; }
-
-    protected ILocalEventBus LocalEventBus { get; }
-    protected SettingManagementPageOptions Options { get; }
-
-    public IndexModel(
-        IOptions<SettingManagementPageOptions> options,
-        ILocalEventBus localEventBus)
+    [RequiresFeature(SettingManagementFeatures.Enable)]
+    public class IndexModel : AbpPageModel
     {
-        LocalEventBus = localEventBus;
-        Options = options.Value;
-    }
+        public SettingPageCreationContext SettingPageCreationContext { get; private set; }
 
-    public virtual async Task<IActionResult> OnGetAsync()
-    {
-        SettingPageCreationContext = new SettingPageCreationContext(ServiceProvider);
+        protected ILocalEventBus LocalEventBus { get; }
+        protected SettingManagementPageOptions Options { get; }
 
-        foreach (var contributor in Options.Contributors)
+        public IndexModel(
+            IOptions<SettingManagementPageOptions> options,
+            ILocalEventBus localEventBus)
         {
-            await contributor.ConfigureAsync(SettingPageCreationContext);
+            LocalEventBus = localEventBus;
+            Options = options.Value;
         }
 
-        return Page();
-    }
+        public virtual async Task<IActionResult> OnGetAsync()
+        {
+            SettingPageCreationContext = new SettingPageCreationContext(ServiceProvider);
 
-    public virtual Task<IActionResult> OnPostAsync()
-    {
-        return Task.FromResult<IActionResult>(Page());
-    }
+            foreach (var contributor in Options.Contributors)
+            {
+                await contributor.ConfigureAsync(SettingPageCreationContext);
+            }
 
-    public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()
-    {
-        await LocalEventBus.PublishAsync(
-            new CurrentApplicationConfigurationCacheResetEventData()
-        );
+            return Page();
+        }
 
-        return NoContent();
+        public virtual Task<IActionResult> OnPostAsync()
+        {
+            return Task.FromResult<IActionResult>(Page());
+        }
+
+        public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()
+        {
+            await LocalEventBus.PublishAsync(
+                new CurrentApplicationConfigurationCacheResetEventData()
+            );
+
+            return NoContent();
+        }
     }
 }

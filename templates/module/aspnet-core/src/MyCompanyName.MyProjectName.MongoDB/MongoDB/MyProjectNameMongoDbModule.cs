@@ -2,21 +2,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDB;
-
-[DependsOn(
-    typeof(MyProjectNameDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class MyProjectNameMongoDbModule : AbpModule
+namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class MyProjectNameMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
+            {
                 /* Add custom repositories here. Example:
                  * options.AddRepository<Question, MongoQuestionRepository>();
                  */
-        });
+            });
+        }
     }
 }

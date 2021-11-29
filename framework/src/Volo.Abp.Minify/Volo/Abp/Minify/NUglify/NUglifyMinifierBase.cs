@@ -4,51 +4,52 @@ using System.Linq;
 using NUglify;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Minify.NUglify;
-
-public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
+namespace Volo.Abp.Minify.NUglify
 {
-    private static void CheckErrors(UglifyResult result, string originalFileName)
+    public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
     {
-        if (result.HasErrors)
+        private static void CheckErrors(UglifyResult result, string originalFileName)
         {
-            var errorMessage = "There are some errors on uglifying the given source code!";
-
-            if (originalFileName != null)
+            if (result.HasErrors)
             {
-                errorMessage += " Original file: " + originalFileName;
+                var errorMessage = "There are some errors on uglifying the given source code!";
+
+                if (originalFileName != null)
+                {
+                    errorMessage += " Original file: " + originalFileName;
+                }
+
+                throw new NUglifyException(
+                    $"{errorMessage}{Environment.NewLine}{result.Errors.Select(err => err.ToString()).JoinAsString(Environment.NewLine)}",
+                    result.Errors
+                );
             }
-
-            throw new NUglifyException(
-                $"{errorMessage}{Environment.NewLine}{result.Errors.Select(err => err.ToString()).JoinAsString(Environment.NewLine)}",
-                result.Errors
-            );
         }
-    }
 
-    public string Minify(
-        string source,
-        string fileName = null,
-        string originalFileName = null)
-    {
-        try
+        public string Minify(
+            string source,
+            string fileName = null,
+            string originalFileName = null)
         {
-            var result = UglifySource(source, fileName);
-            CheckErrors(result, originalFileName);
-            return result.Code;
-        }
-        catch (Exception e)
-        {
-            var errorMessage = "There is an error in uglifying the given source code!";
-
-            if (originalFileName != null)
+            try
             {
-                errorMessage += " Original file: " + originalFileName;
+                var result = UglifySource(source, fileName);
+                CheckErrors(result, originalFileName);
+                return result.Code;
             }
+            catch (Exception e)
+            {
+                var errorMessage = "There is an error in uglifying the given source code!";
 
-            throw new NUglifyException($"{errorMessage}{Environment.NewLine}{e.Message}", e);
+                if (originalFileName != null)
+                {
+                    errorMessage += " Original file: " + originalFileName;
+                }
+
+                throw new NUglifyException($"{errorMessage}{Environment.NewLine}{e.Message}", e);
+            }
         }
-    }
 
-    protected abstract UglifyResult UglifySource(string source, string fileName);
+        protected abstract UglifyResult UglifySource(string source, string fileName);
+    }
 }

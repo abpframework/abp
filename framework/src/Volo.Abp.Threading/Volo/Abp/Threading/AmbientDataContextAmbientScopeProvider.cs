@@ -5,80 +5,81 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Volo.Abp.Threading;
-
-public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T>
+namespace Volo.Abp.Threading
 {
-    public ILogger<AmbientDataContextAmbientScopeProvider<T>> Logger { get; set; }
-
-    private static readonly ConcurrentDictionary<string, ScopeItem> ScopeDictionary = new ConcurrentDictionary<string, ScopeItem>();
-
-    private readonly IAmbientDataContext _dataContext;
-
-    public AmbientDataContextAmbientScopeProvider([NotNull] IAmbientDataContext dataContext)
+    public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T>
     {
-        Check.NotNull(dataContext, nameof(dataContext));
+        public ILogger<AmbientDataContextAmbientScopeProvider<T>> Logger { get; set; }
 
-        _dataContext = dataContext;
+        private static readonly ConcurrentDictionary<string, ScopeItem> ScopeDictionary = new ConcurrentDictionary<string, ScopeItem>();
 
-        Logger = NullLogger<AmbientDataContextAmbientScopeProvider<T>>.Instance;
-    }
+        private readonly IAmbientDataContext _dataContext;
 
-    public T GetValue(string contextKey)
-    {
-        var item = GetCurrentItem(contextKey);
-        if (item == null)
+        public AmbientDataContextAmbientScopeProvider([NotNull] IAmbientDataContext dataContext)
         {
-            return default;
+            Check.NotNull(dataContext, nameof(dataContext));
+
+            _dataContext = dataContext;
+
+            Logger = NullLogger<AmbientDataContextAmbientScopeProvider<T>>.Instance;
         }
 
-        return item.Value;
-    }
-
-    public IDisposable BeginScope(string contextKey, T value)
-    {
-        var item = new ScopeItem(value, GetCurrentItem(contextKey));
-
-        if (!ScopeDictionary.TryAdd(item.Id, item))
+        public T GetValue(string contextKey)
         {
-            throw new AbpException("Can not add item! ScopeDictionary.TryAdd returns false!");
-        }
-
-        _dataContext.SetData(contextKey, item.Id);
-
-        return new DisposeAction(() =>
-        {
-            ScopeDictionary.TryRemove(item.Id, out item);
-
-            if (item.Outer == null)
+            var item = GetCurrentItem(contextKey);
+            if (item == null)
             {
-                _dataContext.SetData(contextKey, null);
-                return;
+                return default;
             }
 
-            _dataContext.SetData(contextKey, item.Outer.Id);
-        });
-    }
+            return item.Value;
+        }
 
-    private ScopeItem GetCurrentItem(string contextKey)
-    {
-        return _dataContext.GetData(contextKey) is string objKey ? ScopeDictionary.GetOrDefault(objKey) : null;
-    }
-
-    private class ScopeItem
-    {
-        public string Id { get; }
-
-        public ScopeItem Outer { get; }
-
-        public T Value { get; }
-
-        public ScopeItem(T value, ScopeItem outer = null)
+        public IDisposable BeginScope(string contextKey, T value)
         {
-            Id = Guid.NewGuid().ToString();
+            var item = new ScopeItem(value, GetCurrentItem(contextKey));
 
-            Value = value;
-            Outer = outer;
+            if (!ScopeDictionary.TryAdd(item.Id, item))
+            {
+                throw new AbpException("Can not add item! ScopeDictionary.TryAdd returns false!");
+            }
+
+            _dataContext.SetData(contextKey, item.Id);
+
+            return new DisposeAction(() =>
+            {
+                ScopeDictionary.TryRemove(item.Id, out item);
+
+                if (item.Outer == null)
+                {
+                    _dataContext.SetData(contextKey, null);
+                    return;
+                }
+
+                _dataContext.SetData(contextKey, item.Outer.Id);
+            });
+        }
+
+        private ScopeItem GetCurrentItem(string contextKey)
+        {
+            return _dataContext.GetData(contextKey) is string objKey ? ScopeDictionary.GetOrDefault(objKey) : null;
+        }
+
+        private class ScopeItem
+        {
+            public string Id { get; }
+
+            public ScopeItem Outer { get; }
+
+            public T Value { get; }
+
+            public ScopeItem(T value, ScopeItem outer = null)
+            {
+                Id = Guid.NewGuid().ToString();
+
+                Value = value;
+                Outer = outer;
+            }
         }
     }
 }

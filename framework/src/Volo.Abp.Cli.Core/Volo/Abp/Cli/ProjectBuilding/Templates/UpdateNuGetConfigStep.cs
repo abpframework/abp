@@ -4,34 +4,35 @@ using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates;
-
-public class UpdateNuGetConfigStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
-    private readonly string _nugetConfigFilePath;
-
-    public UpdateNuGetConfigStep(string nugetConfigFilePath)
+    public class UpdateNuGetConfigStep : ProjectBuildPipelineStep
     {
-        _nugetConfigFilePath = nugetConfigFilePath;
-    }
+        private readonly string _nugetConfigFilePath;
 
-    public override void Execute(ProjectBuildContext context)
-    {
-        var file = context.Files.FirstOrDefault(f => f.Name == _nugetConfigFilePath);
-        if (file == null)
+        public UpdateNuGetConfigStep(string nugetConfigFilePath)
         {
-            return;
+            _nugetConfigFilePath = nugetConfigFilePath;
         }
 
-        var apiKey = context.BuildArgs.ExtraProperties.GetOrDefault("api-key");
-        if (apiKey.IsNullOrEmpty())
+        public override void Execute(ProjectBuildContext context)
         {
-            return;
+            var file = context.Files.FirstOrDefault(f => f.Name == _nugetConfigFilePath);
+            if (file == null)
+            {
+                return;
+            }
+
+            var apiKey = context.BuildArgs.ExtraProperties.GetOrDefault("api-key");
+            if (apiKey.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            const string placeHolder = "<!-- {ABP_COMMERCIAL_NUGET_SOURCE} -->";
+            var nugetSourceTag = $"<add key=\"ABP Commercial NuGet Source\" value=\"https://nuget.abp.io/{apiKey}/v3/index.json\" />";
+
+            file.ReplaceText(placeHolder, nugetSourceTag);
         }
-
-        const string placeHolder = "<!-- {ABP_COMMERCIAL_NUGET_SOURCE} -->";
-        var nugetSourceTag = $"<add key=\"ABP Commercial NuGet Source\" value=\"https://nuget.abp.io/{apiKey}/v3/index.json\" />";
-
-        file.ReplaceText(placeHolder, nugetSourceTag);
     }
 }

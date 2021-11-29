@@ -4,34 +4,35 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.AspNetCore.SignalR.Authentication;
-
-public class AbpAuthenticationHubFilter : IHubFilter
+namespace Volo.Abp.AspNetCore.SignalR.Authentication
 {
-    public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+    public class AbpAuthenticationHubFilter : IHubFilter
     {
-        var currentPrincipalAccessor = invocationContext.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        using (currentPrincipalAccessor.Change(invocationContext.Context.User))
+        public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
         {
-            return await next(invocationContext);
+            var currentPrincipalAccessor = invocationContext.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
+            using (currentPrincipalAccessor.Change(invocationContext.Context.User))
+            {
+                return await next(invocationContext);
+            }
         }
-    }
 
-    public virtual async Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
-    {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        using (currentPrincipalAccessor.Change(context.Context.User))
+        public virtual async Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
         {
-            await next(context);
+            var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
+            using (currentPrincipalAccessor.Change(context.Context.User))
+            {
+                await next(context);
+            }
         }
-    }
 
-    public virtual async Task OnDisconnectedAsync(HubLifetimeContext context, Exception exception, Func<HubLifetimeContext, Exception, Task> next)
-    {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        using (currentPrincipalAccessor.Change(context.Context.User))
+        public virtual async Task OnDisconnectedAsync(HubLifetimeContext context, Exception exception, Func<HubLifetimeContext, Exception, Task> next)
         {
-            await next(context, exception);
+            var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
+            using (currentPrincipalAccessor.Change(context.Context.User))
+            {
+                await next(context, exception);
+            }
         }
     }
 }

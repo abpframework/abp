@@ -4,52 +4,53 @@ using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
+namespace Volo.Abp.EntityFrameworkCore
 {
-    public DbSet<Person> People { get; set; }
-
-    public DbSet<City> Cities { get; set; }
-
-    public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
-
-    public DbSet<BookInSecondDbContext> Books { get; set; }
-
-    public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
-
-    public DbSet<Author> Author { get; set; }
-
-    public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
-        : base(options)
+    public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
     {
+        public DbSet<Person> People { get; set; }
 
-    }
+        public DbSet<City> Cities { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Owned<District>();
+        public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
-        base.OnModelCreating(modelBuilder);
+        public DbSet<BookInSecondDbContext> Books { get; set; }
 
-        modelBuilder.Entity<Phone>(b =>
+        public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
+
+        public DbSet<Author> Author { get; set; }
+
+        public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
+            : base(options)
         {
-            b.HasKey(p => new { p.PersonId, p.Number });
-        });
 
+        }
 
-        modelBuilder.Entity<Person>(b =>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
-        });
+            modelBuilder.Owned<District>();
 
-        modelBuilder.Entity<City>(b =>
-        {
-            b.OwnsMany(c => c.Districts, d =>
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Phone>(b =>
             {
-                d.WithOwner().HasForeignKey(x => x.CityId);
-                d.HasKey(x => new { x.CityId, x.Name });
+                b.HasKey(p => new { p.PersonId, p.Number });
             });
-        });
+
+
+            modelBuilder.Entity<Person>(b =>
+            {
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<City>(b =>
+            {
+                b.OwnsMany(c => c.Districts, d =>
+                {
+                    d.WithOwner().HasForeignKey(x => x.CityId);
+                    d.HasKey(x => new { x.CityId, x.Name });
+                });
+            });
+        }
     }
 }

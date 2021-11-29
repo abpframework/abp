@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class LicenseCodeReplaceStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public override void Execute(ProjectBuildContext context)
+    public class LicenseCodeReplaceStep : ProjectBuildPipelineStep
     {
-        var licenseCode = context.BuildArgs.ExtraProperties.GetOrDefault("license-code");
-
-        var appSettingsJsonFiles = context.Files.Where(f =>
-            f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase) ||
-            f.Name.EndsWith("appsettings.secrets.json", StringComparison.OrdinalIgnoreCase));
-
-        foreach (var appSettingsJson in appSettingsJsonFiles)
+        public override void Execute(ProjectBuildContext context)
         {
-            appSettingsJson.ReplaceText(@"<LICENSE_CODE/>", licenseCode);
+            var licenseCode = context.BuildArgs.ExtraProperties.GetOrDefault("license-code");
+
+            var appSettingsJsonFiles = context.Files.Where(f =>
+                f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase) ||
+                f.Name.EndsWith("appsettings.secrets.json", StringComparison.OrdinalIgnoreCase));
+
+            foreach (var appSettingsJson in appSettingsJsonFiles)
+            {
+                appSettingsJson.ReplaceText(@"<LICENSE_CODE/>", licenseCode);
+            }
         }
     }
 }

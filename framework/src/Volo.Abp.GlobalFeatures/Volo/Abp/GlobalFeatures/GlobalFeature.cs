@@ -1,49 +1,51 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.GlobalFeatures;
-
-public abstract class GlobalFeature
+namespace Volo.Abp.GlobalFeatures
 {
-    [NotNull]
-    public GlobalModuleFeatures Module { get; }
-
-    [NotNull]
-    public GlobalFeatureManager FeatureManager { get; }
-
-    [NotNull]
-    public string FeatureName { get; }
-
-    public bool IsEnabled {
-        get => FeatureManager.IsEnabled(FeatureName);
-        set => SetEnabled(value);
-    }
-
-    protected GlobalFeature([NotNull] GlobalModuleFeatures module)
+    public abstract class GlobalFeature
     {
-        Module = Check.NotNull(module, nameof(module));
-        FeatureManager = Module.FeatureManager;
-        FeatureName = GlobalFeatureNameAttribute.GetName(GetType());
-    }
+        [NotNull]
+        public GlobalModuleFeatures Module { get; }
 
-    public virtual void Enable()
-    {
-        FeatureManager.Enable(FeatureName);
-    }
+        [NotNull]
+        public GlobalFeatureManager FeatureManager { get; }
 
-    public virtual void Disable()
-    {
-        FeatureManager.Disable(FeatureName);
-    }
+        [NotNull]
+        public string FeatureName { get; }
 
-    public void SetEnabled(bool isEnabled)
-    {
-        if (isEnabled)
+        public bool IsEnabled
         {
-            Enable();
+            get => FeatureManager.IsEnabled(FeatureName);
+            set => SetEnabled(value);
         }
-        else
+
+        protected GlobalFeature([NotNull] GlobalModuleFeatures module)
         {
-            Disable();
+            Module = Check.NotNull(module, nameof(module));
+            FeatureManager = Module.FeatureManager;
+            FeatureName = GlobalFeatureNameAttribute.GetName(GetType());
+        }
+
+        public virtual void Enable()
+        {
+            FeatureManager.Enable(FeatureName);
+        }
+
+        public virtual void Disable()
+        {
+            FeatureManager.Disable(FeatureName);
+        }
+
+        public void SetEnabled(bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                Enable();
+            }
+            else
+            {
+                Disable();
+            }
         }
     }
 }

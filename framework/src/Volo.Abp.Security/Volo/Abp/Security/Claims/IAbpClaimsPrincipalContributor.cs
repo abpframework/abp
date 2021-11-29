@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Security.Claims;
-
-public interface IAbpClaimsPrincipalContributor
+namespace Volo.Abp.Security.Claims
 {
-    Task ContributeAsync(AbpClaimsPrincipalContributorContext context);
+    public interface IAbpClaimsPrincipalContributor
+    {
+        Task ContributeAsync(AbpClaimsPrincipalContributorContext context);
+    }
 }

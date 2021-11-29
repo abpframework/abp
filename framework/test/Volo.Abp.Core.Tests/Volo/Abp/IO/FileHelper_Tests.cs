@@ -1,14 +1,15 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.IO;
-
-public class FileHelper_Tests
+namespace Volo.Abp.IO
 {
-    [Fact]
-    public void GetExtension()
+    public class FileHelper_Tests
     {
-        FileHelper.GetExtension("test").ShouldBeNull();
-        FileHelper.GetExtension("te.st").ShouldBe("st");
+        [Fact]
+        public void GetExtension()
+        {
+            FileHelper.GetExtension("test").ShouldBeNull();
+            FileHelper.GetExtension("te.st").ShouldBe("st");
+        }
     }
 }

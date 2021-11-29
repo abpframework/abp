@@ -1,20 +1,21 @@
 using System;
 
-namespace Volo.Abp.Domain.Entities.Events;
-
-[Serializable]
-public class DomainEventEntry
+namespace Volo.Abp.Domain.Entities.Events
 {
-    public object SourceEntity { get; }
-
-    public object EventData { get; }
-
-    public long EventOrder { get; }
-
-    public DomainEventEntry(object sourceEntity, object eventData, long eventOrder)
+    [Serializable]
+    public class DomainEventEntry
     {
-        SourceEntity = sourceEntity;
-        EventData = eventData;
-        EventOrder = eventOrder;
+        public object SourceEntity { get; }
+
+        public object EventData { get; }
+        
+        public long EventOrder { get; }
+
+        public DomainEventEntry(object sourceEntity, object eventData, long eventOrder)
+        {
+            SourceEntity = sourceEntity;
+            EventData = eventData;
+            EventOrder = eventOrder;
+        }
     }
 }

@@ -8,60 +8,61 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
-namespace Volo.Abp.MongoDB.Repositories;
-
-[Collection(MongoTestCollection.Name)]
-public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
+namespace Volo.Abp.MongoDB.Repositories
 {
-    [Fact]
-    public async Task ToMongoQueryable_Test()
+    [Collection(MongoTestCollection.Name)]
+    public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
-        (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).As<IMongoQueryable<Person>>().ShouldNotBeNull();
-        ((IMongoQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
-    }
-
-    [Fact]
-    public async Task Linq_Queries()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        [Fact]
+        public async Task ToMongoQueryable_Test()
         {
-            (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
-            (await PersonRepository.GetQueryableAsync()).Count().ShouldBeGreaterThan(0);
-            return Task.CompletedTask;
-        });
-    }
+            (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
+            (await PersonRepository.GetQueryableAsync()).As<IMongoQueryable<Person>>().ShouldNotBeNull();
+            ((IMongoQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
+            (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
+        }
 
-    [Fact]
-    public async Task UpdateAsync()
-    {
-        var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+        [Fact]
+        public async Task Linq_Queries()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
+                (await PersonRepository.GetQueryableAsync()).Count().ShouldBeGreaterThan(0);
+                return Task.CompletedTask;
+            });
+        }
 
-        person.ChangeName("Douglas-Updated");
-        person.Phones.Add(new Phone(person.Id, "6667778899", PhoneType.Office));
+        [Fact]
+        public async Task UpdateAsync()
+        {
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
 
-        await PersonRepository.UpdateAsync(person);
+            person.ChangeName("Douglas-Updated");
+            person.Phones.Add(new Phone(person.Id, "6667778899", PhoneType.Office));
 
-        person = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
-        person.ShouldNotBeNull();
-        person.Name.ShouldBe("Douglas-Updated");
-        person.Phones.Count.ShouldBe(3);
-        person.Phones.Any(p => p.PersonId == person.Id && p.Number == "6667778899" && p.Type == PhoneType.Office).ShouldBeTrue();
-    }
+            await PersonRepository.UpdateAsync(person);
 
-    [Fact]
-    public override async Task InsertAsync()
-    {
-        var person = new Person(Guid.NewGuid(), "New Person", 35);
-        person.Phones.Add(new Phone(person.Id, "1234567890"));
+            person = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            person.ShouldNotBeNull();
+            person.Name.ShouldBe("Douglas-Updated");
+            person.Phones.Count.ShouldBe(3);
+            person.Phones.Any(p => p.PersonId == person.Id && p.Number == "6667778899" && p.Type == PhoneType.Office).ShouldBeTrue();
+        }
 
-        await PersonRepository.InsertAsync(person);
+        [Fact]
+        public override async Task InsertAsync()
+        {
+            var person = new Person(Guid.NewGuid(), "New Person", 35);
+            person.Phones.Add(new Phone(person.Id, "1234567890"));
 
-        person = await PersonRepository.FindAsync(person.Id);
-        person.ShouldNotBeNull();
-        person.Name.ShouldBe("New Person");
-        person.Phones.Count.ShouldBe(1);
-        person.Phones.Any(p => p.PersonId == person.Id && p.Number == "1234567890").ShouldBeTrue();
+            await PersonRepository.InsertAsync(person);
+
+            person = await PersonRepository.FindAsync(person.Id);
+            person.ShouldNotBeNull();
+            person.Name.ShouldBe("New Person");
+            person.Phones.Count.ShouldBe(1);
+            person.Phones.Any(p => p.PersonId == person.Id && p.Number == "1234567890").ShouldBeTrue();
+        }
     }
 }

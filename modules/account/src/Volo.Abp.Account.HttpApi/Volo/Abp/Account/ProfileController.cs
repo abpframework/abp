@@ -2,37 +2,38 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.Account;
-
-[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
-[Area(AccountRemoteServiceConsts.ModuleName)]
-[ControllerName("Profile")]
-[Route("/api/account/my-profile")]
-public class ProfileController : AbpControllerBase, IProfileAppService
+namespace Volo.Abp.Account
 {
-    protected IProfileAppService ProfileAppService { get; }
-
-    public ProfileController(IProfileAppService profileAppService)
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+    [Area(AccountRemoteServiceConsts.ModuleName)]
+    [ControllerName("Profile")]
+    [Route("/api/account/my-profile")]
+    public class ProfileController : AbpControllerBase, IProfileAppService
     {
-        ProfileAppService = profileAppService;
-    }
+        protected IProfileAppService ProfileAppService { get; }
 
-    [HttpGet]
-    public virtual Task<ProfileDto> GetAsync()
-    {
-        return ProfileAppService.GetAsync();
-    }
+        public ProfileController(IProfileAppService profileAppService)
+        {
+            ProfileAppService = profileAppService;
+        }
 
-    [HttpPut]
-    public virtual Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
-    {
-        return ProfileAppService.UpdateAsync(input);
-    }
+        [HttpGet]
+        public virtual Task<ProfileDto> GetAsync()
+        {
+            return ProfileAppService.GetAsync();
+        }
 
-    [HttpPost]
-    [Route("change-password")]
-    public virtual Task ChangePasswordAsync(ChangePasswordInput input)
-    {
-        return ProfileAppService.ChangePasswordAsync(input);
+        [HttpPut]
+        public virtual Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
+        {
+            return ProfileAppService.UpdateAsync(input);
+        }
+
+        [HttpPost]
+        [Route("change-password")]
+        public virtual Task ChangePasswordAsync(ChangePasswordInput input)
+        {
+            return ProfileAppService.ChangePasswordAsync(input);
+        }
     }
 }

@@ -1,16 +1,17 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.ObjectMapping;
-
-[DependsOn(
-    typeof(AbpObjectMappingModule),
-    typeof(AbpTestBaseModule)
-    )]
-public class AbpObjectMappingTestModule : AbpModule
+namespace Volo.Abp.ObjectMapping
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpObjectMappingModule),
+        typeof(AbpTestBaseModule)
+        )]
+    public class AbpObjectMappingTestModule : AbpModule
     {
-        context.Services.AddTest1AutoObjectMappingProvider<MappingContext1>();
-        context.Services.AddTest2AutoObjectMappingProvider<MappingContext2>();
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTest1AutoObjectMappingProvider<MappingContext1>();
+            context.Services.AddTest2AutoObjectMappingProvider<MappingContext2>();
+        }
     }
 }

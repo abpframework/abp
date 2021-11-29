@@ -1,13 +1,14 @@
 ﻿using System;
 using Medallion.Threading;
 
-namespace Volo.Abp.DistributedLocking;
-
-public static class AbpDistributedLockHandleExtensions
+namespace Volo.Abp.DistributedLocking
 {
-    public static IDistributedSynchronizationHandle ToDistributedSynchronizationHandle(
-        this IAbpDistributedLockHandle handle)
+    public static class AbpDistributedLockHandleExtensions
     {
-        return handle.As<MedallionAbpDistributedLockHandle>().Handle;
+        public static IDistributedSynchronizationHandle ToDistributedSynchronizationHandle(
+            this IAbpDistributedLockHandle handle)
+        {
+            return handle.As<MedallionAbpDistributedLockHandle>().Handle;
+        }
     }
 }

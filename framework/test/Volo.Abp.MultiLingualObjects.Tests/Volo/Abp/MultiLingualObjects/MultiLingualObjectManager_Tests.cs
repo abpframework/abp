@@ -8,57 +8,58 @@ using Volo.Abp.MultiLingualObjects.TestObjects;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.MultiLingualObjects;
-
-public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingualObjectsTestModule>
+namespace Volo.Abp.MultiLingualObjects
 {
-    private readonly IMultiLingualObjectManager _multiLingualObjectManager;
-    private readonly MultiLingualBook _book;
-
-    public MultiLingualObjectManager_Tests()
+    public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingualObjectsTestModule>
     {
-        _multiLingualObjectManager = ServiceProvider.GetRequiredService<IMultiLingualObjectManager>();
+        private readonly IMultiLingualObjectManager _multiLingualObjectManager;
+        private readonly MultiLingualBook _book;
 
-        var id = Guid.NewGuid();
-        _book = new MultiLingualBook(id, 100)
+        public MultiLingualObjectManager_Tests()
         {
-            Translations = new List<MultiLingualBookTranslation>()
-        };
+            _multiLingualObjectManager = ServiceProvider.GetRequiredService<IMultiLingualObjectManager>();
 
-        var en = new MultiLingualBookTranslation
-        {
-            Language = "en",
-            Name = "C# in Depth",
-        };
-        var zh = new MultiLingualBookTranslation
-        {
-            Language = "zh-Hans",
-            Name = "深入理解C#",
-        };
+            var id = Guid.NewGuid();
+            _book = new MultiLingualBook(id, 100)
+            {
+                Translations = new List<MultiLingualBookTranslation>()
+            };
 
-        _book.Translations.Add(en);
-        _book.Translations.Add(zh);
-    }
+            var en = new MultiLingualBookTranslation
+            {
+                Language = "en",
+                Name = "C# in Depth",
+            };
+            var zh = new MultiLingualBookTranslation
+            {
+                Language = "zh-Hans",
+                Name = "深入理解C#",
+            };
 
-    [Fact]
-    public async Task GetTranslationAsync()
-    {
-        using (CultureHelper.Use("en-us"))
-        {
-            var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
-
-            translation.Name.ShouldBe("C# in Depth");
+            _book.Translations.Add(en);
+            _book.Translations.Add(zh);
         }
-    }
 
-    [Fact]
-    public async Task Should_Get_Specified_Language()
-    {
-        using (CultureHelper.Use("zh-Hans"))
+        [Fact]
+        public async Task GetTranslationAsync()
         {
-            var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book, culture: "en");
+            using (CultureHelper.Use("en-us"))
+            {
+                var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
 
-            translation.Name.ShouldBe("C# in Depth");
+                translation.Name.ShouldBe("C# in Depth");
+            }
+        }
+
+        [Fact]
+        public async Task Should_Get_Specified_Language()
+        {
+            using (CultureHelper.Use("zh-Hans"))
+            {
+                var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book, culture: "en");
+
+                translation.Name.ShouldBe("C# in Depth");
+            }
         }
     }
 }

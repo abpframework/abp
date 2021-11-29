@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb;
-
-public class AbpBreadcrumbTagHelper : AbpTagHelper<AbpBreadcrumbTagHelper, AbpBreadcrumbTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 {
-    public AbpBreadcrumbTagHelper(AbpBreadcrumbTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpBreadcrumbTagHelper : AbpTagHelper<AbpBreadcrumbTagHelper, AbpBreadcrumbTagHelperService>
     {
+        public AbpBreadcrumbTagHelper(AbpBreadcrumbTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
 
+        }
     }
 }

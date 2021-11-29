@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
-
-public class AbpToolbarOptions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
-    [NotNull]
-    public List<IToolbarContributor> Contributors { get; }
-
-    public AbpToolbarOptions()
+    public class AbpToolbarOptions
     {
-        Contributors = new List<IToolbarContributor>();
+        [NotNull]
+        public List<IToolbarContributor> Contributors { get; }
+
+        public AbpToolbarOptions()
+        {
+            Contributors = new List<IToolbarContributor>();
+        }
     }
 }

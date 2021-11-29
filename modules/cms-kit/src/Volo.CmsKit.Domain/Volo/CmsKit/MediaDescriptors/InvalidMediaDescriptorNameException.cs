@@ -3,20 +3,21 @@ using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Volo.Abp;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-[Serializable]
-public class InvalidMediaDescriptorNameException : BusinessException
+namespace Volo.CmsKit.MediaDescriptors
 {
-    public InvalidMediaDescriptorNameException([NotNull] string name)
+    [Serializable]
+    public class InvalidMediaDescriptorNameException : BusinessException
     {
-        Code = CmsKitErrorCodes.MediaDescriptors.InvalidName;
-        WithData(nameof(MediaDescriptor.Name), name);
-    }
+        public InvalidMediaDescriptorNameException([NotNull] string name)
+        {
+            Code = CmsKitErrorCodes.MediaDescriptors.InvalidName;
+            WithData(nameof(MediaDescriptor.Name), name);
+        }
+        
+        public InvalidMediaDescriptorNameException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context)
+        {
 
-    public InvalidMediaDescriptorNameException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    {
-
+        }
     }
 }

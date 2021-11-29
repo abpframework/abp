@@ -1,18 +1,19 @@
 ﻿using System;
 using AutoMapper;
 
-namespace Volo.Abp.AutoMapper;
-
-public class AbpAutoMapperConfigurationContext : IAbpAutoMapperConfigurationContext
+namespace Volo.Abp.AutoMapper
 {
-    public IMapperConfigurationExpression MapperConfiguration { get; }
-    public IServiceProvider ServiceProvider { get; }
-
-    public AbpAutoMapperConfigurationContext(
-        IMapperConfigurationExpression mapperConfigurationExpression,
-        IServiceProvider serviceProvider)
+    public class AbpAutoMapperConfigurationContext : IAbpAutoMapperConfigurationContext
     {
-        MapperConfiguration = mapperConfigurationExpression;
-        ServiceProvider = serviceProvider;
+        public IMapperConfigurationExpression MapperConfiguration { get; }
+        public IServiceProvider ServiceProvider { get; }
+
+        public AbpAutoMapperConfigurationContext(
+            IMapperConfigurationExpression mapperConfigurationExpression, 
+            IServiceProvider serviceProvider)
+        {
+            MapperConfiguration = mapperConfigurationExpression;
+            ServiceProvider = serviceProvider;
+        }
     }
 }

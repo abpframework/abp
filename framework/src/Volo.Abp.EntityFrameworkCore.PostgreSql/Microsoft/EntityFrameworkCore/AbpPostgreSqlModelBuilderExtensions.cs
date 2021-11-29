@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.EntityFrameworkCore;
-
-public static class AbpPostgreSqlModelBuilderExtensions
+namespace Microsoft.EntityFrameworkCore
 {
-    public static void UsePostgreSql(
-        this ModelBuilder modelBuilder)
+    public static class AbpPostgreSqlModelBuilderExtensions
     {
-        modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.PostgreSql);
+        public static void UsePostgreSql(
+            this ModelBuilder modelBuilder)
+        {
+            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.PostgreSql);
+        }
     }
 }

@@ -6,31 +6,32 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Account;
-
-[DependsOn(
-    typeof(AbpIdentityApplicationContractsModule)
-)]
-public class AbpAccountApplicationContractsModule : AbpModule
+namespace Volo.Abp.Account
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityApplicationContractsModule)
+    )]
+    public class AbpAccountApplicationContractsModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAccountApplicationContractsModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAccountApplicationContractsModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AccountResource>("en")
-                .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Volo/Abp/Account/Localization/Resources");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AccountResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Volo/Abp/Account/Localization/Resources");
+            });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
-        });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
+            });
+        }
     }
 }

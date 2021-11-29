@@ -6,47 +6,48 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
-
-public class ToolbarConfigurationContext : IToolbarConfigurationContext
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars
 {
-    public IServiceProvider ServiceProvider { get; }
-
-    private readonly IAbpLazyServiceProvider _lazyServiceProvider;
-
-    public IAuthorizationService AuthorizationService => _lazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
-
-    public IStringLocalizerFactory StringLocalizerFactory => _lazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
-
-    public Toolbar Toolbar { get; }
-
-    public ToolbarConfigurationContext(Toolbar toolbar, IServiceProvider serviceProvider)
+    public class ToolbarConfigurationContext : IToolbarConfigurationContext
     {
-        Toolbar = toolbar;
-        ServiceProvider = serviceProvider;
-        _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
-    }
+        public IServiceProvider ServiceProvider { get; }
 
-    public Task<bool> IsGrantedAsync(string policyName)
-    {
-        return AuthorizationService.IsGrantedAsync(policyName);
-    }
+        private readonly IAbpLazyServiceProvider _lazyServiceProvider;
 
-    [CanBeNull]
-    public IStringLocalizer GetDefaultLocalizer()
-    {
-        return StringLocalizerFactory.CreateDefaultOrNull();
-    }
+        public IAuthorizationService AuthorizationService => _lazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
 
-    [NotNull]
-    public IStringLocalizer GetLocalizer<T>()
-    {
-        return StringLocalizerFactory.Create<T>();
-    }
+        public IStringLocalizerFactory StringLocalizerFactory => _lazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
 
-    [NotNull]
-    public IStringLocalizer GetLocalizer(Type resourceType)
-    {
-        return StringLocalizerFactory.Create(resourceType);
+        public Toolbar Toolbar { get; }
+
+        public ToolbarConfigurationContext(Toolbar toolbar, IServiceProvider serviceProvider)
+        {
+            Toolbar = toolbar;
+            ServiceProvider = serviceProvider;
+            _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+        }
+
+        public Task<bool> IsGrantedAsync(string policyName)
+        {
+            return AuthorizationService.IsGrantedAsync(policyName);
+        }
+
+        [CanBeNull]
+        public IStringLocalizer GetDefaultLocalizer()
+        {
+            return StringLocalizerFactory.CreateDefaultOrNull();
+        }
+
+        [NotNull]
+        public IStringLocalizer GetLocalizer<T>()
+        {
+            return StringLocalizerFactory.Create<T>();
+        }
+
+        [NotNull]
+        public IStringLocalizer GetLocalizer(Type resourceType)
+        {
+            return StringLocalizerFactory.Create(resourceType);
+        }
     }
 }

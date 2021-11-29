@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.App;
-
-public class SimpleController : AbpController
+namespace Volo.Abp.AspNetCore.App
 {
-    public ActionResult Index()
+    public class SimpleController : AbpController
     {
-        return Content("Index-Result");
-    }
+        public ActionResult Index()
+        {
+            return Content("Index-Result");
+        }
 
-    public ActionResult About()
-    {
-        // ReSharper disable once Mvc.ViewNotResolved
-        return View();
-    }
+        public ActionResult About()
+        {
+            // ReSharper disable once Mvc.ViewNotResolved
+            return View();
+        }
 
-    public ActionResult ExceptionOnRazor()
-    {
-        // ReSharper disable once Mvc.ViewNotResolved
-        return View();
+        public ActionResult ExceptionOnRazor()
+        {
+            // ReSharper disable once Mvc.ViewNotResolved
+            return View();
+        }
     }
 }

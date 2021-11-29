@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
-
-public class PageLayout : IPageLayout, IScopedDependency
+namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
 {
-    public ContentLayout Content { get; }
-
-    public PageLayout()
+    public class PageLayout : IPageLayout, IScopedDependency
     {
-        Content = new ContentLayout();
+        public ContentLayout Content { get; }
+
+        public PageLayout()
+        {
+            Content = new ContentLayout();
+        }
     }
 }

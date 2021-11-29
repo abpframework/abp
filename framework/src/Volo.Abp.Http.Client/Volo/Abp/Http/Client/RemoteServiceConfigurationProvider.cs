@@ -2,24 +2,25 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.Client;
-
-public class RemoteServiceConfigurationProvider : IRemoteServiceConfigurationProvider, IScopedDependency
+namespace Volo.Abp.Http.Client
 {
-    protected AbpRemoteServiceOptions Options { get; }
-
-    public RemoteServiceConfigurationProvider(IOptionsMonitor<AbpRemoteServiceOptions> options)
+    public class RemoteServiceConfigurationProvider : IRemoteServiceConfigurationProvider, IScopedDependency
     {
-        Options = options.CurrentValue;
-    }
+        protected AbpRemoteServiceOptions Options { get; }
 
-    public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name)
-    {
-        return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefault(name));
-    }
+        public RemoteServiceConfigurationProvider(IOptionsMonitor<AbpRemoteServiceOptions> options)
+        {
+            Options = options.CurrentValue;
+        }
 
-    public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name)
-    {
-        return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefaultOrNull(name));
+        public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name)
+        {
+            return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefault(name));
+        }
+
+        public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name)
+        {
+            return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefaultOrNull(name));
+        }
     }
 }

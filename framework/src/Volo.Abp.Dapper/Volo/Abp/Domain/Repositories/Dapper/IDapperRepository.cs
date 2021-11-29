@@ -2,17 +2,18 @@
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Domain.Repositories.Dapper;
-
-public interface IDapperRepository
+namespace Volo.Abp.Domain.Repositories.Dapper
 {
-    [Obsolete("Use GetDbConnectionAsync method.")]
-    IDbConnection DbConnection { get; }
+    public interface IDapperRepository
+    {
+        [Obsolete("Use GetDbConnectionAsync method.")]
+        IDbConnection DbConnection { get; }
 
-    Task<IDbConnection> GetDbConnectionAsync();
+        Task<IDbConnection> GetDbConnectionAsync();
 
-    [Obsolete("Use GetDbTransactionAsync method.")]
-    IDbTransaction DbTransaction { get; }
+        [Obsolete("Use GetDbTransactionAsync method.")]
+        IDbTransaction DbTransaction { get; }
 
-    Task<IDbTransaction> GetDbTransactionAsync();
+        Task<IDbTransaction> GetDbTransactionAsync();
+    }
 }

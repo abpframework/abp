@@ -3,26 +3,27 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public class AzureServiceBusMessageConsumerFactory : IAzureServiceBusMessageConsumerFactory, ISingletonDependency, IDisposable
+namespace Volo.Abp.AzureServiceBus
 {
-    protected IServiceScope ServiceScope { get; }
-
-    public AzureServiceBusMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
+    public class AzureServiceBusMessageConsumerFactory : IAzureServiceBusMessageConsumerFactory, ISingletonDependency, IDisposable
     {
-        ServiceScope = serviceScopeFactory.CreateScope();
-    }
+        protected IServiceScope ServiceScope { get; }
 
-    public IAzureServiceBusMessageConsumer CreateMessageConsumer(string topicName, string subscriptionName, string connectionName)
-    {
-        var processor = ServiceScope.ServiceProvider.GetRequiredService<AzureServiceBusMessageConsumer>();
-        processor.Initialize(topicName, subscriptionName, connectionName);
-        return processor;
-    }
+        public AzureServiceBusMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
+        {
+            ServiceScope = serviceScopeFactory.CreateScope();
+        }
 
-    public void Dispose()
-    {
-        ServiceScope?.Dispose();
+        public IAzureServiceBusMessageConsumer CreateMessageConsumer(string topicName, string subscriptionName, string connectionName)
+        {
+            var processor = ServiceScope.ServiceProvider.GetRequiredService<AzureServiceBusMessageConsumer>();
+            processor.Initialize(topicName, subscriptionName, connectionName);
+            return processor;
+        }
+
+        public void Dispose()
+        {
+            ServiceScope?.Dispose();
+        }
     }
 }

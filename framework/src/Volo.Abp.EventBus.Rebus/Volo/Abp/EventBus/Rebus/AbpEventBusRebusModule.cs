@@ -3,37 +3,38 @@ using Rebus.Handlers;
 using Rebus.ServiceProvider;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EventBus.Rebus;
-
-[DependsOn(
-    typeof(AbpEventBusModule))]
-public class AbpEventBusRebusModule : AbpModule
+namespace Volo.Abp.EventBus.Rebus
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpEventBusModule))]
+    public class AbpEventBusRebusModule : AbpModule
     {
-        var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>(); ;
-
-        context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
-
-        Configure<AbpRebusEventBusOptions>(rebusOptions =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.ExecutePreConfiguredActions(rebusOptions);
-        });
+            var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>();;
 
-        context.Services.AddRebus(configure =>
+            context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
+
+            Configure<AbpRebusEventBusOptions>(rebusOptions =>
+            {
+                context.Services.ExecutePreConfiguredActions(rebusOptions);
+            });
+
+            context.Services.AddRebus(configure =>
+            {
+                options.Configurer?.Invoke(configure);
+                return configure;
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.Configurer?.Invoke(configure);
-            return configure;
-        });
-    }
+            context.ServiceProvider.UseRebus();
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        context.ServiceProvider.UseRebus();
-
-        context
-            .ServiceProvider
-            .GetRequiredService<RebusDistributedEventBus>()
-            .Initialize();
+            context
+                .ServiceProvider
+                .GetRequiredService<RebusDistributedEventBus>()
+                .Initialize();
+        }
     }
 }

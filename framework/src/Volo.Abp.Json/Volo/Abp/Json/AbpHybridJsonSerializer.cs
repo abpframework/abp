@@ -5,62 +5,63 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Json;
-
-public class AbpHybridJsonSerializer : IJsonSerializer, ITransientDependency
+namespace Volo.Abp.Json
 {
-    protected AbpJsonOptions Options { get; }
-
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-    public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceScopeFactory serviceScopeFactory)
+    public class AbpHybridJsonSerializer : IJsonSerializer, ITransientDependency
     {
-        Options = options.Value;
-        ServiceScopeFactory = serviceScopeFactory;
-    }
+        protected AbpJsonOptions Options { get; }
 
-    public string Serialize([CanBeNull] object obj, bool camelCase = true, bool indented = false)
-    {
-        using (var scope = ServiceScopeFactory.CreateScope())
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+
+        public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceScopeFactory serviceScopeFactory)
         {
-            var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj?.GetType());
-            return serializerProvider.Serialize(obj, camelCase, indented);
+            Options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
         }
-    }
 
-    public T Deserialize<T>([NotNull] string jsonString, bool camelCase = true)
-    {
-        Check.NotNull(jsonString, nameof(jsonString));
-
-        using (var scope = ServiceScopeFactory.CreateScope())
+        public string Serialize([CanBeNull]object obj, bool camelCase = true, bool indented = false)
         {
-            var serializerProvider = GetSerializerProvider(scope.ServiceProvider, typeof(T));
-            return serializerProvider.Deserialize<T>(jsonString, camelCase);
-        }
-    }
-
-    public object Deserialize(Type type, [NotNull] string jsonString, bool camelCase = true)
-    {
-        Check.NotNull(jsonString, nameof(jsonString));
-
-        using (var scope = ServiceScopeFactory.CreateScope())
-        {
-            var serializerProvider = GetSerializerProvider(scope.ServiceProvider, type);
-            return serializerProvider.Deserialize(type, jsonString, camelCase);
-        }
-    }
-
-    protected virtual IJsonSerializerProvider GetSerializerProvider(IServiceProvider serviceProvider, [CanBeNull] Type type)
-    {
-        foreach (var providerType in Options.Providers.Reverse())
-        {
-            var provider = serviceProvider.GetRequiredService(providerType) as IJsonSerializerProvider;
-            if (provider.CanHandle(type))
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                return provider;
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj?.GetType());
+                return serializerProvider.Serialize(obj, camelCase, indented);
             }
         }
 
-        throw new AbpException($"There is no IJsonSerializerProvider that can handle '{type.GetFullNameWithAssemblyName()}'!");
+        public T Deserialize<T>([NotNull]string jsonString, bool camelCase = true)
+        {
+            Check.NotNull(jsonString, nameof(jsonString));
+
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, typeof(T));
+                return serializerProvider.Deserialize<T>(jsonString, camelCase);
+            }
+        }
+
+        public object Deserialize(Type type, [NotNull]string jsonString, bool camelCase = true)
+        {
+            Check.NotNull(jsonString, nameof(jsonString));
+
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, type);
+                return serializerProvider.Deserialize(type, jsonString, camelCase);
+            }
+        }
+
+        protected virtual IJsonSerializerProvider GetSerializerProvider(IServiceProvider serviceProvider, [CanBeNull]Type type)
+        {
+            foreach (var providerType in Options.Providers.Reverse())
+            {
+                var provider = serviceProvider.GetRequiredService(providerType) as IJsonSerializerProvider;
+                if (provider.CanHandle(type))
+                {
+                    return provider;
+                }
+            }
+
+            throw new AbpException($"There is no IJsonSerializerProvider that can handle '{type.GetFullNameWithAssemblyName()}'!");
+        }
     }
 }

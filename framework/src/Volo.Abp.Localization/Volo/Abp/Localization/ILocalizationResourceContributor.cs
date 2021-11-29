@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization;
-
-public interface ILocalizationResourceContributor
+namespace Volo.Abp.Localization
 {
-    void Initialize(LocalizationResourceInitializationContext context);
+    public interface ILocalizationResourceContributor
+    {
+        void Initialize(LocalizationResourceInitializationContext context);
 
-    LocalizedString GetOrNull(string cultureName, string name);
+        LocalizedString GetOrNull(string cultureName, string name);
 
-    void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary);
+        void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary);
+    }
 }

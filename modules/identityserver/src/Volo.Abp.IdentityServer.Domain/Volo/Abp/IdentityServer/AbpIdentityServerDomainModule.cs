@@ -22,128 +22,129 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Validation;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.IdentityServer;
-
-[DependsOn(
-    typeof(AbpIdentityServerDomainSharedModule),
-    typeof(AbpAutoMapperModule),
-    typeof(AbpIdentityDomainModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpCachingModule),
-    typeof(AbpValidationModule),
-    typeof(AbpBackgroundWorkersModule)
-    )]
-public class AbpIdentityServerDomainModule : AbpModule
+namespace Volo.Abp.IdentityServer
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityServerDomainSharedModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpCachingModule),
+        typeof(AbpValidationModule),
+        typeof(AbpBackgroundWorkersModule)
+        )]
+    public class AbpIdentityServerDomainModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
 
-        Configure<AbpDistributedEntityEventOptions>(options =>
-        {
-            options.EtoMappings.Add<ApiResource, ApiResourceEto>(typeof(AbpIdentityServerDomainModule));
-            options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
-            options.EtoMappings.Add<DeviceFlowCodes, DeviceFlowCodesEto>(typeof(AbpIdentityServerDomainModule));
-            options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
+            });
 
-        Configure<AbpClaimsServiceOptions>(options =>
-        {
-            options.RequestedClaims.AddRange(new[]{
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.EtoMappings.Add<ApiResource, ApiResourceEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<DeviceFlowCodes, DeviceFlowCodesEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
+            });
+
+            Configure<AbpClaimsServiceOptions>(options =>
+            {
+                options.RequestedClaims.AddRange(new []{
                     AbpClaimTypes.TenantId,
                     AbpClaimTypes.EditionId
+                });
             });
-        });
 
-        AddIdentityServer(context.Services);
-    }
-
-    private static void AddIdentityServer(IServiceCollection services)
-    {
-        var configuration = services.GetConfiguration();
-        var builderOptions = services.ExecutePreConfiguredActions<AbpIdentityServerBuilderOptions>();
-
-        var identityServerBuilder = services.AddIdentityServer(options =>
-        {
-            options.Events.RaiseErrorEvents = true;
-            options.Events.RaiseInformationEvents = true;
-            options.Events.RaiseFailureEvents = true;
-            options.Events.RaiseSuccessEvents = true;
-        });
-
-        if (builderOptions.AddDeveloperSigningCredential)
-        {
-            identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
+            AddIdentityServer(context.Services);
         }
 
-        identityServerBuilder.AddAbpIdentityServer(builderOptions);
-
-        services.ExecutePreConfiguredActions(identityServerBuilder);
-
-        if (!services.IsAdded<IPersistedGrantService>())
+        private static void AddIdentityServer(IServiceCollection services)
         {
-            services.TryAddSingleton<IPersistedGrantStore, InMemoryPersistedGrantStore>();
+            var configuration = services.GetConfiguration();
+            var builderOptions = services.ExecutePreConfiguredActions<AbpIdentityServerBuilderOptions>();
+
+            var identityServerBuilder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            });
+
+            if (builderOptions.AddDeveloperSigningCredential)
+            {
+                identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
+            }
+
+            identityServerBuilder.AddAbpIdentityServer(builderOptions);
+
+            services.ExecutePreConfiguredActions(identityServerBuilder);
+
+            if (!services.IsAdded<IPersistedGrantService>())
+            {
+                services.TryAddSingleton<IPersistedGrantStore, InMemoryPersistedGrantStore>();
+            }
+
+            if (!services.IsAdded<IDeviceFlowStore>())
+            {
+                services.TryAddSingleton<IDeviceFlowStore, InMemoryDeviceFlowStore>();
+            }
+
+            if (!services.IsAdded<IClientStore>())
+            {
+                identityServerBuilder.AddInMemoryClients(configuration.GetSection("IdentityServer:Clients"));
+            }
+
+            if (!services.IsAdded<IResourceStore>())
+            {
+                identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
+                identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
+            }
         }
 
-        if (!services.IsAdded<IDeviceFlowStore>())
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            services.TryAddSingleton<IDeviceFlowStore, InMemoryDeviceFlowStore>();
-        }
-
-        if (!services.IsAdded<IClientStore>())
-        {
-            identityServerBuilder.AddInMemoryClients(configuration.GetSection("IdentityServer:Clients"));
-        }
-
-        if (!services.IsAdded<IResourceStore>())
-        {
-            identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
-            identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
-        }
-    }
-
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        OneTimeRunner.Run(() =>
-        {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.Client,
-                typeof(Client)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
-                typeof(IdentityResource)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
-                typeof(ApiResource)
-            );
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
-        if (options.IsCleanupEnabled)
-        {
-            context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .Add(
-                    context.ServiceProvider
-                        .GetRequiredService<TokenCleanupBackgroundWorker>()
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.Client,
+                    typeof(Client)
                 );
+
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
+                    typeof(IdentityResource)
+                );
+
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
+                    typeof(ApiResource)
+                );
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
+            if (options.IsCleanupEnabled)
+            {
+                context.ServiceProvider
+                    .GetRequiredService<IBackgroundWorkerManager>()
+                    .Add(
+                        context.ServiceProvider
+                            .GetRequiredService<TokenCleanupBackgroundWorker>()
+                    );
+            }
         }
     }
 }

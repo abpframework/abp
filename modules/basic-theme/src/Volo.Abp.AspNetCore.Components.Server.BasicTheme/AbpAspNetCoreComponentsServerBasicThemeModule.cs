@@ -7,40 +7,41 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme;
-
-[DependsOn(
-    typeof(AbpAspNetCoreComponentsWebBasicThemeModule),
-    typeof(AbpAspNetCoreComponentsServerThemingModule)
-    )]
-public class AbpAspNetCoreComponentsServerBasicThemeModule : AbpModule
+namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreComponentsWebBasicThemeModule),
+        typeof(AbpAspNetCoreComponentsServerThemingModule)
+        )]
+    public class AbpAspNetCoreComponentsServerBasicThemeModule : AbpModule
     {
-        Configure<AbpToolbarOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Contributors.Add(new BasicThemeToolbarContributor());
-        });
+            Configure<AbpToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new BasicThemeToolbarContributor());
+            });
+            
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Add(BlazorBasicThemeBundles.Styles.Global, bundle =>
+                    {
+                        bundle
+                            .AddBaseBundles(BlazorStandardBundles.Styles.Global)
+                            .AddContributors(typeof(BlazorBasicThemeStyleContributor));
+                    });
 
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options
-                .StyleBundles
-                .Add(BlazorBasicThemeBundles.Styles.Global, bundle =>
-                {
-                    bundle
-                        .AddBaseBundles(BlazorStandardBundles.Styles.Global)
-                        .AddContributors(typeof(BlazorBasicThemeStyleContributor));
-                });
-
-            options
-                .ScriptBundles
-                .Add(BlazorBasicThemeBundles.Scripts.Global, bundle =>
-                {
-                    bundle
-                        .AddBaseBundles(BlazorStandardBundles.Scripts.Global)
-                        .AddContributors(typeof(BlazorBasicThemeScriptContributor));
-                });
-        });
+                options
+                    .ScriptBundles
+                    .Add(BlazorBasicThemeBundles.Scripts.Global, bundle =>
+                    {
+                        bundle
+                            .AddBaseBundles(BlazorStandardBundles.Scripts.Global)
+                            .AddContributors(typeof(BlazorBasicThemeScriptContributor));
+                    });
+            });
+        }
     }
 }

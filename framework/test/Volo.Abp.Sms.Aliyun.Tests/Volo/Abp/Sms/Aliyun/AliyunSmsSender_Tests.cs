@@ -2,35 +2,36 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace Volo.Abp.Sms.Aliyun;
-
-public class AliyunSmsSender_Tests : AbpSmsAliyunTestBase
+namespace Volo.Abp.Sms.Aliyun
 {
-    private readonly ISmsSender _smsSender;
-    private readonly IConfiguration _configuration;
-
-    public AliyunSmsSender_Tests()
+    public class AliyunSmsSender_Tests : AbpSmsAliyunTestBase
     {
-        _configuration = GetRequiredService<IConfiguration>();
-        _smsSender = GetRequiredService<ISmsSender>();
-    }
+        private readonly ISmsSender _smsSender;
+        private readonly IConfiguration _configuration;
 
-    [Fact]
-    public async Task SendSms_Test()
-    {
-        var config = _configuration.GetSection("AbpAliyunSms");
-
-        // Please fill in the real parameters in the appsettings.json file.
-        if (config["AccessKeyId"] == "<Enter your AccessKeyId from Aliyun>")
+        public AliyunSmsSender_Tests()
         {
-            return;
+            _configuration = GetRequiredService<IConfiguration>();
+            _smsSender = GetRequiredService<ISmsSender>();
         }
 
-        var msg = new SmsMessage(config["TargetPhoneNumber"],
-            config["TemplateParam"]);
-        msg.Properties.Add("SignName", config["SignName"]);
-        msg.Properties.Add("TemplateCode", config["TemplateCode"]);
+        [Fact]
+        public async Task SendSms_Test()
+        {
+            var config = _configuration.GetSection("AbpAliyunSms");
 
-        await _smsSender.SendAsync(msg);
+            // Please fill in the real parameters in the appsettings.json file.
+            if (config["AccessKeyId"] == "<Enter your AccessKeyId from Aliyun>")
+            {
+                return;
+            }
+            
+            var msg = new SmsMessage(config["TargetPhoneNumber"],
+                config["TemplateParam"]);
+            msg.Properties.Add("SignName", config["SignName"]);
+            msg.Properties.Add("TemplateCode", config["TemplateCode"]);
+
+            await _smsSender.SendAsync(msg);
+        }
     }
 }

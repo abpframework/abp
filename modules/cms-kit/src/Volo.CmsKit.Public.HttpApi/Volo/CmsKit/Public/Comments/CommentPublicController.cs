@@ -6,46 +6,47 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Public.Comments;
-
-[RequiresGlobalFeature(typeof(CommentsFeature))]
-[RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-public/comments")]
-public class CommentPublicController : CmsKitPublicControllerBase, ICommentPublicAppService
+namespace Volo.CmsKit.Public.Comments
 {
-    public ICommentPublicAppService CommentPublicAppService { get; }
-
-    public CommentPublicController(ICommentPublicAppService commentPublicAppService)
+    [RequiresGlobalFeature(typeof(CommentsFeature))]
+    [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-public/comments")]
+    public class CommentPublicController :  CmsKitPublicControllerBase, ICommentPublicAppService
     {
-        CommentPublicAppService = commentPublicAppService;
-    }
+        public ICommentPublicAppService CommentPublicAppService { get; }
 
-    [HttpGet]
-    [Route("{entityType}/{entityId}")]
-    public Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
-    {
-        return CommentPublicAppService.GetListAsync(entityType, entityId);
-    }
+        public CommentPublicController(ICommentPublicAppService commentPublicAppService)
+        {
+            CommentPublicAppService = commentPublicAppService;
+        }
 
-    [HttpPost]
-    [Route("{entityType}/{entityId}")]
-    public Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
-    {
-        return CommentPublicAppService.CreateAsync(entityType, entityId, input);
-    }
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        public Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
+        {
+            return CommentPublicAppService.GetListAsync(entityType, entityId);
+        }
 
-    [HttpPut]
-    [Route("{id}")]
-    public Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
-    {
-        return CommentPublicAppService.UpdateAsync(id, input);
-    }
+        [HttpPost]
+        [Route("{entityType}/{entityId}")]
+        public Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
+        {
+            return CommentPublicAppService.CreateAsync(entityType, entityId, input);
+        }
 
-    [HttpDelete]
-    [Route("{id}")]
-    public Task DeleteAsync(Guid id)
-    {
-        return CommentPublicAppService.DeleteAsync(id);
+        [HttpPut]
+        [Route("{id}")]
+        public Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
+        {
+            return CommentPublicAppService.UpdateAsync(id, input);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public Task DeleteAsync(Guid id)
+        {
+            return CommentPublicAppService.DeleteAsync(id);
+        }
     }
 }

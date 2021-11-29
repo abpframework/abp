@@ -5,24 +5,24 @@ using NSubstitute;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Cli.Build;
-
-public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
+namespace Volo.Abp.Cli.Build
 {
-    private IGitRepositoryHelper _gitRepositoryHelper;
-
-    protected override void AfterAddApplication(IServiceCollection services)
+    public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
     {
-        _gitRepositoryHelper = Substitute.For<IGitRepositoryHelper>();
-        services.AddTransient(provider => _gitRepositoryHelper);
-    }
+        private IGitRepositoryHelper _gitRepositoryHelper;
 
-    [Fact]
-    public void Add_New_Build_Status_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+        protected override void AfterAddApplication(IServiceCollection services)
         {
-            SucceedProjects = new List<DotNetProjectBuildStatus>
+            _gitRepositoryHelper = Substitute.For<IGitRepositoryHelper>();
+            services.AddTransient(provider => _gitRepositoryHelper);
+        }
+
+        [Fact]
+        public void Add_New_Build_Status_Test()
+        {
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            {
+                SucceedProjects = new List<DotNetProjectBuildStatus>
                 {
                     new DotNetProjectBuildStatus
                     {
@@ -30,14 +30,14 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         CommitId = "1"
                     }
                 }
-        };
+            };
 
-        var newBuildStatus = new GitRepositoryBuildStatus(
-            existingBuildStatus.RepositoryName,
-            existingBuildStatus.BranchName
-        )
-        {
-            SucceedProjects = new List<DotNetProjectBuildStatus>
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                SucceedProjects = new List<DotNetProjectBuildStatus>
                 {
                     new DotNetProjectBuildStatus
                     {
@@ -45,19 +45,19 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         CommitId = "2"
                     }
                 }
-        };
+            };
 
-        existingBuildStatus.MergeWith(newBuildStatus);
+            existingBuildStatus.MergeWith(newBuildStatus);
 
-        existingBuildStatus.SucceedProjects.Count.ShouldBe(2);
-    }
+            existingBuildStatus.SucceedProjects.Count.ShouldBe(2);
+        }
 
-    [Fact]
-    public void Update_Existing_Build_Status_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+        [Fact]
+        public void Update_Existing_Build_Status_Test()
         {
-            SucceedProjects = new List<DotNetProjectBuildStatus>
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            {
+                SucceedProjects = new List<DotNetProjectBuildStatus>
                 {
                     new DotNetProjectBuildStatus
                     {
@@ -65,14 +65,14 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         CommitId = "1"
                     }
                 }
-        };
+            };
 
-        var newBuildStatus = new GitRepositoryBuildStatus(
-            existingBuildStatus.RepositoryName,
-            existingBuildStatus.BranchName
-        )
-        {
-            SucceedProjects = new List<DotNetProjectBuildStatus>
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                SucceedProjects = new List<DotNetProjectBuildStatus>
                 {
                     new DotNetProjectBuildStatus
                     {
@@ -85,22 +85,22 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         CommitId = "2"
                     }
                 }
-        };
+            };
 
-        existingBuildStatus.MergeWith(newBuildStatus);
-        existingBuildStatus.SucceedProjects.Count.ShouldBe(2);
-        existingBuildStatus.GetSelfOrChild("volo").SucceedProjects.First(p => p.CsProjPath == "project1.csproj")
-            .CommitId.ShouldBe("2");
-        existingBuildStatus.GetSelfOrChild("volo").SucceedProjects.First(p => p.CsProjPath == "project2.csproj")
-            .CommitId.ShouldBe("2");
-    }
+            existingBuildStatus.MergeWith(newBuildStatus);
+            existingBuildStatus.SucceedProjects.Count.ShouldBe(2);
+            existingBuildStatus.GetSelfOrChild("volo").SucceedProjects.First(p => p.CsProjPath == "project1.csproj")
+                .CommitId.ShouldBe("2");
+            existingBuildStatus.GetSelfOrChild("volo").SucceedProjects.First(p => p.CsProjPath == "project2.csproj")
+                .CommitId.ShouldBe("2");
+        }
 
-    [Fact]
-    public void Add_New_Build_Status_For_Child_Repository_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+        [Fact]
+        public void Add_New_Build_Status_For_Child_Repository_Test()
         {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("abp", "dev")
                     {
@@ -114,14 +114,14 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         }
                     }
                 }
-        };
+            };
 
-        var newBuildStatus = new GitRepositoryBuildStatus(
-            existingBuildStatus.RepositoryName,
-            existingBuildStatus.BranchName
-        )
-        {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("abp", "dev")
                     {
@@ -135,57 +135,57 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         }
                     }
                 }
-        };
+            };
 
-        existingBuildStatus.MergeWith(newBuildStatus);
-        existingBuildStatus.GetChild("abp").SucceedProjects.Count.ShouldBe(2);
-    }
+            existingBuildStatus.MergeWith(newBuildStatus);
+            existingBuildStatus.GetChild("abp").SucceedProjects.Count.ShouldBe(2);
+        }
 
-    [Fact]
-    public void Should_Update_Repository_CommitId_When_New_CommitId_Is_Not_Empty()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev");
-
-        var newBuildStatus = new GitRepositoryBuildStatus(
-            existingBuildStatus.RepositoryName,
-            existingBuildStatus.BranchName
-        )
+        [Fact]
+        public void Should_Update_Repository_CommitId_When_New_CommitId_Is_Not_Empty()
         {
-            CommitId = "42"
-        };
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev");
 
-        existingBuildStatus.MergeWith(newBuildStatus);
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                CommitId = "42"
+            };
 
-        existingBuildStatus.CommitId.ShouldBe("42");
-    }
+            existingBuildStatus.MergeWith(newBuildStatus);
 
-    [Fact]
-    public void Should_Not_Update_Repository_CommitId_When_New_CommitId_Is_Empty()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            existingBuildStatus.CommitId.ShouldBe("42");
+        }
+
+        [Fact]
+        public void Should_Not_Update_Repository_CommitId_When_New_CommitId_Is_Empty()
         {
-            CommitId = "21"
-        };
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            {
+                CommitId = "21"
+            };
 
-        var newBuildStatus = new GitRepositoryBuildStatus(
-            existingBuildStatus.RepositoryName,
-            existingBuildStatus.BranchName
-        )
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                CommitId = ""
+            };
+
+            existingBuildStatus.MergeWith(newBuildStatus);
+
+            existingBuildStatus.CommitId.ShouldBe("21");
+        }
+
+        [Fact]
+        public void GetChild_Test()
         {
-            CommitId = ""
-        };
-
-        existingBuildStatus.MergeWith(newBuildStatus);
-
-        existingBuildStatus.CommitId.ShouldBe("21");
-    }
-
-    [Fact]
-    public void GetChild_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
-        {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("repo-2", "dev")
                     {
@@ -196,18 +196,18 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                     },
                     new GitRepositoryBuildStatus("repo-4", "dev")
                 }
-        };
+            };
 
-        existingBuildStatus.GetChild("repo-3").RepositoryName.ShouldBe("repo-3");
-        existingBuildStatus.GetChild("repo-4").RepositoryName.ShouldBe("repo-4");
-    }
+            existingBuildStatus.GetChild("repo-3").RepositoryName.ShouldBe("repo-3");
+            existingBuildStatus.GetChild("repo-4").RepositoryName.ShouldBe("repo-4");
+        }
 
-    [Fact]
-    public void GetUniqueName_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+        [Fact]
+        public void GetUniqueName_Test()
         {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("repo-2", "dev")
                     {
@@ -218,18 +218,18 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                     },
                     new GitRepositoryBuildStatus("repo-4", "dev")
                 }
-        };
+            };
 
-        existingBuildStatus.GetUniqueName("").ShouldBe("B25C935F97D7B3375530A96B392B7644");
-        existingBuildStatus.GetUniqueName("production").ShouldBe("production_B25C935F97D7B3375530A96B392B7644");
-    }
+            existingBuildStatus.GetUniqueName("").ShouldBe("B25C935F97D7B3375530A96B392B7644");
+            existingBuildStatus.GetUniqueName("production").ShouldBe("production_B25C935F97D7B3375530A96B392B7644");
+        }
 
-    [Fact]
-    public void GetSelfOrChild_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+        [Fact]
+        public void GetSelfOrChild_Test()
         {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("repo-2", "dev")
                     {
@@ -240,20 +240,20 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                     },
                     new GitRepositoryBuildStatus("repo-4", "dev")
                 }
-        };
+            };
 
-        existingBuildStatus.GetSelfOrChild("repo-1").RepositoryName.ShouldBe("repo-1");
-        existingBuildStatus.GetSelfOrChild("repo-2").RepositoryName.ShouldBe("repo-2");
-        existingBuildStatus.GetSelfOrChild("repo-3").RepositoryName.ShouldBe("repo-3");
-        existingBuildStatus.GetSelfOrChild("repo-4").RepositoryName.ShouldBe("repo-4");
-    }
+            existingBuildStatus.GetSelfOrChild("repo-1").RepositoryName.ShouldBe("repo-1");
+            existingBuildStatus.GetSelfOrChild("repo-2").RepositoryName.ShouldBe("repo-2");
+            existingBuildStatus.GetSelfOrChild("repo-3").RepositoryName.ShouldBe("repo-3");
+            existingBuildStatus.GetSelfOrChild("repo-4").RepositoryName.ShouldBe("repo-4");
+        }
 
-    [Fact]
-    public void AddOrUpdateProjectStatus_Test()
-    {
-        var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+        [Fact]
+        public void AddOrUpdateProjectStatus_Test()
         {
-            DependingRepositories = new List<GitRepositoryBuildStatus>()
+            var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
                 {
                     new GitRepositoryBuildStatus("repo-2", "dev")
                     {
@@ -292,26 +292,27 @@ public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
                         }
                     }
                 }
-        };
+            };
 
-        var repo2 = existingBuildStatus.GetChild("repo-2");
-        repo2.AddOrUpdateProjectStatus(new DotNetProjectBuildStatus
-        {
-            CommitId = "21",
-            CsProjPath = "A.csproj"
-        });
-
-        var repo3 = existingBuildStatus.GetChild("repo-3");
-        repo3.AddOrUpdateProjectStatus(new DotNetProjectBuildStatus
-        {
-            CommitId = "21",
-            CsProjPath = "X.csproj"
-        });
-
-        repo2.SucceedProjects.Count.ShouldBe(1);
-        repo2.SucceedProjects.ShouldContain(e => e.CsProjPath == "A.csproj" && e.CommitId == "21");
-
-        repo3.SucceedProjects.Count.ShouldBe(2);
-        repo3.SucceedProjects.ShouldContain(e => e.CsProjPath == "X.csproj" && e.CommitId == "21");
+            var repo2 = existingBuildStatus.GetChild("repo-2");
+            repo2.AddOrUpdateProjectStatus(new DotNetProjectBuildStatus
+            {
+                CommitId = "21",
+                CsProjPath = "A.csproj"
+            });
+            
+            var repo3 = existingBuildStatus.GetChild("repo-3");
+            repo3.AddOrUpdateProjectStatus(new DotNetProjectBuildStatus
+            {
+                CommitId = "21",
+                CsProjPath = "X.csproj"
+            });
+            
+            repo2.SucceedProjects.Count.ShouldBe(1);
+            repo2.SucceedProjects.ShouldContain(e=> e.CsProjPath == "A.csproj" && e.CommitId == "21");
+            
+            repo3.SucceedProjects.Count.ShouldBe(2);
+            repo3.SucceedProjects.ShouldContain(e=> e.CsProjPath == "X.csproj" && e.CommitId == "21");
+        }
     }
 }

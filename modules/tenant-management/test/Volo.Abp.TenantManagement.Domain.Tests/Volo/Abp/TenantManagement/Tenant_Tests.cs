@@ -2,33 +2,34 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.TenantManagement;
-
-public class Tenant_Tests : AbpTenantManagementDomainTestBase
+namespace Volo.Abp.TenantManagement
 {
-    private readonly ITenantRepository _tenantRepository;
-
-    public Tenant_Tests()
+    public class Tenant_Tests : AbpTenantManagementDomainTestBase
     {
-        _tenantRepository = GetRequiredService<ITenantRepository>();
-    }
+        private readonly ITenantRepository _tenantRepository;
 
-    [Fact]
-    public async Task FindDefaultConnectionString()
-    {
-        var acme = await _tenantRepository.FindByNameAsync("acme");
+        public Tenant_Tests()
+        {
+            _tenantRepository = GetRequiredService<ITenantRepository>();
+        }
 
-        acme.ShouldNotBeNull();
-        acme.FindDefaultConnectionString().ShouldBe("DefaultConnString-Value");
-    }
+        [Fact]
+        public async Task FindDefaultConnectionString()
+        {
+            var acme = await _tenantRepository.FindByNameAsync("acme");
 
-    [Fact]
-    public async Task FindConnectionString()
-    {
-        var acme = await _tenantRepository.FindByNameAsync("acme");
+            acme.ShouldNotBeNull();
+            acme.FindDefaultConnectionString().ShouldBe("DefaultConnString-Value");
+        }
 
-        acme.ShouldNotBeNull();
-        acme.FindConnectionString(Data.ConnectionStrings.DefaultConnectionStringName).ShouldBe("DefaultConnString-Value");
-        acme.FindConnectionString("MyConnString").ShouldBe("MyConnString-Value");
+        [Fact]
+        public async Task FindConnectionString()
+        {
+            var acme = await _tenantRepository.FindByNameAsync("acme");
+
+            acme.ShouldNotBeNull();
+            acme.FindConnectionString(Data.ConnectionStrings.DefaultConnectionStringName).ShouldBe("DefaultConnString-Value");
+            acme.FindConnectionString("MyConnString").ShouldBe("MyConnString-Value");
+        }
     }
 }

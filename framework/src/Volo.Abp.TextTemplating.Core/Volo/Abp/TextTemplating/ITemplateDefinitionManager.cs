@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.TextTemplating;
-
-public interface ITemplateDefinitionManager
+namespace Volo.Abp.TextTemplating
 {
-    [NotNull]
-    TemplateDefinition Get([NotNull] string name);
+    public interface ITemplateDefinitionManager
+    {
+        [NotNull]
+        TemplateDefinition Get([NotNull] string name);
 
-    [NotNull]
-    IReadOnlyList<TemplateDefinition> GetAll();
+        [NotNull]
+        IReadOnlyList<TemplateDefinition> GetAll();
 
-    [CanBeNull]
-    TemplateDefinition GetOrNull(string name);
+        [CanBeNull]
+        TemplateDefinition GetOrNull(string name);
+    }
 }

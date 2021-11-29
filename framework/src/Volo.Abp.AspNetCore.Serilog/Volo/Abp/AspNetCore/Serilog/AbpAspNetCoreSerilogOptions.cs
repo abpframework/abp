@@ -1,29 +1,30 @@
-namespace Volo.Abp.AspNetCore.Serilog;
-
-public class AbpAspNetCoreSerilogOptions
+namespace Volo.Abp.AspNetCore.Serilog
 {
-    public AllEnricherPropertyNames EnricherPropertyNames { get; } = new AllEnricherPropertyNames();
-
-    public class AllEnricherPropertyNames
+    public class AbpAspNetCoreSerilogOptions
     {
-        /// <summary>
-        /// Default value: "TenantId".
-        /// </summary>
-        public string TenantId { get; set; } = "TenantId";
+        public AllEnricherPropertyNames EnricherPropertyNames { get; } = new AllEnricherPropertyNames();
 
-        /// <summary>
-        /// Default value: "UserId".
-        /// </summary>
-        public string UserId { get; set; } = "UserId";
+        public class AllEnricherPropertyNames
+        {
+            /// <summary>
+            /// Default value: "TenantId".
+            /// </summary>
+            public string TenantId { get; set; } = "TenantId";
 
-        /// <summary>
-        /// Default value: "ClientId".
-        /// </summary>
-        public string ClientId { get; set; } = "ClientId";
+            /// <summary>
+            /// Default value: "UserId".
+            /// </summary>
+            public string UserId { get; set; } = "UserId";
 
-        /// <summary>
-        /// Default value: "CorrelationId".
-        /// </summary>
-        public string CorrelationId { get; set; } = "CorrelationId";
+            /// <summary>
+            /// Default value: "ClientId".
+            /// </summary>
+            public string ClientId { get; set; } = "ClientId";
+
+            /// <summary>
+            /// Default value: "CorrelationId".
+            /// </summary>
+            public string CorrelationId { get; set; } = "CorrelationId";
+        }
     }
 }

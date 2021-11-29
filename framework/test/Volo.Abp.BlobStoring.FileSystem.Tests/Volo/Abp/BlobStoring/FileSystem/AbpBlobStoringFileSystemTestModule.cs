@@ -3,40 +3,41 @@ using System.IO;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring.FileSystem;
-
-[DependsOn(
-    typeof(AbpBlobStoringFileSystemModule),
-    typeof(AbpBlobStoringTestModule)
-    )]
-public class AbpBlobStoringFileSystemTestModule : AbpModule
+namespace Volo.Abp.BlobStoring.FileSystem
 {
-    private readonly string _testDirectoryPath;
-
-    public AbpBlobStoringFileSystemTestModule()
+    [DependsOn(
+        typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpBlobStoringTestModule)
+        )]
+    public class AbpBlobStoringFileSystemTestModule : AbpModule
     {
-        _testDirectoryPath = Path.Combine(
-            Path.GetTempPath(),
-            Guid.NewGuid().ToString("N")
-        );
-    }
+        private readonly string _testDirectoryPath;
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpBlobStoringOptions>(options =>
+        public AbpBlobStoringFileSystemTestModule()
         {
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            _testDirectoryPath = Path.Combine(
+                Path.GetTempPath(),
+                Guid.NewGuid().ToString("N")
+            );
+        }
+        
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                containerConfiguration.UseFileSystem(fileSystem =>
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
                 {
-                    fileSystem.BasePath = _testDirectoryPath;
+                    containerConfiguration.UseFileSystem(fileSystem =>
+                    {
+                        fileSystem.BasePath = _testDirectoryPath;
+                    });
                 });
             });
-        });
-    }
+        }
 
-    public override void OnApplicationShutdown(ApplicationShutdownContext context)
-    {
-        DirectoryHelper.DeleteIfExists(_testDirectoryPath, true);
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            DirectoryHelper.DeleteIfExists(_testDirectoryPath, true);
+        }
     }
 }

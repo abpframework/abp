@@ -1,26 +1,27 @@
 ﻿using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring.Database;
-
-[DependsOn(
-    typeof(AbpDddDomainModule),
-    typeof(AbpBlobStoringModule),
-    typeof(BlobStoringDatabaseDomainSharedModule)
-    )]
-public class BlobStoringDatabaseDomainModule : AbpModule
+namespace Volo.Abp.BlobStoring.Database
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpDddDomainModule),
+        typeof(AbpBlobStoringModule),
+        typeof(BlobStoringDatabaseDomainSharedModule)
+        )]
+    public class BlobStoringDatabaseDomainModule : AbpModule
     {
-        Configure<AbpBlobStoringOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Containers.ConfigureDefault(container =>
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                if (container.ProviderType == null)
+                options.Containers.ConfigureDefault(container =>
                 {
-                    container.UseDatabase();
-                }
+                    if (container.ProviderType == null)
+                    {
+                        container.UseDatabase();
+                    }
+                });
             });
-        });
+        }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Authorization;
-
-public class AlwaysAllowMethodInvocationAuthorizationService : IMethodInvocationAuthorizationService
+namespace Volo.Abp.Authorization
 {
-    public Task CheckAsync(MethodInvocationAuthorizationContext context)
+    public class AlwaysAllowMethodInvocationAuthorizationService : IMethodInvocationAuthorizationService
     {
-        return Task.CompletedTask;
+        public Task CheckAsync(MethodInvocationAuthorizationContext context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

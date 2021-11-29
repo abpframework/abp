@@ -1,28 +1,29 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace MyCompanyName.MyProjectName.Samples;
-
-public class SampleAppService : MyProjectNameAppService, ISampleAppService
+namespace MyCompanyName.MyProjectName.Samples
 {
-    public Task<SampleDto> GetAsync()
+    public class SampleAppService : MyProjectNameAppService, ISampleAppService
     {
-        return Task.FromResult(
-            new SampleDto
-            {
-                Value = 42
-            }
-        );
-    }
+        public Task<SampleDto> GetAsync()
+        {
+            return Task.FromResult(
+                new SampleDto
+                {
+                    Value = 42
+                }
+            );
+        }
 
-    [Authorize]
-    public Task<SampleDto> GetAuthorizedAsync()
-    {
-        return Task.FromResult(
-            new SampleDto
-            {
-                Value = 42
-            }
-        );
+        [Authorize]
+        public Task<SampleDto> GetAuthorizedAsync()
+        {
+            return Task.FromResult(
+                new SampleDto
+                {
+                    Value = 42
+                }
+            );
+        }
     }
 }

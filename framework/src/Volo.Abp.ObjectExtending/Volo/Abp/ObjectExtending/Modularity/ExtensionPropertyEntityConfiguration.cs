@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.ObjectExtending.Modularity;
-
-public class ExtensionPropertyEntityConfiguration
+﻿namespace Volo.Abp.ObjectExtending.Modularity
 {
-    /// <summary>
-    /// Default: true.
-    /// </summary>
-    public bool IsAvailable { get; set; } = true;
+    public class ExtensionPropertyEntityConfiguration
+    {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsAvailable { get; set; } = true;
+    }
 }

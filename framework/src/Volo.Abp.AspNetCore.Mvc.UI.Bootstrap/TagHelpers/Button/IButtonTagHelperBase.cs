@@ -1,16 +1,17 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
-
-public interface IButtonTagHelperBase
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 {
-    AbpButtonType ButtonType { get; }
+    public interface IButtonTagHelperBase
+    {
+        AbpButtonType ButtonType { get; }
 
-    AbpButtonSize Size { get; }
+        AbpButtonSize Size { get; }
 
-    string Text { get; }
+        string Text { get; }
 
-    string Icon { get; }
+        string Icon { get; }
 
-    bool? Disabled { get; }
+        bool? Disabled { get; }
 
-    FontIconType IconType { get; }
+        FontIconType IconType { get; }
+    }
 }

@@ -6,37 +6,38 @@ using AliyunClient = AlibabaCloud.SDK.Dysmsapi20170525.Client;
 using AliyunConfig = AlibabaCloud.OpenApiClient.Models.Config;
 using AliyunSendSmsRequest = AlibabaCloud.SDK.Dysmsapi20170525.Models.SendSmsRequest;
 
-namespace Volo.Abp.Sms.Aliyun;
-
-public class AliyunSmsSender : ISmsSender, ITransientDependency
+namespace Volo.Abp.Sms.Aliyun
 {
-    protected AbpAliyunSmsOptions Options { get; }
-
-    public AliyunSmsSender(IOptionsMonitor<AbpAliyunSmsOptions> options)
+    public class AliyunSmsSender : ISmsSender, ITransientDependency
     {
-        Options = options.CurrentValue;
-    }
+        protected AbpAliyunSmsOptions Options { get; }
 
-    public async Task SendAsync(SmsMessage smsMessage)
-    {
-        var client = CreateClient();
-
-        await client.SendSmsAsync(new AliyunSendSmsRequest
+        public AliyunSmsSender(IOptionsMonitor<AbpAliyunSmsOptions> options)
         {
-            PhoneNumbers = smsMessage.PhoneNumber,
-            SignName = smsMessage.Properties.GetOrDefault("SignName") as string,
-            TemplateCode = smsMessage.Properties.GetOrDefault("TemplateCode") as string,
-            TemplateParam = smsMessage.Text
-        });
-    }
+            Options = options.CurrentValue;
+        }
 
-    protected virtual AliyunClient CreateClient()
-    {
-        return new(new AliyunConfig
+        public async Task SendAsync(SmsMessage smsMessage)
         {
-            AccessKeyId = Options.AccessKeyId,
-            AccessKeySecret = Options.AccessKeySecret,
-            Endpoint = Options.EndPoint
-        });
+            var client = CreateClient();
+
+            await client.SendSmsAsync(new AliyunSendSmsRequest
+            {
+                PhoneNumbers = smsMessage.PhoneNumber,
+                SignName = smsMessage.Properties.GetOrDefault("SignName") as string,
+                TemplateCode = smsMessage.Properties.GetOrDefault("TemplateCode") as string,
+                TemplateParam = smsMessage.Text
+            });
+        }
+
+        protected virtual AliyunClient CreateClient()
+        {
+            return new(new AliyunConfig
+            {
+                AccessKeyId = Options.AccessKeyId,
+                AccessKeySecret = Options.AccessKeySecret,
+                Endpoint = Options.EndPoint
+            });
+        }
     }
 }

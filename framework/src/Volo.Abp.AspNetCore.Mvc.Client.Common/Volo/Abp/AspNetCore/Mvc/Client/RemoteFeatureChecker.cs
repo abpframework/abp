@@ -2,20 +2,21 @@
 using System.Threading.Tasks;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client;
-
-public class RemoteFeatureChecker : FeatureCheckerBase
+namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    protected ICachedApplicationConfigurationClient ConfigurationClient { get; }
-
-    public RemoteFeatureChecker(ICachedApplicationConfigurationClient configurationClient)
+    public class RemoteFeatureChecker : FeatureCheckerBase
     {
-        ConfigurationClient = configurationClient;
-    }
+        protected ICachedApplicationConfigurationClient ConfigurationClient { get; }
 
-    public override async Task<string> GetOrNullAsync(string name)
-    {
-        var configuration = await ConfigurationClient.GetAsync();
-        return configuration.Features.Values.GetOrDefault(name);
+        public RemoteFeatureChecker(ICachedApplicationConfigurationClient configurationClient)
+        {
+            ConfigurationClient = configurationClient;
+        }
+
+        public override async Task<string> GetOrNullAsync(string name)
+        {
+            var configuration = await ConfigurationClient.GetAsync();
+            return configuration.Features.Values.GetOrDefault(name);
+        }
     }
 }

@@ -5,27 +5,28 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.PermissionManagement;
-
-[DependsOn(
-    typeof(AbpValidationModule)
-    )]
-public class AbpPermissionManagementDomainSharedModule : AbpModule
+namespace Volo.Abp.PermissionManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpValidationModule)
+        )]
+    public class AbpPermissionManagementDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpPermissionManagementDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpPermissionManagementDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpPermissionManagementResource>("en")
-                .AddBaseTypes(
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/Volo/Abp/PermissionManagement/Localization/Domain");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpPermissionManagementResource>("en")
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/PermissionManagement/Localization/Domain");
+            });
+        }
     }
 }

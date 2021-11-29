@@ -14,140 +14,141 @@ using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
-namespace Volo.Abp.Http.Client.DynamicProxying;
-
-public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    public ICancellationTokenProvider CancellationTokenProvider { get; set; }
-    protected IApiDescriptionCache Cache { get; }
-    protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
-    protected ICorrelationIdProvider CorrelationIdProvider { get; }
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public ApiDescriptionFinder(
-        IApiDescriptionCache cache,
-        IOptions<AbpCorrelationIdOptions> abpCorrelationIdOptions,
-        ICorrelationIdProvider correlationIdProvider,
-        ICurrentTenant currentTenant)
+    public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     {
-        Cache = cache;
-        AbpCorrelationIdOptions = abpCorrelationIdOptions.Value;
-        CorrelationIdProvider = correlationIdProvider;
-        CurrentTenant = currentTenant;
-        CancellationTokenProvider = NullCancellationTokenProvider.Instance;
-    }
+        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
+        protected IApiDescriptionCache Cache { get; }
+        protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
+        protected ICorrelationIdProvider CorrelationIdProvider { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
-    public async Task<ActionApiDescriptionModel> FindActionAsync(
-        HttpClient client,
-        string baseUrl,
-        Type serviceType,
-        MethodInfo method)
-    {
-        var apiDescription = await GetApiDescriptionAsync(client, baseUrl);
-
-        //TODO: Cache finding?
-
-        var methodParameters = method.GetParameters().ToArray();
-
-        foreach (var module in apiDescription.Modules.Values)
+        public ApiDescriptionFinder(
+            IApiDescriptionCache cache,
+            IOptions<AbpCorrelationIdOptions> abpCorrelationIdOptions,
+            ICorrelationIdProvider correlationIdProvider,
+            ICurrentTenant currentTenant)
         {
-            foreach (var controller in module.Controllers.Values)
+            Cache = cache;
+            AbpCorrelationIdOptions = abpCorrelationIdOptions.Value;
+            CorrelationIdProvider = correlationIdProvider;
+            CurrentTenant = currentTenant;
+            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
+        }
+
+        public async Task<ActionApiDescriptionModel> FindActionAsync(
+            HttpClient client,
+            string baseUrl,
+            Type serviceType,
+            MethodInfo method)
+        {
+            var apiDescription = await GetApiDescriptionAsync(client, baseUrl);
+
+            //TODO: Cache finding?
+
+            var methodParameters = method.GetParameters().ToArray();
+
+            foreach (var module in apiDescription.Modules.Values)
             {
-                if (!controller.Implements(serviceType))
+                foreach (var controller in module.Controllers.Values)
                 {
-                    continue;
-                }
-
-                foreach (var action in controller.Actions.Values)
-                {
-                    if (action.Name == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
+                    if (!controller.Implements(serviceType))
                     {
-                        var found = true;
+                        continue;
+                    }
 
-                        for (int i = 0; i < methodParameters.Length; i++)
+                    foreach (var action in controller.Actions.Values)
+                    {
+                        if (action.Name == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
                         {
-                            if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i]))
+                            var found = true;
+
+                            for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                found = false;
-                                break;
+                                if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i]))
+                                {
+                                    found = false;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (found)
-                        {
-                            return action;
+                            if (found)
+                            {
+                                return action;
+                            }
                         }
                     }
                 }
             }
+
+            throw new AbpException($"Could not found remote action for method: {method} on the URL: {baseUrl}");
         }
 
-        throw new AbpException($"Could not found remote action for method: {method} on the URL: {baseUrl}");
-    }
-
-    public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(HttpClient client, string baseUrl)
-    {
-        return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
-    }
-
-    protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(
-        HttpClient client,
-        string baseUrl)
-    {
-        var requestMessage = new HttpRequestMessage(
-            HttpMethod.Get,
-            baseUrl.EnsureEndsWith('/') + "api/abp/api-definition"
-        );
-
-        AddHeaders(requestMessage);
-
-        var response = await client.SendAsync(
-            requestMessage,
-            CancellationTokenProvider.Token
-        );
-
-        if (!response.IsSuccessStatusCode)
+        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(HttpClient client, string baseUrl)
         {
-            throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
+            return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
         }
 
-        var content = await response.Content.ReadAsStringAsync();
-
-        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
+        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(
+            HttpClient client,
+            string baseUrl)
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+            var requestMessage = new HttpRequestMessage(
+                HttpMethod.Get,
+                baseUrl.EnsureEndsWith('/') + "api/abp/api-definition"
+            );
 
-        return result;
-    }
+            AddHeaders(requestMessage);
 
-    protected virtual void AddHeaders(HttpRequestMessage requestMessage)
-    {
-        //CorrelationId
-        requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+            var response = await client.SendAsync(
+                requestMessage,
+                CancellationTokenProvider.Token
+            );
 
-        //TenantId
-        if (CurrentTenant.Id.HasValue)
-        {
-            //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            return result;
         }
 
-        //Culture
-        //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
-        var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
-        if (!currentCulture.IsNullOrEmpty())
+        protected virtual void AddHeaders(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
+            //CorrelationId
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+
+            //TenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
+
+            //Culture
+            //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
+            var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
+            if (!currentCulture.IsNullOrEmpty())
+            {
+                requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
+            }
+
+            //X-Requested-With
+            requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
-        //X-Requested-With
-        requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
-    }
+        protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
+        {
+            return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
+        }
 
-    protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
-    {
-        return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
     }
-
 }

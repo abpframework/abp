@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Cli.Build;
-
-public interface IDotNetProjectBuildConfigReader
+﻿namespace Volo.Abp.Cli.Build
 {
-    DotNetProjectBuildConfig Read(string directoryPath);
+    public interface IDotNetProjectBuildConfigReader
+    {
+        DotNetProjectBuildConfig Read(string directoryPath);
+    }
 }

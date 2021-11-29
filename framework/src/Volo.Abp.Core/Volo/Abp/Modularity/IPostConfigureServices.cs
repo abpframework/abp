@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.Modularity;
-
-public interface IPostConfigureServices
+namespace Volo.Abp.Modularity
 {
-    void PostConfigureServices(ServiceConfigurationContext context);
+    public interface IPostConfigureServices
+    {
+        void PostConfigureServices(ServiceConfigurationContext context);
+    }
 }

@@ -6,27 +6,28 @@ using Volo.Abp.ObjectMapping;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.AutoMapper;
-
-public class ObjectMapperExtensions_Tests : AbpIntegratedTest<AutoMapperTestModule>
+namespace Volo.Abp.AutoMapper
 {
-    private readonly IObjectMapper _objectMapper;
-
-    public ObjectMapperExtensions_Tests()
+    public class ObjectMapperExtensions_Tests : AbpIntegratedTest<AutoMapperTestModule>
     {
-        _objectMapper = ServiceProvider.GetRequiredService<IObjectMapper>();
-    }
+        private readonly IObjectMapper _objectMapper;
 
-    [Fact]
-    public void Should_Map_Objects_With_AutoMap_Attributes()
-    {
-        var dto = _objectMapper.Map<MyEntity, MyEntityDto>(
-            new MyEntity
-            {
-                Number = 42
-            }
-        );
+        public ObjectMapperExtensions_Tests()
+        {
+            _objectMapper = ServiceProvider.GetRequiredService<IObjectMapper>();
+        }
 
-        dto.As<MyEntityDto>().Number.ShouldBe(42);
+        [Fact]
+        public void Should_Map_Objects_With_AutoMap_Attributes()
+        {
+            var dto = _objectMapper.Map<MyEntity, MyEntityDto>(
+                new MyEntity
+                {
+                    Number = 42
+                }
+            );
+
+            dto.As<MyEntityDto>().Number.ShouldBe(42);
+        }
     }
 }

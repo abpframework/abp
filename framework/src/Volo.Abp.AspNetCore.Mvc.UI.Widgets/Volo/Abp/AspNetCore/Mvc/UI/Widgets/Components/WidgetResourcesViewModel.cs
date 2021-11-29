@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components;
-
-public class WidgetResourcesViewModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components
 {
-    public IReadOnlyList<WidgetDefinition> Widgets { get; set; }
+    public class WidgetResourcesViewModel
+    {
+        public IReadOnlyList<WidgetDefinition> Widgets { get; set; }
+    }
 }

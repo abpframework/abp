@@ -1,22 +1,23 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-public class ExtensionPropertyApiDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    [NotNull]
-    public ExtensionPropertyApiGetDto OnGet { get; set; }
-
-    [NotNull]
-    public ExtensionPropertyApiCreateDto OnCreate { get; set; }
-
-    [NotNull]
-    public ExtensionPropertyApiUpdateDto OnUpdate { get; set; }
-
-    public ExtensionPropertyApiDto()
+    public class ExtensionPropertyApiDto
     {
-        OnGet = new ExtensionPropertyApiGetDto();
-        OnCreate = new ExtensionPropertyApiCreateDto();
-        OnUpdate = new ExtensionPropertyApiUpdateDto();
+        [NotNull]
+        public ExtensionPropertyApiGetDto OnGet { get; set; }
+
+        [NotNull]
+        public ExtensionPropertyApiCreateDto OnCreate { get; set; }
+
+        [NotNull]
+        public ExtensionPropertyApiUpdateDto OnUpdate { get; set; }
+
+        public ExtensionPropertyApiDto()
+        {
+            OnGet = new ExtensionPropertyApiGetDto();
+            OnCreate = new ExtensionPropertyApiCreateDto();
+            OnUpdate = new ExtensionPropertyApiUpdateDto();
+        }
     }
 }

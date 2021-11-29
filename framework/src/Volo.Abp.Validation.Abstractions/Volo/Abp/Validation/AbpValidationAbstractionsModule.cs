@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Validation;
-
-public class AbpValidationAbstractionsModule : AbpModule
+namespace Volo.Abp.Validation
 {
+    public class AbpValidationAbstractionsModule : AbpModule
+    {
 
+    }
 }

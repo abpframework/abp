@@ -1,16 +1,17 @@
 ﻿using System;
 
-namespace Volo.Abp.Localization;
-
-public class LocalizationResourceInitializationContext
+namespace Volo.Abp.Localization
 {
-    public LocalizationResource Resource { get; }
-
-    public IServiceProvider ServiceProvider { get; }
-
-    public LocalizationResourceInitializationContext(LocalizationResource resource, IServiceProvider serviceProvider)
+    public class LocalizationResourceInitializationContext
     {
-        Resource = resource;
-        ServiceProvider = serviceProvider;
+        public LocalizationResource Resource { get; }
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public LocalizationResourceInitializationContext(LocalizationResource resource, IServiceProvider serviceProvider)
+        {
+            Resource = resource;
+            ServiceProvider = serviceProvider;
+        }
     }
 }

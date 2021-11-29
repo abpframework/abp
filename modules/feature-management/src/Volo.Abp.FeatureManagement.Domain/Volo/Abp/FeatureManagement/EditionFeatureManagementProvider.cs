@@ -4,29 +4,30 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.FeatureManagement;
-
-public class EditionFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
+namespace Volo.Abp.FeatureManagement
 {
-    public override string Name => EditionFeatureValueProvider.ProviderName;
-
-    protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
-
-    public EditionFeatureManagementProvider(
-        IFeatureManagementStore store,
-        ICurrentPrincipalAccessor principalAccessor)
-        : base(store)
+    public class EditionFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
     {
-        PrincipalAccessor = principalAccessor;
-    }
+        public override string Name => EditionFeatureValueProvider.ProviderName;
 
-    protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
-    {
-        if (providerKey != null)
+        protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
+
+        public EditionFeatureManagementProvider(
+            IFeatureManagementStore store,
+            ICurrentPrincipalAccessor principalAccessor)
+            : base(store)
         {
-            return Task.FromResult(providerKey);
+            PrincipalAccessor = principalAccessor;
         }
 
-        return Task.FromResult(PrincipalAccessor.Principal?.FindEditionId()?.ToString("N"));
+        protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
+        {
+            if (providerKey != null)
+            {
+                return Task.FromResult(providerKey);
+            }
+
+            return Task.FromResult(PrincipalAccessor.Principal?.FindEditionId()?.ToString("N"));
+        }
     }
 }

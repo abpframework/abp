@@ -2,9 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public interface IPublisherPool : IAsyncDisposable
+namespace Volo.Abp.AzureServiceBus
 {
-    Task<ServiceBusSender> GetAsync(string topicName, string connectionName);
+    public interface IPublisherPool : IAsyncDisposable
+    {
+        Task<ServiceBusSender> GetAsync(string topicName, string connectionName);
+    }
 }

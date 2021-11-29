@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Http.Client.DynamicProxying;
-
-public interface IHttpClientProxy<out TRemoteService>
+﻿namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    TRemoteService Service { get; }
+    public interface IHttpClientProxy<out TRemoteService>
+    {
+        TRemoteService Service { get; }
+    }
 }

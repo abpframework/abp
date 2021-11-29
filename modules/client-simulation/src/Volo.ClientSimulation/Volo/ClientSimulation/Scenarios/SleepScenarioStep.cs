@@ -1,28 +1,29 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.ClientSimulation.Scenarios;
-
-public class SleepScenarioStep : ScenarioStep
+namespace Volo.ClientSimulation.Scenarios
 {
-    public string Name { get; }
-
-    public int Duration { get; }
-
-    public SleepScenarioStep(
-        string name,
-        int duration = 1000)
+    public class SleepScenarioStep : ScenarioStep
     {
-        Name = name;
-        Duration = duration;
-    }
+        public string Name { get; }
 
-    protected override Task ExecuteAsync(ScenarioExecutionContext context)
-    {
-        return Task.Delay(Duration);
-    }
+        public int Duration { get; }
 
-    public override string GetDisplayText()
-    {
-        return base.GetDisplayText() + $" ({Name})";
+        public SleepScenarioStep(
+            string name, 
+            int duration = 1000)
+        {
+            Name = name;
+            Duration = duration;
+        }
+
+        protected override Task ExecuteAsync(ScenarioExecutionContext context)
+        {
+            return Task.Delay(Duration);
+        }
+
+        public override string GetDisplayText()
+        {
+            return base.GetDisplayText() + $" ({Name})";
+        }
     }
 }

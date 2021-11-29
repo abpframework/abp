@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Identity;
-
-public class IdentityDataSeedResult
+﻿namespace Volo.Abp.Identity
 {
-    public bool CreatedAdminUser { get; set; }
+    public class IdentityDataSeedResult
+    {
+        public bool CreatedAdminUser { get; set; }
 
-    public bool CreatedAdminRole { get; set; }
+        public bool CreatedAdminRole { get; set; }
+    }
 }

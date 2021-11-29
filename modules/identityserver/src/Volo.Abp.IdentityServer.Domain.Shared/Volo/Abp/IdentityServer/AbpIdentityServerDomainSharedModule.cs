@@ -6,31 +6,32 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.IdentityServer;
-
-[DependsOn(
-    typeof(AbpValidationModule)
-    )]
-public class AbpIdentityServerDomainSharedModule : AbpModule
+namespace Volo.Abp.IdentityServer
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpValidationModule)
+        )]
+    public class AbpIdentityServerDomainSharedModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpIdentityServerDomainSharedModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityServerDomainSharedModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources.Add<AbpIdentityServerResource>("en")
-                .AddBaseTypes(
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/Volo/Abp/IdentityServer/Localization/Resources");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources.Add<AbpIdentityServerResource>("en")
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/IdentityServer/Localization/Resources");
+            });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.IdentityServer", typeof(AbpIdentityServerResource));
-        });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.IdentityServer", typeof(AbpIdentityServerResource));
+            });
+        }
     }
 }

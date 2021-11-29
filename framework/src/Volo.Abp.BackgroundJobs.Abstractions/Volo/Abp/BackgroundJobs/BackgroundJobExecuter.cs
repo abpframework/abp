@@ -7,61 +7,62 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependency
+namespace Volo.Abp.BackgroundJobs
 {
-    public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
-
-    protected AbpBackgroundJobOptions Options { get; }
-
-    public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options)
+    public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependency
     {
-        Options = options.Value;
+        public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
 
-        Logger = NullLogger<BackgroundJobExecuter>.Instance;
-    }
+        protected AbpBackgroundJobOptions Options { get; }
 
-    public virtual async Task ExecuteAsync(JobExecutionContext context)
-    {
-        var job = context.ServiceProvider.GetService(context.JobType);
-        if (job == null)
+        public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options)
         {
-            throw new AbpException("The job type is not registered to DI: " + context.JobType);
+            Options = options.Value;
+
+            Logger = NullLogger<BackgroundJobExecuter>.Instance;
         }
 
-        var jobExecuteMethod = context.JobType.GetMethod(nameof(IBackgroundJob<object>.Execute)) ??
-                               context.JobType.GetMethod(nameof(IAsyncBackgroundJob<object>.ExecuteAsync));
-        if (jobExecuteMethod == null)
+        public virtual async Task ExecuteAsync(JobExecutionContext context)
         {
-            throw new AbpException($"Given job type does not implement {typeof(IBackgroundJob<>).Name} or {typeof(IAsyncBackgroundJob<>).Name}. " +
-                                   "The job type was: " + context.JobType);
-        }
-
-        try
-        {
-            if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+            var job = context.ServiceProvider.GetService(context.JobType);
+            if (job == null)
             {
-                await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
+                throw new AbpException("The job type is not registered to DI: " + context.JobType);
             }
-            else
+
+            var jobExecuteMethod = context.JobType.GetMethod(nameof(IBackgroundJob<object>.Execute)) ?? 
+                                   context.JobType.GetMethod(nameof(IAsyncBackgroundJob<object>.ExecuteAsync));
+            if (jobExecuteMethod == null)
             {
-                jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                throw new AbpException($"Given job type does not implement {typeof(IBackgroundJob<>).Name} or {typeof(IAsyncBackgroundJob<>).Name}. " +
+                                       "The job type was: " + context.JobType);
             }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogException(ex);
 
-            await context.ServiceProvider
-                .GetRequiredService<IExceptionNotifier>()
-                .NotifyAsync(new ExceptionNotificationContext(ex));
-
-            throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
+            try
             {
-                JobType = context.JobType.AssemblyQualifiedName,
-                JobArgs = context.JobArgs
-            };
+                if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+                {
+                    await ((Task) jobExecuteMethod.Invoke(job, new[] {context.JobArgs}));
+                }
+                else
+                {
+                    jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+
+                await context.ServiceProvider
+                    .GetRequiredService<IExceptionNotifier>()
+                    .NotifyAsync(new ExceptionNotificationContext(ex));
+
+                throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
+                {
+                    JobType = context.JobType.AssemblyQualifiedName,
+                    JobArgs = context.JobArgs
+                };
+            }
         }
     }
 }

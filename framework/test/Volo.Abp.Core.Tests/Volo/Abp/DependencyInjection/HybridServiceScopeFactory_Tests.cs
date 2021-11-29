@@ -4,37 +4,38 @@ using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.DependencyInjection;
-
-public class HybridServiceScopeFactory_Tests
+namespace Volo.Abp.DependencyInjection
 {
-    [Fact]
-    public void Should_Use_Default_ServiceScopeFactory_By_Default()
+    public class HybridServiceScopeFactory_Tests
     {
-        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+        [Fact]
+        public void Should_Use_Default_ServiceScopeFactory_By_Default()
         {
-            application.Services.AddType(typeof(MyService));
-
-            application.Initialize();
-
-            var serviceScopeFactory = application.ServiceProvider.GetRequiredService<IHybridServiceScopeFactory>();
-
-            using (var scope = serviceScopeFactory.CreateScope())
+            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
             {
-                scope.ServiceProvider.GetRequiredService<MyService>();
+                application.Services.AddType(typeof(MyService));
+
+                application.Initialize();
+
+                var serviceScopeFactory = application.ServiceProvider.GetRequiredService<IHybridServiceScopeFactory>();
+
+                using (var scope = serviceScopeFactory.CreateScope())
+                {
+                    scope.ServiceProvider.GetRequiredService<MyService>();
+                }
+
+                MyService.DisposeCount.ShouldBe(1);
             }
-
-            MyService.DisposeCount.ShouldBe(1);
         }
-    }
 
-    private class MyService : ITransientDependency, IDisposable
-    {
-        public static int DisposeCount { get; private set; }
-
-        public void Dispose()
+        private class MyService : ITransientDependency, IDisposable
         {
-            ++DisposeCount;
+            public static int DisposeCount { get; private set; }
+
+            public void Dispose()
+            {
+                ++DisposeCount;
+            }
         }
     }
 }

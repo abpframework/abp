@@ -412,16 +412,14 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
         </abp-card-header>
         <abp-card-body>            
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="col-12">
-                    <div class="input-group">
-                        <input id="NewItemText" type="text" class="form-control" placeholder="enter text...">
-                    </div>
-                </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+            <form id="NewItemForm" class="form-inline">
+                <input id="NewItemText" 
+                       type="text" 
+                       class="form-control mr-2" 
+                       placeholder="enter text...">
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in Model.TodoItems)
@@ -545,7 +543,7 @@ namespace TodoApp.Blazor.Pages
         private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
         private string NewTodoText { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             TodoItems = await TodoAppService.GetListAsync();
         }
@@ -591,16 +589,17 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
         </CardHeader>
         <CardBody>
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" @onsubmit:preventDefault @onsubmit="() => Create()" class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="col-12">
-                  <div class="input-group">
-                    <input name="NewTodoText" type="text" @bind-value="@NewTodoText" class="form-control" placeholder="enter text..." />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+            <form id="NewItemForm" 
+                  @onsubmit:preventDefault
+                  @onsubmit="() => Create()"
+                  class="form-inline">
+                <input type="text" 
+                       @bind-value="@NewTodoText"
+                       class="form-control mr-2" 
+                       placeholder="enter text...">
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in TodoItems)
@@ -683,7 +682,7 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
 ````bash
-abp generate-proxy -t ng
+abp generate-proxy
 ````
 
 If everything goes well, it should generate an output like shown below:
@@ -759,16 +758,17 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
     </div>
     <div class="card-body">
       <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
-        <div class="col-12">
-          <div class="input-group">
-            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
-          </div>
-        </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
+      <form class="form-inline" (ngSubmit)="create()">
+        <input
+          name="NewTodoText"
+          type="text"
+          [(ngModel)]="newTodoText"
+          class="form-control mr-2"
+          placeholder="enter text..."
+        />
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+
       <!-- TODO ITEMS LIST -->
       <ul id="TodoList">
         <li *ngFor="let todoItem of todoItems">

@@ -9,32 +9,33 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.MediaDescriptors;
-
-[RequiresGlobalFeature(typeof(MediaFeature))]
-[RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-[Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
-[Route("api/cms-kit-admin/media")]
-public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
+namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    protected readonly IMediaDescriptorAdminAppService MediaDescriptorAdminAppService;
-
-    public MediaDescriptorAdminController(IMediaDescriptorAdminAppService mediaDescriptorAdminAppService)
+    [RequiresGlobalFeature(typeof(MediaFeature))]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
+    [Route("api/cms-kit-admin/media")]
+    public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
     {
-        MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
-    }
+        protected readonly IMediaDescriptorAdminAppService MediaDescriptorAdminAppService;
 
-    [HttpPost]
-    [Route("{entityType}")]
-    public virtual Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
-    {
-        return MediaDescriptorAdminAppService.CreateAsync(entityType, inputStream);
-    }
+        public MediaDescriptorAdminController(IMediaDescriptorAdminAppService mediaDescriptorAdminAppService)
+        {
+            MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
+        }
 
-    [HttpDelete]
-    [Route("{id}")]
-    public virtual Task DeleteAsync(Guid id)
-    {
-        return MediaDescriptorAdminAppService.DeleteAsync(id);
+        [HttpPost]
+        [Route("{entityType}")]
+        public virtual Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
+        {
+            return MediaDescriptorAdminAppService.CreateAsync(entityType, inputStream);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public virtual Task DeleteAsync(Guid id)
+        {
+            return MediaDescriptorAdminAppService.DeleteAsync(id);
+        }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.FeatureManagement;
-
-public class FeatureGroupDto
+namespace Volo.Abp.FeatureManagement
 {
-    public string Name { get; set; }
-
-    public string DisplayName { get; set; }
-
-    public List<FeatureDto> Features { get; set; }
-
-    public string GetNormalizedGroupName()
+    public class FeatureGroupDto
     {
-        return Name.Replace(".", "_");
+        public string Name { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public List<FeatureDto> Features { get; set; }
+
+        public string GetNormalizedGroupName()
+        {
+            return Name.Replace(".", "_");
+        }
     }
 }

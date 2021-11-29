@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Cli.Build;
-
-public class DotNetProjectBuildStatus
+﻿namespace Volo.Abp.Cli.Build
 {
-    public string CsProjPath { get; set; }
+    public class DotNetProjectBuildStatus
+    {
+        public string CsProjPath { get; set; }
 
-    public string CommitId { get; set; }
+        public string CommitId { get; set; }
+    }
 }

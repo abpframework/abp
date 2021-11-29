@@ -2,69 +2,70 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransientDependency
+namespace Volo.Abp.MultiTenancy
 {
-    protected virtual ITenantResolver TenantResolver { get; }
-    protected virtual ITenantStore TenantStore { get; }
-    protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
-
-    public TenantConfigurationProvider(
-        ITenantResolver tenantResolver,
-        ITenantStore tenantStore,
-        ITenantResolveResultAccessor tenantResolveResultAccessor)
+    public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransientDependency
     {
-        TenantResolver = tenantResolver;
-        TenantStore = tenantStore;
-        TenantResolveResultAccessor = tenantResolveResultAccessor;
-    }
+        protected virtual ITenantResolver TenantResolver { get; }
+        protected virtual ITenantStore TenantStore { get; }
+        protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
 
-    public virtual async Task<TenantConfiguration> GetAsync(bool saveResolveResult = false)
-    {
-        var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
-
-        if (saveResolveResult)
+        public TenantConfigurationProvider(
+            ITenantResolver tenantResolver,
+            ITenantStore tenantStore,
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
-            TenantResolveResultAccessor.Result = resolveResult;
+            TenantResolver = tenantResolver;
+            TenantStore = tenantStore;
+            TenantResolveResultAccessor = tenantResolveResultAccessor;
         }
 
-        TenantConfiguration tenant = null;
-        if (resolveResult.TenantIdOrName != null)
+        public virtual async Task<TenantConfiguration> GetAsync(bool saveResolveResult = false)
         {
-            tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+            var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
 
-            if (tenant == null)
+            if (saveResolveResult)
             {
-                throw new BusinessException(
-                    code: "Volo.AbpIo.MultiTenancy:010001",
-                    message: "Tenant not found!",
-                    details: "There is no tenant with the tenant id or name: " + resolveResult.TenantIdOrName
-                );
+                TenantResolveResultAccessor.Result = resolveResult;
             }
 
-            if (!tenant.IsActive)
+            TenantConfiguration tenant = null;
+            if (resolveResult.TenantIdOrName != null)
             {
-                throw new BusinessException(
-                    code: "Volo.AbpIo.MultiTenancy:010002",
-                    message: "Tenant not active!",
-                    details: "The tenant is no active with the tenant id or name: " + resolveResult.TenantIdOrName
-                );
+                tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+
+                if (tenant == null)
+                {
+                    throw new BusinessException(
+                        code: "Volo.AbpIo.MultiTenancy:010001",
+                        message: "Tenant not found!",
+                        details: "There is no tenant with the tenant id or name: " + resolveResult.TenantIdOrName
+                    );
+                }
+
+                if (!tenant.IsActive)
+                {
+                    throw new BusinessException(
+                        code: "Volo.AbpIo.MultiTenancy:010002",
+                        message: "Tenant not active!",
+                        details: "The tenant is no active with the tenant id or name: " + resolveResult.TenantIdOrName
+                    );
+                }
             }
+
+            return tenant;
         }
 
-        return tenant;
-    }
-
-    protected virtual async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
-    {
-        if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
+        protected virtual async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
         {
-            return await TenantStore.FindAsync(parsedTenantId);
-        }
-        else
-        {
-            return await TenantStore.FindAsync(tenantIdOrName);
+            if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
+            {
+                return await TenantStore.FindAsync(parsedTenantId);
+            }
+            else
+            {
+                return await TenantStore.FindAsync(tenantIdOrName);
+            }
         }
     }
 }

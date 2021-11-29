@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
-
-public class AbpColumnBreakerTagHelper : AbpTagHelper<AbpColumnBreakerTagHelper, AbpColumnBreakerTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    public AbpColumnBreakerTagHelper(AbpColumnBreakerTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpColumnBreakerTagHelper : AbpTagHelper<AbpColumnBreakerTagHelper, AbpColumnBreakerTagHelperService>
     {
+        public AbpColumnBreakerTagHelper(AbpColumnBreakerTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
 
+        }
     }
 }

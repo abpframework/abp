@@ -1,18 +1,19 @@
 ﻿using System;
 
-namespace Microsoft.AspNetCore.Routing;
-
-public class EndpointRouteBuilderContext
+namespace Microsoft.AspNetCore.Routing
 {
-    public IEndpointRouteBuilder Endpoints { get; }
-
-    public IServiceProvider ScopeServiceProvider { get; }
-
-    public EndpointRouteBuilderContext(
-        IEndpointRouteBuilder endpoints,
-        IServiceProvider scopeServiceProvider)
+    public class EndpointRouteBuilderContext
     {
-        Endpoints = endpoints;
-        ScopeServiceProvider = scopeServiceProvider;
+        public IEndpointRouteBuilder Endpoints { get; }
+        
+        public IServiceProvider ScopeServiceProvider { get; }
+
+        public EndpointRouteBuilderContext(
+            IEndpointRouteBuilder endpoints, 
+            IServiceProvider scopeServiceProvider)
+        {
+            Endpoints = endpoints;
+            ScopeServiceProvider = scopeServiceProvider;
+        }
     }
 }

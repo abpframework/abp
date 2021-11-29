@@ -7,20 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components;
-
-public class DynamicFormsModel : PageModel
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 {
-    [BindProperty]
-    public DetailedModel MyDetailedModel { get; set; }
+    public class DynamicFormsModel : PageModel
+    {
+        [BindProperty]
+        public DetailedModel MyDetailedModel { get; set; }
 
-    public OrderExampleModel MyOrderExampleModel { get; set; }
+        public OrderExampleModel MyOrderExampleModel { get; set; }
 
-    public AttributeExamplesModel MyAttributeExamplesModel { get; set; }
+        public AttributeExamplesModel MyAttributeExamplesModel { get; set; }
 
-    public FormContentExampleModel MyFormContentExampleModel { get; set; }
+        public FormContentExampleModel MyFormContentExampleModel { get; set; }
 
-    public List<SelectListItem> CountryList { get; set; } = new List<SelectListItem>
+        public List<SelectListItem> CountryList { get; set; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "CA", Text = "Canada"},
             new SelectListItem { Value = "US", Text = "USA"},
@@ -28,131 +28,132 @@ public class DynamicFormsModel : PageModel
             new SelectListItem { Value = "RU", Text = "Russia"}
         };
 
-    public void OnGet()
-    {
-        MyDetailedModel = new DetailedModel
+        public void OnGet()
         {
-            Name = "",
-            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            IsActive = true,
-            Age = 65,
-            Day = DateTime.Now,
-            MyCarType = CarType.Coupe,
-            YourCarType = CarType.Sedan,
-            Country = "RU",
-            NeighborCountries = new List<string>() { "UK", "CA" }
-        };
+                MyDetailedModel = new DetailedModel
+                {
+                    Name = "",
+                    Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    IsActive = true,
+                    Age = 65,
+                    Day = DateTime.Now,
+                    MyCarType = CarType.Coupe,
+                    YourCarType = CarType.Sedan,
+                    Country = "RU",
+                    NeighborCountries = new List<string>() { "UK", "CA" }
+                };
 
-        MyFormContentExampleModel = new FormContentExampleModel();
+            MyFormContentExampleModel = new FormContentExampleModel();
 
-        MyOrderExampleModel = new OrderExampleModel();
+            MyOrderExampleModel = new OrderExampleModel();
 
-        MyAttributeExamplesModel = new AttributeExamplesModel
+            MyAttributeExamplesModel = new AttributeExamplesModel
+            {
+                DisabledInput = "Disabled Input",
+                ReadonlyInput = "Readonly Input",
+                LargeInput = "Large Input",
+                SmallInput = "Small Input"
+            };
+
+        }
+
+        public class FormContentExampleModel
         {
-            DisabledInput = "Disabled Input",
-            ReadonlyInput = "Readonly Input",
-            LargeInput = "Large Input",
-            SmallInput = "Small Input"
-        };
+            public string SampleInput { get; set; }
+        }
 
-    }
+        public class AttributeExamplesModel
+        {
+            [HiddenInput]
+            public string HiddenInput { get; set; }
 
-    public class FormContentExampleModel
-    {
-        public string SampleInput { get; set; }
-    }
+            [DisabledInput]
+            public string DisabledInput{ get; set; }
 
-    public class AttributeExamplesModel
-    {
-        [HiddenInput]
-        public string HiddenInput { get; set; }
+            [ReadOnlyInput]
+            public string ReadonlyInput { get; set; }
 
-        [DisabledInput]
-        public string DisabledInput { get; set; }
+            [FormControlSize(AbpFormControlSize.Large)]
+            public string LargeInput { get; set; }
 
-        [ReadOnlyInput]
-        public string ReadonlyInput { get; set; }
+            [FormControlSize(AbpFormControlSize.Small)]
+            public string SmallInput { get; set; }
+        }
 
-        [FormControlSize(AbpFormControlSize.Large)]
-        public string LargeInput { get; set; }
+        public class OrderExampleModel
+        {
+            [DisplayOrder(10005)]
+            public string Surname{ get; set; }
 
-        [FormControlSize(AbpFormControlSize.Small)]
-        public string SmallInput { get; set; }
-    }
+            //Default 10000
+            public string EmailAddress { get; set; }
 
-    public class OrderExampleModel
-    {
-        [DisplayOrder(10005)]
-        public string Surname { get; set; }
+            [DisplayOrder(10003)]
+            public string Name { get; set; }
 
-        //Default 10000
-        public string EmailAddress { get; set; }
+            [DisplayOrder(9999)]
+            public string City { get; set; }
+        }
 
-        [DisplayOrder(10003)]
-        public string Name { get; set; }
+        public class DetailedModel
+        {
+            [Required]
+            [Placeholder("Enter your name...")]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+            
+            [TextArea(Rows = 4)]
+            [Display(Name = "Description")]
+            [InputInfoText("Describe Yourself")]
+            public string Description { get; set; }
 
-        [DisplayOrder(9999)]
-        public string City { get; set; }
-    }
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
+            public string Password { get; set; }
 
-    public class DetailedModel
-    {
-        [Required]
-        [Placeholder("Enter your name...")]
-        [Display(Name = "Name")]
-        public string Name { get; set; }
+            [Display(Name = "Is Active")]
+            public bool IsActive { get; set; }
 
-        [TextArea(Rows = 4)]
-        [Display(Name = "Description")]
-        [InputInfoText("Describe Yourself")]
-        public string Description { get; set; }
+            [Required]
+            [Display(Name = "Age")]
+            public int Age { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+            [Required]
+            [Display(Name = "My Car Type")]
+            public CarType MyCarType { get; set; }
 
-        [Display(Name = "Is Active")]
-        public bool IsActive { get; set; }
+            [Required]
+            [Display(Name = "My Car Type Nullable")]
+            public CarType? MyCarTypeNullable { get; set; }
 
-        [Required]
-        [Display(Name = "Age")]
-        public int Age { get; set; }
+            [Required]
+            [AbpRadioButton(Inline = true)]
+            [Display(Name = "Your Car Type")]
+            public CarType YourCarType { get; set; }
 
-        [Required]
-        [Display(Name = "My Car Type")]
-        public CarType MyCarType { get; set; }
+            [DataType(DataType.Date)]
+            [Display(Name = "Day")]
+            public DateTime Day { get; set; }
+            
+            [SelectItems(nameof(CountryList))]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+            
+            [SelectItems(nameof(CountryList))]
+            [Display(Name = "Neighbor Countries")]
+            public List<string> NeighborCountries { get; set; }
 
-        [Required]
-        [Display(Name = "My Car Type Nullable")]
-        public CarType? MyCarTypeNullable { get; set; }
+            [DynamicFormIgnore]
+            public string IgnoredProperty { get; set; }
+        }
 
-        [Required]
-        [AbpRadioButton(Inline = true)]
-        [Display(Name = "Your Car Type")]
-        public CarType YourCarType { get; set; }
-
-        [DataType(DataType.Date)]
-        [Display(Name = "Day")]
-        public DateTime Day { get; set; }
-
-        [SelectItems(nameof(CountryList))]
-        [Display(Name = "Country")]
-        public string Country { get; set; }
-
-        [SelectItems(nameof(CountryList))]
-        [Display(Name = "Neighbor Countries")]
-        public List<string> NeighborCountries { get; set; }
-
-        [DynamicFormIgnore]
-        public string IgnoredProperty { get; set; }
-    }
-
-    public enum CarType
-    {
-        Sedan,
-        Hatchback,
-        StationWagon,
-        Coupe
+        public enum CarType
+        {
+            Sedan,
+            Hatchback,
+            StationWagon,
+            Coupe
+        }
     }
 }

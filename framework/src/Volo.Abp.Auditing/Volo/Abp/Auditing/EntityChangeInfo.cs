@@ -3,61 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Data;
 
-namespace Volo.Abp.Auditing;
-
-[Serializable]
-public class EntityChangeInfo : IHasExtraProperties
+namespace Volo.Abp.Auditing
 {
-    public DateTime ChangeTime { get; set; }
-
-    public EntityChangeType ChangeType { get; set; }
-
-    /// <summary>
-    /// TenantId of the related entity.
-    /// This is not the TenantId of the audit log entry.
-    /// There can be multiple tenant data changes in a single audit log entry.
-    /// </summary>
-    public Guid? EntityTenantId { get; set; }
-
-    public string EntityId { get; set; }
-
-    public string EntityTypeFullName { get; set; }
-
-    public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
-
-    public ExtraPropertyDictionary ExtraProperties { get; }
-
-    public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
-
-    public EntityChangeInfo()
+    [Serializable]
+    public class EntityChangeInfo : IHasExtraProperties
     {
-        ExtraProperties = new ExtraPropertyDictionary();
-    }
+        public DateTime ChangeTime { get; set; }
 
-    public virtual void Merge(EntityChangeInfo changeInfo)
-    {
-        foreach (var propertyChange in changeInfo.PropertyChanges)
+        public EntityChangeType ChangeType { get; set; }
+
+        /// <summary>
+        /// TenantId of the related entity.
+        /// This is not the TenantId of the audit log entry.
+        /// There can be multiple tenant data changes in a single audit log entry.
+        /// </summary>
+        public Guid? EntityTenantId { get; set; }
+
+        public string EntityId { get; set; }
+
+        public string EntityTypeFullName { get; set; }
+
+        public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
+
+        public ExtraPropertyDictionary ExtraProperties { get; }
+
+        public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
+
+        public EntityChangeInfo()
         {
-            var existingChange = PropertyChanges.FirstOrDefault(p => p.PropertyName == propertyChange.PropertyName);
-            if (existingChange == null)
-            {
-                PropertyChanges.Add(propertyChange);
-            }
-            else
-            {
-                existingChange.NewValue = propertyChange.NewValue;
-            }
+            ExtraProperties = new ExtraPropertyDictionary();
         }
 
-        foreach (var extraProperty in changeInfo.ExtraProperties)
+        public virtual void Merge(EntityChangeInfo changeInfo)
         {
-            var key = extraProperty.Key;
-            if (ExtraProperties.ContainsKey(key))
+            foreach (var propertyChange in changeInfo.PropertyChanges)
             {
-                key = InternalUtils.AddCounter(key);
+                var existingChange = PropertyChanges.FirstOrDefault(p => p.PropertyName == propertyChange.PropertyName);
+                if (existingChange == null)
+                {
+                    PropertyChanges.Add(propertyChange);
+                }
+                else
+                {
+                    existingChange.NewValue = propertyChange.NewValue;
+                }
             }
 
-            ExtraProperties[key] = extraProperty.Value;
+            foreach (var extraProperty in changeInfo.ExtraProperties)
+            {
+                var key = extraProperty.Key;
+                if (ExtraProperties.ContainsKey(key))
+                {
+                    key = InternalUtils.AddCounter(key);
+                }
+
+                ExtraProperties[key] = extraProperty.Value;
+            }
         }
     }
 }

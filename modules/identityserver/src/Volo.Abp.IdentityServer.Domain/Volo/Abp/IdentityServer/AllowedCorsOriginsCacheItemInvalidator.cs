@@ -5,27 +5,28 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.IdentityServer.Clients;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AllowedCorsOriginsCacheItemInvalidator :
-    ILocalEventHandler<EntityChangedEventData<Client>>,
-    ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>,
-    ITransientDependency
+namespace Volo.Abp.IdentityServer
 {
-    protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
-
-    public AllowedCorsOriginsCacheItemInvalidator(IDistributedCache<AllowedCorsOriginsCacheItem> cache)
+    public class AllowedCorsOriginsCacheItemInvalidator : 
+        ILocalEventHandler<EntityChangedEventData<Client>>,
+        ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>,
+        ITransientDependency
     {
-        Cache = cache;
-    }
+        protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
 
-    public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
-    {
-        await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
-    }
+        public AllowedCorsOriginsCacheItemInvalidator(IDistributedCache<AllowedCorsOriginsCacheItem> cache)
+        {
+            Cache = cache;
+        }
+        
+        public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
+        {
+            await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
+        }
 
-    public virtual async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
-    {
-        await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
+        public virtual async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
+        {
+            await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
+        }
     }
 }

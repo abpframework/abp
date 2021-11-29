@@ -3,32 +3,34 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Web.Icons;
-
-public class LocalizableIconDictionary : Dictionary<string, string>
+namespace Volo.CmsKit.Web.Icons
 {
-    [NotNull]
-    public string Default {
-        get => _default;
-        set => _default = Check.NotNullOrWhiteSpace(value, nameof(value));
-    }
-    private string _default;
-
-    public LocalizableIconDictionary([NotNull] string defaultIcon)
+    public class LocalizableIconDictionary : Dictionary<string, string>
     {
-        Default = defaultIcon;
-    }
-
-    public string GetLocalizedIconOrDefault(string cultureName = null)
-    {
-        cultureName ??= CultureInfo.CurrentUICulture.Name;
-
-        var localizedIcon = this.GetOrDefault(cultureName);
-        if (localizedIcon != null)
+        [NotNull]
+        public string Default
         {
-            return localizedIcon;
+            get => _default;
+            set => _default = Check.NotNullOrWhiteSpace(value, nameof(value));
+        }
+        private string _default;
+
+        public LocalizableIconDictionary([NotNull] string defaultIcon)
+        {
+            Default = defaultIcon;
         }
 
-        return Default;
+        public string GetLocalizedIconOrDefault(string cultureName = null)
+        {
+            cultureName ??= CultureInfo.CurrentUICulture.Name;
+            
+            var localizedIcon = this.GetOrDefault(cultureName);
+            if (localizedIcon != null)
+            {
+                return localizedIcon;
+            }
+
+            return Default;
+        }
     }
 }

@@ -3,49 +3,51 @@ using Shouldly;
 using Volo.Abp.Localization;
 using Xunit;
 
-namespace Volo.Abp.TextTemplating;
-
-public class HybridTemplateRendererProvider_Tests : AbpTextTemplatingTestBase<AbpTextTemplatingTestModule>
+namespace Volo.Abp.TextTemplating
 {
-    private readonly ITemplateRenderer _templateRenderer;
-
-    public HybridTemplateRendererProvider_Tests()
+    public class HybridTemplateRendererProvider_Tests : AbpTextTemplatingTestBase<AbpTextTemplatingTestModule>
     {
-        _templateRenderer = GetRequiredService<ITemplateRenderer>();
-    }
+        private readonly ITemplateRenderer _templateRenderer;
 
-    [Fact]
-    public async Task Should_Render_By_Scriban()
-    {
-        using (CultureHelper.Use("en"))
+        public HybridTemplateRendererProvider_Tests()
         {
-            (await _templateRenderer.RenderAsync(
-                TestTemplates.HybridTemplateScriban,
-                model: new {
-                    name = "John"
-                }
-            )).ShouldBe("Hello John, how are you?");
+            _templateRenderer = GetRequiredService<ITemplateRenderer>();
         }
-    }
 
-    [Fact]
-    public async Task Should_Render_By_Razor()
-    {
-        using (CultureHelper.Use("en"))
+        [Fact]
+        public async Task Should_Render_By_Scriban()
         {
-            (await _templateRenderer.RenderAsync(
-                TestTemplates.HybridTemplateRazor,
-                model: new HybridModel
-                {
-                    Name = "John"
-                }
-            )).ShouldBe("Hello John, how are you?");
+            using (CultureHelper.Use("en"))
+            {
+                (await _templateRenderer.RenderAsync(
+                    TestTemplates.HybridTemplateScriban,
+                    model: new
+                    {
+                        name = "John"
+                    }
+                )).ShouldBe("Hello John, how are you?");
+            }
         }
-    }
 
-    public class HybridModel
-    {
-        public string Name { get; set; }
-    }
+        [Fact]
+        public async Task Should_Render_By_Razor()
+        {
+            using (CultureHelper.Use("en"))
+            {
+                (await _templateRenderer.RenderAsync(
+                    TestTemplates.HybridTemplateRazor,
+                    model: new HybridModel
+                    {
+                        Name = "John"
+                    }
+                )).ShouldBe("Hello John, how are you?");
+            }
+        }
 
+        public class HybridModel
+        {
+            public string Name { get; set; }
+        }
+
+    }
 }

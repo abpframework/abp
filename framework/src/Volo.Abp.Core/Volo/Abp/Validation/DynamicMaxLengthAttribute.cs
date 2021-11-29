@@ -4,35 +4,36 @@ using System.Diagnostics;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Validation;
-
-public class DynamicMaxLengthAttribute : MaxLengthAttribute
+namespace Volo.Abp.Validation
 {
-    private static readonly FieldInfo MaximumLengthField;
-
-    static DynamicMaxLengthAttribute()
+    public class DynamicMaxLengthAttribute : MaxLengthAttribute
     {
-        MaximumLengthField = typeof(MaxLengthAttribute).GetField(
-            "<Length>k__BackingField",
-            BindingFlags.Instance | BindingFlags.NonPublic
-        );
-        Debug.Assert(MaximumLengthField != null, nameof(MaximumLengthField) + " != null");
-    }
-
-    public DynamicMaxLengthAttribute(
-        [NotNull] Type sourceType,
-        [CanBeNull] string maximumLengthPropertyName)
-    {
-        Check.NotNull(sourceType, nameof(sourceType));
-
-        if (maximumLengthPropertyName != null)
+        private static readonly FieldInfo MaximumLengthField;
+        
+        static DynamicMaxLengthAttribute()
         {
-            var maximumLengthProperty = sourceType.GetProperty(
-                maximumLengthPropertyName,
-                BindingFlags.Static | BindingFlags.Public
+            MaximumLengthField = typeof(MaxLengthAttribute).GetField(
+                "<Length>k__BackingField",
+                BindingFlags.Instance | BindingFlags.NonPublic
             );
-            Debug.Assert(maximumLengthProperty != null, nameof(maximumLengthProperty) + " != null");
-            MaximumLengthField.SetValue(this, (int)maximumLengthProperty.GetValue(null));
+            Debug.Assert(MaximumLengthField != null, nameof(MaximumLengthField) + " != null");
+        }
+
+        public DynamicMaxLengthAttribute(
+            [NotNull] Type sourceType,
+            [CanBeNull] string maximumLengthPropertyName)
+        {
+            Check.NotNull(sourceType, nameof(sourceType));
+            
+            if (maximumLengthPropertyName != null)
+            {
+                var maximumLengthProperty = sourceType.GetProperty(
+                    maximumLengthPropertyName,
+                    BindingFlags.Static | BindingFlags.Public
+                );
+                Debug.Assert(maximumLengthProperty != null, nameof(maximumLengthProperty) + " != null");
+                MaximumLengthField.SetValue(this, (int) maximumLengthProperty.GetValue(null));
+            }
         }
     }
 }

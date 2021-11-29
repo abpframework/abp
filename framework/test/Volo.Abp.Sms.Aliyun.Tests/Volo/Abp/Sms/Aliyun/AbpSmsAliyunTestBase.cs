@@ -1,11 +1,12 @@
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.Sms.Aliyun;
-
-public class AbpSmsAliyunTestBase : AbpIntegratedTest<AbpSmsAliyunTestsModule>
+namespace Volo.Abp.Sms.Aliyun
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpSmsAliyunTestBase : AbpIntegratedTest<AbpSmsAliyunTestsModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

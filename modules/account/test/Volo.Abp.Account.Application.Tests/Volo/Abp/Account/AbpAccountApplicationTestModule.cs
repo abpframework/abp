@@ -14,68 +14,69 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Account;
-
-[DependsOn(
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAuthorizationModule),
-    typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpAccountApplicationModule),
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
-)]
-public class AbpAccountApplicationTestModule : AbpModule
+namespace Volo.Abp.Account
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAuthorizationModule),
+        typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
+    )]
+    public class AbpAccountApplicationTestModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
-
-        var sqliteConnection = CreateDatabaseAndGetConnection();
-
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configure(abpDbContextConfigurationContext =>
+            context.Services.AddAlwaysAllowAuthorization();
+
+            var sqliteConnection = CreateDatabaseAndGetConnection();
+
+            Configure<AbpDbContextOptions>(options =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                options.Configure(abpDbContextConfigurationContext =>
+                {
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                });
             });
-        });
-    }
-    private static SqliteConnection CreateDatabaseAndGetConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        new IdentityDbContext(
-            new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        new PermissionManagementDbContext(
-            new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-
-        return connection;
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        }
+        private static SqliteConnection CreateDatabaseAndGetConnection()
         {
-            var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
-            AsyncHelper.RunSync(async () =>
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+
+            new IdentityDbContext(
+                new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+            new PermissionManagementDbContext(
+                new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+
+            return connection;
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
             {
-                await dataSeeder.SeedAsync();
-                await scope.ServiceProvider
-                    .GetRequiredService<AbpAccountTestDataBuilder>()
-                    .Build();
-            });
+                var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+                AsyncHelper.RunSync(async () =>
+                {
+                    await dataSeeder.SeedAsync();
+                    await scope.ServiceProvider
+                        .GetRequiredService<AbpAccountTestDataBuilder>()
+                        .Build();
+                });
+            }
         }
     }
 }

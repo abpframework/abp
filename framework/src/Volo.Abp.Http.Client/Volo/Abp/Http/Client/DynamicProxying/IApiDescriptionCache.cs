@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.Client.DynamicProxying;
-
-public interface IApiDescriptionCache
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    Task<ApplicationApiDescriptionModel> GetAsync(
-        string baseUrl,
-        Func<Task<ApplicationApiDescriptionModel>> factory
-    );
+    public interface IApiDescriptionCache
+    {
+        Task<ApplicationApiDescriptionModel> GetAsync(
+            string baseUrl,
+            Func<Task<ApplicationApiDescriptionModel>> factory
+        );
+    }
 }

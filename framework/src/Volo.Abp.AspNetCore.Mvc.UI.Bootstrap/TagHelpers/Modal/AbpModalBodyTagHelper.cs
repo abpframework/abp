@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
-
-public class AbpModalBodyTagHelper : AbpTagHelper<AbpModalBodyTagHelper, AbpModalBodyTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
-    public AbpModalBodyTagHelper(AbpModalBodyTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpModalBodyTagHelper : AbpTagHelper<AbpModalBodyTagHelper, AbpModalBodyTagHelperService>
     {
+        public AbpModalBodyTagHelper(AbpModalBodyTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
 
+        }
     }
 }

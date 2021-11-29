@@ -3,58 +3,59 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlazoriseUI;
-
-[Dependency(ReplaceServices = true)]
-public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDependency
+namespace Volo.Abp.BlazoriseUI
 {
-    /// <summary>
-    /// An event raised after the notification is received.
-    /// </summary>
-    public event EventHandler<UiNotificationEventArgs> NotificationReceived;
-
-    public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
+    [Dependency(ReplaceServices = true)]
+    public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDependency
     {
-        var uiNotificationOptions = CreateDefaultOptions();
-        options?.Invoke(uiNotificationOptions);
+        /// <summary>
+        /// An event raised after the notification is received.
+        /// </summary>
+        public event EventHandler<UiNotificationEventArgs> NotificationReceived;
 
-        NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Info, message, title, uiNotificationOptions));
+        public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
+        {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
 
-        return Task.CompletedTask;
-    }
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Info, message, title, uiNotificationOptions));
 
-    public Task Success(string message, string title = null, Action<UiNotificationOptions> options = null)
-    {
-        var uiNotificationOptions = CreateDefaultOptions();
-        options?.Invoke(uiNotificationOptions);
+            return Task.CompletedTask;
+        }
 
-        NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Success, message, title, uiNotificationOptions));
+        public Task Success(string message, string title = null, Action<UiNotificationOptions> options = null)
+        {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
 
-        return Task.CompletedTask;
-    }
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Success, message, title, uiNotificationOptions));
 
-    public Task Warn(string message, string title = null, Action<UiNotificationOptions> options = null)
-    {
-        var uiNotificationOptions = CreateDefaultOptions();
-        options?.Invoke(uiNotificationOptions);
+            return Task.CompletedTask;
+        }
 
-        NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Warning, message, title, uiNotificationOptions));
+        public Task Warn(string message, string title = null, Action<UiNotificationOptions> options = null)
+        {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
 
-        return Task.CompletedTask;
-    }
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Warning, message, title, uiNotificationOptions));
 
-    public Task Error(string message, string title = null, Action<UiNotificationOptions> options = null)
-    {
-        var uiNotificationOptions = CreateDefaultOptions();
-        options?.Invoke(uiNotificationOptions);
+            return Task.CompletedTask;
+        }
 
-        NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Error, message, title, uiNotificationOptions));
+        public Task Error(string message, string title = null, Action<UiNotificationOptions> options = null)
+        {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
 
-        return Task.CompletedTask;
-    }
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Error, message, title, uiNotificationOptions));
 
-    protected virtual UiNotificationOptions CreateDefaultOptions()
-    {
-        return new UiNotificationOptions();
+            return Task.CompletedTask;
+        }
+
+        protected virtual UiNotificationOptions CreateDefaultOptions()
+        {
+            return new UiNotificationOptions();
+        }
     }
 }

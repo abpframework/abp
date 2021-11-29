@@ -2,10 +2,11 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.PermissionManagement.MongoDB;
-
-[ConnectionStringName(AbpPermissionManagementDbProperties.ConnectionStringName)]
-public interface IPermissionManagementMongoDbContext : IAbpMongoDbContext
+namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    IMongoCollection<PermissionGrant> PermissionGrants { get; }
+    [ConnectionStringName(AbpPermissionManagementDbProperties.ConnectionStringName)]
+    public interface IPermissionManagementMongoDbContext : IAbpMongoDbContext
+    {
+        IMongoCollection<PermissionGrant> PermissionGrants { get; }
+    }
 }

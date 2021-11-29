@@ -1,18 +1,19 @@
 using Volo.Abp.Collections;
 
-namespace Volo.Abp.EventBus.Distributed;
-
-public class AbpDistributedEventBusOptions
+namespace Volo.Abp.EventBus.Distributed
 {
-    public ITypeList<IEventHandler> Handlers { get; }
-
-    public OutboxConfigDictionary Outboxes { get; }
-
-    public InboxConfigDictionary Inboxes { get; }
-    public AbpDistributedEventBusOptions()
+    public class AbpDistributedEventBusOptions
     {
-        Handlers = new TypeList<IEventHandler>();
-        Outboxes = new OutboxConfigDictionary();
-        Inboxes = new InboxConfigDictionary();
+        public ITypeList<IEventHandler> Handlers { get; }
+
+        public OutboxConfigDictionary Outboxes { get; }
+
+        public InboxConfigDictionary Inboxes { get; }
+        public AbpDistributedEventBusOptions()
+        {
+            Handlers = new TypeList<IEventHandler>();
+            Outboxes = new OutboxConfigDictionary();
+            Inboxes = new InboxConfigDictionary();
+        }
     }
 }

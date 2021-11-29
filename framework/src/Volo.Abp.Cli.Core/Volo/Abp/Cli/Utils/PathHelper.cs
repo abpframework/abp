@@ -1,22 +1,23 @@
 ﻿using System.IO;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Cli.Utils;
-
-public static class PathHelper
+namespace Volo.Abp.Cli.Utils
 {
-    public static string NormalizePath([CanBeNull] string path)
+    public static class PathHelper
     {
-        if (string.IsNullOrEmpty(path))
+        public static string NormalizePath([CanBeNull] string path)
         {
-            return path;
-        }
+            if (string.IsNullOrEmpty(path))
+            {
+                return path;
+            }
 
-        if (Path.IsPathRooted(path))
-        {
-            return path;
-        }
+            if (Path.IsPathRooted(path))
+            {
+                return path;
+            }
 
-        return Path.Combine(Directory.GetCurrentDirectory(), path);
+            return Path.Combine(Directory.GetCurrentDirectory(), path);
+        }
     }
 }

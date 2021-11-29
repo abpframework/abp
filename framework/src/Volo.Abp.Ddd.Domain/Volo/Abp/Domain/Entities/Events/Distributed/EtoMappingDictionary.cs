@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed;
-
-public class EtoMappingDictionary : Dictionary<Type, EtoMappingDictionaryItem>
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
-    public void Add<TEntity, TEntityEto>(Type objectMappingContextType = null)
+    public class EtoMappingDictionary : Dictionary<Type, EtoMappingDictionaryItem>
     {
-        this[typeof(TEntity)] = new EtoMappingDictionaryItem(typeof(TEntityEto), objectMappingContextType);
+        public void Add<TEntity, TEntityEto>(Type objectMappingContextType = null)
+        {
+            this[typeof(TEntity)] = new EtoMappingDictionaryItem(typeof(TEntityEto), objectMappingContextType);
+        }
     }
 }

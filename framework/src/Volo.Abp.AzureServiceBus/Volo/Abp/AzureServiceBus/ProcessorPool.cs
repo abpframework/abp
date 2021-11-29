@@ -8,74 +8,75 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AzureServiceBus;
-
-public class ProcessorPool : IProcessorPool, ISingletonDependency
+namespace Volo.Abp.AzureServiceBus
 {
-    public ILogger<ProcessorPool> Logger { get; set; }
-
-    private bool _isDisposed;
-    private readonly AbpAzureServiceBusOptions _options;
-    private readonly IConnectionPool _connectionPool;
-    private readonly ConcurrentDictionary<string, Lazy<ServiceBusProcessor>> _processors;
-
-    public ProcessorPool(
-        IOptions<AbpAzureServiceBusOptions> options,
-        IConnectionPool connectionPool)
+    public class ProcessorPool : IProcessorPool, ISingletonDependency
     {
-        _options = options.Value;
-        _connectionPool = connectionPool;
-        _processors = new ConcurrentDictionary<string, Lazy<ServiceBusProcessor>>();
-        Logger = new NullLogger<ProcessorPool>();
-    }
+        public ILogger<ProcessorPool> Logger { get; set; }
 
-    public async Task<ServiceBusProcessor> GetAsync(string subscriptionName, string topicName, string connectionName)
-    {
-        var admin = _connectionPool.GetAdministrationClient(connectionName);
-        await admin.SetupSubscriptionAsync(topicName, subscriptionName);
-
-        return _processors.GetOrAdd(
-            $"{topicName}-{subscriptionName}", new Lazy<ServiceBusProcessor>(() =>
-            {
-                var config = _options.Connections.GetOrDefault(connectionName);
-                var client = _connectionPool.GetClient(connectionName);
-                return client.CreateProcessor(topicName, subscriptionName, config.Processor);
-            })
-        ).Value;
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_isDisposed)
+        private bool _isDisposed;
+        private readonly AbpAzureServiceBusOptions _options;
+        private readonly IConnectionPool _connectionPool;
+        private readonly ConcurrentDictionary<string, Lazy<ServiceBusProcessor>> _processors;
+        
+        public ProcessorPool(
+            IOptions<AbpAzureServiceBusOptions> options,
+            IConnectionPool connectionPool)
         {
-            return;
+            _options = options.Value;
+            _connectionPool = connectionPool;
+            _processors = new ConcurrentDictionary<string, Lazy<ServiceBusProcessor>>();
+            Logger = new NullLogger<ProcessorPool>();
         }
 
-        _isDisposed = true;
-        if (!_processors.Any())
+        public async Task<ServiceBusProcessor> GetAsync(string subscriptionName, string topicName, string connectionName)
         {
-            Logger.LogDebug($"Disposed processor pool with no processors in the pool.");
-            return;
+            var admin = _connectionPool.GetAdministrationClient(connectionName);
+            await admin.SetupSubscriptionAsync(topicName, subscriptionName);
+
+            return _processors.GetOrAdd(
+                $"{topicName}-{subscriptionName}", new Lazy<ServiceBusProcessor>(() =>
+                {
+                    var config = _options.Connections.GetOrDefault(connectionName);
+                    var client = _connectionPool.GetClient(connectionName);
+                    return client.CreateProcessor(topicName, subscriptionName, config.Processor);
+                })
+            ).Value;
         }
 
-        Logger.LogInformation($"Disposing processor pool ({_processors.Count} processors).");
-
-        foreach (var item in _processors.Values)
+        public async ValueTask DisposeAsync()
         {
-            var processor = item.Value;
-            if (processor.IsProcessing)
+            if (_isDisposed)
             {
-                await processor.StopProcessingAsync();
+                return;
             }
 
-            if (!processor.IsClosed)
+            _isDisposed = true;
+            if (!_processors.Any())
             {
-                await processor.CloseAsync();
+                Logger.LogDebug($"Disposed processor pool with no processors in the pool.");
+                return;
             }
 
-            await processor.DisposeAsync();
-        }
+            Logger.LogInformation($"Disposing processor pool ({_processors.Count} processors).");
 
-        _processors.Clear();
+            foreach (var item in _processors.Values)
+            {
+                var processor = item.Value;
+                if (processor.IsProcessing)
+                {
+                    await processor.StopProcessingAsync();
+                }
+
+                if (!processor.IsClosed)
+                {
+                    await processor.CloseAsync();
+                }
+
+                await processor.DisposeAsync();
+            }
+
+            _processors.Clear();
+        }
     }
 }

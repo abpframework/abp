@@ -9,57 +9,58 @@ using Volo.Abp.PermissionManagement.Blazor;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.Identity.Blazor;
-
-[DependsOn(
-    typeof(AbpIdentityApplicationContractsModule),
-    typeof(AbpAutoMapperModule),
-    typeof(AbpPermissionManagementBlazorModule),
-    typeof(AbpBlazoriseUIModule)
-    )]
-public class AbpIdentityBlazorModule : AbpModule
+namespace Volo.Abp.Identity.Blazor
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityApplicationContractsModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpPermissionManagementBlazorModule),
+        typeof(AbpBlazoriseUIModule)
+        )]
+    public class AbpIdentityBlazorModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityBlazorModule>();
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<AbpIdentityBlazorAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityBlazorModule>();
 
-        Configure<AbpNavigationOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpIdentityBlazorAutoMapperProfile>(validate: true);
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
+            });
+
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
+            });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
-        });
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper
+                    .ApplyEntityConfigurationToUi(
+                        IdentityModuleExtensionConsts.ModuleName,
+                        IdentityModuleExtensionConsts.EntityNames.Role,
+                        createFormTypes: new[] { typeof(IdentityRoleCreateDto) },
+                        editFormTypes: new[] { typeof(IdentityRoleUpdateDto) }
+                    );
 
-        Configure<AbpRouterOptions>(options =>
-        {
-            options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
-        });
-    }
-
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        OneTimeRunner.Run(() =>
-        {
-            ModuleExtensionConfigurationHelper
-                .ApplyEntityConfigurationToUi(
-                    IdentityModuleExtensionConsts.ModuleName,
-                    IdentityModuleExtensionConsts.EntityNames.Role,
-                    createFormTypes: new[] { typeof(IdentityRoleCreateDto) },
-                    editFormTypes: new[] { typeof(IdentityRoleUpdateDto) }
-                );
-
-            ModuleExtensionConfigurationHelper
-                .ApplyEntityConfigurationToUi(
-                    IdentityModuleExtensionConsts.ModuleName,
-                    IdentityModuleExtensionConsts.EntityNames.User,
-                    createFormTypes: new[] { typeof(IdentityUserCreateDto) },
-                    editFormTypes: new[] { typeof(IdentityUserUpdateDto) }
-                );
-        });
+                ModuleExtensionConfigurationHelper
+                    .ApplyEntityConfigurationToUi(
+                        IdentityModuleExtensionConsts.ModuleName,
+                        IdentityModuleExtensionConsts.EntityNames.User,
+                        createFormTypes: new[] { typeof(IdentityUserCreateDto) },
+                        editFormTypes: new[] { typeof(IdentityUserUpdateDto) }
+                    );
+            });
+        }
     }
 }

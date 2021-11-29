@@ -2,18 +2,19 @@
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 
-namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme;
-
-public class BasicThemeToolbarContributor : IToolbarContributor
+namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme
 {
-    public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    public class BasicThemeToolbarContributor : IToolbarContributor
     {
-        if (context.Toolbar.Name == StandardToolbars.Main)
+        public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
         {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitch)));
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginDisplay)));
-        }
+            if (context.Toolbar.Name == StandardToolbars.Main)
+            {
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitch)));
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginDisplay)));
+            }
 
-        return Task.CompletedTask;
+            return Task.CompletedTask;
+        }
     }
 }

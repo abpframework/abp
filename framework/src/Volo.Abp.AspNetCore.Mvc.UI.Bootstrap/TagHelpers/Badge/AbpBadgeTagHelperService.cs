@@ -1,38 +1,39 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Badge;
-
-public class AbpBadgeTagHelperService : AbpTagHelperService<AbpBadgeTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Badge
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpBadgeTagHelperService : AbpTagHelperService<AbpBadgeTagHelper>
     {
-        SetBadgeClass(context, output);
-        SetBadgeStyle(context, output);
-    }
-
-    protected virtual void SetBadgeStyle(TagHelperContext context, TagHelperOutput output)
-    {
-        var badgeType = GetBadgeType(context, output);
-
-        if (badgeType != AbpBadgeType.Default && badgeType != AbpBadgeType._)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddClass("bg-" + badgeType.ToString().ToLowerInvariant());
+            SetBadgeClass(context, output);
+            SetBadgeStyle(context, output);
         }
-    }
 
-    protected virtual void SetBadgeClass(TagHelperContext context, TagHelperOutput output)
-    {
-        output.Attributes.AddClass("badge");
-
-        if (TagHelper.BadgePillType != AbpBadgeType._)
+        protected virtual void SetBadgeStyle(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddClass("rounded-pill");
-        }
-    }
+            var badgeType = GetBadgeType(context, output);
 
-    protected virtual AbpBadgeType GetBadgeType(TagHelperContext context, TagHelperOutput output)
-    {
-        return TagHelper.BadgeType != AbpBadgeType._ ? TagHelper.BadgeType : TagHelper.BadgePillType;
+            if (badgeType != AbpBadgeType.Default && badgeType != AbpBadgeType._)
+            {
+                output.Attributes.AddClass("bg-" + badgeType.ToString().ToLowerInvariant());
+            }
+        }
+
+        protected virtual void SetBadgeClass(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.AddClass("badge");
+
+            if (TagHelper.BadgePillType != AbpBadgeType._)
+            {
+                output.Attributes.AddClass("rounded-pill");
+            }
+        }
+
+        protected virtual AbpBadgeType GetBadgeType(TagHelperContext context, TagHelperOutput output)
+        {
+            return TagHelper.BadgeType != AbpBadgeType._ ? TagHelper.BadgeType : TagHelper.BadgePillType;
+        }
     }
 }

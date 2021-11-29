@@ -8,33 +8,34 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit.Comments;
-
-public class DefaultCommentEntityTypeDefinitionStore : ICommentEntityTypeDefinitionStore
+namespace Volo.CmsKit.Comments
 {
-    protected CmsKitCommentOptions Options { get; }
-
-    public DefaultCommentEntityTypeDefinitionStore(IOptions<CmsKitCommentOptions> options)
+    public class DefaultCommentEntityTypeDefinitionStore : ICommentEntityTypeDefinitionStore
     {
-        Options = options.Value;
-    }
+        protected CmsKitCommentOptions Options { get; }
 
-    public virtual Task<CommentEntityTypeDefinition> GetAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+        public DefaultCommentEntityTypeDefinitionStore(IOptions<CmsKitCommentOptions> options)
+        {
+            Options = options.Value;
+        }
 
-        var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
-                     throw new EntityNotCommentableException(entityType);
+        public virtual Task<CommentEntityTypeDefinition> GetAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return Task.FromResult(result);
-    }
+            var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
+                         throw new EntityNotCommentableException(entityType);
 
-    public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            return Task.FromResult(result);
+        }
 
-        var isDefined = Options.EntityTypes.Any(x => x.EntityType == entityType);
+        public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return Task.FromResult(isDefined);
+            var isDefined = Options.EntityTypes.Any(x => x.EntityType == entityType);
+
+            return Task.FromResult(isDefined);
+        }
     }
 }

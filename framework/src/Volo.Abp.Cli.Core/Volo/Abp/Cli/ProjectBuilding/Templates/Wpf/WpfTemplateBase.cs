@@ -1,12 +1,13 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
-
-public class WpfTemplateBase : TemplateInfo
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.Wpf
 {
-    protected WpfTemplateBase([NotNull] string name) :
-        base(name)
+    public class WpfTemplateBase: TemplateInfo
     {
+        protected WpfTemplateBase([NotNull] string name) :
+            base(name)
+        {
+        }
     }
 }

@@ -2,34 +2,35 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Encryption;
 
-namespace Volo.Abp.Settings;
-
-public class SettingEncryptionService : ISettingEncryptionService, ITransientDependency
+namespace Volo.Abp.Settings
 {
-    protected IStringEncryptionService StringEncryptionService { get; }
-
-    public SettingEncryptionService(IStringEncryptionService stringEncryptionService)
+    public class SettingEncryptionService : ISettingEncryptionService, ITransientDependency
     {
-        StringEncryptionService = stringEncryptionService;
-    }
+        protected IStringEncryptionService StringEncryptionService { get; }
 
-    public virtual string Encrypt(SettingDefinition settingDefinition, string plainValue)
-    {
-        if (plainValue.IsNullOrEmpty())
+        public SettingEncryptionService(IStringEncryptionService stringEncryptionService)
         {
-            return plainValue;
+            StringEncryptionService = stringEncryptionService;
         }
 
-        return StringEncryptionService.Encrypt(plainValue);
-    }
-
-    public virtual string Decrypt(SettingDefinition settingDefinition, string encryptedValue)
-    {
-        if (encryptedValue.IsNullOrEmpty())
+        public virtual string Encrypt(SettingDefinition settingDefinition, string plainValue)
         {
-            return encryptedValue;
+            if (plainValue.IsNullOrEmpty())
+            {
+                return plainValue;
+            }
+
+            return StringEncryptionService.Encrypt(plainValue);
         }
 
-        return StringEncryptionService.Decrypt(encryptedValue);
+        public virtual string Decrypt(SettingDefinition settingDefinition, string encryptedValue)
+        {
+            if (encryptedValue.IsNullOrEmpty())
+            {
+                return encryptedValue;
+            }
+
+            return StringEncryptionService.Decrypt(encryptedValue);
+        }
     }
 }

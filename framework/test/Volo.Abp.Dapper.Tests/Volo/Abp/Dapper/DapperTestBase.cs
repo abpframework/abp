@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.Dapper;
-
-public abstract class DapperTestBase : AbpIntegratedTest<AbpDapperTestModule>
+namespace Volo.Abp.Dapper
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class DapperTestBase : AbpIntegratedTest<AbpDapperTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

@@ -6,34 +6,35 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
-
-public class BasicThemeMainTopToolbarContributor : IToolbarContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars
 {
-    public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    public class BasicThemeMainTopToolbarContributor : IToolbarContributor
     {
-        if (context.Toolbar.Name != StandardToolbars.Main)
+        public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
         {
-            return;
-        }
+            if (context.Toolbar.Name != StandardToolbars.Main)
+            {
+                return;
+            }
 
-        if (!(context.Theme is BasicTheme))
-        {
-            return;
-        }
+            if (!(context.Theme is BasicTheme))
+            {
+                return;
+            }
 
-        var languageProvider = context.ServiceProvider.GetService<ILanguageProvider>();
+            var languageProvider = context.ServiceProvider.GetService<ILanguageProvider>();
 
-        //TODO: This duplicates GetLanguages() usage. Can we eleminate this?
-        var languages = await languageProvider.GetLanguagesAsync();
-        if (languages.Count > 1)
-        {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));
-        }
+            //TODO: This duplicates GetLanguages() usage. Can we eleminate this?
+            var languages = await languageProvider.GetLanguagesAsync();
+            if (languages.Count > 1)
+            {
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));
+            }
 
-        if (context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
-        {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(UserMenuViewComponent)));
+            if (context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            {
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(UserMenuViewComponent)));
+            }
         }
     }
 }

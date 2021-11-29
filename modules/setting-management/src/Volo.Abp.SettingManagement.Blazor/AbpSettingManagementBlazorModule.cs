@@ -7,37 +7,38 @@ using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.SettingManagement.Blazor.Settings;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.SettingManagement.Blazor;
-
-[DependsOn(
-    typeof(AbpAutoMapperModule),
-    typeof(AbpAspNetCoreComponentsWebThemingModule),
-    typeof(AbpSettingManagementApplicationContractsModule)
-)]
-public class AbpSettingManagementBlazorModule : AbpModule
+namespace Volo.Abp.SettingManagement.Blazor
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreComponentsWebThemingModule),
+        typeof(AbpSettingManagementApplicationContractsModule)
+    )]
+    public class AbpSettingManagementBlazorModule : AbpModule
     {
-        context.Services.AddAutoMapperObjectMapper<AbpSettingManagementBlazorModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddProfile<SettingManagementBlazorAutoMapperProfile>(validate: true);
-        });
+            context.Services.AddAutoMapperObjectMapper<AbpSettingManagementBlazorModule>();
 
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new SettingManagementMenuContributor());
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<SettingManagementBlazorAutoMapperProfile>(validate: true);
+            });
 
-        Configure<AbpRouterOptions>(options =>
-        {
-            options.AdditionalAssemblies.Add(typeof(AbpSettingManagementBlazorModule).Assembly);
-        });
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new SettingManagementMenuContributor());
+            });
 
-        Configure<SettingManagementComponentOptions>(options =>
-        {
-            options.Contributors.Add(new EmailingPageContributor());
-        });
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AdditionalAssemblies.Add(typeof(AbpSettingManagementBlazorModule).Assembly);
+            });
+
+            Configure<SettingManagementComponentOptions>(options =>
+            {
+                options.Contributors.Add(new EmailingPageContributor());
+            });
+        }
     }
 }

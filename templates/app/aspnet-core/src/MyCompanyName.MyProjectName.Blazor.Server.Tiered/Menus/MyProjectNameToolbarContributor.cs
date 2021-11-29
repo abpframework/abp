@@ -4,22 +4,23 @@ using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Components.Toolbar.LoginL
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Users;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
-
-public class MyProjectNameToolbarContributor : IToolbarContributor
+namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
 {
-    public virtual Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    public class MyProjectNameToolbarContributor : IToolbarContributor
     {
-        if (context.Toolbar.Name != StandardToolbars.Main)
+        public virtual Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
         {
+            if (context.Toolbar.Name != StandardToolbars.Main)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            {
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
+            }
+
             return Task.CompletedTask;
         }
-
-        if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
-        {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
-        }
-
-        return Task.CompletedTask;
     }
 }

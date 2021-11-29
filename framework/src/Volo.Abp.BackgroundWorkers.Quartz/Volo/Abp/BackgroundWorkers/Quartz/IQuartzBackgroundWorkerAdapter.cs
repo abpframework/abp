@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BackgroundWorkers.Quartz;
-
-public interface IQuartzBackgroundWorkerAdapter : IQuartzBackgroundWorker
+﻿namespace Volo.Abp.BackgroundWorkers.Quartz
 {
-    void BuildWorker(IBackgroundWorker worker);
+    public interface IQuartzBackgroundWorkerAdapter : IQuartzBackgroundWorker
+    {
+        void BuildWorker(IBackgroundWorker worker);
+    }
 }

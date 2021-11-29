@@ -1,17 +1,18 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Tracing;
-
-public class DefaultCorrelationIdProvider : ICorrelationIdProvider, ISingletonDependency
+namespace Volo.Abp.Tracing
 {
-    public string Get()
+    public class DefaultCorrelationIdProvider : ICorrelationIdProvider, ISingletonDependency
     {
-        return CreateNewCorrelationId();
-    }
+        public string Get()
+        {
+            return CreateNewCorrelationId();
+        }
 
-    protected virtual string CreateNewCorrelationId()
-    {
-        return Guid.NewGuid().ToString("N");
+        protected virtual string CreateNewCorrelationId()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
     }
 }

@@ -10,18 +10,18 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public class AbpRazorTemplateCSharpCompiler : ISingletonDependency
+namespace Volo.Abp.TextTemplating.Razor
 {
-    protected AbpRazorTemplateCSharpCompilerOptions Options { get; }
-
-    public AbpRazorTemplateCSharpCompiler(IOptions<AbpRazorTemplateCSharpCompilerOptions> options)
+    public class AbpRazorTemplateCSharpCompiler : ISingletonDependency
     {
-        Options = options.Value;
-    }
+        protected AbpRazorTemplateCSharpCompilerOptions Options { get; }
 
-    private static IEnumerable<PortableExecutableReference> DefaultReferences => new List<Assembly>()
+        public AbpRazorTemplateCSharpCompiler(IOptions<AbpRazorTemplateCSharpCompilerOptions> options)
+        {
+            Options = options.Value;
+        }
+
+        private static IEnumerable<PortableExecutableReference> DefaultReferences => new List<Assembly>()
             {
                 Assembly.Load("netstandard"),
                 Assembly.Load("System.Private.CoreLib"),
@@ -37,70 +37,71 @@ public class AbpRazorTemplateCSharpCompiler : ISingletonDependency
 
                 typeof(AbpRazorTemplateCSharpCompiler).Assembly
             }
-        .Select(x => MetadataReference.CreateFromFile(x.Location))
-        .ToImmutableList();
+            .Select(x => MetadataReference.CreateFromFile(x.Location))
+            .ToImmutableList();
 
-    public virtual Stream CreateAssembly(string code, string assemblyName, List<MetadataReference> references = null, CSharpCompilationOptions options = null)
-    {
-        var defaultReferences = DefaultReferences.Concat(Options.References);
-        try
+        public virtual Stream CreateAssembly(string code, string assemblyName, List<MetadataReference> references = null, CSharpCompilationOptions options = null)
         {
-            var compilation = CSharpCompilation.Create(
-                assemblyName,
-                syntaxTrees: new[] { CreateSyntaxTree(code) },
-                references: references != null ? defaultReferences.Concat(references) : defaultReferences,
-                options ?? GetCompilationOptions());
-
-            using (var memoryStream = new MemoryStream())
+            var defaultReferences = DefaultReferences.Concat(Options.References);
+            try
             {
-                var result = compilation.Emit(memoryStream);
+                var compilation = CSharpCompilation.Create(
+                    assemblyName,
+                    syntaxTrees: new[] { CreateSyntaxTree(code) },
+                    references: references != null ? defaultReferences.Concat(references) : defaultReferences,
+                    options ?? GetCompilationOptions());
 
-                if (!result.Success)
+                using (var memoryStream = new MemoryStream())
                 {
-                    var error = new StringBuilder();
-                    error.AppendLine("Build failed");
-                    foreach (var diagnostic in result.Diagnostics)
+                    var result = compilation.Emit(memoryStream);
+
+                    if (!result.Success)
                     {
-                        error.AppendLine(diagnostic.ToString());
+                        var error = new StringBuilder();
+                        error.AppendLine("Build failed");
+                        foreach (var diagnostic in result.Diagnostics)
+                        {
+                            error.AppendLine(diagnostic.ToString());
+                        }
+
+                        throw new Exception(error.ToString());
                     }
 
-                    throw new Exception(error.ToString());
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var assemblyStream = new MemoryStream();
+                    memoryStream.CopyTo(assemblyStream);
+
+                    return assemblyStream;
                 }
-
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var assemblyStream = new MemoryStream();
-                memoryStream.CopyTo(assemblyStream);
-
-                return assemblyStream;
+            }
+            catch (Exception e)
+            {
+                var error = new StringBuilder();
+                error.AppendLine("CreateAssembly failed");
+                error.AppendLine(e.Message);
+                throw new Exception(error.ToString());
             }
         }
-        catch (Exception e)
+
+        protected virtual SyntaxTree CreateSyntaxTree(string code)
         {
-            var error = new StringBuilder();
-            error.AppendLine("CreateAssembly failed");
-            error.AppendLine(e.Message);
-            throw new Exception(error.ToString());
+            return CSharpSyntaxTree.ParseText(code);
         }
-    }
 
-    protected virtual SyntaxTree CreateSyntaxTree(string code)
-    {
-        return CSharpSyntaxTree.ParseText(code);
-    }
+        protected virtual CSharpCompilationOptions GetCompilationOptions()
+        {
+            var csharpCompilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
-    protected virtual CSharpCompilationOptions GetCompilationOptions()
-    {
-        var csharpCompilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-
-        // Disable 1702 until roslyn turns this off by default
-        csharpCompilationOptions = csharpCompilationOptions.WithSpecificDiagnosticOptions(
-            new Dictionary<string, ReportDiagnostic>
-            {
+            // Disable 1702 until roslyn turns this off by default
+            csharpCompilationOptions = csharpCompilationOptions.WithSpecificDiagnosticOptions(
+                new Dictionary<string, ReportDiagnostic>
+                {
                     {"CS1701", ReportDiagnostic.Suppress}, // Binding redirects
                     {"CS1702", ReportDiagnostic.Suppress},
                     {"CS1705", ReportDiagnostic.Suppress}
-            });
+                });
 
-        return csharpCompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+            return csharpCompilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+        }
     }
 }

@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy;
-
-public interface IAbpTenantAppService : IApplicationService
+namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
 {
-    Task<FindTenantResultDto> FindTenantByNameAsync(string name);
+    public interface IAbpTenantAppService : IApplicationService
+    {
+        Task<FindTenantResultDto> FindTenantByNameAsync(string name);
 
-    Task<FindTenantResultDto> FindTenantByIdAsync(Guid id);
+        Task<FindTenantResultDto> FindTenantByIdAsync(Guid id);
+    }
 }

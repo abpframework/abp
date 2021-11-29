@@ -3,13 +3,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
-
-[DependsOn(typeof(JQueryScriptContributor))]
-public class ToastrScriptBundleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class ToastrScriptBundleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/toastr/toastr.min.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/toastr/toastr.min.js");
+        }
     }
 }

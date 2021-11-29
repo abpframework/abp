@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Domain.Repositories.MemoryDb;
 
-namespace Volo.Abp.Uow.MemoryDb;
-
-public class MemoryDbDatabaseApi : IDatabaseApi
+namespace Volo.Abp.Uow.MemoryDb
 {
-    public IMemoryDatabase Database { get; }
-
-    public MemoryDbDatabaseApi(IMemoryDatabase database)
+    public class MemoryDbDatabaseApi: IDatabaseApi
     {
-        Database = database;
+        public IMemoryDatabase Database { get; }
+
+        public MemoryDbDatabaseApi(IMemoryDatabase database)
+        {
+            Database = database;
+        }
     }
 }

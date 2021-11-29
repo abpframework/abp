@@ -2,19 +2,20 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.BlobStoring.Database.MongoDB;
-
-[ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-public class BlobStoringMongoDbContext : AbpMongoDbContext, IBlobStoringMongoDbContext
+namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public IMongoCollection<DatabaseBlobContainer> BlobContainers => Collection<DatabaseBlobContainer>();
-
-    public IMongoCollection<DatabaseBlob> Blobs => Collection<DatabaseBlob>();
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
+    public class BlobStoringMongoDbContext : AbpMongoDbContext, IBlobStoringMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<DatabaseBlobContainer> BlobContainers => Collection<DatabaseBlobContainer>();
 
-        modelBuilder.ConfigureBlobStoring();
+        public IMongoCollection<DatabaseBlob> Blobs => Collection<DatabaseBlob>();
+
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureBlobStoring();
+        }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.ClientSimulation;
-
-public class ClientSimulationOptions
+namespace Volo.ClientSimulation
 {
-    public List<ScenarioConfiguration> Scenarios { get; }
-
-    public ClientSimulationOptions()
+    public class ClientSimulationOptions
     {
-        Scenarios = new List<ScenarioConfiguration>();
+        public List<ScenarioConfiguration> Scenarios { get; }
+
+        public ClientSimulationOptions()
+        {
+            Scenarios = new List<ScenarioConfiguration>();
+        }
     }
 }

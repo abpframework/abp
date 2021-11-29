@@ -7,83 +7,84 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands;
-
-public class BundleCommand : IConsoleCommand, ITransientDependency
+namespace Volo.Abp.Cli.Commands
 {
-    public ILogger<BundleCommand> Logger { get; set; }
-
-    public IBundlingService BundlingService { get; set; }
-
-
-    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    public class BundleCommand : IConsoleCommand, ITransientDependency
     {
-        var workingDirectoryArg = commandLineArgs.Options.GetOrNull(
-            Options.WorkingDirectory.Short,
-            Options.WorkingDirectory.Long
-        );
+        public ILogger<BundleCommand> Logger { get; set; }
 
-        var workingDirectory = workingDirectoryArg ?? Directory.GetCurrentDirectory();
-
-        var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
-                         commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
+        public IBundlingService BundlingService { get; set; }
 
 
-        if (!Directory.Exists(workingDirectory))
+        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            throw new CliUsageException(
-                "Specified directory does not exist." +
-                Environment.NewLine + Environment.NewLine +
-                GetUsageInfo()
+            var workingDirectoryArg = commandLineArgs.Options.GetOrNull(
+                Options.WorkingDirectory.Short,
+                Options.WorkingDirectory.Long
             );
+
+            var workingDirectory = workingDirectoryArg ?? Directory.GetCurrentDirectory();
+
+            var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
+                             commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
+            
+
+            if (!Directory.Exists(workingDirectory))
+            {
+                throw new CliUsageException(
+                    "Specified directory does not exist." +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
+            }
+
+            try
+            {
+                await BundlingService.BundleAsync(workingDirectory, forceBuild);
+            }
+            catch (BundlingException ex)
+            {
+                Logger.LogError(ex.Message);
+            }
         }
 
-        try
+        public string GetShortDescription()
         {
-            await BundlingService.BundleAsync(workingDirectory, forceBuild);
-        }
-        catch (BundlingException ex)
-        {
-            Logger.LogError(ex.Message);
-        }
-    }
-
-    public string GetShortDescription()
-    {
-        return "Bundles all third party styles and scripts required by modules and updates index.html file.";
-    }
-
-    public string GetUsageInfo()
-    {
-        var sb = new StringBuilder();
-
-        sb.AppendLine("");
-        sb.AppendLine("Usage:");
-        sb.AppendLine("");
-        sb.AppendLine("  abp bundle [options]");
-        sb.AppendLine("");
-        sb.AppendLine("Options:");
-        sb.AppendLine("");
-        sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
-        sb.AppendLine("-f | --force                                            (default: false)");
-        sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
-
-        return sb.ToString();
-    }
-
-    public static class Options
-    {
-        public static class WorkingDirectory
-        {
-            public const string Short = "wd";
-            public const string Long = "working-directory";
+            return "Bundles all third party styles and scripts required by modules and updates index.html file.";
         }
 
-        public static class ForceBuild
+        public string GetUsageInfo()
         {
-            public const string Short = "f";
-            public const string Long = "force";
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("");
+            sb.AppendLine("  abp bundle [options]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("");
+            sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
+            sb.AppendLine("-f | --force                                            (default: false)");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+            return sb.ToString();
+        }
+
+        public static class Options
+        {
+            public static class WorkingDirectory
+            {
+                public const string Short = "wd";
+                public const string Long = "working-directory";
+            }
+
+            public static class ForceBuild
+            {
+                public const string Short = "f";
+                public const string Long = "force";
+            }
         }
     }
 }

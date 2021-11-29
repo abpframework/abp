@@ -5,22 +5,23 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.Abp.Security;
 
-namespace Volo.Abp.MultiTenancy;
-
-//TODO: Create a Volo.Abp.MultiTenancy.Abstractions package?
-
-[DependsOn(
-    typeof(AbpDataModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpEventBusAbstractionsModule)
-    )]
-public class AbpMultiTenancyModule : AbpModule
+namespace Volo.Abp.MultiTenancy
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddSingleton<ICurrentTenantAccessor>(AsyncLocalCurrentTenantAccessor.Instance);
+    //TODO: Create a Volo.Abp.MultiTenancy.Abstractions package?
 
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpDefaultTenantStoreOptions>(configuration);
+    [DependsOn(
+        typeof(AbpDataModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpEventBusAbstractionsModule)
+        )]
+    public class AbpMultiTenancyModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSingleton<ICurrentTenantAccessor>(AsyncLocalCurrentTenantAccessor.Instance);
+            
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
+        }
     }
 }

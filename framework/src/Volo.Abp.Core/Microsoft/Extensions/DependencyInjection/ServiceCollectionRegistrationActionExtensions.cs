@@ -1,65 +1,66 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class ServiceCollectionRegistrationActionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    // OnRegistred
-
-    public static void OnRegistred(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
+    public static class ServiceCollectionRegistrationActionExtensions
     {
-        GetOrCreateRegistrationActionList(services).Add(registrationAction);
-    }
+        // OnRegistred
 
-    public static ServiceRegistrationActionList GetRegistrationActionList(this IServiceCollection services)
-    {
-        return GetOrCreateRegistrationActionList(services);
-    }
-
-    private static ServiceRegistrationActionList GetOrCreateRegistrationActionList(IServiceCollection services)
-    {
-        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
-        if (actionList == null)
+        public static void OnRegistred(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
         {
-            actionList = new ServiceRegistrationActionList();
-            services.AddObjectAccessor(actionList);
+            GetOrCreateRegistrationActionList(services).Add(registrationAction);
         }
 
-        return actionList;
-    }
-
-    public static void DisableAbpClassInterceptors(this IServiceCollection services)
-    {
-        GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled = true;
-    }
-
-    public static bool IsAbpClassInterceptorsDisabled(this IServiceCollection services)
-    {
-        return GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled;
-    }
-
-    // OnExposing
-
-    public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)
-    {
-        GetOrCreateExposingList(services).Add(exposeAction);
-    }
-
-    public static ServiceExposingActionList GetExposingActionList(this IServiceCollection services)
-    {
-        return GetOrCreateExposingList(services);
-    }
-
-    private static ServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
-    {
-        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
-        if (actionList == null)
+        public static ServiceRegistrationActionList GetRegistrationActionList(this IServiceCollection services)
         {
-            actionList = new ServiceExposingActionList();
-            services.AddObjectAccessor(actionList);
+            return GetOrCreateRegistrationActionList(services);
         }
 
-        return actionList;
+        private static ServiceRegistrationActionList GetOrCreateRegistrationActionList(IServiceCollection services)
+        {
+            var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
+            if (actionList == null)
+            {
+                actionList = new ServiceRegistrationActionList();
+                services.AddObjectAccessor(actionList);
+            }
+
+            return actionList;
+        }
+        
+        public static void DisableAbpClassInterceptors(this IServiceCollection services)
+        {
+            GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled = true;
+        }
+        
+        public static bool IsAbpClassInterceptorsDisabled(this IServiceCollection services)
+        {
+            return GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled;
+        }
+
+        // OnExposing
+
+        public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)
+        {
+            GetOrCreateExposingList(services).Add(exposeAction);
+        }
+
+        public static ServiceExposingActionList GetExposingActionList(this IServiceCollection services)
+        {
+            return GetOrCreateExposingList(services);
+        }
+
+        private static ServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
+        {
+            var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
+            if (actionList == null)
+            {
+                actionList = new ServiceExposingActionList();
+                services.AddObjectAccessor(actionList);
+            }
+
+            return actionList;
+        }
     }
 }

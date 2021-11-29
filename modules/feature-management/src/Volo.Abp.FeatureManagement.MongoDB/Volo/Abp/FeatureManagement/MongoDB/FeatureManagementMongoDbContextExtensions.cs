@@ -1,17 +1,18 @@
 ﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.FeatureManagement.MongoDB;
-
-public static class FeatureManagementMongoDbContextExtensions
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    public static void ConfigureFeatureManagement(
-        this IMongoModelBuilder builder)
+    public static class FeatureManagementMongoDbContextExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<FeatureValue>(b =>
+        public static void ConfigureFeatureManagement(
+            this IMongoModelBuilder builder)
         {
-            b.CollectionName = FeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
-        });
+            Check.NotNull(builder, nameof(builder));
+
+            builder.Entity<FeatureValue>(b =>
+            {
+                b.CollectionName = FeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
+            });
+        }
     }
 }

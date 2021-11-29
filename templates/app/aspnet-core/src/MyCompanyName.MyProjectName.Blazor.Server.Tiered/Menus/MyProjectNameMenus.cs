@@ -1,10 +1,11 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
-
-public class MyProjectNameMenus
+﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
 {
-    private const string Prefix = "MyProjectName";
-    public const string Home = Prefix + ".Home";
+    public class MyProjectNameMenus
+    {
+        private const string Prefix = "MyProjectName";
+        public const string Home = Prefix + ".Home";
 
-    //Add your menu items here...
+        //Add your menu items here...
 
+    }
 }

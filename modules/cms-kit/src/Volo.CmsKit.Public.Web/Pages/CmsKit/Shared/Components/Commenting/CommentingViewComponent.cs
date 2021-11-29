@@ -9,56 +9,57 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
-
-[ViewComponent(Name = "CmsCommenting")]
-[Widget(
-    ScriptTypes = new[] { typeof(CommentingScriptBundleContributor) },
-    StyleTypes = new[] { typeof(CommentingStyleBundleContributor) },
-    RefreshUrl = "/CmsKitPublicWidgets/Commenting",
-    AutoInitialize = true
-)]
-public class CommentingViewComponent : AbpViewComponent
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
-    public ICommentPublicAppService CommentPublicAppService { get; }
-    public AbpMvcUiOptions AbpMvcUiOptions { get; }
-
-    public CommentingViewComponent(
-        ICommentPublicAppService commentPublicAppService,
-        IOptions<AbpMvcUiOptions> options)
+    [ViewComponent(Name = "CmsCommenting")]
+    [Widget(
+        ScriptTypes = new[] {typeof(CommentingScriptBundleContributor)},
+        StyleTypes = new[] {typeof(CommentingStyleBundleContributor)},
+        RefreshUrl = "/CmsKitPublicWidgets/Commenting",
+        AutoInitialize = true
+    )]
+    public class CommentingViewComponent : AbpViewComponent
     {
-        CommentPublicAppService = commentPublicAppService;
-        AbpMvcUiOptions = options.Value;
-    }
+        public ICommentPublicAppService CommentPublicAppService { get; }
+        public AbpMvcUiOptions AbpMvcUiOptions { get; }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync(
-        string entityType,
-        string entityId)
-    {
-        var result = await CommentPublicAppService
-            .GetListAsync(entityType, entityId);
-
-        var loginUrl = $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
-
-        var viewModel = new CommentingViewModel
+        public CommentingViewComponent(
+            ICommentPublicAppService commentPublicAppService,
+            IOptions<AbpMvcUiOptions> options)
         {
-            EntityId = entityId,
-            EntityType = entityType,
-            LoginUrl = loginUrl,
-            Comments = result.Items.OrderByDescending(i => i.CreationTime).ToList()
-        };
+            CommentPublicAppService = commentPublicAppService;
+            AbpMvcUiOptions = options.Value;
+        }
 
-        return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", viewModel);
-    }
+        public virtual async Task<IViewComponentResult> InvokeAsync(
+            string entityType,
+            string entityId)
+        {
+            var result = await CommentPublicAppService
+                .GetListAsync(entityType, entityId);
 
-    public class CommentingViewModel
-    {
-        public string EntityType { get; set; }
+            var loginUrl = $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
 
-        public string EntityId { get; set; }
+            var viewModel = new CommentingViewModel
+            {
+                EntityId = entityId,
+                EntityType = entityType,
+                LoginUrl = loginUrl,
+                Comments = result.Items.OrderByDescending(i=> i.CreationTime).ToList()
+            };
 
-        public string LoginUrl { get; set; }
+            return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", viewModel);
+        }
 
-        public IReadOnlyList<CommentWithDetailsDto> Comments { get; set; }
+        public class CommentingViewModel
+        {
+            public string EntityType { get; set; }
+
+            public string EntityId { get; set; }
+
+            public string LoginUrl { get; set; }
+
+            public IReadOnlyList<CommentWithDetailsDto> Comments { get; set; }
+        }
     }
 }

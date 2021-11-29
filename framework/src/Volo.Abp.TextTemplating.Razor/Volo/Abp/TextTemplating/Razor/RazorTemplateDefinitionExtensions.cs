@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.TextTemplating.Razor;
-
-public static class RazorTemplateDefinitionExtensions
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public static TemplateDefinition WithRazorEngine([NotNull] this TemplateDefinition templateDefinition)
+    public static class RazorTemplateDefinitionExtensions
     {
-        return templateDefinition.WithRenderEngine(RazorTemplateRenderingEngine.EngineName);
+        public static TemplateDefinition WithRazorEngine([NotNull] this TemplateDefinition templateDefinition)
+        {
+            return templateDefinition.WithRenderEngine(RazorTemplateRenderingEngine.EngineName);
+        }
     }
 }

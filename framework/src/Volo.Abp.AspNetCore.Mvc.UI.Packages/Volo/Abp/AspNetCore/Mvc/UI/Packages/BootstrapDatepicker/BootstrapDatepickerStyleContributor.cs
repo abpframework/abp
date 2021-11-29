@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
-
-public class BootstrapDatepickerStyleContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    public class BootstrapDatepickerStyleContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.min.css");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.min.css");
+        }
     }
 }

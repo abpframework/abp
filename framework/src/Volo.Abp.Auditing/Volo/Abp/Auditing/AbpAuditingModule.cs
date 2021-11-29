@@ -7,21 +7,22 @@ using Volo.Abp.Security;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Auditing;
-
-[DependsOn(
-    typeof(AbpDataModule),
-    typeof(AbpJsonModule),
-    typeof(AbpTimingModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpThreadingModule),
-    typeof(AbpMultiTenancyModule),
-    typeof(AbpAuditingContractsModule)
-    )]
-public class AbpAuditingModule : AbpModule
+namespace Volo.Abp.Auditing
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpDataModule),
+        typeof(AbpJsonModule),
+        typeof(AbpTimingModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpThreadingModule),
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpAuditingContractsModule)
+        )]
+    public class AbpAuditingModule : AbpModule
     {
-        context.Services.OnRegistred(AuditingInterceptorRegistrar.RegisterIfNeeded);
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.OnRegistred(AuditingInterceptorRegistrar.RegisterIfNeeded);
+        }
     }
 }

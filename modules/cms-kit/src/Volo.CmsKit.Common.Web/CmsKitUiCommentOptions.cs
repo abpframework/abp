@@ -1,11 +1,12 @@
-﻿namespace Volo.CmsKit.Web;
-
-public class CmsKitUiCommentOptions
+﻿namespace Volo.CmsKit.Web
 {
-    public bool IsReactionsEnabled { get; set; }
-
-    public CmsKitUiCommentOptions()
+    public class CmsKitUiCommentOptions
     {
-        IsReactionsEnabled = true;
+        public bool IsReactionsEnabled { get; set; }
+
+        public CmsKitUiCommentOptions()
+        {
+            IsReactionsEnabled = true;
+        }
     }
 }

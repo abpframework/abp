@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
-
-public class ThemeDictionary : Dictionary<Type, ThemeInfo>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    public ThemeInfo Add<TTheme>()
-        where TTheme : ITheme
+    public class ThemeDictionary : Dictionary<Type, ThemeInfo>
     {
-        return Add(typeof(TTheme));
-    }
-
-    public ThemeInfo Add(Type themeType)
-    {
-        if (ContainsKey(themeType))
+        public ThemeInfo Add<TTheme>()
+            where TTheme : ITheme
         {
-            throw new AbpException("This theme is already added before: " + themeType.AssemblyQualifiedName);
+            return Add(typeof(TTheme));
         }
 
-        return this[themeType] = new ThemeInfo(themeType);
+        public ThemeInfo Add(Type themeType)
+        {
+            if (ContainsKey(themeType))
+            {
+                throw new AbpException("This theme is already added before: " + themeType.AssemblyQualifiedName);
+            }
+
+            return this[themeType] = new ThemeInfo(themeType);
+        }
     }
 }

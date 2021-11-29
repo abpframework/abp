@@ -5,47 +5,48 @@ using Newtonsoft.Json.Converters;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Json.Newtonsoft;
-
-public class AbpJsonIsoDateTimeConverter : IsoDateTimeConverter, ITransientDependency
+namespace Volo.Abp.Json.Newtonsoft
 {
-    private readonly IClock _clock;
-
-    public AbpJsonIsoDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
+    public class AbpJsonIsoDateTimeConverter : IsoDateTimeConverter, ITransientDependency
     {
-        _clock = clock;
+        private readonly IClock _clock;
 
-        if (abpJsonOptions.Value.DefaultDateTimeFormat != null)
+        public AbpJsonIsoDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
         {
-            DateTimeFormat = abpJsonOptions.Value.DefaultDateTimeFormat;
-        }
-    }
+            _clock = clock;
 
-    public override bool CanConvert(Type objectType)
-    {
-        if (objectType == typeof(DateTime) || objectType == typeof(DateTime?))
-        {
-            return true;
+            if (abpJsonOptions.Value.DefaultDateTimeFormat != null)
+            {
+                DateTimeFormat = abpJsonOptions.Value.DefaultDateTimeFormat;
+            }
         }
 
-        return false;
-    }
-
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    {
-        var date = base.ReadJson(reader, objectType, existingValue, serializer) as DateTime?;
-
-        if (date.HasValue)
+        public override bool CanConvert(Type objectType)
         {
-            return _clock.Normalize(date.Value);
+            if (objectType == typeof(DateTime) || objectType == typeof(DateTime?))
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        return null;
-    }
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var date = base.ReadJson(reader, objectType, existingValue, serializer) as DateTime?;
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    {
-        var date = value as DateTime?;
-        base.WriteJson(writer, date.HasValue ? _clock.Normalize(date.Value) : value, serializer);
+            if (date.HasValue)
+            {
+                return _clock.Normalize(date.Value);
+            }
+
+            return null;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var date = value as DateTime?;
+            base.WriteJson(writer, date.HasValue ? _clock.Normalize(date.Value) : value, serializer);
+        }
     }
 }

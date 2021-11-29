@@ -1,14 +1,15 @@
-namespace Volo.Abp.Domain.Entities;
-
-public class DomainEventRecord
+namespace Volo.Abp.Domain.Entities
 {
-    public object EventData { get; }
-
-    public long EventOrder { get; }
-
-    public DomainEventRecord(object eventData, long eventOrder)
+    public class DomainEventRecord
     {
-        EventData = eventData;
-        EventOrder = eventOrder;
+        public object EventData { get; }
+        
+        public long EventOrder { get; }
+        
+        public DomainEventRecord(object eventData, long eventOrder)
+        {
+            EventData = eventData;
+            EventOrder = eventOrder;
+        }
     }
 }

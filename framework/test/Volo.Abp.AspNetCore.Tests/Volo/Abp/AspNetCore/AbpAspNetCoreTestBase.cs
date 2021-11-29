@@ -7,42 +7,43 @@ using Microsoft.Net.Http.Headers;
 using Shouldly;
 using Volo.Abp.AspNetCore.TestBase;
 
-namespace Volo.Abp.AspNetCore;
-
-public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Startup>
+namespace Volo.Abp.AspNetCore
 {
-
-}
-
-public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
-    where TStartup : class
-{
-    protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Startup>
     {
-        var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
-        return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
     }
 
-    protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
+        where TStartup : class
     {
-        using (var response = await GetResponseAsync(url, expectedStatusCode))
+        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            return await response.Content.ReadAsStringAsync();
+            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
+            return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
-    }
 
-    protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
-    {
-        using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
+        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
-            if (xmlHttpRequest)
+            using (var response = await GetResponseAsync(url, expectedStatusCode))
             {
-                requestMessage.Headers.Add(HeaderNames.XRequestedWith, "XMLHttpRequest");
+                return await response.Content.ReadAsStringAsync();
             }
-            var response = await Client.SendAsync(requestMessage);
-            response.StatusCode.ShouldBe(expectedStatusCode);
-            return response;
+        }
+
+        protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
+        {
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
+            {
+                requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
+                if (xmlHttpRequest)
+                {
+                    requestMessage.Headers.Add(HeaderNames.XRequestedWith, "XMLHttpRequest");
+                }
+                var response = await Client.SendAsync(requestMessage);
+                response.StatusCode.ShouldBe(expectedStatusCode);
+                return response;
+            }
         }
     }
 }

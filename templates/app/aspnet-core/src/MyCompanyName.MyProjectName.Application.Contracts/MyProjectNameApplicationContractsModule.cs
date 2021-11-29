@@ -7,22 +7,23 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace MyCompanyName.MyProjectName;
-
-[DependsOn(
-    typeof(MyProjectNameDomainSharedModule),
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpFeatureManagementApplicationContractsModule),
-    typeof(AbpIdentityApplicationContractsModule),
-    typeof(AbpPermissionManagementApplicationContractsModule),
-    typeof(AbpSettingManagementApplicationContractsModule),
-    typeof(AbpTenantManagementApplicationContractsModule),
-    typeof(AbpObjectExtendingModule)
-)]
-public class MyProjectNameApplicationContractsModule : AbpModule
+namespace MyCompanyName.MyProjectName
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(MyProjectNameDomainSharedModule),
+        typeof(AbpAccountApplicationContractsModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
+        typeof(AbpIdentityApplicationContractsModule),
+        typeof(AbpPermissionManagementApplicationContractsModule),
+        typeof(AbpSettingManagementApplicationContractsModule),
+        typeof(AbpTenantManagementApplicationContractsModule),
+        typeof(AbpObjectExtendingModule)
+    )]
+    public class MyProjectNameApplicationContractsModule : AbpModule
     {
-        MyProjectNameDtoExtensions.Configure();
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            MyProjectNameDtoExtensions.Configure();
+        }
     }
 }

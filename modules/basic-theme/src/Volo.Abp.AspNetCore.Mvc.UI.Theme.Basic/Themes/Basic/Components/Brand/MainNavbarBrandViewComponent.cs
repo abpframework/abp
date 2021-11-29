@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Brand;
-
-public class MainNavbarBrandViewComponent : AbpViewComponent
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Brand
 {
-    public virtual IViewComponentResult Invoke()
+    public class MainNavbarBrandViewComponent : AbpViewComponent
     {
-        return View("~/Themes/Basic/Components/Brand/Default.cshtml");
+        public virtual IViewComponentResult Invoke()
+        {
+            return View("~/Themes/Basic/Components/Brand/Default.cshtml");
+        }
     }
 }

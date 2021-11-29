@@ -6,58 +6,59 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-[Dependency(TryRegister = true)]
-public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
+namespace Volo.Abp.Identity
 {
-    protected IIdentityUserLookupAppService UserLookupAppService { get; }
-
-    public HttpClientExternalUserLookupServiceProvider(IIdentityUserLookupAppService userLookupAppService)
+    [Dependency(TryRegister = true)]
+    public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
     {
-        UserLookupAppService = userLookupAppService;
-    }
+        protected IIdentityUserLookupAppService UserLookupAppService { get; }
 
-    public virtual async Task<IUserData> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await UserLookupAppService.FindByIdAsync(id);
-    }
+        public HttpClientExternalUserLookupServiceProvider(IIdentityUserLookupAppService userLookupAppService)
+        {
+            UserLookupAppService = userLookupAppService;
+        }
 
-    public virtual async Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
-    {
-        return await UserLookupAppService.FindByUserNameAsync(userName);
-    }
+        public virtual async Task<IUserData> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await UserLookupAppService.FindByIdAsync(id);
+        }
 
-    public async Task<List<IUserData>> SearchAsync(
-        string sorting = null,
-        string filter = null,
-        int maxResultCount = int.MaxValue,
-        int skipCount = 0,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await UserLookupAppService.SearchAsync(
-            new UserLookupSearchInputDto
-            {
-                Filter = filter,
-                MaxResultCount = maxResultCount,
-                SkipCount = skipCount,
-                Sorting = sorting
-            }
-        );
+        public virtual async Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
+        {
+            return await UserLookupAppService.FindByUserNameAsync(userName);
+        }
 
-        return result.Items.Cast<IUserData>().ToList();
-    }
-
-    public async Task<long> GetCountAsync(
-        string filter = null,
-        CancellationToken cancellationToken = new CancellationToken())
-    {
-        return await UserLookupAppService
-            .GetCountAsync(
-                new UserLookupCountInputDto
+        public async Task<List<IUserData>> SearchAsync(
+            string sorting = null,
+            string filter = null, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await UserLookupAppService.SearchAsync(
+                new UserLookupSearchInputDto
                 {
-                    Filter = filter
+                    Filter = filter,
+                    MaxResultCount = maxResultCount,
+                    SkipCount = skipCount,
+                    Sorting = sorting
                 }
             );
+
+            return result.Items.Cast<IUserData>().ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserLookupAppService
+                .GetCountAsync(
+                    new UserLookupCountInputDto
+                    {
+                        Filter = filter
+                    }
+                );
+        }
     }
 }

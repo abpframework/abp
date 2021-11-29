@@ -12,80 +12,81 @@ using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 
-namespace Microsoft.AspNetCore.Builder;
-
-public static class AbpApplicationBuilderExtensions
+namespace Microsoft.AspNetCore.Builder
 {
-    private const string ExceptionHandlingMiddlewareMarker = "_AbpExceptionHandlingMiddleware_Added";
-
-    public static void InitializeApplication([NotNull] this IApplicationBuilder app)
+    public static class AbpApplicationBuilderExtensions
     {
-        Check.NotNull(app, nameof(app));
+        private const string ExceptionHandlingMiddlewareMarker = "_AbpExceptionHandlingMiddleware_Added";
 
-        app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
-        var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
-        var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-
-        applicationLifetime.ApplicationStopping.Register(() =>
+        public static void InitializeApplication([NotNull] this IApplicationBuilder app)
         {
-            application.Shutdown();
-        });
+            Check.NotNull(app, nameof(app));
 
-        applicationLifetime.ApplicationStopped.Register(() =>
-        {
-            application.Dispose();
-        });
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+            var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
+            var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
-        application.Initialize(app.ApplicationServices);
-    }
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                application.Shutdown();
+            });
 
-    public static IApplicationBuilder UseAuditing(this IApplicationBuilder app)
-    {
-        return app
-            .UseMiddleware<AbpAuditingMiddleware>();
-    }
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                application.Dispose();
+            });
 
-    public static IApplicationBuilder UseUnitOfWork(this IApplicationBuilder app)
-    {
-        return app
-            .UseAbpExceptionHandling()
-            .UseMiddleware<AbpUnitOfWorkMiddleware>();
-    }
-
-    public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
-    {
-        return app
-            .UseMiddleware<AbpCorrelationIdMiddleware>();
-    }
-
-    public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app,
-        Action<RequestLocalizationOptions> optionsAction = null)
-    {
-        app.ApplicationServices
-            .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()
-            .InitLocalizationOptions(optionsAction);
-
-        return app.UseMiddleware<AbpRequestLocalizationMiddleware>();
-    }
-
-    public static IApplicationBuilder UseAbpExceptionHandling(this IApplicationBuilder app)
-    {
-        if (app.Properties.ContainsKey(ExceptionHandlingMiddlewareMarker))
-        {
-            return app;
+            application.Initialize(app.ApplicationServices);
         }
 
-        app.Properties[ExceptionHandlingMiddlewareMarker] = true;
-        return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
-    }
+        public static IApplicationBuilder UseAuditing(this IApplicationBuilder app)
+        {
+            return app
+                .UseMiddleware<AbpAuditingMiddleware>();
+        }
 
-    public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
-    {
-        return app.UseMiddleware<AbpClaimsMapMiddleware>();
-    }
+        public static IApplicationBuilder UseUnitOfWork(this IApplicationBuilder app)
+        {
+            return app
+                .UseAbpExceptionHandling()
+                .UseMiddleware<AbpUnitOfWorkMiddleware>();
+        }
 
-    public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
-    {
-        return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
+        public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
+        {
+            return app
+                .UseMiddleware<AbpCorrelationIdMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app,
+            Action<RequestLocalizationOptions> optionsAction = null)
+        {
+            app.ApplicationServices
+                .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()
+                .InitLocalizationOptions(optionsAction);
+
+            return app.UseMiddleware<AbpRequestLocalizationMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpExceptionHandling(this IApplicationBuilder app)
+        {
+            if (app.Properties.ContainsKey(ExceptionHandlingMiddlewareMarker))
+            {
+                return app;
+            }
+
+            app.Properties[ExceptionHandlingMiddlewareMarker] = true;
+            return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpClaimsMapMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
+        }
     }
 }

@@ -1,23 +1,24 @@
 using System;
 
-namespace Volo.Abp.Validation.StringValues;
-
-[Serializable]
-[ValueValidator("BOOLEAN")]
-public class BooleanValueValidator : ValueValidatorBase
+namespace Volo.Abp.Validation.StringValues
 {
-    public override bool IsValid(object value)
+    [Serializable]
+    [ValueValidator("BOOLEAN")]
+    public class BooleanValueValidator : ValueValidatorBase
     {
-        if (value == null)
+        public override bool IsValid(object value)
         {
-            return false;
-        }
+            if (value == null)
+            {
+                return false;
+            }
 
-        if (value is bool)
-        {
-            return true;
-        }
+            if (value is bool)
+            {
+                return true;
+            }
 
-        return bool.TryParse(value.ToString(), out _);
+            return bool.TryParse(value.ToString(), out _);
+        }
     }
 }

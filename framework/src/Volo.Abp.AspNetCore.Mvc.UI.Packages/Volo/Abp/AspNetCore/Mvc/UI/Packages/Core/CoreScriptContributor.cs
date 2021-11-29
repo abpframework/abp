@@ -3,13 +3,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Utils;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
-
-[DependsOn(typeof(UtilsScriptContributor))]
-public class CoreScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(UtilsScriptContributor))]
+    public class CoreScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/abp/core/abp.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/abp/core/abp.js");
+        }
     }
 }

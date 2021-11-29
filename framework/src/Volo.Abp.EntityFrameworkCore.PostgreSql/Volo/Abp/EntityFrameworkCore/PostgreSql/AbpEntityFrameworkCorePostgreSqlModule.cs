@@ -4,30 +4,31 @@ using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EntityFrameworkCore.PostgreSql;
-
-[DependsOn(
-    typeof(AbpEntityFrameworkCoreModule)
-    )]
-public class AbpEntityFrameworkCorePostgreSqlModule : AbpModule
+namespace Volo.Abp.EntityFrameworkCore.PostgreSql
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpEntityFrameworkCoreModule)
+        )]
+    public class AbpEntityFrameworkCorePostgreSqlModule : AbpModule
     {
-        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    }
-
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpSequentialGuidGeneratorOptions>(options =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            if (options.DefaultSequentialGuidType == null)
-            {
-                options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
-            }
-        });
+            // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
 
-        context.Services.AddTransient(typeof(IPostgreSqlDbContextEventOutbox<>), typeof(PostgreSqlDbContextEventOutbox<>));
-        context.Services.AddTransient(typeof(IPostgreSqlDbContextEventInbox<>), typeof(PostgreSqlDbContextEventInbox<>));
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpSequentialGuidGeneratorOptions>(options =>
+            {
+                if (options.DefaultSequentialGuidType == null)
+                {
+                    options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
+                }
+            });
+
+            context.Services.AddTransient(typeof(IPostgreSqlDbContextEventOutbox<>), typeof(PostgreSqlDbContextEventOutbox<>));
+            context.Services.AddTransient(typeof(IPostgreSqlDbContextEventInbox<>), typeof(PostgreSqlDbContextEventInbox<>));
+        }
     }
 }

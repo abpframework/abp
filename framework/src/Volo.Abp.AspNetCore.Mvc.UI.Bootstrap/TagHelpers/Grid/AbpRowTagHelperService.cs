@@ -1,55 +1,56 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
-
-public class AbpRowTagHelperService : AbpTagHelperService<AbpRowTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public class AbpRowTagHelperService : AbpTagHelperService<AbpRowTagHelper>
     {
-        if (output.TagName == "abp-row")
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddClass("row");
-        }
-        if (output.TagName == "abp-form-row")
-        {
-            output.Attributes.AddClass("row");
-        }
+            if (output.TagName == "abp-row")
+            {
+                output.Attributes.AddClass("row");
+            }
+            if (output.TagName == "abp-form-row")
+            {
+                output.Attributes.AddClass("row");
+            }
 
-        output.TagName = "div";
+            output.TagName = "div";
 
-        ProcessVerticalAlign(output);
-        ProcessHorizontalAlign(output);
-        ProcessGutters(output);
-    }
-
-    protected virtual void ProcessVerticalAlign(TagHelperOutput output)
-    {
-        if (TagHelper.VAlign == VerticalAlign.Default)
-        {
-            return;
+            ProcessVerticalAlign(output);
+            ProcessHorizontalAlign(output);
+            ProcessGutters(output);
         }
 
-        output.Attributes.AddClass("align-items-" + TagHelper.VAlign.ToString().ToLowerInvariant());
-    }
-
-    protected virtual void ProcessHorizontalAlign(TagHelperOutput output)
-    {
-        if (TagHelper.HAlign == HorizontalAlign.Default)
+        protected virtual void ProcessVerticalAlign(TagHelperOutput output)
         {
-            return;
+            if (TagHelper.VAlign == VerticalAlign.Default)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("align-items-" + TagHelper.VAlign.ToString().ToLowerInvariant());
         }
 
-        output.Attributes.AddClass("justify-content-" + TagHelper.HAlign.ToString().ToLowerInvariant());
-    }
-
-    protected virtual void ProcessGutters(TagHelperOutput output)
-    {
-        if (TagHelper.Gutters ?? true)
+        protected virtual void ProcessHorizontalAlign(TagHelperOutput output)
         {
-            return;
+            if (TagHelper.HAlign == HorizontalAlign.Default)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("justify-content-" + TagHelper.HAlign.ToString().ToLowerInvariant());
         }
 
-        output.Attributes.AddClass("g-0");
+        protected virtual void ProcessGutters(TagHelperOutput output)
+        {
+            if (TagHelper.Gutters ?? true)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("g-0");
+        }
     }
 }

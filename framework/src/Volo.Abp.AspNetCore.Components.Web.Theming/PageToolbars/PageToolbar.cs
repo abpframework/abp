@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
-
-public class PageToolbar
+﻿namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars
 {
-    public PageToolbarContributorList Contributors { get; set; }
-
-    public PageToolbar()
+    public class PageToolbar
     {
-        Contributors = new PageToolbarContributorList();
+        public PageToolbarContributorList Contributors { get; set; }
+
+        public PageToolbar()
+        {
+            Contributors = new PageToolbarContributorList();
+        }
     }
 }

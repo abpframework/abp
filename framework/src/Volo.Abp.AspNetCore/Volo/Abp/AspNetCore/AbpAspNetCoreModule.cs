@@ -17,52 +17,53 @@ using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore;
-
-[DependsOn(
-    typeof(AbpAuditingModule),
-    typeof(AbpSecurityModule),
-    typeof(AbpVirtualFileSystemModule),
-    typeof(AbpUnitOfWorkModule),
-    typeof(AbpHttpModule),
-    typeof(AbpAuthorizationModule),
-    typeof(AbpValidationModule),
-    typeof(AbpExceptionHandlingModule)
-    )]
-public class AbpAspNetCoreModule : AbpModule
+namespace Volo.Abp.AspNetCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAuditingModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpUnitOfWorkModule),
+        typeof(AbpHttpModule),
+        typeof(AbpAuthorizationModule),
+        typeof(AbpValidationModule),
+        typeof(AbpExceptionHandlingModule)
+        )]
+    public class AbpAspNetCoreModule : AbpModule
     {
-        Configure<AbpAuditingOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Contributors.Add(new AspNetCoreAuditLogContributor());
-        });
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.Contributors.Add(new AspNetCoreAuditLogContributor());
+            });
 
-        Configure<StaticFileOptions>(options =>
+            Configure<StaticFileOptions>(options =>
+            {
+                options.ContentTypeProvider = context.Services.GetRequiredService<AbpFileExtensionContentTypeProvider>();
+            });
+
+            AddAspNetServices(context.Services);
+            context.Services.AddObjectAccessor<IApplicationBuilder>();
+            context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
+        }
+
+        private static void AddAspNetServices(IServiceCollection services)
         {
-            options.ContentTypeProvider = context.Services.GetRequiredService<AbpFileExtensionContentTypeProvider>();
-        });
+            services.AddHttpContextAccessor();
+        }
 
-        AddAspNetServices(context.Services);
-        context.Services.AddObjectAccessor<IApplicationBuilder>();
-        context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
-    }
-
-    private static void AddAspNetServices(IServiceCollection services)
-    {
-        services.AddHttpContextAccessor();
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var environment = context.GetEnvironmentOrNull();
-        if (environment != null)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            environment.WebRootFileProvider =
-                new CompositeFileProvider(
-                    context.GetEnvironment().WebRootFileProvider,
-                    context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
-                );
+            var environment = context.GetEnvironmentOrNull();
+            if (environment != null)
+            {
+                environment.WebRootFileProvider =
+                    new CompositeFileProvider(
+                        context.GetEnvironment().WebRootFileProvider,
+                        context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
+                    );
+            }
         }
     }
 }

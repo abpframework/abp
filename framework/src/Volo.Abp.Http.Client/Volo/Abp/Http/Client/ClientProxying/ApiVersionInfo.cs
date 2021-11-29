@@ -1,21 +1,22 @@
 ﻿using System;
 
-namespace Volo.Abp.Http.Client.ClientProxying;
-
-public class ApiVersionInfo  //TODO: Rename to not conflict with api versioning apis
+namespace Volo.Abp.Http.Client.ClientProxying
 {
-    public string BindingSource { get; }
-    public string Version { get; }
-
-    public ApiVersionInfo(string bindingSource, string version)
+    public class ApiVersionInfo  //TODO: Rename to not conflict with api versioning apis
     {
-        BindingSource = bindingSource;
-        Version = version;
-    }
+        public string BindingSource { get; }
+        public string Version { get; }
 
-    public bool ShouldSendInQueryString()
-    {
-        //TODO: Constant! TODO: Other sources!
-        return !BindingSource.IsIn("Path");
+        public ApiVersionInfo(string bindingSource, string version)
+        {
+            BindingSource = bindingSource;
+            Version = version;
+        }
+
+        public bool ShouldSendInQueryString()
+        {
+            //TODO: Constant! TODO: Other sources!
+            return !BindingSource.IsIn("Path");
+        }
     }
 }

@@ -1,19 +1,20 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Uow;
-
-public class UnitOfWorkEventArgs : EventArgs
+namespace Volo.Abp.Uow
 {
-    /// <summary>
-    /// Reference to the unit of work related to this event.
-    /// </summary>
-    public IUnitOfWork UnitOfWork { get; }
-
-    public UnitOfWorkEventArgs([NotNull] IUnitOfWork unitOfWork)
+    public class UnitOfWorkEventArgs : EventArgs
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        /// <summary>
+        /// Reference to the unit of work related to this event.
+        /// </summary>
+        public IUnitOfWork UnitOfWork { get; }
 
-        UnitOfWork = unitOfWork;
+        public UnitOfWorkEventArgs([NotNull] IUnitOfWork unitOfWork)
+        {
+            Check.NotNull(unitOfWork, nameof(unitOfWork));
+
+            UnitOfWork = unitOfWork;
+        }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System.Reflection;
 
-namespace Volo.Abp.Features;
-
-public class MethodInvocationFeatureCheckerContext
+namespace Volo.Abp.Features
 {
-    public MethodInfo Method { get; }
-
-    public MethodInvocationFeatureCheckerContext(MethodInfo method)
+    public class MethodInvocationFeatureCheckerContext
     {
-        Method = method;
+        public MethodInfo Method { get; }
+
+        public MethodInvocationFeatureCheckerContext(MethodInfo method)
+        {
+            Method = method;
+        }
     }
 }

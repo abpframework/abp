@@ -2,18 +2,19 @@
 using Volo.Abp.Autofac;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.Hosting;
-
-public static class AbpAutofacHostBuilderExtensions
+namespace Microsoft.Extensions.Hosting
 {
-    public static IHostBuilder UseAutofac(this IHostBuilder hostBuilder)
+    public static class AbpAutofacHostBuilderExtensions
     {
-        var containerBuilder = new ContainerBuilder();
+        public static IHostBuilder UseAutofac(this IHostBuilder hostBuilder)
+        {
+            var containerBuilder = new ContainerBuilder();
 
-        return hostBuilder.ConfigureServices((_, services) =>
-            {
-                services.AddObjectAccessor(containerBuilder);
-            })
-            .UseServiceProviderFactory(new AbpAutofacServiceProviderFactory(containerBuilder));
+            return hostBuilder.ConfigureServices((_, services) =>
+                {
+                    services.AddObjectAccessor(containerBuilder);
+                })
+                .UseServiceProviderFactory(new AbpAutofacServiceProviderFactory(containerBuilder));
+        }
     }
 }

@@ -3,18 +3,19 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.TenantManagement.MongoDB;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
-public class TenantManagementMongoDbContext : AbpMongoDbContext, ITenantManagementMongoDbContext
+namespace Volo.Abp.TenantManagement.MongoDB
 {
-    public IMongoCollection<Tenant> Tenants => Collection<Tenant>();
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
+    public class TenantManagementMongoDbContext : AbpMongoDbContext, ITenantManagementMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<Tenant> Tenants => Collection<Tenant>();
 
-        modelBuilder.ConfigureTenantManagement();
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureTenantManagement();
+        }
     }
 }

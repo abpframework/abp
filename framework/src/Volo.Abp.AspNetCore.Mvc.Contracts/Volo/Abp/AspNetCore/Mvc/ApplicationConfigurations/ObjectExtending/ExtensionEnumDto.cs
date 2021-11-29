@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
-
-[Serializable]
-public class ExtensionEnumDto
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
-    public List<ExtensionEnumFieldDto> Fields { get; set; }
+    [Serializable]
+    public class ExtensionEnumDto
+    {
+        public List<ExtensionEnumFieldDto> Fields { get; set; }
 
-    public string LocalizationResource { get; set; }
+        public string LocalizationResource { get; set; }
+    }
 }

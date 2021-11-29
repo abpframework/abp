@@ -1,22 +1,23 @@
 ﻿using System.Runtime.InteropServices;
 using Volo.Abp.DependencyInjection;
 
-namespace System.Runtime;
-
-public class OSPlatformProvider : IOSPlatformProvider, ITransientDependency
+namespace System.Runtime
 {
-    public virtual OSPlatform GetCurrentOSPlatform()
+    public class OSPlatformProvider : IOSPlatformProvider, ITransientDependency
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        public virtual OSPlatform GetCurrentOSPlatform()
         {
-            return OSPlatform.OSX; //MAC
-        }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return OSPlatform.OSX; //MAC
+            }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            return OSPlatform.Windows;
-        }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return OSPlatform.Windows;
+            }
 
-        return OSPlatform.Linux;
+            return OSPlatform.Linux;
+        }
     }
 }

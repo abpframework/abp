@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.EventBus.Distributed;
-
-public class InboxConfigDictionary : Dictionary<string, InboxConfig>
+namespace Volo.Abp.EventBus.Distributed
 {
-    public void Configure(Action<InboxConfig> configAction)
+    public class InboxConfigDictionary : Dictionary<string, InboxConfig>
     {
-        Configure("Default", configAction);
-    }
+        public void Configure(Action<InboxConfig> configAction)
+        {
+            Configure("Default", configAction);
+        }
 
-    public void Configure(string outboxName, Action<InboxConfig> configAction)
-    {
-        var outboxConfig = this.GetOrAdd(outboxName, () => new InboxConfig(outboxName));
-        configAction(outboxConfig);
+        public void Configure(string outboxName, Action<InboxConfig> configAction)
+        {
+            var outboxConfig = this.GetOrAdd(outboxName, () => new InboxConfig(outboxName));
+            configAction(outboxConfig);
+        }
     }
 }

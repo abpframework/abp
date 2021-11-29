@@ -7,32 +7,33 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.App;
-
-[DependsOn(
-    typeof(AbpAspNetCoreTestBaseModule),
-    typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAutofacModule)
-)]
-public class AbpSerilogTestModule : AbpModule
+namespace Volo.Abp.AspNetCore.App
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAutofacModule)
+    )]
+    public class AbpSerilogTestModule : AbpModule
     {
-        Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = true; });
-    }
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = true; });
+        }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var app = context.GetApplicationBuilder();
 
-        app.UseCorrelationId();
-        app.UseRouting();
-        app.UseAuthorization();
-        app.UseMultiTenancy();
-        app.UseAuditing();
-        app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
+            app.UseCorrelationId();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseMultiTenancy();
+            app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
+            app.UseConfiguredEndpoints();
+        }
     }
 }

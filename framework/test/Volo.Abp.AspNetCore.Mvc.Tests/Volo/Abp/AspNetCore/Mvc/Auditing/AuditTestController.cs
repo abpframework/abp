@@ -2,46 +2,47 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 
-namespace Volo.Abp.AspNetCore.Mvc.Auditing;
-
-[Route("api/audit-test")]
-public class AuditTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
-    private readonly AbpAuditingOptions _options;
-
-    public AuditTestController(IOptions<AbpAuditingOptions> options)
+    [Route("api/audit-test")]
+    public class AuditTestController : AbpController
     {
-        _options = options.Value;
-    }
+        private readonly AbpAuditingOptions _options;
 
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok();
-    }
+        public AuditTestController(IOptions<AbpAuditingOptions> options)
+        {
+            _options = options.Value;
+        }
 
-    [Route("audit-success")]
-    public IActionResult AuditSuccessForGetRequests()
-    {
-        return Ok();
-    }
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok();
+        }
 
-    [Route("audit-fail")]
-    public IActionResult AuditFailForGetRequests()
-    {
-        throw new UserFriendlyException("Exception occurred!");
-    }
+        [Route("audit-success")]
+        public IActionResult AuditSuccessForGetRequests()
+        {
+            return Ok();
+        }
 
-    [Route("audit-fail-object")]
-    public object AuditFailForGetRequestsReturningObject()
-    {
-        throw new UserFriendlyException("Exception occurred!");
-    }
+        [Route("audit-fail")]
+        public IActionResult AuditFailForGetRequests()
+        {
+            throw new UserFriendlyException("Exception occurred!");
+        }
 
-    [HttpGet]
-    [Route("audit-activate-failed")]
-    public IActionResult AuditActivateFailed([FromServices] AbpAuditingOptions options)
-    {
-        return Ok();
+        [Route("audit-fail-object")]
+        public object AuditFailForGetRequestsReturningObject()
+        {
+            throw new UserFriendlyException("Exception occurred!");
+        }
+
+        [HttpGet]
+        [Route("audit-activate-failed")]
+        public IActionResult AuditActivateFailed([FromServices] AbpAuditingOptions options)
+        {
+            return Ok();
+        }
     }
 }

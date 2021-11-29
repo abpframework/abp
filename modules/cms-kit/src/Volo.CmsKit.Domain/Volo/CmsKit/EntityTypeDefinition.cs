@@ -2,20 +2,21 @@
 using System;
 using Volo.Abp;
 
-namespace Volo.CmsKit;
-
-public abstract class EntityTypeDefinition : IEquatable<EntityTypeDefinition>
+namespace Volo.CmsKit
 {
-    public EntityTypeDefinition([NotNull] string entityType)
+    public abstract class EntityTypeDefinition : IEquatable<EntityTypeDefinition>
     {
-        EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType));
-    }
+        public EntityTypeDefinition([NotNull] string entityType)
+        {
+            EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType));
+        }
 
-    [NotNull]
-    public string EntityType { get; protected set; }
+        [NotNull]
+        public string EntityType { get; protected set; }
 
-    public bool Equals(EntityTypeDefinition other)
-    {
-        return EntityType == other?.EntityType;
+        public bool Equals(EntityTypeDefinition other)
+        {
+            return EntityType == other?.EntityType;
+        }
     }
 }

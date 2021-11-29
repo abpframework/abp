@@ -119,7 +119,7 @@ The Virtual File System is well integrated to ASP.NET Core:
 
 ### Static Virtual File Folders
 
-By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the virtual File System, the following folders also can contain static files:
+By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the birtual File System, the following folders also can contain static files:
 
 * Pages
 * Views

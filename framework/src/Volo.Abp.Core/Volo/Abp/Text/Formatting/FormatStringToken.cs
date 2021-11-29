@@ -1,14 +1,15 @@
-namespace Volo.Abp.Text.Formatting;
-
-internal class FormatStringToken
+namespace Volo.Abp.Text.Formatting
 {
-    public string Text { get; private set; }
-
-    public FormatStringTokenType Type { get; private set; }
-
-    public FormatStringToken(string text, FormatStringTokenType type)
+    internal class FormatStringToken
     {
-        Text = text;
-        Type = type;
+        public string Text { get; private set; }
+
+        public FormatStringTokenType Type { get; private set; }
+
+        public FormatStringToken(string text, FormatStringTokenType type)
+        {
+            Text = text;
+            Type = type;
+        }
     }
 }

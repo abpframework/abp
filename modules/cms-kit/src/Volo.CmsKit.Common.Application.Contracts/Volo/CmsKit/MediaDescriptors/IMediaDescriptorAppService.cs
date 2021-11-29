@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Content;
 
-namespace Volo.CmsKit.MediaDescriptors;
-
-public interface IMediaDescriptorAppService : IApplicationService
+namespace Volo.CmsKit.MediaDescriptors
 {
-    Task<RemoteStreamContent> DownloadAsync(Guid id);
+    public interface IMediaDescriptorAppService : IApplicationService
+    {
+        Task<RemoteStreamContent> DownloadAsync(Guid id);
+    }
 }

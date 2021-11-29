@@ -1,19 +1,20 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 
-namespace Volo.Abp.AutoMapper;
-
-[DependsOn(
-    typeof(AbpAutoMapperModule),
-    typeof(AbpObjectExtendingTestModule)
-)]
-public class AutoMapperTestModule : AbpModule
+namespace Volo.Abp.AutoMapper
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAutoMapperModule),
+        typeof(AbpObjectExtendingTestModule)
+    )]
+    public class AutoMapperTestModule : AbpModule
     {
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddMaps<AutoMapperTestModule>();
-        });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<AutoMapperTestModule>();
+            });
+        }
     }
 }

@@ -2,23 +2,24 @@
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Http.Client.Proxying;
-
-internal static class HttpActionParameterHelper
+namespace Volo.Abp.Http.Client.Proxying
 {
-    public static object FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
+    internal static class HttpActionParameterHelper
     {
-        var value = methodArguments.GetOrDefault(apiParameter.NameOnMethod);
-        if (value == null)
+        public static object FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
         {
-            return null;
-        }
+            var value =  methodArguments.GetOrDefault(apiParameter.NameOnMethod);
+            if (value == null)
+            {
+                return null;
+            }
 
-        if (apiParameter.Name == apiParameter.NameOnMethod)
-        {
-            return value;
-        }
+            if (apiParameter.Name == apiParameter.NameOnMethod)
+            {
+                return value;
+            }
 
-        return ReflectionHelper.GetValueByPath(value, value.GetType(), apiParameter.Name);
+            return ReflectionHelper.GetValueByPath(value, value.GetType(), apiParameter.Name);
+        }
     }
 }

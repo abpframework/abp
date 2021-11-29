@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Volo.Abp.ObjectExtending;
-
-public static class ObjectExtensionPropertyInfoExtensions
+namespace Volo.Abp.ObjectExtending
 {
-    public static ValidationAttribute[] GetValidationAttributes(this ObjectExtensionPropertyInfo propertyInfo)
+    public static class ObjectExtensionPropertyInfoExtensions
     {
-        return propertyInfo
-            .Attributes
-            .OfType<ValidationAttribute>()
-            .ToArray();
+        public static ValidationAttribute[] GetValidationAttributes(this ObjectExtensionPropertyInfo propertyInfo)
+        {
+            return propertyInfo
+                .Attributes
+                .OfType<ValidationAttribute>()
+                .ToArray();
+        }
     }
 }

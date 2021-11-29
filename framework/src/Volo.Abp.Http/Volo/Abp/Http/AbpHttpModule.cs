@@ -4,18 +4,19 @@ using Volo.Abp.Json;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Http;
-
-[DependsOn(typeof(AbpHttpAbstractionsModule))]
-[DependsOn(typeof(AbpJsonModule))]
-[DependsOn(typeof(AbpMinifyModule))]
-public class AbpHttpModule : AbpModule
+namespace Volo.Abp.Http
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpHttpAbstractionsModule))]
+    [DependsOn(typeof(AbpJsonModule))]
+    [DependsOn(typeof(AbpMinifyModule))]
+    public class AbpHttpModule : AbpModule
     {
-        Configure<AbpApiProxyScriptingOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Generators[JQueryProxyScriptGenerator.Name] = typeof(JQueryProxyScriptGenerator);
-        });
+            Configure<AbpApiProxyScriptingOptions>(options =>
+            {
+                options.Generators[JQueryProxyScriptGenerator.Name] = typeof(JQueryProxyScriptGenerator);
+            });
+        }
     }
 }

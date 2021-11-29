@@ -8,57 +8,58 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.TestApp;
-
-[DependsOn(
-    typeof(AbpDddApplicationModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAutoMapperModule)
-    )]
-public class TestAppModule : AbpModule
+namespace Volo.Abp.TestApp
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpDddApplicationModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAutoMapperModule)
+        )]
+    public class TestAppModule : AbpModule
     {
-        ConfigureAutoMapper();
-        ConfigureDistributedEventBus();
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configurators.Add(ctx =>
+            ConfigureAutoMapper();
+            ConfigureDistributedEventBus();
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+
+        private void ConfigureAutoMapper()
+        {
+            Configure<AbpAutoMapperOptions>(options =>
             {
-                ctx.MapperConfiguration.CreateMap<Person, PersonDto>().ReverseMap();
-                ctx.MapperConfiguration.CreateMap<Phone, PhoneDto>().ReverseMap();
+                options.Configurators.Add(ctx =>
+                {
+                    ctx.MapperConfiguration.CreateMap<Person, PersonDto>().ReverseMap();
+                    ctx.MapperConfiguration.CreateMap<Phone, PhoneDto>().ReverseMap();
+                });
+
+                options.AddMaps<TestAppModule>();
             });
+        }
 
-            options.AddMaps<TestAppModule>();
-        });
-    }
-
-    private void ConfigureDistributedEventBus()
-    {
-        Configure<AbpDistributedEntityEventOptions>(options =>
+        private void ConfigureDistributedEventBus()
         {
-            options.AutoEventSelectors.Add<Person>();
-            options.EtoMappings.Add<Person, PersonEto>();
-        });
-    }
+           Configure<AbpDistributedEntityEventOptions>(options =>
+           {
+               options.AutoEventSelectors.Add<Person>();
+               options.EtoMappings.Add<Person, PersonEto>();
+           });
+        }
 
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
+        private static void SeedTestData(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<TestDataBuilder>()
-                .BuildAsync());
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<TestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

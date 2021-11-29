@@ -1,28 +1,29 @@
 using JetBrains.Annotations;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.CmsKit.GlobalFeatures;
-
-[GlobalFeatureName(Name)]
-public class PagesFeature : GlobalFeature
+namespace Volo.CmsKit.GlobalFeatures
 {
-    public const string Name = "CmsKit.Pages";
-
-    internal PagesFeature(
-        [NotNull] GlobalCmsKitFeatures cmsKit
-    ) : base(cmsKit)
+    [GlobalFeatureName(Name)]
+    public class PagesFeature:GlobalFeature
     {
+        public const string Name = "CmsKit.Pages";
 
-    }
-
-    public override void Enable()
-    {
-        var userFeature = FeatureManager.Modules.CmsKit().User;
-        if (!userFeature.IsEnabled)
+        internal PagesFeature(
+            [NotNull] GlobalCmsKitFeatures cmsKit
+        ) : base(cmsKit)
         {
-            userFeature.Enable();
+            
         }
 
-        base.Enable();
+        public override void Enable()
+        {
+            var userFeature = FeatureManager.Modules.CmsKit().User;
+            if (!userFeature.IsEnabled)
+            {
+                userFeature.Enable();
+            }
+
+            base.Enable();
+        }
     }
 }

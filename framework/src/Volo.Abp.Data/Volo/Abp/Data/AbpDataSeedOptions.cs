@@ -1,11 +1,12 @@
-﻿namespace Volo.Abp.Data;
-
-public class AbpDataSeedOptions
+﻿namespace Volo.Abp.Data
 {
-    public DataSeedContributorList Contributors { get; }
-
-    public AbpDataSeedOptions()
+    public class AbpDataSeedOptions
     {
-        Contributors = new DataSeedContributorList();
+        public DataSeedContributorList Contributors { get; }
+
+        public AbpDataSeedOptions()
+        {
+            Contributors = new DataSeedContributorList();
+        }
     }
 }

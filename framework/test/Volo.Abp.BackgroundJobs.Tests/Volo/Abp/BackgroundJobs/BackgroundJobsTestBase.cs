@@ -1,11 +1,12 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public abstract class BackgroundJobsTestBase : AbpIntegratedTest<AbpBackgroundJobsTestModule>
+namespace Volo.Abp.BackgroundJobs
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public abstract class BackgroundJobsTestBase : AbpIntegratedTest<AbpBackgroundJobsTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

@@ -3,14 +3,15 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
-
-[DependsOn(typeof(CoreScriptContributor))]
-public class JQueryScriptContributor : BundleContributor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery
 {
-    public override void ConfigureBundle(BundleConfigurationContext context)
+    [DependsOn(typeof(CoreScriptContributor))]
+    public class JQueryScriptContributor : BundleContributor
     {
-        context.Files.AddIfNotContains("/libs/jquery/jquery.js");
-        context.Files.AddIfNotContains("/libs/abp/jquery/abp.jquery.js");
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/libs/jquery/jquery.js");
+            context.Files.AddIfNotContains("/libs/abp/jquery/abp.jquery.js");
+        }
     }
 }

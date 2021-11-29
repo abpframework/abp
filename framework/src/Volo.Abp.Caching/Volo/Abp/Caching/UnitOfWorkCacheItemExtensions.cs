@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.Caching;
-
-public static class UnitOfWorkCacheItemExtensions
+﻿namespace Volo.Abp.Caching
 {
-    public static TValue GetUnRemovedValueOrNull<TValue>(this UnitOfWorkCacheItem<TValue> item)
-        where TValue : class
+    public static class UnitOfWorkCacheItemExtensions
     {
-        return item != null && !item.IsRemoved ? item.Value : null;
+        public static TValue GetUnRemovedValueOrNull<TValue>(this UnitOfWorkCacheItem<TValue> item)
+            where TValue : class
+        {
+            return item != null && !item.IsRemoved ? item.Value : null;
+        }
     }
 }

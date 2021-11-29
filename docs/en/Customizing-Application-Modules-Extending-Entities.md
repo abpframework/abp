@@ -63,6 +63,8 @@ You can then use the same extra properties system defined in the previous sectio
 
 Another approach can be **creating your own entity** mapped to **the same database table** (or collection for a MongoDB database).
 
+`AppUser` entity in the [application startup template](Startup-Templates/Application.md) already implements this approach. [EF Core Migrations document](Entity-Framework-Core-Migrations.md) describes how to implement it and manage **EF Core database migrations** in such a case. It is also possible for MongoDB, while this time you won't deal with the database migration problems.
+
 ## Creating a New Entity with Its Own Database Table/Collection
 
 Mapping your entity to an **existing table** of a depended module has a few disadvantages;

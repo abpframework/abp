@@ -2,23 +2,24 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class ServiceCollectionConfigurationExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection ReplaceConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static class ServiceCollectionConfigurationExtensions
     {
-        return services.Replace(ServiceDescriptor.Singleton<IConfiguration>(configuration));
-    }
-
-    public static IConfiguration GetConfiguration(this IServiceCollection services)
-    {
-        var hostBuilderContext = services.GetSingletonInstanceOrNull<HostBuilderContext>();
-        if (hostBuilderContext?.Configuration != null)
+        public static IServiceCollection ReplaceConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            return hostBuilderContext.Configuration as IConfigurationRoot;
+            return services.Replace(ServiceDescriptor.Singleton<IConfiguration>(configuration));
         }
 
-        return services.GetSingletonInstance<IConfiguration>();
+        public static IConfiguration GetConfiguration(this IServiceCollection services)
+        {
+            var hostBuilderContext = services.GetSingletonInstanceOrNull<HostBuilderContext>();
+            if (hostBuilderContext?.Configuration != null)
+            {
+                return hostBuilderContext.Configuration as IConfigurationRoot;
+            }
+
+            return services.GetSingletonInstance<IConfiguration>();
+        }
     }
 }

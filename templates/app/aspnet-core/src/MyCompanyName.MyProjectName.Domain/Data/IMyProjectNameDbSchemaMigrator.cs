@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace MyCompanyName.MyProjectName.Data;
-
-public interface IMyProjectNameDbSchemaMigrator
+namespace MyCompanyName.MyProjectName.Data
 {
-    Task MigrateAsync();
+    public interface IMyProjectNameDbSchemaMigrator
+    {
+        Task MigrateAsync();
+    }
 }

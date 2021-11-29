@@ -1,24 +1,25 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
-
-public class ThemeInfo
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    public Type ThemeType { get; }
-
-    public string Name { get; }
-
-    public ThemeInfo([NotNull] Type themeType)
+    public class ThemeInfo
     {
-        Check.NotNull(themeType, nameof(themeType));
+        public Type ThemeType { get; }
 
-        if (!typeof(ITheme).IsAssignableFrom(themeType))
+        public string Name { get; }
+
+        public ThemeInfo([NotNull] Type themeType)
         {
-            throw new AbpException($"Given {nameof(themeType)} ({themeType.AssemblyQualifiedName}) should be type of {typeof(ITheme).AssemblyQualifiedName}");
-        }
+            Check.NotNull(themeType, nameof(themeType));
 
-        ThemeType = themeType;
-        Name = ThemeNameAttribute.GetName(themeType);
+            if (!typeof(ITheme).IsAssignableFrom(themeType))
+            {
+                throw new AbpException($"Given {nameof(themeType)} ({themeType.AssemblyQualifiedName}) should be type of {typeof(ITheme).AssemblyQualifiedName}");
+            }
+
+            ThemeType = themeType;
+            Name = ThemeNameAttribute.GetName(themeType);
+        }
     }
 }

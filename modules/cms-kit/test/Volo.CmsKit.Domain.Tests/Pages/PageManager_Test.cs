@@ -5,65 +5,66 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Pages;
-
-public class PageManager_Test : CmsKitDomainTestBase
+namespace Volo.CmsKit.Pages
 {
-    private readonly PageManager pageManager;
-    private readonly CmsKitTestData testData;
-    private readonly IPageRepository pageRepository;
-
-    public PageManager_Test()
+    public class PageManager_Test : CmsKitDomainTestBase
     {
-        pageManager = GetRequiredService<PageManager>();
-        testData = GetRequiredService<CmsKitTestData>();
-        pageRepository = GetRequiredService<IPageRepository>();
-    }
+        private readonly PageManager pageManager;
+        private readonly CmsKitTestData testData;
+        private readonly IPageRepository pageRepository;
 
-    public async Task CreateAsync_ShouldWorkProperly_WithNonExistingSlug()
-    {
-        var title = "My awesome page";
-        var slug = "my-awesome-page";
-        var content = "<h1>My Awesome Page</h1><p>This is my awesome page content!</p>";
+        public PageManager_Test()
+        {
+            pageManager = GetRequiredService<PageManager>();
+            testData = GetRequiredService<CmsKitTestData>();
+            pageRepository = GetRequiredService<IPageRepository>();
+        }
 
-        var page = await pageManager.CreateAsync(title, slug, content);
+        public async Task CreateAsync_ShouldWorkProperly_WithNonExistingSlug()
+        {
+            var title = "My awesome page";
+            var slug = "my-awesome-page";
+            var content = "<h1>My Awesome Page</h1><p>This is my awesome page content!</p>";
 
-        page.ShouldNotBeNull();
-        page.Title.ShouldBe(title);
-        page.Slug.ShouldBe(slug);
-        page.Content.ShouldBe(content);
-    }
+            var page = await pageManager.CreateAsync(title, slug, content);
 
-    public async Task CreateAsync_ShouldThrowException_WithExistingSlug()
-    {
-        var title = "My awesome page";
-        var slug = testData.Page_1_Slug;
-        var content = "<h1>My Awesome Page</h1><p>This is my awesome page content!</p>";
+            page.ShouldNotBeNull();
+            page.Title.ShouldBe(title);
+            page.Slug.ShouldBe(slug);
+            page.Content.ShouldBe(content);
+        }
 
-        var exception = await Should.ThrowAsync<PageSlugAlreadyExistsException>(async () =>
-                            await pageManager.CreateAsync(title, slug, content));
+        public async Task CreateAsync_ShouldThrowException_WithExistingSlug()
+        {
+            var title = "My awesome page";
+            var slug = testData.Page_1_Slug;
+            var content = "<h1>My Awesome Page</h1><p>This is my awesome page content!</p>";
 
-        exception.ShouldNotBeNull();
-    }
+            var exception = await Should.ThrowAsync<PageSlugAlreadyExistsException>(async () =>
+                                await pageManager.CreateAsync(title, slug, content));
 
-    public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
-    {
-        var newSlug = "freshly-generated-new-slug";
-        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+            exception.ShouldNotBeNull();
+        }
 
-        await pageManager.SetSlugAsync(page, newSlug);
+        public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
+        {
+            var newSlug = "freshly-generated-new-slug";
+            var page = await pageRepository.GetAsync(testData.Page_1_Id);
 
-        page.Slug.ShouldBe(newSlug);
-    }
+            await pageManager.SetSlugAsync(page, newSlug);
 
-    public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
-    {
-        var newSlug = testData.Page_2_Slug;
-        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+            page.Slug.ShouldBe(newSlug);
+        }
 
-        var exception = await Should.ThrowAsync<PageSlugAlreadyExistsException>(async () =>
-                            await pageManager.SetSlugAsync(page, newSlug));
+        public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
+        {
+            var newSlug = testData.Page_2_Slug;
+            var page = await pageRepository.GetAsync(testData.Page_1_Id);
 
-        exception.ShouldNotBeNull();
+            var exception = await Should.ThrowAsync<PageSlugAlreadyExistsException>(async () =>
+                                await pageManager.SetSlugAsync(page, newSlug));
+
+            exception.ShouldNotBeNull();
+        }
     }
 }

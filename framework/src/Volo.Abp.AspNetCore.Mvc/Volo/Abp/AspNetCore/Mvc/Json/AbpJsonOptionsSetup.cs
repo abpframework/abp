@@ -6,29 +6,30 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json;
-
-public class AbpJsonOptionsSetup : IConfigureOptions<JsonOptions>
+namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    protected IServiceProvider ServiceProvider { get; }
-
-    public AbpJsonOptionsSetup(IServiceProvider serviceProvider)
+    public class AbpJsonOptionsSetup : IConfigureOptions<JsonOptions>
     {
-        ServiceProvider = serviceProvider;
-    }
+        protected IServiceProvider ServiceProvider { get; }
 
-    public void Configure(JsonOptions options)
-    {
-        options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
-        options.JsonSerializerOptions.AllowTrailingCommas = true;
+        public AbpJsonOptionsSetup(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
 
-        options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
-        options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
+        public void Configure(JsonOptions options)
+        {
+            options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+            options.JsonSerializerOptions.AllowTrailingCommas = true;
 
-        options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
-        options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+            options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+            options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
 
-        options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
-        options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+
+            options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
+        }
     }
 }

@@ -7,58 +7,59 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.AspNetCore.Mvc.Validation;
-
-public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        if (!context.ActionDescriptor.IsControllerAction() ||
-            !context.ActionDescriptor.HasObjectResult())
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            await next();
-            return;
-        }
-
-        if (!context.GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.AutoModelValidation)
-        {
-            await next();
-            return;
-        }
-
-        if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.ActionDescriptor.GetMethodInfo()) != null)
-        {
-            await next();
-            return;
-        }
-
-        if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Controller.GetType()) != null)
-        {
-            await next();
-            return;
-        }
-
-        if (context.ActionDescriptor.GetMethodInfo().DeclaringType != context.Controller.GetType())
-        {
-            var baseMethod = context.ActionDescriptor.GetMethodInfo();
-
-            var overrideMethod = context.Controller.GetType().GetMethods().FirstOrDefault(x =>
-                x.DeclaringType == context.Controller.GetType() &&
-                x.Name == baseMethod.Name &&
-                x.ReturnType == baseMethod.ReturnType &&
-                x.GetParameters().Select(p => p.ToString()).SequenceEqual(baseMethod.GetParameters().Select(p => p.ToString())));
-
-            if (overrideMethod != null)
+            if (!context.ActionDescriptor.IsControllerAction() ||
+                !context.ActionDescriptor.HasObjectResult())
             {
-                if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(overrideMethod) != null)
+                await next();
+                return;
+            }
+
+            if (!context.GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.AutoModelValidation)
+            {
+                await next();
+                return;
+            }
+
+            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.ActionDescriptor.GetMethodInfo()) != null)
+            {
+                await next();
+                return;
+            }
+
+            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Controller.GetType()) != null)
+            {
+                await next();
+                return;
+            }
+
+            if (context.ActionDescriptor.GetMethodInfo().DeclaringType != context.Controller.GetType())
+            {
+                var baseMethod = context.ActionDescriptor.GetMethodInfo();
+
+                var overrideMethod = context.Controller.GetType().GetMethods().FirstOrDefault(x =>
+                    x.DeclaringType == context.Controller.GetType() &&
+                    x.Name == baseMethod.Name &&
+                    x.ReturnType == baseMethod.ReturnType &&
+                    x.GetParameters().Select(p => p.ToString()).SequenceEqual(baseMethod.GetParameters().Select(p => p.ToString())));
+
+                if (overrideMethod != null)
                 {
-                    await next();
-                    return;
+                    if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(overrideMethod) != null)
+                    {
+                        await next();
+                        return;
+                    }
                 }
             }
-        }
 
-        context.GetRequiredService<IModelStateValidator>().Validate(context.ModelState);
-        await next();
+            context.GetRequiredService<IModelStateValidator>().Validate(context.ModelState);
+            await next();
+        }
     }
 }

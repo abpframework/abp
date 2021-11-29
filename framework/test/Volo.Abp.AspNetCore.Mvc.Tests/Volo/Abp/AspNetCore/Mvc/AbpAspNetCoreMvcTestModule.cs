@@ -22,121 +22,122 @@ using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc;
-
-[DependsOn(
-    typeof(AbpAspNetCoreTestBaseModule),
-    typeof(AbpMemoryDbTestModule),
-    typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpAutofacModule)
-    )]
-public class AbpAspNetCoreMvcTestModule : AbpModule
+namespace Volo.Abp.AspNetCore.Mvc
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AbpMemoryDbTestModule),
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAutofacModule)
+        )]
+    public class AbpAspNetCoreMvcTestModule : AbpModule
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-        {
-            options.AddAssemblyResource(
-                typeof(MvcTestResource),
-                typeof(AbpAspNetCoreMvcTestModule).Assembly
-            );
-        });
-    }
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        OneTimeRunner.Run(() =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            GlobalFeatureManager.Instance.Modules.GetOrAdd(AbpAspNetCoreMvcTestFeatures.ModuleName,
-                () => new AbpAspNetCoreMvcTestFeatures(GlobalFeatureManager.Instance))
-                .EnableAll();
-        });
-
-        context.Services.AddAuthentication(options =>
-        {
-            options.DefaultChallengeScheme = "Bearer";
-            options.DefaultForbidScheme = "Cookie";
-        }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
-
-        context.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy("MyClaimTestPolicy", policy =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                policy.RequireClaim("MyCustomClaimType", "42");
+                options.AddAssemblyResource(
+                    typeof(MvcTestResource),
+                    typeof(AbpAspNetCoreMvcTestModule).Assembly
+                );
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            OneTimeRunner.Run(() =>
+            {
+                GlobalFeatureManager.Instance.Modules.GetOrAdd(AbpAspNetCoreMvcTestFeatures.ModuleName,
+                    () => new AbpAspNetCoreMvcTestFeatures(GlobalFeatureManager.Instance))
+                    .EnableAll();
             });
 
-            options.AddPolicy("TestPermission1_And_TestPermission2", policy =>
+            context.Services.AddAuthentication(options =>
             {
-                policy.Requirements.Add(new PermissionsRequirement(new[] { "TestPermission1", "TestPermission2" }, requiresAll: true));
+                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultForbidScheme = "Cookie";
+            }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
+
+            context.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MyClaimTestPolicy", policy =>
+                {
+                    policy.RequireClaim("MyCustomClaimType", "42");
+                });
+
+                options.AddPolicy("TestPermission1_And_TestPermission2", policy =>
+                {
+                    policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: true));
+                });
+
+                options.AddPolicy("TestPermission1_Or_TestPermission2", policy =>
+                {
+                    policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: false));
+                });
             });
 
-            options.AddPolicy("TestPermission1_Or_TestPermission2", policy =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                policy.Requirements.Add(new PermissionsRequirement(new[] { "TestPermission1", "TestPermission2" }, requiresAll: false));
+                options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+                {
+                    opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
+                        string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                            ? "phones"
+                            : urlActionNameNormalizerContext.ActionNameInUrl;
+                });
             });
-        });
 
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
-                    string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
-                        ? "phones"
-                        : urlActionNameNormalizerContext.ActionNameInUrl;
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
             });
-        });
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<MvcTestResource>("en")
+                    .AddBaseTypes(
+                        typeof(AbpUiResource),
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
+
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
+            });
+
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
+                options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
-        });
+            var app = context.GetApplicationBuilder();
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<MvcTestResource>("en")
-                .AddBaseTypes(
-                    typeof(AbpUiResource),
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
-
-            options.Languages.Add(new LanguageInfo("en", "en", "English"));
-            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
-            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
-            options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-        });
-
-        Configure<RazorPagesOptions>(options =>
-        {
-            options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
-        });
-
-        Configure<AbpClaimsMapOptions>(options =>
-        {
-            options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
-            options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-
-        app.UseCorrelationId();
-        app.UseStaticFiles();
-        app.UseAbpRequestLocalization();
-        app.UseAbpSecurityHeaders();
-        app.UseRouting();
-        app.UseMiddleware<FakeAuthenticationMiddleware>();
-        app.UseAbpClaimsMap();
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseAuditing();
-        app.UseUnitOfWork();
-        app.UseConfiguredEndpoints();
+            app.UseCorrelationId();
+            app.UseStaticFiles();
+            app.UseAbpRequestLocalization();
+            app.UseAbpSecurityHeaders();
+            app.UseRouting();
+            app.UseMiddleware<FakeAuthenticationMiddleware>();
+            app.UseAbpClaimsMap();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseAuditing();
+            app.UseUnitOfWork();
+            app.UseConfiguredEndpoints();
+        }
     }
 }

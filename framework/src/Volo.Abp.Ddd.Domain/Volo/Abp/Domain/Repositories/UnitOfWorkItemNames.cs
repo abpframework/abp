@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Domain.Repositories;
-
-public static class UnitOfWorkItemNames
+﻿namespace Volo.Abp.Domain.Repositories
 {
-    public const string HardDeletedEntities = "AbpHardDeletedEntities";
+    public static class UnitOfWorkItemNames
+    {
+        public const string HardDeletedEntities = "AbpHardDeletedEntities";
+    }
 }

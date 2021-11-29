@@ -2,21 +2,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Serialization;
-
-public class AbpSerializationModule : AbpModule
+namespace Volo.Abp.Serialization
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public class AbpSerializationModule : AbpModule
     {
-        context.Services.OnExposing(onServiceExposingContext =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.OnExposing(onServiceExposingContext =>
+            {
                 //Register types for IObjectSerializer<T> if implements
                 onServiceExposingContext.ExposedTypes.AddRange(
-                ReflectionHelper.GetImplementedGenericTypes(
-                    onServiceExposingContext.ImplementationType,
-                    typeof(IObjectSerializer<>)
-                )
-            );
-        });
+                    ReflectionHelper.GetImplementedGenericTypes(
+                        onServiceExposingContext.ImplementationType,
+                        typeof(IObjectSerializer<>)
+                    )
+                );
+            });
+        }
     }
 }

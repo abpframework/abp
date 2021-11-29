@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.Application.Services;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit;
-
-public abstract class CmsKitAppServiceBase : ApplicationService
+namespace Volo.CmsKit
 {
-    protected CmsKitAppServiceBase()
+    public abstract class CmsKitAppServiceBase : ApplicationService
     {
-        LocalizationResource = typeof(CmsKitResource);
+        protected CmsKitAppServiceBase()
+        {
+            LocalizationResource = typeof(CmsKitResource);
+        }
     }
 }

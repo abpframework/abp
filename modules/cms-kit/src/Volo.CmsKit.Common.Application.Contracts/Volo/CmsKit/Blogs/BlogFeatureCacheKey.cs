@@ -2,22 +2,23 @@
 using System;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Blogs;
-
-public class BlogFeatureCacheKey
+namespace Volo.CmsKit.Blogs
 {
-    public BlogFeatureCacheKey(Guid id, [NotNull] string featureName)
+    public class BlogFeatureCacheKey
     {
-        Id = id;
-        FeatureName = Check.NotNullOrEmpty(featureName, nameof(featureName));
-    }
+        public BlogFeatureCacheKey(Guid id, [NotNull] string featureName)
+        {
+            Id = id;
+            FeatureName = Check.NotNullOrEmpty(featureName, nameof(featureName));
+        }
 
-    public Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-    public string FeatureName { get; set; }
+        public string FeatureName { get; set; }
 
-    public override string ToString()
-    {
-        return $"BlogFeature_{Id}_{FeatureName}";
+        public override string ToString()
+        {
+            return $"BlogFeature_{Id}_{FeatureName}";
+        }
     }
 }

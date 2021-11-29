@@ -9,33 +9,34 @@ using Volo.Abp.Specifications;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing;
-
-public abstract class Repository_Specifications_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.TestApp.Testing
 {
-    protected readonly IRepository<City, Guid> CityRepository;
-
-    protected Repository_Specifications_Tests()
+    public abstract class Repository_Specifications_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        CityRepository = GetRequiredService<IRepository<City, Guid>>();
-    }
+        protected readonly IRepository<City, Guid> CityRepository;
 
-    [Fact]
-    public async Task SpecificationWithRepository_Test()
-    {
-        await WithUnitOfWorkAsync(async () =>
+        protected Repository_Specifications_Tests()
         {
-            (await CityRepository.CountAsync(new CitySpecification().ToExpression())).ShouldBe(1);
-            return Task.CompletedTask;
-        });
-    }
-}
+            CityRepository = GetRequiredService<IRepository<City, Guid>>();
+        }
 
-public class CitySpecification : Specification<City>
-{
-    public override Expression<Func<City, bool>> ToExpression()
+        [Fact]
+        public async Task SpecificationWithRepository_Test()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                (await CityRepository.CountAsync(new CitySpecification().ToExpression())).ShouldBe(1);
+                return Task.CompletedTask;
+            });
+        }
+    }
+
+    public class CitySpecification : Specification<City>
     {
-        return city => city.Name == "Istanbul";
+        public override Expression<Func<City, bool>> ToExpression()
+        {
+            return city => city.Name == "Istanbul";
+        }
     }
 }

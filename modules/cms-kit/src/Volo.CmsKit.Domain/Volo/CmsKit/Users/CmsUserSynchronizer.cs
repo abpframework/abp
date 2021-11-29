@@ -7,44 +7,45 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Users;
-
-public class CmsUserSynchronizer :
-    IDistributedEventHandler<EntityUpdatedEto<UserEto>>,
-    ITransientDependency
+namespace Volo.CmsKit.Users
 {
-    protected ICmsUserRepository UserRepository { get; }
-
-    protected ICmsUserLookupService UserLookupService { get; }
-
-    public CmsUserSynchronizer(
-        ICmsUserRepository userRepository,
-        ICmsUserLookupService userLookupService)
+    public class CmsUserSynchronizer :
+        IDistributedEventHandler<EntityUpdatedEto<UserEto>>,
+        ITransientDependency
     {
-        UserRepository = userRepository;
-        UserLookupService = userLookupService;
-    }
+        protected ICmsUserRepository UserRepository { get; }
 
-    public virtual async Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
-    {
-        if (!GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
+        protected ICmsUserLookupService UserLookupService { get; }
+
+        public CmsUserSynchronizer(
+            ICmsUserRepository userRepository,
+            ICmsUserLookupService userLookupService)
         {
-            return;
+            UserRepository = userRepository;
+            UserLookupService = userLookupService;
         }
 
-        var user = await UserRepository.FindAsync(eventData.Entity.Id);
-        if (user == null)
+        public virtual async Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
         {
-            user = await UserLookupService.FindByIdAsync(eventData.Entity.Id);
-            if (user == null)
+            if (!GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
             {
                 return;
             }
-        }
 
-        if (user.Update(eventData.Entity))
-        {
-            await UserRepository.UpdateAsync(user);
+            var user = await UserRepository.FindAsync(eventData.Entity.Id);
+            if (user == null)
+            {
+                user = await UserLookupService.FindByIdAsync(eventData.Entity.Id);
+                if (user == null)
+                {
+                    return;
+                }
+            }
+
+            if (user.Update(eventData.Entity))
+            {
+                await UserRepository.UpdateAsync(user);
+            }
         }
     }
 }

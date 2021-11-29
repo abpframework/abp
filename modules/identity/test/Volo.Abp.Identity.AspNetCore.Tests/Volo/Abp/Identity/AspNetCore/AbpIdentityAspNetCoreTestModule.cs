@@ -5,40 +5,41 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Identity.AspNetCore;
-
-[DependsOn(
-    typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpIdentityDomainTestModule),
-    typeof(AbpAspNetCoreTestBaseModule),
-    typeof(AbpAspNetCoreMvcModule)
-)]
-public class AbpIdentityAspNetCoreTestModule : AbpModule
+namespace Volo.Abp.Identity.AspNetCore
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpIdentityDomainTestModule),
+        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AbpAspNetCoreMvcModule)
+    )]
+    public class AbpIdentityAspNetCoreTestModule : AbpModule
     {
-        context.Services.PreConfigure<IMvcBuilder>(builder =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            builder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpIdentityAspNetCoreTestModule).Assembly));
-        });
-    }
+            context.Services.PreConfigure<IMvcBuilder>(builder =>
+            {
+                builder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpIdentityAspNetCoreTestModule).Assembly));
+            });
+        }
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpIdentityOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
-        });
-    }
+            Configure<AbpIdentityOptions>(options =>
+            {
+                options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
+            });
+        }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-        var env = context.GetEnvironment();
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
-        app.UseRouting();
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseConfiguredEndpoints();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseConfiguredEndpoints();
+        }
     }
 }

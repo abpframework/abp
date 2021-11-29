@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-public class ClockDto
+﻿namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    public string Kind { get; set; }
+    public class ClockDto
+    {
+        public string Kind { get; set; }
+    }
 }

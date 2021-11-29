@@ -4,18 +4,19 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.Blogs;
-
-public class DefaultBlogFeatureProvider : IDefaultBlogFeatureProvider, ITransientDependency
+namespace Volo.CmsKit.Blogs
 {
-    public virtual Task<List<BlogFeature>> GetDefaultFeaturesAsync(Guid blogId)
+    public class DefaultBlogFeatureProvider : IDefaultBlogFeatureProvider, ITransientDependency
     {
-        return Task.FromResult(new List<BlogFeature>
+        public virtual Task<List<BlogFeature>> GetDefaultFeaturesAsync(Guid blogId)
+        {
+            return Task.FromResult(new List<BlogFeature>
             {
                 new BlogFeature(blogId, CommentsFeature.Name),
                 new BlogFeature(blogId, ReactionsFeature.Name),
                 new BlogFeature(blogId, RatingsFeature.Name),
                 new BlogFeature(blogId, TagsFeature.Name),
             });
+        }
     }
 }

@@ -4,29 +4,30 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic;
-
-public partial class LoginDisplay : IDisposable
+namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic
 {
-    [Inject]
-    protected IMenuManager MenuManager { get; set; }
-
-    protected ApplicationMenu Menu { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    public partial class LoginDisplay : IDisposable
     {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
+        [Inject]
+        protected IMenuManager MenuManager { get; set; }
 
-        Navigation.LocationChanged += OnLocationChanged;
-    }
+        protected ApplicationMenu Menu { get; set; }
 
-    protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
-    {
-        InvokeAsync(StateHasChanged);
-    }
+        protected override async Task OnInitializedAsync()
+        {
+            Menu = await MenuManager.GetAsync(StandardMenus.User);
 
-    public void Dispose()
-    {
-        Navigation.LocationChanged -= OnLocationChanged;
+            Navigation.LocationChanged += OnLocationChanged;
+        }
+
+        protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+        {
+            InvokeAsync(StateHasChanged);
+        }
+
+        public void Dispose()
+        {
+            Navigation.LocationChanged -= OnLocationChanged;
+        }
     }
 }

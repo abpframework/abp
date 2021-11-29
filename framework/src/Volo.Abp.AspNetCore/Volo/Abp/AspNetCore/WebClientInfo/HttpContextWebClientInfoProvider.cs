@@ -3,40 +3,41 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.WebClientInfo;
-
-public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransientDependency
+namespace Volo.Abp.AspNetCore.WebClientInfo
 {
-    protected ILogger<HttpContextWebClientInfoProvider> Logger { get; }
-    protected IHttpContextAccessor HttpContextAccessor { get; }
-
-    public HttpContextWebClientInfoProvider(
-        ILogger<HttpContextWebClientInfoProvider> logger,
-        IHttpContextAccessor httpContextAccessor)
+    public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransientDependency
     {
-        Logger = logger;
-        HttpContextAccessor = httpContextAccessor;
-    }
+        protected ILogger<HttpContextWebClientInfoProvider> Logger { get; }
+        protected IHttpContextAccessor HttpContextAccessor { get; }
 
-    public string BrowserInfo => GetBrowserInfo();
-
-    public string ClientIpAddress => GetClientIpAddress();
-
-    protected virtual string GetBrowserInfo()
-    {
-        return HttpContextAccessor.HttpContext?.Request?.Headers?["User-Agent"];
-    }
-
-    protected virtual string GetClientIpAddress()
-    {
-        try
+        public HttpContextWebClientInfoProvider(
+            ILogger<HttpContextWebClientInfoProvider> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
-            return HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            Logger = logger;
+            HttpContextAccessor = httpContextAccessor;
         }
-        catch (Exception ex)
+
+        public string BrowserInfo => GetBrowserInfo();
+
+        public string ClientIpAddress => GetClientIpAddress();
+
+        protected virtual string GetBrowserInfo()
         {
-            Logger.LogException(ex, LogLevel.Warning);
-            return null;
+            return HttpContextAccessor.HttpContext?.Request?.Headers?["User-Agent"];
+        }
+
+        protected virtual string GetClientIpAddress()
+        {
+            try
+            {
+                return HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, LogLevel.Warning);
+                return null;
+            }
         }
     }
 }

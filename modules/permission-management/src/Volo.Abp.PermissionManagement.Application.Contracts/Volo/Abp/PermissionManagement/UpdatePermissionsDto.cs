@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.PermissionManagement;
-
-public class UpdatePermissionsDto
+﻿namespace Volo.Abp.PermissionManagement
 {
-    public UpdatePermissionDto[] Permissions { get; set; }
+    public class UpdatePermissionsDto
+    {
+        public UpdatePermissionDto[] Permissions { get; set; }
+    }
 }

@@ -1,6 +1,7 @@
-﻿namespace Volo.CmsKit.Blogs;
-
-public static class BlogFeatureConsts
+﻿namespace Volo.CmsKit.Blogs
 {
-    public const int MaxFeatureNameLenth = 64;
+    public static class BlogFeatureConsts
+    {
+        public const int MaxFeatureNameLenth = 64;
+    }
 }

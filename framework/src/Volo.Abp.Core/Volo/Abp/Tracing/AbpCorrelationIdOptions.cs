@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.Tracing;
-
-public class AbpCorrelationIdOptions
+﻿namespace Volo.Abp.Tracing
 {
-    public string HttpHeaderName { get; set; } = "X-Correlation-Id";
+    public class AbpCorrelationIdOptions
+    {
+        public string HttpHeaderName { get; set; } = "X-Correlation-Id";
 
-    public bool SetResponseHeader { get; set; } = true;
+        public bool SetResponseHeader { get; set; } = true;
+    }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Net.Http;
 
-namespace Volo.Abp.Http.Client.Proxying;
-
-public interface IProxyHttpClientFactory
+namespace Volo.Abp.Http.Client.Proxying
 {
-    HttpClient Create();
+    public interface IProxyHttpClientFactory
+    {
+        HttpClient Create();
 
-    HttpClient Create(string name);
+        HttpClient Create(string name);
+    }
 }

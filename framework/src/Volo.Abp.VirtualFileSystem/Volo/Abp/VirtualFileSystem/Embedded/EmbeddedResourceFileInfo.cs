@@ -3,76 +3,79 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem.Embedded;
-
-/// <summary>
-/// Represents a file embedded in an assembly.
-/// </summary>
-public class EmbeddedResourceFileInfo : IFileInfo
+namespace Volo.Abp.VirtualFileSystem.Embedded
 {
-    public bool Exists => true;
+    /// <summary>
+    /// Represents a file embedded in an assembly.
+    /// </summary>
+    public class EmbeddedResourceFileInfo : IFileInfo
+    {
+        public bool Exists => true;
 
-    public long Length {
-        get {
-            if (!_length.HasValue)
+        public long Length
+        {
+            get
             {
-                using (var stream = _assembly.GetManifestResourceStream(_resourcePath))
+                if (!_length.HasValue)
                 {
-                    _length = stream.Length;
+                    using (var stream = _assembly.GetManifestResourceStream(_resourcePath))
+                    {
+                        _length = stream.Length;
+                    }
                 }
+
+                return _length.Value;
+            }
+        }
+        private long? _length;
+
+        public string PhysicalPath => null;
+
+        public string VirtualPath { get; }
+
+        public string Name { get; }
+
+        /// <summary>
+        /// The time, in UTC.
+        /// </summary>
+        public DateTimeOffset LastModified { get; }
+
+        public bool IsDirectory => false;
+
+        private readonly Assembly _assembly;
+        private readonly string _resourcePath;
+
+        public EmbeddedResourceFileInfo(
+            Assembly assembly,
+            string resourcePath,
+            string virtualPath,
+            string name,
+            DateTimeOffset lastModified)
+        {
+            _assembly = assembly;
+            _resourcePath = resourcePath;
+
+            VirtualPath = virtualPath;
+            Name = name;
+            LastModified = lastModified;
+        }
+
+        /// <inheritdoc />
+        public Stream CreateReadStream()
+        {
+            var stream = _assembly.GetManifestResourceStream(_resourcePath);
+
+            if (!_length.HasValue && stream != null)
+            {
+                _length = stream.Length;
             }
 
-            return _length.Value;
+            return stream;
         }
-    }
-    private long? _length;
 
-    public string PhysicalPath => null;
-
-    public string VirtualPath { get; }
-
-    public string Name { get; }
-
-    /// <summary>
-    /// The time, in UTC.
-    /// </summary>
-    public DateTimeOffset LastModified { get; }
-
-    public bool IsDirectory => false;
-
-    private readonly Assembly _assembly;
-    private readonly string _resourcePath;
-
-    public EmbeddedResourceFileInfo(
-        Assembly assembly,
-        string resourcePath,
-        string virtualPath,
-        string name,
-        DateTimeOffset lastModified)
-    {
-        _assembly = assembly;
-        _resourcePath = resourcePath;
-
-        VirtualPath = virtualPath;
-        Name = name;
-        LastModified = lastModified;
-    }
-
-    /// <inheritdoc />
-    public Stream CreateReadStream()
-    {
-        var stream = _assembly.GetManifestResourceStream(_resourcePath);
-
-        if (!_length.HasValue && stream != null)
+        public override string ToString()
         {
-            _length = stream.Length;
+            return $"[EmbeddedResourceFileInfo] {Name} ({this.VirtualPath})";
         }
-
-        return stream;
-    }
-
-    public override string ToString()
-    {
-        return $"[EmbeddedResourceFileInfo] {Name} ({this.VirtualPath})";
     }
 }

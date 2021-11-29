@@ -3,19 +3,20 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Json.SystemTextJson;
-
-public class AbpSystemTextJsonUnsupportedTypeMatcher : ITransientDependency
+namespace Volo.Abp.Json.SystemTextJson
 {
-    protected AbpSystemTextJsonSerializerOptions Options { get; }
-
-    public AbpSystemTextJsonUnsupportedTypeMatcher(IOptions<AbpSystemTextJsonSerializerOptions> options)
+    public class AbpSystemTextJsonUnsupportedTypeMatcher : ITransientDependency
     {
-        Options = options.Value;
-    }
+        protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-    public virtual bool Match([CanBeNull] Type type)
-    {
-        return Options.UnsupportedTypes.Contains(type);
+        public AbpSystemTextJsonUnsupportedTypeMatcher(IOptions<AbpSystemTextJsonSerializerOptions> options)
+        {
+            Options = options.Value;
+        }
+
+        public virtual bool Match([CanBeNull]Type type)
+        {
+            return Options.UnsupportedTypes.Contains(type);
+        }
     }
 }

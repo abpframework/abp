@@ -1,23 +1,24 @@
 ﻿using System;
 
-namespace Volo.Abp.Auditing;
-
-internal static class InternalUtils
+namespace Volo.Abp.Auditing
 {
-    internal static string AddCounter(string str)
+    internal static class InternalUtils
     {
-        if (str.Contains("__"))
+        internal static string AddCounter(string str)
         {
-            var splitted = str.Split("__");
-            if (splitted.Length == 2)
+            if (str.Contains("__"))
             {
-                if (int.TryParse(splitted[1], out var num))
+                var splitted = str.Split("__");
+                if (splitted.Length == 2)
                 {
-                    return splitted[0] + "__" + (++num);
+                    if (int.TryParse(splitted[1], out var num))
+                    {
+                        return splitted[0] + "__" + (++num);
+                    }
                 }
             }
-        }
 
-        return str + "__2";
+            return str + "__2";
+        }
     }
 }

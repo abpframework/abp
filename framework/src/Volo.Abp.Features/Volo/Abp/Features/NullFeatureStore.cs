@@ -3,20 +3,21 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Features;
-
-[Dependency(TryRegister = true)]
-public class NullFeatureStore : IFeatureStore, ISingletonDependency
+namespace Volo.Abp.Features
 {
-    public ILogger<NullFeatureStore> Logger { get; set; }
-
-    public NullFeatureStore()
+    [Dependency(TryRegister = true)]
+    public class NullFeatureStore : IFeatureStore, ISingletonDependency
     {
-        Logger = NullLogger<NullFeatureStore>.Instance;
-    }
+        public ILogger<NullFeatureStore> Logger { get; set; }
 
-    public Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
-    {
-        return Task.FromResult((string)null);
+        public NullFeatureStore()
+        {
+            Logger = NullLogger<NullFeatureStore>.Instance;
+        }
+
+        public Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        {
+            return Task.FromResult((string) null);
+        }
     }
 }

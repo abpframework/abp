@@ -8,42 +8,43 @@ using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementTestBaseModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
-    )]
-public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
+namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
+        )]
+    public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
-
-        Configure<AbpDbContextOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Configure(abpDbContextConfigurationContext =>
+            var sqliteConnection = CreateDatabaseAndGetConnection();
+
+            Configure<AbpDbContextOptions>(options =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                options.Configure(abpDbContextConfigurationContext =>
+                {
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                });
             });
-        });
 
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
+            });
+        }
+
+        private static SqliteConnection CreateDatabaseAndGetConnection()
         {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
-            });
-    }
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
+            new TenantManagementDbContext(
+                new DbContextOptionsBuilder<TenantManagementDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
-        new TenantManagementDbContext(
-            new DbContextOptionsBuilder<TenantManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        return connection;
+            return connection;
+        }
     }
 }

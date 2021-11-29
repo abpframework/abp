@@ -1,12 +1,13 @@
 using NUglify;
 using Volo.Abp.Minify.Scripts;
 
-namespace Volo.Abp.Minify.NUglify;
-
-public class NUglifyJavascriptMinifier : NUglifyMinifierBase, IJavascriptMinifier
+namespace Volo.Abp.Minify.NUglify
 {
-    protected override UglifyResult UglifySource(string source, string fileName)
+    public class NUglifyJavascriptMinifier : NUglifyMinifierBase, IJavascriptMinifier
     {
-        return Uglify.Js(source, fileName);
+        protected override UglifyResult UglifySource(string source, string fileName)
+        {
+            return Uglify.Js(source, fileName);
+        }
     }
 }

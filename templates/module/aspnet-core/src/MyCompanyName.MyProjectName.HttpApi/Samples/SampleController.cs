@@ -3,31 +3,32 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.Samples;
-
-[Area(MyProjectNameRemoteServiceConsts.ModuleName)]
-[RemoteService(Name = MyProjectNameRemoteServiceConsts.RemoteServiceName)]
-[Route("api/MyProjectName/sample")]
-public class SampleController : MyProjectNameController, ISampleAppService
+namespace MyCompanyName.MyProjectName.Samples
 {
-    private readonly ISampleAppService _sampleAppService;
-
-    public SampleController(ISampleAppService sampleAppService)
+    [Area(MyProjectNameRemoteServiceConsts.ModuleName)]
+    [RemoteService(Name = MyProjectNameRemoteServiceConsts.RemoteServiceName)]
+    [Route("api/MyProjectName/sample")]
+    public class SampleController : MyProjectNameController, ISampleAppService
     {
-        _sampleAppService = sampleAppService;
-    }
+        private readonly ISampleAppService _sampleAppService;
 
-    [HttpGet]
-    public async Task<SampleDto> GetAsync()
-    {
-        return await _sampleAppService.GetAsync();
-    }
+        public SampleController(ISampleAppService sampleAppService)
+        {
+            _sampleAppService = sampleAppService;
+        }
 
-    [HttpGet]
-    [Route("authorized")]
-    [Authorize]
-    public async Task<SampleDto> GetAuthorizedAsync()
-    {
-        return await _sampleAppService.GetAsync();
+        [HttpGet]
+        public async Task<SampleDto> GetAsync()
+        {
+            return await _sampleAppService.GetAsync();
+        }
+
+        [HttpGet]
+        [Route("authorized")]
+        [Authorize]
+        public async Task<SampleDto> GetAuthorizedAsync()
+        {
+            return await _sampleAppService.GetAsync();
+        }
     }
 }

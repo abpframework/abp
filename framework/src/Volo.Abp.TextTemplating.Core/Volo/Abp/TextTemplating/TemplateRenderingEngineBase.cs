@@ -2,40 +2,41 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.TextTemplating;
-
-public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
+namespace Volo.Abp.TextTemplating
 {
-    public abstract string Name { get; }
-
-    protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
-    protected readonly ITemplateContentProvider TemplateContentProvider;
-    protected readonly IStringLocalizerFactory StringLocalizerFactory;
-
-    public TemplateRenderingEngineBase(
-        ITemplateDefinitionManager templateDefinitionManager,
-        ITemplateContentProvider templateContentProvider,
-        IStringLocalizerFactory stringLocalizerFactory)
+    public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
     {
-        TemplateDefinitionManager = templateDefinitionManager;
-        TemplateContentProvider = templateContentProvider;
-        StringLocalizerFactory = stringLocalizerFactory;
-    }
+        public abstract string Name { get; }
 
-    public abstract Task<string> RenderAsync(string templateName, object model = null, string cultureName = null, Dictionary<string, object> globalContext = null);
+        protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
+        protected readonly ITemplateContentProvider TemplateContentProvider;
+        protected readonly IStringLocalizerFactory StringLocalizerFactory;
 
-    protected virtual async Task<string> GetContentOrNullAsync(TemplateDefinition templateDefinition)
-    {
-        return await TemplateContentProvider.GetContentOrNullAsync(templateDefinition);
-    }
-
-    protected virtual IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
-    {
-        if (templateDefinition.LocalizationResource != null)
+        public TemplateRenderingEngineBase(
+            ITemplateDefinitionManager templateDefinitionManager,
+            ITemplateContentProvider templateContentProvider,
+            IStringLocalizerFactory stringLocalizerFactory)
         {
-            return StringLocalizerFactory.Create(templateDefinition.LocalizationResource);
+            TemplateDefinitionManager = templateDefinitionManager;
+            TemplateContentProvider = templateContentProvider;
+            StringLocalizerFactory = stringLocalizerFactory;
         }
 
-        return StringLocalizerFactory.CreateDefaultOrNull();
+        public abstract Task<string> RenderAsync(string templateName, object model = null, string cultureName = null, Dictionary<string, object> globalContext = null);
+
+        protected virtual async Task<string> GetContentOrNullAsync(TemplateDefinition templateDefinition)
+        {
+            return await TemplateContentProvider.GetContentOrNullAsync(templateDefinition);
+        }
+
+        protected virtual IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
+        {
+            if (templateDefinition.LocalizationResource != null)
+            {
+                return StringLocalizerFactory.Create(templateDefinition.LocalizationResource);
+            }
+
+            return StringLocalizerFactory.CreateDefaultOrNull();
+        }
     }
 }

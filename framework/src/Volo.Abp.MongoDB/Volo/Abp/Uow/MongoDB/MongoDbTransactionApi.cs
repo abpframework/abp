@@ -3,36 +3,37 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Uow.MongoDB;
-
-public class MongoDbTransactionApi : ITransactionApi, ISupportsRollback
+namespace Volo.Abp.Uow.MongoDB
 {
-    public IClientSessionHandle SessionHandle { get; }
-
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
-    public MongoDbTransactionApi(
-        IClientSessionHandle sessionHandle,
-        ICancellationTokenProvider cancellationTokenProvider)
+    public class MongoDbTransactionApi : ITransactionApi, ISupportsRollback
     {
-        SessionHandle = sessionHandle;
-        CancellationTokenProvider = cancellationTokenProvider;
-    }
+        public IClientSessionHandle SessionHandle { get; }
 
-    public async Task CommitAsync()
-    {
-        await SessionHandle.CommitTransactionAsync(CancellationTokenProvider.Token);
-    }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-    public void Dispose()
-    {
-        SessionHandle.Dispose();
-    }
+        public MongoDbTransactionApi(
+            IClientSessionHandle sessionHandle,
+            ICancellationTokenProvider cancellationTokenProvider)
+        {
+            SessionHandle = sessionHandle;
+            CancellationTokenProvider = cancellationTokenProvider;
+        }
 
-    public async Task RollbackAsync(CancellationToken cancellationToken)
-    {
-        await SessionHandle.AbortTransactionAsync(
-            CancellationTokenProvider.FallbackToProvider(cancellationToken)
-        );
+        public async Task CommitAsync()
+        {
+            await SessionHandle.CommitTransactionAsync(CancellationTokenProvider.Token);
+        }
+
+        public void Dispose()
+        {
+            SessionHandle.Dispose();
+        }
+
+        public async Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            await SessionHandle.AbortTransactionAsync(
+                CancellationTokenProvider.FallbackToProvider(cancellationToken)
+            );
+        }
     }
 }

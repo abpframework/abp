@@ -13,52 +13,53 @@ using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Http;
-
-[DependsOn(
-    typeof(AbpHttpClientModule),
-    typeof(AbpAspNetCoreMvcTestModule)
-    )]
-public class AbpHttpClientTestModule : AbpModule
+namespace Volo.Abp.Http
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpHttpClientModule),
+        typeof(AbpAspNetCoreMvcTestModule)
+        )]
+    public class AbpHttpClientTestModule : AbpModule
     {
-        context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
-        context.Services.AddHttpClientProxy<IRegularTestController>();
-
-        Configure<AbpRemoteServiceOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.RemoteServices.Default = new RemoteServiceConfiguration("/");
-        });
+            context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
+            context.Services.AddHttpClientProxy<IRegularTestController>();
+
+            Configure<AbpRemoteServiceOptions>(options =>
+            {
+                options.RemoteServices.Default = new RemoteServiceConfiguration("/");
+            });
 
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
-            options.FileSets.AddEmbedded<AbpHttpClientTestModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpHttpClientTestModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<HttpClientTestResource>("en")
-                .AddVirtualJson("/Volo/Abp/Http/Localization");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<HttpClientTestResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Http/Localization");
+            });
 
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Volo.Abp.Http.DynamicProxying", typeof(HttpClientTestResource));
-        });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Abp.Http.DynamicProxying", typeof(HttpClientTestResource));
+            });
 
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateFileInput));
-            options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
-        });
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateFileInput));
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
+            });
 
-        Configure<AbpHttpClientProxyingOptions>(options =>
-        {
-            options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));
-            options.FormDataConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToFormData));
-        });
+            Configure<AbpHttpClientProxyingOptions>(options =>
+            {
+                options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));
+                options.FormDataConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToFormData));
+            });
+        }
     }
 }

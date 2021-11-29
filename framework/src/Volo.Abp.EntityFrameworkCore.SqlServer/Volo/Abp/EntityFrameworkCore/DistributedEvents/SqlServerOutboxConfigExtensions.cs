@@ -1,12 +1,13 @@
 ﻿using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
-
-public static class SqlServerOutboxConfigExtensions
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
 {
-    public static void UseSqlServer<TDbContext>(this OutboxConfig outboxConfig)
-        where TDbContext : IHasEventOutbox
+    public static class SqlServerOutboxConfigExtensions
     {
-        outboxConfig.ImplementationType = typeof(ISqlRawDbContextEventOutbox<TDbContext>);
+        public static void UseSqlServer<TDbContext>(this OutboxConfig outboxConfig)
+            where TDbContext : IHasEventOutbox
+        {
+            outboxConfig.ImplementationType = typeof(ISqlRawDbContextEventOutbox<TDbContext>);
+        }
     }
 }

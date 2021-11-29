@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
-
-public interface IBundleTagHelper
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    string GetNameOrNull();
+    public interface IBundleTagHelper
+    {
+        string GetNameOrNull();
+    }
 }

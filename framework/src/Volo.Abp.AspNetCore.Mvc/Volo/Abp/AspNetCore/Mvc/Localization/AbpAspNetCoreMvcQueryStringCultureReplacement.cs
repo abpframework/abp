@@ -3,31 +3,32 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization;
-
-public class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCultureReplacement, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
-    public virtual Task ReplaceAsync(QueryStringCultureReplacementContext context)
+    public class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCultureReplacement, ITransientDependency
     {
-        if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
+        public virtual Task ReplaceAsync(QueryStringCultureReplacementContext context)
         {
-            if (context.ReturnUrl.Contains("culture=", StringComparison.OrdinalIgnoreCase) &&
-                context.ReturnUrl.Contains("ui-Culture=", StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
             {
-                context.ReturnUrl = Regex.Replace(
-                    context.ReturnUrl,
-                    "culture=[A-Za-z-]+",
-                    $"culture={context.RequestCulture.Culture}",
-                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                if (context.ReturnUrl.Contains("culture=", StringComparison.OrdinalIgnoreCase) &&
+                    context.ReturnUrl.Contains("ui-Culture=", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.ReturnUrl = Regex.Replace(
+                        context.ReturnUrl,
+                        "culture=[A-Za-z-]+",
+                        $"culture={context.RequestCulture.Culture}",
+                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-                context.ReturnUrl = Regex.Replace(
-                    context.ReturnUrl,
-                    "ui-culture=[A-Za-z-]+",
-                    $"ui-culture={context.RequestCulture.UICulture}",
-                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    context.ReturnUrl = Regex.Replace(
+                        context.ReturnUrl,
+                        "ui-culture=[A-Za-z-]+",
+                        $"ui-culture={context.RequestCulture.UICulture}",
+                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                }
             }
-        }
 
-        return Task.CompletedTask;
+            return Task.CompletedTask;
+        }
     }
 }

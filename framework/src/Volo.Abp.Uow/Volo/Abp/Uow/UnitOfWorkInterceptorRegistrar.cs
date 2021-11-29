@@ -3,20 +3,21 @@ using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Uow;
-
-public static class UnitOfWorkInterceptorRegistrar
+namespace Volo.Abp.Uow
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static class UnitOfWorkInterceptorRegistrar
     {
-        if (ShouldIntercept(context.ImplementationType))
+        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            context.Interceptors.TryAdd<UnitOfWorkInterceptor>();
+            if (ShouldIntercept(context.ImplementationType))
+            {
+                context.Interceptors.TryAdd<UnitOfWorkInterceptor>();
+            }
         }
-    }
-
-    private static bool ShouldIntercept(Type type)
-    {
-        return !DynamicProxyIgnoreTypes.Contains(type) && UnitOfWorkHelper.IsUnitOfWorkType(type.GetTypeInfo());
+        
+        private static bool ShouldIntercept(Type type)
+        {
+            return !DynamicProxyIgnoreTypes.Contains(type) && UnitOfWorkHelper.IsUnitOfWorkType(type.GetTypeInfo());
+        }
     }
 }

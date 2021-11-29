@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.IdentityServer.IdentityResources;
-
-public class IdentityResourcePropertyConsts
+﻿namespace Volo.Abp.IdentityServer.IdentityResources
 {
-    public static int KeyMaxLength { get; set; } = 250;
+    public class IdentityResourcePropertyConsts
+    {
+        public static int KeyMaxLength { get; set; } =  250;
 
-    public static int ValueMaxLength { get; set; } = 2000;
+        public static int ValueMaxLength { get; set; } = 2000;
+    }
 }

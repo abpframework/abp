@@ -1,11 +1,12 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Minify;
-
-public interface IMinifier
+namespace Volo.Abp.Minify
 {
-    string Minify(
-        string source,
-        [CanBeNull] string fileName = null,
-        [CanBeNull] string originalFileName = null);
+    public interface IMinifier
+    {
+        string Minify(
+            string source,
+            [CanBeNull] string fileName = null,
+            [CanBeNull] string originalFileName = null);
+    }
 }

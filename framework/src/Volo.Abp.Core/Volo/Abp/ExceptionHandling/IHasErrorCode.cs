@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.ExceptionHandling;
-
-public interface IHasErrorCode
+﻿namespace Volo.Abp.ExceptionHandling
 {
-    string Code { get; }
+    public interface IHasErrorCode
+    {
+        string Code { get; }
+    }
 }

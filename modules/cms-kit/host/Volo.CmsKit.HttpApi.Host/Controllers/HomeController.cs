@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.CmsKit.Controllers;
-
-public class HomeController : AbpController
+namespace Volo.CmsKit.Controllers
 {
-    public ActionResult Index()
+    public class HomeController : AbpController
     {
-        return Redirect("~/swagger");
+        public ActionResult Index()
+        {
+            return Redirect("~/swagger");
+        }
     }
 }

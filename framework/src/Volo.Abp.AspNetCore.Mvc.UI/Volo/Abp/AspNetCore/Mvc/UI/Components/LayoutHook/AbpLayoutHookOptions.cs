@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
-
-public class AbpLayoutHookOptions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 {
-    public IDictionary<string, List<LayoutHookInfo>> Hooks { get; }
-
-    public AbpLayoutHookOptions()
+    public class AbpLayoutHookOptions
     {
-        Hooks = new Dictionary<string, List<LayoutHookInfo>>();
-    }
+        public IDictionary<string, List<LayoutHookInfo>> Hooks { get; }
 
-    public AbpLayoutHookOptions Add(string name, Type componentType, string layout = null)
-    {
-        Hooks
-            .GetOrAdd(name, () => new List<LayoutHookInfo>())
-            .Add(new LayoutHookInfo(componentType, layout));
+        public AbpLayoutHookOptions()
+        {
+            Hooks = new Dictionary<string, List<LayoutHookInfo>>();
+        }
 
-        return this;
+        public AbpLayoutHookOptions Add(string name, Type componentType, string layout = null)
+        {
+            Hooks
+                .GetOrAdd(name, () => new List<LayoutHookInfo>())
+                .Add(new LayoutHookInfo(componentType, layout));
+
+            return this;
+        }
     }
 }

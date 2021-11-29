@@ -2,24 +2,21 @@
 using Shouldly;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.Localization;
 using Xunit;
 
-namespace Volo.Abp.TenantManagement;
-
-public class Localization_Tests : AbpIdentityDomainTestBase
+namespace Volo.Abp.TenantManagement
 {
-    private readonly IStringLocalizer<IdentityResource> _stringLocalizer;
-
-    public Localization_Tests()
+    public class Localization_Tests : AbpIdentityDomainTestBase
     {
-        _stringLocalizer = GetRequiredService<IStringLocalizer<IdentityResource>>();
-    }
+        private readonly IStringLocalizer<IdentityResource> _stringLocalizer;
 
-    [Fact]
-    public void Test()
-    {
-        using (CultureHelper.Use("en"))
+        public Localization_Tests()
+        {
+            _stringLocalizer = GetRequiredService<IStringLocalizer<IdentityResource>>();
+        }
+
+        [Fact]
+        public void Test()
         {
             _stringLocalizer["PersonalSettingsSavedMessage"].Value
             .ShouldBe("Your personal settings has been saved successfully.");

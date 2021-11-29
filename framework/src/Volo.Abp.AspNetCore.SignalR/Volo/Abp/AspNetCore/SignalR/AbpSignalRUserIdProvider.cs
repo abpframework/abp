@@ -3,25 +3,26 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.SignalR;
-
-public class AbpSignalRUserIdProvider : IUserIdProvider, ITransientDependency
+namespace Volo.Abp.AspNetCore.SignalR
 {
-    private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
-
-    private readonly ICurrentUser _currentUser;
-
-    public AbpSignalRUserIdProvider(ICurrentPrincipalAccessor currentPrincipalAccessor, ICurrentUser currentUser)
+    public class AbpSignalRUserIdProvider : IUserIdProvider, ITransientDependency
     {
-        _currentPrincipalAccessor = currentPrincipalAccessor;
-        _currentUser = currentUser;
-    }
+        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
-    public virtual string GetUserId(HubConnectionContext connection)
-    {
-        using (_currentPrincipalAccessor.Change(connection.User))
+        private readonly ICurrentUser _currentUser;
+
+        public AbpSignalRUserIdProvider(ICurrentPrincipalAccessor currentPrincipalAccessor, ICurrentUser currentUser)
         {
-            return _currentUser.Id?.ToString();
+            _currentPrincipalAccessor = currentPrincipalAccessor;
+            _currentUser = currentUser;
+        }
+
+        public virtual string GetUserId(HubConnectionContext connection)
+        {
+            using (_currentPrincipalAccessor.Change(connection.User))
+            {
+                return _currentUser.Id?.ToString();
+            }
         }
     }
 }

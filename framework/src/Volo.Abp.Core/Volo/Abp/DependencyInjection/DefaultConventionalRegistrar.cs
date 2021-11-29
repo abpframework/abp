@@ -2,50 +2,51 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Volo.Abp.DependencyInjection;
-
-//TODO: Make DefaultConventionalRegistrar extensible, so we can only define GetLifeTimeOrNull to contribute to the convention. This can be more performant!
-public class DefaultConventionalRegistrar : ConventionalRegistrarBase
+namespace Volo.Abp.DependencyInjection
 {
-    public override void AddType(IServiceCollection services, Type type)
+    //TODO: Make DefaultConventionalRegistrar extensible, so we can only define GetLifeTimeOrNull to contribute to the convention. This can be more performant!
+    public class DefaultConventionalRegistrar : ConventionalRegistrarBase
     {
-        if (IsConventionalRegistrationDisabled(type))
+        public override void AddType(IServiceCollection services, Type type)
         {
-            return;
-        }
-
-        var dependencyAttribute = GetDependencyAttributeOrNull(type);
-        var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
-
-        if (lifeTime == null)
-        {
-            return;
-        }
-
-        var exposedServiceTypes = GetExposedServiceTypes(type);
-
-        TriggerServiceExposing(services, type, exposedServiceTypes);
-
-        foreach (var exposedServiceType in exposedServiceTypes)
-        {
-            var serviceDescriptor = CreateServiceDescriptor(
-                type,
-                exposedServiceType,
-                exposedServiceTypes,
-                lifeTime.Value
-            );
-
-            if (dependencyAttribute?.ReplaceServices == true)
+            if (IsConventionalRegistrationDisabled(type))
             {
-                services.Replace(serviceDescriptor);
+                return;
             }
-            else if (dependencyAttribute?.TryRegister == true)
+
+            var dependencyAttribute = GetDependencyAttributeOrNull(type);
+            var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
+
+            if (lifeTime == null)
             {
-                services.TryAdd(serviceDescriptor);
+                return;
             }
-            else
+
+            var exposedServiceTypes = GetExposedServiceTypes(type);
+
+            TriggerServiceExposing(services, type, exposedServiceTypes);
+
+            foreach (var exposedServiceType in exposedServiceTypes)
             {
-                services.Add(serviceDescriptor);
+                var serviceDescriptor = CreateServiceDescriptor(
+                    type,
+                    exposedServiceType,
+                    exposedServiceTypes,
+                    lifeTime.Value
+                );
+
+                if (dependencyAttribute?.ReplaceServices == true)
+                {
+                    services.Replace(serviceDescriptor);
+                }
+                else if (dependencyAttribute?.TryRegister == true)
+                {
+                    services.TryAdd(serviceDescriptor);
+                }
+                else
+                {
+                    services.Add(serviceDescriptor);
+                }
             }
         }
     }

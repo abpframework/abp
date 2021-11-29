@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
-
-public class AbpStyleBundleTagHelperService : AbpBundleTagHelperService<AbpStyleBundleTagHelper, AbpStyleBundleTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public AbpStyleBundleTagHelperService(AbpTagHelperStyleService resourceHelper)
-        : base(resourceHelper)
+    public class AbpStyleBundleTagHelperService : AbpBundleTagHelperService<AbpStyleBundleTagHelper, AbpStyleBundleTagHelperService>
     {
+        public AbpStyleBundleTagHelperService(AbpTagHelperStyleService resourceHelper)
+            : base(resourceHelper)
+        {
+        }
     }
 }

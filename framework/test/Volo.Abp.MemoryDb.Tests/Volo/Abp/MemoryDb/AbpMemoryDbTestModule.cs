@@ -10,32 +10,33 @@ using Volo.Abp.MemoryDb.JsonConverters;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.MemoryDb;
-
-[DependsOn(
-    typeof(TestAppModule),
-    typeof(AbpMemoryDbModule),
-    typeof(AbpAutofacModule))]
-public class AbpMemoryDbTestModule : AbpModule
+namespace Volo.Abp.MemoryDb
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(TestAppModule),
+        typeof(AbpMemoryDbModule),
+        typeof(AbpAutofacModule))]
+    public class AbpMemoryDbTestModule : AbpModule
     {
-        var connStr = Guid.NewGuid().ToString();
-
-        Configure<AbpDbConnectionOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.ConnectionStrings.Default = connStr;
-        });
+            var connStr = Guid.NewGuid().ToString();
 
-        context.Services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
-        {
-            options.AddDefaultRepositories();
-            options.AddRepository<City, CityRepository>();
-        });
+            Configure<AbpDbConnectionOptions>(options =>
+            {
+                options.ConnectionStrings.Default = connStr;
+            });
 
-        Configure<Utf8JsonMemoryDbSerializerOptions>(options =>
-        {
-            options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
-        });
+            context.Services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
+                options.AddRepository<City, CityRepository>();
+            });
+
+            Configure<Utf8JsonMemoryDbSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
+            });
+        }
     }
 }

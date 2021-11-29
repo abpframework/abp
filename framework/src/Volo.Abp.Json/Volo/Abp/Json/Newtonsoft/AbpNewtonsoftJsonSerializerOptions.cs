@@ -1,14 +1,15 @@
 ﻿using Newtonsoft.Json;
 using Volo.Abp.Collections;
 
-namespace Volo.Abp.Json.Newtonsoft;
-
-public class AbpNewtonsoftJsonSerializerOptions
+namespace Volo.Abp.Json.Newtonsoft
 {
-    public ITypeList<JsonConverter> Converters { get; }
-
-    public AbpNewtonsoftJsonSerializerOptions()
+    public class AbpNewtonsoftJsonSerializerOptions
     {
-        Converters = new TypeList<JsonConverter>();
+        public ITypeList<JsonConverter> Converters { get; }
+
+        public AbpNewtonsoftJsonSerializerOptions()
+        {
+            Converters = new TypeList<JsonConverter>();
+        }
     }
 }

@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
-
-public class AbpNavbarNavTagHelper : AbpTagHelper<AbpNavbarNavTagHelper, AbpNavbarNavTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 {
-    public AbpNavbarNavTagHelper(AbpNavbarNavTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpNavbarNavTagHelper : AbpTagHelper<AbpNavbarNavTagHelper, AbpNavbarNavTagHelperService>
     {
+        public AbpNavbarNavTagHelper(AbpNavbarNavTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
 
+        }
     }
 }

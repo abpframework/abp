@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.ClientSimulation.Demo.Controllers;
-
-public class HomeController : AbpController
+namespace Volo.ClientSimulation.Demo.Controllers
 {
-    public ActionResult Index()
+    public class HomeController : AbpController
     {
-        return Redirect("/ClientSimulation");
+        public ActionResult Index()
+        {
+            return Redirect("/ClientSimulation");
+        }
     }
 }

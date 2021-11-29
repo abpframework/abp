@@ -1,13 +1,14 @@
 ﻿using System.Net;
 using System.Net.Http;
 
-namespace Volo.Abp.Cli.Http;
-
-public class CliHttpClientHandler : HttpClientHandler
+namespace Volo.Abp.Cli.Http
 {
-    public CliHttpClientHandler()
+    public class CliHttpClientHandler : HttpClientHandler
     {
-        Proxy = WebRequest.GetSystemWebProxy();
-        DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+        public CliHttpClientHandler()
+        {
+            Proxy = WebRequest.GetSystemWebProxy();
+            DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+        }
     }
 }

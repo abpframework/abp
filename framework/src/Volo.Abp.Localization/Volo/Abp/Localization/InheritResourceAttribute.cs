@@ -1,19 +1,20 @@
 ﻿using System;
 
-namespace Volo.Abp.Localization;
-
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class InheritResourceAttribute : Attribute, IInheritedResourceTypesProvider
+namespace Volo.Abp.Localization
 {
-    public Type[] ResourceTypes { get; }
-
-    public InheritResourceAttribute(params Type[] resourceTypes)
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class InheritResourceAttribute : Attribute, IInheritedResourceTypesProvider
     {
-        ResourceTypes = resourceTypes ?? new Type[0];
-    }
+        public Type[] ResourceTypes { get; }
 
-    public virtual Type[] GetInheritedResourceTypes()
-    {
-        return ResourceTypes;
+        public InheritResourceAttribute(params Type[] resourceTypes)
+        {
+            ResourceTypes = resourceTypes ?? new Type[0];
+        }
+
+        public virtual Type[] GetInheritedResourceTypes()
+        {
+            return ResourceTypes;
+        }
     }
 }

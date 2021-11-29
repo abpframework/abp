@@ -6,32 +6,33 @@ using System.Reflection;
 using System.Threading;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Reflection;
-
-public class AssemblyFinder : IAssemblyFinder
+namespace Volo.Abp.Reflection
 {
-    private readonly IModuleContainer _moduleContainer;
-
-    private readonly Lazy<IReadOnlyList<Assembly>> _assemblies;
-
-    public AssemblyFinder(IModuleContainer moduleContainer)
+    public class AssemblyFinder : IAssemblyFinder
     {
-        _moduleContainer = moduleContainer;
+        private readonly IModuleContainer _moduleContainer;
 
-        _assemblies = new Lazy<IReadOnlyList<Assembly>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
-    }
+        private readonly Lazy<IReadOnlyList<Assembly>> _assemblies;
 
-    public IReadOnlyList<Assembly> Assemblies => _assemblies.Value;
-
-    public IReadOnlyList<Assembly> FindAll()
-    {
-        var assemblies = new List<Assembly>();
-
-        foreach (var module in _moduleContainer.Modules)
+        public AssemblyFinder(IModuleContainer moduleContainer)
         {
-            assemblies.Add(module.Type.Assembly);
+            _moduleContainer = moduleContainer;
+
+            _assemblies = new Lazy<IReadOnlyList<Assembly>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
-        return assemblies.Distinct().ToImmutableList();
+        public IReadOnlyList<Assembly> Assemblies => _assemblies.Value;
+
+        public IReadOnlyList<Assembly> FindAll()
+        {
+            var assemblies = new List<Assembly>();
+
+            foreach (var module in _moduleContainer.Modules)
+            {
+                assemblies.Add(module.Type.Assembly);
+            }
+
+            return assemblies.Distinct().ToImmutableList();
+        }
     }
 }

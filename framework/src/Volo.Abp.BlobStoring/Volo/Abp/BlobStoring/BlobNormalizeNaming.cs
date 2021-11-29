@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.BlobStoring;
-
-public class BlobNormalizeNaming
+﻿namespace Volo.Abp.BlobStoring
 {
-    public string ContainerName { get; }
-
-    public string BlobName { get; }
-
-    public BlobNormalizeNaming(string containerName, string blobName)
+    public class BlobNormalizeNaming
     {
-        ContainerName = containerName;
-        BlobName = blobName;
+        public string ContainerName { get; }
+
+        public string BlobName { get; }
+
+        public BlobNormalizeNaming(string containerName, string blobName)
+        {
+            ContainerName = containerName;
+            BlobName = blobName;
+        }
     }
 }

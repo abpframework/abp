@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.BlazoriseUI.Components;
-
-public enum ActionType
+﻿namespace Volo.Abp.BlazoriseUI.Components
 {
-    Dropdown,
-    Button
+    public enum ActionType
+    {
+        Dropdown,
+        Button
+    }
 }

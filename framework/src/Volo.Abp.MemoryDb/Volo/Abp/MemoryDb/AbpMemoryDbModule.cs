@@ -4,14 +4,15 @@ using Volo.Abp.Domain.Repositories.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.MemoryDb;
 
-namespace Volo.Abp.MemoryDb;
-
-[DependsOn(typeof(AbpDddDomainModule))]
-public class AbpMemoryDbModule : AbpModule
+namespace Volo.Abp.MemoryDb
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpDddDomainModule))]
+    public class AbpMemoryDbModule : AbpModule
     {
-        context.Services.TryAddTransient(typeof(IMemoryDatabaseProvider<>), typeof(UnitOfWorkMemoryDatabaseProvider<>));
-        context.Services.TryAddTransient(typeof(IMemoryDatabaseCollection<>), typeof(MemoryDatabaseCollection<>));
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.TryAddTransient(typeof(IMemoryDatabaseProvider<>), typeof(UnitOfWorkMemoryDatabaseProvider<>));
+            context.Services.TryAddTransient(typeof(IMemoryDatabaseCollection<>), typeof(MemoryDatabaseCollection<>));
+        }
     }
 }

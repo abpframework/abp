@@ -9,47 +9,48 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Identity;
-
-[DependsOn(
-    typeof(AbpIdentityEntityFrameworkCoreTestModule),
-    typeof(AbpIdentityTestBaseModule),
-    typeof(AbpPermissionManagementDomainIdentityModule)
-    )]
-public class AbpIdentityDomainTestModule : AbpModule
+namespace Volo.Abp.Identity
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpIdentityEntityFrameworkCoreTestModule),
+        typeof(AbpIdentityTestBaseModule),
+        typeof(AbpPermissionManagementDomainIdentityModule)
+        )]
+    public class AbpIdentityDomainTestModule : AbpModule
     {
-        Configure<AbpDistributedEntityEventOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AutoEventSelectors.Add<IdentityUser>();
-        });
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.Add<IdentityUser>();
+            });
 
-        Configure<AbpVirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityDomainTestModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<IdentityResource>()
+                    .AddVirtualJson("/Volo/Abp/Identity/LocalizationExtensions");
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.FileSets.AddEmbedded<AbpIdentityDomainTestModule>();
-        });
+            SeedTestData(context);
+        }
 
-        Configure<AbpLocalizationOptions>(options =>
+        private static void SeedTestData(ApplicationInitializationContext context)
         {
-            options.Resources
-                .Get<IdentityResource>()
-                .AddVirtualJson("/Volo/Abp/Identity/LocalizationExtensions");
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
-        {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<TestPermissionDataBuilder>()
-                .Build());
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<TestPermissionDataBuilder>()
+                    .Build());
+            }
         }
     }
 }

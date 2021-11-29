@@ -3,45 +3,46 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Volo.Abp.Caching;
-
-public interface ICacheSupportsMultipleItems
+namespace Volo.Abp.Caching
 {
-    byte[][] GetMany(
-        IEnumerable<string> keys
-    );
+    public interface ICacheSupportsMultipleItems
+    {
+        byte[][] GetMany(
+            IEnumerable<string> keys
+        );
 
-    Task<byte[][]> GetManyAsync(
-        IEnumerable<string> keys,
-        CancellationToken token = default
-    );
+        Task<byte[][]> GetManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
 
-    void SetMany(
-        IEnumerable<KeyValuePair<string, byte[]>> items,
-        DistributedCacheEntryOptions options
-    );
+        void SetMany(
+            IEnumerable<KeyValuePair<string, byte[]>> items,
+            DistributedCacheEntryOptions options
+        );
 
-    Task SetManyAsync(
-        IEnumerable<KeyValuePair<string, byte[]>> items,
-        DistributedCacheEntryOptions options,
-        CancellationToken token = default
-    );
+        Task SetManyAsync(
+            IEnumerable<KeyValuePair<string, byte[]>> items,
+            DistributedCacheEntryOptions options,
+            CancellationToken token = default
+        );
 
-    void RefreshMany(
-        IEnumerable<string> keys
-    );
+        void RefreshMany(
+            IEnumerable<string> keys
+        );
 
-    Task RefreshManyAsync(
-        IEnumerable<string> keys,
-        CancellationToken token = default
-    );
+        Task RefreshManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
 
-    void RemoveMany(
-        IEnumerable<string> keys
-    );
+        void RemoveMany(
+            IEnumerable<string> keys
+        );
 
-    Task RemoveManyAsync(
-        IEnumerable<string> keys,
-        CancellationToken token = default
-    );
+        Task RemoveManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
+    }
 }

@@ -1,21 +1,22 @@
 using System;
 
-namespace Volo.Abp.EventBus;
-
-public class EventHandlerDisposeWrapper : IEventHandlerDisposeWrapper
+namespace Volo.Abp.EventBus
 {
-    public IEventHandler EventHandler { get; }
-
-    private readonly Action _disposeAction;
-
-    public EventHandlerDisposeWrapper(IEventHandler eventHandler, Action disposeAction = null)
+    public class EventHandlerDisposeWrapper : IEventHandlerDisposeWrapper
     {
-        _disposeAction = disposeAction;
-        EventHandler = eventHandler;
-    }
+        public IEventHandler EventHandler { get; }
 
-    public void Dispose()
-    {
-        _disposeAction?.Invoke();
+        private readonly Action _disposeAction;
+
+        public EventHandlerDisposeWrapper(IEventHandler eventHandler, Action disposeAction = null)
+        {
+            _disposeAction = disposeAction;
+            EventHandler = eventHandler;
+        }
+
+        public void Dispose()
+        {
+            _disposeAction?.Invoke();
+        }
     }
 }

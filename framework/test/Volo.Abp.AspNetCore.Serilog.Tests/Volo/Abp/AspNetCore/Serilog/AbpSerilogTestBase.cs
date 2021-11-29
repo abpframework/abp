@@ -4,27 +4,28 @@ using Serilog;
 using Serilog.Events;
 using Volo.Abp.AspNetCore.App;
 
-namespace Volo.Abp.AspNetCore.Serilog;
-
-public class AbpSerilogTestBase : AbpAspNetCoreTestBase<App.Startup>
+namespace Volo.Abp.AspNetCore.Serilog
 {
-    protected readonly CollectingSink CollectingSink = new CollectingSink();
-
-    protected override IHostBuilder CreateHostBuilder()
+    public class AbpSerilogTestBase : AbpAspNetCoreTestBase<App.Startup>
     {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Sink(CollectingSink)
-            .CreateLogger();
+        protected readonly CollectingSink CollectingSink = new CollectingSink();
 
-        return base.CreateHostBuilder()
-            .UseSerilog();
-    }
+        protected override IHostBuilder CreateHostBuilder()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Sink(CollectingSink)
+                .CreateLogger();
 
-    protected LogEvent GetLogEvent(string text)
-    {
-        return CollectingSink.Events.FirstOrDefault(m => m.MessageTemplate.Text == text);
+            return base.CreateHostBuilder()
+                .UseSerilog();
+        }
+
+        protected LogEvent GetLogEvent(string text)
+        {
+            return CollectingSink.Events.FirstOrDefault(m => m.MessageTemplate.Text == text);
+        }
     }
 }

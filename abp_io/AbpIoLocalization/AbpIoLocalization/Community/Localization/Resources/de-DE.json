@@ -142,7 +142,6 @@
     "MinimumSearchContent": "Sie müssen mindestens 3 Zeichen eingeben!",
     "Volo.AbpIo.Domain:060001": "Quell-URL(\"{ArticleUrl}\") ist keine Github-URL",
     "Volo.AbpIo.Domain:060002": "Artikelinhalt ist über die Github(\"{ArticleUrl}\")-Ressource nicht verfügbar.",
-    "Volo.AbpIo.Domain:060003": "Kein Artikelinhalt gefunden!",
-    "SeeMore": "Mehr Sehen"
+    "Volo.AbpIo.Domain:060003": "Kein Artikelinhalt gefunden!"
   }
 }

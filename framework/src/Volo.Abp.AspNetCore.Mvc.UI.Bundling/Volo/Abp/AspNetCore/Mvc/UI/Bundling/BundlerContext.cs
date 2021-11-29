@@ -1,19 +1,20 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-public class BundlerContext : IBundlerContext
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public string BundleRelativePath { get; }
-
-    public IReadOnlyList<string> ContentFiles { get; }
-
-    public bool IsMinificationEnabled { get; }
-
-    public BundlerContext(string bundleRelativePath, IReadOnlyList<string> contentFiles, bool isMinificationEnabled)
+    public class BundlerContext : IBundlerContext
     {
-        BundleRelativePath = bundleRelativePath;
-        ContentFiles = contentFiles;
-        IsMinificationEnabled = isMinificationEnabled;
+        public string BundleRelativePath { get; }
+
+        public IReadOnlyList<string> ContentFiles { get; }
+
+        public bool IsMinificationEnabled { get; }
+
+        public BundlerContext(string bundleRelativePath, IReadOnlyList<string> contentFiles, bool isMinificationEnabled)
+        {
+            BundleRelativePath = bundleRelativePath;
+            ContentFiles = contentFiles;
+            IsMinificationEnabled = isMinificationEnabled;
+        }
     }
 }

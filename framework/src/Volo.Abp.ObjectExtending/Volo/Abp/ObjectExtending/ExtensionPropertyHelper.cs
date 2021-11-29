@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.ObjectExtending;
-
-internal static class ExtensionPropertyHelper
+namespace Volo.Abp.ObjectExtending
 {
-    public static IEnumerable<Attribute> GetDefaultAttributes(Type type)
+    internal static class ExtensionPropertyHelper
     {
-        if (TypeHelper.IsNonNullablePrimitiveType(type) || type.IsEnum)
+        public static IEnumerable<Attribute> GetDefaultAttributes(Type type)
         {
-            yield return new RequiredAttribute();
+            if (TypeHelper.IsNonNullablePrimitiveType(type) || type.IsEnum)
+            {
+                yield return new RequiredAttribute();
+            }
+
+            if (type.IsEnum)
+            {
+                yield return new EnumDataTypeAttribute(type);
+            }
         }
 
-        if (type.IsEnum)
+        public static object GetDefaultValue(
+            Type propertyType,
+            Func<object> defaultValueFactory, 
+            object defaultValue)
         {
-            yield return new EnumDataTypeAttribute(type);
-        }
-    }
+            if (defaultValueFactory != null)
+            {
+                return defaultValueFactory();
+            }
 
-    public static object GetDefaultValue(
-        Type propertyType,
-        Func<object> defaultValueFactory,
-        object defaultValue)
-    {
-        if (defaultValueFactory != null)
-        {
-            return defaultValueFactory();
+            return defaultValue ??
+                   TypeHelper.GetDefaultValue(propertyType);
         }
-
-        return defaultValue ??
-               TypeHelper.GetDefaultValue(propertyType);
     }
 }

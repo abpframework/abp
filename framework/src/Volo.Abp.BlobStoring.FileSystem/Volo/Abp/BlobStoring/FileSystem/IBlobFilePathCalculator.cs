@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.FileSystem;
-
-public interface IBlobFilePathCalculator
+﻿namespace Volo.Abp.BlobStoring.FileSystem
 {
-    string Calculate(BlobProviderArgs args);
+    public interface IBlobFilePathCalculator
+    {
+        string Calculate(BlobProviderArgs args);
+    }
 }

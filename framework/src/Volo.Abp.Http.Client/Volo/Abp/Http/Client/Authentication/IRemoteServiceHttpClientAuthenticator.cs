@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Http.Client.Authentication;
-
-public interface IRemoteServiceHttpClientAuthenticator
+namespace Volo.Abp.Http.Client.Authentication
 {
-    Task Authenticate(RemoteServiceHttpClientAuthenticateContext context); //TODO: Rename to AuthenticateAsync
+    public interface IRemoteServiceHttpClientAuthenticator
+    {
+        Task Authenticate(RemoteServiceHttpClientAuthenticateContext context); //TODO: Rename to AuthenticateAsync
+    }
 }

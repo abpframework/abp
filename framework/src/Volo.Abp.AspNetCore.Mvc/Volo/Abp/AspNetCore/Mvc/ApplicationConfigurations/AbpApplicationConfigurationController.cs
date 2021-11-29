@@ -2,28 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-[Area("abp")]
-[RemoteService(Name = "abp")]
-[Route("api/abp/application-configuration")]
-public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    private readonly IAbpApplicationConfigurationAppService _applicationConfigurationAppService;
-    private readonly IAbpAntiForgeryManager _antiForgeryManager;
-
-    public AbpApplicationConfigurationController(
-        IAbpApplicationConfigurationAppService applicationConfigurationAppService,
-        IAbpAntiForgeryManager antiForgeryManager)
+    [Area("abp")]
+    [RemoteService(Name = "abp")]
+    [Route("api/abp/application-configuration")]
+    public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
     {
-        _applicationConfigurationAppService = applicationConfigurationAppService;
-        _antiForgeryManager = antiForgeryManager;
-    }
+        private readonly IAbpApplicationConfigurationAppService _applicationConfigurationAppService;
+        private readonly IAbpAntiForgeryManager _antiForgeryManager;
 
-    [HttpGet]
-    public async Task<ApplicationConfigurationDto> GetAsync()
-    {
-        _antiForgeryManager.SetCookie();
-        return await _applicationConfigurationAppService.GetAsync();
+        public AbpApplicationConfigurationController(
+            IAbpApplicationConfigurationAppService applicationConfigurationAppService,
+            IAbpAntiForgeryManager antiForgeryManager)
+        {
+            _applicationConfigurationAppService = applicationConfigurationAppService;
+            _antiForgeryManager = antiForgeryManager;
+        }
+
+        [HttpGet]
+        public async Task<ApplicationConfigurationDto> GetAsync()
+        {
+            _antiForgeryManager.SetCookie();
+            return await _applicationConfigurationAppService.GetAsync();
+        }
     }
 }

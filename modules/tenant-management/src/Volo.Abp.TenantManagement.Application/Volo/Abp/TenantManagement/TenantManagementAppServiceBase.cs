@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.Application.Services;
 using Volo.Abp.TenantManagement.Localization;
 
-namespace Volo.Abp.TenantManagement;
-
-public abstract class TenantManagementAppServiceBase : ApplicationService
+namespace Volo.Abp.TenantManagement
 {
-    protected TenantManagementAppServiceBase()
+    public abstract class TenantManagementAppServiceBase : ApplicationService
     {
-        ObjectMapperContext = typeof(AbpTenantManagementApplicationModule);
-        LocalizationResource = typeof(AbpTenantManagementResource);
+        protected TenantManagementAppServiceBase()
+        {
+            ObjectMapperContext = typeof(AbpTenantManagementApplicationModule);
+            LocalizationResource = typeof(AbpTenantManagementResource);
+        }
     }
 }

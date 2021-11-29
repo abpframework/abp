@@ -5,24 +5,25 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Testing.Utils;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-public class DistributedUserUpdateHandler : IDistributedEventHandler<EntityUpdatedEto<UserEto>>, ITransientDependency
+namespace Volo.Abp.Identity
 {
-    private readonly ITestCounter _testCounter;
-
-    public DistributedUserUpdateHandler(ITestCounter testCounter)
+    public class DistributedUserUpdateHandler : IDistributedEventHandler<EntityUpdatedEto<UserEto>>, ITransientDependency
     {
-        _testCounter = testCounter;
-    }
+        private readonly ITestCounter _testCounter;
 
-    public Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
-    {
-        if (eventData.Entity.UserName == "john.nash")
+        public DistributedUserUpdateHandler(ITestCounter testCounter)
         {
-            _testCounter.Increment("EntityUpdatedEto<UserEto>");
+            _testCounter = testCounter;
         }
 
-        return Task.CompletedTask;
+        public Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
+        {
+            if (eventData.Entity.UserName == "john.nash")
+            {
+                _testCounter.Increment("EntityUpdatedEto<UserEto>");
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

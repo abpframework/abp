@@ -7,118 +7,119 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.ClientSimulation.Snapshot;
 
-namespace Volo.ClientSimulation.Scenarios;
-
-public abstract class ScenarioStep
+namespace Volo.ClientSimulation.Scenarios
 {
-    protected int ExecutionCount;
-    protected int SuccessCount;
-    protected int FailCount;
-    protected double TotalExecutionDuration;
-    protected double MinExecutionDuration;
-    protected double MaxExecutionDuration;
-    protected double LastExecutionDuration;
-
-    public async Task RunAsync(ScenarioExecutionContext context)
+    public abstract class ScenarioStep
     {
-        await BeforeExecuteAsync(context);
+        protected int ExecutionCount;
+        protected int SuccessCount;
+        protected int FailCount;
+        protected double TotalExecutionDuration;
+        protected double MinExecutionDuration;
+        protected double MaxExecutionDuration;
+        protected double LastExecutionDuration;
 
-        var stopwatch = Stopwatch.StartNew();
-
-        try
+        public async Task RunAsync(ScenarioExecutionContext context)
         {
-            await ExecuteAsync(context);
+            await BeforeExecuteAsync(context);
 
-            SuccessCount++;
+            var stopwatch = Stopwatch.StartNew();
 
-            LastExecutionDuration = stopwatch.Elapsed.TotalMilliseconds;
-
-            TotalExecutionDuration += LastExecutionDuration;
-
-            if (MinExecutionDuration > LastExecutionDuration)
+            try
             {
-                MinExecutionDuration = LastExecutionDuration;
+                await ExecuteAsync(context);
+
+                SuccessCount++;
+
+                LastExecutionDuration = stopwatch.Elapsed.TotalMilliseconds;
+
+                TotalExecutionDuration += LastExecutionDuration;
+
+                if (MinExecutionDuration > LastExecutionDuration)
+                {
+                    MinExecutionDuration = LastExecutionDuration;
+                }
+
+                if (MaxExecutionDuration < LastExecutionDuration)
+                {
+                    MaxExecutionDuration = LastExecutionDuration;
+                }
+            }
+            catch(Exception ex)
+            {
+                FailCount++;
+
+                context
+                    .ServiceProvider
+                    .GetService<ILogger<ScenarioStep>>()
+                    .LogException(ex);
+            }
+            finally
+            {
+                stopwatch.Stop();
+
+                ExecutionCount++;
             }
 
-            if (MaxExecutionDuration < LastExecutionDuration)
+            await AfterExecuteAsync(context);
+        }
+
+        protected virtual Task BeforeExecuteAsync(ScenarioExecutionContext context)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected abstract Task ExecuteAsync(ScenarioExecutionContext context);
+
+        protected virtual Task AfterExecuteAsync(ScenarioExecutionContext context)
+        {
+            return Task.CompletedTask;
+        }
+
+        public virtual string GetDisplayText()
+        {
+            var displayNameAttr = GetType()
+                .GetCustomAttributes(true)
+                .OfType<DisplayNameAttribute>()
+                .FirstOrDefault();
+
+            if (displayNameAttr != null)
             {
-                MaxExecutionDuration = LastExecutionDuration;
+                return displayNameAttr.DisplayName;
             }
-        }
-        catch (Exception ex)
-        {
-            FailCount++;
 
-            context
-                .ServiceProvider
-                .GetService<ILogger<ScenarioStep>>()
-                .LogException(ex);
-        }
-        finally
-        {
-            stopwatch.Stop();
-
-            ExecutionCount++;
+            return GetType()
+                .Name
+                .RemovePostFix(nameof(ScenarioStep));
         }
 
-        await AfterExecuteAsync(context);
-    }
-
-    protected virtual Task BeforeExecuteAsync(ScenarioExecutionContext context)
-    {
-        return Task.CompletedTask;
-    }
-
-    protected abstract Task ExecuteAsync(ScenarioExecutionContext context);
-
-    protected virtual Task AfterExecuteAsync(ScenarioExecutionContext context)
-    {
-        return Task.CompletedTask;
-    }
-
-    public virtual string GetDisplayText()
-    {
-        var displayNameAttr = GetType()
-            .GetCustomAttributes(true)
-            .OfType<DisplayNameAttribute>()
-            .FirstOrDefault();
-
-        if (displayNameAttr != null)
+        public ScenarioStepSnapshot CreateSnapshot()
         {
-            return displayNameAttr.DisplayName;
+            return new ScenarioStepSnapshot
+            {
+                DisplayText = GetDisplayText(),
+                ExecutionCount = ExecutionCount,
+                LastExecutionDuration = LastExecutionDuration,
+                MaxExecutionDuration = MaxExecutionDuration,
+                MinExecutionDuration = MinExecutionDuration,
+                TotalExecutionDuration = TotalExecutionDuration,
+                AvgExecutionDuration = SuccessCount == 0 
+                    ? 0.0 
+                    : TotalExecutionDuration / SuccessCount,
+                FailCount = FailCount,
+                SuccessCount = SuccessCount
+            };
         }
 
-        return GetType()
-            .Name
-            .RemovePostFix(nameof(ScenarioStep));
-    }
-
-    public ScenarioStepSnapshot CreateSnapshot()
-    {
-        return new ScenarioStepSnapshot
+        public virtual void Reset()
         {
-            DisplayText = GetDisplayText(),
-            ExecutionCount = ExecutionCount,
-            LastExecutionDuration = LastExecutionDuration,
-            MaxExecutionDuration = MaxExecutionDuration,
-            MinExecutionDuration = MinExecutionDuration,
-            TotalExecutionDuration = TotalExecutionDuration,
-            AvgExecutionDuration = SuccessCount == 0
-                ? 0.0
-                : TotalExecutionDuration / SuccessCount,
-            FailCount = FailCount,
-            SuccessCount = SuccessCount
-        };
-    }
-
-    public virtual void Reset()
-    {
-        ExecutionCount = 0;
-        FailCount = 0;
-        SuccessCount = 0;
-        TotalExecutionDuration = 0;
-        MinExecutionDuration = 0.0;
-        MaxExecutionDuration = 0.0;
-        LastExecutionDuration = 0.0;
+            ExecutionCount = 0;
+            FailCount = 0;
+            SuccessCount = 0;
+            TotalExecutionDuration = 0;
+            MinExecutionDuration = 0.0;
+            MaxExecutionDuration = 0.0;
+            LastExecutionDuration = 0.0;
+        }
     }
 }

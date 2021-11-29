@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
-
-public class AbpCardHeaderTagHelper : AbpTagHelper<AbpCardHeaderTagHelper, AbpCardHeaderTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public AbpCardHeaderTagHelper(AbpCardHeaderTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpCardHeaderTagHelper : AbpTagHelper<AbpCardHeaderTagHelper, AbpCardHeaderTagHelperService>
     {
+        public AbpCardHeaderTagHelper(AbpCardHeaderTagHelperService tagHelperService) 
+            : base(tagHelperService)
+        {
+        }
     }
 }

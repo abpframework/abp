@@ -1,15 +1,16 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.PermissionManagement;
-
-public class PermissionGrantCacheItem_Tests
+namespace Volo.Abp.PermissionManagement
 {
-    [Fact]
-    public void GetPermissionNameFormCacheKeyOrNull()
+    public class PermissionGrantCacheItem_Tests
     {
-        var key = PermissionGrantCacheItem.CalculateCacheKey("aaa", "bbb", "ccc");
-        PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(key).ShouldBe("aaa");
-        PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull("aaabbbccc").ShouldBeNull();
+        [Fact]
+        public void GetPermissionNameFormCacheKeyOrNull()
+        {
+            var key = PermissionGrantCacheItem.CalculateCacheKey("aaa", "bbb", "ccc");
+            PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(key).ShouldBe("aaa");
+            PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull("aaabbbccc").ShouldBeNull();
+        }
     }
 }

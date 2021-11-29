@@ -5,22 +5,23 @@ using Volo.Abp.DynamicProxy;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Authorization;
-
-[DependsOn(typeof(AbpAutofacModule))]
-[DependsOn(typeof(AbpAuthorizationModule))]
-[DependsOn(typeof(AbpExceptionHandlingModule))]
-public class AbpAuthorizationTestModule : AbpModule
+namespace Volo.Abp.Authorization
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AbpAuthorizationModule))]
+    [DependsOn(typeof(AbpExceptionHandlingModule))]
+    public class AbpAuthorizationTestModule : AbpModule
     {
-        context.Services.OnRegistred(onServiceRegistredContext =>
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
-                !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
+            context.Services.OnRegistred(onServiceRegistredContext =>
             {
-                onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
-            }
-        });
+                if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                    !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
+                {
+                    onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
+                }
+            });
+        }
     }
 }

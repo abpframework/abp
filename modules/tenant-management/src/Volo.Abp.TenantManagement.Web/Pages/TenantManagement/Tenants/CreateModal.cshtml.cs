@@ -4,51 +4,52 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants;
-
-public class CreateModalModel : TenantManagementPageModel
+namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    [BindProperty]
-    public TenantInfoModel Tenant { get; set; }
-
-    protected ITenantAppService TenantAppService { get; }
-
-    public CreateModalModel(ITenantAppService tenantAppService)
+    public class CreateModalModel : TenantManagementPageModel
     {
-        TenantAppService = tenantAppService;
-    }
+        [BindProperty]
+        public TenantInfoModel Tenant { get; set; }
 
-    public virtual Task<IActionResult> OnGetAsync()
-    {
-        Tenant = new TenantInfoModel();
-        return Task.FromResult<IActionResult>(Page());
-    }
+        protected ITenantAppService TenantAppService { get; }
 
-    public virtual async Task<IActionResult> OnPostAsync()
-    {
-        ValidateModel();
+        public CreateModalModel(ITenantAppService tenantAppService)
+        {
+            TenantAppService = tenantAppService;
+        }
 
-        var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
-        await TenantAppService.CreateAsync(input);
+        public virtual Task<IActionResult> OnGetAsync()
+        {
+            Tenant = new TenantInfoModel();
+            return Task.FromResult<IActionResult>(Page());
+        }
 
-        return NoContent();
-    }
+        public virtual async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
 
-    public class TenantInfoModel : ExtensibleObject
-    {
-        [Required]
-        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
-        [Display(Name = "DisplayName:TenantName")]
-        public string Name { get; set; }
+            var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
+            await TenantAppService.CreateAsync(input);
 
-        [Required]
-        [EmailAddress]
-        [MaxLength(256)]
-        public string AdminEmailAddress { get; set; }
+            return NoContent();
+        }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [MaxLength(128)]
-        public string AdminPassword { get; set; }
+        public class TenantInfoModel: ExtensibleObject
+        {
+            [Required]
+            [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxNameLength))]
+            [Display(Name = "DisplayName:TenantName")]
+            public string Name { get; set; }
+
+            [Required]
+            [EmailAddress]
+            [MaxLength(256)]
+            public string AdminEmailAddress { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [MaxLength(128)]
+            public string AdminPassword { get; set; }
+        }
     }
 }

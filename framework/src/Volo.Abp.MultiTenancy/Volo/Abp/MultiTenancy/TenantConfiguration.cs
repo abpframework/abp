@@ -2,32 +2,33 @@ using System;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
-namespace Volo.Abp.MultiTenancy;
-
-[Serializable]
-public class TenantConfiguration
+namespace Volo.Abp.MultiTenancy
 {
-    public Guid Id { get; set; }
-
-    public string Name { get; set; }
-
-    public ConnectionStrings ConnectionStrings { get; set; }
-
-    public bool IsActive { get; set; }
-
-    public TenantConfiguration()
+    [Serializable]
+    public class TenantConfiguration
     {
-        IsActive = true;
-    }
+        public Guid Id { get; set; }
 
-    public TenantConfiguration(Guid id, [NotNull] string name)
-        : this()
-    {
-        Check.NotNull(name, nameof(name));
+        public string Name { get; set; }
 
-        Id = id;
-        Name = name;
+        public ConnectionStrings ConnectionStrings { get; set; }
 
-        ConnectionStrings = new ConnectionStrings();
+        public bool IsActive { get; set; }
+
+        public TenantConfiguration()
+        {
+            IsActive = true;
+        }
+
+        public TenantConfiguration(Guid id, [NotNull] string name)
+            : this()
+        {
+            Check.NotNull(name, nameof(name));
+
+            Id = id;
+            Name = name;
+
+            ConnectionStrings = new ConnectionStrings();
+        }
     }
 }

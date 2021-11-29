@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Data;
-
-public static class ConcurrencyStampExtensions
+namespace Volo.Abp.Data
 {
-    public static void SetConcurrencyStampIfNotNull(this IHasConcurrencyStamp entity, [CanBeNull] string concurrencyStamp)
+    public static class ConcurrencyStampExtensions
     {
-        if (!concurrencyStamp.IsNullOrEmpty())
+        public static void SetConcurrencyStampIfNotNull(this IHasConcurrencyStamp entity, [CanBeNull] string concurrencyStamp)
         {
-            entity.ConcurrencyStamp = concurrencyStamp;
+            if (!concurrencyStamp.IsNullOrEmpty())
+            {
+                entity.ConcurrencyStamp = concurrencyStamp;
+            }
         }
     }
 }

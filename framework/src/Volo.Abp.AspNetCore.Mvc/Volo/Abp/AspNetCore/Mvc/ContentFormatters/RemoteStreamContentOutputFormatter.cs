@@ -4,38 +4,39 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.Content;
 
-namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
-
-public class RemoteStreamContentOutputFormatter : OutputFormatter
+namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 {
-    public RemoteStreamContentOutputFormatter()
+    public class RemoteStreamContentOutputFormatter : OutputFormatter
     {
-        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("*/*"));
-    }
-
-    protected override bool CanWriteType(Type type)
-    {
-        return typeof(IRemoteStreamContent).IsAssignableFrom(type);
-    }
-
-    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
-    {
-        var remoteStream = (IRemoteStreamContent)context.Object;
-
-        if (remoteStream != null)
+        public RemoteStreamContentOutputFormatter()
         {
-            context.HttpContext.Response.ContentType = remoteStream.ContentType;
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("*/*"));
+        }
 
-            if (!remoteStream.FileName.IsNullOrWhiteSpace())
-            {
-                var contentDisposition = new ContentDispositionHeaderValue("attachment");
-                contentDisposition.SetHttpFileName(remoteStream.FileName);
-                context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
-            }
+        protected override bool CanWriteType(Type type)
+        {
+            return typeof(IRemoteStreamContent).IsAssignableFrom(type);
+        }
 
-            using (remoteStream)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
+        {
+            var remoteStream = (IRemoteStreamContent)context.Object;
+
+            if (remoteStream != null)
             {
-                await remoteStream.GetStream().CopyToAsync(context.HttpContext.Response.Body);
+                context.HttpContext.Response.ContentType = remoteStream.ContentType;
+
+                if (!remoteStream.FileName.IsNullOrWhiteSpace())
+                {
+                    var contentDisposition = new ContentDispositionHeaderValue("attachment");
+                    contentDisposition.SetHttpFileName(remoteStream.FileName);
+                    context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
+                }
+
+                using (remoteStream)
+                {
+                    await remoteStream.GetStream().CopyToAsync(context.HttpContext.Response.Body);
+                }
             }
         }
     }

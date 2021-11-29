@@ -8,52 +8,53 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore;
-
-public class EfCoreAsyncQueryableProvider_Tests : EntityFrameworkCoreTestBase
+namespace Volo.Abp.EntityFrameworkCore
 {
-    private readonly IRepository<Person, Guid> _personRepository;
-    private readonly EfCoreAsyncQueryableProvider _efCoreAsyncQueryableProvider;
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
-
-    public EfCoreAsyncQueryableProvider_Tests()
+    public class EfCoreAsyncQueryableProvider_Tests : EntityFrameworkCoreTestBase
     {
-        _personRepository = GetRequiredService<IRepository<Person, Guid>>();
-        _efCoreAsyncQueryableProvider = GetRequiredService<EfCoreAsyncQueryableProvider>();
-        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-    }
+        private readonly IRepository<Person, Guid> _personRepository;
+        private readonly EfCoreAsyncQueryableProvider _efCoreAsyncQueryableProvider;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-    [Fact]
-    public async Task Should_Accept_EfCore_Related_Queries()
-    {
-        using (_ = _unitOfWorkManager.Begin())
+        public EfCoreAsyncQueryableProvider_Tests()
         {
-            var query = (await _personRepository.GetQueryableAsync()).Where(p => p.Age > 0);
-
-            _efCoreAsyncQueryableProvider.CanExecute(query).ShouldBeTrue();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
+            _efCoreAsyncQueryableProvider = GetRequiredService<EfCoreAsyncQueryableProvider>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
-    }
 
-    [Fact]
-    public void Should_Not_Accept_Other_Providers()
-    {
-        var query = new[] { 1, 2, 3 }.AsQueryable().Where(x => x > 0);
-
-        _efCoreAsyncQueryableProvider.CanExecute(query).ShouldBeFalse();
-    }
-
-    [Fact]
-    public async Task Should_Execute_Queries()
-    {
-        using (var uow = _unitOfWorkManager.Begin())
+        [Fact]
+        public async Task Should_Accept_EfCore_Related_Queries()
         {
-            var query = (await _personRepository.GetQueryableAsync()).Where(p => p.Age > 0);
+            using ( _ = _unitOfWorkManager.Begin())
+            {
+                var query = (await _personRepository.GetQueryableAsync()).Where(p => p.Age > 0);
 
-            (await _efCoreAsyncQueryableProvider.CountAsync(query) > 0).ShouldBeTrue();
-            (await _efCoreAsyncQueryableProvider.FirstOrDefaultAsync(query)).ShouldNotBeNull();
-            (await _efCoreAsyncQueryableProvider.ToListAsync(query)).Count.ShouldBeGreaterThan(0);
+                _efCoreAsyncQueryableProvider.CanExecute(query).ShouldBeTrue();
+            }
+        }
 
-            await uow.CompleteAsync();
+        [Fact]
+        public void Should_Not_Accept_Other_Providers()
+        {
+            var query = new[] {1, 2, 3}.AsQueryable().Where(x => x > 0);
+
+            _efCoreAsyncQueryableProvider.CanExecute(query).ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Should_Execute_Queries()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var query = (await _personRepository.GetQueryableAsync()).Where(p => p.Age > 0);
+
+                (await _efCoreAsyncQueryableProvider.CountAsync(query) > 0).ShouldBeTrue();
+                (await _efCoreAsyncQueryableProvider.FirstOrDefaultAsync(query)).ShouldNotBeNull();
+                (await _efCoreAsyncQueryableProvider.ToListAsync(query)).Count.ShouldBeGreaterThan(0);
+
+                await uow.CompleteAsync();
+            }
         }
     }
 }

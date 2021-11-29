@@ -1,15 +1,16 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Threading;
-
-public static class TaskCache
+namespace Volo.Abp.Threading
 {
-    public static Task<bool> TrueResult { get; }
-    public static Task<bool> FalseResult { get; }
-
-    static TaskCache()
+    public static class TaskCache
     {
-        TrueResult = Task.FromResult(true);
-        FalseResult = Task.FromResult(false);
+        public static Task<bool> TrueResult { get; }
+        public static Task<bool> FalseResult { get; }
+
+        static TaskCache()
+        {
+            TrueResult = Task.FromResult(true);
+            FalseResult = Task.FromResult(false);
+        }
     }
 }

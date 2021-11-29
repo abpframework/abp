@@ -1,17 +1,18 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-
-public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public override void Execute(ProjectBuildContext context)
+    public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
     {
-        foreach (var file in context.Files)
+        public override void Execute(ProjectBuildContext context)
         {
-            if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
+            foreach (var file in context.Files)
             {
-                file.RemoveTemplateCode(context.Symbols);
-                file.RemoveTemplateCodeMarkers();
+                if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
+                {
+                    file.RemoveTemplateCode(context.Symbols);
+                    file.RemoveTemplateCodeMarkers();
+                }
             }
         }
     }

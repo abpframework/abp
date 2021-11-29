@@ -1,25 +1,26 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
-
-public class BundleTagHelperContributorTypeItem : BundleTagHelperItem
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    [NotNull]
-    public Type Type { get; }
-
-    public BundleTagHelperContributorTypeItem([NotNull] Type type)
+    public class BundleTagHelperContributorTypeItem : BundleTagHelperItem
     {
-        Type = Check.NotNull(type, nameof(type));
-    }
+        [NotNull]
+        public Type Type { get; }
 
-    public override string ToString()
-    {
-        return Type.FullName;
-    }
+        public BundleTagHelperContributorTypeItem([NotNull] Type type)
+        {
+            Type = Check.NotNull(type, nameof(type));
+        }
 
-    public override void AddToConfiguration(BundleConfiguration configuration)
-    {
-        configuration.AddContributors(Type);
+        public override string ToString()
+        {
+            return Type.FullName;
+        }
+
+        public override void AddToConfiguration(BundleConfiguration configuration)
+        {
+            configuration.AddContributors(Type);
+        }
     }
 }

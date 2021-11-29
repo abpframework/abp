@@ -3,29 +3,30 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlazoriseUI;
-
-[Dependency(ReplaceServices = true)]
-public class BlazoriseUiPageProgressService : IUiPageProgressService,
-    IScopedDependency
+namespace Volo.Abp.BlazoriseUI
 {
-    /// <summary>
-    /// An event raised after the notification is received.
-    /// </summary>
-    public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
-
-    public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
+    [Dependency(ReplaceServices = true)]
+    public class BlazoriseUiPageProgressService : IUiPageProgressService,
+        IScopedDependency
     {
-        var uiPageProgressOptions = CreateDefaultOptions();
-        options?.Invoke(uiPageProgressOptions);
+        /// <summary>
+        /// An event raised after the notification is received.
+        /// </summary>
+        public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
 
-        ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(percentage, uiPageProgressOptions));
+        public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
+        {
+            var uiPageProgressOptions = CreateDefaultOptions();
+            options?.Invoke(uiPageProgressOptions);
 
-        return Task.CompletedTask;
-    }
+            ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(percentage, uiPageProgressOptions));
 
-    protected virtual UiPageProgressOptions CreateDefaultOptions()
-    {
-        return new UiPageProgressOptions();
+            return Task.CompletedTask;
+        }
+
+        protected virtual UiPageProgressOptions CreateDefaultOptions()
+        {
+            return new UiPageProgressOptions();
+        }
     }
 }

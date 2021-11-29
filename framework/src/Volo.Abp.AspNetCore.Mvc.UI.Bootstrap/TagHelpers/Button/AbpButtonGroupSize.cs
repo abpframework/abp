@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
-
-public enum AbpButtonGroupSize
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 {
-    Default,
-    Small,
-    Medium,
-    Large
+    public enum AbpButtonGroupSize
+    {
+        Default,
+        Small,
+        Medium,
+        Large
+    }
 }

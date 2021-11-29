@@ -15,64 +15,65 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.Licensing;
-
-public class AbpIoApiKeyService : IApiKeyService, ITransientDependency
+namespace Volo.Abp.Cli.Licensing
 {
-    protected IJsonSerializer JsonSerializer { get; }
-    protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
-    private readonly ILogger<AbpIoApiKeyService> _logger;
-    private DeveloperApiKeyResult _apiKeyResult = null;
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
-
-    public AbpIoApiKeyService(
-        IJsonSerializer jsonSerializer,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        ILogger<AbpIoApiKeyService> logger,
-        CliHttpClientFactory cliHttpClientFactory)
+    public class AbpIoApiKeyService : IApiKeyService, ITransientDependency
     {
-        JsonSerializer = jsonSerializer;
-        RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-        _logger = logger;
-        _cliHttpClientFactory = cliHttpClientFactory;
-        CancellationTokenProvider = cancellationTokenProvider;
-    }
+        protected IJsonSerializer JsonSerializer { get; }
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-    public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false)
-    {
-        if (!AuthService.IsLoggedIn())
+        private readonly ILogger<AbpIoApiKeyService> _logger;
+        private DeveloperApiKeyResult _apiKeyResult = null;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+
+        public AbpIoApiKeyService(
+            IJsonSerializer jsonSerializer,
+            ICancellationTokenProvider cancellationTokenProvider,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            ILogger<AbpIoApiKeyService> logger, 
+            CliHttpClientFactory cliHttpClientFactory)
         {
-            return null;
+            JsonSerializer = jsonSerializer;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            _logger = logger;
+            _cliHttpClientFactory = cliHttpClientFactory;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        if (invalidateCache)
+        public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false)
         {
-            _apiKeyResult = null;
-        }
-
-        if (_apiKeyResult != null)
-        {
-            return _apiKeyResult;
-        }
-
-        var url = $"{CliUrls.WwwAbpIo}api/license/api-key";
-        var client = _cliHttpClientFactory.CreateClient();
-
-        using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, _logger))
-        {
-            if (!response.IsSuccessStatusCode)
+            if (!AuthService.IsLoggedIn())
             {
-                throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                return null;
             }
 
-            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+            if (invalidateCache)
+            {
+                _apiKeyResult = null;
+            }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
+            if (_apiKeyResult != null)
+            {
+                return _apiKeyResult;
+            }
+
+            var url = $"{CliUrls.WwwAbpIo}api/license/api-key";
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, _logger))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                }
+
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
+            }
+
         }
-
     }
 }

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.CmsKit;
-
-public class CmsKitWebAutoMapperProfile : Profile
+namespace Volo.CmsKit
 {
-    public CmsKitWebAutoMapperProfile()
+    public class CmsKitWebAutoMapperProfile : Profile
     {
-        //Define your AutoMapper configuration here for the Web project.
+        public CmsKitWebAutoMapperProfile()
+        {
+            //Define your AutoMapper configuration here for the Web project.
+        }
     }
 }

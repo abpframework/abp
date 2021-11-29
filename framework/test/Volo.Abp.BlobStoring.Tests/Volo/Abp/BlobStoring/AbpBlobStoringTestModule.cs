@@ -5,38 +5,39 @@ using Volo.Abp.BlobStoring.Fakes;
 using Volo.Abp.BlobStoring.TestObjects;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring;
-
-[DependsOn(
-    typeof(AbpBlobStoringModule),
-    typeof(AbpTestBaseModule),
-    typeof(AbpAutofacModule)
-    )]
-public class AbpBlobStoringTestModule : AbpModule
+namespace Volo.Abp.BlobStoring
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBlobStoringModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAutofacModule)
+        )]
+    public class AbpBlobStoringTestModule : AbpModule
     {
-        context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider1>());
-        context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider2>());
-
-        Configure<AbpBlobStoringOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.Containers
-                .ConfigureDefault(container =>
-                {
-                    container.SetConfiguration("TestConfigDefault", "TestValueDefault");
-                    container.ProviderType = typeof(FakeBlobProvider1);
-                })
-                .Configure<TestContainer1>(container =>
-                {
-                    container.SetConfiguration("TestConfig1", "TestValue1");
-                    container.ProviderType = typeof(FakeBlobProvider1);
-                })
-                .Configure<TestContainer2>(container =>
-                {
-                    container.SetConfiguration("TestConfig2", "TestValue2");
-                    container.ProviderType = typeof(FakeBlobProvider2);
-                });
-        });
+            context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider1>());
+            context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider2>());
+            
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers
+                    .ConfigureDefault(container =>
+                    {
+                        container.SetConfiguration("TestConfigDefault", "TestValueDefault");
+                        container.ProviderType = typeof(FakeBlobProvider1);
+                    })
+                    .Configure<TestContainer1>(container =>
+                    {
+                        container.SetConfiguration("TestConfig1", "TestValue1");
+                        container.ProviderType = typeof(FakeBlobProvider1);
+                    })
+                    .Configure<TestContainer2>(container =>
+                    {
+                        container.SetConfiguration("TestConfig2", "TestValue2");
+                        container.ProviderType = typeof(FakeBlobProvider2);
+                    });
+            });
+        }
     }
 }

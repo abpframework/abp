@@ -4,16 +4,17 @@ using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public class PlugInSourceList : List<IPlugInSource>
+namespace Volo.Abp.Modularity.PlugIns
 {
-    [NotNull]
-    internal Type[] GetAllModules(ILogger logger)
+    public class PlugInSourceList : List<IPlugInSource>
     {
-        return this
-            .SelectMany(pluginSource => pluginSource.GetModulesWithAllDependencies(logger))
-            .Distinct()
-            .ToArray();
+        [NotNull]
+        internal Type[] GetAllModules(ILogger logger)
+        {
+            return this
+                .SelectMany(pluginSource => pluginSource.GetModulesWithAllDependencies(logger))
+                .Distinct()
+                .ToArray();
+        }
     }
 }

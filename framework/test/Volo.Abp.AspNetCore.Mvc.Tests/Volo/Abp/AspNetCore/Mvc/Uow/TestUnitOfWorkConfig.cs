@@ -1,10 +1,11 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.Uow;
-
-public class TestUnitOfWorkConfig : ISingletonDependency
+namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
-    public const string ExceptionOnCompleteMessage = "TestUnitOfWork configured for exception";
+    public class TestUnitOfWorkConfig : ISingletonDependency
+    {
+        public const string ExceptionOnCompleteMessage = "TestUnitOfWork configured for exception";
 
-    public bool ThrowExceptionOnComplete { get; set; }
+        public bool ThrowExceptionOnComplete { get; set; }
+    }
 }

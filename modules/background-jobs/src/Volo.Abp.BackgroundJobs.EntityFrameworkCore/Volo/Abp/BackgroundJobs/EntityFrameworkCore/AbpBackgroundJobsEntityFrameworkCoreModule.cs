@@ -2,19 +2,20 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore;
-
-[DependsOn(
-    typeof(AbpBackgroundJobsDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
-)]
-public class AbpBackgroundJobsEntityFrameworkCoreModule : AbpModule
+namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBackgroundJobsDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+    )]
+    public class AbpBackgroundJobsEntityFrameworkCoreModule : AbpModule
     {
-        context.Services.AddAbpDbContext<BackgroundJobsDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<BackgroundJobRecord, EfCoreBackgroundJobRepository>();
-        });
+            context.Services.AddAbpDbContext<BackgroundJobsDbContext>(options =>
+            {
+                 options.AddRepository<BackgroundJobRecord, EfCoreBackgroundJobRepository>();
+            });
+        }
     }
 }

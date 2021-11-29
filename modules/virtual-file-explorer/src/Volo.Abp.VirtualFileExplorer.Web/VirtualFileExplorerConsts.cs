@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.VirtualFileExplorer.Web;
-
-public static class VirtualFileExplorerConsts
+﻿namespace Volo.Abp.VirtualFileExplorer.Web
 {
-    public static readonly string[] AllowFileInfoTypes = { "VirtualDirectoryFileInfo", "EmbeddedResourceFileInfo", "ManifestDirectoryInfo", "ManifestFileInfo" };
+    public static class VirtualFileExplorerConsts
+    {
+        public static readonly string[] AllowFileInfoTypes = {"VirtualDirectoryFileInfo", "EmbeddedResourceFileInfo", "ManifestDirectoryInfo" , "ManifestFileInfo"};
+    }
 }

@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.TextTemplating.Scriban;
-
-public static class ScribanTemplateDefinitionExtensions
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public static TemplateDefinition WithScribanEngine([NotNull] this TemplateDefinition templateDefinition)
+    public static class ScribanTemplateDefinitionExtensions
     {
-        return templateDefinition.WithRenderEngine(ScribanTemplateRenderingEngine.EngineName);
+        public static TemplateDefinition WithScribanEngine([NotNull] this TemplateDefinition templateDefinition)
+        {
+            return templateDefinition.WithRenderEngine(ScribanTemplateRenderingEngine.EngineName);
+        }
     }
 }

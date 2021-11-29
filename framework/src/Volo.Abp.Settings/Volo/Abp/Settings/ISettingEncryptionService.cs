@@ -1,12 +1,13 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Settings;
-
-public interface ISettingEncryptionService
+namespace Volo.Abp.Settings
 {
-    [CanBeNull]
-    string Encrypt([NotNull] SettingDefinition settingDefinition, [CanBeNull] string plainValue);
+    public interface ISettingEncryptionService
+    {
+        [CanBeNull]
+        string Encrypt([NotNull]SettingDefinition settingDefinition, [CanBeNull] string plainValue);
 
-    [CanBeNull]
-    string Decrypt([NotNull] SettingDefinition settingDefinition, [CanBeNull] string encryptedValue);
+        [CanBeNull]
+        string Decrypt([NotNull]SettingDefinition settingDefinition, [CanBeNull] string encryptedValue);
+    }
 }

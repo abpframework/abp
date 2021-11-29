@@ -6,126 +6,127 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.Permissions;
-
-public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
+namespace Volo.Abp.Authorization.Permissions
 {
-    protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
-    private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
-
-    protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
-    private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
-
-    protected AbpPermissionOptions Options { get; }
-
-    private readonly IServiceProvider _serviceProvider;
-
-    public PermissionDefinitionManager(
-        IOptions<AbpPermissionOptions> options,
-        IServiceProvider serviceProvider)
+    public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
     {
-        _serviceProvider = serviceProvider;
-        Options = options.Value;
+        protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
+        private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
 
-        _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(
-            CreatePermissionDefinitions,
-            isThreadSafe: true
-        );
+        protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
+        private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
 
-        _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(
-            CreatePermissionGroupDefinitions,
-            isThreadSafe: true
-        );
-    }
+        protected AbpPermissionOptions Options { get; }
 
-    public virtual PermissionDefinition Get(string name)
-    {
-        var permission = GetOrNull(name);
+        private readonly IServiceProvider _serviceProvider;
 
-        if (permission == null)
+        public PermissionDefinitionManager(
+            IOptions<AbpPermissionOptions> options,
+            IServiceProvider serviceProvider)
         {
-            throw new AbpException("Undefined permission: " + name);
+            _serviceProvider = serviceProvider;
+            Options = options.Value;
+
+            _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(
+                CreatePermissionDefinitions,
+                isThreadSafe: true
+            );
+
+            _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(
+                CreatePermissionGroupDefinitions,
+                isThreadSafe: true
+            );
         }
 
-        return permission;
-    }
-
-    public virtual PermissionDefinition GetOrNull(string name)
-    {
-        Check.NotNull(name, nameof(name));
-
-        return PermissionDefinitions.GetOrDefault(name);
-    }
-
-    public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
-    {
-        return PermissionDefinitions.Values.ToImmutableList();
-    }
-
-    public IReadOnlyList<PermissionGroupDefinition> GetGroups()
-    {
-        return PermissionGroupDefinitions.Values.ToImmutableList();
-    }
-
-    protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
-    {
-        var permissions = new Dictionary<string, PermissionDefinition>();
-
-        foreach (var groupDefinition in PermissionGroupDefinitions.Values)
+        public virtual PermissionDefinition Get(string name)
         {
-            foreach (var permission in groupDefinition.Permissions)
+            var permission = GetOrNull(name);
+
+            if (permission == null)
             {
-                AddPermissionToDictionaryRecursively(permissions, permission);
+                throw new AbpException("Undefined permission: " + name);
+            }
+
+            return permission;
+        }
+
+        public virtual PermissionDefinition GetOrNull(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return PermissionDefinitions.GetOrDefault(name);
+        }
+
+        public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
+        {
+            return PermissionDefinitions.Values.ToImmutableList();
+        }
+
+        public IReadOnlyList<PermissionGroupDefinition> GetGroups()
+        {
+            return PermissionGroupDefinitions.Values.ToImmutableList();
+        }
+
+        protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
+        {
+            var permissions = new Dictionary<string, PermissionDefinition>();
+
+            foreach (var groupDefinition in PermissionGroupDefinitions.Values)
+            {
+                foreach (var permission in groupDefinition.Permissions)
+                {
+                    AddPermissionToDictionaryRecursively(permissions, permission);
+                }
+            }
+
+            return permissions;
+        }
+
+        protected virtual void AddPermissionToDictionaryRecursively(
+            Dictionary<string, PermissionDefinition> permissions,
+            PermissionDefinition permission)
+        {
+            if (permissions.ContainsKey(permission.Name))
+            {
+                throw new AbpException("Duplicate permission name: " + permission.Name);
+            }
+
+            permissions[permission.Name] = permission;
+
+            foreach (var child in permission.Children)
+            {
+                AddPermissionToDictionaryRecursively(permissions, child);
             }
         }
 
-        return permissions;
-    }
-
-    protected virtual void AddPermissionToDictionaryRecursively(
-        Dictionary<string, PermissionDefinition> permissions,
-        PermissionDefinition permission)
-    {
-        if (permissions.ContainsKey(permission.Name))
+        protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
         {
-            throw new AbpException("Duplicate permission name: " + permission.Name);
-        }
-
-        permissions[permission.Name] = permission;
-
-        foreach (var child in permission.Children)
-        {
-            AddPermissionToDictionaryRecursively(permissions, child);
-        }
-    }
-
-    protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
-    {
-        using (var scope = _serviceProvider.CreateScope())
-        {
-            var context = new PermissionDefinitionContext(scope.ServiceProvider);
-
-            var providers = Options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
-                    .ToList();
-
-            foreach (var provider in providers)
+            using (var scope = _serviceProvider.CreateScope())
             {
-                provider.PreDefine(context);
-            }
+                var context = new PermissionDefinitionContext(scope.ServiceProvider);
 
-            foreach (var provider in providers)
-            {
-                provider.Define(context);
-            }
+                var providers = Options
+                        .DefinitionProviders
+                        .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
+                        .ToList();
 
-            foreach (var provider in providers)
-            {
-                provider.PostDefine(context);
-            }
+                foreach (var provider in providers)
+                {
+                    provider.PreDefine(context);
+                }
 
-            return context.Groups;
+                foreach (var provider in providers)
+                {
+                    provider.Define(context);
+                }
+
+                foreach (var provider in providers)
+                {
+                    provider.PostDefine(context);
+                }
+
+                return context.Groups;
+            }
         }
     }
 }

@@ -1,26 +1,27 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace Microsoft.AspNetCore.Hosting;
-
-public static class AbpHostingEnvironmentExtensions
+namespace Microsoft.AspNetCore.Hosting
 {
-    public static IConfigurationRoot BuildConfiguration(
-        this IWebHostEnvironment env,
-        AbpConfigurationBuilderOptions options = null)
+    public static class AbpHostingEnvironmentExtensions
     {
-        options = options ?? new AbpConfigurationBuilderOptions();
-
-        if (options.BasePath.IsNullOrEmpty())
+        public static IConfigurationRoot BuildConfiguration(
+            this IWebHostEnvironment env,
+            AbpConfigurationBuilderOptions options = null)
         {
-            options.BasePath = env.ContentRootPath;
-        }
+            options = options ?? new AbpConfigurationBuilderOptions();
 
-        if (options.EnvironmentName.IsNullOrEmpty())
-        {
-            options.EnvironmentName = env.EnvironmentName;
-        }
+            if (options.BasePath.IsNullOrEmpty())
+            {
+                options.BasePath = env.ContentRootPath;
+            }
 
-        return ConfigurationHelper.BuildConfiguration(options);
+            if (options.EnvironmentName.IsNullOrEmpty())
+            {
+                options.EnvironmentName = env.EnvironmentName;
+            }
+
+            return ConfigurationHelper.BuildConfiguration(options);
+        }
     }
 }

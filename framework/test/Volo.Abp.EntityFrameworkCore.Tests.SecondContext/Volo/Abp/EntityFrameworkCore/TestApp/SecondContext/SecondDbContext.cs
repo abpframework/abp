@@ -1,26 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
-
-public class SecondDbContext : AbpDbContext<SecondDbContext>
+namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
-    public DbSet<BookInSecondDbContext> Books { get; set; }
-
-    public DbSet<PhoneInSecondDbContext> Phones { get; set; }
-
-    public SecondDbContext(DbContextOptions<SecondDbContext> options)
-        : base(options)
+    public class SecondDbContext : AbpDbContext<SecondDbContext>
     {
-    }
+        public DbSet<BookInSecondDbContext> Books { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        public DbSet<PhoneInSecondDbContext> Phones { get; set; }
 
-        modelBuilder.Entity<PhoneInSecondDbContext>(b =>
+        public SecondDbContext(DbContextOptions<SecondDbContext> options) 
+            : base(options)
         {
-            b.HasKey(p => new { p.PersonId, p.Number });
-        });
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<PhoneInSecondDbContext>(b =>
+            {
+                b.HasKey(p => new { p.PersonId, p.Number });
+            });
+        }
     }
 }

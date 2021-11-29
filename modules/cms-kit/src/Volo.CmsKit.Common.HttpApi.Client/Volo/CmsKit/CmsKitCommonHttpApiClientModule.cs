@@ -4,24 +4,25 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.CmsKit;
-
-[DependsOn(
-    typeof(AbpHttpClientModule),
-    typeof(CmsKitCommonApplicationContractsModule)
-    )]
-public class CmsKitCommonHttpApiClientModule : AbpModule
+namespace Volo.CmsKit
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpHttpClientModule),
+        typeof(CmsKitCommonApplicationContractsModule)
+        )]
+    public class CmsKitCommonHttpApiClientModule : AbpModule
     {
-        context.Services.AddStaticHttpClientProxies(
-            typeof(CmsKitCommonApplicationContractsModule).Assembly,
-            CmsKitCommonRemoteServiceConsts.RemoteServiceName
-        );
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<CmsKitCommonHttpApiClientModule>();
-        });
+            context.Services.AddStaticHttpClientProxies(
+                typeof(CmsKitCommonApplicationContractsModule).Assembly,
+                CmsKitCommonRemoteServiceConsts.RemoteServiceName
+            );
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<CmsKitCommonHttpApiClientModule>();
+            });
+        }
     }
 }

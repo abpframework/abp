@@ -3,23 +3,24 @@ using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Castle.DynamicProxy;
-
-public class CastleAbpMethodInvocationAdapter : CastleAbpMethodInvocationAdapterBase, IAbpMethodInvocation
+namespace Volo.Abp.Castle.DynamicProxy
 {
-    protected IInvocationProceedInfo ProceedInfo { get; }
-    protected Func<IInvocation, IInvocationProceedInfo, Task> Proceed { get; }
-
-    public CastleAbpMethodInvocationAdapter(IInvocation invocation, IInvocationProceedInfo proceedInfo,
-        Func<IInvocation, IInvocationProceedInfo, Task> proceed)
-        : base(invocation)
+    public class CastleAbpMethodInvocationAdapter : CastleAbpMethodInvocationAdapterBase, IAbpMethodInvocation
     {
-        ProceedInfo = proceedInfo;
-        Proceed = proceed;
-    }
+        protected IInvocationProceedInfo ProceedInfo { get; }
+        protected Func<IInvocation, IInvocationProceedInfo, Task> Proceed { get; }
 
-    public override async Task ProceedAsync()
-    {
-        await Proceed(Invocation, ProceedInfo);
+        public CastleAbpMethodInvocationAdapter(IInvocation invocation, IInvocationProceedInfo proceedInfo,
+            Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+            : base(invocation)
+        {
+            ProceedInfo = proceedInfo;
+            Proceed = proceed;
+        }
+
+        public override async Task ProceedAsync()
+        {
+            await Proceed(Invocation, ProceedInfo);
+        }
     }
 }

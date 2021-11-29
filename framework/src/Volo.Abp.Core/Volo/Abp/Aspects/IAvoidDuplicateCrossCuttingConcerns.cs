@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Aspects;
-
-public interface IAvoidDuplicateCrossCuttingConcerns
+namespace Volo.Abp.Aspects
 {
-    List<string> AppliedCrossCuttingConcerns { get; }
+    public interface IAvoidDuplicateCrossCuttingConcerns
+    {
+        List<string> AppliedCrossCuttingConcerns { get; }
+    }
 }

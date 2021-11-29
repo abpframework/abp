@@ -1,41 +1,42 @@
 ﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.Identity.MongoDB;
-
-public static class AbpIdentityMongoDbContextExtensions
+namespace Volo.Abp.Identity.MongoDB
 {
-    public static void ConfigureIdentity(this IMongoModelBuilder builder)
+    public static class AbpIdentityMongoDbContextExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<IdentityUser>(b =>
+        public static void ConfigureIdentity(this IMongoModelBuilder builder)
         {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Users";
-        });
+            Check.NotNull(builder, nameof(builder));
 
-        builder.Entity<IdentityRole>(b =>
-        {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Roles";
-        });
+            builder.Entity<IdentityUser>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Users";
+            });
 
-        builder.Entity<IdentityClaimType>(b =>
-        {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes";
-        });
+            builder.Entity<IdentityRole>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Roles";
+            });
 
-        builder.Entity<OrganizationUnit>(b =>
-        {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits";
-        });
+            builder.Entity<IdentityClaimType>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes";
+            });
 
-        builder.Entity<IdentitySecurityLog>(b =>
-        {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs";
-        });
+            builder.Entity<OrganizationUnit>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits";
+            });
 
-        builder.Entity<IdentityLinkUser>(b =>
-        {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "LinkUsers";
-        });
+            builder.Entity<IdentitySecurityLog>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs";
+            });
+
+            builder.Entity<IdentityLinkUser>(b =>
+            {
+                b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "LinkUsers";
+            });
+        }
     }
 }

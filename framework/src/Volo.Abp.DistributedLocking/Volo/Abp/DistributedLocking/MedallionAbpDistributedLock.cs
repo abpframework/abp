@@ -4,31 +4,32 @@ using System.Threading.Tasks;
 using Medallion.Threading;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.DistributedLocking;
-
-[Dependency(ReplaceServices = true)]
-public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDependency
+namespace Volo.Abp.DistributedLocking
 {
-    protected IDistributedLockProvider DistributedLockProvider { get; }
-
-    public MedallionAbpDistributedLock(IDistributedLockProvider distributedLockProvider)
+    [Dependency(ReplaceServices = true)]
+    public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDependency
     {
-        DistributedLockProvider = distributedLockProvider;
-    }
+        protected IDistributedLockProvider DistributedLockProvider { get; }
 
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
-        string name,
-        TimeSpan timeout = default,
-        CancellationToken cancellationToken = default)
-    {
-        Check.NotNullOrWhiteSpace(name, nameof(name));
-
-        var handle = await DistributedLockProvider.TryAcquireLockAsync(name, timeout, cancellationToken);
-        if (handle == null)
+        public MedallionAbpDistributedLock(IDistributedLockProvider distributedLockProvider)
         {
-            return null;
+            DistributedLockProvider = distributedLockProvider;
         }
+        
+        public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+            string name,
+            TimeSpan timeout = default,
+            CancellationToken cancellationToken = default)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
 
-        return new MedallionAbpDistributedLockHandle(handle);
+            var handle = await DistributedLockProvider.TryAcquireLockAsync(name, timeout, cancellationToken);
+            if (handle == null)
+            {
+                return null;
+            }
+
+            return new MedallionAbpDistributedLockHandle(handle);
+        }
     }
 }

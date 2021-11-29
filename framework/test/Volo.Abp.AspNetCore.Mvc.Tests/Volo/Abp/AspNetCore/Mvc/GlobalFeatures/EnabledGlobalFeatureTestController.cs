@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
-
-[RequiresGlobalFeature(AbpAspNetCoreMvcTestFeature1.Name)]
-[Route("api/EnabledGlobalFeatureTestController-Test")]
-public class EnabledGlobalFeatureTestController : AbpController
+namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 {
-    [HttpGet]
-    [Route("TestMethod")]
-    public string TestMethod()
+    [RequiresGlobalFeature(AbpAspNetCoreMvcTestFeature1.Name)]
+    [Route("api/EnabledGlobalFeatureTestController-Test")]
+    public class EnabledGlobalFeatureTestController : AbpController
     {
-        return "TestMethod";
+        [HttpGet]
+        [Route("TestMethod")]
+        public string TestMethod()
+        {
+            return "TestMethod";
+        }
     }
 }

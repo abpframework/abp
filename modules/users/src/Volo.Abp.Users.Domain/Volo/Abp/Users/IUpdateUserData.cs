@@ -1,8 +1,9 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Users;
-
-public interface IUpdateUserData
+namespace Volo.Abp.Users
 {
-    bool Update([NotNull] IUserData user);
+    public interface IUpdateUserData
+    {
+        bool Update([NotNull] IUserData user);
+    }
 }

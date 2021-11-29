@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote;
-
-public class AbpBlockquoteTagHelper : AbpTagHelper<AbpBlockquoteTagHelper, AbpBlockquoteTagHelperService>
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
 {
-    public AbpBlockquoteTagHelper(AbpBlockquoteTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public class AbpBlockquoteTagHelper : AbpTagHelper<AbpBlockquoteTagHelper, AbpBlockquoteTagHelperService>
     {
-
+        public AbpBlockquoteTagHelper(AbpBlockquoteTagHelperService tagHelperService)
+            : base(tagHelperService)
+        {
+            
+        }
     }
 }

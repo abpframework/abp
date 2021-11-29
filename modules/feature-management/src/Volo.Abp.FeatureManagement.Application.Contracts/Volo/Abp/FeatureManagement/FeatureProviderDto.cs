@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.FeatureManagement;
-
-public class FeatureProviderDto
+﻿namespace Volo.Abp.FeatureManagement
 {
-    public string Name { get; set; }
+    public class FeatureProviderDto
+    {
+        public string Name { get; set; }
 
-    public string Key { get; set; }
+        public string Key { get; set; }
+    }
 }

@@ -10,48 +10,49 @@ using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags;
-
-public class CreateModalModel : CmsKitAdminPageModel
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags
 {
-    protected ITagAdminAppService TagAdminAppService { get; }
-
-    [BindProperty]
-    public TagCreateViewModel ViewModel { get; set; }
-
-    public List<SelectListItem> TagDefinitions { get; set; }
-
-    public CreateModalModel(ITagAdminAppService tagAdminAppService)
+    public class CreateModalModel : CmsKitAdminPageModel
     {
-        TagAdminAppService = tagAdminAppService;
-    }
+        protected ITagAdminAppService TagAdminAppService { get; }
 
-    public async Task OnGetAsync()
-    {
-        var definitions = await TagAdminAppService.GetTagDefinitionsAsync();
+        [BindProperty]
+        public TagCreateViewModel ViewModel { get; set; }
 
-        TagDefinitions = definitions.Select(s => new SelectListItem(s.DisplayName, s.EntityType)).ToList();
-    }
+        public List<SelectListItem> TagDefinitions { get; set; }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var tagCreateDto = ObjectMapper.Map<TagCreateViewModel, TagCreateDto>(ViewModel);
+        public CreateModalModel(ITagAdminAppService tagAdminAppService)
+        {
+            TagAdminAppService = tagAdminAppService;
+        }
 
-        await TagAdminAppService.CreateAsync(tagCreateDto);
+        public async Task OnGetAsync()
+        {
+            var definitions = await TagAdminAppService.GetTagDefinitionsAsync();
 
-        return NoContent();
-    }
+            TagDefinitions = definitions.Select(s => new SelectListItem(s.DisplayName, s.EntityType)).ToList();
+        }
 
-    [AutoMap(typeof(TagCreateDto), ReverseMap = true)]
-    public class TagCreateViewModel
-    {
-        [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxEntityTypeLength))]
-        [Required]
-        [SelectItems(nameof(TagDefinitions))]
-        public string EntityType { get; set; }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var tagCreateDto = ObjectMapper.Map<TagCreateViewModel, TagCreateDto>(ViewModel);
 
-        [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxNameLength))]
-        [Required]
-        public string Name { get; set; }
+            await TagAdminAppService.CreateAsync(tagCreateDto);
+
+            return NoContent();
+        }
+
+        [AutoMap(typeof(TagCreateDto), ReverseMap = true)]
+        public class TagCreateViewModel
+        {
+            [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxEntityTypeLength))]
+            [Required]
+            [SelectItems(nameof(TagDefinitions))]
+            public string EntityType { get; set; }
+
+            [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxNameLength))]
+            [Required]
+            public string Name { get; set; }
+        }
     }
 }

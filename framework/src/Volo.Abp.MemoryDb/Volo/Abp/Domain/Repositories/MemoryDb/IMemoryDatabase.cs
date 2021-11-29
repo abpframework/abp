@@ -1,10 +1,11 @@
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Repositories.MemoryDb;
-
-public interface IMemoryDatabase
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    IMemoryDatabaseCollection<TEntity> Collection<TEntity>() where TEntity : class, IEntity;
+    public interface IMemoryDatabase
+    {
+        IMemoryDatabaseCollection<TEntity> Collection<TEntity>() where TEntity : class, IEntity;
 
-    TKey GenerateNextId<TEntity, TKey>();
+        TKey GenerateNextId<TEntity, TKey>();
+    }
 }

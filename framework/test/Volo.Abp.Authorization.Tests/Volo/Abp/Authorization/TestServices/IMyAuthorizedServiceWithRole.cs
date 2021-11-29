@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Authorization.TestServices;
-
-public interface IMyAuthorizedServiceWithRole
+namespace Volo.Abp.Authorization.TestServices
 {
-    Task<int> ProtectedByRole();
+    public interface IMyAuthorizedServiceWithRole
+    {
+        Task<int> ProtectedByRole();
 
-    Task<int> ProtectedByScheme();
+        Task<int> ProtectedByScheme();
 
-    Task<int> ProtectedByAnotherRole();
+        Task<int> ProtectedByAnotherRole();
+    }
 }

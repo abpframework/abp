@@ -5,46 +5,47 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity;
-
-[RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-[Area(IdentityRemoteServiceConsts.ModuleName)]
-[ControllerName("UserLookup")]
-[Route("api/identity/users/lookup")]
-public class IdentityUserLookupController : AbpControllerBase, IIdentityUserLookupAppService
+namespace Volo.Abp.Identity
 {
-    protected IIdentityUserLookupAppService LookupAppService { get; }
-
-    public IdentityUserLookupController(IIdentityUserLookupAppService lookupAppService)
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
+    [Area(IdentityRemoteServiceConsts.ModuleName)]
+    [ControllerName("UserLookup")]
+    [Route("api/identity/users/lookup")]
+    public class IdentityUserLookupController : AbpControllerBase, IIdentityUserLookupAppService
     {
-        LookupAppService = lookupAppService;
-    }
+        protected IIdentityUserLookupAppService LookupAppService { get; }
 
-    [HttpGet]
-    [Route("{id}")]
-    public virtual Task<UserData> FindByIdAsync(Guid id)
-    {
-        return LookupAppService.FindByIdAsync(id);
-    }
+        public IdentityUserLookupController(IIdentityUserLookupAppService lookupAppService)
+        {
+            LookupAppService = lookupAppService;
+        }
 
-    [HttpGet]
-    [Route("by-username/{userName}")]
-    public virtual Task<UserData> FindByUserNameAsync(string userName)
-    {
-        return LookupAppService.FindByUserNameAsync(userName);
-    }
+        [HttpGet]
+        [Route("{id}")]
+        public virtual Task<UserData> FindByIdAsync(Guid id)
+        {
+            return LookupAppService.FindByIdAsync(id);
+        }
 
-    [HttpGet]
-    [Route("search")]
-    public Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
-    {
-        return LookupAppService.SearchAsync(input);
-    }
+        [HttpGet]
+        [Route("by-username/{userName}")]
+        public virtual Task<UserData> FindByUserNameAsync(string userName)
+        {
+            return LookupAppService.FindByUserNameAsync(userName);
+        }
 
-    [HttpGet]
-    [Route("count")]
-    public Task<long> GetCountAsync(UserLookupCountInputDto input)
-    {
-        return LookupAppService.GetCountAsync(input);
+        [HttpGet]
+        [Route("search")]
+        public Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
+        {
+            return LookupAppService.SearchAsync(input);
+        }
+
+        [HttpGet]
+        [Route("count")]
+        public Task<long> GetCountAsync(UserLookupCountInputDto input)
+        {
+            return LookupAppService.GetCountAsync(input);
+        }
     }
 }

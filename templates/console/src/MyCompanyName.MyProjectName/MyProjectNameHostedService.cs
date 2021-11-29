@@ -4,37 +4,38 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName;
-
-public class MyProjectNameHostedService : IHostedService
+namespace MyCompanyName.MyProjectName
 {
-    private readonly IAbpApplicationWithExternalServiceProvider _application;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly HelloWorldService _helloWorldService;
-
-    public MyProjectNameHostedService(
-        IAbpApplicationWithExternalServiceProvider application,
-        IServiceProvider serviceProvider,
-        HelloWorldService helloWorldService)
+    public class MyProjectNameHostedService : IHostedService
     {
-        _application = application;
-        _serviceProvider = serviceProvider;
-        _helloWorldService = helloWorldService;
-    }
+        private readonly IAbpApplicationWithExternalServiceProvider _application;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly HelloWorldService _helloWorldService;
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _application.Initialize(_serviceProvider);
+        public MyProjectNameHostedService(
+            IAbpApplicationWithExternalServiceProvider application,
+            IServiceProvider serviceProvider,
+            HelloWorldService helloWorldService)
+        {
+            _application = application;
+            _serviceProvider = serviceProvider;
+            _helloWorldService = helloWorldService;
+        }
 
-        _helloWorldService.SayHello();
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _application.Initialize(_serviceProvider);
 
-        return Task.CompletedTask;
-    }
+            _helloWorldService.SayHello();
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _application.Shutdown();
+            return Task.CompletedTask;
+        }
 
-        return Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _application.Shutdown();
+
+            return Task.CompletedTask;
+        }
     }
 }

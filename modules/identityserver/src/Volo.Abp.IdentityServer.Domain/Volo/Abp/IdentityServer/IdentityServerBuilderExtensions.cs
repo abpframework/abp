@@ -4,18 +4,19 @@ using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 
-namespace Volo.Abp.IdentityServer;
-
-public static class IdentityServerBuilderExtensions
+namespace Volo.Abp.IdentityServer
 {
-    public static IIdentityServerBuilder AddAbpStores(this IIdentityServerBuilder builder)
+    public static class IdentityServerBuilderExtensions
     {
-        builder.Services.AddTransient<IPersistedGrantStore, PersistedGrantStore>();
-        builder.Services.AddTransient<IDeviceFlowStore, DeviceFlowStore>();
+        public static IIdentityServerBuilder AddAbpStores(this IIdentityServerBuilder builder)
+        {
+            builder.Services.AddTransient<IPersistedGrantStore, PersistedGrantStore>();
+            builder.Services.AddTransient<IDeviceFlowStore, DeviceFlowStore>();
 
-        return builder
-            .AddClientStore<ClientStore>()
-            .AddResourceStore<ResourceStore>()
-            .AddCorsPolicyService<AbpCorsPolicyService>();
+            return builder
+                .AddClientStore<ClientStore>()
+                .AddResourceStore<ResourceStore>()
+                .AddCorsPolicyService<AbpCorsPolicyService>();
+        }
     }
 }

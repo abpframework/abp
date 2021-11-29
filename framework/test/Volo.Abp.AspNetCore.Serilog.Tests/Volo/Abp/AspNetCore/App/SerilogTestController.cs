@@ -3,24 +3,25 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Tracing;
 
-namespace Volo.Abp.AspNetCore.App;
-
-public class SerilogTestController : AbpController
+namespace Volo.Abp.AspNetCore.App
 {
-    private readonly ICorrelationIdProvider _correlationIdProvider;
-
-    public SerilogTestController(ICorrelationIdProvider correlationIdProvider)
+    public class SerilogTestController : AbpController
     {
-        _correlationIdProvider = correlationIdProvider;
-    }
+        private readonly ICorrelationIdProvider _correlationIdProvider;
+        
+        public SerilogTestController(ICorrelationIdProvider correlationIdProvider)
+        {
+            _correlationIdProvider = correlationIdProvider;
+        }
+        
+        public ActionResult Index()
+        {
+            return Content("Index-Result");
+        }
 
-    public ActionResult Index()
-    {
-        return Content("Index-Result");
-    }
-
-    public ActionResult CorrelationId()
-    {
-        return Content(_correlationIdProvider.Get());
+        public ActionResult CorrelationId()
+        {
+            return Content(_correlationIdProvider.Get());
+        }
     }
 }

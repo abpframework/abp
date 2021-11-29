@@ -5,13 +5,14 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.Authorization;
-
-public class TestRequireEditionPermissionSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
+namespace Volo.Abp.Authorization
 {
-    public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
+    public class TestRequireEditionPermissionSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
     {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        return Task.FromResult(currentPrincipalAccessor.Principal?.FindEditionId() != null);
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
+        {
+            var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
+            return Task.FromResult(currentPrincipalAccessor.Principal?.FindEditionId() != null);
+        }
     }
 }

@@ -7,60 +7,61 @@ using System.Runtime.Loader;
 using JetBrains.Annotations;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Modularity.PlugIns;
-
-public class FolderPlugInSource : IPlugInSource
+namespace Volo.Abp.Modularity.PlugIns
 {
-    public string Folder { get; }
-
-    public SearchOption SearchOption { get; set; }
-
-    public Func<string, bool> Filter { get; set; }
-
-    public FolderPlugInSource(
-        [NotNull] string folder,
-        SearchOption searchOption = SearchOption.TopDirectoryOnly)
+    public class FolderPlugInSource : IPlugInSource
     {
-        Check.NotNull(folder, nameof(folder));
+        public string Folder { get; }
 
-        Folder = folder;
-        SearchOption = searchOption;
-    }
+        public SearchOption SearchOption { get; set; }
 
-    public Type[] GetModules()
-    {
-        var modules = new List<Type>();
+        public Func<string, bool> Filter { get; set; }
 
-        foreach (var assembly in GetAssemblies())
+        public FolderPlugInSource(
+            [NotNull] string folder,
+            SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            try
+            Check.NotNull(folder, nameof(folder));
+
+            Folder = folder;
+            SearchOption = searchOption;
+        }
+
+        public Type[] GetModules()
+        {
+            var modules = new List<Type>();
+
+            foreach (var assembly in GetAssemblies())
             {
-                foreach (var type in assembly.GetTypes())
+                try
                 {
-                    if (AbpModule.IsAbpModule(type))
+                    foreach (var type in assembly.GetTypes())
                     {
-                        modules.AddIfNotContains(type);
+                        if (AbpModule.IsAbpModule(type))
+                        {
+                            modules.AddIfNotContains(type);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    throw new AbpException("Could not get module types from assembly: " + assembly.FullName, ex);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new AbpException("Could not get module types from assembly: " + assembly.FullName, ex);
-            }
+
+            return modules.ToArray();
         }
 
-        return modules.ToArray();
-    }
-
-    private List<Assembly> GetAssemblies()
-    {
-        var assemblyFiles = AssemblyHelper.GetAssemblyFiles(Folder, SearchOption);
-
-        if (Filter != null)
+        private List<Assembly> GetAssemblies()
         {
-            assemblyFiles = assemblyFiles.Where(Filter);
-        }
+            var assemblyFiles = AssemblyHelper.GetAssemblyFiles(Folder, SearchOption);
 
-        return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath).ToList();
+            if (Filter != null)
+            {
+                assemblyFiles = assemblyFiles.Where(Filter);
+            }
+
+            return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath).ToList();
+        }
     }
 }

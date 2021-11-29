@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class TenantResolveResult
+namespace Volo.Abp.MultiTenancy
 {
-    public string TenantIdOrName { get; set; }
-
-    public List<string> AppliedResolvers { get; }
-
-    public TenantResolveResult()
+    public class TenantResolveResult
     {
-        AppliedResolvers = new List<string>();
+        public string TenantIdOrName { get; set; }
+
+        public List<string> AppliedResolvers { get; }
+
+        public TenantResolveResult()
+        {
+            AppliedResolvers = new List<string>();
+        }
     }
 }

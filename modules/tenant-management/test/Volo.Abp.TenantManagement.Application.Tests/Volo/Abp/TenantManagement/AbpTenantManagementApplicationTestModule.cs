@@ -2,15 +2,16 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace Volo.Abp.TenantManagement;
-
-[DependsOn(
-    typeof(AbpTenantManagementApplicationModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreTestModule))]
-public class AbpTenantManagementApplicationTestModule : AbpModule
+namespace Volo.Abp.TenantManagement
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpTenantManagementApplicationModule), 
+        typeof(AbpTenantManagementEntityFrameworkCoreTestModule))]
+    public class AbpTenantManagementApplicationTestModule : AbpModule
     {
-        context.Services.AddAlwaysAllowAuthorization();
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddAlwaysAllowAuthorization();
+        }
     }
 }

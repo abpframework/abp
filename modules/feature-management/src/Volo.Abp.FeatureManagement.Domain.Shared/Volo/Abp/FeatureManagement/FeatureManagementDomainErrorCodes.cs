@@ -1,6 +1,9 @@
-﻿namespace Volo.Abp.FeatureManagement;
+﻿using System;
 
-public static class FeatureManagementDomainErrorCodes
+namespace Volo.Abp.FeatureManagement
 {
-    public const string FeatureValueInvalid = "Volo.Abp.FeatureManagement:InvalidFeatureValue";
+    public static class FeatureManagementDomainErrorCodes
+    {
+        public const string FeatureValueInvalid = "Volo.Abp.FeatureManagement:InvalidFeatureValue";
+    }
 }

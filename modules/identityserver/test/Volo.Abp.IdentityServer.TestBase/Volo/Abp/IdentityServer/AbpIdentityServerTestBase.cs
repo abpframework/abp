@@ -4,13 +4,14 @@ using System.Text;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.IdentityServer;
-
-public class AbpIdentityServerTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
-    where TStartupModule : IAbpModule
+namespace Volo.Abp.IdentityServer
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpIdentityServerTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

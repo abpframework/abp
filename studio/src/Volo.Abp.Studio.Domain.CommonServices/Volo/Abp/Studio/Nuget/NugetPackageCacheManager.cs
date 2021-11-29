@@ -5,31 +5,32 @@ using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.Helpers;
 
-namespace Volo.Abp.Studio.Nuget;
-
-public class NugetPackageCacheManager : ITransientDependency
+namespace Volo.Abp.Studio.Nuget
 {
-    private readonly ICmdHelper _cmdHelper;
-
-    public NugetPackageCacheManager(ICmdHelper cmdHelper)
+    public class NugetPackageCacheManager : ITransientDependency
     {
-        _cmdHelper = cmdHelper;
-    }
+        private readonly ICmdHelper _cmdHelper;
 
-    public async Task<string> CachePackageAsync(string packageName, string version, bool deleteAfter = true)
-    {
-        var temporaryFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-        Directory.CreateDirectory(temporaryFolder);
-
-        _cmdHelper.RunCmdAndGetOutput("dotnet new console -lang c#", temporaryFolder);
-        _cmdHelper.RunCmdAndGetOutput($"dotnet add package {packageName} --version {version}", temporaryFolder);
-
-        if (deleteAfter)
+        public NugetPackageCacheManager(ICmdHelper cmdHelper)
         {
-            Directory.Delete(temporaryFolder, true);
+            _cmdHelper = cmdHelper;
         }
 
-        return temporaryFolder;
+        public async Task<string> CachePackageAsync(string packageName, string version, bool deleteAfter = true)
+        {
+            var temporaryFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            Directory.CreateDirectory(temporaryFolder);
+
+            _cmdHelper.RunCmdAndGetOutput("dotnet new console -lang c#", temporaryFolder);
+            _cmdHelper.RunCmdAndGetOutput($"dotnet add package {packageName} --version {version}", temporaryFolder);
+
+            if (deleteAfter)
+            {
+                Directory.Delete(temporaryFolder, true);
+            }
+
+            return temporaryFolder;
+        }
     }
 }

@@ -2,19 +2,20 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.BackgroundJobs.MongoDB;
-
-[DependsOn(
-    typeof(AbpBackgroundJobsDomainModule),
-    typeof(AbpMongoDbModule)
-    )]
-public class AbpBackgroundJobsMongoDbModule : AbpModule
+namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpBackgroundJobsDomainModule),
+        typeof(AbpMongoDbModule)
+        )]
+    public class AbpBackgroundJobsMongoDbModule : AbpModule
     {
-        context.Services.AddMongoDbContext<BackgroundJobsMongoDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddRepository<BackgroundJobRecord, MongoBackgroundJobRepository>();
-        });
+            context.Services.AddMongoDbContext<BackgroundJobsMongoDbContext>(options =>
+            {
+                 options.AddRepository<BackgroundJobRecord, MongoBackgroundJobRepository>();
+            });
+        }
     }
 }

@@ -7,77 +7,78 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundJobs.RabbitMQ;
-
-public class JobQueueManager : IJobQueueManager, ISingletonDependency
+namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
-    protected ConcurrentDictionary<string, IRunnable> JobQueues { get; }
-
-    protected IServiceProvider ServiceProvider { get; }
-
-    protected AbpBackgroundJobOptions Options { get; }
-
-    protected SemaphoreSlim SyncSemaphore { get; }
-
-    public JobQueueManager(
-        IOptions<AbpBackgroundJobOptions> options,
-        IServiceProvider serviceProvider)
+    public class JobQueueManager : IJobQueueManager, ISingletonDependency
     {
-        ServiceProvider = serviceProvider;
-        Options = options.Value;
-        JobQueues = new ConcurrentDictionary<string, IRunnable>();
-        SyncSemaphore = new SemaphoreSlim(1, 1);
-    }
+        protected ConcurrentDictionary<string, IRunnable> JobQueues { get; }
 
-    public async Task StartAsync(CancellationToken cancellationToken = default)
-    {
-        if (!Options.IsJobExecutionEnabled)
+        protected IServiceProvider ServiceProvider { get; }
+
+        protected AbpBackgroundJobOptions Options { get; }
+
+        protected SemaphoreSlim SyncSemaphore { get; }
+
+        public JobQueueManager(
+            IOptions<AbpBackgroundJobOptions> options,
+            IServiceProvider serviceProvider)
         {
-            return;
+            ServiceProvider = serviceProvider;
+            Options = options.Value;
+            JobQueues = new ConcurrentDictionary<string, IRunnable>();
+            SyncSemaphore = new SemaphoreSlim(1, 1);
         }
 
-        foreach (var jobConfiguration in Options.GetJobs())
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
-            await jobQueue.StartAsync(cancellationToken);
-            JobQueues[jobConfiguration.JobName] = jobQueue;
-        }
-    }
+            if (!Options.IsJobExecutionEnabled)
+            {
+                return;
+            }
 
-    public async Task StopAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var jobQueue in JobQueues.Values)
-        {
-            await jobQueue.StopAsync(cancellationToken);
-        }
-
-        JobQueues.Clear();
-    }
-
-    public async Task<IJobQueue<TArgs>> GetAsync<TArgs>()
-    {
-        var jobConfiguration = Options.GetJob(typeof(TArgs));
-
-        if (JobQueues.TryGetValue(jobConfiguration.JobName, out var jobQueue))
-        {
-            return (IJobQueue<TArgs>)jobQueue;
+            foreach (var jobConfiguration in Options.GetJobs())
+            {
+                var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
+                await jobQueue.StartAsync(cancellationToken);
+                JobQueues[jobConfiguration.JobName] = jobQueue;
+            }
         }
 
-        using (await SyncSemaphore.LockAsync())
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
+            foreach (var jobQueue in JobQueues.Values)
+            {
+                await jobQueue.StopAsync(cancellationToken);
+            }
+
+            JobQueues.Clear();
+        }
+
+        public async Task<IJobQueue<TArgs>> GetAsync<TArgs>()
+        {
+            var jobConfiguration = Options.GetJob(typeof(TArgs));
+
+            if (JobQueues.TryGetValue(jobConfiguration.JobName, out var jobQueue))
             {
                 return (IJobQueue<TArgs>)jobQueue;
             }
 
-            jobQueue = (IJobQueue<TArgs>)ServiceProvider
-                .GetRequiredService(typeof(IJobQueue<>).MakeGenericType(typeof(TArgs)));
+            using (await SyncSemaphore.LockAsync())
+            {
+                if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
+                {
+                    return (IJobQueue<TArgs>)jobQueue;
+                }
 
-            await jobQueue.StartAsync();
+                jobQueue = (IJobQueue<TArgs>)ServiceProvider
+                    .GetRequiredService(typeof(IJobQueue<>).MakeGenericType(typeof(TArgs)));
 
-            JobQueues.TryAdd(jobConfiguration.JobName, jobQueue);
+                await jobQueue.StartAsync();
 
-            return (IJobQueue<TArgs>)jobQueue;
+                JobQueues.TryAdd(jobConfiguration.JobName, jobQueue);
+
+                return (IJobQueue<TArgs>)jobQueue;
+            }
         }
     }
 }

@@ -6,78 +6,79 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace SimpleConsoleDemo;
-
-class Program
+namespace SimpleConsoleDemo
 {
-    static void Main(string[] args)
+    class Program
     {
-        using (var application = AbpApplicationFactory.Create<MyConsoleModule>(options =>
+        static void Main(string[] args)
         {
-            options.Configuration.CommandLineArgs = args;
-            options.UseAutofac();
-        }))
-        {
-            Console.WriteLine("Initializing the application...");
-            application.Initialize();
-            Console.WriteLine("Initializing the application... OK");
-
-            Console.WriteLine("Checking configuration...");
-
-            var configuration = application.ServiceProvider.GetRequiredService<IConfiguration>();
-            if (configuration["AppSettingKey1"] != "AppSettingValue1")
+            using (var application = AbpApplicationFactory.Create<MyConsoleModule>(options =>
             {
-                Console.WriteLine("ERROR: Could not read the configuration!");
+                options.Configuration.CommandLineArgs = args;
+                options.UseAutofac();
+            }))
+            {
+                Console.WriteLine("Initializing the application...");
+                application.Initialize();
+                Console.WriteLine("Initializing the application... OK");
+
+                Console.WriteLine("Checking configuration...");
+
+                var configuration = application.ServiceProvider.GetRequiredService<IConfiguration>();
+                if (configuration["AppSettingKey1"] != "AppSettingValue1")
+                {
+                    Console.WriteLine("ERROR: Could not read the configuration!");
+                    Console.WriteLine("Press ENTER to exit!");
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("Checking configuration... OK");
+
+                var writers = application.ServiceProvider.GetServices<IMessageWriter>();
+                foreach (var writer in writers)
+                {
+                    writer.Write();
+                }
+
+                Console.WriteLine();
                 Console.WriteLine("Press ENTER to exit!");
                 Console.ReadLine();
-                return;
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Checking configuration... OK");
-
-            var writers = application.ServiceProvider.GetServices<IMessageWriter>();
-            foreach (var writer in writers)
-            {
-                writer.Write();
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Press ENTER to exit!");
-            Console.ReadLine();
         }
     }
-}
 
-public class MyConsoleModule : AbpModule
-{
-
-}
-
-public interface IMessageWriter
-{
-    void Write();
-}
-
-public class ConsoleMessageWriter : IMessageWriter, ITransientDependency
-{
-    private readonly MessageSource _messageSource;
-
-    public ConsoleMessageWriter(MessageSource messageSource)
+    public class MyConsoleModule : AbpModule
     {
-        _messageSource = messageSource;
+ 
     }
 
-    public void Write()
+    public interface IMessageWriter
     {
-        Console.WriteLine(_messageSource.GetMessage());
+        void Write();
     }
-}
 
-public class MessageSource : ITransientDependency
-{
-    public string GetMessage()
+    public class ConsoleMessageWriter : IMessageWriter, ITransientDependency
     {
-        return "Hello ABP!";
+        private readonly MessageSource _messageSource;
+
+        public ConsoleMessageWriter(MessageSource messageSource)
+        {
+            _messageSource = messageSource;
+        }
+
+        public void Write()
+        {
+            Console.WriteLine(_messageSource.GetMessage());
+        }
+    }
+
+    public class MessageSource : ITransientDependency
+    {
+        public string GetMessage()
+        {
+            return "Hello ABP!";
+        }
     }
 }

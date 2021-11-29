@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.DependencyInjection;
-
-[ExposeServices(typeof(ICachedServiceProvider))]
-public class CachedServiceProvider : ICachedServiceProvider, IScopedDependency
+namespace Volo.Abp.DependencyInjection
 {
-    protected IServiceProvider ServiceProvider { get; }
-
-    protected IDictionary<Type, object> CachedServices { get; }
-
-    public CachedServiceProvider(IServiceProvider serviceProvider)
+    [ExposeServices(typeof(ICachedServiceProvider))]
+    public class CachedServiceProvider : ICachedServiceProvider, IScopedDependency
     {
-        ServiceProvider = serviceProvider;
+        protected IServiceProvider ServiceProvider { get; }
+        
+        protected IDictionary<Type, object> CachedServices { get; }
 
-        CachedServices = new Dictionary<Type, object>
+        public CachedServiceProvider(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+            
+            CachedServices = new Dictionary<Type, object>
             {
                 {typeof(IServiceProvider), serviceProvider}
             };
-    }
-
-    public object GetService(Type serviceType)
-    {
-        return CachedServices.GetOrAdd(
-            serviceType,
-            () => ServiceProvider.GetService(serviceType)
-        );
+        }
+        
+        public object GetService(Type serviceType)
+        {
+            return CachedServices.GetOrAdd(
+                serviceType,
+                () => ServiceProvider.GetService(serviceType)
+            );
+        }
     }
 }

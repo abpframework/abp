@@ -6,47 +6,48 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Configuration;
-
-public class ConfigReader : IConfigReader, ITransientDependency
+namespace Volo.Abp.Cli.Configuration
 {
-    const string appSettingFileName = "appsettings.json";
-
-    public AbpCliConfig Read(string directory)
+    public class ConfigReader : IConfigReader, ITransientDependency
     {
-        var settingsFilePath = Path.Combine(directory, appSettingFileName);
+        const string appSettingFileName = "appsettings.json";
 
-        if (!File.Exists(settingsFilePath))
+        public AbpCliConfig Read(string directory)
         {
-            throw new FileNotFoundException($"appsettings file could not be found. Path:{settingsFilePath}");
-        }
+            var settingsFilePath = Path.Combine(directory, appSettingFileName);
 
-        var settingsFileContent = File.ReadAllText(settingsFilePath);
-
-        var documentOptions = new JsonDocumentOptions
-        {
-            CommentHandling = JsonCommentHandling.Skip
-        };
-
-        using (var document = JsonDocument.Parse(settingsFileContent, documentOptions))
-        {
-            if (document.RootElement.TryGetProperty("AbpCli", out var element))
+            if (!File.Exists(settingsFilePath))
             {
-                var configJson = element.GetRawText();
-                var options = new JsonSerializerOptions
+                throw new FileNotFoundException($"appsettings file could not be found. Path:{settingsFilePath}");
+            }
+
+            var settingsFileContent = File.ReadAllText(settingsFilePath);
+
+            var documentOptions = new JsonDocumentOptions
+            {
+                CommentHandling = JsonCommentHandling.Skip
+            };
+            
+            using (var document = JsonDocument.Parse(settingsFileContent,documentOptions))
+            {
+                if (document.RootElement.TryGetProperty("AbpCli", out var element))
                 {
-                    Converters =
+                    var configJson = element.GetRawText();
+                    var options = new JsonSerializerOptions
+                    {
+                        Converters =
                         {
                             new JsonStringEnumConverter()
                         },
-                    ReadCommentHandling = JsonCommentHandling.Skip
-                };
-
-                return JsonSerializer.Deserialize<AbpCliConfig>(configJson, options);
-            }
-            else
-            {
-                return new AbpCliConfig();
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    };
+                
+                    return JsonSerializer.Deserialize<AbpCliConfig>(configJson, options);
+                }
+                else
+                {
+                    return new AbpCliConfig();
+                }
             }
         }
     }

@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.Uow.MongoDB;
-
-public class MongoDbDatabaseApi : IDatabaseApi
+namespace Volo.Abp.Uow.MongoDB
 {
-    public IAbpMongoDbContext DbContext { get; }
-
-    public MongoDbDatabaseApi(IAbpMongoDbContext dbContext)
+    public class MongoDbDatabaseApi : IDatabaseApi
     {
-        DbContext = dbContext;
+        public IAbpMongoDbContext DbContext { get; }
+
+        public MongoDbDatabaseApi(IAbpMongoDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
     }
 }

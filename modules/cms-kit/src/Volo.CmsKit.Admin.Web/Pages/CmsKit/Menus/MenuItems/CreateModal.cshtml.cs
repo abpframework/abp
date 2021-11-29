@@ -9,62 +9,63 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.CmsKit.Admin.Menus;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
-
-public class CreateModalModel : CmsKitAdminPageModel
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {
-    protected IMenuItemAdminAppService MenuAdminAppService { get; }
-
-    [BindProperty]
-    public MenuItemCreateViewModel ViewModel { get; set; }
-
-    public CreateModalModel(IMenuItemAdminAppService menuAdminAppService)
+    public class CreateModalModel : CmsKitAdminPageModel
     {
-        MenuAdminAppService = menuAdminAppService;
-        ViewModel = new MenuItemCreateViewModel();
-    }
+        protected IMenuItemAdminAppService MenuAdminAppService { get; }
 
-    public virtual Task OnGetAsync(Guid? parentId)
-    {
-        ViewModel.ParentId = parentId;
+        [BindProperty]
+        public MenuItemCreateViewModel ViewModel { get; set; }
 
-        return Task.CompletedTask;
-    }
+        public CreateModalModel(IMenuItemAdminAppService menuAdminAppService)
+        {
+            MenuAdminAppService = menuAdminAppService;
+            ViewModel = new MenuItemCreateViewModel();
+        }
 
-    public virtual async Task<IActionResult> OnPostAsync()
-    {
-        var input = ObjectMapper.Map<MenuItemCreateViewModel, MenuItemCreateInput>(ViewModel);
+        public virtual Task OnGetAsync(Guid? parentId)
+        {
+            ViewModel.ParentId = parentId;
 
-        var dto = await MenuAdminAppService.CreateAsync(input);
+            return Task.CompletedTask;
+        }
 
-        return new OkObjectResult(dto);
-    }
+        public virtual async Task<IActionResult> OnPostAsync()
+        {
+            var input = ObjectMapper.Map<MenuItemCreateViewModel, MenuItemCreateInput>(ViewModel);
 
-    [AutoMap(typeof(MenuItemCreateInput), ReverseMap = true)]
-    public class MenuItemCreateViewModel
-    {
-        [HiddenInput]
-        public Guid? ParentId { get; set; }
+            var dto = await MenuAdminAppService.CreateAsync(input);
 
-        [Required]
-        public string DisplayName { get; set; }
+            return new OkObjectResult(dto);
+        }
 
-        public bool IsActive { get; set; } = true;
+        [AutoMap(typeof(MenuItemCreateInput), ReverseMap = true)]
+        public class MenuItemCreateViewModel
+        {
+            [HiddenInput]
+            public Guid? ParentId { get; set; }
 
-        public string Url { get; set; }
+            [Required]
+            public string DisplayName { get; set; }
 
-        public Guid? PageId { get; set; }
+            public bool IsActive { get; set; } = true;
+            
+            public string Url { get; set; }
+            
+            public Guid? PageId { get; set; }
 
-        public string Icon { get; set; }
+            public string Icon { get; set; }
 
-        [HiddenInput]
-        public int Order { get; set; }
+            [HiddenInput]
+            public int Order { get; set; }
 
-        public string Target { get; set; }
+            public string Target { get; set; }
 
-        public string ElementId { get; set; }
+            public string ElementId { get; set; }
 
-        public string CssClass { get; set; }
+            public string CssClass { get; set; }
 
+        }
     }
 }

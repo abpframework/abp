@@ -4,41 +4,42 @@ using Volo.Abp.MongoDB.TestApp.FourthContext;
 using Volo.Abp.MongoDB.TestApp.ThirdDbContext;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.MongoDB.TestApp.SecondContext;
-
-[DependsOn(typeof(AbpMongoDbModule))]
-public class AbpMongoDbTestSecondContextModule : AbpModule
+namespace Volo.Abp.MongoDB.TestApp.SecondContext
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(typeof(AbpMongoDbModule))]
+    public class AbpMongoDbTestSecondContextModule : AbpModule
     {
-        context.Services.AddMongoDbContext<SecondDbContext>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.AddDefaultRepositories();
-        });
+            context.Services.AddMongoDbContext<SecondDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
+            });
 
-        context.Services.AddMongoDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            context.Services.AddMongoDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IThirdDbContext>();
+            });
+
+            context.Services.AddMongoDbContext<FourthDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IFourthDbContext>();
+            });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            options.AddDefaultRepositories<IThirdDbContext>();
-        });
+            SeedTestData(context);
+        }
 
-        context.Services.AddMongoDbContext<FourthDbContext>(options =>
+        private static void SeedTestData(ApplicationInitializationContext context)
         {
-            options.AddDefaultRepositories<IFourthDbContext>();
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        SeedTestData(context);
-    }
-
-    private static void SeedTestData(ApplicationInitializationContext context)
-    {
-        using (var scope = context.ServiceProvider.CreateScope())
-        {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<SecondContextTestDataBuilder>()
-                .BuildAsync());
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<SecondContextTestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

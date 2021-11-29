@@ -1,40 +1,41 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 
-namespace Volo.Abp.Identity;
-
-public class IdentityClaimTypeManager : DomainService
+namespace Volo.Abp.Identity
 {
-    protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
-
-    public IdentityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository)
+    public class IdentityClaimTypeManager : DomainService
     {
-        IdentityClaimTypeRepository = identityClaimTypeRepository;
-    }
+        protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
 
-    public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
-    {
-        if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name))
+        public IdentityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository)
         {
-            throw new AbpException($"Name Exist: {claimType.Name}");
+            IdentityClaimTypeRepository = identityClaimTypeRepository;
         }
 
-        return await IdentityClaimTypeRepository.InsertAsync(claimType);
-    }
-
-    public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
-    {
-        if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
+        public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
         {
-            throw new AbpException($"Name Exist: {claimType.Name}");
+            if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name))
+            {
+                throw new AbpException($"Name Exist: {claimType.Name}");
+            }
+
+            return await IdentityClaimTypeRepository.InsertAsync(claimType);
         }
 
-        if (claimType.IsStatic)
+        public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
         {
-            throw new AbpException($"Can not update a static ClaimType.");
+            if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
+            {
+                throw new AbpException($"Name Exist: {claimType.Name}");
+            }
+
+            if (claimType.IsStatic)
+            {
+                throw new AbpException($"Can not update a static ClaimType.");
+            }
+            
+
+            return await IdentityClaimTypeRepository.UpdateAsync(claimType);
         }
-
-
-        return await IdentityClaimTypeRepository.UpdateAsync(claimType);
     }
 }

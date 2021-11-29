@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Timing;
-
-public static class TimingSettingNames
+﻿namespace Volo.Abp.Timing
 {
-    public const string TimeZone = "Abp.Timing.TimeZone";
+    public static class TimingSettingNames
+    {
+        public const string TimeZone = "Abp.Timing.TimeZone";
+    }
 }

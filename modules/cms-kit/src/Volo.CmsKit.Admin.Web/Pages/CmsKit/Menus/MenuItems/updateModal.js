@@ -34,7 +34,6 @@ $(function () {
                 $pageId.data('autocompleteValueProperty', 'id');
                 $pageId.data('autocompleteItemsProperty', 'items');
                 $pageId.data('autocompleteFilterParamName', 'filter');
-                $pageId.data('autocompleteParentSelector', '#menu-update-modal');
 
                 abp.dom.initializers.initializeAutocompleteSelects($pageId);
             }

@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.MultiTenancy;
-
-public class AbpTenantResolveOptions
+namespace Volo.Abp.MultiTenancy
 {
-    [NotNull]
-    public List<ITenantResolveContributor> TenantResolvers { get; }
-
-    public AbpTenantResolveOptions()
+    public class AbpTenantResolveOptions
     {
-        TenantResolvers = new List<ITenantResolveContributor>
+        [NotNull]
+        public List<ITenantResolveContributor> TenantResolvers { get; }
+
+        public AbpTenantResolveOptions()
+        {
+            TenantResolvers = new List<ITenantResolveContributor>
             {
                 new CurrentUserTenantResolveContributor()
             };
+        }
     }
 }

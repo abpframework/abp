@@ -6,94 +6,96 @@ using Volo.Abp.Threading;
 using Volo.ClientSimulation.Scenarios;
 using Volo.ClientSimulation.Snapshot;
 
-namespace Volo.ClientSimulation.Clients;
-
-public class Client : IClient, ITransientDependency
+namespace Volo.ClientSimulation.Clients
 {
-    public event EventHandler Stopped;
-
-    public ClientState State {
-        get => _state;
-        private set => _state = value;
-    }
-    private volatile ClientState _state;
-
-    protected Scenario Scenario { get; private set; }
-    protected object SyncLock { get; } = new object();
-
-    protected Thread ClientThread;
-
-    public void Initialize(Scenario scenario)
+    public class Client : IClient, ITransientDependency
     {
-        lock (SyncLock)
+        public event EventHandler Stopped;
+
+        public ClientState State
         {
-            if (State != ClientState.Stopped)
+            get => _state;
+            private set => _state = value;
+        }
+        private volatile ClientState _state;
+
+        protected Scenario Scenario { get; private set; }
+        protected object SyncLock { get; } = new object();
+
+        protected Thread ClientThread;
+
+        public void Initialize(Scenario scenario)
+        {
+            lock (SyncLock)
             {
-                throw new UserFriendlyException($"Client should be stopped to be able to initialize it. Current state is '{State}'.");
+                if (State != ClientState.Stopped)
+                {
+                    throw new UserFriendlyException($"Client should be stopped to be able to initialize it. Current state is '{State}'.");
+                }
+
+                Scenario = scenario;
             }
-
-            Scenario = scenario;
         }
-    }
 
-    public void Start()
-    {
-        lock (SyncLock)
+        public void Start()
         {
-            if (State != ClientState.Stopped)
+            lock (SyncLock)
             {
-                throw new UserFriendlyException($"Client should be stopped to be able to start it. Current state is '{State}'.");
+                if (State != ClientState.Stopped)
+                {
+                    throw new UserFriendlyException($"Client should be stopped to be able to start it. Current state is '{State}'.");
+                }
+
+                State = ClientState.Running;
+
+                Scenario.Reset();
+                ClientThread = new Thread(Run);
+                ClientThread.Start();
             }
-
-            State = ClientState.Running;
-
-            Scenario.Reset();
-            ClientThread = new Thread(Run);
-            ClientThread.Start();
         }
-    }
 
-    public void Stop()
-    {
-        lock (SyncLock)
-        {
-            if (State != ClientState.Running)
-            {
-                return;
-            }
-
-            State = ClientState.Stopping;
-        }
-    }
-
-    public ClientSnapshot CreateSnapshot()
-    {
-        lock (SyncLock)
-        {
-            return new ClientSnapshot
-            {
-                State = State,
-                Scenario = Scenario.CreateSnapshot()
-            };
-        }
-    }
-
-    private void Run()
-    {
-        while (true)
+        public void Stop()
         {
             lock (SyncLock)
             {
                 if (State != ClientState.Running)
                 {
-                    State = ClientState.Stopped;
-                    ClientThread = null;
-                    Stopped.InvokeSafely(this);
-                    break;
+                    return;
                 }
-            }
 
-            AsyncHelper.RunSync(() => Scenario.ProceedAsync());
+                State = ClientState.Stopping;
+            }
+        }
+
+        public ClientSnapshot CreateSnapshot()
+        {
+            lock (SyncLock)
+            {
+                return new ClientSnapshot
+                {
+                    State = State,
+                    Scenario = Scenario.CreateSnapshot()
+                };
+            }
+        }
+
+        private void Run()
+        {
+            while (true)
+            {
+                lock (SyncLock)
+                {
+                    if (State != ClientState.Running)
+                    {
+                        State = ClientState.Stopped;
+                        ClientThread = null;
+                        Stopped.InvokeSafely(this);
+                        break;
+                    }
+                }
+
+                AsyncHelper.RunSync(() => Scenario.ProceedAsync());
+            }
         }
     }
 }

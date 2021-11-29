@@ -5,133 +5,134 @@ using Xunit;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.Abp.Identity;
-
-public class IdentityRoleAppService_Tests : AbpIdentityApplicationTestBase
+namespace Volo.Abp.Identity
 {
-    private readonly IIdentityRoleAppService _roleAppService;
-    private readonly IIdentityRoleRepository _roleRepository;
-
-    public IdentityRoleAppService_Tests()
+    public class IdentityRoleAppService_Tests : AbpIdentityApplicationTestBase
     {
-        _roleAppService = GetRequiredService<IIdentityRoleAppService>();
-        _roleRepository = GetRequiredService<IIdentityRoleRepository>();
-    }
+        private readonly IIdentityRoleAppService _roleAppService;
+        private readonly IIdentityRoleRepository _roleRepository;
 
-    [Fact]
-    public async Task GetAsync()
-    {
-        //Arrange
-
-        var moderator = await GetRoleAsync("moderator");
-
-        //Act
-
-        var result = await _roleAppService.GetAsync(moderator.Id);
-
-        //Assert
-
-        result.Id.ShouldBe(moderator.Id);
-    }
-
-    [Fact]
-    public async Task GetAllListAsync()
-    {
-        //Act
-
-        var result = await _roleAppService.GetAllListAsync();
-
-        //Assert
-
-        result.Items.Count.ShouldBeGreaterThan(0);
-    }
-
-    [Fact]
-    public async Task GetListAsync()
-    {
-        //Act
-
-        var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
-
-        //Assert
-
-        result.Items.Count.ShouldBeGreaterThan(0);
-    }
-
-    [Fact]
-    public async Task CreateAsync()
-    {
-        //Arrange
-
-        var input = new IdentityRoleCreateDto
+        public IdentityRoleAppService_Tests()
         {
-            Name = Guid.NewGuid().ToString("N").Left(8)
-        };
+            _roleAppService = GetRequiredService<IIdentityRoleAppService>();
+            _roleRepository = GetRequiredService<IIdentityRoleRepository>();
+        }
 
-        //Act
-
-        var result = await _roleAppService.CreateAsync(input);
-
-        //Assert
-
-        result.Id.ShouldNotBe(Guid.Empty);
-        result.Name.ShouldBe(input.Name);
-
-        var role = await _roleRepository.GetAsync(result.Id);
-        role.Name.ShouldBe(input.Name);
-    }
-
-    [Fact]
-    public async Task UpdateAsync()
-    {
-        //Arrange
-
-        var moderator = await GetRoleAsync("moderator");
-
-        var input = new IdentityRoleUpdateDto
+        [Fact]
+        public async Task GetAsync()
         {
-            Name = Guid.NewGuid().ToString("N").Left(8),
-            ConcurrencyStamp = moderator.ConcurrencyStamp,
-            IsDefault = moderator.IsDefault,
-            IsPublic = moderator.IsPublic
-        };
+            //Arrange
 
-        //Act
+            var moderator = await GetRoleAsync("moderator");
 
-        var result = await _roleAppService.UpdateAsync(moderator.Id, input);
+            //Act
 
-        //Assert
+            var result = await _roleAppService.GetAsync(moderator.Id);
 
-        result.Id.ShouldBe(moderator.Id);
-        result.Name.ShouldBe(input.Name);
+            //Assert
 
-        var updatedRole = await _roleRepository.GetAsync(moderator.Id);
-        updatedRole.Name.ShouldBe(input.Name);
-    }
+            result.Id.ShouldBe(moderator.Id);
+        }
 
-    [Fact]
-    public async Task DeleteAsync()
-    {
-        //Arrange
+        [Fact]
+        public async Task GetAllListAsync()
+        {
+            //Act
 
-        var moderator = await GetRoleAsync("moderator");
+            var result = await _roleAppService.GetAllListAsync();
 
-        //Act
+            //Assert
 
-        await _roleAppService.DeleteAsync(moderator.Id);
+            result.Items.Count.ShouldBeGreaterThan(0);
+        }
 
-        //Assert
+        [Fact]
+        public async Task GetListAsync()
+        {
+            //Act
 
-        (await FindRoleAsync("moderator")).ShouldBeNull();
-    }
+            var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
 
-    private async Task<IdentityRole> GetRoleAsync(string roleName)
-    {
-        return (await _roleRepository.GetListAsync()).First(u => u.Name == roleName);
-    }
+            //Assert
 
-    private async Task<IdentityRole> FindRoleAsync(string roleName)
-    {
-        return (await _roleRepository.GetListAsync()).FirstOrDefault(u => u.Name == roleName);
+            result.Items.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task CreateAsync()
+        {
+            //Arrange
+
+            var input = new IdentityRoleCreateDto
+            {
+                Name = Guid.NewGuid().ToString("N").Left(8)
+            };
+
+            //Act
+
+            var result = await _roleAppService.CreateAsync(input);
+
+            //Assert
+
+            result.Id.ShouldNotBe(Guid.Empty);
+            result.Name.ShouldBe(input.Name);
+
+            var role = await _roleRepository.GetAsync(result.Id);
+            role.Name.ShouldBe(input.Name);
+        }
+
+        [Fact]
+        public async Task UpdateAsync()
+        {
+            //Arrange
+
+            var moderator = await GetRoleAsync("moderator");
+
+            var input = new IdentityRoleUpdateDto
+            {
+                Name = Guid.NewGuid().ToString("N").Left(8),
+                ConcurrencyStamp = moderator.ConcurrencyStamp,
+                IsDefault = moderator.IsDefault,
+                IsPublic = moderator.IsPublic
+            };
+
+            //Act
+
+            var result = await _roleAppService.UpdateAsync(moderator.Id, input);
+
+            //Assert
+
+            result.Id.ShouldBe(moderator.Id);
+            result.Name.ShouldBe(input.Name);
+
+            var updatedRole = await _roleRepository.GetAsync(moderator.Id);
+            updatedRole.Name.ShouldBe(input.Name);
+        }
+
+        [Fact]
+        public async Task DeleteAsync()
+        {
+            //Arrange
+
+            var moderator = await GetRoleAsync("moderator");
+
+            //Act
+
+            await _roleAppService.DeleteAsync(moderator.Id);
+
+            //Assert
+
+            (await FindRoleAsync("moderator")).ShouldBeNull();
+        }
+
+        private async Task<IdentityRole> GetRoleAsync(string roleName)
+        {
+            return (await _roleRepository.GetListAsync()).First(u => u.Name == roleName);
+        }
+
+        private async Task<IdentityRole> FindRoleAsync(string roleName)
+        {
+            return (await _roleRepository.GetListAsync()).FirstOrDefault(u => u.Name == roleName);
+        }
     }
 }

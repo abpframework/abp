@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Data;
-
-public static class DataSeederExtensions
+namespace Volo.Abp.Data
 {
-    public static Task SeedAsync(this IDataSeeder seeder, Guid? tenantId = null)
+    public static class DataSeederExtensions
     {
-        return seeder.SeedAsync(new DataSeedContext(tenantId));
+        public static Task SeedAsync(this IDataSeeder seeder, Guid? tenantId = null)
+        {
+            return seeder.SeedAsync(new DataSeedContext(tenantId));
+        }
     }
 }

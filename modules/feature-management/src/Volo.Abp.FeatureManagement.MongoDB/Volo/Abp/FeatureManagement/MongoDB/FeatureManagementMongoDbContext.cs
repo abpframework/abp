@@ -3,18 +3,19 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.FeatureManagement.MongoDB;
-
-[IgnoreMultiTenancy]
-[ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
-public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    public IMongoCollection<FeatureValue> FeatureValues => Collection<FeatureValue>();
-
-    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    [IgnoreMultiTenancy]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
+    public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext
     {
-        base.CreateModel(modelBuilder);
+        public IMongoCollection<FeatureValue> FeatureValues => Collection<FeatureValue>();
 
-        modelBuilder.ConfigureFeatureManagement();
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureFeatureManagement();
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table;
-
-public enum AbpTableHeaderTheme
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 {
-    Default,
-    Light,
-    Dark
+    public enum AbpTableHeaderTheme
+    {
+        Default,
+        Light,
+        Dark
+    }
 }

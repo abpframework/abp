@@ -2,16 +2,17 @@
 using System.IO;
 using System.Text.Encodings.Web;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
-
-public static class TagHelperOutputExtensions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 {
-    public static string Render(this TagHelperOutput output, HtmlEncoder htmlEncoder)
+    public static class TagHelperOutputExtensions
     {
-        using (var writer = new StringWriter())
+        public static string Render(this TagHelperOutput output, HtmlEncoder htmlEncoder)
         {
-            output.WriteTo(writer, htmlEncoder);
-            return writer.ToString();
+            using (var writer = new StringWriter())
+            {
+                output.WriteTo(writer, htmlEncoder);
+                return writer.ToString();
+            }
         }
     }
 }

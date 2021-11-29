@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.ObjectMapping;
-
-public class Test2AutoObjectMappingProvider<TContext> : IAutoObjectMappingProvider<TContext>
+﻿namespace Volo.Abp.ObjectMapping
 {
-    public TDestination Map<TSource, TDestination>(object source)
+    public class Test2AutoObjectMappingProvider<TContext> : IAutoObjectMappingProvider<TContext>
     {
-        return default;
-    }
+        public TDestination Map<TSource, TDestination>(object source)
+        {
+            return default;
+        }
 
-    public TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
-    {
-        return default;
+        public TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
+        {
+            return default;
+        }
     }
 }

@@ -2,32 +2,33 @@
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 
-namespace Volo.CmsKit;
-
-public class FakeBlobProvider : IBlobProvider
+namespace Volo.CmsKit
 {
-    public virtual Task SaveAsync(BlobProviderSaveArgs args)
+    public class FakeBlobProvider : IBlobProvider
     {
-        throw new System.NotImplementedException();
-    }
+        public virtual Task SaveAsync(BlobProviderSaveArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public virtual Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
-    {
-        throw new System.NotImplementedException();
-    }
+        public virtual Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public virtual Task<bool> ExistsAsync(BlobProviderExistsArgs args)
-    {
-        throw new System.NotImplementedException();
-    }
+        public virtual Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public virtual Task<Stream> GetAsync(BlobProviderGetArgs args)
-    {
-        throw new System.NotImplementedException();
-    }
+        public virtual Task<Stream> GetAsync(BlobProviderGetArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public virtual Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
-    {
-        throw new System.NotImplementedException();
+        public virtual Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

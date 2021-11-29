@@ -1,14 +1,15 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
-
-public class LayoutHookViewModel
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 {
-    public LayoutHookInfo[] Hooks { get; }
-
-    public string Layout { get; }
-
-    public LayoutHookViewModel(LayoutHookInfo[] hooks, string layout)
+    public class LayoutHookViewModel
     {
-        Hooks = hooks;
-        Layout = layout;
+        public LayoutHookInfo[] Hooks { get; }
+
+        public string Layout { get; }
+
+        public LayoutHookViewModel(LayoutHookInfo[] hooks, string layout)
+        {
+            Hooks = hooks;
+            Layout = layout;
+        }
     }
 }

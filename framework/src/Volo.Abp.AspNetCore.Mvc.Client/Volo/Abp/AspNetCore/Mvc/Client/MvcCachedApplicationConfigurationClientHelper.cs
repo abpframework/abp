@@ -1,13 +1,14 @@
 ﻿using System.Globalization;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client;
-
-internal static class MvcCachedApplicationConfigurationClientHelper
+namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public static string CreateCacheKey(ICurrentUser currentUser)
+    internal static class MvcCachedApplicationConfigurationClientHelper
     {
-        var userKey = currentUser.Id?.ToString("N") ?? "Anonymous";
-        return $"ApplicationConfiguration_{userKey}_{CultureInfo.CurrentUICulture.Name}";
+        public static string CreateCacheKey(ICurrentUser currentUser)
+        {
+            var userKey = currentUser.Id?.ToString("N") ?? "Anonymous";
+            return $"ApplicationConfiguration_{userKey}_{CultureInfo.CurrentUICulture.Name}";
+        }
     }
 }

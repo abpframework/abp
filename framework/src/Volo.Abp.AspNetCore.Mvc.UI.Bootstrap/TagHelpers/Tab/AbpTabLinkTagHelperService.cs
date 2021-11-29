@@ -4,62 +4,63 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
-
-public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelper>
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
-    public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelper>
     {
-        SetPlaceholderForNameIfNotProvided();
-
-        var tabHeader = GetTabHeaderItem(context, output);
-
-        var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
-
-        tabHeaderItems.Add(new TabItem(tabHeader, "", false, TagHelper.Name, TagHelper.ParentDropdownName, false));
-
-        output.SuppressOutput();
-
-        return Task.CompletedTask;
-    }
-
-    protected virtual string GetTabHeaderItem(TagHelperContext context, TagHelperOutput output)
-    {
-        var id = TagHelper.Name + "-tab";
-        var href = TagHelper.Href;
-        var title = TagHelper.Title;
-
-        if (!string.IsNullOrWhiteSpace(TagHelper.ParentDropdownName))
+        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var anchor = new TagBuilder("a");
-            anchor.AddCssClass("dropdown-item");
-            anchor.Attributes.Add("id", id);
-            anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            SetPlaceholderForNameIfNotProvided();
 
-            return anchor.ToHtmlString();
+            var tabHeader = GetTabHeaderItem(context, output);
+
+            var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
+
+            tabHeaderItems.Add(new TabItem(tabHeader, "", false, TagHelper.Name, TagHelper.ParentDropdownName, false));
+
+            output.SuppressOutput();
+
+            return Task.CompletedTask;
         }
-        else
+
+        protected virtual string GetTabHeaderItem(TagHelperContext context, TagHelperOutput output)
         {
-            var anchor = new TagBuilder("a");
-            anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
-            anchor.Attributes.Add("id", id);
-            anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            var id = TagHelper.Name + "-tab";
+            var href = TagHelper.Href;
+            var title = TagHelper.Title;
 
-            var listItem = new TagBuilder("li");
-            listItem.AddCssClass("nav-item");
-            listItem.InnerHtml.AppendHtml(anchor);
+            if (!string.IsNullOrWhiteSpace(TagHelper.ParentDropdownName))
+            {
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("dropdown-item");
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("href", href);
+                anchor.InnerHtml.AppendHtml(title);
 
-            return listItem.ToHtmlString();
+                return anchor.ToHtmlString();
+            }
+            else
+            {
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("href", href);
+                anchor.InnerHtml.AppendHtml(title);
+
+                var listItem = new TagBuilder("li");
+                listItem.AddCssClass("nav-item");
+                listItem.InnerHtml.AppendHtml(anchor);
+
+                return listItem.ToHtmlString();
+            }
         }
-    }
 
-    protected virtual void SetPlaceholderForNameIfNotProvided()
-    {
-        if (string.IsNullOrWhiteSpace(TagHelper.Name))
+        protected virtual void SetPlaceholderForNameIfNotProvided()
         {
-            TagHelper.Name = TabItemNamePlaceHolder;
+            if (string.IsNullOrWhiteSpace(TagHelper.Name))
+            {
+                TagHelper.Name = TabItemNamePlaceHolder;
+            }
         }
     }
 }

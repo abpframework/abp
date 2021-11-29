@@ -1,8 +1,9 @@
 using System;
 
-namespace Volo.Abp.DependencyInjection;
-
-public interface IServiceProviderAccessor
+namespace Volo.Abp.DependencyInjection
 {
-    IServiceProvider ServiceProvider { get; }
+    public interface IServiceProviderAccessor
+    {
+        IServiceProvider ServiceProvider { get; }
+    }
 }

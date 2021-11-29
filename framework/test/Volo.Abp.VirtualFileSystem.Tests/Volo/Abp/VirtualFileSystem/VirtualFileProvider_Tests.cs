@@ -7,90 +7,91 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.VirtualFileSystem;
-
-public class VirtualFileProvider_Tests : AbpIntegratedTest<VirtualFileProvider_Tests.TestModule>
+namespace Volo.Abp.VirtualFileSystem
 {
-    private readonly IVirtualFileProvider _virtualFileProvider;
-
-    public VirtualFileProvider_Tests()
+    public class VirtualFileProvider_Tests : AbpIntegratedTest<VirtualFileProvider_Tests.TestModule>
     {
-        _virtualFileProvider = ServiceProvider.GetRequiredService<IVirtualFileProvider>();
-    }
+        private readonly IVirtualFileProvider _virtualFileProvider;
 
-    [Fact]
-    public void Should_Define_And_Get_Embedded_Resources()
-    {
-        //Act
-        var resource = _virtualFileProvider.GetFileInfo("/js/jquery-3-1-1-min.js");
-
-        //Assert
-        resource.ShouldNotBeNull();
-        resource.Exists.ShouldBeTrue();
-
-        using (var stream = resource.CreateReadStream())
+        public VirtualFileProvider_Tests()
         {
-            Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//jquery-3-1-1-min.js-contents");
+            _virtualFileProvider = ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
-    }
 
-    [Fact]
-    public void Should_Define_And_Get_Embedded_Resources_With_Special_Chars()
-    {
-        //Act
-        var resource = _virtualFileProvider.GetFileInfo("/js/my{test}.2.9.min.js");
-
-        //Assert
-        resource.ShouldNotBeNull();
-        resource.Exists.ShouldBeTrue();
-
-        using (var stream = resource.CreateReadStream())
+        [Fact]
+        public void Should_Define_And_Get_Embedded_Resources()
         {
-            Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//my{test}.2.9.min.js-content");
-        }
-    }
+            //Act
+            var resource = _virtualFileProvider.GetFileInfo("/js/jquery-3-1-1-min.js");
 
-    [Fact]
-    public void Should_Define_And_Get_Embedded_Directory_Contents()
-    {
-        //Act
-        var contents = _virtualFileProvider.GetDirectoryContents("/js");
+            //Assert
+            resource.ShouldNotBeNull();
+            resource.Exists.ShouldBeTrue();
 
-        //Assert
-        contents.Exists.ShouldBeTrue();
-
-        var contentList = contents.ToList();
-
-        contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
-        contentList.ShouldContain(x => x.Name == "my{test}.2.9.min.js");
-    }
-
-    [Theory]
-    [InlineData("/")]
-    [InlineData("")]
-    public void Should_Define_And_Get_Embedded_Root_Directory_Contents(string path)
-    {
-        //Act
-        var contents = _virtualFileProvider.GetDirectoryContents(path);
-
-        //Assert
-        contents.Exists.ShouldBeTrue();
-
-        var contentList = contents.ToList();
-        contentList.ShouldContain(x => x.Name == "js");
-    }
-
-    [DependsOn(typeof(AbpVirtualFileSystemModule))]
-    public class TestModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpVirtualFileSystemOptions>(options =>
+            using (var stream = resource.CreateReadStream())
             {
-                options.FileSets.AddEmbedded<TestModule>(
-                    baseFolder: "/Volo/Abp/VirtualFileSystem/MyResources"
-                );
-            });
+                Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//jquery-3-1-1-min.js-contents");
+            }
+        }
+
+        [Fact]
+        public void Should_Define_And_Get_Embedded_Resources_With_Special_Chars()
+        {
+            //Act
+            var resource = _virtualFileProvider.GetFileInfo("/js/my{test}.2.9.min.js");
+
+            //Assert
+            resource.ShouldNotBeNull();
+            resource.Exists.ShouldBeTrue();
+
+            using (var stream = resource.CreateReadStream())
+            {
+                Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//my{test}.2.9.min.js-content");
+            }
+        }
+
+        [Fact]
+        public void Should_Define_And_Get_Embedded_Directory_Contents()
+        {
+            //Act
+            var contents = _virtualFileProvider.GetDirectoryContents("/js");
+
+            //Assert
+            contents.Exists.ShouldBeTrue();
+
+            var contentList = contents.ToList();
+
+            contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
+            contentList.ShouldContain(x => x.Name == "my{test}.2.9.min.js");
+        }
+
+        [Theory]
+        [InlineData("/")]
+        [InlineData("")]
+        public void Should_Define_And_Get_Embedded_Root_Directory_Contents(string path)
+        {
+            //Act
+            var contents = _virtualFileProvider.GetDirectoryContents(path);
+
+            //Assert
+            contents.Exists.ShouldBeTrue();
+
+            var contentList = contents.ToList();
+            contentList.ShouldContain(x => x.Name == "js");
+        }
+
+        [DependsOn(typeof(AbpVirtualFileSystemModule))]
+        public class TestModule : AbpModule
+        {
+            public override void ConfigureServices(ServiceConfigurationContext context)
+            {
+                Configure<AbpVirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.AddEmbedded<TestModule>(
+                        baseFolder: "/Volo/Abp/VirtualFileSystem/MyResources"
+                    );
+                });
+            }
         }
     }
 }

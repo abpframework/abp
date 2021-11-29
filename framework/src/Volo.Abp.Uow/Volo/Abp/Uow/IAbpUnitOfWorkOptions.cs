@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Data;
 
-namespace Volo.Abp.Uow;
-
-public interface IAbpUnitOfWorkOptions
+namespace Volo.Abp.Uow
 {
-    bool IsTransactional { get; }
+    public interface IAbpUnitOfWorkOptions
+    {
+        bool IsTransactional { get; }
 
-    IsolationLevel? IsolationLevel { get; }
+        IsolationLevel? IsolationLevel { get; }
 
-    /// <summary>
-    /// Milliseconds
-    /// </summary>
-    int? Timeout { get; }
+        /// <summary>
+        /// Milliseconds
+        /// </summary>
+        int? Timeout { get; }
+    }
 }

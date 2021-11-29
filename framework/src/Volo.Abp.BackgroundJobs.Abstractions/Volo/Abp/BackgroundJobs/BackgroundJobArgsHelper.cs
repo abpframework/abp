@@ -1,35 +1,36 @@
 using System;
 
-namespace Volo.Abp.BackgroundJobs;
-
-public static class BackgroundJobArgsHelper
+namespace Volo.Abp.BackgroundJobs
 {
-    public static Type GetJobArgsType(Type jobType)
+    public static class BackgroundJobArgsHelper
     {
-        foreach (var @interface in jobType.GetInterfaces())
+        public static Type GetJobArgsType(Type jobType)
         {
-            if (!@interface.IsGenericType)
+            foreach (var @interface in jobType.GetInterfaces())
             {
-                continue;
+                if (!@interface.IsGenericType)
+                {
+                    continue;
+                }
+
+                if (@interface.GetGenericTypeDefinition() != typeof(IBackgroundJob<>) &&
+                    @interface.GetGenericTypeDefinition() != typeof(IAsyncBackgroundJob<>))
+                {
+                    continue;
+                }
+
+                var genericArgs = @interface.GetGenericArguments();
+                if (genericArgs.Length != 1)
+                {
+                    continue;
+                }
+
+                return genericArgs[0];
             }
 
-            if (@interface.GetGenericTypeDefinition() != typeof(IBackgroundJob<>) &&
-                @interface.GetGenericTypeDefinition() != typeof(IAsyncBackgroundJob<>))
-            {
-                continue;
-            }
-
-            var genericArgs = @interface.GetGenericArguments();
-            if (genericArgs.Length != 1)
-            {
-                continue;
-            }
-
-            return genericArgs[0];
+            throw new AbpException($"Could not find type of the job args. " +
+                                   $"Ensure that given type implements the {typeof(IBackgroundJob<>).AssemblyQualifiedName} or {typeof(IAsyncBackgroundJob<>).AssemblyQualifiedName} interface. " +
+                                   $"Given job type: {jobType.AssemblyQualifiedName}");
         }
-
-        throw new AbpException($"Could not find type of the job args. " +
-                               $"Ensure that given type implements the {typeof(IBackgroundJob<>).AssemblyQualifiedName} or {typeof(IAsyncBackgroundJob<>).AssemblyQualifiedName} interface. " +
-                               $"Given job type: {jobType.AssemblyQualifiedName}");
     }
 }

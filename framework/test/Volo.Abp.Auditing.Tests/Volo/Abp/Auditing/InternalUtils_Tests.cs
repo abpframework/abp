@@ -1,15 +1,16 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Auditing;
-
-public static class InternalUtils_Tests
+namespace Volo.Abp.Auditing
 {
-    [Fact]
-    public static void AddCounter()
+    public static class InternalUtils_Tests
     {
-        InternalUtils.AddCounter("test").ShouldBe("test__2");
-        InternalUtils.AddCounter("test__2").ShouldBe("test__3");
-        InternalUtils.AddCounter("test__a").ShouldBe("test__a__2");
+        [Fact]
+        public static void AddCounter()
+        {
+            InternalUtils.AddCounter("test").ShouldBe("test__2");
+            InternalUtils.AddCounter("test__2").ShouldBe("test__3");
+            InternalUtils.AddCounter("test__a").ShouldBe("test__a__2");
+        }
     }
 }

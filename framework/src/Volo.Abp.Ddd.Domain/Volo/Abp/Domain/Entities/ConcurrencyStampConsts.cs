@@ -1,6 +1,7 @@
-﻿namespace Volo.Abp.Domain.Entities;
-
-public static class ConcurrencyStampConsts
+﻿namespace Volo.Abp.Domain.Entities
 {
-    public const int MaxLength = 40;
+    public static class ConcurrencyStampConsts
+    {
+        public const int MaxLength = 40;
+    }
 }

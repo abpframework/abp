@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.UI.Navigation;
-
-public interface IMenuConfigurationContext : IServiceProviderAccessor
+namespace Volo.Abp.UI.Navigation
 {
-    ApplicationMenu Menu { get; }
+    public interface IMenuConfigurationContext : IServiceProviderAccessor
+    {
+        ApplicationMenu Menu { get; }
 
-    IAuthorizationService AuthorizationService { get; }
+        IAuthorizationService AuthorizationService { get; }
 
-    IStringLocalizerFactory StringLocalizerFactory { get; }
+        IStringLocalizerFactory StringLocalizerFactory { get; }
+    }
 }

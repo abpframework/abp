@@ -1,19 +1,20 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
-
-public static class AbpCardImagePositionExtensions
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public static string ToClassName(this AbpCardImagePosition position)
+    public static class AbpCardImagePositionExtensions
     {
-        switch (position)
+        public static string ToClassName(this AbpCardImagePosition position)
         {
-            case AbpCardImagePosition.None:
-                return "card-img";
-            case AbpCardImagePosition.Top:
-                return "card-img-top";
-            case AbpCardImagePosition.Bottom:
-                return "card-img-bottom";
-            default:
-                throw new AbpException("Unknown AbpCardImagePosition: " + position);
+            switch (position)
+            {
+                case AbpCardImagePosition.None:
+                    return "card-img";
+                case AbpCardImagePosition.Top:
+                    return "card-img-top";
+                case AbpCardImagePosition.Bottom:
+                    return "card-img-bottom";
+                default:
+                    throw new AbpException("Unknown AbpCardImagePosition: " + position);
+            }
         }
     }
 }

@@ -2,25 +2,26 @@
 using System;
 using Volo.Abp.Localization.Json;
 
-namespace Volo.Abp.Localization.VirtualFiles.Json;
-
-//TODO: Use composition over inheritance..?
-
-public class JsonVirtualFileLocalizationResourceContributor : VirtualFileLocalizationResourceContributorBase
+namespace Volo.Abp.Localization.VirtualFiles.Json
 {
-    public JsonVirtualFileLocalizationResourceContributor(string virtualPath)
-        : base(virtualPath)
-    {
+    //TODO: Use composition over inheritance..?
 
-    }
-
-    protected override bool CanParseFile(IFileInfo file)
+    public class JsonVirtualFileLocalizationResourceContributor : VirtualFileLocalizationResourceContributorBase
     {
-        return file.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
-    }
+        public JsonVirtualFileLocalizationResourceContributor(string virtualPath)
+            : base(virtualPath)
+        {
 
-    protected override ILocalizationDictionary CreateDictionaryFromFileContent(string jsonString)
-    {
-        return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
+        }
+
+        protected override bool CanParseFile(IFileInfo file)
+        {
+            return file.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected override ILocalizationDictionary CreateDictionaryFromFileContent(string jsonString)
+        {
+            return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
+        }
     }
 }

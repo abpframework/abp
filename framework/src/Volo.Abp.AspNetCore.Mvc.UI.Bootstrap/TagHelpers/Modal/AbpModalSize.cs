@@ -1,9 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
-
-public enum AbpModalSize
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
-    Default,
-    Small,
-    Large,
-    ExtraLarge
+    public enum AbpModalSize
+    {
+        Default,
+        Small,
+        Large,
+        ExtraLarge
+    }
 }

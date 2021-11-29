@@ -5,26 +5,27 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.UI;
-
-[DependsOn(
-    typeof(AbpExceptionHandlingModule)
-)]
-public class AbpUiModule : AbpModule
+namespace Volo.Abp.UI
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpExceptionHandlingModule)
+    )]
+    public class AbpUiModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpUiModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpUiModule>();
+            });
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<AbpUiResource>("en")
-                .AddBaseTypes(typeof(AbpExceptionHandlingResource))
-                .AddVirtualJson("/Localization/Resources/AbpUi");
-        });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpUiResource>("en")
+                    .AddBaseTypes(typeof(AbpExceptionHandlingResource))
+                    .AddVirtualJson("/Localization/Resources/AbpUi");
+            });
+        }
     }
 }

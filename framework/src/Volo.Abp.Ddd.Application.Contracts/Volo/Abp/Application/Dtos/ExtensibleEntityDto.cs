@@ -1,27 +1,28 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending;
 
-namespace Volo.Abp.Application.Dtos;
-
-[Serializable]
-public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<TKey>
+namespace Volo.Abp.Application.Dtos
 {
-    /// <summary>
-    /// Id of the entity.
-    /// </summary>
-    public TKey Id { get; set; }
-
-    public override string ToString()
+    [Serializable]
+    public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<TKey>
     {
-        return $"[DTO: {GetType().Name}] Id = {Id}";
+        /// <summary>
+        /// Id of the entity.
+        /// </summary>
+        public TKey Id { get; set; }
+
+        public override string ToString()
+        {
+            return $"[DTO: {GetType().Name}] Id = {Id}";
+        }
     }
-}
 
-[Serializable]
-public abstract class ExtensibleEntityDto : ExtensibleObject, IEntityDto
-{
-    public override string ToString()
+    [Serializable]
+    public abstract class ExtensibleEntityDto : ExtensibleObject, IEntityDto
     {
-        return $"[DTO: {GetType().Name}]";
+        public override string ToString()
+        {
+            return $"[DTO: {GetType().Name}]";
+        }
     }
 }

@@ -1,11 +1,12 @@
 using System;
 
-namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
-
-public class MyProjectNameEntityFrameworkCoreFixture : IDisposable
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public void Dispose()
+    public class MyProjectNameEntityFrameworkCoreFixture : IDisposable
     {
+        public void Dispose()
+        {
 
+        }
     }
 }

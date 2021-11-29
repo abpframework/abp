@@ -5,57 +5,57 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Volo.Abp.Content;
 
-namespace Microsoft.Extensions.DependencyInjection;
-
-public static class AbpSwaggerGenServiceCollectionExtensions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static IServiceCollection AddAbpSwaggerGen(
-        this IServiceCollection services,
-        Action<SwaggerGenOptions> setupAction = null)
+    public static class AbpSwaggerGenServiceCollectionExtensions
     {
-        return services.AddSwaggerGen(
-            options =>
-            {
-                Func<OpenApiSchema> remoteStreamContentSchemaFactory = () => new OpenApiSchema()
-                {
-                    Type = "string",
-                    Format = "binary"
-                };
-
-                options.MapType<RemoteStreamContent>(remoteStreamContentSchemaFactory);
-                options.MapType<IRemoteStreamContent>(remoteStreamContentSchemaFactory);
-
-                setupAction?.Invoke(options);
-            });
-    }
-
-    public static IServiceCollection AddAbpSwaggerGenWithOAuth(
-        this IServiceCollection services,
-        [NotNull] string authority,
-        [NotNull] Dictionary<string, string> scopes,
-        Action<SwaggerGenOptions> setupAction = null)
-    {
-        return services
-            .AddAbpSwaggerGen()
-            .AddSwaggerGen(
+        public static IServiceCollection AddAbpSwaggerGen(
+            this IServiceCollection services,
+            Action<SwaggerGenOptions> setupAction = null)
+        {
+            return services.AddSwaggerGen(
                 options =>
                 {
-                    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                    Func<OpenApiSchema> remoteStreamContentSchemaFactory = () => new OpenApiSchema()
                     {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
-                        {
-                            AuthorizationCode = new OpenApiOAuthFlow
-                            {
-                                AuthorizationUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/authorize"),
-                                Scopes = scopes,
-                                TokenUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/token")
-                            }
-                        }
-                    });
+                        Type = "string",
+                        Format = "binary"
+                    };
 
-                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    options.MapType<RemoteStreamContent>(remoteStreamContentSchemaFactory);
+                    options.MapType<IRemoteStreamContent>(remoteStreamContentSchemaFactory);
+
+                    setupAction?.Invoke(options);
+                });
+        }
+
+        public static IServiceCollection AddAbpSwaggerGenWithOAuth(
+            this IServiceCollection services,
+            [NotNull] string authority,
+            [NotNull] Dictionary<string, string> scopes,
+            Action<SwaggerGenOptions> setupAction = null)
+        {
+            return services
+                .AddAbpSwaggerGen()
+                .AddSwaggerGen(
+                    options =>
                     {
+                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.OAuth2,
+                            Flows = new OpenApiOAuthFlows
+                            {
+                                AuthorizationCode = new OpenApiOAuthFlow
+                                {
+                                    AuthorizationUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/authorize"),
+                                    Scopes = scopes,
+                                    TokenUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/token")
+                                }
+                            }
+                        });
+
+                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        {
                             {
                                 new OpenApiSecurityScheme
                                 {
@@ -67,9 +67,10 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                                 },
                                 Array.Empty<string>()
                             }
-                    });
+                        });
 
-                    setupAction?.Invoke(options);
-                });
+                        setupAction?.Invoke(options);
+                    });
+        }
     }
 }

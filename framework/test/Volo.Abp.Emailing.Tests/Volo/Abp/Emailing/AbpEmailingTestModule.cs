@@ -2,19 +2,20 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Emailing;
-
-[DependsOn(
-    typeof(AbpEmailingModule),
-    typeof(AbpAutofacModule),
-    typeof(AbpTestBaseModule))]
-public class AbpEmailingTestModule : AbpModule
+namespace Volo.Abp.Emailing
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    [DependsOn(
+        typeof(AbpEmailingModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule))]
+    public class AbpEmailingTestModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<AbpEmailingTestModule>();
-        });
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpEmailingTestModule>();
+            });
+        }
     }
 }

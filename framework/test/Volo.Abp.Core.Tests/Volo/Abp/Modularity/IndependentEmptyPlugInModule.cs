@@ -1,10 +1,11 @@
-﻿namespace Volo.Abp.Modularity;
-
-public class IndependentEmptyPlugInModule : TestModuleBase
+﻿namespace Volo.Abp.Modularity
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public class IndependentEmptyPlugInModule : TestModuleBase
     {
-        base.PreConfigureServices(context);
-        SkipAutoServiceRegistration = true;
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            base.PreConfigureServices(context);
+            SkipAutoServiceRegistration = true;
+        }
     }
 }

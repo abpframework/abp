@@ -1,19 +1,20 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BlobStoring.Azure;
-
-public class AbpBlobStoringAzureTestCommonBase : AbpIntegratedTest<AbpBlobStoringAzureTestCommonModule>
+namespace Volo.Abp.BlobStoring.Azure
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringAzureTestCommonBase : AbpIntegratedTest<AbpBlobStoringAzureTestCommonModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
-}
 
-public class AbpBlobStoringAzureTestBase : AbpIntegratedTest<AbpBlobStoringAzureTestModule>
-{
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    public class AbpBlobStoringAzureTestBase : AbpIntegratedTest<AbpBlobStoringAzureTestModule>
     {
-        options.UseAutofac();
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Application.Services;
 
-namespace MyCompanyName.MyProjectName;
-
-public abstract class MyProjectNameAppService : ApplicationService
+namespace MyCompanyName.MyProjectName
 {
-    protected MyProjectNameAppService()
+    public abstract class MyProjectNameAppService : ApplicationService
     {
-        LocalizationResource = typeof(MyProjectNameResource);
-        ObjectMapperContext = typeof(MyProjectNameApplicationModule);
+        protected MyProjectNameAppService()
+        {
+            LocalizationResource = typeof(MyProjectNameResource);
+            ObjectMapperContext = typeof(MyProjectNameApplicationModule);
+        }
     }
 }

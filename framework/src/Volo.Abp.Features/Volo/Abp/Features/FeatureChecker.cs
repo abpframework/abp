@@ -5,63 +5,64 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.Features;
-
-public class FeatureChecker : FeatureCheckerBase
+namespace Volo.Abp.Features
 {
-    protected AbpFeatureOptions Options { get; }
-    protected IServiceProvider ServiceProvider { get; }
-    protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
-    protected List<IFeatureValueProvider> Providers => _providers.Value;
-
-    private readonly Lazy<List<IFeatureValueProvider>> _providers;
-
-    public FeatureChecker(
-        IOptions<AbpFeatureOptions> options,
-        IServiceProvider serviceProvider,
-        IFeatureDefinitionManager featureDefinitionManager)
+    public class FeatureChecker : FeatureCheckerBase
     {
-        ServiceProvider = serviceProvider;
-        FeatureDefinitionManager = featureDefinitionManager;
+        protected AbpFeatureOptions Options { get; }
+        protected IServiceProvider ServiceProvider { get; }
+        protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
+        protected List<IFeatureValueProvider> Providers => _providers.Value;
 
-        Options = options.Value;
+        private readonly Lazy<List<IFeatureValueProvider>> _providers;
 
-        _providers = new Lazy<List<IFeatureValueProvider>>(
-            () => Options
-                .ValueProviders
-                .Select(type => ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)
-                .ToList(),
-            true
-        );
-    }
-
-    public override async Task<string> GetOrNullAsync(string name)
-    {
-        var featureDefinition = FeatureDefinitionManager.Get(name);
-        var providers = Enumerable
-            .Reverse(Providers);
-
-        if (featureDefinition.AllowedProviders.Any())
+        public FeatureChecker(
+            IOptions<AbpFeatureOptions> options,
+            IServiceProvider serviceProvider,
+            IFeatureDefinitionManager featureDefinitionManager)
         {
-            providers = providers.Where(p => featureDefinition.AllowedProviders.Contains(p.Name));
+            ServiceProvider = serviceProvider;
+            FeatureDefinitionManager = featureDefinitionManager;
+
+            Options = options.Value;
+
+            _providers = new Lazy<List<IFeatureValueProvider>>(
+                () => Options
+                    .ValueProviders
+                    .Select(type => ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)
+                    .ToList(),
+                true
+            );
         }
 
-        return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
-    }
-
-    protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
-        IEnumerable<IFeatureValueProvider> providers,
-        FeatureDefinition feature)
-    {
-        foreach (var provider in providers)
+        public override async Task<string> GetOrNullAsync(string name)
         {
-            var value = await provider.GetOrNullAsync(feature);
-            if (value != null)
+            var featureDefinition = FeatureDefinitionManager.Get(name);
+            var providers = Enumerable
+                .Reverse(Providers);
+
+            if (featureDefinition.AllowedProviders.Any())
             {
-                return value;
+                providers = providers.Where(p => featureDefinition.AllowedProviders.Contains(p.Name));
             }
+
+            return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
         }
 
-        return null;
+        protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
+            IEnumerable<IFeatureValueProvider> providers,
+            FeatureDefinition feature)
+        {
+            foreach (var provider in providers)
+            {
+                var value = await provider.GetOrNullAsync(feature);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
     }
 }

@@ -3,28 +3,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Volo.CmsKit.EntityFrameworkCore;
-
-public class UnifiedDbContextFactory : IDesignTimeDbContextFactory<UnifiedDbContext>
+namespace Volo.CmsKit.EntityFrameworkCore
 {
-    public UnifiedDbContext CreateDbContext(string[] args)
+    public class UnifiedDbContextFactory : IDesignTimeDbContextFactory<UnifiedDbContext>
     {
-        FeatureConfigurer.Configure();
+        public UnifiedDbContext CreateDbContext(string[] args)
+        {
+            FeatureConfigurer.Configure();
 
-        var configuration = BuildConfiguration();
+            var configuration = BuildConfiguration();
 
-        var builder = new DbContextOptionsBuilder<UnifiedDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            var builder = new DbContextOptionsBuilder<UnifiedDbContext>()
+                .UseSqlServer(configuration.GetConnectionString("Default"));
 
-        return new UnifiedDbContext(builder.Options);
-    }
+            return new UnifiedDbContext(builder.Options);
+        }
 
-    private static IConfigurationRoot BuildConfiguration()
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false);
+        private static IConfigurationRoot BuildConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false);
 
-        return builder.Build();
+            return builder.Build();
+        }
     }
 }

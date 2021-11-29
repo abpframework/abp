@@ -9,34 +9,35 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 
-namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
-
-public class GlobalFeaturePageFilter : IAsyncPageFilter, ITransientDependency
+namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 {
-    public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+    public class GlobalFeaturePageFilter: IAsyncPageFilter, ITransientDependency
     {
-        return Task.CompletedTask;
-    }
-
-    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-    {
-        if (context.HandlerInstance == null || !context.ActionDescriptor.IsPageAction())
+        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
-            await next();
-            return;
+            return Task.CompletedTask;
         }
 
-        if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
+        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
-            context.Result = new NotFoundResult();
-            return;
-        }
+            if (context.HandlerInstance == null || !context.ActionDescriptor.IsPageAction())
+            {
+                await next();
+                return;
+            }
 
-        using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.GlobalFeatureChecking))
-        {
-            await next();
+            if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
+            {
+                var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
+                logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
+                context.Result = new NotFoundResult();
+                return;
+            }
+
+            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.GlobalFeatureChecking))
+            {
+                await next();
+            }
         }
     }
 }

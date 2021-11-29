@@ -5,49 +5,50 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations;
-
-public class DynamicStringLengthAttributeAdapter : AttributeAdapterBase<DynamicStringLengthAttribute>
+namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
 {
-    private readonly string _max;
-    private readonly string _min;
-
-    public DynamicStringLengthAttributeAdapter(
-        DynamicStringLengthAttribute attribute,
-        IStringLocalizer stringLocalizer)
-        : base(attribute, stringLocalizer)
+    public class DynamicStringLengthAttributeAdapter : AttributeAdapterBase<DynamicStringLengthAttribute>
     {
-        _max = Attribute.MaximumLength.ToString(CultureInfo.InvariantCulture);
-        _min = Attribute.MinimumLength.ToString(CultureInfo.InvariantCulture);
-    }
+        private readonly string _max;
+        private readonly string _min;
 
-    public override void AddValidation(ClientModelValidationContext context)
-    {
-        Check.NotNull(context, nameof(context));
-
-        MergeAttribute(context.Attributes, "data-val", "true");
-        MergeAttribute(context.Attributes, "data-val-length", GetErrorMessage(context));
-
-        if (Attribute.MaximumLength != int.MaxValue)
+        public DynamicStringLengthAttributeAdapter(
+            DynamicStringLengthAttribute attribute,
+            IStringLocalizer stringLocalizer)
+            : base(attribute, stringLocalizer)
         {
-            MergeAttribute(context.Attributes, "data-val-length-max", _max);
+            _max = Attribute.MaximumLength.ToString(CultureInfo.InvariantCulture);
+            _min = Attribute.MinimumLength.ToString(CultureInfo.InvariantCulture);
         }
 
-        if (Attribute.MinimumLength != 0)
+        public override void AddValidation(ClientModelValidationContext context)
         {
-            MergeAttribute(context.Attributes, "data-val-length-min", _min);
+            Check.NotNull(context, nameof(context));
+
+            MergeAttribute(context.Attributes, "data-val", "true");
+            MergeAttribute(context.Attributes, "data-val-length", GetErrorMessage(context));
+
+            if (Attribute.MaximumLength != int.MaxValue)
+            {
+                MergeAttribute(context.Attributes, "data-val-length-max", _max);
+            }
+
+            if (Attribute.MinimumLength != 0)
+            {
+                MergeAttribute(context.Attributes, "data-val-length-min", _min);
+            }
         }
-    }
 
-    public override string GetErrorMessage(ModelValidationContextBase validationContext)
-    {
-        Check.NotNull(validationContext, nameof(validationContext));
+        public override string GetErrorMessage(ModelValidationContextBase validationContext)
+        {
+            Check.NotNull(validationContext, nameof(validationContext));
 
-        return GetErrorMessage(
-            validationContext.ModelMetadata,
-            validationContext.ModelMetadata.GetDisplayName(),
-            Attribute.MaximumLength,
-            Attribute.MinimumLength
-        );
+            return GetErrorMessage(
+                validationContext.ModelMetadata,
+                validationContext.ModelMetadata.GetDisplayName(),
+                Attribute.MaximumLength,
+                Attribute.MinimumLength
+            );
+        }
     }
 }
