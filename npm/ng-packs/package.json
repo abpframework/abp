@@ -62,6 +62,7 @@
     "@angular/compiler-cli": "12.2.13",
     "@angular/core": "12.2.13",
     "@angular/forms": "12.2.13",
+    "@angular/localize": "12.2.13",
     "@angular/language-service": "12.2.13",
     "@angular/platform-browser": "12.2.13",
     "@angular/platform-browser-dynamic": "12.2.13",
