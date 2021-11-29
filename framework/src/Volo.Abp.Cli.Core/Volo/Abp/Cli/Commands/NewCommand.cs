@@ -36,8 +36,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     public NewCommand(TemplateProjectBuilder templateProjectBuilder
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper)
-    : base(connectionStringProvider, cmdHelper)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
