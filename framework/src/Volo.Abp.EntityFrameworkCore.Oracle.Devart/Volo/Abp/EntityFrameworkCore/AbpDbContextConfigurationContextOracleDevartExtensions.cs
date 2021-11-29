@@ -4,31 +4,30 @@ using System;
 using Devart.Data.Oracle.Entity;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore;
+
+public static class AbpDbContextConfigurationContextOracleDevartExtensions
 {
-    public static class AbpDbContextConfigurationContextOracleDevartExtensions
+    public static DbContextOptionsBuilder UseOracle(
+       [NotNull] this AbpDbContextConfigurationContext context,
+       [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
+       bool useExistingConnectionIfAvailable = false)
     {
-        public static DbContextOptionsBuilder UseOracle(
-           [NotNull] this AbpDbContextConfigurationContext context,
-           [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
-           bool useExistingConnectionIfAvailable = false)
+        if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
         {
-            if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
+            return context.DbContextOptions.UseOracle(context.ExistingConnection, optionsBuilder =>
             {
-                return context.DbContextOptions.UseOracle(context.ExistingConnection, optionsBuilder =>
-                {
-                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    oracleOptionsAction?.Invoke(optionsBuilder);
-                });
-            }
-            else
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                oracleOptionsAction?.Invoke(optionsBuilder);
+            });
+        }
+        else
+        {
+            return context.DbContextOptions.UseOracle(context.ConnectionString, optionsBuilder =>
             {
-                return context.DbContextOptions.UseOracle(context.ConnectionString, optionsBuilder =>
-                {
-                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    oracleOptionsAction?.Invoke(optionsBuilder);
-                });
-            }
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                oracleOptionsAction?.Invoke(optionsBuilder);
+            });
         }
     }
 }

@@ -8,41 +8,40 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.App;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreTestBaseModule)
+    )]
+public class AppModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpAspNetCoreTestBaseModule)
-        )]
-    public class AppModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpMultiTenancyOptions>(options =>
         {
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = true;
-            });
-        }
+            options.IsEnabled = true;
+        });
+    }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+
+        app.UseMultiTenancy();
+
+        app.Run(async (ctx) =>
         {
-            var app = context.GetApplicationBuilder();
+            var currentTenant = ctx.RequestServices.GetRequiredService<ICurrentTenant>();
+            var jsonSerializer = ctx.RequestServices.GetRequiredService<IJsonSerializer>();
 
-            app.UseMultiTenancy();
-
-            app.Run(async (ctx) =>
+            var dictionary = new Dictionary<string, string>
             {
-                var currentTenant = ctx.RequestServices.GetRequiredService<ICurrentTenant>();
-                var jsonSerializer = ctx.RequestServices.GetRequiredService<IJsonSerializer>();
+                ["TenantId"] = currentTenant.IsAvailable ? currentTenant.Id.ToString() : ""
+            };
 
-                var dictionary = new Dictionary<string, string>
-                {
-                    ["TenantId"] = currentTenant.IsAvailable ? currentTenant.Id.ToString() : ""
-                };
-
-                var result = jsonSerializer.Serialize(dictionary, camelCase: false);
-                await ctx.Response.WriteAsync(result);
-            });
-        }
+            var result = jsonSerializer.Serialize(dictionary, camelCase: false);
+            await ctx.Response.WriteAsync(result);
+        });
     }
 }

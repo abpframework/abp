@@ -1,13 +1,12 @@
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy
-{
-    public interface ITenantResolveContext : IServiceProviderAccessor
-    {
-        [CanBeNull]
-        string TenantIdOrName { get; set; }
+namespace Volo.Abp.MultiTenancy;
 
-        bool Handled { get; set; }
-    }
+public interface ITenantResolveContext : IServiceProviderAccessor
+{
+    [CanBeNull]
+    string TenantIdOrName { get; set; }
+
+    bool Handled { get; set; }
 }

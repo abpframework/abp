@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public interface ITagDefinitionStore : IEntityTypeDefinitionStore<TagEntityTypeDefiniton>
 {
-    public interface ITagDefinitionStore : IEntityTypeDefinitionStore<TagEntityTypeDefiniton>
-    {
-        Task<List<TagEntityTypeDefiniton>> GetTagEntityTypeDefinitionListAsync();
-    }
+    Task<List<TagEntityTypeDefiniton>> GetTagEntityTypeDefinitionListAsync();
 }

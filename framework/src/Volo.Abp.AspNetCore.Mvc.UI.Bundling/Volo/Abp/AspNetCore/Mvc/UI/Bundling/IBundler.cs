@@ -1,9 +1,8 @@
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
-{
-    public interface IBundler
-    {
-        string FileExtension { get; }
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-        BundleResult Bundle(IBundlerContext context);
-    }
+public interface IBundler
+{
+    string FileExtension { get; }
+
+    BundleResult Bundle(IBundlerContext context);
 }

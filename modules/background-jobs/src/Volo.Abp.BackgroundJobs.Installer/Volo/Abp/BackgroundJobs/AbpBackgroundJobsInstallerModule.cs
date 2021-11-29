@@ -2,20 +2,19 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+[DependsOn(
+    typeof(AbpStudioModuleInstallerModule),
+    typeof(AbpVirtualFileSystemModule)
+    )]
+public class AbpBackgroundJobsInstallerModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpStudioModuleInstallerModule),
-        typeof(AbpVirtualFileSystemModule)
-        )]
-    public class AbpBackgroundJobsInstallerModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpBackgroundJobsInstallerModule>();
-            });
-        }
+            options.FileSets.AddEmbedded<AbpBackgroundJobsInstallerModule>();
+        });
     }
 }

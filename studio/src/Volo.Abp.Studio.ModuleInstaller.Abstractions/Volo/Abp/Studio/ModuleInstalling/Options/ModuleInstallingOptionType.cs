@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.Studio.ModuleInstalling.Options
+﻿namespace Volo.Abp.Studio.ModuleInstalling.Options;
+
+public enum ModuleInstallingOptionType
 {
-    public enum ModuleInstallingOptionType
-    {
-        NotSpecified,
-        Checkbox,
-        FreeText,
-        ComboBox
-    }
+    NotSpecified,
+    Checkbox,
+    FreeText,
+    ComboBox
 }
