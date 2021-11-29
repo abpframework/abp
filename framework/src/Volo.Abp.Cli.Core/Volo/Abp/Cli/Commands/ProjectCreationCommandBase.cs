@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Core;
@@ -296,6 +296,14 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
+    protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+    {
+        if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+        {
+            CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
+        }
+    }
+    
     protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);
