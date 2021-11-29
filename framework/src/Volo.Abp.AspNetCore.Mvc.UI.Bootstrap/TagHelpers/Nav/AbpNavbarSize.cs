@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
+
+public enum AbpNavbarSize
 {
-    public enum AbpNavbarSize
-    {
-        Default,
-        Sm,
-        Md,
-        Lg,
-        Xl
-    }
+    Default,
+    Sm,
+    Md,
+    Lg,
+    Xl
 }

@@ -5,69 +5,68 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
+
+public partial class PageHeader : ComponentBase
 {
-    public partial class PageHeader : ComponentBase
+    protected List<RenderFragment> ToolbarItemRenders { get; set; }
+
+    public IPageToolbarManager PageToolbarManager { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public bool BreadcrumbShowHome { get; set; } = true;
+
+    [Parameter]
+    public bool BreadcrumbShowCurrent { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public List<BreadcrumbItem> BreadcrumbItems { get; set; }
+
+    [Parameter]
+    public PageToolbar Toolbar { get; set; }
+
+    public PageHeader()
     {
-        protected List<RenderFragment> ToolbarItemRenders { get; set; }
-        
-        public IPageToolbarManager PageToolbarManager { get; set; }
-        
-        [Parameter]
-        public string Title { get; set; }
+        BreadcrumbItems = new List<BreadcrumbItem>();
+        ToolbarItemRenders = new List<RenderFragment>();
+    }
 
-        [Parameter]
-        public bool BreadcrumbShowHome { get; set; } = true;
-
-        [Parameter]
-        public bool BreadcrumbShowCurrent { get; set; } = true;
-
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        [Parameter]
-        public List<BreadcrumbItem> BreadcrumbItems { get; set; }
-        
-        [Parameter] 
-        public PageToolbar Toolbar { get; set; }
-
-        public PageHeader()
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if (Toolbar != null)
         {
-            BreadcrumbItems = new List<BreadcrumbItem>();
-            ToolbarItemRenders = new List<RenderFragment>();
-        }
+            var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
+            ToolbarItemRenders.Clear();
 
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-            if (Toolbar!=null)
+            foreach (var item in toolbarItems)
             {
-                var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
-                ToolbarItemRenders.Clear();
-
-                foreach (var item in toolbarItems)
+                var sequence = 0;
+                ToolbarItemRenders.Add(builder =>
                 {
-                    var sequence = 0;
-                    ToolbarItemRenders.Add(builder =>
+                    builder.OpenComponent(sequence, item.ComponentType);
+                    if (item.Arguments != null)
                     {
-                        builder.OpenComponent(sequence, item.ComponentType);
-                        if (item.Arguments != null)
+                        foreach (var argument in item.Arguments)
                         {
-                            foreach (var argument in item.Arguments)
-                            {
-                                sequence++;
-                                builder.AddAttribute(sequence, argument.Key, argument.Value);
-                            }
+                            sequence++;
+                            builder.AddAttribute(sequence, argument.Key, argument.Value);
                         }
-                        builder.CloseComponent();
-                    });
-                }
+                    }
+                    builder.CloseComponent();
+                });
             }
         }
+    }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
     }
 }

@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.Settings;
+
+public interface ISettingValueProvider
 {
-    public interface ISettingValueProvider
-    {
-        string Name { get; }
+    string Name { get; }
 
-        Task<string> GetOrNullAsync([NotNull] SettingDefinition setting);
+    Task<string> GetOrNullAsync([NotNull] SettingDefinition setting);
 
-        Task<List<SettingValue>> GetAllAsync([NotNull] SettingDefinition[] settings);
-    }
+    Task<List<SettingValue>> GetAllAsync([NotNull] SettingDefinition[] settings);
 }

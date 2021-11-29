@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Localization.Resources.AbpUi
+namespace Localization.Resources.AbpUi;
+
+[LocalizationResourceName("AbpUi")]
+public class AbpUiResource
 {
-    [LocalizationResourceName("AbpUi")]
-    public class AbpUiResource
-    {
-    }
 }

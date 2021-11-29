@@ -6,48 +6,47 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.Settings;
+
+[DependsOn(
+    typeof(AbpLocalizationAbstractionsModule),
+    typeof(AbpSecurityModule),
+    typeof(AbpMultiTenancyModule)
+    )]
+public class AbpSettingsModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpLocalizationAbstractionsModule),
-        typeof(AbpSecurityModule),
-        typeof(AbpMultiTenancyModule)
-        )]
-    public class AbpSettingsModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        AutoAddDefinitionProviders(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpSettingOptions>(options =>
         {
-            AutoAddDefinitionProviders(context.Services);
-        }
+            options.ValueProviders.Add<DefaultValueSettingValueProvider>();
+            options.ValueProviders.Add<ConfigurationSettingValueProvider>();
+            options.ValueProviders.Add<GlobalSettingValueProvider>();
+            options.ValueProviders.Add<TenantSettingValueProvider>();
+            options.ValueProviders.Add<UserSettingValueProvider>();
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    private static void AutoAddDefinitionProviders(IServiceCollection services)
+    {
+        var definitionProviders = new List<Type>();
+
+        services.OnRegistred(context =>
         {
-            Configure<AbpSettingOptions>(options =>
+            if (typeof(ISettingDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {
-                options.ValueProviders.Add<DefaultValueSettingValueProvider>();
-                options.ValueProviders.Add<ConfigurationSettingValueProvider>();
-                options.ValueProviders.Add<GlobalSettingValueProvider>();
-                options.ValueProviders.Add<TenantSettingValueProvider>();
-                options.ValueProviders.Add<UserSettingValueProvider>();
-            });
-        }
+                definitionProviders.Add(context.ImplementationType);
+            }
+        });
 
-        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        services.Configure<AbpSettingOptions>(options =>
         {
-            var definitionProviders = new List<Type>();
-
-            services.OnRegistred(context =>
-            {
-                if (typeof(ISettingDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionProviders.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<AbpSettingOptions>(options =>
-            {
-                options.DefinitionProviders.AddIfNotContains(definitionProviders);
-            });
-        }
+            options.DefinitionProviders.AddIfNotContains(definitionProviders);
+        });
     }
 }

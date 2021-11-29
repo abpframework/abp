@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.ProjectBuilding
+namespace Volo.Abp.Cli.ProjectBuilding;
+
+public interface IProjectBuilder
 {
-    public interface IProjectBuilder
-    {
-        Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args);
-    }
+    Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args);
 }
