@@ -487,7 +487,6 @@ namespace Volo.Abp.EntityFrameworkCore
             entry.Reload();
             entry.Entity.As<ISoftDelete>().IsDeleted = true;
             SetDeletionAuditProperties(entry);
-            entry.State = EntityState.Modified;
         }
 
         protected virtual bool IsHardDeleted(EntityEntry entry)
