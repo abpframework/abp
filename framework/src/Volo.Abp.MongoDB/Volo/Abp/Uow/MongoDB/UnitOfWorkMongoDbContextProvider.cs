@@ -17,8 +17,7 @@ namespace Volo.Abp.Uow.MongoDB
     public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
         where TMongoDbContext : IAbpMongoDbContext
     {
-        private const string TransactionsNotSupportedErrorMessage = "The current database does not support transactions, All operations will be performed in non-transactions, This may cause errors.";
-
+        private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
         public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
