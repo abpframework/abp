@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.Json.SystemTextJson.JsonConverters
@@ -13,17 +14,21 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
     {
         private static readonly ConcurrentDictionary<Type, bool> CachedTypes = new ConcurrentDictionary<Type, bool>();
 
-        private readonly List<Type> _excludeTypes = new List<Type>();
+        private readonly AsyncLocal<List<Type>> _excludeTypes = new AsyncLocal<List<Type>>();
 
-        public virtual AbpHasExtraPropertiesJsonConverterFactory AddExcludeTypes(params Type[] excludeTypes)
+        public IDisposable Exclude(params Type[] excludeTypes)
         {
-            _excludeTypes.AddIfNotContains(excludeTypes);
-            return this;
+            var parent = _excludeTypes.Value;
+            _excludeTypes.Value = excludeTypes.ToList();
+            return new DisposeAction(() =>
+            {
+                _excludeTypes.Value = parent;
+            });
         }
-
+        
         public override bool CanConvert(Type typeToConvert)
         {
-            if (_excludeTypes.Contains(typeToConvert))
+            if (_excludeTypes.Value != null && _excludeTypes.Value.Contains(typeToConvert))
             {
                 return false;
             }

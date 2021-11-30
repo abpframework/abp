@@ -17,13 +17,18 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
         {
             _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, x => x == this);
             
-            var converterFactory = _readJsonSerializerOptions.Converters.FirstOrDefault(x => x is AbpHasExtraPropertiesJsonConverterFactory);
-            converterFactory?.As<AbpHasExtraPropertiesJsonConverterFactory>().AddExcludeTypes(typeToConvert);
-
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
             if (rootElement.ValueKind == JsonValueKind.Object)
             {
-                var extensibleObject = rootElement.Deserialize<T>(_readJsonSerializerOptions);
+                var converterFactory = _readJsonSerializerOptions.Converters
+                    .FirstOrDefault(x => x is AbpHasExtraPropertiesJsonConverterFactory)
+                    .As<AbpHasExtraPropertiesJsonConverterFactory>();
+
+                T extensibleObject;
+                using (converterFactory != null ? converterFactory.Exclude(typeToConvert) : NullDisposable.Instance)
+                {
+                    extensibleObject = rootElement.Deserialize<T>(_readJsonSerializerOptions);
+                }
 
                 var extraPropertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase));
                 
