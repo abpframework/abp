@@ -62,12 +62,13 @@
     "@angular/compiler-cli": "12.2.13",
     "@angular/core": "12.2.13",
     "@angular/forms": "12.2.13",
+    "@angular/localize": "12.2.13",
     "@angular/language-service": "12.2.13",
     "@angular/platform-browser": "12.2.13",
     "@angular/platform-browser-dynamic": "12.2.13",
     "@angular/router": "12.2.13",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@ng-bootstrap/ng-bootstrap": "^11.0.0-beta.2",
+    "@ng-bootstrap/ng-bootstrap": "11.0.0-beta.2",
     "@ngneat/spectator": "^8.0.3",
     "@ngx-validate/core": "^0.0.13",
     "@nrwl/angular": "13.1.3",
@@ -119,5 +120,7 @@
     "typescript": "4.3.5",
     "zone.js": "~0.11.4"
   },
-  "dependencies": {}
+  "resolutions": {
+    "@ng-bootstrap/ng-bootstrap": "11.0.0-beta.2"
+  }
 }
