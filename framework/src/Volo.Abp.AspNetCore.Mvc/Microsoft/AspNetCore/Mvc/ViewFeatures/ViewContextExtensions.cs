@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.AspNetCore.Mvc.ViewFeatures
+namespace Microsoft.AspNetCore.Mvc.ViewFeatures;
+
+public static class ViewContextExtensions
 {
-    public static class ViewContextExtensions
+    public static IUrlHelper GetUrlHelper(this ViewContext viewContext)
     {
-        public static IUrlHelper GetUrlHelper(this ViewContext viewContext)
-        {
-            var urlHelperFactory = viewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
-            return urlHelperFactory.GetUrlHelper(viewContext);
-        }
+        var urlHelperFactory = viewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
+        return urlHelperFactory.GetUrlHelper(viewContext);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public class UpdateFeaturesDto
 {
-    public class UpdateFeaturesDto
-    {
-        public List<UpdateFeatureDto> Features { get; set; }
-    }
+    public List<UpdateFeatureDto> Features { get; set; }
 }

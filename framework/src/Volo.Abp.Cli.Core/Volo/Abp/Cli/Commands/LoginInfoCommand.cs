@@ -7,57 +7,56 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands
+namespace Volo.Abp.Cli.Commands;
+
+public class LoginInfoCommand : IConsoleCommand, ITransientDependency
 {
-    public class LoginInfoCommand : IConsoleCommand, ITransientDependency
+    public ILogger<LoginInfoCommand> Logger { get; set; }
+
+    protected AuthService AuthService { get; }
+
+    public LoginInfoCommand(AuthService authService)
     {
-        public ILogger<LoginInfoCommand> Logger { get; set; }
+        AuthService = authService;
+        Logger = NullLogger<LoginInfoCommand>.Instance;
+    }
 
-        protected AuthService AuthService { get; }
+    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    {
+        var loginInfo = await AuthService.GetLoginInfoAsync();
 
-        public LoginInfoCommand(AuthService authService)
+        if (loginInfo == null)
         {
-            AuthService = authService;
-            Logger = NullLogger<LoginInfoCommand>.Instance;
+            Logger.LogError("Unable to get login info.");
+            return;
         }
 
-        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
-        {
-            var loginInfo = await AuthService.GetLoginInfoAsync();
+        var sb = new StringBuilder();
+        sb.AppendLine("");
+        sb.AppendLine($"Login info:");
+        sb.AppendLine($"Name: {loginInfo.Name}");
+        sb.AppendLine($"Surname: {loginInfo.Surname}");
+        sb.AppendLine($"Username: {loginInfo.Username}");
+        sb.AppendLine($"Email Address: {loginInfo.EmailAddress}");
+        sb.AppendLine($"Organization: {loginInfo.Organization}");
+        Logger.LogInformation(sb.ToString());
+    }
 
-            if (loginInfo == null)
-            {
-                Logger.LogError("Unable to get login info.");
-                return;
-            }
+    public string GetUsageInfo()
+    {
+        var sb = new StringBuilder();
 
-            var sb = new StringBuilder();
-            sb.AppendLine("");
-            sb.AppendLine($"Login info:");
-            sb.AppendLine($"Name: {loginInfo.Name}");
-            sb.AppendLine($"Surname: {loginInfo.Surname}");
-            sb.AppendLine($"Username: {loginInfo.Username}");
-            sb.AppendLine($"Email Address: {loginInfo.EmailAddress}");
-            sb.AppendLine($"Organization: {loginInfo.Organization}");
-            Logger.LogInformation(sb.ToString());
-        }
+        sb.AppendLine("");
+        sb.AppendLine("Usage:");
+        sb.AppendLine("  abp login-info");
+        sb.AppendLine("");
+        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
-        public string GetUsageInfo()
-        {
-            var sb = new StringBuilder();
+        return sb.ToString();
+    }
 
-            sb.AppendLine("");
-            sb.AppendLine("Usage:");
-            sb.AppendLine("  abp login-info");
-            sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
-
-            return sb.ToString();
-        }
-
-        public string GetShortDescription()
-        {
-            return "Show your login info.";
-        }
+    public string GetShortDescription()
+    {
+        return "Show your login info.";
     }
 }
