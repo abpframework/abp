@@ -266,7 +266,7 @@ var abp = abp || {};
             {
                 fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     if (_existingDefaultFnRowCallback) {
-                        _existingDefaultFnRowCallback(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                        _existingDefaultFnRowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull);
                     }
 
                     renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
