@@ -348,6 +348,10 @@
     "Volo.AbpIo.Commercial:030008": "Satın alma tarihi yalnızca durum Satın Alındı olduğunda ayarlanabilir!",
     "Volo.AbpIo.Commercial:030009": "Kullanıcı bulunamadı!",
     "Volo.AbpIo.Commercial:030010": "Deneme lisansını satın almak için önce deneme lisansınızı etkinleştirmeniz gerekir!",
-    "Volo.AbpIo.Commercial:030011": "Satın alındığında bir deneme lisansını silemezsiniz!"
+    "Volo.AbpIo.Commercial:030011": "Satın alındığında bir deneme lisansını silemezsiniz!",
+    "Permission:SendWelcomeEmail": "Hoşgeldin Emaili Gönder",
+    "SendWelcomeEmail": "Hoşgeldin Emaili Gönder",
+    "SendWelcomeEmailWarningMessage": "Organizasyon üyelerine hoşgeldin emaili göndermek istediğinden emin misin?",
+    "SendWelcomeEmailSuccessMessage": "Hoşgeldin emaili başarıyla gönderilmiştir!"
   }
 }
