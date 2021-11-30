@@ -352,6 +352,10 @@
     "Volo.AbpIo.Commercial:030008": "Purchase date can be set only when status is Purchased!",
     "Volo.AbpIo.Commercial:030009": "User not found!",
     "Volo.AbpIo.Commercial:030010": "To purchase the trial license, first you need to activate your trial license!",
-    "Volo.AbpIo.Commercial:030011": "You cannot delete a trial license when it is purchased!"
+    "Volo.AbpIo.Commercial:030011": "You cannot delete a trial license when it is purchased!",
+    "Permission:SendWelcomeEmail": "Send Welcome Email",
+    "SendWelcomeEmail": "Send Welcome Email",
+    "SendWelcomeEmailWarningMessage": "Are you sure you want to send welcome email to the organization members?",
+    "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!"
   }
 }
