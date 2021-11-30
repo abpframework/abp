@@ -187,17 +187,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                         )
                     );
                 }
-                catch (Exception e)
+                catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                 {
-                    if (e is InvalidOperationException || e is NotSupportedException)
-                    {
-                        Logger.LogError(TransactionsNotSupportedErrorMessage);
-                        Logger.LogException(e);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Logger.LogError(TransactionsNotSupportedErrorMessage);
+                    Logger.LogException(e);
+                    
+                    return dbContext;
                 }
                 
                 return dbContext;
@@ -230,19 +225,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                                 dbContext.Database.BeginTransaction();
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                         {
-                            if (e is InvalidOperationException || e is NotSupportedException)
-                            {
-                                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                                Logger.LogException(e);
-                            
-                                return dbContext;
-                            }
-                            else
-                            {
-                                throw;
-                            }
+                            Logger.LogError(TransactionsNotSupportedErrorMessage);
+                            Logger.LogException(e);
+
+                            return dbContext;
                         }
                     }
                 }
@@ -255,19 +243,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                          */
                         dbContext.Database.BeginTransaction();
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                     {
-                        if (e is InvalidOperationException || e is NotSupportedException)
-                        {
-                            Logger.LogError(TransactionsNotSupportedErrorMessage);
-                            Logger.LogException(e);
-                            
-                            return dbContext;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        Logger.LogError(TransactionsNotSupportedErrorMessage);
+                        Logger.LogException(e);
+                        
+                        return dbContext;
                     }
                 }
 
@@ -301,17 +282,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                         )
                     );
                 }
-                catch (Exception e)
+                catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                 {
-                    if (e is InvalidOperationException || e is NotSupportedException)
-                    {
-                        Logger.LogError(TransactionsNotSupportedErrorMessage);
-                        Logger.LogException(e);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Logger.LogError(TransactionsNotSupportedErrorMessage);
+                    Logger.LogException(e);
+                        
+                    return dbContext;
                 }
 
                 return dbContext;
@@ -349,19 +325,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                                 );
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                         {
-                            if (e is InvalidOperationException || e is NotSupportedException)
-                            {
-                                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                                Logger.LogException(e);
-
-                                return dbContext;
-                            }
-                            else
-                            {
-                                throw;
-                            }
+                            Logger.LogError(TransactionsNotSupportedErrorMessage);
+                            Logger.LogException(e);
+                        
+                            return dbContext;
                         }
                     }
                 }
@@ -374,19 +343,12 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                          */
                         await dbContext.Database.BeginTransactionAsync(GetCancellationToken());
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                     {
-                        if (e is InvalidOperationException || e is NotSupportedException)
-                        {
-                            Logger.LogError(TransactionsNotSupportedErrorMessage);
-                            Logger.LogException(e);
-
-                            return dbContext;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        Logger.LogError(TransactionsNotSupportedErrorMessage);
+                        Logger.LogException(e);
+                        
+                        return dbContext;
                     }
                 }
 
