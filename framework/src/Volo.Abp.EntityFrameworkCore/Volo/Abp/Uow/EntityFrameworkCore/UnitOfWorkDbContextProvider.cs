@@ -18,7 +18,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : IEfCoreDbContext
     {
-        private const string TransactionsNotSupportedErrorMessage = "The current database does not support transactions, All operations will be performed in non-transactions, This may cause errors.";
+        private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
         
         public ILogger<UnitOfWorkDbContextProvider<TDbContext>> Logger { get; set; }
 
