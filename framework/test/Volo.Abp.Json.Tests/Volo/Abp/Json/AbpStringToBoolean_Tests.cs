@@ -34,7 +34,7 @@ namespace Volo.Abp.Json
             {
                 Converters =
                 {
-                    new AbpStringToEnumFactory()
+                    new AbpStringToBooleanConverter()
                 }
             };
 
