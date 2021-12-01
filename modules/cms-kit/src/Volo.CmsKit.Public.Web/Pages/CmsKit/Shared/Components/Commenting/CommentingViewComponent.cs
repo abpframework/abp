@@ -65,12 +65,12 @@ public class CommentingViewComponent : AbpViewComponent
         foreach (var comment in viewModel.Comments)
         {
             viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
-            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text);
+            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, true);
 
             foreach (var reply in comment.Replies)
             {
                 viewModel.RawCommentTexts.Add(reply.Id, reply.Text);
-                reply.Text = await MarkdownToHtmlRenderer.RenderAsync(reply.Text);
+                reply.Text = await MarkdownToHtmlRenderer.RenderAsync(reply.Text, true);
             }
         }
     }
