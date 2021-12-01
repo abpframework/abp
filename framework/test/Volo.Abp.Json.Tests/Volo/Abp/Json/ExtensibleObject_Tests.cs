@@ -7,11 +7,11 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public class AbpHasExtraPropertiesJsonConverter_Tests : AbpJsonTestBase
+public class ExtensibleObject_Tests: AbpJsonTestBase
 {
     private readonly IJsonSerializer _jsonSerializer;
 
-    public AbpHasExtraPropertiesJsonConverter_Tests()
+    public ExtensibleObject_Tests()
     {
         _jsonSerializer = GetRequiredService<IJsonSerializer>();
     }
@@ -60,16 +60,53 @@ public class AbpHasExtraPropertiesJsonConverter_Tests : AbpJsonTestBase
         fooDto.BarDtos.First().Name.ShouldBe("new-bar-dto");
         fooDto.BarDtos.First().GetProperty("bar").ShouldBe("new-bar-value");
     }
+
+    [Fact]
+    public void SelfReference_Test()
+    {
+        var parentNodeDto = new NodeDto
+        {
+            Name = "parentNode",
+        };
+        parentNodeDto.SetProperty("node", "parent-value");
+
+        var nodeDto = new NodeDto
+        {
+            Name = "node",
+            Parent = parentNodeDto
+        };
+        nodeDto.SetProperty("node", "node-value");
+
+        var json = _jsonSerializer.Serialize(nodeDto);
+
+        nodeDto = _jsonSerializer.Deserialize<NodeDto>(json);
+        nodeDto.ShouldNotBeNull();
+        nodeDto.Name.ShouldBe("node");
+        nodeDto.GetProperty("node").ShouldBe("node-value");
+
+        nodeDto.Parent.ShouldNotBeNull();
+        nodeDto.Parent.Name.ShouldBe("parentNode");
+        nodeDto.Parent.GetProperty("node").ShouldBe("parent-value");
+    }
 }
 
-public class FooDto : ExtensibleObject
+class FooDto : ExtensibleObject
 {
     public string Name { get; set; }
 
     public List<BarDto> BarDtos { get; set; }
 }
 
-public class BarDto : ExtensibleObject
+class BarDto : ExtensibleObject
 {
     public string Name { get; set; }
+
+    public FooDto FooDto { get; set; }
+}
+
+class NodeDto : ExtensibleObject
+{
+    public string Name { get; set; }
+
+    public NodeDto Parent { get; set; }
 }

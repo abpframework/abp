@@ -41,6 +41,14 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         return JsonSerializer.Serialize(copyDictionary);
     }
 
+    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    {
+        Converters =
+        {
+            new ObjectToInferredTypesConverter()
+        }
+    };
+
     private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
     {
         if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
@@ -48,11 +56,8 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
             return new ExtraPropertyDictionary();
         }
 
-        var deserializeOptions = new JsonSerializerOptions();
-        deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-
-        var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
-                         new ExtraPropertyDictionary();
+        var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, DeserializeOptions) ??
+                            new ExtraPropertyDictionary();
 
         if (entityType != null)
         {

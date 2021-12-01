@@ -8,6 +8,10 @@ namespace Volo.Abp.FeatureManagement.JsonConverters;
 
 public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelectionStringValueItemSource>
 {
+    private JsonSerializerOptions _readJsonSerializerOptions;
+
+    private JsonSerializerOptions _writeJsonSerializerOptions;
+
     public override ISelectionStringValueItemSource Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
@@ -16,10 +20,10 @@ public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelect
 
         if (itemsJsonProperty.Value.ValueKind == JsonValueKind.Array)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
 
             var selectionStringValueItem =
-                itemsJsonProperty.Value.Deserialize<LocalizableSelectionStringValueItem[]>(newOptions) ??
+                itemsJsonProperty.Value.Deserialize<LocalizableSelectionStringValueItem[]>(_readJsonSerializerOptions) ??
                 Array.Empty<LocalizableSelectionStringValueItem>();
 
             return new StaticSelectionStringValueItemSource(selectionStringValueItem.As<ISelectionStringValueItem[]>());
@@ -28,10 +32,9 @@ public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelect
         throw new JsonException($"Can't to get the {nameof(ISelectionStringValueItemSource.Items)} property of {nameof(ISelectionStringValueItemSource)}!");
     }
 
-
     public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
     {
-        var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-        JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
+        _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
+        JsonSerializer.Serialize(writer, value, value.GetType(), _writeJsonSerializerOptions);
     }
 }
