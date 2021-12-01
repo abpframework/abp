@@ -247,9 +247,8 @@ a {
         margin-bottom: 1rem;
         margin-left: 0;
         border-left: 3px solid #d2dbe4;
-        padding: 1em 1.5em;
         background-color: #e9edf1;
-        padding-bottom: .2em;
+        padding: 1em 1.5em !important;
         font-size: 1em; }
       .docs-page .docs-content article.docs-body img {
         max-width: 100%;
