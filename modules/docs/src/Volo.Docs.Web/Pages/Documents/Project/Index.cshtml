@@ -93,7 +93,7 @@
                                         </span>
 
                                         <select asp-items="Model.ProjectSelectItems"
-                                                class="form-control"
+                                                class="form-select"
                                                 onchange="window.location.pathname = this.value">
                                         </select>
                                     </div>
@@ -115,7 +115,7 @@
         
 
                                                 <select asp-items="Model.VersionSelectItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="if (this.value) { window.location.replace(this.value) }">
                                                 </select>
                                             </div>
@@ -134,7 +134,7 @@
                                                             <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
                                                  </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="window.location.replace(this.value)">
                                                 </select>
                                             </div>
