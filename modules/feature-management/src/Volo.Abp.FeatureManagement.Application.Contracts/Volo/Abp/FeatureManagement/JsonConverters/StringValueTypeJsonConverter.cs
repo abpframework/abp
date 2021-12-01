@@ -9,9 +9,9 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
     public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
     {
         private JsonSerializerOptions _readJsonSerializerOptions;
-        
+
         private JsonSerializerOptions _writeJsonSerializerOptions;
-        
+
         public override IStringValueType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;

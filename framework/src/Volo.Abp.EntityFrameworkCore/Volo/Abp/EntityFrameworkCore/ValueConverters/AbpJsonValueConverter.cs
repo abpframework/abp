@@ -26,7 +26,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
                 new ObjectToInferredTypesConverter()
             }
         };
-        
+
         private static TPropertyType DeserializeObject(string s)
         {
             return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions);

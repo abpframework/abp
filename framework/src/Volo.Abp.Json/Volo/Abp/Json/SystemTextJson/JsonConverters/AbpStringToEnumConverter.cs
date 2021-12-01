@@ -11,9 +11,9 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
         private readonly JsonStringEnumConverter _innerJsonStringEnumConverter;
 
         private JsonSerializerOptions _readJsonSerializerOptions;
-        
+
         private JsonSerializerOptions _writeJsonSerializerOptions;
-        
+
         public AbpStringToEnumConverter()
             : this(namingPolicy: null, allowIntegerValues: true)
         {

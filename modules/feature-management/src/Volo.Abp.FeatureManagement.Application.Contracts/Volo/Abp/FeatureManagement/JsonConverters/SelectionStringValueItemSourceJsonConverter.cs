@@ -9,7 +9,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
     public class SelectionStringValueItemSourceJsonConverter : JsonConverter<ISelectionStringValueItemSource>
     {
         private JsonSerializerOptions _readJsonSerializerOptions;
-        
+
         private JsonSerializerOptions _writeJsonSerializerOptions;
 
         public override ISelectionStringValueItemSource Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

@@ -60,7 +60,7 @@ namespace Volo.Abp.Json
             fooDto.BarDtos.First().Name.ShouldBe("new-bar-dto");
             fooDto.BarDtos.First().GetProperty("bar").ShouldBe("new-bar-value");
         }
-        
+
         [Fact]
         public void SelfReference_Test()
         {
@@ -100,14 +100,14 @@ namespace Volo.Abp.Json
     class BarDto : ExtensibleObject
     {
         public string Name { get; set; }
-        
+
         public FooDto FooDto { get; set; }
     }
-    
+
     class NodeDto : ExtensibleObject
     {
         public string Name { get; set; }
-        
+
         public NodeDto Parent { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace Volo.Abp.Json.SystemTextJson
         }
 
         private readonly ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
-        
+
         protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
         {
             return JsonSerializerOptionsCache.GetOrAdd($"default{camelCase}{indented}", _ =>

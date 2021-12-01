@@ -9,7 +9,7 @@ namespace Volo.Abp.MemoryDb.JsonConverters
         where TEntity : Entity<TKey>
     {
         private JsonSerializerOptions _writeJsonSerializerOptions;
-        
+
         public override TEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var jsonDocument = JsonDocument.ParseValue(ref reader);
