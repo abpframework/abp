@@ -21,12 +21,12 @@ namespace Volo.Abp.Json
             var testClass = JsonSerializer.Deserialize<TestClass>("{\"Enabled\": \"TrUe\"}", options);
             testClass.ShouldNotBeNull();
             testClass.Enabled.ShouldBe(true);
-            
+
             testClass = JsonSerializer.Deserialize<TestClass>("{\"Enabled\": true}", options);
             testClass.ShouldNotBeNull();
             testClass.Enabled.ShouldBe(true);
         }
-        
+
         [Fact]
         public void Test_Write()
         {
@@ -42,7 +42,7 @@ namespace Volo.Abp.Json
             {
                 Enabled = true
             });
-            
+
             testClassJson.ShouldBe("{\"Enabled\":true}");
         }
 

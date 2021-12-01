@@ -94,7 +94,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
+
         protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(
             HttpClient client,
             string baseUrl)

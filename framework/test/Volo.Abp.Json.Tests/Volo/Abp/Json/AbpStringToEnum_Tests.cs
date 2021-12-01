@@ -22,12 +22,12 @@ namespace Volo.Abp.Json
             var testClass = JsonSerializer.Deserialize<TestClass>("{\"Day\": \"Monday\"}", options);
             testClass.ShouldNotBeNull();
             testClass.Day.ShouldBe(DayOfWeek.Monday);
-            
+
             testClass = JsonSerializer.Deserialize<TestClass>("{\"Day\": 1}", options);
             testClass.ShouldNotBeNull();
             testClass.Day.ShouldBe(DayOfWeek.Monday);
         }
-        
+
         [Fact]
         public void Test_Write()
         {
@@ -43,7 +43,7 @@ namespace Volo.Abp.Json
             {
                 Day = DayOfWeek.Monday
             });
-            
+
             testClassJson.ShouldBe("{\"Day\":1}");
         }
 

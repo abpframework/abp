@@ -31,7 +31,7 @@ namespace Volo.Abp.Localization.Json
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true
         };
-        
+
         /// <summary>
         ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
         /// </summary>

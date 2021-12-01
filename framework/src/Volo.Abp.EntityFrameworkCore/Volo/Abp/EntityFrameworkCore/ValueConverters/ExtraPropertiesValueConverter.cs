@@ -48,14 +48,14 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
                 new ObjectToInferredTypesConverter()
             }
         };
-        
+
         private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
             if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
             {
                 return new ExtraPropertyDictionary();
             }
-            
+
             var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, DeserializeOptions) ??
                              new ExtraPropertyDictionary();
 
