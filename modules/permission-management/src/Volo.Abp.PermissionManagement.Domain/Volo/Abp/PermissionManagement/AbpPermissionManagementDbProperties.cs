@@ -1,13 +1,12 @@
 ﻿using Volo.Abp.Data;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public static class AbpPermissionManagementDbProperties
 {
-    public static class AbpPermissionManagementDbProperties
-    {
-        public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
+    public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 
-        public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
+    public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
-        public const string ConnectionStringName = "AbpPermissionManagement";
-    }
+    public const string ConnectionStringName = "AbpPermissionManagement";
 }

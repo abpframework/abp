@@ -6,31 +6,30 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Modularity;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json;
+
+[DependsOn(typeof(AbpTimingModule))]
+public class AbpJsonModule : AbpModule
 {
-    [DependsOn(typeof(AbpTimingModule))]
-    public class AbpJsonModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.TryAddEnumerable(ServiceDescriptor
+            .Transient<IConfigureOptions<AbpSystemTextJsonSerializerOptions>, AbpSystemTextJsonSerializerOptionsSetup>());
+
+        Configure<AbpJsonOptions>(options =>
         {
-            context.Services.TryAddEnumerable(ServiceDescriptor
-                .Transient<IConfigureOptions<AbpSystemTextJsonSerializerOptions>, AbpSystemTextJsonSerializerOptionsSetup>());
+            options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
 
-            Configure<AbpJsonOptions>(options =>
+            var abpJsonOptions = context.Services.ExecutePreConfiguredActions<AbpJsonOptions>();
+            if (abpJsonOptions.UseHybridSerializer)
             {
-                options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
+                options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
+            }
+        });
 
-                var abpJsonOptions = context.Services.ExecutePreConfiguredActions<AbpJsonOptions>();
-                if (abpJsonOptions.UseHybridSerializer)
-                {
-                    options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
-                }
-            });
-
-            Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
-            {
-                options.Converters.Add<AbpJsonIsoDateTimeConverter>();
-            });
-        }
+        Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
+        {
+            options.Converters.Add<AbpJsonIsoDateTimeConverter>();
+        });
     }
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Tags;
 using Xunit;
 
-namespace Volo.CmsKit.MongoDB.Tags
+namespace Volo.CmsKit.MongoDB.Tags;
+
+[Collection(MongoTestCollection.Name)]
+public class EntityTagRepository_Test : EntityTagRepository_Test<CmsKitMongoDbTestModule>
 {
-    [Collection(MongoTestCollection.Name)]
-    public class EntityTagRepository_Test : EntityTagRepository_Test<CmsKitMongoDbTestModule>
-    {
-        
-    }
+
 }
