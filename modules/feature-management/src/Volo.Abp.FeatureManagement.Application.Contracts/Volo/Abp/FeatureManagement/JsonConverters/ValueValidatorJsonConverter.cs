@@ -10,6 +10,10 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
 {
     public class ValueValidatorJsonConverter : JsonConverter<IValueValidator>
     {
+        private JsonSerializerOptions _readJsonSerializerOptions;
+
+        private JsonSerializerOptions _writeJsonSerializerOptions;
+
         public override IValueValidator Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
@@ -22,8 +26,8 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
                 var propertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Properties), StringComparison.OrdinalIgnoreCase));
                 if (propertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)
                 {
-                    var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
-                    var properties = propertiesJsonProperty.Value.Deserialize<IDictionary<string, object>>(newOptions);
+                    _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
+                    var properties = propertiesJsonProperty.Value.Deserialize<IDictionary<string, object>>(_readJsonSerializerOptions);
                     if (properties != null && properties.Any())
                     {
                         foreach (var property in properties)
@@ -41,8 +45,8 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, IValueValidator value, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-            JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
+            _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
+            JsonSerializer.Serialize(writer, value, value.GetType(), _writeJsonSerializerOptions);
         }
 
         protected virtual IValueValidator CreateValueValidatorByName(string name)

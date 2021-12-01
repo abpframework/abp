@@ -19,11 +19,17 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             return JsonSerializer.Serialize(d);
         }
 
+        private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+        {
+            Converters =
+            {
+                new ObjectToInferredTypesConverter()
+            }
+        };
+
         private static TPropertyType DeserializeObject(string s)
         {
-            var deserializeOptions = new JsonSerializerOptions();
-            deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-            return JsonSerializer.Deserialize<TPropertyType>(s, deserializeOptions);
+            return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions);
         }
     }
 }

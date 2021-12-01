@@ -8,6 +8,8 @@ namespace Volo.Abp.MemoryDb.JsonConverters
     public class EntityJsonConverter<TEntity, TKey> : JsonConverter<TEntity>
         where TEntity : Entity<TKey>
     {
+        private JsonSerializerOptions _writeJsonSerializerOptions;
+
         public override TEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var jsonDocument = JsonDocument.ParseValue(ref reader);
@@ -32,8 +34,8 @@ namespace Volo.Abp.MemoryDb.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, TEntity value, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-            JsonSerializer.Serialize(writer, value, newOptions);
+            _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
+            JsonSerializer.Serialize(writer, value, _writeJsonSerializerOptions);
         }
     }
 }

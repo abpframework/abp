@@ -41,6 +41,14 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             return JsonSerializer.Serialize(copyDictionary);
         }
 
+        private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+        {
+            Converters =
+            {
+                new ObjectToInferredTypesConverter()
+            }
+        };
+
         private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
             if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
@@ -48,10 +56,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
                 return new ExtraPropertyDictionary();
             }
 
-            var deserializeOptions = new JsonSerializerOptions();
-            deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-
-            var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
+            var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, DeserializeOptions) ??
                              new ExtraPropertyDictionary();
 
             if (entityType != null)

@@ -29,7 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
 
             options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
-            options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
         }
     }
 }

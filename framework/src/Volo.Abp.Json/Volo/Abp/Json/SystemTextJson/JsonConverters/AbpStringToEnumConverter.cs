@@ -10,6 +10,10 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
     {
         private readonly JsonStringEnumConverter _innerJsonStringEnumConverter;
 
+        private JsonSerializerOptions _readJsonSerializerOptions;
+
+        private JsonSerializerOptions _writeJsonSerializerOptions;
+
         public AbpStringToEnumConverter()
             : this(namingPolicy: null, allowIntegerValues: true)
         {
@@ -28,21 +32,21 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, x =>
-                x == this ||
-                x.GetType() == typeof(AbpStringToEnumFactory));
+            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, x =>
+                    x == this ||
+                    x.GetType() == typeof(AbpStringToEnumFactory),
+                _innerJsonStringEnumConverter.CreateConverter(typeToConvert, options));
 
-            newOptions.Converters.Add(_innerJsonStringEnumConverter.CreateConverter(typeToConvert, newOptions));
-            return JsonSerializer.Deserialize<T>(ref reader, newOptions);
+            return JsonSerializer.Deserialize<T>(ref reader, _readJsonSerializerOptions);
         }
 
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, x =>
+            _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, x =>
                 x == this ||
                 x.GetType() == typeof(AbpStringToEnumFactory));
 
-            JsonSerializer.Serialize(writer, value, newOptions);
+            JsonSerializer.Serialize(writer, value, _writeJsonSerializerOptions);
         }
     }
 }

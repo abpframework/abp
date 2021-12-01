@@ -8,6 +8,8 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
     public class AbpStringToBooleanConverter : JsonConverter<bool>
     {
+        private JsonSerializerOptions _writeJsonSerializerOptions;
+
         public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.String)
@@ -29,9 +31,10 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-            var entityConverter = (JsonConverter<bool>)newOptions.GetConverter(typeof(bool));
-            entityConverter.Write(writer, value, newOptions);
+            _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
+            var entityConverter = (JsonConverter<bool>)_writeJsonSerializerOptions.GetConverter(typeof(bool));
+
+            entityConverter.Write(writer, value, _writeJsonSerializerOptions);
         }
     }
 }
