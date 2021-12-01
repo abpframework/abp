@@ -4,7 +4,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Create A New Project
 
-1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.8.0+):
+1. Create a new AspNet Core Web Application from Visual Studio 2022 (17.0.0+):
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
@@ -21,7 +21,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 Volo.Abp.AspNetCore.Mvc is AspNet Core MVC integration package for ABP. So, install it to your project:
 
 ````
-Install-Package Volo.Abp.AspNetCore.Mvc
+Install-Package Volo.Abp.AspNetCore.Mvc -Version 5.0.0-rc.1
 ````
 
 ## Create First ABP Module
@@ -40,21 +40,20 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(
-            ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
                 app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseConfiguredEndpoints();
@@ -69,34 +68,29 @@ ABP packages define module classes and a module can depend on another. In the co
 
 Instead of the Startup class, we are configuring ASP.NET Core pipeline in this module class.
 
-## The Startup Class
+## The Program Class
 
-Next step is to modify Startup class to integrate to ABP module system:
+Next step is to modify Program class to integrate to ABP module system:
 
 ````C#
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<AppModule>();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public void Configure(IApplicationBuilder app)
-        {
-            app.InitializeApplication();
-        }
-    }
-}
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
 ````
 
-``services.AddApplication<AppModule>()`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.Services.AddApplication<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
-``app.InitializeApplication()`` in ``Configure`` method initializes and starts the application.
+``app.InitializeApplication()`` initializes and starts the application.
 
 ## Run the Application!
 
@@ -111,7 +105,7 @@ Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty ea
 1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
 ````
-Install-Package Volo.Abp.Autofac
+Install-Package Volo.Abp.Autofac -Version 5.0.0-rc.1
 ````
 
 2. Add ``AbpAutofacModule`` Dependency
@@ -127,28 +121,23 @@ public class AppModule : AbpModule
 
 3. Update `Program.cs` to use Autofac:
 
-````csharp
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+````C#
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac(); //Add this line
-    }
-}
+builder.Host.UseAutofac();  //Add this line
+
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
+
 ````
 
 ## Source Code
