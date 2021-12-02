@@ -57,7 +57,7 @@ a {
             border-radius: 0px; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:visited, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-select:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:visited {
               box-shadow: none; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.select {
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select {
             padding: 0 10px 2px 6px; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-filter {
         padding: 0 1rem;
