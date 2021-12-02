@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.BlobStoring.Azure
+﻿namespace Volo.Abp.BlobStoring.Azure;
+
+public interface IAzureBlobNameCalculator
 {
-    public interface IAzureBlobNameCalculator
-    {
-        string Calculate(BlobProviderArgs args);
-    }
+    string Calculate(BlobProviderArgs args);
 }

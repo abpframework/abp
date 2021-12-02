@@ -1,9 +1,8 @@
 using MongoDB.Driver;
 
-namespace Volo.Abp.MongoDB.DistributedEvents
+namespace Volo.Abp.MongoDB.DistributedEvents;
+
+public interface IHasEventInbox : IAbpMongoDbContext
 {
-    public interface IHasEventInbox : IAbpMongoDbContext
-    {
-        IMongoCollection<IncomingEventRecord> IncomingEvents { get; }
-    }
+    IMongoCollection<IncomingEventRecord> IncomingEvents { get; }
 }

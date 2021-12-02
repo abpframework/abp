@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.Authorization.Permissions
+﻿namespace Volo.Abp.Authorization.Permissions;
+
+public interface IPermissionDefinitionProvider
 {
-    public interface IPermissionDefinitionProvider
-    {
-        void PreDefine(IPermissionDefinitionContext context);
+    void PreDefine(IPermissionDefinitionContext context);
 
-        void Define(IPermissionDefinitionContext context);
+    void Define(IPermissionDefinitionContext context);
 
-        void PostDefine(IPermissionDefinitionContext context);
-    }
+    void PostDefine(IPermissionDefinitionContext context);
 }
