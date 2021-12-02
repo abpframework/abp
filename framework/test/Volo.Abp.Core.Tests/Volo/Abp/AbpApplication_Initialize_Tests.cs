@@ -4,63 +4,62 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Modularity.PlugIns;
 using Xunit;
 
-namespace Volo.Abp
+namespace Volo.Abp;
+
+public class AbpApplication_Initialize_Tests
 {
-    public class AbpApplication_Initialize_Tests
+    [Fact]
+    public void Should_Initialize_Single_Module()
     {
-        [Fact]
-        public void Should_Initialize_Single_Module()
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
         {
-            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
-            {
-                //Assert
-                var module = application.Services.GetSingletonInstance<IndependentEmptyModule>();
-                module.PreConfigureServicesIsCalled.ShouldBeTrue();
-                module.ConfigureServicesIsCalled.ShouldBeTrue();
-                module.PostConfigureServicesIsCalled.ShouldBeTrue();
+            //Assert
+            var module = application.Services.GetSingletonInstance<IndependentEmptyModule>();
+            module.PreConfigureServicesIsCalled.ShouldBeTrue();
+            module.ConfigureServicesIsCalled.ShouldBeTrue();
+            module.PostConfigureServicesIsCalled.ShouldBeTrue();
 
-                //Act
-                application.Initialize();
+            //Act
+            application.Initialize();
 
-                //Assert
-                application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
-                module.OnApplicationInitializeIsCalled.ShouldBeTrue();
+            //Assert
+            application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
+            module.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
-                //Act
-                application.Shutdown();
+            //Act
+            application.Shutdown();
 
-                //Assert
-                module.OnApplicationShutdownIsCalled.ShouldBeTrue();
-            }
+            //Assert
+            module.OnApplicationShutdownIsCalled.ShouldBeTrue();
         }
+    }
 
-        [Fact]
-        public void Should_Initialize_PlugIn()
+    [Fact]
+    public void Should_Initialize_PlugIn()
+    {
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
         {
-            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
-            {
-                options.PlugInSources.AddTypes(typeof(IndependentEmptyPlugInModule));
-            }))
-            {
-                //Assert
-                var plugInModule = application.Services.GetSingletonInstance<IndependentEmptyPlugInModule>();
-                plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
-                plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
-                plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
+            options.PlugInSources.AddTypes(typeof(IndependentEmptyPlugInModule));
+        }))
+        {
+            //Assert
+            var plugInModule = application.Services.GetSingletonInstance<IndependentEmptyPlugInModule>();
+            plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
+            plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
+            plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
 
-                //Act
-                application.Initialize();
+            //Act
+            application.Initialize();
 
-                //Assert
-                application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);
-                plugInModule.OnApplicationInitializeIsCalled.ShouldBeTrue();
+            //Assert
+            application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);
+            plugInModule.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
-                //Act
-                application.Shutdown();
+            //Act
+            application.Shutdown();
 
-                //Assert
-                plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
-            }
+            //Assert
+            plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
         }
     }
 }

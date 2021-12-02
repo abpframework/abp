@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ListGroup
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ListGroup;
+
+public enum AbpListItemTagType
 {
-    public enum AbpListItemTagType
-    {
-        Default,
-        Link,
-        Button
-    }
+    Default,
+    Link,
+    Button
 }

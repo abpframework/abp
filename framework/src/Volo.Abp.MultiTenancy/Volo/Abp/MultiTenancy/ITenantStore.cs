@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public interface ITenantStore
 {
-    public interface ITenantStore
-    {
-        Task<TenantConfiguration> FindAsync(string name);
+    Task<TenantConfiguration> FindAsync(string name);
 
-        Task<TenantConfiguration> FindAsync(Guid id);
+    Task<TenantConfiguration> FindAsync(Guid id);
 
-        [Obsolete("Use FindAsync method.")]
-        TenantConfiguration Find(string name);
+    [Obsolete("Use FindAsync method.")]
+    TenantConfiguration Find(string name);
 
-        [Obsolete("Use FindAsync method.")]
-        TenantConfiguration Find(Guid id);
-    }
+    [Obsolete("Use FindAsync method.")]
+    TenantConfiguration Find(Guid id);
 }
