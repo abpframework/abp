@@ -3,11 +3,10 @@
 
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
+
+[RemoteService(false)]
+[DisableConventionalRegistration]
+public partial class AbpApplicationConfigurationClientProxy
 {
-    [RemoteService(false)]
-    [DisableConventionalRegistration]
-    public partial class AbpApplicationConfigurationClientProxy
-    {
-    }
 }
