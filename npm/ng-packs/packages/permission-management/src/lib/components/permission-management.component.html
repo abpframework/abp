@@ -73,11 +73,9 @@
                 [attr.id]="permission.name"
                 class="form-check-input"
                 [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
-              />
-              <label
-                class="form-check-label"
-                [attr.for]="permission.name"
                 (click)="onClickCheckbox(permission, permissionCheckbox.value)"
+              />
+              <label class="form-check-label" [attr.for]="permission.name"
                 >{{ permission.displayName }}
                 <ng-container *ngIf="!hideBadges">
                   <span
