@@ -83,13 +83,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 version = latestVersion;
             }
 
-            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+            if (await GetTemplateNugetVersionAsync(name, type, version) == null)
+            {
+                throw new Exception("There is no version found with given version: " + version);
+            }
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
-                    version, latestVersion, nugetVersion);
+                    version, latestVersion, version);
             }
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
@@ -97,14 +100,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
 #if DEBUG
             if (File.Exists(localCacheFile))
             {
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, version);
             }
 #endif
 
             if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, version);
             }
 
             Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
@@ -125,7 +128,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 File.WriteAllBytes(localCacheFile, fileContent);
             }
 
-            return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
+            return new TemplateFile(fileContent, version, latestVersion, version);
         }
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null,
