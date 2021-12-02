@@ -52,7 +52,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(MyProjectNameHttpApiModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
