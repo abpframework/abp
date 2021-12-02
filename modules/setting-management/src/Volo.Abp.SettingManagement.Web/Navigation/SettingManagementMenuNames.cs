@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.SettingManagement.Web.Navigation
+﻿namespace Volo.Abp.SettingManagement.Web.Navigation;
+
+public class SettingManagementMenuNames
 {
-    public class SettingManagementMenuNames
-    {
-        public const string GroupName = "SettingManagement";
-    }
+    public const string GroupName = "SettingManagement";
 }

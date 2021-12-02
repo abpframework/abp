@@ -5,122 +5,121 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class PackageSourceManager : ITransientDependency
 {
-    public class PackageSourceManager: ITransientDependency
+    public ILogger<PackageSourceManager> Logger { get; set; }
+
+    public PackageSourceManager()
     {
-        public ILogger<PackageSourceManager> Logger { get; set; }
+        Logger = NullLogger<PackageSourceManager>.Instance;
+    }
 
-        public PackageSourceManager()
+    public void Add(string solutionFolder, string sourceKey, string sourceValue)
+    {
+        var nugetConfigPath = GetNugetConfigPath(solutionFolder);
+
+        Logger.LogInformation($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources...");
+
+        if (!File.Exists(nugetConfigPath))
         {
-            Logger = NullLogger<PackageSourceManager>.Instance;
+            File.WriteAllText(nugetConfigPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                          "<configuration>\n" +
+                          "    <packageSources>\n" +
+                          "        <add key=\"nuget.org\" value=\"https://api.nuget.org/v3/index.json\" />\n" +
+                          $"        <add key=\"{sourceKey}\" value=\"{sourceValue}\" />\n" +
+                          "    </packageSources>\n" +
+                          "</configuration>");
+            return;
         }
 
-        public void Add(string solutionFolder, string sourceKey, string sourceValue)
+        var fileContent = File.ReadAllText(nugetConfigPath);
+
+        if (fileContent.Contains($"\"{sourceValue}\""))
         {
-            var nugetConfigPath = GetNugetConfigPath(solutionFolder);
-
-            Logger.LogInformation($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources...");
-
-            if (!File.Exists(nugetConfigPath))
-            {
-                File.WriteAllText(nugetConfigPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                              "<configuration>\n" +
-                              "    <packageSources>\n" +
-                              "        <add key=\"nuget.org\" value=\"https://api.nuget.org/v3/index.json\" />\n" +
-                              $"        <add key=\"{sourceKey}\" value=\"{sourceValue}\" />\n" +
-                              "    </packageSources>\n" +
-                              "</configuration>");
-                return;
-            }
-
-            var fileContent = File.ReadAllText(nugetConfigPath);
-
-            if (fileContent.Contains($"\"{sourceValue}\""))
-            {
-                return;
-            }
-
-            try
-            {
-                var doc = new XmlDocument() { PreserveWhitespace = true };
-
-                doc.Load(GenerateStreamFromString(fileContent));
-
-                var sourceNodes = doc.SelectNodes("/configuration/packageSources");
-
-                var newNode = doc.CreateElement("add");
-
-                var includeAttr = doc.CreateAttribute("key");
-                includeAttr.Value = sourceKey;
-                newNode.Attributes.Append(includeAttr);
-
-                var versionAttr = doc.CreateAttribute("value");
-                versionAttr.Value = sourceValue;
-                newNode.Attributes.Append(versionAttr);
-
-                sourceNodes?[0]?.AppendChild(newNode);
-
-                File.WriteAllText(nugetConfigPath, doc.OuterXml);
-            }
-            catch
-            {
-                Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources FAILED.");
-            }
+            return;
         }
 
-        public void Remove(string solutionFolder, string sourceKey)
+        try
         {
-            var nugetConfigPath = GetNugetConfigPath(solutionFolder);
+            var doc = new XmlDocument() { PreserveWhitespace = true };
 
-            if (!File.Exists(nugetConfigPath))
-            {
-                return;
-            }
+            doc.Load(GenerateStreamFromString(fileContent));
 
-            var fileContent = File.ReadAllText(nugetConfigPath);
+            var sourceNodes = doc.SelectNodes("/configuration/packageSources");
 
-            if (!fileContent.Contains($"\"{sourceKey}\""))
-            {
-                return;
-            }
+            var newNode = doc.CreateElement("add");
 
-            Logger.LogInformation($"Removing \"{sourceKey}\" from nuget sources...");
+            var includeAttr = doc.CreateAttribute("key");
+            includeAttr.Value = sourceKey;
+            newNode.Attributes.Append(includeAttr);
 
-            try
-            {
-                var doc = new XmlDocument() { PreserveWhitespace = true };
+            var versionAttr = doc.CreateAttribute("value");
+            versionAttr.Value = sourceValue;
+            newNode.Attributes.Append(versionAttr);
 
-                doc.Load(GenerateStreamFromString(fileContent));
+            sourceNodes?[0]?.AppendChild(newNode);
 
-                var nodes = doc.SelectNodes($"/configuration/packageSources/add[@key='{sourceKey}']");
+            File.WriteAllText(nugetConfigPath, doc.OuterXml);
+        }
+        catch
+        {
+            Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources FAILED.");
+        }
+    }
 
-                if (nodes != null && nodes.Count > 0)
-                {
-                    nodes[0].ParentNode.RemoveChild(nodes[0]);
-                }
+    public void Remove(string solutionFolder, string sourceKey)
+    {
+        var nugetConfigPath = GetNugetConfigPath(solutionFolder);
 
-                File.WriteAllText(nugetConfigPath, doc.OuterXml);
-            }
-            catch
-            {
-                Logger.LogWarning($"Removing \"{sourceKey}\" from nuget sources FAILED.");
-            }
+        if (!File.Exists(nugetConfigPath))
+        {
+            return;
         }
 
-        private static string GetNugetConfigPath(string solutionFolder)
+        var fileContent = File.ReadAllText(nugetConfigPath);
+
+        if (!fileContent.Contains($"\"{sourceKey}\""))
         {
-            return Path.Combine(solutionFolder, "NuGet.Config");
+            return;
         }
 
-        private static Stream GenerateStreamFromString(string s)
+        Logger.LogInformation($"Removing \"{sourceKey}\" from nuget sources...");
+
+        try
         {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+
+            doc.Load(GenerateStreamFromString(fileContent));
+
+            var nodes = doc.SelectNodes($"/configuration/packageSources/add[@key='{sourceKey}']");
+
+            if (nodes != null && nodes.Count > 0)
+            {
+                nodes[0].ParentNode.RemoveChild(nodes[0]);
+            }
+
+            File.WriteAllText(nugetConfigPath, doc.OuterXml);
         }
+        catch
+        {
+            Logger.LogWarning($"Removing \"{sourceKey}\" from nuget sources FAILED.");
+        }
+    }
+
+    private static string GetNugetConfigPath(string solutionFolder)
+    {
+        return Path.Combine(solutionFolder, "NuGet.Config");
+    }
+
+    private static Stream GenerateStreamFromString(string s)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(s);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
     }
 }

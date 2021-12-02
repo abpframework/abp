@@ -18,84 +18,83 @@ using Volo.Abp.SettingManagement.Blazor.WebAssembly;
 using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Blazor.Host
+namespace MyCompanyName.MyProjectName.Blazor.Host;
+
+[DependsOn(
+    typeof(AbpAutofacWebAssemblyModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
+    typeof(AbpAccountApplicationContractsModule),
+    typeof(AbpIdentityBlazorWebAssemblyModule),
+    typeof(AbpTenantManagementBlazorWebAssemblyModule),
+    typeof(AbpSettingManagementBlazorWebAssemblyModule),
+    typeof(MyProjectNameBlazorWebAssemblyModule)
+)]
+public class MyProjectNameBlazorHostModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAutofacWebAssemblyModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
-        typeof(AbpAccountApplicationContractsModule),
-        typeof(AbpIdentityBlazorWebAssemblyModule),
-        typeof(AbpTenantManagementBlazorWebAssemblyModule),
-        typeof(AbpSettingManagementBlazorWebAssemblyModule),
-        typeof(MyProjectNameBlazorWebAssemblyModule)
-    )]
-    public class MyProjectNameBlazorHostModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
-            var builder = context.Services.GetSingletonInstance<WebAssemblyHostBuilder>();
+        var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
+        var builder = context.Services.GetSingletonInstance<WebAssemblyHostBuilder>();
 
-            ConfigureAuthentication(builder);
-            ConfigureHttpClient(context, environment);
-            ConfigureBlazorise(context);
-            ConfigureRouter(context);
-            ConfigureUI(builder);
-            ConfigureMenu(context);
-            ConfigureAutoMapper(context);
-        }
+        ConfigureAuthentication(builder);
+        ConfigureHttpClient(context, environment);
+        ConfigureBlazorise(context);
+        ConfigureRouter(context);
+        ConfigureUI(builder);
+        ConfigureMenu(context);
+        ConfigureAutoMapper(context);
+    }
 
-        private void ConfigureRouter(ServiceConfigurationContext context)
+    private void ConfigureRouter(ServiceConfigurationContext context)
+    {
+        Configure<AbpRouterOptions>(options =>
         {
-            Configure<AbpRouterOptions>(options =>
-            {
-                options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
-            });
-        }
+            options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
+        });
+    }
 
-        private void ConfigureMenu(ServiceConfigurationContext context)
+    private void ConfigureMenu(ServiceConfigurationContext context)
+    {
+        Configure<AbpNavigationOptions>(options =>
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new MyProjectNameHostMenuContributor(context.Services.GetConfiguration()));
-            });
-        }
+            options.MenuContributors.Add(new MyProjectNameHostMenuContributor(context.Services.GetConfiguration()));
+        });
+    }
 
-        private void ConfigureBlazorise(ServiceConfigurationContext context)
-        {
-            context.Services
-                .AddBootstrap5Providers()
-                .AddFontAwesomeIcons();
-        }
+    private void ConfigureBlazorise(ServiceConfigurationContext context)
+    {
+        context.Services
+            .AddBootstrap5Providers()
+            .AddFontAwesomeIcons();
+    }
 
-        private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
+    private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
+    {
+        builder.Services.AddOidcAuthentication(options =>
         {
-            builder.Services.AddOidcAuthentication(options =>
-            {
-                builder.Configuration.Bind("AuthServer", options.ProviderOptions);
-                options.ProviderOptions.DefaultScopes.Add("MyProjectName");
-            });
-        }
+            builder.Configuration.Bind("AuthServer", options.ProviderOptions);
+            options.ProviderOptions.DefaultScopes.Add("MyProjectName");
+        });
+    }
 
-        private static void ConfigureUI(WebAssemblyHostBuilder builder)
-        {
-            builder.RootComponents.Add<App>("#ApplicationContainer");
-        }
+    private static void ConfigureUI(WebAssemblyHostBuilder builder)
+    {
+        builder.RootComponents.Add<App>("#ApplicationContainer");
+    }
 
-        private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
+    private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
+    {
+        context.Services.AddTransient(sp => new HttpClient
         {
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri(environment.BaseAddress)
-            });
-        }
+            BaseAddress = new Uri(environment.BaseAddress)
+        });
+    }
 
-        private void ConfigureAutoMapper(ServiceConfigurationContext context)
+    private void ConfigureAutoMapper(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<MyProjectNameBlazorHostModule>();
-            });
-        }
+            options.AddMaps<MyProjectNameBlazorHostModule>();
+        });
     }
 }

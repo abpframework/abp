@@ -2,16 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Studio
+namespace Volo.Abp.Studio;
+
+[DependsOn(
+    typeof(AbpStudioDomainSharedModule)
+    )]
+public class AbpStudioDomainCommonServicesModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpStudioDomainSharedModule)
-        )]
-    public class AbpStudioDomainCommonServicesModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddSingleton<IFileSystem>(new FileSystem());
-        }
+        context.Services.AddSingleton<IFileSystem>(new FileSystem());
     }
 }

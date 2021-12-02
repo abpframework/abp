@@ -10,54 +10,53 @@ using Volo.Abp.SettingManagement.Web.Settings;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.SettingManagement.Web
+namespace Volo.Abp.SettingManagement.Web;
+
+[DependsOn(
+    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+    typeof(AbpSettingManagementDomainSharedModule)
+    )]
+public class AbpSettingManagementWebModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpSettingManagementApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpSettingManagementDomainSharedModule)
-        )]
-    public class AbpSettingManagementWebModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementWebModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementWebModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpNavigationOptions>(options =>
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new SettingManagementMainMenuContributor());
-            });
+            options.MenuContributors.Add(new SettingManagementMainMenuContributor());
+        });
 
-            Configure<SettingManagementPageOptions>(options =>
-            {
-                options.Contributors.Add(new EmailingPageContributor());
-            });
+        Configure<SettingManagementPageOptions>(options =>
+        {
+            options.Contributors.Add(new EmailingPageContributor());
+        });
 
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpSettingManagementWebModule>();
-            });
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpSettingManagementWebModule>();
+        });
 
-            Configure<AbpBundlingOptions>(options =>
-            {
-                options.ScriptBundles
-                    .Configure(typeof(IndexModel).FullName,
-                        configuration =>
-                        {
-                            configuration.AddFiles("/Pages/SettingManagement/Components/EmailSettingGroup/Default.js");
-                        });
-            });
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles
+                .Configure(typeof(IndexModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/Pages/SettingManagement/Components/EmailSettingGroup/Default.js");
+                    });
+        });
 
-            Configure<DynamicJavaScriptProxyOptions>(options =>
-            {
-                options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
-            });
-        }
+        Configure<DynamicJavaScriptProxyOptions>(options =>
+        {
+            options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
+        });
     }
 }
