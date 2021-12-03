@@ -1,9 +1,8 @@
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.ExceptionHandling
+namespace Volo.Abp.ExceptionHandling;
+
+public interface ILocalizeErrorMessage
 {
-    public interface ILocalizeErrorMessage
-    {
-        string LocalizeMessage(LocalizationContext context);
-    }
+    string LocalizeMessage(LocalizationContext context);
 }

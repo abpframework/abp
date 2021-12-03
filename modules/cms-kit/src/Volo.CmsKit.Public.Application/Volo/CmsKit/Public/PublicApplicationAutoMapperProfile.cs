@@ -11,28 +11,27 @@ using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Public
+namespace Volo.CmsKit.Public;
+
+public class PublicApplicationAutoMapperProfile : Profile
 {
-    public class PublicApplicationAutoMapperProfile : Profile
+    public PublicApplicationAutoMapperProfile()
     {
-        public PublicApplicationAutoMapperProfile()
-        {
-            CreateMap<CmsUser, Comments.CmsUserDto>();
+        CreateMap<CmsUser, Comments.CmsUserDto>();
 
-            CreateMap<Comment, CommentDto>()
-                .Ignore(x=> x.Author);
+        CreateMap<Comment, CommentDto>()
+            .Ignore(x => x.Author);
 
-            CreateMap<Comment, CommentWithDetailsDto>()
-                .Ignore(x=> x.Replies)
-                .Ignore(x=> x.Author);
+        CreateMap<Comment, CommentWithDetailsDto>()
+            .Ignore(x => x.Replies)
+            .Ignore(x => x.Author);
 
-            CreateMap<Rating, RatingDto>();
-            
-            CreateMap<Page, PageDto>();
+        CreateMap<Rating, RatingDto>();
 
-            CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+        CreateMap<Page, PageDto>();
 
-            CreateMap<MenuItem, MenuItemDto>();
-        }
+        CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+
+        CreateMap<MenuItem, MenuItemDto>();
     }
 }

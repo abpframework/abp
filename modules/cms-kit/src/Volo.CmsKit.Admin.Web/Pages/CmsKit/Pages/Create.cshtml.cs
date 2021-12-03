@@ -7,51 +7,50 @@ using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Pages;
 using Volo.CmsKit.Pages;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages;
+
+public class CreateModel : CmsKitAdminPageModel
 {
-    public class CreateModel : CmsKitAdminPageModel
+    protected readonly IPageAdminAppService pageAdminAppService;
+
+    [BindProperty]
+    public CreatePageViewModel ViewModel { get; set; }
+
+    public CreateModel(IPageAdminAppService pageAdminAppService)
     {
-        protected readonly IPageAdminAppService pageAdminAppService;
+        this.pageAdminAppService = pageAdminAppService;
+    }
 
-        [BindProperty]
-        public CreatePageViewModel ViewModel { get; set; }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var createInput = ObjectMapper.Map<CreatePageViewModel, CreatePageInputDto>(ViewModel);
 
-        public CreateModel(IPageAdminAppService pageAdminAppService)
-        {
-            this.pageAdminAppService = pageAdminAppService;
-        }
+        var created = await pageAdminAppService.CreateAsync(createInput);
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            var createInput = ObjectMapper.Map<CreatePageViewModel, CreatePageInputDto>(ViewModel);
+        return new OkObjectResult(created);
+    }
 
-            var created = await pageAdminAppService.CreateAsync(createInput);
+    [AutoMap(typeof(CreatePageInputDto), ReverseMap = true)]
+    public class CreatePageViewModel
+    {
+        [Required]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
+        public string Title { get; set; }
 
-            return new OkObjectResult(created);
-        }
+        [Required]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        public string Slug { get; set; }
 
-        [AutoMap(typeof(CreatePageInputDto), ReverseMap = true)]
-        public class CreatePageViewModel
-        {
-            [Required]
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
-            public string Title { get; set; }
+        [HiddenInput]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        public string Content { get; set; }
 
-            [Required]
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
-            public string Slug { get; set; }
+        [TextArea(Rows = 6)]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        public string Script { get; set; }
 
-            [HiddenInput]
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
-            public string Content { get; set; }
-
-            [TextArea(Rows = 6)]
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
-            public string Script { get; set; }
-
-            [TextArea(Rows = 6)]
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
-            public string Style { get; set; }
-        }
+        [TextArea(Rows = 6)]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        public string Style { get; set; }
     }
 }

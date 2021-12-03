@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IModuleContainer
 {
-    public interface IModuleContainer
-    {
-        [NotNull]
-        IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
-    }
+    [NotNull]
+    IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 }

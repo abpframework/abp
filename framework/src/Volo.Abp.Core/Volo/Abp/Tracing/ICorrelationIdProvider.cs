@@ -1,10 +1,9 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Tracing
+namespace Volo.Abp.Tracing;
+
+public interface ICorrelationIdProvider
 {
-    public interface ICorrelationIdProvider
-    {
-        [NotNull]
-        string Get();
-    }
+    [NotNull]
+    string Get();
 }

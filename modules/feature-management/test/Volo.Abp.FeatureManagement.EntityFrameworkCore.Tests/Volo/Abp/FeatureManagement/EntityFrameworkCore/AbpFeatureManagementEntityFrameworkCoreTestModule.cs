@@ -6,38 +6,37 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(FeatureManagementTestBaseModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+    )]
+public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(FeatureManagementTestBaseModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqliteModule)
-        )]
-    public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+        var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            Configure<AbpDbContextOptions>(options =>
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
-                {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
-                });
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
-        }
-        
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
+        });
+    }
 
-            new FeatureManagementDbContext(
-                new DbContextOptionsBuilder<FeatureManagementDbContext>().UseSqlite(connection).Options
-            ).GetService<IRelationalDatabaseCreator>().CreateTables();
-            
-            return connection;
-        }
+    private static SqliteConnection CreateDatabaseAndGetConnection()
+    {
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        new FeatureManagementDbContext(
+            new DbContextOptionsBuilder<FeatureManagementDbContext>().UseSqlite(connection).Options
+        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+        return connection;
     }
 }
