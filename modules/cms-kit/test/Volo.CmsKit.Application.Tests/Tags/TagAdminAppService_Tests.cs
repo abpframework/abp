@@ -7,56 +7,55 @@ using Volo.Abp.Users;
 using Volo.CmsKit.Admin.Tags;
 using Xunit;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class TagAdminAppService_Tests : CmsKitApplicationTestBase
 {
-    public class TagAdminAppService_Tests : CmsKitApplicationTestBase
+    private readonly ITagAdminAppService _tagAdminAppService;
+    private ICurrentUser _currentUser;
+    private readonly CmsKitTestData _cmsKitTestData;
+
+    public TagAdminAppService_Tests()
     {
-        private readonly ITagAdminAppService _tagAdminAppService;
-        private ICurrentUser _currentUser;
-        private readonly CmsKitTestData _cmsKitTestData;
+        _tagAdminAppService = GetRequiredService<ITagAdminAppService>();
+        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+    }
 
-        public TagAdminAppService_Tests()
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        _currentUser = Substitute.For<ICurrentUser>();
+        services.AddSingleton(_currentUser);
+    }
+
+    [Fact]
+    public async Task ShouldCreateProperly()
+    {
+        var list = await _tagAdminAppService.CreateAsync(new TagCreateDto
         {
-            _tagAdminAppService = GetRequiredService<ITagAdminAppService>();
-            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        }
+            EntityType = _cmsKitTestData.EntityType1,
+            Name = "My First Tag",
+        });
 
-        protected override void AfterAddApplication(IServiceCollection services)
+        list.Id.ShouldNotBe(Guid.Empty);
+    }
+
+    [Fact]
+    public async Task ShouldThrowException_WhenTagAlreadyExist()
+    {
+        await Should.ThrowAsync<TagAlreadyExistException>(async () => await _tagAdminAppService.CreateAsync(new TagCreateDto
         {
-            _currentUser = Substitute.For<ICurrentUser>();
-            services.AddSingleton(_currentUser);
-        }
+            EntityType = _cmsKitTestData.Content_1_EntityType,
+            Name = _cmsKitTestData.Content_1_Tags[0],
+        }));
+    }
 
-        [Fact]
-        public async Task ShouldCreateProperly()
-        {
-            var list = await _tagAdminAppService.CreateAsync(new TagCreateDto
-            {
-                EntityType = _cmsKitTestData.EntityType1,
-                Name = "My First Tag",
-            });
+    public async Task GetTagDefinitionsAsync_ShouldWorkProperly_WithoutParameters()
+    {
+        var definitions = await _tagAdminAppService.GetTagDefinitionsAsync();
 
-            list.Id.ShouldNotBe(Guid.Empty);
-        }
-
-        [Fact]
-        public async Task ShouldThrowException_WhenTagAlreadyExist()
-        {
-            await Should.ThrowAsync<TagAlreadyExistException>(async () => await _tagAdminAppService.CreateAsync(new TagCreateDto
-            {
-                EntityType = _cmsKitTestData.Content_1_EntityType,
-                Name = _cmsKitTestData.Content_1_Tags[0],
-            }));
-        }
-
-        public async Task GetTagDefinitionsAsync_ShouldWorkProperly_WithoutParameters()
-        {
-            var definitions = await _tagAdminAppService.GetTagDefinitionsAsync();
-
-            definitions.ShouldNotBeNull();
-            definitions.ShouldNotBeEmpty();
-            definitions.Count.ShouldBeGreaterThan(1);
-            definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
-        }
+        definitions.ShouldNotBeNull();
+        definitions.ShouldNotBeEmpty();
+        definitions.Count.ShouldBeGreaterThan(1);
+        definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
     }
 }

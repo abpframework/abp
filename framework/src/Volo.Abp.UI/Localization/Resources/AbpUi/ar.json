@@ -45,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "لم تحفظ التغييرات.",
     "GoHomePage": "اذهب الى الصفحة الرئيسية",
     "GoBack": "عد",
-    "Search": "بحث"
+    "Search": "بحث",
+    "ItemWillBeDeletedMessageWithFormat": "سيتم حذف {0}!",
+    "ItemWillBeDeletedMessage": "سوف يتم حذف هذا البند!",
+    "ManageYourAccount": "إدارة حسابك"
   }
 }

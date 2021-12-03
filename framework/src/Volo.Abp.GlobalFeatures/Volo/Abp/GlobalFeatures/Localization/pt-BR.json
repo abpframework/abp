@@ -1,0 +1,6 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.GlobalFeature:010001": "O serviço '{ServiceName}' precisa habilitar o recurso '{GlobalFeatureName}'."
+  }
+}

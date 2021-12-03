@@ -1,9 +1,8 @@
-﻿namespace Volo.CmsKit.Entities
-{
-    public class CmsEntityConsts
-    {
-        public static int MaxEntityTypeLength { get; set; } = 64;
+﻿namespace Volo.CmsKit.Entities;
 
-        public static int MaxEntityIdLength { get; set; } = 64;
-    }
+public class CmsEntityConsts
+{
+    public static int MaxEntityTypeLength { get; set; } = 64;
+
+    public static int MaxEntityIdLength { get; set; } = 64;
 }

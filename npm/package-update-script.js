@@ -1,12 +1,10 @@
-
-   
 const glob = require('glob');
 var path = require('path');
 const childProcess = require('child_process');
 const { program } = require('commander');
 
 program.version('0.0.1');
-program.option('-pr, --prerelase', 'whether version is prerelase');
+program.option('-pr, --prerelease', 'whether version is prerelease');
 program.option('-rg, --registry <registry>', 'target npm server registry');
 program.parse(process.argv);
 
@@ -17,7 +15,7 @@ const check = (pkgJsonPath) => {
     return childProcess
       .execSync(
         `ncu "/^@(${packages}).*$/" --packageFile ${pkgJsonPath} -u${
-          program.prerelase ? ' --target newest' : ''
+          program.prerelease ? ' --target newest' : ''
         }${program.registry ? ` --registry ${program.registry}` : ''}`
       )
       .toString();

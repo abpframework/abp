@@ -13,6 +13,14 @@
     "DefaultErrorMessage404": "Nie znaleziono zasobu!",
     "DefaultErrorMessage404Detail": "Nie znaleziono zasobu z żądania na serwerze!",
     "EntityNotFoundErrorMessage": "Nie istnieje encja {0} z id = {1}!",
-    "Error": "Błąd"
+    "AbpDbConcurrencyErrorMessage": "Przesłane przez Ciebie dane zostały już zmienione przez innego użytkownika/klienta. Odrzuć wprowadzone zmiany i spróbuj od początku.",
+    "Error": "Błąd",
+    "UnhandledException": "Nieobsługiwany wyjątek!",
+    "401Message": "Nieautoryzowany",
+    "403Message": "Zabroniony",
+    "404Message": "Strona nie znaleziona",
+    "500Message": "Wewnętrzny błąd serwera",
+    "403MessageDetail": "Nie masz uprawnień do wykonania tej operacji!",
+    "404MessageDetail": "Przepraszamy, pod tym adresem nic nie ma."
   }
 }

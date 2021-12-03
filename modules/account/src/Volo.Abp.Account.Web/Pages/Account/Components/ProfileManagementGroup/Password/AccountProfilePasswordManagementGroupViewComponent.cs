@@ -7,54 +7,53 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password
+namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password;
+
+public class AccountProfilePasswordManagementGroupViewComponent : AbpViewComponent
 {
-    public class AccountProfilePasswordManagementGroupViewComponent : AbpViewComponent
+    protected IProfileAppService ProfileAppService { get; }
+
+    public AccountProfilePasswordManagementGroupViewComponent(
+        IProfileAppService profileAppService)
     {
-        protected IProfileAppService ProfileAppService { get; }
+        ProfileAppService = profileAppService;
+    }
 
-        public AccountProfilePasswordManagementGroupViewComponent(
-            IProfileAppService profileAppService)
+    public virtual async Task<IViewComponentResult> InvokeAsync()
+    {
+        var user = await ProfileAppService.GetAsync();
+
+        var model = new ChangePasswordInfoModel
         {
-            ProfileAppService = profileAppService;
-        }
+            HideOldPasswordInput = !user.HasPassword
+        };
 
-        public virtual async Task<IViewComponentResult> InvokeAsync()
-        {
-            var user = await ProfileAppService.GetAsync();
+        return View("~/Pages/Account/Components/ProfileManagementGroup/Password/Default.cshtml", model);
+    }
 
-            var model = new ChangePasswordInfoModel
-            {
-                HideOldPasswordInput = !user.HasPassword
-            };
+    public class ChangePasswordInfoModel
+    {
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        [Display(Name = "DisplayName:CurrentPassword")]
+        [DataType(DataType.Password)]
+        [DisableAuditing]
+        public string CurrentPassword { get; set; }
 
-            return View("~/Pages/Account/Components/ProfileManagementGroup/Password/Default.cshtml", model);
-        }
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        [Display(Name = "DisplayName:NewPassword")]
+        [DataType(DataType.Password)]
+        [DisableAuditing]
+        public string NewPassword { get; set; }
 
-        public class ChangePasswordInfoModel
-        {
-            [Required]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-            [Display(Name = "DisplayName:CurrentPassword")]
-            [DataType(DataType.Password)]
-            [DisableAuditing]
-            public string CurrentPassword { get; set; }
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        [Display(Name = "DisplayName:NewPasswordConfirm")]
+        [DataType(DataType.Password)]
+        [DisableAuditing]
+        public string NewPasswordConfirm { get; set; }
 
-            [Required]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-            [Display(Name = "DisplayName:NewPassword")]
-            [DataType(DataType.Password)]
-            [DisableAuditing]
-            public string NewPassword { get; set; }
-
-            [Required]
-            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-            [Display(Name = "DisplayName:NewPasswordConfirm")]
-            [DataType(DataType.Password)]
-            [DisableAuditing]
-            public string NewPasswordConfirm { get; set; }
-
-            public bool HideOldPasswordInput { get; set; }
-        }
+        public bool HideOldPasswordInput { get; set; }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.SimpleStateChecking
+namespace Volo.Abp.SimpleStateChecking;
+
+public interface IHasSimpleStateCheckers<TState>
+    where TState : IHasSimpleStateCheckers<TState>
 {
-    public interface IHasSimpleStateCheckers<TState>
-        where TState : IHasSimpleStateCheckers<TState>
-    {
-        List<ISimpleStateChecker<TState>> StateCheckers { get; }
-    }
+    List<ISimpleStateChecker<TState>> StateCheckers { get; }
 }

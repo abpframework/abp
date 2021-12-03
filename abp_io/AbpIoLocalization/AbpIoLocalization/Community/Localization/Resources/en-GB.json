@@ -101,6 +101,7 @@
     "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\">Open an issue</a> on the GitHub to request an article/tutorial you want to see on this web site.",
     "ArticleRequestMessageBody": "Here is the list of the requested articles by the Community. Do you want to write a requested article? Please click on the request and join the discussion.",
     "Language": "Language",
-    "CreateArticleLanguageInfo": "The language in which the article is written"
+    "CreateArticleLanguageInfo": "Language of the article",
+    "SeeMore": "See More"
   }
 }

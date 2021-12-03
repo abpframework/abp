@@ -1,9 +1,8 @@
-﻿namespace Volo.CmsKit.Admin
-{
-    public class CmsKitAdminRemoteServiceConsts
-    {
-        public const string RemoteServiceName = "CmsKitAdmin";
+﻿namespace Volo.CmsKit.Admin;
 
-        public const string ModuleName = "cms-kit-admin";
-    }
+public class CmsKitAdminRemoteServiceConsts
+{
+    public const string RemoteServiceName = "CmsKitAdmin";
+
+    public const string ModuleName = "cms-kit-admin";
 }
