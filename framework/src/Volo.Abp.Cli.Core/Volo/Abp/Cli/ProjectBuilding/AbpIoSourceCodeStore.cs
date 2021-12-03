@@ -218,9 +218,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return versions.Any(v => v.Name == version);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return true;
+                throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
             }
         }
 
