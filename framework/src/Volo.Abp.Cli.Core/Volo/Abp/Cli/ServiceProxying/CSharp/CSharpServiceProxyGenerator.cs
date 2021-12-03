@@ -29,23 +29,21 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                                                    $"{Environment.NewLine}<using placeholder>" +
                                                    $"{Environment.NewLine}" +
                                                    $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
-                                                   $"{Environment.NewLine}namespace <namespace>" +
+                                                   $"{Environment.NewLine}namespace <namespace>;" +
+                                                   $"{Environment.NewLine}" +
+                                                   $"{Environment.NewLine}[Dependency(ReplaceServices = true)]" +
+                                                   $"{Environment.NewLine}[ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
+                                                   $"{Environment.NewLine}public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
                                                    $"{Environment.NewLine}{{" +
-                                                   $"{Environment.NewLine}    [Dependency(ReplaceServices = true)]" +
-                                                   $"{Environment.NewLine}    [ExposeServices(typeof(<serviceInterface>), typeof(<className>))]" +
-                                                   $"{Environment.NewLine}    public partial class <className> : ClientProxyBase<<serviceInterface>>, <serviceInterface>" +
-                                                   $"{Environment.NewLine}    {{" +
-                                                   $"{Environment.NewLine}        <method placeholder>" +
-                                                   $"{Environment.NewLine}    }}" +
+                                                   $"{Environment.NewLine}    <method placeholder>" +
                                                    $"{Environment.NewLine}}}" +
                                                    $"{Environment.NewLine}";
     private readonly string _clientProxyTemplate = "// This file is part of <className>, you can customize it here" +
                                                     $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
-                                                    $"{Environment.NewLine}namespace <namespace>" +
+                                                    $"{Environment.NewLine}namespace <namespace>;" +
+                                                    $"{Environment.NewLine}" +
+                                                    $"{Environment.NewLine}public partial class <className>" +
                                                     $"{Environment.NewLine}{{" +
-                                                    $"{Environment.NewLine}    public partial class <className>" +
-                                                    $"{Environment.NewLine}    {{" +
-                                                    $"{Environment.NewLine}    }}" +
                                                     $"{Environment.NewLine}}}" +
                                                     $"{Environment.NewLine}";
     private readonly List<string> _usingNamespaceList = new()
