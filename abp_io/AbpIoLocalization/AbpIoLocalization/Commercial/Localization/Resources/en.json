@@ -394,6 +394,8 @@
     "DowngradeLicensePlan": "Can I downgrade to a lower license plan in the future?",
     "DowngradeLicensePlanExplanation": "You cannot downgrade your existing license plan. But you can purchase a new lower license plan and continue to your development on the new license. After you purchase a lower license, you just need to login to your new license plan via ABP CLI command: ` abp login <username> -o <organization> `.",
     "LicenseTransfer": "Can a license be transferred from one developer to another?",
-    "LicenseTransferExplanation": "Yes! When you purchase a license, you become the license holder, hence you will have access to the organization management page. An organization has owner and developer roles. Owners can manage the developer seats and assign developers. Each assigned developer will login via ABP CLI command into the system and will have development and support permissions."
-   }
+    "LicenseTransferExplanation": "Yes! When you purchase a license, you become the license holder, hence you will have access to the organization management page. An organization has owner and developer roles. Owners can manage the developer seats and assign developers. Each assigned developer will login via ABP CLI command into the system and will have development and support permissions.",
+    "UserOwnerDescription": "The 'Owner' of the organization is the admin of this account. He/she manages the organization by purchasing licenses, allocating developers. An 'Owner' cannot write code in the ABP Commercial projects, cannot download the ABP sample projects, or cannot ask questions on the support website. If you want to do all these, you have to add yourself as a developer too.",
+    "UserDeveloperDescription": "The 'Developers' can write code in the ABP Commercial projects, download the ABP sample projects, or ask questions on the support website. On the other hand, the 'Developers' cannot manage this organization."
+  }
 }
