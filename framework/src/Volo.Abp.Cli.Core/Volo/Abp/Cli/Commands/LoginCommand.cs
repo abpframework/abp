@@ -40,52 +40,70 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        if (commandLineArgs.Target.IsNullOrEmpty())
+        if (!commandLineArgs.Options.ContainsKey("device"))
         {
-            throw new CliUsageException(
-                "Username name is missing!" +
-                Environment.NewLine + Environment.NewLine +
-                GetUsageInfo()
-            );
-        }
-
-        var organization = commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long);
-
-        if (await HasMultipleOrganizationAndThisNotSpecified(commandLineArgs, organization))
-        {
-            return;
-        }
-
-        var password = commandLineArgs.Options.GetOrNull(Options.Password.Short, Options.Password.Long);
-        if (password == null)
-        {
-            Console.Write("Password: ");
-            password = ConsoleHelper.ReadSecret();
-            if (password.IsNullOrWhiteSpace())
+            if (commandLineArgs.Target.IsNullOrEmpty())
             {
                 throw new CliUsageException(
-                    "Password is missing!" +
+                    "Username name is missing!" +
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );
             }
-        }
 
-        try
-        {
-            await AuthService.LoginAsync(
-                commandLineArgs.Target,
-                password,
-                organization
-            );
-        }
-        catch (Exception ex)
-        {
-            LogCliError(ex, commandLineArgs);
-            return;
-        }
+            var organization = commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long);
 
-        Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
+            if (await HasMultipleOrganizationAndThisNotSpecified(commandLineArgs, organization))
+            {
+                return;
+            }
+
+            var password = commandLineArgs.Options.GetOrNull(Options.Password.Short, Options.Password.Long);
+            if (password == null)
+            {
+                Console.Write("Password: ");
+                password = ConsoleHelper.ReadSecret();
+                if (password.IsNullOrWhiteSpace())
+                {
+                    throw new CliUsageException(
+                        "Password is missing!" +
+                        Environment.NewLine + Environment.NewLine +
+                        GetUsageInfo()
+                    );
+                }
+            }
+
+            try
+            {
+                await AuthService.LoginAsync(
+                    commandLineArgs.Target,
+                    password,
+                    organization
+                );
+            }
+            catch (Exception ex)
+            {
+                LogCliError(ex, commandLineArgs);
+                return;
+            }
+
+            Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
+        }
+        else
+        {
+            try
+            {
+                await AuthService.DeviceLoginAsync();
+            }
+            catch (Exception ex)
+            {
+                LogCliError(ex, commandLineArgs);
+                return;
+            }
+
+            var loginInfo = await AuthService.GetLoginInfoAsync();
+            Logger.LogInformation($"Successfully logged in as '{loginInfo.Username}'");
+        }
     }
 
     private async Task<bool> HasMultipleOrganizationAndThisNotSpecified(CommandLineArgs commandLineArgs, string organization)
@@ -176,6 +194,7 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Usage:");
         sb.AppendLine("  abp login <username>");
         sb.AppendLine("  abp login <username> -p <password>");
+        sb.AppendLine("  abp login <username> --device");
         sb.AppendLine("");
         sb.AppendLine("Example:");
         sb.AppendLine("");

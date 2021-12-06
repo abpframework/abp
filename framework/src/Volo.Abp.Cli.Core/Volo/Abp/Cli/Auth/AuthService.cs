@@ -92,6 +92,21 @@ public class AuthService : ITransientDependency
         File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
     }
 
+    public async Task DeviceLoginAsync()
+    {
+        var configuration = new IdentityClientConfiguration(
+            CliUrls.AccountAbpIo,
+            "role email abpio abpio_www abpio_commercial openid offline_access",
+            "abp-cli",
+            "1q2w3e*",
+            OidcConstants.GrantTypes.DeviceCode
+        );
+
+        var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
+
+        File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
+    }
+
     public async Task LogoutAsync()
     {
         string accessToken = null;
