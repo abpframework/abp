@@ -102,6 +102,7 @@
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "FreeDDDEBook": "Free DDD E-Book",
-    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "RemoveCurrentUserFromOrganizationWarningMessage": "You are removing yourself from your own organization. You will no longer be able to manage this organization, do you confirm?"
   }
 }
