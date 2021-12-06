@@ -93,7 +93,7 @@
                                         </span>
 
                                         <select asp-items="Model.ProjectSelectItems"
-                                                class="form-control"
+                                                class="form-select"
                                                 onchange="window.location.pathname = this.value">
                                         </select>
                                     </div>
@@ -115,7 +115,7 @@
         
 
                                                 <select asp-items="Model.VersionSelectItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="if (this.value) { window.location.replace(this.value) }">
                                                 </select>
                                             </div>
@@ -126,15 +126,15 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="@(Model.VersionSelectItems.Any()? "pl-0 col-5" : "col")">
-                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
+                                <div class="@(Model.VersionSelectItems.Any()? "ps-0 col-5" : "col")">
+                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "ps-1" : "")">
                                         <div class="version-select">
                                             <div class="input-group">
                                                 @*<span class="input-group-text">
                                                             <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
                                                  </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="window.location.replace(this.value)">
                                                 </select>
                                             </div>
@@ -260,7 +260,7 @@
                                                 <abp-column size="_4">
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
-                                                        <select class="doc-section-combobox form-control"
+                                                        <select class="doc-section-combobox form-select"
                                                                 aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
                                                                 id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
                                                             @foreach (var value in parameter.Values)
