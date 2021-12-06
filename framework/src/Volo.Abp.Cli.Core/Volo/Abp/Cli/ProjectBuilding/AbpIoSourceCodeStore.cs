@@ -82,17 +82,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
                 version = latestVersion;
             }
-
-            if (await GetTemplateNugetVersionAsync(name, type, version) == null)
+            else
             {
-                throw new Exception("There is no version found with given version: " + version);
+                if (!await IsVersionExists(version))
+                {
+                    throw new Exception("There is no version found with given version: " + version);
+                }
             }
+
+            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
-                    version, latestVersion, version);
+                    version, latestVersion, nugetVersion);
             }
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
@@ -100,14 +104,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
 #if DEBUG
             if (File.Exists(localCacheFile))
             {
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, version);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
             }
 #endif
 
             if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, version);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
             }
 
             Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
@@ -128,7 +132,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 File.WriteAllBytes(localCacheFile, fileContent);
             }
 
-            return new TemplateFile(fileContent, version, latestVersion, version);
+            return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null,
@@ -193,6 +197,30 @@ namespace Volo.Abp.Cli.ProjectBuilding
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        private async Task<bool> IsVersionExists(string version)
+        {
+            var url = $"{CliUrls.WwwAbpIo}api/download/versions?includePreReleases=true";
+
+            try
+            {
+                var client = _cliHttpClientFactory.CreateClient();
+
+                using (var response = await client.GetAsync(url,
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
+                {
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var versions = JsonSerializer.Deserialize<List<GithubRelease>>(result);
+
+                    return versions.Any(v => v.Name == version);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
             }
         }
 
@@ -291,6 +319,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public class GetVersionResultDto
         {
             public string Version { get; set; }
+        }
+
+        public class GithubRelease
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public bool IsPrerelease { get; set; }
+
+            public DateTime PublishTime { get; set; }
         }
     }
 }
