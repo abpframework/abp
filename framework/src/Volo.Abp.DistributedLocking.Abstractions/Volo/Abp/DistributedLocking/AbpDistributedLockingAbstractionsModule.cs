@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.DistributedLocking
+namespace Volo.Abp.DistributedLocking;
+
+public class AbpDistributedLockingAbstractionsModule : AbpModule
 {
-    public class AbpDistributedLockingAbstractionsModule : AbpModule
-    {
-        
-    }
+
 }

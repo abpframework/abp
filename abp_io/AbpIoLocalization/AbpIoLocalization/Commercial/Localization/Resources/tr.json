@@ -390,6 +390,7 @@
     "TrialLicenseExpireMessage": "Deneme lisansını kullanıyorsunuz ve deneme lisansınızın süresi {0} tarihinde sona erecek.",
     "TryForFree": "Ücretsiz deneyin",
     "TrialLicenseExpiredInfo": "Deneme lisansınızın süresi doldu!",
-    "CommercialNewsletterConfirmationMessage": "<a href=\"https://commercial.abp.io/TermsConditions\">Şartlar, Koşullar</a> ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik politikasını</a> kabul ediyorum."
+    "CommercialNewsletterConfirmationMessage": "<a href=\"https://commercial.abp.io/TermsConditions\">Şartlar, Koşullar</a> ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik politikasını</a> kabul ediyorum.",
+    "RemoveCurrentUserFromOrganizationWarningMessage": "Organizasyondan kendinizi kaldırıyorsunuz. Artık bu organizasyonu yönetemeyeceksiniz, onaylıyor musunuz? "
   }
 }

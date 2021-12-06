@@ -6,110 +6,109 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.Application.Services
+namespace Volo.Abp.Application.Services;
+
+public abstract class CrudAppService<TEntity, TEntityDto, TKey>
+    : CrudAppService<TEntity, TEntityDto, TKey, PagedAndSortedResultRequestDto>
+    where TEntity : class, IEntity<TKey>
+    where TEntityDto : IEntityDto<TKey>
 {
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey>
-        : CrudAppService<TEntity, TEntityDto, TKey, PagedAndSortedResultRequestDto>
-        where TEntity : class, IEntity<TKey>
-        where TEntityDto : IEntityDto<TKey>
+    protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
     {
-        protected CrudAppService(IRepository<TEntity, TKey> repository)
-            : base(repository)
-        {
 
-        }
+    }
+}
+
+public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
+    : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto>
+    where TEntity : class, IEntity<TKey>
+    where TEntityDto : IEntityDto<TKey>
+{
+    protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
+    {
+
+    }
+}
+
+public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
+    : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+    where TEntity : class, IEntity<TKey>
+    where TEntityDto : IEntityDto<TKey>
+{
+    protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
+    {
+
+    }
+}
+
+public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    : CrudAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    where TEntity : class, IEntity<TKey>
+    where TEntityDto : IEntityDto<TKey>
+{
+    protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
+    {
+
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto>
-        where TEntity : class, IEntity<TKey>
-        where TEntityDto : IEntityDto<TKey>
+    protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
     {
-        protected CrudAppService(IRepository<TEntity, TKey> repository)
-            : base(repository)
-        {
-
-        }
+        return MapToGetOutputDtoAsync(entity);
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
-        where TEntity : class, IEntity<TKey>
-        where TEntityDto : IEntityDto<TKey>
+    protected override TEntityDto MapToGetListOutputDto(TEntity entity)
     {
-        protected CrudAppService(IRepository<TEntity, TKey> repository)
-            : base(repository)
-        {
+        return MapToGetOutputDto(entity);
+    }
+}
 
-        }
+public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    : AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    where TEntity : class, IEntity<TKey>
+    where TGetOutputDto : IEntityDto<TKey>
+    where TGetListOutputDto : IEntityDto<TKey>
+{
+    protected new IRepository<TEntity, TKey> Repository { get; }
+
+    protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
+    {
+        Repository = repository;
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        : CrudAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        where TEntity : class, IEntity<TKey>
-        where TEntityDto : IEntityDto<TKey>
+    protected override async Task DeleteByIdAsync(TKey id)
     {
-        protected CrudAppService(IRepository<TEntity, TKey> repository)
-            : base(repository)
-        {
-
-        }
-
-        protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
-        {
-            return MapToGetOutputDtoAsync(entity);
-        }
-
-        protected override TEntityDto MapToGetListOutputDto(TEntity entity)
-        {
-            return MapToGetOutputDto(entity);
-        }
+        await Repository.DeleteAsync(id);
     }
 
-    public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        : AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        where TEntity : class, IEntity<TKey>
-        where TGetOutputDto : IEntityDto<TKey>
-        where TGetListOutputDto : IEntityDto<TKey>
+    protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
     {
-        protected new IRepository<TEntity, TKey> Repository { get; }
+        return await Repository.GetAsync(id);
+    }
 
-        protected CrudAppService(IRepository<TEntity, TKey> repository)
-            : base(repository)
+    protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
+    {
+        if (updateInput is IEntityDto<TKey> entityDto)
         {
-            Repository = repository;
+            entityDto.Id = entity.Id;
         }
 
-        protected override async Task DeleteByIdAsync(TKey id)
+        base.MapToEntity(updateInput, entity);
+    }
+
+    protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
+    {
+        if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
         {
-            await Repository.DeleteAsync(id);
+            return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
         }
-
-        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
+        else
         {
-            return await Repository.GetAsync(id);
-        }
-
-        protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
-        {
-            if (updateInput is IEntityDto<TKey> entityDto)
-            {
-                entityDto.Id = entity.Id;
-            }
-
-            base.MapToEntity(updateInput, entity);
-        }
-
-        protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
-        {
-            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
-            {
-                return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
-            }
-            else
-            {
-                return query.OrderByDescending(e => e.Id);
-            }
+            return query.OrderByDescending(e => e.Id);
         }
     }
 }

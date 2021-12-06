@@ -12,61 +12,60 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityServer.Clients;
 
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public class AbpCorsPolicyService : ICorsPolicyService
 {
-    public class AbpCorsPolicyService : ICorsPolicyService
+    public ILogger<AbpCorsPolicyService> Logger { get; set; }
+    protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
+    protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
+    protected IdentityServerOptions Options { get; }
+
+    public AbpCorsPolicyService(
+        IDistributedCache<AllowedCorsOriginsCacheItem> cache,
+        IHybridServiceScopeFactory hybridServiceScopeFactory,
+        IOptions<IdentityServerOptions> options)
     {
-        public ILogger<AbpCorsPolicyService> Logger { get; set; }
-        protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
-        protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
-        protected IdentityServerOptions Options { get; }
+        Cache = cache;
+        HybridServiceScopeFactory = hybridServiceScopeFactory;
+        Options = options.Value;
+        Logger = NullLogger<AbpCorsPolicyService>.Instance;
+    }
 
-        public AbpCorsPolicyService(
-            IDistributedCache<AllowedCorsOriginsCacheItem> cache,
-            IHybridServiceScopeFactory hybridServiceScopeFactory,
-            IOptions<IdentityServerOptions> options)
-        {
-            Cache = cache;
-            HybridServiceScopeFactory = hybridServiceScopeFactory;
-            Options = options.Value;
-            Logger = NullLogger<AbpCorsPolicyService>.Instance;
-        }
-
-        public virtual async Task<bool> IsOriginAllowedAsync(string origin)
-        {
-            var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync,
-                () => new DistributedCacheEntryOptions()
-                {
-                    AbsoluteExpirationRelativeToNow = Options.Caching.CorsExpiration
-                });
-
-            var isAllowed = await IsOriginAllowedAsync(cacheItem.AllowedOrigins, origin);
-
-            if (!isAllowed)
+    public virtual async Task<bool> IsOriginAllowedAsync(string origin)
+    {
+        var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync,
+            () => new DistributedCacheEntryOptions()
             {
-                Logger.LogWarning($"Origin is not allowed: {origin}");
-            }
+                AbsoluteExpirationRelativeToNow = Options.Caching.CorsExpiration
+            });
 
-            return isAllowed;
+        var isAllowed = await IsOriginAllowedAsync(cacheItem.AllowedOrigins, origin);
+
+        if (!isAllowed)
+        {
+            Logger.LogWarning($"Origin is not allowed: {origin}");
         }
 
-        protected virtual async Task<AllowedCorsOriginsCacheItem> CreateCacheItemAsync()
+        return isAllowed;
+    }
+
+    protected virtual async Task<AllowedCorsOriginsCacheItem> CreateCacheItemAsync()
+    {
+        // doing this here and not in the ctor because: https://github.com/aspnet/AspNetCore/issues/2377
+        using (var scope = HybridServiceScopeFactory.CreateScope())
         {
-            // doing this here and not in the ctor because: https://github.com/aspnet/AspNetCore/issues/2377
-            using (var scope = HybridServiceScopeFactory.CreateScope())
+            var clientRepository = scope.ServiceProvider.GetRequiredService<IClientRepository>();
+
+            return new AllowedCorsOriginsCacheItem
             {
-                var clientRepository = scope.ServiceProvider.GetRequiredService<IClientRepository>();
-
-                return new AllowedCorsOriginsCacheItem
-                {
-                    AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync()).ToArray()
-                };
-            }
+                AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync()).ToArray()
+            };
         }
+    }
 
-        protected virtual Task<bool> IsOriginAllowedAsync(string[] allowedOrigins, string origin)
-        {
-            return Task.FromResult(allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase));
-        }
+    protected virtual Task<bool> IsOriginAllowedAsync(string[] allowedOrigins, string origin)
+    {
+        return Task.FromResult(allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase));
     }
 }

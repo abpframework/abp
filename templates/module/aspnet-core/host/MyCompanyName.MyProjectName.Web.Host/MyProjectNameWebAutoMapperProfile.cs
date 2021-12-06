@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName;
+
+public class MyProjectNameWebAutoMapperProfile : Profile
 {
-    public class MyProjectNameWebAutoMapperProfile : Profile
+    public MyProjectNameWebAutoMapperProfile()
     {
-        public MyProjectNameWebAutoMapperProfile()
-        {
-            //Define your AutoMapper configuration here for the Web project.
-        }
+        //Define your AutoMapper configuration here for the Web project.
     }
 }

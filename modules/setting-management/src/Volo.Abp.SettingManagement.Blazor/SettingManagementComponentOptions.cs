@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.SettingManagement.Blazor
-{
-    public class SettingManagementComponentOptions
-    {
-        public List<ISettingComponentContributor> Contributors { get; }
+namespace Volo.Abp.SettingManagement.Blazor;
 
-        public SettingManagementComponentOptions()
-        {
-            Contributors = new List<ISettingComponentContributor>();
-        }
+public class SettingManagementComponentOptions
+{
+    public List<ISettingComponentContributor> Contributors { get; }
+
+    public SettingManagementComponentOptions()
+    {
+        Contributors = new List<ISettingComponentContributor>();
     }
 }

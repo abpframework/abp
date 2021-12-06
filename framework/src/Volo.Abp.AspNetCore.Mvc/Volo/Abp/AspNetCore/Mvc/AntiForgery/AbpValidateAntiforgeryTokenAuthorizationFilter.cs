@@ -7,75 +7,74 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
+namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
+
+public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizationFilter, IAntiforgeryPolicy, ITransientDependency
 {
-    public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizationFilter, IAntiforgeryPolicy, ITransientDependency
+    private IAntiforgery _antiforgery;
+    private readonly AbpAntiForgeryCookieNameProvider _antiForgeryCookieNameProvider;
+    private readonly ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> _logger;
+
+    public AbpValidateAntiforgeryTokenAuthorizationFilter(
+        IAntiforgery antiforgery,
+        AbpAntiForgeryCookieNameProvider antiForgeryCookieNameProvider,
+        ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
     {
-        private IAntiforgery _antiforgery;
-        private readonly AbpAntiForgeryCookieNameProvider _antiForgeryCookieNameProvider;
-        private readonly ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> _logger;
+        _antiforgery = antiforgery;
+        _logger = logger;
+        _antiForgeryCookieNameProvider = antiForgeryCookieNameProvider;
+    }
 
-        public AbpValidateAntiforgeryTokenAuthorizationFilter(
-            IAntiforgery antiforgery,
-            AbpAntiForgeryCookieNameProvider antiForgeryCookieNameProvider,
-            ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
+    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    {
+        if (context == null)
         {
-            _antiforgery = antiforgery;
-            _logger = logger;
-            _antiForgeryCookieNameProvider = antiForgeryCookieNameProvider;
+            throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        if (!context.IsEffectivePolicy<IAntiforgeryPolicy>(this))
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (!context.IsEffectivePolicy<IAntiforgeryPolicy>(this))
-            {
-                _logger.LogInformation("Skipping the execution of current filter as its not the most effective filter implementing the policy " + typeof(IAntiforgeryPolicy));
-                return;
-            }
-
-            if (ShouldValidate(context))
-            {
-                try
-                {
-                    await _antiforgery.ValidateRequestAsync(context.HttpContext);
-                }
-                catch (AntiforgeryValidationException exception)
-                {
-                    _logger.LogError(exception.Message, exception);
-                    context.Result = new AntiforgeryValidationFailedResult();
-                }
-            }
+            _logger.LogInformation("Skipping the execution of current filter as its not the most effective filter implementing the policy " + typeof(IAntiforgeryPolicy));
+            return;
         }
 
-        protected virtual bool ShouldValidate(AuthorizationFilterContext context)
+        if (ShouldValidate(context))
         {
-            var authCookieName = _antiForgeryCookieNameProvider.GetAuthCookieNameOrNull();
-
-            //Always perform antiforgery validation when request contains authentication cookie
-            if (authCookieName != null &&
-                context.HttpContext.Request.Cookies.ContainsKey(authCookieName))
+            try
             {
-                return true;
+                await _antiforgery.ValidateRequestAsync(context.HttpContext);
             }
-
-            var antiForgeryCookieName = _antiForgeryCookieNameProvider.GetAntiForgeryCookieNameOrNull();
-
-            //No need to validate if antiforgery cookie is not sent.
-            //That means the request is sent from a non-browser client.
-            //See https://github.com/aspnet/Antiforgery/issues/115
-            if (antiForgeryCookieName != null &&
-                !context.HttpContext.Request.Cookies.ContainsKey(antiForgeryCookieName))
+            catch (AntiforgeryValidationException exception)
             {
-                return false;
+                _logger.LogError(exception.Message, exception);
+                context.Result = new AntiforgeryValidationFailedResult();
             }
+        }
+    }
 
-            // Anything else requires a token.
+    protected virtual bool ShouldValidate(AuthorizationFilterContext context)
+    {
+        var authCookieName = _antiForgeryCookieNameProvider.GetAuthCookieNameOrNull();
+
+        //Always perform antiforgery validation when request contains authentication cookie
+        if (authCookieName != null &&
+            context.HttpContext.Request.Cookies.ContainsKey(authCookieName))
+        {
             return true;
         }
+
+        var antiForgeryCookieName = _antiForgeryCookieNameProvider.GetAntiForgeryCookieNameOrNull();
+
+        //No need to validate if antiforgery cookie is not sent.
+        //That means the request is sent from a non-browser client.
+        //See https://github.com/aspnet/Antiforgery/issues/115
+        if (antiForgeryCookieName != null &&
+            !context.HttpContext.Request.Cookies.ContainsKey(antiForgeryCookieName))
+        {
+            return false;
+        }
+
+        // Anything else requires a token.
+        return true;
     }
 }

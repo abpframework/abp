@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.DependencyInjection;
 
- namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName;
+
+public class HelloWorldService : ITransientDependency
 {
-    public class HelloWorldService : ITransientDependency
+    public string SayHello()
     {
-        public string SayHello()
-        {
-            return "\tHello world!";
-        }
+        return "\tHello world!";
     }
 }
