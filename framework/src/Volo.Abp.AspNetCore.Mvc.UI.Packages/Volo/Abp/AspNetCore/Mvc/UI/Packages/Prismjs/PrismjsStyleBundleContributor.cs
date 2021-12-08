@@ -7,6 +7,6 @@ public class PrismjsStyleBundleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/prismjs/themes/prism-okaidia.css");
+        context.Files.AddIfNotContains("/libs/prismjs/themes/prism.css");
     }
 }
