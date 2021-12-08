@@ -319,3 +319,4 @@ tempkey.jwk
 # appsettings.secrets.json
 appsettings.secrets.json
 deploy/nuget-api-key.txt
+deploy/npm-auth-token.txt
