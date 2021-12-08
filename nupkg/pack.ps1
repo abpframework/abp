@@ -8,13 +8,16 @@ foreach($solution in $solutions) {
 }
 
 # Create all packages
+$i = 0
 foreach($project in $projects) {
-    
+    $i += 1
     $projectFolder = Join-Path $rootFolder $project
+	$projectName = ($project -split '/')[-1]
 	
-    # Create nuget pack
+	# Create nuget pack
+	Write-Host ("-----===[ $i / " + $projects.length  + " - " + $projectName + " ]===-----")
     Set-Location $projectFolder
-    Remove-Item -Recurse (Join-Path $projectFolder "bin/Release")
+    Remove-Item -Force -Recurse (Join-Path $projectFolder "bin/Release")
     & dotnet pack -c Release
 
     if (-Not $?) {
@@ -25,7 +28,7 @@ foreach($project in $projects) {
     # Copy nuget package
     $projectName = $project.Substring($project.LastIndexOf("/") + 1)
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $projectName + ".*.nupkg")
-    Move-Item $projectPackPath $packFolder
+    Move-Item -Force $projectPackPath $packFolder
 }
 
 # Go back to the pack folder
