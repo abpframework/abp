@@ -8,9 +8,6 @@ if (!$branch)
 	$branch = Read-Host "Enter the branch name"
 } 
 
-
-
-
 # Read the current version from common.props
 $commonPropsFilePath = resolve-path "../common.props"
 $commonPropsXmlCurrent = [xml](Get-Content $commonPropsFilePath ) 
@@ -36,5 +33,6 @@ git switch $branch
 git pull origin
 
 echo "`n-----=====[ BUILDING ALL PROJECTS ]=====-----`n"
-# .\build\build-all.ps1
+cd build
+.\build-all.ps1
 echo "`n-----=====[ BUILDING ALL PROJECTS COMPLETED]=====-----`n"
