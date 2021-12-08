@@ -148,7 +148,7 @@
       "folder": "src"
     },
     "Volo.Abp.BlobStoring.Database.Installer": {
-      "path": "src/Volo.Abp.BlobStoring.Database.Installer/Volo.Abp.BlobStoring.Database.Installer.abppkg.json",
+      "path": "src/Volo.CmsKit.Installer/Volo.CmsKit.Installer.abppkg.json",
       "folder": "src"
     }
   }
