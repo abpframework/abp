@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@abp/utils@~5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-5.0.0-rc.1.tgz#ba89a9de73288661db295f3bce9ea0e47c669f42"
-  integrity sha512-bOgH+hz7B7MnrqR/Aqy34CKiAnZItD/tLBXysea+MldzvAKdssmqe2RLA/6lApzLaF3SbOttoXXpa1q432vAlg==
+"@abp/utils@~5.0.0-rc.2":
+  version "5.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-5.0.0-rc.2.tgz#4ffc8e937c2e83f91c60a2f1222d8e046ab7dd54"
+  integrity sha512-/6QL6EdCatyz4igdPA0K0Cs/0fe3AatGyYYtwb+SBnZBcySqF+BUBWVlwMDJks8V/oUrJMQNy41foNuLGJb3jQ==
   dependencies:
     just-compare "^1.3.0"
 
