@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Settings
+﻿namespace Volo.Abp.Settings;
+
+public interface ISettingDefinitionProvider
 {
-    public interface ISettingDefinitionProvider
-    {
-        void Define(ISettingDefinitionContext context);
-    }
+    void Define(ISettingDefinitionContext context);
 }

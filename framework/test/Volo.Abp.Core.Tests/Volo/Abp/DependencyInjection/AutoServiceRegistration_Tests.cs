@@ -4,38 +4,37 @@ using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.DependencyInjection
-{
-    public class AutoServiceRegistration_Tests
-    {
-        [Fact]
-        public void AutoServiceRegistration_Should_Not_Duplicate_Test()
-        {
-            using (var application = AbpApplicationFactory.Create<TestModule>())
-            {
-                //Act
-                application.Initialize();
+namespace Volo.Abp.DependencyInjection;
 
-                //Assert
-                var services = application.ServiceProvider.GetServices<TestService>().ToList();
-                services.Count.ShouldBe(1);
-            }
+public class AutoServiceRegistration_Tests
+{
+    [Fact]
+    public void AutoServiceRegistration_Should_Not_Duplicate_Test()
+    {
+        using (var application = AbpApplicationFactory.Create<TestModule>())
+        {
+            //Act
+            application.Initialize();
+
+            //Assert
+            var services = application.ServiceProvider.GetServices<TestService>().ToList();
+            services.Count.ShouldBe(1);
         }
     }
+}
 
-    [DependsOn(typeof(TestDependedModule))]
-    public class TestModule : AbpModule
-    {
+[DependsOn(typeof(TestDependedModule))]
+public class TestModule : AbpModule
+{
 
-    }
+}
 
-    public class TestDependedModule : AbpModule
-    {
+public class TestDependedModule : AbpModule
+{
 
-    }
+}
 
-    public class TestService : ITransientDependency
-    {
+public class TestService : ITransientDependency
+{
 
-    }
 }

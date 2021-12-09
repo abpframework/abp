@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.TestHost;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.TestBase
+namespace Volo.Abp.AspNetCore.TestBase;
+
+public class TestServerAccessor : ITestServerAccessor, ISingletonDependency
 {
-    public class TestServerAccessor : ITestServerAccessor, ISingletonDependency
-    {
-        public TestServer Server { get; set; }
-    }
+    public TestServer Server { get; set; }
 }

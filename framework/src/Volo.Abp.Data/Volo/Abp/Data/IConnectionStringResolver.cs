@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Data
-{
-    public interface IConnectionStringResolver
-    {
-        [NotNull]
-        [Obsolete("Use ResolveAsync method.")]
-        string Resolve(string connectionStringName = null);
+namespace Volo.Abp.Data;
 
-        [NotNull]
-        Task<string> ResolveAsync(string connectionStringName = null);
-    }
+public interface IConnectionStringResolver
+{
+    [NotNull]
+    [Obsolete("Use ResolveAsync method.")]
+    string Resolve(string connectionStringName = null);
+
+    [NotNull]
+    Task<string> ResolveAsync(string connectionStringName = null);
 }

@@ -2,38 +2,37 @@
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
+
+public class BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
 {
-    public class BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
+        var appsettingsFile = context.Files.FirstOrDefault(x =>
+            !x.IsDirectory &&
+            x.Name.EndsWith("aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/appsettings.json",
+                StringComparison.InvariantCultureIgnoreCase)
+        );
+
+        appsettingsFile.NormalizeLineEndings();
+        var lines = appsettingsFile.GetLines();
+
+        for (var i = 0; i < lines.Length; i++)
         {
-            var appsettingsFile = context.Files.FirstOrDefault(x =>
-                !x.IsDirectory &&
-                x.Name.EndsWith("aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/appsettings.json",
-                    StringComparison.InvariantCultureIgnoreCase)
-            );
+            var line = lines[i];
 
-            appsettingsFile.NormalizeLineEndings();
-            var lines = appsettingsFile.GetLines();
-
-            for (var i = 0; i < lines.Length; i++)
+            if (line.Contains("Authority") && line.Contains("localhost"))
             {
-                var line = lines[i];
-
-                if (line.Contains("Authority") && line.Contains("localhost"))
-                {
-                    line = line.Replace("44305", "44301");
-                }
-                else if (line.Contains("BaseUrl") && line.Contains("localhost"))
-                {
-                    line = line.Replace("44305", "44300");
-                }
-
-                lines[i] = line;
+                line = line.Replace("44305", "44301");
+            }
+            else if (line.Contains("BaseUrl") && line.Contains("localhost"))
+            {
+                line = line.Replace("44305", "44300");
             }
 
-            appsettingsFile.SetLines(lines);
+            lines[i] = line;
         }
+
+        appsettingsFile.SetLines(lines);
     }
 }
