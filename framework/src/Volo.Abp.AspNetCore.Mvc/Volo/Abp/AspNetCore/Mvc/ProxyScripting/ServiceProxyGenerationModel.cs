@@ -3,53 +3,52 @@ using System.Linq;
 using Volo.Abp.Http.ProxyScripting;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 
-namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
+namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting;
+
+public class ServiceProxyGenerationModel //: TODO: IShouldNormalize
 {
-    public class ServiceProxyGenerationModel //: TODO: IShouldNormalize
+    public string Type { get; set; }
+
+    public bool UseCache { get; set; }
+
+    public string Modules { get; set; }
+
+    public string Controllers { get; set; }
+
+    public string Actions { get; set; }
+
+    public ServiceProxyGenerationModel()
     {
-        public string Type { get; set; }
+        UseCache = true;
+    }
 
-        public bool UseCache { get; set; }
-
-        public string Modules { get; set; }
-
-        public string Controllers { get; set; }
-
-        public string Actions { get; set; }
-
-        public ServiceProxyGenerationModel()
+    public void Normalize()
+    {
+        if (Type.IsNullOrEmpty())
         {
-            UseCache = true;
+            Type = JQueryProxyScriptGenerator.Name;
+        }
+    }
+
+    public ProxyScriptingModel CreateOptions()
+    {
+        var options = new ProxyScriptingModel(Type, UseCache);
+
+        if (!Modules.IsNullOrEmpty())
+        {
+            options.Modules = Modules.Split('|').Select(m => m.Trim()).ToArray();
         }
 
-        public void Normalize()
+        if (!Controllers.IsNullOrEmpty())
         {
-            if (Type.IsNullOrEmpty())
-            {
-                Type = JQueryProxyScriptGenerator.Name;
-            }
+            options.Controllers = Controllers.Split('|').Select(m => m.Trim()).ToArray();
         }
 
-        public ProxyScriptingModel CreateOptions()
+        if (!Actions.IsNullOrEmpty())
         {
-            var options = new ProxyScriptingModel(Type, UseCache);
-
-            if (!Modules.IsNullOrEmpty())
-            {
-                options.Modules = Modules.Split('|').Select(m => m.Trim()).ToArray();
-            }
-
-            if (!Controllers.IsNullOrEmpty())
-            {
-                options.Controllers = Controllers.Split('|').Select(m => m.Trim()).ToArray();
-            }
-
-            if (!Actions.IsNullOrEmpty())
-            {
-                options.Actions = Actions.Split('|').Select(m => m.Trim()).ToArray();
-            }
-
-            return options;
+            options.Actions = Actions.Split('|').Select(m => m.Trim()).ToArray();
         }
+
+        return options;
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class MyGetPackage
 {
-    public class MyGetPackage
-    {
-        public string PackageType { get; set; }
+    public string PackageType { get; set; }
 
-        public string Id { get; set; }
+    public string Id { get; set; }
 
-        public List<string> Versions { get; set; }
+    public List<string> Versions { get; set; }
 
-        public List<string> Dates { get; set; }
-    }
+    public List<string> Dates { get; set; }
 }

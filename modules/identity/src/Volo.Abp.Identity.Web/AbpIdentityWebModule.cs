@@ -16,112 +16,111 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.Web
+namespace Volo.Abp.Identity.Web;
+
+[DependsOn(typeof(AbpIdentityApplicationContractsModule))]
+[DependsOn(typeof(AbpAutoMapperModule))]
+[DependsOn(typeof(AbpPermissionManagementWebModule))]
+[DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+public class AbpIdentityWebModule : AbpModule
 {
-    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
-    [DependsOn(typeof(AbpPermissionManagementWebModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
-    public class AbpIdentityWebModule : AbpModule
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
-            });
+            options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
+        });
 
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpIdentityWebModule).Assembly);
-            });
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
-            });
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpIdentityWebModule).Assembly);
+        });
+    }
 
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpIdentityWebModule>();
-            });
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
+        });
 
-            context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpIdentityWebModule>();
+        });
 
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
-            });
+        context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();
 
-            Configure<RazorPagesOptions>(options =>
-            {
-                options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
-                options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);
-                options.Conventions.AuthorizePage("/Identity/Users/EditModal", IdentityPermissions.Users.Update);
-                options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
-                options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
-                options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
-            });
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
+        });
+
+        Configure<RazorPagesOptions>(options =>
+        {
+            options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
+            options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);
+            options.Conventions.AuthorizePage("/Identity/Users/EditModal", IdentityPermissions.Users.Update);
+            options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
+            options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
+            options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
+        });
 
 
-            Configure<AbpPageToolbarOptions>(options =>
-            {
-                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel>(
-                    toolbar =>
-                    {
-                        toolbar.AddButton(
-                            LocalizableString.Create<IdentityResource>("NewUser"),
-                            icon: "plus",
-                            name: "CreateUser",
-                            requiredPolicyName: IdentityPermissions.Users.Create
-                        );
-                    }
+        Configure<AbpPageToolbarOptions>(options =>
+        {
+            options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel>(
+                toolbar =>
+                {
+                    toolbar.AddButton(
+                        LocalizableString.Create<IdentityResource>("NewUser"),
+                        icon: "plus",
+                        name: "CreateUser",
+                        requiredPolicyName: IdentityPermissions.Users.Create
+                    );
+                }
+            );
+
+            options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel>(
+                toolbar =>
+                {
+                    toolbar.AddButton(
+                        LocalizableString.Create<IdentityResource>("NewRole"),
+                        icon: "plus",
+                        name: "CreateRole",
+                        requiredPolicyName: IdentityPermissions.Roles.Create
+                    );
+                }
+            );
+        });
+
+        Configure<DynamicJavaScriptProxyOptions>(options =>
+        {
+            options.DisableModule(IdentityRemoteServiceConsts.ModuleName);
+        });
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.Role,
+                    createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel.RoleInfoModel) },
+                    editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel.RoleInfoModel) }
                 );
 
-                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel>(
-                    toolbar =>
-                    {
-                        toolbar.AddButton(
-                            LocalizableString.Create<IdentityResource>("NewRole"),
-                            icon: "plus",
-                            name: "CreateRole",
-                            requiredPolicyName: IdentityPermissions.Roles.Create
-                        );
-                    }
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.User,
+                    createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel.UserInfoViewModel) },
+                    editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel.UserInfoViewModel) }
                 );
-            });
-
-            Configure<DynamicJavaScriptProxyOptions>(options =>
-            {
-                options.DisableModule(IdentityRemoteServiceConsts.ModuleName);
-            });
-        }
-
-        public override void PostConfigureServices(ServiceConfigurationContext context)
-        {
-            OneTimeRunner.Run(() =>
-            {
-                ModuleExtensionConfigurationHelper
-                    .ApplyEntityConfigurationToUi(
-                        IdentityModuleExtensionConsts.ModuleName,
-                        IdentityModuleExtensionConsts.EntityNames.Role,
-                        createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel.RoleInfoModel) },
-                        editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel.RoleInfoModel) }
-                    );
-
-                ModuleExtensionConfigurationHelper
-                    .ApplyEntityConfigurationToUi(
-                        IdentityModuleExtensionConsts.ModuleName,
-                        IdentityModuleExtensionConsts.EntityNames.User,
-                        createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel.UserInfoViewModel) },
-                        editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel.UserInfoViewModel) }
-                    );
-            });
-        }
+        });
     }
 }

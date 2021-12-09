@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+[Flags]
+public enum NpmApplicationType
 {
-    [Flags]
-    public enum NpmApplicationType
-    {
-        Mvc = 1,
-        Angular = 2
-    }
+    Mvc = 1,
+    Angular = 2
 }

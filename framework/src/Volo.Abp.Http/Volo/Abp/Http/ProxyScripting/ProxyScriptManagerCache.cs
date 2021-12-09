@@ -3,25 +3,24 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.ProxyScripting
+namespace Volo.Abp.Http.ProxyScripting;
+
+public class ProxyScriptManagerCache : IProxyScriptManagerCache, ISingletonDependency
 {
-    public class ProxyScriptManagerCache : IProxyScriptManagerCache, ISingletonDependency
+    private readonly ConcurrentDictionary<string, string> _cache;
+
+    public ProxyScriptManagerCache()
     {
-        private readonly ConcurrentDictionary<string, string> _cache;
+        _cache = new ConcurrentDictionary<string, string>();
+    }
 
-        public ProxyScriptManagerCache()
-        {
-            _cache = new ConcurrentDictionary<string, string>();
-        }
-        
-        public string GetOrAdd(string key, Func<string> factory)
-        {
-            return _cache.GetOrAdd(key, factory);
-        }
+    public string GetOrAdd(string key, Func<string> factory)
+    {
+        return _cache.GetOrAdd(key, factory);
+    }
 
-        public void Set(string key, string value)
-        {
-            _cache[key] = value;
-        }
+    public void Set(string key, string value)
+    {
+        _cache[key] = value;
     }
 }

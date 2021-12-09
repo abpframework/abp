@@ -2,30 +2,29 @@
 using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public class AbpTenantManagementDomainMappingProfile : Profile
 {
-    public class AbpTenantManagementDomainMappingProfile : Profile
+    public AbpTenantManagementDomainMappingProfile()
     {
-        public AbpTenantManagementDomainMappingProfile()
-        {
-            CreateMap<Tenant, TenantConfiguration>()
-                .ForMember(ti => ti.ConnectionStrings, opts =>
+        CreateMap<Tenant, TenantConfiguration>()
+            .ForMember(ti => ti.ConnectionStrings, opts =>
+            {
+                opts.MapFrom((tenant, ti) =>
                 {
-                    opts.MapFrom((tenant, ti) =>
+                    var connStrings = new ConnectionStrings();
+
+                    foreach (var connectionString in tenant.ConnectionStrings)
                     {
-                        var connStrings = new ConnectionStrings();
+                        connStrings[connectionString.Name] = connectionString.Value;
+                    }
 
-                        foreach (var connectionString in tenant.ConnectionStrings)
-                        {
-                            connStrings[connectionString.Name] = connectionString.Value;
-                        }
+                    return connStrings;
+                });
+            })
+            .ForMember(x => x.IsActive, x => x.Ignore());
 
-                        return connStrings;
-                    });
-                })
-                .ForMember(x => x.IsActive, x => x.Ignore());
-
-            CreateMap<Tenant, TenantEto>();
-        }
+        CreateMap<Tenant, TenantEto>();
     }
 }

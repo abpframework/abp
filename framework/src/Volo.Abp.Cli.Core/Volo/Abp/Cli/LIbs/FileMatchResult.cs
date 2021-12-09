@@ -1,15 +1,14 @@
-﻿namespace Volo.Abp.Cli.LIbs
+﻿namespace Volo.Abp.Cli.LIbs;
+
+public class FileMatchResult
 {
-    public class FileMatchResult
+    public string Path { get; }
+
+    public string Stem { get; }
+
+    public FileMatchResult(string path, string stem)
     {
-        public string Path { get; }
-
-        public string Stem { get; }
-
-        public FileMatchResult(string path, string stem)
-        {
-            Path = path;
-            Stem = stem;
-        }
+        Path = path;
+        Stem = stem;
     }
 }

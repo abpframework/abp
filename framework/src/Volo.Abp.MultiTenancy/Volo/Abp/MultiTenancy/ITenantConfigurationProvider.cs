@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public interface ITenantConfigurationProvider
 {
-    public interface ITenantConfigurationProvider
-    {
-        Task<TenantConfiguration> GetAsync(bool saveResolveResult = false);
-    }
+    Task<TenantConfiguration> GetAsync(bool saveResolveResult = false);
 }
