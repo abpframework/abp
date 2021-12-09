@@ -90,7 +90,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
         }
 
-        private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+        public static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
