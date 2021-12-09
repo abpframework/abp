@@ -99,6 +99,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
             });
         }
 
