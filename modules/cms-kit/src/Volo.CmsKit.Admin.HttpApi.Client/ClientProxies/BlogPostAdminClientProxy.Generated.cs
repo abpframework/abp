@@ -9,51 +9,50 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Blogs;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Admin.Blogs.ClientProxies
+namespace Volo.CmsKit.Admin.Blogs.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogPostAdminAppService), typeof(BlogPostAdminClientProxy))]
+public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAppService>, IBlogPostAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogPostAdminAppService), typeof(BlogPostAdminClientProxy))]
-    public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAppService>, IBlogPostAdminAppService
+    public virtual async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
     {
-        public virtual async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
+        return await RequestAsync<BlogPostDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogPostDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(CreateBlogPostDto), input }
-            });
-        }
+            { typeof(CreateBlogPostDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<BlogPostDto> GetAsync(Guid id)
+    public virtual async Task<BlogPostDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<BlogPostDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogPostDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
+    public virtual async Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
+    {
+        return await RequestAsync<PagedResultDto<BlogPostListDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<BlogPostListDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(BlogPostGetListInput), input }
-            });
-        }
+            { typeof(BlogPostGetListInput), input }
+        });
+    }
 
-        public virtual async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
+    public virtual async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
+    {
+        return await RequestAsync<BlogPostDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogPostDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(UpdateBlogPostDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(UpdateBlogPostDto), input }
+        });
     }
 }

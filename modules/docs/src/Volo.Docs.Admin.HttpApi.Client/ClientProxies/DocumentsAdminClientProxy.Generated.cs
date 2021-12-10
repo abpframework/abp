@@ -9,58 +9,57 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Docs.Admin.Documents;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Docs.Admin.ClientProxies
+namespace Volo.Docs.Admin.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IDocumentAdminAppService), typeof(DocumentsAdminClientProxy))]
+public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminAppService>, IDocumentAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IDocumentAdminAppService), typeof(DocumentsAdminClientProxy))]
-    public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminAppService>, IDocumentAdminAppService
+    public virtual async Task ClearCacheAsync(ClearCacheInput input)
     {
-        public virtual async Task ClearCacheAsync(ClearCacheInput input)
+        await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(ClearCacheInput), input }
-            });
-        }
+            { typeof(ClearCacheInput), input }
+        });
+    }
 
-        public virtual async Task PullAllAsync(PullAllDocumentInput input)
+    public virtual async Task PullAllAsync(PullAllDocumentInput input)
+    {
+        await RequestAsync(nameof(PullAllAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(PullAllAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(PullAllDocumentInput), input }
-            });
-        }
+            { typeof(PullAllDocumentInput), input }
+        });
+    }
 
-        public virtual async Task PullAsync(PullDocumentInput input)
+    public virtual async Task PullAsync(PullDocumentInput input)
+    {
+        await RequestAsync(nameof(PullAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(PullAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(PullDocumentInput), input }
-            });
-        }
+            { typeof(PullDocumentInput), input }
+        });
+    }
 
-        public virtual async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
+    public virtual async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
+    {
+        return await RequestAsync<PagedResultDto<DocumentDto>>(nameof(GetAllAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<DocumentDto>>(nameof(GetAllAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(GetAllInput), input }
-            });
-        }
+            { typeof(GetAllInput), input }
+        });
+    }
 
-        public virtual async Task RemoveFromCacheAsync(Guid documentId)
+    public virtual async Task RemoveFromCacheAsync(Guid documentId)
+    {
+        await RequestAsync(nameof(RemoveFromCacheAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(RemoveFromCacheAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), documentId }
-            });
-        }
+            { typeof(Guid), documentId }
+        });
+    }
 
-        public virtual async Task ReindexAsync(Guid documentId)
+    public virtual async Task ReindexAsync(Guid documentId)
+    {
+        await RequestAsync(nameof(ReindexAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(ReindexAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), documentId }
-            });
-        }
+            { typeof(Guid), documentId }
+        });
     }
 }

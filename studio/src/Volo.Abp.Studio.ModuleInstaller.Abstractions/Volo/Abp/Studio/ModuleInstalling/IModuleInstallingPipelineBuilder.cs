@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.ModuleInstalling
+namespace Volo.Abp.Studio.ModuleInstalling;
+
+public interface IModuleInstallingPipelineBuilder
 {
-    public interface IModuleInstallingPipelineBuilder
-    {
-        Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context);
-    }
+    Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context);
 }

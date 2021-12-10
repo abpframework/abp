@@ -6,38 +6,37 @@ using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
+
+public class SqlRawDbContextEventInbox<TDbContext> : DbContextEventInbox<TDbContext>, ISqlRawDbContextEventInbox<TDbContext>
+    where TDbContext : IHasEventInbox
 {
-    public class SqlRawDbContextEventInbox<TDbContext> : DbContextEventInbox<TDbContext> , ISqlRawDbContextEventInbox<TDbContext>
-        where TDbContext : IHasEventInbox
+    public SqlRawDbContextEventInbox(
+        IDbContextProvider<TDbContext> dbContextProvider,
+        IClock clock,
+        IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
+        : base(dbContextProvider, clock, eventBusBoxesOptions)
     {
-        public SqlRawDbContextEventInbox(
-            IDbContextProvider<TDbContext> dbContextProvider,
-            IClock clock,
-            IOptions<AbpEventBusBoxesOptions> eventBusBoxesOptions)
-            : base(dbContextProvider, clock, eventBusBoxesOptions)
-        {
-        }
+    }
 
-        [UnitOfWork]
-        public override async Task MarkAsProcessedAsync(Guid id)
-        {
-            var dbContext = await DbContextProvider.GetDbContextAsync();
-            var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
+    [UnitOfWork]
+    public override async Task MarkAsProcessedAsync(Guid id)
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+        var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
 
-            var sql = $"UPDATE {tableName} SET Processed = '1', ProcessedTime = '{Clock.Now}' WHERE Id = '{id.ToString().ToUpper()}'";
-            await dbContext.Database.ExecuteSqlRawAsync(sql);
-        }
+        var sql = $"UPDATE {tableName} SET Processed = '1', ProcessedTime = '{Clock.Now}' WHERE Id = '{id.ToString().ToUpper()}'";
+        await dbContext.Database.ExecuteSqlRawAsync(sql);
+    }
 
-        [UnitOfWork]
-        public override async Task DeleteOldEventsAsync()
-        {
-            var dbContext = await DbContextProvider.GetDbContextAsync();
-            var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
-            var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
+    [UnitOfWork]
+    public override async Task DeleteOldEventsAsync()
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+        var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
+        var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
 
-            var sql = $"DELETE FROM {tableName} WHERE Processed = '1' AND CreationTime < '{timeToKeepEvents}'";
-            await dbContext.Database.ExecuteSqlRawAsync(sql);
-        }
+        var sql = $"DELETE FROM {tableName} WHERE Processed = '1' AND CreationTime < '{timeToKeepEvents}'";
+        await dbContext.Database.ExecuteSqlRawAsync(sql);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Studio.Analyzing.Models
+namespace Volo.Abp.Studio.Analyzing.Models;
+
+public class PackageContentList : List<PackageContentItemModel>
 {
-    public class PackageContentList : List<PackageContentItemModel>
-    {
-        
-    }
+
 }

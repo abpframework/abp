@@ -7,33 +7,32 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 
-namespace Volo.CmsKit.Admin
+namespace Volo.CmsKit.Admin;
+
+public abstract class CmsKitAdminAppServiceBase : CmsKitAppServiceBase
 {
-    public abstract class CmsKitAdminAppServiceBase : CmsKitAppServiceBase
+    protected CmsKitAdminAppServiceBase()
     {
-        protected CmsKitAdminAppServiceBase()
-        {
-            ObjectMapperContext = typeof(CmsKitAdminApplicationModule);
-        }
+        ObjectMapperContext = typeof(CmsKitAdminApplicationModule);
+    }
 
-        /// <summary>
-        /// Checks given policies until finding granted policy. If none of them is granted, throws <see cref="AbpAuthorizationException"/>
-        /// </summary>
-        /// <param name="policies">Policies to be checked.</param>
-        /// <exception cref="AbpAuthorizationException">Thrown when none of policies is granted.</exception>
-        protected async Task CheckAnyOfPoliciesAsync([NotNull] IEnumerable<string> policies)
-        {
-            Check.NotNull(policies, nameof(policies));
+    /// <summary>
+    /// Checks given policies until finding granted policy. If none of them is granted, throws <see cref="AbpAuthorizationException"/>
+    /// </summary>
+    /// <param name="policies">Policies to be checked.</param>
+    /// <exception cref="AbpAuthorizationException">Thrown when none of policies is granted.</exception>
+    protected async Task CheckAnyOfPoliciesAsync([NotNull] IEnumerable<string> policies)
+    {
+        Check.NotNull(policies, nameof(policies));
 
-            foreach (var policy in policies)
+        foreach (var policy in policies)
+        {
+            if (await AuthorizationService.IsGrantedAsync(policy))
             {
-                if (await AuthorizationService.IsGrantedAsync(policy))
-                {
-                    return;
-                }
+                return;
             }
-
-            throw new AbpAuthorizationException();
         }
+
+        throw new AbpAuthorizationException();
     }
 }

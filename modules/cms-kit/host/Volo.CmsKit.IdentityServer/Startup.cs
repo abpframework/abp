@@ -4,18 +4,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.CmsKit
-{
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<CmsKitIdentityServerModule>();
-        }
+namespace Volo.CmsKit;
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        {
-            app.InitializeApplication();
-        }
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddApplication<CmsKitIdentityServerModule>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+    {
+        app.InitializeApplication();
     }
 }
