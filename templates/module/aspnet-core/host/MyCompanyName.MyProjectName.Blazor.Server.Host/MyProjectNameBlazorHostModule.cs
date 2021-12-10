@@ -48,6 +48,7 @@ using Volo.Abp.TenantManagement.Blazor.Server;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
@@ -198,6 +199,12 @@ public class MyProjectNameBlazorHostModule : AbpModule
         {
             options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
         });
+
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+            });
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
