@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hi, in this step by step article we will see how we can integrate the Syncfusion MVC Components to our ABP MVC UI.
+Hi, in this article we will see how we can integrate the Syncfusion MVC Components into our application.
 
 ## Source Code
 
@@ -15,7 +15,7 @@ You can find the source code of the application at https://github.com/EngincanV/
     * In this article, I will create a new startup template in v5.0.0-rc.2 and if you follow this article from top to end and create a new startup template with me, you need to install the [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) before starting.
 
 
-Also update your ABP CLI to the v5.0.0-rc.2, you can use the below command to update your CLI version:
+Also, update your ABP CLI to the v5.0.0-rc.2, you can use the below command to update your CLI version:
 
 ```bash
 dotnet tool update Volo.Abp.Cli -g --version 5.0.0-rc.2
@@ -31,7 +31,7 @@ dotnet tool install Volo.Abp.Cli -g --version 5.0.0-rc.2
 
 In this article, I will create a new startup template with EF Core as a database provider and MVC for UI framework. But if you already have a project with MVC UI, you don't need to create a new startup template, you can directly implement the following steps to your existing project.
 
-> If you already have a project, you can skip this section.
+> If you already have a project with MVC/Razor Pages UI, you can skip this section.
 
 We can create a new startup template by using the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
@@ -45,9 +45,11 @@ Our project boilerplate will be ready after the download is finished. Then, we c
 
 ### Pre-requisite
 
-> If you've already had a license from Syncfusion, you can skip this section and starts with Step 1.
+> If you've already had a license from Syncfusion, you can skip this section.
 
-* First thing we need to do is creating an account to be able to get license from Syncfusion. Let's navigate to https://www.syncfusion.com/aspnet-core-ui-controls and click the "Download Free Trial" button. 
+* The first thing we need to do is create an account to be able to get a license from Syncfusion. 
+
+* So, let's navigate to https://www.syncfusion.com/aspnet-core-ui-controls and click the "Download Free Trial" button. 
 
 * Then fill the form and starts your 30-day free trial.
 
@@ -55,28 +57,43 @@ Our project boilerplate will be ready after the download is finished. Then, we c
 
 ![](./manage-trial-1.png)
 
-click the "Get License Key" link for "ASP.NET Core (Essential JS 2)".
+Click the "Get License Key" link for "ASP.NET Core (Essential JS 2)".
 
 ![](./manage-trial-2.png)
 
-Then a modal will be open like above, select the version and click the "Get License Key" button.
+Then a modal will be open like in the above image, select a version and click the "Get License Key" button.
 
 ![](./copy-license-key.png)
 
-* Lastly, copy the generated license key value. This license key will be used in our application, to let Syncfusion check do our license is not expired and valid.
+Lastly, copy the generated license key value. 
 
+In order to use the relevant components, Syncfusion needs to check this license key to know that our license is valid. 
 
-### Step 1 (Configurations)
+### Configurations
 
-After providing a license key from Syncfusion, we can start with configuration thats need to be done in our application.
+After providing a license key from Syncfusion, we can start with the configuration that needs to be done in our application.
 
-* We need to install the `Syncfusion.EJ2.AspNet.Core` Nuget package to our Web project (*.Web).
+#### 1-) Install the Syncfusion.EJ2.AspNet.Core package
+
+We need to install the `Syncfusion.EJ2.AspNet.Core` Nuget package to our Web project (*.Web). 
+
+We can install it via **Visual Studio's Nuget Package Manager**:
 
 ![](./syncfusion-package.png)
 
+or via dotnet cli: 
+
+```bash
+dotnet add package Syncfusion.EJ2.AspNet.Core --version 19.3.0.57
+```
+
+> In this article, I've used the package in version 19.3.0.57.
+
+#### 2-) Register the License Key
+
 * After installing the package, we need to register our license key to be able to use the Syncfusion Components. 
 
-* To register the license key, open your web module class and update the `ConfigureServices` methods as follows:
+* To register the license key, open your web module class and update the `ConfigureServices` method as follows:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -85,7 +102,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
     var configuration = context.Services.GetConfiguration();
 
     //Register Syncfusion license
-    Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(licenseKey: configuration["Syncfusion:LicenseKey"]);
+    Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(licenseKey: configuration["Syncfusion:LicenseKey"].ToString());
 
     ConfigureUrls(configuration);
     ConfigureBundles();
@@ -99,9 +116,10 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-Instead of writing the license key in here we can define it in **appsettings.json** file and use it in here by using the Configuration system of .NET.
+Instead of writing the license key directly in here we can define it in the **appsettings.json** file and use it here by using the Configuration system of .NET.
 
-* Open your **appsettings.json** file and add a new section named "Syncfusion":
+
+* Open your **appsettings.json** file and add a new section named "Syncfusion" as below:
 
 ```json
 {  
@@ -115,9 +133,9 @@ Instead of writing the license key in here we can define it in **appsettings.jso
 
 > Replace the `<your-license-key> part with your license key that we've obtained in the previous section.`
 
-* To be able to use the Syncfusion Components we need to define it as tag helper in our **_ViewImports.cshtml** file. By doing that we can use the Syncfusion components everywhere in our application.
+* To be able to use the Syncfusion Components we need to define them in our **_ViewImports.cshtml** file. By doing that we can use the Syncfusion components everywhere in our application.
 
-* So open your **/Pages/_ViewImports.cshtml** file and add a new tag helper:
+* Open your **/Pages/_ViewImports.cshtml** file and add a new tag helper:
 
 ```cshtml
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -127,13 +145,13 @@ Instead of writing the license key in here we can define it in **appsettings.jso
 @addTagHelper *, Syncfusion.EJ2 //use Syncfusion components
 ```
 
-### Step 2 - (Add styles and script to our application)
+#### 3-) Adding Syncfusion styles and scripts to our application
 
-* Last thing we need to do is, add some style and script files that provided by Syncfusion, between to our head-body tags. 
+* The last thing we need to do is, add some style and script files provided by Syncfusion, between our head-body tags. 
 
-* We can do this by creating two view component (one for Styles and other for Scripts). Let's do that.
+* We can do this by creating two view components (one for Styles and the other for Scripts). Let's do that.
 
-First, create folder structure like below under the **Components** folder.
+First, create a folder structure like below under the **Components** folder.
 
 ![](./component-folder-structure.png)
 
@@ -232,7 +250,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 After injecting the Syncfusion style and script into our application our configurations have been completed. We can try with a simple component to see if it works as we expected.
 
-Let's try with the [Calendar](https://www.syncfusion.com/aspnet-core-ui-controls/calendar) component. Open your **Index.cshtml** file and update with the below content:
+* Let's try with the [Calendar](https://www.syncfusion.com/aspnet-core-ui-controls/calendar) component. Open your **Index.cshtml** file and update with the below content:
 
 ```cshtml
 @page
@@ -259,8 +277,8 @@ Let's try with the [Calendar](https://www.syncfusion.com/aspnet-core-ui-controls
 
 ![](./calendar-component.png)
 
---- 
+### Conclusion
 
-## See the Syncfusion Components in Action
+In this article, I've explained how to integrate the **Syncfusion Components** into our applications. After following this article, you can use the Syncfusion components in your application.
 
-//TODO: create a todo application and show some components.
+Thanks for reading the article, I hope you've found it useful :)
