@@ -171,7 +171,7 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
 
 ##### 3.2.2- Adding NPM Package
 
-Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
+Open `package.json` and add `@abp/docs": "^5.0.0` as shown below:
 
   ```json
     {
@@ -179,8 +179,8 @@ Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
         "name": "my-app",
         "private": true,
         "dependencies": {
-            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
-            "@abp/docs": "^2.9.0"
+            "@abp/aspnetcore.mvc.ui.theme.basic": "^5.0.0",
+            "@abp/docs": "^5.0.0"
         }
     }
   ```
@@ -356,12 +356,12 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 
 - MainWebsiteUrl: `/`
 
-- LatestVersionBranchName: `master`
+- LatestVersionBranchName: `dev`
 
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'master', N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'dev', N'')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
