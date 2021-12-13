@@ -73,7 +73,10 @@ namespace Volo.Abp.FeatureManagement
 
                 SetFeatureDepth(groupDto.Features, providerName, providerKey);
 
-                result.Groups.Add(groupDto);
+                if (groupDto.Features.Any())
+                {
+                    result.Groups.Add(groupDto);
+                }
             }
 
             return result;
