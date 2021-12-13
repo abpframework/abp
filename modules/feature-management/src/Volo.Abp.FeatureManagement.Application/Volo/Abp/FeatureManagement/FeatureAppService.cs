@@ -108,7 +108,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
     protected virtual async Task CheckProviderPolicy(string providerName, string providerKey)
     {
         string policyName;
-        if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null )
+        if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null)
         {
             policyName = "FeatureManagement.ManageHostFeatures";
         }
