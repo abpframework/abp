@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.MultiLingualObjects
+﻿namespace Volo.Abp.MultiLingualObjects;
+
+public interface IObjectTranslation
 {
-    public interface IObjectTranslation
-    {
-        string Language { get; set; }
-    }
+    string Language { get; set; }
 }

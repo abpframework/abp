@@ -15,6 +15,6 @@
 
 This tutorial explains how to **create and run** a new web application using the ABP Framework. Follow the steps below;
 
-1. [Setup your development environment](Getting-Started-Setup-Environment)
+1. [Setup your development environment](Getting-Started-Setup-Environment.md)
 2. [Creating a new solution](Getting-Started-Create-Solution.md)
 3. [Running the solution](Getting-Started-Running-Solution.md)

@@ -1,26 +1,25 @@
 ﻿using System;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Data;
+
+public interface IDataFilter<TFilter>
+    where TFilter : class
 {
-    public interface IDataFilter<TFilter>
-        where TFilter : class
-    {
-        IDisposable Enable();
+    IDisposable Enable();
 
-        IDisposable Disable();
+    IDisposable Disable();
 
-        bool IsEnabled { get; }
-    }
+    bool IsEnabled { get; }
+}
 
-    public interface IDataFilter
-    {
-        IDisposable Enable<TFilter>()
-            where TFilter : class;
-        
-        IDisposable Disable<TFilter>()
-            where TFilter : class;
+public interface IDataFilter
+{
+    IDisposable Enable<TFilter>()
+        where TFilter : class;
 
-        bool IsEnabled<TFilter>()
-            where TFilter : class;
-    }
+    IDisposable Disable<TFilter>()
+        where TFilter : class;
+
+    bool IsEnabled<TFilter>()
+        where TFilter : class;
 }

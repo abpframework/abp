@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.Identity.AspNetCore
+﻿namespace Volo.Abp.Identity.AspNetCore;
+
+public class AbpIdentityAspNetCoreOptions
 {
-    public class AbpIdentityAspNetCoreOptions
-    {
-        /// <summary>
-        /// Default: true.
-        /// </summary>
-        public bool ConfigureAuthentication { get; set; } = true;
-    }
+    /// <summary>
+    /// Default: true.
+    /// </summary>
+    public bool ConfigureAuthentication { get; set; } = true;
 }
