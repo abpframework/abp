@@ -1,4 +1,4 @@
-# How to Integrate the Syncfusion MVC Components to the ABP MVC UI?
+# Integrating the Syncfusion MVC Components to the ABP MVC UI
 
 ## Introduction
 
@@ -12,16 +12,16 @@ You can find the source code of the application at https://github.com/EngincanV/
 
 * [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
-    * In this article, I will create a new startup template in v5.0.0-rc.2 and if you follow this article from top to end and create a new startup template with me, you need to install the [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) before starting.
+    * In this article, we will create a new startup template in v5.0.0-rc.2 and if you follow this article from top to bottom and create a new startup template with me, you need to install the [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) before starting.
 
 
-Also, update your ABP CLI to the v5.0.0-rc.2, you can use the below command to update your CLI version:
+Also, you need to update your ABP CLI to the v5.0.0-rc.2, you can use the command below to update your CLI version:
 
 ```bash
 dotnet tool update Volo.Abp.Cli -g --version 5.0.0-rc.2
 ```
 
-or install if you haven't installed before:
+or install it if you haven't installed it before:
 
 ```bash
 dotnet tool install Volo.Abp.Cli -g --version 5.0.0-rc.2
@@ -29,7 +29,7 @@ dotnet tool install Volo.Abp.Cli -g --version 5.0.0-rc.2
 
 ## Creating the Solution
 
-In this article, I will create a new startup template with EF Core as a database provider and MVC for UI framework. But if you already have a project with MVC UI, you don't need to create a new startup template, you can directly implement the following steps to your existing project.
+In this article, we will create a new startup template with EF Core as a database provider and MVC for the UI framework. But if you already have a project with MVC UI, you don't need to create a new startup template, you can directly implement the following steps to your existing project.
 
 > If you already have a project with MVC/Razor Pages UI, you can skip this section.
 
@@ -51,9 +51,9 @@ Our project boilerplate will be ready after the download is finished. Then, we c
 
 * So, let's navigate to https://www.syncfusion.com/aspnet-core-ui-controls and click the "Download Free Trial" button. 
 
-* Then fill the form and starts your 30-day free trial.
+* Then fill the form and start your 30-day free trial.
 
-* After that, navigates to https://www.syncfusion.com/account/manage-trials/downloads to get our license key that will be used in our application. 
+* After that, navigate to https://www.syncfusion.com/account/manage-trials/downloads to get our license key that will be used in our application. 
 
 ![](./manage-trial-1.png)
 
@@ -61,7 +61,7 @@ Click the "Get License Key" link for "ASP.NET Core (Essential JS 2)".
 
 ![](./manage-trial-2.png)
 
-Then a modal will be open like in the above image, select a version and click the "Get License Key" button.
+Then a modal will be opened like in the above image, select a version and click the "Get License Key" button.
 
 ![](./copy-license-key.png)
 
@@ -151,7 +151,7 @@ Instead of writing the license key directly in here we can define it in the **ap
 
 * We can do this by creating two view components (one for Styles and the other for Scripts). Let's do that.
 
-First, create a folder structure like below under the **Components** folder.
+First, create a folder structure as shown below under the **Components** folder.
 
 ![](./component-folder-structure.png)
 
@@ -212,7 +212,7 @@ namespace SyncfusionComponentsDemo.Web.Components.Syncfusion.Style
 }
 ```
 
-After creating these two components, we can use the [**Layout Hooks**](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Layout-Hooks) system of ABP to inject this two components between head and script tags.
+After creating these two components, we can use the [**Layout Hooks**](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Layout-Hooks) system of ABP to inject these two components between head and script tags.
 
 To do this, open your web module class and update the `ConfigureServices` method as below:
 
@@ -248,7 +248,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-After injecting the Syncfusion style and script into our application our configurations have been completed. We can try with a simple component to see if it works as we expected.
+After injecting the Syncfusion style and script into our application, our configurations have been completed. We can try with a simple component to see if it works as we expected.
 
 * Let's try with the [Calendar](https://www.syncfusion.com/aspnet-core-ui-controls/calendar) component. Open your **Index.cshtml** file and update with the below content:
 
@@ -279,6 +279,6 @@ After injecting the Syncfusion style and script into our application our configu
 
 ### Conclusion
 
-In this article, I've explained how to integrate the **Syncfusion Components** into our applications. After following this article, you can use the Syncfusion components in your application.
+In this article, we've explained how to integrate the **Syncfusion Components** into our applications. After following this article, you can use the Syncfusion components in your application.
 
 Thanks for reading the article, I hope you've found it useful :)
