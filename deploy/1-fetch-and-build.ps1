@@ -40,5 +40,6 @@ git pull origin
 
 echo "`n-----=====[ BUILDING ALL PROJECTS ]=====-----`n"
 cd build
-.\build-all.ps1 -f
+.\build-all-release.ps1
+
 echo "`n-----=====[ BUILDING ALL PROJECTS COMPLETED]=====-----`n"
