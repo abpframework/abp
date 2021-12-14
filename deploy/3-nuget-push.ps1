@@ -26,6 +26,6 @@ echo "`n-----=====[ PUSHING PACKAGES TO NUGET ]=====-----`n"
 cd ..\nupkg
 powershell -File push_packages.ps1 $nugetApiKey
 echo "`n-----=====[ PUSHING PACKAGES TO NUGET COMPLETED ]=====-----`n"
-Write-Info "Pushing packages to NuGet Completed"
+Write-Info "Completed: Pushing packages to NuGet"
 
 cd ..\deploy #always return to the deploy directory

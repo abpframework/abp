@@ -6,5 +6,5 @@ cd ..\nupkg
 powershell -File pack.ps1
 echo "`n-----=====[ CREATING NUGET PACKAGES COMPLETED ]=====-----`n"
 
-Write-Info "Creating NuGet packages completed"
+Write-Info "Completed: Creating NuGet packages"
 cd ..\deploy #always return to the deploy directory

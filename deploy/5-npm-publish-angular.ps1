@@ -34,6 +34,6 @@ Write-Info "Pushing MVC packages to NPM"
 echo "`n-----=====[ PUSHING MVC PACKS TO NPM ]=====-----`n"
 powershell -File publish-ng.ps1
 echo "`n-----=====[ PUSHING MVC PACKS TO NPM COMPLETED ]=====-----`n"
-Write-Info "Pushing MVC packages to NPM completed"
+Write-Info "Completed: Pushing MVC packages to NPM"
 
 cd ..\deploy #always return to the deploy directory
