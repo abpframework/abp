@@ -58,7 +58,7 @@ $solutions = (
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
     "modules/cms-kit",
-    "modules/studio"
+    "studio"
 )
 
 # List of projects
