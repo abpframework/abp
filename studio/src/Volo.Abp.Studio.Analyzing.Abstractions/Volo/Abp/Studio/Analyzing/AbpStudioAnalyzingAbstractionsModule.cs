@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Studio.Analyzing
+namespace Volo.Abp.Studio.Analyzing;
+
+public class AbpStudioAnalyzingAbstractionsModule : AbpModule
 {
-    public class AbpStudioAnalyzingAbstractionsModule : AbpModule
-    {
-        
-    }
+
 }

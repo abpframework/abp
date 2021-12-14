@@ -138,6 +138,11 @@
     "TwitterUserNameValidationMessage": "你的Twitter用户名不能包含空格, 请确认你的Twitter用户名是正确的.",
     "LinkedinUrlValidationMessage": "你的领英URL不能包含空格, 请确认你的领英URL是正确的",
     "NoPostsFound": "没有发现帖子",
-    "SearchInPosts": "搜索帖子…"
+    "SearchInPosts": "搜索帖子…",
+    "MinimumSearchContent": "您必须输入至少 3 个字符！",
+    "Volo.AbpIo.Domain:060001": "源 URL(\"{ArticleUrl}\") 不是 Github URL",
+    "Volo.AbpIo.Domain:060002": "文章内容无法从 Github(\"{ArticleUrl}\") 资源中获得。",
+    "Volo.AbpIo.Domain:060003": "没有找到文章内容！",
+    "SeeMore": "查看更多"
   }
 }

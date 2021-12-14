@@ -7,42 +7,41 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EventBus.Boxes
+namespace Volo.Abp.EventBus.Boxes;
+
+public class OutboxSenderManager : IBackgroundWorker
 {
-    public class OutboxSenderManager : IBackgroundWorker
+    protected AbpDistributedEventBusOptions Options { get; }
+    protected IServiceProvider ServiceProvider { get; }
+    protected List<IOutboxSender> Senders { get; }
+
+    public OutboxSenderManager(
+        IOptions<AbpDistributedEventBusOptions> options,
+        IServiceProvider serviceProvider)
     {
-        protected AbpDistributedEventBusOptions Options { get; }
-        protected IServiceProvider ServiceProvider { get; }
-        protected List<IOutboxSender> Senders { get; }
+        ServiceProvider = serviceProvider;
+        Options = options.Value;
+        Senders = new List<IOutboxSender>();
+    }
 
-        public OutboxSenderManager(
-            IOptions<AbpDistributedEventBusOptions> options,
-            IServiceProvider serviceProvider)
+    public async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var outboxConfig in Options.Outboxes.Values)
         {
-            ServiceProvider = serviceProvider;
-            Options = options.Value;
-            Senders = new List<IOutboxSender>();
-        }
-
-        public async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (var outboxConfig in Options.Outboxes.Values)
+            if (outboxConfig.IsSendingEnabled)
             {
-                if (outboxConfig.IsSendingEnabled)
-                {
-                    var sender = ServiceProvider.GetRequiredService<IOutboxSender>();
-                    await sender.StartAsync(outboxConfig, cancellationToken);
-                    Senders.Add(sender);
-                }
+                var sender = ServiceProvider.GetRequiredService<IOutboxSender>();
+                await sender.StartAsync(outboxConfig, cancellationToken);
+                Senders.Add(sender);
             }
         }
+    }
 
-        public async Task StopAsync(CancellationToken cancellationToken = default)
+    public async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var sender in Senders)
         {
-            foreach (var sender in Senders)
-            {
-                await sender.StopAsync(cancellationToken);
-            }
+            await sender.StopAsync(cancellationToken);
         }
     }
 }

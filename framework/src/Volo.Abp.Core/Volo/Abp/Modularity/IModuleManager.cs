@@ -1,11 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity
-{
-    public interface IModuleManager
-    {
-        void InitializeModules([NotNull] ApplicationInitializationContext context);
+namespace Volo.Abp.Modularity;
 
-        void ShutdownModules([NotNull] ApplicationShutdownContext context);
-    }
+public interface IModuleManager
+{
+    void InitializeModules([NotNull] ApplicationInitializationContext context);
+
+    void ShutdownModules([NotNull] ApplicationShutdownContext context);
 }

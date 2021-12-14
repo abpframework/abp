@@ -1,6 +1,24 @@
 {
   "culture": "vi",
   "texts": {
-    "Settings": "Cài đặt"
+    "Settings": "Cài đặt",
+    "SuccessfullySaved": "Lưu thành công",
+    "Permission:SettingManagement": "Cài đặt quản lý",
+    "Permission:Emailing": "Gửi email",
+    "Menu:Emailing": "Gửi email",
+    "SmtpHost": "Tổ chức",
+    "SmtpPort": "Hải cảng",
+    "SmtpUserName": "Tên tài khoản",
+    "SmtpPassword": "Mật khẩu",
+    "SmtpDomain": "Lãnh địa",
+    "SmtpEnableSsl": "Bật ssl",
+    "SmtpUseDefaultCredentials": "Sử dụng thông tin đăng nhập mặc định",
+    "DefaultFromAddress": "Mặc định từ địa chỉ",
+    "DefaultFromDisplayName": "Mặc định từ tên hiển thị",
+    "Feature:SettingManagementGroup": "Cài đặt quản lý",
+    "Feature:SettingManagementEnable": "Bật quản lý cài đặt",
+    "Feature:SettingManagementEnableDescription": "Bật cài đặt hệ thống quản lý trong ứng dụng.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Cho phép người thuê thay đổi cài đặt email.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Cho phép người thuê thay đổi cài đặt email."
   }
 }

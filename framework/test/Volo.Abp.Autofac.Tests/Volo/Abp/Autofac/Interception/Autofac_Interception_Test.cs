@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Autofac.Interception
+namespace Volo.Abp.Autofac.Interception;
+
+public class Autofac_Interception_Test : AbpInterceptionTestBase<AutofacTestModule>
 {
-    public class Autofac_Interception_Test : AbpInterceptionTestBase<AutofacTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
-	}
+        options.UseAutofac();
+    }
 }

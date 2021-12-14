@@ -1,0 +1,26 @@
+{
+  "culture": "is",
+  "texts": {
+    "InternalServerErrorMessage": "Kerfisvilla kom upp í úrvinnslu á beiðninni þinni!",
+    "ValidationErrorMessage": "Beiðnin þín er ekki möguleg!",
+    "ValidationNarrativeErrorMessageTitle": "Eftirfarandi villur fundust við staðfestingu.",
+    "DefaultErrorMessage": "Það hefur komið upp villa!",
+    "DefaultErrorMessageDetail": "Villu smáatriði ekki send frá netþjóni.",
+    "DefaultErrorMessage401": "Þú ert ekki auðkenndur!",
+    "DefaultErrorMessage401Detail": "Skráðu þig inn til að framkvæma aðgerðina.",
+    "DefaultErrorMessage403": "Þú hefur ekki leyfi fyrir þessa aðgerð!",
+    "DefaultErrorMessage403Detail": "Þú hefur ekki leyfi fyrir þessa aðgerð!",
+    "DefaultErrorMessage404": "Auðlind fannst ekki!",
+    "DefaultErrorMessage404Detail": "Auðlindin sem óskað var eftir fannst ekki á netþjóninum!",
+    "EntityNotFoundErrorMessage": "Það er enginn eining {0} með id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Gögnunum sem þú hefur sent inn hefur þegar verið breytt af öðrum notanda/viðskiptavini. Fleygðu breytingunum sem þú hefur gert og reyndu frá upphafi.",
+    "Error": "Villa",
+    "UnhandledException": "Ómeðhöndluð villa",
+    "401Message": "Ekki er heimild fyrir þessari aðgerð",
+    "403Message": "Bannað",
+    "404Message": "Síðan fannst ekki",
+    "500Message": "Villa í netþjóni",
+    "403MessageDetail": "Þú hefur ekki heimild fyrir þessa aðgerð!",
+    "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi."
+  }
+}

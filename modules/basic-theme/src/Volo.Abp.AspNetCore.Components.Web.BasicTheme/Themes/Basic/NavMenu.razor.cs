@@ -1,19 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
+namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
+
+public partial class NavMenu : IDisposable
 {
-    public partial class NavMenu
+    [Inject]
+    protected IMenuManager MenuManager { get; set; }
+
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    protected ApplicationMenu Menu { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected IMenuManager MenuManager { get; set; }
+        Menu = await MenuManager.GetMainMenuAsync();
+        AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
+    }
 
-        protected ApplicationMenu Menu { get; set; }
+    public void Dispose()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+    }
 
-        protected override async Task OnInitializedAsync()
-        {
-            Menu = await MenuManager.GetMainMenuAsync();
-        }
+    private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        Menu = await MenuManager.GetMainMenuAsync();
+        await InvokeAsync(StateHasChanged);
     }
 }

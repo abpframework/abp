@@ -1,0 +1,11 @@
+{
+  "culture": "is",
+  "texts": {
+    "Hello <b>{0}</b>.": "Halló <b>{0}</b>.",
+    "Car": "Bíll",
+    "CarPlural": "Bílar",
+    "MaxLenghtErrorMessage": "Lengd þessa svæðis getur að hámarki verið að hámarki {0}",
+    "Universe": "Alheimur",
+    "FortyTwo": "Fjörutíu og tveir"
+  }
+}

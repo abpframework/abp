@@ -2,6 +2,23 @@
   "culture": "cs",
   "texts": {
     "Settings": "Nastavení",
-    "SuccessfullySaved": "Úspěšně uloženo"
+    "SuccessfullySaved": "Úspěšně uloženo",
+    "Permission:SettingManagement": "Správa nastavení",
+    "Permission:Emailing": "Zasílání e-mailem",
+    "Menu:Emailing": "Zasílání e-mailem",
+    "SmtpHost": "Hostitel",
+    "SmtpPort": "Přístav",
+    "SmtpUserName": "Uživatelské jméno",
+    "SmtpPassword": "Heslo",
+    "SmtpDomain": "Doména",
+    "SmtpEnableSsl": "Povolit ssl",
+    "SmtpUseDefaultCredentials": "Použít výchozí přihlašovací údaje",
+    "DefaultFromAddress": "Výchozí z adresy",
+    "DefaultFromDisplayName": "Výchozí ze zobrazovaného názvu",
+    "Feature:SettingManagementGroup": "Správa nastavení",
+    "Feature:SettingManagementEnable": "Povolit správu nastavení",
+    "Feature:SettingManagementEnableDescription": "Povolit systém správy nastavení v aplikaci.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Povolit nájemcům měnit nastavení e-mailu.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Povolit nájemcům měnit nastavení e-mailu."
   }
 }

@@ -1,12 +1,13 @@
-(function ($) {
+$(document).ready(function () {
+    var myDefaultAllowList = $.fn.tooltip.Constructor.Default.allowList;
 
-    var l = abp.localization.getResource('CmsKit');
-
-    var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.whiteList;
-
-    if (myDefaultWhiteList.span.indexOf('data-reaction-name') < 0) {
-        myDefaultWhiteList.span.push('data-reaction-name');
+    if (myDefaultAllowList.span.indexOf('data-reaction-name') < 0) {
+        myDefaultAllowList.span.push('data-reaction-name');
     }
+});
+
+(function ($) {
+    var l = abp.localization.getResource('CmsKit');
 
     abp.widgets.CmsReactionSelection = function ($widget) {
         var widgetManager = $widget.data('abp-widget-manager');

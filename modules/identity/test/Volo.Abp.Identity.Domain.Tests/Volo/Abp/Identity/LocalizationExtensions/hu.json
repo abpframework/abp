@@ -1,0 +1,7 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "A jelszó hosszának nagyobbnak kell lennie, mint {0} karakter.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "A jelszónak legalább egy nem alfanumerikus karaktert kell tartalmaznia."
+  }
+}

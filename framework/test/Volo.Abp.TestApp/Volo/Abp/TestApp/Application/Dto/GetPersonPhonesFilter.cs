@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.Application.Dto
+namespace Volo.Abp.TestApp.Application.Dto;
+
+public class GetPersonPhonesFilter
 {
-    public class GetPersonPhonesFilter
-    {
-        public PhoneType? Type { get; set; }
-    }
+    public PhoneType? Type { get; set; }
 }

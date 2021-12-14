@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Часовой пояс",
+    "Description:Abp.Timing.Timezone": "Часовой пояс приложения"
+  }
+}

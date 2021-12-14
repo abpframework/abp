@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.editorconfig
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -318,3 +318,6 @@ tempkey.jwk
 
 # appsettings.secrets.json
 appsettings.secrets.json
+deploy/nuget-api-key.txt
+deploy/npm-auth-token.txt
+deploy/ssh-password.txt

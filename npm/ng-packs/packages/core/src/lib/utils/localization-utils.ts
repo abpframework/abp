@@ -35,7 +35,7 @@ export function createLocalizationPipeKeyGenerator(
 ) {
   const findLocalization = createLocalizationFinder(localization);
 
-  return (resourceNames: string[], keys: string[], defaultKey: string) => {
+  return (resourceNames: string[], keys: string[], defaultKey: string | undefined) => {
     const { resourceName, key } = findLocalization(resourceNames, keys);
     return !resourceName ? defaultKey : resourceName === '_' ? key : `${resourceName}::${key}`;
   };
@@ -45,7 +45,7 @@ function createLocalizationFinder(localization: ApplicationLocalizationConfigura
   const localize = createLocalizer(localization);
 
   return (resourceNames: string[], keys: string[]) => {
-    resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
+    resourceNames = resourceNames.concat(localization.defaultResourceName || '').filter(Boolean);
 
     const resourceCount = resourceNames.length;
     const keyCount = keys.length;

@@ -10,34 +10,33 @@ using Volo.Blogging.Files;
 using Volo.Abp.Content;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Blogging.ClientProxies
+namespace Volo.Blogging.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IFileAppService), typeof(BlogFilesClientProxy))]
+public partial class BlogFilesClientProxy : ClientProxyBase<IFileAppService>, IFileAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IFileAppService), typeof(BlogFilesClientProxy))]
-    public partial class BlogFilesClientProxy : ClientProxyBase<IFileAppService>, IFileAppService
+    public virtual async Task<RawFileDto> GetAsync(string name)
     {
-        public virtual async Task<RawFileDto> GetAsync(string name)
+        return await RequestAsync<RawFileDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<RawFileDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), name }
-            });
-        }
+            { typeof(string), name }
+        });
+    }
 
-        public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
+    public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
+    {
+        return await RequestAsync<IRemoteStreamContent>(nameof(GetFileAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IRemoteStreamContent>(nameof(GetFileAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), name }
-            });
-        }
+            { typeof(string), name }
+        });
+    }
 
-        public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
+    public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
+    {
+        return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<FileUploadOutputDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(FileUploadInputDto), input }
-            });
-        }
+            { typeof(FileUploadInputDto), input }
+        });
     }
 }

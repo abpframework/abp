@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.MultiLingualObjects
+namespace Volo.Abp.MultiLingualObjects;
+
+public interface IMultiLingualObject<TTranslation>
+    where TTranslation : class, IObjectTranslation
 {
-    public interface IMultiLingualObject<TTranslation>
-        where TTranslation : class, IObjectTranslation
-    {
-        ICollection<TTranslation> Translations { get; set; }
-    }
+    ICollection<TTranslation> Translations { get; set; }
 }
