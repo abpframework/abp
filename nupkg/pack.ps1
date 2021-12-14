@@ -4,8 +4,11 @@
 foreach($solution in $solutions) {
     $solutionFolder = Join-Path $rootFolder $solution
     Set-Location $solutionFolder
-    & dotnet restore
+    dotnet restore
 }
+
+# Delete old packages
+del *.nupkg
 
 # Create all packages
 $i = 0
@@ -16,17 +19,15 @@ foreach($project in $projects) {
     $i += 1
     $projectFolder = Join-Path $rootFolder $project
 	$projectName = ($project -split '/')[-1]
-	Write-Info "[$i / $projectsCount] - Packing project: $projectName"
-	
+		
 	# Create nuget pack
-	Write-Info "-----===[ $i / " + $projects.length  + " - " + $projectName + " ]===-----"
-    
+    Write-Info "[$i / $projectsCount] - Packing project: $projectName"
 	Set-Location $projectFolder
-    Remove-Item -Force -Recurse (Join-Path $projectFolder "bin/Release")
+    dotnet clean
     dotnet pack -c Release
 
     if (-Not $?) {
-        Write-Error "Packaging failed for the project: $projectFolder" 
+        Write-Error "Packaging failed for the project: $projectName" 
         exit $LASTEXITCODE
     }
     
