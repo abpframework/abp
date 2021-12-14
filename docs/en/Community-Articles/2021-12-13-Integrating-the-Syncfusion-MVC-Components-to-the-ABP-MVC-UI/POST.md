@@ -147,7 +147,43 @@ Instead of writing the license key directly in here we can define it in the **ap
 
 #### 3-) Adding Syncfusion styles and scripts to our application
 
-* The last thing we need to do is, add some style and script files provided by Syncfusion, between our head-body tags. 
+Firstly, let's install the `@syncfusion/ej2` package from **npm**. 
+
+* Open your **package.json** file and add the `@syncfusion/ej2` package with version **19.3.57**:
+
+```json
+{
+  "version": "1.0.0",
+  "name": "my-app",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^5.0.0-rc.2",
+    "@syncfusion/ej2": "^19.3.57"
+  }
+}
+```
+
+* Then, open the **abp.resourcemapping.js** file and update the **mappings** section:
+
+```js
+module.exports = {
+    aliases: {
+        
+    },
+    mappings: {
+        "@node_modules/@syncfusion/ej2/dist/ej2.min.js": "@libs/syncfusion/",
+        "@node_modules/@syncfusion/ej2/material.css": "@libs/syncfusion/"
+    }
+};
+```
+
+> ABP copies related packages from **node_modules** folder to the **libs** folder by examining this file. You can read this [document](docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management#mapping-the-library-resources) for more info.
+
+* Then run the `abp install-libs` to install the dependencies and copy them into the libs folder by your mappings configuration. After running this command, in your **libs** folder it should be a folder named **syncfusion** folder.
+
+![](./syncfusion-libs.png)
+
+The last thing we need to do is, add some style and script files provided by Syncfusion, between our head-body tags. 
 
 * We can do this by creating two view components (one for Styles and the other for Scripts). Let's do that.
 
@@ -163,7 +199,7 @@ Then open the related files and add the following codes to each of these files.
 @addTagHelper *, Syncfusion.EJ2 //add this line
 
 <!-- Syncfusion Essential JS 2 Scripts -->
-<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+<script src="/libs/syncfusion/ej2.min.js"></script>
 
 <!-- Syncfusion Essential JS 2 ScriptManager -->
 <ejs-scripts></ejs-scripts>
@@ -191,7 +227,7 @@ namespace SyncfusionComponentsDemo.Web.Components.Syncfusion.Script
 
 ```cshtml
 <!-- Syncfusion Essential JS 2 Styles -->
-<link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+<link rel="stylesheet" href="/libs/syncfusion/material.css">
 ```
 
 * SyncfusionStyleComponent.cs
