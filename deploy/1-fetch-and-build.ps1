@@ -3,12 +3,14 @@ param(
   [string]$newVersion
 ) 
 
+. ..\nupkg\common.ps1
+
 if (!$branch)
 {
 	$branch = Read-Host "Enter the branch name"
 } 
 
-# Read the current version from common.props
+#----------- Read the current version from common.props -----------
 $commonPropsFilePath = resolve-path "../common.props"
 $commonPropsXmlCurrent = [xml](Get-Content $commonPropsFilePath ) 
 $currentVersion = $commonPropsXmlCurrent.Project.PropertyGroup.Version.Trim()
@@ -33,13 +35,16 @@ if ($newVersion -ne $currentVersion){
 }
 
 
-echo "`n-----=====[ PULLING ABP REPO - BRANCH: $branch ]=====-----`n"
+################################################################
+Write-Info "Pulling ABP $branch branch from GitHub"
 cd ..
 git switch $branch
 git pull origin
 
-echo "`n-----=====[ BUILDING ALL PROJECTS ]=====-----`n"
+################################################################
+Write-Info "Building ABP repository"
 cd build
 .\build-all-release.ps1
 
-echo "`n-----=====[ BUILDING ALL PROJECTS COMPLETED]=====-----`n"
+Write-Info "Building ABP repository completed"
+cd ..\deploy #always return to the deploy directory
