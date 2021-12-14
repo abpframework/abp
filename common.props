@@ -26,6 +26,8 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+    <EmbeddedResource Include="*.abppkg.analyze.json" />
+    <Content Remove="*.abppkg.analyze.json" />
   </ItemGroup>
   
   <ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
