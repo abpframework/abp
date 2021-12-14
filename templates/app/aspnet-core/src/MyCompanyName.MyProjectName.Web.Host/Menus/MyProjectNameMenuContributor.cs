@@ -50,7 +50,7 @@ namespace MyCompanyName.MyProjectName.Web.Menus
                     order: 0
                 )
             );
-            
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
@@ -59,7 +59,7 @@ namespace MyCompanyName.MyProjectName.Web.Menus
             {
                 administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
             }
-            
+
             administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
             administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
