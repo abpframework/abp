@@ -15,17 +15,23 @@ $currentVersion = $commonPropsXmlCurrent.Project.PropertyGroup.Version.Trim()
 
 if (!$newVersion)
 {
-	$newVersion = Read-Host "Current version is '$currentVersion'. Enter the new version  "
+	$newVersion = Read-Host "Current version is '$currentVersion'. Enter the new version (empty for no change) "
+	if($newVersion -eq "")
+	{
+		$newVersion = $currentVersion
+	}
 } 
 
-# Update common.props for version attribute
-$commonPropsXmlCurrent.Project.PropertyGroup.Version = $newVersion
-$commonPropsXmlCurrent.Save( $commonPropsFilePath )
-#check if it's updated...
-$commonPropsXmlNew = [xml](Get-Content $commonPropsFilePath ) 
-$newVersionAfterUpdate = $commonPropsXmlNew.Project.PropertyGroup.Version
+if ($newVersion -ne $currentVersion){
+	# Update common.props for version attribute
+	$commonPropsXmlCurrent.Project.PropertyGroup.Version = $newVersion
+	$commonPropsXmlCurrent.Save( $commonPropsFilePath )
+	#check if it's updated...
+	$commonPropsXmlNew = [xml](Get-Content $commonPropsFilePath ) 
+	$newVersionAfterUpdate = $commonPropsXmlNew.Project.PropertyGroup.Version
+	echo "`n`nNew version updated as '$newVersionAfterUpdate' in $commonPropsFilePath`n"
+}
 
-echo "`n`nNew version updated as '$newVersionAfterUpdate' in $commonPropsFilePath`n"
 
 echo "`n-----=====[ PULLING ABP REPO - BRANCH: $branch ]=====-----`n"
 cd ..
