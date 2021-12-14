@@ -2,6 +2,42 @@
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $rootFolder = Join-Path $packFolder "../"
 
+function Write-Info   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Black -BackgroundColor Green
+
+	try 
+	{
+	   $host.UI.RawUI.WindowTitle = $text
+	}		
+	catch 
+	{
+		#Changing window title is not suppoerted!
+	}
+}
+
+function Write-Error   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Red -BackgroundColor Black 
+}
+
+function Seperator   
+{
+	Write-Host ("_" * 100)  -ForegroundColor gray 
+}
+
 # List of solutions
 $solutions = (
     "framework",
