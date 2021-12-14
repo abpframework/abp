@@ -9,26 +9,33 @@ foreach($solution in $solutions) {
 
 # Create all packages
 $i = 0
+$projectsCount = $projects.length
+Write-Info "Running dotnet pack on $projectsCount projects..."
+
 foreach($project in $projects) {
     $i += 1
     $projectFolder = Join-Path $rootFolder $project
 	$projectName = ($project -split '/')[-1]
+	Write-Info "[$i / $projectsCount] - Packing project: $projectName"
 	
 	# Create nuget pack
-	Write-Host ("-----===[ $i / " + $projects.length  + " - " + $projectName + " ]===-----")
-    Set-Location $projectFolder
+	Write-Info "-----===[ $i / " + $projects.length  + " - " + $projectName + " ]===-----"
+    
+	Set-Location $projectFolder
     Remove-Item -Force -Recurse (Join-Path $projectFolder "bin/Release")
-    & dotnet pack -c Release
+    dotnet pack -c Release
 
     if (-Not $?) {
-        Write-Host ("Packaging failed for the project: " + $projectFolder)
+        Write-Error "Packaging failed for the project: $projectFolder" 
         exit $LASTEXITCODE
     }
     
-    # Copy nuget package
+    # Move nuget package
     $projectName = $project.Substring($project.LastIndexOf("/") + 1)
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $projectName + ".*.nupkg")
     Move-Item -Force $projectPackPath $packFolder
+	
+	Seperator
 }
 
 # Go back to the pack folder
