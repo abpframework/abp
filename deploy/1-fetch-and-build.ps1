@@ -46,5 +46,5 @@ Write-Info "Building ABP repository"
 cd build
 .\build-all-release.ps1
 
-Write-Info "Building ABP repository completed"
+Write-Info "Completed: Building ABP repository"
 cd ..\deploy #always return to the deploy directory

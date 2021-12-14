@@ -29,6 +29,5 @@ echo "`nDownloading release file into Natro..."
 
 plink.exe -ssh jenkins@94.73.164.234 -pw $password -P 22 -batch "powershell -File c:\ci\scripts\download-latest-abp-release.ps1 ${version}" 
 
-Write-Info "Downloading release zip into Natro completed"
-echo "`n---===[ COMPLETED ]===---"
+Write-Info "Completed: Downloading release zip into Natro completed"
 #---------------------------------------------------------------------
