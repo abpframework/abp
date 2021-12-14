@@ -2,6 +2,8 @@ param(
   [string]$npmAuthToken
 ) 
 
+. ..\nupkg\common.ps1
+
 if (!$npmAuthToken)
 {	
 	#reading password from file content
@@ -21,13 +23,17 @@ if (!$npmAuthToken)
 
 cd ..\npm
 
-echo "`n-----=====[ SETTING NPM AUTH TOKEN ]=====-----`n"
+#----------------------------------------------------------------------------
+
+echo "`nSetting npmjs.org auth-token token`n"
 npm set //registry.npmjs.org/:_authToken $npmAuthToken
 
+#----------------------------------------------------------------------------
+
+Write-Info "Pushing MVC packages to NPM"
 echo "`n-----=====[ PUSHING MVC PACKS TO NPM ]=====-----`n"
-powershell -File publish-mvc.ps1
-
-echo "`n-----=====[ PUSHING ANGULAR PACKS TO NPM ]=====-----`n"
 powershell -File publish-ng.ps1
+echo "`n-----=====[ PUSHING MVC PACKS TO NPM COMPLETED ]=====-----`n"
+Write-Info "Pushing MVC packages to NPM completed"
 
-echo "`n-----=====[ PUSHING PACKS TO NPM COMPLETED ]=====-----`n"
+cd ..\deploy #always return to the deploy directory
