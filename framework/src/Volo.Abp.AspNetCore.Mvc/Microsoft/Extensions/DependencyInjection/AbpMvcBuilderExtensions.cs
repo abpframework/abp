@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             applicationParts.Add(new AssemblyPart(assembly));
         }
 
-        public static void AddAbpRazorRuntimeCompilation(this IMvcBuilder mvcCoreBuilder)
+        public static void AddAbpRazorRuntimeCompilation(this IMvcCoreBuilder mvcCoreBuilder)
         {
             mvcCoreBuilder.AddRazorRuntimeCompilation();
             mvcCoreBuilder.Services.Configure<MvcRazorRuntimeCompilationOptions>(options =>
