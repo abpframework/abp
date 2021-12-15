@@ -34,7 +34,7 @@ abp new Acme.BookStore
 
 ### Upgrading existing solutions
 
-Check [the migration guide](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-5_0) for the applications with the version 4.x upgrading to the version 5.2. Also see [the upgrading guide](https://docs.abp.io/en/abp/latest/Upgrading) to understand how to update existing solutions.
+Check [the migration guide](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-5_0) for the applications with the version 4.x upgrading to the version 5.0. Also see [the upgrading guide](https://docs.abp.io/en/abp/latest/Upgrading) to understand how to update existing solutions.
 
 ## ABP Community Talks 2021.12
 
