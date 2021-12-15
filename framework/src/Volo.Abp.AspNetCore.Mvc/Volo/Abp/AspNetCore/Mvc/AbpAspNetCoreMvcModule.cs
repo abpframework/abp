@@ -140,15 +140,6 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             mvcCoreBuilder.AddAbpHybridJson();
 
-            Configure<MvcRazorRuntimeCompilationOptions>(options =>
-            {
-                options.FileProviders.Add(
-                    new RazorViewEngineVirtualFileProvider(
-                        context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
-                    )
-                );
-            });
-
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?
