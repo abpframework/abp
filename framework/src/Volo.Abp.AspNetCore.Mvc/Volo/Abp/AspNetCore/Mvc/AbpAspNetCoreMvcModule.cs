@@ -138,6 +138,12 @@ namespace Volo.Abp.AspNetCore.Mvc
                 })
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
+            if (context.Services.GetHostingEnvironment().IsDevelopment() &&
+                context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
+            {
+                mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
+            }
+
             mvcCoreBuilder.AddAbpHybridJson();
 
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
