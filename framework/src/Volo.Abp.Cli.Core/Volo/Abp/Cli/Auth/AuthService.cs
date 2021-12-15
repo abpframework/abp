@@ -17,7 +17,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Auth;
 
-public class AuthService : ITransientDependency
+public class AuthService : IAuthService, ITransientDependency
 {
     protected IIdentityModelAuthenticationService AuthenticationService { get; }
     protected ILogger<AuthService> Logger { get; }
