@@ -8,7 +8,7 @@ ABP 5.0 uses the latest version of the [Blazorise](https://blazorise.com/) libra
 
 ## Bootstrap 5
 
-ABP 5.0 now works with Bootstrap 5. For details, please refer to the official migration guide provided by Bootstrap.
+ABP 5.0 now works with Bootstrap 5. For details, please refer to the official [migration guide](https://getbootstrap.com/docs/5.0/migration/) provided by Bootstrap.
 
 Replace `Blazorise.Bootstrap` with `Blazorise.Bootstrap5` package.
 
