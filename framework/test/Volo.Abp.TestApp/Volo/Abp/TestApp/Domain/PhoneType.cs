@@ -1,9 +1,8 @@
-namespace Volo.Abp.TestApp.Domain
+namespace Volo.Abp.TestApp.Domain;
+
+public enum PhoneType
 {
-    public enum PhoneType
-    {
-        Mobile,
-        Home,
-        Office
-    }
+    Mobile,
+    Home,
+    Office
 }

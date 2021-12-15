@@ -1,9 +1,8 @@
 ﻿using System.IO;
 
-namespace Volo.Abp.Swashbuckle
+namespace Volo.Abp.Swashbuckle;
+
+public interface ISwaggerHtmlResolver
 {
-    public interface ISwaggerHtmlResolver
-    {
-        Stream Resolver();
-    }
+    Stream Resolver();
 }

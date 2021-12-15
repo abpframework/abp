@@ -9,19 +9,18 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Blogs;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Blogs.ClientProxies
+namespace Volo.CmsKit.Blogs.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogFeatureAppService), typeof(BlogFeatureClientProxy))]
+public partial class BlogFeatureClientProxy : ClientProxyBase<IBlogFeatureAppService>, IBlogFeatureAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogFeatureAppService), typeof(BlogFeatureClientProxy))]
-    public partial class BlogFeatureClientProxy : ClientProxyBase<IBlogFeatureAppService>, IBlogFeatureAppService
+    public virtual async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
     {
-        public virtual async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
+        return await RequestAsync<BlogFeatureDto>(nameof(GetOrDefaultAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogFeatureDto>(nameof(GetOrDefaultAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), blogId },
-                { typeof(string), featureName }
-            });
-        }
+            { typeof(Guid), blogId },
+            { typeof(string), featureName }
+        });
     }
 }

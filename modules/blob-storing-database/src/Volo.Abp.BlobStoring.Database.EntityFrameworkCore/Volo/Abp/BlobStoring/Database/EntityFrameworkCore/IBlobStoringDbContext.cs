@@ -2,13 +2,12 @@
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
-{
-    [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-    public interface IBlobStoringDbContext : IEfCoreDbContext
-    {
-        DbSet<DatabaseBlobContainer> BlobContainers { get; }
+namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 
-        DbSet<DatabaseBlob> Blobs { get; }
-    }
+[ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
+public interface IBlobStoringDbContext : IEfCoreDbContext
+{
+    DbSet<DatabaseBlobContainer> BlobContainers { get; }
+
+    DbSet<DatabaseBlob> Blobs { get; }
 }

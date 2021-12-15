@@ -44,193 +44,192 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountHttpApiModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpEntityFrameworkCoreSqlServerModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpIdentityApplicationModule),
+    typeof(AbpIdentityHttpApiModule),
+    typeof(AbpIdentityServerEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementApplicationModule),
+    typeof(AbpPermissionManagementHttpApiModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementApplicationModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementApplicationModule),
+    typeof(AbpTenantManagementHttpApiModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(CmsKitApplicationContractsModule),
+    typeof(AbpAspNetCoreSerilogModule)
+    )]
+public class CmsKitIdentityServerModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAccountHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(CmsKitApplicationContractsModule),
-        typeof(AbpAspNetCoreSerilogModule)
-        )]
-    public class CmsKitIdentityServerModule : AbpModule
+    private const string DefaultCorsPolicyName = "Default";
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        private const string DefaultCorsPolicyName = "Default";
+        FeatureConfigurer.Configure();
+    }
 
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        Configure<AbpDbContextOptions>(options =>
         {
-            FeatureConfigurer.Configure();
-        }
+            options.UseSqlServer();
+        });
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
-
-            Configure<AbpDbContextOptions>(options =>
+        context.Services.AddSwaggerGen(
+            options =>
             {
-                options.UseSqlServer();
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "CmsKit API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
             });
 
-            context.Services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CmsKit API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+            options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            });
-
-            Configure<AbpAuditingOptions>(options =>
-            {
+        Configure<AbpAuditingOptions>(options =>
+        {
                 //options.IsEnabledForGetRequests = true;
                 options.ApplicationName = "AuthServer";
-            });
+        });
 
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            });
-
-            context.Services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = configuration["AuthServer:ApiName"];
-                });
-
-            Configure<AbpDistributedCacheOptions>(options =>
-            {
-                options.KeyPrefix = "CmsKit:";
-            });
-
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "CmsKit-Protection-Keys");
-            }
-
-            context.Services.AddCors(options =>
-            {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
-                {
-                    builder
-                        .WithOrigins(
-                            configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
-                        )
-                        .WithAbpExposedHeaders()
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        Configure<AppUrlOptions>(options =>
         {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
+            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+        });
 
-            if (env.IsDevelopment())
+        context.Services.AddAuthentication()
+            .AddJwtBearer(options =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseErrorPage();
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
-            app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
-
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
-
-            app.UseAbpRequestLocalization();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = false;
+                options.Audience = configuration["AuthServer:ApiName"];
             });
-            app.UseAuditing();
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
 
-            SeedData(context);
-        }
-
-        private void SeedData(ApplicationInitializationContext context)
+        Configure<AbpDistributedCacheOptions>(options =>
         {
-            AsyncHelper.RunSync(async () =>
-            {
-                using (var scope = context.ServiceProvider.CreateScope())
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                }
-            });
+            options.KeyPrefix = "CmsKit:";
+        });
+
+        Configure<AbpMultiTenancyOptions>(options =>
+        {
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "CmsKit-Protection-Keys");
         }
+
+        context.Services.AddCors(options =>
+        {
+            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseErrorPage();
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseCorrelationId();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseCors(DefaultCorsPolicyName);
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+
+        if (MultiTenancyConsts.IsEnabled)
+        {
+            app.UseMultiTenancy();
+        }
+
+        app.UseAbpRequestLocalization();
+        app.UseIdentityServer();
+        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+        });
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
+
+        SeedData(context);
+    }
+
+    private void SeedData(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(async () =>
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                await scope.ServiceProvider
+                    .GetRequiredService<IDataSeeder>()
+                    .SeedAsync();
+            }
+        });
     }
 }

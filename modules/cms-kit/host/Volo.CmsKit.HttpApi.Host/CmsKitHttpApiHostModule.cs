@@ -35,160 +35,159 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(CmsKitApplicationModule),
+    typeof(CmsKitEntityFrameworkCoreModule),
+    typeof(CmsKitHttpApiModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpEntityFrameworkCoreSqlServerModule),
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+    )]
+public class CmsKitHttpApiHostModule : AbpModule
 {
-    [DependsOn(
-        typeof(CmsKitApplicationModule),
-        typeof(CmsKitEntityFrameworkCoreModule),
-        typeof(CmsKitHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
-        )]
-    public class CmsKitHttpApiHostModule : AbpModule
+    private const string DefaultCorsPolicyName = "Default";
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        private const string DefaultCorsPolicyName = "Default";
+        FeatureConfigurer.Configure();
+    }
 
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        Configure<AbpDbContextOptions>(options =>
         {
-            FeatureConfigurer.Configure();
-        }
+            options.UseSqlServer();
+        });
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpMultiTenancyOptions>(options =>
         {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
 
-            Configure<AbpDbContextOptions>(options =>
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.UseSqlServer();
-            });
-
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-
-            if (hostingEnvironment.IsDevelopment())
-            {
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
-                    options.FileSets.ReplaceEmbeddedByPhysical<CmsKitDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Domain.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<CmsKitDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Domain", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<CmsKitApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Application.Contracts", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<CmsKitApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Application", Path.DirectorySeparatorChar)));
-                });
-            }
-
-            context.Services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CmsKit API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            });
-
-            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "CmsKit";
-                });
-
-            Configure<AbpDistributedCacheOptions>(options =>
-            {
-                options.KeyPrefix = "CmsKit:";
-            });
-
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "CmsKit-Protection-Keys");
-            }
-
-            context.Services.AddCors(options =>
-            {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
-                {
-                    builder
-                        .WithOrigins(
-                            configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
-                        )
-                        .WithAbpExposedHeaders()
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
+                options.FileSets.ReplaceEmbeddedByPhysical<CmsKitDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Domain.Shared", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<CmsKitDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Domain", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<CmsKitApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Application.Contracts", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<CmsKitApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.CmsKit.Application", Path.DirectorySeparatorChar)));
             });
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
-
-            if (env.IsDevelopment())
+        context.Services.AddSwaggerGen(
+            options =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseErrorPage();
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
-            app.UseAuthentication();
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
-            app.UseAbpRequestLocalization();
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "CmsKit API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
             });
-            app.UseAuditing();
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+            options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+        });
+
+        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = false;
+                options.Audience = "CmsKit";
+            });
+
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
+            options.KeyPrefix = "CmsKit:";
+        });
+
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "CmsKit-Protection-Keys");
         }
+
+        context.Services.AddCors(options =>
+        {
+            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseErrorPage();
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseCorrelationId();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseCors(DefaultCorsPolicyName);
+        app.UseAuthentication();
+        if (MultiTenancyConsts.IsEnabled)
+        {
+            app.UseMultiTenancy();
+        }
+        app.UseAbpRequestLocalization();
+        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+        });
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
     }
 }
