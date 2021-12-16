@@ -21,7 +21,7 @@ public class AbpApplicationConfigurationController : AbpControllerBase, IAbpAppl
     }
 
     [HttpGet]
-    public async Task<ApplicationConfigurationDto> GetAsync()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync()
     {
         _antiForgeryManager.SetCookie();
         return await _applicationConfigurationAppService.GetAsync();
