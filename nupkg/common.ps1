@@ -266,7 +266,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi.Client",
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
-    "modules/docs/src/Volo.Docs.Web",,
+    "modules/docs/src/Volo.Docs.Web",
     "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
