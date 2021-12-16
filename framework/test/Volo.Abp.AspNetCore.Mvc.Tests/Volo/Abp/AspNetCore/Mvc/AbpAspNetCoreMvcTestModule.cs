@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
@@ -113,6 +114,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             Configure<RazorPagesOptions>(options =>
             {
                 options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
+            });
+
+            Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationFormats.Add("/Volo/Abp/AspNetCore/App/Views/{1}/{0}.cshtml");
             });
 
             Configure<AbpClaimsMapOptions>(options =>

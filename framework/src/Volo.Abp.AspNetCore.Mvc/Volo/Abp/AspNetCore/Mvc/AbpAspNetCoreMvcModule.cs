@@ -119,7 +119,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 );
 
             var mvcBuilder = context.Services.AddMvc()
-                .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -139,16 +138,13 @@ namespace Volo.Abp.AspNetCore.Mvc
                 })
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-            mvcCoreBuilder.AddAbpHybridJson();
-
-            Configure<MvcRazorRuntimeCompilationOptions>(options =>
+            if (context.Services.GetHostingEnvironment().IsDevelopment() &&
+                context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
             {
-                options.FileProviders.Add(
-                    new RazorViewEngineVirtualFileProvider(
-                        context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
-                    )
-                );
-            });
+                mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
+            }
+
+            mvcCoreBuilder.AddAbpHybridJson();
 
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
