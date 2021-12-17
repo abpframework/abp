@@ -47,6 +47,33 @@ public static class RepositoryExtensions
         }
     }
 
+
+    public static async Task EnsureExistsAsync<TEntity, TKey>(
+           this IRepository<TEntity, TKey> repository,
+           TKey id,
+           CancellationToken cancellationToken = default
+       )
+           where TEntity : class, IEntity<TKey>
+    {
+        if (await repository.AnyAsync(x => x.Id.Equals(id), cancellationToken))
+        {
+            throw new EntityNotFoundException(typeof(TEntity), id);
+        }
+    }
+
+    public static async Task EnsureExistsAsync<TEntity, TKey>(
+        this IRepository<TEntity, TKey> repository,
+        Expression<Func<TEntity, bool>> expression,
+        CancellationToken cancellationToken = default
+    )
+        where TEntity : class, IEntity<TKey>
+    {
+        if (await repository.AnyAsync(expression, cancellationToken))
+        {
+            throw new EntityNotFoundException(typeof(TEntity));
+        }
+    }
+
     public static async Task HardDeleteAsync<TEntity>(
         this IRepository<TEntity> repository,
         Expression<Func<TEntity, bool>> predicate,
