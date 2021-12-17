@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,7 +47,21 @@ public abstract class AbpApplicationBase : IAbpApplication
         services.AddCoreAbpServices(this, options);
 
         Modules = LoadModules(services, options);
-        ConfigureServices();
+
+        if (!options.ManualConfigureServices)
+        {
+            ConfigureServices();
+        }
+    }
+
+    public virtual async Task ShutdownAsync()
+    {
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            await scope.ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .ShutdownModulesAsync(new ApplicationShutdownContext(scope.ServiceProvider));
+        }
     }
 
     public virtual void Shutdown()
@@ -68,6 +83,17 @@ public abstract class AbpApplicationBase : IAbpApplication
     {
         ServiceProvider = serviceProvider;
         ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
+    }
+
+    protected virtual async Task InitializeModulesAsync()
+    {
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            WriteInitLogs(scope.ServiceProvider);
+            await scope.ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .InitializeModulesAsync(new ApplicationInitializationContext(scope.ServiceProvider));
+        }
     }
 
     protected virtual void InitializeModules()
@@ -111,7 +137,84 @@ public abstract class AbpApplicationBase : IAbpApplication
     }
 
     //TODO: We can extract a new class for this
-    protected virtual void ConfigureServices()
+    public virtual async Task ConfigureServicesAsync()
+    {
+        var context = new ServiceConfigurationContext(Services);
+        Services.AddSingleton(context);
+
+        foreach (var module in Modules)
+        {
+            if (module.Instance is AbpModule abpModule)
+            {
+                abpModule.ServiceConfigurationContext = context;
+            }
+        }
+
+        //PreConfigureServices
+        foreach (var module in Modules.Where(m => m.Instance is IPreConfigureServices))
+        {
+            try
+            {
+                await ((IPreConfigureServices)module.Instance).PreConfigureServicesAsync(context);
+            }
+            catch (Exception ex)
+            {
+                throw new AbpInitializationException($"An error occurred during {nameof(IPreConfigureServices.PreConfigureServicesAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+            }
+        }
+
+        var assemblies = new HashSet<Assembly>();
+
+        //ConfigureServices
+        foreach (var module in Modules)
+        {
+            if (module.Instance is AbpModule abpModule)
+            {
+                if (!abpModule.SkipAutoServiceRegistration)
+                {
+                    var assembly = module.Type.Assembly;
+                    if (!assemblies.Contains(assembly))
+                    {
+                        Services.AddAssembly(assembly);
+                        assemblies.Add(assembly);
+                    }
+                }
+            }
+
+            try
+            {
+                await module.Instance.ConfigureServicesAsync(context);
+            }
+            catch (Exception ex)
+            {
+                throw new AbpInitializationException($"An error occurred during {nameof(IAbpModule.ConfigureServicesAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+            }
+        }
+
+        //PostConfigureServices
+        foreach (var module in Modules.Where(m => m.Instance is IPostConfigureServices))
+        {
+            try
+            {
+                await ((IPostConfigureServices)module.Instance).PostConfigureServicesAsync(context);
+            }
+            catch (Exception ex)
+            {
+                throw new AbpInitializationException($"An error occurred during {nameof(IPostConfigureServices.PostConfigureServicesAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+            }
+        }
+
+        foreach (var module in Modules)
+        {
+            if (module.Instance is AbpModule abpModule)
+            {
+                abpModule.ServiceConfigurationContext = null;
+            }
+        }
+    }
+
+    //TODO: We can extract a new class for this
+    public virtual void ConfigureServices()
     {
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);

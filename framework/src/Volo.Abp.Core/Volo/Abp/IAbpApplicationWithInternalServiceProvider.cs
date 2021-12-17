@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp;
 
@@ -9,6 +10,18 @@ public interface IAbpApplicationWithInternalServiceProvider : IAbpApplication
     /// Multiple calls returns the same service provider without creating again.
     /// </summary>
     IServiceProvider CreateServiceProvider();
+
+    /// <summary>
+    /// Call the Pre/Post/ConfigureServicesAsync method of the modules.
+    /// </summary>
+    Task ConfigureServicesAsync();
+
+    /// <summary>
+    /// Creates the service provider and initializes all the modules.
+    /// If <see cref="CreateServiceProvider"/> method was called before,
+    /// it does not re-create it, but uses the previous one.
+    /// </summary>
+    Task InitializeAsync();
 
     /// <summary>
     /// Creates the service provider and initializes all the modules.

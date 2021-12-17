@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
@@ -22,6 +23,11 @@ public interface IAbpApplication : IModuleContainer, IDisposable
     /// This can not be used before initialize the application.
     /// </summary>
     IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    /// Used to gracefully shutdown the application and all modules.
+    /// </summary>
+    Task ShutdownAsync();
 
     /// <summary>
     /// Used to gracefully shutdown the application and all modules.
