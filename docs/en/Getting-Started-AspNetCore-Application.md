@@ -21,7 +21,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 Volo.Abp.AspNetCore.Mvc is the AspNet Core MVC integration package for ABP. So, install it on your project:
 
 ````
-Install-Package Volo.Abp.AspNetCore.Mvc -Version 5.0.0
+Install-Package Volo.Abp.AspNetCore.Mvc
 ````
 
 ## Create the First ABP Module
@@ -105,7 +105,7 @@ Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty ea
 1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
 ````
-Install-Package Volo.Abp.Autofac -Version 5.0.0
+Install-Package Volo.Abp.Autofac
 ````
 
 2. Add the ``AbpAutofacModule`` Dependency
