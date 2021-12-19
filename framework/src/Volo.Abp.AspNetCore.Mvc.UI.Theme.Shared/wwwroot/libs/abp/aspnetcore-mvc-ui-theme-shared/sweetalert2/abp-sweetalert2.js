@@ -4,6 +4,10 @@ var abp = abp || {};
         return;
     }
 
+    var localize = function (key) {
+        return abp.localization.getResource('AbpUi')(key);
+    };
+
     /* DEFAULTS *************************************************/
 
     abp.libs = abp.libs || {};
@@ -98,9 +102,10 @@ var abp = abp || {};
     };
 
     abp.event.on('abp.configurationInitialized', function () {
-        var l = abp.localization.getResource('AbpUi');
-
-        abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
+        abp.libs.sweetAlert.config.confirm.title = localize('AreYouSure');
+        abp.libs.sweetAlert.config.confirm.confirmButtonText = localize('Yes');
+        abp.libs.sweetAlert.config.confirm.denyButtonText = localize('No');
+        abp.libs.sweetAlert.config.confirm.cancelButtonText = localize('Cancel');
         abp.libs.sweetAlert.config.confirm.showCancelButton = true;
         abp.libs.sweetAlert.config.confirm.reverseButtons = true;
     });
