@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.ObjectMapping
-{
-    public class MappingContext2
-    {
+﻿namespace Volo.Abp.ObjectMapping;
 
-    }
+public class MappingContext2
+{
+
 }

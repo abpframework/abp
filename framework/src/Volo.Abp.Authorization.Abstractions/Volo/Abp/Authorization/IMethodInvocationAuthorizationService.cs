@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Authorization
+namespace Volo.Abp.Authorization;
+
+public interface IMethodInvocationAuthorizationService
 {
-    public interface IMethodInvocationAuthorizationService
-    {
-        Task CheckAsync(MethodInvocationAuthorizationContext context);
-    }
+    Task CheckAsync(MethodInvocationAuthorizationContext context);
 }

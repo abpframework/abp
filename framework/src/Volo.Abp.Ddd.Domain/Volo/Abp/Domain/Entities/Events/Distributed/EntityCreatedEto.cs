@@ -2,29 +2,28 @@
 using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed
+namespace Volo.Abp.Domain.Entities.Events.Distributed;
+
+[Serializable]
+[GenericEventName(Postfix = ".Created")]
+public class EntityCreatedEto<TEntityEto> : IEventDataMayHaveTenantId
 {
-    [Serializable]
-    [GenericEventName(Postfix = ".Created")]
-    public class EntityCreatedEto<TEntityEto> : IEventDataMayHaveTenantId
+    public TEntityEto Entity { get; set; }
+
+    public EntityCreatedEto(TEntityEto entity)
     {
-        public TEntityEto Entity { get; set; }
+        Entity = entity;
+    }
 
-        public EntityCreatedEto(TEntityEto entity)
+    public virtual bool IsMultiTenant(out Guid? tenantId)
+    {
+        if (Entity is IMultiTenant multiTenantEntity)
         {
-            Entity = entity;
+            tenantId = multiTenantEntity.TenantId;
+            return true;
         }
 
-        public virtual bool IsMultiTenant(out Guid? tenantId)
-        {
-            if (Entity is IMultiTenant multiTenantEntity)
-            {
-                tenantId = multiTenantEntity.TenantId;
-                return true;
-            }
-
-            tenantId = null;
-            return false;
-        }
+        tenantId = null;
+        return false;
     }
 }

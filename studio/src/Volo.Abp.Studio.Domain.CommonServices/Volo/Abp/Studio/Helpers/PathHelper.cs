@@ -2,36 +2,35 @@
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Studio.Helpers
+namespace Volo.Abp.Studio.Helpers;
+
+public static class PathHelper
 {
-    public static class PathHelper
+    public static string GetRelativePath([NotNull] string basePath, [NotNull] string targetPath)
     {
-        public static string GetRelativePath([NotNull] string basePath, [NotNull] string targetPath)
-        {
-            Check.NotNull(basePath, nameof(basePath));
-            Check.NotNull(targetPath, nameof(targetPath));
+        Check.NotNull(basePath, nameof(basePath));
+        Check.NotNull(targetPath, nameof(targetPath));
 
-            return new Uri(basePath).MakeRelativeUri(new Uri(targetPath)).ToString();
+        return new Uri(basePath).MakeRelativeUri(new Uri(targetPath)).ToString();
+    }
+
+    public static string EnsureForwardSlash(string path)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return path.Replace("\\", "/");
         }
 
-        public static string EnsureForwardSlash(string path)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return path.Replace("\\", "/");
-            }
+        return path;
+    }
 
-            return path;
+    public static string Normalize(string path)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return path.Replace("/", "\\");
         }
 
-        public static string Normalize(string path)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return path.Replace("/", "\\");
-            }
-
-            return path;
-        }
+        return path;
     }
 }

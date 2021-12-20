@@ -158,6 +158,7 @@
     "YourEmailAddress": "Your e-mail address",
     "YourFullName": "Your full name",
     "YourMessage": "Your Message",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported."
   }
 }

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.ClientSimulation.Scenarios
+namespace Volo.ClientSimulation.Scenarios;
+
+public class ScenarioExecutionContext
 {
-    public class ScenarioExecutionContext
+    public IServiceProvider ServiceProvider { get; }
+
+    public Dictionary<string, object> Properties { get; }
+
+    public ScenarioExecutionContext(IServiceProvider serviceProvider)
     {
-        public IServiceProvider ServiceProvider { get; }
+        ServiceProvider = serviceProvider;
+        Properties = new Dictionary<string, object>();
+    }
 
-        public Dictionary<string, object> Properties { get; }
-
-        public ScenarioExecutionContext(IServiceProvider serviceProvider)
-        {
-            ServiceProvider = serviceProvider;
-            Properties = new Dictionary<string, object>();
-        }
-
-        public virtual void Reset()
-        {
-            Properties.Clear();
-        }
+    public virtual void Reset()
+    {
+        Properties.Clear();
     }
 }
