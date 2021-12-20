@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +10,7 @@ namespace MyCompanyName.MyProjectName;
 
 public class Program
 {
-    public static int Main(string[] args)
+    public async static Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -33,13 +34,13 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            builder.Services.AddApplication<MyProjectNameHttpApiHostModule>(options =>
+            await builder.Services.AddApplicationAsync<MyProjectNameHttpApiHostModule>(options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);
             });
             var app = builder.Build();
-            app.InitializeApplication();
-            app.Run();
+            await app.InitializeApplicationAsync();
+            await app.RunAsync();
             return 0;
         }
         catch (Exception ex)

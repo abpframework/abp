@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.EventBus.Abstractions;
@@ -12,6 +13,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus;
 
@@ -30,10 +32,16 @@ public class AbpEventBusModule : AbpModule
         AddEventHandlers(context.Services);
     }
 
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await context.AddBackgroundWorkerAsync<OutboxSenderManager>();
+        await context.AddBackgroundWorkerAsync<InboxProcessManager>();
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<OutboxSenderManager>();
-        context.AddBackgroundWorker<InboxProcessManager>();
+        AsyncHelper.RunSync(() => context.AddBackgroundWorkerAsync<OutboxSenderManager>());
+        AsyncHelper.RunSync(() => context.AddBackgroundWorkerAsync<InboxProcessManager>());
     }
 
     private static void AddEventHandlers(IServiceCollection services)

@@ -5,7 +5,7 @@ namespace MyCompanyName.MyProjectName.Blazor;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public async static Task Main(string[] args)
     {
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
