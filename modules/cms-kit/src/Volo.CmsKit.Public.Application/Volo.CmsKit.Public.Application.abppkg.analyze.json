@@ -1,0 +1,65 @@
+{
+  "name": "Volo.CmsKit.Public.Application",
+  "hash": "bb8a74383fd91a888c1a6bdd8793886a",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.Public",
+      "contentType": "abpModule",
+      "name": "CmsKitPublicApplicationModule"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Reactions",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Reactions.IReactionPublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "ReactionPublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Ratings",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Ratings.IRatingPublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "RatingPublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Pages",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Pages.IPagePublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "PagePublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Menus",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Menus.IMenuItemPublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "MenuItemPublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Comments",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Comments.ICommentPublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "CommentPublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Blogs",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "BlogPostPublicAppService"
+    }
+  ]
+}

@@ -19,13 +19,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="*.abppkg.json" />
-    <None Include="*.abppkg.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
     <EmbeddedResource Include="*.abppkg.analyze.json" />
     <Content Remove="*.abppkg.analyze.json" />
+    <EmbeddedResource Include="*.abppkg.json" />
+    <Content Remove="*.abppkg.json" />
   </ItemGroup>
   <ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
     <EmbeddedResource Include="**\*generate-proxy.json" />

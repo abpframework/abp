@@ -1,0 +1,18 @@
+{
+  "name": "Volo.CmsKit.EntityFrameworkCore",
+  "hash": "4619f783b3acb98bc13aa198c890fca1",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "CmsKitEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.CmsKit.EntityFrameworkCore",
+      "connectionStringName": "CmsKit",
+      "databaseTables": [],
+      "contentType": "efCoreDbContext",
+      "name": "CmsKitDbContext"
+    }
+  ]
+}
