@@ -1,12 +1,12 @@
-# 在AspNet Core MVC Web Application中使用ABP 
+# 在AspNet Core MVC Web Application中使用ABP
 
-本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
+本教程将介绍如何开始以最少的依赖关系开始使用ABP开发.
 
-通常情况下你需要下载一个 **[启动模板](Getting-Started-AspNetCore-MVC-Template.md)**
+通常情况下你希望从 **[启动模板](Getting-Started-AspNetCore-MVC-Template.md)** 开始.
 
 ## 创建一个新项目
 
-1. 使用Visual Studio 2019 (16.4.0+)创建一个新的AspNet Core Web Application:
+1. 使用Visual Studio 2022 (17.0.0+)创建一个新的AspNet Core Web Application:
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
@@ -43,21 +43,20 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(
-            ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
                 app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseConfiguredEndpoints();
@@ -68,43 +67,38 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` 是应用程序启动模块的好名称.
 
-ABP的包定义了这个模块类,模块可以依赖其它模块.在上面的代码中 ``AppModule`` 依赖于 ``AbpAspNetCoreMvcModule`` (模块存在于[Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc)包中). 安装新的ABP的包后添加``DependsOn``是很常见的做法.
+ABP的包定义了模块类,模块可以依赖其它模块.在上面的代码中 ``AppModule`` 依赖于 ``AbpAspNetCoreMvcModule`` (由[Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc)包定义). 安装新的ABP的包后添加``DependsOn``特性是很常见的做法.
 
 我们在此模块类中配置ASP.NET Core管道,而不是Startup类中.
 
 ### 启动类
 
-接下来修改启动类集成ABP模块系统:
+接下来修改启动类集成到ABP模块系统:
 
 ````C#
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<AppModule>();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public void Configure(IApplicationBuilder app)
-        {
-            app.InitializeApplication();
-        }
-    }
-}
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
 
 ````
- 
-``services.AddApplication<AppModule>()``添加了所有``AppModule``模块中定义的全部服务.
 
-``Configure``方法中的``app.InitializeApplication()``完成初始化并启动应用程序.
+``services.AddApplication<AppModule>()``添加了从``AppModule``中启动的所有模块中定义的所有服务.
+
+``app.InitializeApplication()`` 初始化并启动应用程序.
 
 ## 运行应用程序!
 
-启动该应用，它将按预期运行.
+启动该应用,它将按预期运行.
 
 ## 使用 Autofac 依赖注入框架
 
@@ -132,27 +126,21 @@ public class AppModule : AbpModule
 3. 修改``Program.cs``以使用Autofac:
 
 ````C#
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac();  // 添加这一行
-    }
-}
+builder.Host.UseAutofac();  //Add this line
+
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
 ````
 
 ## 源码
