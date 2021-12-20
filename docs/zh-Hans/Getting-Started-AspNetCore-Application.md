@@ -6,7 +6,7 @@
 
 ## 创建一个新项目
 
-1. 使用Visual Studio 2022 (17.0.0+)创建一个新的AspNet Core Web Application:
+1. 使用Visual Studio 2022 (17.0.0+)创建一个新的ASPNET Core Web应用程序:
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
