@@ -9,7 +9,7 @@ public class Program
     {
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-        var application = builder.AddApplication<MyProjectNameBlazorHostModule>(options =>
+        var application = await builder.AddApplicationAsync<MyProjectNameBlazorHostModule>(options =>
         {
             options.UseAutofac();
         });
