@@ -54,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.TagName = "div";
                 LeaveOnlyGroupAttributes(context, output);
-                output.Attributes.AddClass("mb-3");
+                output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
                 if (isCheckBox)
                 {
                     output.Attributes.AddClass("form-check");
@@ -104,7 +104,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
         {
-            return "<div class=\"" + (isCheckbox ? "mb-3 form-check" : "mb-3") + "\">" +
+            return "<div class=\"" + (isCheckbox ? "mb-2 form-check" : "mb-3") + "\">" +
                    Environment.NewLine + innerHtml + Environment.NewLine +
                    "</div>";
         }
