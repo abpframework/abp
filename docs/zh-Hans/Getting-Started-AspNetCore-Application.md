@@ -1,4 +1,4 @@
-# 在AspNet Core MVC Web Application中使用ABP
+# 在ASP.NET Core MVC Web 应用程序中使用ABP
 
 本教程将介绍如何开始以最少的依赖关系开始使用ABP开发.
 
@@ -6,7 +6,7 @@
 
 ## 创建一个新项目
 
-1. 使用Visual Studio 2022 (17.0.0+)创建一个新的ASPNET Core Web应用程序:
+1. 使用Visual Studio 2022 (17.0.0+)创建一个新的ASP.NET Core Web应用程序:
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
@@ -21,7 +21,7 @@
 
 ## 安装 Volo.Abp.AspNetCore.Mvc 包
 
-Volo.Abp.AspNetCore.Mvc是ABP集成AspNet Core MVC的包,请安装它到你项目中:
+Volo.Abp.AspNetCore.Mvc是ABP集成ASP.NET Core MVC的包,请安装它到你项目中:
 
 ````
 Install-Package Volo.Abp.AspNetCore.Mvc
@@ -29,7 +29,7 @@ Install-Package Volo.Abp.AspNetCore.Mvc
 
 ## 创建ABP模块
 
-ABP是一个模块化框架,它需要一个**启动 (根) 模块**继承自``AbpModule``:
+ABP是一个模块化框架,它需要一个**启动(根)模块**继承自 `AbpModule`:
 
 ````C#
 using Microsoft.AspNetCore.Builder;
@@ -102,9 +102,9 @@ app.Run();
 
 ## 使用 Autofac 依赖注入框架
 
-虽然AspNet Core的依赖注入(DI)系统适用于基本要求,但[Autofac](https://autofac.org/)提供了属性注入和方法拦截等高级功能,这些功能是ABP执行高级应用程序框架功能所必需的.
+虽然ASP.NET Core的依赖注入(DI)系统适用于基本要求,但[Autofac](https://autofac.org/)提供了属性注入和方法拦截等高级功能,这些功能是ABP执行高级应用程序框架功能所必需的.
 
-用Autofac取代AspNet Core的DI系统并集成到ABP非常简单.
+用Autofac取代ASP.NET Core的DI系统并集成到ABP非常简单.
 
 1. 安装 [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) 包
 
