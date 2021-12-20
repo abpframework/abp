@@ -85,7 +85,7 @@ namespace Volo.Abp.Cli.Bundling
                     {
                         var pathFragments = definition.Source.Split('/').ToList();
                         var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
-                        var path = contentRoots.FirstOrDefault(x => x.IndexOf($"\\{pathFragments[1]}\\", StringComparison.OrdinalIgnoreCase) > 0);
+                        var path = contentRoots.FirstOrDefault(x => x.IndexOf(Path.DirectorySeparatorChar + pathFragments[1] + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) > 0);
                         if (path == null)
                         {
                             throw new AbpException("Not found: " + definition.Source);
