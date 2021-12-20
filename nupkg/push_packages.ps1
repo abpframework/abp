@@ -9,6 +9,7 @@ $version = $commonPropsXml.Project.PropertyGroup.Version
 # Publish all packages
 $i = 0
 $errorCount = 0
+$totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
 Set-Location $packFolder
 
@@ -19,12 +20,12 @@ foreach($project in $projects) {
 	$nugetPackageName = $projectName + "." + $version + ".nupkg"	
 	$nugetPackageExists = Test-Path $nugetPackageName -PathType leaf
  
-	Write-Host ("-----===[ $i / " + $projects.length  + " - " + $nugetPackageName + " ]===-----")
+	Write-Info "[$i / $totalProjectsCount] - Pushing: $nugetPackageName"
 	
 	if ($nugetPackageExists)
 	{
 		dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey"		
-		Write-Host ("Deleting package from local: " + $nugetPackageName)
+		#Write-Host ("Deleting package from local: " + $nugetPackageName)
 		#Remove-Item $nugetPackageName -Force
 	}
 	else

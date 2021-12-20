@@ -101,6 +101,9 @@ var abp = abp || {};
         var l = abp.localization.getResource('AbpUi');
 
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
+        abp.libs.sweetAlert.config.confirm.confirmButtonText = l('Yes');
+        abp.libs.sweetAlert.config.confirm.denyButtonText = l('No');
+        abp.libs.sweetAlert.config.confirm.cancelButtonText = l('Cancel');
         abp.libs.sweetAlert.config.confirm.showCancelButton = true;
         abp.libs.sweetAlert.config.confirm.reverseButtons = true;
     });
