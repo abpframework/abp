@@ -68,7 +68,7 @@ public static class RepositoryExtensions
     )
         where TEntity : class, IEntity<TKey>
     {
-        if (await repository.AnyAsync(expression, cancellationToken))
+        if (!await repository.AnyAsync(expression, cancellationToken))
         {
             throw new EntityNotFoundException(typeof(TEntity));
         }
