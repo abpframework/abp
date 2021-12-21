@@ -28,7 +28,7 @@
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了几种可供下载的源码组合:
+本教程根据你的**UI** 和 **数据库**偏好有多个版版本,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
@@ -327,7 +327,7 @@ namespace Acme.BookStore
 }
 ````
 
-> 参阅 [对象对对象映射](../Object-To-Object-Mapping.md) 文档了解详情.
+> 参阅 [对象到对象映射](../Object-To-Object-Mapping.md) 文档了解详情.
 
 ### CreateUpdateBookDto
 
