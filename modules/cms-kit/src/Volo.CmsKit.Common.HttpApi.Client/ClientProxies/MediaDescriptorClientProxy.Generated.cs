@@ -10,18 +10,17 @@ using Volo.CmsKit.MediaDescriptors;
 using Volo.Abp.Content;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.MediaDescriptors.ClientProxies
+namespace Volo.CmsKit.MediaDescriptors.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IMediaDescriptorAppService), typeof(MediaDescriptorClientProxy))]
+public partial class MediaDescriptorClientProxy : ClientProxyBase<IMediaDescriptorAppService>, IMediaDescriptorAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IMediaDescriptorAppService), typeof(MediaDescriptorClientProxy))]
-    public partial class MediaDescriptorClientProxy : ClientProxyBase<IMediaDescriptorAppService>, IMediaDescriptorAppService
+    public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id)
     {
-        public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id)
+        return await RequestAsync<RemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<RemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

@@ -1,7 +1,6 @@
-namespace Volo.Abp.Http.ProxyScripting
+namespace Volo.Abp.Http.ProxyScripting;
+
+public interface IProxyScriptManager
 {
-    public interface IProxyScriptManager
-    {
-        string GetScript(ProxyScriptingModel scriptingModel);
-    }
+    string GetScript(ProxyScriptingModel scriptingModel);
 }

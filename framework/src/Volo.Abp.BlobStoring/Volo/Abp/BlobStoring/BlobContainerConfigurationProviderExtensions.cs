@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.BlobStoring
+﻿namespace Volo.Abp.BlobStoring;
+
+public static class BlobContainerConfigurationProviderExtensions
 {
-    public static class BlobContainerConfigurationProviderExtensions
+    public static BlobContainerConfiguration Get<TContainer>(
+        this IBlobContainerConfigurationProvider configurationProvider)
     {
-        public static BlobContainerConfiguration Get<TContainer>(
-            this IBlobContainerConfigurationProvider configurationProvider)
-        {
-            return configurationProvider.Get(BlobContainerNameAttribute.GetContainerName<TContainer>());
-        }
+        return configurationProvider.Get(BlobContainerNameAttribute.GetContainerName<TContainer>());
     }
 }

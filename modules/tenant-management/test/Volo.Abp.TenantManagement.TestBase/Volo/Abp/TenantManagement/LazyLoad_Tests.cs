@@ -5,29 +5,28 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public abstract class LazyLoad_Tests<TStartupModule> : TenantManagementTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class LazyLoad_Tests<TStartupModule> : TenantManagementTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    public ITenantRepository TenantRepository { get; }
+
+    protected LazyLoad_Tests()
     {
-        public ITenantRepository TenantRepository { get; }
+        TenantRepository = GetRequiredService<ITenantRepository>();
+    }
 
-        protected LazyLoad_Tests()
+    [Fact]
+    public async Task Should_Lazy_Load_Tenant_Collections()
+    {
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
         {
-            TenantRepository = GetRequiredService<ITenantRepository>();
-        }
+            var role = await TenantRepository.FindByNameAsync("acme", includeDetails: false);
+            role.ConnectionStrings.ShouldNotBeNull();
+            role.ConnectionStrings.Any().ShouldBeTrue();
 
-        [Fact]
-        public async Task Should_Lazy_Load_Tenant_Collections()
-        {
-            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
-            {
-                var role = await TenantRepository.FindByNameAsync("acme", includeDetails: false);
-                role.ConnectionStrings.ShouldNotBeNull();
-                role.ConnectionStrings.Any().ShouldBeTrue();
-
-                await uow.CompleteAsync();
-            }
+            await uow.CompleteAsync();
         }
     }
 }

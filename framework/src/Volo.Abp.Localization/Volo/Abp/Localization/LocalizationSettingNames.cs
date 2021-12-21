@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Localization
+﻿namespace Volo.Abp.Localization;
+
+public static class LocalizationSettingNames
 {
-    public static class LocalizationSettingNames
-    {
-        public const string DefaultLanguage = "Abp.Localization.DefaultLanguage";
-    }
+    public const string DefaultLanguage = "Abp.Localization.DefaultLanguage";
 }

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+public interface ITemplateDefinitionContext
 {
-    public interface ITemplateDefinitionContext
-    {
-        IReadOnlyList<TemplateDefinition> GetAll(string name);
+    IReadOnlyList<TemplateDefinition> GetAll(string name);
 
-        TemplateDefinition GetOrNull(string name);
+    TemplateDefinition GetOrNull(string name);
 
-        void Add(params TemplateDefinition[] definitions);
-    }
+    void Add(params TemplateDefinition[] definitions);
 }
