@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -45,9 +45,8 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         var cacheKey = CreateCacheKey();
         var httpContext = HttpContextAccessor?.HttpContext;
 
-        if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+        if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
         {
-
             return configuration;
         }
 
@@ -58,10 +57,10 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
-                }
+            }
         );
 
-        if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest)
+        if (httpContext != null)
         {
             httpContext.Items[cacheKey] = configuration;
         }
@@ -74,7 +73,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         var cacheKey = CreateCacheKey();
         var httpContext = HttpContextAccessor?.HttpContext;
 
-        if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+        if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
         {
             return configuration;
         }
