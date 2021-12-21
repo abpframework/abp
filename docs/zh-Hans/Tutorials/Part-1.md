@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## 关于本教程
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Text}}** 做为数据库提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -40,16 +23,29 @@ end
 - [Part 6: 作者: 领域层](Part-6.md)
 - [Part 7: 作者: 数据库集成](Part-7.md)
 - [Part 8: 作者: 应用服务层](Part-8.md)
-- [Part 9: 作者: 用户页面](Part-9.md)
+- [Part 9: 作者: 用户界面](Part-9.md)
 - [Part 10: 图书到作者的关系](Part-10.md)
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了两种可供下载的源码组合:
+本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI 与 MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
+> 如果你在Windows中遇到 "文件名太长" or "解压错误", 很可能与Windows最大文件路径限制有关. Windows文件路径的最大长度为250字符. 为了解决这个问题,参阅 [在Windows 10中启用长路径](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> 如果你遇到与Git相关的长路径错误, 尝试使用下面的命令在Windows中启用长路径. 参阅 https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### 视频教程
+
+本章也被录制为视频教程 **<a href="https://www.youtube.com/watch?v=cJzyIFfAlp8&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=1" target="_blank">发布在YouTube</a>**.
+
+{{end}}
 ## 创建解决方案
 
 在开始开发之前,请按照[入门教程](../Getting-Started.md)创建名为 `Acme.BookStore` 的新解决方案.
@@ -58,12 +54,12 @@ end
 
 启动模板中的**领域层**分为两个项目:
 
- - `Acme.BookStore.Domain`包含你的[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities), [领域服务](https://docs.abp.io/zh-Hans/abp/latest/Domain-Services)和其他核心域对象.
+ - `Acme.BookStore.Domain`包含你的[实体](../Entities.md), [领域服务](../Domain-Services.md)和其他核心域对象.
  - `Acme.BookStore.Domain.Shared`包含可与客户共享的常量,枚举或其他域相关对象.
 
-在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义你的实体. 
+在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义你的实体.
 
-该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个 `Books` 文件夹并在其中添加一个名为 `Book` 的类,如下所示:
+该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个 `Books` 文件夹(命名空间),并在其中添加名为 `Book` 的类,如下所示:
 
 ````csharp
 using System;
@@ -84,15 +80,15 @@ namespace Acme.BookStore.Books
 }
 ````
 
-* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是[**领域驱动设计**](./Domain-Driven-Design.md) 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](../Entities.md)).
-* `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些审计属性(`CreationTime`, `CreatorId`, `LastModificationTime` 等). ABP框架自动为你管理这些属性.
-* `Guid`是`Book`实体的主键类型.
+* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是[**领域驱动设计**](../Domain-Driven-Design.md) 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](../Entities.md)).
+* `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些基础[审计](../Audit-Logging.md)属性(例如`CreationTime`, `CreatorId`, `LastModificationTime` 等). ABP框架自动为你管理这些属性.
+* `Guid`是`Book`实体的**主键类型**.
 
 > 为了保持简单,本教程将实体属性保留为 **public get/set** . 如果你想了解关于DDD最佳实践,请参阅[实体文档](../Entities.md).
 
 ### BookType枚举
 
-上面所用到了 `BookType` 枚举,在 `Acme.BookStore.Domain.Shared` 项目创建 `BookType`.
+`Book`实体使用了`BookType`枚举. 在`Acme.BookStore.Domain.Shared`项目中创建`Books`文件夹(命名空间),并在其中添加`BookType`:
 
 ````csharp
 namespace Acme.BookStore.Books
@@ -150,28 +146,37 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 ### 将Book实体映射到数据库表
 
-在 `Acme.BookStore.EntityFrameworkCore` 项目中打开 `BookStoreDbContextModelCreatingExtensions.cs` 文件,添加 `Book` 实体的映射代码. 最终类应为:
+
+打开`BookStoreDbContext`类的`OnModelCreating`方法,为`Book`实体添加映射代码:
 
 ````csharp
 using Acme.BookStore.Books;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
+...
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
-    public static class BookStoreDbContextModelCreatingExtensions
+    public class BookStoreDbContext :
+        AbpDbContext<BookStoreDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
     {
-        public static void ConfigureBookStore(this ModelBuilder builder)
+        ...
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            Check.NotNull(builder, nameof(builder));
+            base.OnModelCreating(builder);
+
+            /* Include modules to your migration db context */
+
+            builder.ConfigurePermissionManagement();
+            ...
 
             /* Configure your own tables/entities inside here */
 
             builder.Entity<Book>(b =>
             {
                 b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
-                          BookStoreConsts.DbSchema);
+                    BookStoreConsts.DbSchema);
                 b.ConfigureByConvention(); //auto configure for the base class props
                 b.Property(x => x.Name).IsRequired().HasMaxLength(128);
             });
@@ -180,12 +185,12 @@ namespace Acme.BookStore.EntityFrameworkCore
 }
 ````
 
-* `BookStoreConsts` 含有用于表的架构和表前缀的常量值. 你不必使用它,但建议在单点控制表前缀.
-* `ConfigureByConvention()` 方法优雅的配置/映射继承的属性,应始终对你所有的实体使用它.
+* `BookStoreConsts` 含有用于表的架构和表前缀的常量值. 使用它不是强制的,但建议在统一的地方控制表前缀.
+* `ConfigureByConvention()` 方法优雅的配置/映射继承的属性,应对所有的实体使用它.
 
 ### 添加数据迁移
 
-启动模板使用[EF Core Code First Migrations](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/)创建和维护数据库架构. 我们应该创建一个新的迁移并且应用到数据库.
+本示例使用[EF Core Code First Migrations](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/).因为我们修改了数据库映射配置，我们必须创建一个新的迁移并且应用到数据库.
 
 在 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 目录打开命令行终端输入以下命令:
 
@@ -205,7 +210,7 @@ dotnet ef migrations add Created_Book_Entity
 
 > >在运行应用程序之前最好将初始数据添加到数据库中. 本节介绍ABP框架的[数据种子系统](../Data-Seeding.md). 如果你不想创建种子数据可以跳过本节,但是建议你遵循它来学习这个有用的ABP Framework功能。
 
-在 `*.Domain` 项目下创建派生 `IDataSeedContributor` 的类,并且拷贝以下代码:
+在 `*.Domain` 项目下创建 `IDataSeedContributor` 的派生类,并且拷贝以下代码:
 
 ```csharp
 using System;
@@ -258,7 +263,7 @@ namespace Acme.BookStore
 }
 ```
 
-* 如果数据库中当前没有图书,则此代码使用 `IRepository<Book, Guid>`(默认为[repository](../Repositories.md))将两本书插入数据库.
+* 如果数据库中当前没有图书,则此代码使用 `IRepository<Book, Guid>`(默认[repository](../Repositories.md))将两本书插入数据库.
 
 ### 更新数据库
 
@@ -279,7 +284,7 @@ namespace Acme.BookStore
 
 ### BookDto
 
-`CrudAppService` 基类需要定义实体的基本DTO. 在 `Acme.BookStore.Application.Contracts` 项目中创建一个名为 `BookDto` 的DTO类:
+`CrudAppService` 基类需要定义实体的基本DTO. 在 `Acme.BookStore.Application.Contracts` 项目中创建 `Books` 文件夹(命名空间), 并在其中添加名为 `BookDto` 的DTO类:
 
 ````C#
 using System;
@@ -300,9 +305,9 @@ namespace Acme.BookStore
 }
 ````
 
-* **DTO**类被用来在 **表示层** 和 **应用层** **传递数据**.查看[DTO文档](https://docs.abp.io/zh-Hans/abp/latest/Data-Transfer-Objects)查看更多信息.
-* 为了在页面上展示书籍信息,`BookDto`被用来将书籍数据传递到表示层.
-* `BookDto`继承自 `AuditedEntityDto<Guid>`.跟上面定义的 `Book` 实体一样具有一些审计属性.
+* **DTO**类被用来在 **表示层** 和 **应用层** **传递数据**.参阅[DTO文档](https://docs.abp.io/zh-Hans/abp/latest/Data-Transfer-Objects).
+* 为了在用户界面上展示书籍信息,`BookDto`被用来将书籍数据传递到表示层.
+* `BookDto`继承自 `AuditedEntityDto<Guid>`.与上面定义的 `Book` 实体一样具有一些审计属性.
 
 在将书籍返回到表示层时,需要将`Book`实体转换为`BookDto`对象. [AutoMapper](https://automapper.org)库可以在定义了正确的映射时自动执行此转换. 启动模板配置了AutoMapper,因此你只需在`Acme.BookStore.Application`项目的`BookStoreApplicationAutoMapperProfile`类中定义映射:
 
@@ -326,8 +331,7 @@ namespace Acme.BookStore
 
 ### CreateUpdateBookDto
 
-在`Acme.BookStore.Application.Contracts`项目中创建一个名为 `CreateUpdateBookDto` 的DTO类:
-
+在`Acme.BookStore.Application.Contracts`项目中创建 `Books` 文件夹(命名空间),并在其中添加名为 `CreateUpdateBookDto` 的DTO类:
 ````csharp
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -354,7 +358,7 @@ namespace Acme.BookStore.Books
 ````
 
 * 这个DTO类被用于在创建或更新书籍的时候从用户界面获取图书信息.
-* 它定义了数据注释属性(如`[Required]`)来定义属性的验证. DTO由ABP框架[自动验证](https://docs.abp.io/zh-Hans/abp/latest/Validation).
+* 它定义了数据注释特性(如`[Required]`)来定义属性的验证规则. DTO由ABP框架[自动验证](https://docs.abp.io/zh-Hans/abp/latest/Validation).
 
 就像上面的`BookDto`一样,创建一个从`CreateUpdateBookDto`对象到`Book`实体的映射,最终映射配置类如下:
 
@@ -378,7 +382,7 @@ namespace Acme.BookStore
 
 ### IBookAppService
 
-下一步是为应用程序定义接口,在`Acme.BookStore.Application.Contracts`项目中定义一个名为`IBookAppService`的接口:
+下一步是为应用程序定义接口,在`Acme.BookStore.Application.Contracts`项目创建 `Books` 文件夹(命名空间),并在其中添加名为`IBookAppService`的接口:
 
 ````csharp
 using System;
@@ -400,12 +404,12 @@ namespace Acme.BookStore.Books
 ````
 
 * 框架定义应用程序服务的接口**不是必需的**. 但是,它被建议作为最佳实践.
-* `ICrudAppService`定义了常见的**CRUD**方法:`GetAsync`,`GetListAsync`,`CreateAsync`,`UpdateAsync`和`DeleteAsync`. 你可以从空的`IApplicationService`接口继承并手动定义自己的方法(将在下一部分中完成).
-* `ICrudAppService`有一些变体, 你可以在每个方法中使用单独的DTO,也可以分别单独指定(例如使用不同的DTO进行创建和更新).
+* `ICrudAppService`定义了常见的**CRUD**方法:`GetAsync`,`GetListAsync`,`CreateAsync`,`UpdateAsync`和`DeleteAsync`. 从这个接口扩展不是必需的,你可以从空的`IApplicationService`接口继承并手动定义自己的方法(将在下一部分中完成).
+* `ICrudAppService`有一些变体, 你可以在每个方法中使用单独的DTO(例如使用不同的DTO进行创建和更新).
 
 ### BookAppService
 
-在`Acme.BookStore.Application`项目中创建名为 `BookAppService` 的 `IBookAppService` 实现:
+是时候实现`IBookAppService`接口了.在`Acme.BookStore.Application`项目中创建 `Books` 文件夹(命名空间),并在其中添加名为 `BookAppService` 的类:
 
 ````csharp
 using System;
@@ -439,19 +443,20 @@ namespace Acme.BookStore.Books
 
 ### 自动生成API Controllers
 
-你通常创建**Controller**以将应用程序服务公开为**HTTP API**端点. 因此允许浏览器或第三方客户端通过AJAX调用它们. 
+在典型的ASP.NET Core应用程序中,你创建**API Controller**以将应用程序服务公开为**HTTP API**端点. 这将允许浏览器或第三方客户端通过HTTP调用它们.
 
-ABP可以[**自动**](../API/Auto-API-Controllers.md)按照惯例将你的应用程序服务配置为MVC API控制器.
+ABP可以[**自动**](../API/Auto-API-Controllers.md)按照约定将你的应用程序服务配置为MVC API控制器.
 
 ### Swagger UI
 
 启动模板配置为使用[Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)运行[swagger UI](https://swagger.io/tools/swagger-ui/). 运行应用程序并在浏览器中输入`https://localhost:XXXX/swagger/`(用你自己的端口替换XXXX)作为URL.
+使用`CTRL+F5`运行应用程序 ({{if UI=="MVC"}}`Acme.BookStore.Web`{{else}}`Acme.BookStore.HttpApi.Host`{{end}})并使用浏览器访问`https://localhost:<port>/swagger/` on your browser. 使用你自己的端口号替换 `<port>`.
 
-你会看到一些内置的接口和`Book`的接口,它们都是REST风格的:
+你会看到一些内置的服务端点和`Book`服务,它们都是REST风格的端点:
 
-![bookstore-swagger](images/bookstore-swagger.png)
+![bookstore-swagger](./images/bookstore-swagger.png)
 
-Swagger有一个很好的UI来测试API. 
+Swagger有一个很好的UI来测试API.
 
 你可以尝试执行`[GET] /api/app/book` API来获取书籍列表, 服务端会返回以下JSON结果:
 
