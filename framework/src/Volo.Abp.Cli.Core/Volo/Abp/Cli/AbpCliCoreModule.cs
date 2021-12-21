@@ -64,7 +64,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands["bundle"] = typeof(BundleCommand);
             options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands["install-libs"] = typeof(InstallLibsCommand);
-            options.Commands["clean"] = typeof(CleanCommand);
+            options.Commands[CleanCommand.Name] = typeof(CleanCommand);
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>
