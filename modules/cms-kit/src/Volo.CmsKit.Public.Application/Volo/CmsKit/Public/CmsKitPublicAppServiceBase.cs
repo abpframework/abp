@@ -1,10 +1,9 @@
-﻿namespace Volo.CmsKit.Public
+﻿namespace Volo.CmsKit.Public;
+
+public abstract class CmsKitPublicAppServiceBase : CmsKitAppServiceBase
 {
-    public abstract class CmsKitPublicAppServiceBase : CmsKitAppServiceBase
+    protected CmsKitPublicAppServiceBase()
     {
-        protected CmsKitPublicAppServiceBase()
-        {
-            ObjectMapperContext = typeof(CmsKitPublicApplicationModule);
-        }
+        ObjectMapperContext = typeof(CmsKitPublicApplicationModule);
     }
 }

@@ -1,17 +1,16 @@
-﻿namespace Volo.Abp.BackgroundJobs
+﻿namespace Volo.Abp.BackgroundJobs;
+
+public class MyAsyncJobArgs
 {
-    public class MyAsyncJobArgs
+    public string Value { get; set; }
+
+    public MyAsyncJobArgs()
     {
-        public string Value { get; set; }
 
-        public MyAsyncJobArgs()
-        {
+    }
 
-        }
-
-        public MyAsyncJobArgs(string value)
-        {
-            Value = value;
-        }
+    public MyAsyncJobArgs(string value)
+    {
+        Value = value;
     }
 }

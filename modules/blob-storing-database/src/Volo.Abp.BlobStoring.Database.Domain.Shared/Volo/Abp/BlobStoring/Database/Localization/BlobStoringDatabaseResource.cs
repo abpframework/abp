@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.BlobStoring.Database.Localization
+namespace Volo.Abp.BlobStoring.Database.Localization;
+
+[LocalizationResourceName("BlobStoringDatabase")]
+public class BlobStoringDatabaseResource
 {
-    [LocalizationResourceName("BlobStoringDatabase")]
-    public class BlobStoringDatabaseResource
-    {
-        
-    }
+
 }

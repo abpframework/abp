@@ -2,34 +2,33 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class RemoveDependencyFromPackageJsonFileStep : ProjectBuildPipelineStep
 {
-    public class RemoveDependencyFromPackageJsonFileStep : ProjectBuildPipelineStep
+    private readonly string _packageJsonFilePath;
+    private readonly string _packageName;
+
+    public RemoveDependencyFromPackageJsonFileStep(string packageJsonFilePath, string packageName)
     {
-        private readonly string _packageJsonFilePath;
-        private readonly string _packageName;
+        _packageJsonFilePath = packageJsonFilePath;
+        _packageName = packageName;
+    }
 
-        public RemoveDependencyFromPackageJsonFileStep(string packageJsonFilePath, string packageName)
+    public override void Execute(ProjectBuildContext context)
+    {
+        var packageJsonFile = context.Files.FirstOrDefault(f => f.Name == _packageJsonFilePath);
+
+        if (packageJsonFile == null)
         {
-            _packageJsonFilePath = packageJsonFilePath;
-            _packageName = packageName;
+            return;
         }
 
-        public override void Execute(ProjectBuildContext context)
-        {
-            var packageJsonFile = context.Files.FirstOrDefault(f => f.Name == _packageJsonFilePath);
+        var packageJsonObject = JObject.Parse(packageJsonFile.Content);
+        var dependenciesObject = (JObject)packageJsonObject["dependencies"];
 
-            if (packageJsonFile == null)
-            {
-                return;
-            }
+        dependenciesObject?.Remove(_packageName);
 
-            var packageJsonObject = JObject.Parse(packageJsonFile.Content);
-            var dependenciesObject = (JObject) packageJsonObject["dependencies"];
-
-            dependenciesObject?.Remove(_packageName);
-
-            packageJsonFile.SetContent(packageJsonObject.ToString(Formatting.Indented));
-        }
+        packageJsonFile.SetContent(packageJsonObject.ToString(Formatting.Indented));
     }
 }

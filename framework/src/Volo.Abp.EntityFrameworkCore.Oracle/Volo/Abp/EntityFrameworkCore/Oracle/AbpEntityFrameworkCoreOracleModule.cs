@@ -3,23 +3,22 @@ using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EntityFrameworkCore.Oracle
-{
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-    public class AbpEntityFrameworkCoreOracleModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpSequentialGuidGeneratorOptions>(options =>
-            {
-                if (options.DefaultSequentialGuidType == null)
-                {
-                    options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsBinary;
-                }
-            });
+namespace Volo.Abp.EntityFrameworkCore.Oracle;
 
-            context.Services.AddTransient(typeof(IOracleDbContextEventOutbox<>), typeof(OracleDbContextEventOutbox<>));
-            context.Services.AddTransient(typeof(IOracleDbContextEventInbox<>), typeof(OracleDbContextEventInbox<>));
-        }
+[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+public class AbpEntityFrameworkCoreOracleModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpSequentialGuidGeneratorOptions>(options =>
+        {
+            if (options.DefaultSequentialGuidType == null)
+            {
+                options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsBinary;
+            }
+        });
+
+        context.Services.AddTransient(typeof(IOracleDbContextEventOutbox<>), typeof(OracleDbContextEventOutbox<>));
+        context.Services.AddTransient(typeof(IOracleDbContextEventInbox<>), typeof(OracleDbContextEventInbox<>));
     }
 }
