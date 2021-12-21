@@ -80,7 +80,7 @@ Navigate to Manage Azure Active Directory in [azure portal](https://portal.azure
 
 Enter a name for your application and **App.SelfUrl** + **AzureAd.CallbackPath** as redirect uri then register.
 
-<img src="azure-app-register.JPG" alt="azure-app-register" style="zoom:75%;" />
+![azure-app-register](azure-app-register.JPG)
 
 Now navigate to **Authentication** on the left menu and enable **ID tokens**.
 
