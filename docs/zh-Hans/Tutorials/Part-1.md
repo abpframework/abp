@@ -192,7 +192,7 @@ namespace Acme.BookStore.EntityFrameworkCore
 
 本示例使用[EF Core Code First Migrations](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/).因为我们修改了数据库映射配置，我们必须创建一个新的迁移并且应用到数据库.
 
-在 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 目录打开命令行终端输入以下命令:
+在 `Acme.BookStore.EntityFrameworkCore` 目录打开命令行终端输入以下命令:
 
 ```bash
 dotnet ef migrations add Created_Book_Entity
