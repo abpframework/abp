@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Volo.ClientSimulation.SourceCode.zip" />
+        <Content Include="Volo.ClientSimulation.SourceCode.zip">
+            <Pack>true</Pack>
+            <PackagePath>content\</PackagePath>
+        </Content>
+    </ItemGroup>
+</Project>

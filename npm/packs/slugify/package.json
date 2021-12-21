@@ -1,5 +1,5 @@
 {
-  "version": "5.0.0-rc.2",
+  "version": "5.0.0",
   "name": "@abp/slugify",
   "publishConfig": {
     "access": "public"

@@ -2,6 +2,8 @@ param(
   [string]$nugetApiKey
 ) 
 
+. ..\nupkg\common.ps1
+
 if (!$nugetApiKey)
 {	
 	#reading password from file content
@@ -19,9 +21,11 @@ if (!$nugetApiKey)
 	$nugetApiKey = Read-Host "Enter the NuGet API KEY"
 }
 
-echo "`n-----=====[ PUSHING PACKS TO NUGET ]=====-----`n"
-
+Write-Info "Pushing packages to NuGet"
+echo "`n-----=====[ PUSHING PACKAGES TO NUGET ]=====-----`n"
 cd ..\nupkg
 powershell -File push_packages.ps1 $nugetApiKey
+echo "`n-----=====[ PUSHING PACKAGES TO NUGET COMPLETED ]=====-----`n"
+Write-Info "Completed: Pushing packages to NuGet"
 
-echo "`n-----=====[ PUSHING PACKS TO NUGET COMPLETED ]=====-----`n"
+cd ..\deploy #always return to the deploy directory
