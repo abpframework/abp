@@ -41,8 +41,8 @@ public class AbpCliCoreModule : AbpModule
 
         Configure<AbpCliOptions>(options =>
         {
-                //TODO: Define constants like done for GenerateProxyCommand.Name.
-                options.Commands["help"] = typeof(HelpCommand);
+            //TODO: Define constants like done for GenerateProxyCommand.Name.
+            options.Commands["help"] = typeof(HelpCommand);
             options.Commands["prompt"] = typeof(PromptCommand);
             options.Commands["new"] = typeof(NewCommand);
             options.Commands["get-source"] = typeof(GetSourceCommand);
@@ -64,6 +64,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands["bundle"] = typeof(BundleCommand);
             options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands["install-libs"] = typeof(InstallLibsCommand);
+            options.Commands["clean"] = typeof(CleanCommand);
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>
