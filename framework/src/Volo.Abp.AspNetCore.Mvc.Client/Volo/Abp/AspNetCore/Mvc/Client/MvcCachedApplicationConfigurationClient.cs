@@ -45,9 +45,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             var cacheKey = CreateCacheKey();
             var httpContext = HttpContextAccessor?.HttpContext;
 
-            if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
             {
-
                 return configuration;
             }
 
@@ -61,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
                 }
             );
 
-            if (httpContext != null && !httpContext.WebSockets.IsWebSocketRequest)
+            if (httpContext != null)
             {
                 httpContext.Items[cacheKey] = configuration;
             }
