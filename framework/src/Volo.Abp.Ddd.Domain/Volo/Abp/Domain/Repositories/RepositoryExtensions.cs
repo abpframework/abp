@@ -47,13 +47,12 @@ public static class RepositoryExtensions
         }
     }
 
-
     public static async Task EnsureExistsAsync<TEntity, TKey>(
-           this IRepository<TEntity, TKey> repository,
-           TKey id,
-           CancellationToken cancellationToken = default
-       )
-           where TEntity : class, IEntity<TKey>
+       this IRepository<TEntity, TKey> repository,
+       TKey id,
+       CancellationToken cancellationToken = default
+    )
+       where TEntity : class, IEntity<TKey>
     {
         if (!await repository.AnyAsync(x => x.Id.Equals(id), cancellationToken))
         {
