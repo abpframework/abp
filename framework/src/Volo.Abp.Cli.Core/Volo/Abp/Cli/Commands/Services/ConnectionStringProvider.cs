@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 
@@ -21,7 +22,8 @@ namespace Volo.Abp.Cli.Commands.Services
                 case DatabaseManagementSystem.OracleDevart:
                     return "Data Source=MyProjectName;Integrated Security=yes;";
                 case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder, "MyProjectName.db")};".Replace("\\", "\\\\");
+                    var comment = outputFolder.IsNullOrWhiteSpace() ? "//You need to change to an absolute filename" : string.Empty;
+                    return $"Data Source={Path.Combine(outputFolder, "MyProjectName.db")};".Replace("\\", "\\\\") + comment;
                 default:
                     return null;
             }
