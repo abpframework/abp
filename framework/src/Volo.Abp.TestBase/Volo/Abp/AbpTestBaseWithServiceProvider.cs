@@ -5,7 +5,7 @@ namespace Volo.Abp;
 
 public abstract class AbpTestBaseWithServiceProvider
 {
-    protected abstract IServiceProvider ServiceProvider { get; }
+    protected IServiceProvider ServiceProvider { get; set; }
 
     protected virtual T GetService<T>()
     {

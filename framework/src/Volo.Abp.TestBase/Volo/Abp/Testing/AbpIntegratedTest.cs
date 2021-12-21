@@ -9,8 +9,6 @@ public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithService
 {
     protected IAbpApplication Application { get; }
 
-    protected override IServiceProvider ServiceProvider => Application.ServiceProvider;
-
     protected IServiceProvider RootServiceProvider { get; }
 
     protected IServiceScope TestServiceScope { get; }
@@ -29,6 +27,7 @@ public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithService
         RootServiceProvider = CreateServiceProvider(services);
         TestServiceScope = RootServiceProvider.CreateScope();
 
+        ServiceProvider = Application.ServiceProvider;
         application.Initialize(TestServiceScope.ServiceProvider);
     }
 

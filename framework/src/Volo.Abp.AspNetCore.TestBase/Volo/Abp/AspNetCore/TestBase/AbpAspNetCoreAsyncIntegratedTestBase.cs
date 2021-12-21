@@ -14,9 +14,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.TestBase;
 
 public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
-    where TModule : AbpModule
+    where TModule : IAbpModule
 {
-    protected IHost Host { get; set; }
+    protected WebApplication WebApplication { get; set; }
 
     protected TestServer Server { get; set; }
 
@@ -50,26 +50,20 @@ public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
         });
 
         await ConfigureServicesAsync(builder.Services);
+        WebApplication = builder.Build();
+        await WebApplication.InitializeApplicationAsync();
+        await WebApplication.StartAsync();
 
-        var app = builder.Build();
-
-        await app.InitializeApplicationAsync();
-
-        await app.StartAsync();
-
-        Host = app.Services.GetRequiredService<IHost>();
-
-        Server = Host.GetTestServer();
-        Client = Host.GetTestClient();
+        Server = WebApplication.Services.GetRequiredService<IHost>().GetTestServer();
+        Client = Server.CreateClient();
 
         ServiceProvider = Server.Services;
-
         ServiceProvider.GetRequiredService<ITestServerAccessor>().Server = Server;
     }
 
-    public virtual Task DisposeAsync()
+    public virtual async Task DisposeAsync()
     {
-        return Task.CompletedTask;
+        await WebApplication.DisposeAsync();
     }
 
     protected virtual Task ConfigureServicesAsync(IServiceCollection services)
