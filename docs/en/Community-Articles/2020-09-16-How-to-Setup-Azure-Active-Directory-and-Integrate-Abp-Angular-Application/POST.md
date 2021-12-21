@@ -12,7 +12,7 @@ The most common question is;
 
 The answer is, **you don't**. ABP Angular application is integrated with the backend (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
 
-<img src="auth-diagram.jpeg" alt="auth-diagram" style="zoom:50%;" />
+![auth-diagram](auth-diagram.jpeg)
 
 > What if I want Azure AD as my authorization server and not IdentityServer?
 
