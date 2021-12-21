@@ -14,12 +14,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.Metadata.ModelType == typeof(IRemoteStreamContent) ||
-                context.Metadata.ModelType == typeof(RemoteStreamContent) ||
-                typeof(IEnumerable<IRemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType) ||
+            if (context.Metadata.ModelType == typeof(RemoteStreamContent) ||
                 typeof(IEnumerable<RemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType))
             {
-                return new AbpRemoteStreamContentModelBinder();
+                return new AbpRemoteStreamContentModelBinder<RemoteStreamContent>();
+            }
+
+            if (context.Metadata.ModelType == typeof(IRemoteStreamContent) ||
+                typeof(IEnumerable<IRemoteStreamContent>).IsAssignableFrom(context.Metadata.ModelType))
+            {
+                return new AbpRemoteStreamContentModelBinder<IRemoteStreamContent>();
             }
 
             return null;
