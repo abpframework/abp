@@ -6,6 +6,6 @@ namespace Volo.Abp.TestApp.Application.Dto
     {
         public string Name { get; set; }
 
-        public RemoteStreamContent Content { get; set; }
+        public IRemoteStreamContent Content { get; set; }
     }
 }
