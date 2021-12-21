@@ -263,7 +263,7 @@ namespace Volo.Abp.Http.DynamicProxying
             var result = await _peopleAppService.CreateMultipleFileAsync(new CreateMultipleFileInput()
             {
                 Name = "123.rtf",
-                Contents = new List<IRemoteStreamContent>()
+                Contents = new List<RemoteStreamContent>()
                 {
                     new RemoteStreamContent(memoryStream, "1-1.rtf", "application/rtf"),
                     new RemoteStreamContent(memoryStream2, "1-2.rtf", "application/rtf2")
