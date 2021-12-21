@@ -28,7 +28,7 @@
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **数据库**偏好有多个版版本,我们准备了几种可供下载的源码组合:
+本教程根据你的**UI** 和 **数据库**偏好有多个版本,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
