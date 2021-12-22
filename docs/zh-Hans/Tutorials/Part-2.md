@@ -465,7 +465,7 @@ ABP CLI提供了 `generate-proxy` 命令为你的服务HTTP API生成客户端�
 在 `angular` 文件夹下运行以下命令:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 生成的文件如下:
