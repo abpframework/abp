@@ -15,6 +15,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class SuiteCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "suite";
+    
     public ICmdHelper CmdHelper { get; }
     private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
     private readonly NuGetService _nuGetService;
