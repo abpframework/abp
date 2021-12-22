@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+public interface ITemplateContentContributor
 {
-    public interface ITemplateContentContributor
-    {
-        Task<string> GetOrNullAsync(TemplateContentContributorContext context);
-    }
+    Task<string> GetOrNullAsync(TemplateContentContributorContext context);
 }

@@ -6,25 +6,24 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
-namespace Volo.CmsKit.Public.Menus
+namespace Volo.CmsKit.Public.Menus;
+
+[RequiresGlobalFeature(typeof(BlogsFeature))]
+[RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
+[Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
+[Route("api/cms-kit-public/menu-items")]
+public class MenuItemPublicController : CmsKitPublicControllerBase, IMenuItemPublicAppService
 {
-    [RequiresGlobalFeature(typeof(BlogsFeature))]
-    [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
-    [Route("api/cms-kit-public/menu-items")]
-    public class MenuItemPublicController : CmsKitPublicControllerBase, IMenuItemPublicAppService
+    protected IMenuItemPublicAppService MenuPublicAppService { get; }
+
+    public MenuItemPublicController(IMenuItemPublicAppService menuPublicAppService)
     {
-        protected  IMenuItemPublicAppService MenuPublicAppService { get; }
+        MenuPublicAppService = menuPublicAppService;
+    }
 
-        public MenuItemPublicController(IMenuItemPublicAppService menuPublicAppService)
-        {
-            MenuPublicAppService = menuPublicAppService;
-        }
-
-        [HttpGet]
-        public Task<List<MenuItemDto>> GetListAsync()
-        {
-            return MenuPublicAppService.GetListAsync();
-        }
+    [HttpGet]
+    public Task<List<MenuItemDto>> GetListAsync()
+    {
+        return MenuPublicAppService.GetListAsync();
     }
 }

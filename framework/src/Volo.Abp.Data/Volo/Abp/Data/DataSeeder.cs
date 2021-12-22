@@ -4,35 +4,34 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Data;
+
+//TODO: Create a Volo.Abp.Data.Seeding namespace?
+public class DataSeeder : IDataSeeder, ITransientDependency
 {
-    //TODO: Create a Volo.Abp.Data.Seeding namespace?
-    public class DataSeeder : IDataSeeder, ITransientDependency
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected AbpDataSeedOptions Options { get; }
+
+    public DataSeeder(
+        IOptions<AbpDataSeedOptions> options,
+        IServiceScopeFactory serviceScopeFactory)
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpDataSeedOptions Options { get; }
+        ServiceScopeFactory = serviceScopeFactory;
+        Options = options.Value;
+    }
 
-        public DataSeeder(
-            IOptions<AbpDataSeedOptions> options,
-            IServiceScopeFactory serviceScopeFactory)
+    [UnitOfWork]
+    public virtual async Task SeedAsync(DataSeedContext context)
+    {
+        using (var scope = ServiceScopeFactory.CreateScope())
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            Options = options.Value;
-        }
-
-        [UnitOfWork]
-        public virtual async Task SeedAsync(DataSeedContext context)
-        {
-            using (var scope = ServiceScopeFactory.CreateScope())
+            foreach (var contributorType in Options.Contributors)
             {
-                foreach (var contributorType in Options.Contributors)
-                {
-                    var contributor = (IDataSeedContributor) scope
-                        .ServiceProvider
-                        .GetRequiredService(contributorType);
+                var contributor = (IDataSeedContributor)scope
+                    .ServiceProvider
+                    .GetRequiredService(contributorType);
 
-                    await contributor.SeedAsync(context);
-                }
+                await contributor.SeedAsync(context);
             }
         }
     }

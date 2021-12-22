@@ -4,36 +4,35 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+
+[AttributeUsage(AttributeTargets.Property)]
+public class SelectItems : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class SelectItems: Attribute
+    public string ItemsListPropertyName { get; set; }
+
+    public SelectItems(string itemsListPropertyName)
     {
-        public string ItemsListPropertyName { get; set; }
+        ItemsListPropertyName = itemsListPropertyName;
+    }
 
-        public SelectItems(string itemsListPropertyName)
+    public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
+    {
+        var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+
+        while (properties.Count == 0)
         {
-            ItemsListPropertyName = itemsListPropertyName;
-        }
-
-        public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
-        {
-            var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
-
-            while (properties.Count == 0)
+            explorer = explorer.Container;
+            if (explorer.Container == null)
             {
-                explorer = explorer.Container;
-                if (explorer.Container == null)
-                {
-                    return null;
-                }
-
-                properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+                return null;
             }
 
-            var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
-
-            return selectItems;
+            properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
         }
+
+        var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
+
+        return selectItems;
     }
 }

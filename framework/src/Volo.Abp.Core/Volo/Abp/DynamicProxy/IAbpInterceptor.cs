@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.DynamicProxy
+namespace Volo.Abp.DynamicProxy;
+
+public interface IAbpInterceptor
 {
-	public interface IAbpInterceptor
-    {
-        Task InterceptAsync(IAbpMethodInvocation invocation);
-	}
+    Task InterceptAsync(IAbpMethodInvocation invocation);
 }

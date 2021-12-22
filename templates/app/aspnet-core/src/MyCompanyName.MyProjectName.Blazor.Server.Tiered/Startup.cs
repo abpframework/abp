@@ -2,18 +2,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
-{
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<MyProjectNameBlazorModule>();
-        }
+namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.InitializeApplication();
-        }
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddApplication<MyProjectNameBlazorModule>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.InitializeApplication();
     }
 }
