@@ -12,6 +12,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class CleanCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "clean";
+    
     public ILogger<CleanCommand> Logger { get; set; }
 
     public CleanCommand()
