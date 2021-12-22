@@ -11,6 +11,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class BundleCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "bundle";
+    
     public ILogger<BundleCommand> Logger { get; set; }
 
     public IBundlingService BundlingService { get; set; }
