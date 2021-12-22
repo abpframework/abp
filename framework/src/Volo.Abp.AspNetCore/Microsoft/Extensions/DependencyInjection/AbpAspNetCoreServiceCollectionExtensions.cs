@@ -8,7 +8,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IWebHostEnvironment GetHostingEnvironment(this IServiceCollection services)
         {
-            if (!services.Any(d => d.ServiceType == typeof(IWebHostEnvironment)))
+            var hostingEnvironment = services.GetSingletonInstanceOrNull<IWebHostEnvironment>();
+
+            if (hostingEnvironment == null)
             {
                 return new EmptyHostingEnvironment()
                 {
@@ -16,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 };
             }
 
-            return services.GetSingletonInstance<IWebHostEnvironment>();
+            return hostingEnvironment;
         }
     }
 }
