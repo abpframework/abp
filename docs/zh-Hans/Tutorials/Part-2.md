@@ -28,7 +28,7 @@
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了几种可供下载的源码组合:
+本教程根据你的**UI** 和 **数据库**偏好有多个版本,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
@@ -317,7 +317,7 @@ $(function () {
 ````
 
 * `abp.localization.getResource` 获取一个函数,该函数用于使用服务器端定义的相同JSON文件对文本进行本地化. 通过这种方式你可以与客户端共享本地化值.
-* `abp.libs.datatables.normalizeConfiguration`是一个辅助方法.不是必须的, 但是它通过为缺少的选项提供约定的值来简化[Datatables](https://datatables.net/)配置.
+* `abp.libs.datatables.normalizeConfiguration`是一个辅助方法.不是必须的, 但是它通过为缺省的选项提供约定的值来简化[Datatables](https://datatables.net/)配置.
 * `abp.libs.datatables.createAjax`是另一个辅助方法,用来适配ABP的动态JavaScript API代理和[Datatable](https://datatables.net/)期望的参数格式.
 * `acme.bookStore.books.book.getList` 是动态JavaScript代理函数(上面已经介绍过了)
 * [luxon](https://moment.github.io/luxon/) 库也是该解决方案中预先配置的标准库,你可以轻松地执行日期/时间操作.
@@ -461,7 +461,7 @@ function configureRoutes(routes: RoutesService) {
 启动host应用程序后,在 `angular` 文件夹下运行以下命令:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 这个命令将在`/src/app/proxy/books`文件夹下产生以下文件:
