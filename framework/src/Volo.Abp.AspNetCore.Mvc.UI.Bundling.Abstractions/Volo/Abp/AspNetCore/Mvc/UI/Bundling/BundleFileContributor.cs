@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+
+public class BundleFileContributor : BundleContributor
 {
-    public class BundleFileContributor : BundleContributor
+    public string[] Files { get; }
+
+    public BundleFileContributor(params string[] files)
     {
-        public string[] Files { get; }
+        Files = files ?? Array.Empty<string>();
+    }
 
-        public BundleFileContributor(params string[] files)
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        foreach (var file in Files)
         {
-            Files = files ?? Array.Empty<string>();
-        }
-
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            foreach (var file in Files)
-            {
-                context.Files.AddIfNotContains(file);
-            }
+            context.Files.AddIfNotContains(file);
         }
     }
 }

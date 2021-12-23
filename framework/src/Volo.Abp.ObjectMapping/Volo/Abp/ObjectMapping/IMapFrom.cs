@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.ObjectMapping
+﻿namespace Volo.Abp.ObjectMapping;
+
+public interface IMapFrom<in TSource>
 {
-    public interface IMapFrom<in TSource>
-    {
-        void MapFrom(TSource source);
-    }
+    void MapFrom(TSource source);
 }

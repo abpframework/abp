@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
+
+public interface ITheme
 {
-    public interface ITheme
-    {
-        string GetLayout(string name, bool fallbackToDefault = true);
-    }
+    string GetLayout(string name, bool fallbackToDefault = true);
 }

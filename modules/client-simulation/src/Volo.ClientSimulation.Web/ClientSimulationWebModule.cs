@@ -3,21 +3,20 @@ using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.ClientSimulation
+namespace Volo.ClientSimulation;
+
+[DependsOn(
+    typeof(ClientSimulationModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+    )]
+public class ClientSimulationWebModule : AbpModule
 {
-    [DependsOn(
-        typeof(ClientSimulationModule),
-        typeof(AbpHttpClientIdentityModelWebModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
-        )]
-    public class ClientSimulationWebModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<ClientSimulationWebModule>("Volo.ClientSimulation");
-            });
-        }
+            options.FileSets.AddEmbedded<ClientSimulationWebModule>("Volo.ClientSimulation");
+        });
     }
 }

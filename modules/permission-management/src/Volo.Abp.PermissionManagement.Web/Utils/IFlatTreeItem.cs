@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.PermissionManagement.Web.Utils
+﻿namespace Volo.Abp.PermissionManagement.Web.Utils;
+
+public interface IFlatTreeItem
 {
-    public interface IFlatTreeItem
-    {
-        string Name { get; }
+    string Name { get; }
 
-        string ParentName { get; }
+    string ParentName { get; }
 
-        int Depth { get; set; }
-    }
+    int Depth { get; set; }
 }
