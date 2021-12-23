@@ -1,17 +1,16 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
+
+public class AbpCollapseBodyTagHelper : AbpTagHelper<AbpCollapseBodyTagHelper, AbpCollapseBodyTagHelperService>
 {
-    public class AbpCollapseBodyTagHelper : AbpTagHelper<AbpCollapseBodyTagHelper, AbpCollapseBodyTagHelperService>
+    public string Id { get; set; }
+
+    public bool? Multi { get; set; }
+
+    public bool? Show { get; set; }
+
+    public AbpCollapseBodyTagHelper(AbpCollapseBodyTagHelperService tagHelperService)
+        : base(tagHelperService)
     {
-        public string Id { get; set; }
 
-        public bool? Multi { get; set; }
-
-        public bool? Show { get; set; }
-
-        public AbpCollapseBodyTagHelper(AbpCollapseBodyTagHelperService tagHelperService)
-            : base(tagHelperService)
-        {
-
-        }
     }
 }

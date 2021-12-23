@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Routing
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+
+public class RouterAssemblyList : List<Assembly>
 {
-    public class RouterAssemblyList : List<Assembly>
-    {
-        
-    }
+
 }

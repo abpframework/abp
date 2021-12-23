@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.MongoDB.Blogs
+namespace Volo.CmsKit.MongoDB.Blogs;
+
+public class BlogFeatureRepository_Test : BlogFeatureRepository_Test<CmsKitMongoDbTestModule>
 {
-    public class BlogFeatureRepository_Test : BlogFeatureRepository_Test<CmsKitMongoDbTestModule>
-    {
-        
-    }
+
 }

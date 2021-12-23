@@ -7,36 +7,35 @@ using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Http.Client.Web.Conventions;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Http.Client.Web
+namespace Volo.Abp.Http.Client.Web;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpHttpClientModule)
+    )]
+public class AbpHttpClientWebModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpHttpClientModule)
-        )]
-    public class AbpHttpClientWebModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.Replace(ServiceDescriptor.Transient<IAbpServiceConvention, AbpHttpClientProxyServiceConvention>());
-            context.Services.AddTransient<AbpHttpClientProxyServiceConvention>();
+        context.Services.Replace(ServiceDescriptor.Transient<IAbpServiceConvention, AbpHttpClientProxyServiceConvention>());
+        context.Services.AddTransient<AbpHttpClientProxyServiceConvention>();
 
-            var partManager = context.Services.GetSingletonInstance<ApplicationPartManager>();
-            partManager.FeatureProviders.Add(new AbpHttpClientProxyControllerFeatureProvider());
-        }
+        var partManager = context.Services.GetSingletonInstance<ApplicationPartManager>();
+        partManager.FeatureProviders.Add(new AbpHttpClientProxyControllerFeatureProvider());
+    }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var partManager = context.ServiceProvider.GetRequiredService<ApplicationPartManager>();
+        foreach (var moduleAssembly in context
+            .ServiceProvider
+            .GetRequiredService<IModuleContainer>()
+            .Modules
+            .Select(m => m.Type.Assembly)
+            .Where(a => a.GetTypes().Any(AbpHttpClientProxyHelper.IsClientProxyService))
+            .Distinct())
         {
-            var partManager = context.ServiceProvider.GetRequiredService<ApplicationPartManager>();
-            foreach (var moduleAssembly in context
-                .ServiceProvider
-                .GetRequiredService<IModuleContainer>()
-                .Modules
-                .Select(m => m.Type.Assembly)
-                .Where(a => a.GetTypes().Any(AbpHttpClientProxyHelper.IsClientProxyService))
-                .Distinct())
-            {
-                partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
-            }
+            partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
         }
     }
 }
