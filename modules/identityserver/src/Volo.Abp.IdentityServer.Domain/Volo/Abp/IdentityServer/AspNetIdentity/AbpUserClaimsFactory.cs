@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Volo.Abp.DependencyInjection;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -41,6 +42,10 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             {
                 identity.RemoveClaim(usernameClaim);
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.PreferredUserName, username));
+
+                //https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/issues/1627
+                //https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/blob/05e02b5e0383be40e45c667c12f6667d38e33fcc/src/System.IdentityModel.Tokens.Jwt/ClaimTypeMapping.cs#L52
+                identity.AddIfNotContains(new Claim(JwtRegisteredClaimNames.UniqueName, username));
             }
 
             if (!identity.HasClaim(x => x.Type == JwtClaimTypes.Name))
