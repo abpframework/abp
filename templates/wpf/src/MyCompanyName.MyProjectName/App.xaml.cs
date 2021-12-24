@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using Serilog.Extensions.Hosting;
-using Serilog.Extensions.Logging;
 using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName;
@@ -38,13 +34,7 @@ public partial class App : Application
             _abpApplication =  await AbpApplicationFactory.CreateAsync<MyProjectNameModule>(options =>
             {
                 options.UseAutofac();
-
-                // UseSerilog()
-                options.Services.AddLogging();
-                options.Services.Replace(ServiceDescriptor.Singleton<ILoggerFactory, SerilogLoggerFactory>());
-                var implementationInstance = new DiagnosticContext(null);
-                options.Services.AddSingleton(implementationInstance);
-                options.Services.AddSingleton((IDiagnosticContext) implementationInstance);
+                options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
             });
 
             await _abpApplication.InitializeAsync();

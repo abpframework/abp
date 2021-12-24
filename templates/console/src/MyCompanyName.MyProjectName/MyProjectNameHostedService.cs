@@ -2,12 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Extensions.Hosting;
-using Serilog.Extensions.Logging;
 using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName;
@@ -33,13 +29,7 @@ public class MyProjectNameHostedService : IHostedService
             options.Services.AddSingleton(_hostEnvironment);
 
             options.UseAutofac();
-
-            // UseSerilog()
-            options.Services.AddLogging();
-            options.Services.Replace(ServiceDescriptor.Singleton<ILoggerFactory, SerilogLoggerFactory>());
-            var implementationInstance = new DiagnosticContext(null);
-            options.Services.AddSingleton(implementationInstance);
-            options.Services.AddSingleton((IDiagnosticContext) implementationInstance);
+            options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         });
 
         await _abpApplication.InitializeAsync();
