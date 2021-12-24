@@ -12,6 +12,7 @@ using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -29,7 +30,7 @@ public static class AbpApplicationBuilderExtensions
 
         applicationLifetime.ApplicationStopping.Register(() =>
         {
-            application.ShutdownAsync();
+            AsyncHelper.RunSync(() => application.ShutdownAsync());
         });
 
         applicationLifetime.ApplicationStopped.Register(() =>
