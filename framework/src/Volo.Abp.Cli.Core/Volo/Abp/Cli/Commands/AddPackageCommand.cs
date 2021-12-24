@@ -14,6 +14,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class AddPackageCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "add-package";
+    
     public ILogger<AddPackageCommand> Logger { get; set; }
 
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }

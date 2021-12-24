@@ -8,6 +8,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class SwitchToPreviewCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "switch-to-preview";
+    
     private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
 
     public SwitchToPreviewCommand(PackagePreviewSwitcher packagePreviewSwitcher)

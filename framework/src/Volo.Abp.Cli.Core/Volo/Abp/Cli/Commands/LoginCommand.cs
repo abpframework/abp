@@ -18,6 +18,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class LoginCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "login";
+    
     public ILogger<LoginCommand> Logger { get; set; }
 
     protected AuthService AuthService { get; }
