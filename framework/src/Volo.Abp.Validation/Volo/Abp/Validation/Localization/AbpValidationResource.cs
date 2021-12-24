@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.Validation.Localization
+namespace Volo.Abp.Validation.Localization;
+
+[LocalizationResourceName("AbpValidation")]
+public class AbpValidationResource
 {
-    [LocalizationResourceName("AbpValidation")]
-    public class AbpValidationResource
-    {
-        
-    }
+
 }

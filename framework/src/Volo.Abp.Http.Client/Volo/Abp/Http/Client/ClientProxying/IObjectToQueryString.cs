@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Http.Client.ClientProxying
+namespace Volo.Abp.Http.Client.ClientProxying;
+
+public interface IObjectToQueryString<in TValue>
 {
-    public interface IObjectToQueryString<in TValue>
-    {
-        Task<string> ConvertAsync(TValue value);
-    }
+    Task<string> ConvertAsync(TValue value);
 }

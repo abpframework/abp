@@ -9,35 +9,34 @@ using Volo.Abp.Studio.Packages;
 using Volo.Abp.Studio.Packages.Modifying;
 using Volo.Abp.Studio.Analyzing.Models.Module;
 
-namespace Volo.Abp.Studio.ModuleInstalling.Steps
+namespace Volo.Abp.Studio.ModuleInstalling.Steps;
+
+public class AddEfCoreConfigurationMethodStep : ModuleInstallingPipelineStep
 {
-    public class AddEfCoreConfigurationMethodStep : ModuleInstallingPipelineStep
+    public override async Task ExecuteAsync(ModuleInstallingContext context)
     {
-        public override async Task ExecuteAsync(ModuleInstallingContext context)
+        var efCoreProject = context.TargetModulePackages.FirstOrDefault(p => p.Role == PackageTypes.EntityFrameworkCore);
+
+        if (efCoreProject == null)
         {
-            var efCoreProject = context.TargetModulePackages.FirstOrDefault(p => p.Role == PackageTypes.EntityFrameworkCore);
+            return;
+        }
 
-            if (efCoreProject == null)
-            {
-                return;
-            }
+        var efCoreProjectCsprojPath = efCoreProject.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj";
 
-            var efCoreProjectCsprojPath = efCoreProject.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj";
+        var _derivedClassFinder = context.ServiceProvider.GetRequiredService<DerivedClassFinder>();
+        var _dbContextFileBuilderConfigureAdder = context.ServiceProvider.GetRequiredService<DbContextFileBuilderConfigureAdder>();
 
-            var _derivedClassFinder = context.ServiceProvider.GetRequiredService<DerivedClassFinder>();
-            var _dbContextFileBuilderConfigureAdder = context.ServiceProvider.GetRequiredService<DbContextFileBuilderConfigureAdder>();
+        var dbContextFile = _derivedClassFinder.Find(efCoreProjectCsprojPath, "AbpDbContext").FirstOrDefault();
 
-            var dbContextFile = _derivedClassFinder.Find(efCoreProjectCsprojPath, "AbpDbContext").FirstOrDefault();
+        if (dbContextFile == null)
+        {
+            return;
+        }
 
-            if (dbContextFile == null)
-            {
-                return;
-            }
-
-            foreach (var declaration in context.EfCoreConfigurationMethodDeclarations)
-            {
-                _dbContextFileBuilderConfigureAdder.Add(dbContextFile, declaration.Namespace + ":" + declaration.MethodName);
-            }
+        foreach (var declaration in context.EfCoreConfigurationMethodDeclarations)
+        {
+            _dbContextFileBuilderConfigureAdder.Add(dbContextFile, declaration.Namespace + ":" + declaration.MethodName);
         }
     }
 }

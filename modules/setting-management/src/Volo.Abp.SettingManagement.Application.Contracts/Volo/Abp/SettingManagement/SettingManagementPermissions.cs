@@ -1,16 +1,15 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace Volo.Abp.SettingManagement
+namespace Volo.Abp.SettingManagement;
+
+public class SettingManagementPermissions
 {
-    public class SettingManagementPermissions
+    public const string GroupName = "SettingManagement";
+
+    public const string Emailing = GroupName + ".Emailing";
+
+    public static string[] GetAll()
     {
-        public const string GroupName = "SettingManagement";
-
-        public const string Emailing = GroupName + ".Emailing";
-
-        public static string[] GetAll()
-        {
-            return ReflectionHelper.GetPublicConstantsRecursively(typeof(SettingManagementPermissions));
-        }
+        return ReflectionHelper.GetPublicConstantsRecursively(typeof(SettingManagementPermissions));
     }
 }
