@@ -46,8 +46,8 @@
     "GoHomePage": "返回首頁",
     "GoBack": "返回",
     "Search": "查詢",
-    "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
-    "ItemWillBeDeletedMessage": "This item will be deleted!",
-    "ManageYourAccount": "Manage your account"
+    "ItemWillBeDeletedMessageWithFormat": "{0} 將被刪除!",
+    "ItemWillBeDeletedMessage": "此項目將被刪除!",
+    "ManageYourAccount": "管理個人帳號"
   }
 }
