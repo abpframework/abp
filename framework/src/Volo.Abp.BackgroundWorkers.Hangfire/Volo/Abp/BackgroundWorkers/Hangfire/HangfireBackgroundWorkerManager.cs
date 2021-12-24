@@ -42,7 +42,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
 
                 if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
                 {
-                    var timer = (AbpTimer) worker.GetType()
+                    var timer = (AbpAsyncTimer) worker.GetType()
                         .GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
                     period = timer?.Period;
                 }
