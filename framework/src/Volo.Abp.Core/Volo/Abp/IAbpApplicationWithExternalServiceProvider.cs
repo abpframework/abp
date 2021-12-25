@@ -10,12 +10,7 @@ public interface IAbpApplicationWithExternalServiceProvider : IAbpApplication
     /// Sets the service provider, but not initializes the modules.
     /// </summary>
     void SetServiceProvider([NotNull] IServiceProvider serviceProvider);
-
-    /// <summary>
-    /// Call the Pre/Post/ConfigureServicesAsync method of the modules.
-    /// </summary>
-    Task ConfigureServicesAsync();
-
+    
     /// <summary>
     /// Sets the service provider and initializes all the modules.
     /// If <see cref="SetServiceProvider"/> was called before, the same

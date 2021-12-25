@@ -15,7 +15,7 @@ public static class AbpApplicationFactory
         var app = Create(typeof(TStartupModule), options =>
         {
             optionsAction?.Invoke(options);
-            options.ManualConfigureServices = true;
+            options.SkipConfigureServices = true;
         });
         await app.ConfigureServicesAsync();
         return app;
@@ -28,7 +28,7 @@ public static class AbpApplicationFactory
         var app = new AbpApplicationWithInternalServiceProvider(startupModuleType, options =>
         {
             optionsAction?.Invoke(options);
-            options.ManualConfigureServices = true;
+            options.SkipConfigureServices = true;
         });
         await app.ConfigureServicesAsync();
         return app;
@@ -42,7 +42,7 @@ public static class AbpApplicationFactory
         var app = Create(typeof(TStartupModule), services, options =>
         {
             optionsAction?.Invoke(options);
-            options.ManualConfigureServices = true;
+            options.SkipConfigureServices = true;
         });
         await app.ConfigureServicesAsync();
         return app;
@@ -56,7 +56,7 @@ public static class AbpApplicationFactory
         var app = new AbpApplicationWithExternalServiceProvider(startupModuleType, services, options =>
         {
             optionsAction?.Invoke(options);
-            options.ManualConfigureServices = true;
+            options.SkipConfigureServices = true;
         });
         await app.ConfigureServicesAsync();
         return app;

@@ -24,6 +24,8 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
+    private bool _configuredServices;
+
     internal AbpApplicationBase(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
@@ -48,7 +50,7 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         Modules = LoadModules(services, options);
 
-        if (!options.ManualConfigureServices)
+        if (!options.SkipConfigureServices)
         {
             ConfigureServices();
         }
@@ -139,6 +141,8 @@ public abstract class AbpApplicationBase : IAbpApplication
     //TODO: We can extract a new class for this
     public virtual async Task ConfigureServicesAsync()
     {
+        CheckMultipleConfigureServices();
+        
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -211,11 +215,23 @@ public abstract class AbpApplicationBase : IAbpApplication
                 abpModule.ServiceConfigurationContext = null;
             }
         }
+
+        _configuredServices = true;
+    }
+
+    private void CheckMultipleConfigureServices()
+    {
+        if (_configuredServices)
+        {
+            throw new AbpInitializationException("Services have already been configured! If you call ConfigureServicesAsync method, you must have set AbpApplicationCreationOptions.SkipConfigureServices tu true before.");
+        }
     }
 
     //TODO: We can extract a new class for this
     public virtual void ConfigureServices()
     {
+        CheckMultipleConfigureServices();
+        
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -288,5 +304,7 @@ public abstract class AbpApplicationBase : IAbpApplication
                 abpModule.ServiceConfigurationContext = null;
             }
         }
+
+        _configuredServices = true;
     }
 }
