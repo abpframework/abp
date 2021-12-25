@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
@@ -8,6 +9,20 @@ namespace Volo.Abp.DependencyInjection;
 
 public class AutoServiceRegistration_Tests
 {
+    [Fact]
+    public async Task AutoServiceRegistration_Should_Not_Duplicate_Test_Async()
+    {
+        using (var application = await AbpApplicationFactory.CreateAsync<TestModule>())
+        {
+            //Act
+            await application.InitializeAsync();
+
+            //Assert
+            var services = application.ServiceProvider.GetServices<TestService>().ToList();
+            services.Count.ShouldBe(1);
+        }
+    }
+
     [Fact]
     public void AutoServiceRegistration_Should_Not_Duplicate_Test()
     {
