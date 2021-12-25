@@ -98,7 +98,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 #### 仓储
 
-为此模块定义了一下自定义仓储：
+为此模块定义了以下自定义仓储：
 
 * `IApiResourceRepository`
 * `IClientRepository`
