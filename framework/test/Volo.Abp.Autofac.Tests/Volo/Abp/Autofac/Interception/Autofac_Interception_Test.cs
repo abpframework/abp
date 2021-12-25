@@ -1,11 +1,13 @@
-﻿using Volo.Abp.DynamicProxy;
+﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Autofac.Interception;
 
 public class Autofac_Interception_Test : AbpInterceptionTestBase<AutofacTestModule>
 {
-    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    protected override Task<Action<AbpApplicationCreationOptions>> SetAbpApplicationCreationOptionsAsync()
     {
-        options.UseAutofac();
+        return Task.FromResult<Action<AbpApplicationCreationOptions>>(options => options.UseAutofac());
     }
 }
