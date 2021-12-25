@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hi, in this article we will see how we can integrate the Syncfusion MVC Components into our application.
+In this article we will see how we can integrate the Syncfusion MVC Components into our ABP application.
 
 ## Source Code
 
@@ -13,7 +13,8 @@ You can find the source code of the application at https://github.com/EngincanV/
 * [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
     * In this article, we will create a new startup template in v5.0.0-rc.2 and if you follow this article from top to bottom and create a new startup template with me, you need to install the [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) before starting.
-
+   
+**NOTE:** ABP v5.X stable version has been released. You can replace v5.0.0-rc.2 with the latest stable version in your steps.
 
 Also, you need to update your ABP CLI to the v5.0.0-rc.2, you can use the command below to update your CLI version:
 
