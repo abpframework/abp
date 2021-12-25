@@ -21,7 +21,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public void Add(IBackgroundWorker worker)
+    public async Task AddAsync(IBackgroundWorker worker)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {

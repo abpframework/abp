@@ -2,53 +2,73 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
-public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWithServiceProvider, IDisposable
-    where TStartup : class
+public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
+    where TModule : IAbpModule
 {
-    protected TestServer Server { get; }
+    protected WebApplication WebApplication { get; set; }
 
-    protected HttpClient Client { get; }
+    protected TestServer Server { get; set; }
 
-    private readonly IHost _host;
+    protected HttpClient Client { get; set; }
 
-    protected AbpAspNetCoreIntegratedTestBase()
+    protected IServiceProvider ServiceProvider { get; set; }
+
+    protected virtual T GetService<T>()
     {
-        var builder = CreateHostBuilder();
+        return ServiceProvider.GetService<T>();
+    }
 
-        _host = builder.Build();
-        _host.Start();
+    protected virtual T GetRequiredService<T>()
+    {
+        return ServiceProvider.GetRequiredService<T>();
+    }
 
-        Server = _host.GetTestServer();
-        Client = _host.GetTestClient();
+    public virtual async Task InitializeAsync()
+    {
+        var builder = WebApplication.CreateBuilder();
+        builder.Host.ConfigureServices(services =>
+            {
+                services.AddSingleton<IHostLifetime, TestNoopHostLifetime>();
+                services.AddSingleton<IServer, TestServer>();
+            })
+            .UseAutofac();
+
+        await builder.Services.AddApplicationAsync<TModule>(options =>
+        {
+            options.Services.ReplaceConfiguration(builder.Configuration);
+        });
+
+        await ConfigureServicesAsync(builder.Services);
+        WebApplication = builder.Build();
+        await WebApplication.InitializeApplicationAsync();
+        await WebApplication.StartAsync();
+
+        Server = WebApplication.Services.GetRequiredService<IHost>().GetTestServer();
+        Client = Server.CreateClient();
 
         ServiceProvider = Server.Services;
-
         ServiceProvider.GetRequiredService<ITestServerAccessor>().Server = Server;
     }
 
-    protected virtual IHostBuilder CreateHostBuilder()
+    public virtual async Task DisposeAsync()
     {
-        return Host.CreateDefaultBuilder()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<TStartup>();
-                webBuilder.UseTestServer();
-            })
-            .UseAutofac()
-            .ConfigureServices(ConfigureServices);
+        await WebApplication.DisposeAsync();
     }
 
-    protected virtual void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected virtual Task ConfigureServicesAsync(IServiceCollection services)
     {
-
+        return Task.CompletedTask;
     }
 
     #region GetUrl
@@ -89,9 +109,4 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWit
     }
 
     #endregion
-
-    public void Dispose()
-    {
-        _host?.Dispose();
-    }
 }
