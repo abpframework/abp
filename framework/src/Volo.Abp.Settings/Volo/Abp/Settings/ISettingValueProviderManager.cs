@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.Settings;
+
+public interface ISettingValueProviderManager
 {
-    public interface ISettingValueProviderManager
-    {
-        List<ISettingValueProvider> Providers { get; }
-    }
+    List<ISettingValueProvider> Providers { get; }
 }

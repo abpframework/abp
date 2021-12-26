@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown;
+
+public enum DropdownStyle
 {
-    public enum DropdownStyle
-    {
-        Single,
-        Split
-    }
+    Single,
+    Split
 }

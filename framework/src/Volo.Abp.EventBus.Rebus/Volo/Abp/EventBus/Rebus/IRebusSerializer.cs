@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.EventBus.Rebus
+namespace Volo.Abp.EventBus.Rebus;
+
+public interface IRebusSerializer
 {
-    public interface IRebusSerializer
-    {
-        byte[] Serialize(object obj);
+    byte[] Serialize(object obj);
 
-        object Deserialize(byte[] value, Type type);
+    object Deserialize(byte[] value, Type type);
 
-        T Deserialize<T>(byte[] value);
-    }
+    T Deserialize<T>(byte[] value);
 }

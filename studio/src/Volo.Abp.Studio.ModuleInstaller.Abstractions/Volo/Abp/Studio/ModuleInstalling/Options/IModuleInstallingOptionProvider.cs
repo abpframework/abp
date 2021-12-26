@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.ModuleInstalling.Options
+namespace Volo.Abp.Studio.ModuleInstalling.Options;
+
+public interface IModuleInstallingOptionProvider
 {
-    public interface IModuleInstallingOptionProvider
-    {
-        Task<List<ModuleInstallingOption>> GetAsync();
-    }
+    Task<List<ModuleInstallingOption>> GetAsync();
 }
