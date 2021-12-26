@@ -34,10 +34,7 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            await builder.Services.AddApplicationAsync<MyProjectNameHttpApiHostModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(builder.Configuration);
-            });
+            await builder.AddApplicationAsync<MyProjectNameHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();
