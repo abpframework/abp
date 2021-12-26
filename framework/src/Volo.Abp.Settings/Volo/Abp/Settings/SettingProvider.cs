@@ -73,6 +73,10 @@ namespace Volo.Abp.Settings
                 }
 
                 settingDefinitions.RemoveAll(x => notNullValues.Any(v => v.Name == x.Name));
+                if (!settingDefinitions.Any())
+                {
+                    break;
+                }
             }
 
             return result.Values.ToList();
