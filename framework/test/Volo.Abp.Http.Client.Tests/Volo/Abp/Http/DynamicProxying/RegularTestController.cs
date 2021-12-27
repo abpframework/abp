@@ -87,6 +87,22 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [HttpGet]
+        [Route("post-object-and-first-release-date-with-url/{time:datetime}")]
+        public Task<Car> GetObjectandFirstReleaseDateAsync(DateTime time, Car bodyValue)
+        {
+            bodyValue.FirstReleaseDate = time;
+            return Task.FromResult(bodyValue);
+        }
+
+        [HttpGet]
+        [Route("post-object-and-count-with-url/{count}")]
+        public Task<Car> GetObjectandCountAsync(int count, Car bodyValue)
+        {
+            bodyValue.Year = count;
+            return Task.FromResult(bodyValue);
+        }
+
+        [HttpGet]
         [Route("post-object-and-id-with-url-and-query/{id}")]
         public Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue)
         {
