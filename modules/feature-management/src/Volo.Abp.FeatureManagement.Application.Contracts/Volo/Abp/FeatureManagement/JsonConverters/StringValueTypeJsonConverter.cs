@@ -28,7 +28,8 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
         {
             var name = nameJsonProperty.Value.GetString();
 
-            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(), new SelectionStringValueItemSourceJsonConverter());
+            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(Options),
+                new SelectionStringValueItemSourceJsonConverter());
 
             return name switch
             {
