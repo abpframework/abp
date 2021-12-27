@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -73,6 +73,10 @@ public class SettingProvider : ISettingProvider, ITransientDependency
             }
 
             settingDefinitions.RemoveAll(x => notNullValues.Any(v => v.Name == x.Name));
+            if (!settingDefinitions.Any())
+            {
+                break;
+            }
         }
 
         return result.Values.ToList();

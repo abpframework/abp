@@ -74,6 +74,24 @@ public class CsprojFileManager : XmlFileManagerBase, ICsprojFileManager, ITransi
         await SaveXmlDocumentAsync(filePath, document);
     }
 
+    public async Task AddImportAsync(string filePath, string importFilePath)
+    {
+        var document = await GetXmlDocumentAsync(filePath);
+
+        var relativeImportFilePath = PathHelper.GetRelativePath(filePath, importFilePath);
+
+        var importNode = document.CreateElement("Import");
+
+        var projectAttr = document.CreateAttribute("Project");
+        projectAttr.Value = relativeImportFilePath;
+        importNode.Attributes.Append(projectAttr);
+
+        document["Project"].AppendChild(importNode);
+        document["Project"].AppendChild(document.CreateWhitespace(Environment.NewLine + "  "));
+
+        await SaveXmlDocumentAsync(filePath, document);
+    }
+
     public async Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference)
     {
         var document = await GetXmlDocumentAsync(filePath);

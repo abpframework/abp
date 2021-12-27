@@ -17,6 +17,30 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 public static class AbpWebAssemblyHostBuilderExtensions
 {
+    public async static Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
+        [NotNull] this WebAssemblyHostBuilder builder,
+        Action<AbpWebAssemblyApplicationCreationOptions> options)
+        where TStartupModule : IAbpModule
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        // Related this commit(https://github.com/dotnet/aspnetcore/commit/b99d805bc037fcac56afb79abeb7d5a43141c85e)
+        // Microsoft.AspNetCore.Blazor.BuildTools has been removed in net 5.0.
+        // This call may be removed when we find a suitable solution.
+        // System.Runtime.CompilerServices.AsyncStateMachineAttribute
+        Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add<AsyncStateMachineAttribute>();
+
+        builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+        builder.Services.AddSingleton(builder);
+
+        var application = await builder.Services.AddApplicationAsync<TStartupModule>(opts =>
+        {
+            options?.Invoke(new AbpWebAssemblyApplicationCreationOptions(builder, opts));
+        });
+
+        return application;
+    }
+
     public static IAbpApplicationWithExternalServiceProvider AddApplication<TStartupModule>(
         [NotNull] this WebAssemblyHostBuilder builder,
         Action<AbpWebAssemblyApplicationCreationOptions> options)
@@ -41,7 +65,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         return application;
     }
 
-    public static async Task InitializeAsync(
+    public async static Task InitializeAsync(
         [NotNull] this IAbpApplicationWithExternalServiceProvider application,
         [NotNull] IServiceProvider serviceProvider)
     {
@@ -51,12 +75,12 @@ public static class AbpWebAssemblyHostBuilderExtensions
         ((ComponentsClientScopeServiceProviderAccessor)serviceProvider
             .GetRequiredService<IClientScopeServiceProviderAccessor>()).ServiceProvider = serviceProvider;
 
-        application.Initialize(serviceProvider);
+        await application.InitializeAsync(serviceProvider);
         await InitializeModulesAsync(serviceProvider);
         await SetCurrentLanguageAsync(serviceProvider);
     }
 
-    private static async Task InitializeModulesAsync(IServiceProvider serviceProvider)
+    private async static Task InitializeModulesAsync(IServiceProvider serviceProvider)
     {
         foreach (var service in serviceProvider.GetServices<IAsyncInitialize>())
         {
@@ -64,7 +88,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         }
     }
 
-    private static async Task SetCurrentLanguageAsync(IServiceProvider serviceProvider)
+    private async static Task SetCurrentLanguageAsync(IServiceProvider serviceProvider)
     {
         var configurationClient = serviceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
         var utilsService = serviceProvider.GetRequiredService<IAbpUtilsService>();

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
@@ -34,6 +35,21 @@ public class AbpBackgroundWorkersQuartzModule : AbpModule
         }
     }
 
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var quartzBackgroundWorkerOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerQuartzOptions>>().Value;
+        if (quartzBackgroundWorkerOptions.IsAutoRegisterEnabled)
+        {
+            var backgroundWorkerManager = context.ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
+            var works = context.ServiceProvider.GetServices<IQuartzBackgroundWorker>().Where(x => x.AutoRegister);
+
+            foreach (var work in works)
+            {
+                await backgroundWorkerManager.AddAsync(work);
+            }
+        }
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var quartzBackgroundWorkerOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerQuartzOptions>>().Value;
@@ -44,7 +60,7 @@ public class AbpBackgroundWorkersQuartzModule : AbpModule
 
             foreach (var work in works)
             {
-                backgroundWorkerManager.Add(work);
+                AsyncHelper.RunSync(() => backgroundWorkerManager.AddAsync(work));
             }
         }
     }

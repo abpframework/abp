@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -187,7 +188,7 @@ public class MyProjectNameIdentityServerModule : AbpModule
 #endif
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
@@ -227,19 +228,16 @@ public class MyProjectNameIdentityServerModule : AbpModule
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
 
-        SeedData(context);
+        await SeedData(context);
     }
 
-    private void SeedData(ApplicationInitializationContext context)
+    private async Task SeedData(ApplicationInitializationContext context)
     {
-        AsyncHelper.RunSync(async () =>
+        using (var scope = context.ServiceProvider.CreateScope())
         {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                await scope.ServiceProvider
-                    .GetRequiredService<IDataSeeder>()
-                    .SeedAsync();
-            }
-        });
+            await scope.ServiceProvider
+                .GetRequiredService<IDataSeeder>()
+                .SeedAsync();
+        }
     }
 }
