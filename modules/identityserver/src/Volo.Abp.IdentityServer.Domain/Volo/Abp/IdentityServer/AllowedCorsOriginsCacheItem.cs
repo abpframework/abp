@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.IdentityServer
-{
-    public class AllowedCorsOriginsCacheItem
-    {
-        public const string AllOrigins = "AllOrigins";
+﻿namespace Volo.Abp.IdentityServer;
 
-        public string[] AllowedOrigins { get; set; }
-    }
+public class AllowedCorsOriginsCacheItem
+{
+    public const string AllOrigins = "AllOrigins";
+
+    public string[] AllowedOrigins { get; set; }
 }

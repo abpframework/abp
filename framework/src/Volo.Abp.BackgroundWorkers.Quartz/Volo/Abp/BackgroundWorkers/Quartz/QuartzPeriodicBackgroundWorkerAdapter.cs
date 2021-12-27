@@ -4,83 +4,82 @@ using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers.Quartz
+namespace Volo.Abp.BackgroundWorkers.Quartz;
+
+[DisallowConcurrentExecution]
+public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWorkerBase,
+    IQuartzBackgroundWorkerAdapter
+    where TWorker : IBackgroundWorker
 {
-    [DisallowConcurrentExecution]
-    public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWorkerBase,
-        IQuartzBackgroundWorkerAdapter
-        where TWorker : IBackgroundWorker
+    private readonly MethodInfo _doWorkAsyncMethod;
+    private readonly MethodInfo _doWorkMethod;
+
+    public QuartzPeriodicBackgroundWorkerAdapter()
     {
-        private readonly MethodInfo _doWorkAsyncMethod;
-        private readonly MethodInfo _doWorkMethod;
+        AutoRegister = false;
 
-        public QuartzPeriodicBackgroundWorkerAdapter()
+        _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+        _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
+
+    }
+
+    public void BuildWorker(IBackgroundWorker worker)
+    {
+        int? period;
+        var workerType = worker.GetType();
+
+        if (worker is AsyncPeriodicBackgroundWorkerBase || worker is PeriodicBackgroundWorkerBase)
         {
-            AutoRegister = false;
+            if (typeof(TWorker) != worker.GetType())
+            {
+                throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
+            }
 
-            _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic);
-            _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
-
+            var timer = (AbpAsyncTimer)worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
+            period = timer?.Period;
+        }
+        else
+        {
+            return;
         }
 
-        public void BuildWorker(IBackgroundWorker worker)
+        if (period == null)
         {
-            int? period;
-            var workerType = worker.GetType();
-
-            if (worker is AsyncPeriodicBackgroundWorkerBase || worker is PeriodicBackgroundWorkerBase)
-            {
-                if (typeof(TWorker) != worker.GetType())
-                {
-                    throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
-                }
-
-                var timer = (AbpAsyncTimer) worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-                period = timer?.Period;
-            }
-            else
-            {
-                return;
-            }
-
-            if (period == null)
-            {
-                return;
-            }
-
-            JobDetail = JobBuilder
-                .Create<QuartzPeriodicBackgroundWorkerAdapter<TWorker>>()
-                .WithIdentity(workerType.FullName)
-                .Build();
-            Trigger = TriggerBuilder.Create()
-                .WithIdentity(workerType.FullName)
-                .WithSimpleSchedule(builder => builder.WithInterval(TimeSpan.FromMilliseconds(period.Value)).RepeatForever())
-                .Build();
+            return;
         }
 
-        public override async Task Execute(IJobExecutionContext context)
-        {
-            var worker = (IBackgroundWorker) ServiceProvider.GetService(typeof(TWorker));
-            var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
+        JobDetail = JobBuilder
+            .Create<QuartzPeriodicBackgroundWorkerAdapter<TWorker>>()
+            .WithIdentity(workerType.FullName)
+            .Build();
+        Trigger = TriggerBuilder.Create()
+            .WithIdentity(workerType.FullName)
+            .WithSimpleSchedule(builder => builder.WithInterval(TimeSpan.FromMilliseconds(period.Value)).RepeatForever())
+            .Build();
+    }
 
-            switch (worker)
-            {
-                case AsyncPeriodicBackgroundWorkerBase asyncWorker:
+    public override async Task Execute(IJobExecutionContext context)
+    {
+        var worker = (IBackgroundWorker)ServiceProvider.GetService(typeof(TWorker));
+        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
+
+        switch (worker)
+        {
+            case AsyncPeriodicBackgroundWorkerBase asyncWorker:
                 {
                     if (_doWorkAsyncMethod != null)
                     {
-                        await (Task) _doWorkAsyncMethod.Invoke(asyncWorker, new object[] {workerContext});
+                        await (Task)_doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext });
                     }
 
                     break;
                 }
-                case PeriodicBackgroundWorkerBase syncWorker:
+            case PeriodicBackgroundWorkerBase syncWorker:
                 {
-                    _doWorkMethod?.Invoke(syncWorker, new object[] {workerContext});
+                    _doWorkMethod?.Invoke(syncWorker, new object[] { workerContext });
 
                     break;
                 }
-            }
         }
     }
 }
