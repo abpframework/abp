@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 public static class AbpWebAssemblyHostBuilderExtensions
 {
-    public static async Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
+    public async static Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
         [NotNull] this WebAssemblyHostBuilder builder,
         Action<AbpWebAssemblyApplicationCreationOptions> options)
         where TStartupModule : IAbpModule
@@ -65,7 +65,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         return application;
     }
 
-    public static async Task InitializeAsync(
+    public async static Task InitializeAsync(
         [NotNull] this IAbpApplicationWithExternalServiceProvider application,
         [NotNull] IServiceProvider serviceProvider)
     {
@@ -80,7 +80,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         await SetCurrentLanguageAsync(serviceProvider);
     }
 
-    private static async Task InitializeModulesAsync(IServiceProvider serviceProvider)
+    private async static Task InitializeModulesAsync(IServiceProvider serviceProvider)
     {
         foreach (var service in serviceProvider.GetServices<IAsyncInitialize>())
         {
@@ -88,7 +88,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         }
     }
 
-    private static async Task SetCurrentLanguageAsync(IServiceProvider serviceProvider)
+    private async static Task SetCurrentLanguageAsync(IServiceProvider serviceProvider)
     {
         var configurationClient = serviceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
         var utilsService = serviceProvider.GetRequiredService<IAbpUtilsService>();

@@ -34,10 +34,7 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            await builder.Services.AddApplicationAsync<MyProjectNameBlazorHostModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(builder.Configuration);
-            });
+            await builder.AddApplicationAsync<MyProjectNameBlazorHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();
