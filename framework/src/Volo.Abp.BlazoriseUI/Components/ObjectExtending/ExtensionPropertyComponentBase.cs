@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Blazorise;
+using Blazorise.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.Web;
@@ -13,6 +16,9 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
 {
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+
+    [Inject]
+    public IValidationMessageLocalizerAttributeFinder ValidationMessageLocalizerAttributeFinder { get; set; }
 
     [Parameter]
     public TEntity Entity { get; set; }
@@ -33,7 +39,41 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
             return;
         }
 
+        if (LH == null)
+        {
+            e.MemberNames = result.First().MemberNames;
+            e.Status = ValidationStatus.Error;
+            e.ErrorText = result.First().ErrorMessage;
+            return;
+        }
+
+
+        var formattedValidationAttributes = PropertyInfo.GetValidationAttributes();
+        foreach (var validationAttribute in formattedValidationAttributes )
+        {
+            if (validationAttribute.ErrorMessageResourceName == null)
+            {
+                ValidationAttributeHelper.SetDefaultErrorMessage(validationAttribute);
+            }
+        }
+
+        var formattedResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(Entity)
+        {
+            DisplayName = PropertyInfo.Name,
+            MemberName = PropertyInfo.Name
+        };
+
+        Validator.TryValidateValue(e.Value, validationContext, formattedResults, formattedValidationAttributes);
+
+        var errorMessage = result.First().ErrorMessage;
+        var errorMessageString = ValidationAttributeHelper.RevertErrorMessagePlaceholders(formattedResults.First().ErrorMessage);
+        var errorMessageArguments = ValidationMessageLocalizerAttributeFinder.FindAll(errorMessage, errorMessageString)
+            ?.OrderBy(x => x.Index)
+            ?.Select(x => x.Argument);
+
+        e.MemberNames = result.First().MemberNames;
         e.Status = ValidationStatus.Error;
-        e.ErrorText = result.First().ErrorMessage;
+        e.ErrorText = LH.Localize(errorMessageString, errorMessageArguments);
     }
 }

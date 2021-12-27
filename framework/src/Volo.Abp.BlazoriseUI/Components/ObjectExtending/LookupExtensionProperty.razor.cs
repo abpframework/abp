@@ -48,11 +48,14 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         var text = Entity.GetProperty(TextPropertyName);
         if (value != null && text != null)
         {
-            lookupItems.Add(new SelectItem<object>
+            if (lookupItems.All(x => !x.Value.Equals(value)))
             {
-                Text = Entity.GetProperty(TextPropertyName).ToString(),
-                Value = value
-            });
+                lookupItems.Add(new SelectItem<object>
+                {
+                    Text = Entity.GetProperty(TextPropertyName).ToString(),
+                    Value = value
+                });
+            }
         }
     }
 
