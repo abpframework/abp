@@ -80,14 +80,7 @@ namespace Volo.Docs
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                if (scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value.Enable)
-                {
-                    var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
-                    AsyncHelper.RunSync(() => documentFullSearch.CreateIndexIfNeededAsync());
-                }
-            }
+            AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
         }
     }
 }
