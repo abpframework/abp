@@ -15,6 +15,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class TranslateCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "translate";
+    
     public ILogger<TranslateCommand> Logger { get; set; }
 
     public Task ExecuteAsync(CommandLineArgs commandLineArgs)

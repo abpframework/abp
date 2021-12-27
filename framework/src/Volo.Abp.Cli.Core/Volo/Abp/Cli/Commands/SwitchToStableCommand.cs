@@ -8,6 +8,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class SwitchToStableCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "switch-to-stable";
+    
     private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
 
     public SwitchToStableCommand(PackagePreviewSwitcher packagePreviewSwitcher)

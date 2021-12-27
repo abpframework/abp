@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public void Add(IBackgroundWorker worker)
+    public async Task AddAsync(IBackgroundWorker worker)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
@@ -32,7 +32,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             }
             else
             {
-                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => hangfireBackgroundWorker.DoWorkAsync(),
+                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.DoWorkAsync(),
                     hangfireBackgroundWorker.CronExpression);
             }
         }
@@ -42,7 +42,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
 
             if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
             {
-                var timer = (AbpTimer)worker.GetType()
+                var timer = (AbpAsyncTimer) worker.GetType()
                     .GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
                 period = timer?.Period;
             }

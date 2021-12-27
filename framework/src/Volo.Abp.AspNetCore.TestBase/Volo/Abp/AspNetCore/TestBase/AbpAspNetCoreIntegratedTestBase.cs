@@ -17,8 +17,6 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWit
 
     protected HttpClient Client { get; }
 
-    protected override IServiceProvider ServiceProvider { get; }
-
     private readonly IHost _host;
 
     protected AbpAspNetCoreIntegratedTestBase()

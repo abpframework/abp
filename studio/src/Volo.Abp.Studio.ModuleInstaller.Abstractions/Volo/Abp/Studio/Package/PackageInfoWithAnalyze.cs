@@ -14,14 +14,14 @@ public class PackageInfoWithAnalyze
     [CanBeNull]
     public string Role { get; }
 
-    [NotNull]
+    [CanBeNull]
     public PackageModel Analyze { get; }
 
-    public PackageInfoWithAnalyze([NotNull] string path, [CanBeNull] string role, [NotNull] PackageModel analyze)
+    public PackageInfoWithAnalyze([NotNull] string path, [CanBeNull] string role, [CanBeNull] PackageModel analyze)
     {
         Path = Check.NotNullOrWhiteSpace(path, nameof(path));
         Name = PackageHelper.GetNameFromPath(path);
         Role = role;
-        Analyze = Check.NotNull(analyze, nameof(analyze));
+        Analyze = analyze;
     }
 }

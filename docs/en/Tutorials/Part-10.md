@@ -948,7 +948,7 @@ Since the HTTP APIs have been changed, you need to update Angular client side [s
 Run the following command in the `angular` folder (you may need to stop the angular application):
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 This command will update the service proxy files under the `/src/app/proxy/` folder.
 

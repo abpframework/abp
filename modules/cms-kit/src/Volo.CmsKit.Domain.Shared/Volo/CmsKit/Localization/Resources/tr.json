@@ -158,6 +158,7 @@
     "YourEmailAddress": "Email adresiniz",
     "YourFullName": "Tam adınız",
     "YourMessage": "Mesajınız",
-    "YourReply": "Cevabınız"
+    "YourReply": "Cevabınız",
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekler."
   }
 }

@@ -2,6 +2,42 @@
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $rootFolder = Join-Path $packFolder "../"
 
+function Write-Info   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Black -BackgroundColor Green
+
+	try 
+	{
+	   $host.UI.RawUI.WindowTitle = $text
+	}		
+	catch 
+	{
+		#Changing window title is not suppoerted!
+	}
+}
+
+function Write-Error   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Red -BackgroundColor Black 
+}
+
+function Seperator   
+{
+	Write-Host ("_" * 100)  -ForegroundColor gray 
+}
+
 # List of solutions
 $solutions = (
     "framework",
@@ -22,7 +58,7 @@ $solutions = (
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
     "modules/cms-kit",
-    "modules/studio"
+    "studio"
 )
 
 # List of projects
@@ -99,8 +135,8 @@ $projects = (
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
-    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
-    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
@@ -210,6 +246,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
@@ -230,6 +267,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Application.Contracts",

@@ -31,6 +31,11 @@ public class SolutionFileModuleAdder : ISolutionFileModuleAdder, ITransientDepen
         string directory,
         string slnTargetFolder)
     {
+        if (!Directory.Exists(directory))
+        {
+            return;
+        }
+
         var projects = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
 
         foreach (var project in projects)

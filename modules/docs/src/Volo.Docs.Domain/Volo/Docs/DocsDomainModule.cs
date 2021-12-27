@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -39,7 +40,7 @@ namespace Volo.Docs
                 options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
                 options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));
             });
-            
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets
@@ -63,6 +64,18 @@ namespace Volo.Docs
             {
                 client.Timeout = TimeSpan.FromMilliseconds(15000);
             });
+        }
+
+        public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                if (scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value.Enable)
+                {
+                    var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
+                    await documentFullSearch.CreateIndexIfNeededAsync();
+                }
+            }
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
