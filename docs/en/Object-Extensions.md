@@ -9,10 +9,10 @@ ABP Framework provides an **object extension system** to allow you to **add extr
 This is the interface to make a class extensible. It simply defines a `Dictionary` property:
 
 ````csharp
-Dictionary<string, object> ExtraProperties { get; }
+ExtraPropertyDictionary ExtraProperties { get; }
 ````
 
-Then you can add or get extra properties using this dictionary.
+`ExtraPropertyDictionary` class is inherited from the `Dictionary<string, object>` class. You can add or get extra properties using this dictionary.
 
 ### Base Classes
 

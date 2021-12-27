@@ -29,6 +29,5 @@ public class AbpJsonOptionsSetup : IConfigureOptions<JsonOptions>
         options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
 
         options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
-        options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
     }
 }

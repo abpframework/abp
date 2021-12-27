@@ -230,7 +230,7 @@
           },
           "configurations": {
             "production": {
-              "tsConfig": "apps/dev-app/tsconfig.prod.json",
+              "tsConfig": "apps/dev-app/tsconfig.app.json",
               "budgets": [
                 {
                   "type": "initial",

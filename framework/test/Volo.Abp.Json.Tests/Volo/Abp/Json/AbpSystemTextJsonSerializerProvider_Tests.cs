@@ -174,8 +174,7 @@ public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerial
     {
         var json = "{\"name\":\"test\",\"extraProperties\":null}";
         var extensibleObject = JsonSerializer.Deserialize<TestExtensibleObjectClass>(json);
-        extensibleObject.ExtraProperties.ShouldNotBeNull();
-        extensibleObject.ExtraProperties.ShouldBeEmpty();
+        extensibleObject.ExtraProperties.ShouldBeNull();
     }
 
     [Fact]

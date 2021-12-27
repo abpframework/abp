@@ -17,6 +17,7 @@ namespace Volo.Abp.Uow.MongoDB;
 public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
     where TMongoDbContext : IAbpMongoDbContext
 {
+    private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
     public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
 
     private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -78,7 +79,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             dbContextKey,
             () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
 
-        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
+        return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
     }
 
     public async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
@@ -117,7 +118,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
         }
 
-        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
+        return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
     }
 
     [Obsolete("Use CreateDbContextAsync")]
@@ -190,7 +191,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             }
             catch (NotSupportedException e)
             {
-                Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                Logger.LogError(TransactionsNotSupportedErrorMessage);
                 Logger.LogException(e);
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
@@ -241,7 +242,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             }
             catch (NotSupportedException e)
             {
-                Logger.LogError("The current MongoDB database does not support transactions, All operations will be performed in non-transactions, This may cause errors.");
+                Logger.LogError(TransactionsNotSupportedErrorMessage);
                 Logger.LogException(e);
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);

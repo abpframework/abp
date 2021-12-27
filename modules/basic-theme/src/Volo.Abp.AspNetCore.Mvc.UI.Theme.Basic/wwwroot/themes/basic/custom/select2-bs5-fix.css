@@ -1,4 +1,0 @@
-﻿/*TODO: Remove after BS5 Modal support of select2 */
-span.select2-container.select2-container--default.select2-container--open {
-    z-index: 1056; /*Just for BS5 Modals*/
-}

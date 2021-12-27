@@ -1,33 +1,26 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Commands.Services;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.ProjectBuilding.Templates.App;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands;
 
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
+    public const string Name = "new";
+    
     public ILogger<NewCommand> Logger { get; set; }
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
@@ -36,8 +29,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     public NewCommand(TemplateProjectBuilder templateProjectBuilder
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper)
-    : base(connectionStringProvider, cmdHelper)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -84,6 +78,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
+        RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

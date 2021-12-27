@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -90,6 +90,11 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
         return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
     }
 
+    public static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(
         HttpClient client,
         string baseUrl)
@@ -113,10 +118,7 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions);
 
         return result;
     }
@@ -149,5 +151,4 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     {
         return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
     }
-
 }

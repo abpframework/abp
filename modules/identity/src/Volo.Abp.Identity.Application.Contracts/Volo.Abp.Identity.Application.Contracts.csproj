@@ -21,14 +21,4 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Volo.Abp.Identity.Application.Contracts.abppkg.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.Application.Contracts.abppkg.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <None Remove="Volo.Abp.Identity.Application.Contracts.abppkg.analyze.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.Application.Contracts.abppkg.analyze.json" />
-  </ItemGroup>
-
 </Project>

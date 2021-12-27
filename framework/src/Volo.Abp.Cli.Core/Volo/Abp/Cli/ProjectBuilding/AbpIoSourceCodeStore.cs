@@ -82,6 +82,13 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
             version = latestVersion;
         }
+        else
+        {
+            if (!await IsVersionExists(version))
+            {
+                throw new Exception("There is no version found with given version: " + version);
+            }
+        }
 
         var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
 
@@ -141,7 +148,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             var client = _cliHttpClientFactory.CreateClient();
             var stringContent = new StringContent(
                 JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto
-                { Name = name, IncludePreReleases = includePreReleases }),
+                    {Name = name, IncludePreReleases = includePreReleases}),
                 Encoding.UTF8,
                 MimeTypes.Application.Json
             );
@@ -174,7 +181,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             var client = _cliHttpClientFactory.CreateClient();
 
             var stringContent = new StringContent(
-                JsonSerializer.Serialize(new GetTemplateNugetVersionDto { Name = name, Version = version }),
+                JsonSerializer.Serialize(new GetTemplateNugetVersionDto {Name = name, Version = version}),
                 Encoding.UTF8,
                 MimeTypes.Application.Json
             );
@@ -190,6 +197,30 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         catch (Exception)
         {
             return null;
+        }
+    }
+
+    private async Task<bool> IsVersionExists(string version)
+    {
+        var url = $"{CliUrls.WwwAbpIo}api/download/versions?includePreReleases=true";
+
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetAsync(url,
+                _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                var result = await response.Content.ReadAsStringAsync();
+                var versions = JsonSerializer.Deserialize<List<GithubRelease>>(result);
+
+                return versions.Any(v => v.Name == version);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
         }
     }
 
@@ -288,5 +319,16 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     public class GetVersionResultDto
     {
         public string Version { get; set; }
+    }
+
+    public class GithubRelease
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public bool IsPrerelease { get; set; }
+
+        public DateTime PublishTime { get; set; }
     }
 }

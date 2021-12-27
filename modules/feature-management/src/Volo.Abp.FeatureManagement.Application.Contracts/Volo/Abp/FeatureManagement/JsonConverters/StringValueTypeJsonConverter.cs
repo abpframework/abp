@@ -8,6 +8,10 @@ namespace Volo.Abp.FeatureManagement.JsonConverters;
 
 public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 {
+    private JsonSerializerOptions _readJsonSerializerOptions;
+
+    private JsonSerializerOptions _writeJsonSerializerOptions;
+
     protected readonly AbpFeatureManagementApplicationContractsOptions Options;
 
     public StringValueTypeJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
@@ -24,14 +28,13 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
         {
             var name = nameJsonProperty.Value.GetString();
 
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(Options),
-                new SelectionStringValueItemSourceJsonConverter());
+            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(), new SelectionStringValueItemSourceJsonConverter());
 
             return name switch
             {
-                "SelectionStringValueType" => JsonSerializer.Deserialize<SelectionStringValueType>(rootElement.GetRawText(), newOptions),
-                "FreeTextStringValueType" => JsonSerializer.Deserialize<FreeTextStringValueType>(rootElement.GetRawText(), newOptions),
-                "ToggleStringValueType" => JsonSerializer.Deserialize<ToggleStringValueType>(rootElement.GetRawText(), newOptions),
+                "SelectionStringValueType" =>  rootElement.Deserialize<SelectionStringValueType>(_readJsonSerializerOptions),
+                "FreeTextStringValueType" => rootElement.Deserialize<FreeTextStringValueType>(_readJsonSerializerOptions),
+                "ToggleStringValueType" => rootElement.Deserialize<ToggleStringValueType>(_readJsonSerializerOptions),
                 _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
             };
         }
@@ -41,7 +44,7 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 
     public override void Write(Utf8JsonWriter writer, IStringValueType value, JsonSerializerOptions options)
     {
-        var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-        JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
+        _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
+        JsonSerializer.Serialize(writer, value, value.GetType(), _writeJsonSerializerOptions);
     }
 }

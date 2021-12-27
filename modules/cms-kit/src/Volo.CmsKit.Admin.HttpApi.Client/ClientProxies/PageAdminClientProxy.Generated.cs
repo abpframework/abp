@@ -9,51 +9,50 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Pages;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Admin.Pages.ClientProxies
+namespace Volo.CmsKit.Admin.Pages.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IPageAdminAppService), typeof(PageAdminClientProxy))]
+public partial class PageAdminClientProxy : ClientProxyBase<IPageAdminAppService>, IPageAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IPageAdminAppService), typeof(PageAdminClientProxy))]
-    public partial class PageAdminClientProxy : ClientProxyBase<IPageAdminAppService>, IPageAdminAppService
+    public virtual async Task<PageDto> GetAsync(Guid id)
     {
-        public virtual async Task<PageDto> GetAsync(Guid id)
+        return await RequestAsync<PageDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PageDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
+    public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
+    {
+        return await RequestAsync<PagedResultDto<PageDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<PageDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(GetPagesInputDto), input }
-            });
-        }
+            { typeof(GetPagesInputDto), input }
+        });
+    }
 
-        public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
+    public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
+    {
+        return await RequestAsync<PageDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PageDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(CreatePageInputDto), input }
-            });
-        }
+            { typeof(CreatePageInputDto), input }
+        });
+    }
 
-        public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
+    public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
+    {
+        return await RequestAsync<PageDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PageDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(UpdatePageInputDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(UpdatePageInputDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

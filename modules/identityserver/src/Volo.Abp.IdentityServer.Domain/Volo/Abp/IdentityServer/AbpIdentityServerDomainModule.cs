@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Services;
+﻿using System.Threading.Tasks;
+using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -133,17 +134,31 @@ public class AbpIdentityServerDomainModule : AbpModule
         });
     }
 
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
+        if (options.IsCleanupEnabled)
+        {
+            await context.ServiceProvider
+                .GetRequiredService<IBackgroundWorkerManager>()
+                .AddAsync(
+                    context.ServiceProvider
+                        .GetRequiredService<TokenCleanupBackgroundWorker>()
+                );
+        }
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
         if (options.IsCleanupEnabled)
         {
-            context.ServiceProvider
+            AsyncHelper.RunSync(() => context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
-                .Add(
+                .AddAsync(
                     context.ServiceProvider
                         .GetRequiredService<TokenCleanupBackgroundWorker>()
-                );
+                ));
         }
     }
 }
