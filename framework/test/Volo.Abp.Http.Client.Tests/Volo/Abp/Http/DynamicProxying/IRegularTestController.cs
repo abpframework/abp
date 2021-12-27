@@ -26,6 +26,10 @@ namespace Volo.Abp.Http.DynamicProxying
 
         Task<Car> GetObjectandIdAsync(int id, Car bodyValue);
 
+        Task<Car> GetObjectandFirstReleaseDateAsync(DateTime time, Car bodyValue);
+
+        Task<Car> GetObjectandCountAsync(int count, Car bodyValue);
+
         Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue);
 
         Task<string> PutValueWithBodyAsync(string bodyValue);

@@ -59,6 +59,7 @@ namespace Volo.Abp.Http
             {
                 options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));
                 options.FormDataConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToFormData));
+                options.PathConverts.Add(typeof(int), typeof(TestObjectToPath));
             });
         }
     }

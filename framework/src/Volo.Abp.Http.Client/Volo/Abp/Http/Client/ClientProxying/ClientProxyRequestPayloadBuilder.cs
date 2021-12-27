@@ -113,6 +113,8 @@ namespace Volo.Abp.Http.Client.ClientProxying
                             .Invoke(this, new object[]
                             {
                                 scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.FormDataConverts[value.GetType()]),
+                                action,
+                                parameter,
                                 value
                             });
 
@@ -168,9 +170,9 @@ namespace Volo.Abp.Http.Client.ClientProxying
             return formData;
         }
 
-        protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, T value)
+        protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, ActionApiDescriptionModel actionApiDescription, ParameterApiDescriptionModel parameterApiDescription, T value)
         {
-            return await converter.ConvertAsync(value);
+            return await converter.ConvertAsync(actionApiDescription, parameterApiDescription, value);
         }
     }
 }
