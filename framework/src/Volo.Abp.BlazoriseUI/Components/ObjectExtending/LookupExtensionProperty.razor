@@ -2,18 +2,19 @@
 @typeparam TResourceType
 @using Abp.Localization
 @using Blazorise.Components
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
 
 <Field>
     <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
     <Autocomplete Data="@lookupItems"
                   TItem="SelectItem<object>"
                   TValue="object"
-                  TextField="item=>item.Text"
-                  ValueField="item=>item.Value"
+                  TextField="item => item.Text"
+                  ValueField="item => item.Value"
                   SelectedValue="@SelectedValue"
                   SelectedValueChanged="@SelectedValueChanged"
                   SearchChanged="@SearchFilterChangedAsync"
+                  Validator="@Validate"
                   MinLength="0">
     </Autocomplete>
 </Field>
- 

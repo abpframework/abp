@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Blazorise;
+using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.Data;
 using Volo.Abp.Http;
@@ -18,17 +20,10 @@ using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 
-public partial class LookupExtensionProperty<TEntity, TResourceType> : ComponentBase
+public partial class LookupExtensionProperty<TEntity, TResourceType>
     where TEntity : IHasExtraProperties
 {
     protected List<SelectItem<object>> lookupItems;
-
-    [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
-
-    [Parameter] public TEntity Entity { get; set; }
-
-    [Parameter] public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
-
 
     [Inject] public ILookupApiRequestService LookupApiService { get; set; }
 
@@ -63,7 +58,7 @@ public partial class LookupExtensionProperty<TEntity, TResourceType> : Component
 
     protected virtual void UpdateLookupTextProperty(object value)
     {
-        var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value)).Text;
+        var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value))?.Text;
         Entity.SetProperty(TextPropertyName, selectedItemText);
     }
 
@@ -101,12 +96,12 @@ public partial class LookupExtensionProperty<TEntity, TResourceType> : Component
         return Task.CompletedTask;
     }
 
-    protected async Task SearchFilterChangedAsync(string filter)
+    protected virtual async Task SearchFilterChangedAsync(string filter)
     {
         lookupItems = await GetLookupItemsAsync(filter);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
