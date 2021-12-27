@@ -1,0 +1,23 @@
+{
+  "culture": "is",
+  "texts": {
+    "Menu:TenantManagement": "Tenant umsjá",
+    "Tenants": "Tenantar",
+    "NewTenant": "Nýr tenant",
+    "TenantName": "Nafn tenants",
+    "DisplayName:TenantName": "Nafn tenants",
+    "TenantDeletionConfirmationMessage": "Tenantinum '{0}' verður eytt. Staðfestir þú það?",
+    "ConnectionStrings": "Tengi strengir",
+    "DisplayName:DefaultConnectionString": "Sjálfgefin tengistrengur",
+    "DisplayName:UseSharedDatabase": "Notaðu samnýttan gagnagrunn",
+    "ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
+    "Permission:TenantManagement": "Tenant umsjá",
+    "Permission:Create": "Búa til",
+    "Permission:Edit": "Breyta",
+    "Permission:Delete": "Eyða",
+    "Permission:ManageConnectionStrings": "Umsjá tengistrengja",
+    "Permission:ManageFeatures": "Umsjá eiginleika",
+    "DisplayName:AdminEmailAddress": "Netfang stjórnanda (admin)",
+    "DisplayName:AdminPassword": "Lykilorð stjórnanda (admin)"
+  }
+}

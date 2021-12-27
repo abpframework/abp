@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Uow
-{
-    public class AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions
-    {
-        public List<string> NonTransactionalUrls { get; }
+namespace Volo.Abp.AspNetCore.Uow;
 
-        public AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions()
-        {
-            NonTransactionalUrls = new List<string>
+public class AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions
+{
+    public List<string> NonTransactionalUrls { get; }
+
+    public AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions()
+    {
+        NonTransactionalUrls = new List<string>
             {
                 "/connect/"
             };
-        }
     }
 }

@@ -2,6 +2,9 @@
   "culture": "pt-BR",
   "texts": {
     "Features": "Funcionalidades",
-    "NoFeatureFoundMessage": "Não há nenhuma funcionalidade disponível."
+    "NoFeatureFoundMessage": "Nï¿½o hï¿½ nenhuma funcionalidade disponï¿½vel.",
+    "Permission:FeatureManagement": "Gerenciamento de recursos",
+    "Permission:FeatureManagement.ManageHostFeatures": "Gerenciar recursos do Host",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor do recurso {0} nÃ£o Ã© vÃ¡lido!"
   }
 }

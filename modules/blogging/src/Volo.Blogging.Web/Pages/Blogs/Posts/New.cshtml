@@ -44,8 +44,8 @@
 
                             <abp-row>
                                 <abp-column size-sm="_9">
-                                    <div class="form-group">
-                                        <label for="CoverImageFile">@L["CoverImage"]</label>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="CoverImageFile">@L["CoverImage"]</label>
                                         <span> * </span>
                                         <input class="form-control" type="file" id="CoverImageFile" />
                                     </div>
@@ -60,14 +60,14 @@
                             <abp-input asp-for="Post.Description" />
 
 
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <div class="new-post-editor">
                                     <div class="gradient-background-animation loading-cover"></div>
                                 </div>
                             </div>
 
                             <div class="actions d-flex">
-                                <div class="text-muted editor-info d-none d-lg-block mr-auto">
+                                <div class="text-muted editor-info d-none d-lg-block me-auto">
 
                                     <div>
                                         <svg class="markdown-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
@@ -81,7 +81,7 @@
                                 <div class="mt-3 d-flex flex-row-reverse">
                                     <abp-button id="PostFormSubmitButton" button-type="Primary" type="submit" form="new-post-form" text="@L["Submit"].Value" icon="check" />
 
-                                    <a asp-page="./Index" class="btn btn-default mr-2"><span>@L["Cancel"]</span></a>
+                                    <a asp-page="./Index" class="btn btn-default me-2"><span>@L["Cancel"]</span></a>
                                 </div>
                             </div>
                         </form>

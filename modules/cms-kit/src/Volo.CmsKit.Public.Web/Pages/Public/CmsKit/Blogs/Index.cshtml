@@ -34,9 +34,11 @@
                         <small style="opacity:.65;">@blog.CreationTime</small>
                     </p>
                     <p style="min-height: 60px;">@blog.ShortDescription</p>
-                    <a href="/blogs/@Model.BlogSlug/@blog.Slug" class="btn btn-block btn-light">
-                        @L["Read"]
-                    </a>
+                    <div class="d-grid gap-2">
+                        <a href="/blogs/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
+                            @L["Read"]
+                        </a>
+                    </div>
                 </abp-card-body>
             </abp-card>
         </abp-column>
@@ -48,4 +50,3 @@
         <abp-paginator model="Model.PagerModel" />
     </abp-column>
 </abp-row>
-

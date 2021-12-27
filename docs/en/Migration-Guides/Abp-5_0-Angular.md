@@ -1,8 +1,8 @@
 # Angular UI v4.x to v5.0 Migration Guide
 
-## Breaking Changes
+This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](Abp-5_0.md).
 
-### Overall
+## Overall
 
 See the overall list of breaking changes:
 
@@ -16,15 +16,68 @@ See the overall list of breaking changes:
 - Update all dependency versions to the latest [#9806](https://github.com/abpframework/abp/issues/9806)
 - Chart.js big include with CommonJS warning [#7472](https://github.com/abpframework/abp/issues/7472)
 
-### Angular v12
+## Angular v12
 
 The new ABP Angular UI is based on Angular v12. We started to compile Angular UI packages with the Ivy compilation. Therefore, **new packages only work with Angular v12**. If you are still on the older version of Angular v12, you have to update to Angular v12. The update is usually very easy. See [Angular Update Guide](https://update.angular.io/?l=2&v=11.0-12.0) for further information.
 
-### Bootstrap 5
+> **ABP Angular UI is not yet compatible with Angular v13 due to some issues.**
 
-TODO
+## Bootstrap 5
 
-### NGXS has been removed
+ABP 5.0 now works with Bootstrap 5. For details, please refer to the official [migration guide](https://getbootstrap.com/docs/5.0/migration/) provided by Bootstrap.
+
+We have updated dependencies of the `ThemeShared` package, therefore when you update `@abp/ng.theme.shared`, it will install the necessary dependencies. 
+
+### RTL
+
+Bootstrap 5 provides its own CSS file for RTL(right-to-left) languages. Therefore, we have removed `bootstrap-rtl.min.css` from `@abp/ng.theme.shared`.
+
+In angular.json, make the following change:
+
+Replace 
+
+`"node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css"` with 
+
+`"node_modules/bootstrap/dist/css/bootstrap.rtl.min.css"`
+
+```js
+{
+  // ...
+    "styles": [{
+      "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+      "inject": false,
+      "bundleName": "bootstrap-rtl.min"
+    }]
+}
+```
+
+That's it for open source templates.
+
+### Commercial
+
+Starting from version 5.0, Lepton styles get bundled with Bootstrap. That's why you don't need to provide `bootstrap` styles in `angular.json` anymore.
+
+Remove the following two objects from the `styles` array in `angular.json`
+
+```js
+{
+  // ...
+    "styles": [{
+      "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+      "inject": false,
+      "bundleName": "bootstrap-rtl.min"
+    },
+    {
+      "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "inject": true,
+      "bundleName": "bootstrap-ltr.min"
+    }]
+}
+```
+
+After you have implemented the necessary changes explained by Bootstrap, it should be good to go.
+
+## NGXS has been removed
 
 We aim to make the ABP Framework free of any state-management solutions. ABP developers should be able to use the ABP Framework with any library/framework of their choice. So, we decided to remove NGXS from ABP packages.
 
@@ -42,21 +95,21 @@ NGXS states and actions, some namespaces have been removed. See [this issue](htt
 
 If you don't want to use the NGXS, you should remove all NGXS related imports, injections, etc., from your project.
 
-### @angular/localize package
+## @angular/localize package
 
 [`@angular/localize`](https://angular.io/api/localize) dependency has been removed from `@abp/ng.core` package. The package must be installed in your app. Run the following command to install:
 
 ```bash
-npm install @angular/localize
+npm install @angular/localize@12
 
 # or
 
-yarn add @angular/localize
+yarn add @angular/localize@12
 ```
 
 > ABP Angular UI packages are not dependent on the `@angular/localize` package. However, some packages (like `@ng-bootstrap/ng-bootstrap`) depend on the package. Thus, this package needs to be installed in your project.
 
-### Proxy endpoints
+## Proxy endpoints
 
 New endpoints named proxy have been created, related proxies have moved.
 For example; before v5.0, `IdentityUserService` could be imported from `@abp/ng.identity`. As of v5.0, the service can be imported from `@abp/ng.identity/proxy`. See an example:
@@ -79,11 +132,11 @@ Following proxies have been affected:
 - `@abp/ng.tenant-management` to `@abp/ng.tenant-management/proxy`
 - **ProfileService** is deleted from `@abp/ng.core`. Instead, you can import it from `@abp/ng.identity/proxy`
 
-### SettingTabsService
+## SettingTabsService
 
 **SettingTabsService** has moved from `@abp/ng.core` to `@abp/ng.setting-management/config`.
 
-### ChartComponent
+## ChartComponent
 
 [`ChartComponent`](../UI/Angular/Chart-Component.md) has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
 

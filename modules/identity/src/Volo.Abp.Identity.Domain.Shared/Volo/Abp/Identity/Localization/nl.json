@@ -25,6 +25,7 @@
     "DisplayName:Email": "E-mail adres",
     "DisplayName:PhoneNumber": "Telefoonnummer",
     "DisplayName:TwoFactorEnabled": "Tweefactor authenticatie",
+    "DisplayName:IsActive": "Actief",
     "DisplayName:LockoutEnabled": "Account vergrendelen na mislukte inlogpogingen",
     "NewRole": "Nieuwe rol",
     "RoleName": "Rol naam",
@@ -70,6 +71,7 @@
     "Volo.Abp.Identity:010007": "U kunt uw instelling voor tweefactor authenticatie niet wijzigen.",
     "Volo.Abp.Identity:010008": "Het is niet toegestaan om de instelling van tweefactor authenticatie te wijzigen.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximaal toegestande aantal lidmaatschappen van organisatie-eenheden voor een gebruiker",
+    "ThisUserIsNotActiveMessage": "Deze gebruiker is niet actief.",
     "Permission:IdentityManagement": "Identiteitsbeheer",
     "Permission:RoleManagement": "Rolbeheer",
     "Permission:Create": "Maak aan",
@@ -78,12 +80,6 @@
     "Permission:ChangePermissions": "Wijzig de rechten",
     "Permission:UserManagement": "Gebruikersbeheer",
     "Permission:UserLookup": "Gebruiker opzoeken",
-    "Feature:IdentityGroup": "Identiteit",
-    "Feature:TwoFactor": "Tweefactor authenticatie gedrag",
-    "Feature:TwoFactorDescription": "Stel tweefactor authenticatie gedrag in. Mogelijke waardes: Optioneel,Uitgeschakeld,Afgedwongen",
-    "Feature:TwoFactor.Optional": "Optioneel",
-    "Feature:TwoFactor.Disabled": "Uitgeschakeld",
-    "Feature:TwoFactor.Forced": "Afgedwongen",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Vereiste lengte",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Vereist aantal unieke tekens",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Vereist niet-alfanumeriek teken",
@@ -111,10 +107,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Of het telefoonnummer kan worden bevestigd door de gebruiker.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Of een bevestigd telefoonnummer vereist is om in te loggen.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Of de gebruikersnaam kan worden bijgewerkt door de gebruiker.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Of de e-mail door de gebruiker kan worden veranderd.",
-    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Tweefactor authenticatie gedrag",
-    "Description:Abp.Identity.TwoFactorBehaviour": "Tweefactor authenticatie gedrag",
-    "DisplayName:Abp.Identity.UsersCanChange": "Sta gebruikers toe hun Tweefactor authenticatie te wijzigen.",
-    "Description:Abp.Identity.UsersCanChange": "Sta gebruikers toe hun Tweefactor authenticatie te wijzigen."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Of de e-mail door de gebruiker kan worden veranderd."
   }
 }

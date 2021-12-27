@@ -1,8 +1,8 @@
 import {
   AuthGuard,
-  DynamicLayoutComponent,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
+  RouterOutletComponent,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   {
     path: '',
-    component: DynamicLayoutComponent,
+    component: RouterOutletComponent,
     children: [
       {
         path: 'login',

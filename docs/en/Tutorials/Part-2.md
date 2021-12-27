@@ -10,7 +10,7 @@
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Value}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -80,13 +80,13 @@ You can see the **book list** returned from the server. You can also check the *
 Let's **create a new book** using the `create` function:
 
 ````js
-acme.bookStore.books.book.create({ 
-        name: 'Foundation', 
-        type: 7, 
-        publishDate: '1951-05-24', 
-        price: 21.5 
-    }).then(function (result) { 
-        console.log('successfully created the book with id: ' + result.id); 
+acme.bookStore.books.book.create({
+        name: 'Foundation',
+        type: 7,
+        publishDate: '1951-05-24',
+        price: 21.5
+    }).then(function (result) {
+        console.log('successfully created the book with id: ' + result.id);
     });
 ````
 
@@ -187,7 +187,7 @@ namespace Acme.BookStore.Web.Pages.Books
     {
         public void OnGet()
         {
-            
+
         }
     }
 }
@@ -461,7 +461,7 @@ For more information, see the [RoutesService document](../UI/Angular/Modifying-t
 Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 This command will create the following files under the `/src/app/proxy/books` folder:
@@ -654,7 +654,7 @@ Open the `Books.razor` and replace the content as the following:
 > If you see some syntax errors, you can ignore them if your application properly built and run. Visual Studio still has some bugs with Blazor.
 
 * Inherited from the `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
-* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
 * Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
 
 While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.

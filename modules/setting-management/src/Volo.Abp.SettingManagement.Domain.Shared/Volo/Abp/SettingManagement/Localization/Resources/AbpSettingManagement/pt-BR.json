@@ -2,6 +2,23 @@
   "culture": "pt-BR",
   "texts": {
     "Settings": "Configurações",
-    "SuccessfullySaved": "Salvo com sucesso!"
+    "SuccessfullySaved": "Salvo com sucesso!",
+    "Permission:SettingManagement": "Gestão de Cenários",
+    "Permission:Emailing": "Enviando por e-mail",
+    "Menu:Emailing": "Enviando por e-mail",
+    "SmtpHost": "Hospedeiro",
+    "SmtpPort": "Porta",
+    "SmtpUserName": "Nome do usuário",
+    "SmtpPassword": "Senha",
+    "SmtpDomain": "Domínio",
+    "SmtpEnableSsl": "Habilitar SSL",
+    "SmtpUseDefaultCredentials": "Use credenciais padrão",
+    "DefaultFromAddress": "Endereço de origem padrão",
+    "DefaultFromDisplayName": "Padrão do nome de exibição",
+    "Feature:SettingManagementGroup": "Gestão de Cenários",
+    "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
+    "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Permitir que os inquilinos alterem as configurações de e-mail.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Permitir que os inquilinos alterem as configurações de e-mail."
   }
 }

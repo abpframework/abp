@@ -55,16 +55,16 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 
-  @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('modalContent') modalContent?: TemplateRef<any>;
 
-  @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
+  @ContentChild('abpHeader', { static: false }) abpHeader?: TemplateRef<any>;
 
-  @ContentChild('abpBody', { static: false }) abpBody: TemplateRef<any>;
+  @ContentChild('abpBody', { static: false }) abpBody?: TemplateRef<any>;
 
-  @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
+  @ContentChild('abpFooter', { static: false }) abpFooter?: TemplateRef<any>;
 
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
-  abpSubmit: ButtonComponent;
+  abpSubmit?: ButtonComponent;
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
@@ -78,7 +78,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   _busy = false;
 
-  modalRef: NgbModalRef;
+  modalRef!: NgbModalRef;
 
   isConfirmationOpen = false;
 
@@ -93,7 +93,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   }
 
   get isFormDirty(): boolean {
-    return Boolean(this.modalWindowRef.querySelector('.ng-dirty'));
+    return Boolean(this.modalWindowRef?.querySelector('.ng-dirty'));
   }
 
   constructor(
@@ -175,8 +175,8 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
       this.isConfirmationOpen = true;
       this.confirmationService
         .warn(
-          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
-          'AbpAccount::AreYouSure',
+          'AbpUi::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpUi::AreYouSure',
           { dismissible: false },
         )
         .subscribe((status: Confirmation.Status) => {
@@ -191,22 +191,22 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   }
 
   listen() {
-    fromEvent(this.modalWindowRef, 'keyup')
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
-      )
-      .subscribe(() => this.close());
+    if (this.modalWindowRef) {
+      fromEvent<KeyboardEvent>(this.modalWindowRef, 'keyup')
+        .pipe(
+          takeUntil(this.destroy$),
+          debounceTime(150),
+          filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+        )
+        .subscribe(() => this.close());
+    }
 
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        event.preventDefault();
-        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
-          event.returnValue = true;
-        } else {
-          delete event.returnValue;
+        // TODO: check this
+        if (!this.isFormDirty || this.suppressUnsavedChangesWarning) {
+          event.preventDefault();
         }
       });
 

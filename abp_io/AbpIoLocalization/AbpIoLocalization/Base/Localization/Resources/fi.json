@@ -32,6 +32,13 @@
     "SeeDocuments": "Katso Asiakirjat",
     "Samples": "Näytteet",
     "Framework": "Kehys",
-    "Support": "Tuki"
+    "Support": "Tuki",
+    "FreeDDDBook": "Ilmainen DDD e-kirja",
+    "New": "Uusi",
+    "Volo.AbpIo.Domain:020005": "Lisenssin jatkovuosi ei voi olla pienempi kuin {MinExtendLicenseYear} vuosi ja suurempi kuin {MaxExtendLicenseYear} vuosi",
+    "TrialLicensePeriodHasExpired": "Kokeilulisenssijaksosi päättyi {0} päivää sitten.",
+    "TrialLicensePeriodWillExpire": "Kokeilulisenssijaksosi vanhenee {0} päivän kuluttua.",
+    "TrialLicensePeriodExpireToday": "Kokeilulisenssijaksosi päättyy tänään.",
+    "PurchaseNow": "Osta nyt!"
   }
 }
