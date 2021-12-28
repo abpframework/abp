@@ -4,13 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
+using Volo.Abp.Http.Modeling;
 using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
     public class TestObjectToFormData : IObjectToFormData<List<GetParamsNameValue>>, ITransientDependency
     {
-        public Task<List<KeyValuePair<string, HttpContent>>> ConvertAsync(List<GetParamsNameValue> values)
+        public Task<List<KeyValuePair<string, HttpContent>>> ConvertAsync(ActionApiDescriptionModel actionApiDescription, ParameterApiDescriptionModel parameterApiDescription, List<GetParamsNameValue> values)
         {
             if (values.IsNullOrEmpty())
             {
