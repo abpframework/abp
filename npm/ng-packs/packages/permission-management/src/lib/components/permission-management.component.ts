@@ -8,13 +8,26 @@ import {
   UpdatePermissionDto,
 } from '@abp/ng.permission-management/proxy';
 import { LocaleDirection } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
-import { of } from 'rxjs';
-import { finalize, switchMap, tap } from 'rxjs/operators';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  TrackByFunction,
+  ViewChildren,
+} from '@angular/core';
+import { concat, of } from 'rxjs';
+import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { PermissionManagement } from '../models/permission-management';
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
   style: string;
+};
+
+type PermissionWithGroupName = PermissionGrantInfoDto & {
+  groupName: string;
 };
 
 @Component({
@@ -58,7 +71,11 @@ export class PermissionManagementComponent
       this.openModal().subscribe(() => {
         this._visible = true;
         this.visibleChange.emit(true);
-        this.initModal();
+        concat(this.selectAllInAllTabsRef.changes, this.selectAllInThisTabsRef.changes)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.initModal();
+          });
       });
     } else {
       this.selectedGroup = null;
@@ -69,11 +86,16 @@ export class PermissionManagementComponent
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
+  @ViewChildren('selectAllInThisTabsRef')
+  selectAllInThisTabsRef: QueryList<ElementRef<HTMLInputElement>>;
+  @ViewChildren('selectAllInAllTabsRef')
+  selectAllInAllTabsRef: QueryList<ElementRef<HTMLInputElement>>;
+
   data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
 
   selectedGroup: PermissionGroupDto;
 
-  permissions: PermissionGrantInfoDto[] = [];
+  permissions: PermissionWithGroupName[] = [];
 
   selectThisTab = false;
 
@@ -250,13 +272,16 @@ export class PermissionManagementComponent
   }
 
   initModal() {
-    this.setTabCheckboxState();
-    this.setGrantCheckboxState();
+    // TODO: Refactor
+    setTimeout(() => {
+      this.setTabCheckboxState();
+      this.setGrantCheckboxState();
+    });
   }
 
   getAssignedCount(groupName: string) {
     return this.permissions.reduce(
-      (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
+      (acc, val) => (val.groupName === groupName && val.isGranted ? acc + 1 : acc),
       0,
     );
   }
@@ -283,6 +308,9 @@ function findMargin(permissions: PermissionGrantInfoDto[], permission: Permissio
   return parentPermission ? 20 : 0;
 }
 
-function getPermissions(groups: PermissionGroupDto[]): PermissionGrantInfoDto[] {
-  return groups.reduce((acc, val) => [...acc, ...val.permissions], []);
+function getPermissions(groups: PermissionGroupDto[]): PermissionWithGroupName[] {
+  return groups.reduce(
+    (acc, val) => [...acc, ...val.permissions.map(p => ({ ...p, groupName: val.name }))],
+    [],
+  );
 }

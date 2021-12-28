@@ -1,0 +1,25 @@
+{
+  "culture": "is",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Sjálfgefið frá heimilisfang",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Sjálfgefið frá skjánafn",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Hýsill",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Notandanafn",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Lykilorð",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Lén",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Virkja SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Nota sjálfgefin auðkenni",
+    "Description:Abp.Mailing.DefaultFromAddress": "Sjálfgefið frá heimilisfangi",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Sjálfgefið frá skjánafni",
+    "Description:Abp.Mailing.Smtp.Host": "Nafn eða IP -tala gestgjafans sem notuð er fyrir SMTP færslur.",
+    "Description:Abp.Mailing.Smtp.Port": "Portin sem notuð er fyrir SMTP færslur.",
+    "Description:Abp.Mailing.Smtp.UserName": "Notandanafn tengt auðkennum.",
+    "Description:Abp.Mailing.Smtp.Password": "Lykilorðið fyrir notendanafnið sem tengist auðkennum.",
+    "Description:Abp.Mailing.Smtp.Domain": "Lénið eða tölvuheitið sem staðfestir auðkennin.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Hvort SmtpClient notar Secure Sockets Layer (SSL) til að dulkóða tenginguna.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Hvort DefaultCredentials eru sendar með beiðnum.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Sjálfgefið sniðmát fyrir tölvupóst",
+    "TextTemplate:StandardEmailTemplates.Message": "Einfalt skilaboðasniðmát fyrir tölvupósta"
+  }
+}

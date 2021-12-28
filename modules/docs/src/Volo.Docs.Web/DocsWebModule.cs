@@ -9,6 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Bundling;
@@ -84,6 +85,11 @@ namespace Volo.Docs
                 options
                     .Extensions<PrismjsScriptBundleContributor>()
                     .Add<PrismjsScriptBundleContributorDocsExtension>();
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(DocsRemoteServiceConsts.ModuleName);
             });
         }
     }

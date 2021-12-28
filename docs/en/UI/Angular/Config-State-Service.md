@@ -81,7 +81,7 @@ You can use the `getFeature` or `getFeature$` method of `ConfigStateService` to 
 ```js
 // this.config is instance of ConfigStateService
 
-const enableLdapLogin = this.configStateService.getFeature("Account.EnableLdapLogin");
+const enableLdapLogin = this.config.getFeature("Account.EnableLdapLogin");
 
 // or
 this.config.getFeature$("Account.EnableLdapLogin").subscribe(enableLdapLogin => {
@@ -98,7 +98,7 @@ You can use the `getSetting` or `getSetting$` method of `ConfigStateService` to 
 ```js
 // this.config is instance of ConfigStateService
 
-const twoFactorBehaviour = this.configStateService.getSetting("Abp.Identity.TwoFactor.Behaviour");
+const twoFactorBehaviour = this.config.getSetting("Abp.Identity.TwoFactor.Behaviour");
 
 // or
 this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorBehaviour => {

@@ -1,9 +1,8 @@
 ﻿﻿using System.Threading.Tasks;
 
- namespace Volo.Abp.Account.Web.ProfileManagement
+namespace Volo.Abp.Account.Web.ProfileManagement;
+
+public interface IProfileManagementPageContributor
 {
-    public interface IProfileManagementPageContributor
-    {
-        Task ConfigureAsync(ProfileManagementPageCreationContext context);
-    }
+    Task ConfigureAsync(ProfileManagementPageCreationContext context);
 }

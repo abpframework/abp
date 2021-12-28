@@ -9,6 +9,9 @@
 
 <abp-card>
     <abp-card-body>
-        @Html.Raw(await MarkdownRenderer.RenderAsync(Model.Content))
+        @if (!Model.Content.IsNullOrEmpty())
+        {   
+            @Html.Raw(await MarkdownRenderer.RenderAsync(Model.Content))
+        }
     </abp-card-body>
 </abp-card>

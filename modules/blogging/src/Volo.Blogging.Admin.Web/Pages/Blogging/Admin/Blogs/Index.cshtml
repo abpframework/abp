@@ -28,7 +28,7 @@
             <abp-column size-md="_6">
                 <h2>@L["Blogs"]</h2>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
                 {
                     <abp-button icon="plus" text="@L["CreateANewBlog"].Value" button-type="Primary" id="CreateNewBlogButtonId"></abp-button>

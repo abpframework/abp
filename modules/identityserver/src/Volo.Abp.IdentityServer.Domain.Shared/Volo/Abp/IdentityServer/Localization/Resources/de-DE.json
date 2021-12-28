@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "Ungültiger Benutzername oder Passwort!",
     "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder muss Ihre E-Mail-/Telefonnummer bestätigen.",
     "InvalidUsername": "Ungültiger Benutzername oder Passwort!",
+    "InvalidAuthenticatorCode": "Ungültiger Authentifizierungscode!",
     "TheTargetUserIsNotLinkedToYou": "Der Zielbenutzer ist nicht mit Ihnen verknüpft!"
   }
 }

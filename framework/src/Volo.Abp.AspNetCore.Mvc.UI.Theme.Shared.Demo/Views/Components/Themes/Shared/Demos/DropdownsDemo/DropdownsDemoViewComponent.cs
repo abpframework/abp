@@ -2,21 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DropdownsDemo
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DropdownsDemo;
+
+[Widget(
+    StyleTypes = new[] { typeof(PrismjsStyleBundleContributor) },
+    ScriptTypes = new[] { typeof(PrismjsScriptBundleContributor) }
+)]
+public class DropdownsDemoViewComponent : AbpViewComponent
 {
-    [Widget(
-        StyleTypes = new []{ typeof(PrismjsStyleBundleContributor) },
-        ScriptTypes = new[]{ typeof(PrismjsScriptBundleContributor) }
-    )]
-    public class DropdownsDemoViewComponent : AbpViewComponent
+    public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DropdownsDemo/Default.cshtml";
+
+    public virtual IViewComponentResult Invoke()
     {
-        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DropdownsDemo/Default.cshtml";
+        var Model = new DropDownDemoDemoModel();
 
-        public IViewComponentResult Invoke()
-        {
-            var Model = new DropDownDemoDemoModel();
-
-            return View(ViewPath, Model);
-        }
+        return View(ViewPath, Model);
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class IdentityUserUpdateRolesDto
 {
-    public class IdentityUserUpdateRolesDto
-    {
-        [Required]
-        public string[] RoleNames { get; set; }
-    }
+    [Required]
+    public string[] RoleNames { get; set; }
 }

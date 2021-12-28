@@ -5,26 +5,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.SimpleStateChecking
+namespace Volo.Abp.SimpleStateChecking;
+
+public class SimpleStateChecker_GlobalCheckCount_Test : SimpleStateCheckerTestBase
 {
-    public class SimpleStateChecker_GlobalCheckCount_Test : SimpleStateCheckerTestBase
+    protected override void AfterAddApplication(IServiceCollection services)
     {
-        protected override void AfterAddApplication(IServiceCollection services)
+        services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
         {
-            services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
-            {
-                options.GlobalStateCheckers.Add<MyGlobalSimpleStateChecker>();
-                options.GlobalStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
-            });
+            options.GlobalStateCheckers.Add<MyGlobalSimpleStateChecker>();
+            options.GlobalStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
+        });
 
-            base.AfterAddApplication(services);
-        }
+        base.AfterAddApplication(services);
+    }
 
-        [Fact]
-        public async Task Simple_State_Check_Should_Be_Prevent_Multiple_Checks()
+    [Fact]
+    public async Task Simple_State_Check_Should_Be_Prevent_Multiple_Checks()
+    {
+        var myStateEntities = new SimpleStateCheckerTestBase.MyStateEntity[]
         {
-            var myStateEntities = new SimpleStateCheckerTestBase.MyStateEntity[]
-            {
                 new SimpleStateCheckerTestBase.MyStateEntity()
                 {
                     CreationTime = DateTime.Parse("2022-01-01", CultureInfo.InvariantCulture),
@@ -35,31 +35,31 @@ namespace Volo.Abp.SimpleStateChecking
                 {
                     CreationTime = DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture)
                 }
-            };
+        };
 
-            myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
-            myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
+        myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
+        myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
 
-            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities[0])).ShouldBeTrue();
+        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities[0])).ShouldBeTrue();
 
-            myStateEntities[0].CheckCount.ShouldBe(0);
-            myStateEntities[0].GlobalCheckCount.ShouldBe(1);
-            myStateEntities[0].MultipleCheckCount.ShouldBe(1);
-            myStateEntities[0].MultipleGlobalCheckCount.ShouldBe(1);
+        myStateEntities[0].CheckCount.ShouldBe(0);
+        myStateEntities[0].GlobalCheckCount.ShouldBe(1);
+        myStateEntities[0].MultipleCheckCount.ShouldBe(1);
+        myStateEntities[0].MultipleGlobalCheckCount.ShouldBe(1);
 
-            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities[1])).ShouldBeFalse();
+        (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities[1])).ShouldBeFalse();
 
-            myStateEntities[1].CheckCount.ShouldBe(1);
-            myStateEntities[1].GlobalCheckCount.ShouldBe(0);
-            myStateEntities[1].MultipleCheckCount.ShouldBe(0);
-            myStateEntities[1].MultipleGlobalCheckCount.ShouldBe(0);
-        }
+        myStateEntities[1].CheckCount.ShouldBe(1);
+        myStateEntities[1].GlobalCheckCount.ShouldBe(0);
+        myStateEntities[1].MultipleCheckCount.ShouldBe(0);
+        myStateEntities[1].MultipleGlobalCheckCount.ShouldBe(0);
+    }
 
-        [Fact]
-        public async Task Multiple_And_Simple_State_Check_Should_Be_Prevent_Multiple_Checks()
+    [Fact]
+    public async Task Multiple_And_Simple_State_Check_Should_Be_Prevent_Multiple_Checks()
+    {
+        var myStateEntities = new SimpleStateCheckerTestBase.MyStateEntity[]
         {
-            var myStateEntities = new SimpleStateCheckerTestBase.MyStateEntity[]
-            {
                 new SimpleStateCheckerTestBase.MyStateEntity()
                 {
                     CreationTime = DateTime.Parse("2022-01-01", CultureInfo.InvariantCulture),
@@ -70,26 +70,25 @@ namespace Volo.Abp.SimpleStateChecking
                 {
                     CreationTime = DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture)
                 }
-            };
+        };
 
-            myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
-            myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
+        myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
+        myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
 
-            var result = await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities);
-            result.Count.ShouldBe(2);
+        var result = await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities);
+        result.Count.ShouldBe(2);
 
-            result[myStateEntities[0]].ShouldBeTrue();
-            result[myStateEntities[1]].ShouldBeFalse();
+        result[myStateEntities[0]].ShouldBeTrue();
+        result[myStateEntities[1]].ShouldBeFalse();
 
-            myStateEntities[0].CheckCount.ShouldBe(0);
-            myStateEntities[0].GlobalCheckCount.ShouldBe(1);
-            myStateEntities[0].MultipleCheckCount.ShouldBe(1);
-            myStateEntities[0].MultipleGlobalCheckCount.ShouldBe(1);
+        myStateEntities[0].CheckCount.ShouldBe(0);
+        myStateEntities[0].GlobalCheckCount.ShouldBe(1);
+        myStateEntities[0].MultipleCheckCount.ShouldBe(1);
+        myStateEntities[0].MultipleGlobalCheckCount.ShouldBe(1);
 
-            myStateEntities[1].CheckCount.ShouldBe(0);
-            myStateEntities[1].GlobalCheckCount.ShouldBe(0);
-            myStateEntities[1].MultipleCheckCount.ShouldBe(0);
-            myStateEntities[1].MultipleGlobalCheckCount.ShouldBe(1);
-        }
+        myStateEntities[1].CheckCount.ShouldBe(0);
+        myStateEntities[1].GlobalCheckCount.ShouldBe(0);
+        myStateEntities[1].MultipleCheckCount.ShouldBe(0);
+        myStateEntities[1].MultipleGlobalCheckCount.ShouldBe(1);
     }
 }

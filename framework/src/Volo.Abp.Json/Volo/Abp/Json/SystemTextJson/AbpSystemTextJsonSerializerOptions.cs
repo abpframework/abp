@@ -1,23 +1,22 @@
 ﻿using System.Text.Json;
 using Volo.Abp.Collections;
 
-namespace Volo.Abp.Json.SystemTextJson
+namespace Volo.Abp.Json.SystemTextJson;
+
+public class AbpSystemTextJsonSerializerOptions
 {
-    public class AbpSystemTextJsonSerializerOptions
+    public JsonSerializerOptions JsonSerializerOptions { get; }
+
+    public ITypeList UnsupportedTypes { get; }
+
+    public AbpSystemTextJsonSerializerOptions()
     {
-        public JsonSerializerOptions JsonSerializerOptions { get; }
-
-        public ITypeList UnsupportedTypes { get; }
-
-        public AbpSystemTextJsonSerializerOptions()
+        JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
-            JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
-            {
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                AllowTrailingCommas = true
-            };
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            AllowTrailingCommas = true
+        };
 
-            UnsupportedTypes = new TypeList();
-        }
+        UnsupportedTypes = new TypeList();
     }
 }

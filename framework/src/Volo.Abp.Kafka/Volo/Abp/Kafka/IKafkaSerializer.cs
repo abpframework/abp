@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.Kafka
+namespace Volo.Abp.Kafka;
+
+public interface IKafkaSerializer
 {
-    public interface IKafkaSerializer
-    {
-        byte[] Serialize(object obj);
+    byte[] Serialize(object obj);
 
-        object Deserialize(byte[] value, Type type);
+    object Deserialize(byte[] value, Type type);
 
-        T Deserialize<T>(byte[] value);
-    }
+    T Deserialize<T>(byte[] value);
 }

@@ -8,68 +8,66 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Xunit;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class AbpUserClaimsPrincipalFactory_Tests : AbpIdentityDomainTestBase
 {
-    public class AbpUserClaimsPrincipalFactory_Tests : AbpIdentityDomainTestBase
+    private readonly IdentityUserManager _identityUserManager;
+    private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
+    private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
+    private readonly IdentityTestData _testData;
+
+    public AbpUserClaimsPrincipalFactory_Tests()
     {
-        private readonly IdentityUserManager _identityUserManager;
-        private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
-        private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
-        private readonly IdentityTestData _testData;
+        _identityUserManager = GetRequiredService<IdentityUserManager>();
+        _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
+        _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
+        _testData = GetRequiredService<IdentityTestData>();
+    }
 
-        public AbpUserClaimsPrincipalFactory_Tests()
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
-            _identityUserManager = GetRequiredService<IdentityUserManager>();
-            _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
-            _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
-            _testData = GetRequiredService<IdentityTestData>();
-        }
+            options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
+        });
+    }
 
-        protected override void AfterAddApplication(IServiceCollection services)
+    [Fact]
+    public async Task Add_And_Replace_Claims_Test()
+    {
+        await UsingUowAsync(async () =>
         {
-            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-            {
-                options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
-            });
-        }
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
+            user.ShouldNotBeNull();
 
-        [Fact]
-        public async Task Add_And_Replace_Claims_Test()
+            var claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.NameIdentifier && x.Value == user.Id.ToString());
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Uri && x.Value =="www.abp.io");
+            claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == user.Email);
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "replaced@abp.io");
+
+            claimsPrincipal = await _abpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
+        });
+    }
+
+    class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+    {
+        //https://github.com/dotnet/aspnetcore/blob/v5.0.0/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L79
+        private static string IdentityAuthenticationType => "Identity.Application";
+
+        public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
         {
-            await UsingUowAsync(async () =>
-            {
-                var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
-                user.ShouldNotBeNull();
+            var claimsIdentity = context.ClaimsPrincipal.Identities.First(x => x.AuthenticationType == IdentityAuthenticationType);
 
-                var claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Uri, "www.abp.io"));
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Email, "replaced@abp.io"));
 
-                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.NameIdentifier && x.Value == user.Id.ToString());
-                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Uri && x.Value =="www.abp.io");
-                claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == user.Email);
-                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "replaced@abp.io");
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
 
-                claimsPrincipal = await _abpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
-                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
-            });
+            return Task.CompletedTask;
         }
-
-        class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
-        {
-            //https://github.com/dotnet/aspnetcore/blob/v5.0.0/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L79
-            private static string IdentityAuthenticationType => "Identity.Application";
-
-            public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
-            {
-                var claimsIdentity = context.ClaimsPrincipal.Identities.First(x => x.AuthenticationType == IdentityAuthenticationType);
-
-                claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Uri, "www.abp.io"));
-                claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Email, "replaced@abp.io"));
-
-                context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
-
-                return Task.CompletedTask;
-            }
-        }
-
     }
 }

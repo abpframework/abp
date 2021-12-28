@@ -40,9 +40,9 @@ var abp = abp || {};
             } else {
 
                 if (fieldItem.icon !== undefined && fieldItem.icon) {
-                    $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " mr-1"));
+                    $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " me-1"));
                 } else if (fieldItem.iconClass) {
-                    $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
+                    $a.append($("<i>").addClass(fieldItem.iconClass + " me-1"));
                 }
 
                 $a.append(htmlEncode(fieldItem.text));
@@ -84,9 +84,9 @@ var abp = abp || {};
                     $button.html(firstItem.text);
                 } else {
                     if (firstItem.icon !== undefined && firstItem.icon) {
-                        $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " mr-1"));
+                        $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " me-1"));
                     } else if (firstItem.iconClass) {
-                        $button.append($("<i>").addClass(firstItem.iconClass + " mr-1"));
+                        $button.append($("<i>").addClass(firstItem.iconClass + " me-1"));
                     }
                     $button.append(htmlEncode(firstItem.text));
                 }
@@ -124,11 +124,11 @@ var abp = abp || {};
             var $dropdownButton = $('<button/>');
 
             if (field.icon !== undefined && field.icon) {
-                $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
+                $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " me-1"));
             } else if (field.iconClass) {
-                $dropdownButton.append($("<i>").addClass(field.iconClass + " mr-1"));
+                $dropdownButton.append($("<i>").addClass(field.iconClass + " me-1"));
             } else {
-                $dropdownButton.append($("<i>").addClass("fa fa-cog mr-1"));
+                $dropdownButton.append($("<i>").addClass("fa fa-cog me-1"));
             }
 
             if (field.text) {
@@ -139,7 +139,7 @@ var abp = abp || {};
 
             $dropdownButton
                 .addClass('btn btn-primary btn-sm dropdown-toggle')
-                .attr('data-toggle', 'dropdown')
+                .attr('data-bs-toggle', 'dropdown')
                 .attr('aria-haspopup', 'true')
                 .attr('aria-expanded', 'false');
 
@@ -168,7 +168,7 @@ var abp = abp || {};
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.appendTo($container);
+                $dropdownButton.prependTo($container);
             }
 
             if ($dropdownItemsContainer.children().length === 0) {
@@ -266,7 +266,7 @@ var abp = abp || {};
             {
                 fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     if (_existingDefaultFnRowCallback) {
-                        _existingDefaultFnRowCallback(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                        _existingDefaultFnRowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull);
                     }
 
                     renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
@@ -366,8 +366,12 @@ var abp = abp || {};
                 }
 
                 //Text filter
-                if (requestData.search && requestData.search.value !== "") {
-                    input.filter = requestData.search.value;
+                if(settings.oInit.searching){
+                    if (requestData.search && requestData.search.value !== "") {
+                        input.filter = requestData.search.value;
+                    } else {
+                        input.filter = null;
+                    }
                 }
 
                 if (callback) {
@@ -508,6 +512,6 @@ var abp = abp || {};
         };
     };
 
-    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto mr-auto"i><"col-auto"p>>';
+    datatables.defaultConfigurations.dom = '<"dataTable_filters row"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto me-auto"i><"col-auto"p>>';
 
 })(jQuery);

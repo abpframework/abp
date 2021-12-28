@@ -13,7 +13,7 @@ ABP is a modular platform. Every developer can create modules and the modules sh
 
 One challenge is the **versions of the dependant NPM packages**. What if two different modules use the same JavaScript library but its different (and potentially incompatible) versions.
 
-To solve the versioning problem, we created a **standard set of packages** those depends on some common third-party libraries. Some example packages are [@abp/jquery](https://www.npmjs.com/package/@abp/jquery), [@abp/bootstrap](https://www.npmjs.com/package/@abp/bootstrap) and [@abp/font-awesome](https://www.npmjs.com/package/@abp/font-awesome). You can see the **list of packages** from the [Github repository](https://github.com/volosoft/abp/tree/master/npm/packs).
+To solve the versioning problem, we created a **standard set of packages** those depends on some common third-party libraries. Some example packages are [@abp/jquery](https://www.npmjs.com/package/@abp/jquery), [@abp/bootstrap](https://www.npmjs.com/package/@abp/bootstrap) and [@abp/font-awesome](https://www.npmjs.com/package/@abp/font-awesome). You can see the **list of packages** from the [GitHub repository](https://github.com/volosoft/abp/tree/master/npm/packs).
 
 The benefit of a **standard package** is:
 
@@ -22,14 +22,14 @@ The benefit of a **standard package** is:
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
-````
+```json
 {
   ...
   "dependencies": {
     "@abp/bootstrap": "^1.0.0"
   }
 }
-````
+```
 
 It's suggested to depend on a standard package instead of directly depending on a third-party package.
 
@@ -37,9 +37,9 @@ It's suggested to depend on a standard package instead of directly depending on 
 
 After depending on a NPM package, all you should do is to run the **yarn** command from the command line to install all the packages and their dependencies:
 
-````
+```bash
 yarn
-````
+```
 
 Alternatively, you can use `npm install` but [Yarn](https://classic.yarnpkg.com/) is suggested as mentioned before.
 
@@ -69,7 +69,7 @@ The **startup templates** are already configured to work all these out of the bo
 
 A module should define a JavaScript file named `abp.resourcemapping.js` which is formatted as in the example below:
 
-````js
+```json
 module.exports = {
     aliases: {
         "@node_modules": "./node_modules",
@@ -83,7 +83,7 @@ module.exports = {
         
     }
 }
-````
+```
 
 * **aliases** section defines standard aliases (placeholders) that can be used in the mapping paths. **@node_modules** and **@libs** are required (by the standard packages), you can define your own aliases to reduce duplication.
 * **clean** section is a list of folders to clean before copying the files. Glob matching and negation is enabled, so you can fine-tune what to delete and keep. The example above will clean everything inside `./wwwroot/libs`, but keep any `foo.txt` files.
@@ -91,14 +91,14 @@ module.exports = {
 
 An example mapping configuration is shown below:
 
-````js
+```json
 mappings: {
     "@node_modules/bootstrap/dist/css/bootstrap.css": "@libs/bootstrap/css/",
     "@node_modules/bootstrap/dist/js/bootstrap.bundle.js": "@libs/bootstrap/js/",
     "@node_modules/bootstrap-datepicker/dist/locales/*.*": "@libs/bootstrap-datepicker/locales/",
     "@node_modules/bootstrap-v4-rtl/dist/**/*": "@libs/bootstrap-v4-rtl/dist/"
 }
-````
+```
 
 #### install-libs Command
 

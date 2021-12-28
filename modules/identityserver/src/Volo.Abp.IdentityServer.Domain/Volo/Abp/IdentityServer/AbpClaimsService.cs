@@ -3,43 +3,53 @@ using System.Linq;
 using System.Security.Claims;
 using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
+
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public class AbpProfileService : ProfileService<IdentityUser>
 {
-    public class AbpClaimsService : DefaultClaimsService
+    protected ICurrentTenant CurrentTenant { get; }
+
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
+
+    public AbpProfileService(
+        IdentityUserManager userManager,
+        IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+        ICurrentTenant currentTenant,
+        IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
+        : base(userManager, claimsFactory)
     {
-        public AbpClaimsService(
-            IProfileService profile,
-            ILogger<DefaultClaimsService> logger)
-            : base(profile, logger)
-        {
+        CurrentTenant = currentTenant;
+        AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
+    }
 
-        }
-
-        protected override IEnumerable<string> FilterRequestedClaimTypes(IEnumerable<string> claimTypes)
+    [UnitOfWork]
+    public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            var claimTypesArray = claimTypes.ToArray();
-            return base.FilterRequestedClaimTypes(claimTypesArray).Union(FilterAdditionalRequestedClaimTypes(claimTypesArray));
+            await base.GetProfileDataAsync(context);
         }
+    }
 
-        protected virtual IEnumerable<string> FilterAdditionalRequestedClaimTypes(IEnumerable<string> claimTypes)
+    [UnitOfWork]
+    public override async Task IsActiveAsync(IsActiveContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            return new[] { AbpClaimTypes.TenantId };
+            await base.IsActiveAsync(context);
         }
+    }
 
-        protected override IEnumerable<Claim> GetOptionalClaims(ClaimsPrincipal subject)
-        {
-            return base.GetOptionalClaims(subject).Union(GetAdditionalOptionalClaims(subject));
-        }
-
-        protected virtual IEnumerable<Claim> GetAdditionalOptionalClaims(ClaimsPrincipal subject)
-        {
-            var claim = subject.FindFirst(AbpClaimTypes.TenantId);
-            if (claim != null)
-            {
-                yield return claim;
-            }
-        }
+    [UnitOfWork]
+    protected override async Task<ClaimsPrincipal> GetUserClaimsAsync(IdentityUser user)
+    {
+        var claimsPrincipal = await base.GetUserClaimsAsync(user);
+        await AbpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
+        return claimsPrincipal;
     }
 }

@@ -74,7 +74,7 @@ public class MyClientAppModule : AbpModule
 
 `RemoteServices` section in the `appsettings.json` file is used to get remote service address by default. Simplest configuration is shown below:
 
-````
+```json
 {
   "RemoteServices": {
     "Default": {
@@ -82,7 +82,7 @@ public class MyClientAppModule : AbpModule
     } 
   } 
 }
-````
+```
 
 See the "AbpRemoteServiceOptions" section below for more detailed configuration.
 

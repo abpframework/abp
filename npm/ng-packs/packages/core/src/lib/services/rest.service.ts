@@ -1,4 +1,4 @@
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -43,18 +43,22 @@ export class RestService {
       .request<R>(method, api + request.url, {
         observe,
         ...(params && {
-          params: Object.keys(params).reduce((acc, key) => {
-            const value = params[key];
-
-            if (isUndefinedOrEmptyString(value)) return acc;
-            if (value === null && !this.options.sendNullsAsQueryParam) return acc;
-
-            acc[key] = value;
-            return acc;
-          }, {}),
+          params: this.getParams(params, config.httpParamEncoder),
         }),
         ...options,
       } as any)
       .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
+  }
+
+  private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {
+    const httpParams = encoder ? new HttpParams({ encoder }) : new HttpParams();
+    return Object.keys(params).reduce((acc, key) => {
+      const value = params[key];
+
+      if (isUndefinedOrEmptyString(value)) return acc;
+      if (value === null && !this.options.sendNullsAsQueryParam) return acc;
+      acc = acc.set(key, value);
+      return acc;
+    }, httpParams);
   }
 }

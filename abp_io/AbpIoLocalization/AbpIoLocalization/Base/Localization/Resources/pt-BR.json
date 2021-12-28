@@ -26,6 +26,19 @@
     "ContributionGuide": "Guia de contribuição",
     "Blog": "Blog",
     "Commercial": "Comercial",
-    "SeeDocuments": "Ver documentos"
+    "MyAccount": "Minha conta",
+    "Permission:License": "Licença",
+    "Permission:UserInfo": "Informação de usuário",
+    "SeeDocuments": "Ver documentos",
+    "Samples": "Amostras",
+    "Framework": "Estrutura",
+    "Support": "Apoio, suporte",
+    "FreeDDDBook": "E-book DDD grátis",
+    "New": "Novo",
+    "Volo.AbpIo.Domain:020005": "O ano de extensão da licença não pode ser inferior a {MinExtendLicenseYear} ano (s) e superior a {MaxExtendLicenseYear} ano (s)",
+    "TrialLicensePeriodHasExpired": "Seu período de licença de teste expirou há {0} dias.",
+    "TrialLicensePeriodWillExpire": "O período de sua licença de teste expirará em {0} dias.",
+    "TrialLicensePeriodExpireToday": "Seu período de licença de teste expirará hoje.",
+    "PurchaseNow": "Compre agora!"
   }
 }

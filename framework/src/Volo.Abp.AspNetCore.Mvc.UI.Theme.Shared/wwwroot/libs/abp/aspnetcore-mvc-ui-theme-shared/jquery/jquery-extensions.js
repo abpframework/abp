@@ -96,6 +96,13 @@
         //serialize to array
         var data = $(this).serializeArray();
 
+        // add unchecked checkboxes because serializeArray ignores them
+        $(this).find("input[type=checkbox]").each(function () {
+            if (!$(this).is(':checked')) {
+                data.push({name: this.name, value: this.checked});
+            }
+        });
+
         //add also disabled items
         $(':disabled[name]', this)
             .each(function (item) {

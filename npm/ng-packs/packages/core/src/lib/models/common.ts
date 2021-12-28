@@ -11,6 +11,21 @@ export namespace ABP {
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
+    localizations?: Localization[];
+  }
+
+  export interface Child {
+    localizations?: Localization[];
+  }
+
+  export interface Localization {
+    culture: string;
+    resources: LocalizationResource[];
+  }
+
+  export interface LocalizationResource {
+    resourceName: string;
+    texts: Record<string, string>;
   }
 
   export interface HasPolicy {
@@ -52,7 +67,7 @@ export namespace ABP {
   }
 
   export interface Route extends Nav {
-    path: string;
+    path?: string;
     layout?: eLayoutType;
     iconClass?: string;
   }

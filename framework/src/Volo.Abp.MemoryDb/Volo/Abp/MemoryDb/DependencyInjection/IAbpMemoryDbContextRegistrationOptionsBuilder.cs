@@ -1,9 +1,8 @@
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MemoryDb.DependencyInjection
+namespace Volo.Abp.MemoryDb.DependencyInjection;
+
+public interface IAbpMemoryDbContextRegistrationOptionsBuilder : IAbpCommonDbContextRegistrationOptionsBuilder
 {
-    public interface IAbpMemoryDbContextRegistrationOptionsBuilder : IAbpCommonDbContextRegistrationOptionsBuilder
-    {
-        
-    }
+
 }

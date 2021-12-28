@@ -7,41 +7,43 @@ using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.DbMigrator
+namespace MyCompanyName.MyProjectName.DbMigrator;
+
+public class DbMigratorHostedService : IHostedService
 {
-    public class DbMigratorHostedService : IHostedService
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
+    private readonly IConfiguration _configuration;
+
+    public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
     {
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        private readonly IConfiguration _configuration;
+        _hostApplicationLifetime = hostApplicationLifetime;
+        _configuration = configuration;
+    }
 
-        public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        using (var application = await AbpApplicationFactory.CreateAsync<MyProjectNameDbMigratorModule>(options =>
         {
-            _hostApplicationLifetime = hostApplicationLifetime;
-            _configuration = configuration;
-        }
-
-        public async Task StartAsync(CancellationToken cancellationToken)
+           options.Services.ReplaceConfiguration(_configuration);
+           options.UseAutofac();
+           options.Services.AddLogging(c => c.AddSerilog());
+        }))
         {
-            using (var application = AbpApplicationFactory.Create<MyProjectNameDbMigratorModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(_configuration);
-                options.UseAutofac();
-                options.Services.AddLogging(c => c.AddSerilog());
-            }))
-            {
-                application.Initialize();
+            await application.InitializeAsync();
 
-                await application
-                    .ServiceProvider
-                    .GetRequiredService<MyProjectNameDbMigrationService>()
-                    .MigrateAsync();
+            await application
+                .ServiceProvider
+                .GetRequiredService<MyProjectNameDbMigrationService>()
+                .MigrateAsync();
 
-                application.Shutdown();
+            await application.ShutdownAsync();
 
-                _hostApplicationLifetime.StopApplication();
-            }
+            _hostApplicationLifetime.StopApplication();
         }
+    }
 
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }

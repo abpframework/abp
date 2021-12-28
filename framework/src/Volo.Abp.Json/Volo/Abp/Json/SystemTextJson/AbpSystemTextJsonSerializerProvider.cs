@@ -1,45 +1,50 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Json.SystemTextJson
+namespace Volo.Abp.Json.SystemTextJson;
+
+public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
 {
-    public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+    protected AbpSystemTextJsonSerializerOptions Options { get; }
+
+    protected AbpSystemTextJsonUnsupportedTypeMatcher AbpSystemTextJsonUnsupportedTypeMatcher { get; }
+
+    public AbpSystemTextJsonSerializerProvider(
+        IOptions<AbpSystemTextJsonSerializerOptions> options,
+        AbpSystemTextJsonUnsupportedTypeMatcher abpSystemTextJsonUnsupportedTypeMatcher)
     {
-        protected AbpSystemTextJsonSerializerOptions Options { get; }
+        AbpSystemTextJsonUnsupportedTypeMatcher = abpSystemTextJsonUnsupportedTypeMatcher;
+        Options = options.Value;
+    }
 
-        protected AbpSystemTextJsonUnsupportedTypeMatcher AbpSystemTextJsonUnsupportedTypeMatcher { get; }
+    public bool CanHandle(Type type)
+    {
+        return !AbpSystemTextJsonUnsupportedTypeMatcher.Match(type);
+    }
 
-        public AbpSystemTextJsonSerializerProvider(
-            IOptions<AbpSystemTextJsonSerializerOptions> options,
-            AbpSystemTextJsonUnsupportedTypeMatcher abpSystemTextJsonUnsupportedTypeMatcher)
-        {
-            AbpSystemTextJsonUnsupportedTypeMatcher = abpSystemTextJsonUnsupportedTypeMatcher;
-            Options = options.Value;
-        }
+    public string Serialize(object obj, bool camelCase = true, bool indented = false)
+    {
+        return JsonSerializer.Serialize(obj, CreateJsonSerializerOptions(camelCase, indented));
+    }
 
-        public bool CanHandle(Type type)
-        {
-            return !AbpSystemTextJsonUnsupportedTypeMatcher.Match(type);
-        }
+    public T Deserialize<T>(string jsonString, bool camelCase = true)
+    {
+        return JsonSerializer.Deserialize<T>(jsonString, CreateJsonSerializerOptions(camelCase));
+    }
 
-        public string Serialize(object obj, bool camelCase = true, bool indented = false)
-        {
-            return JsonSerializer.Serialize(obj, CreateJsonSerializerOptions(camelCase, indented));
-        }
+    public object Deserialize(Type type, string jsonString, bool camelCase = true)
+    {
+        return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
+    }
 
-        public T Deserialize<T>(string jsonString, bool camelCase = true)
-        {
-            return JsonSerializer.Deserialize<T>(jsonString, CreateJsonSerializerOptions(camelCase));
-        }
+    private readonly ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
 
-        public object Deserialize(Type type, string jsonString, bool camelCase = true)
-        {
-            return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
-        }
-
-        protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
+    protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
+    {
+        return JsonSerializerOptionsCache.GetOrAdd($"default{camelCase}{indented}", _ =>
         {
             var settings = new JsonSerializerOptions(Options.JsonSerializerOptions);
 
@@ -54,6 +59,6 @@ namespace Volo.Abp.Json.SystemTextJson
             }
 
             return settings;
-        }
+        });
     }
 }

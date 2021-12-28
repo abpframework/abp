@@ -10,49 +10,48 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Volo.Abp.IdentityServer.AspNetIdentity
+namespace Volo.Abp.IdentityServer.AspNetIdentity;
+
+public class AbpProfileService : ProfileService<IdentityUser>
 {
-    public class AbpProfileService : ProfileService<IdentityUser>
+    protected ICurrentTenant CurrentTenant { get; }
+
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
+
+    public AbpProfileService(
+        IdentityUserManager userManager,
+        IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+        ICurrentTenant currentTenant,
+        IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
+        : base(userManager, claimsFactory)
     {
-        protected ICurrentTenant CurrentTenant { get; }
+        CurrentTenant = currentTenant;
+        AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
+    }
 
-        protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
-
-        public AbpProfileService(
-            IdentityUserManager userManager,
-            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
-            ICurrentTenant currentTenant,
-            IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
-            : base(userManager, claimsFactory)
+    [UnitOfWork]
+    public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            CurrentTenant = currentTenant;
-            AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
+            await base.GetProfileDataAsync(context);
         }
+    }
 
-        [UnitOfWork]
-        public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    [UnitOfWork]
+    public override async Task IsActiveAsync(IsActiveContext context)
+    {
+        using (CurrentTenant.Change(context.Subject.FindTenantId()))
         {
-            using (CurrentTenant.Change(context.Subject.FindTenantId()))
-            {
-                await base.GetProfileDataAsync(context);
-            }
+            await base.IsActiveAsync(context);
         }
+    }
 
-        [UnitOfWork]
-        public override async Task IsActiveAsync(IsActiveContext context)
-        {
-            using (CurrentTenant.Change(context.Subject.FindTenantId()))
-            {
-                await base.IsActiveAsync(context);
-            }
-        }
-
-        [UnitOfWork]
-        protected override async Task<ClaimsPrincipal> GetUserClaimsAsync(IdentityUser user)
-        {
-            var claimsPrincipal = await base.GetUserClaimsAsync(user);
-            await AbpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
-            return claimsPrincipal;
-        }
+    [UnitOfWork]
+    protected override async Task<ClaimsPrincipal> GetUserClaimsAsync(IdentityUser user)
+    {
+        var claimsPrincipal = await base.GetUserClaimsAsync(user);
+        await AbpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
+        return claimsPrincipal;
     }
 }

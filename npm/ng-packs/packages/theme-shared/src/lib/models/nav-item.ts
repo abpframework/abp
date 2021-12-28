@@ -1,7 +1,7 @@
 import { Type } from '@angular/core';
 
 export class NavItem {
-  id: string | number;
+  id?: string | number;
   component?: Type<any>;
   html?: string;
   action?: () => void;
