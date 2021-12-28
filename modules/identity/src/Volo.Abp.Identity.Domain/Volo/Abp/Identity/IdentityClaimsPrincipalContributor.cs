@@ -10,78 +10,77 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class IdentityClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
 {
-    public class IdentityClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+    public virtual async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
-        public virtual async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+
+        var userId = identity?.FindUserId();
+        if (userId == null)
         {
-            var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+            return;
+        }
 
-            var userId = identity?.FindUserId();
-            if (userId == null)
+        using (context.ServiceProvider.GetRequiredService<ICurrentTenant>().Change(identity.FindTenantId()))
+        {
+            var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
+            var user = await userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
             {
-                return;
-            }
+                var roleManager = context.ServiceProvider.GetRequiredService<IdentityRoleManager>();
+                var identityOptions = context.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
 
-            using (context.ServiceProvider.GetRequiredService<ICurrentTenant>().Change(identity.FindTenantId()))
-            {
-                var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
-                var user = await userManager.FindByIdAsync(userId.ToString());
-                if (user != null)
+                if (!user.UserName.IsNullOrWhiteSpace())
                 {
-                    var roleManager = context.ServiceProvider.GetRequiredService<IdentityRoleManager>();
-                    var identityOptions = context.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
+                    identity.AddIfNotContains(new Claim(identityOptions.ClaimsIdentity.UserNameClaimType, user.UserName));
+                }
 
-                    if (!user.UserName.IsNullOrWhiteSpace())
+                if (userManager.SupportsUserRole)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
+                    foreach (var roleName in roles)
                     {
-                        identity.AddIfNotContains(new Claim(identityOptions.ClaimsIdentity.UserNameClaimType, user.UserName));
-                    }
-
-                    if (userManager.SupportsUserRole)
-                    {
-                        var roles = await userManager.GetRolesAsync(user);
-                        foreach (var roleName in roles)
+                        if (!identity.HasClaim(x => x.Type == identityOptions.ClaimsIdentity.RoleClaimType && x.Value == roleName))
                         {
-                            if (!identity.HasClaim(x => x.Type == identityOptions.ClaimsIdentity.RoleClaimType && x.Value == roleName))
+                            identity.AddClaim(new Claim(identityOptions.ClaimsIdentity.RoleClaimType, roleName));
+                            if (roleManager.SupportsRoleClaims)
                             {
-                                identity.AddClaim(new Claim(identityOptions.ClaimsIdentity.RoleClaimType, roleName));
-                                if (roleManager.SupportsRoleClaims)
+                                var role = await roleManager.FindByNameAsync(roleName);
+                                if (role != null)
                                 {
-                                    var role = await roleManager.FindByNameAsync(roleName);
-                                    if (role != null)
-                                    {
-                                        identity.AddClaims(await roleManager.GetClaimsAsync(role));
-                                    }
+                                    identity.AddClaims(await roleManager.GetClaimsAsync(role));
                                 }
                             }
                         }
                     }
-
-                    if (!user.Name.IsNullOrWhiteSpace())
-                    {
-                        identity.AddIfNotContains(new Claim(AbpClaimTypes.Name, user.Name));
-                    }
-
-                    if (!user.Surname.IsNullOrWhiteSpace())
-                    {
-                        identity.AddIfNotContains(new Claim(AbpClaimTypes.SurName, user.Surname));
-                    }
-
-                    if (!user.PhoneNumber.IsNullOrWhiteSpace())
-                    {
-                        identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumber, user.PhoneNumber));
-                    }
-
-                    identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed.ToString()));
-
-                    if (!user.Email.IsNullOrWhiteSpace())
-                    {
-                        identity.AddIfNotContains(new Claim(AbpClaimTypes.Email, user.Email));
-                    }
-
-                    identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
                 }
+
+                if (!user.Name.IsNullOrWhiteSpace())
+                {
+                    identity.AddIfNotContains(new Claim(AbpClaimTypes.Name, user.Name));
+                }
+
+                if (!user.Surname.IsNullOrWhiteSpace())
+                {
+                    identity.AddIfNotContains(new Claim(AbpClaimTypes.SurName, user.Surname));
+                }
+
+                if (!user.PhoneNumber.IsNullOrWhiteSpace())
+                {
+                    identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumber, user.PhoneNumber));
+                }
+
+                identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed.ToString()));
+
+                if (!user.Email.IsNullOrWhiteSpace())
+                {
+                    identity.AddIfNotContains(new Claim(AbpClaimTypes.Email, user.Email));
+                }
+
+                identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
             }
         }
     }

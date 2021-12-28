@@ -74,7 +74,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
         await CreateApiResourceAsync("MyProjectName");
     }
 
-    private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
+    private async Task<ApiResource> CreateApiResourceAsync(string name)
     {
         var apiResource = await _apiResourceRepository.FindByNameAsync(name);
         if (apiResource == null)
