@@ -1,18 +1,18 @@
 # 身份服务器模块
 
-身份服务器模块提供了一个 [IdentityServer](https://github.com/IdentityServer/IdentityServer4) (IDS) 的完全集成，该框架提供高级身份验证功能，如单点登录和API访问控制.此模块将客户端,资源以及其他 IDS 相关的对象保存到数据库中.
+身份服务器模块提供了一个 [IdentityServer](https://github.com/IdentityServer/IdentityServer4) (IDS) 的完全集成, 该框架提供高级身份验证功能, 如单点登录和API访问控制.此模块将客户端,资源以及其他 IDS 相关的对象保存到数据库中.
 
 ## 如何安装
 
-当你使用 ABP 框架 [创建一个新的解决方案](https://abp.io/get-started) 时，此模块将被预安装(作为 NuGet/NPM 包).你可以继续用其作为包并轻松地获取更新，也可以将其源代码包含在解决方案中(请参阅 `get-source` [CLI](../CLI.md))以开发自定义模块.
+当你使用 ABP 框架 [创建一个新的解决方案](https://abp.io/get-started) 时, 此模块将被预安装(作为 NuGet/NPM 包).你可以继续用其作为包并轻松地获取更新, 也可以将其源代码包含在解决方案中(请参阅 `get-source` [CLI](../CLI.md))以开发自定义模块.
 
 ### 源代码
 
-可以 [在此处](https://github.com/abpframework/abp/tree/dev/modules/identityserver) 访问源代码.源代码使用 [MIT](https://choosealicense.com/licenses/mit/) 许可，所以你可以免费使用和自定义它.
+可以 [在此处](https://github.com/abpframework/abp/tree/dev/modules/identityserver) 访问源代码.源代码使用 [MIT](https://choosealicense.com/licenses/mit/) 许可, 所以你可以免费使用和自定义它.
 
 ## 用户界面
 
-此模块使用了领域逻辑和数据库集成，但没有提供任何 UI.如果你需要动态添加客户端和资源, 管理 UI 是非常有用的.在这种情况下，你可以自己构建管理 UI，或者考虑购买为此模块提供了管理 UI 的 [ABP 商业版](https://commercial.abp.io/).
+此模块使用了领域逻辑和数据库集成, 但没有提供任何 UI.如果你需要动态添加客户端和资源, 管理 UI 是非常有用的.在这种情况下, 你可以自己构建管理 UI, 或者考虑购买为此模块提供了管理 UI 的 [ABP 商业版](https://commercial.abp.io/).
 
 ## 与其他模块的关系
 
@@ -27,10 +27,10 @@
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
 {
-	PreConfigure<AbpIdentityServerBuilderOptions>(builder =>
-	{
-    	//Set options here...		
-	});
+    PreConfigure<AbpIdentityServerBuilderOptions>(builder =>
+    {
+        //Set options here...
+    });
 }
 ````
 
@@ -46,10 +46,10 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
 {
-	PreConfigure<IIdentityServerBuilder>(builder =>
-	{
-    	builder.AddSigningCredential(...);	
-	});
+    PreConfigure<IIdentityServerBuilder>(builder =>
+    {
+        builder.AddSigningCredential(...);
+    });
 }
 ````
 
@@ -107,7 +107,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 #### 领域服务
 
-此模块不包含任何领域服务，但重写了下面的服务；
+此模块不包含任何领域服务, 但重写了下面的服务；
 
 * `AbpProfileService` (当 `AbpIdentityServerBuilderOptions.IntegrateToAspNetIdentity` 为 true 时使用)
 * `AbpClaimsService`
@@ -132,13 +132,13 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 ##### 表/集合 前缀 & 架构
 
-所有表/集合都使用 `IdentityServer` 作为默认前缀.如果你需要改变表的前缀或设置一个架构名称(如果你的数据库提供程序支持)，请设置 `AbpIdentityServerDbProperties` 类的静态属性.
+所有表/集合都使用 `IdentityServer` 作为默认前缀.如果你需要改变表的前缀或设置一个架构名称(如果你的数据库提供程序支持), 请设置 `AbpIdentityServerDbProperties` 类的静态属性.
 
 ##### 连接字符串
 
-此模块使用 `AbpIdentityServer` 作为连接字符串的名称.如果你没有用这个名称定义连接字符串，它将回退到 `Default` 连接字符串.
+此模块使用 `AbpIdentityServer` 作为连接字符串的名称.如果你没有用这个名称定义连接字符串, 它将回退到 `Default` 连接字符串.
 
-有关详细信息，请参阅 [连接字符串](https://docs.abp.io/en/abp/latest/Connection-Strings) 文档.
+有关详细信息, 请参阅 [连接字符串](https://docs.abp.io/en/abp/latest/Connection-Strings) 文档.
 
 #### EF Core
 
