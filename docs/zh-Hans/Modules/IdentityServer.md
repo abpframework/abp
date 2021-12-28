@@ -22,7 +22,7 @@
 
 ### AbpIdentityServerBuilderOptions
 
-`AbpIdentityServerBuilderOptions` 在你的身份服务器 [模块](https://docs.abp.io/en/abp/latest/Module-Development-Basics) 中的 `PreConfigureServices` 方法中配置.例如:
+`AbpIdentityServerBuilderOptions` 在你的身份服务器 [模块](https://docs.abp.io/zh-Hans/abp/latest/Module-Development-Basics) 中的 `PreConfigureServices` 方法中配置.例如:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -41,7 +41,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 * `IntegrateToAspNetIdentity` (默认值:true):集成到 ASP.NET Identity.
 * `AddDeveloperSigningCredential` (默认值:true):设置为 false 禁止调用 IIdentityServerBuilder 中的 `AddDeveloperSigningCredential()`.
 
-`IIdentityServerBuilder` 可以在你的身份服务器 [模块](https://docs.abp.io/en/abp/latest/Module-Development-Basics) 中的 `PreConfigureServices` 方法中配置.例如:
+`IIdentityServerBuilder` 可以在你的身份服务器 [模块](https://docs.abp.io/zh-Hans/abp/latest/Module-Development-Basics) 中的 `PreConfigureServices` 方法中配置.例如:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -107,7 +107,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 #### 领域服务
 
-此模块不包含任何领域服务, 但重写了下面的服务；
+此模块不包含任何领域服务, 但重写了下面的服务;
 
 * `AbpProfileService` (当 `AbpIdentityServerBuilderOptions.IntegrateToAspNetIdentity` 为 true 时使用)
 * `AbpClaimsService`
@@ -138,7 +138,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 此模块使用 `AbpIdentityServer` 作为连接字符串的名称.如果你没有用这个名称定义连接字符串, 它将回退到 `Default` 连接字符串.
 
-有关详细信息, 请参阅 [连接字符串](https://docs.abp.io/en/abp/latest/Connection-Strings) 文档.
+有关详细信息, 请参阅 [连接字符串](https://docs.abp.io/zh-Hans/abp/latest/Connection-Strings) 文档.
 
 #### EF Core
 
