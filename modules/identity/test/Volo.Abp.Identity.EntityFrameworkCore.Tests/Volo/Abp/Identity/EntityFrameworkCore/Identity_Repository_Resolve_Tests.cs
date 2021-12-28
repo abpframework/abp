@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Volo.Abp.Identity.EntityFrameworkCore
+namespace Volo.Abp.Identity.EntityFrameworkCore;
+
+public class Identity_Repository_Resolve_Tests : Identity_Repository_Resolve_Tests<AbpIdentityEntityFrameworkCoreTestModule>
 {
-    public class Identity_Repository_Resolve_Tests : Identity_Repository_Resolve_Tests<AbpIdentityEntityFrameworkCoreTestModule>
-    {
-    }
 }

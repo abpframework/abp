@@ -1,13 +1,12 @@
 ﻿using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+[DependsOn(
+    typeof(AbpBackgroundJobsEntityFrameworkCoreTestModule)
+    )]
+public class AbpBackgroundJobsDomainTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpBackgroundJobsEntityFrameworkCoreTestModule)
-        )]
-    public class AbpBackgroundJobsDomainTestModule : AbpModule
-    {
-        
-    }
+
 }

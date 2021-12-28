@@ -1,16 +1,15 @@
-﻿namespace Volo.Abp.Serialization
+﻿namespace Volo.Abp.Serialization;
+
+public interface IObjectSerializer
 {
-    public interface IObjectSerializer
-    {
-        byte[] Serialize<T>(T obj);
+    byte[] Serialize<T>(T obj);
 
-        T Deserialize<T>(byte[] bytes);
-    }
+    T Deserialize<T>(byte[] bytes);
+}
 
-    public interface IObjectSerializer<T>
-    {
-        byte[] Serialize(T obj);
+public interface IObjectSerializer<T>
+{
+    byte[] Serialize(T obj);
 
-        T Deserialize(byte[] bytes);
-    }
+    T Deserialize(byte[] bytes);
 }

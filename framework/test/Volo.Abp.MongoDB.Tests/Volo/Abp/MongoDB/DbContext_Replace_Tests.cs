@@ -6,26 +6,25 @@ using Volo.Abp.MongoDB.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.MongoDB;
 using Xunit;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+[Collection(MongoTestCollection.Name)]
+public class DbContext_Replace_Tests : MongoDbTestBase
 {
-    [Collection(MongoTestCollection.Name)]
-    public class DbContext_Replace_Tests : MongoDbTestBase
+    private readonly AbpMongoDbContextOptions _options;
+
+    public DbContext_Replace_Tests()
     {
-        private readonly AbpMongoDbContextOptions _options;
+        _options = GetRequiredService<IOptions<AbpMongoDbContextOptions>>().Value;
+    }
 
-        public DbContext_Replace_Tests()
-        {
-            _options = GetRequiredService<IOptions<AbpMongoDbContextOptions>>().Value;
-        }
+    [Fact]
+    public void Should_Replace_DbContext()
+    {
+        _options.GetReplacedTypeOrSelf(typeof(IThirdDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
+        _options.GetReplacedTypeOrSelf(typeof(IFourthDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
 
-        [Fact]
-        public void Should_Replace_DbContext()
-        {
-            _options.GetReplacedTypeOrSelf(typeof(IThirdDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
-            _options.GetReplacedTypeOrSelf(typeof(IFourthDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
-
-            (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppMongoDbContext).ShouldBeTrue();
-            (ServiceProvider.GetRequiredService<IFourthDbContext>() is TestAppMongoDbContext).ShouldBeTrue();
-        }
+        (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppMongoDbContext).ShouldBeTrue();
+        (ServiceProvider.GetRequiredService<IFourthDbContext>() is TestAppMongoDbContext).ShouldBeTrue();
     }
 }
