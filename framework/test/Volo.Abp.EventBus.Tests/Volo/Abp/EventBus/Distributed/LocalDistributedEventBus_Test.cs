@@ -51,6 +51,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var tenantId = Guid.NewGuid();
 
+        MySimpleDistributedSingleInstanceEventHandler.TenantId = null;
         DistributedEventBus.Subscribe<MySimpleEto>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
 
         await DistributedEventBus.PublishAsync(new MySimpleEto
@@ -69,6 +70,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var tenantId = Guid.NewGuid();
 
+        MySimpleDistributedSingleInstanceEventHandler.TenantId = null;
         DistributedEventBus.Subscribe<MySimpleEto>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
 
         var eto = new MySimpleEto { Properties = { { "TenantId", tenantId.ToString() } } };
