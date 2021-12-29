@@ -1,6 +1,6 @@
 # 身份管理模块
 
-身份模块基于 [Microsoft Identity 库](https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity) 用于管理角色,用户和他们的权限.
+身份模块基于 [Microsoft Identity 库](https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity) 用于管理角色,用户及其权限.
 
 ## 如何安装
 
@@ -75,14 +75,14 @@
 
 #### 组织单元编码
 
-组织单元编码是通过 `OrganizationUnitManager` 服务自动生成和维护的. 它是一个字符串, 像这个:
+组织单元编码是通过 `OrganizationUnitManager` 服务自动生成和维护的. 它是一个字符串, 像这样:
 
 "**00001.00042.00005**"
 
-这个编码常被用于轻易地 (递归) 查询出数据库中组织单元的所有子项. 这个编码有一些规则 (当你使用 `OrganizationUnitManager` 时自动被应用的) : 
+通常用这种编码可以轻易地 (递归) 查询出数据库中组织单元的所有子项. 这个编码有一些规则 (当你使用 `OrganizationUnitManager` 时自动被应用的) : 
 
 - 对 [租户](../Multi-Tenancy.md) 是 **唯一的**.
-- 同一组织单元的全部子项都具有 **以父级组织单元编码开头的** 编码
+- 同一组织单元的全部子项都具有 **以父级组织单元编码开头的** 编码.
 - 如示例中所示, 它是固定长度的且是基于树中组织单元的级别的.
 - 尽管组织单元编码是唯一的, 但如果你移动了相关的组织单元, 它也可以被更改.
 
@@ -96,7 +96,7 @@
 - 在组织单元树中移动一个组织单元.
 - 获取关于组织单元树及其项的信息.
 
-## 身份安全日志
+### 身份安全日志
 
 安全日志系统可以记录账户的一些重要的操作或者改动 (例如 *登录* 和 *更改密码*) . 如果需要, 你也可以保存安全日志.
 
@@ -115,14 +115,14 @@ await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
 ```cs
 Configure<AbpSecurityLogOptions>(options =>
 {
-	options.ApplicationName = "AbpSecurityTest";
+    options.ApplicationName = "AbpSecurityTest";
 });
 ```
 ## 选项
 
-`IdentityOptions` is the standard [options class](../Options.md) provided by the Microsoft [Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity). So, you can set these options in the `ConfigureServices` method of your [module](../Module-Development-Basics.md) class.
+`IdentityOptions` 是由 Microsoft [Identity 库](https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity) 提供的标准 [选项类](../Options.md) . 所以, 你可以在 [模块](../Module-Development-Basics.md) 类的 `ConfigureServices` 方法中设置这些选项.
 
-**Example: Set minimum required length of passwords**
+**例如: 设置所需的密码最小长度**
 
 ````csharp
 Configure<IdentityOptions>(options =>
@@ -131,9 +131,9 @@ Configure<IdentityOptions>(options =>
 });
 ````
 
-ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../Settings.md). You can [inject](../Dependency-Injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
+ABP 允许你在运行时通过使用 [设置系统](../Settings.md) 更进一步地更改这些选项. 你可以 [注入](../Dependency-Injection.md) `ISettingManager` 并使用 `Set...` 方法中的一种来更改用户, 租户或全局所有用户的选项值.
 
-**Example: Change minimum required length of passwords for the current tenant**
+**例如: 更改当前租户所需的密码最小长度**
 
 ````csharp
 public class MyService : ITransientDependency
@@ -155,18 +155,18 @@ public class MyService : ITransientDependency
 }
 ````
 
-`IdentitySettingNames` class (in the `Volo.Abp.Identity.Settings` namespace) defines constants for the setting names.
+`IdentitySettingNames` 类 (在 `Volo.Abp.Identity.Settings` 命名空间中) 为设置名称定义了一些常量.
 
-## Distributed Events
+## 分布式事件
 
-This module defines the following ETOs (Event Transfer Objects) to allow you to subscribe to changes on the entities of the module;
+此模块定义了如下 ETOs (事件传输对象) 以允许你去订阅模块中实体的改动.
 
-* `UserEto` is published on changes done on an `IdentityUser` entity.
-* `IdentityRoleEto` is published on changes done on an `IdentityRole` entity.
-* `IdentityClaimTypeEto` is published on changes done on an `IdentityClaimType` entity.
-* `OrganizationUnitEto` is published on changes done on an `OrganizationUnit` entity.
+* `UserEto` 在 `IdentityUser` 实体更改完成时发布.
+* `IdentityRoleEto` 在 `IdentityRole` 实体更改完成时发布.
+* `IdentityClaimTypeEto` 在 `IdentityClaimType` 实体更改完成时发布.
+* `OrganizationUnitEto` 在 `OrganizationUnit` 实体更改完成时发布.
 
-**Example: Get notified when a new user has been created**
+**例如: 当一个新用户被创建时接收通知**
 
 ````csharp
 public class MyHandler :
@@ -181,57 +181,57 @@ public class MyHandler :
 }
 ````
 
-`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../Distributed-Event-Bus.md) to learn details of the pre-defined events.
+`UserEto` 和 `IdentityRoleEto` 默认自动发布事件. 你应该自己配置其他的 Eto. 请参阅 [分布式事件总线文档](../Distributed-Event-Bus.md) 了解预定义事件的详细信息.
 
-> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../Local-Event-Bus.md) can be more efficient and easier.
+> 订阅分布式事件对于分布式场景 (如微服务架构) 特别有用. 如果你正在构建单体式应用程序, 或者在运行了身份模块的同一进程内监听事件, 那么订阅 [本地事件](../Local-Event-Bus.md) 更高效, 更简单.
 
-## Internals
+## 内部构件
 
-This section covers some internal details of the module that you don't need much, but may need to use in some cases.
+本节包括模块的一些内部详细信息, 您不是那么需要, 但在一些情况下可能需要使用.
 
-### Domain layer
+### 领域层
 
-#### Aggregates
+#### 聚合
 
-##### User
+##### 用户
 
-A user is generally a person logins to and uses the application.
+用户通常是一个登录并使用应用程序的人.
 
-* `IdentityUser` (aggregate root): Represents a user in the system.
-  * `IdentityUserRole` (collection): Roles to the user.
-  * `IdentityUserClaim` (collection): Custom claims of the user.
-  * `IdentityUserLogin` (collection): External logins of the user.
-  * `IdentityUserToken` (collection): Tokens of the user (used by the Microsoft Identity services).
+* `IdentityUser` (聚合根): 表示系统中的一个用户.
+  * `IdentityUserRole` (集合): 分配给用户的角色.
+  * `IdentityUserClaim` (集合): 用户的自定义声明.
+  * `IdentityUserLogin` (集合): 用户的外部登录.
+  * `IdentityUserToken` (集合): 用户的令牌 (用于 Microsoft Identity 服务).
 
-##### Role
+##### 角色
 
-A role is typically a group of permissions to assign to the users.
+角色通常是分配给用户的一组权限.
 
-* `IdentityRole` (aggregate root): Represents a role in the system.
-  * `IdentityRoleClaim` (collection): Custom claims of the role.
+* `IdentityRole` (聚合根): 表示系统中的角色.
+  * `IdentityRoleClaim` (集合): 角色的自定义声明.
 
-##### Claim Type
+##### 声明类型
 
-A claim type is a definition of a custom claim that can be assigned to other entities (like roles and users) in the system.
+声明类型是可以被分配给系统中其他实体 (如角色和用户) 的自定义声明的定义.
 
-* `IdentityClaimType` (aggregate root): Represents a claim type definition. It contains some properties (e.g. Required, Regex, Description, ValueType) to define the claim type and the validation rules.
+* `IdentityClaimType` (聚合根): 表示声明类型的定义. 它包括一些用于定义声明类型和验证规则的属性 (例如, 必须的, 正则表达式, 描述, 值类型) .
 
-##### Identity Security Log
+##### 身份安全日志
 
-A `IdentitySecurityLog` object represents an authentication related operation (like *login*) in the system.
+`IdentitySecurityLog` 对象表示系统中与授权相关的操作 (如 *登录*) .
 
-* `IdentitySecurityLog` (aggregate root): Represents a security log in the system.
+* `IdentitySecurityLog` (聚合根): 表示系统中的安全日志.
 
-##### OrganizationUnit
+##### 组织单元
 
-An Organization unit is a entity in a hierarchical structure.
+组织单元是一个有层级结构的实体.
 
-* ```OrganizationUnit``` (aggregate root): Represents an organization unit in the system.
-  * ```Roles``` (collection): Roles of the organization unit.
+* ```OrganizationUnit``` (聚合根): 表示系统中的组织单元.
+  * ```Roles``` (集合): 组织单元的角色.
 
-#### Repositories
+#### 仓储
 
-Following custom repositories are defined for this module:
+此模块定义了以下自定义仓储:
 
 * `IIdentityUserRepository`
 * `IIdentityRoleRepository`
@@ -239,50 +239,50 @@ Following custom repositories are defined for this module:
 * ```IIdentitySecurityLogRepository```
 * ```IOrganizationUnitRepository```
 
-#### Domain services
+#### 领域服务
 
-##### User manager
+##### 用户管理
 
-`IdentityUserManager` is used to manage users, their roles, claims, passwords, emails, etc. It is derived from Microsoft Identity's `UserManager<T>` class where `T` is `IdentityUser`.
+`IdentityUserManager` 常用于管理用户, 他们的权限, 声明, 密码, 电子邮件等等. 它派生自 Microsoft Identity 的 `UserManager<T>` 类, 其中 `T` 是 `IdentityUser`.
 
-##### Role manager
+##### 角色管理
 
-`IdentityRoleManager` is used to manage roles and their claims. It is derived from Microsoft Identity's `RoleManager<T>` class where `T` is `IdentityRole`.
+`IdentityRoleManager` 常用于管理角色和他们的声明. 它派生自 Microsoft Identity 的 `RoleManager<T>` 类, 其中 `T` 是 `IdentityRole`.
 
-##### Claim type manager
+##### 声明类型管理
 
-`IdenityClaimTypeManager` is used to perform some operations for the `IdentityClaimType` aggregate root.
+`IdenityClaimTypeManager` 常用于对聚合根 `IdentityClaimType` 执行某些操作.
 
-##### Organization unit manager
+##### 组织单元管理
 
-```OrganizationUnitManager``` is used to perform some operations for the ```OrganizationUnit``` aggregate root.
+```OrganizationUnitManager``` 常用于对聚合根 `OrganizationUnit` 执行某些操作.
 
-##### Security log manager
+##### 安全日志管理
 
-```IdentitySecurityLogManager``` is used to save security logs.
+```IdentitySecurityLogManager``` 常用于保存安全日志.
 
-### Application Layer
+### 服务层
 
-#### Application Services
+#### 应用服务
 
-* `IdentityUserAppService` (implements `IIdentityUserAppService`): Implements the use cases of the user management UI.
-* `IdentityRoleAppService` (implement `IIdentityRoleAppService`): Implements the use cases of the role management UI.
-* `IdentityClaimTypeAppService` (implements `IIdentityClaimTypeAppService`): Implements the use cases of the claim type management UI.
-* `IdentitySettingsAppService` (implements `IIdentitySettingsAppService`): Used to get and update settings for the Identity module.
-* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP framework.
-* `ProfileAppService` (implements `IProfileAppService`): Used to change a user's profile and the password.
-* ```IdentitySecurityLogAppService``` (implements ```IIdentitySecurityLogAppService```): Implements the use cases of the security logs UI.
-* ```OrganizationUnitAppService``` (implements ```OrganizationUnitAppService```): Implements the use cases of the organization unit management UI.
+* `IdentityUserAppService` (实现 `IIdentityUserAppService`): 实现了用户管理 UI 的用例.
+* `IdentityRoleAppService` (实现 `IIdentityRoleAppService`): 实现了角色管理 UI 的用例.
+* `IdentityClaimTypeAppService` (实现 `IIdentityClaimTypeAppService`): 实现了声明类型管理 UI 的用例.
+* `IdentitySettingsAppService` (实现 `IIdentitySettingsAppService`): 用于获取和更新身份模块的设置.
+* `IdentityUserLookupAppService` (实现 `IIdentityUserLookupAppService`): 用于根据 `id` 或 `userName` 获取用户信息. 它旨在由ABP内部使用.
+* `ProfileAppService` (实现 `IProfileAppService`): 用于更改用户的简介和密码.
+* ```IdentitySecurityLogAppService``` (实现 ```IIdentitySecurityLogAppService```): 实现了安全日志 UI 的用例.
+* ```OrganizationUnitAppService``` (实现 ```OrganizationUnitAppService```): 实现了组织单元管理 UI 的用例.
 
-### Database Providers
+### 数据库提供程序
 
-This module provides [Entity Framework Core](../Entity-Framework-Core.md) and [MongoDB](../MongoDB.md) options for the database.
+此模块为数据库提供 [Entity Framework Core](../Entity-Framework-Core.md) 和 [MongoDB](../MongoDB.md) 两种选择.
 
-#### Entity Framework Core
+#### EF Core
 
-[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore) NuGet package implements the EF Core integration.
+NuGet 包 [Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore) 实现了 EF Core 的集成.
 
-##### Database Tables
+##### 数据库表
 
 * **AbpRoles**
   * AbpRoleClaims
@@ -299,9 +299,9 @@ This module provides [Entity Framework Core](../Entity-Framework-Core.md) and [M
 
 #### MongoDB
 
-[Volo.Abp.Identity.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.MongoDB) NuGet package implements the MongoDB integration.
+NuGet 包 [Volo.Abp.Identity.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.MongoDB) 实现了 MongoDB 的集成.
 
-##### Database Collections
+##### 数据库集合
 
 * **AbpRoles**
 * **AbpUsers**
@@ -309,12 +309,12 @@ This module provides [Entity Framework Core](../Entity-Framework-Core.md) and [M
 * **AbpOrganizationUnits**
 * **AbpSecurityLogs**
 
-#### Common Database Properties
+#### 常用数据库属性
 
-You can set the following properties of the `AbpIdentityDbProperties` class to change the database options:
+你可以设置 `AbpIdentityDbProperties` 中的以下属性来更改数据库选项:
 
-* `DbTablePrefix` (`Abp` by default) is the prefix for table/collection names.
-* `DbSchema` (`null` by default) is the database schema.
-* `ConnectionStringName` (`AbpIdentity` by default) is the [connection string](../Connection-Strings.md) name for this module.
+* `DbTablePrefix` (`Abp` 作为默认值) 是表/集合名称的前缀.
+* `DbSchema` (`null` 作为默认值) 是数据库架构.
+* `ConnectionStringName` (`AbpIdentity` 作为默认值) 是此模块的 [连接字符串](../Connection-Strings.md) 名称.
 
-These are static properties. If you want to set, do it in the beginning of your application (typically, in `Program.cs`).
+它们是静态属性. 你需要在开始运行应用程序前设置它们 (通常在 `Program.cs` 中).
