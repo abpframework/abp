@@ -1,5 +1,5 @@
 {
-  "version": "5.0.0",
+  "version": "5.0.1",
   "name": "@abp/sweetalert2",
   "publishConfig": {
     "access": "public"
@@ -10,7 +10,7 @@
     "directory": "npm/packs/sweetalert2"
   },
   "dependencies": {
-    "@abp/core": "~5.0.0",
+    "@abp/core": "~5.0.1",
     "sweetalert2": "^11.0.18"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
