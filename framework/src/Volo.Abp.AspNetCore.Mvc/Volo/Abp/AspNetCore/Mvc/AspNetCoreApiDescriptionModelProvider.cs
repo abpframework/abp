@@ -80,7 +80,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var setting = FindSetting(controllerType);
 
             var moduleModel = applicationModel.GetOrAddModule(
-                GetRootPath(controllerType, setting),
+                GetRootPath(controllerType, apiDescription.ActionDescriptor, setting),
                 GetRemoteServiceName(controllerType, setting)
             );
 
@@ -327,7 +327,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
-        private static string GetRootPath([NotNull] Type controllerType,
+        private static string GetRootPath(
+            [NotNull] Type controllerType,
+            [NotNull] ActionDescriptor actionDescriptor,
             [CanBeNull] ConventionalControllerSetting setting)
         {
             if (setting != null)
@@ -335,7 +337,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RootPath;
             }
 
-            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
+            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault() ?? actionDescriptor.EndpointMetadata.OfType<AreaAttribute>().FirstOrDefault();
             if (areaAttr != null)
             {
                 return areaAttr.RouteValue;
