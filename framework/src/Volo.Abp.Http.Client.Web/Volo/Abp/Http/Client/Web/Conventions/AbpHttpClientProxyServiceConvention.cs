@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,15 @@ namespace Volo.Abp.Http.Client.Web.Conventions
             foreach (var controller in GetClientProxyControllers(application))
             {
                 controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
+
+                var moduleApiDescription = FindModuleApiDescriptionModel(controller);
+
+                if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
+                {
+                    var selector = controller.Selectors.FirstOrDefault();
+                    selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
+                    controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+                }
 
                 var controllerApiDescription = FindControllerApiDescriptionModel(controller);
                 if (controllerApiDescription != null &&
