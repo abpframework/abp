@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -61,5 +62,36 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         });
 
         Assert.Equal(tenantId, MySimpleDistributedSingleInstanceEventHandler.TenantId);
+    }
+
+    [Fact]
+    public async Task Should_Publish_Event_On_Uow_Completed_If_OnUnitOfWorkComplete_And_UseOutBox()
+    {
+        var tenantId = Guid.NewGuid();
+
+        DistributedEventBus.Subscribe<MySimpleEto>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
+
+        var eto = new MySimpleEto { Properties = { { "TenantId", tenantId.ToString() } } };
+        
+        using (var uow = UnitOfWorkManager.Begin(new AbpUnitOfWorkOptions()))
+        {
+            uow.OnCompleted(() =>
+            {
+                Assert.Null(MySimpleDistributedSingleInstanceEventHandler.TenantId);
+                return Task.CompletedTask;
+            });
+            
+            await DistributedEventBus.PublishAsync(
+                eventData: eto,
+                onUnitOfWorkComplete: true,
+                useOutbox: true);
+            
+            Assert.Null(MySimpleDistributedSingleInstanceEventHandler.TenantId);
+
+            await uow.CompleteAsync();
+            
+            Assert.Equal(tenantId, MySimpleDistributedSingleInstanceEventHandler.TenantId);
+        }
+
     }
 }

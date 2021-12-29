@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed;
 
@@ -15,16 +16,20 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
 {
     private readonly ILocalEventBus _localEventBus;
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
 
     public LocalDistributedEventBus(
         ILocalEventBus localEventBus,
+        IUnitOfWorkManager unitOfWorkManager,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
     {
         _localEventBus = localEventBus;
+        UnitOfWorkManager = unitOfWorkManager;
         ServiceScopeFactory = serviceScopeFactory;
         AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         Subscribe(distributedEventBusOptions.Value.Handlers);
@@ -135,11 +140,37 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
 
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
     {
+        var currentUow = UnitOfWorkManager.Current;
+        
+        if (onUnitOfWorkComplete && useOutbox && currentUow != null)
+        {
+            // Publish on UOW completed since the local event bus does not use the outbox.
+            currentUow.OnCompleted(async () =>
+            {
+                await _localEventBus.PublishAsync(eventData);
+            });
+
+            return Task.CompletedTask;
+        }
+        
         return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
     }
 
     public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
+        var currentUow = UnitOfWorkManager.Current;
+        
+        if (onUnitOfWorkComplete && useOutbox && currentUow != null)
+        {
+            // Publish on UOW completed since the local event bus does not use the outbox.
+            currentUow.OnCompleted(async () =>
+            {
+                await _localEventBus.PublishAsync(eventType, eventData);
+            });
+            
+            return Task.CompletedTask;
+        }
+        
         return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
 }
