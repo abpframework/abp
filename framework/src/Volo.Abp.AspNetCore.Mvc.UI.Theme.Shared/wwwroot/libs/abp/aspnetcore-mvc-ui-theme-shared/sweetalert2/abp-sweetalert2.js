@@ -100,13 +100,10 @@ var abp = abp || {};
     abp.event.on('abp.configurationInitialized', function () {
         var l = abp.localization.getResource('AbpUi');
 
-        abp.libs.sweetAlert.config.default.confirmButtonText = localize('Yes');
-        abp.libs.sweetAlert.config.default.denyButtonText = localize('No');
-        abp.libs.sweetAlert.config.default.cancelButtonText = localize('Cancel');
+        abp.libs.sweetAlert.config['default'].confirmButtonText = localize('Yes');
+        abp.libs.sweetAlert.config['default'].denyButtonText = localize('No');
+        abp.libs.sweetAlert.config['default'].cancelButtonText = localize('Cancel');
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
-        abp.libs.sweetAlert.config.confirm.confirmButtonText = l('Yes');
-        abp.libs.sweetAlert.config.confirm.denyButtonText = l('No');
-        abp.libs.sweetAlert.config.confirm.cancelButtonText = l('Cancel');
         abp.libs.sweetAlert.config.confirm.showCancelButton = true;
         abp.libs.sweetAlert.config.confirm.reverseButtons = true;
     });
