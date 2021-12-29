@@ -10,62 +10,61 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+[DependsOn(
+    typeof(AbpTestBaseModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+)]
+public class AbpAuditingTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpTestBaseModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpEntityFrameworkCoreSqliteModule)
-    )]
-    public class AbpAuditingTestModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddAbpDbContext<AbpAuditingTestDbContext>(options =>
         {
-            context.Services.AddAbpDbContext<AbpAuditingTestDbContext>(options =>
+            options.AddDefaultRepositories(true);
+        });
+
+        var sqliteConnection = CreateDatabaseAndGetConnection();
+
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
             {
-                options.AddDefaultRepositories(true);
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
+        });
 
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+        Configure<AbpAuditingOptions>(options =>
+        {
+            options.EntityHistorySelectors.Add(
+                new NamedTypeSelector(
+                    "AppEntityWithSelector",
+                    type => type == typeof(AppEntityWithSelector))
+            );
 
-            Configure<AbpDbContextOptions>(options =>
-            {
-                options.Configure(abpDbContextConfigurationContext =>
-                {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
-                });
-            });
+            options.EntityHistorySelectors.Add(
+                new NamedTypeSelector(
+                    "AppEntityWithSoftDelete",
+                    type => type == typeof(AppEntityWithSoftDelete))
+            );
+        });
 
-            Configure<AbpAuditingOptions>(options =>
-            {
-                options.EntityHistorySelectors.Add(
-                    new NamedTypeSelector(
-                        "AppEntityWithSelector",
-                        type => type == typeof(AppEntityWithSelector))
-                );
+        context.Services.AddType<Auditing_Tests.MyAuditedObject1>();
+    }
 
-                options.EntityHistorySelectors.Add(
-                    new NamedTypeSelector(
-                        "AppEntityWithSoftDelete",
-                        type => type == typeof(AppEntityWithSoftDelete))
-                );
-            });
+    private static SqliteConnection CreateDatabaseAndGetConnection()
+    {
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
 
-            context.Services.AddType<Auditing_Tests.MyAuditedObject1>();
+        using (var context = new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>()
+            .UseSqlite(connection).Options))
+        {
+            context.GetService<IRelationalDatabaseCreator>().CreateTables();
         }
 
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
-
-            using (var context = new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>()
-                .UseSqlite(connection).Options))
-            {
-                context.GetService<IRelationalDatabaseCreator>().CreateTables();
-            }
-
-            return connection;
-        }
+        return connection;
     }
 }

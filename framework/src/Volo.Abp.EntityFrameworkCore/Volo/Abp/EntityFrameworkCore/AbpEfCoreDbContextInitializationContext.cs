@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Uow;
 
-namespace Volo.Abp.EntityFrameworkCore
-{
-    public class AbpEfCoreDbContextInitializationContext
-    {
-        public IUnitOfWork UnitOfWork { get; }
+namespace Volo.Abp.EntityFrameworkCore;
 
-        public AbpEfCoreDbContextInitializationContext(IUnitOfWork unitOfWork)
-        {
-            UnitOfWork = unitOfWork;
-        }
+public class AbpEfCoreDbContextInitializationContext
+{
+    public IUnitOfWork UnitOfWork { get; }
+
+    public AbpEfCoreDbContextInitializationContext(IUnitOfWork unitOfWork)
+    {
+        UnitOfWork = unitOfWork;
     }
 }

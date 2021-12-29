@@ -1,8 +1,7 @@
-namespace Volo.Abp.Text.Formatting
+namespace Volo.Abp.Text.Formatting;
+
+internal enum FormatStringTokenType
 {
-    internal enum FormatStringTokenType
-    {
-        ConstantText,
-        DynamicValue
-    }
+    ConstantText,
+    DynamicValue
 }

@@ -2,10 +2,9 @@
 using System.Security.Claims;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc;
+
+public class FakeUserClaims : ISingletonDependency
 {
-    public class FakeUserClaims : ISingletonDependency
-    {
-        public List<Claim> Claims { get; } = new List<Claim>();
-    }
+    public List<Claim> Claims { get; } = new List<Claim>();
 }

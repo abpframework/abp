@@ -1,10 +1,9 @@
 using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
+namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
+
+public interface IDbContextEventInbox<TDbContext> : IEventInbox
+    where TDbContext : IHasEventInbox
 {
-    public interface IDbContextEventInbox<TDbContext> : IEventInbox
-        where TDbContext : IHasEventInbox
-    {
-        
-    }
+
 }
