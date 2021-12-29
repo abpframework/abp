@@ -40,8 +40,7 @@ public class AbpEventBusModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        AsyncHelper.RunSync(() => context.AddBackgroundWorkerAsync<OutboxSenderManager>());
-        AsyncHelper.RunSync(() => context.AddBackgroundWorkerAsync<InboxProcessManager>());
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
     private static void AddEventHandlers(IServiceCollection services)

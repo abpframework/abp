@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,15 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         {
             controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
 
+            var moduleApiDescription = FindModuleApiDescriptionModel(controller);
+
+            if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
+            {
+                var selector = controller.Selectors.FirstOrDefault();
+                selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
+                controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+            }
+
             var controllerApiDescription = FindControllerApiDescriptionModel(controller);
             if (controllerApiDescription != null &&
                 !controllerApiDescription.ControllerGroupName.IsNullOrWhiteSpace())
@@ -98,7 +108,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
         if (actionApiDescriptionModel == null)
         {
-            return; ;
+            return;;
         }
 
         ActionWithAttributeRoute.Add(action);
