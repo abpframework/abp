@@ -35,6 +35,10 @@ public class DefaultBlobProviderSelector : IBlobProviderSelector, ITransientDepe
 
         foreach (var provider in BlobProviders)
         {
+            if (configuration.ProviderType == null)
+            {
+                throw new AbpException("BLOB Container provider is not used. Example: Configure to use the File System storage provider by default");
+            }
             if (ProxyHelper.GetUnProxiedType(provider).IsAssignableTo(configuration.ProviderType))
             {
                 return provider;
