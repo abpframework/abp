@@ -12,7 +12,7 @@ public static class ApplicationInitializationContextExtensions
 {
     public static IApplicationBuilder GetApplicationBuilder(this ApplicationInitializationContext context)
     {
-        return context.ServiceProvider.GetRequiredService<IObjectAccessor<IApplicationBuilder>>().Value;
+        return context.ServiceProvider.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<IObjectAccessor<IApplicationBuilder>>().Value;
     }
 
     public static IWebHostEnvironment GetEnvironment(this ApplicationInitializationContext context)

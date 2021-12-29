@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,27 @@ public static class ServiceCollectionCommonExtensions
     public static bool IsAdded(this IServiceCollection services, Type type)
     {
         return services.Any(d => d.ServiceType == type);
+    }
+
+    public static ObjectAccessorCollection GetObjectAccessorCollection(this IServiceCollection services)
+    {
+        var implementationInstance = (ObjectAccessorCollection)services
+            .FirstOrDefault(d => d.ServiceType == typeof(ObjectAccessorCollection))
+            ?.ImplementationInstance;
+
+        if (implementationInstance != null)
+        {
+            return implementationInstance;
+        }
+
+        if (services.IsReadOnly)
+        {
+            throw new AbpException("The ObjectAccessorCollection does not exist and the IServiceCollection cannot be modified because it is read-only.");
+        }
+
+        implementationInstance = new ObjectAccessorCollection();
+        services.AddSingleton(implementationInstance);
+        return implementationInstance;
     }
 
     public static T GetSingletonInstanceOrNull<T>(this IServiceCollection services)

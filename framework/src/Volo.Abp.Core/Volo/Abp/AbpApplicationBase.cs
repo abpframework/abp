@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
@@ -36,6 +37,8 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         StartupModuleType = startupModuleType;
         Services = services;
+
+        services.TryAddSingleton(new ObjectAccessorCollection());
 
         services.TryAddObjectAccessor<IServiceProvider>();
 
@@ -84,7 +87,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     protected virtual void SetServiceProvider(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
+        ServiceProvider.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
     }
 
     protected virtual async Task InitializeModulesAsync()
@@ -142,7 +145,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual async Task ConfigureServicesAsync()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -231,7 +234,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual void ConfigureServices()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 

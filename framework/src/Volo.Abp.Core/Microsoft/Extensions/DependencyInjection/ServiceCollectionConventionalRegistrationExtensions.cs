@@ -20,7 +20,7 @@ public static class ServiceCollectionConventionalRegistrationExtensions
 
     private static ConventionalRegistrarList GetOrCreateRegistrarList(IServiceCollection services)
     {
-        var conventionalRegistrars = services.GetSingletonInstanceOrNull<IObjectAccessor<ConventionalRegistrarList>>()?.Value;
+        var conventionalRegistrars = services.GetObjectOrNull<IObjectAccessor<ConventionalRegistrarList>>()?.Value;
         if (conventionalRegistrars == null)
         {
             conventionalRegistrars = new ConventionalRegistrarList { new DefaultConventionalRegistrar() };

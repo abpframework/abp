@@ -24,7 +24,7 @@ public static class AbpApplicationBuilderExtensions
     {
         Check.NotNull(app, nameof(app));
 
-        app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        app.ApplicationServices.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -45,7 +45,7 @@ public static class AbpApplicationBuilderExtensions
     {
         Check.NotNull(app, nameof(app));
 
-        app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        app.ApplicationServices.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 

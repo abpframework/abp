@@ -39,7 +39,7 @@ public static class AbpMvcBuilderExtensions
         {
             options.FileProviders.Add(
                 new RazorViewEngineVirtualFileProvider(
-                    mvcCoreBuilder.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
+                    mvcCoreBuilder.Services.GetObject<IObjectAccessor<IServiceProvider>>()
                 )
             );
         });

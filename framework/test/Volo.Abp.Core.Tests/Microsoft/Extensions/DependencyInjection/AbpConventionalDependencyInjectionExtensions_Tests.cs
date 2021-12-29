@@ -179,12 +179,18 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
 
         //Assert
 
-        _services.GetSingletonInstance<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
-        _services.GetSingletonInstance<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+        _services.GetObject<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+        _services.GetObject<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
 
         var serviceProvider = _services.BuildServiceProvider();
-        serviceProvider.GetRequiredService<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
-        serviceProvider.GetRequiredService<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+        var objectAccessorCollection = serviceProvider.GetService<ObjectAccessorCollection>();
+        objectAccessorCollection.ShouldNotBe(null);
+        objectAccessorCollection.GetAll().Count().ShouldBe(2);
+        objectAccessorCollection.GetAll().ShouldContain(x => x.ServiceType == typeof(ObjectAccessor<MyEmptyClass>) && x.ImplementationInstance == accessor);
+        objectAccessorCollection.GetAll().ShouldContain(x => x.ServiceType == typeof(IObjectAccessor<MyEmptyClass>) && x.ImplementationInstance == accessor);
+
+        serviceProvider.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+        serviceProvider.GetRequiredService<ObjectAccessorCollection>().GetRequiredService<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
     }
 
     public class MyTransientClass : ITransientDependency
