@@ -337,13 +337,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RootPath;
             }
 
-            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
-            if (areaAttr != null)
-            {
-                return areaAttr.RouteValue;
-            }
-
-            areaAttr = actionDescriptor.EndpointMetadata.OfType<AreaAttribute>().FirstOrDefault();
+            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault() ?? actionDescriptor.EndpointMetadata.OfType<AreaAttribute>().FirstOrDefault();
             if (areaAttr != null)
             {
                 return areaAttr.RouteValue;
