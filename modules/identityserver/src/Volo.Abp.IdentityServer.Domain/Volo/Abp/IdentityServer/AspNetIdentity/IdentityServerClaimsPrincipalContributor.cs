@@ -72,14 +72,17 @@ public class IdentityServerClaimsPrincipalContributor : IAbpClaimsPrincipalContr
                     }
                 }
 
-                if (!user.Name.IsNullOrEmpty())
+                if (user is IdentityUser identityUser)
                 {
-                    identity.AddIfNotContains(new Claim(JwtClaimTypes.GivenName, user.Name));
-                }
+                    if (!identityUser.Name.IsNullOrEmpty())
+                    {
+                        identity.AddIfNotContains(new Claim(JwtClaimTypes.GivenName, identityUser.Name));
+                    }
 
-                if (!user.Surname.IsNullOrEmpty())
-                {
-                    identity.AddIfNotContains(new Claim(JwtClaimTypes.FamilyName, user.Surname));
+                    if (!identityUser.Surname.IsNullOrEmpty())
+                    {
+                        identity.AddIfNotContains(new Claim(JwtClaimTypes.FamilyName, identityUser.Surname));
+                    }
                 }
             }
         }
