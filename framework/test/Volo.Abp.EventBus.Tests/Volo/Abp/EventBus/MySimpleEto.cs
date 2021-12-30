@@ -1,8 +1,7 @@
 ﻿using Volo.Abp.Domain.Entities.Events.Distributed;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus;
+
+public class MySimpleEto : EtoBase
 {
-    public class MySimpleEto : EtoBase
-    {
-    }
 }

@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+public class AbpAuditingTestBase : AbpIntegratedTest<AbpAuditingTestModule>
 {
-    public class AbpAuditingTestBase : AbpIntegratedTest<AbpAuditingTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

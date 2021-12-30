@@ -5,63 +5,62 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization
+namespace Volo.Abp.Authorization;
+
+public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizationService, ITransientDependency
 {
-    public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizationService, ITransientDependency
+    private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
+    private readonly IAbpAuthorizationService _abpAuthorizationService;
+
+    public MethodInvocationAuthorizationService(
+        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
+        IAbpAuthorizationService abpAuthorizationService)
     {
-        private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
-        private readonly IAbpAuthorizationService _abpAuthorizationService;
+        _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+        _abpAuthorizationService = abpAuthorizationService;
+    }
 
-        public MethodInvocationAuthorizationService(
-            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
-            IAbpAuthorizationService abpAuthorizationService)
+    public async Task CheckAsync(MethodInvocationAuthorizationContext context)
+    {
+        if (AllowAnonymous(context))
         {
-            _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
-            _abpAuthorizationService = abpAuthorizationService;
+            return;
         }
 
-        public async Task CheckAsync(MethodInvocationAuthorizationContext context)
+        var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
+            _abpAuthorizationPolicyProvider,
+            GetAuthorizationDataAttributes(context.Method)
+        );
+
+        if (authorizationPolicy == null)
         {
-            if (AllowAnonymous(context))
-            {
-                return;
-            }
-
-            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
-                _abpAuthorizationPolicyProvider,
-                GetAuthorizationDataAttributes(context.Method)
-            );
-
-            if (authorizationPolicy == null)
-            {
-                return;
-            }
-
-            await _abpAuthorizationService.CheckAsync(authorizationPolicy);
+            return;
         }
 
-        protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
+        await _abpAuthorizationService.CheckAsync(authorizationPolicy);
+    }
+
+    protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
+    {
+        return context.Method.GetCustomAttributes(true).OfType<IAllowAnonymous>().Any();
+    }
+
+    protected virtual IEnumerable<IAuthorizeData> GetAuthorizationDataAttributes(MethodInfo methodInfo)
+    {
+        var attributes = methodInfo
+            .GetCustomAttributes(true)
+            .OfType<IAuthorizeData>();
+
+        if (methodInfo.IsPublic && methodInfo.DeclaringType != null)
         {
-            return context.Method.GetCustomAttributes(true).OfType<IAllowAnonymous>().Any();
+            attributes = attributes
+                .Union(
+                    methodInfo.DeclaringType
+                        .GetCustomAttributes(true)
+                        .OfType<IAuthorizeData>()
+                );
         }
 
-        protected virtual IEnumerable<IAuthorizeData> GetAuthorizationDataAttributes(MethodInfo methodInfo)
-        {
-            var attributes = methodInfo
-                .GetCustomAttributes(true)
-                .OfType<IAuthorizeData>();
-
-            if (methodInfo.IsPublic && methodInfo.DeclaringType != null)
-            {
-                attributes = attributes
-                    .Union(
-                        methodInfo.DeclaringType
-                            .GetCustomAttributes(true)
-                            .OfType<IAuthorizeData>()
-                    );
-            }
-
-            return attributes;
-        }
+        return attributes;
     }
 }

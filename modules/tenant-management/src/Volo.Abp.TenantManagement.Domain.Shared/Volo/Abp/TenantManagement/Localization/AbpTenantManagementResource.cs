@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.TenantManagement.Localization
+namespace Volo.Abp.TenantManagement.Localization;
+
+[LocalizationResourceName("AbpTenantManagement")]
+public class AbpTenantManagementResource
 {
-    [LocalizationResourceName("AbpTenantManagement")]
-    public class AbpTenantManagementResource
-    {
-        
-    }
+
 }

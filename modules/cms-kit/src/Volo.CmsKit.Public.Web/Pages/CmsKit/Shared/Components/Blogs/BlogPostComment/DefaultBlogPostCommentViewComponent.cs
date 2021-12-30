@@ -7,33 +7,32 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment;
+
+[ViewComponent(Name = "CmsDefaultBlogPostComment")]
+public class DefaultBlogPostCommentViewComponent : AbpViewComponent
 {
-    [ViewComponent(Name = "CmsDefaultBlogPostComment")]
-    public class DefaultBlogPostCommentViewComponent : AbpViewComponent
+    protected IBlogPostPublicAppService BlogPostPublicAppService;
+
+    public DefaultBlogPostCommentViewComponent(IBlogPostPublicAppService blogPostPublicAppService)
     {
-        protected IBlogPostPublicAppService BlogPostPublicAppService;
+        BlogPostPublicAppService = blogPostPublicAppService;
+    }
 
-        public DefaultBlogPostCommentViewComponent(IBlogPostPublicAppService blogPostPublicAppService)
-        {
-            BlogPostPublicAppService = blogPostPublicAppService;
-        }
+    public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
+    {
+        return View(
+            "~/Pages/CmsKit/Shared/Components/Blogs/BlogPostComment/Default.cshtml",
+            new DefaultBlogPostCommentViewModel
+            {
+                EntityType = entityType,
+                EntityId = entityId
+            });
+    }
 
-        public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
-        {
-            return View(
-                "~/Pages/CmsKit/Shared/Components/Blogs/BlogPostComment/Default.cshtml",
-                new DefaultBlogPostCommentViewModel
-                {
-                    EntityType = entityType,
-                    EntityId = entityId
-                });
-        }
-
-        public class DefaultBlogPostCommentViewModel
-        {
-            public string EntityType { get; set; }
-            public string EntityId { get; set; }
-        }
+    public class DefaultBlogPostCommentViewModel
+    {
+        public string EntityType { get; set; }
+        public string EntityId { get; set; }
     }
 }

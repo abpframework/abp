@@ -5,69 +5,66 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers
+namespace Volo.Abp.BackgroundWorkers;
+
+/// <summary>
+/// Implements <see cref="IBackgroundWorkerManager"/>.
+/// </summary>
+public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency, IDisposable
 {
+    protected bool IsRunning { get; private set; }
+
+    private bool _isDisposed;
+
+    private readonly List<IBackgroundWorker> _backgroundWorkers;
+
     /// <summary>
-    /// Implements <see cref="IBackgroundWorkerManager"/>.
+    /// Initializes a new instance of the <see cref="BackgroundWorkerManager"/> class.
     /// </summary>
-    public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency, IDisposable
+    public BackgroundWorkerManager()
     {
-        protected bool IsRunning { get; private set; }
+        _backgroundWorkers = new List<IBackgroundWorker>();
+    }
 
-        private bool _isDisposed;
+    public virtual async Task AddAsync(IBackgroundWorker worker)
+    {
+        _backgroundWorkers.Add(worker);
 
-        private readonly List<IBackgroundWorker> _backgroundWorkers;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundWorkerManager"/> class.
-        /// </summary>
-        public BackgroundWorkerManager()
+        if (IsRunning)
         {
-            _backgroundWorkers = new List<IBackgroundWorker>();
+            await worker.StartAsync();
+        }
+    }
+
+    public virtual void Dispose()
+    {
+        if (_isDisposed)
+        {
+            return;
         }
 
-        public virtual void Add(IBackgroundWorker worker)
-        {
-            _backgroundWorkers.Add(worker);
+        _isDisposed = true;
 
-            if (IsRunning)
-            {
-                AsyncHelper.RunSync(
-                    () => worker.StartAsync()
-                );
-            }
+        //TODO: ???
+    }
+
+    public virtual async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        IsRunning = true;
+
+        foreach (var worker in _backgroundWorkers)
+        {
+            await worker.StartAsync(cancellationToken);
         }
+    }
 
-        public virtual void Dispose()
+    public virtual async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        IsRunning = false;
+
+        foreach (var worker in _backgroundWorkers)
         {
-            if (_isDisposed)
-            {
-                return;
-            }
-
-            _isDisposed = true;
-
-            //TODO: ???
-        }
-
-        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            IsRunning = true;
-
-            foreach (var worker in _backgroundWorkers)
-            {
-                await worker.StartAsync(cancellationToken);
-            }
-        }
-
-        public virtual async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            IsRunning = false;
-
-            foreach (var worker in _backgroundWorkers)
-            {
-                await worker.StopAsync(cancellationToken);
-            }
+            await worker.StopAsync(cancellationToken);
         }
     }
 }
