@@ -15,6 +15,20 @@
     "The field {0} must be a string with a maximum length of {1}.": "Pole {0} musi być łańcuchem znaków o maksymalnej długości {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "Pole {0} musi być łańcuchem znaków o minimalnej długości {2} i maksymalnej długości {1}.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "Pole {0} nie jest prawidłowym, w pełni kwalifikowanym adresem URL http, https lub ftp.",
-    "The field {0} is invalid.": "Pole {0} jest niepoprawne."
+    "The field {0} is invalid.": "Pole {0} jest niepoprawne.",
+    "ThisFieldIsNotAValidCreditCardNumber.": "To pole nie jest prawidłowym numerem karty kredytowej.",
+    "ThisFieldIsNotValid.": "To pole jest nieprawidłowe.",
+    "ThisFieldIsNotAValidEmailAddress.": "To pole nie jest prawidłowym adresem e-mail.",
+    "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "To pole akceptuje tylko pliki z następującymi rozszerzeniami: {0}",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "To pole musi być ciągiem lub typem tablicy o maksymalnej długości „{0}”.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "To pole musi być ciągiem lub typem tablicy o minimalnej długości „{0}”.",
+    "ThisFieldIsNotAValidPhoneNumber.": "To pole nie jest prawidłowym numerem telefonu.",
+    "ThisFieldMustBeBetween{0}And{1}": "To pole musi zawierać się w przedziale od {0} do {1}.",
+    "ThisFieldMustMatchTheRegularExpression{0}": "To pole musi być zgodne z wyrażeniem regularnym „{0}”.",
+    "ThisFieldIsRequired.": "To pole jest wymagane.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "To pole musi być ciągiem o maksymalnej długości {0}.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "To pole musi być ciągiem o minimalnej długości {1} i maksymalnej długości {0}.",
+    "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "To pole nie jest prawidłowym, w pełni kwalifikowanym adresem URL http, https lub ftp.",
+    "ThisFieldIsInvalid.": "To pole jest nieprawidłowe."
   }
 }

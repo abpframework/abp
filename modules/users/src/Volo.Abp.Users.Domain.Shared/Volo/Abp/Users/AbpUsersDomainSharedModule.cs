@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Users
+namespace Volo.Abp.Users;
+
+public class AbpUsersDomainSharedModule : AbpModule
 {
-    public class AbpUsersDomainSharedModule : AbpModule
-    {
-        
-    }
+
 }

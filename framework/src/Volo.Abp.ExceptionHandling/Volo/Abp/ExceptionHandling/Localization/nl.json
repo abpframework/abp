@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Bron niet gevonden!",
     "DefaultErrorMessage404Detail": "De gevraagde bron kan niet worden gevonden op de server!",
     "EntityNotFoundErrorMessage": "Er is geen entiteit {0} met id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "De door u ingevulde gegevens zijn al gewijzigd door een andere gebruiker/klant. Negeer de wijzigingen die u heeft aangebracht en probeer het vanaf het begin.",
     "Error": "Fout",
     "UnhandledException": "Onverwerkte uitzondering!",
     "401Message": "Ongeautoriseerd",

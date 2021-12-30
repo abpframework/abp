@@ -97,7 +97,7 @@
     "Community": "Comunità",
     "Marketing": "Marketing",
     "CommunityPrivacyPolicyConfirmation": "Accetto i Termini e condizioni e l '<a href=\"https://commercial.abp.io/Privacy\">Informativa sulla privacy</a>.",
-    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\">Apri un numero</a> su GitHub per richiedere un articolo / tutorial che desideri vedere su questo sito web.",
+    "ArticleRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\">Apri un numero</a> su GitHub per richiedere un articolo/tutorial che desideri vedere su questo sito web.",
     "ArticleRequestMessageBody": "Di seguito l'elenco degli articoli richiesti dalla community. Vuoi scrivere un articolo richiesto? Fare clic sulla richiesta e partecipare alla discussione.",
     "Language": "Lingua",
     "CreateArticleLanguageInfo": "La lingua per il contenuto del post.",
@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Devi inserire almeno 3 caratteri!",
     "Volo.AbpIo.Domain:060001": "Source URL(\"{ArticleUrl}\") non è un URL di GitHub",
     "Volo.AbpIo.Domain:060002": "Il contenuto dell'articolo non è disponibile dalla risorsa Github(\"{ArticleUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Nessun contenuto dell'articolo trovato!"
+    "Volo.AbpIo.Domain:060003": "Nessun contenuto dell'articolo trovato!",
+    "SeeMore": "Vedi Altro"
   }
 }

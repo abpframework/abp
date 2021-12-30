@@ -1,8 +1,12 @@
 // This file is part of AbpApplicationConfigurationClientProxy, you can customize it here
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies
+
+using Volo.Abp.DependencyInjection;
+
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
+
+[RemoteService(false)]
+[DisableConventionalRegistration]
+public partial class AbpApplicationConfigurationClientProxy
 {
-    public partial class AbpApplicationConfigurationClientProxy
-    {
-    }
 }

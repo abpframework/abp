@@ -1,25 +1,24 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Volo.Abp.Authorization
+namespace Volo.Abp.Authorization;
+
+public class PermissionsRequirement : IAuthorizationRequirement
 {
-    public class PermissionsRequirement : IAuthorizationRequirement
+    public string[] PermissionNames { get; }
+
+    public bool RequiresAll { get; }
+
+    public PermissionsRequirement([NotNull] string[] permissionNames, bool requiresAll)
     {
-        public string[] PermissionNames { get; }
+        Check.NotNull(permissionNames, nameof(permissionNames));
 
-        public bool RequiresAll { get; }
+        PermissionNames = permissionNames;
+        RequiresAll = requiresAll;
+    }
 
-        public PermissionsRequirement([NotNull]string[] permissionNames, bool requiresAll)
-        {
-            Check.NotNull(permissionNames, nameof(permissionNames));
-
-            PermissionNames = permissionNames;
-            RequiresAll = requiresAll;
-        }
-
-        public override string ToString()
-        {
-            return $"PermissionsRequirement: {string.Join(", ", PermissionNames)}";
-        }
+    public override string ToString()
+    {
+        return $"PermissionsRequirement: {string.Join(", ", PermissionNames)}";
     }
 }

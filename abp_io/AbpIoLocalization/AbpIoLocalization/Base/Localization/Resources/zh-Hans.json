@@ -32,6 +32,13 @@
     "SeeDocuments": "查看文档",
     "Samples": "示例",
     "Framework": "框架",
-    "Support": "支持"
+    "Support": "支持",
+    "FreeDDDBook": "免费 DDD 电子书",
+    "New": "新的",
+    "Volo.AbpIo.Domain:020005": "许可证延长年份不能低于 {MinExtendLicenseYear} 年和大于 {MaxExtendLicenseYear} 年",
+    "TrialLicensePeriodHasExpired": "您的试用许可期限已于 {0} 天前到期。",
+    "TrialLicensePeriodWillExpire": "您的试用许可期限将在 {0} 天后到期。",
+    "TrialLicensePeriodExpireToday": "您的试用许可期将于今天到期。",
+    "PurchaseNow": "现在买！"
   }
 }

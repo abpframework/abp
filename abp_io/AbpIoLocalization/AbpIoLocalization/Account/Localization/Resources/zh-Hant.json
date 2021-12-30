@@ -8,6 +8,8 @@
     "FrameworkDocumentation": "框架文件",
     "OfficialBlog": "官方部落格",
     "CommercialHomePage": "商業版首頁",
-    "CommercialSupportWebSite": "商業版支援網站"
+    "CommercialSupportWebSite": "商業版支援網站",
+    "CommunityWebSite": "ABP社區網站",
+    "ManageAccount": "我的帳戶 | ABP.IO"
   }
 }

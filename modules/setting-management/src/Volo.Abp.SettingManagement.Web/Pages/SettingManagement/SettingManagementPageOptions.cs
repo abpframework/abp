@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
-{
-    public class SettingManagementPageOptions
-    {
-        public List<ISettingPageContributor> Contributors { get; }
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 
-        public SettingManagementPageOptions()
-        {
-            Contributors = new List<ISettingPageContributor>();
-        }
+public class SettingManagementPageOptions
+{
+    public List<ISettingPageContributor> Contributors { get; }
+
+    public SettingManagementPageOptions()
+    {
+        Contributors = new List<ISettingPageContributor>();
     }
 }

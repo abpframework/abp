@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.DistributedLocking
+namespace Volo.Abp.DistributedLocking;
+
+public class AbpDistributedLockingAbstractionsTestBase : AbpIntegratedTest<AbpDistributedLockingAbstractionsTestModule>
 {
-    public class AbpDistributedLockingAbstractionsTestBase : AbpIntegratedTest<AbpDistributedLockingAbstractionsTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

@@ -10,34 +10,33 @@ using Volo.Abp.Account;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.Account.ClientProxies
+namespace Volo.Abp.Account.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IAccountAppService), typeof(AccountClientProxy))]
+public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, IAccountAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IAccountAppService), typeof(AccountClientProxy))]
-    public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, IAccountAppService
+    public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
     {
-        public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
+        return await RequestAsync<IdentityUserDto>(nameof(RegisterAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(RegisterAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(RegisterDto), input }
-            });
-        }
+            { typeof(RegisterDto), input }
+        });
+    }
 
-        public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
+    public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
+    {
+        await RequestAsync(nameof(SendPasswordResetCodeAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(SendPasswordResetCodeAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(SendPasswordResetCodeDto), input }
-            });
-        }
+            { typeof(SendPasswordResetCodeDto), input }
+        });
+    }
 
-        public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
+    public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
+    {
+        await RequestAsync(nameof(ResetPasswordAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(ResetPasswordAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(ResetPasswordDto), input }
-            });
-        }
+            { typeof(ResetPasswordDto), input }
+        });
     }
 }

@@ -1,6 +1,9 @@
 {
   "culture": "hi",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "जन्म तिथि1",
+    "DisplayName:BirthDate2": "जन्म तिथि 2",
+    "PersonModel:BirthDate3": "जन्म तिथि3",
     "BirthDate": "जन्म तिथि",
     "Value1": "मान एक"
   }

@@ -1,0 +1,15 @@
+{
+  "culture": "ru",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Хост сервера",
+    "Description:Abp.Ldap.ServerHost": "Хост сервера",
+    "DisplayName:Abp.Ldap.ServerPort": "Порт сервера",
+    "Description:Abp.Ldap.ServerPort": "Порт сервера",
+    "DisplayName:Abp.Ldap.BaseDc": "Компонент базового домена",
+    "Description:Abp.Ldap.BaseDc": "Компонент базового домена",
+    "DisplayName:Abp.Ldap.UserName": "Имя пользователя",
+    "Description:Abp.Ldap.UserName": "Имя пользователя",
+    "DisplayName:Abp.Ldap.Password": "Пароль",
+    "Description:Abp.Ldap.Password": "Пароль"
+  }
+}

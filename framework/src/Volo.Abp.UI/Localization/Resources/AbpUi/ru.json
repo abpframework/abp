@@ -4,6 +4,7 @@
     "Languages": "Языки",
     "AreYouSure": "Вы уверены?",
     "Cancel": "Отмена",
+    "Clear": "Прозрачный",
     "Yes": "Да",
     "No": "Нет",
     "Ok": "ОК",
@@ -31,9 +32,12 @@
     "PagerFirst": "Первая",
     "PagerLast": "Последняя",
     "PagerInfo": "Записи с _START_ до _END_ из _TOTAL_ записей",
+    "PagerInfo{0}{1}{2}": "Показано записей от {0} до {1} из {2}",
     "PagerInfoEmpty": "Записи с 0 до 0 из 0 записей.",
     "PagerInfoFiltered": "(отфильтровано из _MAX_ записей)",
     "NoDataAvailableInDatatable": "Данные в таблице отсутствуют",
+    "Total": "общий",
+    "Selected": "выбранный",
     "PagerShowMenuEntries": "Показать _MENU_ записей",
     "DatatableActionDropdownDefaultText": "Действия",
     "ChangePassword": "Изменить пароль",
@@ -41,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "У вас есть несохраненные изменения.",
     "GoHomePage": "Вернуться на главную страницу",
     "GoBack": "Вернуться назад",
-    "Search": "поиск"
+    "Search": "поиск",
+    "ItemWillBeDeletedMessageWithFormat": "{0} будет удален!",
+    "ItemWillBeDeletedMessage": "Этот предмет будет удален!",
+    "ManageYourAccount": "Настройте свой аккаунт"
   }
 }

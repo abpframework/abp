@@ -1,0 +1,6 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Volo.Abp.Http.DynamicProxying:10001": "Wyjątek biznesowy z danymi: {0}"
+  }
+}

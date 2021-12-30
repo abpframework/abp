@@ -31,6 +31,8 @@
     "DisplayName:GitHubRootUrl": "GitHub kök adresi",
     "DisplayName:GitHubAccessToken": "GitHub erişim token",
     "DisplayName:GitHubUserAgent": "GitHub kullanıcı temsilcisi",
+    "DisplayName:GithubVersionProviderSource": "GitHub sürüm sağlayıcı kaynağı",
+    "DisplayName:VersionBranchPrefix": "Sürüm dalı öneki",
     "DisplayName:All": "Çekme bütün",
     "DisplayName:LanguageCode": "Dil kodu",
     "DisplayName:Version": "versiyon",
@@ -42,6 +44,16 @@
     "RemoveFromCacheConfirmation": "Bu maddeyi önbellekten kaldırmak istediğiniz emin misiniz?",
     "ReIndexDocumentConfirmation": "Bu maddeyi yeniden indekslemek istediğinize emin misiniz?",
     "DeleteFromDatabase": "Veritabanından sil",
-    "Deleted": "Silindi"
+    "Deleted": "Silindi",
+    "Search": "Arama",
+    "StartDate": "Başlangıç tarihi",
+    "EndDate": "Bitiş tarihi",
+    "CreationTime": "oluşturma zamanı",
+    "LastUpdateTime": "Son Güncelleme",
+    "LastSignificantUpdateTime": "Son önemli güncelleme",
+    "Version": "sürüm",
+    "LanguageCode": "Dil kodu",
+    "FileName": "Dosya adı",
+    "LastCachedTime": "Önbellek süresi"
   }
 }

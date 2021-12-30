@@ -35,6 +35,10 @@
     "Support": "Supporto",
     "FreeDDDBook": "DDD E-Book Gratuito",
     "New": "Nuovo",
-    "Volo.AbpIo.Domain:020005": "Estensione Licenza non può essere inferiore a {MinExtendLicenseYear} anno e maggiore di {MaxExtendLicenseYear} anni "
+    "Volo.AbpIo.Domain:020005": "Estensione Licenza non può essere inferiore a {MinExtendLicenseYear} anno e maggiore di {MaxExtendLicenseYear} anni ",
+    "TrialLicensePeriodHasExpired": "Il periodo della tua licenza di prova è scaduto {0} giorni fa.",
+    "TrialLicensePeriodWillExpire": "Il periodo della tua licenza di prova scadrà tra {0} giorni.",
+    "TrialLicensePeriodExpireToday": "Il periodo di licenza di prova scadrà oggi.",
+    "PurchaseNow": "Acquista adesso!"
   }
 }

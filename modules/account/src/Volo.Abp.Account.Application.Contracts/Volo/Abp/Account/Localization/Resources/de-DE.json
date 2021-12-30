@@ -60,6 +60,8 @@
     "Volo.Account:InvalidEmailAddress": "Die angegebene E-Mail-Adresse kann nicht gefunden werden: {0}",
     "PasswordReset": "Passwort zurücksetzen",
     "PasswordResetInfoInEmail": "Wir haben eine Anfrage zur Wiederherstellung des Kontos erhalten! Wenn Sie diese Anforderung initiiert haben, klicken Sie auf den folgenden Link, um Ihr Passwort zurückzusetzen.",
-    "ResetMyPassword": "Mein Passwort zurücksetzen"
+    "ResetMyPassword": "Mein Passwort zurücksetzen",
+    "AccessDenied": "Zugriff abgelehnt!",
+    "AccessDeniedMessage": "Sie haben keinen Zugriff auf diese Ressource."
   }
 }

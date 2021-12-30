@@ -26,6 +26,19 @@
     "ContributionGuide": "貢獻指南",
     "Blog": "部落格",
     "Commercial": "商業版",
-    "SeeDocuments": "查看文件"
+    "MyAccount": "我的賬戶",
+    "Permission:License": "執照",
+    "Permission:UserInfo": "用戶信息",
+    "SeeDocuments": "查看文件",
+    "Samples": "樣品",
+    "Framework": "框架",
+    "Support": "支持",
+    "FreeDDDBook": "免費 DDD 電子書",
+    "New": "新的",
+    "Volo.AbpIo.Domain:020005": "許可證延長年不能低於 {MinExtendLicenseYear} 年且大於 {MaxExtendLicenseYear} 年",
+    "TrialLicensePeriodHasExpired": "您的試用許可期限已於 {0} 天前到期。",
+    "TrialLicensePeriodWillExpire": "您的試用許可期限將在 {0} 天后到期。",
+    "TrialLicensePeriodExpireToday": "您的試用許可期將於今天到期。",
+    "PurchaseNow": "現在買！"
   }
 }

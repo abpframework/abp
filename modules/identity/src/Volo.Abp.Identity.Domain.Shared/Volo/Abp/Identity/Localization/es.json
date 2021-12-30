@@ -25,6 +25,7 @@
     "DisplayName:Email": "Dirección de e-mail",
     "DisplayName:PhoneNumber": "Número de teléfono",
     "DisplayName:TwoFactorEnabled": "Autenticación en dos pasos",
+    "DisplayName:IsActive": "Activo",
     "DisplayName:LockoutEnabled": "Bloquear la cuenta después de intentos de inicio de sesión fallidos",
     "NewRole": "Nuevo rol",
     "RoleName": "Nombre de rol",
@@ -70,6 +71,7 @@
     "Volo.Abp.Identity:010007": "No puedes cambiar tu configuración de autentificación de dos pasos.",
     "Volo.Abp.Identity:010008": "No está permitido cambiar la configuración de autenticación de dos pasos.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Número máximo de unidades organizativas por usuario",
+    "ThisUserIsNotActiveMessage": "Este usuario no está activo.",
     "Permission:IdentityManagement": "Gestión de identidades",
     "Permission:RoleManagement": "Gestión de roles",
     "Permission:Create": "Crear",
@@ -78,12 +80,6 @@
     "Permission:ChangePermissions": "Cambiar permisos",
     "Permission:UserManagement": "Gestión de usuarios",
     "Permission:UserLookup": "Busqueda de usuario",
-    "Feature:IdentityGroup": "Identidad",
-    "Feature:TwoFactor": "Autenticatión de dos pasos",
-    "Feature:TwoFactorDescription": "Establecer autenticación de dos pasos. Valores opcionales: Opcional, Deshabilitado, Obligatorio",
-    "Feature:TwoFactor.Optional": "Opcional",
-    "Feature:TwoFactor.Disabled": "Deshabilitado",
-    "Feature:TwoFactor.Forced": "Obligatorio",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Longitud requerida",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Caracteres únicos requeridos",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Caracteres no alfanuméricos requeridos",
@@ -111,10 +107,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Si el número de teléfono puede ser confirmado por el usuario. ",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Sí un número de teléfono confirmado es requerido para iniciar sesión.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Si el nombre de usuario puede ser actualizado por el usuario.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si el e-mail puede ser actualizado por el usuario.",
-    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Autenticación de dos pasos",
-    "Description:Abp.Identity.TwoFactorBehaviour": "Autenticación de dos pasos",
-    "DisplayName:Abp.Identity.UsersCanChange": "Permitir a los usuario cambiar su autenticación de dos pasos.",
-    "Description:Abp.Identity.UsersCanChange": "Permitir a los usuario cambiar su autenticación de dos pasos."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si el e-mail puede ser actualizado por el usuario."
   }
 }

@@ -100,6 +100,9 @@ var abp = abp || {};
     abp.event.on('abp.configurationInitialized', function () {
         var l = abp.localization.getResource('AbpUi');
 
+        abp.libs.sweetAlert.config.default.confirmButtonText = l('Yes');
+        abp.libs.sweetAlert.config.default.denyButtonText = l('No');
+        abp.libs.sweetAlert.config.default.cancelButtonText = l('Cancel');
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
         abp.libs.sweetAlert.config.confirm.showCancelButton = true;
         abp.libs.sweetAlert.config.confirm.reverseButtons = true;
