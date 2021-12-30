@@ -12,5 +12,12 @@ namespace Volo.Abp.Options
                 action(options);
             }
         }
+
+        public TOptions Configure()
+        {
+            var options = Activator.CreateInstance<TOptions>();
+            Configure(options);
+            return options;
+        }
     }
 }
