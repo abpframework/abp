@@ -21,6 +21,7 @@ namespace Volo.Abp.Http.Client.Web.Conventions
     public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     {
         protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
+        protected readonly List<ControllerModel> ControllerWithAttributeRoute;
         protected readonly List<ActionModel> ActionWithAttributeRoute;
 
         public AbpHttpClientProxyServiceConvention(
@@ -30,6 +31,7 @@ namespace Volo.Abp.Http.Client.Web.Conventions
             : base(options, conventionalRouteBuilder)
         {
             ClientProxyApiDescriptionFinder = clientProxyApiDescriptionFinder;
+            ControllerWithAttributeRoute = new List<ControllerModel>();
             ActionWithAttributeRoute = new List<ActionModel>();
         }
 
@@ -51,15 +53,6 @@ namespace Volo.Abp.Http.Client.Web.Conventions
             {
                 controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
 
-                var moduleApiDescription = FindModuleApiDescriptionModel(controller);
-
-                if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
-                {
-                    var selector = controller.Selectors.FirstOrDefault();
-                    selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
-                    controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
-                }
-
                 var controllerApiDescription = FindControllerApiDescriptionModel(controller);
                 if (controllerApiDescription != null &&
                     !controllerApiDescription.ControllerGroupName.IsNullOrWhiteSpace())
@@ -76,6 +69,14 @@ namespace Volo.Abp.Http.Client.Web.Conventions
         protected virtual void ConfigureClientProxySelector(ControllerModel controller)
         {
             RemoveEmptySelectors(controller.Selectors);
+
+            var moduleApiDescription = FindModuleApiDescriptionModel(controller);
+            if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
+            {
+                var selector = controller.Selectors.FirstOrDefault();
+                selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
+                controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+            }
 
             var controllerType = controller.ControllerType.AsType();
             var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
@@ -111,15 +112,14 @@ namespace Volo.Abp.Http.Client.Web.Conventions
                 return;;
             }
 
+            ControllerWithAttributeRoute.Add(controller);
             ActionWithAttributeRoute.Add(action);
 
             if (!action.Selectors.Any())
             {
                 var abpServiceSelectorModel = new SelectorModel
                 {
-                    AttributeRouteModel = new AttributeRouteModel(
-                        new RouteAttribute(template: actionApiDescriptionModel.Url)
-                    ),
+                    AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url)),
                     ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
                 };
 
@@ -142,9 +142,7 @@ namespace Volo.Abp.Http.Client.Web.Conventions
 
                     if (selector.AttributeRouteModel == null)
                     {
-                        selector.AttributeRouteModel = new AttributeRouteModel(
-                            new RouteAttribute(template: actionApiDescriptionModel.Url)
-                        );
+                        selector.AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url));
                     }
 
                     if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
@@ -157,14 +155,17 @@ namespace Volo.Abp.Http.Client.Web.Conventions
 
         protected virtual void ConfigureClientProxyApiExplorer(ControllerModel controller)
         {
-            if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+            if (ControllerWithAttributeRoute.Contains(controller))
             {
-                controller.ApiExplorer.GroupName = controller.ControllerName;
-            }
+                if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+                {
+                    controller.ApiExplorer.GroupName = controller.ControllerName;
+                }
 
-            if (controller.ApiExplorer.IsVisible == null)
-            {
-                controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
+                if (controller.ApiExplorer.IsVisible == null)
+                {
+                    controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
+                }
             }
 
             foreach (var action in controller.Actions)
