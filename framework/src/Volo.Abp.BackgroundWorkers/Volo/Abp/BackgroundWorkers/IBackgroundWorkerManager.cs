@@ -1,18 +1,18 @@
-﻿using Volo.Abp.Threading;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Threading;
 
-namespace Volo.Abp.BackgroundWorkers
+namespace Volo.Abp.BackgroundWorkers;
+
+/// <summary>
+/// Used to manage background workers.
+/// </summary>
+public interface IBackgroundWorkerManager : IRunnable
 {
     /// <summary>
-    /// Used to manage background workers.
+    /// Adds a new worker. Starts the worker immediately if <see cref="IBackgroundWorkerManager"/> has started.
     /// </summary>
-    public interface IBackgroundWorkerManager : IRunnable
-    {
-        /// <summary>
-        /// Adds a new worker. Starts the worker immediately if <see cref="IBackgroundWorkerManager"/> has started.
-        /// </summary>
-        /// <param name="worker">
-        /// The worker. It should be resolved from IOC.
-        /// </param>
-        void Add(IBackgroundWorker worker);
-    }
+    /// <param name="worker">
+    /// The worker. It should be resolved from IOC.
+    /// </param>
+    Task AddAsync(IBackgroundWorker worker);
 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class TagEntityTypeDefinitions : List<TagEntityTypeDefiniton>
 {
-    public class TagEntityTypeDefinitions : List<TagEntityTypeDefiniton>
-    {
-    }
 }

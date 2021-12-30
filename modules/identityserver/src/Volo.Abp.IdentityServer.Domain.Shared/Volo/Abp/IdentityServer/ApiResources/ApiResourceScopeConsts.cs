@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.IdentityServer.ApiResources
+﻿namespace Volo.Abp.IdentityServer.ApiResources;
+
+public class ApiResourceScopeConsts
 {
-    public class ApiResourceScopeConsts
-    {
-        public static int ScopeMaxLength { get; set; } = 200;
-    }
+    public static int ScopeMaxLength { get; set; } = 200;
 }

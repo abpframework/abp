@@ -127,13 +127,7 @@ First of all, you need to have EF Core or MongoDB installed into your solution. 
 
 #### Install the packages
 
-Install the new [Volo.Abp.EventBus.Boxes](https://www.nuget.org/packages/Volo.Abp.EventBus.Boxes) NuGet package to your database layer (to `EntityFrameworkCore` or `MongoDB` project) or to the host application. Open a command-line terminal at the root directory of your database (or host) project and execute the following command:
-
-````csharp
-abp add-package Volo.Abp.EventBus.Boxes
-````
-
-This will install the package and setup the ABP module dependency. This package depends on [DistributedLock.Core](https://www.nuget.org/packages/DistributedLock.Core) library which provides a distributed locking system for concurrency control in a distributed environment. There are [many distributed lock providers](https://github.com/madelson/DistributedLock#implementations), including Redis, SqlServer and ZooKeeper. You can use the one you like. Here, I will show the Redis provider.
+For the outbox & inbox functionality, ABP depends on [DistributedLock.Core](https://www.nuget.org/packages/DistributedLock.Core) library which provides a distributed locking system for concurrency control in a distributed environment. There are [many distributed lock providers](https://github.com/madelson/DistributedLock#implementations), including Redis, SqlServer and ZooKeeper. You can use the one you like. Here, I will show the Redis provider.
 
 Add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the ConfigureService method of your ABP module class:
 
@@ -284,6 +278,16 @@ Previously, it was a responsibility of the developer to set `TenantId` for new e
 This can be a breaking change in rare cases (for example, if you create host side entities from a tenant context and do not explicitly set host entity's `TenantId` to `null`).
 
 ## Community News
+
+### ABP Community Talks 2021.12
+
+![community-talks](community-talks.png)
+
+As the core ABP development team, we've decided to organize monthly live meetings with the ABP community. The first live meeting will be at **December 16, 2021, 17:00 (UTC)** on YouTube. ABP core team members will present some of the new features coming with ABP 5.0.
+
+**Join this event on the Kommunity platform: https://kommunity.com/volosoft/events/abp-community-talks-4afca9c9**
+
+You can also [subscribe to the Volosoft channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) for reminders for further ABP events and videos.
 
 ### ABP was on ASP.NET Community Startup!
 

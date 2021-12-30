@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public class NewtonsoftStringValueJsonConverter_Tests : StringValueJsonConverter_Tests
 {
-    public class NewtonsoftStringValueJsonConverter_Tests : StringValueJsonConverter_Tests
+    protected override void AfterAddApplication(IServiceCollection services)
     {
-        protected override void AfterAddApplication(IServiceCollection services)
+        services.PreConfigure<AbpJsonOptions>(options =>
         {
-            services.PreConfigure<AbpJsonOptions>(options =>
-            {
-                options.UseHybridSerializer = true;
-            });
-        }
+            options.UseHybridSerializer = true;
+        });
     }
 }

@@ -5,51 +5,50 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
 {
-    public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
+    protected AbpTextTemplatingOptions Options { get; }
+
+    public AbpTemplateRenderer(
+        IServiceScopeFactory serviceScopeFactory,
+        ITemplateDefinitionManager templateDefinitionManager,
+        IOptions<AbpTextTemplatingOptions> options)
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
-        protected AbpTextTemplatingOptions Options { get; }
+        ServiceScopeFactory = serviceScopeFactory;
+        TemplateDefinitionManager = templateDefinitionManager;
+        Options = options.Value;
+    }
 
-        public AbpTemplateRenderer(
-            IServiceScopeFactory serviceScopeFactory,
-            ITemplateDefinitionManager templateDefinitionManager,
-            IOptions<AbpTextTemplatingOptions> options)
+    public virtual async Task<string> RenderAsync(
+        string templateName,
+        object model = null,
+        string cultureName = null,
+        Dictionary<string, object> globalContext = null)
+    {
+        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+
+        var renderEngine = templateDefinition.RenderEngine;
+
+        if (renderEngine.IsNullOrWhiteSpace())
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            TemplateDefinitionManager = templateDefinitionManager;
-            Options = options.Value;
+            renderEngine = Options.DefaultRenderingEngine;
         }
 
-        public virtual async Task<string> RenderAsync(
-            string templateName,
-            object model = null,
-            string cultureName = null,
-            Dictionary<string, object> globalContext = null)
+        var providerType = Options.RenderingEngines.GetOrDefault(renderEngine);
+
+        if (providerType != null && typeof(ITemplateRenderingEngine).IsAssignableFrom(providerType))
         {
-            var templateDefinition = TemplateDefinitionManager.Get(templateName);
-
-            var renderEngine = templateDefinition.RenderEngine;
-
-            if (renderEngine.IsNullOrWhiteSpace())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                renderEngine = Options.DefaultRenderingEngine;
+                var templateRenderingEngine = (ITemplateRenderingEngine)scope.ServiceProvider.GetRequiredService(providerType);
+                return await templateRenderingEngine.RenderAsync(templateName, model, cultureName, globalContext);
             }
-
-            var providerType = Options.RenderingEngines.GetOrDefault(renderEngine);
-
-            if (providerType != null && typeof(ITemplateRenderingEngine).IsAssignableFrom(providerType))
-            {
-                using (var scope = ServiceScopeFactory.CreateScope())
-                {
-                    var templateRenderingEngine = (ITemplateRenderingEngine)scope.ServiceProvider.GetRequiredService(providerType);
-                    return await templateRenderingEngine.RenderAsync(templateName, model, cultureName, globalContext);
-                }
-            }
-
-            throw new AbpException("There is no rendering engine found with template name: " + templateName);
         }
+
+        throw new AbpException("There is no rendering engine found with template name: " + templateName);
     }
 }

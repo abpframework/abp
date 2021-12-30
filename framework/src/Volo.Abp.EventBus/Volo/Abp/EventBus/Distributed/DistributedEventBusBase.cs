@@ -8,157 +8,156 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.EventBus.Distributed
+namespace Volo.Abp.EventBus.Distributed;
+
+public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus, ISupportsEventBoxes
 {
-    public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventBus, ISupportsEventBoxes
+    protected IGuidGenerator GuidGenerator { get; }
+    protected IClock Clock { get; }
+    protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+
+    protected DistributedEventBusBase(
+        IServiceScopeFactory serviceScopeFactory,
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
+        IGuidGenerator guidGenerator,
+        IClock clock
+    ) : base(
+        serviceScopeFactory,
+        currentTenant,
+        unitOfWorkManager)
     {
-        protected IGuidGenerator GuidGenerator { get; }
-        protected IClock Clock { get; }
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+        GuidGenerator = guidGenerator;
+        Clock = clock;
+        AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
+    }
 
-        protected DistributedEventBusBase(
-            IServiceScopeFactory serviceScopeFactory,
-            ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
-            IGuidGenerator guidGenerator,
-            IClock clock
-        ) : base(
-            serviceScopeFactory,
-            currentTenant,
-            unitOfWorkManager)
+    public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+    {
+        return Subscribe(typeof(TEvent), handler);
+    }
+
+    public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
+    }
+
+    public Task PublishAsync<TEvent>(
+        TEvent eventData,
+        bool onUnitOfWorkComplete = true,
+        bool useOutbox = true)
+        where TEvent : class
+    {
+        return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
+    }
+
+    public async Task PublishAsync(
+        Type eventType,
+        object eventData,
+        bool onUnitOfWorkComplete = true,
+        bool useOutbox = true)
+    {
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
         {
-            GuidGenerator = guidGenerator;
-            Clock = clock;
-            AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext(), useOutbox)
+            );
+            return;
         }
 
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+        if (useOutbox)
         {
-            return Subscribe(typeof(TEvent), handler);
-        }
-
-        public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
-        {
-            return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
-        }
-
-        public Task PublishAsync<TEvent>(
-            TEvent eventData,
-            bool onUnitOfWorkComplete = true,
-            bool useOutbox = true)
-            where TEvent : class
-        {
-            return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
-        }
-
-        public async Task PublishAsync(
-            Type eventType,
-            object eventData,
-            bool onUnitOfWorkComplete = true,
-            bool useOutbox = true)
-        {
-            if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+            if (await AddToOutboxAsync(eventType, eventData))
             {
-                AddToUnitOfWork(
-                    UnitOfWorkManager.Current,
-                    new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext(), useOutbox)
-                );
                 return;
             }
-
-            if (useOutbox)
-            {
-                if (await AddToOutboxAsync(eventType, eventData))
-                {
-                    return;
-                }
-            }
-
-            await PublishToEventBusAsync(eventType, eventData);
         }
 
-        public abstract Task PublishFromOutboxAsync(
-            OutgoingEventInfo outgoingEvent,
-            OutboxConfig outboxConfig
-        );
+        await PublishToEventBusAsync(eventType, eventData);
+    }
 
-        public abstract Task ProcessFromInboxAsync(
-            IncomingEventInfo incomingEvent,
-            InboxConfig inboxConfig);
+    public abstract Task PublishFromOutboxAsync(
+        OutgoingEventInfo outgoingEvent,
+        OutboxConfig outboxConfig
+    );
 
-        private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
+    public abstract Task ProcessFromInboxAsync(
+        IncomingEventInfo incomingEvent,
+        InboxConfig inboxConfig);
+
+    private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
+    {
+        var unitOfWork = UnitOfWorkManager.Current;
+        if (unitOfWork == null)
         {
-            var unitOfWork = UnitOfWorkManager.Current;
-            if (unitOfWork == null)
-            {
-                return false;
-            }
-
-            foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
-            {
-                if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
-                {
-                    var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                    var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-                    await eventOutbox.EnqueueAsync(
-                        new OutgoingEventInfo(
-                            GuidGenerator.Create(),
-                            eventName,
-                            Serialize(eventData),
-                            Clock.Now
-                        )
-                    );
-                    return true;
-                }
-            }
-
             return false;
         }
 
-        protected async Task<bool> AddToInboxAsync(
-            string messageId,
-            string eventName,
-            Type eventType,
-            byte[] eventBytes)
+        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
         {
-            if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
+            if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
-                return false;
+                var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                await eventOutbox.EnqueueAsync(
+                    new OutgoingEventInfo(
+                        GuidGenerator.Create(),
+                        eventName,
+                        Serialize(eventData),
+                        Clock.Now
+                    )
+                );
+                return true;
             }
-
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values)
-                {
-                    if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
-                    {
-                        var eventInbox = (IEventInbox) scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
-
-                        if (!messageId.IsNullOrEmpty())
-                        {
-                            if (await eventInbox.ExistsByMessageIdAsync(messageId))
-                            {
-                                continue;
-                            }
-                        }
-
-                        await eventInbox.EnqueueAsync(
-                            new IncomingEventInfo(
-                                GuidGenerator.Create(),
-                                messageId,
-                                eventName,
-                                eventBytes,
-                                Clock.Now
-                            )
-                        );
-                    }
-                }
-            }
-
-            return true;
         }
 
-        protected abstract byte[] Serialize(object eventData);
+        return false;
     }
+
+    protected async Task<bool> AddToInboxAsync(
+        string messageId,
+        string eventName,
+        Type eventType,
+        byte[] eventBytes)
+    {
+        if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
+        {
+            return false;
+        }
+
+        using (var scope = ServiceScopeFactory.CreateScope())
+        {
+            foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values)
+            {
+                if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
+                {
+                    var eventInbox = (IEventInbox)scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+
+                    if (!messageId.IsNullOrEmpty())
+                    {
+                        if (await eventInbox.ExistsByMessageIdAsync(messageId))
+                        {
+                            continue;
+                        }
+                    }
+
+                    await eventInbox.EnqueueAsync(
+                        new IncomingEventInfo(
+                            GuidGenerator.Create(),
+                            messageId,
+                            eventName,
+                            eventBytes,
+                            Clock.Now
+                        )
+                    );
+                }
+            }
+        }
+
+        return true;
+    }
+
+    protected abstract byte[] Serialize(object eventData);
 }
