@@ -5,67 +5,66 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.Client
+namespace Volo.Abp.AspNetCore.Mvc.Client;
+
+public class RemoteLocalizationContributor : ILocalizationResourceContributor
 {
-    public class RemoteLocalizationContributor : ILocalizationResourceContributor
+    private LocalizationResource _resource;
+    private ICachedApplicationConfigurationClient _applicationConfigurationClient;
+    private ILogger<RemoteLocalizationContributor> _logger;
+
+    public void Initialize(LocalizationResourceInitializationContext context)
     {
-        private LocalizationResource _resource;
-        private ICachedApplicationConfigurationClient _applicationConfigurationClient;
-        private ILogger<RemoteLocalizationContributor> _logger;
+        _resource = context.Resource;
+        _applicationConfigurationClient = context.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
+        _logger = context.ServiceProvider.GetService<ILogger<RemoteLocalizationContributor>>()
+                  ?? NullLogger<RemoteLocalizationContributor>.Instance;
+    }
 
-        public void Initialize(LocalizationResourceInitializationContext context)
+    public LocalizedString GetOrNull(string cultureName, string name)
+    {
+        var resource = GetResourceOrNull();
+        if (resource == null)
         {
-            _resource = context.Resource;
-            _applicationConfigurationClient = context.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
-            _logger = context.ServiceProvider.GetService<ILogger<RemoteLocalizationContributor>>()
-                      ?? NullLogger<RemoteLocalizationContributor>.Instance;
+            return null;
         }
 
-        public LocalizedString GetOrNull(string cultureName, string name)
+        var value = resource.GetOrDefault(name);
+        if (value == null)
         {
-            var resource = GetResourceOrNull();
-            if (resource == null)
-            {
-                return null;
-            }
-
-            var value = resource.GetOrDefault(name);
-            if (value == null)
-            {
-                return null;
-            }
-
-            return new LocalizedString(name, value);
+            return null;
         }
 
-        public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
-        {
-            var resource = GetResourceOrNull();
-            if (resource == null)
-            {
-                return;
-            }
+        return new LocalizedString(name, value);
+    }
 
-            foreach (var keyValue in resource)
-            {
-                dictionary[keyValue.Key] = new LocalizedString(keyValue.Key, keyValue.Value);
-            }
+    public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        var resource = GetResourceOrNull();
+        if (resource == null)
+        {
+            return;
         }
 
-        private Dictionary<string, string> GetResourceOrNull()
+        foreach (var keyValue in resource)
         {
-            var applicationConfigurationDto = _applicationConfigurationClient.Get();
-
-            var resource = applicationConfigurationDto
-                .Localization.Values
-                .GetOrDefault(_resource.ResourceName);
-
-            if (resource == null)
-            {
-                _logger.LogWarning($"Could not find the localization resource {_resource.ResourceName} on the remote server!");
-            }
-
-            return resource;
+            dictionary[keyValue.Key] = new LocalizedString(keyValue.Key, keyValue.Value);
         }
+    }
+
+    private Dictionary<string, string> GetResourceOrNull()
+    {
+        var applicationConfigurationDto = _applicationConfigurationClient.Get();
+
+        var resource = applicationConfigurationDto
+            .Localization.Values
+            .GetOrDefault(_resource.ResourceName);
+
+        if (resource == null)
+        {
+            _logger.LogWarning($"Could not find the localization resource {_resource.ResourceName} on the remote server!");
+        }
+
+        return resource;
     }
 }

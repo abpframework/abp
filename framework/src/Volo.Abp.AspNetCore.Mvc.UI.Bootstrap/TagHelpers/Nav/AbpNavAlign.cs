@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
+
+public enum AbpNavAlign
 {
-    public enum AbpNavAlign
-    {
-        Default,
-        Start,
-        Center,
-        End
-    }
+    Default,
+    Start,
+    Center,
+    End
 }

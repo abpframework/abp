@@ -9,80 +9,79 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AzureServiceBus
+namespace Volo.Abp.AzureServiceBus;
+
+public class ConnectionPool : IConnectionPool, ISingletonDependency
 {
-    public class ConnectionPool : IConnectionPool, ISingletonDependency
+    public ILogger<ConnectionPool> Logger { get; set; }
+
+    private bool _isDisposed;
+    private readonly AbpAzureServiceBusOptions _options;
+    private readonly ConcurrentDictionary<string, Lazy<ServiceBusClient>> _clients;
+    private readonly ConcurrentDictionary<string, Lazy<ServiceBusAdministrationClient>> _adminClients;
+
+    public ConnectionPool(IOptions<AbpAzureServiceBusOptions> options)
     {
-        public ILogger<ConnectionPool> Logger { get; set; }
+        _options = options.Value;
+        _clients = new ConcurrentDictionary<string, Lazy<ServiceBusClient>>();
+        _adminClients = new ConcurrentDictionary<string, Lazy<ServiceBusAdministrationClient>>();
+        Logger = new NullLogger<ConnectionPool>();
+    }
 
-        private bool _isDisposed;
-        private readonly AbpAzureServiceBusOptions _options;
-        private readonly ConcurrentDictionary<string, Lazy<ServiceBusClient>> _clients;
-        private readonly ConcurrentDictionary<string, Lazy<ServiceBusAdministrationClient>> _adminClients;
+    public ServiceBusClient GetClient(string connectionName)
+    {
+        connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
+        return _clients.GetOrAdd(
+            connectionName, new Lazy<ServiceBusClient>(() =>
+            {
+                var config = _options.Connections.GetOrDefault(connectionName);
+                return new ServiceBusClient(config.ConnectionString, config.Client);
+            })
+        ).Value;
+    }
 
-        public ConnectionPool(IOptions<AbpAzureServiceBusOptions> options)
+    public ServiceBusAdministrationClient GetAdministrationClient(string connectionName)
+    {
+        connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
+        return _adminClients.GetOrAdd(
+            connectionName, new Lazy<ServiceBusAdministrationClient>(() =>
+            {
+                var config = _options.Connections.GetOrDefault(connectionName);
+                return new ServiceBusAdministrationClient(config.ConnectionString);
+            })
+        ).Value;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_isDisposed)
         {
-            _options = options.Value;
-            _clients = new ConcurrentDictionary<string, Lazy<ServiceBusClient>>();
-            _adminClients = new ConcurrentDictionary<string, Lazy<ServiceBusAdministrationClient>>();
-            Logger = new NullLogger<ConnectionPool>();
+            return;
         }
 
-        public ServiceBusClient GetClient(string connectionName)
+        _isDisposed = true;
+        if (!_clients.Any())
         {
-            connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
-            return _clients.GetOrAdd(
-                connectionName, new Lazy<ServiceBusClient>(() =>
-                {
-                    var config = _options.Connections.GetOrDefault(connectionName);
-                    return new ServiceBusClient(config.ConnectionString, config.Client);
-                })
-            ).Value;
+            Logger.LogDebug($"Disposed connection pool with no connection in the pool.");
+            return;
         }
 
-        public ServiceBusAdministrationClient GetAdministrationClient(string connectionName)
+        Logger.LogInformation($"Disposing connection pool ({_clients.Count} connections).");
+
+        foreach (var connection in _clients.Values)
         {
-            connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
-            return _adminClients.GetOrAdd(
-                connectionName, new Lazy<ServiceBusAdministrationClient>(() =>
-                {
-                    var config = _options.Connections.GetOrDefault(connectionName);
-                    return new ServiceBusAdministrationClient(config.ConnectionString);
-                })
-            ).Value;
+            await connection.Value.DisposeAsync();
         }
 
-        public async ValueTask DisposeAsync()
+        _clients.Clear();
+
+        if (!_adminClients.Any())
         {
-            if (_isDisposed)
-            {
-                return;
-            }
-
-            _isDisposed = true;
-            if (!_clients.Any())
-            {
-                Logger.LogDebug($"Disposed connection pool with no connection in the pool.");
-                return;
-            }
-
-            Logger.LogInformation($"Disposing connection pool ({_clients.Count} connections).");
-
-            foreach (var connection in _clients.Values)
-            {
-                await connection.Value.DisposeAsync();
-            }
-
-            _clients.Clear();
-            
-            if (!_adminClients.Any())
-            {
-                Logger.LogDebug($"Disposed admin connection pool with no admin connection in the pool.");
-                return;
-            }
-
-            Logger.LogInformation($"Disposing admin connection pool ({_adminClients.Count} admin connections).");
-            _adminClients.Clear();
+            Logger.LogDebug($"Disposed admin connection pool with no admin connection in the pool.");
+            return;
         }
+
+        Logger.LogInformation($"Disposing admin connection pool ({_adminClients.Count} admin connections).");
+        _adminClients.Clear();
     }
 }

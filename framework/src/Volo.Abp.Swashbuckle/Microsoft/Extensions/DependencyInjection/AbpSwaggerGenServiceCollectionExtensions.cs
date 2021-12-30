@@ -5,57 +5,57 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Volo.Abp.Content;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class AbpSwaggerGenServiceCollectionExtensions
 {
-    public static class AbpSwaggerGenServiceCollectionExtensions
+    public static IServiceCollection AddAbpSwaggerGen(
+        this IServiceCollection services,
+        Action<SwaggerGenOptions> setupAction = null)
     {
-        public static IServiceCollection AddAbpSwaggerGen(
-            this IServiceCollection services,
-            Action<SwaggerGenOptions> setupAction = null)
-        {
-            return services.AddSwaggerGen(
+        return services.AddSwaggerGen(
+            options =>
+            {
+                Func<OpenApiSchema> remoteStreamContentSchemaFactory = () => new OpenApiSchema()
+                {
+                    Type = "string",
+                    Format = "binary"
+                };
+
+                options.MapType<RemoteStreamContent>(remoteStreamContentSchemaFactory);
+                options.MapType<IRemoteStreamContent>(remoteStreamContentSchemaFactory);
+
+                setupAction?.Invoke(options);
+            });
+    }
+
+    public static IServiceCollection AddAbpSwaggerGenWithOAuth(
+        this IServiceCollection services,
+        [NotNull] string authority,
+        [NotNull] Dictionary<string, string> scopes,
+        Action<SwaggerGenOptions> setupAction = null)
+    {
+        return services
+            .AddAbpSwaggerGen()
+            .AddSwaggerGen(
                 options =>
                 {
-                    Func<OpenApiSchema> remoteStreamContentSchemaFactory = () => new OpenApiSchema()
+                    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                     {
-                        Type = "string",
-                        Format = "binary"
-                    };
-
-                    options.MapType<RemoteStreamContent>(remoteStreamContentSchemaFactory);
-                    options.MapType<IRemoteStreamContent>(remoteStreamContentSchemaFactory);
-
-                    setupAction?.Invoke(options);
-                });
-        }
-
-        public static IServiceCollection AddAbpSwaggerGenWithOAuth(
-            this IServiceCollection services,
-            [NotNull] string authority,
-            [NotNull] Dictionary<string, string> scopes,
-            Action<SwaggerGenOptions> setupAction = null)
-        {
-            return services
-                .AddAbpSwaggerGen()
-                .AddSwaggerGen(
-                    options =>
-                    {
-                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
                         {
-                            Type = SecuritySchemeType.OAuth2,
-                            Flows = new OpenApiOAuthFlows
+                            AuthorizationCode = new OpenApiOAuthFlow
                             {
-                                AuthorizationCode = new OpenApiOAuthFlow
-                                {
-                                    AuthorizationUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/authorize"),
-                                    Scopes = scopes,
-                                    TokenUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/token")
-                                }
+                                AuthorizationUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/authorize"),
+                                Scopes = scopes,
+                                TokenUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/token")
                             }
-                        });
+                        }
+                    });
 
-                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                        {
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
                             {
                                 new OpenApiSecurityScheme
                                 {
@@ -67,10 +67,9 @@ namespace Microsoft.Extensions.DependencyInjection
                                 },
                                 Array.Empty<string>()
                             }
-                        });
-
-                        setupAction?.Invoke(options);
                     });
-        }
+
+                    setupAction?.Invoke(options);
+                });
     }
 }

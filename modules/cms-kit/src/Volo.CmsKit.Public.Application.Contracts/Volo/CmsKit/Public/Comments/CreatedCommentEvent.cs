@@ -1,11 +1,10 @@
 ﻿using System;
 using Volo.Abp.EventBus;
 
-namespace Volo.CmsKit.Public.Comments
+namespace Volo.CmsKit.Public.Comments;
+
+[EventName("Volo.CmsKit.Comments.Created")]
+public class CreatedCommentEvent
 {
-    [EventName("Volo.CmsKit.Comments.Created")]
-    public class CreatedCommentEvent
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }
