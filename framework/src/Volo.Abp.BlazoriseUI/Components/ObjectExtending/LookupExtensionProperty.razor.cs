@@ -37,26 +37,17 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         }
     }
 
+    public string SelectedText => Entity.GetProperty<string>(TextPropertyName);
+
     public LookupExtensionProperty()
     {
         lookupItems = new List<SelectItem<object>>();
     }
 
-    protected override void OnParametersSet()
+    protected async override Task OnInitializedAsync()
     {
-        var value = Entity.GetProperty(PropertyInfo.Name);
-        var text = Entity.GetProperty(TextPropertyName);
-        if (value != null && text != null)
-        {
-            if (lookupItems.All(x => !x.Value.Equals(value)))
-            {
-                lookupItems.Add(new SelectItem<object>
-                {
-                    Text = Entity.GetProperty(TextPropertyName).ToString(),
-                    Value = value
-                });
-            }
-        }
+        await base.OnInitializedAsync();
+        await SearchFilterChangedAsync(string.Empty);
     }
 
     protected virtual void UpdateLookupTextProperty(object value)
@@ -84,8 +75,7 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
             selectItems.Add(new SelectItem<object>
             {
                 Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
-                Value = JsonSerializer.Deserialize(
-                    item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
+                Value = JsonSerializer.Deserialize(item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
             });
         }
 
@@ -95,22 +85,11 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
     protected virtual Task SelectedValueChanged(object selectedItem)
     {
         SelectedValue = selectedItem;
-
         return Task.CompletedTask;
     }
 
     protected virtual async Task SearchFilterChangedAsync(string filter)
     {
         lookupItems = await GetLookupItemsAsync(filter);
-    }
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            await SearchFilterChangedAsync(string.Empty);
-        }
     }
 }

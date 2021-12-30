@@ -212,7 +212,7 @@ public abstract class AbpCrudPageBase<
         EntityActions = new EntityActionDictionary();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await SetPermissionsAsync();
         await SetEntityActionsAsync();
@@ -220,7 +220,7 @@ public abstract class AbpCrudPageBase<
         await InvokeAsync(StateHasChanged);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
