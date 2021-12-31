@@ -4,66 +4,65 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Serialization
+namespace Volo.Abp.Serialization;
+
+public class DefaultObjectSerializer : IObjectSerializer, ITransientDependency
 {
-    public class DefaultObjectSerializer : IObjectSerializer, ITransientDependency
+    private readonly IServiceProvider _serviceProvider;
+
+    public DefaultObjectSerializer(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public DefaultObjectSerializer(IServiceProvider serviceProvider)
+    public virtual byte[] Serialize<T>(T obj)
+    {
+        if (obj == null)
         {
-            _serviceProvider = serviceProvider;
+            return null;
         }
 
-        public virtual byte[] Serialize<T>(T obj)
+        //Check if a specific serializer is registered
+        using (var scope = _serviceProvider.CreateScope())
         {
-            if (obj == null)
+            var specificSerializer = scope.ServiceProvider.GetService<IObjectSerializer<T>>();
+            if (specificSerializer != null)
             {
-                return null;
+                return specificSerializer.Serialize(obj);
             }
-
-            //Check if a specific serializer is registered
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var specificSerializer = scope.ServiceProvider.GetService<IObjectSerializer<T>>();
-                if (specificSerializer != null)
-                {
-                    return specificSerializer.Serialize(obj);
-                }
-            }
-
-            return AutoSerialize(obj);
         }
 
-        [CanBeNull]
-        public virtual T Deserialize<T>(byte[] bytes)
+        return AutoSerialize(obj);
+    }
+
+    [CanBeNull]
+    public virtual T Deserialize<T>(byte[] bytes)
+    {
+        if (bytes == null)
         {
-            if (bytes == null)
-            {
-                return default;
-            }
-
-            //Check if a specific serializer is registered
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var specificSerializer = scope.ServiceProvider.GetService<IObjectSerializer<T>>();
-                if (specificSerializer != null)
-                {
-                    return specificSerializer.Deserialize(bytes);
-                }
-            }
-
-            return AutoDeserialize<T>(bytes);
+            return default;
         }
 
-        protected virtual byte[] AutoSerialize<T>(T obj)
+        //Check if a specific serializer is registered
+        using (var scope = _serviceProvider.CreateScope())
         {
-            return JsonSerializer.SerializeToUtf8Bytes(obj);
+            var specificSerializer = scope.ServiceProvider.GetService<IObjectSerializer<T>>();
+            if (specificSerializer != null)
+            {
+                return specificSerializer.Deserialize(bytes);
+            }
         }
 
-        protected virtual T AutoDeserialize<T>(byte[] bytes)
-        {
-            return JsonSerializer.Deserialize<T>(bytes);
-        }
+        return AutoDeserialize<T>(bytes);
+    }
+
+    protected virtual byte[] AutoSerialize<T>(T obj)
+    {
+        return JsonSerializer.SerializeToUtf8Bytes(obj);
+    }
+
+    protected virtual T AutoDeserialize<T>(byte[] bytes)
+    {
+        return JsonSerializer.Deserialize<T>(bytes);
     }
 }

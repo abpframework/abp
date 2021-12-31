@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Volo.CmsKit.Public.Application.Contracts\Volo.CmsKit.Public.Application.Contracts.csproj" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Markdig.Signed" Version="0.26.0" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.331" />
   </ItemGroup>
 
   <ItemGroup>

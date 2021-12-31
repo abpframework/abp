@@ -6,45 +6,44 @@ using Microsoft.AspNetCore.Http;
 using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions
+namespace Volo.Abp.AspNetCore.Mvc.Conventions;
+
+public class AbpConventionalControllerOptions
 {
-    public class AbpConventionalControllerOptions
+    public ConventionalControllerSettingList ConventionalControllerSettings { get; }
+
+    public List<Type> FormBodyBindingIgnoredTypes { get; }
+
+    /// <summary>
+    /// Set true to use the old style URL path style.
+    /// Default: false.
+    /// </summary>
+    public bool UseV3UrlStyle { get; set; }
+
+    public AbpConventionalControllerOptions()
     {
-        public ConventionalControllerSettingList ConventionalControllerSettings { get; }
+        ConventionalControllerSettings = new ConventionalControllerSettingList();
 
-        public List<Type> FormBodyBindingIgnoredTypes { get; }
-
-        /// <summary>
-        /// Set true to use the old style URL path style.
-        /// Default: false.
-        /// </summary>
-        public bool UseV3UrlStyle { get; set; }
-
-        public AbpConventionalControllerOptions()
-        {
-            ConventionalControllerSettings = new ConventionalControllerSettingList();
-
-            FormBodyBindingIgnoredTypes = new List<Type>
+        FormBodyBindingIgnoredTypes = new List<Type>
             {
                 typeof(IFormFile),
                 typeof(IRemoteStreamContent)
             };
-        }
+    }
 
-        public AbpConventionalControllerOptions Create(
-            Assembly assembly,
-            [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
-        {
-            var setting = new ConventionalControllerSetting(
-                assembly,
-                ModuleApiDescriptionModel.DefaultRootPath,
-                ModuleApiDescriptionModel.DefaultRemoteServiceName
-            );
+    public AbpConventionalControllerOptions Create(
+        Assembly assembly,
+        [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+    {
+        var setting = new ConventionalControllerSetting(
+            assembly,
+            ModuleApiDescriptionModel.DefaultRootPath,
+            ModuleApiDescriptionModel.DefaultRemoteServiceName
+        );
 
-            optionsAction?.Invoke(setting);
-            setting.Initialize();
-            ConventionalControllerSettings.Add(setting);
-            return this;
-        }
+        optionsAction?.Invoke(setting);
+        setting.Initialize();
+        ConventionalControllerSettings.Add(setting);
+        return this;
     }
 }

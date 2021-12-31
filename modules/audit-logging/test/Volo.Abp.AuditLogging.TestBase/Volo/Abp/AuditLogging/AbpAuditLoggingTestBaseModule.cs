@@ -2,27 +2,26 @@
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AuditLogging
-{
-    [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAuditLoggingDomainModule))]
-    public class AbpAuditLoggingTestBaseModule : AbpModule
-    {
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedTestData(context);
-        }
+namespace Volo.Abp.AuditLogging;
 
-        private static void SeedTestData(ApplicationInitializationContext context)
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(AbpTestBaseModule),
+    typeof(AbpAuditLoggingDomainModule))]
+public class AbpAuditLoggingTestBaseModule : AbpModule
+{
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        SeedTestData(context);
+    }
+
+    private static void SeedTestData(ApplicationInitializationContext context)
+    {
+        using (var scope = context.ServiceProvider.CreateScope())
         {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                scope.ServiceProvider
-                    .GetRequiredService <AuditingTestDataBuilder>()
-                    .Build();
-            }
+            scope.ServiceProvider
+                .GetRequiredService<AuditingTestDataBuilder>()
+                .Build();
         }
     }
 }

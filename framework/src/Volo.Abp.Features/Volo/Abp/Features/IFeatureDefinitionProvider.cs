@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Features
+﻿namespace Volo.Abp.Features;
+
+public interface IFeatureDefinitionProvider
 {
-    public interface IFeatureDefinitionProvider
-    {
-        void Define(IFeatureDefinitionContext context);
-    }
+    void Define(IFeatureDefinitionContext context);
 }

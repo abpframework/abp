@@ -3,32 +3,31 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions
+namespace Volo.Abp.AspNetCore.Mvc.Conventions;
+
+public class AbpConventionalControllerFeatureProvider : ControllerFeatureProvider
 {
-    public class AbpConventionalControllerFeatureProvider : ControllerFeatureProvider
+    private readonly IAbpApplication _application;
+
+    public AbpConventionalControllerFeatureProvider(IAbpApplication application)
     {
-        private readonly IAbpApplication _application;
+        _application = application;
+    }
 
-        public AbpConventionalControllerFeatureProvider(IAbpApplication application)
+    protected override bool IsController(TypeInfo typeInfo)
+    {
+        //TODO: Move this to a lazy loaded field for efficiency.
+        if (_application.ServiceProvider == null)
         {
-            _application = application;
+            return false;
         }
 
-        protected override bool IsController(TypeInfo typeInfo)
-        {
-            //TODO: Move this to a lazy loaded field for efficiency.
-            if (_application.ServiceProvider == null)
-            {
-                return false;
-            }
+        var configuration = _application.ServiceProvider
+            .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value
+            .ConventionalControllers
+            .ConventionalControllerSettings
+            .GetSettingOrNull(typeInfo.AsType());
 
-            var configuration = _application.ServiceProvider
-                .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value
-                .ConventionalControllers
-                .ConventionalControllerSettings
-                .GetSettingOrNull(typeInfo.AsType());
-
-            return configuration != null;
-        }
+        return configuration != null;
     }
 }

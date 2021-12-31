@@ -1,9 +1,8 @@
-namespace Volo.Abp.TestApp.Domain
-{
-    public class PersonNameChangedEvent
-    {
-        public Person Person { get; set; }
+namespace Volo.Abp.TestApp.Domain;
 
-        public string OldName { get; set; }
-    }
+public class PersonNameChangedEvent
+{
+    public Person Person { get; set; }
+
+    public string OldName { get; set; }
 }

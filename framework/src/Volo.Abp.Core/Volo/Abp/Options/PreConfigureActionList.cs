@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Options
+namespace Volo.Abp.Options;
+
+public class PreConfigureActionList<TOptions> : List<Action<TOptions>>
 {
-    public class PreConfigureActionList<TOptions> : List<Action<TOptions>>
+    public void Configure(TOptions options)
     {
-        public void Configure(TOptions options)
+        foreach (var action in this)
         {
-            foreach (var action in this)
-            {
-                action(options);
-            }
+            action(options);
         }
 
         public TOptions Configure()
