@@ -272,7 +272,22 @@
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, articles, offers, and more.",
     "FirstEdition": "First Edition",
-	"ThankYou": "Thank you!",
-	"CheckboxMandatory": "You need to check this to proceed!"
+    "ThankYou": "Thank you!",
+    "CheckboxMandatory": "You need to check this to proceed!",
+    "UserInterface": "User Interface",
+    "APIGateway": "API Gateway",
+    "Database": "Database",
+    "Saas": "Saas",
+    "OpenSourceWebApp": "Open <span class=\"forever\">source </span> <br/> web application",
+    "Framework": "Framework",
+    "AuditLoggingExplanation": "Automatically trace all the operations and data changes in your system.",
+    "AbpNewCommandExplanation": "Creates new solutions using the ABP startup templates.",
+    "AbpAddModuleCommandExplanation": "Installs pre-built application modules to your solution",
+    "AbpUpdateCommandExplanation": "Automatically updates all ABP related NuGet and NPM packages in your solution.",
+    "ExploreAllCLICommands": "Explore all CLI Commands",
+    "ExploreDocumentationAndGuides": "Explore the comprehensive documentation and guides.",
+    "Documentations": "Documentations",
+    "Views": "Views",
+    "ReadMore": "Read More"
   }
 }
