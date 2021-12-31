@@ -28,15 +28,23 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             int? period;
             var workerType = worker.GetType();
 
-            if (worker is AsyncPeriodicBackgroundWorkerBase || worker is PeriodicBackgroundWorkerBase)
+            if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
             {
                 if (typeof(TWorker) != worker.GetType())
                 {
                     throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
                 }
 
-                var timer = (AbpAsyncTimer) worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-                period = timer?.Period;
+                var timer = worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
+
+                if (worker is AsyncPeriodicBackgroundWorkerBase)
+                {
+                    period = ((AbpAsyncTimer)timer)?.Period;
+                }
+                else
+                {
+                    period = ((AbpTimer)timer)?.Period;
+                }
             }
             else
             {
