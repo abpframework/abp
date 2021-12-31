@@ -150,15 +150,6 @@ public class AbpIdentityServerDomainModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
-        if (options.IsCleanupEnabled)
-        {
-            AsyncHelper.RunSync(() => context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .AddAsync(
-                    context.ServiceProvider
-                        .GetRequiredService<TokenCleanupBackgroundWorker>()
-                ));
-        }
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 }

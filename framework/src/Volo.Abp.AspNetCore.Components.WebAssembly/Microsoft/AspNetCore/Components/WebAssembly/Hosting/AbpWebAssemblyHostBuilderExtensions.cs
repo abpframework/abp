@@ -65,7 +65,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         return application;
     }
 
-    public async static Task InitializeAsync(
+    public async static Task InitializeApplicationAsync(
         [NotNull] this IAbpApplicationWithExternalServiceProvider application,
         [NotNull] IServiceProvider serviceProvider)
     {
