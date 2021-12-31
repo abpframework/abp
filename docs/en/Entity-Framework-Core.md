@@ -93,7 +93,8 @@ protected override void OnModelCreating(ModelBuilder builder)
 
         //Configure the base properties
         b.ConfigureByConvention();
-
+        //if you used composite keys ,please define keys of the entity
+        //b.HasKey(new[] { nameof(Book.XXXId), nameof(Book.XXXId) });
         //Configure other properties (if you are using the fluent API)
         b.Property(x => x.Name).IsRequired().HasMaxLength(128);
     });
