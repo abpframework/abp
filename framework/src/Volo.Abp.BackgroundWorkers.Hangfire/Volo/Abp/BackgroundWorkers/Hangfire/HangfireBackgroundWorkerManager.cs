@@ -42,9 +42,17 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
 
                 if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
                 {
-                    var timer = (AbpAsyncTimer) worker.GetType()
+                    var timer = worker.GetType()
                         .GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-                    period = timer?.Period;
+
+                    if (worker is AsyncPeriodicBackgroundWorkerBase)
+                    {
+                        period = ((AbpAsyncTimer)timer)?.Period;
+                    }
+                    else
+                    {
+                        period = ((AbpTimer)timer)?.Period;
+                    }
                 }
                 else
                 {
@@ -82,7 +90,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
             }
             else
             {
-                cron = $"0 0 */{time.TotalDays} * *";
+                throw new AbpException($"Cannot convert period: {period} to cron expression, use HangfireBackgroundWorkerBase to define worker");
             }
 
             return cron;

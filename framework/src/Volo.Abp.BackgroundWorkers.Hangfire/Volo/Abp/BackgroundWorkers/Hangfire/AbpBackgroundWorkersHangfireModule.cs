@@ -10,7 +10,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
     [DependsOn(
         typeof(AbpBackgroundWorkersModule),
         typeof(AbpHangfireModule))]
-    public class AbpBackgroundWorkerHangfireModule : AbpModule
+    public class AbpBackgroundWorkersHangfireModule : AbpModule
     {
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
