@@ -389,8 +389,7 @@
     "TrialLicenseExpireMessage": "You are using the trial license and your trial license will expire on {0}.",
     "TryForFree": "Try For Free",
     "TrialLicenseExpiredInfo": "Your trial license period has expired!",
-    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
-    "DowngradeLicensePlan": "Can I downgrade to a lower license plan in the future?",
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",    "DowngradeLicensePlan": "Can I downgrade to a lower license plan in the future?",
     "DowngradeLicensePlanExplanation": "You cannot downgrade your existing license plan. But you can purchase a new lower license plan and continue to your development on the new license. After you purchase a lower license, you just need to login to your new license plan via ABP CLI command: ` abp login <username> -o <organization> `.",
     "LicenseTransfer": "Can a license be transferred from one developer to another?",
     "LicenseTransferExplanation": "Yes! When you purchase a license, you become the license holder, hence you will have access to the organization management page. An organization has owner and developer roles. Owners can manage the developer seats and assign developers. Each assigned developer will login via ABP CLI command into the system and will have development and support permissions.",
@@ -401,7 +400,13 @@
     "ExtendNow": "Extend Now",
     "ContinueWithNewOrganization": "Continue with a new organization",
     "RenewLicenseEarly": "If I renew my license early, will I get the full year?",
-    "RenewLicenseEarylExplanation": "When you renew your license before your license expiry date, 1 year will be added to your license expiry date. For example, if your license expires on {0}-06-06 and you renew it on {0}-01-01, your new license expiry date will be {1}-06-06."
-
+    "RenewLicenseEarylExplanation": "When you renew your license before your license expiry date, 1 year will be added to your license expiry date. For example, if your license expires on {0}-06-06 and you renew it on {0}-01-01, your new license expiry date will be {1}-06-06.",
+    "OpenSourceWebApplication": "Open source web application",
+    "CompleteWebDevelopment": "A complete web development",
+    "ABPFrameworkDescription": "ABP Framework is a complete infrastructure to create modern web applications by following the software development best practices and conventions.",
+    "CommunityDescription": "Share your experiences with the ABP Framework!",
+    "GetStarted": "Get Started",
+    "Views": "views",
+    "LatestArticles": "Latest Articles"
   }
 }
