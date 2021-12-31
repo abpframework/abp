@@ -21,7 +21,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public async Task AddAsync(IBackgroundWorker worker)
+    public Task AddAsync(IBackgroundWorker worker)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
@@ -42,18 +42,26 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
 
             if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
             {
-                var timer = (AbpAsyncTimer) worker.GetType()
+                var timer = worker.GetType()
                     .GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-                period = timer?.Period;
+
+                if (worker is AsyncPeriodicBackgroundWorkerBase)
+                {
+                    period = ((AbpAsyncTimer)timer)?.Period;
+                }
+                else
+                {
+                    period = ((AbpTimer)timer)?.Period;
+                }
             }
             else
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (period == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
@@ -61,6 +69,8 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
 
             RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
         }
+
+        return Task.CompletedTask;
     }
 
     protected virtual string GetCron(int period)
@@ -82,7 +92,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         }
         else
         {
-            cron = $"0 0 */{time.TotalDays} * *";
+            throw new AbpException($"Cannot convert period: {period} to cron expression, use HangfireBackgroundWorkerBase to define worker");
         }
 
         return cron;
