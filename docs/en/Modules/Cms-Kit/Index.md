@@ -18,6 +18,12 @@ Click to a feature to understand and learn how to use it.
 
 All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../../Global-Features.md) system.
 
+## Pre Requirements
+
+CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
+
+> Using a distributed cache such as [Redis](../../Redis-Cache.md) is highly recommented for data consistency.
+
 ## How to Install
 
 > This module is depends on [BlobStoring](../../Blob-Storing.md) module, please install `BlobStoring` module first and add a provider. For more information, check the [documentation](../../Blob-Storing.md).
