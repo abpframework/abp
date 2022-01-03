@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "GetStarted": "Get Started - Startup Templates",
+    "GetStarted": "Get Started",
     "Create": "Create",
     "NewProject": "New Project",
     "DirectDownload": "Direct Download",
@@ -175,7 +175,7 @@
     "TieredOption": "Creates a tiered solution where Web and Http API layers are physically separated. If not checked, creates a layered solution which is less complex and suitable for most scenarios.",
     "SeparateIdentityServerOption": "Separates server side into two applications: First one is for the identity server and the second one is for your server side HTTP API.",
     "UseslatestPreVersion": "Uses latest pre-release version",
-    "ReadTheDocumentation": "<span class=\"text-primary\">Read</span><span class=\"text-success\"> The Documentation</span>",
+    "ReadTheDocumentation": "Read The Documentation",
     "Documentation": "Documentation",
     "GettingStartedTutorial": "Getting Started Tutorial",
     "ApplicationDevelopmentTutorial": "Application Development Tutorial",
@@ -288,6 +288,14 @@
     "ExploreDocumentationAndGuides": "Explore the comprehensive documentation and guides.",
     "Documentations": "Documentations",
     "Views": "Views",
-    "ReadMore": "Read More"
+    "ReadMore": "Read More",
+    "EnterYouEmailToGetNews": "Enter your email to get the latest news about the ABP Framework",
+    "Tiered": "Tiered",
+    "SeparateIdentityServer": "Separate Identity Server",
+    "Preview": "Preview",
+    "CreateANewSolution": "Create a new solution",
+    "ABPFrameworkFeatures": "ABP Framework Features",
+    "Commercial": "Commercial",
+    "ThirdPartyTools": "Third Party Tools"
   }
 }
