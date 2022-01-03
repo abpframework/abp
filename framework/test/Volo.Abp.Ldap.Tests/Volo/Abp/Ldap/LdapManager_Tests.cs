@@ -22,7 +22,7 @@ public class LdapManager_Tests : AbpIntegratedTest<AbpLdapTestModule>
         options.UseAutofac();
     }
 
-    [Fact]
+    [Fact(Skip = "Required Ldap environment")]
     public async Task AuthenticateAsync()
     {
         (await _ldapManager.AuthenticateAsync("cn=admin,dc=abp,dc=io", "123qwe")).ShouldBe(true);
