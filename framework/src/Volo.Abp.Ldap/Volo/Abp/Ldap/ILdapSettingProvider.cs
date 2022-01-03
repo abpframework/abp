@@ -10,7 +10,7 @@ public interface ILdapSettingProvider
 
     public Task<string> GetBaseDcAsync();
 
-    public Task<string> GetDomainDcAsync();
+    public Task<string> GetDomainAsync();
 
     public Task<string> GetUserNameAsync();
 

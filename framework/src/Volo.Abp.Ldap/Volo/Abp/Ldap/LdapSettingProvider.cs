@@ -29,7 +29,7 @@ public class LdapSettingProvider : ILdapSettingProvider, ITransientDependency
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.BaseDc);
     }
 
-    public async Task<string> GetDomainDcAsync()
+    public async Task<string> GetDomainAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.Domain);
     }
