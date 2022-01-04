@@ -19,14 +19,13 @@ Click to a feature to understand and learn how to use it.
 All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../../Global-Features.md) system.
 
 ## Pre Requirements
+-  This module depends on [BlobStoring](../../Blob-Storing.md) module for keeping media content.
+> Make sure `BlobStoring` module is installed and at leats one provider is configured properly. For more information, check the [documentation](../../Blob-Storing.md).
 
-CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
-
+- CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../Redis-Cache.md), is highly recommended for data consistency in distributed/clustered deployments.
 
 ## How to Install
-
-> This module is depends on [BlobStoring](../../Blob-Storing.md) module, please install `BlobStoring` module first and add a provider. For more information, check the [documentation](../../Blob-Storing.md).
 
 [ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
