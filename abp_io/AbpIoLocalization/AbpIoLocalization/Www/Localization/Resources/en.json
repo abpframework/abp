@@ -300,6 +300,8 @@
     "Back": "Back",
     "Community": "Community",
     "SeeMore": "See More",
-    "DetailsOfTheEBook": "Details of the E-Book"
+    "DetailsOfTheEBook": "Details of the E-Book",
+    "JoinOurMarketingNewsletter": "Join our marketing newsletter",
+    "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
   }
 }
