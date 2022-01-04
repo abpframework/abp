@@ -296,6 +296,10 @@
     "CreateANewSolution": "Create a new solution",
     "ABPFrameworkFeatures": "ABP Framework Features",
     "Commercial": "Commercial",
-    "ThirdPartyTools": "Third Party Tools"
+    "ThirdPartyTools": "Third Party Tools",
+    "Back": "Back",
+    "Community": "Community",
+    "SeeMore": "See More",
+    "DetailsOfTheEBook": "Details of the E-Book"
   }
 }
