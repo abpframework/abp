@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -39,20 +40,25 @@ public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITra
         return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
+    private readonly ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
+
     protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
     {
-        var settings = new JsonSerializerOptions(Options.JsonSerializerOptions);
-
-        if (camelCase)
+        return JsonSerializerOptionsCache.GetOrAdd($"default{camelCase}{indented}", _ =>
         {
-            settings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        }
+            var settings = new JsonSerializerOptions(Options.JsonSerializerOptions);
 
-        if (indented)
-        {
-            settings.WriteIndented = true;
-        }
+            if (camelCase)
+            {
+                settings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            }
 
-        return settings;
+            if (indented)
+            {
+                settings.WriteIndented = true;
+            }
+
+            return settings;
+        });
     }
 }

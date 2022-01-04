@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -11,6 +12,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging.Bundling;
+using Volo.Blogging.Files;
 using Volo.Blogging.Localization;
 
 namespace Volo.Blogging
@@ -77,6 +79,11 @@ namespace Volo.Blogging
             Configure<DynamicJavaScriptProxyOptions>(options =>
             {
                 options.DisableModule(BloggingRemoteServiceConsts.ModuleName);
+            });
+
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(FileUploadInputDto));
             });
         }
     }

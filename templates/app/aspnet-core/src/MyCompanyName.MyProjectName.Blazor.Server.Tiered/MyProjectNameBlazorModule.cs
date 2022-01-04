@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.IO;
 using System.Net.Http;
 using Blazorise.Bootstrap5;
@@ -52,7 +52,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
 
 [DependsOn(
     typeof(MyProjectNameHttpApiClientModule),
-    typeof(MyProjectNameHttpApiModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcClientModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),

@@ -24,6 +24,14 @@ public static class JsonLocalizationDictionaryBuilder
         }
     }
 
+    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true
+    };
+
     /// <summary>
     ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
     /// </summary>
@@ -33,15 +41,7 @@ public static class JsonLocalizationDictionaryBuilder
         JsonLocalizationFile jsonFile;
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                AllowTrailingCommas = true
-            };
-
-            jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, options);
+            jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, DeserializeOptions);
         }
         catch (JsonException ex)
         {

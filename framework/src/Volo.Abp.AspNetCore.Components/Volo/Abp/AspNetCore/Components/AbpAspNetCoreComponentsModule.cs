@@ -6,13 +6,14 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Components;
 
 [DependsOn(
     typeof(AbpObjectMappingModule),
     typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
+    typeof(AbpTimingModule)
     )]
 public class AbpAspNetCoreComponentsModule : AbpModule
 {

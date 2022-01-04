@@ -74,6 +74,64 @@ public class CsprojFileManager : XmlFileManagerBase, ICsprojFileManager, ITransi
         await SaveXmlDocumentAsync(filePath, document);
     }
 
+    public async Task AddImportAsync(string filePath, string importFilePath)
+    {
+        var document = await GetXmlDocumentAsync(filePath);
+
+        var relativeImportFilePath = PathHelper.GetRelativePath(filePath, importFilePath);
+
+        var importNode = document.CreateElement("Import");
+
+        var projectAttr = document.CreateAttribute("Project");
+        projectAttr.Value = relativeImportFilePath;
+        importNode.Attributes.Append(projectAttr);
+
+        document["Project"].AppendChild(importNode);
+        document["Project"].AppendChild(document.CreateWhitespace(Environment.NewLine + "  "));
+
+        await SaveXmlDocumentAsync(filePath, document);
+    }
+
+    public async Task AddAssemblyVersionAsync(string filePath, string version)
+    {
+        var document = await GetXmlDocumentAsync(filePath);
+
+        var matchedNodes = document.SelectNodes($"/Project/PropertyGroup");
+
+        if (matchedNodes.Count == 0)
+        {
+            return;
+        }
+
+        var versionNode = document.CreateElement("Version");
+
+        versionNode.InnerText = version;
+
+        matchedNodes[0].AppendChild(versionNode);
+
+        await SaveXmlDocumentAsync(filePath, document);
+    }
+
+    public async Task AddCopyLocalLockFileAssembliesAsync(string filePath)
+    {
+        var document = await GetXmlDocumentAsync(filePath);
+
+        var matchedNodes = document.SelectNodes($"/Project/PropertyGroup");
+
+        if (matchedNodes.Count == 0)
+        {
+            return;
+        }
+
+        var versionNode = document.CreateElement("CopyLocalLockFileAssemblies");
+
+        versionNode.InnerText = "True";
+
+        matchedNodes[0].AppendChild(versionNode);
+
+        await SaveXmlDocumentAsync(filePath, document);
+    }
+
     public async Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference)
     {
         var document = await GetXmlDocumentAsync(filePath);

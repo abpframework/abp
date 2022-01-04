@@ -8,11 +8,11 @@
 }
 ````
 
-This is a single-part, quick-start tutorial to build a simple todo application with the ABP Framework. Here, a screenshot from the final application:
+This is a single-part quick-start tutorial to build a simple todo application with the ABP Framework. Here's a screenshot from the final application:
 
 ![todo-list](todo-list.png)
 
-You can find source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
 ## Pre-Requirements
 
@@ -56,7 +56,7 @@ This will create a new solution, named *TodoApp*. Once the solution is ready, op
 
 ### Create the Database
 
-If you are using Visual Studio, right click to the `TodoApp.DbMigrator` project, select *Set as StartUp Project*, then hit *Ctrl+F5* to run it without debugging. It will create the initial database and seed the initial data.
+If you are using Visual Studio, right click on the `TodoApp.DbMigrator` project, select *Set as StartUp Project*, then hit *Ctrl+F5* to run it without debugging. It will create the initial database and seed the initial data.
 
 {{if DB=="EF"}}
 
@@ -74,7 +74,7 @@ It is good to run the application before starting the development. Ensure the {{
 
 It is good to run the application before starting the development. The solution has two main applications;
 
-* `TodoApp.HttpApi.Host` host the server-side HTTP API.
+* `TodoApp.HttpApi.Host` hosts the server-side HTTP API.
 * `TodoApp.Blazor` is the client-side Blazor WebAssembly application.
 
 Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
@@ -85,16 +85,16 @@ You can explore and test your HTTP API with this UI. Now, we can set the `TodoAp
 
 {{else if UI=="NG"}}
 
-It is good to run the application before starting the development. The solution has two main applications;
+It is good to run the application before starting the development. The solution has two main applications:
 
 * `TodoApp.HttpApi.Host` (in the .NET solution) host the server-side HTTP API.
 * `angular` folder contains the Angular application.
 
-Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
+Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
 ![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
 
-You can explore and test your HTTP API with this UI. If that works, we can run the Angular client application.
+You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
 First, run the following command to restore the NPM packages;
 
@@ -114,13 +114,13 @@ This command takes time, but eventually runs and opens the application in your d
 
 ![todo-ui-initial](todo-ui-initial.png)
 
-You can click to the *Login* button, use `admin` as the username and `1q2w3E*` as the password to login to the application.
+You can click on the *Login* button, use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-All ready. We can start the coding!
+All ready. We can start coding!
 
 ## Domain Layer
 
-This application has a single [entity](../../Entities.md) and we are starting by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
+This application has a single [entity](../../Entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
 
 ````csharp
 using System;
@@ -151,7 +151,7 @@ Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *To
 public DbSet<TodoItem> TodoItems { get; set; }
 ````
 
-Then locate  to `OnModelCreating` method in the `TodoAppDbContext` class and add the mapping code for the `TodoItem ` entity:
+Then navigate to the `OnModelCreating` method in the `TodoAppDbContext` class and add the mapping code for the `TodoItem ` entity:
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -171,7 +171,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-We've mapped `TodoItem` entity to a `TodoItems` table in the database.
+We've mapped the `TodoItem` entity to the `TodoItems` table in the database.
 
 ### Code First Migrations
 
@@ -193,11 +193,11 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
-Next step is to setup the [MongoDB](../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes;
+Next step is to setup the [MongoDB](../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes:
 
 1. Add a new property to the class:
 
@@ -216,13 +216,13 @@ modelBuilder.Entity<TodoItem>(b =>
 
 {{end}}
 
-Now, we can use ABP repositories to save and retrieve todo items, as we'll do in the next section.
+Now, we can use the ABP repositories to save and retrieve the todo items, as we'll do in the next section.
 
 ## Application Layer
 
-An [Application Service](../../Application-Services.md) is used to perform use cases of the application. We need to perform the following use cases:
+An [Application Service](../../Application-Services.md) is used to perform the use cases of the application. We need to perform the following use cases:
 
-* Get the list of todo items
+* Get the list of the todo items
 * Create a new todo item
 * Delete an existing todo item
 
@@ -264,7 +264,7 @@ namespace TodoApp
 }
 ````
 
-This is a very simple DTO class that matches to our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
+This is a very simple DTO class that matches our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
 
 ### Application Service Implementation
 
@@ -313,7 +313,7 @@ public async Task<List<TodoItemDto>> GetListAsync()
 }
 ````
 
-We are simply getting the complete `TodoItem` list from database, mapping them to `TodoItemDto` objects and returning as the result.
+We are simply getting the complete `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
 
 #### Creating a New Todo Item
 
@@ -334,7 +334,7 @@ public async Task<TodoItemDto> CreateAsync(string text)
 }
 ````
 
-Repository's `InsertAsync` method inserts the given `TodoItem` to database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
+The repository's `InsertAsync` method inserts the given `TodoItem` to the database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
 
 #### Deleting a Todo Item
 
@@ -351,7 +351,7 @@ The application service is ready to be used from the UI layer.
 
 ## User Interface Layer
 
-It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here, a sample screenshot from the final UI:
+It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here's a sample screenshot from the final UI:
 
 ![todo-list](todo-list.png)
 
@@ -388,11 +388,11 @@ namespace TodoApp.Web.Pages
 }
 ````
 
-This class uses the `ITodoAppService` to get the list of todo items and assign the the `TodoItems` property. We will use it to render the todo items on the razor page.
+This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
 
 ### Index.cshtml
 
-Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
 ````xml
 @page
@@ -412,14 +412,16 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
         </abp-card-header>
         <abp-card-body>            
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" class="form-inline">
-                <input id="NewItemText" 
-                       type="text" 
-                       class="form-control mr-2" 
-                       placeholder="enter text...">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <form id="NewItemForm" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input id="NewItemText" type="text" class="form-control" placeholder="enter text...">
+                    </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form>
-            
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in Model.TodoItems)
@@ -440,7 +442,7 @@ This page imports a CSS and a JavaScript file, so we should also create them.
 
 ### Index.js
 
-Open the `Index.js` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+Open the `Index.js` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
 ````js
 $(function () {
@@ -471,15 +473,15 @@ $(function () {
 });
 ````
 
-In the first part, we are subscribing to click events of the trash icons near to the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from DOM, so we don't need to refresh the page.
+In the first part, we are subscribing to the click events of the trash icons near the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from the DOM, so we don't need to refresh the page.
 
-In the second part, we are creating a new todo item on the server. If it succeeds, we are then manipulating DOM to insert a new `<li>` element to the todo list. This way we don't need to refresh the whole page after creating a new todo item.
+In the second part, we are creating a new todo item on the server. If it succeeds, we are then manipulating the DOM to insert a new `<li>` element to the todo list. This way we don't need to refresh the whole page after creating a new todo item.
 
 The interesting part here is how we communicate with the server. See the *Dynamic JavaScript Proxies & Auto API Controllers* section to understand how it works. But now, let's continue and complete the application.
 
 ### Index.css
 
-As the final touch, open the `Index.css` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+As the final touch, open the `Index.css` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
 ````css
 #TodoList{
@@ -514,9 +516,9 @@ Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
-In the `Index.js` file, we've used `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+In the `Index.js` file, we've used the `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
-However, you may notice that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
+However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
 
 If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
@@ -543,7 +545,7 @@ namespace TodoApp.Blazor.Pages
         private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
         private string NewTodoText { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             TodoItems = await TodoAppService.GetListAsync();
         }
@@ -565,7 +567,7 @@ namespace TodoApp.Blazor.Pages
 }
 ````
 
-This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
+This class uses `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
 {{if UI=="Blazor"}}
 
@@ -589,17 +591,16 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
         </CardHeader>
         <CardBody>
             <!-- FORM FOR NEW TODO ITEMS -->
-            <form id="NewItemForm" 
-                  @onsubmit:preventDefault
-                  @onsubmit="() => Create()"
-                  class="form-inline">
-                <input type="text" 
-                       @bind-value="@NewTodoText"
-                       class="form-control mr-2" 
-                       placeholder="enter text...">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <form id="NewItemForm" @onsubmit:preventDefault @onsubmit="() => Create()" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input name="NewTodoText" type="text" @bind-value="@NewTodoText" class="form-control" placeholder="enter text..." />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form>
-
             <!-- TODO ITEMS LIST -->
             <ul id="TodoList">
                 @foreach (var todoItem in TodoItems)
@@ -618,7 +619,7 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
 
 ### Index.razor.css
 
-As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace with the following content:
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace it with the following content:
 
 ````css
 #TodoList{
@@ -659,7 +660,7 @@ In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and
 
 The magic is done by the ABP Framework's [Dynamic C# Client Proxy](../../API/Dynamic-CSharp-API-Clients.md) system. It uses the standard `HttpClient` and performs HTTP API requests to the remote server. It also handles all the standard tasks for us, including authorization, JSON serialization and exception handling.
 
-However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
+However, you may ask that we haven't created any API Controller, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
 
 If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
@@ -675,17 +676,17 @@ ABP provides a handy feature to automatically create client-side services to eas
 
 You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. 
 
-> **Warning**: There is an issue with IIS Express: it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+> **Warning**: There is an issue with IIS Express: it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
 ![run-without-iisexpress](run-without-iisexpress.png)
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t ng
 ````
 
-If everything goes well, it should generate an output like shown below:
+If everything goes well, it should generate an output as shown below:
 
 ````bash
 CREATE src/app/proxy/generate-proxy.json (170978 bytes)
@@ -695,7 +696,7 @@ CREATE src/app/proxy/models.ts (66 bytes)
 CREATE src/app/proxy/index.ts (58 bytes)
 ````
 
-We can then use the `todoService` to use the server-side HTTP APIs, as we'll do in the next section.
+We can then use `todoService` to use the server-side HTTP APIs, as we'll do in the next section.
 
 ### home.component.ts
 
@@ -744,7 +745,7 @@ export class HomeComponent implements OnInit {
 
 ````
 
-We've used the `todoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used in the view side.
+We've used `todoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used on the view side.
 
 ### home.component.html
 
@@ -758,17 +759,16 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
     </div>
     <div class="card-body">
       <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="form-inline" (ngSubmit)="create()">
-        <input
-          name="NewTodoText"
-          type="text"
-          [(ngModel)]="newTodoText"
-          class="form-control mr-2"
-          placeholder="enter text..."
-        />
-        <button type="submit" class="btn btn-primary">Submit</button>
+      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+        <div class="col-12">
+          <div class="input-group">
+            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </form>
-
       <!-- TODO ITEMS LIST -->
       <ul id="TodoList">
         <li *ngFor="let todoItem of todoItems">
@@ -819,7 +819,7 @@ Now, you can run the application again to see the result.
 
 ## Conclusion
 
-In this tutorial, we've built a very simple application to warm up to the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../Part-1.md) which covers all the aspects of a real-life web application development.
+In this tutorial, we've built a very simple application to warm up for the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../Part-1.md) which covers all the aspects of real-life web application development.
 
 ## Source Code
 

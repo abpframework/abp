@@ -201,26 +201,3 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 
 <input type="text" name="search" [(ngModel)]="list.filter">
 ```
-
-## Breaking Change with ABP v3.0
-
-We had to modify the `ListService` to make it work with `ngx-datatable`. Previously, the minimum value for `page` property was `1` and you could use it like this:
-
-```html
-<!-- other bindings are hidden in favor of brevity -->
-<abp-table
-  [(page)]="list.page"
-></abp-table>
-```
-
-As of v3.0, with ngx-datatable, the `page` property has to be set as `0` for the initial page. Therefore, if you used `ListService` on your tables before and are going to keep `abp-table`, you need to make the following change:
-
-```html
-<!-- other bindings are hidden in favor of brevity -->
-<abp-table
-  [page]="list.page + 1"
-  (pageChange)="list.page = $event - 1"
-></abp-table>
-```
-
-**Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Pages.Abp.MultiTenancy.ClientProxies;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
@@ -35,5 +37,8 @@ public class AbpAspNetCoreMvcClientCommonModule : AbpModule
         {
             options.GlobalContributors.Add<RemoteLocalizationContributor>();
         });
+
+        context.Services.AddTransient<AbpApplicationConfigurationClientProxy>();
+        context.Services.AddTransient<AbpTenantClientProxy>();
     }
 }

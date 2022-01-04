@@ -49,6 +49,9 @@
                         }
                     </div>
                 </div>
+                <div class="mt-0">
+                    <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
+                </div>
             </div>
         </form>
     </div>;
@@ -57,7 +60,7 @@
     Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, string text) =>
     @<div class="cms-comment-content-area" data-id="@id.ToString()">
         <p class="m-0">
-            @text
+            @Html.Raw(text)
         </p>
     </div>;
 }
@@ -105,8 +108,10 @@
                         <div class="text-end">
                             <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
                             <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
-
                         </div>
+                    </div>
+                    <div class="mt-0">
+                        <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                     </div>
                 </div>
             </form>
@@ -152,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-                @GetEditArea(comment.Id, comment.Text, comment.ConcurrencyStamp).Invoke(null)
+                @GetEditArea(comment.Id, Model.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
 
                 @if (comment.Replies.Any())
                 {
@@ -182,7 +187,7 @@
                                     </div>
                                 </div>
 
-                                @GetEditArea(reply.Id, reply.Text, reply.ConcurrencyStamp).Invoke(null)
+                                @GetEditArea(reply.Id, Model.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
                             </div>
                         </div>
                     }
@@ -211,4 +216,3 @@
         </div>
     }
 </div>
- 

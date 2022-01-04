@@ -12,6 +12,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "create-migration-and-run-migrator";
+    
     public ICmdHelper CmdHelper { get; }
     public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 

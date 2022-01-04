@@ -112,8 +112,10 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
                         .MakeGenericMethod(value.GetType())
                         .Invoke(this, new object[]
                         {
-                                scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.FormDataConverts[value.GetType()]),
-                                value
+                            scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.FormDataConverts[value.GetType()]),
+                            action,
+                            parameter,
+                            value
                         });
 
                     if (formDataContents != null)
@@ -154,7 +156,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
             }
             else if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
             {
-                foreach (var item in (IEnumerable)value)
+                foreach (var item in (IEnumerable) value)
                 {
                     formData.Add(new StringContent(item.ToString(), Encoding.UTF8), parameter.Name);
                 }
@@ -168,8 +170,8 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         return formData;
     }
 
-    protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, T value)
+    protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, ActionApiDescriptionModel actionApiDescription, ParameterApiDescriptionModel parameterApiDescription, T value)
     {
-        return await converter.ConvertAsync(value);
+        return await converter.ConvertAsync(actionApiDescription, parameterApiDescription, value);
     }
 }

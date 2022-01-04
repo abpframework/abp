@@ -218,7 +218,8 @@ namespace AbpDemo
             //Get entities from the repository
             List<Product> products = await query
                 .Skip(input.SkipCount)
-                .Take(input.MaxResultCount);.ToListAsync();
+                .Take(input.MaxResultCount)
+                .ToListAsync();
 
             //Map entities to DTOs
             List<ProductDto> productDtos =

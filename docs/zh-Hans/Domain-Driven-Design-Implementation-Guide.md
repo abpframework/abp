@@ -166,7 +166,7 @@ ABP的启动解决方案中包含两个用于集成Entity Framework Core的项�
 这种依赖关系的设计,可能会让你有机会在展现层直接使用到EF Core的对象,**应该严格禁止这样的做法**.如果想在解决方案分层上规避这种问题,有下面两种方式,相对复杂一些:
 
 * 将`Web`项目类型改为razor类库,并创建一个新项目,比如`Web.Host`,`Web.Host`依赖`Web`,`Application`,`EntityFrameworkCore`三个项目,并作为Web宿主程序运行.注意,不要写任何与UI相关的代码,只是作为**宿主运行**.
-* 在`Web`项目中移除对`Application`和`EntityFrameworkCore`的引用,`Web`在启动时,再动态加载程序集``IssueTracking.Application.dll`和`IssueTracking.EntityFrameworkCore.dll`.可以使用ABP框架的[插件模块](PlugIn-Modules.md)来动态加载程序集.
+* 在`Web`项目中移除对`Application`和`EntityFrameworkCore`的引用,`Web`在启动时,再动态加载程序集`IssueTracking.Application.dll`和`IssueTracking.EntityFrameworkCore.dll`.可以使用ABP框架的[插件模块](PlugIn-Modules.md)来动态加载程序集.
 
 ### DDD模式的应用程序执行顺序
 
@@ -572,7 +572,7 @@ namespace IssueTracking.Issues
 
 抛出异常会引发两个问题:
 
-1. 当异常发生时,**用户**应该看到异常(错误)信息吗?如果需要看到,异常消息如何实现本地化? user** see the exception (error) message? If so, how do you **localize** the exception message? 实体中无法注入[本地化](Localization.md)的 `IStringLocalizer` 接口.
+1. 当异常发生时,**用户**应该看到异常(错误)信息吗?如果需要看到,异常消息如何实现本地化?   实体中无法注入[本地化](Localization.md)的 `IStringLocalizer` 接口.
 2. 对于Web应用或HTTP API,应向客户端返回什么**HTTP状态代码**.
 
 ABP框架的 [异常处理](Exception-Handling.md) 可以解决上述问题.
@@ -598,7 +598,7 @@ namespace IssueTracking.Issues
 * `IssueStateException` 继承至 `BusinessException` .对于`BusinessException`的派生类,ABP框架默认返回的HTTP状态码是403 (默认是服务器内部错误 状态码 500)
 *  将`code` 作为Key,在本地化资源中查找对应的文字.
 
-现在,我们修 `ReOpen` 方法:
+现在,我们修改 `ReOpen` 方法:
 
 ````csharp
 public void ReOpen()

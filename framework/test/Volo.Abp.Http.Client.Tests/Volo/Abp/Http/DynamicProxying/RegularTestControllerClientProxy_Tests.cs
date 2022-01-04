@@ -125,6 +125,23 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task GetObjectandFirstReleaseDateAsync()
+    {
+        var time = DateTime.Now;
+        var result = await _controller.GetObjectandFirstReleaseDateAsync(time, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+        result.FirstReleaseDate.ToUniversalTime().ShouldBe(time.ToUniversalTime());
+        result.Model.ShouldBe("Ford");
+    }
+
+    [Fact]
+    public async Task GetObjectandCountAsync()
+    {
+        var result = await _controller.GetObjectandCountAsync(-1, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+        result.Year.ShouldBe(888);
+        result.Model.ShouldBe("Ford");
+    }
+
+    [Fact]
     public async Task GetObjectAndIdWithQueryAsync()
     {
         var result = await _controller.GetObjectAndIdWithQueryAsync(42, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
