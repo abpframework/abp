@@ -452,7 +452,7 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
 
 public static class CurrentUserExtensions
 {
-    public static string GetSocialSecurityNumber(ICurrentUser currentUser)
+    public static string GetSocialSecurityNumber(this ICurrentUser currentUser)
     {
         return currentUser.FindClaimValue("SocialSecurityNumber");
     }
