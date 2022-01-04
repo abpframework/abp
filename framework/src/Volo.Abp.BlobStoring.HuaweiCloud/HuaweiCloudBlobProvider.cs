@@ -16,10 +16,10 @@ namespace Volo.Abp.BlobStoring.HuaweiCloud
         protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
         public HuaweiCloudBlobProvider(
-            IHuaweiCloudBlobNameCalculator HuaweiCloudBlobNameCalculator,
+            IHuaweiCloudBlobNameCalculator huaweiCloudBlobNameCalculator,
             IBlobNormalizeNamingService blobNormalizeNamingService)
         {
-            this.HuaweiCloudBlobNameCalculator = HuaweiCloudBlobNameCalculator;
+            HuaweiCloudBlobNameCalculator = huaweiCloudBlobNameCalculator;
             BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
@@ -105,7 +105,7 @@ namespace Volo.Abp.BlobStoring.HuaweiCloud
             var stream = result.ResponseStream;
             if (stream != null)
             {
-                stream.Position = 0;
+
                 await stream.CopyToAsync(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);
             }
