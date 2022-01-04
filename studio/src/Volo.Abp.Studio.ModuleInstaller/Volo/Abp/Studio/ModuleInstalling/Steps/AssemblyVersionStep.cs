@@ -5,7 +5,7 @@ using Volo.Abp.Studio.Packages.Modifying;
 
 namespace Volo.Abp.Studio.ModuleInstalling.Steps;
 
-public class CommonPropsStep : ModuleInstallingPipelineStep
+public class AssemblyVersionStep : ModuleInstallingPipelineStep
 {
     public async override Task ExecuteAsync(ModuleInstallingContext context)
     {
@@ -23,7 +23,8 @@ public class CommonPropsStep : ModuleInstallingPipelineStep
 
         foreach (var csProjFile in csProjFiles)
         {
-            await _csprojFileManager.AddImportAsync(csProjFile, commonPropsFilePath);
+            await _csprojFileManager.AddAssemblyVersionAsync(csProjFile, context.Version);
+            await _csprojFileManager.AddCopyLocalLockFileAssembliesAsync(csProjFile);
         }
     }
 }

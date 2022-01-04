@@ -172,7 +172,7 @@
     "StartDevelopWithTutorials": "The downloaded solution is well architected and documented. You can start to develop your own business code based on it following <a href=\"{0}\">the tutorials</a>",
     "TryTheCommercialDemo": "You can try <a href=\"{0}\">the demo</a> to see a sample application created using the ABP Commercial startup template.",
     "HowManyProducts": "How many different products/solutions can I build using the ABP Commercial?",
-    "HowManyProductsExplanation": "There is no limit to create an ABP project. You can create as many project as you want, develop and upload them to different servers.",
+    "HowManyProductsExplanation": "You can create as many projects as you want during your active license period, there is no limit! After your license expires, you cannot create new projects, but you can continue to develop the projects you have downloaded and deploy them to an unlimited count of servers.",
     "HowManyDevelopers": "How many developers can work on the ABP Commercial?",
     "HowManyDevelopersExplanation": "ABP Commercial licenses are per developer. Different license types have different developer limits. However, you can add more developers to any license type whenever you need. See <a href=\"{0}\">the prices</a> page for license types, developer limits and additional developer costs.",
     "ChangingLicenseType": "Can I upgrade my license type later?",
