@@ -22,7 +22,7 @@ All features are individually usable. If you disable a feature, it completely di
 
 CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
 
-> Using a distributed cache such as [Redis](../../Redis-Cache.md) is highly recommended for data consistency in tiered solutions.
+> Using a distributed cache, such as [Redis](../../Redis-Cache.md), is highly recommended for data consistency in distributed/clustered deployments.
 
 ## How to Install
 
