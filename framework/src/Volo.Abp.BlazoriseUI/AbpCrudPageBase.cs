@@ -350,6 +350,7 @@ public abstract class AbpCrudPageBase<
 
     protected virtual Task CloseCreateModalAsync()
     {
+        NewEntity = new TCreateViewModel();
         return InvokeAsync(CreateModal.Hide);
     }
 
@@ -464,6 +465,7 @@ public abstract class AbpCrudPageBase<
 
     protected virtual async Task OnCreatedEntityAsync()
     {
+        NewEntity = new TCreateViewModel();
         await GetEntitiesAsync();
 
         await InvokeAsync(CreateModal.Hide);
