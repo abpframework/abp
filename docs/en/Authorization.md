@@ -428,7 +428,7 @@ This is already done for the startup template integration tests.
 
 Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
 
-**Example: Add a `SocialSecurityNumber` claim:**
+**Example: Add a `SocialSecurityNumber` claim and get it:**
 
 ```csharp
 public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
@@ -446,6 +446,15 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
                 identity.AddClaim(new Claim("SocialSecurityNumber", socialSecurityNumber));
             }
         }
+    }
+}
+
+
+public static class CurrentUserExtensions
+{
+    public static string GetSocialSecurityNumber(ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue("SocialSecurityNumber");
     }
 }
 ```
