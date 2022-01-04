@@ -9,28 +9,27 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Public.Blogs;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Blogs.ClientProxies
-{
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
-    public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
-    {
-        public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
-        {
-            return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), blogSlug },
-                { typeof(string), blogPostSlug }
-            });
-        }
+namespace Volo.CmsKit.Public.Blogs.ClientProxies;
 
-        public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
+public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
+{
+    public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
+    {
+        return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), blogSlug },
-                { typeof(PagedAndSortedResultRequestDto), input }
-            });
-        }
+            { typeof(string), blogSlug },
+            { typeof(string), blogPostSlug }
+        });
+    }
+
+    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+    {
+        return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), blogSlug },
+            { typeof(PagedAndSortedResultRequestDto), input }
+        });
     }
 }

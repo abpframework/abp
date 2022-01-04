@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
+namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+
+public class DynamicJavaScriptProxyOptions
 {
-    public class DynamicJavaScriptProxyOptions
+    public HashSet<string> DisabledModules { get; }
+
+    public DynamicJavaScriptProxyOptions()
     {
-        public HashSet<string> DisabledModules { get; }
+        DisabledModules = new HashSet<string>();
+    }
 
-        public DynamicJavaScriptProxyOptions()
-        {
-            DisabledModules = new HashSet<string>();
-        }
+    public void DisableModule(string module)
+    {
+        DisabledModules.AddIfNotContains(module);
+    }
 
-        public void DisableModule(string module)
-        {
-            DisabledModules.AddIfNotContains(module);
-        }
-
-        public void EnableModule(string module)
-        {
-            DisabledModules.Remove(module);
-        }
+    public void EnableModule(string module)
+    {
+        DisabledModules.Remove(module);
     }
 }

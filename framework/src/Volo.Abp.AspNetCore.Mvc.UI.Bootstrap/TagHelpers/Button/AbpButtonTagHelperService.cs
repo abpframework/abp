@@ -3,58 +3,57 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+
+public class AbpButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpButtonTagHelper>
 {
-    public class AbpButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpButtonTagHelper>
+    protected const string DataBusyTextAttributeName = "data-busy-text";
+    protected const string DataBusyTextIsHtmlAttributeName = "data-busy-text-is-html";
+
+    protected IStringLocalizer<AbpUiResource> L { get; }
+
+    public AbpButtonTagHelperService(IStringLocalizer<AbpUiResource> localizer)
     {
-        protected const string DataBusyTextAttributeName = "data-busy-text";
-        protected const string DataBusyTextIsHtmlAttributeName = "data-busy-text-is-html";
+        L = localizer;
+    }
 
-        protected IStringLocalizer<AbpUiResource> L { get; }
+    public override void Process(TagHelperContext context, TagHelperOutput output)
+    {
+        base.Process(context, output);
+        output.TagName = "button";
+        AddType(context, output);
+        AddBusyText(context, output);
+        AddBusyTextIsHtml(context, output);
+    }
 
-        public AbpButtonTagHelperService(IStringLocalizer<AbpUiResource> localizer)
+    protected virtual void AddType(TagHelperContext context, TagHelperOutput output)
+    {
+        if (output.Attributes.ContainsName("type"))
         {
-            L = localizer;
+            return;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        output.Attributes.Add("type", "button");
+    }
+
+    protected virtual void AddBusyText(TagHelperContext context, TagHelperOutput output)
+    {
+        var busyText = TagHelper.BusyText ?? L["ProcessingWithThreeDot"];
+        if (busyText.IsNullOrWhiteSpace())
         {
-            base.Process(context, output);
-            output.TagName = "button";
-            AddType(context, output);
-            AddBusyText(context, output);
-            AddBusyTextIsHtml(context, output);
+            return;
         }
 
-        protected virtual void AddType(TagHelperContext context, TagHelperOutput output)
-        {
-            if (output.Attributes.ContainsName("type"))
-            {
-                return;
-            }
+        output.Attributes.SetAttribute(DataBusyTextAttributeName, busyText);
+    }
 
-            output.Attributes.Add("type", "button");
+    protected virtual void AddBusyTextIsHtml(TagHelperContext context, TagHelperOutput output)
+    {
+        if (!TagHelper.BusyTextIsHtml)
+        {
+            return;
         }
 
-        protected virtual void AddBusyText(TagHelperContext context, TagHelperOutput output)
-        {
-            var busyText = TagHelper.BusyText ?? L["ProcessingWithThreeDot"];
-            if (busyText.IsNullOrWhiteSpace())
-            {
-                return;
-            }
-
-            output.Attributes.SetAttribute(DataBusyTextAttributeName, busyText);
-        }
-
-        protected virtual void AddBusyTextIsHtml(TagHelperContext context, TagHelperOutput output)
-        {
-            if (!TagHelper.BusyTextIsHtml)
-            {
-                return;
-            }
-
-            output.Attributes.SetAttribute(DataBusyTextIsHtmlAttributeName, TagHelper.BusyTextIsHtml.ToString().ToLower());
-        }
+        output.Attributes.SetAttribute(DataBusyTextIsHtmlAttributeName, TagHelper.BusyTextIsHtml.ToString().ToLower());
     }
 }

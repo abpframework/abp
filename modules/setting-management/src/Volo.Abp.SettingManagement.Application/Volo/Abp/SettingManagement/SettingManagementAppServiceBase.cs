@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Application.Services;
 using Volo.Abp.SettingManagement.Localization;
 
-namespace Volo.Abp.SettingManagement
+namespace Volo.Abp.SettingManagement;
+
+public abstract class SettingManagementAppServiceBase : ApplicationService
 {
-    public abstract class SettingManagementAppServiceBase : ApplicationService
+    protected SettingManagementAppServiceBase()
     {
-        protected SettingManagementAppServiceBase()
-        {
-            ObjectMapperContext = typeof(AbpSettingManagementApplicationModule);
-            LocalizationResource = typeof(AbpSettingManagementResource);
-        }
+        ObjectMapperContext = typeof(AbpSettingManagementApplicationModule);
+        LocalizationResource = typeof(AbpSettingManagementResource);
     }
 }

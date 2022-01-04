@@ -29,6 +29,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`help`**: 展示ABP CLI的用法帮助信息.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
 * **`add-package`**: 添加ABP包到项目.
 * **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
 * **`generate-proxy`**: 生成客户端代理以使用HTTP API端点.
@@ -128,6 +129,16 @@ abp update [options]
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
 * `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
 * `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
+
+### clean
+
+删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
+
+用法:
+
+````bash
+abp clean
+````
 
 ### add-package
 
