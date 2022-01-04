@@ -3,28 +3,27 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 
-namespace Volo.CmsKit.Public.Pages
+namespace Volo.CmsKit.Public.Pages;
+
+[RequiresGlobalFeature(typeof(PagesFeature))]
+public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {
-    [RequiresGlobalFeature(typeof(PagesFeature))]
-    public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
+    protected IPageRepository PageRepository { get; }
+
+    public PagePublicAppService(IPageRepository pageRepository)
     {
-        protected IPageRepository PageRepository { get; }
+        PageRepository = pageRepository;
+    }
 
-        public PagePublicAppService(IPageRepository pageRepository)
+    public virtual async Task<PageDto> FindBySlugAsync(string slug)
+    {
+        var page = await PageRepository.FindBySlugAsync(slug);
+
+        if (page == null)
         {
-            PageRepository = pageRepository;
+            return null;
         }
 
-        public virtual async Task<PageDto> FindBySlugAsync(string slug)
-        {
-            var page = await PageRepository.FindBySlugAsync(slug);
-
-            if (page == null)
-            {
-                return null;
-            }
-
-            return ObjectMapper.Map<Page, PageDto>(page);
-        }
+        return ObjectMapper.Map<Page, PageDto>(page);
     }
 }

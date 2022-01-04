@@ -3,32 +3,31 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Authorization.Permissions;
+
+public class RequirePermissionsSimpleStateChecker<TState> : ISimpleStateChecker<TState>
+    where TState : IHasSimpleStateCheckers<TState>
 {
-    public class RequirePermissionsSimpleStateChecker<TState> : ISimpleStateChecker<TState>
-        where TState : IHasSimpleStateCheckers<TState>
+    private readonly RequirePermissionsSimpleBatchStateCheckerModel<TState> _model;
+
+    public RequirePermissionsSimpleStateChecker(RequirePermissionsSimpleBatchStateCheckerModel<TState> model)
     {
-        private readonly RequirePermissionsSimpleBatchStateCheckerModel<TState> _model;
+        _model = model;
+    }
 
-        public RequirePermissionsSimpleStateChecker(RequirePermissionsSimpleBatchStateCheckerModel<TState> model)
+    public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
+    {
+        var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
+
+        if (_model.Permissions.Length == 1)
         {
-            _model = model;
+            return await permissionChecker.IsGrantedAsync(_model.Permissions.First());
         }
 
-        public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
-        {
-            var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
+        var grantResult = await permissionChecker.IsGrantedAsync(_model.Permissions);
 
-            if (_model.Permissions.Length == 1)
-            {
-                return await permissionChecker.IsGrantedAsync(_model.Permissions.First());
-            }
-
-            var grantResult = await permissionChecker.IsGrantedAsync(_model.Permissions);
-
-            return _model.RequiresAll
-                ? grantResult.AllGranted
-                : grantResult.Result.Any(x => _model.Permissions.Contains(x.Key) && x.Value == PermissionGrantResult.Granted);
-        }
+        return _model.RequiresAll
+            ? grantResult.AllGranted
+            : grantResult.Result.Any(x => _model.Permissions.Contains(x.Key) && x.Value == PermissionGrantResult.Granted);
     }
 }

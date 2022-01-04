@@ -7,158 +7,157 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public abstract class ExternalLoginProviderBase : IExternalLoginProvider
 {
-    public abstract class ExternalLoginProviderBase : IExternalLoginProvider
+    protected IGuidGenerator GuidGenerator { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IdentityUserManager UserManager { get; }
+    protected IIdentityUserRepository IdentityUserRepository { get; }
+    protected IOptions<IdentityOptions> IdentityOptions { get; }
+
+    protected ExternalLoginProviderBase(
+        IGuidGenerator guidGenerator,
+        ICurrentTenant currentTenant,
+        IdentityUserManager userManager,
+        IIdentityUserRepository identityUserRepository,
+        IOptions<IdentityOptions> identityOptions)
     {
-        protected IGuidGenerator GuidGenerator { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected IdentityUserManager UserManager { get; }
-        protected IIdentityUserRepository IdentityUserRepository { get; }
-        protected IOptions<IdentityOptions> IdentityOptions { get; }
+        GuidGenerator = guidGenerator;
+        CurrentTenant = currentTenant;
+        UserManager = userManager;
+        IdentityUserRepository = identityUserRepository;
+        IdentityOptions = identityOptions;
+    }
 
-        protected ExternalLoginProviderBase(
-            IGuidGenerator guidGenerator,
-            ICurrentTenant currentTenant,
-            IdentityUserManager userManager,
-            IIdentityUserRepository identityUserRepository,
-            IOptions<IdentityOptions> identityOptions)
+    public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
+
+    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
+    {
+        await IdentityOptions.SetAsync();
+
+        var externalUser = await GetUserInfoAsync(userName);
+        NormalizeExternalLoginUserInfo(externalUser, userName);
+
+        var user = new IdentityUser(
+            GuidGenerator.Create(),
+            userName,
+            externalUser.Email,
+            tenantId: CurrentTenant.Id
+        );
+
+        user.Name = externalUser.Name;
+        user.Surname = externalUser.Surname;
+
+        user.IsExternal = true;
+
+        user.SetEmailConfirmed(externalUser.EmailConfirmed ?? false);
+        user.SetPhoneNumber(externalUser.PhoneNumber, externalUser.PhoneNumberConfirmed ?? false);
+
+        (await UserManager.CreateAsync(user)).CheckErrors();
+
+        if (externalUser.TwoFactorEnabled != null)
         {
-            GuidGenerator = guidGenerator;
-            CurrentTenant = currentTenant;
-            UserManager = userManager;
-            IdentityUserRepository = identityUserRepository;
-            IdentityOptions = identityOptions;
+            (await UserManager.SetTwoFactorEnabledAsync(user, externalUser.TwoFactorEnabled.Value)).CheckErrors();
         }
 
-        public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
-
-        public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
-        {
-            await IdentityOptions.SetAsync();
-
-            var externalUser = await GetUserInfoAsync(userName);
-            NormalizeExternalLoginUserInfo(externalUser, userName);
-
-            var user = new IdentityUser(
-                GuidGenerator.Create(),
-                userName,
-                externalUser.Email,
-                tenantId: CurrentTenant.Id
-            );
-
-            user.Name = externalUser.Name;
-            user.Surname = externalUser.Surname;
-
-            user.IsExternal = true;
-
-            user.SetEmailConfirmed(externalUser.EmailConfirmed ?? false);
-            user.SetPhoneNumber(externalUser.PhoneNumber, externalUser.PhoneNumberConfirmed ?? false);
-
-            (await UserManager.CreateAsync(user)).CheckErrors();
-
-            if (externalUser.TwoFactorEnabled != null)
-            {
-                (await UserManager.SetTwoFactorEnabledAsync(user, externalUser.TwoFactorEnabled.Value)).CheckErrors();
-            }
-
-            (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
-            (await UserManager.AddLoginAsync(
-                        user,
-                        new UserLoginInfo(
-                            providerName,
-                            externalUser.ProviderKey ,
-                            providerName
-                        )
+        (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
+        (await UserManager.AddLoginAsync(
+                    user,
+                    new UserLoginInfo(
+                        providerName,
+                        externalUser.ProviderKey,
+                        providerName
                     )
-                ).CheckErrors();
+                )
+            ).CheckErrors();
 
-            return user;
+        return user;
+    }
+
+    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
+    {
+        await IdentityOptions.SetAsync();
+
+        var externalUser = await GetUserInfoAsync(user);
+        NormalizeExternalLoginUserInfo(externalUser, user.UserName);
+
+        if (!externalUser.Name.IsNullOrWhiteSpace())
+        {
+            user.Name = externalUser.Name;
         }
 
-        public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
+        if (!externalUser.Surname.IsNullOrWhiteSpace())
         {
-            await IdentityOptions.SetAsync();
+            user.Surname = externalUser.Surname;
+        }
 
-            var externalUser = await GetUserInfoAsync(user);
-            NormalizeExternalLoginUserInfo(externalUser, user.UserName);
-
-            if (!externalUser.Name.IsNullOrWhiteSpace())
+        if (user.PhoneNumber != externalUser.PhoneNumber)
+        {
+            if (!externalUser.PhoneNumber.IsNullOrWhiteSpace())
             {
-                user.Name = externalUser.Name;
+                await UserManager.SetPhoneNumberAsync(user, externalUser.PhoneNumber);
+                user.SetPhoneNumberConfirmed(externalUser.PhoneNumberConfirmed == true);
             }
-
-            if (!externalUser.Surname.IsNullOrWhiteSpace())
+        }
+        else
+        {
+            if (!user.PhoneNumber.IsNullOrWhiteSpace() &&
+                user.PhoneNumberConfirmed == false &&
+                externalUser.PhoneNumberConfirmed == true)
             {
-                user.Surname = externalUser.Surname;
+                user.SetPhoneNumberConfirmed(true);
             }
+        }
 
-            if (user.PhoneNumber != externalUser.PhoneNumber)
-            {
-                if (!externalUser.PhoneNumber.IsNullOrWhiteSpace())
-                {
-                    await UserManager.SetPhoneNumberAsync(user, externalUser.PhoneNumber);
-                    user.SetPhoneNumberConfirmed(externalUser.PhoneNumberConfirmed == true);
-                }
-            }
-            else
-            {
-                if (!user.PhoneNumber.IsNullOrWhiteSpace() &&
-                    user.PhoneNumberConfirmed == false &&
-                    externalUser.PhoneNumberConfirmed == true)
-                {
-                    user.SetPhoneNumberConfirmed(true);
-                }
-            }
+        if (!string.Equals(user.Email, externalUser.Email, StringComparison.OrdinalIgnoreCase))
+        {
+            (await UserManager.SetEmailAsync(user, externalUser.Email)).CheckErrors();
+            user.SetEmailConfirmed(externalUser.EmailConfirmed ?? false);
+        }
 
-            if (!string.Equals(user.Email, externalUser.Email, StringComparison.OrdinalIgnoreCase))
-            {
-                (await UserManager.SetEmailAsync(user, externalUser.Email)).CheckErrors();
-                user.SetEmailConfirmed(externalUser.EmailConfirmed ?? false);
-            }
+        if (externalUser.TwoFactorEnabled != null)
+        {
+            (await UserManager.SetTwoFactorEnabledAsync(user, externalUser.TwoFactorEnabled.Value)).CheckErrors();
+        }
 
-            if (externalUser.TwoFactorEnabled != null)
-            {
-                (await UserManager.SetTwoFactorEnabledAsync(user, externalUser.TwoFactorEnabled.Value)).CheckErrors();
-            }
+        await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins);
 
-            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins);
-
-            var userLogin = user.Logins.FirstOrDefault(l => l.LoginProvider == providerName);
-            if (userLogin != null)
+        var userLogin = user.Logins.FirstOrDefault(l => l.LoginProvider == providerName);
+        if (userLogin != null)
+        {
+            if (userLogin.ProviderKey != externalUser.ProviderKey)
             {
-                if (userLogin.ProviderKey != externalUser.ProviderKey)
-                {
-                    (await UserManager.RemoveLoginAsync(user, providerName, userLogin.ProviderKey)).CheckErrors();
-                    (await UserManager.AddLoginAsync(user, new UserLoginInfo(providerName, externalUser.ProviderKey, providerName))).CheckErrors();
-                }
-            }
-            else
-            {
+                (await UserManager.RemoveLoginAsync(user, providerName, userLogin.ProviderKey)).CheckErrors();
                 (await UserManager.AddLoginAsync(user, new UserLoginInfo(providerName, externalUser.ProviderKey, providerName))).CheckErrors();
             }
-
-            user.IsExternal = true;
-
-            (await UserManager.UpdateAsync(user)).CheckErrors();
+        }
+        else
+        {
+            (await UserManager.AddLoginAsync(user, new UserLoginInfo(providerName, externalUser.ProviderKey, providerName))).CheckErrors();
         }
 
-        protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName);
+        user.IsExternal = true;
 
-        protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user)
-        {
-            return GetUserInfoAsync(user.UserName);
-        }
+        (await UserManager.UpdateAsync(user)).CheckErrors();
+    }
 
-        private static void NormalizeExternalLoginUserInfo(
-            ExternalLoginUserInfo externalUser,
-            string userName
-        )
+    protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName);
+
+    protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user)
+    {
+        return GetUserInfoAsync(user.UserName);
+    }
+
+    private static void NormalizeExternalLoginUserInfo(
+        ExternalLoginUserInfo externalUser,
+        string userName
+    )
+    {
+        if (externalUser.ProviderKey.IsNullOrWhiteSpace())
         {
-            if (externalUser.ProviderKey.IsNullOrWhiteSpace())
-            {
-                externalUser.ProviderKey = userName;
-            }
+            externalUser.ProviderKey = userName;
         }
     }
 }

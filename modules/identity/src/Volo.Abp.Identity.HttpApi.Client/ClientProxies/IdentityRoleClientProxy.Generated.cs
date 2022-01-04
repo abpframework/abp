@@ -9,56 +9,55 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.Identity.ClientProxies
+namespace Volo.Abp.Identity.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityRoleAppService), typeof(IdentityRoleClientProxy))]
+public partial class IdentityRoleClientProxy : ClientProxyBase<IIdentityRoleAppService>, IIdentityRoleAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IIdentityRoleAppService), typeof(IdentityRoleClientProxy))]
-    public partial class IdentityRoleClientProxy : ClientProxyBase<IIdentityRoleAppService>, IIdentityRoleAppService
+    public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
     {
-        public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
-        {
-            return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetAllListAsync));
-        }
+        return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetAllListAsync));
+    }
 
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
+    public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
+    {
+        return await RequestAsync<PagedResultDto<IdentityRoleDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<IdentityRoleDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(GetIdentityRolesInput), input }
-            });
-        }
+            { typeof(GetIdentityRolesInput), input }
+        });
+    }
 
-        public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
+    public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<IdentityRoleDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityRoleDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
+    public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
+    {
+        return await RequestAsync<IdentityRoleDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityRoleDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(IdentityRoleCreateDto), input }
-            });
-        }
+            { typeof(IdentityRoleCreateDto), input }
+        });
+    }
 
-        public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
+    public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
+    {
+        return await RequestAsync<IdentityRoleDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityRoleDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(IdentityRoleUpdateDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(IdentityRoleUpdateDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

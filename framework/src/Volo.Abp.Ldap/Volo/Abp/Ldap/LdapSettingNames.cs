@@ -1,15 +1,14 @@
-﻿namespace Volo.Abp.Ldap
+﻿namespace Volo.Abp.Ldap;
+
+public static class LdapSettingNames
 {
-    public static class LdapSettingNames
-    {
-        public const string ServerHost = "Abp.Ldap.ServerHost";
+    public const string ServerHost = "Abp.Ldap.ServerHost";
 
-        public const string ServerPort = "Abp.Ldap.ServerPort";
+    public const string ServerPort = "Abp.Ldap.ServerPort";
 
-        public const string BaseDc = "Abp.Ldap.BaseDc";
+    public const string BaseDc = "Abp.Ldap.BaseDc";
 
-        public const string UserName = "Abp.Ldap.UserName";
+    public const string UserName = "Abp.Ldap.UserName";
 
-        public const string Password = "Abp.Ldap.Password";
-    }
+    public const string Password = "Abp.Ldap.Password";
 }

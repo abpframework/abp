@@ -11,21 +11,20 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.EntityFrameworkCore
+namespace Volo.CmsKit.EntityFrameworkCore;
+
+[ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
+public interface ICmsKitDbContext : IEfCoreDbContext
 {
-    [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
-    public interface ICmsKitDbContext : IEfCoreDbContext
-    {
-        DbSet<Comment> Comments { get; }
-        DbSet<CmsUser> User { get; }
-        DbSet<UserReaction> Reactions { get; }
-        DbSet<Rating> Ratings { get; }
-        DbSet<Tag> Tags { get; }
-        DbSet<EntityTag> EntityTags { get; }
-        DbSet<Page> Pages { get; }
-        DbSet<Blog> Blogs { get; }
-        DbSet<BlogPost> BlogPosts { get; }
-        DbSet<MediaDescriptor> MediaDescriptors { get; }
-        DbSet<MenuItem> MenuItems { get; }
-    }
+    DbSet<Comment> Comments { get; }
+    DbSet<CmsUser> User { get; }
+    DbSet<UserReaction> Reactions { get; }
+    DbSet<Rating> Ratings { get; }
+    DbSet<Tag> Tags { get; }
+    DbSet<EntityTag> EntityTags { get; }
+    DbSet<Page> Pages { get; }
+    DbSet<Blog> Blogs { get; }
+    DbSet<BlogPost> BlogPosts { get; }
+    DbSet<MediaDescriptor> MediaDescriptors { get; }
+    DbSet<MenuItem> MenuItems { get; }
 }

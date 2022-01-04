@@ -2,23 +2,22 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class AbpAspNetCoreServiceCollectionExtensions
 {
-    public static class AbpAspNetCoreServiceCollectionExtensions
+    public static IWebHostEnvironment GetHostingEnvironment(this IServiceCollection services)
     {
-        public static IWebHostEnvironment GetHostingEnvironment(this IServiceCollection services)
+        var hostingEnvironment = services.GetSingletonInstanceOrNull<IWebHostEnvironment>();
+
+        if (hostingEnvironment == null)
         {
-            var hostingEnvironment = services.GetSingletonInstanceOrNull<IWebHostEnvironment>();
-
-            if (hostingEnvironment == null)
+            return new EmptyHostingEnvironment()
             {
-                return new EmptyHostingEnvironment()
-                {
-                    EnvironmentName = Environments.Development
-                };
-            }
-
-            return hostingEnvironment;
+                EnvironmentName = Environments.Development
+            };
         }
+
+        return hostingEnvironment;
     }
 }
