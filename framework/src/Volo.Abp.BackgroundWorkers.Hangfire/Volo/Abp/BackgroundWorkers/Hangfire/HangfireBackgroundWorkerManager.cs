@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
@@ -25,14 +26,14 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
+            var unProxyWorker = ProxyHelper.UnProxy(hangfireBackgroundWorker);
             if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
             {
-                RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.DoWorkAsync(),
-                    hangfireBackgroundWorker.CronExpression);
+                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),hangfireBackgroundWorker.CronExpression);
             }
             else
             {
-                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.DoWorkAsync(),
+                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
                     hangfireBackgroundWorker.CronExpression);
             }
         }
@@ -64,7 +65,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
                 return Task.CompletedTask;
             }
 
-            var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+            var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
             var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
             RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
