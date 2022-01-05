@@ -22,7 +22,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public void Add(IBackgroundWorker worker)
+    public Task AddAsync(IBackgroundWorker worker)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
@@ -57,12 +57,12 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             }
             else
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (period == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
