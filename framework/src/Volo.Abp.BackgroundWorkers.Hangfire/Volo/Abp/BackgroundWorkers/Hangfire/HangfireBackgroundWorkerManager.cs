@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Castle.DynamicProxy;
 using Hangfire;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
@@ -32,7 +33,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             }
             else
             {
-                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.DoWorkAsync(),
+                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => hangfireBackgroundWorker.DoWorkAsync(),
                     hangfireBackgroundWorker.CronExpression);
             }
         }
@@ -64,13 +65,28 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
                 return Task.CompletedTask;
             }
 
-            var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+            var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(GetProxyClassRealType(worker));
             var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
             RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
         }
 
         return Task.CompletedTask;
+    }
+
+    protected virtual Type GetProxyClassRealType(object instance)
+    {
+        Type realType;
+        if (ProxyUtil.IsProxy(instance))
+        {
+            realType = ProxyUtil.GetUnproxiedType(instance);
+        }
+        else
+        {
+            realType = instance.GetType();
+        }
+
+        return realType;
     }
 
     protected virtual string GetCron(int period)

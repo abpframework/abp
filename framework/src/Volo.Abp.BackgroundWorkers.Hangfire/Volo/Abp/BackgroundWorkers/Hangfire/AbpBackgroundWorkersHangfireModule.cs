@@ -2,6 +2,7 @@
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Castle;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
@@ -9,7 +10,8 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
 [DependsOn(
     typeof(AbpBackgroundWorkersModule),
-    typeof(AbpHangfireModule))]
+    typeof(AbpHangfireModule),
+    typeof(AbpCastleCoreModule))]
 public class AbpBackgroundWorkersHangfireModule : AbpModule
 {
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
