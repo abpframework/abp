@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\studio\src\Volo.Abp.Studio.ModuleInstaller\Volo.Abp.Studio.ModuleInstaller.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="..\..\Volo.Abp.Identity.abpmdl.json" />
+      <EmbeddedResource Include="..\..\Volo.Abp.Identity.abpmdl.json" />
+    </ItemGroup>
+
+</Project>

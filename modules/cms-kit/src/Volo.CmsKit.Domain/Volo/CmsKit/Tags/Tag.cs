@@ -4,34 +4,40 @@ using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class Tag : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
-    public class Tag : FullAuditedAggregateRoot<Guid>, IMultiTenant
+    public virtual Guid? TenantId { get; protected set; }
+
+    [NotNull]
+    public virtual string EntityType { get; protected set; }
+
+    [NotNull]
+    public virtual string Name { get; protected set; }
+
+    protected Tag()
     {
-        public string EntityType { get; set; }
+    }
 
-        public string Name { get; protected set; }
+    public Tag(
+        Guid id,
+        [NotNull] string entityType,
+        [NotNull] string name,
+        Guid? tenantId = null) : base(id)
+    {
+        EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
+        Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
+        TenantId = tenantId;
+    }
 
-        public Guid? TenantId { get; set; }
+    public virtual void SetName([NotNull] string name)
+    {
+        Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
+    }
 
-        protected Tag()
-        {
-        }
-
-        public Tag(
-            Guid id,
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null) : base(id)
-        {
-            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
-            SetName(name);
-            TenantId = tenantId;
-        }
-
-        public void SetName(string name)
-        {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TagConsts.MaxNameLength);
-        }
+    public virtual void SetEntityType(string entityType)
+    {
+        EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
     }
 }

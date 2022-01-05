@@ -90,7 +90,7 @@ Abra o `book-list.component.html`e adicione o `abp-modal`para mostrar / ocultar 
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       Cancel
     </button>
   </ng-template>
@@ -276,7 +276,7 @@ Abra o `book-list.component.html`e adicione um `abp-button`para salvar o formul√
 
 ```html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
     Cancel
   </button>
   <button class="btn btn-primary" (click)="save()">

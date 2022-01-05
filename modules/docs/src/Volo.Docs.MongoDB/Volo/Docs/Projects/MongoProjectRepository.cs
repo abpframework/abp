@@ -22,7 +22,7 @@ namespace Volo.Docs.Projects
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
         {
-            var projects = await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(sorting ?? "Id desc").As<IMongoQueryable<Project>>()
+            var projects = await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting).As<IMongoQueryable<Project>>()
                 .PageBy<Project, IMongoQueryable<Project>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 

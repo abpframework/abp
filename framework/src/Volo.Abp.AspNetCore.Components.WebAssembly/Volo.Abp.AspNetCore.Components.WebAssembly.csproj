@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Abp.AspNetCore.Components.WebAssembly</AssemblyName>
         <PackageId>Volo.Abp.AspNetCore.Components.WebAssembly</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,9 +15,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Client.Common\Volo.Abp.AspNetCore.Mvc.Client.Common.csproj" />
       <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
-      <ProjectReference Include="..\Volo.Abp.AspNetCore.Components\Volo.Abp.AspNetCore.Components.csproj" />
     </ItemGroup>
 
     <ItemGroup>

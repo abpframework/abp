@@ -1,0 +1,11 @@
+﻿@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.Localization
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <Field>
+        <Check TValue="bool" @bind-Checked="@Value">@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</Check>
+    </Field>
+}

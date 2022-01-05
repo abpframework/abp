@@ -1,0 +1,8 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Volo.Feature:010001": "Caracteristica nu este activată: {FeatureName}",
+    "Volo.Feature:010002": "Caracteristicile necesare nu sunt activate. Toate aceste caracteristici trebuie activate: {FeatureNames}",
+    "Volo.Feature:010003": "Caracteristicile necesare nu sunt activate. Cel puţin una din aceste caracteristici trebuie activată: {FeatureNames}"
+  }
+}

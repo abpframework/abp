@@ -21,12 +21,12 @@ describe('AuthGuard', () => {
     expect(guard.canActivate()).toBe(true);
   });
 
-  it('should execute the initLogin method of the authService', () => {
+  it('should execute the navigateToLogin method of the authService', () => {
     const authService = spectator.inject(AuthService);
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
-    const initLoginSpy = jest.spyOn(authService, 'initLogin');
+    const navigateToLoginSpy = jest.spyOn(authService, 'navigateToLogin');
 
     expect(guard.canActivate()).toBe(false);
-    expect(initLoginSpy).toHaveBeenCalled();
+    expect(navigateToLoginSpy).toHaveBeenCalled();
   });
 });

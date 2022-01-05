@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "Menu:TenantManagement": "إدارة الجهات",
@@ -10,6 +10,7 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Default Connection String",
     "DisplayName:UseSharedDatabase": "استخدام قاعدة البيانات المشتركة",
+    "ManageHostFeatures": "إدارة ميزات المضيف",
     "Permission:TenantManagement": "إدارة المستأجر",
     "Permission:Create": "إنشاء",
     "Permission:Edit": "تحرير",

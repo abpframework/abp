@@ -43,6 +43,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.AspNetCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Identity.Blazor", "src\Volo.Abp.Identity.Blazor\Volo.Abp.Identity.Blazor.csproj", "{3F7BB653-3F3A-4889-B73C-E463F239099A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Identity.Blazor.Server", "src\Volo.Abp.Identity.Blazor.Server\Volo.Abp.Identity.Blazor.Server.csproj", "{A5BAC86D-1231-4B95-918E-2011477A81E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Identity.Blazor.WebAssembly", "src\Volo.Abp.Identity.Blazor.WebAssembly\Volo.Abp.Identity.Blazor.WebAssembly.csproj", "{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +125,14 @@ Global
 		{3F7BB653-3F3A-4889-B73C-E463F239099A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F7BB653-3F3A-4889-B73C-E463F239099A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F7BB653-3F3A-4889-B73C-E463F239099A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5BAC86D-1231-4B95-918E-2011477A81E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5BAC86D-1231-4B95-918E-2011477A81E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5BAC86D-1231-4B95-918E-2011477A81E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5BAC86D-1231-4B95-918E-2011477A81E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +156,8 @@ Global
 		{736F91E7-8A70-441B-89DE-0E29A348E718} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
 		{89C094EB-D80A-4976-9C10-7CE3EBEEE877} = {9FACAF96-A681-4B36-A938-A37DCA0B7EC1}
 		{3F7BB653-3F3A-4889-B73C-E463F239099A} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
+		{A5BAC86D-1231-4B95-918E-2011477A81E7} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
+		{4DB89179-EEDC-4C01-9F9E-04A7C106FA7F} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05740D37-83CF-4041-9C2A-D89F1B3DB5A4}

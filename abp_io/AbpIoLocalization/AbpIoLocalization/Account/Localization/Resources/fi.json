@@ -1,0 +1,15 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Account": "ABP-tili - Kirjaudu ja rekisteröidy | ABP.IO",
+    "Welcome": "Tervetuloa",
+    "UseOneOfTheFollowingLinksToContinue": "Käytä yhtä seuraavista linkeistä jatkaaksesi",
+    "FrameworkHomePage": "Kehyksen kotisivu",
+    "FrameworkDocumentation": "Puitteet",
+    "OfficialBlog": "Virallinen blogi",
+    "CommercialHomePage": "Kaupallinen kotisivu",
+    "CommercialSupportWebSite": "Kaupallisen tuen verkkosivusto",
+    "CommunityWebSite": "ABP-yhteisön verkkosivusto",
+    "ManageAccount": "Oma tili | ABP.IO"
+  }
+}

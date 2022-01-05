@@ -1,9 +1,8 @@
-﻿$(function () {
+$(function () {
     var $container = $('#edit-post-container');
     var $editorContainer = $container.find('.edit-post-editor');
     var $submitButton = $container.find('button[type=submit]');
     var $form = $container.find('form#edit-post-form');
-    var editorDataKey = 'tuiEditor';
     var $titleLengthWarning = $('#title-length-warning');
     var maxTitleLength = parseInt($titleLengthWarning.data('max-length'));
 
@@ -14,15 +13,15 @@
     var $postFormSubmitButton = $('#PostFormSubmitButton');
 
     var setCoverImage = function (file) {
-        $postCoverImage.val(file.fileUrl);
-        $coverImage.attr('src', file.fileUrl);
+        $postCoverImage.val(file.webUrl);
+        $coverImage.attr('src', file.webUrl);
         $postFormSubmitButton.removeAttr('disabled');
     };
 
     var uploadCoverImage = function (file) {
         var formData = new FormData();
         formData.append('file', file);
-
+        formData.append('name', file.name);
         $.ajax({
             type: 'POST',
             url: '/api/blogging/files/images/upload',
@@ -64,7 +63,7 @@
     var uploadImage = function (file, callbackFn) {
         var formData = new FormData();
         formData.append('file', file);
-
+        formData.append('name', file.name);
         $.ajax({
             type: 'POST',
             url: '/api/blogging/files/images/upload',
@@ -72,37 +71,37 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                callbackFn(response.fileUrl);
+                callbackFn(response.webUrl);
             },
         });
     };
 
-    var newPostEditor = $editorContainer
-        .tuiEditor({
-            usageStatistics: false,
-            initialEditType: 'markdown',
-            previewStyle: 'tab',
-            height: 'auto',
-            initialValue: $form.find("input[name='Post.Content']").val(),
-            hooks: {
-                addImageBlobHook: function (blob, callback, source) {
-                    var imageAltText = blob.name;
+    var newPostEditor = new toastui.Editor({
+        el: $editorContainer[0],
+        usageStatistics: false,
+        initialEditType: 'markdown',
+        previewStyle: 'tab',
+        height: 'auto',
+        plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
+        initialValue: $form.find("input[name='Post.Content']").val(),
+        hooks: {
+            addImageBlobHook: function (blob, callback, source) {
+                var imageAltText = blob.name;
 
-                    uploadImage(blob, function (fileUrl) {
-                        callback(fileUrl, imageAltText);
-                    });
-                },
+                uploadImage(blob, function (webUrl) {
+                    callback(webUrl, imageAltText);
+                });
             },
-            events: {
-                load: function () {
-                    $editorContainer.find('.loading-cover').remove();
-                    $submitButton.prop('disabled', false);
-                    $form.data('validator').settings.ignore = '.ignore';
-                    $editorContainer.find(':input').addClass('ignore');
-                },
+        },
+        events: {
+            load: function () {
+                $editorContainer.find('.loading-cover').remove();
+                $submitButton.prop('disabled', false);
+                $form.data('validator').settings.ignore = '.ignore';
+                $editorContainer.find(':input').addClass('ignore');
             },
-        })
-        .data(editorDataKey);
+        },
+    });
 
     $container.find('form#edit-post-form').submit(function (e) {
         var $postTextInput = $form.find("input[name='Post.Content']");

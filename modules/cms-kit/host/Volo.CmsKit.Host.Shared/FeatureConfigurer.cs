@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Threading;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit
 {

@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 ## Introduction
 
@@ -70,7 +75,7 @@ We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Datab
 
 ### Update the EF Core Mapping
 
-Open the `BookStoreDbContextModelCreatingExtensions` class under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
+Locate to `OnModelCreating` method in the `BookStoreDbContext` class that under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
 
 ````csharp
 builder.Entity<Book>(b =>
@@ -86,13 +91,13 @@ builder.Entity<Book>(b =>
 
 ### Add New EF Core Migration
 
-Run the following command in the Package Manager Console (of the Visual Studio) to add a new database migration:
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore` project and type the following command:
 
 ````bash
-Add-Migration "Added_AuthorId_To_Book"
+dotnet ef migrations add Added_AuthorId_To_Book
 ````
-
-> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -120,6 +125,8 @@ migrationBuilder.AddForeignKey(
 * Adds an `AuthorId` field to the `AppBooks` table.
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -326,6 +333,7 @@ Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Acme.BookStore.Permissions;
@@ -387,23 +395,17 @@ namespace Acme.BookStore.Books
 
         public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            //Set a default sorting, if not provided
-            if (input.Sorting.IsNullOrWhiteSpace())
-            {
-                input.Sorting = nameof(Book.Name);
-            }
-            
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
             var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
-                orderby input.Sorting //TODO: Can not sort like that!
                 select new {book, author};
 
             //Paging
             query = query
+                .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
 
@@ -434,6 +436,25 @@ namespace Acme.BookStore.Books
             return new ListResultDto<AuthorLookupDto>(
                 ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
             );
+        }
+
+        private static string NormalizeSorting(string sorting)
+        {
+            if (sorting.IsNullOrEmpty())
+            {
+                return $"book.{nameof(Book.Name)}";
+            }
+
+            if (sorting.Contains("authorName", StringComparison.OrdinalIgnoreCase))
+            {
+                return sorting.Replace(
+                    "authorName",
+                    "author.Name", 
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            return $"book.{sorting}";
         }
     }
 }
@@ -927,7 +948,7 @@ Since the HTTP APIs have been changed, you need to update Angular client side [s
 Run the following command in the `angular` folder (you may need to stop the angular application):
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 This command will update the service proxy files under the `/src/app/proxy/` folder.
 
@@ -935,10 +956,11 @@ This command will update the service proxy files under the `/src/app/proxy/` fol
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
 
-````js
+````html
 <ngx-datatable-column
   [name]="'::Author' | abpLocalization"
   prop="authorName"
+  [sortable]="false"
 ></ngx-datatable-column>
 ````
 
@@ -1078,7 +1100,7 @@ That's all. Just run the application and try to create or edit an author.
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ### The Book List
 

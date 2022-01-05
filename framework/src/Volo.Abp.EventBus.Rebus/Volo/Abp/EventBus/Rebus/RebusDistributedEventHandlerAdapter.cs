@@ -1,20 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Rebus.Handlers;
 
-namespace Volo.Abp.EventBus.Rebus
+namespace Volo.Abp.EventBus.Rebus;
+
+public class RebusDistributedEventHandlerAdapter<TEventData> : IHandleMessages<TEventData>
 {
-    public class RebusDistributedEventHandlerAdapter<TEventData> : IHandleMessages<TEventData>
+    protected RebusDistributedEventBus RebusDistributedEventBus { get; }
+
+    public RebusDistributedEventHandlerAdapter(RebusDistributedEventBus rebusDistributedEventBus)
     {
-        protected RebusDistributedEventBus RebusDistributedEventBus { get; }
+        RebusDistributedEventBus = rebusDistributedEventBus;
+    }
 
-        public RebusDistributedEventHandlerAdapter(RebusDistributedEventBus rebusDistributedEventBus)
-        {
-            RebusDistributedEventBus = rebusDistributedEventBus;
-        }
-
-        public async Task Handle(TEventData message)
-        {
-            await RebusDistributedEventBus.TriggerHandlersAsync(typeof(TEventData), message);
-        }
+    public async Task Handle(TEventData message)
+    {
+        await RebusDistributedEventBus.ProcessEventAsync(message.GetType(), message);
     }
 }

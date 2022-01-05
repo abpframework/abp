@@ -8,59 +8,58 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.TestApp.Testing
+namespace Volo.Abp.TestApp.Testing;
+
+public abstract class Repository_Queryable_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class Repository_Queryable_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected readonly IRepository<Person, Guid> PersonRepository;
+
+    protected Repository_Queryable_Tests()
     {
-        protected readonly IRepository<Person, Guid> PersonRepository;
+        PersonRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
+    }
 
-        protected Repository_Queryable_Tests()
+    [Fact]
+    public async Task Any()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            PersonRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
-        }
+            (await PersonRepository.AnyAsync()).ShouldBeTrue();
+            return Task.CompletedTask;
+        });
+    }
 
-        [Fact]
-        public async Task Any()
+    [Fact]
+    public async Task Single()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            await WithUnitOfWorkAsync(() =>
-            {
-                PersonRepository.Any().ShouldBeTrue();
-                return Task.CompletedTask;
-            });
-        }
+            var person = await PersonRepository.SingleAsync(p => p.Id == TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            return Task.CompletedTask;
+        });
+    }
 
-        [Fact]
-        public async Task Single()
+    [Fact]
+    public async Task WithDetails()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            await WithUnitOfWorkAsync(() =>
-            {
-                var person = PersonRepository.Single(p => p.Id == TestDataBuilder.UserDouglasId);
-                person.Name.ShouldBe("Douglas");
-                return Task.CompletedTask;
-            });
-        }
+            var person = (await PersonRepository.WithDetailsAsync()).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        });
+    }
 
-        [Fact]
-        public async Task WithDetails()
+    [Fact]
+    public async Task WithDetails_Explicit()
+    {
+        await WithUnitOfWorkAsync(async () =>
         {
-            await WithUnitOfWorkAsync(async () =>
-            {
-                var person = (await PersonRepository.WithDetailsAsync()).Single(p => p.Id == TestDataBuilder.UserDouglasId);
-                person.Name.ShouldBe("Douglas");
-                person.Phones.Count.ShouldBe(2);
-            });
-        }
-
-        [Fact]
-        public async Task WithDetails_Explicit()
-        {
-            await WithUnitOfWorkAsync(async () =>
-            {
-                var person = (await PersonRepository.WithDetailsAsync(p => p.Phones)).Single(p => p.Id == TestDataBuilder.UserDouglasId);
-                person.Name.ShouldBe("Douglas");
-                person.Phones.Count.ShouldBe(2);
-            });
-        }
+            var person = (await PersonRepository.WithDetailsAsync(p => p.Phones)).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        });
     }
 }

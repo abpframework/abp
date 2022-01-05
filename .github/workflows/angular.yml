@@ -2,13 +2,21 @@ name: 'Angular'
 on:
   pull_request:
     paths:
-      - 'npm/ng-packs/**'
+      - 'npm/ng-packs/**/*.ts'
+      - 'npm/ng-packs/**/*.html'
+      - 'npm/ng-packs/*.json'
       - '!npm/ng-packs/scripts/**'
+      - '!npm/ng-packs/packages/schematics/**'
+    branches:
+      - 'rel-*'
+      - 'dev'
 jobs:
   build-test-lint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
@@ -25,25 +33,13 @@ jobs:
         working-directory: npm/ng-packs
 
       - name: Run lint
-        run: yarn ng lint
+        run: yarn affected:lint --base=remotes/origin/${{ github.base_ref }}
         working-directory: npm/ng-packs
 
-      - name: Run prepare workspace
-        run: yarn prepare:workspace
+      - name: Run build
+        run: yarn affected:build --base=remotes/origin/${{ github.base_ref }}
         working-directory: npm/ng-packs
 
       - name: Run test
-        run: yarn ci:test
+        run: yarn affected:test --base=remotes/origin/${{ github.base_ref }}
         working-directory: npm/ng-packs
-
-      - name: Build dev-app
-        run: yarn build --prod
-        working-directory: npm/ng-packs
-
-      - name: Install packages of app template
-        run: yarn install
-        working-directory: templates/app/angular
-
-      - name: Build app template
-        run: yarn build --prod
-        working-directory: templates/app/angular

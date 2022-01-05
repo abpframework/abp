@@ -1,4 +1,3 @@
-import snq from 'snq';
 import { ApplicationLocalizationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 
 // This will not be necessary when only Angukar 9.1+ is supported
@@ -14,7 +13,7 @@ export function createLocalizer(localization: ApplicationLocalizationConfigurati
   return (resourceName: string, key: string, defaultValue: string) => {
     if (resourceName === '_') return key;
 
-    const resource = snq(() => localization.values[resourceName]);
+    const resource = localization?.values?.[resourceName];
 
     if (!resource) return defaultValue;
 
@@ -36,7 +35,7 @@ export function createLocalizationPipeKeyGenerator(
 ) {
   const findLocalization = createLocalizationFinder(localization);
 
-  return (resourceNames: string[], keys: string[], defaultKey: string) => {
+  return (resourceNames: string[], keys: string[], defaultKey: string | undefined) => {
     const { resourceName, key } = findLocalization(resourceNames, keys);
     return !resourceName ? defaultKey : resourceName === '_' ? key : `${resourceName}::${key}`;
   };
@@ -46,7 +45,7 @@ function createLocalizationFinder(localization: ApplicationLocalizationConfigura
   const localize = createLocalizer(localization);
 
   return (resourceNames: string[], keys: string[]) => {
-    resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
+    resourceNames = resourceNames.concat(localization.defaultResourceName || '').filter(Boolean);
 
     const resourceCount = resourceNames.length;
     const keyCount = keys.length;

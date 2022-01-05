@@ -1,11 +1,9 @@
 ﻿using JetBrains.Annotations;
-using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class CmsKitTagOptions
 {
-    public class CmsKitTagOptions
-    {
-        [NotNull]
-        public TagEntityTypeDefinitionDictionary EntityTypes { get; } = new TagEntityTypeDefinitionDictionary();
-    }
+    [NotNull]
+    public TagEntityTypeDefinitions EntityTypes { get; } = new TagEntityTypeDefinitions();
 }

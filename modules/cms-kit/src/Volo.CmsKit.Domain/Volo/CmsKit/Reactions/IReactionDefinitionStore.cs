@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.CmsKit.Reactions
-{
-    public interface IReactionDefinitionStore
-    {
-        Task<List<ReactionDefinition>> GetReactionsAsync([CanBeNull] string entityType = null);
+namespace Volo.CmsKit.Reactions;
 
-        Task<ReactionDefinition> GetReactionOrNullAsync([NotNull] string reactionName, [CanBeNull] string entityType = null);
-    }
+public interface IReactionDefinitionStore : IEntityTypeDefinitionStore<ReactionEntityTypeDefinition>
+{
+    Task<List<ReactionDefinition>> GetReactionsAsync([NotNull] string entityType);
+
+    Task<ReactionDefinition> GetReactionOrNullAsync([NotNull] string reactionName, [NotNull] string entityType);
 }

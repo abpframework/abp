@@ -3,18 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Admin.Blogs
 {
     public class BlogManagementAppService : BloggingAdminAppServiceBase, IBlogManagementAppService
     {
         private readonly IBlogRepository _blogRepository;
-
-        public BlogManagementAppService(IBlogRepository blogRepository)
+        private readonly IDistributedCache<List<PostCacheItem>> _postsCache;
+        
+        public BlogManagementAppService(IBlogRepository blogRepository, IDistributedCache<List<PostCacheItem>> postsCache)
         {
             _blogRepository = blogRepository;
+            _postsCache = postsCache;
         }
 
         public async Task<ListResultDto<BlogDto>> GetListAsync()
@@ -54,6 +59,7 @@ namespace Volo.Blogging.Admin.Blogs
             blog.SetName(input.Name);
             blog.SetShortName(input.ShortName);
             blog.Description = input.Description;
+            blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
@@ -62,6 +68,12 @@ namespace Volo.Blogging.Admin.Blogs
         public async Task DeleteAsync(Guid id)
         {
             await _blogRepository.DeleteAsync(id);
+        }
+
+        [Authorize(BloggingPermissions.Blogs.ClearCache)]
+        public async Task ClearCacheAsync(Guid id)
+        {
+            await _postsCache.RemoveAsync(id.ToString());
         }
     }
 }

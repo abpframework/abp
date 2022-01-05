@@ -1,41 +1,37 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Reflection;
 
-namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
+namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
+
+public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
 {
-    public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        if (!context.ActionDescriptor.IsControllerAction())
         {
-            if (!context.ActionDescriptor.IsControllerAction())
-            {
-                await next();
-                return;
-            }
-
-            if (!IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
-            {
-                var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-                logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
-                context.Result = new NotFoundResult();
-                return;
-            }
-
             await next();
+            return;
         }
 
-        protected virtual bool IsGlobalFeatureEnabled(Type controllerType, out RequiresGlobalFeatureAttribute attribute)
+        if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
         {
-            attribute = ReflectionHelper.GetSingleAttributeOrDefault<RequiresGlobalFeatureAttribute>(controllerType);
-            return attribute == null || GlobalFeatureManager.Instance.IsEnabled(attribute.GetFeatureName());
+            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
+            logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
+            context.Result = new NotFoundResult();
+            return;
+        }
+
+        using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.GlobalFeatureChecking))
+        {
+            await next();
         }
     }
 }

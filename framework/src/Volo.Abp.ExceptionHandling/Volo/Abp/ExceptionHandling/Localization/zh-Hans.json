@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "未找到资源!",
     "DefaultErrorMessage404Detail": "未在服务中找到请求的资源!",
     "EntityNotFoundErrorMessage": "实体 {0} 不存在,id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "你提交的数据已经被其他用户/客户端修改.请放弃你所做的修改并再次尝试.",
     "Error": "错误",
     "UnhandledException": "未处理的异常!",
     "401Message": "未授权",
     "403Message": "禁止访问",
     "404Message": "网页未找到",
-    "500Message": "内部服务器错误"
+    "500Message": "内部服务器错误",
+    "403MessageDetail": "您没有权限执行此操作",
+    "404MessageDetail": "抱歉, 这个地址是空的"
   }
 }

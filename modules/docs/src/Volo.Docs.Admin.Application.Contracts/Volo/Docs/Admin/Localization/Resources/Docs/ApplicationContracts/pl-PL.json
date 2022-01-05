@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "pl-PL",
   "texts": {
     "Permission:DocumentManagement": "Zarządzanie dokumentacją",
@@ -6,11 +6,14 @@
     "Permission:Edit": "Edytuj",
     "Permission:Delete": "Usuń",
     "Permission:Create": "Utwórz",
+    "Permission:Documents": "Dokumenty",
+    "Menu:Documents": "Dokumenty",
     "Menu:DocumentManagement": "Dokumenty",
     "Menu:ProjectManagement": "Projekty",
     "CreateANewProject": "Utwórz nowy projet",
     "Edit": "Edytuj",
     "Create": "Utwórz",
+    "Pull": "Ciągnąć",
     "Projects": "Projekty",
     "Name": "Nazwa",
     "ShortName": "Krótka nazwa",
@@ -27,6 +30,30 @@
     "DisplayName:LatestVersionBranchName": "Nazwa brancha ostatniej wersji",
     "DisplayName:GitHubRootUrl": "Adres URL do GitHub'a",
     "DisplayName:GitHubAccessToken": "GitHub access token",
-    "DisplayName:GitHubUserAgent": "GitHub user agent"
+    "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:GithubVersionProviderSource": "Źródło dostawcy wersji GitHub",
+    "DisplayName:VersionBranchPrefix": "Prefiks gałęzi wersji",
+    "DisplayName:All": "Pociągnij wszystko",
+    "DisplayName:LanguageCode": "Kod języka",
+    "DisplayName:Version": "Wersja",
+    "Documents": "Dokumenty",
+    "RemoveFromCache": "Usuń z pamięci podręcznej",
+    "Reindex": "Ponowna indeksacja",
+    "ReindexCompleted": "Ponowna indeksacja zakończona",
+    "RemovedFromCache": "Usunięto z pamięci podręcznej",
+    "RemoveFromCacheConfirmation": "Czy na pewno chcesz usunąć ten element z pamięci podręcznej?",
+    "ReIndexDocumentConfirmation": "Czy na pewno chcesz ponownie zindeksować ten element?",
+    "DeleteFromDatabase": "Usuń z bazy danych",
+    "Deleted": "Usunięto",
+    "Search": "Szukaj",
+    "StartDate": "Data rozpoczęcia",
+    "EndDate": "Data końcowa",
+    "CreationTime": "Czas utworzenia",
+    "LastUpdateTime": "Ostatnia aktualizacja",
+    "LastSignificantUpdateTime": "Ostatnia ważna aktualizacja",
+    "Version": "Wersja",
+    "LanguageCode": "Kod języka",
+    "FileName": "Nazwa pliku",
+    "LastCachedTime": "Czas w pamięci podręcznej"
   }
 }

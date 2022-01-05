@@ -4,85 +4,95 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Reactions;
 using Volo.CmsKit.Web;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
+
+[ViewComponent(Name = "CmsReactionSelection")]
+[Widget(
+    ScriptTypes = new[] { typeof(ReactionSelectionScriptBundleContributor) },
+    StyleTypes = new[] { typeof(ReactionSelectionStyleBundleContributor) },
+    RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection",
+    AutoInitialize = true
+)]
+public class ReactionSelectionViewComponent : AbpViewComponent
 {
-    [ViewComponent(Name = "CmsReactionSelection")]
-    [Widget(
-        ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)},
-        StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection",
-        AutoInitialize = true
-    )]
-    public class ReactionSelectionViewComponent : AbpViewComponent
+    protected IReactionPublicAppService ReactionPublicAppService { get; }
+
+    protected CmsKitUiOptions Options { get; }
+
+    public AbpMvcUiOptions AbpMvcUiOptions { get; }
+
+    public ReactionSelectionViewComponent(
+        IReactionPublicAppService reactionPublicAppService,
+        IOptions<CmsKitUiOptions> options,
+        IOptions<AbpMvcUiOptions> abpMvcUiOptions)
     {
-        protected IReactionPublicAppService ReactionPublicAppService { get; }
+        ReactionPublicAppService = reactionPublicAppService;
+        Options = options.Value;
+        AbpMvcUiOptions = abpMvcUiOptions.Value;
+    }
 
-        protected CmsKitUiOptions Options { get; }
+    public virtual async Task<IViewComponentResult> InvokeAsync(
+        string entityType,
+        string entityId)
+    {
+        var result = await ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
 
-        public ReactionSelectionViewComponent(
-            IReactionPublicAppService reactionPublicAppService,
-            IOptions<CmsKitUiOptions> options)
+        var loginUrl =
+            $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-rating_{entityType}_{entityId}";
+
+        var viewModel = new ReactionSelectionViewModel
         {
-            ReactionPublicAppService = reactionPublicAppService;
-            Options = options.Value;
-        }
+            EntityType = entityType,
+            EntityId = entityId,
+            Reactions = new List<ReactionViewModel>(),
+            LoginUrl = loginUrl
+        };
 
-        public virtual async Task<IViewComponentResult> InvokeAsync(
-            string entityType,
-            string entityId)
+        foreach (var reactionDto in result.Items)
         {
-            var result = await ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
-
-            var viewModel = new ReactionSelectionViewModel
-            {
-                EntityType = entityType,
-                EntityId = entityId,
-                Reactions = new List<ReactionViewModel>()
-            };
-
-            foreach (var reactionDto in result.Items)
-            {
-                viewModel.Reactions.Add(
-                    new ReactionViewModel //TODO: AutoMap
+            viewModel.Reactions.Add(
+                new ReactionViewModel //TODO: AutoMap
                     {
-                        Name = reactionDto.Reaction.Name,
-                        DisplayName = reactionDto.Reaction.DisplayName,
-                        Icon = Options.ReactionIcons.GetLocalizedIcon(reactionDto.Reaction.Name),
-                        Count = reactionDto.Count,
-                        IsSelectedByCurrentUser = reactionDto.IsSelectedByCurrentUser
-                    });
-            }
-
-            return View("~/Pages/CmsKit/Shared/Components/ReactionSelection/Default.cshtml", viewModel);
+                    Name = reactionDto.Reaction.Name,
+                    DisplayName = reactionDto.Reaction.DisplayName,
+                    Icon = Options.ReactionIcons.GetLocalizedIcon(reactionDto.Reaction.Name),
+                    Count = reactionDto.Count,
+                    IsSelectedByCurrentUser = reactionDto.IsSelectedByCurrentUser
+                });
         }
 
-        public class ReactionSelectionViewModel
-        {
-            public string EntityType { get; set; }
+        return View("~/Pages/CmsKit/Shared/Components/ReactionSelection/Default.cshtml", viewModel);
+    }
 
-            public string EntityId { get; set; }
+    public class ReactionSelectionViewModel
+    {
+        public string EntityType { get; set; }
 
-            public List<ReactionViewModel> Reactions { get; set; }
-        }
+        public string EntityId { get; set; }
 
-        public class ReactionViewModel
-        {
-            [NotNull]
-            public string Name { get; set; }
+        public List<ReactionViewModel> Reactions { get; set; }
 
-            [CanBeNull]
-            public string DisplayName { get; set; }
+        public string LoginUrl { get; set; }
+    }
 
-            [NotNull]
-            public string Icon { get; set; }
+    public class ReactionViewModel
+    {
+        [NotNull]
+        public string Name { get; set; }
 
-            public int Count { get; set; }
+        [CanBeNull]
+        public string DisplayName { get; set; }
 
-            public bool IsSelectedByCurrentUser { get; set; }
-        }
+        [NotNull]
+        public string Icon { get; set; }
+
+        public int Count { get; set; }
+
+        public bool IsSelectedByCurrentUser { get; set; }
     }
 }

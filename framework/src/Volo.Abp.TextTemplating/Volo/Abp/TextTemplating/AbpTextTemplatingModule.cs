@@ -1,46 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.TextTemplating.Scriban;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+[Obsolete("This module will be removed in the future. Please use AbpTextTemplatingScribanModule or AbpTextTemplatingRazorModule.")]
+[DependsOn(typeof(AbpTextTemplatingScribanModule))]
+public class AbpTextTemplatingModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpVirtualFileSystemModule),
-        typeof(AbpLocalizationAbstractionsModule)
-        )]
-    public class AbpTextTemplatingModule : AbpModule
-    {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            AutoAddProvidersAndContributors(context.Services);
-        }
 
-        private static void AutoAddProvidersAndContributors(IServiceCollection services)
-        {
-            var definitionProviders = new List<Type>();
-            var contentContributors = new List<Type>();
-
-            services.OnRegistred(context =>
-            {
-                if (typeof(ITemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionProviders.Add(context.ImplementationType);
-                }
-
-                if (typeof(ITemplateContentContributor).IsAssignableFrom(context.ImplementationType))
-                {
-                    contentContributors.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<AbpTextTemplatingOptions>(options =>
-            {
-                options.DefinitionProviders.AddIfNotContains(definitionProviders);
-                options.ContentContributors.AddIfNotContains(contentContributors);
-            });
-        }
-    }
 }

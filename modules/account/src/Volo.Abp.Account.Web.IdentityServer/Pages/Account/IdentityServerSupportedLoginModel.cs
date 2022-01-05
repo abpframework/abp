@@ -20,215 +20,200 @@ using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Account.Web.Pages.Account
-{
-    [ExposeServices(typeof(LoginModel))]
-    public class IdentityServerSupportedLoginModel : LoginModel
-    {
-        protected IIdentityServerInteractionService Interaction { get; }
-        protected IClientStore ClientStore { get; }
-        protected IEventService IdentityServerEvents { get; }
+namespace Volo.Abp.Account.Web.Pages.Account;
 
-        public IdentityServerSupportedLoginModel(
-            IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions,
-            IIdentityServerInteractionService interaction,
-            IClientStore clientStore,
-            IEventService identityServerEvents,
-            IOptions<IdentityOptions> identityOptions)
-            :base(
-                schemeProvider,
-                accountOptions,
-                identityOptions)
+[ExposeServices(typeof(LoginModel))]
+public class IdentityServerSupportedLoginModel : LoginModel
+{
+    protected IIdentityServerInteractionService Interaction { get; }
+    protected IClientStore ClientStore { get; }
+    protected IEventService IdentityServerEvents { get; }
+
+    public IdentityServerSupportedLoginModel(
+        IAuthenticationSchemeProvider schemeProvider,
+        IOptions<AbpAccountOptions> accountOptions,
+        IIdentityServerInteractionService interaction,
+        IClientStore clientStore,
+        IEventService identityServerEvents,
+        IOptions<IdentityOptions> identityOptions)
+        : base(
+            schemeProvider,
+            accountOptions,
+            identityOptions)
+    {
+        Interaction = interaction;
+        ClientStore = clientStore;
+        IdentityServerEvents = identityServerEvents;
+    }
+
+    public override async Task<IActionResult> OnGetAsync()
+    {
+        LoginInput = new LoginInputModel();
+
+        var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
+
+        if (context != null)
         {
-            Interaction = interaction;
-            ClientStore = clientStore;
-            IdentityServerEvents = identityServerEvents;
+            ShowCancelButton = true;
+
+            LoginInput.UserNameOrEmailAddress = context.LoginHint;
+
+            //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
+            var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
+            if (!string.IsNullOrEmpty(tenant))
+            {
+                CurrentTenant.Change(Guid.Parse(tenant));
+                Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
+            }
         }
 
-        public override async Task<IActionResult> OnGetAsync()
+        if (context?.IdP != null)
         {
-            LoginInput = new LoginInputModel();
-
-            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
-
-            if (context != null)
-            {
-                ShowCancelButton = true;
-
-                LoginInput.UserNameOrEmailAddress = context.LoginHint;
-
-                //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
-                var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
-                if (!string.IsNullOrEmpty(tenant))
-                {
-                    CurrentTenant.Change(Guid.Parse(tenant));
-                    Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
-                }
-            }
-
-            if (context?.IdP != null)
-            {
-                LoginInput.UserNameOrEmailAddress = context.LoginHint;
-                ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
-                return Page();
-            }
-
-            var providers = await GetExternalProviders();
-            ExternalProviders = providers.ToList();
-
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            if (context?.Client?.ClientId != null)
-            {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
-                if (client != null)
-                {
-                    EnableLocalLogin = client.EnableLocalLogin;
-
-                    if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
-                    {
-                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
-                    }
-                }
-            }
-
-            if (IsExternalLoginOnly)
-            {
-                return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
-            }
-
+            LoginInput.UserNameOrEmailAddress = context.LoginHint;
+            ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
             return Page();
         }
 
-        public override async Task<IActionResult> OnPostAsync(string action)
+        var providers = await GetExternalProviders();
+        ExternalProviders = providers.ToList();
+
+        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
+        if (context?.Client?.ClientId != null)
         {
-            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
-            if (action == "Cancel")
+            var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
+            if (client != null)
             {
-                if (context == null)
+                EnableLocalLogin = client.EnableLocalLogin;
+
+                if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                 {
-                    return Redirect("~/");
+                    providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
+            }
+        }
 
-                await Interaction.GrantConsentAsync(context, new ConsentResponse()
-                {
-                    Error = AuthorizationError.AccessDenied
-                });
+        if (IsExternalLoginOnly)
+        {
+            return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
+        }
 
-                return Redirect(ReturnUrl);
+        return Page();
+    }
+
+    public override async Task<IActionResult> OnPostAsync(string action)
+    {
+        var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
+        if (action == "Cancel")
+        {
+            if (context == null)
+            {
+                return Redirect("~/");
             }
 
-            await CheckLocalLoginAsync();
-
-            ValidateModel();
-
-            await IdentityOptions.SetAsync();
-
-            ExternalProviders = await GetExternalProviders();
-
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            await ReplaceEmailToUsernameOfInputIfNeeds();
-
-            var result = await SignInManager.PasswordSignInAsync(
-                LoginInput.UserNameOrEmailAddress,
-                LoginInput.Password,
-                LoginInput.RememberMe,
-                true
-            );
-
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            await Interaction.GrantConsentAsync(context, new ConsentResponse()
             {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                Action = result.ToIdentitySecurityLogAction(),
-                UserName = LoginInput.UserNameOrEmailAddress,
-                ClientId = context?.Client?.ClientId
+                Error = AuthorizationError.AccessDenied
             });
 
-            if (result.RequiresTwoFactor)
-            {
-                return await TwoFactorLoginResultAsync();
-            }
-
-            if (result.IsLockedOut)
-            {
-                Alerts.Warning(L["UserLockedOutMessage"]);
-                return Page();
-            }
-
-            if (result.IsNotAllowed)
-            {
-                Alerts.Warning(L["LoginIsNotAllowed"]);
-                return Page();
-            }
-
-            if (!result.Succeeded)
-            {
-                Alerts.Danger(L["InvalidUserNameOrPassword"]);
-                return Page();
-            }
-
-            //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
-
-            Debug.Assert(user != null, nameof(user) + " != null");
-            await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
-
-            return RedirectSafely(ReturnUrl, ReturnUrlHash);
+            return Redirect(ReturnUrl);
         }
 
-        public override async Task<IActionResult> OnPostExternalLogin(string provider)
-        {
-            if (AccountOptions.WindowsAuthenticationSchemeName == provider)
-            {
-                return await ProcessWindowsLoginAsync();
-            }
+        await CheckLocalLoginAsync();
 
-            return await base.OnPostExternalLogin(provider);
+        ValidateModel();
+
+        await IdentityOptions.SetAsync();
+
+        ExternalProviders = await GetExternalProviders();
+
+        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
+        await ReplaceEmailToUsernameOfInputIfNeeds();
+
+        var result = await SignInManager.PasswordSignInAsync(
+            LoginInput.UserNameOrEmailAddress,
+            LoginInput.Password,
+            LoginInput.RememberMe,
+            true
+        );
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = result.ToIdentitySecurityLogAction(),
+            UserName = LoginInput.UserNameOrEmailAddress,
+            ClientId = context?.Client?.ClientId
+        });
+
+        if (result.RequiresTwoFactor)
+        {
+            return await TwoFactorLoginResultAsync();
         }
 
-        private async Task<IActionResult> ProcessWindowsLoginAsync()
+        if (result.IsLockedOut)
         {
-            var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
-            if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
-            {
-                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
-            }
+            Alerts.Warning(L["UserLockedOutMessage"]);
+            return Page();
+        }
 
-            var props = new AuthenticationProperties
+        if (result.IsNotAllowed)
+        {
+            Alerts.Warning(L["LoginIsNotAllowed"]);
+            return Page();
+        }
+
+        if (!result.Succeeded)
+        {
+            Alerts.Danger(L["InvalidUserNameOrPassword"]);
+            return Page();
+        }
+
+        //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
+        var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                   await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+
+        Debug.Assert(user != null, nameof(user) + " != null");
+        await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
+
+        return RedirectSafely(ReturnUrl, ReturnUrlHash);
+    }
+
+    public override async Task<IActionResult> OnPostExternalLogin(string provider)
+    {
+        if (AccountOptions.WindowsAuthenticationSchemeName == provider)
+        {
+            return await ProcessWindowsLoginAsync();
+        }
+
+        return await base.OnPostExternalLogin(provider);
+    }
+
+    protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
+    {
+        var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
+        if (result.Succeeded)
+        {
+            var props = new AuthenticationProperties()
             {
                 RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
                 Items =
-                {
-                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
-                }
+                    {
+                        {
+                            "LoginProvider", AccountOptions.WindowsAuthenticationSchemeName
+                        },
+                    }
             };
 
-            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-            identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
-            identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
+            var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
+            id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
+            id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
 
-            //TODO: Consider to add Windows groups the the identity
-            //if (_accountOptions.IncludeWindowsGroups)
-            //{
-            //    var windowsIdentity = windowsPrincipal.Identity as WindowsIdentity;
-            //    if (windowsIdentity != null)
-            //    {
-            //        var groups = windowsIdentity.Groups?.Translate(typeof(NTAccount));
-            //        var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
-            //        identity.AddClaims(roles);
-            //    }
-            //}
+            await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
 
-            await HttpContext.SignInAsync(
-                IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                new ClaimsPrincipal(identity),
-                props
-            );
-
-            return RedirectSafely(props.RedirectUri);
+            return Redirect(props.RedirectUri);
         }
+
+        return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
     }
 }

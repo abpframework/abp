@@ -1,6 +1,7 @@
 {
   "culture": "ru",
   "texts": {
+    "GivenTenantIsNotExist": "Данный арендатор не существует: {0}",
     "GivenTenantIsNotAvailable": "Данный арендатор недоступен: {0}",
     "Tenant": "Арендатор",
     "Switch": "переключиться",

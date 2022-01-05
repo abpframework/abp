@@ -1,4 +1,4 @@
-﻿# Domain Services
+# Domain Services
 
 ## Introduction
 

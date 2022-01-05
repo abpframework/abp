@@ -2,11 +2,14 @@
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
-{
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule), typeof(AbpMinifyModule))]
-    public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
-    {
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-    }
+[DependsOn(
+    typeof(AbpAspNetCoreMvcUiBootstrapModule),
+    typeof(AbpMinifyModule),
+    typeof(AbpAspNetCoreMvcUiBundlingAbstractionsModule)
+    )]
+public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
+{
+
 }

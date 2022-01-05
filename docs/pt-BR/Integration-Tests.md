@@ -1,3 +1,3 @@
-﻿# Integration Tests
+# Integration Tests
 
 Façam!

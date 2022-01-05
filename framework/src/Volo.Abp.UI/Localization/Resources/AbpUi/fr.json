@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "Enregistrement...",
     "Actions": "Actions",
     "Delete": "Supprimer",
+    "SuccessfullyDeleted": "Supprimé avec succès",
     "Edit": "Modifier",
     "Refresh": "Actualiser",
     "Language": "Langue",
@@ -46,6 +47,7 @@
     "GoBack": "Retour",
     "Search": "Recherche",
     "ItemWillBeDeletedMessageWithFormat": "{0} sera supprimé!",
-    "ItemWillBeDeletedMessage": "Cet objet va être supprimé!"
+    "ItemWillBeDeletedMessage": "Cet objet va être supprimé!",
+    "ManageYourAccount": "Gérer votre compte"
   }
 }

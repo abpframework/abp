@@ -6,38 +6,37 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Account.Web.Pages.Account
+namespace Volo.Abp.Account.Web.Pages.Account;
+
+public class ManageModel : AccountPageModel
 {
-    public class ManageModel : AccountPageModel
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public string ReturnUrl { get; set; }
+
+    public ProfileManagementPageCreationContext ProfileManagementPageCreationContext { get; private set; }
+
+    protected ProfileManagementPageOptions Options { get; }
+
+    public ManageModel(IOptions<ProfileManagementPageOptions> options)
     {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
-        
-        public ProfileManagementPageCreationContext ProfileManagementPageCreationContext { get; private set; }
+        Options = options.Value;
+    }
 
-        protected ProfileManagementPageOptions Options { get; }
+    public virtual async Task<IActionResult> OnGetAsync()
+    {
+        ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
 
-        public ManageModel(IOptions<ProfileManagementPageOptions> options)
+        foreach (var contributor in Options.Contributors)
         {
-            Options = options.Value;
+            await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
         }
 
-        public virtual async Task<IActionResult> OnGetAsync()
-        {
-            ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
+        return Page();
+    }
 
-            foreach (var contributor in Options.Contributors)
-            {
-                await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
-            }
-
-            return Page();
-        }
-
-        public virtual Task<IActionResult> OnPostAsync()
-        {
-            return Task.FromResult<IActionResult>(Page());
-        }
+    public virtual Task<IActionResult> OnPostAsync()
+    {
+        return Task.FromResult<IActionResult>(Page());
     }
 }

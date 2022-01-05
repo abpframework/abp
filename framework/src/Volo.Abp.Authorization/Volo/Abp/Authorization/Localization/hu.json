@@ -1,0 +1,10 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Volo.Authorization:010001": "A hitelesítés sikertelen! Mivel a politika nem adott.",
+    "Volo.Authorization:010002": "A hitelesítés sikertelen! Az adott irányelv nem engedélyezte: {PolicyName}",
+    "Volo.Authorization:010003": "A hitelesítés sikertelen! Az adott házirend nincs engedélyezve az adott erőforráshoz: {ResourceName}",
+    "Volo.Authorization:010004": "A hitelesítés sikertelen! Az adott követelmény nincs megadva az adott erőforráshoz: {ResourceName}",
+    "Volo.Authorization:010005": "A hitelesítés sikertelen! Az adott követelmények nem lettek megadva az adott erőforráshoz: {ResourceName}"
+  }
+}

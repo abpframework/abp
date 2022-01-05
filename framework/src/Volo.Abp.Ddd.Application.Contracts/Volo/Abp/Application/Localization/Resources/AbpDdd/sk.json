@@ -1,0 +1,6 @@
+{
+  "culture": "sk",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} nemôže byť viac ako {1}! Zvýšte {2}.{3} na strane servera, aby ste zobrazili viac výsledkov."
+  }
+}

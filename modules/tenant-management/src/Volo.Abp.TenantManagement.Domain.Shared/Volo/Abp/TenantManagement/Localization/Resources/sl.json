@@ -10,11 +10,14 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Privzeti Connection String",
     "DisplayName:UseSharedDatabase": "Uporabi skupno bazo",
+    "ManageHostFeatures": "Upravljajte funkcije gostitelja",
     "Permission:TenantManagement": "Upravljanje najemnikov",
     "Permission:Create": "Ustvarjanje",
     "Permission:Edit": "Urejanje",
     "Permission:Delete": "Brisanje",
     "Permission:ManageConnectionStrings": "Upravljanje connection string-ov",
-    "Permission:ManageFeatures": "Upravljanje funkcionalnosti"
+    "Permission:ManageFeatures": "Upravljanje funkcionalnosti",
+    "DisplayName:AdminEmailAddress": "Admin e-poštni naslov",
+    "DisplayName:AdminPassword": "Skrbniško geslo"
   }
 }

@@ -18,14 +18,13 @@
   <ng-template #dropdownLink let-route>
     <ng-container *ngIf="route.children?.length">
       <li
-        #navbarRootDropdown
         class="nav-item dropdown"
         display="static"
         *abpPermission="route.requiredPolicy"
         (click)="
-          navbarRootDropdown.expand
-            ? (navbarRootDropdown.expand = false)
-            : (navbarRootDropdown.expand = true)
+          rootDropdownExpand[route.name]
+            ? (rootDropdownExpand[route.name] = false)
+            : (rootDropdownExpand[route.name] = true)
         "
       >
         <a
@@ -42,7 +41,7 @@
           #routeContainer
           class="dropdown-menu border-0 shadow-sm"
           (click)="$event.preventDefault(); $event.stopPropagation()"
-          [class.d-block]="smallScreen && navbarRootDropdown.expand"
+          [class.d-block]="smallScreen && rootDropdownExpand[route.name]"
         >
           <ng-container
             *ngTemplateOutlet="forTemplate; context: { $implicit: route }"
@@ -62,12 +61,14 @@
   </ng-template>
 
   <ng-template #defaultChild let-child>
-    <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
-        <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
-        {{ child.name | abpLocalization }}</a
-      >
-    </div>
+    <ng-container *ngIf="child.path">
+      <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
+        <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}</a
+        >
+      </div>
+    </ng-container>
   </ng-template>
 
   <ng-template #dropdownChild let-child>
@@ -84,7 +85,7 @@
           abpEllipsis="210px"
           [abpEllipsisEnabled]="!smallScreen"
           role="button"
-          class="btn d-block text-left dropdown-toggle"
+          class="btn d-block text-start dropdown-toggle"
         >
           <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
           {{ child.name | abpLocalization }}
@@ -92,7 +93,7 @@
       </div>
       <div
         #childrenContainer
-        class="dropdown-menu border-0 shadow-sm"
+        class="dropdown-menu dropdown-menu-start border-0 shadow-sm"
         [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
       >
         <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }"></ng-container>

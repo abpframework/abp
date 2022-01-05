@@ -8,9 +8,12 @@ describe('ButtonComponent', () => {
 
   beforeEach(
     () =>
-      (spectator = createHost('<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>', {
-        hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
-      })),
+      (spectator = createHost(
+        '<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>',
+        {
+          hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
+        },
+      )),
   );
 
   it('should display the button', () => {
@@ -48,9 +51,5 @@ describe('ButtonComponent', () => {
     spectator.component.loading = true;
     spectator.detectComponentChanges();
     expect(spectator.query('[disabled]')).toBeTruthy();
-  });
-
-  it('should disabled when the loading input is true', () => {
-    expect(spectator.query('[autofocus][name="abp-button"]')).toBeTruthy();
   });
 });

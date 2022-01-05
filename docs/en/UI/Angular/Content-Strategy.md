@@ -11,13 +11,15 @@
 constructor(
   public content: string,
   protected domStrategy?: DomStrategy,
-  protected contentSecurityStrategy?: ContentSecurityStrategy
+  protected contentSecurityStrategy?: ContentSecurityStrategy,
+  protected options?: ElementOptions = {},
 )
 ```
 
 - `content` is set to `<script>` and `<style>` elements as `textContent` property.
 - `domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
 - `contentSecurityStrategy` is the `ContentSecurityStrategy` that will be used on the created element before inserting it. (_default: None_)
+- `options` can be used to pass any option to the element that will be created. e.g: `{ id: "some-id" }` (_default: empty object_)
 
 Please refer to [DomStrategy](./Dom-Strategy.md) and [ContentSecurityStrategy](./Content-Security-Strategy.md) documentation for their usage.
 
@@ -57,7 +59,7 @@ Predefined content strategies are accessible via `CONTENT_STRATEGY` constant.
 ### AppendScriptToBody
 
 ```js
-CONTENT_STRATEGY.AppendScriptToBody(content: string)
+CONTENT_STRATEGY.AppendScriptToBody(content: string, options?: ElementOptions<HTMLScriptElement>)
 ```
 
 Creates a `<script>` element with the given content and places it at the **end** of `<body>` tag in the document.
@@ -66,7 +68,7 @@ Creates a `<script>` element with the given content and places it at the **end**
 ### AppendScriptToHead
 
 ```js
-CONTENT_STRATEGY.AppendScriptToHead(content: string)
+CONTENT_STRATEGY.AppendScriptToHead(content: string, options?: ElementOptions<HTMLScriptElement>)
 ```
 
 Creates a `<script>` element with the given content and places it at the **end** of `<head>` tag in the document.
@@ -75,7 +77,7 @@ Creates a `<script>` element with the given content and places it at the **end**
 ### AppendStyleToHead
 
 ```js
-CONTENT_STRATEGY.AppendStyleToHead(content: string)
+CONTENT_STRATEGY.AppendStyleToHead(content: string, options?: ElementOptions<HTMLStyleElement>)
 ```
 
 Creates a `<style>` element with the given content and places it at the **end** of `<head>` tag in the document.
@@ -84,7 +86,7 @@ Creates a `<style>` element with the given content and places it at the **end** 
 ### PrependStyleToHead
 
 ```js
-CONTENT_STRATEGY.PrependStyleToHead(content: string)
+CONTENT_STRATEGY.PrependStyleToHead(content: string, options?: ElementOptions<HTMLStyleElement>)
 ```
 
 Creates a `<style>` element with the given content and places it at the **beginning** of `<head>` tag in the document.

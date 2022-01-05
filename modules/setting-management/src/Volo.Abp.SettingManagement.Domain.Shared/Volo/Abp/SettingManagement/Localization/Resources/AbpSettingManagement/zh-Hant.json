@@ -2,6 +2,23 @@
   "culture": "zh-Hant",
   "texts": {
     "Settings": "設置",
-    "SuccessfullySaved": "保存成功"
+    "SuccessfullySaved": "保存成功",
+    "Permission:SettingManagement": "設定管理",
+    "Permission:Emailing": "信箱",
+    "Menu:Emailing": "信箱",
+    "SmtpHost": "主機",
+    "SmtpPort": "Port",
+    "SmtpUserName": "帳號",
+    "SmtpPassword": "密碼",
+    "SmtpDomain": "網域",
+    "SmtpEnableSsl": "啟用 SSL",
+    "SmtpUseDefaultCredentials": "使用預設Credentials",
+    "DefaultFromAddress": "預設發信信箱",
+    "DefaultFromDisplayName": "預設信件顯示名稱",
+    "Feature:SettingManagementGroup": "設定管理",
+    "Feature:SettingManagementEnable": "啟用設定管理",
+    "Feature:SettingManagementEnableDescription": "在應用程序中啟用設定管理系統.",
+    "Feature:AllowTenantsToChangeEmailSettings": "允許租戶更改電子郵件設置。",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "允許租戶更改電子郵件設置。"
   }
 }

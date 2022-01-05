@@ -1,0 +1,15 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Nafn auðkennis auðlindar er þegar til: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api auðlindanafn er þegar til: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api scope nafn er þegar til: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId er núþegar til: {ClientId}",
+    "UserLockedOut": "Notandareikningnum hefur verið lokað vegna ógildra innskráningartilrauna. Bíddu aðeins og reyndu aftur.",
+    "InvalidUserNameOrPassword": "Ógilt notendanafn eða lykilorð!",
+    "LoginIsNotAllowed": "Þú hefur ekki leyfi til að skrá þig inn! Þú þarft að staðfesta netfangið þitt/símanúmer.",
+    "InvalidUsername": "Ógilt notendanafn eða lykilorð!",
+    "InvalidAuthenticatorCode": "Ógildur auðkenningarkóði!",
+    "TheTargetUserIsNotLinkedToYou": "Marknotandinn er ekki tengdur þér!"
+  }
+}

@@ -5,222 +5,226 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.Utils;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
 {
-    public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
+        if (context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref"))
         {
-            if (context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref"))
+            var localAbpRepoPath = context.BuildArgs.AbpGitHubLocalRepositoryPath;
+
+            if (string.IsNullOrWhiteSpace(localAbpRepoPath))
             {
-                var localAbpRepoPath = context.BuildArgs.AbpGitHubLocalRepositoryPath;
-
-                if (string.IsNullOrWhiteSpace(localAbpRepoPath))
-                {
-                    return;
-                }
-
-                var localVoloRepoPath = context.BuildArgs.VoloGitHubLocalRepositoryPath;
-
-                new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
-                    context.Files,
-                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
-                    localAbpRepoPath,
-                    localVoloRepoPath
-                ).Run();
+                return;
             }
-            else
+
+            var localVoloRepoPath = context.BuildArgs.VoloGitHubLocalRepositoryPath;
+
+            new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
+                context,
+                context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
+                localAbpRepoPath,
+                localVoloRepoPath
+            ).Run();
+        }
+        else
+        {
+            var nugetPackageVersion = context.TemplateFile.RepositoryNugetVersion;
+
+            if (IsBranchName(nugetPackageVersion))
             {
-                var nugetPackageVersion = context.TemplateFile.RepositoryNugetVersion;
+                nugetPackageVersion = context.TemplateFile.LatestVersion;
+            }
 
-                if (IsBranchName(nugetPackageVersion))
+            new ProjectReferenceReplacer.NugetReferenceReplacer(
+                context,
+                context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
+                nugetPackageVersion
+            ).Run();
+        }
+    }
+
+    private bool IsBranchName(string versionOrBranchName)
+    {
+        Check.NotNullOrWhiteSpace(versionOrBranchName, nameof(versionOrBranchName));
+
+        if (char.IsDigit(versionOrBranchName[0]))
+        {
+            return false;
+        }
+
+        if (versionOrBranchName[0].IsIn('v', 'V') &&
+            versionOrBranchName.Length > 1 &&
+            char.IsDigit(versionOrBranchName[1]))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private abstract class ProjectReferenceReplacer
+    {
+        private readonly List<FileEntry> _entries;
+        private readonly bool _isMicroserviceServiceTemplate;
+        private readonly string _projectName;
+
+        protected ProjectReferenceReplacer(
+            ProjectBuildContext context,
+            string projectName)
+        {
+            _entries = context.Files;
+            _isMicroserviceServiceTemplate = MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(context.Template?.Name);
+            _projectName = projectName;
+        }
+
+        public void Run()
+        {
+            foreach (var fileEntry in _entries)
+            {
+                if (fileEntry.Name.EndsWith(".csproj"))
                 {
-                    nugetPackageVersion = context.TemplateFile.LatestVersion;
+                    fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
                 }
-
-                new ProjectReferenceReplacer.NugetReferenceReplacer(
-                    context.Files,
-                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
-                    nugetPackageVersion
-                ).Run();
             }
         }
 
-        private bool IsBranchName(string versionOrBranchName)
+        private string ProcessFileContent(string content)
         {
-            Check.NotNullOrWhiteSpace(versionOrBranchName, nameof(versionOrBranchName));
+            Check.NotNull(content, nameof(content));
 
-            if (char.IsDigit(versionOrBranchName[0]))
+            using (var stream = StreamHelper.GenerateStreamFromString(content))
             {
-                return false;
-            }
-
-            if (versionOrBranchName[0].IsIn('v', 'V') &&
-                versionOrBranchName.Length > 1 &&
-                char.IsDigit(versionOrBranchName[1]))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private abstract class ProjectReferenceReplacer
-        {
-            private readonly List<FileEntry> _entries;
-            private readonly string _projectName;
-
-            protected ProjectReferenceReplacer(
-                List<FileEntry> entries,
-                string projectName)
-            {
-                _entries = entries;
-                _projectName = projectName;
-            }
-
-            public void Run()
-            {
-                foreach (var fileEntry in _entries)
-                {
-                    if (fileEntry.Name.EndsWith(".csproj"))
-                    {
-                        fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
-                    }
-                }
-            }
-
-            private string ProcessFileContent(string content)
-            {
-                Check.NotNull(content, nameof(content));
-
                 var doc = new XmlDocument() { PreserveWhitespace = true };
-
-                doc.Load(StreamHelper.GenerateStreamFromString(content));
-
+                doc.Load(stream);
                 return ProcessReferenceNodes(doc, content);
             }
+        }
 
-            private string ProcessReferenceNodes(XmlDocument doc, string content)
+        private string ProcessReferenceNodes(XmlDocument doc, string content)
+        {
+            Check.NotNull(content, nameof(content));
+
+            var nodes = doc.SelectNodes("/Project/ItemGroup/ProjectReference[@Include]");
+
+            foreach (XmlNode oldNode in nodes)
             {
-                Check.NotNull(content, nameof(content));
+                var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
-                var nodes = doc.SelectNodes("/Project/ItemGroup/ProjectReference[@Include]");
-
-                foreach (XmlNode oldNode in nodes)
+                // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
+                if (oldNodeIncludeValue.Contains(_projectName))
                 {
-                    var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
-
-                    // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
+                    if (_isMicroserviceServiceTemplate || _entries.Any(e => e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
                     {
                         continue;
                     }
-
-                    XmlNode newNode = null;
-
-                    newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);
-
-                    oldNode.ParentNode.ReplaceChild(newNode, oldNode);
                 }
 
-                return doc.OuterXml;
+                XmlNode newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);
+
+                oldNode.ParentNode.ReplaceChild(newNode, oldNode);
             }
 
-            private string GetProjectNameWithExtensionFromProjectReference(string oldNodeIncludeValue)
-            {
-                if (string.IsNullOrWhiteSpace(oldNodeIncludeValue))
-                {
-                    return oldNodeIncludeValue;
-                }
+            return doc.OuterXml;
+        }
 
-                return oldNodeIncludeValue.Split('\\', '/').Last();
+        private string GetProjectNameWithExtensionFromProjectReference(string oldNodeIncludeValue)
+        {
+            if (string.IsNullOrWhiteSpace(oldNodeIncludeValue))
+            {
+                return oldNodeIncludeValue;
             }
 
-            protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
+            return oldNodeIncludeValue.Split('\\', '/').Last();
+        }
+
+        protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
 
 
-            public class NugetReferenceReplacer : ProjectReferenceReplacer
+        public class NugetReferenceReplacer : ProjectReferenceReplacer
+        {
+            private readonly string _nugetPackageVersion;
+
+            public NugetReferenceReplacer(ProjectBuildContext context, string projectName, string nugetPackageVersion)
+                : base(context, projectName)
             {
-                private readonly string _nugetPackageVersion;
-
-                public NugetReferenceReplacer(List<FileEntry> entries, string projectName, string nugetPackageVersion)
-                    : base(entries, projectName)
-                {
-                    _nugetPackageVersion = nugetPackageVersion;
-                }
-
-                protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
-                {
-                    var newNode = doc.CreateElement("PackageReference");
-
-                    var includeAttr = doc.CreateAttribute("Include");
-                    includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
-                    newNode.Attributes.Append(includeAttr);
-
-                    var versionAttr = doc.CreateAttribute("Version");
-                    versionAttr.Value = _nugetPackageVersion;
-                    newNode.Attributes.Append(versionAttr);
-                    return newNode;
-                }
-
-                private string ConvertToNugetReference(string oldValue)
-                {
-                    var newValue = Regex.Match(oldValue, @"\\((?!.+?\\).+?)\.csproj", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-                    if (newValue.Success && newValue.Groups.Count == 2)
-                    {
-                        return newValue.Groups[1].Value;
-                    }
-
-                    return oldValue;
-                }
+                _nugetPackageVersion = nugetPackageVersion;
             }
 
-
-            public class LocalProjectPathReferenceReplacer : ProjectReferenceReplacer
+            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
             {
-                private readonly string _gitHubAbpLocalRepositoryPath;
-                private readonly string _gitHubVoloLocalRepositoryPath;
+                var newNode = doc.CreateElement("PackageReference");
 
-                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
-                    : base(entries, projectName)
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
+                newNode.Attributes.Append(includeAttr);
+
+                var versionAttr = doc.CreateAttribute("Version");
+                versionAttr.Value = _nugetPackageVersion;
+                newNode.Attributes.Append(versionAttr);
+                return newNode;
+            }
+
+            private string ConvertToNugetReference(string oldValue)
+            {
+                var newValue = Regex.Match(oldValue, @"\\((?!.+?\\).+?)\.csproj", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+                if (newValue.Success && newValue.Groups.Count == 2)
                 {
-                    _gitHubAbpLocalRepositoryPath = gitHubAbpLocalRepositoryPath;
-                    _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;
+                    return newValue.Groups[1].Value;
                 }
 
-                protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+                return oldValue;
+            }
+        }
+
+
+        public class LocalProjectPathReferenceReplacer : ProjectReferenceReplacer
+        {
+            private readonly string _gitHubAbpLocalRepositoryPath;
+            private readonly string _gitHubVoloLocalRepositoryPath;
+
+            public LocalProjectPathReferenceReplacer(ProjectBuildContext context, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
+                : base(context, projectName)
+            {
+                _gitHubAbpLocalRepositoryPath = gitHubAbpLocalRepositoryPath;
+                _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;
+            }
+
+            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+            {
+                var newNode = doc.CreateElement("ProjectReference");
+
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = SetGithubPath(oldNodeIncludeValue);
+                newNode.Attributes.Append(includeAttr);
+
+                return newNode;
+            }
+
+            private string SetGithubPath(string includeValue)
+            {
+                while (includeValue.StartsWith("..\\"))
                 {
-                    var newNode = doc.CreateElement("ProjectReference");
-
-                    var includeAttr = doc.CreateAttribute("Include");
-                    includeAttr.Value = SetGithubPath(oldNodeIncludeValue);
-                    newNode.Attributes.Append(includeAttr);
-
-                    return newNode;
+                    includeValue = includeValue.TrimStart('.');
+                    includeValue = includeValue.TrimStart('\\');
                 }
 
-                private string SetGithubPath(string includeValue)
+                if (!string.IsNullOrWhiteSpace(_gitHubVoloLocalRepositoryPath))
                 {
-                    while (includeValue.StartsWith("..\\"))
+                    if (includeValue.StartsWith("abp\\", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        includeValue = includeValue.TrimStart('.');
-                        includeValue = includeValue.TrimStart('\\');
+                        return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue.Substring("abp\\".Length);
                     }
 
-                    if (!string.IsNullOrWhiteSpace(_gitHubVoloLocalRepositoryPath))
-                    {
-                        if (includeValue.StartsWith("abp\\", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue.Substring("abp\\".Length);
-                        }
-
-                        return _gitHubVoloLocalRepositoryPath.EnsureEndsWith('\\') + "abp\\" + includeValue;
-                    }
-
-                    return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
+                    return _gitHubVoloLocalRepositoryPath.EnsureEndsWith('\\') + "abp\\" + includeValue;
                 }
+
+                return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
             }
         }
     }

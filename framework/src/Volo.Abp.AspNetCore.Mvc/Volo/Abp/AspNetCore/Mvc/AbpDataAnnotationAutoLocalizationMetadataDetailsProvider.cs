@@ -8,61 +8,82 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc;
+
+public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
 {
-    public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
+    private const string PropertyLocalizationKeyPrefix = "DisplayName:";
+
+    private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
+    private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
+
+    public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
     {
-        private const string PropertyLocalizationKeyPrefix = "DisplayName:";
+        _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
+        _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
+    }
 
-        private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
-        private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
-
-        public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
+    public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
+    {
+        var displayMetadata = context.DisplayMetadata;
+        if (displayMetadata.DisplayName != null)
         {
-            _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
-            _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
+            return;
         }
 
-        public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
+        var attributes = context.Attributes;
+
+        if (attributes.OfType<DisplayAttribute>().Any() ||
+            attributes.OfType<DisplayNameAttribute>().Any())
         {
-            var displayMetadata = context.DisplayMetadata;
-            if (displayMetadata.DisplayName != null)
-            {
-                return;
-            }
-
-            var attributes = context.Attributes;
-
-            if (attributes.OfType<DisplayAttribute>().Any() ||
-                attributes.OfType<DisplayNameAttribute>().Any())
-            {
-                return;
-            }
-
-            if (context.Key.Name.IsNullOrWhiteSpace())
-            {
-                return;
-            }
-
-            if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
-            {
-                return;
-            }
-
-            var containerType = context.Key.ContainerType ?? context.Key.ModelType;
-            var localizer = _localizationOptions.Value.Value.DataAnnotationLocalizerProvider(containerType, _stringLocalizerFactory.Value);
-
-            displayMetadata.DisplayName = () =>
-            {
-                var localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
-
-                if (localizedString.ResourceNotFound)
-                {
-                    localizedString = localizer[context.Key.Name];
-                }
-
-                return localizedString;
-            };
+            return;
         }
+
+        if (context.Key.Name.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
+        if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
+        {
+            return;
+        }
+
+        var containerType = context.Key.ContainerType ?? context.Key.ModelType;
+        var localizer = _localizationOptions.Value.Value.DataAnnotationLocalizerProvider(containerType, _stringLocalizerFactory.Value);
+
+        displayMetadata.DisplayName = () =>
+        {
+                /*
+                 * DisplayName:ClassName:PropertyName
+                 * DisplayName:PropertyName
+                 * ClassName:PropertyName
+                 * PropertyName
+                 */
+
+            LocalizedString localizedString = null;
+
+            if (context.Key.ContainerType != null)
+            {
+                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
+            }
+
+            if (localizedString == null || localizedString.ResourceNotFound)
+            {
+                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+            }
+
+            if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
+            {
+                localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
+            }
+
+            if (localizedString.ResourceNotFound)
+            {
+                localizedString = localizer[context.Key.Name];
+            }
+
+            return localizedString;
+        };
     }
 }

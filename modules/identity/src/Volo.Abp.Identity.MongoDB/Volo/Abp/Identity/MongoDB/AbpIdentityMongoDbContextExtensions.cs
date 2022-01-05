@@ -1,51 +1,41 @@
-﻿using System;
-using Volo.Abp.MongoDB;
+﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.Identity.MongoDB
+namespace Volo.Abp.Identity.MongoDB;
+
+public static class AbpIdentityMongoDbContextExtensions
 {
-    public static class AbpIdentityMongoDbContextExtensions
+    public static void ConfigureIdentity(this IMongoModelBuilder builder)
     {
-        public static void ConfigureIdentity(
-            this IMongoModelBuilder builder,
-            Action<IdentityMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<IdentityUser>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Users";
+        });
 
-            var options = new IdentityMongoModelBuilderConfigurationOptions(
-                AbpIdentityDbProperties.DbTablePrefix
-            );
+        builder.Entity<IdentityRole>(b =>
+        {
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "Roles";
+        });
 
-            optionsAction?.Invoke(options);
+        builder.Entity<IdentityClaimType>(b =>
+        {
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes";
+        });
 
-            builder.Entity<IdentityUser>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "Users";
-            });
+        builder.Entity<OrganizationUnit>(b =>
+        {
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits";
+        });
 
-            builder.Entity<IdentityRole>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "Roles";
-            });
+        builder.Entity<IdentitySecurityLog>(b =>
+        {
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs";
+        });
 
-            builder.Entity<IdentityClaimType>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "ClaimTypes";
-            });
-
-            builder.Entity<OrganizationUnit>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "OrganizationUnits";
-            });
-
-            builder.Entity<IdentitySecurityLog>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "SecurityLogs";
-            });
-
-            builder.Entity<IdentityLinkUser>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "LinkUsers";
-            });
-        }
+        builder.Entity<IdentityLinkUser>(b =>
+        {
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "LinkUsers";
+        });
     }
 }

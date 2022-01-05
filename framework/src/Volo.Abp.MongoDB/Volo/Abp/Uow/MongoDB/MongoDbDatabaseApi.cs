@@ -1,12 +1,13 @@
-﻿namespace Volo.Abp.Uow.MongoDB
-{
-    public class MongoDbDatabaseApi<TMongoDbContext> : IDatabaseApi
-    {
-        public TMongoDbContext DbContext { get; }
+﻿using Volo.Abp.MongoDB;
 
-        public MongoDbDatabaseApi(TMongoDbContext dbContext)
-        {
-            DbContext = dbContext;
-        }
+namespace Volo.Abp.Uow.MongoDB;
+
+public class MongoDbDatabaseApi : IDatabaseApi
+{
+    public IAbpMongoDbContext DbContext { get; }
+
+    public MongoDbDatabaseApi(IAbpMongoDbContext dbContext)
+    {
+        DbContext = dbContext;
     }
 }

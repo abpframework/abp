@@ -19,15 +19,13 @@
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4">
-                <input asp-for="ReturnUrl"/>
-                <input asp-for="ReturnUrlHash"/>
-                <div class="form-group">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                <div class="mb-3">
+                    <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
                     <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control"/>
                     <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="LoginInput.Password"></label>
+                <div class="mb-3">
+                    <label asp-for="LoginInput.Password" class="form-label"></label>
                     <input asp-for="LoginInput.Password" class="form-control"/>
                     <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
                 </div>
@@ -35,15 +33,17 @@
                     <abp-column>
                         <abp-input asp-for="LoginInput.RememberMe" class="mb-4"/>
                     </abp-column>
-                    <abp-column class="text-right">
+                    <abp-column class="text-end">
                         <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
                     </abp-column>
                 </abp-row>
-                <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
-                @if (Model.ShowCancelButton)
-                {
-                    <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-block btn-lg mt-3">@L["Cancel"]</abp-button>
-                }
+                <div class="d-grid gap-2">
+                    <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                    @if (Model.ShowCancelButton)
+                    {
+                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                    }
+                </div>
             </form>
         }
 
@@ -52,8 +52,6 @@
             <div class="mt-2">
                 <h5>@L["OrLoginWith"]</h5>
                 <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-                    <input asp-for="ReturnUrl"/>
-                    <input asp-for="ReturnUrlHash"/>
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
                         <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>

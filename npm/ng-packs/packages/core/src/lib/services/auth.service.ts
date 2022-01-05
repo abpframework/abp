@@ -1,5 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Params } from '@angular/router';
+import { from, Observable } from 'rxjs';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { LoginParams } from '../models/auth';
 import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
 import { EnvironmentService } from './environment.service';
 
@@ -7,41 +10,43 @@ import { EnvironmentService } from './environment.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private flow: string;
   private strategy: AuthFlowStrategy;
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
   }
 
-  constructor(private environment: EnvironmentService, private injector: Injector) {
-    this.setStrategy();
-    this.listenToSetEnvironment();
-  }
-
-  private setStrategy = () => {
-    const flow = this.environment.getEnvironment().oAuthConfig.responseType || 'password';
-    if (this.flow === flow) return;
-
-    if (this.strategy) this.strategy.destroy();
-
-    this.flow = flow;
-    this.strategy = AUTH_FLOW_STRATEGY.Code(this.injector);
-  };
-
-  private listenToSetEnvironment() {
-    this.environment.createOnUpdateStream(state => state.oAuthConfig).subscribe(this.setStrategy);
-  }
+  constructor(protected injector: Injector) {}
 
   async init() {
-    return await this.strategy.init();
+    const environmentService = this.injector.get(EnvironmentService);
+
+    return environmentService
+      .getEnvironment$()
+      .pipe(
+        map(env => env?.oAuthConfig),
+        filter(oAuthConfig => !!oAuthConfig),
+        tap(oAuthConfig => {
+          this.strategy =
+            oAuthConfig.responseType === 'code'
+              ? AUTH_FLOW_STRATEGY.Code(this.injector)
+              : AUTH_FLOW_STRATEGY.Password(this.injector);
+        }),
+        switchMap(() => from(this.strategy.init())),
+        take(1),
+      )
+      .toPromise();
   }
 
-  logout(): Observable<any> {
-    return this.strategy.logout();
+  logout(queryParams?: Params): Observable<any> {
+    return this.strategy.logout(queryParams);
   }
 
-  initLogin() {
-    this.strategy.login();
+  navigateToLogin(queryParams?: Params) {
+    this.strategy.navigateToLogin(queryParams);
+  }
+
+  login(params: LoginParams) {
+    return this.strategy.login(params);
   }
 }

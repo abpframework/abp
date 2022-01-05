@@ -3,46 +3,45 @@ using System.Collections.Immutable;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
+namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+
+public class PageWidgetManager : IPageWidgetManager, IScopedDependency
 {
-    public class PageWidgetManager : IPageWidgetManager, IScopedDependency
+    public const string HttpContextItemName = "__AbpCurrentWidgets";
+
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public PageWidgetManager(IHttpContextAccessor httpContextAccessor)
     {
-        public const string HttpContextItemName = "__AbpCurrentWidgets";
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+    public bool TryAdd(WidgetDefinition widget)
+    {
+        return GetWidgetList()
+            .AddIfNotContains(widget);
+    }
 
-        public PageWidgetManager(IHttpContextAccessor httpContextAccessor)
+    private List<WidgetDefinition> GetWidgetList()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+        if (httpContext == null)
         {
-            _httpContextAccessor = httpContextAccessor;
+            throw new AbpException($"{typeof(PageWidgetManager).AssemblyQualifiedName} should be used in a web request! Can not get IHttpContextAccessor.HttpContext.");
         }
 
-        public bool TryAdd(WidgetDefinition widget)
+        var widgets = httpContext.Items[HttpContextItemName] as List<WidgetDefinition>;
+        if (widgets == null)
         {
-            return GetWidgetList()
-                .AddIfNotContains(widget);
+            widgets = new List<WidgetDefinition>();
+            httpContext.Items[HttpContextItemName] = widgets;
         }
 
-        private List<WidgetDefinition> GetWidgetList()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                throw new AbpException($"{typeof(PageWidgetManager).AssemblyQualifiedName} should be used in a web request! Can not get IHttpContextAccessor.HttpContext.");
-            }
+        return widgets;
+    }
 
-            var widgets = httpContext.Items[HttpContextItemName] as List<WidgetDefinition>;
-            if (widgets == null)
-            {
-                widgets = new List<WidgetDefinition>();
-                httpContext.Items[HttpContextItemName] = widgets;
-            }
-
-            return widgets;
-        }
-
-        public IReadOnlyList<WidgetDefinition> GetAll()
-        {
-            return GetWidgetList().ToImmutableArray();
-        }
+    public IReadOnlyList<WidgetDefinition> GetAll()
+    {
+        return GetWidgetList().ToImmutableArray();
     }
 }

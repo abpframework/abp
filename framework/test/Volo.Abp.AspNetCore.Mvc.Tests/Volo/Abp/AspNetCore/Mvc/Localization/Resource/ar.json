@@ -1,6 +1,9 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "تاريخ الميلاد 1",
+    "DisplayName:BirthDate2": "تاريخ الميلاد 2",
+    "PersonModel:BirthDate3": "تاريخ الميلاد 3",
     "BirthDate": "تاريخ الميلاد",
     "Value1": "القيمة الأولى"
   }

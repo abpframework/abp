@@ -11,12 +11,10 @@
     <button
       *ngIf="alert.dismissible"
       type="button"
-      class="close"
+      class="btn-close"
       data-dismiss="alert"
       aria-label="Close"
       (click)="service.remove(i)"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    ></button>
   </div>
 </ng-container>

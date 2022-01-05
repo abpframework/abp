@@ -153,9 +153,9 @@ ABP的启动解决方案中包含两个用于集成Entity Framework Core的项�
 * `Application.Contracts` 依赖`Domain.Shared`项目,可以在DTO中重用`Domain.Shared`中的类型.例如,`Domain.Shared`项目中的枚举类型 `IssueType` 同样被`Contracts`项目中的`CreateIssueDto`DTO所引用.
 * `Application` 依赖`Application.Contracts`项目,因为此项目需要实现应用服务的接口及接口使用的DTO.另外也依赖`Domain`项目,因为应用服务的实现必须依赖领域层中的对象.
 * `EntityFrameworkCore` 依赖`Domain`项目,因为此项目需要将领域对象(实体或值对象)映射到数据库的表,另外还需要实现`Domain`项目中的仓储接口.
-* `HttpApi` 依赖`Application.Contacts`项目,因为Controllers需要注入应用服务.
-* `HttpApi.Client` 依赖`Application.Contacts`项目,因为此项目需要是使用应用服务.
-* `Web` 依赖`HttpApi`项目,因为此项目对外提供HTTP APIs.另外Pages或Components 需要使用应用服务,所以还间接依赖了`Application.Contacts`项目
+* `HttpApi` 依赖`Application.Contracts`项目,因为Controllers需要注入应用服务.
+* `HttpApi.Client` 依赖`Application.Contracts`项目,因为此项目需要是使用应用服务.
+* `Web` 依赖`HttpApi`项目,因为此项目对外提供HTTP APIs.另外Pages或Components 需要使用应用服务,所以还间接依赖了`Application.Contracts`项目
 
 #### 虚线依赖
 
@@ -166,7 +166,7 @@ ABP的启动解决方案中包含两个用于集成Entity Framework Core的项�
 这种依赖关系的设计,可能会让你有机会在展现层直接使用到EF Core的对象,**应该严格禁止这样的做法**.如果想在解决方案分层上规避这种问题,有下面两种方式,相对复杂一些:
 
 * 将`Web`项目类型改为razor类库,并创建一个新项目,比如`Web.Host`,`Web.Host`依赖`Web`,`Application`,`EntityFrameworkCore`三个项目,并作为Web宿主程序运行.注意,不要写任何与UI相关的代码,只是作为**宿主运行**.
-* 在`Web`项目中移除对`Application`和`EntityFrameworkCore`的引用,`Web`在启动时,再动态加载程序集``IssueTracking.Application.dll`和`IssueTracking.EntityFrameworkCore.dll`.可以使用ABP框架的[插件模块](PlugIn-Modules.md)来动态加载程序集.
+* 在`Web`项目中移除对`Application`和`EntityFrameworkCore`的引用,`Web`在启动时,再动态加载程序集`IssueTracking.Application.dll`和`IssueTracking.EntityFrameworkCore.dll`.可以使用ABP框架的[插件模块](PlugIn-Modules.md)来动态加载程序集.
 
 ### DDD模式的应用程序执行顺序
 
@@ -572,7 +572,7 @@ namespace IssueTracking.Issues
 
 抛出异常会引发两个问题:
 
-1. 当异常发生时,**用户**应该看到异常(错误)信息吗?如果需要看到,异常消息如何实现本地化? user** see the exception (error) message? If so, how do you **localize** the exception message? 实体中无法注入[本地化](Localization.md)的 `IStringLocalizer` 接口.
+1. 当异常发生时,**用户**应该看到异常(错误)信息吗?如果需要看到,异常消息如何实现本地化?   实体中无法注入[本地化](Localization.md)的 `IStringLocalizer` 接口.
 2. 对于Web应用或HTTP API,应向客户端返回什么**HTTP状态代码**.
 
 ABP框架的 [异常处理](Exception-Handling.md) 可以解决上述问题.
@@ -598,7 +598,7 @@ namespace IssueTracking.Issues
 * `IssueStateException` 继承至 `BusinessException` .对于`BusinessException`的派生类,ABP框架默认返回的HTTP状态码是403 (默认是服务器内部错误 状态码 500)
 *  将`code` 作为Key,在本地化资源中查找对应的文字.
 
-现在,我们修 `ReOpen` 方法:
+现在,我们修改 `ReOpen` 方法:
 
 ````csharp
 public void ReOpen()
@@ -781,7 +781,7 @@ namespace IssueTracking.Issues
 - 创建时间大于30天
 - 最近30天没有评论
 
-这个业务逻辑就被实现再了仓储内部,当我们需要重用这个业务规则时就会出现问题.
+这个业务逻辑就被实现在了仓储内部,当我们需要重用这个业务规则时就会出现问题.
 
 例如:我们需要再实体`Issue`上添加一个方法来判断是否非活动`bool IsInActive()`,以方便我们在`Issue`实例上获取.
 
@@ -1315,7 +1315,7 @@ namespace IssueTracking.Users
 
 #### 输出DTO最佳实践
 
-* 保持**数量较少**的输出DTO,尽可能**重用输入DTO**(例外:不要将输入DTO作为输出DTO).
+* 保持**数量较少**的输出DTO,尽可能**重用输出DTO**(例外:不要将输入DTO作为输出DTO).
 * 输出DTO可以包含比用例需要的属性**更多**的属性.
 * 针对 **Create** 和 **Update** 方法,返回实体的DTO.
 
@@ -1771,15 +1771,15 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 领域逻辑是系统的*核心领域规则*组成,而应用逻辑则满足特定的*用例*.
 
-虽然定义很明确,但是实施起来缺并不容器.你可能无法确定哪些代码应该属于领域层,哪些代码应该属于应用层,本节会尝试解释差异.
+虽然定义很明确,但是实施起来却并不容易.你可能无法确定哪些代码应该属于领域层,哪些代码应该属于应用层,本节会尝试解释差异.
 
 ### 多应用层
 
 当你的系统很大时,DDD有助于**处理复杂问题**.尤其是,**单个领域**需要多个**应用程序运行**,那么**领域逻辑与应用逻辑分离**就变的非常重要.
 
-假设你正字构建一个具有多个应用程序的系统:
+假设你正在构建一个具有多个应用程序的系统:
 
-* 一个**公开的应用网站**,使用ASP.NET Core MVC构建,展示商品给来访者.这样的网站不选哟身份验证即可查看商品.来访者只有执行了某些操作(例如,将商品添加到购物车)后,才需要登录网站.
+* 一个**公开的应用网站**,使用ASP.NET Core MVC构建,展示商品给来访者.这样的网站不需要身份验证即可查看商品.来访者只有执行了某些操作(例如,将商品添加到购物车)后,才需要登录网站.
 * 一个**后台管理系统**,UI使用Angular,通过REST API请求数据.内部员工使用这个系统来维护数据(例如,编辑商品说明).
 * 一个**移动端应用程序**,它比公开的网站UI上更加简洁.它通过REST API或其它技术(例如,TCP sockets)请求数据.
 
@@ -1787,7 +1787,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 每个应用程序都有不同的**需求**,不同的**用例**(应用服务方法),不同的DTO,不同的**验证**和**授权**规则等.
 
-将所有这些逻辑都集中到一个应用层中,会使你的服务包含太多的`if`条件分支及**复杂的业务逻辑**,从而使你的代码难道开发,**维护**,测试,引发各种问题.
+将所有这些逻辑都集中到一个应用层中,会使你的服务包含太多的`if`条件分支及**复杂的业务逻辑**,从而使你的代码开发,**维护**,测试,引发各种问题.
 
 如果你在一个领域中有多个应用程序
 
@@ -1798,7 +1798,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 为了更清楚的实现,你可以为不同的应用类型创建不同的项目(`.csproj`):
 
-* `IssueTracker.Admin.Application` 和 `IssueTracker.Admin.Application.Contacts` 为后台管理系统提供服务.
+* `IssueTracker.Admin.Application` 和 `IssueTracker.Admin.Application.Contracts` 为后台管理系统提供服务.
 * `IssueTracker.Public.Application` 和 `IssueTracker.Public.Application.Contracts` 为公开网站提供服务.
 * `IssueTracker.Mobile.Application` 和 `IssueTracker.Mobile.Application.Contracts` 为移动端应用提供服务.
 

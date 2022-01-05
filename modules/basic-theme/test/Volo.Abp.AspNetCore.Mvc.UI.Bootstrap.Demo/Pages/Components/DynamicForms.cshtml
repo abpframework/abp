@@ -1,0 +1,448 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
+@model DynamicFormsModel
+
+@{
+    ViewData["Title"] = "Forms";
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<h2>Dynamic Forms</h2>
+
+<h4>Dynamic Form Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.MyDetailedModel" submit-button="true"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Model Class">
+                <pre><code>
+public class DynamicFormsModel : PageModel
+    {
+        [BindProperty]
+        public DetailedModel MyDetailedModel { get; set; }
+
+        public List&lt;SelectListItem> CountryList { get; set; } = new List&lt;SelectListItem>
+        {
+            new SelectListItem { Value = "CA", Text = "Canada"},
+            new SelectListItem { Value = "US", Text = "USA"},
+            new SelectListItem { Value = "UK", Text = "United Kingdom"},
+            new SelectListItem { Value = "RU", Text = "Russia"}
+        };
+
+        public void OnGet()
+        {
+                MyDetailedModel = new DetailedModel
+                {
+                    Name = "",
+                    Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    IsActive = true,
+                    Age = 65,
+                    Day = DateTime.Now,
+                    MyCarType = CarType.Coupe,
+                    YourCarType = CarType.Sedan,
+                    Country = "RU",
+                    NeighborCountries = new List&lt;string>() { "UK", "CA" }
+                };
+        }
+
+        public class DetailedModel
+        {
+            [Required]
+            [Placeholder("Enter your name...")]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+            
+            [TextArea(Rows = 4)]
+            [Display(Name = "Description")]
+            [InputInfoText("Describe Yourself")]
+            public string Description { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
+            public string Password { get; set; }
+
+            [Display(Name = "Is Active")]
+            public bool IsActive { get; set; }
+
+            [Required]
+            [Display(Name = "Age")]
+            public int Age { get; set; }
+
+            [Required]
+            [Display(Name = "My Car Type")]
+            public CarType MyCarType { get; set; }
+
+            [Required]
+            [AbpRadioButton(Inline = true)]
+            [Display(Name = "Your Car Type")]
+            public CarType YourCarType { get; set; }
+
+            [DataType(DataType.Date)]
+            [Display(Name = "Day")]
+            public DateTime Day { get; set; }
+            
+            [SelectItems(nameof(CountryList))]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+            
+            [SelectItems(nameof(CountryList))]
+            [Display(Name = "Neighbor Countries")]
+            public List&lt;string> NeighborCountries { get; set; }
+        }
+
+        public enum CarType
+        {
+            Sedan,
+            Hatchback,
+            StationWagon,
+            Coupe
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-dynamic-form abp-model=&quot;@@Model.MyDetailedModel&quot; submit-button=&quot;true&quot; /&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;form method=&quot;post&quot; novalidate=&quot;novalidate&quot;&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Name&quot;&gt;Name&lt;/label&gt;
+        &lt;input type=&quot;text&quot; data-val=&quot;true&quot; data-val-required=&quot;The Name field is required.&quot; id=&quot;MyDetailedModel_Name&quot; name=&quot;MyDetailedModel.Name&quot; value=&quot;&quot; class=&quot;form-control &quot; placeholder=&quot;Enter your name...&quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyDetailedModel.Name&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Description&quot;&gt;Description&lt;/label&gt;
+        &lt;textarea id=&quot;MyDetailedModel_Description&quot; name=&quot;MyDetailedModel.Description&quot; rows=&quot;4&quot; class=&quot;form-control &quot;&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&lt;/textarea&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyDetailedModel.Description&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Password&quot;&gt;Password&lt;/label&gt;
+        &lt;input type=&quot;password&quot; data-val=&quot;true&quot; data-val-required=&quot;The Password field is required.&quot; id=&quot;MyDetailedModel_Password&quot; name=&quot;MyDetailedModel.Password&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyDetailedModel.Password&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3 form-check&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; checked=&quot;checked&quot; data-val=&quot;true&quot; data-val-required=&quot;The Is Active field is required.&quot; id=&quot;MyDetailedModel_IsActive&quot; name=&quot;MyDetailedModel.IsActive&quot; value=&quot;true&quot; class=&quot;form-check-input &quot;&gt;&lt;input name=&quot;MyDetailedModel.IsActive&quot; type=&quot;hidden&quot; value=&quot;false&quot;&gt;
+        &lt;label class=&quot;form-check-label&quot; for=&quot;MyDetailedModel_IsActive&quot;&gt;Is Active&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Age&quot;&gt;Age&lt;/label&gt;
+        &lt;input type=&quot;number&quot; data-val=&quot;true&quot; data-val-required=&quot;The Age field is required.&quot; id=&quot;MyDetailedModel_Age&quot; name=&quot;MyDetailedModel.Age&quot; value=&quot;65&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyDetailedModel.Age&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_MyCarType&quot;&gt;My Car Type&lt;/label&gt;
+        &lt;select data-val=&quot;true&quot; data-val-required=&quot;The My Car Type field is required.&quot; id=&quot;MyDetailedModel_MyCarType&quot; name=&quot;MyDetailedModel.MyCarType&quot; class=&quot;form-control valid&quot; aria-describedby=&quot;MyDetailedModel_MyCarType-error&quot; aria-invalid=&quot;false&quot;&gt;
+            &lt;option value=&quot;0&quot;&gt;Sedan&lt;/option&gt;
+            &lt;option value=&quot;1&quot;&gt;Hatchback&lt;/option&gt;
+            &lt;option value=&quot;2&quot;&gt;StationWagon&lt;/option&gt;
+            &lt;option selected=&quot;selected&quot; value=&quot;3&quot;&gt;Coupe&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyDetailedModel.YourCarTypeRadio0&quot; name=&quot;MyDetailedModel.YourCarType&quot; value=&quot;0&quot; checked=&quot;checked&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyDetailedModel.YourCarTypeRadio0&quot;&gt;Sedan&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyDetailedModel.YourCarTypeRadio1&quot; name=&quot;MyDetailedModel.YourCarType&quot; value=&quot;1&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyDetailedModel.YourCarTypeRadio1&quot;&gt;Hatchback&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyDetailedModel.YourCarTypeRadio2&quot; name=&quot;MyDetailedModel.YourCarType&quot; value=&quot;2&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyDetailedModel.YourCarTypeRadio2&quot;&gt;StationWagon&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyDetailedModel.YourCarTypeRadio3&quot; name=&quot;MyDetailedModel.YourCarType&quot; value=&quot;3&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyDetailedModel.YourCarTypeRadio3&quot;&gt;Coupe&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Day&quot;&gt;Day&lt;/label&gt;
+        &lt;input type=&quot;date&quot; data-val=&quot;true&quot; data-val-required=&quot;The Day field is required.&quot; id=&quot;MyDetailedModel_Day&quot; name=&quot;MyDetailedModel.Day&quot; value=&quot;2018-12-19&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyDetailedModel.Day&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_Country&quot;&gt;Country&lt;/label&gt;
+        &lt;select id=&quot;MyDetailedModel_Country&quot; name=&quot;MyDetailedModel.Country&quot; class=&quot;form-control&quot;&gt;
+            &lt;option value=&quot;CA&quot;&gt;Canada&lt;/option&gt;
+            &lt;option value=&quot;US&quot;&gt;USA&lt;/option&gt;
+            &lt;option value=&quot;UK&quot;&gt;United Kingdom&lt;/option&gt;
+            &lt;option selected=&quot;selected&quot; value=&quot;RU&quot;&gt;Russia&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyDetailedModel_NeighborCountries&quot;&gt;Neighbor Countries&lt;/label&gt;
+        &lt;select id=&quot;MyDetailedModel_NeighborCountries&quot; multiple=&quot;multiple&quot; name=&quot;MyDetailedModel.NeighborCountries&quot; class=&quot;form-control&quot;&gt;
+            &lt;option selected=&quot;selected&quot; value=&quot;CA&quot;&gt;Canada&lt;/option&gt;
+            &lt;option value=&quot;US&quot;&gt;USA&lt;/option&gt;
+            &lt;option selected=&quot;selected&quot; value=&quot;UK&quot;&gt;United Kingdom&lt;/option&gt;
+            &lt;option value=&quot;RU&quot;&gt;Russia&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;CfDJ8Kbwu8pRBWJCh6KUtTDoAuTDS8evmWgc2dNZYWkzjZ1xFcA9ptyCgQBCTgA9NMoh_FXGRBDVunA7fx0TF1df1_OxaxerJvuWRCwFBhy8KbPcgXrVtmtSp6Z28gpFpO0Z1TSO1pdgdTwEXj43DBWq0Hc&quot;&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; data-busy-text=&quot;Processing...&quot;&gt;&lt;span&gt;Submit&lt;/span&gt;&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Order Attribute Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.MyOrderExampleModel"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Model Class" active="true">
+                <pre><code>
+public class DynamicFormsModel : PageModel
+    {
+        public OrderExampleModel MyOrderExampleModel { get; set; }
+
+        public void OnGet()
+        {
+            MyOrderExampleModel = new OrderExampleModel();
+        }
+
+        public class OrderExampleModel
+        {
+            [DisplayOrder(10005)]
+            public string Surname{ get; set; }
+
+            //Default 10000
+            public string EmailAddress { get; set; }
+
+            [DisplayOrder(10003)]
+            public string Name { get; set; }
+
+            [DisplayOrder(9999)]
+            public string City { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+    &lt;abp-dynamic-form abp-model=&quot;Model.MyOrderExampleModel&quot;/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;form method=&quot;post&quot;&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyOrderExampleModel_City&quot;&gt;City&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyOrderExampleModel_City&quot; name=&quot;MyOrderExampleModel.City&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyOrderExampleModel.City&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyOrderExampleModel_EmailAddress&quot;&gt;EmailAddress&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyOrderExampleModel_EmailAddress&quot; name=&quot;MyOrderExampleModel.EmailAddress&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyOrderExampleModel.EmailAddress&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyOrderExampleModel_Name&quot;&gt;Name&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyOrderExampleModel_Name&quot; name=&quot;MyOrderExampleModel.Name&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyOrderExampleModel.Name&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyOrderExampleModel_Surname&quot;&gt;Surname&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyOrderExampleModel_Surname&quot; name=&quot;MyOrderExampleModel.Surname&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyOrderExampleModel.Surname&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;CfDJ8Kbwu8pRBWJCh6KUtTDoAuQICDXiCEgWpOHc7uIzSQ2dKiezdDkWplt2D8XLsCX39Z8B_GnplHrAfZgZ5GkNZN-tkEgKlMtyjoWv9MADyYb2MmWw-LuW8wfUXI9YSza5lo_8P03Vff4NxmrV3boG0xQ&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Attribute Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.MyAttributeExamplesModel"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Model Class" active="true">
+                <pre><code>
+public class DynamicFormsModel : PageModel
+    {
+        public AttributeExamplesModel MyAttributeExamplesModel { get; set; }
+
+        public void OnGet()
+        {
+            MyAttributeExamplesModel = new AttributeExamplesModel();
+            MyAttributeExamplesModel.DisabledInput = "Disabled Input";
+            MyAttributeExamplesModel.ReadonlyInput = "Readonly Input";
+            MyAttributeExamplesModel.LargeInput = "Large Input";
+            MyAttributeExamplesModel.SmallInput = "Small Input";
+        }
+
+        public class AttributeExamplesModel
+        {
+            [HiddenInput]
+            public string HiddenInput { get; set; }
+
+            [DisabledInput]
+            public string DisabledInput{ get; set; }
+
+            [ReadOnlyInput]
+            public string ReadonlyInput { get; set; }
+
+            [FormControlSize(AbpFormControlSize.Large)]
+            public string LargeInput { get; set; }
+
+            [FormControlSize(AbpFormControlSize.Small)]
+            public string SmallInput { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+    &lt;abp-dynamic-form abp-model=&quot;Model.MyAttributeExamplesModel&quot;/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;form method=&quot;post&quot;&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;input type=&quot;hidden&quot; id=&quot;MyAttributeExamplesModel_HiddenInput&quot; name=&quot;MyAttributeExamplesModel.HiddenInput&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyAttributeExamplesModel_DisabledInput&quot;&gt;DisabledInput&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_DisabledInput&quot; name=&quot;MyAttributeExamplesModel.DisabledInput&quot; value=&quot;Disabled Input&quot; disabled=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.DisabledInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyAttributeExamplesModel_ReadonlyInput&quot;&gt;ReadonlyInput&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_ReadonlyInput&quot; name=&quot;MyAttributeExamplesModel.ReadonlyInput&quot; value=&quot;Readonly Input&quot; class=&quot;form-control &quot; readonly=&quot;&quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.ReadonlyInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyAttributeExamplesModel_LargeInput&quot;&gt;LargeInput&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_LargeInput&quot; name=&quot;MyAttributeExamplesModel.LargeInput&quot; value=&quot;Large Input&quot; class=&quot;form-control form-control-lg&quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.LargeInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mb-3&quot;&gt;
+        &lt;label for=&quot;MyAttributeExamplesModel_SmallInput&quot;&gt;SmallInput&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_SmallInput&quot; name=&quot;MyAttributeExamplesModel.SmallInput&quot; value=&quot;Small Input&quot; class=&quot;form-control form-control-sm&quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.SmallInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;CfDJ8Kbwu8pRBWJCh6KUtTDoAuSUKLRRJ2JhujqxKEZfzYxIDYQtg1knqOh9zyG1DjaXRnoavm1876JtbePc4El_6aDqwMUKuXshQhXIunS_hrygXH5v-Tm6Qw_zL-JEJnSmd6Q4EwCtwDBwGX0in4-swG8&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Form Content Placement</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.MyFormContentExampleModel">
+            <div>
+                First Div! <br />
+                ---------
+            </div>
+
+            <abp-form-content />
+
+            <div>
+                ---------  <br />
+                Second Div!
+            </div>
+        </abp-dynamic-form>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Model Class">
+                <pre><code>
+public class DynamicFormsModel : PageModel
+    {
+        public FormContentExampleModel MyFormContentExampleModel { get; set; }
+
+        public void OnGet()
+        {
+            MyFormContentExampleModel = new FormContentExampleModel();
+        }
+
+        public class FormContentExampleModel
+        {
+            public string SampleInput { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-dynamic-form abp-model=&quot;@@Model.MyFormContentExampleModel&quot;&gt;
+    &lt;div&gt;
+        First Div!  &lt;br /&gt;
+        ---------
+    &lt;/div&gt;
+
+    &lt;abp-form-content /&gt;
+
+    &lt;div&gt;
+        ---------  &lt;br /&gt;
+        Second Div!
+    &lt;/div&gt;
+&lt;/abp-dynamic-form&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;form method=&quot;post&quot;&gt;
+    &lt;div&gt;
+        First Div!  &lt;br /&gt;
+        ---------
+    &lt;/div&gt;
+
+    &lt;div&gt;
+        &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label for=&quot;MyFormContentExampleModel_SampleInput&quot;&gt;SampleInput&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;MyFormContentExampleModel_SampleInput&quot; name=&quot;MyFormContentExampleModel.SampleInput&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+            &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyFormContentExampleModel.SampleInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+        ---------  &lt;br /&gt;
+        Second Div!
+    &lt;/div&gt;
+    &lt;input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;CfDJ8Kbwu8pRBWJCh6KUtTDoAuS4l6PkkSnj6NFFQcJPBjnUn13wQKxp0lm1Dw84zvR-1QrE4byCemr2_qENxB-Ob_YEc6yw3bvQcqN6VQ0ZPN4Sv6DvX5okAWE52wRXmNcHlTliFOPdjLcKcv3qBFXXlVk&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

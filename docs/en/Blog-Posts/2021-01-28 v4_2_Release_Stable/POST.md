@@ -42,7 +42,7 @@ Run this command in the root folder of your solution.
 
 ## Migration Guide
 
-Check [the migration guide](https://docs.abp.io/en/abp/4.2/Migration-Guides/Abp-4_2) for the applications with the version 4.x upgrading to the version 4.2.
+Check [the migration guide](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-4_2) for the applications with the version 4.x upgrading to the version 4.2.
 
 > It is strongly recommended to check the migration guide for this version. Especially, the new `IRepository.GetQueryableAsync()` method is a core change should be considered after upgrading the solution.
 

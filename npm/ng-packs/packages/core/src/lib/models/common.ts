@@ -10,6 +10,26 @@ export namespace ABP {
     registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
+    tenantKey?: string;
+    localizations?: Localization[];
+  }
+
+  export interface Child {
+    localizations?: Localization[];
+  }
+
+  export interface Localization {
+    culture: string;
+    resources: LocalizationResource[];
+  }
+
+  export interface LocalizationResource {
+    resourceName: string;
+    texts: Record<string, string>;
+  }
+
+  export interface HasPolicy {
+    requiredPolicy?: string;
   }
 
   export interface Test extends Partial<Root> {
@@ -47,7 +67,7 @@ export namespace ABP {
   }
 
   export interface Route extends Nav {
-    path: string;
+    path?: string;
     layout?: eLayoutType;
     iconClass?: string;
   }
@@ -70,7 +90,6 @@ export namespace ABP {
     [key: string]: T;
   }
 
-  export type ExtractFromOutput<
-    T extends EventEmitter<any> | Subject<any>
-  > = T extends EventEmitter<infer X> ? X : T extends Subject<infer Y> ? Y : never;
+  export type ExtractFromOutput<T extends EventEmitter<any> | Subject<any>> =
+    T extends EventEmitter<infer X> ? X : T extends Subject<infer Y> ? Y : never;
 }

@@ -52,15 +52,15 @@ Client side installation depends on your UI framework / client type.
 
 Run the following command in the root folder of your web project:
 
-````bash
+```bash
 yarn add @abp/signalr
-````
+```
 
 > This requires to [install yarn](https://yarnpkg.com/) if you haven't install before.
 
 This will add the `@abp/signalr` to the dependencies in the `package.json` of your project:
 
-````json
+```json
 {
   ...
   "dependencies": {
@@ -68,25 +68,25 @@ This will add the `@abp/signalr` to the dependencies in the `package.json` of yo
     "@abp/signalr": "~2.7.0"
   }
 }
-````
+```
 
-Run the `gulp` in the root folder of your web project:
+Run the following [ABP CLI](CLI.md) command in the root folder of your web project:
 
-````bash
-gulp
-````
+```bash
+abp install-libs
+```
 
 This will copy the SignalR JavaScript files into your project:
 
 ![signal-js-file](images/signal-js-file.png)
 
-Finally, add the following code to your page/view to include the `signalr.js` file 
+Finally, add the following code to your page/view to include the `signalr.js` file
 
-````xml
+```xml
 @section scripts {
     <abp-script type="typeof(SignalRBrowserScriptContributor)" />
 }
-````
+```
 
 It requires to add `@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR` to your page/view.
 
@@ -108,27 +108,27 @@ ABP automatically registers all the hubs to the [dependency injection](Dependenc
 
 Example:
 
-````csharp
+```csharp
 public class MessagingHub : Hub
 {
     //...
 }
-````
+```
 
 The hub route will be `/signalr-hubs/messaging` for the `MessagingHub`:
 
-* Adding a standard `/signalr-hubs/` prefix
-* Continue with the **camel case** hub name, without the `Hub` suffix.
+- Adding a standard `/signalr-hubs/` prefix
+- Continue with the **kebab-case** hub name, without the `Hub` suffix.
 
 If you want to specify the route, you can use the `HubRoute` attribute:
 
-````csharp
+```csharp
 [HubRoute("/my-messaging-hub")]
 public class MessagingHub : Hub
 {
     //...
 }
-````
+```
 
 ### AbpHub Base Classes
 
@@ -136,7 +136,7 @@ Instead of the standard `Hub` and `Hub<T>` classes, you can inherit from the `Ab
 
 Example:
 
-````csharp
+```csharp
 public class MessagingHub : AbpHub
 {
     public async Task SendMessage(string targetUserName, string message)
@@ -145,7 +145,7 @@ public class MessagingHub : AbpHub
         var txt = L["MyText"]; //Localization
     }
 }
-````
+```
 
 > While you could inject the same properties into your hub constructor, this way simplifies your hub class.
 
@@ -153,9 +153,9 @@ public class MessagingHub : AbpHub
 
 ABP automatically registers all the hubs to the [dependency injection](Dependency-Injection.md) as a **transient service**. If you want to **disable auto dependency injection** registration for your hub class, just add a `DisableConventionalRegistration` attribute. You can still register your hub class to dependency injection in the `ConfigureServices` method of your module if you like:
 
-````csharp
+```csharp
 context.Services.AddTransient<MessagingHub>();
-````
+```
 
 When **you or ABP** register the class to the dependency injection, it is automatically mapped to the endpoint route configuration just as described in the previous sections. You can use `DisableAutoHubMap` attribute if you want to manually map your hub class.
 
@@ -163,7 +163,7 @@ For manual mapping, you have two options:
 
 1. Use the `AbpSignalROptions` to add your map configuration (in the `ConfigureServices` method of your [module](Module-Development-Basics.md)), so ABP still performs the endpoint mapping for your hub:
 
-````csharp
+```csharp
 Configure<AbpSignalROptions>(options =>
 {
     options.Hubs.Add(
@@ -178,13 +178,13 @@ Configure<AbpSignalROptions>(options =>
         )
     );
 });
-````
+```
 
 This is a good way to provide additional SignalR options.
 
 If you don't want to disable auto hub map, but still want to perform additional SignalR configuration, use the `options.Hubs.AddOrUpdate(...)` method:
 
-````csharp
+```csharp
 Configure<AbpSignalROptions>(options =>
 {
     options.Hubs.AddOrUpdate(
@@ -200,13 +200,13 @@ Configure<AbpSignalROptions>(options =>
         }
     );
 });
-````
+```
 
 This is the way you can modify the options of a hub class defined in a depended module (where you don't have the source code access).
 
 2. Change `app.UseConfiguredEndpoints` in the `OnApplicationInitialization` method of your [module](Module-Development-Basics.md) as shown below (added a lambda method as the parameter).
 
-````csharp
+```csharp
 app.UseConfiguredEndpoints(endpoints =>
 {
     endpoints.MapHub<MessagingHub>("/my-messaging-hub", options =>
@@ -214,7 +214,7 @@ app.UseConfiguredEndpoints(endpoints =>
         options.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
     });
 });
-````
+```
 
 ### UserIdProvider
 
@@ -234,5 +234,5 @@ Refer to the Microsoft's documentation to [host and scale](https://docs.microsof
 
 ## See Also
 
-* [Microsoft SignalR documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction)
-* [Real-Time Messaging In A Distributed Architecture Using ABP, SingalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)
+- [Microsoft SignalR documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction)
+- [Real-Time Messaging In A Distributed Architecture Using ABP, SingalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)

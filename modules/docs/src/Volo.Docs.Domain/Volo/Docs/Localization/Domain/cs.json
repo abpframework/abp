@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "cs",
   "texts": {
     "Documents": "Dokumenty",
@@ -33,6 +33,9 @@
     "Upd": "Akt",
     "NewExplanation": "Vytvořeno v posledních dvou týdnech.",
     "UpdatedExplanation": "Aktualizováno v posledních dvou týdnech.",
-    "Volo.Docs.Domain:010002": "ShortName {ShortName} už existuje."
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} už existuje.",
+    "Preview": "náhled",
+    "Search": "Vyhledávání",
+    "SearchResults": "Výsledky vyhledávání"
   }
 }

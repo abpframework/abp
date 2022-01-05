@@ -1,91 +1,69 @@
 ﻿using JetBrains.Annotations;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class TagManager : DomainService
 {
-    public class TagManager : DomainService, ITagManager
+    protected ITagRepository TagRepository { get; }
+    protected ITagDefinitionStore TagDefinitionStore { get; }
+
+    public TagManager(ITagRepository tagRepository, ITagDefinitionStore tagDefinitionStore)
     {
-        private readonly ITagRepository _tagRepository;
-        private readonly ITagDefinitionStore _tagDefinitionStore;
+        TagRepository = tagRepository;
+        TagDefinitionStore = tagDefinitionStore;
+    }
 
-        public TagManager(
-            ITagRepository tagRepository,
-            ITagDefinitionStore tagDefinitionStore)
+    public virtual async Task<Tag> GetOrAddAsync([NotNull] string entityType, [NotNull] string name)
+    {
+        var tag = await TagRepository.FindAsync(entityType, name);
+
+        if (tag == null)
         {
-            _tagRepository = tagRepository;
-            _tagDefinitionStore = tagDefinitionStore;
+            tag = await CreateAsync(GuidGenerator.Create(), entityType, name);
+            await TagRepository.InsertAsync(tag);
         }
 
-        public async Task<Tag> GetOrAddAsync(
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
+        return tag;
+    }
+
+    public virtual async Task<Tag> CreateAsync(Guid id,
+                                               [NotNull] string entityType,
+                                               [NotNull] string name)
+    {
+        if (!await TagDefinitionStore.IsDefinedAsync(entityType))
         {
-            var entity = await _tagRepository.FindAsync(entityType, name, tenantId, cancellationToken);
-
-            if (entity == null)
-            {
-                entity = await InsertAsync(GuidGenerator.Create(), entityType, name, tenantId, cancellationToken);
-            }
-
-            return entity;
+            throw new EntityNotTaggableException(entityType);
         }
 
-        public async Task<Tag> InsertAsync(
-            Guid id,
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
+        if (await TagRepository.AnyAsync(entityType, name))
         {
-            if (await _tagRepository.AnyAsync(entityType, name, tenantId, cancellationToken))
-            {
-                throw new TagAlreadyExistException(entityType, name);
-            }
-
-            if (!await _tagDefinitionStore.IsDefinedAsync(entityType))
-            {
-                throw new EntityNotTaggableException(entityType); 
-            }
-
-            return await _tagRepository.InsertAsync(
-                new Tag(
-                    id,
-                    entityType,
-                    name,
-                    tenantId),
-                cancellationToken: cancellationToken);
+            throw new TagAlreadyExistException(entityType, name);
         }
 
-        public async Task<Tag> UpdateAsync(
-            Guid id,
-            [NotNull] string name,
-            CancellationToken cancellationToken = default)
+        return
+            new Tag(id, entityType, name, CurrentTenant.Id);
+    }
+
+    public virtual async Task<Tag> UpdateAsync(Guid id, [NotNull] string name)
+    {
+        Check.NotNullOrEmpty(name, nameof(name));
+
+        var tag = await TagRepository.GetAsync(id);
+
+        if (name != tag.Name &&
+            await TagRepository.AnyAsync(tag.EntityType, name))
         {
-            var entity = await _tagRepository.GetAsync(id, cancellationToken: cancellationToken);
-
-            if (name != entity.Name &&
-                await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
-            {
-                throw new TagAlreadyExistException(entity.EntityType, name);
-            }
-
-            entity.SetName(name);
-
-            return await _tagRepository.UpdateAsync(entity, cancellationToken: cancellationToken);
+            throw new TagAlreadyExistException(tag.EntityType, name);
         }
 
-        public Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default)
-        {
-            return _tagDefinitionStore.GetTagDefinitionsAsync();
-        }
+        tag.SetName(name);
+
+        return tag;
     }
 }

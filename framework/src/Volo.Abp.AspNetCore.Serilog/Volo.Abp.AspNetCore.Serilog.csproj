@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Volo.Abp.AspNetCore.Serilog</AssemblyName>
         <PackageId>Volo.Abp.AspNetCore.Serilog</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -13,6 +13,7 @@
         <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
         <IsPackable>true</IsPackable>
         <OutputType>Library</OutputType>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <RootNamespace />
     </PropertyGroup>
 
@@ -22,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="2.9.0" />
+      <PackageReference Include="Serilog" Version="2.10.0" />
     </ItemGroup>
 
 </Project>

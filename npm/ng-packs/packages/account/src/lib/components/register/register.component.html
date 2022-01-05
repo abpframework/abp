@@ -1,0 +1,57 @@
+<h4>{{ 'AbpAccount::Register' | abpLocalization }}</h4>
+<strong>
+  {{ 'AbpAccount::AlreadyRegistered' | abpLocalization }}
+  <a class="text-decoration-none" routerLink="/account/login">{{
+    'AbpAccount::Login' | abpLocalization
+  }}</a>
+</strong>
+<form
+  *ngIf="isSelfRegistrationEnabled"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  validateOnSubmit
+  class="mt-4"
+>
+  <div class="mb-3 form-group">
+    <label for="input-user-name" class="form-label">{{
+      'AbpAccount::UserName' | abpLocalization
+    }}</label
+    ><span> * </span
+    ><input
+      autofocus
+      type="text"
+      id="input-user-name"
+      class="form-control"
+      formControlName="username"
+      autocomplete="username"
+    />
+  </div>
+  <div class="mb-3 form-group">
+    <label for="input-email-address" class="form-label">{{
+      'AbpAccount::EmailAddress' | abpLocalization
+    }}</label
+    ><span> * </span
+    ><input type="email" id="input-email-address" class="form-control" formControlName="email" />
+  </div>
+  <div class="mb-3 form-group">
+    <label for="input-password" class="form-label">{{
+      'AbpAccount::Password' | abpLocalization
+    }}</label
+    ><span> * </span
+    ><input
+      type="password"
+      id="input-password"
+      class="form-control"
+      formControlName="password"
+      autocomplete="current-password"
+    />
+  </div>
+  <abp-button
+    [loading]="inProgress"
+    buttonType="submit"
+    name="Action"
+    buttonClass="btn-block btn-lg mt-3 btn btn-primary"
+  >
+    {{ 'AbpAccount::Register' | abpLocalization }}
+  </abp-button>
+</form>

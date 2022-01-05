@@ -5,76 +5,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.EntityFrameworkCore;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>, ITagRepository
 {
-    public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>, ITagRepository
+    public EfCoreTagRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
     {
-        public EfCoreTagRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
-        {
-        }
+    }
 
-        public virtual async Task<bool> AnyAsync(
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
-        {
-            return await (await GetDbSetAsync()).AnyAsync(x =>
-                    x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
-                GetCancellationToken(cancellationToken));
-        }
+    public virtual async Task<bool> AnyAsync(
+        [NotNull] string entityType,
+        [NotNull] string name,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(entityType, nameof(entityType));
+        Check.NotNullOrEmpty(name, nameof(name));
 
-        public virtual Task<Tag> GetAsync(
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
-        {
-            return GetAsync(x =>
-                    x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
-                cancellationToken: GetCancellationToken(cancellationToken));
-        }
+        return await (await GetDbSetAsync()).AnyAsync(x =>
+                x.EntityType == entityType &&
+                x.Name == name,
+            GetCancellationToken(cancellationToken));
+    }
 
-        public virtual Task<Tag> FindAsync(
-            [NotNull] string entityType,
-            [NotNull] string name,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
-        {
-            return FindAsync(x =>
-                    x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
-                cancellationToken: GetCancellationToken(cancellationToken));
-        }
+    public virtual Task<Tag> GetAsync(
+        [NotNull] string entityType,
+        [NotNull] string name,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(entityType, nameof(entityType));
+        Check.NotNullOrEmpty(name, nameof(name));
 
-        public virtual async Task<List<Tag>> GetAllRelatedTagsAsync(
-            [NotNull] string entityType,
-            [NotNull] string entityId,
-            Guid? tenantId = null,
-            CancellationToken cancellationToken = default)
-        {
-            var entityTagIds = await (await GetDbContextAsync()).Set<EntityTag>()
-                .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
-                .Select(q => q.TagId)
-                .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        return GetAsync(x =>
+                x.EntityType == entityType &&
+                x.Name == name,
+            cancellationToken: GetCancellationToken(cancellationToken));
+    }
 
-            var query = (await GetDbSetAsync())
-                .Where(x => x.EntityType == entityType &&
-                            x.TenantId == tenantId &&
-                            entityTagIds.Contains(x.Id));
+    public virtual Task<Tag> FindAsync(
+        [NotNull] string entityType,
+        [NotNull] string name,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(entityType, nameof(entityType));
+        Check.NotNullOrEmpty(name, nameof(name));
 
-            return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
-        }
+        return FindAsync(x =>
+                x.EntityType == entityType &&
+                x.Name == name,
+            cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<Tag>> GetAllRelatedTagsAsync(
+        [NotNull] string entityType,
+        [NotNull] string entityId,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(entityType, nameof(entityType));
+        Check.NotNullOrEmpty(entityId, nameof(entityId));
+
+        var entityTagIds = await (await GetDbContextAsync()).Set<EntityTag>()
+            .Where(q => q.EntityId == entityId)
+            .Select(q => q.TagId)
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+        var query = (await GetDbSetAsync())
+            .Where(x => x.EntityType == entityType &&
+                        entityTagIds.Contains(x.Id));
+
+        return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<List<Tag>> GetListAsync(string filter)
+    {
+        return await (await GetQueryableByFilterAsync(filter)).ToListAsync();
+    }
+
+    public async Task<int> GetCountAsync(string filter)
+    {
+        return await (await GetQueryableByFilterAsync(filter)).CountAsync();
+    }
+
+    private async Task<IQueryable<Tag>> GetQueryableByFilterAsync(string filter)
+    {
+        return (await GetQueryableAsync())
+            .WhereIf(
+                !filter.IsNullOrEmpty(),
+                x =>
+                    x.Name.ToLower().Contains(filter.ToLower()) ||
+                    x.EntityType.ToLower().Contains(filter.ToLower()));
     }
 }

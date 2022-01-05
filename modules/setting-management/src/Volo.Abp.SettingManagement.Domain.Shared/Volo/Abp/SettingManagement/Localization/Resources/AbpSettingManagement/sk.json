@@ -1,0 +1,24 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Settings": "Nastavenia",
+    "SuccessfullySaved": "Úspešne uložené",
+    "Permission:SettingManagement": "Správa nastavení",
+    "Permission:Emailing": "Posielanie emailov",
+    "Menu:Emailing": "Posielanie emailov",
+    "SmtpHost": "Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Meno používateľa",
+    "SmtpPassword": "Heslo",
+    "SmtpDomain": "Doména",
+    "SmtpEnableSsl": "Povoliť SSL",
+    "SmtpUseDefaultCredentials": "Použiť predvolené meno a heslo",
+    "DefaultFromAddress": "Predvolená adresa Od",
+    "DefaultFromDisplayName": "Predvolené meno Od",
+    "Feature:SettingManagementGroup": "Správa nastavení",
+    "Feature:SettingManagementEnable": "Povoliť správu nastavení",
+    "Feature:SettingManagementEnableDescription": "Povoliť systém správy nastavení v aplikácii.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Povoliť nájomníkom zmeniť nastavenia e-mailu.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Povoliť nájomníkom zmeniť nastavenia e-mailu."
+  }
+}

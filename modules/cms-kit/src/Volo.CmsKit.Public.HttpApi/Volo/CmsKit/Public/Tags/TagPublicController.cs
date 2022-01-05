@@ -6,26 +6,25 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Public.Tags
+namespace Volo.CmsKit.Public.Tags;
+
+[RequiresGlobalFeature(typeof(TagsFeature))]
+[RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
+[Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
+[Route("api/cms-kit-public/tags")]
+public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
 {
-    [RequiresGlobalFeature(typeof(TagsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
-    [Route("api/cms-kit-public/tags")]
-    public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
+    protected ITagAppService TagAppService { get; }
+
+    public TagPublicController(ITagAppService tagAppService)
     {
-        protected readonly ITagAppService TagAppService;
+        TagAppService = tagAppService;
+    }
 
-        public TagPublicController(ITagAppService tagAppService)
-        {
-            TagAppService = tagAppService;
-        }
-
-        [HttpGet]
-        [Route("{entityType}/{entityId}")]
-        public Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
-        {
-            return TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
-        }
+    [HttpGet]
+    [Route("{entityType}/{entityId}")]
+    public Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
+    {
+        return TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
     }
 }

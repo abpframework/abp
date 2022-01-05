@@ -1,32 +1,46 @@
 ﻿using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp;
-using Volo.Abp.Localization;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit
+namespace Volo.CmsKit;
+
+public abstract class PolicySpecifiedDefinition : EntityTypeDefinition, IEquatable<PolicySpecifiedDefinition>
 {
-    public abstract class PolicySpecifiedDefinition
+    public PolicySpecifiedDefinition(
+        [NotNull] string entityType,
+        IEnumerable<string> createPolicies = null,
+        IEnumerable<string> updatePolicies = null,
+        IEnumerable<string> deletePolicies = null) : base(entityType)
     {
-        protected PolicySpecifiedDefinition()
+        if (createPolicies != null)
         {
+            CreatePolicies = CreatePolicies.Concat(createPolicies).ToList();
         }
 
-        public PolicySpecifiedDefinition(
-            [CanBeNull] string createPolicy = null,
-            [CanBeNull] string updatePolicy = null,
-            [CanBeNull] string deletePolicy = null)
+        if (updatePolicies != null)
         {
-            CreatePolicy = createPolicy;
-            DeletePolicy = deletePolicy;
-            UpdatePolicy = updatePolicy;
+            UpdatePolicies = UpdatePolicies.Concat(updatePolicies).ToList();
         }
 
-        [CanBeNull]
-        public virtual string CreatePolicy { get; set; }
+        if (deletePolicies != null)
+        {
+            DeletePolicies = DeletePolicies.Concat(deletePolicies).ToList();
+        }
+    }
 
-        [CanBeNull]
-        public virtual string UpdatePolicy { get; set; }
+    [NotNull]
+    public virtual ICollection<string> CreatePolicies { get; } = new List<string>();
 
-        [CanBeNull]
-        public virtual string DeletePolicy { get; set; }
+    [NotNull]
+    public virtual ICollection<string> UpdatePolicies { get; } = new List<string>();
+
+    [NotNull]
+    public virtual ICollection<string> DeletePolicies { get; } = new List<string>();
+
+    public bool Equals(PolicySpecifiedDefinition other)
+    {
+        return other?.EntityType == EntityType;
     }
 }

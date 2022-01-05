@@ -2,12 +2,16 @@
 
 @model TagViewComponent.TagViewModel
 
-@if (Model.Tags != null)
-{
-    foreach (var tag in Model.Tags)
-    {
-        <span class="cmskit-tag">
-            @tag.Name
-        </span>
-    }
-}
+    <div class="my-3">
+        <div class="cms-tags-area">
+            @if (Model.Tags != null)
+            {
+                foreach (var tag in Model.Tags)
+                {
+                    <span class="badge bg-light px-3 py-2 cmskit-tag font-weight-normal">
+                        @tag.Name
+                    </span>
+                }
+            }
+        </div>
+    </div> 

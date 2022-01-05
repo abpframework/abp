@@ -1,12 +1,13 @@
-﻿using Volo.Abp.Testing;
+﻿using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+public abstract class AbpTextTemplatingTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class AbpTextTemplatingTestBase : AbpIntegratedTest<AbpTextTemplatingTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

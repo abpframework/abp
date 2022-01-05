@@ -5,56 +5,51 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using MyCompanyName.MyProjectName.Localization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName;
+
+public class MyProjectNameWebHostMenuContributor : IMenuContributor
 {
-    public class MyProjectNameWebHostMenuContributor : IMenuContributor
+    private readonly IConfiguration _configuration;
+
+    public MyProjectNameWebHostMenuContributor(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public MyProjectNameWebHostMenuContributor(IConfiguration configuration)
+    public Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.User)
         {
-            _configuration = configuration;
+            AddLogoutItemToMenu(context);
         }
 
-        public Task ConfigureMenuAsync(MenuConfigurationContext context)
-        {
-            if (context.Menu.Name == StandardMenus.User)
-            {
-                AddLogoutItemToMenu(context);
-            }
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
-        }
+    private void AddLogoutItemToMenu(MenuConfigurationContext context)
+    {
+        var l = context.GetLocalizer<MyProjectNameResource>();
 
-        private void AddLogoutItemToMenu(MenuConfigurationContext context)
-        {
-            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-            var l = context.GetLocalizer<MyProjectNameResource>();
+        context.Menu.Items.Add(new ApplicationMenuItem(
+            "Account.Manage",
+            l["MyAccount"],
+            $"{_configuration["AuthServer:Authority"].EnsureEndsWith('/')}Account/Manage",
+            icon: "fa fa-cog",
+            order: int.MaxValue - 1001,
+            null,
+            "_blank"
+        ).RequireAuthenticated());
 
-            if (currentUser.IsAuthenticated)
-            {
-                context.Menu.Items.Add(new ApplicationMenuItem(
-                    "Account.Manage",
-                    l["ManageYourProfile"],
-                    $"{_configuration["AuthServer:Authority"].EnsureEndsWith('/')}Account/Manage",
-                    icon: "fa fa-cog",
-                    order: int.MaxValue - 1001,
-                    null,
-                    "_blank")
-                    );
-
-
-                context.Menu.Items.Add(new ApplicationMenuItem(
-                    "Account.Logout",
-                    l["Logout"],
-                    "~/Account/Logout",
-                    "fas fa-power-off",
-                    order: int.MaxValue - 1000
-                ));
-            }
-        }
+        context.Menu.Items.Add(new ApplicationMenuItem(
+            "Account.Logout",
+            l["Logout"],
+            "~/Account/Logout",
+            "fas fa-power-off",
+            order: int.MaxValue - 1000
+        ).RequireAuthenticated());
     }
 }

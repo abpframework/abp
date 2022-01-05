@@ -1,26 +1,35 @@
 ﻿@page
 @using Localization.Resources.AbpUi
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 @using Volo.Abp.GlobalFeatures
+@using Volo.Abp.Users
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
 @model IndexModel
 @inject IStringLocalizer<AbpUiResource> Localizer
+@inject ICurrentUser CurrentUser
+
+@section styles{
+    <abp-style type="typeof(TuiEditorStyleContributor)"/>
+}
+
+@section scripts{
+    <abp-script type="typeof(UppyScriptContributor)"/>
+    <abp-script type="typeof(TuiEditorScriptContributor)"/>
+    <abp-script src="/Pages/index.js"/>
+}
+
 <h1 class="text-center">CMS Kit DEMO</h1>
 
 <abp-card>
     <abp-card-body class="p-5">
         <abp-blockquote class="text-center">
-            @if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
-            {
-                @await Component.InvokeAsync(typeof(ContentViewComponent), new {entityType = "quote", entityId = "1"})
-            }
-            
             @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
                 @await Component.InvokeAsync(typeof(TagViewComponent), new
@@ -32,6 +41,8 @@
         </abp-blockquote>
     </abp-card-body>
 </abp-card>
+
+<hr />
 
 <abp-row>
     <abp-column size-md="_6">
@@ -53,7 +64,7 @@
         }
     </abp-column>
 </abp-row>
-<abp-card>
+<abp-card class="mb-2">
     <abp-card-body class="p-5">
         <abp-blockquote class="text-center">
             <p class="h2 mb-4">

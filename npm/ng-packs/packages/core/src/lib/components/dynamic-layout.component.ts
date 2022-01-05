@@ -1,11 +1,11 @@
-import { Component, Injector, Optional, SkipSelf, Type } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Component, Injector, isDevMode, Optional, SkipSelf, Type } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { LocalizationService } from '../services/localization.service';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
+import { RouterEvents } from '../services/router-events.service';
 import { RoutesService } from '../services/routes.service';
 import { SubscriptionService } from '../services/subscription.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
@@ -13,13 +13,7 @@ import { TreeNode } from '../utils/tree-utils';
 
 @Component({
   selector: 'abp-dynamic-layout',
-  template: `
-    <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
-    <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
-    <ng-template #componentOutlet
-      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
-    ></ng-template>
-  `,
+  template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
 export class DynamicLayoutComponent {
@@ -44,22 +38,24 @@ export class DynamicLayoutComponent {
     private localizationService: LocalizationService,
     private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
+    private routerEvents: RouterEvents,
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
-    if (dynamicLayoutComponent) return;
+    if (dynamicLayoutComponent) {
+      if (isDevMode) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
+      return;
+    }
     this.route = injector.get(ActivatedRoute);
     this.router = injector.get(Router);
     this.routes = injector.get(RoutesService);
 
-    this.getLayout();
-    this.subscription.addOne(
-      this.router.events.pipe(filter(event => event instanceof NavigationEnd)),
-      () => {
-        this.getLayout();
-      },
-    );
-
+    this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
+  }
+
+  private checkLayoutOnNavigationEnd() {
+    const navigationEnd$ = this.routerEvents.getNavigationEvents('End');
+    this.subscription.addOne(navigationEnd$, () => this.getLayout());
   }
 
   private getLayout() {

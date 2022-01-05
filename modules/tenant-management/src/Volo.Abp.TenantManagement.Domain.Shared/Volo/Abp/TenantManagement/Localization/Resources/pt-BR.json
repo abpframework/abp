@@ -10,11 +10,14 @@
     "ConnectionStrings": "String de Conexão",
     "DisplayName:DefaultConnectionString": "String de Conexão Padrão",
     "DisplayName:UseSharedDatabase": "Use o banco de dados compartilhado",
+    "ManageHostFeatures": "Gerenciar recursos do Host",
     "Permission:TenantManagement": "Inquilinos",
     "Permission:Create": "Criar",
     "Permission:Edit": "Editar",
     "Permission:Delete": "Excluir",
     "Permission:ManageConnectionStrings": "Gerenciar conexões (connection strings)",
-    "Permission:ManageFeatures": "Gerenciar Funcionalidades"
+    "Permission:ManageFeatures": "Gerenciar Funcionalidades",
+    "DisplayName:AdminEmailAddress": "Endereço de e-mail do administrador",
+    "DisplayName:AdminPassword": "Senha do administrador"
   }
 }

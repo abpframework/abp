@@ -1,8 +1,8 @@
-import { ABP, getRoutePath, RoutesService, TreeNode, SubscriptionService } from '@abp/ng.core';
+import { ABP, getRoutePath, RouterEvents, RoutesService, SubscriptionService, TreeNode } from '@abp/ng.core';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, startWith } from 'rxjs/operators';
-import { eThemeSharedRouteNames } from '../../enums';
+import { Router } from '@angular/router';
+import { map, startWith } from 'rxjs/operators';
+import { eThemeSharedRouteNames } from '../../enums/route-names';
 
 @Component({
   selector: 'abp-breadcrumb',
@@ -18,13 +18,12 @@ export class BreadcrumbComponent implements OnInit {
     private router: Router,
     private routes: RoutesService,
     private subscription: SubscriptionService,
+    private routerEvents: RouterEvents,
   ) {}
 
   ngOnInit(): void {
     this.subscription.addOne(
-      this.router.events.pipe(
-        filter<NavigationEnd>(event => event instanceof NavigationEnd),
-        // tslint:disable-next-line:deprecation
+      this.routerEvents.getNavigationEvents('End').pipe(
         startWith(null),
         map(() => this.routes.search({ path: getRoutePath(this.router) })),
       ),
@@ -35,7 +34,7 @@ export class BreadcrumbComponent implements OnInit {
 
           while (node.parent) {
             node = node.parent;
-            const { parent, children, isLeaf, ...segment } = node;
+            const { parent, children, isLeaf, path, ...segment } = node;
             if (!isAdministration(segment)) this.segments.unshift(segment);
           }
 
@@ -46,6 +45,6 @@ export class BreadcrumbComponent implements OnInit {
   }
 }
 
-function isAdministration(route: ABP.Route) {
+function isAdministration(route: Pick<ABP.Route, 'name'>) {
   return route.name === eThemeSharedRouteNames.Administration;
 }

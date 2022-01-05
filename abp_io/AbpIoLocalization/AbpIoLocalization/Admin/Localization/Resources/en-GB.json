@@ -197,6 +197,23 @@
     "RemoveCache": "Remove Cache",
     "Language": "Language",
     "Optional": "Optional",
-    "CreateArticleLanguageInfo": "The language in which the article is written"
+    "CreateArticleLanguageInfo": "The language in which the article is written",
+    "Menu:Quotation": "Quotation",
+    "Menu:Invoice": "Invoice",
+    "Menu:PaymentRequests": "Payment Requests",
+    "Permission:PaymentRequests": "Payment Requests",
+    "PaymentRequests": "Payment Requests",
+    "Creator": "Creator",
+    "ExtraProperties": "Extra Properties",
+    "Organization": "Organization",
+    "Waiting": "Waiting",
+    "Completed": "Completed",
+    "Failed": "Failed",
+    "PaymentRequestDeletionWarningMessage": "This payment request will be deleted. Do you confirm that?",
+    "Payment": "Payment",
+    "Permission:SendWelcomeEmail": "Send Welcome Email",
+    "SendWelcomeEmail": "Send Welcome Email",
+    "SendWelcomeEmailWarningMessage": "Are you sure you want to send welcome email to the organization members?",
+    "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!"
   }
 }

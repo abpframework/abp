@@ -1,20 +1,25 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+[DependsOn(
+    typeof(AbpTenantManagementApplicationContractsModule),
+    typeof(AbpHttpClientModule))]
+public class AbpTenantManagementHttpApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpTenantManagementApplicationContractsModule), 
-        typeof(AbpHttpClientModule))]
-    public class AbpTenantManagementHttpApiClientModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddStaticHttpClientProxies(
+            typeof(AbpTenantManagementApplicationContractsModule).Assembly,
+            TenantManagementRemoteServiceConsts.RemoteServiceName
+        );
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.AddHttpClientProxies(
-                typeof(AbpTenantManagementApplicationContractsModule).Assembly,
-                TenantManagementRemoteServiceConsts.RemoteServiceName
-            );
-        }
+            options.FileSets.AddEmbedded<AbpTenantManagementHttpApiClientModule>();
+        });
     }
 }

@@ -1,0 +1,12 @@
+{
+  "version": "5.0.1",
+  "name": "@abp/cms-kit.public",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/highlight.js": "~5.0.1",
+    "@abp/star-rating-svg": "~5.0.1"
+  },
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
+}

@@ -6,8 +6,8 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Docs.Documents
 {
-    [RemoteService]
-    [Area("docs")]
+    [RemoteService(Name = DocsRemoteServiceConsts.RemoteServiceName)]
+    [Area(DocsRemoteServiceConsts.ModuleName)]
     [ControllerName("Document")]
     [Route("api/docs/documents")]
     public class DocsDocumentController :  AbpController, IDocumentAppService
@@ -59,6 +59,13 @@ namespace Volo.Docs.Documents
         public Task<bool> FullSearchEnabledAsync()
         {
             return DocumentAppService.FullSearchEnabledAsync();
+        }
+
+        [HttpGet]
+        [Route("links")]
+        public Task<List<string>> GetUrlsAsync(string prefix)
+        {
+            return DocumentAppService.GetUrlsAsync(prefix);
         }
 
         [HttpGet]

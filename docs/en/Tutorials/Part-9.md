@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,6 +33,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
 
 ## Introduction
 
@@ -600,7 +605,7 @@ function configureRoutes(routes: RoutesService) {
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 This command generates the service proxy for the author service and the related model (DTO) classes:
@@ -719,7 +724,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       </div>
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
-          <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
+          <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
@@ -745,10 +750,10 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
-              <button ngbDropdownItem (click)="editAuthor(row.id)">
+              <button *abpPermission="'BookStore.Authors.Edit'" ngbDropdownItem (click)="editAuthor(row.id)">
                 {%{{{ '::Edit' | abpLocalization }}}%}
               </button>
-              <button ngbDropdownItem (click)="delete(row.id)">
+              <button *abpPermission="'BookStore.Authors.Delete'" ngbDropdownItem (click)="delete(row.id)">
                 {%{{{ '::Delete' | abpLocalization }}}%}
               </button>
             </div>
@@ -792,7 +797,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
 
@@ -832,7 +837,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## The Author Management Page
 
@@ -843,8 +848,11 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 ````xml
 @page "/authors"
 @using Acme.BookStore.Authors
+@using Acme.BookStore.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 <Card>
     <CardHeader>
         <Row>
@@ -917,73 +925,109 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 <Modal @ref="CreateAuthorModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>@L["NewAuthor"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateAuthorModal" />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>@L["Name"]</FieldLabel>
-                <TextEdit @bind-text="@NewAuthor.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["BirthDate"]</FieldLabel>
-                <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["ShortBio"]</FieldLabel>
-                <MemoEdit Rows="5" @bind-text="@NewAuthor.ShortBio" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary"
-                    Clicked="CloseCreateAuthorModal">
-                @L["Cancel"]
-            </Button>
-            <Button Color="Color.Primary"
-                    Clicked="CreateAuthorAsync">
-                @L["Save"]
-            </Button>
-        </ModalFooter>
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewAuthor"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateAuthorModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewAuthor" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAuthor.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate"/>
+                    </Field>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["ShortBio"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@NewAuthor.ShortBio">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateAuthorModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateAuthorAsync">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
     </ModalContent>
 </Modal>
 
 <Modal @ref="EditAuthorModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>@EditingAuthor.Name</ModalTitle>
-            <CloseButton Clicked="CloseEditAuthorModal" />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>@L["Name"]</FieldLabel>
-                <TextEdit @bind-text="@EditingAuthor.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["BirthDate"]</FieldLabel>
-                <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["ShortBio"]</FieldLabel>
-                <MemoEdit Rows="5" @bind-text="@EditingAuthor.ShortBio" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary"
-                    Clicked="CloseEditAuthorModal">
-                @L["Cancel"]
-            </Button>
-            <Button Color="Color.Primary"
-                    Clicked="UpdateAuthorAsync">
-                @L["Save"]
-            </Button>
-        </ModalFooter>
+        <Form>
+            <ModalHeader>
+                        <ModalTitle>@EditingAuthor.Name</ModalTitle>
+                        <CloseButton Clicked="CloseEditAuthorModal" />
+                    </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingAuthor" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAuthor.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate"/>
+                    </Field>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["ShortBio"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@EditingAuthor.ShortBio">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditAuthorModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateAuthorAsync">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
     </ModalContent>
 </Modal>
 ````
 
-* This code is similar to the `Books.razor`, except it doesn't inherit from the `BlazorisePageBase`, but uses its own implementation.
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
 * Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../API/Dynamic-CSharp-API-Clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
 * Injects the `IAuthorizationService` to check [permissions](../Authorization.md).
 * Injects the `IObjectMapper` for [object to object mapping](../Object-To-Object-Mapping.md).
@@ -1025,6 +1069,10 @@ namespace Acme.BookStore.Blazor.Pages
         private Modal CreateAuthorModal { get; set; }
         private Modal EditAuthorModal { get; set; }
 
+        private Validations CreateValidationsRef;
+        
+        private Validations EditValidationsRef;
+        
         public Authors()
         {
             NewAuthor = new CreateAuthorDto();
@@ -1074,11 +1122,13 @@ namespace Acme.BookStore.Blazor.Pages
 
             await GetAuthorsAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OpenCreateAuthorModal()
         {
+            CreateValidationsRef.ClearAll();
+            
             NewAuthor = new CreateAuthorDto();
             CreateAuthorModal.Show();
         }
@@ -1090,6 +1140,8 @@ namespace Acme.BookStore.Blazor.Pages
 
         private void OpenEditAuthorModal(AuthorDto author)
         {
+            EditValidationsRef.ClearAll();
+            
             EditingAuthorId = author.Id;
             EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
             EditAuthorModal.Show();
@@ -1114,16 +1166,22 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task CreateAuthorAsync()
         {
-            await AuthorAppService.CreateAsync(NewAuthor);
-            await GetAuthorsAsync();
-            CreateAuthorModal.Hide();
+            if (CreateValidationsRef.ValidateAll())
+            {
+                await AuthorAppService.CreateAsync(NewAuthor);
+                await GetAuthorsAsync();
+                CreateAuthorModal.Hide();
+            }
         }
 
         private async Task UpdateAuthorAsync()
         {
-            await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
-            await GetAuthorsAsync();
-            EditAuthorModal.Hide();
+            if (EditValidationsRef.ValidateAll())
+            {
+                await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
+                await GetAuthorsAsync();
+                EditAuthorModal.Hide();
+            }
         }
     }
 }

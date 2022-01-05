@@ -44,6 +44,11 @@ export default `
     top: 0;
     left: 100%;
 }
+/* work around for rtl. Track https://github.com/ng-bootstrap/ng-bootstrap/issues/4100 issue */
+[dir=rtl] .navbar .dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+}
 .card-header .btn {
     padding: 2px 6px;
 }
@@ -137,5 +142,9 @@ background-color: rgba(0, 0, 0, 0.6);
 .bordered .datatable-body-row {
     border-top: 1px solid #eee;
     margin-top: -1px;
+}
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.27rem;
 }
 `;

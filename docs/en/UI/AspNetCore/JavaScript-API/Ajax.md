@@ -8,7 +8,7 @@
 * Can **block** a UI part (or the full page) during the AJAX operation.
 * Allows to fully customize any AJAX call, by using the standard `$.ajax` **options**.
 
-> While `abp.ajax` makes the AJAX call pretty easier, you typically will use the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Client-Proxies.md) system to perform calls to your server side HTTP APIs. `abp.ajax` can be used when you need to perform low level AJAX operations.
+> While `abp.ajax` makes the AJAX call pretty easier, you typically will use the [Dynamic JavaScript Client Proxy](../Dynamic-JavaScript-Proxies.md) system to perform calls to your server side HTTP APIs. `abp.ajax` can be used when you need to perform low level AJAX operations.
 
 ## Basic Usage
 

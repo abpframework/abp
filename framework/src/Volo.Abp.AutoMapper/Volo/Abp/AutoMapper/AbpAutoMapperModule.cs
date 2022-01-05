@@ -8,49 +8,51 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
-namespace Volo.Abp.AutoMapper
+namespace Volo.Abp.AutoMapper;
+
+[DependsOn(
+    typeof(AbpObjectMappingModule),
+    typeof(AbpObjectExtendingModule),
+    typeof(AbpAuditingModule)
+)]
+public class AbpAutoMapperModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpObjectMappingModule),
-        typeof(AbpObjectExtendingModule),
-        typeof(AbpAuditingModule)
-    )]
-    public class AbpAutoMapperModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
-        }
+        context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAutoMapperObjectMapper();
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAutoMapperObjectMapper();
 
-            context.Services.AddSingleton<MapperAccessor>(provider => CreateMappings(provider));
-            context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
-        }
+        context.Services.AddSingleton<MapperAccessor>(CreateMappings);
+        context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
+    }
 
-        private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
+    private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
+    {
+        using (var scope = serviceProvider.CreateScope())
         {
-            using (var scope = serviceProvider.CreateScope())
+            var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
+
+            void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
             {
-                var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
-
-                void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
+                foreach (var configurator in options.Configurators)
                 {
-                    foreach (var configurator in options.Configurators)
-                    {
-                        configurator(ctx);
-                    }
+                    configurator(ctx);
                 }
+            }
 
-                void ValidateAll(IConfigurationProvider config)
+            options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
+
+            void ValidateAll(IConfigurationProvider config)
+            {
+                foreach (var profileType in options.ValidatingProfiles)
                 {
-                    foreach (var profileType in options.ValidatingProfiles)
-                    {
-                        config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
-                    }
+                    config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
                 }
+            }
 
                 var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
                 {
@@ -59,13 +61,12 @@ namespace Volo.Abp.AutoMapper
                     ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
                 });
 
-                ValidateAll(mapperConfiguration);
+            ValidateAll(mapperConfiguration);
 
-                return new MapperAccessor
-                {
-                    Mapper = new Mapper(mapperConfiguration, serviceProvider.GetService)
-                };
-            }
+            return new MapperAccessor
+            {
+                Mapper = new Mapper(mapperConfiguration)
+            };
         }
     }
 }

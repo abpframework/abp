@@ -10,11 +10,14 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Domyślny Connection String",
     "DisplayName:UseSharedDatabase": "Użyj współdzielonej bazy danych",
+    "ManageHostFeatures": "Zarządzaj funkcjami hosta",
     "Permission:TenantManagement": "Zarządzanie tenantami",
     "Permission:Create": "Utwórz",
     "Permission:Edit": "Edytuj",
     "Permission:Delete": "Usuń",
     "Permission:ManageConnectionStrings": "Zarządzaj connection string'ami",
-    "Permission:ManageFeatures": "Zarządzaj fukcjami"
+    "Permission:ManageFeatures": "Zarządzaj fukcjami",
+    "DisplayName:AdminEmailAddress": "Adres e-mail administratora",
+    "DisplayName:AdminPassword": "Hasło administratora"
   }
 }

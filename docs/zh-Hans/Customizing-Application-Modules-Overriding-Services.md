@@ -243,7 +243,7 @@ ObjectExtensionManager.Instance
 
 这是定义实体属性的另一种方法( 有关 `ObjectExtensionManager` 更多信息,请参阅[文档](Object-Extensions.md)). 这次我们设置了 `CheckPairDefinitionOnMapping` 为false,在将实体映射到DTO时会跳过定义检查.
 
-如果你不喜欢这种方法,但想简单的向多个对象(DTO)添加单个属, `AddOrUpdateProperty` 可以使用类型数组添加额外的属性:
+如果你不喜欢这种方法,但想简单的向多个对象(DTO)添加单个属性, `AddOrUpdateProperty` 可以使用类型数组添加额外的属性:
 
 ````csharp
 ObjectExtensionManager.Instance

@@ -2,6 +2,23 @@
   "culture": "en",
   "texts": {
     "Settings": "Settings",
-    "SuccessfullySaved": "Successfully saved"
+    "SuccessfullySaved": "Successfully saved",
+    "Permission:SettingManagement": "Setting Management",
+    "Permission:Emailing": "Emailing",
+    "Menu:Emailing": "Emailing",
+    "SmtpHost": "Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "User name",
+    "SmtpPassword": "Password",
+    "SmtpDomain": "Domain",
+    "SmtpEnableSsl": "Enable ssl",
+    "SmtpUseDefaultCredentials": "Use default credentials",
+    "DefaultFromAddress": "Default from address",
+    "DefaultFromDisplayName": "Default from display name",
+    "Feature:SettingManagementGroup": "Setting Management",
+    "Feature:SettingManagementEnable": "Enable setting management",
+    "Feature:SettingManagementEnableDescription": "Enable setting management system in the application.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Allow tenants to change email settings.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Allow tenants to change email settings."
   }
 }

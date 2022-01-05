@@ -1,17 +1,13 @@
-﻿using Volo.Abp.BlazoriseUI;
-using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
+﻿using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
+
+[DependsOn(
+    typeof(AbpAspNetCoreComponentsWebThemingModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyModule)
+)]
+public class AbpAspNetCoreComponentsWebAssemblyThemingModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpBlazoriseUIModule),
-        typeof(AbpHttpClientIdentityModelWebAssemblyModule),
-        typeof(AbpUiNavigationModule)
-    )]
-    public class AbpAspNetCoreComponentsWebAssemblyThemingModule : AbpModule
-    {
 
-    }
 }

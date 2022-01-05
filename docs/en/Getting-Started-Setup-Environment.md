@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -19,21 +19,18 @@ First things first! Let's setup your development environment before creating the
 
 The following tools should be installed on your development machine:
 
-* [Visual Studio 2019](https://visualstudio.microsoft.com/vs/) (v16.8+) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
-* [.NET Core 5.0+](https://www.microsoft.com/net/download/dotnet-core/)
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
 {{ if UI != "Blazor" }}
 * [Node v12 or v14](https://nodejs.org/)
-* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (already installed with Node)
+* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[1](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}
 * [Redis](https://redis.io/) (the startup solution uses the Redis as the [distributed cache](Caching.md)).
 {{ end }}
 
-<sup id="f-editor"><b>1</b></sup> _You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core._ <sup>[↩](#a-editor)</sup>
-
 {{ if UI != "Blazor" }}
 
-<sup id="f-yarn"><b>2</b></sup> _Yarn v2 works differently and is not supported._ <sup>[↩](#a-yarn)</sup>
+<sup id="f-yarn"><b>1</b></sup> _Yarn v2 works differently and is not supported._ <sup>[↩](#a-yarn)</sup>
 
 {{ end }}
 

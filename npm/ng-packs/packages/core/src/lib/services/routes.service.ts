@@ -6,6 +6,7 @@ import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils'
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export abstract class AbstractTreeService<T extends object> {
   abstract id: string;
   abstract parentId: string;
@@ -135,7 +136,8 @@ export abstract class AbstractTreeService<T extends object> {
 @Injectable()
 export abstract class AbstractNavTreeService<T extends ABP.Nav>
   extends AbstractTreeService<T>
-  implements OnDestroy {
+  implements OnDestroy
+{
   private subscription: Subscription;
   private permissionService: PermissionService;
   readonly id = 'name';
@@ -179,6 +181,3 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
-
-@Injectable({ providedIn: 'root' })
-export class SettingTabsService extends AbstractNavTreeService<ABP.Tab> {}

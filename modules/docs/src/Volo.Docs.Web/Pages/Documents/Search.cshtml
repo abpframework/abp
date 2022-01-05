@@ -30,12 +30,12 @@
 <div class="container mb-5">
 
     <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
-        <h4 class="text-center my-3">Search in Documents</h4>
+		<h4 class="text-center my-3">@L["FullSearch"]</h4>
         <div class="card rounded">
             <div class="p-3 bg-white">
-                <div class="form-row">
+                <div class="row">
                     <div class="col"><input type="text" asp-for="@Model.KeyWord" class="form-control" /></div>
-                    <div class="col-auto"><button type="submit" class="btn btn-primary px-md-5">Search</button></div>
+                    <div class="col-auto"><button type="submit" class="btn btn-primary px-md-5">@L["Search"]</button></div>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
     <div class="card mt-4 rounded">
         <div class="card-header">
-            <h5 class="text-center ">Search Results</h5>
+            <h5 class="text-center ">@L["SearchResults"]</h5>
         </div>
         <div class="p-5 card-body">
             @foreach (var docs in Model.SearchOutputs)

@@ -1,17 +1,15 @@
 ﻿@using Volo.Abp.Validation.StringValues
 @using Microsoft.Extensions.Localization
-
 @inherits AbpFeatureManagementComponentBase
 
-<Modal @ref="Modal">
-    <ModalBackdrop />
-    <ModalContent Size="ModalSize.Large" IsCentered="true">
+<Modal @ref="Modal" Closing="@ClosingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>@L["Features"]</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         <ModalBody MaxHeight="50">
-            @if (Groups == null)
+            @if (Groups == null || !Groups.Any())
             {
                 <span>@L["NoFeatureFoundMessage"]</span>
             }
@@ -31,14 +29,14 @@
                         {
                             <TabPanel Name="@GetNormalizedGroupName(group.Name)">
                                 <h4>@group.DisplayName</h4>
-
+                                <hr class="mt-2 mb-3"/>
                                 @foreach (var feature in group.Features)
                                 {
                                     var disabled = IsDisabled(feature.Provider.Name);
 
                                     if (feature.ValueType is FreeTextStringValueType)
                                     {
-                                        <Field>
+                                        <Field Style="@GetFeatureStyles(feature)">
                                             <FieldLabel>@feature.DisplayName</FieldLabel>
                                             <TextEdit Disabled="@disabled"
                                                       Text="@feature.Value"
@@ -54,7 +52,7 @@
                                     {
                                         var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
 
-                                        <Field>
+                                        <Field Style="@GetFeatureStyles(feature)">
                                             <FieldLabel>@feature.DisplayName</FieldLabel>
                                             <Select TValue="string"
                                                     @bind-SelectedValue="@SelectionStringValues[feature.Name]">
@@ -70,8 +68,9 @@
 
                                     if (feature.ValueType is ToggleStringValueType)
                                     {
-                                        <Field>
-                                            <Check TValue="bool" @bind-Checked="@ToggleValues[feature.Name]">@feature.DisplayName</Check>
+                                        <Field Style="@GetFeatureStyles(feature)" >
+                                            <Check
+                                                TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async(v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
                                         </Field>
                                     }
                                 }

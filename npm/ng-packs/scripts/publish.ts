@@ -1,7 +1,8 @@
+import program from 'commander';
 import execa from 'execa';
 import fse from 'fs-extra';
-import program from 'commander';
 import replaceWithPreview from './replace-with-preview';
+const semverParse = require('semver/functions/parse');
 
 program
   .option(
@@ -10,61 +11,61 @@ program
   )
   .option('-r, --registry <registry>', 'target npm server registry')
   .option('-p, --preview', 'publishes with preview tag')
-  .option('-r, --rc', 'publishes with next tag')
-  .option('-g, --skipGit', 'skips git push');
+  .option('-sg, --skipGit', 'skips git push')
+  .option('-sv, --skipVersionValidation', 'skips version validation');
 
 program.parse(process.argv);
 
 (async () => {
   const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
 
+  const oldVersion = fse.readJSONSync('../lerna.version.json').version;
+
   if (!program.nextVersion) {
     console.error('Please provide a version with --nextVersion attribute');
     process.exit(1);
   }
 
-  const registry =
-    program.registry ||
-    (program.preview
-      ? 'https://www.myget.org/F/abp-nightly/auth/8f2a5234-1bce-4dc7-b976-2983078590a9/npm/'
-      : 'https://registry.npmjs.org');
+  const registry = program.registry || 'https://registry.npmjs.org';
 
   try {
-    await fse.remove('../dist');
+    await fse.remove('../dist/packages');
 
-    await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
+    await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
 
-    await fse.rename('../lerna.version.json', '../lerna.json');
+    await updateVersion(program.nextVersion);
 
-    await execa(
-      'yarn',
-      [
-        'lerna',
-        'version',
-        program.nextVersion,
-        '--yes',
-        '--no-commit-hooks',
-        '--skip-git',
-        '--force-publish',
-      ],
-      { stdout: 'inherit', cwd: '../' },
-    );
-
-    await fse.rename('../lerna.json', '../lerna.version.json');
-
-    await execa('yarn', ['replace-with-tilde']);
+    if (!program.skipVersionValidation) {
+      await execa(
+        'yarn',
+        [
+          'validate-versions',
+          '--compareVersion',
+          program.nextVersion,
+          '--path',
+          '../ng-packs/packages',
+        ],
+        { stdout: 'inherit', cwd: '../../scripts' },
+      );
+    }
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 
     await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
-
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
+  } catch (error) {
+    console.error(error.stderr);
+    console.error('\n\nAn error has occurred! Rolling back the changed package versions.');
+    await updateVersion(oldVersion);
+    process.exit(1);
+  }
 
+  try {
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
     let tag: string;
     if (program.preview) tag = 'preview';
-    if (program.rc) tag = 'next';
+    else if (semverParse(program.nextVersion).prerelease?.length) tag = 'next';
 
     await execa(
       'yarn',
@@ -76,7 +77,14 @@ program.parse(process.argv);
     );
 
     await fse.rename('../lerna.json', '../lerna.publish.json');
+  } catch (error) {
+    console.error(error.stderr);
+    console.error('\n\nAn error has occurred while publishing to the NPM!');
+    await fse.rename('../lerna.json', '../lerna.publish.json');
+    process.exit(1);
+  }
 
+  try {
     if (!program.preview && !program.skipGit) {
       await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
         stdout: 'inherit',
@@ -92,3 +100,17 @@ program.parse(process.argv);
 
   process.exit(0);
 })();
+
+async function updateVersion(version: string) {
+  await fse.rename('../lerna.version.json', '../lerna.json');
+
+  await execa(
+    'yarn',
+    ['lerna', 'version', version, '--yes', '--no-commit-hooks', '--skip-git', '--force-publish'],
+    { stdout: 'inherit', cwd: '../' },
+  );
+
+  await fse.rename('../lerna.json', '../lerna.version.json');
+
+  await execa('yarn', ['replace-with-tilde']);
+}

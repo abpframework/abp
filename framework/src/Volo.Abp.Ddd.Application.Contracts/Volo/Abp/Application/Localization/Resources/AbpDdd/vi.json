@@ -1,0 +1,6 @@
+{
+  "culture": "vi",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} không được nhiều hơn {1}! Tăng {2}. {3} ở phía máy chủ để cho phép nhiều kết quả hơn."
+  }
+}

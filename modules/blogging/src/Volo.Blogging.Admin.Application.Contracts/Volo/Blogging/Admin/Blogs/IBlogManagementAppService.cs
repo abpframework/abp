@@ -18,5 +18,7 @@ namespace Volo.Blogging.Admin.Blogs
         Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input);
 
         Task DeleteAsync(Guid id);
+
+        Task ClearCacheAsync(Guid id);
     }
 }

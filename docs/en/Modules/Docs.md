@@ -38,7 +38,7 @@ Note that this document covers `Entity Framework Core` provider but you can also
 
 ### 2- Running The Empty Application
 
-After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contracts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `EntityFrameworkCore.DbMigations`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
+After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contracts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
 
 ![Create a new project](../images/docs-module_solution-explorer.png)
 
@@ -171,7 +171,7 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
 
 ##### 3.2.2- Adding NPM Package
 
-Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
+Open `package.json` and add `@abp/docs": "^5.0.0` as shown below:
 
   ```json
     {
@@ -179,16 +179,17 @@ Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
         "name": "my-app",
         "private": true,
         "dependencies": {
-            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
-            "@abp/docs": "^2.9.0"
+            "@abp/aspnetcore.mvc.ui.theme.basic": "^5.0.0",
+            "@abp/docs": "^5.0.0"
         }
     }
   ```
 
-  Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
+Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
 
-  1. `yarn`
-  2. `gulp`
+````bash
+abp install-libs
+````
 
 ### 4- Database Integration
 
@@ -237,15 +238,15 @@ If you choose Entity Framework as your database provider, you need to configure 
     }
   ```
 
-* Open `Package Manager Console` in `Visual Studio` and choose `Acme.MyProject.EntityFrameworkCore.DbMigrations` as default project. Then write the below command to add the migration for Docs Module.
+* Open `Package Manager Console` in `Visual Studio` and choose `Acme.MyProject.EntityFrameworkCore` as default project. Then write the below command to add the migration for Docs Module.
 
   ```csharp
   add-migration Added_Docs_Module
   ```
 
-  When the command successfully executes , you will see a new migration file named as `20181221111621_Added_Docs_Module` in the folder `Acme.MyProject.EntityFrameworkCore.DbMigrations\Migrations`.
+  When the command successfully executes , you will see a new migration file named as `20181221111621_Added_Docs_Module` in the folder `Acme.MyProject.EntityFrameworkCore\Migrations`.
 
-  Now, update the database for Docs module database changes. To do this run the below code on `Package Manager Console` in `Visual Studio`.  Be sure `Acme.MyProject.EntityFrameworkCore.DbMigrations` is still default project.
+  Now, update the database for Docs module database changes. To do this run the below code on `Package Manager Console` in `Visual Studio`.  Be sure `Acme.MyProject.EntityFrameworkCore` is still default project.
 
   ```csharp
   update-database
@@ -320,7 +321,7 @@ Open `DocsProjects` in your database, and insert a new record with the following
 * **ShortName**: A short and URL friendly name that will be used in your docs URL.
 * **Format**: The format of the document (for Markdown: `md`, for HTML: `html`)
 * **DefaultDocumentName**: The document for the initial page.
-* **NavigationDocumentName**: The document to be used for the navigation menu (index).
+* **NavigationDocumentName**: The document to be used for the navigation menu (Index).
 * **MinimumVersion**: The minimum version to show the docs. Below version will not be listed.
 * **DocumentStoreType**: The source of the documents (for GitHub:`GitHub`, for file system`FileSystem`)
 * **ExtraProperties**: A serialized `JSON` that stores special configuration for the selected `DocumentStoreType`. 
@@ -355,12 +356,12 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 
 - MainWebsiteUrl: `/`
 
-- LatestVersionBranchName: `master`
+- LatestVersionBranchName: `dev`
 
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'master', N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'dev', N'')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
@@ -622,6 +623,46 @@ If your `IElasticClient` needs additional configuration, please use override `IE
   }
 }
 ```
+
+
+## Row Highlighting
+
+You can apply highlight to specific code lines or a range of sequential lines.
+See the following examples:
+
+```
+	```C# {3, 5}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+```
+	```C# {2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+```
+	```C# {1, 2-4}
+	public class Book : Entity<Guid>
+	{
+	    public string Name { get; set; }
+	    public string Surname { get; set; }
+	}
+	```
+```
+
+---
+
+
 
 ## Next
 

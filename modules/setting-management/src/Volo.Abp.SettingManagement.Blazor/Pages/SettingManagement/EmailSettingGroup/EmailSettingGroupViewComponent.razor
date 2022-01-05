@@ -1,0 +1,99 @@
+﻿@using Volo.Abp.SettingManagement.Localization
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+@inject AbpBlazorMessageLocalizerHelper<AbpSettingManagementResource> LH
+
+@if (EmailSettings != null)
+{
+    <Form>
+        <Validations @ref="@IdentitySettingValidation" Model="@EmailSettings" ValidateOnLoad="false">
+            <Row>
+                <Column>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["DefaultFromDisplayName"]</FieldLabel>
+                            <TextEdit @bind-Text="@EmailSettings.DefaultFromDisplayName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["DefaultFromAddress"]</FieldLabel>
+                            <TextEdit @bind-Text="@EmailSettings.DefaultFromAddress">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                           <FieldLabel>@L["SmtpHost"]</FieldLabel>
+                            <TextEdit @bind-Text="@EmailSettings.SmtpHost">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["SmtpPort"]</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@EmailSettings.SmtpPort">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl">@L["SmtpEnableSsl"]</Check>
+                    </Field>
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials">@L["SmtpUseDefaultCredentials"]</Check>
+                    </Field>
+                    @if (!EmailSettings.SmtpUseDefaultCredentials)
+                    {
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                              <FieldLabel>@L["SmtpDomain"]</FieldLabel>
+                                <TextEdit @bind-Text="@EmailSettings.SmtpDomain">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                               <FieldLabel>@L["SmtpUserName"]</FieldLabel>
+                                <TextEdit @bind-Text="@EmailSettings.SmtpUserName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                               <FieldLabel>@L["SmtpPassword"]</FieldLabel>
+                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                    }
+                </Column>
+            </Row>
+        </Validations>
+        <Row>
+            <Column>
+                <SubmitButton Clicked="@UpdateSettingsAsync" />
+            </Column>
+        </Row>
+    </Form>
+}

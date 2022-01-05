@@ -3,124 +3,111 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class TagManager_Tests : CmsKitDomainTestBase
 {
-    public class TagManager_Tests : CmsKitDomainTestBase
+    private readonly CmsKitTestData _cmsKitTestData;
+    private readonly TagManager _tagManager;
+
+    private readonly ITagRepository _tagRepository;
+
+    public TagManager_Tests()
     {
-        private readonly CmsKitTestData _cmsKitTestData;
-        private readonly TagManager _tagManager;
+        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+        _tagManager = GetRequiredService<TagManager>();
+        _tagRepository = GetRequiredService<ITagRepository>();
+    }
 
-        private readonly ITagRepository _tagRepository;
-        
-        public TagManager_Tests()
-        {
-            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-            _tagManager = GetRequiredService<TagManager>();
-            _tagRepository = GetRequiredService<ITagRepository>();
-        }
+    [Fact]
+    public async Task ShouldAddWhenGettingAsync()
+    {
+        var newTagEntityType = _cmsKitTestData.EntityType1;
+        var newTagName = "test_tag_2123";
 
-        [Fact]
-        public async Task ShouldAddWhenGettingAsync()
-        {
-            var newTagEntityType = _cmsKitTestData.EntityType1;
-            var newTagName = "test_tag_2123";
-            
-            var doesExist = await _tagRepository.AnyAsync(newTagEntityType, newTagName);
-            
-            doesExist.ShouldBeFalse();
-            
-            var newTag = await _tagManager.GetOrAddAsync(newTagEntityType, newTagName);
+        var doesExist = await _tagRepository.AnyAsync(newTagEntityType, newTagName);
 
-            newTag.ShouldNotBeNull();
-            
-            var doesExistAgain = await _tagRepository.AnyAsync(newTagEntityType, newTagName);
-            
-            doesExistAgain.ShouldBeTrue();
-        }
-        
-        [Fact]
-        public async Task ShouldNotAddWhenGettingAsync()
-        {
-            var tagName = _cmsKitTestData.Content_1_Tags[0];
+        doesExist.ShouldBeFalse();
 
-            var tag = await _tagRepository.GetAsync(_cmsKitTestData.Content_1_EntityType, tagName);
-            
-            var newTag = await _tagManager.GetOrAddAsync(_cmsKitTestData.Content_1_EntityType, tag.Name);
+        var newTag = await _tagManager.GetOrAddAsync(newTagEntityType, newTagName);
 
-            newTag.ShouldNotBeNull();
-            
-            newTag.Id.ShouldBe(tag.Id);
-        }
+        newTag.ShouldNotBeNull();
 
-        [Fact]
-        public async Task ShouldInsertAsync()
-        {
-            var tagName = "Freshly Created New Tag";
-            var tag = await _tagManager.InsertAsync(Guid.NewGuid(), _cmsKitTestData.EntityType1, tagName);
+        var doesExistAgain = await _tagRepository.AnyAsync(newTagEntityType, newTagName);
 
-            tag.ShouldNotBeNull();
+        doesExistAgain.ShouldBeTrue();
+    }
 
-            var doesExist = await _tagRepository.AnyAsync(_cmsKitTestData.EntityType1, tagName);
-            
-            doesExist.ShouldBeTrue();
-        }
-        [Fact]
-        public async Task ShouldntInsertWithUnconfiguredEntityTypeAsync()
-        {
-            var notConfiguredEntityType = "My.Namespace.SomeEntity";
+    [Fact]
+    public async Task ShouldNotAddWhenGettingAsync()
+    {
+        var tagName = _cmsKitTestData.Content_1_Tags[0];
 
-            var exception = await Should.ThrowAsync<EntityNotTaggableException>(async () => 
-                await _tagManager.InsertAsync(Guid.NewGuid(), notConfiguredEntityType, "test"));
+        var tag = await _tagRepository.GetAsync(_cmsKitTestData.Content_1_EntityType, tagName);
 
-            exception.ShouldNotBeNull();
-            exception.Data[nameof(Tag.EntityType)].ShouldBe(notConfiguredEntityType);
-        }
-        
-        [Fact]
-        public async Task ShouldNotInsert()
-        {
-            var type = _cmsKitTestData.Content_1_EntityType;
-            var name = _cmsKitTestData.Content_1_Tags[0];
+        var newTag = await _tagManager.GetOrAddAsync(_cmsKitTestData.Content_1_EntityType, tag.Name);
 
-            Should.Throw<Exception>(async () => await _tagManager.InsertAsync(Guid.NewGuid(), type, name));
-        }
-        
-        [Fact]
-        public async Task ShouldUpdate()
-        {
-            var type = _cmsKitTestData.Content_1_EntityType;
-            var name = _cmsKitTestData.Content_1_Tags[0];
-            var newName = name + "-updated";
-            
-            var tag = await _tagRepository.GetAsync(type, name);
+        newTag.ShouldNotBeNull();
 
-            await _tagManager.UpdateAsync(tag.Id, newName);
+        newTag.Id.ShouldBe(tag.Id);
+    }
 
-            var updatedTag = await _tagRepository.GetAsync(type, newName);
-            
-            updatedTag.Id.ShouldBe(tag.Id);
-        }
-        
-        [Fact]
-        public async Task ShouldNotUpdate()
-        {
-            var type = _cmsKitTestData.Content_1_EntityType;
-            var name = _cmsKitTestData.Content_1_Tags[0];
-            var newName = _cmsKitTestData.Content_1_Tags[1];
-            
-            var tag = await _tagRepository.GetAsync(type, name);
+    [Fact]
+    public async Task ShouldCreateAsync()
+    {
+        var tagName = "Freshly Created New Tag";
+        var tag = await _tagManager.CreateAsync(Guid.NewGuid(), _cmsKitTestData.EntityType1, tagName);
 
-            Should.Throw<Exception>(async () => await _tagManager.UpdateAsync(tag.Id, newName));
-        }
+        tag.ShouldNotBeNull();
 
-        [Fact]
-        public async Task ShouldGetTagDefinitionsProperly_WithoutParameter()
-        {
-            var definitions = await _tagManager.GetTagDefinitionsAsync();
+        tag.Id.ShouldNotBe(Guid.Empty);
+    }
 
-            definitions.ShouldNotBeNull();
-            definitions.Count.ShouldBeGreaterThan(1);
-            definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
-        }
+    [Fact]
+    public async Task ShouldntInsertWithUnconfiguredEntityTypeAsync()
+    {
+        var notConfiguredEntityType = "My.Namespace.SomeEntity";
+
+        var exception = await Should.ThrowAsync<EntityNotTaggableException>(async () =>
+            await _tagManager.CreateAsync(Guid.NewGuid(), notConfiguredEntityType, "test"));
+
+        exception.ShouldNotBeNull();
+        exception.Data[nameof(Tag.EntityType)].ShouldBe(notConfiguredEntityType);
+    }
+
+    [Fact]
+    public async Task ShouldNotInsert()
+    {
+        var type = _cmsKitTestData.Content_1_EntityType;
+        var name = _cmsKitTestData.Content_1_Tags[0];
+
+        Should.Throw<Exception>(async () => await _tagManager.CreateAsync(Guid.NewGuid(), type, name));
+    }
+
+    [Fact]
+    public async Task ShouldUpdate()
+    {
+        var type = _cmsKitTestData.Content_1_EntityType;
+        var name = _cmsKitTestData.Content_1_Tags[0];
+        var newName = name + "-updated";
+
+        var tag = await _tagRepository.GetAsync(type, name);
+
+        var updatedTag = await _tagManager.UpdateAsync(tag.Id, newName);
+
+        updatedTag.Id.ShouldBe(tag.Id);
+        updatedTag.Name.ShouldBe(newName);
+    }
+
+    [Fact]
+    public async Task ShouldNotUpdate()
+    {
+        var type = _cmsKitTestData.Content_1_EntityType;
+        var name = _cmsKitTestData.Content_1_Tags[0];
+        var newName = _cmsKitTestData.Content_1_Tags[1];
+
+        var tag = await _tagRepository.GetAsync(type, name);
+
+        Should.Throw<Exception>(async () => await _tagManager.UpdateAsync(tag.Id, newName));
     }
 }

@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "sl",
   "texts": {
     "Permission:DocumentManagement": "Upravljanje dokumentov",
@@ -7,6 +7,7 @@
     "Permission:Delete": "Brisanje",
     "Permission:Create": "Ustvarjanje",
     "Permission:Documents": "Dokumenti",
+    "Menu:Documents": "dokumenti",
     "Menu:DocumentManagement": "Dokumenti",
     "Menu:ProjectManagement": "Projekti",
     "CreateANewProject": "Ustvari nov projekt",
@@ -30,8 +31,29 @@
     "DisplayName:GitHubRootUrl": "Korenski URL na GitHub",
     "DisplayName:GitHubAccessToken": "GitHub access token",
     "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:GithubVersionProviderSource": "Vir ponudnika različice GitHub",
+    "DisplayName:VersionBranchPrefix": "Predpona veje različice",
     "DisplayName:All": "Prenesi vse",
     "DisplayName:LanguageCode": "Koda jezika",
-    "DisplayName:Version": "Verzija"
+    "DisplayName:Version": "Verzija",
+    "Documents": "dokumenti",
+    "RemoveFromCache": "Odstrani iz predpomnilnika",
+    "Reindex": "Ponovno indeksiraj",
+    "ReindexCompleted": "Ponovno indeksiranje je končano",
+    "RemovedFromCache": "Odstranjeno iz predpomnilnika",
+    "RemoveFromCacheConfirmation": "Ali ste prepričani, da želite odstraniti ta element iz predpomnilnika?",
+    "ReIndexDocumentConfirmation": "Ali ste prepričani, da želite ponovno indeksirati ta element?",
+    "DeleteFromDatabase": "Izbriši iz baze podatkov",
+    "Deleted": "Izbrisano",
+    "Search": "Iskanje",
+    "StartDate": "Začetni datum",
+    "EndDate": "Končni datum",
+    "CreationTime": "Čas ustvarjanja",
+    "LastUpdateTime": "Zadnja posodobitev",
+    "LastSignificantUpdateTime": "Zadnja pomembna posodobitev",
+    "Version": "Različica",
+    "LanguageCode": "Jezikovna koda",
+    "FileName": "Ime datoteke",
+    "LastCachedTime": "Čas predpomnilnika"
   }
 }

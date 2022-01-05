@@ -1,48 +1,63 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Blazorise;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.BlazoriseUI.Components
+namespace Volo.Abp.BlazoriseUI.Components;
+
+public partial class EntityActions<TItem> : ComponentBase
 {
-    public partial class EntityActions<TItem> : ComponentBase
+    protected readonly List<EntityAction<TItem>> Actions = new List<EntityAction<TItem>>();
+    protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
+    protected EntityAction<TItem> PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
+
+    [Parameter]
+    public Color ToggleColor { get; set; } = Color.Primary;
+
+    [Parameter]
+    public string ToggleText { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; }
+
+    [Parameter]
+    public ActionType Type { get; set; } = ActionType.Dropdown;
+
+    [CascadingParameter]
+    public DataGridEntityActionsColumn<TItem> ParentEntityActionsColumn { get; set; }
+
+    [Inject]
+    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+
+    internal void AddAction(EntityAction<TItem> action)
     {
-        protected readonly List<EntityAction<TItem>> Actions = new List<EntityAction<TItem>>();
-        protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
-        protected EntityAction<TItem> PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
-        protected internal ActionType Type => Actions.Count(t => t.IsVisible) > 1 ? ActionType.Dropdown : ActionType.Button;
+        Actions.Add(action);
+    }
 
-        [Parameter]
-        public Color ToggleColor { get; set; } = Color.Primary;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ToggleText = UiLocalizer["Actions"];
+    }
 
-        [Parameter]
-        public string ToggleText { get; set; }
-
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        [Parameter]
-        public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; }
-
-        [Inject]
-        public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-
-        internal void AddAction(EntityAction<TItem> action)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-            Actions.Add(action);
-            if (EntityActionsColumn != null)
+            if (ParentEntityActionsColumn != null)
             {
-                EntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible);
+                ParentEntityActionsColumn.Displayable = Actions.Any(t => t.Visible && t.HasPermission);
             }
-            StateHasChanged();
+
+            await InvokeAsync(StateHasChanged);
         }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            ToggleText = UiLocalizer["Actions"];
-        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "未找到資源!",
     "DefaultErrorMessage404Detail": "未在服務中找到請求的資源!",
     "EntityNotFoundErrorMessage": "實體 {0} 不存在,id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "你提交的數據已經被其他用戶/客戶端修改.請放棄你所做的修改並再次嘗試.",
     "Error": "錯誤",
     "UnhandledException": "未處理的異常!",
     "401Message": "未授權",
     "403Message": "禁止訪問",
     "404Message": "網頁未找到",
-    "500Message": "內部伺服器錯誤"
+    "500Message": "內部伺服器錯誤",
+    "403MessageDetail": "你不被授權執行此操作",
+    "404MessageDetail": "對不起，地址是空的"
   }
 }

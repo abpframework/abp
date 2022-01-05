@@ -6,30 +6,48 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Microsoft.AspNetCore.RequestLocalization
+namespace Microsoft.AspNetCore.RequestLocalization;
+
+public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependency
 {
-    public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependency
+    public const string HttpContextItemName = "__AbpSetCultureCookie";
+
+    private readonly IAbpRequestLocalizationOptionsProvider _requestLocalizationOptionsProvider;
+    private readonly ILoggerFactory _loggerFactory;
+
+    public AbpRequestLocalizationMiddleware(
+        IAbpRequestLocalizationOptionsProvider requestLocalizationOptionsProvider,
+        ILoggerFactory loggerFactory)
     {
-        private readonly IAbpRequestLocalizationOptionsProvider _requestLocalizationOptionsProvider;
-        private readonly ILoggerFactory _loggerFactory;
+        _requestLocalizationOptionsProvider = requestLocalizationOptionsProvider;
+        _loggerFactory = loggerFactory;
+    }
 
-        public AbpRequestLocalizationMiddleware(
-            IAbpRequestLocalizationOptionsProvider requestLocalizationOptionsProvider,
-            ILoggerFactory loggerFactory)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    {
+        var middleware = new RequestLocalizationMiddleware(
+            next,
+            new OptionsWrapper<RequestLocalizationOptions>(await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()),
+            _loggerFactory
+        );
+
+        context.Response.OnStarting(() =>
         {
-            _requestLocalizationOptionsProvider = requestLocalizationOptionsProvider;
-            _loggerFactory = loggerFactory;
-        }
+            if (context.Items[HttpContextItemName] == null)
+            {
+                var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
+                if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider)
+                {
+                    AbpRequestCultureCookieHelper.SetCultureCookie(
+                        context,
+                        requestCultureFeature.RequestCulture
+                    );
+                }
+            }
 
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-        {
-            var middleware = new RequestLocalizationMiddleware(
-                next,
-                new OptionsWrapper<RequestLocalizationOptions>(await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()),
-                _loggerFactory
-            );
+            return Task.CompletedTask;
+        });
 
-            await middleware.Invoke(context);
-        }
+        await middleware.Invoke(context);
     }
 }

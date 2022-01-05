@@ -37,7 +37,9 @@ The pipe will replace the key with the localized text.
 You can also specify a default value as shown below:
 
 ```html
-<h1>{%{{{ { key: 'Resource::Key', defaultValue: 'Default Value' } | abpLocalization }}}%}</h1>
+<h1>
+  {%{{{ { key: 'Resource::Key', defaultValue: 'Default Value' } | abpLocalization }}}%}
+</h1>
 ```
 
 To use interpolation, you must give the values for interpolation as pipe parameters, for example:
@@ -79,12 +81,18 @@ After that, you are able to use localization service.
 > You can add interpolation parameters as arguments to `instant()` and `get()` methods.
 
 ```js
-this.localizationService.instant('AbpIdentity::UserDeletionConfirmation', 'John');
+this.localizationService.instant(
+  'AbpIdentity::UserDeletionConfirmation',
+  'John'
+);
 
 // with fallback value
 this.localizationService.instant(
-  { key: 'AbpIdentity::UserDeletionConfirmation', defaultValue: 'Default Value' },
-  'John',
+  {
+    key: 'AbpIdentity::UserDeletionConfirmation',
+    defaultValue: 'Default Value',
+  },
+  'John'
 );
 
 // Output
@@ -97,8 +105,105 @@ To get a localized text as [_Observable_](https://rxjs.dev/guide/observable) use
 this.localizationService.get('Resource::Key');
 
 // with fallback value
-this.localizationService.get({ key: 'Resource::Key', defaultValue: 'Default Value' });
+this.localizationService.get({
+  key: 'Resource::Key',
+  defaultValue: 'Default Value',
+});
 ```
+
+## UI Localizations
+
+Localizations can be determined on backend side. Angular UI gets the localizations from the `application-configuration` API's response. You can also determine localizations on the UI side.
+
+See an example:
+
+```ts
+// app.module.ts
+
+@NgModule({
+  imports: [
+    //...other imports
+    CoreModule.forRoot({
+      localizations: [
+        {
+          culture: 'en',
+          resources: [
+            {
+              resourceName: 'MyProjectName',
+              texts: {
+                Administration: 'Administration',
+                HomePage: 'Home',
+              },
+            },
+          ],
+        },
+        {
+          culture: 'de-DE',
+          resources: [
+            {
+              resourceName: 'MyProjectName',
+              texts: {
+                Administration: 'Verwaltung',
+                HomePage: 'Startseite',
+              },
+            },
+          ],
+        },
+      ],
+    }),
+  ]
+})
+```
+
+...or, you can determine the localizations in a feature module:
+
+```ts
+// your feature module
+
+@NgModule({
+  imports: [
+    //...other imports
+    CoreModule.forChild({
+      localizations: [
+        {
+          culture: 'en',
+          resources: [
+            {
+              resourceName: 'MyProjectName',
+              texts: {
+                Administration: 'Administration',
+                HomePage: 'Home',
+              },
+            },
+          ],
+        },
+        {
+          culture: 'de-DE',
+          resources: [
+            {
+              resourceName: 'MyProjectName',
+              texts: {
+                Administration: 'Verwaltung',
+                HomePage: 'Startseite',
+              },
+            },
+          ],
+        },
+      ],
+    }),
+  ]
+})
+```
+
+The localizations above can be used like this:
+
+```html
+<div>{%{{{ 'MyProjectName::Administration' | abpLocalization }}}%}</div>
+
+<div>{%{{{ 'MyProjectName::HomePage' | abpLocalization }}}%}</div>
+```
+
+> **Note:** If you have specified the same localizations in the UI and backend, the backend localizations override the UI localizations.
 
 ## RTL Support
 
@@ -137,7 +242,7 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
                 "bundleName": "bootstrap-ltr.min"
               },
               "apps/dev-app/src/styles.scss"
-            ],
+            ]
           }
         }
       }
@@ -198,7 +303,6 @@ import { registerLocale } from '@abp/ng.core/locale';
   ]
 ```
 
-
 ### Mapping of Culture Name to Angular Locale File Name
 
 Some of the culture names defined in .NET do not match Angular locales. In such cases, the Angular app throws an error like below at runtime:
@@ -222,7 +326,7 @@ import { registerLocale } from '@abp/ng.core/locale';
       // ...other options,
       registerLocaleFn: registerLocale(
         {
-          cultureNameLocaleFileMap: { 
+          cultureNameLocaleFileMap: {
             "DotnetCultureName": "AngularLocaleFileName",
             "pt-BR": "pt"  // example
           },
@@ -243,10 +347,10 @@ Add the below code to the `app.module.ts` by replacing `your-locale` placeholder
 
 import { storeLocaleData } from '@abp/ng.core/locale';
 import(
-/* webpackChunkName: "_locale-your-locale-js"*/
-/* webpackMode: "eager" */
-'@angular/common/locales/your-locale.js'
-).then(m => storeLocaleData(m.default, 'your-locale'));
+  /* webpackChunkName: "_locale-your-locale-js"*/
+  /* webpackMode: "eager" */
+  '@angular/common/locales/your-locale.js'
+).then((m) => storeLocaleData(m.default, 'your-locale'));
 ```
 
 ...or a custom `registerLocale` function can be passed to the `CoreModule`:
@@ -285,7 +389,6 @@ After this custom `registerLocale` function, since the en and fr added to the `w
 
 Which locale files you add to `webpackInclude` magic comment, they will be included in the bundle
 
-
 ## See Also
 
-* [Localization in ASP.NET Core](../../Localization.md)
+- [Localization in ASP.NET Core](../../Localization.md)

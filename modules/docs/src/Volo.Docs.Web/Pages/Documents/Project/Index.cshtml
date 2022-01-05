@@ -27,6 +27,7 @@
         <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
         <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+        <abp-style src="/Pages/Documents/Project/index.css"/>
     </abp-style-bundle>
 }
 @section scripts {
@@ -36,6 +37,7 @@
         <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
         <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
         <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
+        <abp-script src="/client-proxies/docs-proxy.js" />
         <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
         <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
         <abp-script src="/Pages/Documents/Project/index.js" />
@@ -44,7 +46,7 @@
 }
 @if (Model.LoadSuccess)
 {
-    <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
+    <div class="docs-page" data-spy="scroll" data-bs-target="#docs-sticky-index">
         <div class="row justify-content-end">
             <div class="col-md-3 docs-sidebar dark-sidebar">
                 <div class="docs-sidebar-wrapper">
@@ -86,14 +88,12 @@
                             <div class="docs-version">
                                 <div class="version-select">
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text">
-                                                <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                            </label>
-                                        </div>
+                                        <span class="input-group-text">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
                                         <select asp-items="Model.ProjectSelectItems"
-                                                class="form-control"
+                                                class="form-select"
                                                 onchange="window.location.pathname = this.value">
                                         </select>
                                     </div>
@@ -104,18 +104,18 @@
                         <div class="row">
                             @if (Model.VersionSelectItems.Any())
                             {
-                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pr-0":"")">
-                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pr-1":"")">
+                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pe-0":"")">
+                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pe-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text">
-                                                        <i class="fas fa-code-branch" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
-                                                    </label>
-                                                </div>
+
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-code-branch" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Version"]"></i>
+                                                </span>
+        
 
                                                 <select asp-items="Model.VersionSelectItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="if (this.value) { window.location.replace(this.value) }">
                                                 </select>
                                             </div>
@@ -126,17 +126,15 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="col-5  @(Model.VersionSelectItems.Any()?"pl-0":"")">
-                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
+                                <div class="@(Model.VersionSelectItems.Any()? "ps-0 col-5" : "col")">
+                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "ps-1" : "")">
                                         <div class="version-select">
                                             <div class="input-group">
-                                                @*<div class="input-group-prepend">
-                                                        <label class="input-group-text">
-                                                            <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
-                                                        </label>
-                                                    </div>*@
+                                                @*<span class="input-group-text">
+                                                            <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
+                                                 </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
-                                                        class="form-control"
+                                                        class="form-select"
                                                         onchange="window.location.replace(this.value)">
                                                 </select>
                                             </div>
@@ -149,10 +147,7 @@
                         <div class="docs-version">
                             <div class="version-select">
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text"><i class="fa fa-filter"></i></label>
-                                    </div>
-
+                                    <span class="input-group-text"><i class="fa fa-filter"></i></span>
                                     <input class="form-control"
                                            id="filter"
                                            type="search"
@@ -196,9 +191,7 @@
                                 {
                                     <div class="search-area">
                                         <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text"><i class="fa fa-search"></i></label>
-                                            </div>
+                                            <span class="input-group-text"><i class="fa fa-search"></i></span>
 
                                             <input class="form-control"
                                                    id="fullsearch"
@@ -214,7 +207,7 @@
                                 <div class="cont-container">
                                     @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
                                     {
-                                        <span class="for-desktop mr-3">
+                                        <span class="for-desktop me-3">
                                             @(L["Contributors"].Value)
                                         </span>
                                         @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c=> c.CommitCount).ToList())
@@ -261,15 +254,13 @@
                                                 </p>
                                             </abp-column>
                                         </abp-row>
-                                        <abp-form-row>
+                                        <abp-row>
                                             @foreach (var parameter in Model.DocumentPreferences.Parameters)
                                             {
                                                 <abp-column size="_4">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
-                                                        </div>
-                                                        <select class="doc-section-combobox form-control"
+                                                        <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
+                                                        <select class="doc-section-combobox form-select"
                                                                 aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
                                                                 id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
                                                             @foreach (var value in parameter.Values)
@@ -287,12 +278,12 @@
                                                     </div>
                                                 </abp-column>
                                             }
-                                        </abp-form-row>
+                                        </abp-row>
                                     </div>
                                 }
                             </div>
 
-                            <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
+                            <div data-spy="scroll" data-bs-target="#docs-sticky-index" data-offset="0">
                                 <article class="docs-body">
 
                                     @if (Model.DocumentLanguageCode != Model.LanguageCode)

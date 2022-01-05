@@ -9,138 +9,139 @@ using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands
+namespace Volo.Abp.Cli.Commands;
+
+public class GetSourceCommand : IConsoleCommand, ITransientDependency
 {
-    public class GetSourceCommand : IConsoleCommand, ITransientDependency
+    public const string Name = "get-source";
+    
+    private readonly SourceCodeDownloadService _sourceCodeDownloadService;
+    public ModuleProjectBuilder ModuleProjectBuilder { get; }
+
+    public ILogger<NewCommand> Logger { get; set; }
+
+    public GetSourceCommand(ModuleProjectBuilder moduleProjectBuilder, SourceCodeDownloadService sourceCodeDownloadService)
     {
-        private readonly SourceCodeDownloadService _sourceCodeDownloadService;
-        public ModuleProjectBuilder ModuleProjectBuilder { get; }
+        _sourceCodeDownloadService = sourceCodeDownloadService;
+        ModuleProjectBuilder = moduleProjectBuilder;
+        Logger = NullLogger<NewCommand>.Instance;
+    }
 
-        public ILogger<NewCommand> Logger { get; set; }
-
-        public GetSourceCommand(ModuleProjectBuilder moduleProjectBuilder, SourceCodeDownloadService sourceCodeDownloadService)
+    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    {
+        if (commandLineArgs.Target == null)
         {
-            _sourceCodeDownloadService = sourceCodeDownloadService;
-            ModuleProjectBuilder = moduleProjectBuilder;
-            Logger = NullLogger<NewCommand>.Instance;
+            throw new CliUsageException(
+                "Module name is missing!" +
+                Environment.NewLine + Environment.NewLine +
+                GetUsageInfo()
+            );
         }
 
-        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+        if (version != null)
         {
-            if (commandLineArgs.Target == null)
-            {
-                throw new CliUsageException(
-                    "Module name is missing!" +
-                    Environment.NewLine + Environment.NewLine +
-                    GetUsageInfo()
-                );
-            }
-
-            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
-            if (version != null)
-            {
-                Logger.LogInformation("Version: " + version);
-            }
-
-            var outputFolder = GetOutPutFolder(commandLineArgs);
-            Logger.LogInformation("Output folder: " + outputFolder);
-
-            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
-            if (gitHubAbpLocalRepositoryPath != null)
-            {
-                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
-            }
-
-            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
-            if (gitHubVoloLocalRepositoryPath != null)
-            {
-                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
-            }
-
-            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-
-            await _sourceCodeDownloadService.DownloadAsync(
-                commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
+            Logger.LogInformation("Version: " + version);
         }
 
-        private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
+        var outputFolder = GetOutPutFolder(commandLineArgs);
+        Logger.LogInformation("Output folder: " + outputFolder);
+
+        var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+        if (gitHubAbpLocalRepositoryPath != null)
         {
-            var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
-            if (outputFolder != null)
-            {
-                if (!Directory.Exists(outputFolder))
-                {
-                    Directory.CreateDirectory(outputFolder);
-                }
-
-                outputFolder = Path.GetFullPath(outputFolder);
-            }
-            else
-            {
-                outputFolder = Directory.GetCurrentDirectory();
-            }
-
-            return outputFolder;
+            Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
         }
 
-        public string GetUsageInfo()
+        var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+        if (gitHubVoloLocalRepositoryPath != null)
         {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("");
-            sb.AppendLine("Usage:");
-            sb.AppendLine("");
-            sb.AppendLine("  abp get-source <module-name> [options]");
-            sb.AppendLine("");
-            sb.AppendLine("Options:");
-            sb.AppendLine("");
-            sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
-            sb.AppendLine("-v|--version <version>                      (default: latest version)");
-            sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
-            sb.AppendLine("");
-            sb.AppendLine("Examples:");
-            sb.AppendLine("");
-            sb.AppendLine("  abp get-source Volo.Blogging");
-            sb.AppendLine("  abp get-source Volo.Blogging -o d:\\my-project");
-            sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
-
-            return sb.ToString();
+            Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
         }
 
-        public string GetShortDescription()
+        commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+
+        await _sourceCodeDownloadService.DownloadModuleAsync(
+            commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
+    }
+
+    private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
+    {
+        var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
+        if (outputFolder != null)
         {
-            return "Download the source code of the specified module.";
+            if (!Directory.Exists(outputFolder))
+            {
+                Directory.CreateDirectory(outputFolder);
+            }
+
+            outputFolder = Path.GetFullPath(outputFolder);
+        }
+        else
+        {
+            outputFolder = Directory.GetCurrentDirectory();
         }
 
-        public static class Options
+        return outputFolder;
+    }
+
+    public string GetUsageInfo()
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("");
+        sb.AppendLine("Usage:");
+        sb.AppendLine("");
+        sb.AppendLine("  abp get-source <module-name> [options]");
+        sb.AppendLine("");
+        sb.AppendLine("Options:");
+        sb.AppendLine("");
+        sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
+        sb.AppendLine("-v|--version <version>                      (default: latest version)");
+        sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
+        sb.AppendLine("");
+        sb.AppendLine("Examples:");
+        sb.AppendLine("");
+        sb.AppendLine("  abp get-source Volo.Blogging");
+        sb.AppendLine("  abp get-source Volo.Blogging -o d:\\my-project");
+        sb.AppendLine("");
+        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+        return sb.ToString();
+    }
+
+    public string GetShortDescription()
+    {
+        return "Download the source code of the specified module.";
+    }
+
+    public static class Options
+    {
+        public static class OutputFolder
         {
-            public static class OutputFolder
-            {
-                public const string Short = "o";
-                public const string Long = "output-folder";
-            }
+            public const string Short = "o";
+            public const string Long = "output-folder";
+        }
 
-            public static class GitHubAbpLocalRepositoryPath
-            {
-                public const string Long = "abp-path";
-            }
+        public static class GitHubAbpLocalRepositoryPath
+        {
+            public const string Long = "abp-path";
+        }
 
-            public static class GitHubVoloLocalRepositoryPath
-            {
-                public const string Long = "volo-path";
-            }
+        public static class GitHubVoloLocalRepositoryPath
+        {
+            public const string Long = "volo-path";
+        }
 
-            public static class Version
-            {
-                public const string Short = "v";
-                public const string Long = "version";
-            }
+        public static class Version
+        {
+            public const string Short = "v";
+            public const string Long = "version";
+        }
 
-            public static class Preview
-            {
-                public const string Long = "preview";
-            }
+        public static class Preview
+        {
+            public const string Long = "preview";
         }
     }
 }

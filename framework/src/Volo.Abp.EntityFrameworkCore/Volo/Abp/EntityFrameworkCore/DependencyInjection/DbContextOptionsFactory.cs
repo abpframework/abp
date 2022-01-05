@@ -4,98 +4,116 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection;
+
+public static class DbContextOptionsFactory
 {
-    public static class DbContextOptionsFactory
+    public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
+        where TDbContext : AbpDbContext<TDbContext>
     {
-        public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
-            where TDbContext : AbpDbContext<TDbContext>
+        var creationContext = GetCreationContext<TDbContext>(serviceProvider);
+
+        var context = new AbpDbContextConfigurationContext<TDbContext>(
+            creationContext.ConnectionString,
+            serviceProvider,
+            creationContext.ConnectionStringName,
+            creationContext.ExistingConnection
+        );
+
+        var options = GetDbContextOptions<TDbContext>(serviceProvider);
+
+        PreConfigure(options, context);
+        Configure(options, context);
+
+        return context.DbContextOptions.Options;
+    }
+
+    private static void PreConfigure<TDbContext>(
+        AbpDbContextOptions options,
+        AbpDbContextConfigurationContext<TDbContext> context)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        foreach (var defaultPreConfigureAction in options.DefaultPreConfigureActions)
         {
-            var creationContext = GetCreationContext<TDbContext>(serviceProvider);
-
-            var context = new AbpDbContextConfigurationContext<TDbContext>(
-                creationContext.ConnectionString,
-                serviceProvider,
-                creationContext.ConnectionStringName,
-                creationContext.ExistingConnection
-            );
-
-            var options = GetDbContextOptions<TDbContext>(serviceProvider);
-
-            PreConfigure(options, context);
-            Configure(options, context);
-
-            return context.DbContextOptions.Options;
+            defaultPreConfigureAction.Invoke(context);
         }
 
-        private static void PreConfigure<TDbContext>(
-            AbpDbContextOptions options,
-            AbpDbContextConfigurationContext<TDbContext> context)
-            where TDbContext : AbpDbContext<TDbContext>
+        var preConfigureActions = options.PreConfigureActions.GetOrDefault(typeof(TDbContext));
+        if (!preConfigureActions.IsNullOrEmpty())
         {
-            foreach (var defaultPreConfigureAction in options.DefaultPreConfigureActions)
+            foreach (var preConfigureAction in preConfigureActions)
             {
-                defaultPreConfigureAction.Invoke(context);
-            }
-
-            var preConfigureActions = options.PreConfigureActions.GetOrDefault(typeof(TDbContext));
-            if (!preConfigureActions.IsNullOrEmpty())
-            {
-                foreach (var preConfigureAction in preConfigureActions)
-                {
-                    ((Action<AbpDbContextConfigurationContext<TDbContext>>)preConfigureAction).Invoke(context);
-                }
+                ((Action<AbpDbContextConfigurationContext<TDbContext>>)preConfigureAction).Invoke(context);
             }
         }
+    }
 
-        private static void Configure<TDbContext>(
-            AbpDbContextOptions options,
-            AbpDbContextConfigurationContext<TDbContext> context)
-            where TDbContext : AbpDbContext<TDbContext>
+    private static void Configure<TDbContext>(
+        AbpDbContextOptions options,
+        AbpDbContextConfigurationContext<TDbContext> context)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        var configureAction = options.ConfigureActions.GetOrDefault(typeof(TDbContext));
+        if (configureAction != null)
         {
-            var configureAction = options.ConfigureActions.GetOrDefault(typeof(TDbContext));
-            if (configureAction != null)
-            {
-                ((Action<AbpDbContextConfigurationContext<TDbContext>>)configureAction).Invoke(context);
-            }
-            else if (options.DefaultConfigureAction != null)
-            {
-                options.DefaultConfigureAction.Invoke(context);
-            }
-            else
-            {
-                throw new AbpException(
-                    $"No configuration found for {typeof(DbContext).AssemblyQualifiedName}! Use services.Configure<AbpDbContextOptions>(...) to configure it.");
-            }
+            ((Action<AbpDbContextConfigurationContext<TDbContext>>)configureAction).Invoke(context);
+        }
+        else if (options.DefaultConfigureAction != null)
+        {
+            options.DefaultConfigureAction.Invoke(context);
+        }
+        else
+        {
+            throw new AbpException(
+                $"No configuration found for {typeof(DbContext).AssemblyQualifiedName}! Use services.Configure<AbpDbContextOptions>(...) to configure it.");
+        }
+    }
+
+    private static AbpDbContextOptions GetDbContextOptions<TDbContext>(IServiceProvider serviceProvider)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        return serviceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+    }
+
+    private static DbContextCreationContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        var context = DbContextCreationContext.Current;
+        if (context != null)
+        {
+            return context;
         }
 
-        private static AbpDbContextOptions GetDbContextOptions<TDbContext>(IServiceProvider serviceProvider)
-            where TDbContext : AbpDbContext<TDbContext>
-        {
-            return serviceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
-        }
+        var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+        var connectionString = ResolveConnectionString<TDbContext>(serviceProvider, connectionStringName);
 
-        private static DbContextCreationContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
-            where TDbContext : AbpDbContext<TDbContext>
-        {
-            var context = DbContextCreationContext.Current;
-            if (context != null)
-            {
-                return context;
-            }
+        return new DbContextCreationContext(
+            connectionStringName,
+            connectionString
+        );
+    }
 
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-
-            //Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
+    private static string ResolveConnectionString<TDbContext>(
+        IServiceProvider serviceProvider,
+        string connectionStringName)
+    {
+        // Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
 #pragma warning disable 618
-            var connectionString = serviceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
-#pragma warning restore 618
+        var connectionStringResolver = serviceProvider.GetRequiredService<IConnectionStringResolver>();
+        var currentTenant = serviceProvider.GetRequiredService<ICurrentTenant>();
 
-            return new DbContextCreationContext(
-                connectionStringName,
-                connectionString
-            );
+        // Multi-tenancy unaware contexts should always use the host connection string
+        if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+        {
+            using (currentTenant.Change(null))
+            {
+                return connectionStringResolver.Resolve(connectionStringName);
+            }
         }
+
+        return connectionStringResolver.Resolve(connectionStringName);
+#pragma warning restore 618
     }
 }

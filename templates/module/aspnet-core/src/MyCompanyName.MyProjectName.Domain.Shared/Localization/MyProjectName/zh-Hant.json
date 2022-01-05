@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hant",
   "texts": {
-    "ManageYourProfile":  "管理個人資料" 
+    "MyAccount": "我的賬戶",
+    "SamplePageMessage": "MyProjectName 模塊的示例頁面"
   }
 }

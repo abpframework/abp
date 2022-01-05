@@ -19,8 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Rebus" Version="6.4.1" />
-      <PackageReference Include="Rebus.ServiceProvider" Version="5.0.6" />
+      <PackageReference Include="Rebus" Version="6.5.5" />
+      <PackageReference Include="Rebus.ServiceProvider" Version="6.4.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftPackageVersion)" />
     </ItemGroup>
     
 </Project>

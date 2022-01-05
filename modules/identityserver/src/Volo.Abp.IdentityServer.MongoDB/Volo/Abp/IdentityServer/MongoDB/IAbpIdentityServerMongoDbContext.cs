@@ -7,22 +7,23 @@ using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.IdentityServer.MongoDB
+namespace Volo.Abp.IdentityServer.MongoDB;
+
+[IgnoreMultiTenancy]
+[ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
+public interface IAbpIdentityServerMongoDbContext : IAbpMongoDbContext
 {
-    [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
-    public interface IAbpIdentityServerMongoDbContext : IAbpMongoDbContext
-    {
-        IMongoCollection<ApiResource> ApiResources { get; }
+    IMongoCollection<ApiResource> ApiResources { get; }
 
-        IMongoCollection<ApiScope> ApiScopes { get; }
+    IMongoCollection<ApiScope> ApiScopes { get; }
 
-        IMongoCollection<Client> Clients { get; }
+    IMongoCollection<Client> Clients { get; }
 
-        IMongoCollection<IdentityResource> IdentityResources { get; }
+    IMongoCollection<IdentityResource> IdentityResources { get; }
 
-        IMongoCollection<PersistedGrant> PersistedGrants { get; }
+    IMongoCollection<PersistedGrant> PersistedGrants { get; }
 
-        IMongoCollection<DeviceFlowCodes> DeviceFlowCodes { get; }
-    }
+    IMongoCollection<DeviceFlowCodes> DeviceFlowCodes { get; }
 }

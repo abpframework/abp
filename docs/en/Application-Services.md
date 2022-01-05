@@ -430,17 +430,17 @@ Task DeleteAsync(TKey id);
 
 #### Querying
 
-These methods are low level methods those can be control how to query entities from the database.
+These methods are low level methods that can control how to query entities from the database.
 
 * `CreateFilteredQuery` can be overridden to create an `IQueryable<TEntity>` that is filtered by the given input. If your `TGetListInput` class contains any filter, it is proper to override this method and filter the query. It returns the (unfiltered) repository (which is already `IQueryable<TEntity>`) by default.
 * `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP Framework automatically understands it and performs the paging.
-* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creating time, if your entity implements the standard `IHasCreationTime` interface.
+* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creation time, if your entity implements the standard `IHasCreationTime` interface.
 * `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
 * `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
 
 #### Object to Object Mapping
 
-These methods are used to convert Entities to DTOs and vice verse. They uses the [IObjectMapper](Object-To-Object-Mapping.md) by default.
+These methods are used to convert Entities to DTOs and vice verse. They use the [IObjectMapper](Object-To-Object-Mapping.md) by default.
 
 * `MapToGetOutputDtoAsync` is used to map the entity to the DTO returned from the `GetAsync`, `CreateAsync` and `UpdateAsync` methods. Alternatively, you can override the `MapToGetOutputDto` if you don't need to perform any async operation.
 * `MapToGetListOutputDtosAsync` is used to map a list of entities to a list of DTOs returned from the `GetListAsync` method. It uses the `MapToGetListOutputDtoAsync` to map each entity in the list. You can override one of them based on your case. Alternatively, you can override the `MapToGetListOutputDto` if you don't need to perform any async operation.
@@ -468,8 +468,35 @@ namespace MyProject.Test
     {
         Task Upload(Guid id, IRemoteStreamContent streamContent);
         Task<IRemoteStreamContent> Download(Guid id);
+
+        Task CreateFile(CreateFileInput input);
+        Task CreateMultipleFile(CreateMultipleFileInput input);
+    }
+
+    public class CreateFileInput
+    {
+        public Guid Id { get; set; }
+
+        public IRemoteStreamContent Content { get; set; }
+    }
+
+    public class CreateMultipleFileInput
+    {
+        public Guid Id { get; set; }
+
+        public IEnumerable<IRemoteStreamContent> Contents { get; set; }
     }
 }
+````
+
+**You need to configure `AbpAspNetCoreMvcOptions` to add DTO class to `FormBodyBindingIgnoredTypes` to use `IRemoteStreamContent` in** **DTO ([Data Transfer Object](Data-Transfer-Objects.md))**
+
+````csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateFileInput));
+    options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
+});
 ````
 
 **Example: Application Service Implementation that can be used to get and return streams**
@@ -501,6 +528,27 @@ namespace MyProject.Test
             using (var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.Create))
             {
                 await streamContent.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+
+        public async Task CreateFileAsync(CreateFileInput input)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + input.Id + ".blob", FileMode.Create))
+            {
+                await input.Content.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+
+        public async Task CreateMultipleFileAsync(CreateMultipleFileInput input)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + input.Id + ".blob", FileMode.Append))
+            {
+                foreach (var content in input.Contents)
+                {
+                    await content.GetStream().CopyToAsync(fs);
+                }
                 await fs.FlushAsync();
             }
         }

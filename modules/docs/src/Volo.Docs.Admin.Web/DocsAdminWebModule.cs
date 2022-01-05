@@ -2,6 +2,7 @@
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -11,7 +12,7 @@ using Volo.Docs.Localization;
 namespace Volo.Docs.Admin
 {
     [DependsOn(
-        typeof(DocsAdminHttpApiModule),
+        typeof(DocsAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
         )]
     public class DocsAdminWebModule : AbpModule
@@ -45,6 +46,11 @@ namespace Volo.Docs.Admin
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsAdminWebAutoMapperProfile>(validate: true);
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(DocsAdminRemoteServiceConsts.ModuleName);
             });
         }
     }

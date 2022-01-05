@@ -1,0 +1,1 @@
+Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!

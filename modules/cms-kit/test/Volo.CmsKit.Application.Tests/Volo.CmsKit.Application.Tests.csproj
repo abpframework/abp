@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Volo.CmsKit</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\**\*" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.CmsKit.Application\Volo.CmsKit.Application.csproj" />

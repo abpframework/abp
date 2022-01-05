@@ -1,44 +1,42 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.GlobalFeatures
+namespace Volo.Abp.GlobalFeatures;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class GlobalFeatureNameAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class GlobalFeatureNameAttribute : Attribute
+    [NotNull]
+    public string Name { get; }
+
+    public GlobalFeatureNameAttribute([NotNull] string name)
     {
-        [NotNull]
-        public string Name { get; }
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+    }
 
-        public GlobalFeatureNameAttribute([NotNull] string name)
+    public static string GetName<TFeature>()
+    {
+        return GetName(typeof(TFeature));
+    }
+
+    [NotNull]
+    public static string GetName([NotNull] Type type)
+    {
+        Check.NotNull(type, nameof(type));
+
+        var attribute = type
+            .GetCustomAttributes<GlobalFeatureNameAttribute>()
+            .FirstOrDefault();
+
+        if (attribute == null)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            throw new AbpException($"{type.AssemblyQualifiedName} should define the {typeof(GlobalFeatureNameAttribute).FullName} atttribute!");
         }
 
-        public static string GetName<TFeature>()
-            where TFeature : GlobalFeature
-        {
-            return GetName(typeof(TFeature));
-        }
-
-        [NotNull]
-        public static string GetName([NotNull] Type type)
-        {
-            Check.NotNull(type, nameof(type));
-
-            var attribute = type
-                .GetCustomAttributes<GlobalFeatureNameAttribute>()
-                .FirstOrDefault();
-
-            if (attribute == null)
-            {
-                throw new AbpException($"{type.AssemblyQualifiedName} should define the {typeof(GlobalFeatureNameAttribute).FullName} atttribute!");
-            }
-
-            return attribute
-                .As<GlobalFeatureNameAttribute>()
-                .Name;
-        }
+        return attribute
+            .As<GlobalFeatureNameAttribute>()
+            .Name;
     }
 }
