@@ -26,14 +26,14 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
         {
             if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
             {
+                var unProxyWorker = ProxyHelper.UnProxy(hangfireBackgroundWorker);
                 if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
                 {
-                    RecurringJob.AddOrUpdate(() => hangfireBackgroundWorker.DoWorkAsync(),
-                        hangfireBackgroundWorker.CronExpression);
+                    RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),hangfireBackgroundWorker.CronExpression);
                 }
                 else
                 {
-                    RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => hangfireBackgroundWorker.DoWorkAsync(),
+                    RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
                         hangfireBackgroundWorker.CronExpression);
                 }
             }
