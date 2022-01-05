@@ -182,7 +182,7 @@
     "TheStartupTemplate": "The Startup Template",
     "InstallABPCLIInfo": "ABP CLI is the fastest way to start a new solution with the ABP framework. Install the ABP CLI using a command line window:",
     "DifferentLevelOfNamespaces": "You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.",
-    "ABPCLIExamplesInfo": "<strong>new</strong> command creates a <strong>layered MVC application</strong> with <strong>Entity Framework Core</strong> as the database provider. However, it has additional options. Examples:",
+    "ABPCLIExamplesInfo": "<strong>new</strong> command creates a <strong>layered MVC application</strong> with <strong>Entity Framework Core</strong> as the database provider. However, it has additional options.",
     "SeeCliDocumentForMoreInformation": "See the <a href=\"{0}\">ABP CLI document</a> for more options or select the \"Direct Download\" tab above.",
     "Optional": "Optional",
     "LocalFrameworkRef": "Keep local project reference for the framework packages.",
