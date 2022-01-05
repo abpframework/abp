@@ -204,15 +204,23 @@ var abp = abp || {};
 
         handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
+            var responseJSON = null;
 
-            if (userOptions.abpHandleError !== false) {
-                messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
+            if (jqXHR.responseJSON) {
+                responseJSON = jqXHR.responseJSON;
+            }
+            else {
+                responseJSON = JSON.parse(jqXHR.responseText)
             }
 
-            abp.ajax.logError(jqXHR.responseJSON.error);
+            if (userOptions.abpHandleError !== false) {
+                messagePromise = abp.ajax.showError(responseJSON.error);
+            }
 
-            $dfd && $dfd.reject(jqXHR.responseJSON.error, jqXHR);
-            userOptions.error && userOptions.error(jqXHR.responseJSON.error, jqXHR);
+            abp.ajax.logError(responseJSON.error);
+
+            $dfd && $dfd.reject(responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);
