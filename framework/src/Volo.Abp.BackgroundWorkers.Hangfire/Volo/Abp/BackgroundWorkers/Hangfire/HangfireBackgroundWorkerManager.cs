@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire
@@ -64,7 +65,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire
                     return;
                 }
 
-                var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+                var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
                 var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
                 RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
