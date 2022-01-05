@@ -37,7 +37,7 @@ public partial class PageHeader : ComponentBase
         ToolbarItemRenders = new List<RenderFragment>();
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected async override Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
         if (Toolbar != null)
@@ -65,7 +65,7 @@ public partial class PageHeader : ComponentBase
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }
