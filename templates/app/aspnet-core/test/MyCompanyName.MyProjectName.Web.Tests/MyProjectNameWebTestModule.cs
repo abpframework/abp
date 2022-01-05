@@ -27,7 +27,7 @@ namespace MyCompanyName.MyProjectName
         {
             context.Services.PreConfigure<IMvcBuilder>(builder =>
             {
-                builder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(MyProjectNameWebModule).Assembly));
+                builder.PartManager.ApplicationParts.Add(new CompiledRazorAssemblyPart(typeof(MyProjectNameWebModule).Assembly));
             });
         }
 
