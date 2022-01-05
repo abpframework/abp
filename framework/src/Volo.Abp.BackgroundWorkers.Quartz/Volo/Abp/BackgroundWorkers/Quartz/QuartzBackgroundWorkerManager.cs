@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz
@@ -56,7 +57,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             }
             else
             {
-                var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+                var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
 
                 var workerAdapter = Activator.CreateInstance(adapterType) as IQuartzBackgroundWorkerAdapter;
 
