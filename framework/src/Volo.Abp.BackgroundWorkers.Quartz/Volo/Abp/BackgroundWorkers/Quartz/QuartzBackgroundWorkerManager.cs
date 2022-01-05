@@ -34,9 +34,9 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
         }
     }
 
-    public virtual void Add(IBackgroundWorker worker)
+    public virtual async Task AddAsync(IBackgroundWorker worker)
     {
-        AsyncHelper.RunSync(() => ReScheduleJobAsync(worker));
+        await ReScheduleJobAsync(worker);
     }
 
     protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker)
