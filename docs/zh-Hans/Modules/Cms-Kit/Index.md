@@ -20,22 +20,22 @@
 
 ## 预备要求
 - 此模块依赖于 [Blob 存储](../../Blob-Storing.md) 模块来保存媒体内容.
-> 确保 `BlobStoring` 模块已安装并至少正确地配置了一个提供程序. 请查阅 [documentation](../../Blob-Storing.md) 了解更多信息.
+> 确保 `BlobStoring` 模块已安装并至少正确地配置了一个提供程序. 请查阅 [文档](../../Blob-Storing.md) 了解更多信息.
 
-- CMS 套件使用 [分布式缓存](../../Caching.md) 来提高响应速度.
+- CMS Kit 使用 [分布式缓存](../../Caching.md) 来提高响应速度.
 > 强烈建议在分布式/集群部署中为实现数据一致性使用分布式缓存, 如 [Redis](../../Redis-Cache.md).
 
 ## 如何安装
 
-可以使用 [ABP CLI](../../CLI.md) 的 `add-module` 命令为解决方案安装模块. 您可以使用以下命令在命令行中安装 CMS 套件模块:
+可以使用 [ABP CLI](../../CLI.md) 的 `add-module` 命令为解决方案安装模块. 您可以使用以下命令在命令行中安装 CMS Kit 模块:
 
 ```bash
 abp add-module Volo.CmsKit
 ```
 
-> 默认情况下, Cms-Kit 通过 `GlobalFeature` 被禁用. 因此初始迁移将为空. 所以, 当你使用 EF Core 安装时,你可以添加 `--skip-db-migrations` 命令来跳过迁移. 启用 Cms-Kit 全局功能后, 请添加新的迁移.
+> 默认情况下, Cms-Kit `GlobalFeature` 被禁用. 因此初始迁移将为空. 所以, 当你使用 EF Core 安装时,你可以添加 `--skip-db-migrations` 命令来跳过迁移. 启用 Cms-Kit 全局功能后, 请添加新的迁移.
 
-安装过程完成后, 在您的解决方案 `Domain.Shared` 项目中打开 `GlobalFeatureConfigurator` 类, 并将以下代码写入 `Configure` 方法中, 以启用内容管理系统套件模块的全部功能.
+安装过程完成后, 在您的解决方案 `Domain.Shared` 项目中打开 `GlobalFeatureConfigurator` 类, 并将以下代码写入 `Configure` 方法中, 以启用 CMS Kit 模块的全部功能.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -58,9 +58,9 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## 软件包
 
-此模块遵循 [模块开发最佳实践指南](https://docs.abp.io/zh-Hans/abp/latest/Best-Practices/Index), 有多个 NuGet 和 NPM 软件包组成. 如果你想了解软件包及其之间的关系, 请参阅指南.
+此模块遵循 [模块开发最佳实践指南](https://docs.abp.io/zh-Hans/abp/latest/Best-Practices/Index), 由多个 NuGet 和 NPM 软件包组成. 如果你想了解软件包及其之间的关系, 请参阅指南.
 
-CMS 套件软件包专为各种使用场景而设计. 如果您查阅了 [CMS 套件软件包](https://www.nuget.org/packages?q=Volo.CmsKit) 您将看到一些有 `Admin` 和 `Public` 后缀的软件包. 该模块有两个应用程序层, 原因是他们可能被用于不同类型的应用程序. 这些应用程序层仅使用一个领域层.
+CMS Kit 软件包专为各种使用场景而设计. 如果您查阅了 [CMS Kit 软件包](https://www.nuget.org/packages?q=Volo.CmsKit) 您将看到一些有 `Admin` 和 `Public` 后缀的软件包. 该模块有两个应用程序层, 原因是他们可能被用于不同类型的应用程序. 这些应用程序层仅使用一个领域层.
 
  - `Volo.CmsKit.Admin.*` 软件包包括管理员 (后台) 应用程序所必须的功能.
  - `Volo.CmsKit.Public.*` 软件包包括被用于用户阅读博客文章和发表评论的公共网站上的功能.
