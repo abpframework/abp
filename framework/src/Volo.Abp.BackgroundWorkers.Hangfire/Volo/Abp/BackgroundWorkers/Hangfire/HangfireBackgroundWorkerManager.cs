@@ -70,6 +70,8 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
 
             RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
         }
+
+        return Task.CompletedTask;
     }
 
     protected virtual string GetCron(int period)
