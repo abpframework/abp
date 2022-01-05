@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.Configuration
+namespace Volo.Abp.Cli.Configuration;
+
+public interface IConfigReader
 {
-    public interface IConfigReader
-    {
-        AbpCliConfig Read(string directory);
-    }
+    AbpCliConfig Read(string directory);
 }

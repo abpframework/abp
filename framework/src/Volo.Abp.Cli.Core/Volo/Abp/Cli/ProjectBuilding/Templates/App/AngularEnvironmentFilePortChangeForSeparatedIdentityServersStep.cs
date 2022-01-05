@@ -2,43 +2,42 @@
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
+
+public class AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
 {
-    public class AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
+        var fileEntries = context.Files.Where(x =>
+                !x.IsDirectory &&
+                (x.Name.EndsWith("angular/src/environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                 x.Name.EndsWith("angular/src/environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                 x.Name.EndsWith("angular/src/environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
+            )
+            .ToList();
+
+        foreach (var fileEntry in fileEntries)
         {
-            var fileEntries = context.Files.Where(x =>
-                    !x.IsDirectory &&
-                    (x.Name.EndsWith("angular/src/environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
-                     x.Name.EndsWith("angular/src/environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
-                     x.Name.EndsWith("angular/src/environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
-                )
-                .ToList();
+            fileEntry.NormalizeLineEndings();
+            var lines = fileEntry.GetLines();
 
-            foreach (var fileEntry in fileEntries)
+            for (var i = 0; i < lines.Length; i++)
             {
-                fileEntry.NormalizeLineEndings();
-                var lines = fileEntry.GetLines();
+                var line = lines[i];
 
-                for (var i = 0; i < lines.Length; i++)
+                if (line.Contains("issuer") && line.Contains("localhost"))
                 {
-                    var line = lines[i];
-
-                    if (line.Contains("issuer") && line.Contains("localhost"))
-                    {
-                        line = line.Replace("44305", "44301");
-                    }
-                    else if (line.Contains("url") && line.Contains("localhost"))
-                    {
-                        line = line.Replace("44305", "44300");
-                    }
-
-                    lines[i] = line;
+                    line = line.Replace("44305", "44301");
+                }
+                else if (line.Contains("url") && line.Contains("localhost"))
+                {
+                    line = line.Replace("44305", "44300");
                 }
 
-                fileEntry.SetLines(lines);
+                lines[i] = line;
             }
+
+            fileEntry.SetLines(lines);
         }
     }
 }

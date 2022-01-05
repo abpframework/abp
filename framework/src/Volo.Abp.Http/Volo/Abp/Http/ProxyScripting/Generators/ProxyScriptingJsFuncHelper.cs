@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.ProxyScripting.Generators
-{
-    internal static class ProxyScriptingJsFuncHelper
-    {
-        private const string ValidJsVariableNameChars = "abcdefghijklmnopqrstuxwvyzABCDEFGHIJKLMNOPQRSTUXWVYZ0123456789_";
+namespace Volo.Abp.Http.ProxyScripting.Generators;
 
-        private static readonly HashSet<string> ReservedWords = new HashSet<string> {
+internal static class ProxyScriptingJsFuncHelper
+{
+    private const string ValidJsVariableNameChars = "abcdefghijklmnopqrstuxwvyzABCDEFGHIJKLMNOPQRSTUXWVYZ0123456789_";
+
+    private static readonly HashSet<string> ReservedWords = new HashSet<string> {
             "abstract",
             "else",
             "instanceof",
@@ -73,97 +73,96 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
             "with"
         };
 
-        public static string NormalizeJsVariableName(string name, string additionalChars = "")
+    public static string NormalizeJsVariableName(string name, string additionalChars = "")
+    {
+        var validChars = ValidJsVariableNameChars + additionalChars;
+
+        var sb = new StringBuilder(name);
+
+        sb.Replace('-', '_');
+
+        //Delete invalid chars
+        foreach (var c in name)
         {
-            var validChars = ValidJsVariableNameChars + additionalChars;
-
-            var sb = new StringBuilder(name);
-
-            sb.Replace('-', '_');
-
-            //Delete invalid chars
-            foreach (var c in name)
+            if (!validChars.Contains(c))
             {
-                if (!validChars.Contains(c))
-                {
-                    sb.Replace(c.ToString(), "");
-                }
+                sb.Replace(c.ToString(), "");
             }
-
-            if (sb.Length == 0)
-            {
-                return "_" + Guid.NewGuid().ToString("N").Left(8);
-            }
-
-            return sb.ToString();
         }
 
-        public static string WrapWithBracketsOrWithDotPrefix(string name)
+        if (sb.Length == 0)
         {
-            if (!ReservedWords.Contains(name))
-            {
-                return "." + name;
-            }
-
-            return "['" + name + "']";
+            return "_" + Guid.NewGuid().ToString("N").Left(8);
         }
 
-        public static string GetParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
+        return sb.ToString();
+    }
+
+    public static string WrapWithBracketsOrWithDotPrefix(string name)
+    {
+        if (!ReservedWords.Contains(name))
         {
-            var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
-
-            return parameterInfo.Name == parameterInfo.NameOnMethod
-                ? parameterInfoName
-                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
+            return "." + name;
         }
 
-        public static string CreateJsObjectLiteral(ParameterApiDescriptionModel[] parameters, int indent = 0)
+        return "['" + name + "']";
+    }
+
+    public static string GetParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
+    {
+        var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
+
+        return parameterInfo.Name == parameterInfo.NameOnMethod
+            ? parameterInfoName
+            : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
+    }
+
+    public static string CreateJsObjectLiteral(ParameterApiDescriptionModel[] parameters, int indent = 0)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("{");
+
+        sb.AppendLine(parameters
+            .Select(prm => $"{new string(' ', indent)}  '{prm.Name}': {GetParamNameInJsFunc(prm)}")
+            .JoinAsString(", " + Environment.NewLine));
+
+        sb.Append(new string(' ', indent) + "}");
+
+        return sb.ToString();
+    }
+
+    public static string GetFormPostParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
+    {
+        var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
+
+        return parameterInfo.Name == parameterInfo.NameOnMethod
+            ? parameterInfoName
+            : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
+    }
+
+    public static string CreateJsFormPostData(ParameterApiDescriptionModel[] parameters, int indent)
+    {
+        var sb = new StringBuilder();
+
+        for (var i = 0; i < parameters.Length; i++)
         {
-            var sb = new StringBuilder();
+            var and = i < parameters.Length - 1 ? " + '&' + " : string.Empty;
 
-            sb.AppendLine("{");
+            var parameterName = parameters[i].DescriptorName.IsNullOrWhiteSpace()
+                ? parameters[i].Name
+                : $"{parameters[i].DescriptorName}.{parameters[i].Name}";
 
-            sb.AppendLine(parameters
-                .Select(prm => $"{new string(' ', indent)}  '{prm.Name}': {GetParamNameInJsFunc(prm)}")
-                .JoinAsString(", " + Environment.NewLine));
-
-            sb.Append(new string(' ', indent) + "}");
-
-            return sb.ToString();
+            sb.Append($"'{parameterName}=' + {GetFormPostParamNameInJsFunc(parameters[i])}{and}");
         }
 
-        public static string GetFormPostParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
-        {
-            var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
+        return sb.ToString();
+    }
 
-            return parameterInfo.Name == parameterInfo.NameOnMethod
-                ? parameterInfoName
-                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
-        }
-
-        public static string CreateJsFormPostData(ParameterApiDescriptionModel[] parameters, int indent)
-        {
-            var sb = new StringBuilder();
-
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                var and = i < parameters.Length - 1 ? " + '&' + " : string.Empty;
-
-                var parameterName = parameters[i].DescriptorName.IsNullOrWhiteSpace()
-                    ? parameters[i].Name
-                    : $"{parameters[i].DescriptorName}.{parameters[i].Name}";
-
-                sb.Append($"'{parameterName}=' + {GetFormPostParamNameInJsFunc(parameters[i])}{and}");
-            }
-
-            return sb.ToString();
-        }
-
-        public static string GenerateJsFuncParameterList(ActionApiDescriptionModel action, string ajaxParametersName)
-        {
-            var methodParamNames = action.Parameters.GroupBy(p => p.NameOnMethod).Select(x => x.Key).ToList();
-            methodParamNames.Add(ajaxParametersName);
-            return methodParamNames.Select(prmName => NormalizeJsVariableName(prmName.ToCamelCase())).JoinAsString(", ");
-        }
+    public static string GenerateJsFuncParameterList(ActionApiDescriptionModel action, string ajaxParametersName)
+    {
+        var methodParamNames = action.Parameters.GroupBy(p => p.NameOnMethod).Select(x => x.Key).ToList();
+        methodParamNames.Add(ajaxParametersName);
+        return methodParamNames.Select(prmName => NormalizeJsVariableName(prmName.ToCamelCase())).JoinAsString(", ");
     }
 }

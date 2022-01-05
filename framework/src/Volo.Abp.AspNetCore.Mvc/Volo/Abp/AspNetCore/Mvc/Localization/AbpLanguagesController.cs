@@ -5,60 +5,59 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization
+namespace Volo.Abp.AspNetCore.Mvc.Localization;
+
+[Area("Abp")]
+[Route("Abp/Languages/[action]")]
+[RemoteService(false)]
+[ApiExplorerSettings(IgnoreApi = true)]
+public class AbpLanguagesController : AbpController
 {
-    [Area("Abp")]
-    [Route("Abp/Languages/[action]")]
-    [RemoteService(false)]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class AbpLanguagesController : AbpController
+    protected IQueryStringCultureReplacement QueryStringCultureReplacement { get; }
+
+    public AbpLanguagesController(IQueryStringCultureReplacement queryStringCultureReplacement)
     {
-        protected IQueryStringCultureReplacement QueryStringCultureReplacement { get; }
+        QueryStringCultureReplacement = queryStringCultureReplacement;
+    }
 
-        public AbpLanguagesController(IQueryStringCultureReplacement queryStringCultureReplacement)
+    [HttpGet]
+    public virtual async Task<IActionResult> Switch(string culture, string uiCulture = "", string returnUrl = "")
+    {
+        if (!CultureHelper.IsValidCultureCode(culture))
         {
-            QueryStringCultureReplacement = queryStringCultureReplacement;
+            throw new AbpException("Unknown language: " + culture + ". It must be a valid culture!");
         }
 
-        [HttpGet]
-        public virtual async Task<IActionResult> Switch(string culture, string uiCulture = "", string returnUrl = "")
+        AbpRequestCultureCookieHelper.SetCultureCookie(
+            HttpContext,
+            new RequestCulture(culture, uiCulture)
+        );
+
+        HttpContext.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
+
+        var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
+        await QueryStringCultureReplacement.ReplaceAsync(context);
+
+        if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
         {
-            if (!CultureHelper.IsValidCultureCode(culture))
-            {
-                throw new AbpException("Unknown language: " + culture + ". It must be a valid culture!");
-            }
-
-            AbpRequestCultureCookieHelper.SetCultureCookie(
-                HttpContext,
-                new RequestCulture(culture, uiCulture)
-            );
-
-            HttpContext.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
-
-            var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
-            await QueryStringCultureReplacement.ReplaceAsync(context);
-
-            if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
-            {
-                return Redirect(GetRedirectUrl(context.ReturnUrl));
-            }
-
-            return Redirect("~/");
+            return Redirect(GetRedirectUrl(context.ReturnUrl));
         }
 
-        protected virtual string GetRedirectUrl(string returnUrl)
+        return Redirect("~/");
+    }
+
+    protected virtual string GetRedirectUrl(string returnUrl)
+    {
+        if (returnUrl.IsNullOrEmpty())
         {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return "~/";
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
             return "~/";
         }
+
+        if (Url.IsLocalUrl(returnUrl))
+        {
+            return returnUrl;
+        }
+
+        return "~/";
     }
 }
