@@ -1,85 +1,82 @@
-﻿using System;
-using Volo.Abp;
+﻿using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.MongoDB
+namespace Volo.CmsKit.MongoDB;
+
+public static class CmsKitMongoDbContextExtensions
 {
-    public static class CmsKitMongoDbContextExtensions
+    public static void ConfigureCmsKit(
+        this IMongoModelBuilder builder)
     {
-        public static void ConfigureCmsKit(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<CmsUser>(x =>
         {
-            Check.NotNull(builder, nameof(builder));
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Users";
+        });
 
-            var options = new CmsKitMongoModelBuilderConfigurationOptions(
-                CmsKitDbProperties.DbTablePrefix
-            );
+        builder.Entity<UserReaction>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "UserReactions";
+        });
 
-            optionsAction?.Invoke(options);
+        builder.Entity<Comment>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Comments";
+        });
 
-            builder.Entity<CmsUser>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Users";
-            });
+        builder.Entity<Rating>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Ratings";
+        });
 
-            builder.Entity<UserReaction>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "UserReactions";
-            });
+        builder.Entity<Tag>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Tags";
+        });
 
-            builder.Entity<Comment>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Comments";
-            });
-            
-            builder.Entity<Rating>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Ratings";
-            });
-            
-            builder.Entity<Tag>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Tags";
-            });
-            
-            builder.Entity<EntityTag>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "EntityTags";
-            });
-            
-            builder.Entity<Page>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Pages";
-            });
+        builder.Entity<EntityTag>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "EntityTags";
+        });
 
-            builder.Entity<Blog>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Blogs";
-            });
+        builder.Entity<Page>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Pages";
+        });
 
-            builder.Entity<BlogPost>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogPosts";
-            });
+        builder.Entity<Blog>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Blogs";
+        });
 
-            builder.Entity<BlogFeature>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogFeatures";
-            });
-            
-            builder.Entity<MediaDescriptor>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
-            });
-        }
+        builder.Entity<BlogPost>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogPosts";
+        });
+
+        builder.Entity<BlogFeature>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogFeatures";
+        });
+
+        builder.Entity<MediaDescriptor>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
+        });
+
+        builder.Entity<MenuItem>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MenuItems";
+        });
     }
 }

@@ -13,26 +13,25 @@ using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Domain
+namespace Volo.Abp.Domain;
+
+[DependsOn(
+    typeof(AbpAuditingModule),
+    typeof(AbpDataModule),
+    typeof(AbpEventBusModule),
+    typeof(AbpGuidsModule),
+    typeof(AbpMultiTenancyModule),
+    typeof(AbpThreadingModule),
+    typeof(AbpTimingModule),
+    typeof(AbpUnitOfWorkModule),
+    typeof(AbpObjectMappingModule),
+    typeof(AbpExceptionHandlingModule),
+    typeof(AbpSpecificationsModule)
+    )]
+public class AbpDddDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAuditingModule),
-        typeof(AbpDataModule),
-        typeof(AbpEventBusModule),
-        typeof(AbpGuidsModule),
-        typeof(AbpMultiTenancyModule),
-        typeof(AbpThreadingModule),
-        typeof(AbpTimingModule),
-        typeof(AbpUnitOfWorkModule),
-        typeof(AbpObjectMappingModule),
-        typeof(AbpExceptionHandlingModule),
-        typeof(AbpSpecificationsModule)
-        )]
-    public class AbpDddDomainModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());
-        }
+        context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());
     }
 }

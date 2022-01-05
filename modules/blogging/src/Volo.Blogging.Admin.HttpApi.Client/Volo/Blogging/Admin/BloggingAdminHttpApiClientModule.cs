@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Blogging.Admin
 {
@@ -11,8 +12,13 @@ namespace Volo.Blogging.Admin
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(typeof(BloggingAdminApplicationContractsModule).Assembly,
+            context.Services.AddStaticHttpClientProxies(typeof(BloggingAdminApplicationContractsModule).Assembly,
                 BloggingAdminRemoteServiceConsts.RemoteServiceName);
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<BloggingAdminHttpApiClientModule>();
+            });
         }
 
     }

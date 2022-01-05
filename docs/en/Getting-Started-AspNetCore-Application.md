@@ -1,10 +1,10 @@
-﻿# Getting Started ABP With AspNet Core MVC Web Application
+# Getting Started With an ABP and AspNet Core MVC Web Application
 
 This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
-## Create A New Project
+## Create a New Project
 
-1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.8.0+):
+1. Create a new AspNet Core Web Application with Visual Studio 2022 (17.0.0+):
 
 ![](images/create-new-aspnet-core-application-v2.png)
 
@@ -12,19 +12,19 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ![](images/select-empty-web-application-v2.png)
 
-3. Press to the create button:
+3. Press the create button:
 
 ![create-aspnet-core-application](images/create-aspnet-core-application.png)
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
-Volo.Abp.AspNetCore.Mvc is AspNet Core MVC integration package for ABP. So, install it to your project:
+Volo.Abp.AspNetCore.Mvc is the AspNet Core MVC integration package for ABP. So, install it on your project:
 
 ````
 Install-Package Volo.Abp.AspNetCore.Mvc
 ````
 
-## Create First ABP Module
+## Create the First ABP Module
 
 ABP is a modular framework and it requires a **startup (root) module** class derived from ``AbpModule``:
 
@@ -40,21 +40,20 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(
-            ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
                 app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseConfiguredEndpoints();
@@ -65,38 +64,33 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` is a good name for the startup module for an application.
 
-ABP packages define module classes and a module can depend on another. In the code above, the ``AppModule`` depends on the ``AbpAspNetCoreMvcModule`` (defined by [Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc) package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
+ABP packages define module classes and a module can depend on another. In the code above, the ``AppModule`` depends on the ``AbpAspNetCoreMvcModule`` (defined by the [Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc) package). It's common to add a ``DependsOn`` attribute after installing a new ABP NuGet package.
 
-Instead of the Startup class, we are configuring ASP.NET Core pipeline in this module class.
+Instead of the Startup class, we are configuring an ASP.NET Core pipeline in this module class.
 
-## The Startup Class
+## The Program Class
 
-Next step is to modify Startup class to integrate to ABP module system:
+Next step is to modify the Program class to integrate to the ABP module system:
 
 ````C#
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<AppModule>();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public void Configure(IApplicationBuilder app)
-        {
-            app.InitializeApplication();
-        }
-    }
-}
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
 ````
 
-``services.AddApplication<AppModule>()`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.Services.AddApplication<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
-``app.InitializeApplication()`` in ``Configure`` method initializes and starts the application.
+``app.InitializeApplication()`` initializes and starts the application.
 
 ## Run the Application!
 
@@ -114,7 +108,7 @@ Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty ea
 Install-Package Volo.Abp.Autofac
 ````
 
-2. Add ``AbpAutofacModule`` Dependency
+2. Add the ``AbpAutofacModule`` Dependency
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
@@ -127,28 +121,23 @@ public class AppModule : AbpModule
 
 3. Update `Program.cs` to use Autofac:
 
-````csharp
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+````C#
+using BasicAspNetCoreApplication;
 
-namespace BasicAspNetCoreApplication
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac(); //Add this line
-    }
-}
+builder.Host.UseAutofac();  //Add this line
+
+builder.Services.ReplaceConfiguration(builder.Configuration);
+
+builder.Services.AddApplication<AppModule>();
+
+var app = builder.Build();
+
+app.InitializeApplication();
+
+app.Run();
+
 ````
 
 ## Source Code

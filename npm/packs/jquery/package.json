@@ -1,11 +1,16 @@
 {
-  "version": "4.3.0",
+  "version": "5.0.1",
   "name": "@abp/jquery",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/jquery"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.3.0",
+    "@abp/core": "~5.0.1",
     "jquery": "~3.6.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

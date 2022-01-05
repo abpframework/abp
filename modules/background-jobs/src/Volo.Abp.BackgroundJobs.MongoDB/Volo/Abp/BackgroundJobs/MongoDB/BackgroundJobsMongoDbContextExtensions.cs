@@ -1,26 +1,17 @@
-﻿using System;
-using Volo.Abp.MongoDB;
+﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.BackgroundJobs.MongoDB
+namespace Volo.Abp.BackgroundJobs.MongoDB;
+
+public static class BackgroundJobsMongoDbContextExtensions
 {
-    public static class BackgroundJobsMongoDbContextExtensions
+    public static void ConfigureBackgroundJobs(
+        this IMongoModelBuilder builder)
     {
-        public static void ConfigureBackgroundJobs(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<BackgroundJobRecord>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
-
-            var options = new BackgroundJobsMongoModelBuilderConfigurationOptions(
-                BackgroundJobsDbProperties.DbTablePrefix
-            );
-
-            optionsAction?.Invoke(options);
-
-            builder.Entity<BackgroundJobRecord>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "BackgroundJobs";
-            });
-        }
+            b.CollectionName = BackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs";
+        });
     }
 }

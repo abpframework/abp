@@ -1,6 +1,10 @@
 {
   "culture": "vi",
   "texts": {
-    "Features": "Tính năng" 
+    "Features": "Tính năng",
+    "NoFeatureFoundMessage": "Không có bất kỳ tính năng khả dụng nào.",
+    "Permission:FeatureManagement": "Quản lý tính năng",
+    "Permission:FeatureManagement.ManageHostFeatures": "Quản lý các tính năng của Máy chủ lưu trữ",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Giá trị tính năng {0} không hợp lệ!"
   }
 }

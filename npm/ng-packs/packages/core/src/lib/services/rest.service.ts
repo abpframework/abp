@@ -1,14 +1,13 @@
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { RestOccurError } from '../actions/rest.actions';
 import { ABP } from '../models/common';
 import { Rest } from '../models/rest';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { isUndefinedOrEmptyString } from '../utils/common-utils';
 import { EnvironmentService } from './environment.service';
+import { HttpErrorReporterService } from './http-error-reporter.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +17,7 @@ export class RestService {
     @Inject(CORE_OPTIONS) protected options: ABP.Root,
     protected http: HttpClient,
     protected environment: EnvironmentService,
-    protected store: Store,
+    protected httpErrorReporter: HttpErrorReporterService,
   ) {}
 
   protected getApiFromStore(apiName: string): string {
@@ -26,11 +25,10 @@ export class RestService {
   }
 
   handleError(err: any): Observable<any> {
-    this.store.dispatch(new RestOccurError(err));
+    this.httpErrorReporter.reportError(err);
     return throwError(err);
   }
 
-  // TODO: Deprecate service or improve interface in v5.0
   request<T, R>(
     request: HttpRequest<T> | Rest.Request<T>,
     config?: Rest.Config,
@@ -45,18 +43,22 @@ export class RestService {
       .request<R>(method, api + request.url, {
         observe,
         ...(params && {
-          params: Object.keys(params).reduce((acc, key) => {
-            const value = params[key];
-
-            if (isUndefinedOrEmptyString(value)) return acc;
-            if (value === null && !this.options.sendNullsAsQueryParam) return acc;
-
-            acc[key] = value;
-            return acc;
-          }, {}),
+          params: this.getParams(params, config.httpParamEncoder),
         }),
         ...options,
       } as any)
       .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
+  }
+
+  private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {
+    const httpParams = encoder ? new HttpParams({ encoder }) : new HttpParams();
+    return Object.keys(params).reduce((acc, key) => {
+      const value = params[key];
+
+      if (isUndefinedOrEmptyString(value)) return acc;
+      if (value === null && !this.options.sendNullsAsQueryParam) return acc;
+      acc = acc.set(key, value);
+      return acc;
+    }, httpParams);
   }
 }

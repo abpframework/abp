@@ -149,10 +149,10 @@ export default `
 .ngx-datatable.material {
   box-shadow: none;
 }
-ngb-typeahead-window {
-  width: 100%;
+ngb-typeahead-window, ngb-typeahead-window.dropdown-menu {
   max-height: 25em;
   overflow-y: scroll !important;
+  z-index: 1050;
 }
 
 @keyframes fadeInTop {
@@ -175,7 +175,7 @@ ngb-typeahead-window {
 }
 
 /* </animations */
-
+.ngb-dp-body {
+  z-index: 1055 !important;
+}
 `;
-
-export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';

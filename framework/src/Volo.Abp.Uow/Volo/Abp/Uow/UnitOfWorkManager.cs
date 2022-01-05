@@ -3,128 +3,114 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
 {
-    public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
+    [Obsolete("This will be removed in next versions.")]
+    public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+
+    public IUnitOfWork Current => _ambientUnitOfWork.GetCurrentByChecking();
+
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IAmbientUnitOfWork _ambientUnitOfWork;
+
+    public UnitOfWorkManager(
+        IAmbientUnitOfWork ambientUnitOfWork,
+        IServiceScopeFactory serviceScopeFactory)
     {
-        [Obsolete("This will be removed in next versions.")]
-        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+        _ambientUnitOfWork = ambientUnitOfWork;
+        _serviceScopeFactory = serviceScopeFactory;
+    }
 
-        public IUnitOfWork Current => GetCurrentUnitOfWork();
+    public IUnitOfWork Begin(AbpUnitOfWorkOptions options, bool requiresNew = false)
+    {
+        Check.NotNull(options, nameof(options));
 
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IAmbientUnitOfWork _ambientUnitOfWork;
-
-        public UnitOfWorkManager(
-            IAmbientUnitOfWork ambientUnitOfWork,
-            IServiceScopeFactory serviceScopeFactory)
+        var currentUow = Current;
+        if (currentUow != null && !requiresNew)
         {
-            _ambientUnitOfWork = ambientUnitOfWork;
-            _serviceScopeFactory = serviceScopeFactory;
+            return new ChildUnitOfWork(currentUow);
         }
 
-        public IUnitOfWork Begin(AbpUnitOfWorkOptions options, bool requiresNew = false)
+        var unitOfWork = CreateNewUnitOfWork();
+        unitOfWork.Initialize(options);
+
+        return unitOfWork;
+    }
+
+    public IUnitOfWork Reserve(string reservationName, bool requiresNew = false)
+    {
+        Check.NotNull(reservationName, nameof(reservationName));
+
+        if (!requiresNew &&
+            _ambientUnitOfWork.UnitOfWork != null &&
+            _ambientUnitOfWork.UnitOfWork.IsReservedFor(reservationName))
         {
-            Check.NotNull(options, nameof(options));
-
-            var currentUow = Current;
-            if (currentUow != null && !requiresNew)
-            {
-                return new ChildUnitOfWork(currentUow);
-            }
-
-            var unitOfWork = CreateNewUnitOfWork();
-            unitOfWork.Initialize(options);
-
-            return unitOfWork;
+            return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
         }
 
-        public IUnitOfWork Reserve(string reservationName, bool requiresNew = false)
+        var unitOfWork = CreateNewUnitOfWork();
+        unitOfWork.Reserve(reservationName);
+
+        return unitOfWork;
+    }
+
+    public void BeginReserved(string reservationName, AbpUnitOfWorkOptions options)
+    {
+        if (!TryBeginReserved(reservationName, options))
         {
-            Check.NotNull(reservationName, nameof(reservationName));
+            throw new AbpException($"Could not find a reserved unit of work with reservation name: {reservationName}");
+        }
+    }
 
-            if (!requiresNew &&
-                _ambientUnitOfWork.UnitOfWork != null &&
-                _ambientUnitOfWork.UnitOfWork.IsReservedFor(reservationName))
-            {
-                return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
-            }
+    public bool TryBeginReserved(string reservationName, AbpUnitOfWorkOptions options)
+    {
+        Check.NotNull(reservationName, nameof(reservationName));
 
-            var unitOfWork = CreateNewUnitOfWork();
-            unitOfWork.Reserve(reservationName);
+        var uow = _ambientUnitOfWork.UnitOfWork;
 
-            return unitOfWork;
+        //Find reserved unit of work starting from current and going to outers
+        while (uow != null && !uow.IsReservedFor(reservationName))
+        {
+            uow = uow.Outer;
         }
 
-        public void BeginReserved(string reservationName, AbpUnitOfWorkOptions options)
+        if (uow == null)
         {
-            if (!TryBeginReserved(reservationName, options))
-            {
-                throw new AbpException($"Could not find a reserved unit of work with reservation name: {reservationName}");
-            }
+            return false;
         }
 
-        public bool TryBeginReserved(string reservationName, AbpUnitOfWorkOptions options)
+        uow.Initialize(options);
+
+        return true;
+    }
+
+    private IUnitOfWork CreateNewUnitOfWork()
+    {
+        var scope = _serviceScopeFactory.CreateScope();
+        try
         {
-            Check.NotNull(reservationName, nameof(reservationName));
+            var outerUow = _ambientUnitOfWork.UnitOfWork;
 
-            var uow = _ambientUnitOfWork.UnitOfWork;
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-            //Find reserved unit of work starting from current and going to outers
-            while (uow != null && !uow.IsReservedFor(reservationName))
+            unitOfWork.SetOuter(outerUow);
+
+            _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
+
+            unitOfWork.Disposed += (sender, args) =>
             {
-                uow = uow.Outer;
-            }
-
-            if (uow == null)
-            {
-                return false;
-            }
-
-            uow.Initialize(options);
-
-            return true;
-        }
-
-        private IUnitOfWork GetCurrentUnitOfWork()
-        {
-            var uow = _ambientUnitOfWork.UnitOfWork;
-
-            //Skip reserved unit of work
-            while (uow != null && (uow.IsReserved || uow.IsDisposed || uow.IsCompleted))
-            {
-                uow = uow.Outer;
-            }
-
-            return uow;
-        }
-
-        private IUnitOfWork CreateNewUnitOfWork()
-        {
-            var scope = _serviceScopeFactory.CreateScope();
-            try
-            {
-                var outerUow = _ambientUnitOfWork.UnitOfWork;
-
-                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-
-                unitOfWork.SetOuter(outerUow);
-
-                _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
-
-                unitOfWork.Disposed += (sender, args) =>
-                {
-                    _ambientUnitOfWork.SetUnitOfWork(outerUow);
-                    scope.Dispose();
-                };
-
-                return unitOfWork;
-            }
-            catch
-            {
+                _ambientUnitOfWork.SetUnitOfWork(outerUow);
                 scope.Dispose();
-                throw;
-            }
+            };
+
+            return unitOfWork;
+        }
+        catch
+        {
+            scope.Dispose();
+            throw;
         }
     }
 }

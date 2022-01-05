@@ -9,173 +9,191 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public class PermissionManager : IPermissionManager, ISingletonDependency
 {
-    public class PermissionManager : IPermissionManager, ISingletonDependency
+    protected IPermissionGrantRepository PermissionGrantRepository { get; }
+
+    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+
+    protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
+
+    protected IGuidGenerator GuidGenerator { get; }
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
+
+    protected PermissionManagementOptions Options { get; }
+
+    protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
+
+    private readonly Lazy<List<IPermissionManagementProvider>> _lazyProviders;
+
+    public PermissionManager(
+        IPermissionDefinitionManager permissionDefinitionManager,
+        ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
+        IPermissionGrantRepository permissionGrantRepository,
+        IServiceProvider serviceProvider,
+        IGuidGenerator guidGenerator,
+        IOptions<PermissionManagementOptions> options,
+        ICurrentTenant currentTenant,
+        IDistributedCache<PermissionGrantCacheItem> cache)
     {
-        protected IPermissionGrantRepository PermissionGrantRepository { get; }
+        GuidGenerator = guidGenerator;
+        CurrentTenant = currentTenant;
+        Cache = cache;
+        SimpleStateCheckerManager = simpleStateCheckerManager;
+        PermissionGrantRepository = permissionGrantRepository;
+        PermissionDefinitionManager = permissionDefinitionManager;
+        Options = options.Value;
 
-        protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+        _lazyProviders = new Lazy<List<IPermissionManagementProvider>>(
+            () => Options
+                .ManagementProviders
+                .Select(c => serviceProvider.GetRequiredService(c) as IPermissionManagementProvider)
+                .ToList(),
+            true
+        );
+    }
 
-        protected IPermissionStateManager PermissionStateManager { get; }
+    public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
+    {
+        return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
+    }
 
-        protected IGuidGenerator GuidGenerator { get; }
+    public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
+    {
+        var permissionDefinitions = permissionNames.Select(x => PermissionDefinitionManager.Get(x)).ToArray();
+        return await GetInternalAsync(permissionDefinitions, providerName, providerKey);
+    }
 
-        protected ICurrentTenant CurrentTenant { get; }
+    public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
+    {
+        var permissionDefinitions = PermissionDefinitionManager.GetPermissions().ToArray();
 
-        protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
+        var multiplePermissionWithGrantedProviders = await GetInternalAsync(permissionDefinitions, providerName, providerKey);
 
-        protected PermissionManagementOptions Options { get; }
+        return multiplePermissionWithGrantedProviders.Result;
 
-        protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
+    }
 
-        private readonly Lazy<List<IPermissionManagementProvider>> _lazyProviders;
+    public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
+    {
+        var permission = PermissionDefinitionManager.Get(permissionName);
 
-        public PermissionManager(
-            IPermissionDefinitionManager permissionDefinitionManager,
-            IPermissionStateManager permissionStateManager,
-            IPermissionGrantRepository permissionGrantRepository,
-            IServiceProvider serviceProvider,
-            IGuidGenerator guidGenerator,
-            IOptions<PermissionManagementOptions> options,
-            ICurrentTenant currentTenant,
-            IDistributedCache<PermissionGrantCacheItem> cache)
+        if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
         {
-            GuidGenerator = guidGenerator;
-            CurrentTenant = currentTenant;
-            Cache = cache;
-            PermissionStateManager = permissionStateManager;
-            PermissionGrantRepository = permissionGrantRepository;
-            PermissionDefinitionManager = permissionDefinitionManager;
-            Options = options.Value;
+            //TODO: BusinessException
+            throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
+        }
 
-            _lazyProviders = new Lazy<List<IPermissionManagementProvider>>(
-                () => Options
-                    .ManagementProviders
-                    .Select(c => serviceProvider.GetRequiredService(c) as IPermissionManagementProvider)
-                    .ToList(),
-                true
+        if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+        {
+            //TODO: BusinessException
+            throw new ApplicationException($"The permission named '{permission.Name}' has not compatible with the provider named '{providerName}'");
+        }
+
+        if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+        {
+            //TODO: BusinessException
+            throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
+        }
+
+        var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey);
+        if (currentGrantInfo.IsGranted == isGranted)
+        {
+            return;
+        }
+
+        var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
+        if (provider == null)
+        {
+            //TODO: BusinessException
+            throw new AbpException("Unknown permission management provider: " + providerName);
+        }
+
+        await provider.SetAsync(permissionName, providerKey, isGranted);
+    }
+
+    public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
+    {
+        using (CurrentTenant.Change(permissionGrant.TenantId))
+        {
+            //Invalidating the cache for the old key
+            await Cache.RemoveAsync(
+                PermissionGrantCacheItem.CalculateCacheKey(
+                    permissionGrant.Name,
+                    permissionGrant.ProviderName,
+                    permissionGrant.ProviderKey
+                )
             );
         }
 
-        public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
+        permissionGrant.ProviderKey = providerKey;
+        return await PermissionGrantRepository.UpdateAsync(permissionGrant);
+    }
+
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    {
+        var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+        foreach (var permissionGrant in permissionGrants)
         {
-            return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
+            await PermissionGrantRepository.DeleteAsync(permissionGrant);
         }
+    }
 
-        public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
+    protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
+    {
+        var multiplePermissionWithGrantedProviders = await GetInternalAsync(new PermissionDefinition[] { permission }, providerName, providerKey);
+
+        return multiplePermissionWithGrantedProviders.Result.First();
+    }
+
+    protected virtual async Task<MultiplePermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition[] permissions, string providerName, string providerKey)
+    {
+        var permissionNames = permissions.Select(x => x.Name).ToArray();
+        var multiplePermissionWithGrantedProviders = new MultiplePermissionWithGrantedProviders(permissionNames);
+
+        var neededCheckPermissions = new List<PermissionDefinition>();
+
+        foreach (var permission in permissions
+                                    .Where(x => x.IsEnabled)
+                                    .Where(x => x.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+                                    .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName)))
         {
-            var results = new List<PermissionWithGrantedProviders>();
-
-            foreach (var permissionDefinition in PermissionDefinitionManager.GetPermissions())
+            if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
-                results.Add(await GetInternalAsync(permissionDefinition, providerName, providerKey));
-            }
-
-            return results;
-        }
-
-        public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
-        {
-            var permission = PermissionDefinitionManager.Get(permissionName);
-
-            if (!permission.IsEnabled || !await PermissionStateManager.IsEnabledAsync(permission))
-            {
-                //TODO: BusinessException
-                throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
-            }
-
-            if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
-            {
-                //TODO: BusinessException
-                throw new ApplicationException($"The permission named '{permission.Name}' has not compatible with the provider named '{providerName}'");
-            }
-
-            if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
-            {
-                //TODO: BusinessException
-                throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
-            }
-
-            var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey);
-            if (currentGrantInfo.IsGranted == isGranted)
-            {
-                return;
-            }
-
-            var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
-            if (provider == null)
-            {
-                //TODO: BusinessException
-                throw new AbpException("Unknown permission management provider: " + providerName);
-            }
-
-            await provider.SetAsync(permissionName, providerKey, isGranted);
-        }
-
-        public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
-        {
-            using (CurrentTenant.Change(permissionGrant.TenantId))
-            {
-                //Invalidating the cache for the old key
-                await Cache.RemoveAsync(
-                    PermissionGrantCacheItem.CalculateCacheKey(
-                        permissionGrant.Name,
-                        permissionGrant.ProviderName,
-                        permissionGrant.ProviderKey
-                    )
-                );
-            }
-
-            permissionGrant.ProviderKey = providerKey;
-            return await PermissionGrantRepository.UpdateAsync(permissionGrant);
-        }
-
-        public virtual async Task DeleteAsync(string providerName, string providerKey)
-        {
-            var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
-            foreach (var permissionGrant in permissionGrants)
-            {
-                await PermissionGrantRepository.DeleteAsync(permissionGrant);
+                neededCheckPermissions.Add(permission);
             }
         }
 
-        protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
+        if (!neededCheckPermissions.Any())
         {
-            var result = new PermissionWithGrantedProviders(permission.Name, false);
+            return multiplePermissionWithGrantedProviders;
+        }
 
-            if (!permission.IsEnabled)
-            {
-                return result;
-            }
+        foreach (var provider in ManagementProviders)
+        {
+            permissionNames = neededCheckPermissions.Select(x => x.Name).ToArray();
+            var multiplePermissionValueProviderGrantInfo = await provider.CheckAsync(permissionNames, providerName, providerKey);
 
-            if (!await PermissionStateManager.IsEnabledAsync(permission))
+            foreach (var providerResultDict in multiplePermissionValueProviderGrantInfo.Result)
             {
-                return result;
-            }
-
-            if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
-            {
-                return result;
-            }
-
-            if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
-            {
-                return result;
-            }
-
-            foreach (var provider in ManagementProviders)
-            {
-                var providerResult = await provider.CheckAsync(permission.Name, providerName, providerKey);
-                if (providerResult.IsGranted)
+                if (providerResultDict.Value.IsGranted)
                 {
-                    result.IsGranted = true;
-                    result.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResult.ProviderKey));
+                    var permissionWithGrantedProvider = multiplePermissionWithGrantedProviders.Result
+                        .First(x => x.Name == providerResultDict.Key);
+
+                    permissionWithGrantedProvider.IsGranted = true;
+                    permissionWithGrantedProvider.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResultDict.Value.ProviderKey));
                 }
             }
-
-            return result;
         }
+
+        return multiplePermissionWithGrantedProviders;
     }
 }

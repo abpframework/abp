@@ -1,8 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Toaster } from '../../models/toaster';
-import { ToasterService } from '../../services/toaster.service';
-import snq from 'snq';
-
 @Component({
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
@@ -10,7 +7,9 @@ import snq from 'snq';
 })
 export class ToastComponent implements OnInit {
   @Input()
-  toast: Toaster.Toast;
+  toast!: Toaster.Toast;
+
+  @Output() remove = new EventEmitter<number>();
 
   get severityClass(): string {
     if (!this.toast || !this.toast.severity) return '';
@@ -32,18 +31,18 @@ export class ToastComponent implements OnInit {
     }
   }
 
-  constructor(private toasterService: ToasterService) {}
-
   ngOnInit() {
-    if (snq(() => this.toast.options.sticky)) return;
-    const timeout = snq(() => this.toast.options.life) || 5000;
+    const { sticky, life } = this.toast.options || {};
+
+    if (sticky) return;
+    const timeout = life || 5000;
     setTimeout(() => {
       this.close();
     }, timeout);
   }
 
   close() {
-    this.toasterService.remove(this.toast.options.id);
+    this.remove.emit(this.toast.options?.id);
   }
 
   tap() {

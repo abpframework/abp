@@ -1,5 +1,5 @@
 {
-  "version": "4.3.0",
+  "version": "5.0.1",
   "name": "@abp/chart.js",
   "publishConfig": {
     "access": "public"

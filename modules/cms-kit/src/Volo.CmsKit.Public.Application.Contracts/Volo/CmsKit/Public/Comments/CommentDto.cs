@@ -1,24 +1,26 @@
 ﻿using System;
+using Volo.Abp.Domain.Entities;
 
-namespace Volo.CmsKit.Public.Comments
+namespace Volo.CmsKit.Public.Comments;
+
+[Serializable]
+public class CommentDto : IHasConcurrencyStamp
 {
-    [Serializable]
-    public class CommentDto
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string EntityType { get; set; }
+    public string EntityType { get; set; }
 
-        public string EntityId { get; set; }
+    public string EntityId { get; set; }
 
-        public string Text { get; set; }
+    public string Text { get; set; }
 
-        public Guid? RepliedCommentId { get; set; }
+    public Guid? RepliedCommentId { get; set; }
 
-        public Guid CreatorId { get; set; }
+    public Guid CreatorId { get; set; }
 
-        public DateTime CreationTime { get; set; }
+    public DateTime CreationTime { get; set; }
 
-        public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
-    }
+    public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
+
+    public string ConcurrencyStamp { get; set; }
 }

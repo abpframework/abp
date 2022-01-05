@@ -1,31 +1,42 @@
-﻿using System.Threading.Tasks;
-using MyCompanyName.MyProjectName.Localization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Account.Localization;
+namespace MyCompanyName.MyProjectName.Blazor.Host;
 
-namespace MyCompanyName.MyProjectName.Blazor.Host
+public class MyProjectNameHostMenuContributor : IMenuContributor
 {
-    public class MyProjectNameHostMenuContributor : IMenuContributor
+    private readonly IConfiguration _configuration;
+
+    public MyProjectNameHostMenuContributor(IConfiguration configuration)
     {
-        public Task ConfigureMenuAsync(MenuConfigurationContext context)
+        _configuration = configuration;
+    }
+
+    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.User)
         {
-            if(context.Menu.DisplayName != StandardMenus.Main)
-            {
-                return Task.CompletedTask;
-            }
-
-            var l = context.GetLocalizer<MyProjectNameResource>();
-
-            context.Menu.Items.Insert(
-                0,
-                new ApplicationMenuItem(
-                    "MyProjectName.Home",
-                    l["Menu:Home"],
-                    "/",
-                    icon: "fas fa-home"
-                )
-            );
-
-            return Task.CompletedTask;
+            await ConfigureUserMenuAsync(context);
         }
+    }
+
+    private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
+    {
+        var accountStringLocalizer = context.GetLocalizer<AccountResource>();
+
+        var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
+
+        context.Menu.AddItem(new ApplicationMenuItem(
+            "Account.Manage",
+            accountStringLocalizer["ManageYourProfile"],
+            $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
+            icon: "fa fa-cog",
+            order: 1000,
+            null).RequireAuthenticated());
+
+        return Task.CompletedTask;
     }
 }

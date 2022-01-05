@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { InternalStore } from '../utils/internal-store-utils';
 
@@ -14,8 +15,21 @@ export class ConfigStateService {
     return this.store.sliceUpdate;
   }
 
-  setState(state: ApplicationConfigurationDto) {
-    this.store.set(state);
+  private updateSubject = new Subject();
+
+  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+    this.initUpdateStream();
+  }
+
+  private initUpdateStream() {
+    this.updateSubject
+      .pipe(switchMap(() => this.abpConfigService.get()))
+      .subscribe(res => this.store.set(res));
+  }
+
+  refreshAppState() {
+    this.updateSubject.next();
+    return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
   getOne$(key: string) {
@@ -34,14 +48,14 @@ export class ConfigStateService {
     return this.store.state;
   }
 
-  getDeep$(keys: string[] | string) {
+  getDeep$(keys: string[] | string): Observable<any> {
     keys = splitKeys(keys);
 
     return this.store
       .sliceState(state => state)
       .pipe(
         map(state => {
-          return (keys as string[]).reduce((acc, val) => {
+          return (keys as string[]).reduce((acc: any, val) => {
             if (acc) {
               return acc[val];
             }
@@ -52,10 +66,10 @@ export class ConfigStateService {
       );
   }
 
-  getDeep(keys: string[] | string) {
+  getDeep(keys: string[] | string): any {
     keys = splitKeys(keys);
 
-    return (keys as string[]).reduce((acc, val) => {
+    return (keys as string[]).reduce((acc: any, val) => {
       if (acc) {
         return acc[val];
       }

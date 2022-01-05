@@ -6,7 +6,7 @@ import { NgControl } from '@angular/forms';
 })
 export class DisabledDirective implements OnChanges {
   @Input()
-  abpDisabled: boolean;
+  abpDisabled = false;
 
   constructor(@Host() private ngControl: NgControl) {}
 

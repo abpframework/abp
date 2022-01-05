@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import {
@@ -14,7 +15,7 @@ import { interpolate } from './common';
 import { readEnvironment, resolveProject } from './workspace';
 
 export function createApiDefinitionGetter(params: GenerateProxySchema) {
-  const apiName = params['api-name'] || 'default';
+  const apiName = params.apiName || 'default';
 
   return async (host: Tree) => {
     const source = await resolveProject(host, params.source!);
@@ -45,7 +46,7 @@ async function getApiDefinition(sourceUrl: string) {
 }
 
 export function createRootNamespaceGetter(params: GenerateProxySchema) {
-  const apiName = params['api-name'] || 'default';
+  const apiName = params.apiName || 'default';
 
   return async (tree: Tree) => {
     const project = await resolveProject(tree, params.source!);

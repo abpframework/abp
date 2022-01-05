@@ -1,0 +1,26 @@
+{
+  "culture": "hi",
+  "texts": {
+    "InternalServerErrorMessage": "आपके अनुरोध के दौरान एक आंतरिक त्रुटि हुई!",
+    "ValidationErrorMessage": "आपका अनुरोध मान्य नहीं है!",
+    "ValidationNarrativeErrorMessageTitle": "सत्यापन के दौरान निम्नलिखित त्रुटियों का पता चला था।",
+    "DefaultErrorMessage": "एक गलती हुई है!",
+    "DefaultErrorMessageDetail": "सर्वर द्वारा त्रुटि विवरण नहीं भेजा गया।",
+    "DefaultErrorMessage401": "आप प्रमाणित नहीं हैं!",
+    "DefaultErrorMessage401Detail": "आपको यह ऑपरेशन करने के लिए साइन इन करना चाहिए।",
+    "DefaultErrorMessage403": "तुम अधिकृत नहीं हो!",
+    "DefaultErrorMessage403Detail": "आपको यह ऑपरेशन करने की अनुमति नहीं है!",
+    "DefaultErrorMessage404": "संसाधन नही मिला!",
+    "DefaultErrorMessage404Detail": "अनुरोधित संसाधन सर्वर पर नहीं मिला!",
+    "EntityNotFoundErrorMessage": "Id = {1} के साथ कोई इकाई {0} नहीं है!",
+    "AbpDbConcurrencyErrorMessage": "आपके द्वारा सबमिट किया गया डेटा पहले ही किसी अन्य उपयोगकर्ता/क्लाइंट द्वारा बदल दिया गया है। कृपया अपने द्वारा किए गए परिवर्तनों को त्याग दें और शुरुआत से ही प्रयास करें।",
+    "Error": "त्रुटि",
+    "UnhandledException": "अनियंत्रित अपवाद!",
+    "401Message": "अनधिकृत",
+    "403Message": "मना किया हुआ",
+    "404Message": "पृष्ठ नहीं मिला",
+    "500Message": "आंतरिक सर्वर त्रुटि",
+    "403MessageDetail": "आप इस ऑपरेशन को करने के लिए अधिकृत नहीं हैं!",
+    "404MessageDetail": "क्षमा करें, इस पते पर कुछ भी नहीं है।"
+  }
+}

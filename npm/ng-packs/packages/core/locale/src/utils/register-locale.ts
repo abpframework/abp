@@ -1,5 +1,4 @@
 import { differentLocales } from '@abp/ng.core';
-import { registerLocaleData } from '@angular/common';
 import { isDevMode } from '@angular/core';
 
 export interface LocaleErrorHandlerData {
@@ -27,8 +26,9 @@ export function registerLocale(
 
     return new Promise((resolve, reject) => {
       return import(
-        /* webpackChunkName: "_locale-[request]"*/
-        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
+        /* webpackMode: "lazy-once" */
+        /* webpackChunkName: "locales"*/
+        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant).js/ */
         /* webpackExclude: /[/\\]global|extra/ */
         `@angular/common/locales/${localeMap[locale] || locale}.js`
       )

@@ -2,10 +2,10 @@
   <PropertyGroup>
 
     <!-- All Microsoft packages -->
-    <MicrosoftPackageVersion>5.0.*</MicrosoftPackageVersion>
+    <MicrosoftPackageVersion>6.0.0</MicrosoftPackageVersion>
 
     <!-- Microsoft.NET.Test.Sdk https://www.nuget.org/packages/Microsoft.NET.Test.Sdk -->
-    <MicrosoftNETTestSdkPackageVersion>16.9.1</MicrosoftNETTestSdkPackageVersion>
+    <MicrosoftNETTestSdkPackageVersion>16.11.0</MicrosoftNETTestSdkPackageVersion>
 
     <!-- NSubstitute  https://www.nuget.org/packages/NSubstitute -->
     <NSubstitutePackageVersion>4.2.2</NSubstitutePackageVersion>
@@ -23,7 +23,17 @@
     <xUnitRunnerVisualstudioPackageVersion>2.4.3</xUnitRunnerVisualstudioPackageVersion>
 
     <!-- Mongo2Go https://www.nuget.org/packages/Mongo2Go -->
-    <Mongo2GoPackageVersion>3.1.1</Mongo2GoPackageVersion>
+    <Mongo2GoPackageVersion>3.1.3</Mongo2GoPackageVersion>
+
+    <IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="coverlet.collector" Version="3.1.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

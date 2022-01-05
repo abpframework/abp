@@ -1,6 +1,7 @@
 # ABP Framework
 
 ![build and test](https://img.shields.io/github/workflow/status/abpframework/abp/build%20and%20test/dev?style=flat-square)
+[![codecov](https://codecov.io/gh/abpframework/abp/branch/dev/graph/badge.svg?token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp)
 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds)
@@ -10,8 +11,9 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 
 ## Getting Started
 
-- [Getting Started Guide](https://docs.abp.io/en/abp/latest/Getting-Started) is the easiest way to start a new web application with the ABP Framework.
-- [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) is a complete tutorial to develop a full stack web application.
+- [Quick Start](https://docs.abp.io/en/abp/latest/Tutorials/Todo/Index) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
+- [Getting Started guide](https://docs.abp.io/en/abp/latest/Getting-Started) can be used to create and run ABP based solutions with different options and details.
+- [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) is a complete tutorial to develop a full stack web application with all aspects of a real-life solution.
 
 ### Quick Start
 

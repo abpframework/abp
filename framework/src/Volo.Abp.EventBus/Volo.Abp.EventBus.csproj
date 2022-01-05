@@ -15,7 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj" />
+    <ProjectReference Include="..\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 

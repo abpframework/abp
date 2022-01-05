@@ -2,17 +2,24 @@ import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Optional,
   SimpleChanges,
 } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
+import {
+  defaultNgxDatatableMessages,
+  NgxDatatableMessages,
+  NGX_DATATABLE_MESSAGES,
+} from '../tokens/ngx-datatable-messages.token';
 
 @Directive({
-  // tslint:disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[list]',
   exportAs: 'ngxDatatableList',
 })
@@ -20,12 +27,13 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscription = new Subscription();
   private querySubscription = new Subscription();
 
-  @Input() list: ListService;
+  @Input() list!: ListService;
 
   constructor(
     private table: DatatableComponent,
     private cdRef: ChangeDetectorRef,
     private localizationService: LocalizationService,
+    @Optional() @Inject(NGX_DATATABLE_MESSAGES) private ngxDatatableMessages: NgxDatatableMessages,
   ) {
     this.setInitialValues();
   }
@@ -33,14 +41,14 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
+
+    const { emptyMessage, selectedMessage, totalMessage } =
+      this.ngxDatatableMessages || defaultNgxDatatableMessages;
+
     this.table.messages = {
-      emptyMessage: this.localizationService.localizeSync(
-        'AbpUi',
-        'NoDataAvailableInDatatable',
-        'No data available',
-      ),
-      totalMessage: this.localizationService.localizeSync('AbpUi', 'Total', 'total'),
-      selectedMessage: this.localizationService.localizeSync('AbpUi', 'Selected', 'selected'),
+      emptyMessage: this.localizationService.instant(emptyMessage),
+      totalMessage: this.localizationService.instant(totalMessage),
+      selectedMessage: this.localizationService.instant(selectedMessage),
     };
   }
 

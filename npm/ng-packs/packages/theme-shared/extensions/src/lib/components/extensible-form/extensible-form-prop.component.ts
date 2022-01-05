@@ -1,13 +1,16 @@
-import { ABP, AbpValidators, TrackByService } from '@abp/ng.core';
+import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   Optional,
   SimpleChanges,
   SkipSelf,
+  ViewChild,
 } from '@angular/core';
 import {
   ControlContainer,
@@ -19,7 +22,6 @@ import {
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
@@ -43,10 +45,14 @@ import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
     { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
-export class ExtensibleFormPropComponent implements OnChanges {
-  @Input() data: PropData;
+export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
+  @Input() data!: PropData;
 
-  @Input() prop: FormProp;
+  @Input() prop!: FormProp;
+
+  @Input() first?: boolean;
+
+  @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   asterisk = '';
 
@@ -54,9 +60,9 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   validators: ValidatorFn[] = [];
 
-  readonly: boolean;
+  readonly!: boolean;
 
-  disabled: boolean;
+  disabled!: boolean;
 
   private readonly form: FormGroup;
 
@@ -66,9 +72,9 @@ export class ExtensibleFormPropComponent implements OnChanges {
     this.typeaheadModel = selectedOption || { key: null, value: null };
     const { key, value } = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
-    if (valueControl.value && !value) valueControl.markAsDirty();
-    keyControl.setValue(key);
-    valueControl.setValue(value);
+    if (valueControl?.value && !value) valueControl.markAsDirty();
+    keyControl?.setValue(key);
+    valueControl?.setValue(value);
   }
 
   search = (text$: Observable<string>) =>
@@ -82,6 +88,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   typeaheadFormatter = (option: ABP.Option<any>) => option.key;
 
+  get meridian() {
+    return (
+      this.configState.getDeep('localization.currentCulture.dateTimeFormat.shortTimePattern') || ''
+    ).includes('tt');
+  }
+
   get isInvalid() {
     const control = this.form.get(this.prop.name);
     return control.touched && control.invalid;
@@ -90,6 +102,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   constructor(
     public readonly cdRef: ChangeDetectorRef,
     public readonly track: TrackByService,
+    protected configState: ConfigStateService,
     groupDirective: FormGroupDirective,
   ) {
     this.form = groupDirective.form;
@@ -107,6 +120,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   private setAsterisk() {
     this.asterisk = this.validators.some(isRequired) ? '*' : '';
+  }
+
+  ngAfterViewInit() {
+    if (this.first && this.fieldRef) {
+      this.fieldRef.nativeElement.focus();
+    }
   }
 
   getComponent(prop: FormProp): string {
@@ -151,7 +170,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   }
 
   ngOnChanges({ prop }: SimpleChanges) {
-    const currentProp = snq<FormProp>(() => prop.currentValue);
+    const currentProp = prop?.currentValue;
     const { options, readonly, disabled, validators } = currentProp || {};
 
     if (options) this.options$ = options(this.data);

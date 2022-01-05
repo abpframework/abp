@@ -27,15 +27,15 @@
     <strong>{{ (currentUser$ | async)?.userName }}</strong>
   </a>
   <div
-    class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
+    class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
     aria-labelledby="dropdownMenuLink"
     [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
   >
     <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
-      ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
+      ><i class="fa fa-cog me-1"></i>{{ 'AbpAccount::MyAccount' | abpLocalization }}</a
     >
     <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
-      ><i class="fa fa-power-off mr-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
+      ><i class="fa fa-power-off me-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
     >
   </div>
 </div>

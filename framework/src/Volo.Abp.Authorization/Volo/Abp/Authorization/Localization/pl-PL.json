@@ -1,0 +1,10 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Volo.Authorization:010001": "Autoryzacja nie powiodła się! Podana polityka nie przyznała.",
+    "Volo.Authorization:010002": "Autoryzacja nie powiodła się! Podana zasada nie została przyznana: {PolicyName}",
+    "Volo.Authorization:010003": "Autoryzacja nie powiodła się! Podana zasada nie została przyznana dla danego zasobu: {ResourceName}",
+    "Volo.Authorization:010004": "Autoryzacja nie powiodła się! Podane wymaganie nie zostało spełnione dla danego zasobu: {ResourceName}",
+    "Volo.Authorization:010005": "Autoryzacja nie powiodła się! Podane wymagania nie zostały przyznane dla danego zasobu: {ResourceName}"
+  }
+}

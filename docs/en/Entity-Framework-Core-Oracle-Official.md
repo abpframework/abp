@@ -1,6 +1,8 @@
-﻿# Switch to EF Core Oracle Provider
+# Switch to EF Core Oracle Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
+
+> Before switching your provider, please ensure your Oracle version is **v12.2+**. In the earlier versions of Oracle, there were long identifier limitations that prevents creating a database table, column or index longer than 30 bytes. With [v12.2](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/newft/new-features.html#GUID-64283AD6-0939-47B0-856E-5E9255D7246B) "The maximum length of identifiers is increased to 128 bytes". **v12.2** and later versions, you can use the database tables, columns and indexes provided by ABP without any problems. 
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 
@@ -17,19 +19,19 @@ Also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Ab
 Find `UseSqlServer()` calls in your solution, replace with `UseOracle()`. Check the following files:
 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
+* *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project.
 
 
-In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFactory.cs, replace the following code block
+In the `CreateDbContext()` method of the *YourProjectName*DbContextFactory.cs, replace the following code block
 
 ```csharp
-var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 ```
 
 with this one (just changes `UseSqlServer(...)` to `UseOracle(...)`)
 ```csharp
-var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameDbContext>()
                 .UseOracle(configuration.GetConnectionString("Default"));
 ```
 
@@ -46,8 +48,8 @@ You typically will change the `appsettings.json` inside the `.DbMigrator` and `.
 The startup template uses [Entity Framework Core's Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) by default. 
 EF Core Migrations depend on the selected DBMS provider. Changing the DBMS provider, may not work with the existing migrations.
 
-* Delete the `Migrations` folder under the `.EntityFrameworkCore.DbMigrations` project and re-build the solution.
-* Run `Add-Migration "Initial"` on the Package Manager Console window (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore.DbMigrations` project as the default project in the Package Manager Console).
+* Delete the `Migrations` folder under the `.EntityFrameworkCore` project and re-build the solution.
+* Run `Add-Migration "Initial"` on the Package Manager Console window (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore` project as the default project in the Package Manager Console).
 
 This will scaffold a new migration for Oracle.
 

@@ -1,17 +1,23 @@
 {
   "culture": "vi",
   "texts": {
+    "Languages": "Ngôn ngữ",
     "AreYouSure": "Bạn có chắc không ?",
     "Cancel": "Hủy bỏ",
+    "Clear": "Sạch",
     "Yes": "Đồng ý",
     "No": "Không",
+    "Ok": "Vâng",
     "Close": "Đóng",
     "Save": "Lưu",
     "SavingWithThreeDot": "Đang lưu...",
     "Actions": "Hành động",
     "Delete": "Xóa",
+    "SuccessfullyDeleted": "Đã xóa thành công",
     "Edit": "Sửa",
     "Refresh": "Làm mới",
+    "Language": "Ngôn ngữ",
+    "LoadMore": "Tải thêm",
     "ProcessingWithThreeDot": "Đang xử lý...",
     "LoadingWithThreeDot": "Đang tải...",
     "Welcome": "Chào mừng bạn",
@@ -30,10 +36,18 @@
     "PagerInfoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
     "PagerInfoFiltered": "(được lọc từ tổng số _MAX_ mục)",
     "NoDataAvailableInDatatable": "Không có dữ liệu trong bảng",
+    "Total": "toàn bộ",
+    "Selected": "đã chọn",
     "PagerShowMenuEntries": "Hiển thị _MENU_ mục",
     "DatatableActionDropdownDefaultText": "Hành động",
     "ChangePassword": "Đổi mật khẩu",
     "PersonalInfo": "Hồ sơ của tôi",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Bạn có những thay đổi chưa được lưu"
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Bạn có những thay đổi chưa được lưu",
+    "GoHomePage": "Đi đến trang chủ",
+    "GoBack": "Quay lại",
+    "Search": "Tìm kiếm",
+    "ItemWillBeDeletedMessageWithFormat": "{0} sẽ bị xóa!",
+    "ItemWillBeDeletedMessage": "Vật phẩm này sẽ bị xoá!",
+    "ManageYourAccount": "Quản lý tài khoản của bạn"
   }
 }

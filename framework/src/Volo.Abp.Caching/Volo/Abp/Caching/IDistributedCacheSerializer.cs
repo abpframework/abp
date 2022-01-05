@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.Caching
-{
-    public interface IDistributedCacheSerializer
-    {
-        byte[] Serialize<T>(T obj);
+﻿namespace Volo.Abp.Caching;
 
-        T Deserialize<T>(byte[] bytes);
-    }
+public interface IDistributedCacheSerializer
+{
+    byte[] Serialize<T>(T obj);
+
+    T Deserialize<T>(byte[] bytes);
 }

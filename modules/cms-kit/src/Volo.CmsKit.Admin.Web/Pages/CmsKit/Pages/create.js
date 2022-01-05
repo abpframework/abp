@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var $createForm = $('#form-page-create');
@@ -89,6 +89,7 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
+            plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
             height: "100%",
             minHeight: "25em",
             initialEditType: 'markdown',

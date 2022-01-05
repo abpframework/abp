@@ -34,4 +34,10 @@ No change on the framework packages, but **module packages are separated as Web 
 
 ### Other Changes
 
-* `EntityAction.RequiredPermission` has been marked as **obsolete**, because of performance reasons. It is suggested to use the `Visible` property by checking the permission/policy yourself and assigning to a variable. 
+* `EntityAction.RequiredPermission` has been marked as **obsolete**, because of performance reasons. It is suggested to use the `Visible` property by checking the permission/policy yourself and assigning to a variable.
+
+### Resource Reference Changes
+
+Open `<YourProjectName>BundleContributor.cs` and replace `context.Add("main.css");` to `context.Add("main.css", true);`
+
+Then run `abp bundle` command in the `blazor` folder to update resource references.

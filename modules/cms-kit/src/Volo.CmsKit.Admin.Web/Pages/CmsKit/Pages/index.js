@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
 
     var pagesService = volo.cmsKit.admin.pages.pageAdmin;
@@ -43,6 +43,7 @@
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }

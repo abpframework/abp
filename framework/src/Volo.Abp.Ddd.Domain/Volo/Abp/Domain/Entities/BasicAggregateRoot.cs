@@ -1,95 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Volo.Abp.Uow;
 
-namespace Volo.Abp.Domain.Entities
+namespace Volo.Abp.Domain.Entities;
+
+[Serializable]
+public abstract class BasicAggregateRoot : Entity,
+    IAggregateRoot,
+    IGeneratesDomainEvents
 {
-    [Serializable]
-    public abstract class BasicAggregateRoot : Entity,
-        IAggregateRoot,
-        IGeneratesDomainEvents
+    private readonly ICollection<DomainEventRecord> _distributedEvents = new Collection<DomainEventRecord>();
+    private readonly ICollection<DomainEventRecord> _localEvents = new Collection<DomainEventRecord>();
+
+    public virtual IEnumerable<DomainEventRecord> GetLocalEvents()
     {
-        private readonly ICollection<object> _distributedEvents = new Collection<object>();
-        private readonly ICollection<object> _localEvents = new Collection<object>();
-
-        public virtual IEnumerable<object> GetLocalEvents()
-        {
-            return _localEvents;
-        }
-
-        public virtual IEnumerable<object> GetDistributedEvents()
-        {
-            return _distributedEvents;
-        }
-
-        public virtual void ClearLocalEvents()
-        {
-            _localEvents.Clear();
-        }
-
-        public virtual void ClearDistributedEvents()
-        {
-            _distributedEvents.Clear();
-        }
-
-        protected virtual void AddLocalEvent(object eventData)
-        {
-            _localEvents.Add(eventData);
-        }
-
-        protected virtual void AddDistributedEvent(object eventData)
-        {
-            _distributedEvents.Add(eventData);
-        }
+        return _localEvents;
     }
 
-    [Serializable]
-    public abstract class BasicAggregateRoot<TKey> : Entity<TKey>,
-        IAggregateRoot<TKey>,
-        IGeneratesDomainEvents
+    public virtual IEnumerable<DomainEventRecord> GetDistributedEvents()
     {
-        private readonly ICollection<object> _distributedEvents = new Collection<object>();
-        private readonly ICollection<object> _localEvents = new Collection<object>();
+        return _distributedEvents;
+    }
 
-        protected BasicAggregateRoot()
-        {
+    public virtual void ClearLocalEvents()
+    {
+        _localEvents.Clear();
+    }
 
-        }
+    public virtual void ClearDistributedEvents()
+    {
+        _distributedEvents.Clear();
+    }
 
-        protected BasicAggregateRoot(TKey id)
-            : base(id)
-        {
+    protected virtual void AddLocalEvent(object eventData)
+    {
+        _localEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
+    }
 
-        }
+    protected virtual void AddDistributedEvent(object eventData)
+    {
+        _distributedEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
+    }
+}
 
-        public virtual IEnumerable<object> GetLocalEvents()
-        {
-            return _localEvents;
-        }
+[Serializable]
+public abstract class BasicAggregateRoot<TKey> : Entity<TKey>,
+    IAggregateRoot<TKey>,
+    IGeneratesDomainEvents
+{
+    private readonly ICollection<DomainEventRecord> _distributedEvents = new Collection<DomainEventRecord>();
+    private readonly ICollection<DomainEventRecord> _localEvents = new Collection<DomainEventRecord>();
 
-        public virtual IEnumerable<object> GetDistributedEvents()
-        {
-            return _distributedEvents;
-        }
+    protected BasicAggregateRoot()
+    {
 
-        public virtual void ClearLocalEvents()
-        {
-            _localEvents.Clear();
-        }
+    }
 
-        public virtual void ClearDistributedEvents()
-        {
-            _distributedEvents.Clear();
-        }
+    protected BasicAggregateRoot(TKey id)
+        : base(id)
+    {
 
-        protected virtual void AddLocalEvent(object eventData)
-        {
-            _localEvents.Add(eventData);
-        }
+    }
 
-        protected virtual void AddDistributedEvent(object eventData)
-        {
-            _distributedEvents.Add(eventData);
-        }
+    public virtual IEnumerable<DomainEventRecord> GetLocalEvents()
+    {
+        return _localEvents;
+    }
+
+    public virtual IEnumerable<DomainEventRecord> GetDistributedEvents()
+    {
+        return _distributedEvents;
+    }
+
+    public virtual void ClearLocalEvents()
+    {
+        _localEvents.Clear();
+    }
+
+    public virtual void ClearDistributedEvents()
+    {
+        _distributedEvents.Clear();
+    }
+
+    protected virtual void AddLocalEvent(object eventData)
+    {
+        _localEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
+    }
+
+    protected virtual void AddDistributedEvent(object eventData)
+    {
+        _distributedEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
     }
 }

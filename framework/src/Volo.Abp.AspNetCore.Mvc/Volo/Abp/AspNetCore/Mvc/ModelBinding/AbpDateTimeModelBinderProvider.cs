@@ -1,28 +1,28 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
+namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
+
+public class AbpDateTimeModelBinderProvider : IModelBinderProvider
 {
-
-    public class AbpDateTimeModelBinderProvider : IModelBinderProvider
+    public IModelBinder GetBinder(ModelBinderProviderContext context)
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        var modelType = context.Metadata.UnderlyingOrModelType;
+        if (modelType == typeof(DateTime))
         {
-            if (context.Metadata.ModelType != typeof(DateTime) &&
-                context.Metadata.ModelType != typeof(DateTime?))
-            {
-                return null;
-            }
-
             if (context.Metadata.ContainerType == null)
             {
                 if (context.Metadata is DefaultModelMetadata defaultModelMetadata &&
                     defaultModelMetadata.Attributes.Attributes.All(x => x.GetType() != typeof(DisableDateTimeNormalizationAttribute)))
                 {
-                    return new AbpDateTimeModelBinder(context);
+                    return CreateAbpDateTimeModelBinder(context);
                 }
             }
             else
@@ -38,11 +38,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                     dateNormalizationDisabledForProperty != null &&
                     !dateNormalizationDisabledForProperty.Value)
                 {
-                    return new AbpDateTimeModelBinder(context);
+                    return CreateAbpDateTimeModelBinder(context);
                 }
             }
-
-            return null;
         }
+
+        return null;
+    }
+
+    protected virtual AbpDateTimeModelBinder CreateAbpDateTimeModelBinder(ModelBinderProviderContext context)
+    {
+        const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
+        var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
+        return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
     }
 }

@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "ManageYourProfile":  "Manage your profile",
+    "MyAccount":  "My account",
     "SamplePageMessage": "A sample page for the MyProjectName module"
   }
 }

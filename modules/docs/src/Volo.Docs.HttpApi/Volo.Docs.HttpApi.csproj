@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Docs.HttpApi</AssemblyName>
     <PackageId>Volo.Docs.HttpApi</PackageId>
     <RootNamespace />

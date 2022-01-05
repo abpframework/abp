@@ -1,4 +1,4 @@
-﻿$(function (){
+$(function (){
     var l = abp.localization.getResource("CmsKit");
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
@@ -74,6 +74,7 @@
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
                         }

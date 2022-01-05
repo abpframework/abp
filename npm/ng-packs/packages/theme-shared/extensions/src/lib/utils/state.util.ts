@@ -74,7 +74,7 @@ export function mapEntitiesToContributors<T = any>(
   resource: string,
 ) {
   return pipe(
-    switchMap(entities =>
+    switchMap((entities: any) =>
       zip(selectLocalization(configState), selectEnums(configState)).pipe(
         map(([localization, enums]) => {
           const generateDisplayName = createDisplayNameLocalizationPipeKeyGenerator(localization);
@@ -166,8 +166,9 @@ function createPropertiesToContributorsMapper<T = any>(
       if (isOnCreateForm || isOnEditForm) {
         const defaultValue = property.defaultValue;
         const validators = () => getValidatorsFromProperty(property);
-        let options: PropCallback<any, Observable<ABP.Option<any>[]>>;
-        if (type === ePropType.Enum) options = createEnumOptions(propName, enums[property.type]);
+        let options: PropCallback<any, Observable<ABP.Option<any>[]>> | undefined;
+        if (type === ePropType.Enum)
+          options = createEnumOptions(propName, enums[property.type || '']);
         else if (type === ePropType.Typeahead) options = createTypeaheadOptions(lookup);
 
         const formProp = new FormProp({
@@ -192,7 +193,7 @@ function createPropertiesToContributorsMapper<T = any>(
 }
 
 function getTypeFromProperty(property: ObjectExtensions.ExtensionPropertyDto): ePropType {
-  return (property.typeSimple.replace(/\?$/, '') as string) as ePropType;
+  return property?.typeSimple?.replace(/\?$/, '') as string as ePropType;
 }
 
 function isUndefined(obj: any): obj is undefined {

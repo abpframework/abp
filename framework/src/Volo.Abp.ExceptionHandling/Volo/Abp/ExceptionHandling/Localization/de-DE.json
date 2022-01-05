@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "Ressource nicht gefunden!",
     "DefaultErrorMessage404Detail": "Die angeforderte Ressource konnte nicht auf dem Server gefunden werden!",
     "EntityNotFoundErrorMessage": "Es gibt keine Entität {0} mit id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Die von Ihnen übermittelten Daten wurden bereits von einem anderen Benutzer/Kunden geändert. Bitte verwerfen Sie die vorgenommenen Änderungen und versuchen Sie es von vorne.",
     "Error": "Fehler",
     "UnhandledException": "Unbehandelte Ausnahme!",
     "401Message": "Nicht autorisiert",
     "403Message": "Unzulässig",
     "404Message": "Seite nicht gefunden",
-    "500Message": "Interner Serverfehler"
+    "500Message": "Interner Serverfehler",
+    "403MessageDetail": "Sie sind nicht berechtigt, diesen Vorgang durchzuführen!",
+    "404MessageDetail": "Entschuldigung, unter dieser Adresse ist nichts."
   }
 }

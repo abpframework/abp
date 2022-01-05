@@ -321,13 +321,20 @@ Some exception types are automatically thrown by the framework:
 
 You can also throw these type of exceptions in your code (although it's rarely needed).
 
-## Send exception details to the client
+## AbpExceptionHandlingOptions
 
-You can send exceptions to the client via the `SendExceptionsDetailsToClients` property of the `AbpExceptionHandlingOptions` class:
+`AbpExceptionHandlingOptions` is the main [options object](Options.md) to configure the exception handling system. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
 
 ````csharp
-services.Configure<AbpExceptionHandlingOptions>(options =>
+Configure<AbpExceptionHandlingOptions>(options =>
 {
     options.SendExceptionsDetailsToClients = true;
+    options.SendStackTraceToClients = false;
 });
 ````
+
+Here, a list of the options you can configure:
+
+* `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
+* `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
+

@@ -1,55 +1,56 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 using System.Linq;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Authorization.Permissions;
+
+public class ClientPermissionValueProvider : PermissionValueProvider
 {
-    public class ClientPermissionValueProvider : PermissionValueProvider
+    public const string ProviderName = "C";
+
+    public override string Name => ProviderName;
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public ClientPermissionValueProvider(IPermissionStore permissionStore, ICurrentTenant currentTenant)
+        : base(permissionStore)
     {
-        public const string ProviderName = "C";
+        CurrentTenant = currentTenant;
+    }
 
-        public override string Name => ProviderName;
+    public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+    {
+        var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
 
-        protected ICurrentTenant CurrentTenant { get; }
-
-        public ClientPermissionValueProvider(IPermissionStore permissionStore, ICurrentTenant currentTenant)
-            : base(permissionStore)
+        if (clientId == null)
         {
-            CurrentTenant = currentTenant;
+            return PermissionGrantResult.Undefined;
         }
 
-        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+        using (CurrentTenant.Change(null))
         {
-            var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
+            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
+                ? PermissionGrantResult.Granted
+                : PermissionGrantResult.Undefined;
+        }
+    }
 
-            if (clientId == null)
-            {
-                return PermissionGrantResult.Undefined;
-            }
+    public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
+    {
+        var permissionNames = context.Permissions.Select(x => x.Name).Distinct().ToArray();
+        Check.NotNullOrEmpty(permissionNames, nameof(permissionNames));
 
-            using (CurrentTenant.Change(null))
-            {
-                return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
-                    ? PermissionGrantResult.Granted
-                    : PermissionGrantResult.Undefined;
-            }
+        var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
+        if (clientId == null)
+        {
+            return new MultiplePermissionGrantResult(permissionNames); ;
         }
 
-        public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
+        using (CurrentTenant.Change(null))
         {
-            var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
-
-            var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
-            if (clientId == null)
-            {
-                return new MultiplePermissionGrantResult(permissionNames);;
-            }
-
-            using (CurrentTenant.Change(null))
-            {
-                return await PermissionStore.IsGrantedAsync(permissionNames, Name, clientId);
-            }
+            return await PermissionStore.IsGrantedAsync(permissionNames, Name, clientId);
         }
     }
 }

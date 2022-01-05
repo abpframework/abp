@@ -84,6 +84,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
     {
         context.Add(
             new TemplateDefinition("Hello") //template name: "Hello"
+                .WithRazorEngine()
                 .WithVirtualFilePath(
                     "/Demos/Hello/Hello.cshtml", //template content path
                     isInlineLocalized: true
@@ -97,6 +98,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
 * `TemplateDefinition` is the class represents a template. Each template must have a unique name (that will be used while you are rendering the template).
 * `/Demos/Hello/Hello.cshtml` is the path of the template file.
 * `isInlineLocalized` is used to declare if you are using a single template for all languages (`true`) or different templates for each language (`false`). See the Localization section below for more.
+* `WithRenderEngine` method is used to set the render engine of the template.
 
 ### The Template Base
 
@@ -223,7 +225,9 @@ context.Add(
     new TemplateDefinition(
             "PasswordReset", //Template name
             typeof(DemoResource) //LOCALIZATION RESOURCE
-        ).WithVirtualFilePath(
+        )
+        .WithRazorEngine()
+        .WithVirtualFilePath(
             "/Demos/PasswordReset/PasswordReset.cshtml", //template content path
             isInlineLocalized: true
         )
@@ -271,6 +275,7 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en"
         )
+        .WithRazorEngine()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates", //template content folder
             isInlineLocalized: false
@@ -333,7 +338,9 @@ context.Add(
     new TemplateDefinition(
         "EmailLayout",
         isLayout: true //SET isLayout!
-    ).WithVirtualFilePath(
+    )
+    .WithRazorEngine()
+    .WithVirtualFilePath(
         "/Demos/EmailLayout/EmailLayout.cshtml",
         isInlineLocalized: true
     )
@@ -348,7 +355,9 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en",
             layout: "EmailLayout" //Set the LAYOUT
-        ).WithVirtualFilePath(
+        )
+        .WithRazorEngine()
+        .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates",
             isInlineLocalized: false
         )

@@ -7,10 +7,10 @@ import { Confirmation } from '../models/confirmation';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
-  status$: Subject<Confirmation.Status>;
+  status$!: Subject<Confirmation.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
 
-  private containerComponentRef: ComponentRef<ConfirmationComponent>;
+  private containerComponentRef!: ComponentRef<ConfirmationComponent>;
 
   clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
     this.confirmation$.next();
@@ -87,7 +87,7 @@ export class ConfirmationService {
   }
 
   private listenToEscape() {
-    fromEvent(document, 'keyup')
+    fromEvent<KeyboardEvent>(document, 'keyup')
       .pipe(
         takeUntil(this.status$),
         debounceTime(150),

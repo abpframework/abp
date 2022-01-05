@@ -20,6 +20,20 @@ namespace Volo.Docs.Documents
         {
         }
 
+        public async Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(d => d.ProjectId == projectId)
+                .Select(x => new DocumentWithoutDetails
+                {
+                    Id = x.Id,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    Format = x.Format
+                })
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken);
@@ -43,7 +57,17 @@ namespace Volo.Docs.Documents
                 x.Version == version, cancellationToken: cancellationToken);
         }
 
-        public async Task<List<Document>> GetAllAsync(
+        public async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .WhereIf(version != null, x => x.Version == version)
+                .WhereIf(name != null, x => x.Name == name)
+                .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
+                .As<IMongoQueryable<Document>>()
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<DocumentWithoutContent>> GetAllAsync(
             Guid? projectId,
             string name,
             string version,
@@ -81,8 +105,8 @@ namespace Volo.Docs.Documents
                         lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
                         lastCachedTimeMin: lastCachedTimeMin,
                         lastCachedTimeMax: lastCachedTimeMax)
-                    .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
-                    .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
+                    .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<DocumentWithoutContent>>()
+                    .PageBy<DocumentWithoutContent, IMongoQueryable<DocumentWithoutContent>>(skipCount, maxResultCount)
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -135,7 +159,7 @@ namespace Volo.Docs.Documents
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(cancellationToken);
         }
 
-        protected virtual IMongoQueryable<Document> ApplyFilterForGetAll(
+        protected virtual IMongoQueryable<DocumentWithoutContent> ApplyFilterForGetAll(
             IMongoQueryable<Document> query,
             Guid? projectId,
             string name,
@@ -218,7 +242,20 @@ namespace Volo.Docs.Documents
                 query = query.Where(d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date);
             }
 
-            return query;
+            return query.Select(x => new DocumentWithoutContent
+            {
+                Id = x.Id,
+                ProjectId = x.ProjectId,
+                Name = x.Name,
+                Version = x.Version,
+                LanguageCode = x.LanguageCode,
+                FileName = x.FileName,
+                Format = x.Format,
+                CreationTime = x.CreationTime,
+                LastUpdatedTime = x.LastUpdatedTime,
+                LastSignificantUpdateTime = x.LastSignificantUpdateTime,
+                LastCachedTime = x.LastCachedTime
+            });
         }
     }
 }

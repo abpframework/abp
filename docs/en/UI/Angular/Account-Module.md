@@ -1,10 +1,10 @@
 # Angular UI Account Module
 
-Angular UI account module is available as of v4.3. It contains some pages (login, register, manage your profile, etc.).
+Angular UI account module is available as of v4.3. It contains some pages (login, register, My account, etc.).
 
 If you add the account module to your project;
 
-- "Manage your profile" link in the current user dropdown on the top bar will redirect the user to a page in the account module.
+- "My account" link in the current user dropdown on the top bar will redirect the user to a page in the account module.
 - You can switch the authentication flow to the resource owner password flow.
 
 
@@ -13,10 +13,10 @@ If you add the account module to your project;
 Install the `@abp/ng.account` NPM package by running the below command:
 
 ```bash
-npm install @abp/ng.account@next
+npm install @abp/ng.account
 ```
 
-> Make sure v4.3-rc or higher version is installed.
+> Make sure v4.3 or higher version is installed.
 
 Open the `app.module.ts` and add `AccountConfigModule.forRoot()` to the imports array as shown below:
 
@@ -52,12 +52,12 @@ export class AppRoutingModule {}
 
 ### Account Public Module Implementation for Commercial Templates
 
-The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3-rc or higher version. The package can be updated by running the following command:
+The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3 or higher version. The package can be updated by running the following command:
 
 ```bash
-npm install @volo/abp.ng.account@next
+npm install @volo/abp.ng.account
 ```
-> Make sure v4.3-rc or higher version is installed.
+> Make sure v4.3 or higher version is installed.
 
 Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
 
@@ -91,13 +91,13 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-### Manage Profile Page
+### My Account Page
 
-Before v4.3, the "Manage Your Profile" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
+Before v4.3, the "My account" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
 
-### My Security Logs Page [COMMERCIAL]
+### Security Logs Page [COMMERCIAL]
 
-Before v4.3, the "My Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's my security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.
+Before v4.3, the "Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.
 
 ### Resource Owner Password Flow
 
@@ -119,7 +119,5 @@ export const environment = {
   // other options removed for sake of brevity
 } as Config.Environment;
 ```
-
-> Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.
 
 See the [Authorization in Angular UI](./Authorization.md) document for more details.

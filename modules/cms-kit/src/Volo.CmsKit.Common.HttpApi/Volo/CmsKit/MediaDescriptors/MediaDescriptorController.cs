@@ -6,26 +6,25 @@ using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
-namespace Volo.CmsKit.MediaDescriptors
+namespace Volo.CmsKit.MediaDescriptors;
+
+[RequiresGlobalFeature(typeof(MediaFeature))]
+[RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+[Area(CmsKitCommonRemoteServiceConsts.ModuleName)]
+[Route("api/cms-kit/media")]
+public class MediaDescriptorController : CmsKitControllerBase, IMediaDescriptorAppService
 {
-    [RequiresGlobalFeature(typeof(MediaFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
-    [Route("api/cms-kit/media")]
-    public class MediaDescriptorController : CmsKitControllerBase, IMediaDescriptorAppService
+    protected readonly IMediaDescriptorAppService MediaDescriptorAppService;
+
+    public MediaDescriptorController(IMediaDescriptorAppService mediaDescriptorAppService)
     {
-        protected readonly IMediaDescriptorAppService MediaDescriptorAppService;
+        MediaDescriptorAppService = mediaDescriptorAppService;
+    }
 
-        public MediaDescriptorController(IMediaDescriptorAppService mediaDescriptorAppService)
-        {
-            MediaDescriptorAppService = mediaDescriptorAppService;
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        public virtual Task<RemoteStreamContent> DownloadAsync(Guid id)
-        {
-            return MediaDescriptorAppService.DownloadAsync(id);
-        }
+    [HttpGet]
+    [Route("{id}")]
+    public virtual Task<RemoteStreamContent> DownloadAsync(Guid id)
+    {
+        return MediaDescriptorAppService.DownloadAsync(id);
     }
 }

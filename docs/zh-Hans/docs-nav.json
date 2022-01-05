@@ -1,11 +1,29 @@
 {
   "items": [
     {
-      "text": "入门",
+      "text": "快速入门",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
+      "text": "入门教程",
       "items": [
         {
           "text": "Web应用程序",
-          "path": "Getting-Started.md"
+          "path": "Getting-Started.md",
+          "items": [
+            {
+              "text": "1: 设置你的开发环境",
+              "path": "Getting-Started-Setup-Environment.md"
+            },
+            {
+              "text": "2: 创建新的解决方案",
+              "path": "Getting-Started-Create-Solution.md"
+            },
+            {
+              "text": "3: 运行解决方案",
+              "path": "Getting-Started-Running-Solution.md"
+            }
+          ]
         },
         {
           "text": "控制台应用程序",
@@ -172,6 +190,10 @@
                 {
                   "text": "Quartz 集成",
                   "path": "Background-Workers-Quartz.md"
+                },
+                {
+                  "text": "Hangfire 集成",
+                  "path": "Background-Workers-Hangfire.md"
                 }
               ]
             }
@@ -517,10 +539,6 @@
             {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
               "text": "懒加载Scripts与Styles",

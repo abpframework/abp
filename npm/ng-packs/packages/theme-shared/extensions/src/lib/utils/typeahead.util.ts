@@ -12,25 +12,25 @@ export function createTypeaheadOptions(
   lookup: ExtensionPropertyUiLookupDto,
 ): PropCallback<any, Observable<ABP.Option<any>[]>> {
   return (data, searchText) =>
-    searchText
+    searchText && data
       ? data
           .getInjected(RestService)
           .request(
             {
               method: 'GET',
-              url: lookup.url,
+              url: lookup.url || '',
               params: {
-                [lookup.filterParamName]: searchText,
+                [lookup.filterParamName || '']: searchText,
               },
             },
             { apiName: 'Default' },
           )
           .pipe(
-            map(response => {
-              const list = response[lookup.resultListPropertyName];
+            map((response: any) => {
+              const list = response[lookup.resultListPropertyName || ''];
               const mapToOption = (item: any) => ({
-                key: item[lookup.displayPropertyName],
-                value: item[lookup.valuePropertyName],
+                key: item[lookup.displayPropertyName || ''],
+                value: item[lookup.valuePropertyName || ''],
               });
               return list.map(mapToOption);
             }),
@@ -51,7 +51,7 @@ export function createTypeaheadDisplayNameGenerator(
   properties: ObjectExtensions.EntityExtensionProperties,
 ): ObjectExtensions.DisplayNameGeneratorFn {
   return (displayName, fallback) => {
-    const name = removeTypeaheadTextSuffix(fallback.name);
+    const name = removeTypeaheadTextSuffix(fallback.name || '');
     return displayNameGeneratorFn(displayName || properties[name].displayName, {
       name,
       resource: fallback.resource,

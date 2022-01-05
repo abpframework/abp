@@ -1,10 +1,9 @@
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus;
+
+public class MyDerivedEventData : MySimpleEventData
 {
-    public class MyDerivedEventData : MySimpleEventData
+    public MyDerivedEventData(int value)
+        : base(value)
     {
-        public MyDerivedEventData(int value)
-            : base(value)
-        {
-        }
     }
 }

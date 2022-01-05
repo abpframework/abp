@@ -21,17 +21,19 @@
 @section styles{
     <abp-style-bundle>
         <abp-style src="/Pages/CmsKit/Comments/details.css" />
-    </abp-style-bundle>    
+    </abp-style-bundle>
 }
 
 @section scripts {
     <abp-script-bundle>
-        <abp-script src="/Pages/CmsKit/Comments/details.js" />
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/Comments/details.js"/>
     </abp-script-bundle>
 }
 
 <div id="CmsKitCommentsWrapper">
-    
+
     <abp-card>
         <abp-card-body>
             <abp-row>
@@ -69,7 +71,7 @@
             </abp-row>
         </abp-card-body>
     </abp-card>
-    
+
     <abp-card>
         <abp-card-body>
             <abp-row>
@@ -90,9 +92,11 @@
                                 <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
-                                <abp-button class="mt-md-4" size="Block" button-type="Primary" type="submit">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </abp-button>
+                                <div class="d-grid gap-2">
+                                    <abp-button class="mt-md-4" button-type="Primary" type="submit">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </abp-button>
+                                </div>
                             </abp-column>
                         </abp-row>
                     </form>

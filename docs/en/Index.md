@@ -1,6 +1,6 @@
-﻿# ABP Documentation
+# ABP Documentation
 
-ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.
+ABP Framework offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, modules, themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
 ## Getting Started
 
@@ -29,8 +29,9 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](Domain-Driven-Design.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](Module-Development-Basics.md) document to understand the module system.
-* [Implementing Domain Driven Design](Domain-Driven-Design-Implementation-Guide.md) document is an ultimate guide for who want to understand and implement the DDD.
+* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
 * [Microservice Architecture](Microservice-Architecture.md) document explains how ABP helps to create a microservice solution.
+* [Multi-Tenancy](Multi-Tenancy.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
 ### Infrastructure
 
@@ -54,6 +55,24 @@ See the [Application Modules](Modules/Index.md) document for all pre-built modul
 ### Startup Templates
 
 The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+
+## Books
+
+### Mastering ABP Framework
+
+![abp-book](images/abp-book.png)
+
+*Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
+
+**[You can order it from Amazon now](https://www.amazon.com/Mastering-ABP-Framework-maintainable-implementing-dp-1801079242/dp/1801079242)!**
+
+### Free E-Book: Implementing Domain Driven Design
+
+![Implementing Domain Driven Design](images/implementing-domain-driven-design-book.png)
+
+A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP Framework** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
+
+**[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).**
 
 ## ABP Community
 

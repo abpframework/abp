@@ -1,7 +1,6 @@
-﻿namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
+﻿namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts;
+
+public class IndexModel : CmsKitAdminPageModel
 {
-    public class IndexModel : CmsKitAdminPageModel
-    {
-        
-    }
+
 }

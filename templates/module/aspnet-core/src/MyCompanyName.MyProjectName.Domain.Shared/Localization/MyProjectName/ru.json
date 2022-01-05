@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "MyAccount": "Мой аккаунт",
+    "SamplePageMessage": "Пример страницы для модуля MyProjectName"
+  }
+}

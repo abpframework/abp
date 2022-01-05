@@ -29,6 +29,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`help`**: 展示ABP CLI的用法帮助信息.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
 * **`add-package`**: 添加ABP包到项目.
 * **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
 * **`generate-proxy`**: 生成客户端代理以使用HTTP API端点.
@@ -39,6 +40,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`logout`**: 在你的计算机注销认证.
+* **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
 
@@ -128,6 +130,16 @@ abp update [options]
 * `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
 * `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
 
+### clean
+
+删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
+
+用法:
+
+````bash
+abp clean
+````
+
 ### add-package
 
 通过以下方式将ABP包添加到项目中
@@ -187,43 +199,75 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-为您的HTTP API生成Angular服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
+为你的HTTP API生成Angular, C# 或 JavaScript服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
 
 用法:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp generate-proxy -t ng
+abp generate-proxy -t js -url https://localhost:44302/
+abp generate-proxy -t csharp -url https://localhost:44302/
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
 ### remove-proxy
 
-从Angular应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
+从Angular, CSharp 或 JavaScript应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
 
-This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+这在你之前为多个模块生成代理并且需要删除其中一个模块时特别有用.
 
-Usage:
+用法:
 
 ````bash
-abp remove-proxy
+abp remove-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp remove-proxy -t ng
+abp remove-proxy -t js -m identity -o Pages/Identity/client-proxies.js
+abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
@@ -339,3 +383,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 ```
 abp logout
 ```
+
+### install-libs
+
+为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包, 它的 **执行目录** 或者传递的 ```--working-directory``` 目录必须包含一个项目文件(*.csproj).
+
+`install-libs` 命令读取 `abp.resourcemapping.js` 来管理包. 参阅[客户端包管理](UI/AspNetCore/Client-Side-Package-Management.md)了解更多细节.
+
+用法:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定工作目录, 当执行目录不包含项目文件时会很有用.

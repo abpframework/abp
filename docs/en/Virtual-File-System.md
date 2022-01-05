@@ -38,7 +38,7 @@ This configuration recursively adds all files under the **MyResources** folder o
 Embedding a file in the project/assembly may cause problems if a file name contains some special chars. To overcome this limitation;
 
 1. Add [Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet package to the project that contains the embedded resource(s).
-2. Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyConfig>...</PropertyConfig>` section of your `.csproj` file.
+2. Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyGroup>...</PropertyGroup>` section of your `.csproj` file.
 
 > While these two steps are optional and ABP can work without these configuration, it is strongly suggested to make it.
 
@@ -117,21 +117,9 @@ The Virtual File System is well integrated to ASP.NET Core:
 * Js, css, image files and all other web content types can be embedded into assemblies and used just like the physical files.
 * An application (or another module) can **override a virtual file** of a module just like placing a file with the same name and extension into the same folder of the virtual file.
 
-### UseVirtualFiles Middleware
+### Static Virtual File Folders
 
-The Virtual Files Middleware is used to serve embedded (js, css, image...) files to clients/browsers just like physical files in the **wwwroot** folder. It also covers the physical files.
-
-Replace the `app.UseStaticFiles()` with the `app.UseVirtualFiles()` in your ASP.NET Core middleware configuration:
-
-````C#
-app.UseVirtualFiles();
-````
-
-> `UseVirtualFiles()` is already configured for the [application startup template](Startup-Templates/Application.md).
-
-#### Static Virtual File Folders
-
-By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the `UseVirtualFiles` middleware, the following folders also can contain static files:
+By default, ASP.NET Core only allows the `wwwroot` folder to contain the static files consumed by the clients. When you use the virtual File System, the following folders also can contain static files:
 
 * Pages
 * Views

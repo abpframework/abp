@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 
 export interface ActionApiDescriptionModel {
   uniqueName?: string;
@@ -48,6 +49,7 @@ export interface ModuleApiDescriptionModel {
 export interface ParameterApiDescriptionModel {
   nameOnMethod?: string;
   name?: string;
+  jsonName?: string;
   type?: string;
   typeSimple?: string;
   isOptional: boolean;
@@ -59,6 +61,7 @@ export interface ParameterApiDescriptionModel {
 
 export interface PropertyApiDescriptionModel {
   name?: string;
+  jsonName?: string;
   type?: string;
   typeSimple?: string;
   isRequired: boolean;
