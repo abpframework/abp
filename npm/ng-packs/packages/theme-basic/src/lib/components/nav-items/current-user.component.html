@@ -31,11 +31,19 @@
     aria-labelledby="dropdownMenuLink"
     [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
   >
-    <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
-      ><i class="fa fa-cog me-1"></i>{{ 'AbpAccount::MyAccount' | abpLocalization }}</a
-    >
-    <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
-      ><i class="fa fa-power-off me-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
-    >
+    <ng-container *ngFor="let item of userMenu.items$ | async; trackBy: trackByFn">
+      <ng-container *ngIf="item.visible && item.visible()">
+        <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">
+          <ng-container
+            *ngIf="item.component; else htmlTemplate"
+            [ngComponentOutlet]="item.component"
+          ></ng-container>
+
+          <ng-template #htmlTemplate>
+            <div [innerHTML]="item.html" (click)="item.action ? item.action() : null"></div>
+          </ng-template>
+        </li>
+      </ng-container>
+    </ng-container>
   </div>
 </div>
