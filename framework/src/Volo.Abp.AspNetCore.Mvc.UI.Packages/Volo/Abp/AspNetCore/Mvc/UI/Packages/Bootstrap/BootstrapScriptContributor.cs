@@ -12,6 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
         {
             context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.bundle.js");
             context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.enable.tooltips.everywhere.js");
+
+            if (context.FileProvider.GetFileInfo("/libs/bootstrap/js/bootstrap.enable.popovers.everywhere.js").Exists)
+            {
+                context.Files.AddIfNotContains("/libs/bootstrap/js/bootstrap.enable.popovers.everywhere.js");
+            }
         }
     }
 }
