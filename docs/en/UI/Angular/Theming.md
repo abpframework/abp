@@ -204,24 +204,48 @@ constructor(private sessionState: SessionStateService) {
 }
 ````
 
+
+
 ##### User Menu
 
-User menu is a component that can be replaceable. See an example to learn how can you replace it:
+`UserMenuService` is used to get the user menu's items and render on the dropdown. You can add/update/remove an item by using the service. 
+
+**Example: Adding/updating/removing an user menu item**
 
 ````ts
-import { eThemeBasicComponents } from '@abp/ng.theme.basic';
-import { NavItemsService } from '@abp/ng.theme.shared';
+import { eUserMenuItems } from '@abp/ng.theme.basic';
+import { UserMenuService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({/* component metadata */})
 export class AppComponent {
-  constructor(private navItems: NavItemsService) {
-    this.navItems.patchItem(eThemeBasicComponents.CurrentUser, { component: MyUserMenuComponent });
+  constructor(private userMenu: UserMenuService, private router: Router) {
+    this.userMenu.addItems([
+      {
+        id: 'UserMenu.Reports',
+        order: 1,
+        html: `<a class="dropdown-item pointer">Reports</a>`,
+        action: () => {
+          this.router.navigateByUrl('/account/reports');
+        },
+      },
+    ]);
+
+    this.userMenu.patchItem(eUserMenuItems.MyAccount, {
+      html: `<a class="dropdown-item pointer">My profile</a>`,
+    });
+
+    this.userMenu.removeItem(eUserMenuItems.Logout);
   }
 }
 ````
 
-[`ConfigStateService`](Config-State-Service.md) service can be used to obtain the `application-configuration` API response (e.g. getting current user or tenant).
+In the example above, added a new user menu item labeled "Reports", updated the "My account" item HTML content, and removed the "Logout" item.
+
+See the result:
+
+![image](https://user-images.githubusercontent.com/34455572/148387770-5b5e25fb-f855-447c-8ead-c04c69b6d6f7.png)
 
 #### Page Alerts
 
