@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.PermissionManagement
-{
-    public class ProviderInfoDto
-    {
-        public string ProviderName { get; set; }
+﻿namespace Volo.Abp.PermissionManagement;
 
-        public string ProviderKey { get; set; }
-    }
+public class ProviderInfoDto
+{
+    public string ProviderName { get; set; }
+
+    public string ProviderKey { get; set; }
 }

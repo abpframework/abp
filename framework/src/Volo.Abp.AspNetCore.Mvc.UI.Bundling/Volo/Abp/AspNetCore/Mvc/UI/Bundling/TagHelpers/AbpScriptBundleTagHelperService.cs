@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
+
+public class AbpScriptBundleTagHelperService : AbpBundleTagHelperService<AbpScriptBundleTagHelper, AbpScriptBundleTagHelperService>
 {
-    public class AbpScriptBundleTagHelperService : AbpBundleTagHelperService<AbpScriptBundleTagHelper, AbpScriptBundleTagHelperService>
+    public AbpScriptBundleTagHelperService(AbpTagHelperScriptService resourceHelper)
+        : base(resourceHelper)
     {
-        public AbpScriptBundleTagHelperService(AbpTagHelperScriptService resourceHelper)
-            : base(resourceHelper)
-        {
-        }
     }
 }

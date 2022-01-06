@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.FileSystem
+﻿namespace Volo.Abp.BlobStoring.FileSystem;
+
+public static class FileSystemBlobProviderConfigurationNames
 {
-    public static class FileSystemBlobProviderConfigurationNames
-    {
-        public const string BasePath = "FileSystem.BasePath";
-        public const string AppendContainerNameToBasePath = "FileSystem.AppendContainerNameToBasePath";
-    }
+    public const string BasePath = "FileSystem.BasePath";
+    public const string AppendContainerNameToBasePath = "FileSystem.AppendContainerNameToBasePath";
 }

@@ -2,18 +2,24 @@
 using System.Threading.Tasks;
 using Volo.Abp.Studio.Package;
 
-namespace Volo.Abp.Studio.Packages.Modifying
+namespace Volo.Abp.Studio.Packages.Modifying;
+
+public interface ICsprojFileManager
 {
-    public interface ICsprojFileManager
-    {
-        Task AddProjectReferenceAsync(string filePath, string projectToReference);
+    Task AddProjectReferenceAsync(string filePath, string projectToReference);
 
-        Task AddPackageReferenceAsync(string filePath, string packageName, string version);
+    Task AddPackageReferenceAsync(string filePath, string packageName, string version);
 
-        Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference);
+    Task AddImportAsync(string filePath, string importFilePath);
 
-        Task<string> GetTargetFrameworkAsync(string filePath);
+    Task AddAssemblyVersionAsync(string filePath, string version);
 
-        Task<List<PackageDependency>> GetDependencyListAsync(string filePath);
-    }
+    Task AddCopyLocalLockFileAssembliesAsync(string filePath);
+
+    Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference);
+
+
+    Task<string> GetTargetFrameworkAsync(string filePath);
+
+    Task<List<PackageDependency>> GetDependencyListAsync(string filePath);
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
 
-namespace Volo.Abp.Content
+namespace Volo.Abp.Content;
+
+public interface IRemoteStreamContent : IDisposable
 {
-    public interface IRemoteStreamContent : IDisposable
-    {
-        string FileName { get; }
+    string FileName { get; }
 
-        string ContentType { get; }
+    string ContentType { get; }
 
-        long? ContentLength { get; }
+    long? ContentLength { get; }
 
-        Stream GetStream();
-    }
+    Stream GetStream();
 }

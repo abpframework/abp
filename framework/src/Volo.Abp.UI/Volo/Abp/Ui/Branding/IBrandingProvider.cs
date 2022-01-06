@@ -1,17 +1,16 @@
-﻿namespace Volo.Abp.Ui.Branding
+﻿namespace Volo.Abp.Ui.Branding;
+
+public interface IBrandingProvider
 {
-    public interface IBrandingProvider
-    {
-        string AppName { get; }
+    string AppName { get; }
 
-        /// <summary>
-        /// Logo on white background
-        /// </summary>
-        string LogoUrl { get; }
+    /// <summary>
+    /// Logo on white background
+    /// </summary>
+    string LogoUrl { get; }
 
-        /// <summary>
-        /// Logo on dark background
-        /// </summary>
-        string LogoReverseUrl { get; }
-    }
+    /// <summary>
+    /// Logo on dark background
+    /// </summary>
+    string LogoReverseUrl { get; }
 }

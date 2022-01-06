@@ -5,186 +5,185 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.TextTemplating.Razor
+namespace Volo.Abp.TextTemplating.Razor;
+
+public abstract class RazorTemplatePageBase<TModel> : RazorTemplatePageBase, IRazorTemplatePage<TModel>
 {
-    public abstract class RazorTemplatePageBase<TModel> : RazorTemplatePageBase, IRazorTemplatePage<TModel>
+    public TModel Model { get; set; }
+}
+
+public abstract class RazorTemplatePageBase : IRazorTemplatePage
+{
+    public Dictionary<string, object> GlobalContext { get; set; }
+
+    public IServiceProvider ServiceProvider { get; set; }
+
+    public IStringLocalizer Localizer { get; set; }
+
+    public HtmlEncoder HtmlEncoder { get; set; }
+
+    public JavaScriptEncoder JavaScriptEncoder { get; set; }
+
+    public UrlEncoder UrlEncoder { get; set; }
+
+    public string Body { get; set; }
+
+    private readonly StringBuilder _stringBuilder = new StringBuilder();
+
+    private AttributeInfo _attributeInfo;
+
+    public virtual void WriteLiteral(string literal = null)
     {
-        public TModel Model { get; set; }
+        if (!literal.IsNullOrEmpty())
+        {
+            _stringBuilder.Append(literal);
+        }
     }
 
-    public abstract class RazorTemplatePageBase : IRazorTemplatePage
+    public virtual void Write(object value = null)
     {
-        public Dictionary<string, object> GlobalContext { get; set; }
-
-        public IServiceProvider ServiceProvider { get; set; }
-
-        public IStringLocalizer Localizer { get; set; }
-
-        public HtmlEncoder HtmlEncoder { get; set; }
-
-        public JavaScriptEncoder JavaScriptEncoder { get; set; }
-
-        public UrlEncoder UrlEncoder { get; set; }
-
-        public string Body { get; set; }
-
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
-
-        private AttributeInfo _attributeInfo;
-
-        public virtual void WriteLiteral(string literal = null)
+        if (value is null)
         {
-            if (!literal.IsNullOrEmpty())
-            {
-                _stringBuilder.Append(literal);
-            }
+            return;
         }
 
-        public virtual void Write(object value = null)
+        _stringBuilder.Append(value.ToString());
+    }
+
+    public virtual void BeginWriteAttribute(string name, string prefix, int prefixOffset, string suffix, int suffixOffset, int attributeValuesCount)
+    {
+        _attributeInfo = new AttributeInfo(name, prefix, prefixOffset, suffix, suffixOffset, attributeValuesCount);
+
+        if (attributeValuesCount != 1)
         {
-            if (value is null)
+            WriteLiteral(prefix);
+        }
+    }
+
+    public virtual void WriteAttributeValue(string prefix, int prefixOffset, object value, int valueOffset, int valueLength, bool isLiteral)
+    {
+        if (_attributeInfo.AttributeValuesCount == 1)
+        {
+            if (IsBoolFalseOrNullValue(prefix, value))
             {
+                // Value is either null or the bool 'false' with no prefix; don't render the attribute.
+                _attributeInfo.Suppressed = true;
                 return;
             }
 
-            _stringBuilder.Append(value.ToString());
+            // We are not omitting the attribute. Write the prefix.
+            WriteLiteral(_attributeInfo.Prefix);
+
+            if (IsBoolTrueWithEmptyPrefixValue(prefix, value))
+            {
+                // The value is just the bool 'true', write the attribute name instead of the string 'True'.
+                value = _attributeInfo.Name;
+            }
         }
 
-        public virtual void BeginWriteAttribute(string name, string prefix, int prefixOffset, string suffix, int suffixOffset, int attributeValuesCount)
+        // This block handles two cases.
+        // 1. Single value with prefix.
+        // 2. Multiple values with or without prefix.
+        if (value != null)
         {
-            _attributeInfo = new AttributeInfo(name, prefix, prefixOffset, suffix, suffixOffset, attributeValuesCount);
-
-            if (attributeValuesCount != 1)
+            if (!string.IsNullOrEmpty(prefix))
             {
                 WriteLiteral(prefix);
             }
-        }
 
-        public virtual void WriteAttributeValue(string prefix, int prefixOffset, object value, int valueOffset, int valueLength, bool isLiteral)
+            WriteUnprefixedAttributeValue(value, isLiteral);
+        }
+    }
+
+    public virtual void EndWriteAttribute()
+    {
+        if (!_attributeInfo.Suppressed)
         {
-            if (_attributeInfo.AttributeValuesCount == 1)
-            {
-                if (IsBoolFalseOrNullValue(prefix, value))
-                {
-                    // Value is either null or the bool 'false' with no prefix; don't render the attribute.
-                    _attributeInfo.Suppressed = true;
-                    return;
-                }
-
-                // We are not omitting the attribute. Write the prefix.
-                WriteLiteral(_attributeInfo.Prefix);
-
-                if (IsBoolTrueWithEmptyPrefixValue(prefix, value))
-                {
-                    // The value is just the bool 'true', write the attribute name instead of the string 'True'.
-                    value = _attributeInfo.Name;
-                }
-            }
-
-            // This block handles two cases.
-            // 1. Single value with prefix.
-            // 2. Multiple values with or without prefix.
-            if (value != null)
-            {
-                if (!string.IsNullOrEmpty(prefix))
-                {
-                    WriteLiteral(prefix);
-                }
-
-                WriteUnprefixedAttributeValue(value, isLiteral);
-            }
+            WriteLiteral(_attributeInfo.Suffix);
         }
+    }
 
-        public virtual void EndWriteAttribute()
+    public virtual Task ExecuteAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task<string> GetOutputAsync()
+    {
+        return Task.FromResult(_stringBuilder.ToString());
+    }
+
+    private void WriteUnprefixedAttributeValue(object value, bool isLiteral)
+    {
+        var stringValue = value as string;
+
+        // The extra branching here is to ensure that we call the Write*To(string) overload where possible.
+        if (isLiteral && stringValue != null)
         {
-            if (!_attributeInfo.Suppressed)
-            {
-                WriteLiteral(_attributeInfo.Suffix);
-            }
+            WriteLiteral(stringValue);
         }
-
-        public virtual Task ExecuteAsync()
+        else if (isLiteral)
         {
-            return Task.CompletedTask;
+            //WriteLiteral(value);
+            _stringBuilder.Append(value);
         }
-
-        public virtual Task<string> GetOutputAsync()
+        else if (stringValue != null)
         {
-            return Task.FromResult(_stringBuilder.ToString());
+            Write(stringValue);
         }
-
-        private void WriteUnprefixedAttributeValue(object value, bool isLiteral)
+        else
         {
-            var stringValue = value as string;
-
-            // The extra branching here is to ensure that we call the Write*To(string) overload where possible.
-            if (isLiteral && stringValue != null)
-            {
-                WriteLiteral(stringValue);
-            }
-            else if (isLiteral)
-            {
-                //WriteLiteral(value);
-                _stringBuilder.Append(value);
-            }
-            else if (stringValue != null)
-            {
-                Write(stringValue);
-            }
-            else
-            {
-                Write(value);
-            }
+            Write(value);
         }
+    }
 
 
-        private static bool IsBoolFalseOrNullValue(string prefix, object value)
+    private static bool IsBoolFalseOrNullValue(string prefix, object value)
+    {
+        return string.IsNullOrEmpty(prefix) &&
+               (value is null ||
+                (value is bool boolValue && !boolValue));
+    }
+
+    private static bool IsBoolTrueWithEmptyPrefixValue(string prefix, object value)
+    {
+        // If the value is just the bool 'true', use the attribute name as the value.
+        return string.IsNullOrEmpty(prefix) &&
+               (value is bool boolValue && boolValue);
+    }
+
+    private struct AttributeInfo
+    {
+        public AttributeInfo(
+            string name,
+            string prefix,
+            int prefixOffset,
+            string suffix,
+            int suffixOffset,
+            int attributeValuesCount)
         {
-            return string.IsNullOrEmpty(prefix) &&
-                   (value is null ||
-                    (value is bool boolValue && !boolValue));
+            Name = name;
+            Prefix = prefix;
+            PrefixOffset = prefixOffset;
+            Suffix = suffix;
+            SuffixOffset = suffixOffset;
+            AttributeValuesCount = attributeValuesCount;
+
+            Suppressed = false;
         }
 
-        private static bool IsBoolTrueWithEmptyPrefixValue(string prefix, object value)
-        {
-            // If the value is just the bool 'true', use the attribute name as the value.
-            return string.IsNullOrEmpty(prefix) &&
-                   (value is bool boolValue && boolValue);
-        }
+        public int AttributeValuesCount { get; }
 
-        private struct AttributeInfo
-        {
-            public AttributeInfo(
-                string name,
-                string prefix,
-                int prefixOffset,
-                string suffix,
-                int suffixOffset,
-                int attributeValuesCount)
-            {
-                Name = name;
-                Prefix = prefix;
-                PrefixOffset = prefixOffset;
-                Suffix = suffix;
-                SuffixOffset = suffixOffset;
-                AttributeValuesCount = attributeValuesCount;
+        public string Name { get; }
 
-                Suppressed = false;
-            }
+        public string Prefix { get; }
 
-            public int AttributeValuesCount { get; }
+        public int PrefixOffset { get; }
 
-            public string Name { get; }
+        public string Suffix { get; }
 
-            public string Prefix { get; }
+        public int SuffixOffset { get; }
 
-            public int PrefixOffset { get; }
-
-            public string Suffix { get; }
-
-            public int SuffixOffset { get; }
-
-            public bool Suppressed { get; set; }
-        }
+        public bool Suppressed { get; set; }
     }
 }

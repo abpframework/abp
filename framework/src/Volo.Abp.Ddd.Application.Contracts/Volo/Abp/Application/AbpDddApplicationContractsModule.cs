@@ -4,27 +4,26 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Application
-{
-    [DependsOn(
-        typeof(AbpLocalizationModule),
-        typeof(AbpAuditingContractsModule)
-        )]
-    public class AbpDddApplicationContractsModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpDddApplicationContractsModule>();
-            });
+namespace Volo.Abp.Application;
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<AbpDddApplicationContractsResource>("en")
-                    .AddVirtualJson("/Volo/Abp/Application/Localization/Resources/AbpDdd");
-            });
-        }
+[DependsOn(
+    typeof(AbpLocalizationModule),
+    typeof(AbpAuditingContractsModule)
+    )]
+public class AbpDddApplicationContractsModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpDddApplicationContractsModule>();
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<AbpDddApplicationContractsResource>("en")
+                .AddVirtualJson("/Volo/Abp/Application/Localization/Resources/AbpDdd");
+        });
     }
 }
