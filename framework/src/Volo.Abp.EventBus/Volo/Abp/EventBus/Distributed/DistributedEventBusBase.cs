@@ -73,6 +73,16 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             {
                 return;
             }
+
+            if (UnitOfWorkManager.Current != null)
+            {
+                UnitOfWorkManager.Current.OnCompleted(async () =>
+                {
+                    await PublishToEventBusAsync(eventType, eventData);
+                });
+
+                return;
+            }
         }
 
         await PublishToEventBusAsync(eventType, eventData);
