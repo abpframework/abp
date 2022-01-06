@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -343,7 +345,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task RunInstallLibsAsync(string fileDirectory)
         {
             var args = new CommandLineArgs("install-libs");
-            args.Options.Add(BundleCommand.Options.WorkingDirectory.Short, fileDirectory);
+            args.Options.Add(InstallLibsCommand.Options.WorkingDirectory.Short, fileDirectory);
 
             await InstallLibsCommand.ExecuteAsync(args);
         }
