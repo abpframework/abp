@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+public interface IAuditingStore
 {
-    public interface IAuditingStore
-    {
-        Task SaveAsync(AuditLogInfo auditInfo);
-    }
+    Task SaveAsync(AuditLogInfo auditInfo);
 }

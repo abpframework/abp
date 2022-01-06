@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,246 +15,245 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Http.Client.Web.Conventions
+namespace Volo.Abp.Http.Client.Web.Conventions;
+
+[DisableConventionalRegistration]
+public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 {
-    [DisableConventionalRegistration]
-    public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
+    protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
+    protected readonly List<ControllerModel> ControllerWithAttributeRoute;
+    protected readonly List<ActionModel> ActionWithAttributeRoute;
+
+    public AbpHttpClientProxyServiceConvention(
+        IOptions<AbpAspNetCoreMvcOptions> options,
+        IConventionalRouteBuilder conventionalRouteBuilder,
+        IClientProxyApiDescriptionFinder clientProxyApiDescriptionFinder)
+        : base(options, conventionalRouteBuilder)
     {
-        protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
-        protected readonly List<ControllerModel> ControllerWithAttributeRoute;
-        protected readonly List<ActionModel> ActionWithAttributeRoute;
+        ClientProxyApiDescriptionFinder = clientProxyApiDescriptionFinder;
+        ControllerWithAttributeRoute = new List<ControllerModel>();
+        ActionWithAttributeRoute = new List<ActionModel>();
+    }
 
-        public AbpHttpClientProxyServiceConvention(
-            IOptions<AbpAspNetCoreMvcOptions> options,
-            IConventionalRouteBuilder conventionalRouteBuilder,
-            IClientProxyApiDescriptionFinder clientProxyApiDescriptionFinder)
-            : base(options, conventionalRouteBuilder)
+    protected override IList<ControllerModel> GetControllers(ApplicationModel application)
+    {
+        return application.Controllers.Where(c => !AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
+    }
+
+    protected virtual IList<ControllerModel> GetClientProxyControllers(ApplicationModel application)
+    {
+        return application.Controllers.Where(c => AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
+    }
+
+    protected override void ApplyForControllers(ApplicationModel application)
+    {
+        base.ApplyForControllers(application);
+
+        foreach (var controller in GetClientProxyControllers(application))
         {
-            ClientProxyApiDescriptionFinder = clientProxyApiDescriptionFinder;
-            ControllerWithAttributeRoute = new List<ControllerModel>();
-            ActionWithAttributeRoute = new List<ActionModel>();
-        }
+            controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
 
-        protected override IList<ControllerModel> GetControllers(ApplicationModel application)
-        {
-            return application.Controllers.Where(c => !AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
-        }
-
-        protected virtual IList<ControllerModel> GetClientProxyControllers(ApplicationModel application)
-        {
-            return application.Controllers.Where(c => AbpHttpClientProxyHelper.IsClientProxyService(c.ControllerType)).ToList();
-        }
-
-        protected override void ApplyForControllers(ApplicationModel application)
-        {
-            base.ApplyForControllers(application);
-
-            foreach (var controller in GetClientProxyControllers(application))
+            var controllerApiDescription = FindControllerApiDescriptionModel(controller);
+            if (controllerApiDescription != null &&
+                !controllerApiDescription.ControllerGroupName.IsNullOrWhiteSpace())
             {
-                controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
+                controller.ControllerName = controllerApiDescription.ControllerGroupName;
+            }
 
-                var controllerApiDescription = FindControllerApiDescriptionModel(controller);
-                if (controllerApiDescription != null &&
-                    !controllerApiDescription.ControllerGroupName.IsNullOrWhiteSpace())
+            ConfigureClientProxySelector(controller);
+            ConfigureClientProxyApiExplorer(controller);
+            ConfigureParameters(controller);
+        }
+    }
+
+    protected virtual void ConfigureClientProxySelector(ControllerModel controller)
+    {
+        RemoveEmptySelectors(controller.Selectors);
+
+        var moduleApiDescription = FindModuleApiDescriptionModel(controller);
+        if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
+        {
+            var selector = controller.Selectors.FirstOrDefault();
+            selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
+            controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+        }
+
+        var controllerType = controller.ControllerType.AsType();
+        var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
+        if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(controllerType))
+        {
+            return;
+        }
+
+        if (controller.Selectors.Any(selector => selector.AttributeRouteModel != null))
+        {
+            return;
+        }
+
+        foreach (var action in controller.Actions)
+        {
+            ConfigureClientProxySelector(controller, action);
+        }
+    }
+
+    protected virtual void ConfigureClientProxySelector(ControllerModel controller, ActionModel action)
+    {
+        RemoveEmptySelectors(action.Selectors);
+
+        var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
+        if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
+        {
+            return;
+        }
+
+        var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
+        if (actionApiDescriptionModel == null)
+        {
+            return;;
+        }
+
+        ControllerWithAttributeRoute.Add(controller);
+        ActionWithAttributeRoute.Add(action);
+
+        if (!action.Selectors.Any())
+        {
+            var abpServiceSelectorModel = new SelectorModel
+            {
+                AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url)),
+                ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
+            };
+
+            action.Selectors.Add(abpServiceSelectorModel);
+        }
+        else
+        {
+            foreach (var selector in action.Selectors)
+            {
+                var httpMethod = selector.ActionConstraints
+                    .OfType<HttpMethodActionConstraint>()
+                    .FirstOrDefault()?
+                    .HttpMethods?
+                    .FirstOrDefault();
+
+                if (httpMethod == null)
                 {
-                    controller.ControllerName = controllerApiDescription.ControllerGroupName;
+                    httpMethod = actionApiDescriptionModel.HttpMethod;
                 }
 
-                ConfigureClientProxySelector(controller);
-                ConfigureClientProxyApiExplorer(controller);
-                ConfigureParameters(controller);
-            }
-        }
-
-        protected virtual void ConfigureClientProxySelector(ControllerModel controller)
-        {
-            RemoveEmptySelectors(controller.Selectors);
-
-            var moduleApiDescription = FindModuleApiDescriptionModel(controller);
-            if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
-            {
-                var selector = controller.Selectors.FirstOrDefault();
-                selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
-                controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
-            }
-
-            var controllerType = controller.ControllerType.AsType();
-            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
-            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(controllerType))
-            {
-                return;
-            }
-
-            if (controller.Selectors.Any(selector => selector.AttributeRouteModel != null))
-            {
-                return;
-            }
-
-            foreach (var action in controller.Actions)
-            {
-                ConfigureClientProxySelector(controller, action);
-            }
-        }
-
-        protected virtual void ConfigureClientProxySelector(ControllerModel controller, ActionModel action)
-        {
-            RemoveEmptySelectors(action.Selectors);
-
-            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
-            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
-            {
-                return;
-            }
-
-            var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
-            if (actionApiDescriptionModel == null)
-            {
-                return;;
-            }
-
-            ControllerWithAttributeRoute.Add(controller);
-            ActionWithAttributeRoute.Add(action);
-
-            if (!action.Selectors.Any())
-            {
-                var abpServiceSelectorModel = new SelectorModel
+                if (selector.AttributeRouteModel == null)
                 {
-                    AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url)),
-                    ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
-                };
+                    selector.AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url));
+                }
 
-                action.Selectors.Add(abpServiceSelectorModel);
-            }
-            else
-            {
-                foreach (var selector in action.Selectors)
+                if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
                 {
-                    var httpMethod = selector.ActionConstraints
-                        .OfType<HttpMethodActionConstraint>()
-                        .FirstOrDefault()?
-                        .HttpMethods?
-                        .FirstOrDefault();
-
-                    if (httpMethod == null)
-                    {
-                        httpMethod = actionApiDescriptionModel.HttpMethod;
-                    }
-
-                    if (selector.AttributeRouteModel == null)
-                    {
-                        selector.AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url));
-                    }
-
-                    if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
-                    {
-                        selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
-                    }
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
                 }
             }
         }
+    }
 
-        protected virtual void ConfigureClientProxyApiExplorer(ControllerModel controller)
+    protected virtual void ConfigureClientProxyApiExplorer(ControllerModel controller)
+    {
+        if (ControllerWithAttributeRoute.Contains(controller))
         {
-            if (ControllerWithAttributeRoute.Contains(controller))
+            if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
             {
-                if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
-                {
-                    controller.ApiExplorer.GroupName = controller.ControllerName;
-                }
-
-                if (controller.ApiExplorer.IsVisible == null)
-                {
-                    controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
-                }
+                controller.ApiExplorer.GroupName = controller.ControllerName;
             }
 
-            foreach (var action in controller.Actions)
+            if (controller.ApiExplorer.IsVisible == null)
             {
-                if (ActionWithAttributeRoute.Contains(action))
-                {
-                    ConfigureApiExplorer(action);
-                }
+                controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
             }
         }
 
-        protected virtual ModuleApiDescriptionModel FindModuleApiDescriptionModel(ControllerModel controller)
+        foreach (var action in controller.Actions)
         {
-            var appServiceType = FindAppServiceInterfaceType(controller);
-            if (appServiceType == null)
+            if (ActionWithAttributeRoute.Contains(action))
             {
-                return null;
+                ConfigureApiExplorer(action);
             }
+        }
+    }
 
-            var applicationApiDescriptionModel = ClientProxyApiDescriptionFinder.GetApiDescription();
-            foreach (var moduleApiDescription in applicationApiDescriptionModel.Modules.Values)
-            {
-                if (moduleApiDescription.Controllers.Values.Any(x => x.Interfaces.Any(t => t.Type == appServiceType.FullName)))
-                {
-                    return moduleApiDescription;
-                }
-            }
-
+    protected virtual ModuleApiDescriptionModel FindModuleApiDescriptionModel(ControllerModel controller)
+    {
+        var appServiceType = FindAppServiceInterfaceType(controller);
+        if (appServiceType == null)
+        {
             return null;
         }
 
-        protected virtual ControllerApiDescriptionModel FindControllerApiDescriptionModel(ControllerModel controller)
+        var applicationApiDescriptionModel = ClientProxyApiDescriptionFinder.GetApiDescription();
+        foreach (var moduleApiDescription in applicationApiDescriptionModel.Modules.Values)
         {
-            var appServiceType = FindAppServiceInterfaceType(controller);
-            if (appServiceType == null)
+            if (moduleApiDescription.Controllers.Values.Any(x => x.Interfaces.Any(t => t.Type == appServiceType.FullName)))
             {
-                return null;
+                return moduleApiDescription;
             }
+        }
 
-            var applicationApiDescriptionModel = ClientProxyApiDescriptionFinder.GetApiDescription();
-            foreach (var controllerApiDescription in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers.Values))
-            {
-                if (controllerApiDescription.Interfaces.Any(t => t.Type == appServiceType.FullName))
-                {
-                    return controllerApiDescription;
-                }
-            }
+        return null;
+    }
 
+    protected virtual ControllerApiDescriptionModel FindControllerApiDescriptionModel(ControllerModel controller)
+    {
+        var appServiceType = FindAppServiceInterfaceType(controller);
+        if (appServiceType == null)
+        {
             return null;
         }
 
-        protected virtual ActionApiDescriptionModel FindActionApiDescriptionModel(ControllerModel controller, ActionModel action)
+        var applicationApiDescriptionModel = ClientProxyApiDescriptionFinder.GetApiDescription();
+        foreach (var controllerApiDescription in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers.Values))
         {
-            var appServiceType = FindAppServiceInterfaceType(controller);
-            if (appServiceType == null)
+            if (controllerApiDescription.Interfaces.Any(t => t.Type == appServiceType.FullName))
             {
-                return null;
+                return controllerApiDescription;
             }
+        }
 
-            var key =
-                $"{appServiceType.FullName}." +
-                $"{action.ActionMethod.Name}." +
-                $"{string.Join("-", action.Parameters.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.ParameterType)))}";
+        return null;
+    }
 
-            var actionApiDescriptionModel = ClientProxyApiDescriptionFinder.FindAction(key);
-            if (actionApiDescriptionModel == null)
-            {
-                return null;
-            }
-
-            if (actionApiDescriptionModel.ImplementFrom.StartsWith("Volo.Abp.Application.Services"))
-            {
-                return actionApiDescriptionModel;
-            }
-
-            if (appServiceType.FullName != null && actionApiDescriptionModel.ImplementFrom.StartsWith(appServiceType.FullName))
-            {
-                return actionApiDescriptionModel;
-            }
-
+    protected virtual ActionApiDescriptionModel FindActionApiDescriptionModel(ControllerModel controller, ActionModel action)
+    {
+        var appServiceType = FindAppServiceInterfaceType(controller);
+        if (appServiceType == null)
+        {
             return null;
         }
 
-        protected virtual Type FindAppServiceInterfaceType(ControllerModel controller)
+        var key =
+            $"{appServiceType.FullName}." +
+            $"{action.ActionMethod.Name}." +
+            $"{string.Join("-", action.Parameters.Select(x => TypeHelper.GetFullNameHandlingNullableAndGenerics(x.ParameterType)))}";
+
+        var actionApiDescriptionModel = ClientProxyApiDescriptionFinder.FindAction(key);
+        if (actionApiDescriptionModel == null)
         {
-            return controller.ControllerType.GetInterfaces()
-                .FirstOrDefault(type => !type.IsGenericType &&
-                                        type != typeof(IApplicationService) &&
-                                        typeof(IApplicationService).IsAssignableFrom(type));
+            return null;
         }
+
+        if (actionApiDescriptionModel.ImplementFrom.StartsWith("Volo.Abp.Application.Services"))
+        {
+            return actionApiDescriptionModel;
+        }
+
+        if (appServiceType.FullName != null && actionApiDescriptionModel.ImplementFrom.StartsWith(appServiceType.FullName))
+        {
+            return actionApiDescriptionModel;
+        }
+
+        return null;
+    }
+
+    protected virtual Type FindAppServiceInterfaceType(ControllerModel controller)
+    {
+        return controller.ControllerType.GetInterfaces()
+            .FirstOrDefault(type => !type.IsGenericType &&
+                                    type != typeof(IApplicationService) &&
+                                    typeof(IApplicationService).IsAssignableFrom(type));
     }
 }

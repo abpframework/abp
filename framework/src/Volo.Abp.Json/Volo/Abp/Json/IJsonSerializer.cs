@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json;
+
+public interface IJsonSerializer
 {
-    public interface IJsonSerializer
-    {
-        string Serialize(object obj, bool camelCase = true, bool indented = false);
+    string Serialize(object obj, bool camelCase = true, bool indented = false);
 
-        T Deserialize<T>(string jsonString, bool camelCase = true);
+    T Deserialize<T>(string jsonString, bool camelCase = true);
 
-        object Deserialize(Type type, string jsonString, bool camelCase = true);
-    }
+    object Deserialize(Type type, string jsonString, bool camelCase = true);
 }

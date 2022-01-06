@@ -1,6 +1,5 @@
-﻿namespace Volo.Abp.TextTemplating.Localization
+﻿namespace Volo.Abp.TextTemplating.Localization;
+
+public class TestLocalizationSource
 {
-    public class TestLocalizationSource
-    {
-    }
 }
