@@ -204,14 +204,8 @@ var abp = abp || {};
 
         handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
-            var responseJSON = null;
 
-            if (jqXHR.responseJSON) {
-                responseJSON = jqXHR.responseJSON;
-            }
-            else {
-                responseJSON = JSON.parse(jqXHR.responseText)
-            }
+            var responseJSON = jqXHR.responseJSON ?? JSON.parse(jqXHR.responseText);
 
             if (userOptions.abpHandleError !== false) {
                 messagePromise = abp.ajax.showError(responseJSON.error);
