@@ -48,8 +48,13 @@
           </ng-template>
 
           <ng-template #textTemplate>
-            <a (click)="item.action ? item.action() : null" class="dropdown-item pointer">
-              {{ item.text }}</a
+            <a
+              *ngIf="item.textTemplate"
+              (click)="item.action ? item.action() : null"
+              class="dropdown-item pointer"
+            >
+              <i *ngIf="item.textTemplate.icon" class="me-1 {{ item.textTemplate.icon }}"></i>
+              {{ item.textTemplate.text | abpLocalization }}</a
             >
           </ng-template>
         </li>
