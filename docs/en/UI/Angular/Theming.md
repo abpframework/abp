@@ -241,11 +241,11 @@ export class AppComponent {
   constructor(private userMenu: UserMenuService, private router: Router) {
     this.userMenu.addItems([
       {
-        id: 'UserMenu.Reports',
+        id: 'UserMenu.MyAccount',
         order: 1,
         
         // HTML example
-        html: `<a class="dropdown-item pointer">Reports</a>`,
+        html: `<a class="dropdown-item pointer">My account</a>`,
         
         // text template example
         textTemplate: {
@@ -256,7 +256,7 @@ export class AppComponent {
         component: UserMenuItemComponent,
 
         action: () => {
-          this.router.navigateByUrl('/account/reports');
+          this.router.navigateByUrl('/account/manage');
         },
       },
     ]);
