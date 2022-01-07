@@ -19,7 +19,7 @@ public class AbpAutoMapperConventionalRegistrar : DefaultConventionalRegistrar
     protected override bool IsConventionalRegistrationDisabled(Type type)
     {
         return !type.GetInterfaces().Any(x => x.IsGenericType && OpenTypes.Contains(x.GetGenericTypeDefinition())) ||
-                   base.IsConventionalRegistrationDisabled(type);
+               base.IsConventionalRegistrationDisabled(type);
     }
 
     protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
