@@ -1,3 +1,5 @@
 import { NavItem } from './nav-item';
 
-export class UserMenu extends NavItem {}
+export class UserMenu extends NavItem {
+  text?: string;
+}

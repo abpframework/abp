@@ -40,7 +40,17 @@
           ></ng-container>
 
           <ng-template #htmlTemplate>
-            <div [innerHTML]="item.html" (click)="item.action ? item.action() : null"></div>
+            <div
+              *ngIf="item.html; else textTemplate"
+              [innerHTML]="item.html"
+              (click)="item.action ? item.action() : null"
+            ></div>
+          </ng-template>
+
+          <ng-template #textTemplate>
+            <a (click)="item.action ? item.action() : null" class="dropdown-item pointer">
+              {{ item.text }}</a
+            >
           </ng-template>
         </li>
       </ng-container>
