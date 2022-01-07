@@ -37,6 +37,7 @@
           <ng-container
             *ngIf="item.component; else htmlTemplate"
             [ngComponentOutlet]="item.component"
+            [ngComponentOutletInjector]="item | toInjector"
           ></ng-container>
 
           <ng-template #htmlTemplate>
