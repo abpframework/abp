@@ -210,6 +210,9 @@ constructor(private sessionState: SessionStateService) {
 
 `UserMenuService` is used to get the user menu's items and render on the dropdown. You can add/update/remove an item by using the service. 
 
+You can either pass a `component`, a piece of `html` or a `textTemplate` to render an item.
+All of the options are shown below. You can choose either of them.
+
 **Example: Adding/updating/removing an user menu item**
 
 ````ts
@@ -218,6 +221,21 @@ import { UserMenuService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+// make sure that you import this component in a NgModule
+@Component({
+  selector: 'abp-current-user-test',
+  template: `
+    <a class="dropdown-item pointer" (click)="data.action()">
+      <i *ngIf="data.textTemplate.icon" [class]="data.textTemplate.icon"></i>
+      {{ data.textTemplate.text | abpLocalization }}
+    </a>
+  `,
+})
+export class UserMenuItemComponent {
+  // you can inject the data through `INJECTOR_PIPE_DATA_TOKEN` token
+  constructor(@Inject(INJECTOR_PIPE_DATA_TOKEN) public data: UserMenu) {}
+}
+
 @Component({/* component metadata */})
 export class AppComponent {
   constructor(private userMenu: UserMenuService, private router: Router) {
@@ -225,7 +243,18 @@ export class AppComponent {
       {
         id: 'UserMenu.Reports',
         order: 1,
+        
+        // HTML example
         html: `<a class="dropdown-item pointer">Reports</a>`,
+        
+        // text template example
+        textTemplate: {
+          text: 'AbpAccount::MyAccount',
+          icon: 'fa fa-cog',
+        },
+        // component example
+        component: UserMenuItemComponent,
+
         action: () => {
           this.router.navigateByUrl('/account/reports');
         },
