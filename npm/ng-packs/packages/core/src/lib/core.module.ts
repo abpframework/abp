@@ -23,6 +23,7 @@ import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
+import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
@@ -65,6 +66,7 @@ export function storageFactory(): OAuthStorage {
     RouterOutletComponent,
     SortPipe,
     StopPropagationDirective,
+    ToInjectorPipe,
   ],
   imports: [
     OAuthModule,
@@ -89,6 +91,7 @@ export function storageFactory(): OAuthStorage {
     RouterOutletComponent,
     SortPipe,
     StopPropagationDirective,
+    ToInjectorPipe,
   ],
   providers: [LocalizationPipe],
   entryComponents: [
