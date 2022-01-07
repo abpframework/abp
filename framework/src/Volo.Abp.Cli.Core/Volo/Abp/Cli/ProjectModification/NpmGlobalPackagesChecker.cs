@@ -24,10 +24,6 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 InstallYarn();
             }
-            if (!installedNpmPackages.Contains(" gulp@"))
-            {
-                InstallGulp();
-            }
         }
 
         protected virtual string GetInstalledNpmPackages()
@@ -40,12 +36,6 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             Logger.LogInformation("Installing yarn...");
             CmdHelper.RunCmd("npm install yarn -g");
-        }
-
-        protected virtual void InstallGulp()
-        {
-            Logger.LogInformation("Installing gulp...");
-            CmdHelper.RunCmd("npm install gulp -g");
         }
     }
 }

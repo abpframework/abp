@@ -519,14 +519,23 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var nugetPackage in module.NugetPackages)
             {
+                var isProjectTiered = await IsProjectTiered(projectFiles);
+
                 var nugetTarget =
-                    await IsProjectTiered(projectFiles) && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
+                    isProjectTiered && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
                         ? nugetPackage.TieredTarget
                         : nugetPackage.Target;
 
-                if (webPackagesWillBeAddedToBlazorServerProject && nugetTarget == NuGetPackageTarget.Web)
+                if (webPackagesWillBeAddedToBlazorServerProject)
                 {
-                    nugetTarget = NuGetPackageTarget.BlazorServer;
+                    if ( nugetTarget == NuGetPackageTarget.Web)
+                    {
+                        nugetTarget = NuGetPackageTarget.BlazorServer;
+                    }
+                    else if (!isProjectTiered && nugetTarget == NuGetPackageTarget.SignalR)
+                    {
+                        nugetTarget = NuGetPackageTarget.BlazorServer;
+                    }
                 }
 
                 var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetTarget);
