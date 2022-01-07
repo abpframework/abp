@@ -22,14 +22,18 @@ public abstract class EventBusBase : IEventBus
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
+    protected IEventHandlerInvoker EventHandlerInvoker { get; }
+
     protected EventBusBase(
         IServiceScopeFactory serviceScopeFactory,
         ICurrentTenant currentTenant,
-        IUnitOfWorkManager unitOfWorkManager)
+        IUnitOfWorkManager unitOfWorkManager,
+        IEventHandlerInvoker eventHandlerInvoker)
     {
         ServiceScopeFactory = serviceScopeFactory;
         CurrentTenant = currentTenant;
         UnitOfWorkManager = unitOfWorkManager;
+        EventHandlerInvoker = eventHandlerInvoker;
     }
 
     /// <inheritdoc/>
@@ -210,27 +214,9 @@ public abstract class EventBusBase : IEventBus
 
                 using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                 {
-                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
+                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)) || ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
-                        var method = typeof(ILocalEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(ILocalEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
-
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
-                    }
-                    else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
-                    {
-                        var method = typeof(IDistributedEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(IDistributedEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
-
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
+                        await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData);
                     }
                     else
                     {
