@@ -1,9 +1,8 @@
 using System;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus;
+
+public interface IEventHandlerDisposeWrapper : IDisposable
 {
-    public interface IEventHandlerDisposeWrapper : IDisposable
-    {
-        IEventHandler EventHandler { get; }
-    }
+    IEventHandler EventHandler { get; }
 }

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Pages;
 
-namespace Volo.CmsKit.EntityFrameworkCore.Blogs
+namespace Volo.CmsKit.EntityFrameworkCore.Blogs;
+
+public class BlogPostRepository_Test : BlogPostRepository_Test<CmsKitEntityFrameworkCoreTestModule>
 {
-    public class BlogPostRepository_Test : BlogPostRepository_Test<CmsKitEntityFrameworkCoreTestModule>
-    {
-    }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.Bundling
+namespace Volo.Abp.Cli.Bundling;
+
+public interface IBundlingService
 {
-    public interface IBundlingService
-    {
-        Task BundleAsync(string directory, bool forceBuild);
-    }
+    Task BundleAsync(string directory, bool forceBuild);
 }

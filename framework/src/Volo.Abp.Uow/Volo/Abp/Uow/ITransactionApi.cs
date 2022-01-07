@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public interface ITransactionApi : IDisposable
 {
-    public interface ITransactionApi : IDisposable
-    {
-        Task CommitAsync();
-    }
+    Task CommitAsync();
 }

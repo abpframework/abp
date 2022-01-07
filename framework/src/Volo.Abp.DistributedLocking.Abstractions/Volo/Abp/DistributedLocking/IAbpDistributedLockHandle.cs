@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Volo.Abp.DistributedLocking
+namespace Volo.Abp.DistributedLocking;
+
+public interface IAbpDistributedLockHandle : IAsyncDisposable
 {
-    public interface IAbpDistributedLockHandle : IAsyncDisposable
-    {
-        
-    }
+
 }
