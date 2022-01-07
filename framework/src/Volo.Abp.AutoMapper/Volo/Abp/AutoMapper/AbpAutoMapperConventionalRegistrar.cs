@@ -18,7 +18,7 @@ namespace Volo.Abp.AutoMapper
 
         protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            return type.GetInterfaces().Any(x => x.IsGenericType && OpenTypes.Contains(x.GetGenericTypeDefinition())) ||
+            return !type.GetInterfaces().Any(x => x.IsGenericType && OpenTypes.Contains(x.GetGenericTypeDefinition())) ||
                    base.IsConventionalRegistrationDisabled(type);
         }
 
