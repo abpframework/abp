@@ -35,23 +35,20 @@ namespace MyCompany.MyProject
 如下所示, 在 **Startup.cs** 文件中调用 `UseAutofac()`:
 
 ````csharp
-public class Startup
+public class Program
 {
-    public IServiceProvider ConfigureServices(IServiceCollection services)
+    public static int Main(string[] args)
     {
-        services.AddApplication<MyWebModule>(options =>
-        {
-            //Integrate Autofac!
-            options.UseAutofac();
-        });
-
-        return services.BuildServiceProviderFromFactory();
+        CreateHostBuilder(args).Build().Run();
     }
 
-    public void Configure(IApplicationBuilder app)
-    {
-        app.InitializeApplication();
-    }
+    internal static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .UseAutofac(); //Integrate Autofac!
 }
 ````
 
