@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using AutoMapper.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -19,7 +18,8 @@ namespace Volo.Abp.AutoMapper
 
         protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            return !OpenTypes.Any(type.ImplementsGenericInterface) || base.IsConventionalRegistrationDisabled(type);
+            return type.GetInterfaces().Any(x => x.IsGenericType && OpenTypes.Contains(x.GetGenericTypeDefinition())) ||
+                   base.IsConventionalRegistrationDisabled(type);
         }
 
         protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
