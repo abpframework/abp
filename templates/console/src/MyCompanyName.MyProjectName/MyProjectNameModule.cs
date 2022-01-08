@@ -5,12 +5,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Autofac;
+using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
-    typeof(AbpAutofacModule)
+    typeof(AbpAutofacModule),
+    typeof(AbpEventBusModule)
 )]
 public class MyProjectNameModule : AbpModule
 {

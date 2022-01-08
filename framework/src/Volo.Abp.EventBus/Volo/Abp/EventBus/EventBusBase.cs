@@ -216,7 +216,7 @@ public abstract class EventBusBase : IEventBus
                 {
                     if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)) || ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
-                        await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData);
+                        await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
                     }
                     else
                     {
