@@ -78,7 +78,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
                 while (true)
                 {
                     var waitingEvents = await Outbox.GetWaitingEventsAsync(EventBusBoxesOptions.OutboxWaitingEventMaxCount, StoppingToken);
-                    if (waitingEvents.Count < 1000)
+                    if (waitingEvents.Count <= 0)
                     {
                         break;
                     }
