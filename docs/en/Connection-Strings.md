@@ -39,6 +39,10 @@ This configuration defines three different connection strings:
 
 ### AbpDbConnectionOptions
 
+`AbpDbConnectionOptions` is the options class that is used to set the connection strings and configure database structures.
+
+#### Setting the connection strings
+
 ABP uses the `AbpDbConnectionOptions` to get the connection strings. If you configure the connection strings as explained above, `AbpDbConnectionOptions` is automatically filled. However, you can set or override the connection strings using [the options pattern](Options.md). You can configure the `AbpDbConnectionOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) as shown below:
 
 ````csharp
@@ -52,6 +56,52 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+#### Configuring the database structures
+
+`Databases` property of the `AbpDbConnectionOptions` class is used to group multiple connection strings (of multiple modules) to a single connection string.
+
+See the following connection strings:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=MyMainDb;Trusted_Connection=True;",
+  "AbpIdentity": "Server=localhost;Database=MySecondaryDb;Trusted_Connection=True;",
+  "AbpIdentityServer": "Server=localhost;Database=MySecondaryDb;Trusted_Connection=True;",
+  "AbpPermissionManagement": "Server=localhost;Database=MySecondaryDb;Trusted_Connection=True;"
+}
+````
+
+In this example, we've defined four connection strings, but the last three of them are the same; `AbpIdentity`, `AbpIdentityServer` and `AbpPermissionManagement` uses the same database, named `MySecondaryDb`. The main application and the other modules use the `Default` connection string, hence the `MyMainDb` database.
+
+What we want to do here is to group three modules (`AbpIdentity`, `AbpIdentityServer` and `AbpPermissionManagement`) in a single database, but we needed to specify each one manually. Because the fallback connection string is the `Default` one, if we don't specify it for a module.
+
+To eliminate the repetitive connection string definition, we can configure the `AbpDbConnectionOptions.Databases` property to group these connection strings, as shown in the following code (we place that in the `ConfigureServices` method of our [module class](Module-Development-Basics.md)):
+
+````csharp
+Configure<AbpDbConnectionOptions>(options =>
+{
+    options.Databases.Configure("MySecondaryDb", db =>
+    {
+        db.MappedConnections.Add("AbpIdentity");
+        db.MappedConnections.Add("AbpIdentityServer");
+        db.MappedConnections.Add("AbpPermissionManagement");
+    });
+});
+````
+
+Then we can change the `appsettings.json` file as shown in the following code block:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=MyMainDb;Trusted_Connection=True;",
+  "MySecondaryDb": "Server=localhost;Database=MySecondaryDb;Trusted_Connection=True;"
+}
+````
+
+`MySecondaryDb` becomes the new connection string for the mapped connections.
+
+> ABP first looks for the module-specific connection string, then looks if a database mapping is available, finally fallbacks to the `Default` connection string.
+
 ## Set the Connection String Name
 
 A module typically has a unique connection string name associated to its `DbContext` class using the `ConnectionStringName` attribute. Example:
@@ -64,7 +114,7 @@ public class IdentityServerDbContext
 }
 ````
 
-For [Entity Framework Core](Entity-Framework-Core.md) and [MongoDB](MongoDB.md), write this to your `DbContext` class (and the interface if it has).
+For [Entity Framework Core](Entity-Framework-Core.md) and [MongoDB](MongoDB.md), write this to your `DbContext` class (and the interface if it has). In this way, ABP uses the specified connection string for the related `DbContext` instances.
 
 ## Database Migrations for the Entity Framework Core
 
