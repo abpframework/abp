@@ -90,9 +90,38 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData);
     }
 
-    public override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
-        throw new NotImplementedException();
+        var outgoingEventArray =  outgoingEvents.ToArray();
+        var failures = new List<Guid>();
+
+        var publisher = await _publisherPool.GetAsync(
+            _options.TopicName,
+            _options.ConnectionName);
+
+        using var messageBatch = await publisher.CreateMessageBatchAsync();
+
+        var failed = false;
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
+            if (failed)
+            {
+                failures.Add(outgoingEvent.Id);
+                continue;
+            }
+
+            var body = _serializer.Serialize(outgoingEvent.EventData);
+
+            if (!messageBatch.TryAddMessage(new ServiceBusMessage(body) { Subject = outgoingEvent.EventName }))
+            {
+                failed = true;
+                failures.Add(outgoingEvent.Id);
+            }
+        }
+
+        await publisher.SendMessagesAsync(messageBatch);
+
+        return new MultipleOutgoingEventPublishResult(outgoingEventArray.Where(x => !failures.Contains(x.Id)).ToList());
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
@@ -183,7 +212,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             .Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
     }
