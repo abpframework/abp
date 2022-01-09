@@ -148,7 +148,18 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+        await PublishAsync(eventType, eventData);
+    }
+
+    protected virtual async Task PublishAsync(Type eventType, object eventData)
+    {
+        if (AbpRebusEventBusOptions.Publish != null)
+        {
+            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+            return;
+        }
+
+        await Rebus.Advanced.Routing.Send(AbpRebusEventBusOptions.InputQueueName, eventData);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -210,9 +221,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return PublishToEventBusAsync(eventType, eventData);
     }
 
-    public override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
-        throw new NotImplementedException();
+        var outgoingEventArray = outgoingEvents.ToArray();
+
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
+            await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+        }
+
+        return new MultipleOutgoingEventPublishResult(outgoingEventArray);
     }
 
     public async override Task ProcessFromInboxAsync(
