@@ -1,15 +1,17 @@
 # Connection Strings
 
-ABP Framework is designed to be [modular](Module-Development-Basics.md), [microservice compatible](Microservice-Architecture.md) and [multi-tenancy](Multi-Tenancy.md) aware. Connection string management is also designed to support these scenarios;
+> Connection string system is especially needed when you want to create or use a modular system. If you have a monolithic application with a single database, you can go with the [ABP startup solution template](Startup-Templates/Application.md), which is properly configured for you.
 
-* Allows to set separate connection strings for every module, so every module can have its own physical database. Modules even might be configured to use different DBMSs.
+ABP Framework is designed to be [modular](Module-Development-Basics.md) and [multi-tenancy](Multi-Tenancy.md) aware. Connection string management is also designed to support these scenarios;
+
+* Allows to set separate connection strings for every module, so every module can have its own physical database. Modules even might be configured to use different database providers.
 * Allows to set separate connection string and use a separate database per tenant (in a SaaS application).
 
 It also supports hybrid scenarios;
 
-* Allows to group modules into databases (all modules into a single shared database, 2 modules to database A, 3 modules to database B, 1 module to database C and rest of the modules to database D... etc.)
+* Allows to group modules into databases (e.g., all modules into a single shared database or two modules to database A, three modules to database B, one module to database C and rest of the modules to database D)
 * Allows to group tenants into databases, just like the modules.
-* Allows to separate databases per tenant per module (which might be harder to maintain for you because of too many databases, but the ABP framework supports it).
+* Allows to separate databases per tenant per module (which might be hard to maintain for you because of too many databases, but the ABP framework supports it).
 
 All the [pre-built application modules](Modules/Index.md) are designed to be compatible these scenarios.
 
@@ -29,15 +31,15 @@ See the following configuration:
 
 This configuration defines three different connection strings:
 
-* `MyMainDb` (the `Default` connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](Startup-Templates/Application.md) is configured to use a single connection string, so all the modules uses a single shared database.
-* `MyIdsDb` is used by the [IdentityServer](Modules/IdentityServer.md) module.
-* `MyPermissionDb` is used by the [Permission Management](Modules/Permission-Management.md) module.
+* `MyMainDb` (the `Default` connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](Startup-Templates/Application.md) is configured to use a single connection string, so all the modules uses a single, shared database.
+* `MyIdsDb` (the `AbpIdentityServer` connection string) is used by the [IdentityServer](Modules/IdentityServer.md) module.
+* `MyPermissionDb` (the `AbpPermissionManagement` connection string) is used by the [Permission Management](Modules/Permission-Management.md) module.
 
-[Pre-built application modules](Modules/Index.md) define constants for the connection string names. For example, the IdentityServer module defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
+[Pre-built application modules](Modules/Index.md) define constants for the connection string names. For example, the [IdentityServer module](Modules/IdentityServer.md) defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
 
 ### AbpDbConnectionOptions
 
-ABP actually uses the `AbpDbConnectionOptions` to get the connection strings. If you set the connection strings as explained above, `AbpDbConnectionOptions` is automatically filled. However, you can set or override the connection strings using [the options pattern](Options.md). You can configure the `AbpDbConnectionOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) as shown below:
+ABP uses the `AbpDbConnectionOptions` to get the connection strings. If you configure the connection strings as explained above, `AbpDbConnectionOptions` is automatically filled. However, you can set or override the connection strings using [the options pattern](Options.md). You can configure the `AbpDbConnectionOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) as shown below:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -64,13 +66,11 @@ public class IdentityServerDbContext
 
 For [Entity Framework Core](Entity-Framework-Core.md) and [MongoDB](MongoDB.md), write this to your `DbContext` class (and the interface if it has).
 
-> If you are developing a reusable, database provider independent module see also [the best practices guide](Best-Practices/Index.md).
-
 ## Database Migrations for the Entity Framework Core
 
 Relational databases require to create the database and the database schema (tables, views... etc.) before using it.
 
-The startup template (with EF Core ORM) comes with a single database and a `.EntityFrameworkCore` project that contains related classes and the migration files for that database. This project mainly defines a *YourProjectName*DbContext that calls the `Configure...()` methods of the used modules, like `builder.ConfigurePermissionManagement()`.
+The startup template (with EF Core ORM) comes with a single database and a `.EntityFrameworkCore` project that contains related classes and the migration files for that database. This project mainly defines a `YourProjectNameDbContext` class that calls the `Configure...()` methods of the used modules, like `builder.ConfigurePermissionManagement()`.
 
 Once you want to separate a module's database, you typically will need to create a second migration path. See the [EF Core Migrations](Entity-Framework-Core-Migrations.md) document to learn how to create and use a different database for a desired module.
 
