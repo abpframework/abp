@@ -98,7 +98,7 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
                         break;
                     }
 
-                    Logger.LogInformation($"Found {waitingEvents.Count} events in the inbox.");
+                    //Logger.LogInformation($"Found {waitingEvents.Count} events in the inbox.");
 
                     foreach (var waitingEvent in waitingEvents)
                     {
@@ -113,7 +113,7 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
                             await uow.CompleteAsync();
                         }
 
-                        Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
+                        //Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
                     }
                 }
             }

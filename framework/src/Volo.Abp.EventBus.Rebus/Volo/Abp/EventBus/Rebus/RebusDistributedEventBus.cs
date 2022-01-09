@@ -146,7 +146,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
     }
@@ -210,7 +210,12 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return PublishToEventBusAsync(eventType, eventData);
     }
 
-    public override async Task ProcessFromInboxAsync(
+    public override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async override Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig)
     {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,25 +78,20 @@ public class OutboxSender : IOutboxSender, ITransientDependency
                 while (true)
                 {
                     var waitingEvents = await Outbox.GetWaitingEventsAsync(EventBusBoxesOptions.OutboxWaitingEventMaxCount, StoppingToken);
-                    if (waitingEvents.Count <= 0)
+                    if (waitingEvents.Count < 1000)
                     {
                         break;
                     }
 
                     Logger.LogInformation($"Found {waitingEvents.Count} events in the outbox.");
 
-                    foreach (var waitingEvent in waitingEvents)
-                    {
-                        await DistributedEventBus
-                            .AsSupportsEventBoxes()
-                            .PublishFromOutboxAsync(
-                                waitingEvent,
-                                OutboxConfig
-                            );
+                    var result = await DistributedEventBus
+                        .AsSupportsEventBoxes()
+                        .PublishManyFromOutboxAsync(waitingEvents, OutboxConfig);
 
-                        await Outbox.DeleteAsync(waitingEvent.Id);
-                        Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
-                    }
+                    await Outbox.DeleteManyAsync(result.PublishedOutgoingEvents.Select(x => x.Id).ToArray());
+
+                    Logger.LogInformation($"Sent {result.PublishedOutgoingEvents.Count} events to message broker");
                 }
             }
             else

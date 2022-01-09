@@ -162,7 +162,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(
             eventType,
@@ -196,7 +196,12 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         );
     }
 
-    public override async Task ProcessFromInboxAsync(
+    public override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async override Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig)
     {

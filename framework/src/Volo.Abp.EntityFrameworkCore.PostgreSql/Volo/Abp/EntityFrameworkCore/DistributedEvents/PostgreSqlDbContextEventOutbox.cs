@@ -13,7 +13,7 @@ public class PostgreSqlDbContextEventOutbox<TDbContext> : DbContextEventOutbox<T
     }
 
     [UnitOfWork]
-    public override async Task DeleteAsync(Guid id)
+    public async override Task DeleteAsync(Guid id)
     {
         var dbContext = (IHasEventOutbox)await DbContextProvider.GetDbContextAsync();
         var tableName = dbContext.OutgoingEvents.EntityType.GetSchemaQualifiedTableName();

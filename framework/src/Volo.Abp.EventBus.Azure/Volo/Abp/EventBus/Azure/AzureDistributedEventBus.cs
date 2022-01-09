@@ -85,12 +85,17 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
         await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData);
     }
 
-    public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
+    public override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
         var eventType = _eventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
