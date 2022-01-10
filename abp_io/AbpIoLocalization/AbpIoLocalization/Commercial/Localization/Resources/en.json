@@ -407,6 +407,10 @@
     "CommunityDescription": "Share your experiences with the ABP Framework!",
     "GetStarted": "Get Started",
     "Views": "views",
-    "LatestPosts": "Latest Posts"
+    "LatestPosts": "Latest Posts",
+    "PreBuiltApplication": "Pre-Built Application",
+    "DatabaseProviders": "Database Providers",
+    "UIFrameworks": "UI Frameworks",
+    "UsefulLinks": "Useful Links"
   }
 }
