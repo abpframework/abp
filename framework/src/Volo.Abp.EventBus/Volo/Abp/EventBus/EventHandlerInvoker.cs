@@ -8,33 +8,43 @@ namespace Volo.Abp.EventBus;
 
 public class EventHandlerInvoker : IEventHandlerInvoker, ISingletonDependency
 {
-    private readonly ConcurrentDictionary<string, IEventHandlerMethodExecutor> _cache;
+    private readonly ConcurrentDictionary<string, EventHandlerInvokerCacheItem> _cache;
 
     public EventHandlerInvoker()
     {
-        _cache = new ConcurrentDictionary<string, IEventHandlerMethodExecutor>();
+        _cache = new ConcurrentDictionary<string, EventHandlerInvokerCacheItem>();
     }
 
     public async Task InvokeAsync(IEventHandler eventHandler, object eventData, Type eventType)
     {
-        var notAnEventHandler = true;
-        if (typeof(ILocalEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+        var cacheItem = _cache.GetOrAdd($"{eventHandler.GetType().FullName}-{eventType.FullName}", _ =>
         {
-            var eventHandlerCall = _cache.GetOrAdd($"{typeof(LocalEventHandlerMethodExecutor<>).FullName}{eventHandler.GetType().FullName}-{eventType.FullName}",
-                (_) => (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(LocalEventHandlerMethodExecutor<>).MakeGenericType(eventType)));
-            await eventHandlerCall.ExecutorAsync(eventHandler, eventData);
-            notAnEventHandler = false;
+            var item = new EventHandlerInvokerCacheItem();
+
+            if (typeof(ILocalEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+            {
+                item.Local = (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(LocalEventHandlerMethodExecutor<>).MakeGenericType(eventType));
+            }
+
+            if (typeof(IDistributedEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+            {
+                item.Distributed = (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(DistributedEventHandlerMethodExecutor<>).MakeGenericType(eventType));
+            }
+
+            return item;
+        });
+
+        if (cacheItem.Local != null)
+        {
+            await cacheItem.Local.ExecutorAsync(eventHandler, eventData);
         }
 
-        if (typeof(IDistributedEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+        if (cacheItem.Distributed != null)
         {
-            var eventHandlerCall = _cache.GetOrAdd($"{typeof(DistributedEventHandlerMethodExecutor<>).FullName}{eventHandler.GetType().FullName}-{eventType.FullName}",
-                (_) => (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(DistributedEventHandlerMethodExecutor<>).MakeGenericType(eventType)));
-            await eventHandlerCall.ExecutorAsync(eventHandler, eventData);
-            notAnEventHandler = false;
+            await cacheItem.Distributed.ExecutorAsync(eventHandler, eventData);
         }
 
-        if (notAnEventHandler)
+        if (cacheItem.Local == null && cacheItem.Distributed == null)
         {
             throw new AbpException("The object instance is not an event handler. Object type: " + eventHandler.GetType().AssemblyQualifiedName);
         }
