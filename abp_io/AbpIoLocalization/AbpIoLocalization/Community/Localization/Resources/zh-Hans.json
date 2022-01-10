@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "无法从Github获取最新的文章请求.",
     "PostRequestFromGithubIssue": "现在没有任何文章请求.",
     "LatestPosts": "最新的帖子",
-    "PostRequests": "文章请求",
+    "ArticleRequests": "文章请求",
     "AllPostRequests": "查看所有文章请求",
     "SubscribeToTheNewsletter": "订阅简讯",
     "NewsletterEmailDefinition": "获取有关ABP发生的信息,例如新版本,免费资源,文章等.",

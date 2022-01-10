@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Nem sikerült lekérni a legújabb cikkkérést a Githubtól.",
     "PostRequestFromGithubIssue": "Jelenleg nincs cikkkérés.",
     "LatestPosts": "Legutóbbi bejegyzések",
-    "PostRequests": "Cikkigények",
+    "ArticleRequests": "Cikkigények",
     "AllPostRequests": "Lásd: Összes cikkigénylés",
     "SubscribeToTheNewsletter": "Feliratkozás a Hírlevélre",
     "NewsletterEmailDefinition": "Információkat kaphat az ABP eseményeiről, például új kiadásokról, ingyenes forrásokról, cikkekről és egyebekről.",

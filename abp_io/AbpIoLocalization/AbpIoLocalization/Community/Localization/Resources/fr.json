@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Impossible d'obtenir la dernière demande d'post de Github.",
     "PostRequestFromGithubIssue": "Il n'y a actuellement aucune demande d'post.",
     "LatestPosts": "Derniers messages",
-    "PostRequests": "Demandes d'posts",
+    "ArticleRequests": "Demandes d'posts",
     "AllPostRequests": "Voir toutes les demandes d'posts",
     "SubscribeToTheNewsletter": "Abonnez-vous à la newsletter",
     "NewsletterEmailDefinition": "Obtenez des informations sur les événements d'ABP, comme les nouvelles versions, les sources gratuites, les posts, etc.",

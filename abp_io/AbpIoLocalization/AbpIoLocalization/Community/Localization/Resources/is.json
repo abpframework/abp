@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Gat ekki fengið nýjustu greinabeiðnina frá Github.",
     "PostRequestFromGithubIssue": "Það eru engar greinarbeiðnir núna.",
     "LatestPosts": "Nýjustu færslur",
-    "PostRequests": "Greinarbeiðnir",
+    "ArticleRequests": "Greinarbeiðnir",
     "AllPostRequests": "Sjá allar greinarbeiðnir",
     "SubscribeToTheNewsletter": "Gerast áskrifandi að Fréttabréfinu",
     "NewsletterEmailDefinition": "Fáðu upplýsingar um atburði í ABP eins og nýjar útgáfur, ókeypis heimildir, greinar og fleira.",

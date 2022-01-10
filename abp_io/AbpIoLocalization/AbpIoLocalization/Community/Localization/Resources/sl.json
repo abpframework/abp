@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Najnovejše zahteve za članek od Githuba ni bilo mogoče dobiti.",
     "PostRequestFromGithubIssue": "Zdaj ni nobenih zahtev za članke.",
     "LatestPosts": "Najnovejše objave",
-    "PostRequests": "Zahteve za člen",
+    "ArticleRequests": "Zahteve za člen",
     "AllPostRequests": "Oglejte si vse zahteve za članke",
     "SubscribeToTheNewsletter": "Naročite se na glasilo",
     "NewsletterEmailDefinition": "Pridobite informacije o dogajanju v ABP, kot so nove izdaje, brezplačni viri, članki in drugo.",

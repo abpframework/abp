@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Não foi possível obter a solicitação do artigo mais recente do Github.",
     "PostRequestFromGithubIssue": "Não há nenhum pedido de artigo agora.",
     "LatestPosts": "últimas postagens",
-    "PostRequests": "Pedidos de artigos",
+    "ArticleRequests": "Pedidos de artigos",
     "AllPostRequests": "Veja todas as solicitações de artigos",
     "SubscribeToTheNewsletter": "Assine o boletim informativo",
     "NewsletterEmailDefinition": "Obtenha informações sobre os acontecimentos na ABP, como novos lançamentos, fontes gratuitas, artigos e muito mais.",

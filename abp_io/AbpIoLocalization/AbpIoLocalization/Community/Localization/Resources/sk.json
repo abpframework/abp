@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Nepodarilo sa načítať najnovšiu požiadavku na článok z Githubu.",
     "PostRequestFromGithubIssue": "Nie sú žiadne žiadosti o článok.",
     "LatestPosts": "Posledne pridané príspevky",
-    "PostRequests": "Žiadané články",
+    "ArticleRequests": "Žiadané články",
     "AllPostRequests": "Zobraziť všetky žiadosti o články",
     "SubscribeToTheNewsletter": "Prihlásiť sa k odberu noviniek",
     "NewsletterEmailDefinition": "Získajte informácie o dianí v ABP, ako sú nové vydania, bezplatné zdroje, články a ďalšie.",

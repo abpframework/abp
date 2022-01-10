@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Не удалось получить последний запрос статьи от Github.",
     "PostRequestFromGithubIssue": "Сейчас нет запросов на статьи.",
     "LatestPosts": "Последние посты",
-    "PostRequests": "Запросы на статьи",
+    "ArticleRequests": "Запросы на статьи",
     "AllPostRequests": "Просмотреть все запросы статей",
     "SubscribeToTheNewsletter": "Подпишитесь на рассылку новостей",
     "NewsletterEmailDefinition": "Получайте информацию о событиях в ABP, например о новых выпусках, бесплатных источниках, статьях и многом другом.",

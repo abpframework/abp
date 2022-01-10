@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Nepodařilo se získat nejnovější požadavek na článek z Github.",
     "PostRequestFromGithubIssue": "Nyní nejsou žádné požadavky na články.",
     "LatestPosts": "Nejnovější příspěvky",
-    "PostRequests": "Žádosti o článek",
+    "ArticleRequests": "Žádosti o článek",
     "AllPostRequests": "Viz Všechny požadavky na článek",
     "SubscribeToTheNewsletter": "Přihlaste se k odběru Newsletteru",
     "NewsletterEmailDefinition": "Získejte informace o dění v ABP, jako jsou nové verze, bezplatné zdroje, články a další.",

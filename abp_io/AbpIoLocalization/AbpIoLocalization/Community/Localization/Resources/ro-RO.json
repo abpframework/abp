@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Nu s-a putut obţine ultima cerere de articol de pe Github.",
     "PostRequestFromGithubIssue": "Momentan nu există cereri de articole.",
     "LatestPosts": "Ultimele postări",
-    "PostRequests": "Cereri de articole",
+    "ArticleRequests": "Cereri de articole",
     "AllPostRequests": "Vedeţi toate cererile de articole",
     "SubscribeToTheNewsletter": "Abonaţi-vă la newsletter-ul nostru",
     "NewsletterEmailDefinition": "Obţineţi informaţii despre evenimentele din ABP, cum ar fi lansări noi, surse gratuite, articole şi multe altele.",

@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Github'dan en son makale isteği alınamadı.",
     "PostRequestFromGithubIssue": "Şu anda herhangi bir makale talebi yok.",
     "LatestPosts": "Son Gönderiler",
-    "PostRequests": "Makale İstekleri",
+    "ArticleRequests": "Makale İstekleri",
     "AllPostRequests": "Tüm Makale İsteklerini Gör",
     "SubscribeToTheNewsletter": "Bültene Abone Ol",
     "NewsletterEmailDefinition": "Yeni çıkanlar, ücretsiz kaynaklar, makaleler ve daha fazlası gibi ABP'deki gelişmeler hakkında bilgi alın.",

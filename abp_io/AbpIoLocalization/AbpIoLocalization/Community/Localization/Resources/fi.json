@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Uusinta artikkelipyyntöä ei saatu Github.",
     "PostRequestFromGithubIssue": "Artikkelipyyntöjä ei ole nyt.",
     "LatestPosts": "Uusimmat viestit",
-    "PostRequests": "Artikkelipyynnöt",
+    "ArticleRequests": "Artikkelipyynnöt",
     "AllPostRequests": "Katso kaikki artikkelipyynnöt",
     "SubscribeToTheNewsletter": "Tilaa uutiskirje",
     "NewsletterEmailDefinition": "Hanki tietoa ABP: n tapahtumista, kuten uusista julkaisuista, ilmaisista lähteistä, artikkeleista ja muusta.",

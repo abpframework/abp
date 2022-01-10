@@ -88,7 +88,7 @@
     "CommunityPostRequestErrorMessage": "Couldn't get the latest post request from GitHub.",
     "PostRequestFromGithubIssue": "There aren't any post requests at the moment.",
     "LatestPosts": "Latest Posts",
-    "PostRequests": "Post Requests",
+    "ArticleRequests": "Article Requests",
     "AllPostRequests": "See all Post requests",
     "SubscribeToTheNewsletter": "Subscribe to the Newsletter",
     "NewsletterEmailDefinition": "Receive information about what's happening in ABP; new releases, free sources, posts, and more.",

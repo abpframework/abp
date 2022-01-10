@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Kon het laatste artikelverzoek van Github niet ophalen.",
     "PostRequestFromGithubIssue": "Er zijn nu geen artikelverzoeken.",
     "LatestPosts": "Laatste berichten",
-    "PostRequests": "Artikelverzoeken",
+    "ArticleRequests": "Artikelverzoeken",
     "AllPostRequests": "Bekijk alle artikelverzoeken",
     "SubscribeToTheNewsletter": "Abonneer u op de nieuwsbrief",
     "NewsletterEmailDefinition": "Krijg informatie over gebeurtenissen in ABP zoals nieuwe releases, gratis bronnen, artikelen en meer.",

@@ -370,7 +370,7 @@
     "Next": "Next",
     "StartTrial": "Start My Free Trial",
     "ContactUsIssues": "Contact us if you have any issues",
-    "TrialActivatedWarning": "Dear {0}, a user is entitled to have only 1 free trial period. You already used your trial period.",
+    "TrialActivatedWarning": "A user is entitled to have only 1 free trial period. You already used your trial period.",
     "ActivationRequirement": "You are one step away from starting your free trial.<br>We have sent an email to <b>{0}</b> to activate your account. Check your inbox/junk/spam boxes!",
     "SaveAndDownload": "Save And Download",
     "CompanyNameValidationMessage": "Company name is too long!",

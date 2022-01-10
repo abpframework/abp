@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "تعذر الحصول على آخر طلب مقال من جيثب.",
     "PostRequestFromGithubIssue": "لا توجد أي طلبات مقالات الآن.",
     "LatestPosts": "آخر المشاركات",
-    "PostRequests": "طلبات المادة",
+    "ArticleRequests": "طلبات المادة",
     "AllPostRequests": "انظر جميع طلبات المادة",
     "SubscribeToTheNewsletter": "اشترك في النشرة الإخبارية",
     "NewsletterEmailDefinition": "احصل على معلومات حول الأحداث في ABP مثل الإصدارات الجديدة والمصادر المجانية والمقالات والمزيد.",

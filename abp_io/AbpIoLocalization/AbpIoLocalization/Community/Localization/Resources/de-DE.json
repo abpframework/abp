@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Die Anfrage nach den neuesten Beiträgen von Github konnte nicht abgerufen werden.",
     "PostRequestFromGithubIssue": "Es liegen noch keine Artikelanfragen vor.",
     "LatestPosts": "Neueste Beiträge",
-    "PostRequests": "Artikelanfragen",
+    "ArticleRequests": "Artikelanfragen",
     "AllPostRequests": "Alle Artikelanfragen anzeigen",
     "SubscribeToTheNewsletter": "Abonnieren Sie den Newsletter",
     "NewsletterEmailDefinition": "Erhalten Sie Informationen über Ereignisse in ABP wie Neuerscheinungen, kostenlose Quellen, Artikel und mehr.",

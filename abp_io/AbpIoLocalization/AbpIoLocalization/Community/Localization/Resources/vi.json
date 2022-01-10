@@ -87,7 +87,7 @@
     "CommunityPostRequestErrorMessage": "Không thể nhận được yêu cầu bài viết mới nhất từ Github.",
     "PostRequestFromGithubIssue": "Không có bất kỳ yêu cầu bài viết bây giờ.",
     "LatestPosts": "Bài viết mới nhất",
-    "PostRequests": "Yêu cầu bài viết",
+    "ArticleRequests": "Yêu cầu bài viết",
     "AllPostRequests": "Xem tất cả các yêu cầu bài viết",
     "SubscribeToTheNewsletter": "Đăng ký nhận bản tin",
     "NewsletterEmailDefinition": "Nhận thông tin về các diễn biến trong ABP như các bản phát hành mới, các nguồn miễn phí, các bài báo và hơn thế nữa.",
