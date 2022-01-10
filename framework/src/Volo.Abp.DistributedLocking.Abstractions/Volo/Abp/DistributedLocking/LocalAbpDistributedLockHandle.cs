@@ -1,21 +1,20 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.DistributedLocking
+namespace Volo.Abp.DistributedLocking;
+
+public class LocalAbpDistributedLockHandle : IAbpDistributedLockHandle
 {
-    public class LocalAbpDistributedLockHandle : IAbpDistributedLockHandle
+    private readonly SemaphoreSlim _semaphore;
+
+    public LocalAbpDistributedLockHandle(SemaphoreSlim semaphore)
     {
-        private readonly SemaphoreSlim _semaphore;
+        _semaphore = semaphore;
+    }
 
-        public LocalAbpDistributedLockHandle(SemaphoreSlim semaphore)
-        {
-            _semaphore = semaphore;
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            _semaphore.Release();
-            return default;
-        }
+    public ValueTask DisposeAsync()
+    {
+        _semaphore.Release();
+        return default;
     }
 }

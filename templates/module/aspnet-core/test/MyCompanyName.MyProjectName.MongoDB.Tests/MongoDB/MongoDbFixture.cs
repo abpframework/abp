@@ -1,22 +1,21 @@
 using System;
 using Mongo2Go;
 
-namespace MyCompanyName.MyProjectName.MongoDB
+namespace MyCompanyName.MyProjectName.MongoDB;
+
+public class MongoDbFixture : IDisposable
 {
-    public class MongoDbFixture : IDisposable
+    private static readonly MongoDbRunner MongoDbRunner;
+    public static readonly string ConnectionString;
+
+    static MongoDbFixture()
     {
-        private static readonly MongoDbRunner MongoDbRunner;
-        public static readonly string ConnectionString;
+        MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
+        ConnectionString = MongoDbRunner.ConnectionString;
+    }
 
-        static MongoDbFixture()
-        {
-            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
-            ConnectionString = MongoDbRunner.ConnectionString;
-        }
-
-        public void Dispose()
-        {
-            MongoDbRunner?.Dispose();
-        }
+    public void Dispose()
+    {
+        MongoDbRunner?.Dispose();
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.Identity
-{
-    public static class IdentityRemoteServiceConsts
-    {
-        public const string RemoteServiceName = "AbpIdentity";
+﻿namespace Volo.Abp.Identity;
 
-        public const string ModuleName = "identity";
-    }
+public static class IdentityRemoteServiceConsts
+{
+    public const string RemoteServiceName = "AbpIdentity";
+
+    public const string ModuleName = "identity";
 }

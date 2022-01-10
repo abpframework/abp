@@ -6,53 +6,52 @@ using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Xunit;
 
-namespace Volo.Abp.TextTemplating.VirtualFiles
+namespace Volo.Abp.TextTemplating.VirtualFiles;
+
+public abstract class LocalizedTemplateContentReaderFactory_Tests<TStartupModule> : AbpTextTemplatingTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    public abstract class LocalizedTemplateContentReaderFactory_Tests<TStartupModule> : AbpTextTemplatingTestBase<TStartupModule>
-        where TStartupModule : IAbpModule
+    protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
+    protected LocalizedTemplateContentReaderFactory LocalizedTemplateContentReaderFactory;
+    protected string WelcomeEmailEnglishContent;
+    protected string WelcomeEmailTurkishContent;
+
+    protected LocalizedTemplateContentReaderFactory_Tests()
     {
-        protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
-        protected LocalizedTemplateContentReaderFactory LocalizedTemplateContentReaderFactory;
-        protected string WelcomeEmailEnglishContent;
-        protected string WelcomeEmailTurkishContent;
+        TemplateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+    }
 
-        protected LocalizedTemplateContentReaderFactory_Tests()
+    [Fact]
+    public async Task Create_Should_Work_With_PhysicalFileProvider()
+    {
+        var reader = await LocalizedTemplateContentReaderFactory.CreateAsync(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail));
+
+        reader.GetContentOrNull("en").ShouldBe(WelcomeEmailEnglishContent);
+        reader.GetContentOrNull("tr").ShouldBe(WelcomeEmailTurkishContent);
+    }
+
+    public class PhysicalFileVirtualFileProvider : IVirtualFileProvider
+    {
+        private readonly PhysicalFileProvider _physicalFileProvider;
+
+        public PhysicalFileVirtualFileProvider(PhysicalFileProvider physicalFileProvider)
         {
-            TemplateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+            _physicalFileProvider = physicalFileProvider;
         }
 
-        [Fact]
-        public async Task Create_Should_Work_With_PhysicalFileProvider()
+        public IFileInfo GetFileInfo(string subpath)
         {
-            var reader = await LocalizedTemplateContentReaderFactory.CreateAsync(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail));
-
-            reader.GetContentOrNull("en").ShouldBe(WelcomeEmailEnglishContent);
-            reader.GetContentOrNull("tr").ShouldBe(WelcomeEmailTurkishContent);
+            return _physicalFileProvider.GetFileInfo(subpath);
         }
 
-        public class PhysicalFileVirtualFileProvider : IVirtualFileProvider
+        public IDirectoryContents GetDirectoryContents(string subpath)
         {
-            private readonly PhysicalFileProvider _physicalFileProvider;
+            return _physicalFileProvider.GetDirectoryContents(subpath);
+        }
 
-            public PhysicalFileVirtualFileProvider(PhysicalFileProvider physicalFileProvider)
-            {
-                _physicalFileProvider = physicalFileProvider;
-            }
-
-            public IFileInfo GetFileInfo(string subpath)
-            {
-                return _physicalFileProvider.GetFileInfo(subpath);
-            }
-
-            public IDirectoryContents GetDirectoryContents(string subpath)
-            {
-                return _physicalFileProvider.GetDirectoryContents(subpath);
-            }
-
-            public IChangeToken Watch(string filter)
-            {
-                return _physicalFileProvider.Watch(filter);
-            }
+        public IChangeToken Watch(string filter)
+        {
+            return _physicalFileProvider.Watch(filter);
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Studio.Packages.Modifying
-{
-    public interface IAbpModuleFileManager
-    {
-        Task AddDependency(string filePath, string moduleToAdd);
+namespace Volo.Abp.Studio.Packages.Modifying;
 
-        Task<string> ExtractModuleNameWithNamespace(string filePath);
-    }
+public interface IAbpModuleFileManager
+{
+    Task AddDependency(string filePath, string moduleToAdd);
+
+    Task<string> ExtractModuleNameWithNamespace(string filePath);
 }

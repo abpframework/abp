@@ -1,28 +1,27 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.TextTemplating.VirtualFiles
+namespace Volo.Abp.TextTemplating.VirtualFiles;
+
+public class VirtualFileTemplateContentContributor : ITemplateContentContributor, ITransientDependency
 {
-    public class VirtualFileTemplateContentContributor : ITemplateContentContributor, ITransientDependency
+    public const string VirtualPathPropertyName = "VirtualPath";
+
+    private readonly ILocalizedTemplateContentReaderFactory _localizedTemplateContentReaderFactory;
+
+    public VirtualFileTemplateContentContributor(
+        ILocalizedTemplateContentReaderFactory localizedTemplateContentReaderFactory)
     {
-        public const string VirtualPathPropertyName = "VirtualPath";
+        _localizedTemplateContentReaderFactory = localizedTemplateContentReaderFactory;
+    }
 
-        private readonly ILocalizedTemplateContentReaderFactory _localizedTemplateContentReaderFactory;
+    public virtual async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
+    {
+        var localizedReader = await _localizedTemplateContentReaderFactory
+            .CreateAsync(context.TemplateDefinition);
 
-        public VirtualFileTemplateContentContributor(
-            ILocalizedTemplateContentReaderFactory localizedTemplateContentReaderFactory)
-        {
-            _localizedTemplateContentReaderFactory = localizedTemplateContentReaderFactory;
-        }
-
-        public virtual async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
-        {
-            var localizedReader = await _localizedTemplateContentReaderFactory
-                .CreateAsync(context.TemplateDefinition);
-
-            return localizedReader.GetContentOrNull(
-                context.Culture
-            );
-        }
+        return localizedReader.GetContentOrNull(
+            context.Culture
+        );
     }
 }

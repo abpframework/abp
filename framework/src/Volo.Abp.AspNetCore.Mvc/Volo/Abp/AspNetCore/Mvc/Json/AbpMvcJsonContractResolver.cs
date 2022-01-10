@@ -8,42 +8,41 @@ using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json
+namespace Volo.Abp.AspNetCore.Mvc.Json;
+
+public class AbpMvcJsonContractResolver : DefaultContractResolver, ITransientDependency
 {
-    public class AbpMvcJsonContractResolver : DefaultContractResolver, ITransientDependency
+    private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
+
+    public AbpMvcJsonContractResolver(IServiceProvider serviceProvider)
     {
-        private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
+        _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
+            serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
+            true
+        );
 
-        public AbpMvcJsonContractResolver(IServiceProvider serviceProvider)
+        NamingStrategy = new CamelCaseNamingStrategy();
+    }
+
+    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+    {
+        var property = base.CreateProperty(member, memberSerialization);
+
+        ModifyProperty(member, property);
+
+        return property;
+    }
+
+    protected virtual void ModifyProperty(MemberInfo member, JsonProperty property)
+    {
+        if (property.PropertyType != typeof(DateTime) && property.PropertyType != typeof(DateTime?))
         {
-            _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
-                serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
-                true
-            );
-
-            NamingStrategy = new CamelCaseNamingStrategy();
+            return;
         }
 
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(member) == null)
         {
-            var property = base.CreateProperty(member, memberSerialization);
-
-            ModifyProperty(member, property);
-
-            return property;
-        }
-
-        protected virtual void ModifyProperty(MemberInfo member, JsonProperty property)
-        {
-            if (property.PropertyType != typeof(DateTime) && property.PropertyType != typeof(DateTime?))
-            {
-                return;
-            }
-
-            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(member) == null)
-            {
-                property.Converter = _dateTimeConverter.Value;
-            }
+            property.Converter = _dateTimeConverter.Value;
         }
     }
 }

@@ -2,10 +2,20 @@
 @typeparam TResourceType
 @using Volo.Abp.BlazoriseUI
 @using Volo.Abp.Localization
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
 
 @if (PropertyInfo != null && Entity != null)
 {
-    <Field>
-        <Check TValue="bool" @bind-Checked="@Value">@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</Check>
-    </Field>
+    <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
+        <Field>
+            <Check TValue="bool" @bind-Checked="@Value">
+                <ChildContent>
+                    @PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)
+                </ChildContent>
+                <Feedback>
+                    <ValidationError/>
+                </Feedback>
+            </Check>
+        </Field>
+    </Validation>
 }
