@@ -31,9 +31,12 @@ public static class AbpAuditLoggingDbContextModelBuilderExtensions
             b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
             b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
             b.Property(x => x.ImpersonatorUserId).HasColumnName(nameof(AuditLog.ImpersonatorUserId));
+            b.Property(x => x.ImpersonatorTenantName).HasMaxLength(AuditLogConsts.MaxTenantNameLength).HasColumnName(nameof(AuditLog.ImpersonatorTenantName));
+            b.Property(x => x.ImpersonatorUserName).HasMaxLength(AuditLogConsts.MaxUserNameLength).HasColumnName(nameof(AuditLog.ImpersonatorUserName));
             b.Property(x => x.UserId).HasColumnName(nameof(AuditLog.UserId));
             b.Property(x => x.UserName).HasMaxLength(AuditLogConsts.MaxUserNameLength).HasColumnName(nameof(AuditLog.UserName));
             b.Property(x => x.TenantId).HasColumnName(nameof(AuditLog.TenantId));
+            b.Property(x => x.TenantName).HasMaxLength(AuditLogConsts.MaxTenantNameLength).HasColumnName(nameof(AuditLog.TenantName));
 
             b.HasMany(a => a.Actions).WithOne().HasForeignKey(x => x.AuditLogId).IsRequired();
             b.HasMany(a => a.EntityChanges).WithOne().HasForeignKey(x => x.AuditLogId).IsRequired();

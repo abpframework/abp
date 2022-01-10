@@ -87,7 +87,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData);
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
     }
 
     public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -222,14 +222,27 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    protected virtual async Task PublishAsync(string eventName, object eventData)
+    protected virtual Task PublishAsync(string eventName, object eventData)
     {
         var body = _serializer.Serialize(eventData);
 
+        return PublishAsync(eventName, body, null);
+    }
+
+    protected virtual async Task PublishAsync(
+        string eventName,
+        byte[] body,
+        Guid? eventId)
+    {
         var message = new ServiceBusMessage(body)
         {
             Subject = eventName
         };
+
+        if (message.MessageId.IsNullOrWhiteSpace())
+        {
+            message.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
+        }
 
         var publisher = await _publisherPool.GetAsync(
             _options.TopicName,

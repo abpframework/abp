@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Porta del server",
     "DisplayName:Abp.Ldap.BaseDc": "Componente del dominio di base",
     "Description:Abp.Ldap.BaseDc": "Componente del dominio di base",
+    "DisplayName:Abp.Ldap.Domain": "Dominio",
+    "Description:Abp.Ldap.Domain": "Dominio",
     "DisplayName:Abp.Ldap.UserName": "Nome utente",
     "Description:Abp.Ldap.UserName": "Nome utente",
     "DisplayName:Abp.Ldap.Password": "Password",
