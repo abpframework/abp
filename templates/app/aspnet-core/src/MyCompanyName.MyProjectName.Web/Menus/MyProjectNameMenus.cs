@@ -1,11 +1,10 @@
-﻿namespace MyCompanyName.MyProjectName.Web.Menus
+﻿namespace MyCompanyName.MyProjectName.Web.Menus;
+
+public class MyProjectNameMenus
 {
-    public class MyProjectNameMenus
-    {
-        private const string Prefix = "MyProjectName";
-        public const string Home = Prefix + ".Home";
+    private const string Prefix = "MyProjectName";
+    public const string Home = Prefix + ".Home";
 
-        //Add your menu items here...
+    //Add your menu items here...
 
-    }
 }

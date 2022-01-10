@@ -23,6 +23,7 @@ import { ValidationErrorComponent } from './components/validation-error/validati
 import { LazyStyleHandler } from './handlers/lazy-style.handler';
 import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
+import { BASIC_THEME_USER_MENU_PROVIDERS } from './providers/user-menu.provider';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -70,6 +71,7 @@ export class ThemeBasicModule {
       ngModule: ThemeBasicModule,
       providers: [
         BASIC_THEME_NAV_ITEM_PROVIDERS,
+        BASIC_THEME_USER_MENU_PROVIDERS,
         BASIC_THEME_STYLES_PROVIDERS,
         {
           provide: VALIDATION_ERROR_TEMPLATE,

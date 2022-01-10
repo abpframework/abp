@@ -9,15 +9,14 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IAbpApplicationConfigurationAppService), typeof(AbpApplicationConfigurationClientProxy))]
+public partial class AbpApplicationConfigurationClientProxy : ClientProxyBase<IAbpApplicationConfigurationAppService>, IAbpApplicationConfigurationAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IAbpApplicationConfigurationAppService), typeof(AbpApplicationConfigurationClientProxy))]
-    public partial class AbpApplicationConfigurationClientProxy : ClientProxyBase<IAbpApplicationConfigurationAppService>, IAbpApplicationConfigurationAppService
+    public virtual async Task<ApplicationConfigurationDto> GetAsync()
     {
-        public virtual async Task<ApplicationConfigurationDto> GetAsync()
-        {
-            return await RequestAsync<ApplicationConfigurationDto>(nameof(GetAsync));
-        }
+        return await RequestAsync<ApplicationConfigurationDto>(nameof(GetAsync));
     }
 }
