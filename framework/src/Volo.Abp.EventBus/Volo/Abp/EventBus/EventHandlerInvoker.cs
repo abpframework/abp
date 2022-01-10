@@ -1,35 +1,40 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.EventBus;
 
 public class EventHandlerInvoker : IEventHandlerInvoker, ISingletonDependency
 {
-    private const string EventHandlerMethodName = "HandleEventAsync";
-    private readonly ConcurrentDictionary<string, EventHandlerMethodExecutor> _executorCache;
+    private readonly ConcurrentDictionary<string, IEventHandlerMethodExecutor> _cache;
 
     public EventHandlerInvoker()
     {
-        _executorCache = new ConcurrentDictionary<string, EventHandlerMethodExecutor>();
+        _cache = new ConcurrentDictionary<string, IEventHandlerMethodExecutor>();
     }
 
-    public Task InvokeAsync(IEventHandler eventHandler, object eventData, Type eventType)
+    public async Task InvokeAsync(IEventHandler eventHandler, object eventData, Type eventType)
     {
-        var handleType = eventHandler.GetType();
-        var key = $"{handleType.FullName}_{eventType.FullName}";
+        if (typeof(ILocalEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+        {
+            var eventHandlerCall = _cache.GetOrAdd($"{typeof(LocalEventHandlerMethodExecutor<>).FullName}{eventHandler.GetType().FullName}-{eventType.FullName}",
+                (_) => (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(LocalEventHandlerMethodExecutor<>).MakeGenericType(eventType)));
+            await eventHandlerCall.ExecutorAsync(eventHandler, eventData);
+        }
 
-        var executor = _executorCache.GetOrAdd(key, _ => EventHandlerMethodExecutor.Create(GetHandleEventMethodInfo(handleType, eventType), handleType.GetTypeInfo()));
+        if (typeof(IDistributedEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+        {
+            var eventHandlerCall = _cache.GetOrAdd($"{typeof(DistributedEventHandlerMethodExecutor<>).FullName}{eventHandler.GetType().FullName}-{eventType.FullName}",
+                (_) => (IEventHandlerMethodExecutor)Activator.CreateInstance(typeof(DistributedEventHandlerMethodExecutor<>).MakeGenericType(eventType)));
+            await eventHandlerCall.ExecutorAsync(eventHandler, eventData);
+        }
 
-        return executor.ExecuteAsync(eventHandler, new[] { eventData });
-    }
-
-    private static MethodInfo GetHandleEventMethodInfo(Type handleType, Type eventType)
-    {
-        var methods = handleType.GetMethods().Where(x => x.Name == EventHandlerMethodName).ToArray();
-        return methods.Length == 1 ? methods.First() : methods.FirstOrDefault(x => x.GetParameters().Any(param => param.ParameterType == eventType));
+        if (!typeof(ILocalEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler) &&
+            !typeof(IDistributedEventHandler<>).MakeGenericType(eventType).IsInstanceOfType(eventHandler))
+        {
+            throw new AbpException("The object instance is not an event handler. Object type: " + eventHandler.GetType().AssemblyQualifiedName);
+        }
     }
 }

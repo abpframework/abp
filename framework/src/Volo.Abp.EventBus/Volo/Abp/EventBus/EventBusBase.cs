@@ -214,14 +214,7 @@ public abstract class EventBusBase : IEventBus
 
                 using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                 {
-                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)) || ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
-                    {
-                        await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
-                    }
-                    else
-                    {
-                        throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
-                    }
+                    await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
                 }
             }
             catch (TargetInvocationException ex)

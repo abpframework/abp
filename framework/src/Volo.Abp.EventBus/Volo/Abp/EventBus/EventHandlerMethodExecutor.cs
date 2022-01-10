@@ -1,66 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.EventBus;
 
-public class EventHandlerMethodExecutor
+public delegate Task EventHandlerMethodExecutorAsync(IEventHandler target, object parameter);
+
+public interface IEventHandlerMethodExecutor
 {
-    private readonly MethodExecutorAsync _executorAsync;
-    private delegate Task MethodExecutorAsync(IEventHandler target, object[] parameters);
+    EventHandlerMethodExecutorAsync ExecutorAsync { get; }
+}
 
-    public MethodInfo MethodInfo { get; }
+public class LocalEventHandlerMethodExecutor<TEvent> : IEventHandlerMethodExecutor
+    where TEvent : class
+{
+    public  EventHandlerMethodExecutorAsync ExecutorAsync => (target, parameter) => target.As<ILocalEventHandler<TEvent>>().HandleEventAsync(parameter.As<TEvent>());
 
-    public TypeInfo TargetTypeInfo { get; }
-
-    private EventHandlerMethodExecutor(MethodInfo methodInfo, TypeInfo targetTypeInfo)
+    public Task ExecuteAsync(IEventHandler target, TEvent parameters)
     {
-        if (methodInfo == null)
-        {
-            throw new ArgumentNullException(nameof(methodInfo));
-        }
-
-        MethodInfo = methodInfo;
-        TargetTypeInfo = targetTypeInfo;
-
-        _executorAsync = GetExecutorAsync(methodInfo, targetTypeInfo);
+        return ExecutorAsync(target, parameters);
     }
+}
 
-    private static MethodExecutorAsync GetExecutorAsync(MethodInfo methodInfo, TypeInfo targetTypeInfo)
+public class DistributedEventHandlerMethodExecutor<TEvent> : IEventHandlerMethodExecutor
+    where TEvent : class
+{
+    public EventHandlerMethodExecutorAsync ExecutorAsync => (target, parameter) => target.As<IDistributedEventHandler<TEvent>>().HandleEventAsync(parameter.As<TEvent>());
+
+    public Task ExecuteAsync(IEventHandler target, TEvent parameters)
     {
-        var targetParameter = Expression.Parameter(typeof(IEventHandler), "target");
-        var parametersParameter = Expression.Parameter(typeof(object[]), "parameters");
-
-        var paramInfos = methodInfo.GetParameters();
-        var parameters = new List<Expression>(paramInfos.Length);
-
-        for (var i = 0; i < paramInfos.Length; i++)
-        {
-            var paramInfo = paramInfos[i];
-            var valueObj = Expression.ArrayIndex(parametersParameter, Expression.Constant(i));
-            var valueCast = Expression.Convert(valueObj, paramInfo.ParameterType);
-
-            parameters.Add(valueCast);
-        }
-
-        var instanceCast = Expression.Convert(targetParameter, targetTypeInfo.AsType());
-        var methodCall = Expression.Call(instanceCast, methodInfo, parameters);
-
-        var castMethodCall = Expression.Convert(methodCall, typeof(Task));
-        var lambda = Expression.Lambda<MethodExecutorAsync>(castMethodCall, targetParameter, parametersParameter);
-        return lambda.Compile();
-
-    }
-
-    public static EventHandlerMethodExecutor Create(MethodInfo methodInfo, TypeInfo targetTypeInfo)
-    {
-        return new EventHandlerMethodExecutor(methodInfo, targetTypeInfo);
-    }
-
-    public Task ExecuteAsync(IEventHandler target, object[] parameters)
-    {
-        return _executorAsync(target, parameters);
+        return ExecutorAsync(target, parameters);
     }
 }

@@ -27,7 +27,7 @@ public class EventHandlerInvoker_Tests : EventBusTestBase
 
         await _eventHandlerInvoker.InvokeAsync(localHandler, eventData, eventData.GetType());
 
-        localHandler.MyEventDataCount.ShouldBe(1);
+        localHandler.MyEventDataCount.ShouldBe(2);
         localHandler.EntityChangedEventDataCount.ShouldBe(0);
         localHandler.EntityChangedEventDataCount.ShouldBe(0);
     }
@@ -99,6 +99,7 @@ public class EventHandlerInvoker_Tests : EventBusTestBase
     }
 
     public class MyLocalEventHandler : ILocalEventHandler<MyEventData>,
+        IDistributedEventHandler<MyEventData>,
         IDistributedEventHandler<EntityCreatedEventData<MyEntity>>,
         IDistributedEventHandler<EntityChangedEventData<MyEntity>>
     {
