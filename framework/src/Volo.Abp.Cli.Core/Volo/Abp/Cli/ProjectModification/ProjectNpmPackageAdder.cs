@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +26,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public SourceCodeDownloadService SourceCodeDownloadService { get; }
     public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
     public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+    public InstallLibsCommand InstallLibsCommand { get; }
     public ICmdHelper CmdHelper { get; }
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     public ILogger<ProjectNpmPackageAdder> Logger { get; set; }
@@ -35,12 +36,14 @@ public class ProjectNpmPackageAdder : ITransientDependency
         SourceCodeDownloadService sourceCodeDownloadService,
         AngularSourceCodeAdder angularSourceCodeAdder,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+        InstallLibsCommand ınstallLibsCommand,
         ICmdHelper cmdHelper)
     {
         JsonSerializer = jsonSerializer;
         SourceCodeDownloadService = sourceCodeDownloadService;
         AngularSourceCodeAdder = angularSourceCodeAdder;
         RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+        InstallLibsCommand = ınstallLibsCommand;
         CmdHelper = cmdHelper;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
@@ -109,14 +112,14 @@ public class ProjectNpmPackageAdder : ITransientDependency
         );
     }
 
-    public Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
-        bool skipGulpCommand = false)
+    public async Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
+        bool skipInstallingLibs = false)
     {
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath) ||
             File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
@@ -134,16 +137,15 @@ public class ProjectNpmPackageAdder : ITransientDependency
             Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
             CmdHelper.RunCmd("yarn add " + npmPackage.Name + versionPostfix);
 
-            if (skipGulpCommand)
+            if (skipInstallingLibs)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            Logger.LogInformation("gulp");
-            CmdHelper.RunCmd("gulp");
+            await InstallLibsCommand.ExecuteAsync(
+                new CommandLineArgs("install-libs")
+            );
         }
-
-        return Task.CompletedTask;
     }
 
     private string DetectAbpVersionOrNull(string packageJsonFile)
