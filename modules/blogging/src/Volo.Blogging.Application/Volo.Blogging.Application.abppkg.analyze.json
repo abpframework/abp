@@ -1,0 +1,56 @@
+{
+  "name": "Volo.Blogging.Application",
+  "hash": "cb199201deb38a1dbd87df36e993c999",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging",
+      "contentType": "abpModule",
+      "name": "BloggingApplicationModule"
+    },
+    {
+      "namespace": "Volo.Blogging.Tagging",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Tagging.ITagAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "TagAppService"
+    },
+    {
+      "namespace": "Volo.Blogging.Posts",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Posts.IPostAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "PostAppService"
+    },
+    {
+      "namespace": "Volo.Blogging.Files",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Files.IFileAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "FileAppService"
+    },
+    {
+      "namespace": "Volo.Blogging.Comments",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Comments.ICommentAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "CommentAppService"
+    },
+    {
+      "namespace": "Volo.Blogging.Blogs",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Blogs.IBlogAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "BlogAppService"
+    }
+  ]
+}
