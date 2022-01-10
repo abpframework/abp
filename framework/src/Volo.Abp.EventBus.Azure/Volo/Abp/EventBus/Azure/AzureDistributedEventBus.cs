@@ -110,9 +110,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 continue;
             }
 
-            var body = _serializer.Serialize(outgoingEvent.EventData);
-
-            if (!messageBatch.TryAddMessage(new ServiceBusMessage(body) { Subject = outgoingEvent.EventName }))
+            if (!messageBatch.TryAddMessage(new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName }))
             {
                 failed = true;
                 failures.Add(outgoingEvent.Id);
