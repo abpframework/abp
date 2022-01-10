@@ -52,16 +52,6 @@ public class AbpBackgroundWorkersQuartzModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var quartzBackgroundWorkerOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerQuartzOptions>>().Value;
-        if (quartzBackgroundWorkerOptions.IsAutoRegisterEnabled)
-        {
-            var backgroundWorkerManager = context.ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
-            var works = context.ServiceProvider.GetServices<IQuartzBackgroundWorker>().Where(x => x.AutoRegister);
-
-            foreach (var work in works)
-            {
-                AsyncHelper.RunSync(() => backgroundWorkerManager.AddAsync(work));
-            }
-        }
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 }

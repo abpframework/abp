@@ -30,12 +30,12 @@ public class AbpBackgroundJobsRabbitMqModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        AsyncHelper.RunSync(() => StartJobQueueManagerAsync(context));
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        AsyncHelper.RunSync(() => StopJobQueueManagerAsync(context));
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 
     private async static Task StartJobQueueManagerAsync(ApplicationInitializationContext context)

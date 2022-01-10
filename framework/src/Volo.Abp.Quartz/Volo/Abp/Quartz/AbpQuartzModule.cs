@@ -81,18 +81,11 @@ public class AbpQuartzModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpQuartzOptions>>().Value;
-
-        _scheduler = context.ServiceProvider.GetRequiredService<IScheduler>();
-
-        AsyncHelper.RunSync(() => options.StartSchedulerFactory.Invoke(_scheduler));
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        if (_scheduler.IsStarted)
-        {
-            AsyncHelper.RunSync(() => _scheduler.Shutdown());
-        }
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 }

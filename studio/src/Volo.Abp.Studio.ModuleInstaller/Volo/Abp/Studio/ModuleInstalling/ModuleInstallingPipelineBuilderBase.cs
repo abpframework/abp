@@ -12,7 +12,7 @@ public abstract class ModuleInstallingPipelineBuilderBase
         if (context.WithSourceCode)
         {
             pipeline.Add(new SourceCodeDownloadStep());
-            pipeline.Add(new CommonPropsStep());
+            pipeline.Add(new AssemblyVersionStep());
 
             if (context.AddToSolutionFile)
             {

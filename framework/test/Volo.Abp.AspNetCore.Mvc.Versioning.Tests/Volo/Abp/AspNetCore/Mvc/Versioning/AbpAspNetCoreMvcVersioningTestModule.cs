@@ -38,9 +38,10 @@ public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var preActions = context.Services.GetPreConfigureActions<AbpAspNetCoreMvcOptions>();
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
-            context.Services.ExecutePreConfiguredActions(options);
+            preActions.Configure(options);
         });
 
         context.Services.AddAbpApiVersioning(options =>
@@ -48,11 +49,10 @@ public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
             options.ReportApiVersions = true;
             options.AssumeDefaultVersionWhenUnspecified = true;
 
-                //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
-                //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
+            //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
+            //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
 
-                var mvcOptions = context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>();
-            options.ConfigureAbp(mvcOptions);
+            options.ConfigureAbp(preActions.Configure());
         });
 
         context.Services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed;
 
@@ -15,16 +16,19 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
 {
     private readonly ILocalEventBus _localEventBus;
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
 
     public LocalDistributedEventBus(
         ILocalEventBus localEventBus,
+        IUnitOfWorkManager unitOfWorkManager,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
     {
         _localEventBus = localEventBus;
+        UnitOfWorkManager = unitOfWorkManager;
         ServiceScopeFactory = serviceScopeFactory;
         AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         Subscribe(distributedEventBusOptions.Value.Handlers);
@@ -122,24 +126,56 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         _localEventBus.UnsubscribeAll(eventType);
     }
 
-    public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
+    public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
         where TEvent : class
     {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
+        await PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
     }
 
-    public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+    public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+        {
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
+            );
+            return;
+        }
+
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete: false);
     }
 
-    public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
+    public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+        where TEvent : class
     {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
+        await PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
     }
 
-    public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+        {
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext(), useOutbox)
+            );
+            return;
+        }
+
+        if (useOutbox && UnitOfWorkManager.Current != null)
+        {
+            UnitOfWorkManager.Current.OnCompleted(async() => {
+                await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete: false);
+            });
+            return;
+        }
+
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete: false);
+    }
+
+    protected virtual void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+    {
+        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 }
