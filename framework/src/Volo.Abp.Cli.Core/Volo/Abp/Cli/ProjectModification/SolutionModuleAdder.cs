@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -519,14 +519,23 @@ public class SolutionModuleAdder : ITransientDependency
 
         foreach (var nugetPackage in module.NugetPackages)
         {
+            var isProjectTiered = await IsProjectTiered(projectFiles);
+
             var nugetTarget =
-                await IsProjectTiered(projectFiles) && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
+                isProjectTiered && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
                     ? nugetPackage.TieredTarget
                     : nugetPackage.Target;
 
-            if (webPackagesWillBeAddedToBlazorServerProject && nugetTarget == NuGetPackageTarget.Web)
+            if (webPackagesWillBeAddedToBlazorServerProject)
             {
-                nugetTarget = NuGetPackageTarget.BlazorServer;
+                if ( nugetTarget == NuGetPackageTarget.Web)
+                {
+                    nugetTarget = NuGetPackageTarget.BlazorServer;
+                }
+                else if (!isProjectTiered && nugetTarget == NuGetPackageTarget.SignalR)
+                {
+                    nugetTarget = NuGetPackageTarget.BlazorServer;
+                }
             }
 
             var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetTarget);
@@ -590,7 +599,7 @@ public class SolutionModuleAdder : ITransientDependency
         }
 
         var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"))
-            ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj"));
+            ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj")) ;
 
         if (dbMigrationsProject == null)
         {
@@ -679,74 +688,74 @@ public class SolutionModuleAdder : ITransientDependency
         module.EfCoreConfigureMethodName = $"{module.Name}.EntityFrameworkCore:Configure{moduleProjectName}";
 
         module.NugetPackages = new List<NugetPackageInfo>
+        {
+            new NugetPackageInfo
             {
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Application",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationModule",
-                    Target = NuGetPackageTarget.Application
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Application.Contracts",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationContractsModule",
-                    Target = NuGetPackageTarget.ApplicationContracts
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Blazor.WebAssembly",
-                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
-                    Target = NuGetPackageTarget.BlazorWebAssembly
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Blazor.Server",
-                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
-                    Target = NuGetPackageTarget.BlazorServer
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Domain",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}DomainModule",
-                    Target = NuGetPackageTarget.Domain
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Domain.Shared",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}DomainSharedModule",
-                    Target = NuGetPackageTarget.DomainShared
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.EntityFrameworkCore",
-                    ModuleClass = $"{module.Name}.EntityFrameworkCore.{moduleProjectName}EntityFrameworkCoreModule",
-                    Target = NuGetPackageTarget.EntityFrameworkCore
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.HttpApi",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiModule",
-                    Target = NuGetPackageTarget.HttpApi
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.HttpApi.Client",
-                    ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiClientModule",
-                    Target = NuGetPackageTarget.HttpApiClient
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.MongoDB",
-                    ModuleClass = $"{module.Name}.MongoDB.{moduleProjectName}MongoDbModule",
-                    Target = NuGetPackageTarget.MongoDB
-                },
-                new NugetPackageInfo
-                {
-                    Name = $"{module.Name}.Web",
-                    ModuleClass = $"{module.Name}.Web.{moduleProjectName}WebModule",
-                    Target = NuGetPackageTarget.Web
-                },
-            };
+                Name = $"{module.Name}.Application",
+                ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationModule",
+                Target = NuGetPackageTarget.Application
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Application.Contracts",
+                ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationContractsModule",
+                Target = NuGetPackageTarget.ApplicationContracts
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Blazor.WebAssembly",
+                ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
+                Target = NuGetPackageTarget.BlazorWebAssembly
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Blazor.Server",
+                ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
+                Target = NuGetPackageTarget.BlazorServer
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Domain",
+                ModuleClass = $"{module.Name}.{moduleProjectName}DomainModule",
+                Target = NuGetPackageTarget.Domain
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Domain.Shared",
+                ModuleClass = $"{module.Name}.{moduleProjectName}DomainSharedModule",
+                Target = NuGetPackageTarget.DomainShared
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.EntityFrameworkCore",
+                ModuleClass = $"{module.Name}.EntityFrameworkCore.{moduleProjectName}EntityFrameworkCoreModule",
+                Target = NuGetPackageTarget.EntityFrameworkCore
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.HttpApi",
+                ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiModule",
+                Target = NuGetPackageTarget.HttpApi
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.HttpApi.Client",
+                ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiClientModule",
+                Target = NuGetPackageTarget.HttpApiClient
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.MongoDB",
+                ModuleClass = $"{module.Name}.MongoDB.{moduleProjectName}MongoDbModule",
+                Target = NuGetPackageTarget.MongoDB
+            },
+            new NugetPackageInfo
+            {
+                Name = $"{module.Name}.Web",
+                ModuleClass = $"{module.Name}.Web.{moduleProjectName}WebModule",
+                Target = NuGetPackageTarget.Web
+            },
+        };
 
         module.NpmPackages = new List<NpmPackageInfo>();
 
