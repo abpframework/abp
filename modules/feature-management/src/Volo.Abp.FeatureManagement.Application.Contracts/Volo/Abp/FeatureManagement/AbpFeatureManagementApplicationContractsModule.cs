@@ -26,11 +26,12 @@ public class AbpFeatureManagementApplicationContractsModule : AbpModule
             options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
         });
 
+        var contractsOptionsActions = context.Services.GetPreConfigureActions<AbpFeatureManagementApplicationContractsOptions>();
         Configure<AbpFeatureManagementApplicationContractsOptions>(options =>
         {
-            context.Services.ExecutePreConfiguredActions(options);
+            contractsOptionsActions.Configure(options);
         });
-        
+
         Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
         {
             options.Converters.Add<NewtonsoftStringValueTypeJsonConverter>();
@@ -38,8 +39,7 @@ public class AbpFeatureManagementApplicationContractsModule : AbpModule
 
         Configure<AbpSystemTextJsonSerializerOptions>(options =>
         {
-            var contractsOptions = context.Services.ExecutePreConfiguredActions<AbpFeatureManagementApplicationContractsOptions>();
-            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(contractsOptions));
+            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(contractsOptionsActions.Configure()));
         });
     }
 }
