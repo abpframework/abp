@@ -136,9 +136,11 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
             UserName = CurrentUser.UserName,
             ClientId = CurrentClient.Id,
             CorrelationId = CorrelationIdProvider.Get(),
+            ExecutionTime = Clock.Now,
             ImpersonatorUserId = CurrentUser.FindImpersonatorUserId(),
+            ImpersonatorUserName = CurrentUser.FindImpersonatorUserName(),
             ImpersonatorTenantId = CurrentUser.FindImpersonatorTenantId(),
-            ExecutionTime = Clock.Now
+            ImpersonatorTenantName = CurrentUser.FindImpersonatorTenantName(),
         };
 
         ExecutePreContributors(auditInfo);
