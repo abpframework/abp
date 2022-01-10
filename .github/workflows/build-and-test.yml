@@ -41,12 +41,12 @@ jobs:
         dotnet-version: 6.0.100
 
     - name: Build All
-      run: .\build-all.ps1
+      run: .\build-all.ps1 -f
       working-directory: .\build
       shell: powershell
 
     - name: Test All
-      run: .\test-all.ps1
+      run: .\test-all.ps1 -f
       working-directory: .\build
       shell: powershell
 

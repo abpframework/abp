@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Quartz;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
@@ -26,16 +27,16 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
     public void BuildWorker(IBackgroundWorker worker)
     {
         int? period;
-        var workerType = worker.GetType();
+        var workerType = ProxyHelper.GetUnProxiedType(worker);
 
         if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
         {
-            if (typeof(TWorker) != worker.GetType())
+            if (typeof(TWorker) != workerType)
             {
                 throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
             }
 
-            var timer = worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
+            var timer = workerType.GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
 
             if (worker is AsyncPeriodicBackgroundWorkerBase)
             {

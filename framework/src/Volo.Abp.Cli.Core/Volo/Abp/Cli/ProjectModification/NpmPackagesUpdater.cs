@@ -88,7 +88,7 @@ public class NpmPackagesUpdater : ITransientDependency
                 RunYarn(fileDirectory);
             }
 
-            if (!IsAngularProject(fileDirectory))
+            if (!IsAngularProject(fileDirectory) && GulpFileExistAsync(fileDirectory))
             {
                 Thread.Sleep(1000);
                 RunGulp(fileDirectory);
@@ -106,6 +106,11 @@ public class NpmPackagesUpdater : ITransientDependency
     private static async Task<bool> NpmrcFileExistAsync(string directoryName)
     {
         return await Task.FromResult(File.Exists(Path.Combine(directoryName, ".npmrc")));
+    }
+
+    private static bool GulpFileExistAsync(string directoryName)
+    {
+        return File.Exists(Path.Combine(directoryName, "gulpfile.js"));
     }
 
     private async Task CreateNpmrcFileAsync(string directoryName)
