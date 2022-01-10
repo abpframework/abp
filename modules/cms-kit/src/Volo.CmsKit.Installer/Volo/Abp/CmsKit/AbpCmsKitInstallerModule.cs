@@ -8,13 +8,13 @@ namespace Volo.Abp.CmsKit;
     typeof(AbpStudioModuleInstallerModule),
     typeof(AbpVirtualFileSystemModule)
     )]
-public class VoloCmsKitDatabaseInstallerModule : AbpModule
+public class VoloCmsKitInstallerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<VoloCmsKitDatabaseInstallerModule>();
+            options.FileSets.AddEmbedded<VoloCmsKitInstallerModule>();
         });
     }
 }

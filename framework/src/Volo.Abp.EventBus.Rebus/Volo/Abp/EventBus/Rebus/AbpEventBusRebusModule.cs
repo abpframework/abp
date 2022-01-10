@@ -11,18 +11,17 @@ public class AbpEventBusRebusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>(); ;
-
         context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
 
+        var preActions = context.Services.GetPreConfigureActions<AbpRebusEventBusOptions>();
         Configure<AbpRebusEventBusOptions>(rebusOptions =>
         {
-            context.Services.ExecutePreConfiguredActions(rebusOptions);
+            preActions.Configure(rebusOptions);
         });
 
         context.Services.AddRebus(configure =>
         {
-            options.Configurer?.Invoke(configure);
+            preActions.Configure().Configurer?.Invoke(configure);
             return configure;
         });
     }

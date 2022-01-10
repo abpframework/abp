@@ -25,7 +25,6 @@ public class AbpSystemTextJsonSerializerOptionsSetup : IConfigureOptions<AbpSyst
         options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
 
         options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
-        options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
 
         // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
         options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;

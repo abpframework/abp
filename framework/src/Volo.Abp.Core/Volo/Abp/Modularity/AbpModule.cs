@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,9 +31,21 @@ public abstract class AbpModule :
 
     private ServiceConfigurationContext _serviceConfigurationContext;
 
+    public virtual Task PreConfigureServicesAsync(ServiceConfigurationContext context)
+    {
+        PreConfigureServices(context);
+        return Task.CompletedTask;
+    }
+
     public virtual void PreConfigureServices(ServiceConfigurationContext context)
     {
 
+    }
+
+    public virtual Task ConfigureServicesAsync(ServiceConfigurationContext context)
+    {
+        ConfigureServices(context);
+        return Task.CompletedTask;
     }
 
     public virtual void ConfigureServices(ServiceConfigurationContext context)
@@ -40,9 +53,21 @@ public abstract class AbpModule :
 
     }
 
+    public virtual Task PostConfigureServicesAsync(ServiceConfigurationContext context)
+    {
+        PostConfigureServices(context);
+        return Task.CompletedTask;
+    }
+
     public virtual void PostConfigureServices(ServiceConfigurationContext context)
     {
 
+    }
+
+    public virtual Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        OnPreApplicationInitialization(context);
+        return Task.CompletedTask;
     }
 
     public virtual void OnPreApplicationInitialization(ApplicationInitializationContext context)
@@ -50,14 +75,32 @@ public abstract class AbpModule :
 
     }
 
+    public virtual Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        OnApplicationInitialization(context);
+        return Task.CompletedTask;
+    }
+
     public virtual void OnApplicationInitialization(ApplicationInitializationContext context)
     {
 
     }
 
+    public virtual Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        OnPostApplicationInitialization(context);
+        return Task.CompletedTask;
+    }
+
     public virtual void OnPostApplicationInitialization(ApplicationInitializationContext context)
     {
 
+    }
+
+    public virtual Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        OnApplicationShutdown(context);
+        return Task.CompletedTask;
     }
 
     public virtual void OnApplicationShutdown(ApplicationShutdownContext context)

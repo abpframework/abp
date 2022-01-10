@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -18,12 +19,14 @@ namespace Volo.Abp.Cli.Commands;
 public abstract class ProjectCreationCommandBase
 {
     public ConnectionStringProvider ConnectionStringProvider { get; }
+    public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
-    public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, ICmdHelper cmdHelper)
+    public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, SolutionPackageVersionFinder solutionPackageVersionFinder, ICmdHelper cmdHelper)
     {
         ConnectionStringProvider = connectionStringProvider;
+        SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
 
         Logger = NullLogger<NewCommand>.Instance;
@@ -108,13 +111,16 @@ public abstract class ProjectCreationCommandBase
         SolutionName solutionName;
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
-            var microserviceSolutionName = FindMicroserviceSolutionName(outputFolderRoot);
+            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
 
-            if (microserviceSolutionName == null)
+            if (slnFile == null)
             {
                 throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
             }
 
+            var microserviceSolutionName = Path.GetFileName(slnFile).RemovePostFix(".sln");
+
+            version ??= SolutionPackageVersionFinder.Find(slnFile);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
             outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
@@ -221,18 +227,6 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected string FindMicroserviceSolutionName(string outputFolderRoot)
-    {
-        var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
-
-        if (slnFile == null)
-        {
-            return null;
-        }
-
-        return Path.GetFileName(slnFile).RemovePostFix(".sln");
-    }
-
     protected UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)
     {
         if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "blazor")))
@@ -296,6 +290,14 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
+    protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+    {
+        if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+        {
+            CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
+        }
+    }
+    
     protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);

@@ -605,7 +605,7 @@ function configureRoutes(routes: RoutesService) {
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 This command generates the service proxy for the author service and the related model (DTO) classes:

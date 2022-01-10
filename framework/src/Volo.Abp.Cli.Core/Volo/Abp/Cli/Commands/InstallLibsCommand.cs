@@ -12,6 +12,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class InstallLibsCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "install-libs";
+    
     public ILogger<InstallLibsCommand> Logger { get; set; }
 
     protected IInstallLibsService InstallLibsService { get; }

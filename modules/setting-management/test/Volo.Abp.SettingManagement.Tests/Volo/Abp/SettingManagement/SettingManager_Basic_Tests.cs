@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Settings;
 using Xunit;
@@ -44,6 +44,15 @@ public class SettingManager_Basic_Tests : SettingsTestBase
         settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
         settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "default-store-value");
         settingValues.ShouldContain(sv => sv.Name == "SettingNotSetInStore" && sv.Value == "default-value");
+    }
+
+    [Fact]
+    public async Task Should_Get_All_By_Names_Base_Store_Values()
+    {
+        var settingValues = await _settingProvider.GetAllAsync(new []{ "MySetting1", "MySetting2" });
+        settingValues.Count.ShouldBe(2);
+        settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
+        settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "default-store-value");
     }
 
     [Fact]

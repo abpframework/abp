@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Volo.Abp.Application.Dtos;
@@ -8,6 +8,16 @@ namespace Volo.Abp.Application.Dtos;
 /// </summary>
 [Serializable]
 public class PagedResultRequestDto : LimitedResultRequestDto, IPagedResultRequest
+{
+    [Range(0, int.MaxValue)]
+    public virtual int SkipCount { get; set; }
+}
+
+/// <summary>
+/// Simply implements <see cref="IPagedResultRequest"/>.
+/// </summary>
+[Serializable]
+public class ExtensiblePagedResultRequestDto : ExtensibleLimitedResultRequestDto, IPagedResultRequest
 {
     [Range(0, int.MaxValue)]
     public virtual int SkipCount { get; set; }

@@ -7,10 +7,38 @@ $apiKey = $args[0]
 $version = $commonPropsXml.Project.PropertyGroup.Version
 
 # Publish all packages
+$i = 0
+$errorCount = 0
+$totalProjectsCount = $projects.length
+$nugetUrl = "https://api.nuget.org/v3/index.json"
+Set-Location $packFolder
+
 foreach($project in $projects) {
-    $projectName = $project.Substring($project.LastIndexOf("/") + 1)
-    & dotnet nuget push ($projectName + "." + $version + ".nupkg") --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key "$apiKey"
+	$i += 1
+	$projectFolder = Join-Path $rootFolder $project
+	$projectName = ($project -split '/')[-1]
+	$nugetPackageName = $projectName + "." + $version + ".nupkg"	
+	$nugetPackageExists = Test-Path $nugetPackageName -PathType leaf
+ 
+	Write-Info "[$i / $totalProjectsCount] - Pushing: $nugetPackageName"
+	
+	if ($nugetPackageExists)
+	{
+		dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey"		
+		#Write-Host ("Deleting package from local: " + $nugetPackageName)
+		#Remove-Item $nugetPackageName -Force
+	}
+	else
+	{
+		Write-Host ("********** ERROR PACKAGE NOT FOUND: " + $nugetPackageName) -ForegroundColor red
+		$errorCount += 1
+		#Exit
+	}
+	
+	Write-Host "--------------------------------------------------------------`r`n"
 }
 
-# Go back to the pack folder
-Set-Location $packFolder
+if ($errorCount > 0)
+{
+	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
+}

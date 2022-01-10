@@ -19,6 +19,8 @@ public class AbpApplicationCreationOptions
     [NotNull]
     public AbpConfigurationBuilderOptions Configuration { get; }
 
+    public bool SkipConfigureServices { get; set; }
+
     public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
     {
         Services = Check.NotNull(services, nameof(services));

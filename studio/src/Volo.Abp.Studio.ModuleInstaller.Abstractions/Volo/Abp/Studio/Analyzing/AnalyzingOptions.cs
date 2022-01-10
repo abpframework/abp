@@ -9,14 +9,8 @@ public class AnalyzingOptions
     [CanBeNull]
     public string AnalyzeConfigurationFile { get; set; }
 
-    [CanBeNull]
-    public string SettingNamePrefix { get; set; }
-
-    [CanBeNull]
-    public string FeatureNamePrefix { get; set; }
-
     // Combines two options
-    // The second option has more priority 
+    // The second option has more priority
     public static AnalyzingOptions Combine([CanBeNull] AnalyzingOptions first, [CanBeNull] AnalyzingOptions second)
     {
         if (second == null && first == null)
@@ -36,9 +30,7 @@ public class AnalyzingOptions
 
         return new AnalyzingOptions
         {
-            AnalyzeConfigurationFile = second.AnalyzeConfigurationFile ?? first.AnalyzeConfigurationFile,
-            SettingNamePrefix = second.SettingNamePrefix ?? first.SettingNamePrefix,
-            FeatureNamePrefix = second.FeatureNamePrefix ?? first.FeatureNamePrefix
+            AnalyzeConfigurationFile = second.AnalyzeConfigurationFile ?? first.AnalyzeConfigurationFile
         };
     }
 }
