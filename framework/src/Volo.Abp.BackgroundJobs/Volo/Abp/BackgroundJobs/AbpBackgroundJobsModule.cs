@@ -30,10 +30,6 @@ public class AbpBackgroundJobsModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-        if (options.IsJobExecutionEnabled)
-        {
-            AsyncHelper.RunSync(() => context.AddBackgroundWorkerAsync<IBackgroundJobWorker>());
-        }
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 }
