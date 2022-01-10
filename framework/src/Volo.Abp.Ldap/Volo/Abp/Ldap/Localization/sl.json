@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Vrata strežnika",
     "DisplayName:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
     "Description:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
+    "DisplayName:Abp.Ldap.Domain": "domena",
+    "Description:Abp.Ldap.Domain": "domena",
     "DisplayName:Abp.Ldap.UserName": "Uporabniško ime",
     "Description:Abp.Ldap.UserName": "Uporabniško ime",
     "DisplayName:Abp.Ldap.Password": "Geslo",

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using LdapForNet;
 using LdapForNet.Native;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -12,11 +11,11 @@ namespace Volo.Abp.Ldap;
 public class LdapManager : ILdapManager, ITransientDependency
 {
     public ILogger<LdapManager> Logger { get; set; }
-    protected IOptions<AbpLdapOptions> LdapOptions { get; }
+    protected ILdapSettingProvider LdapSettingProvider { get; }
 
-    public LdapManager(IOptions<AbpLdapOptions> ldapOptions)
+    public LdapManager(ILdapSettingProvider ldapSettingProvider)
     {
-        LdapOptions = ldapOptions;
+        LdapSettingProvider = ldapSettingProvider;
         Logger = NullLogger<LdapManager>.Instance;
     }
 
@@ -52,9 +51,7 @@ public class LdapManager : ILdapManager, ITransientDependency
 
     protected virtual async Task ConnectAsync(ILdapConnection ldapConnection)
     {
-        await LdapOptions.SetAsync();
-
-        ldapConnection.Connect(LdapOptions.Value.ServerHost, LdapOptions.Value.ServerPort);
+        ldapConnection.Connect(await LdapSettingProvider.GetServerHostAsync(), await LdapSettingProvider.GetServerPortAsync());
     }
 
     protected virtual async Task AuthenticateLdapConnectionAsync(ILdapConnection connection, string username, string password)
