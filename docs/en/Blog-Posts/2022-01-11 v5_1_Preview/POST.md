@@ -42,6 +42,26 @@ TODO: Startup template changes
 
 In this section, I will introduce some major features released with this version.
 
+### DRAFT list of things done
+
+#### ABP Framework
+
+* Use new hosting model for the app template. [#10928](https://github.com/abpframework/abp/pull/10928) - what to do for existing solutions?
+* Async application initialization methods on the AbpModule class [#6828](https://github.com/abpframework/abp/issues/6828)
+* Angular 13?
+* [#10552](https://github.com/abpframework/abp/pull/10696) Used file scoped namespaces :)
+* Support markdown in CMS-Kit comments [#10792](https://github.com/abpframework/abp/pull/10792)
+* eShopOnAbp is getting mature
+* Nightly builds are working again
+* Coming: New ABP.IO design!
+
+All issues & PRs in [5.1 milesone](https://github.com/abpframework/abp/milestone/60?closed=1).
+
+#### ABP Commercial
+
+* CMS Kit Pro: URL forwarding
+* LeptonX is coming for ABP Blazor and MVC UI too (share the sample dashboard)
+
 ### Header 1
 
 TODO
