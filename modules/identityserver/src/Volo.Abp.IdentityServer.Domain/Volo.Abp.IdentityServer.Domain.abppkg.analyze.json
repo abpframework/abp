@@ -1,0 +1,197 @@
+{
+  "name": "Volo.Abp.IdentityServer.Domain",
+  "hash": "bd4823ce93c6e63a6e46f26398ddcaa1",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.IdentityServer",
+      "contentType": "abpModule",
+      "name": "AbpIdentityServerDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim",
+        "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "IdentityResource"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Grants",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "PersistedGrant"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Devices",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "DeviceFlowCodes"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Abp.IdentityServer.Clients.ClientScope",
+        "Volo.Abp.IdentityServer.Clients.ClientSecret",
+        "Volo.Abp.IdentityServer.Clients.ClientGrantType",
+        "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin",
+        "Volo.Abp.IdentityServer.Clients.ClientRedirectUri",
+        "Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri",
+        "Volo.Abp.IdentityServer.Clients.ClientIdPRestriction",
+        "Volo.Abp.IdentityServer.Clients.ClientClaim",
+        "Volo.Abp.IdentityServer.Clients.ClientProperty"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Client"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim",
+        "Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "ApiScope"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret",
+        "Volo.Abp.IdentityServer.ApiResources.ApiResourceScope",
+        "Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim",
+        "Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "ApiResource"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim",
+          "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "IdentityResource"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IIdentityResourceRepository"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Grants",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.Grants",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "PersistedGrant"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IPersistentGrantRepository"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Devices",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.Devices",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "DeviceFlowCodes"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IDeviceFlowCodesRepository"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.Clients",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Abp.IdentityServer.Clients.ClientScope",
+          "Volo.Abp.IdentityServer.Clients.ClientSecret",
+          "Volo.Abp.IdentityServer.Clients.ClientGrantType",
+          "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin",
+          "Volo.Abp.IdentityServer.Clients.ClientRedirectUri",
+          "Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri",
+          "Volo.Abp.IdentityServer.Clients.ClientIdPRestriction",
+          "Volo.Abp.IdentityServer.Clients.ClientClaim",
+          "Volo.Abp.IdentityServer.Clients.ClientProperty"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Client"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IClientRepository"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim",
+          "Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "ApiScope"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IApiScopeRepository"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.IdentityServer.ApiResources",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret",
+          "Volo.Abp.IdentityServer.ApiResources.ApiResourceScope",
+          "Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim",
+          "Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "ApiResource"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IApiResourceRepository"
+    }
+  ]
+}

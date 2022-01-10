@@ -41,6 +41,10 @@
     "Volo.Abp.PermissionManagement.Domain.IdentityServer": {
       "path": "src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo.Abp.PermissionManagement.Domain.IdentityServer.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.IdentityServer.Installer": {
+      "path": "src/Volo.Abp.IdentityServer.Installer/Volo.Abp.IdentityServer.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }
