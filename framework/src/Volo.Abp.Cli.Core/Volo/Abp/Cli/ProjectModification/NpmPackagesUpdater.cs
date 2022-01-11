@@ -121,7 +121,6 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
-        var voloRegistry = await GetVoloRegistryAsync();
 
         if (await NpmrcFileExistAsync(directoryName))
         {
@@ -132,11 +131,6 @@ public class NpmPackagesUpdater : ITransientDependency
                 fileContent += Environment.NewLine + abpRegistry;
             }
 
-            if (!fileContent.Contains(voloRegistry))
-            {
-                fileContent += Environment.NewLine + voloRegistry;
-            }
-
             File.WriteAllText(fileName, fileContent);
 
             return;
@@ -145,40 +139,8 @@ public class NpmPackagesUpdater : ITransientDependency
         using var fs = File.Create(fileName);
 
         var content = new UTF8Encoding(true)
-            .GetBytes(abpRegistry + Environment.NewLine + voloRegistry);
+            .GetBytes(abpRegistry);
         fs.Write(content, 0, content.Length);
-    }
-
-    private async Task<string> GetVoloRegistryAsync()
-    {
-        var apikey = await GetApiKeyAsync();
-
-        if (string.IsNullOrWhiteSpace(apikey))
-        {
-            return "";
-        }
-
-        return "@volo:registry=https://www.myget.org/F/abp-commercial/auth/" + apikey + "/npm/";
-    }
-
-    public async Task<string> GetApiKeyAsync()
-    {
-        try
-        {
-            var client = _cliHttpClientFactory.CreateClient();
-            using (var response = await client.GetHttpResponseMessageWithRetryAsync(
-                       url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                       cancellationToken: CancellationTokenProvider.Token,
-                       logger: Logger
-                   ))
-            {
-                return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
-            }
-        }
-        catch (Exception)
-        {
-            return string.Empty;
-        }
     }
 
     private static bool IsAngularProject(string fileDirectory)
