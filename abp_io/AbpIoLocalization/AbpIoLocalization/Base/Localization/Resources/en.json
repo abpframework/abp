@@ -73,6 +73,9 @@
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
     "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "ABPIO-Common": "ABPIO-Common",
-    "CommercialNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "FreeDDDEBook": "Free DDD E-Book",
+    "AdditionalServices": "Additional Services",
+    "Learn": "Learn"
   }
 }
