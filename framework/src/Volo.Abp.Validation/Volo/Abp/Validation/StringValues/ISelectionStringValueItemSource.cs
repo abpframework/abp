@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Validation.StringValues
+namespace Volo.Abp.Validation.StringValues;
+
+public interface ISelectionStringValueItemSource
 {
-    public interface ISelectionStringValueItemSource
-    {
-        ICollection<ISelectionStringValueItem> Items { get; }
-    }
+    ICollection<ISelectionStringValueItem> Items { get; }
 }

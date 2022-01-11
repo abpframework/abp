@@ -3,40 +3,39 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.SecurityLog
+namespace Volo.Abp.SecurityLog;
+
+public class DefaultSecurityLogManager : ISecurityLogManager, ITransientDependency
 {
-    public class DefaultSecurityLogManager : ISecurityLogManager, ITransientDependency
+    protected AbpSecurityLogOptions SecurityLogOptions { get; }
+
+    protected ISecurityLogStore SecurityLogStore { get; }
+
+    public DefaultSecurityLogManager(
+        IOptions<AbpSecurityLogOptions> securityLogOptions,
+        ISecurityLogStore securityLogStore)
     {
-        protected AbpSecurityLogOptions SecurityLogOptions { get; }
+        SecurityLogStore = securityLogStore;
+        SecurityLogOptions = securityLogOptions.Value;
+    }
 
-        protected ISecurityLogStore SecurityLogStore { get; }
-
-        public DefaultSecurityLogManager(
-            IOptions<AbpSecurityLogOptions> securityLogOptions,
-            ISecurityLogStore securityLogStore)
+    public async Task SaveAsync(Action<SecurityLogInfo> saveAction = null)
+    {
+        if (!SecurityLogOptions.IsEnabled)
         {
-            SecurityLogStore = securityLogStore;
-            SecurityLogOptions = securityLogOptions.Value;
+            return;
         }
 
-        public async Task SaveAsync(Action<SecurityLogInfo> saveAction = null)
-        {
-            if (!SecurityLogOptions.IsEnabled)
-            {
-                return;
-            }
+        var securityLogInfo = await CreateAsync();
+        saveAction?.Invoke(securityLogInfo);
+        await SecurityLogStore.SaveAsync(securityLogInfo);
+    }
 
-            var securityLogInfo = await CreateAsync();
-            saveAction?.Invoke(securityLogInfo);
-            await SecurityLogStore.SaveAsync(securityLogInfo);
-        }
-
-        protected virtual Task<SecurityLogInfo> CreateAsync()
+    protected virtual Task<SecurityLogInfo> CreateAsync()
+    {
+        return Task.FromResult(new SecurityLogInfo
         {
-            return Task.FromResult(new SecurityLogInfo
-            {
-                ApplicationName = SecurityLogOptions.ApplicationName
-            });
-        }
+            ApplicationName = SecurityLogOptions.ApplicationName
+        });
     }
 }

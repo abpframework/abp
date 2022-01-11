@@ -3,15 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Studio.ModuleInstalling;
 
-namespace Volo.Abp.Account
+namespace Volo.Abp.Account;
+
+[Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+[ExposeServices(typeof(IModuleInstallingPipelineBuilder))]
+public class AccountInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
 {
-    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(typeof(IModuleInstallingPipelineBuilder))]
-    public class AccountInstallerPipelineBuilder : ModuleInstallingPipelineBuilderBase, IModuleInstallingPipelineBuilder, ITransientDependency
+    public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
     {
-        public async Task<ModuleInstallingPipeline> BuildAsync(ModuleInstallingContext context)
-        {
-            return GetBasePipeline(context);
-        }
+        return GetBasePipeline(context);
     }
 }

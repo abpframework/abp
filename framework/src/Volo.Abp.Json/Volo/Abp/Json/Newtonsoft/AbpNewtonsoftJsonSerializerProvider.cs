@@ -7,74 +7,73 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Json.Newtonsoft
+namespace Volo.Abp.Json.Newtonsoft;
+
+public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
 {
-    public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+    private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
+        new CamelCaseExceptDictionaryKeysResolver();
+
+    protected List<JsonConverter> Converters { get; }
+
+    public AbpNewtonsoftJsonSerializerProvider(
+        IOptions<AbpNewtonsoftJsonSerializerOptions> options,
+        IServiceProvider serviceProvider)
     {
-        private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
-            new CamelCaseExceptDictionaryKeysResolver();
+        Converters = options.Value
+            .Converters
+            .Select(c => (JsonConverter)serviceProvider.GetRequiredService(c))
+            .ToList();
+    }
 
-        protected List<JsonConverter> Converters { get; }
+    public bool CanHandle(Type type)
+    {
+        return true;
+    }
 
-        public AbpNewtonsoftJsonSerializerProvider(
-            IOptions<AbpNewtonsoftJsonSerializerOptions> options,
-            IServiceProvider serviceProvider)
+    public string Serialize(object obj, bool camelCase = true, bool indented = false)
+    {
+        return JsonConvert.SerializeObject(obj, CreateSerializerSettings(camelCase, indented));
+    }
+
+    public T Deserialize<T>(string jsonString, bool camelCase = true)
+    {
+        return JsonConvert.DeserializeObject<T>(jsonString, CreateSerializerSettings(camelCase));
+    }
+
+    public object Deserialize(Type type, string jsonString, bool camelCase = true)
+    {
+        return JsonConvert.DeserializeObject(jsonString, type, CreateSerializerSettings(camelCase));
+    }
+
+    protected virtual JsonSerializerSettings CreateSerializerSettings(bool camelCase = true, bool indented = false)
+    {
+        var settings = new JsonSerializerSettings();
+
+        settings.Converters.InsertRange(0, Converters);
+
+        if (camelCase)
         {
-            Converters = options.Value
-                .Converters
-                .Select(c => (JsonConverter) serviceProvider.GetRequiredService(c))
-                .ToList();
+            settings.ContractResolver = SharedCamelCaseExceptDictionaryKeysResolver;
         }
 
-        public bool CanHandle(Type type)
+        if (indented)
         {
-            return true;
+            settings.Formatting = Formatting.Indented;
         }
 
-        public string Serialize(object obj, bool camelCase = true, bool indented = false)
+        return settings;
+    }
+
+    private class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
+    {
+        protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
         {
-            return JsonConvert.SerializeObject(obj, CreateSerializerSettings(camelCase, indented));
-        }
+            var contract = base.CreateDictionaryContract(objectType);
 
-        public T Deserialize<T>(string jsonString, bool camelCase = true)
-        {
-            return JsonConvert.DeserializeObject<T>(jsonString, CreateSerializerSettings(camelCase));
-        }
+            contract.DictionaryKeyResolver = propertyName => propertyName;
 
-        public object Deserialize(Type type, string jsonString, bool camelCase = true)
-        {
-            return JsonConvert.DeserializeObject(jsonString, type, CreateSerializerSettings(camelCase));
-        }
-
-        protected virtual JsonSerializerSettings CreateSerializerSettings(bool camelCase = true, bool indented = false)
-        {
-            var settings = new JsonSerializerSettings();
-
-            settings.Converters.InsertRange(0, Converters);
-
-            if (camelCase)
-            {
-                settings.ContractResolver = SharedCamelCaseExceptDictionaryKeysResolver;
-            }
-
-            if (indented)
-            {
-                settings.Formatting = Formatting.Indented;
-            }
-
-            return settings;
-        }
-
-        private class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
-        {
-            protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
-            {
-                var contract = base.CreateDictionaryContract(objectType);
-
-                contract.DictionaryKeyResolver = propertyName => propertyName;
-
-                return contract;
-            }
+            return contract;
         }
     }
 }

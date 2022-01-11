@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.TenantManagement.Web",
+  "hash": "20bd21bec310cf2c54ecddc579017ce8",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement.Web",
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementWebModule"
+    }
+  ]
+}

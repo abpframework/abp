@@ -21,13 +21,13 @@ getConfig() {
 
 Although clear and flexible, handling errors this way is repetitive work, even when error processing is delegated to the store or any other injectable.
 
-An `HttpInterceptor` is able to catch `HttpErrorResponse`  and can be used for a centralized error handling. Nevertheless, cases where default error handler, therefore the interceptor, must be disabled require additional work and comprehension of Angular internals. Check [this issue](https://github.com/angular/angular/issues/20203) for details.
+An `HttpInterceptor` is able to catch `HttpErrorResponse` and can be used for a centralized error handling. Nevertheless, cases where default error handler, therefore the interceptor, must be disabled require additional work and comprehension of Angular internals. Check [this issue](https://github.com/angular/angular/issues/20203) for details.
 
 
 
 ## RestService
 
-ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
+ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
 
 
 
@@ -67,7 +67,7 @@ getFoo(id: number) {
 
 
 
-The `request` method always returns an `Observable<T>`. Therefore you can do the following wherever you use `getFoo` method:
+The `request` method always returns an `Observable<T>`. Therefore you can do the following wherever you use `getFoo` method:
 
 ```js
 doSomethingWithFoo(id: number) {
@@ -205,7 +205,7 @@ You may find `Rest.Observe` enum [here](https://github.com/abpframework/abp/blob
 
 ## HTTP Error Handling
 
-When the `RestService` is used, all HTTP errors are automatically handled by `ErrorHandler` which is a service that exposed by the `@abp/ng.theme.shared` package.
+When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
 
 ### Custom HTTP Error Handler
 

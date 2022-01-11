@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.Users.MongoDB",
+  "hash": "827e73e5cc91bc0e666d7fc131009cb9",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Users.MongoDB",
+      "contentType": "abpModule",
+      "name": "AbpUsersMongoDbModule"
+    }
+  ]
+}

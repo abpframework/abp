@@ -1,13 +1,12 @@
-﻿namespace Volo.Abp.Studio.Packages.Referencing
+﻿namespace Volo.Abp.Studio.Packages.Referencing;
+
+public enum PackageReferenceCompatibility
 {
-    public enum PackageReferenceCompatibility
-    {
-        Unknown,
-        DDD_Compatible,
-        Compatible,
-        TestProject,
-        IndirectlyReferenced,
-        DirectlyReferenced,
-        CircularReference
-    }
+    Unknown,
+    DDD_Compatible,
+    Compatible,
+    TestProject,
+    IndirectlyReferenced,
+    DirectlyReferenced,
+    CircularReference
 }

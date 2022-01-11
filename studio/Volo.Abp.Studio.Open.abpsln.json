@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.Studio.Open": {
+      "path": "Volo.Abp.Studio.Open.abpmdl.json"
+    }
+  }
+}

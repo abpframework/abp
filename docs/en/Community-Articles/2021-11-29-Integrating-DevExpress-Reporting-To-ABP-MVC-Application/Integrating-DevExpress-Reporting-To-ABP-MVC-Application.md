@@ -714,4 +714,4 @@ To add these functionalities, update the `Viewer.cshtml` file under the `Pages/R
 
 ## Source Code
 
-- You can download the source code from [here](https://github.com/gterdem/abp-devexpress-reporting-sample).
+- You can download the source code from [here](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Reports-Mvc).
