@@ -1,4 +1,4 @@
-import { LocalizationService } from '@abp/ng.core';
+import { escapeHtmlChars, LocalizationService } from '@abp/ng.core';
 import { EntityProp, ePropType } from '@abp/ng.theme.shared/extensions';
 import { of } from 'rxjs';
 import { IdentityRoleDto } from '../proxy/identity/models';
@@ -15,7 +15,7 @@ export const DEFAULT_ROLES_ENTITY_PROPS = EntityProp.createMany<IdentityRoleDto>
       const { isDefault, isPublic, name } = data.record;
 
       return of(
-        name +
+        escapeHtmlChars(name) +
           (isDefault
             ? `<span class="badge badge-pill badge-success ml-1">${t(
                 'AbpIdentity::DisplayName:IsDefault',
