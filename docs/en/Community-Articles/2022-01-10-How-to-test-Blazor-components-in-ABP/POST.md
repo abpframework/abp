@@ -1,19 +1,19 @@
-# How to test Blazor components in ABP
+# How to Test Blazor Components in ABP
 
 ## Source Code
 
 You can find the source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/BlazorPageUniTest).
 
 
-In this article I will use [bUnit](https://github.com/bUnit-dev/bUnit) for a simple test of the Blazor component.
+In this article, I will use [bUnit](https://github.com/bUnit-dev/bUnit) for a simple test of a Blazor component.
 
 ## Getting Started
 
-Use ABP CLI to create a blazor app
+Use the ABP CLI to create a blazor app
 
 `abp new BookStore -t app -u blazor`
 
-Then add `BookStore.Blazor.Tests` xunit test project to the solution, and add [bUnit](https://github.com/bUnit-dev/bUnit) package and `ProjectReference` and to the test project.
+Then add the `BookStore.Blazor.Tests` xunit test project to the solution, and add [bUnit](https://github.com/bUnit-dev/bUnit) package and `ProjectReference` to the test project.
 
 The contents of `BookStore.Blazor.Tests.csproj`
 ```xml
@@ -48,7 +48,7 @@ The contents of `BookStore.Blazor.Tests.csproj`
 </Project>
 ```
 
-Create `BookStoreBlazorTestModule` and depends on `AbpAspNetCoreComponentsModule` and `BookStoreEntityFrameworkCoreTestModule`.
+Create `BookStoreBlazorTestModule` that depends on `AbpAspNetCoreComponentsModule` and `BookStoreEntityFrameworkCoreTestModule`.
 
 ```cs
 [DependsOn(
@@ -61,9 +61,9 @@ public class BookStoreBlazorTestModule : AbpModule
 }
 ```
 
-Create `BookStoreBlazorTestBase` class and add `CreateTestContext` method. The `CreateTestContext` have key code.
+Create a `BookStoreBlazorTestBase` class and add the `CreateTestContext` method. The `CreateTestContext` have key code.
 
-It use ABP's `ServiceProvider` as an fallback `ServiceProvider` and add all ABP's services to the `TestContext`.
+It uses ABP's `ServiceProvider` as a fallback `ServiceProvider` and add all ABP's services to the `TestContext`.
 
 ```cs
 public abstract class BookStoreBlazorTestBase : BookStoreTestBase<BookStoreBlazorTestModule>
@@ -82,7 +82,7 @@ public abstract class BookStoreBlazorTestBase : BookStoreTestBase<BookStoreBlazo
 }
 ```
 
-Finally we add an `Index_Tests` class to test the `Index` component.
+Finally, we add an `Index_Tests` class to test the `Index` component.
 
 ```cs
 public class Index_Tests : BookStoreBlazorTestBase
