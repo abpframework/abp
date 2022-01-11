@@ -1,10 +1,10 @@
-name: Merge branch dev with rel-5.0
+name: Merge branch dev with rel-5.1
 on:
   push:
     branches:
-      - rel-5.0
+      - rel-5.1
 jobs:
-  merge-dev-with-rel-5-0:
+  merge-dev-with-rel-5-1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,13 +12,13 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin rel-5.0:rel-5.0
-          git reset --hard rel-5.0
+          git fetch origin rel-5.1:rel-5.1
+          git reset --hard rel-5.1
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: auto-merge/rel-5-0/${{github.run_number}}
-          title: Merge branch dev with rel-5.0
-          body: This PR generated automatically to merge dev with rel-5.0. Please review the changed files before merging to prevent any errors that may occur.
+          branch: auto-merge/rel-5-1/${{github.run_number}}
+          title: Merge branch dev with rel-5.1
+          body: This PR generated automatically to merge dev with rel-5.1. Please review the changed files before merging to prevent any errors that may occur.
           reviewers: ${{github.actor}}
           token: ${{ github.token }}
