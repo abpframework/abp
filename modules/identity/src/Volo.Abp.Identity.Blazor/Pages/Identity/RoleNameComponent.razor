@@ -8,9 +8,9 @@
 @(Data.As<IdentityRoleDto>().Name)
 @if (Data.As<IdentityRoleDto>().IsDefault)
 {
-    <Badge Color="Color.Primary" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsDefault"]</Badge>
+    <Badge Color="Color.Success" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsDefault"]</Badge>
 }
 @if (Data.As<IdentityRoleDto>().IsPublic)
 {
-    <Badge Color="Color.Light" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsPublic"]</Badge>
+    <Badge Color="Color.Info" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsPublic"]</Badge>
 }

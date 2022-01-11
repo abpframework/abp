@@ -7,8 +7,9 @@
     "Volo.IdentityServer:DuplicateClientId": "ClientId ya existe: {ClientId}",
     "UserLockedOut": "La cuenta de usuario ha sido bloqueada debido a inicios de sesión no validos. Por favor, espera un momento e intentalo de nuevo.",
     "InvalidUserNameOrPassword": "Nombre de usuario o contraseña incorrecto!",
-    "LoginIsNotAllowed": "No puedes iniciar sesión!, necesitas confirmar tu e-mail/ número de teléfono.",
+    "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico/número de teléfono.",
     "InvalidUsername": "Nombre de usuario icorrecto",
+    "InvalidAuthenticatorCode": "¡Código de autenticador no válido!",
     "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted."
   }
 }

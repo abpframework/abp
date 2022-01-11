@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using AutoMapper.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AutoMapper
 {
-    public class AbpAutoMapperConventionalRegistrar : ConventionalRegistrarBase
+    public class AbpAutoMapperConventionalRegistrar : DefaultConventionalRegistrar
     {
         protected readonly Type[] OpenTypes = {
             typeof(IValueResolver<,,>),
@@ -18,17 +16,15 @@ namespace Volo.Abp.AutoMapper
             typeof(IMappingAction<,>)
         };
 
-        public override void AddType(IServiceCollection services, Type type)
+        protected override bool IsConventionalRegistrationDisabled(Type type)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
+            return !type.GetInterfaces().Any(x => x.IsGenericType && OpenTypes.Contains(x.GetGenericTypeDefinition())) ||
+                   base.IsConventionalRegistrationDisabled(type);
+        }
 
-            if (type.IsClass && !type.IsAbstract && OpenTypes.Any(type.ImplementsGenericInterface))
-            {
-                services.TryAddTransient(type);
-            }
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
     }
 }

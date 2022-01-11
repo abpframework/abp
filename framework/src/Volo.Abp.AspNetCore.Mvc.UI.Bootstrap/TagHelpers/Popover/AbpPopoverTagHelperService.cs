@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             }
 
             var dataPlacement = GetDirectory().ToString().ToLowerInvariant();
-            // data-placement="default" with data-trigger="focus" causes Cannot read property 'indexOf' of undefined at computeAutoPlacement(bootstrap.bundle.js?_v=637146714627330435:2185) error
+            // data-bs-placement="default" with data-trigger="focus" causes Cannot read property 'indexOf' of undefined at computeAutoPlacement(bootstrap.bundle.js?_v=637146714627330435:2185) error
             if (IsDismissibleOrHoverable() && GetDirectory() == PopoverDirectory.Default)
             {
                 //dataPlacementAsHtml = string.Empty; //bootstrap default placement is right, abp's is top.
@@ -59,10 +59,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             var span = new TagBuilder("span");
             span.AddCssClass("d-inline-block");
             span.Attributes.Add("tabindex", "0");
-            span.Attributes.Add("data-toggle", "popover");
-            span.Attributes.Add("data-content", GetDataContent());
-            span.Attributes.Add("data-trigger", triggerValue);
-            span.Attributes.Add("data-placement", dataPlacement);
+            span.Attributes.Add("data-bs-toggle", "popover");
+            span.Attributes.Add("data-bs-content", GetDataContent());
+            span.Attributes.Add("data-bs-trigger", triggerValue);
+            span.Attributes.Add("data-bs-placement", dataPlacement);
 
             if (titleAttribute != null)
             {
@@ -79,7 +79,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
         {
             if (TagHelper.Dismissible ?? false)
             {
-                output.Attributes.Add("data-trigger", "focus");
+                output.Attributes.Add("data-bs-trigger", "focus");
             }
         }
 
@@ -88,20 +88,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             if (TagHelper.Hoverable ?? false)
             {
                 //If already has focus data trigger
-                if (output.Attributes.TryGetAttribute("data-trigger", out _))
+                if (output.Attributes.TryGetAttribute("data-bs-trigger", out _))
                 {
-                    output.Attributes.SetAttribute(new TagHelperAttribute("data-trigger", "focus hover"));
+                    output.Attributes.SetAttribute(new TagHelperAttribute("data-bs-trigger", "focus hover"));
                 }
                 else
                 {
-                    output.Attributes.Add("data-trigger", "hover");
+                    output.Attributes.Add("data-bs-trigger", "hover");
                 }
             }
         }
 
         protected virtual void SetDataToggle(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-toggle", "popover");
+            output.Attributes.Add("data-bs-toggle", "popover");
         }
 
         protected virtual void SetDataPlacement(TagHelperContext context, TagHelperOutput output)
@@ -111,12 +111,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             {
                 directory = PopoverDirectory.Bottom;
             }
-            output.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
+            output.Attributes.Add("data-bs-placement", directory.ToString().ToLowerInvariant());
         }
 
         protected virtual void SetPopoverData(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-content", GetDataContent());
+            output.Attributes.Add("data-bs-content", GetDataContent());
         }
 
         protected virtual string GetDataContent()

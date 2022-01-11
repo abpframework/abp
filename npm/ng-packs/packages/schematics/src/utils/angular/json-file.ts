@@ -8,7 +8,14 @@
 
 import { JsonValue } from '@angular-devkit/core';
 import { Tree } from '@angular-devkit/schematics';
-import { Node, applyEdits, findNodeAtLocation, getNodeValue, modify, parseTree } from 'jsonc-parser';
+import {
+  Node,
+  applyEdits,
+  findNodeAtLocation,
+  getNodeValue,
+  modify,
+  parseTree,
+} from 'jsonc-parser';
 
 export type JSONPath = (string | number)[];
 
@@ -17,10 +24,7 @@ export class JSONFile {
   private content: string;
   error: undefined | Error;
 
-  constructor(
-    private readonly host: Tree,
-    private readonly path: string,
-  ) {
+  constructor(private readonly host: Tree, private readonly path: string) {
     const buffer = this.host.read(this.path);
     if (buffer) {
       this.content = buffer.toString();
@@ -50,24 +54,24 @@ export class JSONFile {
     return node === undefined ? undefined : getNodeValue(node);
   }
 
-  modify(jsonPath: JSONPath, value: JsonValue | undefined, getInsertionIndex?: (properties: string[]) => number): void {
+  modify(
+    jsonPath: JSONPath,
+    value: JsonValue | undefined,
+    getInsertionIndex?: (properties: string[]) => number,
+  ): void {
     if (!getInsertionIndex) {
       const property = jsonPath.slice(-1)[0];
-      getInsertionIndex = properties => [...properties, property].sort().findIndex(p => p === property);
+      getInsertionIndex = properties =>
+        [...properties, property].sort().findIndex(p => p === property);
     }
 
-    const edits = modify(
-      this.content,
-      jsonPath,
-      value,
-      {
-        getInsertionIndex,
-        formattingOptions: {
-          insertSpaces: true,
-          tabSize: 2,
-        },
+    const edits = modify(this.content, jsonPath, value, {
+      getInsertionIndex,
+      formattingOptions: {
+        insertSpaces: true,
+        tabSize: 2,
       },
-    );
+    });
 
     this.content = applyEdits(this.content, edits);
     this.host.overwrite(this.path, this.content);

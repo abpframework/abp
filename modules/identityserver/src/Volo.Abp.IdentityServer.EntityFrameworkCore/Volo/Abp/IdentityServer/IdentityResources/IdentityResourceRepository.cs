@@ -24,11 +24,10 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from identityResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
-                        where scopeNames.Contains(identityResource.Name)
-                        select identityResource;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(identityResource => scopeNames.Contains(identityResource.Name))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         [Obsolete("Use WithDetailsAsync method.")]
@@ -72,14 +71,13 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
-                .Where(x => x.Name == name)
                 .OrderBy(x => x.Id)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).AnyAsync(ir => ir.Id != expectedId && ir.Name == name, GetCancellationToken(cancellationToken));
         }
     }
 }

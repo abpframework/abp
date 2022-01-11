@@ -7,9 +7,9 @@ namespace Volo.Abp.DynamicProxy
     public static class ProxyHelper
     {
         private const string ProxyNamespace = "Castle.Proxies";
-        
+
         /// <summary>
-        /// Returns dynamic proxy target object if this is a proxied object, otherwise returns the given object. 
+        /// Returns dynamic proxy target object if this is a proxied object, otherwise returns the given object.
         /// It supports Castle Dynamic Proxies.
         /// </summary>
         public static object UnProxy(object obj)
@@ -33,7 +33,21 @@ namespace Volo.Abp.DynamicProxy
 
         public static Type GetUnProxiedType(object obj)
         {
-            return UnProxy(obj).GetType();
+            if (obj.GetType().Namespace == ProxyNamespace)
+            {
+                var target = UnProxy(obj);
+                if (target != null)
+                {
+                    if (target == obj)
+                    {
+                        return obj.GetType().GetTypeInfo().BaseType;
+                    }
+
+                    return target.GetType();
+                }
+            }
+
+            return obj.GetType();
         }
     }
 }

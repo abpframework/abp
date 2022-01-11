@@ -2,6 +2,42 @@
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $rootFolder = Join-Path $packFolder "../"
 
+function Write-Info   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Black -BackgroundColor Green
+
+	try 
+	{
+	   $host.UI.RawUI.WindowTitle = $text
+	}		
+	catch 
+	{
+		#Changing window title is not suppoerted!
+	}
+}
+
+function Write-Error   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Red -BackgroundColor Black 
+}
+
+function Seperator   
+{
+	Write-Host ("_" * 100)  -ForegroundColor gray 
+}
+
 # List of solutions
 $solutions = (
     "framework",
@@ -21,7 +57,8 @@ $solutions = (
     "modules/users",
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
-    "modules/cms-kit"
+    "modules/cms-kit",
+    "studio"
 )
 
 # List of projects
@@ -58,12 +95,14 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Serilog",
     "framework/src/Volo.Abp.AspNetCore.SignalR",
     "framework/src/Volo.Abp.AspNetCore.TestBase",
+    "framework/src/Volo.Abp.Auditing.Contracts",
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
     "framework/src/Volo.Abp.Authorization.Abstractions",
     "framework/src/Volo.Abp.Autofac",
     "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",
+    "framework/src/Volo.Abp.AzureServiceBus",
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions",
     "framework/src/Volo.Abp.BackgroundJobs",
     "framework/src/Volo.Abp.BackgroundJobs.HangFire",
@@ -71,6 +110,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundJobs.Quartz",
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.BackgroundWorkers.Quartz",
+    "framework/src/Volo.Abp.BackgroundWorkers.Hangfire",
     "framework/src/Volo.Abp.BlazoriseUI",
     "framework/src/Volo.Abp.BlobStoring",
     "framework/src/Volo.Abp.BlobStoring.FileSystem",
@@ -90,6 +130,8 @@ $projects = (
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Application.Contracts",
     "framework/src/Volo.Abp.Ddd.Domain",
+    "framework/src/Volo.Abp.DistributedLocking.Abstractions",
+    "framework/src/Volo.Abp.DistributedLocking",
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
@@ -103,6 +145,7 @@ $projects = (
     "framework/src/Volo.Abp.EventBus.RabbitMQ",
     "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.EventBus.Rebus",
+    "framework/src/Volo.Abp.EventBus.Azure",
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
@@ -111,6 +154,7 @@ $projects = (
     "framework/src/Volo.Abp.HangFire",
     "framework/src/Volo.Abp.Http.Abstractions",
     "framework/src/Volo.Abp.Http.Client",
+	"framework/src/Volo.Abp.Http.Client.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
@@ -159,24 +203,32 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
     "modules/account/src/Volo.Abp.Account.Blazor",
+    "modules/account/src/Volo.Abp.Account.Installer",
+    "studio/source-codes/Volo.Abp.Account.SourceCode",
         
     # modules/audit-logging
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
+    "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
 
     # modules/background-jobs
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain.Shared",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Installer",
+    "studio/source-codes/Volo.Abp.BackgroundJobs.SourceCode",
 
     # modules/basic-theme
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Server.BasicTheme",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+    "modules/basic-theme/src/Volo.Abp.BasicTheme.Installer",
+    "studio/source-codes/Volo.Abp.BasicTheme.SourceCode",
 
     # modules/blogging
     "modules/blogging/src/Volo.Blogging.Application.Contracts.Shared",
@@ -194,6 +246,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
@@ -214,6 +267,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Application.Contracts",
@@ -228,6 +282,8 @@ $projects = (
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor.Server",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor.WebAssembly",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Installer",
+    "studio/source-codes/Volo.Abp.FeatureManagement.SourceCode",
 
     # modules/identity
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
@@ -244,6 +300,8 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.Blazor.Server",
     "modules/identity/src/Volo.Abp.Identity.Blazor.WebAssembly",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
+    "modules/identity/src/Volo.Abp.Identity.Installer",
+    "studio/source-codes/Volo.Abp.Identity.SourceCode",
     
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
@@ -251,6 +309,8 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore",
     "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB",
     "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
+    "modules/identityserver/src/Volo.Abp.IdentityServer.Installer",
+    "studio/source-codes/Volo.Abp.IdentityServer.SourceCode",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",
@@ -265,6 +325,8 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor.Server",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor.WebAssembly",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Installer",
+    "studio/source-codes/Volo.Abp.PermissionManagement.SourceCode",
 
     # modules/setting-management
     "modules/setting-management/src/Volo.Abp.SettingManagement.Application.Contracts",
@@ -279,6 +341,8 @@ $projects = (
     "modules/setting-management/src/Volo.Abp.SettingManagement.HttpApi",
     "modules/setting-management/src/Volo.Abp.SettingManagement.MongoDB",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Web",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Installer",
+    "studio/source-codes/Volo.Abp.SettingManagement.SourceCode",
 
     # modules/tenant-management
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application.Contracts",
@@ -293,6 +357,8 @@ $projects = (
     "modules/tenant-management/src/Volo.Abp.TenantManagement.HttpApi",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.MongoDB",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Web",
+    "modules/tenant-management/src/Volo.Abp.TenantManagement.Installer",
+    "studio/source-codes/Volo.Abp.TenantManagement.SourceCode",
 
     # modules/users
     "modules/users/src/Volo.Abp.Users.Abstractions",
@@ -300,15 +366,21 @@ $projects = (
     "modules/users/src/Volo.Abp.Users.Domain.Shared",
     "modules/users/src/Volo.Abp.Users.EntityFrameworkCore",
     "modules/users/src/Volo.Abp.Users.MongoDB",
+    "modules/users/src/Volo.Abp.Users.Installer",
+    "studio/source-codes/Volo.Abp.Users.SourceCode",
 
     # modules/virtual-file-explorer
     "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web",
+    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Installer",
+    "studio/source-codes/Volo.Abp.VirtualFileExplorer.SourceCode",
 	
     # modules/blob-storing-database
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain",
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain.Shared",
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.MongoDB",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Installer",
+    "studio/source-codes/Volo.Abp.BlobStoring.Database.SourceCode",
 	
     # abp/cms-kit	
     "modules/cms-kit/src/Volo.CmsKit.Admin.Application",
@@ -334,5 +406,14 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi",
     "modules/cms-kit/src/Volo.CmsKit.Public.HttpApi.Client",
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
-    "modules/cms-kit/src/Volo.CmsKit.Web"
+    "modules/cms-kit/src/Volo.CmsKit.Web",
+    "modules/cms-kit/src/Volo.CmsKit.Installer",
+    "studio/source-codes/Volo.CmsKit.SourceCode",
+	
+    # abp/studio
+    "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
+    "studio/src/Volo.Abp.Studio.Domain.CommonServices",
+    "studio/src/Volo.Abp.Studio.Domain.Shared",
+    "studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
+    "studio/src/Volo.Abp.Studio.ModuleInstaller"
 )

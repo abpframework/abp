@@ -47,6 +47,15 @@ namespace Volo.Abp.SettingManagement
         }
 
         [Fact]
+        public async Task Should_Get_All_By_Names_Base_Store_Values()
+        {
+            var settingValues = await _settingProvider.GetAllAsync(new []{ "MySetting1", "MySetting2" });
+            settingValues.Count.ShouldBe(2);
+            settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
+            settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "default-store-value");
+        }
+
+        [Fact]
         public async Task Should_Set_Global_Value()
         {
             await _settingManager.SetGlobalAsync("MySetting1", "43");

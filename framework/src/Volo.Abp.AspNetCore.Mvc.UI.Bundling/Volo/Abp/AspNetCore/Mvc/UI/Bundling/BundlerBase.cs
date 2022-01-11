@@ -5,7 +5,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Minify;
 
@@ -102,13 +101,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             Logger.LogDebug($"- {fileName} ({nonMinifiedSize} bytes) - non minified, minifying...");
 
-            fileContent = Minifier.Minify(
-                fileContent,
-                context.BundleRelativePath,
-                fileName
-            );
+            try
+            {
+                fileContent = Minifier.Minify(
+                    fileContent,
+                    context.BundleRelativePath,
+                    fileName
+                );
 
-            Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+                Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+
+                return fileContent;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning($"Unable to minify the file: {fileName}. Return file content without minification.", ex);
+            }
 
             return fileContent;
         }

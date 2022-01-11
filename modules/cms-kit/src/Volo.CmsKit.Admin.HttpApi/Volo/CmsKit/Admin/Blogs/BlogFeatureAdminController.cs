@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
     [Authorize(CmsKitAdminPermissions.Blogs.Features)]
     [Route("api/cms-kit-admin/blogs/{blogId}/features")]
     public class BlogFeatureAdminController : CmsKitAdminController, IBlogFeatureAdminAppService

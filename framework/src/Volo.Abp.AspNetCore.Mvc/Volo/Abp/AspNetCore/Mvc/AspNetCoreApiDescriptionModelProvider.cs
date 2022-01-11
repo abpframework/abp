@@ -80,12 +80,13 @@ namespace Volo.Abp.AspNetCore.Mvc
             var setting = FindSetting(controllerType);
 
             var moduleModel = applicationModel.GetOrAddModule(
-                GetRootPath(controllerType, setting),
+                GetRootPath(controllerType, apiDescription.ActionDescriptor, setting),
                 GetRemoteServiceName(controllerType, setting)
             );
 
             var controllerModel = moduleModel.GetOrAddController(
                 _options.ControllerNameGenerator(controllerType, setting),
+                FindGroupName(controllerType) ?? apiDescription.GroupName,
                 controllerType,
                 _modelOptions.IgnoredInterfaces
             );
@@ -113,6 +114,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 allowAnonymous = false;
             }
 
+            var implementFrom = controllerType.FullName;
+
+            var interfaceType = controllerType.GetInterfaces().FirstOrDefault(i => i.GetMethods().Any(x => x.ToString() == method.ToString()));
+            if (interfaceType != null)
+            {
+                implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
+            }
+
             var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
                 ActionApiDescriptionModel.Create(
@@ -121,7 +130,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                     apiDescription.RelativePath,
                     apiDescription.HttpMethod,
                     GetSupportedVersions(controllerType, method, setting),
-                    allowAnonymous
+                    allowAnonymous,
+                    implementFrom
                 )
             );
 
@@ -317,7 +327,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
-        private static string GetRootPath([NotNull] Type controllerType,
+        private static string GetRootPath(
+            [NotNull] Type controllerType,
+            [NotNull] ActionDescriptor actionDescriptor,
             [CanBeNull] ConventionalControllerSetting setting)
         {
             if (setting != null)
@@ -325,7 +337,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RootPath;
             }
 
-            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
+            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault() ?? actionDescriptor.EndpointMetadata.OfType<AreaAttribute>().FirstOrDefault();
             if (areaAttr != null)
             {
                 return areaAttr.RouteValue;
@@ -349,6 +361,19 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             return ModuleApiDescriptionModel.DefaultRemoteServiceName;
+        }
+
+        private string FindGroupName(Type controllerType)
+        {
+            var controllerNameAttribute =
+                controllerType.GetCustomAttributes().OfType<ControllerNameAttribute>().FirstOrDefault();
+
+            if (controllerNameAttribute?.Name != null)
+            {
+                return controllerNameAttribute.Name;
+            }
+
+            return null;
         }
 
         [CanBeNull]

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { toastInOut } from '../../animations/toast.animations';
 import { Toaster } from '../../models/toaster';
-import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'abp-toast-container',
@@ -10,12 +10,14 @@ import { ReplaySubject } from 'rxjs';
   animations: [toastInOut],
 })
 export class ToastContainerComponent implements OnInit {
-  toasts$: ReplaySubject<Toaster.Toast[]>;
+  toasts$!: ReplaySubject<Toaster.Toast[]>;
+
+  remove!: (toastId: number) => void;
 
   toasts = [] as Toaster.Toast[];
 
   @Input()
-  top: string;
+  top?: string;
 
   @Input()
   right = '30px';
@@ -24,10 +26,10 @@ export class ToastContainerComponent implements OnInit {
   bottom = '30px';
 
   @Input()
-  left: string;
+  left?: string;
 
   @Input()
-  toastKey: string;
+  toastKey?: string;
 
   ngOnInit() {
     this.toasts$.subscribe(toasts => {
@@ -39,8 +41,8 @@ export class ToastContainerComponent implements OnInit {
     });
   }
 
-  trackByFunc(index, toast) {
+  trackByFunc(index: number, toast: Toaster.Toast) {
     if (!toast) return null;
-    return toast.options.id;
+    return toast.options?.id;
   }
 }

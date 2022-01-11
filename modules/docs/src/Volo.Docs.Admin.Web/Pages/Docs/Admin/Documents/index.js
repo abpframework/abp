@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource('Docs');
     var service = window.volo.docs.admin.documentsAdmin;
 

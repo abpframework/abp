@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -23,6 +25,8 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public ILogger<NpmPackagesUpdater> Logger { get; set; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        public InstallLibsCommand InstallLibsCommand { get; }
+        public ICmdHelper CmdHelper { get; }
 
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
         private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
@@ -33,16 +37,22 @@ namespace Volo.Abp.Cli.ProjectModification
             PackageJsonFileFinder packageJsonFileFinder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
             ICancellationTokenProvider cancellationTokenProvider,
-            CliHttpClientFactory cliHttpClientFactory)
+            CliHttpClientFactory cliHttpClientFactory,
+            InstallLibsCommand ınstallLibsCommand,
+            ICmdHelper cmdHelper)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
             _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
             CancellationTokenProvider = cancellationTokenProvider;
+            InstallLibsCommand = ınstallLibsCommand;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }
 
-        public async Task Update(string rootDirectory, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, string version = null)
+        public async Task Update(string rootDirectory, bool includePreviews = false,
+            bool includeReleaseCandidates = false,
+            bool switchToStable = false, string version = null)
         {
             var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
@@ -57,7 +67,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
             async Task UpdateAsync(string file)
             {
-                var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates, switchToStable, version);
+                var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates,
+                    switchToStable,
+                    version);
                 packagesUpdated.TryAdd(file, updated);
             }
 
@@ -88,7 +100,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 if (!IsAngularProject(fileDirectory))
                 {
                     Thread.Sleep(1000);
-                    RunGulp(fileDirectory);
+                    RunInstallLibsAsync(fileDirectory);
                 }
             }
         }
@@ -113,7 +125,6 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (await NpmrcFileExistAsync(directoryName))
             {
-
                 var fileContent = File.ReadAllText(fileName);
 
                 if (!fileContent.Contains(abpRegistry))
@@ -156,10 +167,10 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var client = _cliHttpClientFactory.CreateClient();
                 using (var response = await client.GetHttpResponseMessageWithRetryAsync(
-                    url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                    cancellationToken: CancellationTokenProvider.Token,
-                    logger: Logger
-                ))
+                           url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
+                           cancellationToken: CancellationTokenProvider.Token,
+                           logger: Logger
+                       ))
                 {
                     return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
                 }
@@ -194,7 +205,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var abpPackage in abpPackages)
             {
-                var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates, switchToStable, specifiedVersion);
+                var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates,
+                    switchToStable, specifiedVersion);
 
                 if (updated)
                 {
@@ -228,15 +240,19 @@ namespace Volo.Abp.Cli.ProjectModification
                     return false;
                 }
 
-                if (SemanticVersion.Parse(specifiedVersion) <= SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                if (SemanticVersion.Parse(specifiedVersion) <=
+                    SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
                 {
                     return false;
                 }
+
                 version = specifiedVersion.EnsureStartsWith('^');
             }
             else
             {
-                if ((includePreviews || (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) && !includeReleaseCandidates)
+                if ((includePreviews ||
+                     (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) &&
+                    !includeReleaseCandidates)
                 {
                     version = "preview";
                 }
@@ -320,16 +336,18 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 abpPackages
                     .AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
-                    .ToList());
+                        .ToList());
             }
 
             return abpPackages;
         }
 
-        protected virtual void RunGulp(string fileDirectory)
+        protected virtual async Task RunInstallLibsAsync(string fileDirectory)
         {
-            Logger.LogInformation($"Running Gulp on {fileDirectory}");
-            CmdHelper.RunCmd($"cd {fileDirectory} && gulp");
+            var args = new CommandLineArgs("install-libs");
+            args.Options.Add(InstallLibsCommand.Options.WorkingDirectory.Short, fileDirectory);
+
+            await InstallLibsCommand.ExecuteAsync(args);
         }
 
         protected virtual void RunYarn(string fileDirectory)

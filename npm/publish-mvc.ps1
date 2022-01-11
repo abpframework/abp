@@ -18,9 +18,9 @@ if (-Not $Registry) {
 
 $PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 
-$IsPrerelase = $(node publish-utils.js --prerelase --customVersion $Version) -eq "true";
+$IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
 
-if ($IsPrerelase) {
+if ($IsPrerelease) {
   $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
 }
 

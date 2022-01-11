@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +65,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             return AbpRabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
                    new JobQueueConfiguration(
                        typeof(TArgs),
-                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
+                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName,
+                       AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName
                    );
         }
 
@@ -133,6 +135,9 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
             Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
 
+            // Declare delayed queue
+            QueueConfiguration.DeclareDelayed(ChannelAccessor.Channel);
+
             if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
                 Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
@@ -154,12 +159,21 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            //TODO: How to handle priority & delay?
+            //TODO: How to handle priority
+
+            var routingKey = QueueConfiguration.QueueName;
+            var basicProperties = CreateBasicPropertiesToPublish();
+
+            if (delay.HasValue)
+            {
+                routingKey = QueueConfiguration.DelayedQueueName;
+                basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
+            }
 
             ChannelAccessor.Channel.BasicPublish(
                 exchange: "",
-                routingKey: QueueConfiguration.QueueName,
-                basicProperties: CreateBasicPropertiesToPublish(),
+                routingKey: routingKey,
+                basicProperties: basicProperties,
                 body: Serializer.Serialize(args)
             );
 

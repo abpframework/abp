@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.Http.Client.DynamicProxying;
 
 namespace Volo.Abp.Http.Client
 {
@@ -22,6 +23,8 @@ namespace Volo.Abp.Http.Client
         {
             var configuration = context.Services.GetConfiguration();
             Configure<AbpRemoteServiceOptions>(configuration);
+
+            context.Services.AddTransient(typeof(DynamicHttpProxyInterceptorClientProxy<>));
         }
     }
 }

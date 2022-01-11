@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { NgbTimeAdapter, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable()
-export class TimeAdapter extends NgbTimeAdapter<string> {
+export class TimeAdapter extends NgbTimeAdapter<string | Date> {
   fromModel(value: string | Date): NgbTimeStruct | null {
     if (!value) return null;
 
@@ -11,7 +11,7 @@ export class TimeAdapter extends NgbTimeAdapter<string> {
       ? new Date(0, 0, 1, ...value.split(':').map(Number))
       : new Date(value);
 
-    if (isNaN((date as unknown) as number)) return null;
+    if (isNaN(date as unknown as number)) return null;
 
     return {
       hour: date.getHours(),

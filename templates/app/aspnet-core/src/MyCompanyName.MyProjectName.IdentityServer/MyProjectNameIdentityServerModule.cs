@@ -39,6 +39,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreSerilogModule)
@@ -65,9 +66,11 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
+                options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -131,12 +134,11 @@ namespace MyCompanyName.MyProjectName
                 options.KeyPrefix = "MyProjectName:";
             });
 
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
 
             context.Services.AddCors(options =>

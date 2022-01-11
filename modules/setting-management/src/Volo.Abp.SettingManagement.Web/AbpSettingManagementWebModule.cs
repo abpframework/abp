@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
@@ -12,7 +13,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.SettingManagement.Web
 {
     [DependsOn(
-        typeof(AbpSettingManagementHttpApiModule),
+        typeof(AbpSettingManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpSettingManagementDomainSharedModule)
         )]
@@ -51,6 +52,11 @@ namespace Volo.Abp.SettingManagement.Web
                         {
                             configuration.AddFiles("/Pages/SettingManagement/Components/EmailSettingGroup/Default.js");
                         });
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
             });
         }
     }

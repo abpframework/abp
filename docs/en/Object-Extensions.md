@@ -1,4 +1,4 @@
-﻿# Object Extensions
+# Object Extensions
 
 ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](Modules/Index.md), especially when you want to [extend entities](Customizing-Application-Modules-Extending-Entities.md) and [DTOs](Customizing-Application-Modules-Overriding-Services.md) defined by the module.
 
@@ -9,10 +9,10 @@ ABP Framework provides an **object extension system** to allow you to **add extr
 This is the interface to make a class extensible. It simply defines a `Dictionary` property:
 
 ````csharp
-Dictionary<string, object> ExtraProperties { get; }
+ExtraPropertyDictionary ExtraProperties { get; }
 ````
 
-Then you can add or get extra properties using this dictionary.
+`ExtraPropertyDictionary` class is inherited from the `Dictionary<string, object>` class. You can add or get extra properties using this dictionary.
 
 ### Base Classes
 

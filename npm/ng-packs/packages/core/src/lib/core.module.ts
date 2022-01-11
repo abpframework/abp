@@ -3,7 +3,6 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angu
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgxsModule } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
@@ -17,7 +16,6 @@ import { InitDirective } from './directives/init.directive';
 import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
-import { VisibilityDirective } from './directives/visibility.directive';
 import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
 import { RoutesHandler } from './handlers/routes.handler';
 import { ApiInterceptor } from './interceptors/api.interceptor';
@@ -25,15 +23,16 @@ import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
+import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
-import { ProfileState } from './states/profile.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
+import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
+import { TENANT_KEY } from './tokens/tenant-key.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
-import { TENANT_KEY } from './tokens/tenant-key.token';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -66,7 +65,6 @@ export function storageFactory(): OAuthStorage {
     RouterOutletComponent,
     SortPipe,
     StopPropagationDirective,
-    VisibilityDirective,
   ],
   imports: [
     OAuthModule,
@@ -91,7 +89,6 @@ export function storageFactory(): OAuthStorage {
     RouterOutletComponent,
     SortPipe,
     StopPropagationDirective,
-    VisibilityDirective,
   ],
   providers: [LocalizationPipe],
   entryComponents: [
@@ -111,7 +108,6 @@ export class BaseCoreModule {}
   imports: [
     BaseCoreModule,
     LocalizationModule,
-    NgxsModule.forFeature([ProfileState]),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: 'XSRF-TOKEN',
@@ -134,6 +130,7 @@ export class CoreModule {
       ngModule: RootCoreModule,
       providers: [
         LocaleProvider,
+        CookieLanguageProvider,
         {
           provide: 'CORE_OPTIONS',
           useValue: options,
@@ -180,6 +177,26 @@ export class CoreModule {
         },
         { provide: OAuthStorage, useFactory: storageFactory },
         { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
+        {
+          provide: LOCALIZATIONS,
+          multi: true,
+          useValue: localizationContributor(options.localizations),
+          deps: [LocalizationService],
+        },
+      ],
+    };
+  }
+
+  static forChild(options = {} as ABP.Child): ModuleWithProviders<RootCoreModule> {
+    return {
+      ngModule: RootCoreModule,
+      providers: [
+        {
+          provide: LOCALIZATIONS,
+          multi: true,
+          useValue: localizationContributor(options.localizations),
+          deps: [LocalizationService],
+        },
       ],
     };
   }

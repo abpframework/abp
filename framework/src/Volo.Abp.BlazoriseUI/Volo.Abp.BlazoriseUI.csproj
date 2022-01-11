@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
     <ItemGroup>
@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.4.1" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.4.1" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.4.1" />
-        <PackageReference Include="Blazorise.Components" Version="0.9.4.1" />
+        <PackageReference Include="Blazorise" Version="0.9.5.4" />
+        <PackageReference Include="Blazorise.DataGrid" Version="0.9.5.4" />
+        <PackageReference Include="Blazorise.Snackbar" Version="0.9.5.4" />
+        <PackageReference Include="Blazorise.Components" Version="0.9.5.4" />
     </ItemGroup>
 
 </Project>

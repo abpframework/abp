@@ -1,8 +1,10 @@
-﻿# Switch to EF Core Oracle Devart Provider
+# Switch to EF Core Oracle Devart Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
 > This document uses a paid library of [Devart](https://www.devart.com/dotconnect/oracle/) company, See [this document](Entity-Framework-Core-Oracle.md) for other options.
+
+> Before switching your provider, please ensure your Oracle version is **v12.2+**. In the earlier versions of Oracle, there were long identifier limitations that prevents creating a database table, column or index longer than 30 bytes. With [v12.2](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/newft/new-features.html#GUID-64283AD6-0939-47B0-856E-5E9255D7246B) "The maximum length of identifiers is increased to 128 bytes". **v12.2** and later versions, you can use the database tables, columns and indexes provided by ABP without any problems. 
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 

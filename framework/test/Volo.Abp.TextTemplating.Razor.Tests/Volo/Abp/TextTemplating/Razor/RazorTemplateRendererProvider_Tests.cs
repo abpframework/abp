@@ -72,13 +72,13 @@ namespace Volo.Abp.TextTemplating.Razor
                 TestTemplates.ForgotPasswordEmail,
                 new ForgotPasswordEmailModel("John"),
                 cultureName: "en"
-            )).ShouldBe("*BEGIN*Hello John, how are you?. Please click to the following link to get an email to reset your password!*END*");
+            )).ShouldBe("*BEGIN*Hello John, how are you?. Please click to the following link to get an email to reset your password!<a target=\"_blank\" href=\"https://abp.io/Account/ResetPassword\">Reset your password</a>*END*");
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ForgotPasswordEmail,
                 new ForgotPasswordEmailModel("John"),
                 cultureName: "tr"
-            )).ShouldBe("*BEGIN*Merhaba John, nasılsın?. Please click to the following link to get an email to reset your password!*END*");
+            )).ShouldBe("*BEGIN*Merhaba John, nasılsın?. Please click to the following link to get an email to reset your password!<a target=\"_blank\" href=\"https://abp.io/Account/ResetPassword\">Reset your password</a>*END*");
         }
 
         [Fact]

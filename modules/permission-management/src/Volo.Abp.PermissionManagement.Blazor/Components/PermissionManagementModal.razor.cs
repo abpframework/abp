@@ -235,9 +235,10 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             );
         }
 
-        protected virtual void ClosingModal(ModalClosingEventArgs eventArgs)
+        protected virtual Task ClosingModal(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+            return Task.CompletedTask;
         }
     }
 }

@@ -22,7 +22,6 @@ import {
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
@@ -47,13 +46,13 @@ import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
   ],
 })
 export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
-  @Input() data: PropData;
+  @Input() data!: PropData;
 
-  @Input() prop: FormProp;
+  @Input() prop!: FormProp;
 
-  @Input() first: boolean;
+  @Input() first?: boolean;
 
-  @ViewChild('field') private fieldRef: ElementRef<HTMLElement>;
+  @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   asterisk = '';
 
@@ -61,9 +60,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   validators: ValidatorFn[] = [];
 
-  readonly: boolean;
+  readonly!: boolean;
 
-  disabled: boolean;
+  disabled!: boolean;
 
   private readonly form: FormGroup;
 
@@ -73,9 +72,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     this.typeaheadModel = selectedOption || { key: null, value: null };
     const { key, value } = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
-    if (valueControl.value && !value) valueControl.markAsDirty();
-    keyControl.setValue(key);
-    valueControl.setValue(value);
+    if (valueControl?.value && !value) valueControl.markAsDirty();
+    keyControl?.setValue(key);
+    valueControl?.setValue(value);
   }
 
   search = (text$: Observable<string>) =>
@@ -171,7 +170,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges({ prop }: SimpleChanges) {
-    const currentProp = snq<FormProp>(() => prop.currentValue);
+    const currentProp = prop?.currentValue;
     const { options, readonly, disabled, validators } = currentProp || {};
 
     if (options) this.options$ = options(this.data);

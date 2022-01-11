@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Public.Comments
 {
     [RequiresGlobalFeature(typeof(CommentsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
-    [Area("cms-kit")]
+    [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
     [Route("api/cms-kit-public/comments")]
     public class CommentPublicController :  CmsKitPublicControllerBase, ICommentPublicAppService
     {

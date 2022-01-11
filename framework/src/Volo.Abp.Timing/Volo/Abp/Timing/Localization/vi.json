@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Múi giờ",
+    "Description:Abp.Timing.Timezone": "Múi giờ ứng dụng"
+  }
+}

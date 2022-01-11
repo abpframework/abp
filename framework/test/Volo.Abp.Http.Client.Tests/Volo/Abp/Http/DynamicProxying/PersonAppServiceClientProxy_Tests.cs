@@ -49,7 +49,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
-            people.Items.Count.ShouldBe((int) people.TotalCount);
+            people.Items.Count.ShouldBe((int)people.TotalCount);
         }
 
         [Fact]
@@ -90,8 +90,7 @@ namespace Volo.Abp.Http.DynamicProxying
             {
                 Name = uniquePersonName,
                 Age = 42
-            }
-            );
+            });
 
             person.ShouldNotBeNull();
             person.Id.ShouldNotBe(Guid.Empty);
@@ -110,8 +109,7 @@ namespace Volo.Abp.Http.DynamicProxying
                 var person = await _peopleAppService.CreateAsync(new PersonDto
                 {
                     Age = 42
-                }
-                );
+                });
             });
         }
 
@@ -195,10 +193,22 @@ namespace Volo.Abp.Http.DynamicProxying
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
             memoryStream.Position = 0;
-            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "upload.rtf")
-            {
-                ContentType = "application/rtf"
-            });
+
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "upload.rtf", "application/rtf"));
+            result.ShouldBe("UploadAsync:application/rtf:upload.rtf");
+        }
+
+        [Fact]
+        public async Task UploadPartialAsync()
+        {
+            var memoryStream = new MemoryStream();
+            var rawData = new byte[16];
+            var text = Encoding.UTF8.GetBytes("UploadAsync");
+            await memoryStream.WriteAsync(rawData);
+            await memoryStream.WriteAsync(text);
+            memoryStream.Position = rawData.Length;
+
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream, "upload.rtf", "application/rtf"));
             result.ShouldBe("UploadAsync:application/rtf:upload.rtf");
         }
 
@@ -215,15 +225,8 @@ namespace Volo.Abp.Http.DynamicProxying
 
             var result = await _peopleAppService.UploadMultipleAsync(new List<IRemoteStreamContent>()
             {
-                new RemoteStreamContent(memoryStream, "File1.rtf")
-                {
-                    ContentType = "application/rtf"
-                },
-
-                new RemoteStreamContent(memoryStream2, "File2.rtf")
-                {
-                    ContentType = "application/rtf2"
-                }
+                new RemoteStreamContent(memoryStream, "File1.rtf", "application/rtf"),
+                new RemoteStreamContent(memoryStream2, "File2.rtf", "application/rtf2")
             });
             result.ShouldBe("File1:application/rtf:File1.rtfFile2:application/rtf2:File2.rtf");
         }
@@ -237,10 +240,7 @@ namespace Volo.Abp.Http.DynamicProxying
             var result = await _peopleAppService.CreateFileAsync(new CreateFileInput()
             {
                 Name = "123.rtf",
-                Content = new RemoteStreamContent(memoryStream, "create.rtf")
-                {
-                    ContentType = "application/rtf"
-                }
+                Content = new RemoteStreamContent(memoryStream, "create.rtf", "application/rtf")
             });
             result.ShouldBe("123.rtf:CreateFileAsync:application/rtf:create.rtf");
         }
@@ -263,28 +263,72 @@ namespace Volo.Abp.Http.DynamicProxying
             var result = await _peopleAppService.CreateMultipleFileAsync(new CreateMultipleFileInput()
             {
                 Name = "123.rtf",
-                Contents = new List<IRemoteStreamContent>()
+                Contents = new List<RemoteStreamContent>()
                 {
-                    new RemoteStreamContent(memoryStream, "1-1.rtf")
-                    {
-                        ContentType = "application/rtf"
-                    },
-
-                    new RemoteStreamContent(memoryStream2, "1-2.rtf")
-                    {
-                        ContentType = "application/rtf2"
-                    }
+                    new RemoteStreamContent(memoryStream, "1-1.rtf", "application/rtf"),
+                    new RemoteStreamContent(memoryStream2, "1-2.rtf", "application/rtf2")
                 },
                 Inner = new CreateFileInput()
                 {
                     Name = "789.rtf",
-                    Content = new RemoteStreamContent(memoryStream3, "i-789.rtf")
-                    {
-                        ContentType = "application/rtf3"
-                    }
+                    Content = new RemoteStreamContent(memoryStream3, "i-789.rtf", "application/rtf3")
                 }
             });
             result.ShouldBe("123.rtf:File1:application/rtf:1-1.rtf123.rtf:File2:application/rtf2:1-2.rtf789.rtf:File3:application/rtf3:i-789.rtf");
+        }
+
+        [Fact]
+        public async Task GetParamsFromQueryAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsInput()
+            {
+                NameValues = new List<GetParamsNameValue>()
+                {
+                    new GetParamsNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        }
+
+        [Fact]
+        public async Task GetParamsFromFormAsync()
+        {
+            var result = await _peopleAppService.GetParamsFromFormAsync(new GetParamsInput()
+            {
+                NameValues = new List<GetParamsNameValue>()
+                {
+                    new GetParamsNameValue()
+                    {
+                        Name = "name1",
+                        Value = "value1"
+                    },
+                    new GetParamsNameValue()
+                    {
+                        Name = "name2",
+                        Value = "value2"
+                    }
+                },
+                NameValue = new GetParamsNameValue()
+                {
+                    Name = "name3",
+                    Value = "value3"
+                }
+            });
+            result.ShouldBe("name1-value1:name2-value2:name3-value3");
         }
     }
 }

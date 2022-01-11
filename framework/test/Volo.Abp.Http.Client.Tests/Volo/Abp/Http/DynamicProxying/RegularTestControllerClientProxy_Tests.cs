@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -125,6 +125,23 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
+        public async Task GetObjectandFirstReleaseDateAsync()
+        {
+            var time = DateTime.Now;
+            var result = await _controller.GetObjectandFirstReleaseDateAsync(time, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+            result.FirstReleaseDate.ToUniversalTime().ShouldBe(time.ToUniversalTime());
+            result.Model.ShouldBe("Ford");
+        }
+
+        [Fact]
+        public async Task GetObjectandCountAsync()
+        {
+            var result = await _controller.GetObjectandCountAsync(-1, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+            result.Year.ShouldBe(888);
+            result.Model.ShouldBe("Ford");
+        }
+
+        [Fact]
         public async Task GetObjectAndIdWithQueryAsync()
         {
             var result = await _controller.GetObjectAndIdWithQueryAsync(42, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
@@ -159,5 +176,17 @@ namespace Volo.Abp.Http.DynamicProxying
             (await _controller.DeleteByIdAsync(42)).ShouldBe(43);
         }
 
+        [Fact]
+        public async Task AbortRequestAsync()
+        {
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(10);
+
+            var result = await _controller.AbortRequestAsync(default);
+            result.ShouldBe("AbortRequestAsync");
+
+            var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(cts.Token));
+            exception.InnerException.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
+        }
     }
 }

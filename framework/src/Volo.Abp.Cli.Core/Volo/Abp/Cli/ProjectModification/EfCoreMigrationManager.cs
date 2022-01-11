@@ -10,10 +10,12 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class EfCoreMigrationManager : ITransientDependency
     {
+        public ICmdHelper CmdHelper { get; }
         public ILogger<EfCoreMigrationManager> Logger { get; set; }
 
-        public EfCoreMigrationManager()
+        public EfCoreMigrationManager(ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
             Logger = NullLogger<EfCoreMigrationManager>.Instance;
         }
 

@@ -3,7 +3,7 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { Environment } from '../models';
 import { EnvironmentService } from '../services';
 
-export const ENVIRONMENT_DATA = ({
+export const ENVIRONMENT_DATA = {
   production: false,
   application: {
     name: 'MyProjectName',
@@ -23,9 +23,9 @@ export const ENVIRONMENT_DATA = ({
   localization: {
     defaultResourceName: 'MyProjectName',
   },
-} as any) as Environment;
+} as any as Environment;
 
-describe('ConfigState', () => {
+describe('Environment', () => {
   let spectator: SpectatorService<EnvironmentService>;
   let environment: EnvironmentService;
 
@@ -54,7 +54,7 @@ describe('ConfigState', () => {
     it(
       'should return api url',
       waitForAsync(() => {
-        expect(environment.getApiUrl()).toEqual(ENVIRONMENT_DATA.apis.default.url);
+        expect(environment.getApiUrl('default')).toEqual(ENVIRONMENT_DATA.apis.default.url);
         environment
           .getApiUrl$('other')
           .subscribe(data => expect(data).toEqual(ENVIRONMENT_DATA.apis.other.url));
@@ -64,20 +64,4 @@ describe('ConfigState', () => {
       }),
     );
   });
-
-  // TODO: create permission.service.spec.ts
-  // describe('#getGrantedPolicy', () => {
-  //   it('should return a granted policy', () => {
-  //     expect(ConfigState.getGrantedPolicy('Abp.Identity')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('Abp.Identity || Abp.Account')(CONFIG_STATE_DATA)).toBe(
-  //       true,
-  //     );
-  //     expect(ConfigState.getGrantedPolicy('Abp.Account && Abp.Identity')(CONFIG_STATE_DATA)).toBe(
-  //       false,
-  //     );
-  //     expect(ConfigState.getGrantedPolicy('Abp.Account &&')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('|| Abp.Account')(CONFIG_STATE_DATA)).toBe(false);
-  //     expect(ConfigState.getGrantedPolicy('')(CONFIG_STATE_DATA)).toBe(true);
-  //   });
-  // });
 });

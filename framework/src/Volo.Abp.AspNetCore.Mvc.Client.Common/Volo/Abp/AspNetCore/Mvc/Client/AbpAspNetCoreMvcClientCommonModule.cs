@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pages.Abp.MultiTenancy.ClientProxies;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
@@ -14,7 +17,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
         typeof(AbpCachingModule),
         typeof(AbpLocalizationModule),
         typeof(AbpAuthorizationModule),
-        typeof(AbpFeaturesModule)
+        typeof(AbpFeaturesModule),
+        typeof(AbpVirtualFileSystemModule)
     )]
     public class AbpAspNetCoreMvcClientCommonModule : AbpModule
     {
@@ -22,16 +26,20 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(
-                typeof(AbpAspNetCoreMvcContractsModule).Assembly,
-                RemoteServiceName,
-                asDefaultServices: false
-            );
+            context.Services.AddStaticHttpClientProxies(typeof(AbpAspNetCoreMvcContractsModule).Assembly, RemoteServiceName);
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcClientCommonModule>();
+            });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.GlobalContributors.Add<RemoteLocalizationContributor>();
             });
+
+            context.Services.AddTransient<AbpApplicationConfigurationClientProxy>();
+            context.Services.AddTransient<AbpTenantClientProxy>();
         }
     }
 }

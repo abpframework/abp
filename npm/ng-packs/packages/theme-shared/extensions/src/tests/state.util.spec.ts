@@ -10,8 +10,9 @@ import {
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
 
-const configState = new ConfigStateService();
-configState.setState(createMockState() as any);
+const fakeAppConfigService = { get: () => of(createMockState()) } as any;
+const configState = new ConfigStateService(fakeAppConfigService);
+configState.refreshAppState();
 
 describe('State Utils', () => {
   describe('#getObjectExtensionEntitiesFromStore', () => {
@@ -29,7 +30,7 @@ describe('State Utils', () => {
     });
 
     it('should not emit when object extensions do not exist', done => {
-      const emptyConfigState = new ConfigStateService();
+      const emptyConfigState = new ConfigStateService(null);
       const emit = jest.fn();
 
       getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);

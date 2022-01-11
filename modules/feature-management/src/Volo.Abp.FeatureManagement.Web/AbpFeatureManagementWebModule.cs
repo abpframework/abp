@@ -4,13 +4,14 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpAutoMapperModule)
         )]
@@ -45,6 +46,11 @@ namespace Volo.Abp.FeatureManagement
             Configure<RazorPagesOptions>(options =>
             {
                 //Configure authorization.
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(FeatureManagementRemoteServiceConsts.ModuleName);
             });
         }
     }

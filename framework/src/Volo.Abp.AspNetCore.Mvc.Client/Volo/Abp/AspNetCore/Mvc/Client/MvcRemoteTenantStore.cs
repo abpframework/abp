@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using Pages.Abp.MultiTenancy.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -13,16 +13,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 {
     public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
     {
-        protected IHttpClientProxy<IAbpTenantAppService> Proxy { get; }
+        protected AbpTenantClientProxy TenantAppService { get; }
         protected IHttpContextAccessor HttpContextAccessor { get; }
         protected IDistributedCache<TenantConfiguration> Cache { get; }
 
         public MvcRemoteTenantStore(
-            IHttpClientProxy<IAbpTenantAppService> proxy,
+            AbpTenantClientProxy tenantAppService,
             IHttpContextAccessor httpContextAccessor,
             IDistributedCache<TenantConfiguration> cache)
         {
-            Proxy = proxy;
+            TenantAppService = tenantAppService;
             HttpContextAccessor = httpContextAccessor;
             Cache = cache;
         }
@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name)),
+                async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name)),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id)),
+                async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id)),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
@@ -95,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = Cache.GetOrAdd(
                 cacheKey,
-                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name))),
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
@@ -123,7 +123,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = Cache.GetOrAdd(
                 cacheKey,
-                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id))),
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =

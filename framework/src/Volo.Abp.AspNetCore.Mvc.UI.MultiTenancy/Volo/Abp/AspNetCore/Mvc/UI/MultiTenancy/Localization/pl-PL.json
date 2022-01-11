@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "pl-PL",
   "texts": {
     "GivenTenantIsNotExist": "Podany najemca nie istnieje: {0}",
@@ -7,6 +7,7 @@
     "Switch": "zmień",
     "Name": "Nazwa",
     "SwitchTenantHint": "Pozostaw pole nazwy puste, aby przełączyć się na stronę hosta.",
+    "SwitchTenant": "Zmień najemcę",
     "NotSelected": "Nie wybrano"
   }
 }

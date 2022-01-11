@@ -1,4 +1,4 @@
-﻿# Application Configuration Endpoint
+# Application Configuration Endpoint
 
 ABP Framework provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, the list of some fundamental information at this endpoint:
 

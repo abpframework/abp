@@ -1,7 +1,24 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "Settings": "الإعدادات",
-    "SuccessfullySaved": "تم الحفظ بنجاح"
+    "SuccessfullySaved": "تم الحفظ بنجاح",
+    "Permission:SettingManagement": "إدارة الإعداد",
+    "Permission:Emailing": "إرسال بالبريد الإلكتروني",
+    "Menu:Emailing": "إرسال بالبريد الإلكتروني",
+    "SmtpHost": "مضيف",
+    "SmtpPort": "ميناء",
+    "SmtpUserName": "اسم المستخدم",
+    "SmtpPassword": "كلمه السر",
+    "SmtpDomain": "اختصاص",
+    "SmtpEnableSsl": "تفعيل ssl",
+    "SmtpUseDefaultCredentials": "استخدم بيانات الاعتماد الافتراضية",
+    "DefaultFromAddress": "افتراضي من العنوان",
+    "DefaultFromDisplayName": "افتراضي من اسم العرض",
+    "Feature:SettingManagementGroup": "إدارة الإعداد",
+    "Feature:SettingManagementEnable": "تمكين إدارة الإعداد",
+    "Feature:SettingManagementEnableDescription": "تفعيل إعداد نظام الإدارة في التطبيق.",
+    "Feature:AllowTenantsToChangeEmailSettings": "السماح للمستأجرين بتغيير إعدادات البريد الإلكتروني.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "السماح للمستأجرين بتغيير إعدادات البريد الإلكتروني."
   }
 }

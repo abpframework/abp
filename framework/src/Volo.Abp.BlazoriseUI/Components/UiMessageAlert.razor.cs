@@ -113,7 +113,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             {
                 await Okayed.InvokeAsync(null);
 
-                ModalRef.Hide();
+                await ModalRef.Hide();
             });
         }
 
@@ -121,7 +121,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await InvokeAsync(async () =>
             {
-                ModalRef.Hide();
+                await ModalRef.Hide();
 
                 if (IsConfirmation && Callback != null)
                 {
@@ -136,7 +136,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await InvokeAsync(async () =>
             {
-                ModalRef.Hide();
+                await ModalRef.Hide();
 
                 if (IsConfirmation && Callback != null)
                 {
@@ -147,10 +147,12 @@ namespace Volo.Abp.BlazoriseUI.Components
             });
         }
 
-        protected virtual void OnModalClosing(ModalClosingEventArgs eventArgs)
+        protected virtual Task OnModalClosing(ModalClosingEventArgs eventArgs)
         {
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.EscapeClosing
                 || eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
     }
 }

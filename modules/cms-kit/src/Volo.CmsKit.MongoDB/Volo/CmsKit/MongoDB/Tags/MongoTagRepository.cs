@@ -67,7 +67,7 @@ namespace Volo.CmsKit.MongoDB.Tags
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(entityId, nameof(entityId));
 
-            var entityTagIds = await (await GetDbContextAsync(cancellationToken)).EntityTags.AsQueryable()
+            var entityTagIds = await (await GetMongoQueryableAsync<EntityTag>(cancellationToken))
                 .Where(q => q.EntityId == entityId)
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));

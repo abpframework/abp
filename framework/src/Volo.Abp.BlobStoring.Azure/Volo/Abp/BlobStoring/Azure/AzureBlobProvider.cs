@@ -67,9 +67,7 @@ namespace Volo.Abp.BlobStoring.Azure
 
             var blobClient = GetBlobClient(args, blobName);
             var download = await blobClient.DownloadAsync();
-            var memoryStream = new MemoryStream();
-            await download.Value.Content.CopyToAsync(memoryStream);
-            return memoryStream;
+            return await TryCopyToMemoryStreamAsync(download.Value.Content, args.CancellationToken);
         }
 
         protected virtual BlobClient GetBlobClient(BlobProviderArgs args, string blobName)

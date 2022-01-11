@@ -1,4 +1,3 @@
-import execa from 'execa';
 import fse from 'fs-extra';
 import glob from 'glob';
 

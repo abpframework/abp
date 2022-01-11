@@ -19,7 +19,7 @@ import {
 } from '../tokens/ngx-datatable-messages.token';
 
 @Directive({
-  // tslint:disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[list]',
   exportAs: 'ngxDatatableList',
 })
@@ -27,7 +27,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscription = new Subscription();
   private querySubscription = new Subscription();
 
-  @Input() list: ListService;
+  @Input() list!: ListService;
 
   constructor(
     private table: DatatableComponent,

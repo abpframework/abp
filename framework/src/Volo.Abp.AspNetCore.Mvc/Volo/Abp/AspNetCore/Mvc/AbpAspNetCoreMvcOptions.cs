@@ -14,11 +14,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public bool AutoModelValidation { get; set; }
 
+        public bool EnableRazorRuntimeCompilationOnDevelopment { get; set; }
+
         public AbpAspNetCoreMvcOptions()
         {
             ConventionalControllers = new AbpConventionalControllerOptions();
             IgnoredControllersOnModelExclusion = new HashSet<Type>();
             AutoModelValidation = true;
+            EnableRazorRuntimeCompilationOnDevelopment = true;
         }
     }
 }

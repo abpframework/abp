@@ -1,4 +1,4 @@
-﻿# Switch to EF Core PostgreSQL Provider
+# Switch to EF Core PostgreSQL Provider
 
 This document explains how to switch to the **PostgreSQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 

@@ -27,7 +27,18 @@
     "Blog": "Blog",
     "Commercial": "Commercial",
     "MyAccount": "Mein Benutzerkonto",
+    "Permission:License": "Lizenz",
+    "Permission:UserInfo": "Benutzerinfo",
     "SeeDocuments": "Siehe Unterlagen",
-    "Samples": "Beispiele"
+    "Samples": "Beispiele",
+    "Framework": "Rahmen",
+    "Support": "Unterstützung",
+    "FreeDDDBook": "Kostenloses DDD-E-Book",
+    "New": "Neu",
+    "Volo.AbpIo.Domain:020005": "Das Jahr der Lizenzverlängerung darf nicht kleiner als {MinExtendLicenseYear} Jahr(e) und größer als {MaxExtendLicenseYear} Jahr(e) sein",
+    "TrialLicensePeriodHasExpired": "Ihr Testlizenzzeitraum ist vor {0} Tagen abgelaufen.",
+    "TrialLicensePeriodWillExpire": "Ihr Testlizenzzeitraum läuft in {0} Tagen ab.",
+    "TrialLicensePeriodExpireToday": "Ihre Testlizenz läuft heute ab.",
+    "PurchaseNow": "Jetzt kaufen!"
   }
 }

@@ -1,19 +1,22 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Hangfire
 {
+    [DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
     public class AbpHangfireModule : AbpModule
     {
         private BackgroundJobServer _backgroundJobServer;
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var preActions = context.Services.GetPreConfigureActions<IGlobalConfiguration>();
             context.Services.AddHangfire(configuration =>
             {
-                context.Services.ExecutePreConfiguredActions(configuration);
+                preActions.Configure(configuration);
             });
         }
 

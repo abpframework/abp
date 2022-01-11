@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Admin.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Modularity;
@@ -11,11 +12,13 @@ using Volo.CmsKit.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+using Volo.CmsKit.Admin.MediaDescriptors;
 
 namespace Volo.CmsKit.Admin.Web
 {
     [DependsOn(
-        typeof(CmsKitAdminHttpApiModule),
+        typeof(CmsKitAdminApplicationContractsModule),
         typeof(CmsKitCommonWebModule)
         )]
     public class CmsKitAdminWebModule : AbpModule
@@ -151,6 +154,16 @@ namespace Volo.CmsKit.Admin.Web
                             requiredPolicyName: CmsKitAdminPermissions.Menus.Update
                             );
                     });
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(CmsKitAdminRemoteServiceConsts.ModuleName);
+            });
+
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
             });
         }
     }

@@ -307,8 +307,8 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.None)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page;
 
@@ -321,7 +321,10 @@ namespace Volo.Abp.BlazoriseUI
         {
             try
             {
-                CreateValidationsRef?.ClearAll();
+                if (CreateValidationsRef != null)
+                {
+                    await CreateValidationsRef.ClearAll();
+                }
 
                 await CheckCreatePolicyAsync();
 
@@ -329,10 +332,14 @@ namespace Volo.Abp.BlazoriseUI
 
                 // Mapper will not notify Blazor that binded values are changed
                 // so we need to notify it manually by calling StateHasChanged
-                await InvokeAsync(() =>
+                await InvokeAsync(async () =>
                 {
                     StateHasChanged();
-                    CreateModal?.Show();
+                    if (CreateModal != null)
+                    {
+                        await CreateModal.Show();
+                    }
+
                 });
             }
             catch (Exception ex)
@@ -346,17 +353,22 @@ namespace Volo.Abp.BlazoriseUI
             return InvokeAsync(CreateModal.Hide);
         }
 
-        protected virtual void ClosingCreateModal(ModalClosingEventArgs eventArgs)
+        protected virtual Task ClosingCreateModal(ModalClosingEventArgs eventArgs)
         {
             // cancel close if clicked outside of modal area
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task OpenEditModalAsync(TListViewModel entity)
         {
             try
             {
-                EditValidationsRef?.ClearAll();
+                if (EditValidationsRef != null)
+                {
+                    await EditValidationsRef.ClearAll();
+                }
 
                 await CheckUpdatePolicyAsync();
 
@@ -365,10 +377,13 @@ namespace Volo.Abp.BlazoriseUI
                 EditingEntityId = entity.Id;
                 EditingEntity = MapToEditingEntity(entityDto);
 
-                await InvokeAsync(() =>
+                await InvokeAsync(async () =>
                 {
                     StateHasChanged();
-                    EditModal?.Show();
+                    if (EditModal != null)
+                    {
+                        await EditModal.Show();
+                    }
                 });
             }
             catch (Exception ex)
@@ -408,17 +423,24 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual void ClosingEditModal(ModalClosingEventArgs eventArgs)
+        protected virtual Task ClosingEditModal(ModalClosingEventArgs eventArgs)
         {
             // cancel close if clicked outside of modal area
             eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task CreateEntityAsync()
         {
             try
             {
-                if (CreateValidationsRef?.ValidateAll() ?? true)
+                var validate = true;
+                if (CreateValidationsRef != null)
+                {
+                    validate = await CreateValidationsRef.ValidateAll();
+                }
+                if (validate)
                 {
                     await OnCreatingEntityAsync();
 
@@ -451,7 +473,12 @@ namespace Volo.Abp.BlazoriseUI
         {
             try
             {
-                if (EditValidationsRef?.ValidateAll() ?? true)
+                var validate = true;
+                if (EditValidationsRef != null)
+                {
+                    validate = await EditValidationsRef.ValidateAll();
+                }
+                if (validate)
                 {
                     await OnUpdatingEntityAsync();
 
@@ -504,6 +531,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
             await InvokeAsync(StateHasChanged);
+            await Notify.Success(L["SuccessfullyDeleted"]);
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)

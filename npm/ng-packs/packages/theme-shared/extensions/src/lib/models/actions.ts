@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
@@ -33,7 +32,7 @@ export abstract class Action<R = any> {
   ) {}
 }
 
-export type ActionCallback<T, R = any> = (data?: Omit<ActionData<T>, 'data'>) => R;
+export type ActionCallback<T, R = any> = (data: Omit<ActionData<T>, 'data'>) => R;
 export type ActionPredicate<T> = (data?: Omit<ActionData<T>, 'data'>) => boolean;
 
 export abstract class ActionsFactory<C extends Actions<any>> {

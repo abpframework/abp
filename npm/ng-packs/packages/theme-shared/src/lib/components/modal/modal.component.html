@@ -1,20 +1,18 @@
 <ng-content></ng-content>
 
 <ng-template #modalContent let-modal>
-  <div id="abp-modal-header" class="modal-header">
+  <div *ngIf="abpHeader" id="abp-modal-header" class="modal-header">
     <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
     ​
     <button
       id="abp-modal-close-button"
       type="button"
-      class="close"
+      class="btn-sm btn-close"
       aria-label="Close"
       (click)="modal.dismiss()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    ></button>
   </div>
-  <div id="abp-modal-body" class="modal-body">
+  <div *ngIf="abpBody" id="abp-modal-body" class="modal-body">
     <ng-container *ngTemplateOutlet="abpBody"></ng-container>
   </div>
   <div *ngIf="abpFooter" id="abp-modal-footer" class="modal-footer">

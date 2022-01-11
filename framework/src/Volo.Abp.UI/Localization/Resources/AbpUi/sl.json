@@ -4,6 +4,7 @@
     "Languages": "Jeziki",
     "AreYouSure": "Ali ste prepričani?",
     "Cancel": "Prekliči",
+    "Clear": "Jasno",
     "Yes": "Da",
     "No": "Ne",
     "Ok": "V redu",
@@ -12,6 +13,7 @@
     "SavingWithThreeDot": "Shranjujem...",
     "Actions": "Dejanja",
     "Delete": "Izbriši",
+    "SuccessfullyDeleted": "Uspešno izbrisano",
     "Edit": "Uredi",
     "Refresh": "Osveži",
     "Language": "Jezik",
@@ -34,6 +36,8 @@
     "PagerInfoEmpty": "Prikazanih 0 do 0 od 0 zapisov",
     "PagerInfoFiltered": "(filtrirano od vseh _MAX_ zapisov)",
     "NoDataAvailableInDatatable": "V tabeli ni na voljo podatkov",
+    "Total": "skupaj",
+    "Selected": "izbrani",
     "PagerShowMenuEntries": "Prikaži _MENU_ zapise",
     "DatatableActionDropdownDefaultText": "Dejanja",
     "ChangePassword": "Zamenjaj geslo",
@@ -41,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "Imate neshranjene spremembe.",
     "GoHomePage": "Pojdi na osnovno stran",
     "GoBack": "Nazaj",
-    "Search": "Iskanje"
+    "Search": "Iskanje",
+    "ItemWillBeDeletedMessageWithFormat": "{0} bo izbrisan!",
+    "ItemWillBeDeletedMessage": "Ta element bo izbrisan!",
+    "ManageYourAccount": "Upravljajte svoj račun"
   }
 }

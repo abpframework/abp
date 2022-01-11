@@ -17,6 +17,7 @@ namespace Volo.Abp.Uow.MongoDB
     public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
         where TMongoDbContext : IAbpMongoDbContext
     {
+        private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
         public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -29,7 +30,7 @@ namespace Volo.Abp.Uow.MongoDB
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IOptions<AbpMongoDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -70,7 +71,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseName = mongoUrl.DatabaseName;
             if (databaseName.IsNullOrWhiteSpace())
             {
-                databaseName = ConnectionStringNameAttribute.GetConnStringName<TMongoDbContext>();
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             }
 
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
@@ -98,7 +99,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseName = mongoUrl.DatabaseName;
             if (databaseName.IsNullOrWhiteSpace())
             {
-                databaseName = ConnectionStringNameAttribute.GetConnStringName<TMongoDbContext>();
+                databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
             }
 
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
@@ -124,7 +125,7 @@ namespace Volo.Abp.Uow.MongoDB
 
         private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
         {
-            var client = new MongoClient(mongoUrl);
+            var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
             if (unitOfWork.Options.IsTransactional)
@@ -144,7 +145,7 @@ namespace Volo.Abp.Uow.MongoDB
             string databaseName,
             CancellationToken cancellationToken = default)
         {
-            var client = new MongoClient(mongoUrl);
+            var client = CreateMongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
 
             if (unitOfWork.Options.IsTransactional)
@@ -184,7 +185,18 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                session.StartTransaction();
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError(TransactionsNotSupportedErrorMessage);
+                    Logger.LogException(e);
+
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
@@ -224,8 +236,19 @@ namespace Volo.Abp.Uow.MongoDB
                     session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
                 }
 
-                session.StartTransaction();
+                try
+                {
+                    session.StartTransaction();
+                }
+                catch (NotSupportedException e)
+                {
+                    Logger.LogError(TransactionsNotSupportedErrorMessage);
+                    Logger.LogException(e);
 
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
+                    return dbContext;
+                }
+                
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
                     new MongoDbTransactionApi(
@@ -271,6 +294,14 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             return _connectionStringResolver.Resolve(dbContextType);
+        }
+
+        private MongoClient CreateMongoClient(MongoUrl mongoUrl)
+        {
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            _options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
+
+            return new MongoClient(mongoClientSettings);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)

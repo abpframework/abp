@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.BlobStoring
@@ -12,5 +13,18 @@ namespace Volo.Abp.BlobStoring
         public abstract Task<bool> ExistsAsync(BlobProviderExistsArgs args);
 
         public abstract Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
+
+        protected virtual async Task<Stream> TryCopyToMemoryStreamAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            if(stream == null)
+            {
+                return null;
+            }
+
+            var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, cancellationToken);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return memoryStream;
+        }
     }
 }

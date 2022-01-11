@@ -1,0 +1,243 @@
+{
+  "modules": {
+    "bloggingAdmin": {
+      "rootPath": "bloggingAdmin",
+      "remoteServiceName": "BloggingAdmin",
+      "controllers": {
+        "Volo.Blogging.Admin.BlogManagementController": {
+          "controllerName": "BlogManagement",
+          "controllerGroupName": "BlogManagement",
+          "type": "Volo.Blogging.Admin.BlogManagementController",
+          "interfaces": [
+            {
+              "type": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            }
+          ],
+          "actions": {
+            "GetListAsync": {
+              "uniqueName": "GetListAsync",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs/admin",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs/admin/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/blogging/blogs/admin",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Admin.Blogs.CreateBlogDto, Volo.Blogging.Admin.Application.Contracts",
+                  "type": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                  "typeSimple": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                  "typeSimple": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/blogging/blogs/admin/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Blogging.Admin.Blogs.UpdateBlogDto, Volo.Blogging.Admin.Application.Contracts",
+                  "type": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                  "typeSimple": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                  "typeSimple": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/blogging/blogs/admin/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            },
+            "ClearCacheAsyncById": {
+              "uniqueName": "ClearCacheAsyncById",
+              "name": "ClearCacheAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/blogs/admin/clear-cache/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

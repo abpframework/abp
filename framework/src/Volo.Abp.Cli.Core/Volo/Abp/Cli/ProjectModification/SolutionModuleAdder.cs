@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Xml;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
@@ -30,6 +32,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
         public NewCommand NewCommand { get; }
         public BundleCommand BundleCommand { get; }
+        public ICmdHelper CmdHelper { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -58,7 +61,8 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder angularSourceCodeAdder,
             NewCommand newCommand,
             BundleCommand bundleCommand,
-            CliHttpClientFactory cliHttpClientFactory)
+            CliHttpClientFactory cliHttpClientFactory,
+            ICmdHelper cmdHelper)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -74,12 +78,12 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularSourceCodeAdder = angularSourceCodeAdder;
             NewCommand = newCommand;
             BundleCommand = bundleCommand;
+            CmdHelper = cmdHelper;
             _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
-        public virtual async Task AddAsync(
-            [NotNull] string solutionFile,
+        public virtual async Task<ModuleWithMastersInfo> AddAsync([NotNull] string solutionFile,
             [NotNull] string moduleName,
             string version,
             bool skipDbMigrations = false,
@@ -94,8 +98,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
             module = RemoveIncompatiblePackages(module, version);
 
-            Logger.LogInformation(
-                $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
+            Logger.LogInformation($"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
@@ -137,6 +140,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 CmdHelper.OpenWebPage(documentationLink);
             }
+
+            return module;
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
@@ -146,7 +151,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return module;
         }
 
-        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
+        private static bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
@@ -178,6 +183,14 @@ namespace Volo.Abp.Cli.ProjectModification
             var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
 
             if (blazorProject == null || !module.NugetPackages.Any(np => np.Target == NuGetPackageTarget.Blazor))
+            {
+                return;
+            }
+            // return if project is blazor-server
+            var document = new XmlDocument();
+            document.Load(blazorProject);
+            var sdk = document.DocumentElement.GetAttribute("Sdk");
+            if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
             {
                 return;
             }
@@ -506,14 +519,23 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var nugetPackage in module.NugetPackages)
             {
+                var isProjectTiered = await IsProjectTiered(projectFiles);
+
                 var nugetTarget =
-                    await IsProjectTiered(projectFiles) && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
+                    isProjectTiered && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
                         ? nugetPackage.TieredTarget
                         : nugetPackage.Target;
 
-                if (webPackagesWillBeAddedToBlazorServerProject && nugetTarget == NuGetPackageTarget.Web)
+                if (webPackagesWillBeAddedToBlazorServerProject)
                 {
-                    nugetTarget = NuGetPackageTarget.BlazorServer;
+                    if ( nugetTarget == NuGetPackageTarget.Web)
+                    {
+                        nugetTarget = NuGetPackageTarget.BlazorServer;
+                    }
+                    else if (!isProjectTiered && nugetTarget == NuGetPackageTarget.SignalR)
+                    {
+                        nugetTarget = NuGetPackageTarget.BlazorServer;
+                    }
                 }
 
                 var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetTarget);
@@ -620,7 +642,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!string.IsNullOrEmpty(dbMigratorProject))
             {
-                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run");
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
             }
         }
 

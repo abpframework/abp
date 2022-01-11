@@ -54,6 +54,7 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameHttpApiClientModule),
+        typeof(MyProjectNameHttpApiModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
@@ -98,7 +99,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
-            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureDataProtection(context, configuration, hostingEnvironment);
         }
 
         private void ConfigureMenu(IConfiguration configuration)
@@ -205,17 +206,16 @@ namespace MyCompanyName.MyProjectName
             );
         }
 
-        private void ConfigureRedis(
+        private void ConfigureDataProtection(
             ServiceConfigurationContext context,
             IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
+            var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
             if (!hostingEnvironment.IsDevelopment())
             {
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+                dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
         }
 

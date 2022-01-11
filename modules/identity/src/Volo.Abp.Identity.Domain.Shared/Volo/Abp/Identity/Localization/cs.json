@@ -25,6 +25,7 @@
     "DisplayName:Email": "Email",
     "DisplayName:PhoneNumber": "Telefonní číslo",
     "DisplayName:TwoFactorEnabled": "Dvoufázové ověřování",
+    "DisplayName:IsActive": "Aktivní",
     "DisplayName:LockoutEnabled": "Zamčení účtu po neúspěšných pokusech",
     "NewRole": "Nová role",
     "RoleName": "Název role",
@@ -61,11 +62,16 @@
     "Volo.Abp.Identity:UserNameNotFound": "Uživatel {0} neexistuje.",
     "Volo.Abp.Identity:UserNotInRole": "Uživatel není v roli '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Heslo nesouhlasí s potvrzovacím heslem.",
+    "Volo.Abp.Identity:010001": "Nemůžete smazat svůj vlastní účet!",
+    "Volo.Abp.Identity:010002": "Nelze nastavit více než {MaxUserMembershipCount} organizačních jednotek na uživatele!",
+    "Volo.Abp.Identity:010003": "Nelze změnit heslo externě přihlášeného uživatele!",
+    "Volo.Abp.Identity:010004": "Organizační jednotka s názvem {0} již existuje. Na stejné úrovni nelze vytvořit více jednotek se stejným názvem.",
     "Volo.Abp.Identity:010005": "Statické role nemohou být přejmenovány.",
     "Volo.Abp.Identity:010006": "Statické role nemohou být smazány.",
-    "Volo.Abp.Identity:010004": "Organizační jednotka s názvem {0} již existuje. Na stejné úrovni nelze vytvořit více jednotek se stejným názvem.",
+    "Volo.Abp.Identity:010007": "Nastavení dvou faktorů nemůžete změnit.",
+    "Volo.Abp.Identity:010008": "Není povoleno měnit nastavení dvou faktorů.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximální povolený počet členů organizační jednotky pro uživatele",
-    "Volo.Abp.Identity:010001": "Nemůžete smazat svůj vlastní účet!",
+    "ThisUserIsNotActiveMessage": "Tento uživatel není aktivní.",
     "Permission:IdentityManagement": "Správa identit",
     "Permission:RoleManagement": "Správa rolí",
     "Permission:Create": "Vytvořit",
@@ -101,7 +107,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Zda telefonní číslo může být potvrzeno uživatelem.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Zda je pro přihlášení vyžadováno potvrzené telefonní číslo.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Zda může uživatel změnit uživatelské jméno.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email.",
-    "Volo.Abp.Identity:010002": "Nelze nastavit více než {MaxUserMembershipCount} organizačních jednotek na uživatele!"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email."
   }
 }

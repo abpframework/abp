@@ -1,11 +1,13 @@
-﻿.cms-reaction-select-icon, .cms-reaction-icon {
+.cms-reaction-select-icon, .cms-reaction-icon {
     cursor: pointer;
 }
-.cms-reaction-selection-popover-content i.fa-2x{
+
+.cms-reaction-selection-popover-content i.fa-2x {
     width: 25%;
     display: inline-block;
     float: left;
 }
+
 .reaction-in-comment span.area-title {
     display: none;
 }
@@ -15,6 +17,11 @@ span.area-title {
     padding: 3px;
     display: block;
 }
+
 .popover {
     min-width: 276px;
+}
+
+.cms-reaction-icon-selected {
+    font-weight: bold;
 }

@@ -1,11 +1,16 @@
 {
-  "version": "4.4.4",
+  "version": "5.0.1",
   "name": "@abp/select2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git",
+    "directory": "npm/packs/select2"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.4.4",
+    "@abp/core": "~5.0.1",
     "select2": "^4.0.13"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

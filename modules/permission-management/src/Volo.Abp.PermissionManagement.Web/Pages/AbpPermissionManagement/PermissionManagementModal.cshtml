@@ -13,7 +13,7 @@
     <abp-modal size="Large">
         <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
         <abp-modal-body class="custom-scroll-container">
-            <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="None" label="@L["SelectAllInAllTabs"].Value"/>
+            <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None" label="@L["SelectAllInAllTabs"].Value"/>
             <hr class="mt-2 mb-2"/>
             <input asp-for="@Model.ProviderKey"/>
             <input asp-for="@Model.ProviderName"/>
@@ -27,7 +27,7 @@
                         <div class="w-100" style="max-height: 640px;overflow-y: auto">
                             <div class="pl-1 pt-1">
                                 <abp-input asp-for="@group.IsAllPermissionsGranted"
-                                           check-box-hidden-input-render-mode="None"
+                                           check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
                                            name="SelectAllInThisTab"
                                            id="SelectAllInThisTab-@group.GetNormalizedGroupName()"
                                            data-tab-id="v-pills-tab-@group.GetNormalizedGroupName()"
@@ -37,7 +37,7 @@
                                 {
                                     var permission = group.Permissions[j];
                                     <abp-input asp-for="@permission.IsGranted"
-                                               check-box-hidden-input-render-mode="None"
+                                               check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
                                                abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
                                                label="@permission.GetShownName(Model.ProviderName)"
                                                disabled="@permission.IsDisabled(Model.ProviderName)"

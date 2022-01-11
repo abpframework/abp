@@ -4,6 +4,7 @@
     "Languages": "Jazyky",
     "AreYouSure": "Jste si jisti?",
     "Cancel": "Zrušit",
+    "Clear": "Průhledná",
     "Yes": "Ano",
     "No": "Ne",
     "Ok": "Ok",
@@ -12,6 +13,7 @@
     "SavingWithThreeDot": "Ukládám...",
     "Actions": "Akce",
     "Delete": "Smazat",
+    "SuccessfullyDeleted": "Úspěšně smazáno",
     "Edit": "Upravit",
     "Refresh": "Obnovit",
     "Language": "Jazyk",
@@ -43,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "Máte neuložené změny.",
     "GoHomePage": "Přejít na domovskou stránku",
     "GoBack": "Jít zpět",
-    "Search": "Vyhledávání"
+    "Search": "Vyhledávání",
+    "ItemWillBeDeletedMessageWithFormat": "{0} bude smazáno!",
+    "ItemWillBeDeletedMessage": "Tato položka bude smazána!",
+    "ManageYourAccount": "Spravujte svůj účet"
   }
 }

@@ -130,10 +130,14 @@ namespace Volo.Abp.Cli.ProjectModification
                 "*.csproj",
                 SearchOption.AllDirectories);
 
-            var projectsUnderTest = Directory.GetFiles(
-                Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name, "test"),
-                "*.csproj",
-                SearchOption.AllDirectories);
+            var projectsUnderTest = new List<string>();
+            if (Directory.Exists(Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name, "test")))
+            {
+                projectsUnderTest = Directory.GetFiles(
+                    Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name, "test"),
+                    "*.csproj",
+                    SearchOption.AllDirectories).ToList();
+            }
 
             foreach (var projectPath in projectsUnderModule)
             {

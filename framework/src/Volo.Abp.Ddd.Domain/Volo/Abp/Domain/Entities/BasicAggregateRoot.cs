@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -9,15 +10,15 @@ namespace Volo.Abp.Domain.Entities
         IAggregateRoot,
         IGeneratesDomainEvents
     {
-        private readonly ICollection<object> _distributedEvents = new Collection<object>();
-        private readonly ICollection<object> _localEvents = new Collection<object>();
+        private readonly ICollection<DomainEventRecord> _distributedEvents = new Collection<DomainEventRecord>();
+        private readonly ICollection<DomainEventRecord> _localEvents = new Collection<DomainEventRecord>();
 
-        public virtual IEnumerable<object> GetLocalEvents()
+        public virtual IEnumerable<DomainEventRecord> GetLocalEvents()
         {
             return _localEvents;
         }
 
-        public virtual IEnumerable<object> GetDistributedEvents()
+        public virtual IEnumerable<DomainEventRecord> GetDistributedEvents()
         {
             return _distributedEvents;
         }
@@ -34,12 +35,12 @@ namespace Volo.Abp.Domain.Entities
 
         protected virtual void AddLocalEvent(object eventData)
         {
-            _localEvents.Add(eventData);
+            _localEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
         }
 
         protected virtual void AddDistributedEvent(object eventData)
         {
-            _distributedEvents.Add(eventData);
+            _distributedEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
         }
     }
 
@@ -48,8 +49,8 @@ namespace Volo.Abp.Domain.Entities
         IAggregateRoot<TKey>,
         IGeneratesDomainEvents
     {
-        private readonly ICollection<object> _distributedEvents = new Collection<object>();
-        private readonly ICollection<object> _localEvents = new Collection<object>();
+        private readonly ICollection<DomainEventRecord> _distributedEvents = new Collection<DomainEventRecord>();
+        private readonly ICollection<DomainEventRecord> _localEvents = new Collection<DomainEventRecord>();
 
         protected BasicAggregateRoot()
         {
@@ -62,12 +63,12 @@ namespace Volo.Abp.Domain.Entities
 
         }
 
-        public virtual IEnumerable<object> GetLocalEvents()
+        public virtual IEnumerable<DomainEventRecord> GetLocalEvents()
         {
             return _localEvents;
         }
 
-        public virtual IEnumerable<object> GetDistributedEvents()
+        public virtual IEnumerable<DomainEventRecord> GetDistributedEvents()
         {
             return _distributedEvents;
         }
@@ -84,12 +85,12 @@ namespace Volo.Abp.Domain.Entities
 
         protected virtual void AddLocalEvent(object eventData)
         {
-            _localEvents.Add(eventData);
+            _localEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
         }
 
         protected virtual void AddDistributedEvent(object eventData)
         {
-            _distributedEvents.Add(eventData);
+            _distributedEvents.Add(new DomainEventRecord(eventData, EventOrderGenerator.GetNext()));
         }
     }
 }

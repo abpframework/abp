@@ -7,11 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
-using Volo.Abp.Json;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Local
 {
@@ -34,8 +33,8 @@ namespace Volo.Abp.EventBus.Local
             IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
-            IEventErrorHandler errorHandler)
-            : base(serviceScopeFactory, currentTenant, errorHandler)
+            IUnitOfWorkManager unitOfWorkManager)
+            : base(serviceScopeFactory, currentTenant, unitOfWorkManager)
         {
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
@@ -120,18 +119,19 @@ namespace Volo.Abp.EventBus.Local
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
         }
 
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceLocalEvent(eventRecord);
+        }
+
         public virtual async Task PublishAsync(LocalEventMessage localEventMessage)
         {
-            await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData, errorContext =>
-            {
-                errorContext.EventData = localEventMessage.EventData;
-                errorContext.SetProperty(nameof(LocalEventMessage.MessageId), localEventMessage.MessageId);
-            });
+            await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
         }
 
         protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)

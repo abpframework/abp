@@ -461,7 +461,7 @@ For more information, see the [RoutesService document](../UI/Angular/Modifying-t
 Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 This command will create the following files under the `/src/app/proxy/books` folder:
