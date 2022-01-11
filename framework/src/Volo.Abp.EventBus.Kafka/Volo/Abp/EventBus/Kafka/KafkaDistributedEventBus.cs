@@ -39,14 +39,16 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IKafkaSerializer serializer,
         IProducerPool producerPool,
         IGuidGenerator guidGenerator,
-        IClock clock)
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker)
         : base(
             serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
         MessageConsumerFactory = messageConsumerFactory;
