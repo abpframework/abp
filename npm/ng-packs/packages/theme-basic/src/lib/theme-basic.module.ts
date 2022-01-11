@@ -28,36 +28,35 @@ import { BASIC_THEME_USER_MENU_PROVIDERS } from './providers/user-menu.provider'
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-  declarations: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
-    CurrentUserComponent,
-    LanguagesComponent,
-    PageAlertContainerComponent,
-    TenantBoxComponent,
-    AuthWrapperComponent,
-  ],
-  exports: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
-    CurrentUserComponent,
-    LanguagesComponent,
-    PageAlertContainerComponent,
-  ],
-  imports: [
-    CoreModule,
-    ThemeSharedModule,
-    NgbCollapseModule,
-    NgbDropdownModule,
-    NgxValidateCoreModule,
-  ],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent, CurrentUserComponent, LanguagesComponent],
+    declarations: [
+        ...LAYOUTS,
+        ValidationErrorComponent,
+        LogoComponent,
+        NavItemsComponent,
+        RoutesComponent,
+        CurrentUserComponent,
+        LanguagesComponent,
+        PageAlertContainerComponent,
+        TenantBoxComponent,
+        AuthWrapperComponent,
+    ],
+    exports: [
+        ...LAYOUTS,
+        ValidationErrorComponent,
+        LogoComponent,
+        NavItemsComponent,
+        RoutesComponent,
+        CurrentUserComponent,
+        LanguagesComponent,
+        PageAlertContainerComponent,
+    ],
+    imports: [
+        CoreModule,
+        ThemeSharedModule,
+        NgbCollapseModule,
+        NgbDropdownModule,
+        NgxValidateCoreModule,
+    ]
 })
 export class BaseThemeBasicModule {}
 
