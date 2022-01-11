@@ -21,3 +21,10 @@ export function interpolate(text: string, params: string[]) {
     .replace(/(['"]?\{\s*(\d+)\s*\}['"]?)/g, (_, match, digit) => params[digit] ?? match)
     .replace(/\s+/g, ' ');
 }
+
+export function escapeHtmlChars(value: string) {
+  return (
+    value &&
+    value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  );
+}
