@@ -23,5 +23,5 @@ export function interpolate(text: string, params: string[]) {
 }
 
 export function escapeHtmlChars(value: string) {
-  return value && value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return value && value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
