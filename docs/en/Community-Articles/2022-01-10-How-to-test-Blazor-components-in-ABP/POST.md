@@ -9,17 +9,43 @@ In this article I will use [bUnit](https://github.com/bUnit-dev/bUnit) for a sim
 
 ## Getting Started
 
-Use ABP CLI to create a blazor app, then add `BookStore.Blazor.Tests` unit test project to the solution.
+Use ABP CLI to create a blazor app
 
 `abp new BookStore -t app -u blazor`
 
-Add [bUnit](https://github.com/bUnit-dev/bUnit)  package and `ProjectReference` and to the test project.
+Then add `BookStore.Blazor.Tests` xunit test project to the solution, and add [bUnit](https://github.com/bUnit-dev/bUnit) package and `ProjectReference` and to the test project.
 
+The contents of `BookStore.Blazor.Tests.csproj`
 ```xml
-<PackageReference Include="bunit" Version="1.2.49" />
+<Project Sdk="Microsoft.NET.Sdk">
 
-<ProjectReference Include="..\..\src\BookStore.Blazor\BookStore.Blazor.csproj" />
-<ProjectReference Include="..\BookStore.EntityFrameworkCore.Tests\BookStore.EntityFrameworkCore.Tests.csproj" />
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="bunit" Version="1.2.49" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="5.0.1" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\BookStore.Blazor\BookStore.Blazor.csproj" />
+      <ProjectReference Include="..\BookStore.EntityFrameworkCore.Tests\BookStore.EntityFrameworkCore.Tests.csproj" />
+    </ItemGroup>
+
+</Project>
 ```
 
 Create `BookStoreBlazorTestModule` and depends on `AbpAspNetCoreComponentsModule` and `BookStoreEntityFrameworkCoreTestModule`.
