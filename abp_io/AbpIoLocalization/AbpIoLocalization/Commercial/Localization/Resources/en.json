@@ -434,6 +434,8 @@
     "ResponsiveAndMobileCompatible": "Responsive & mobile-compatible",
     "ProvidesStylesForDatatables": "Provides styles for Datatables",
     "SupportForum": "Support Forum",
-    "TrustedBy": "Trusted By"
+    "TrustedBy": "Trusted By",
+    "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
+    "Plans": "Plans"
   }
 }
