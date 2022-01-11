@@ -1,6 +1,7 @@
 {
   "culture": "fi",
   "texts": {
+    "Menu:Account": "Tili",
     "UserName": "Käyttäjätunnus",
     "EmailAddress": "Sähköpostiosoite",
     "UserNameOrEmailAddress": "Käyttäjänimi tai Sähköpostiosoite",

@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class ServiceCollectionLoggingExtensions
 {
-    public static class ServiceCollectionLoggingExtensions
+    public static ILogger<T> GetInitLogger<T>(this IServiceCollection services)
     {
-        public static ILogger<T> GetInitLogger<T>(this IServiceCollection services)
-        {
-            return services.GetSingletonInstance<IInitLoggerFactory>().Create<T>();
-        }
+        return services.GetSingletonInstance<IInitLoggerFactory>().Create<T>();
     }
 }

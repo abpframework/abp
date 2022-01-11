@@ -1,34 +1,67 @@
-﻿namespace Volo.Abp.Modularity
+﻿using System.Threading.Tasks;
+
+namespace Volo.Abp.Modularity;
+
+public class OnApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
 {
-    public class OnApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
+    public async override Task InitializeAsync(ApplicationInitializationContext context, IAbpModule module)
     {
-        public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
+        if (module is IOnApplicationInitialization onApplicationInitialization)
         {
-            (module as IOnApplicationInitialization)?.OnApplicationInitialization(context);
+            await onApplicationInitialization.OnApplicationInitializationAsync(context);
         }
     }
 
-    public class OnApplicationShutdownModuleLifecycleContributor : ModuleLifecycleContributorBase
+    public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
     {
-        public override void Shutdown(ApplicationShutdownContext context, IAbpModule module)
+        (module as IOnApplicationInitialization)?.OnApplicationInitialization(context);
+    }
+}
+
+public class OnApplicationShutdownModuleLifecycleContributor : ModuleLifecycleContributorBase
+{
+    public async override Task ShutdownAsync(ApplicationShutdownContext context, IAbpModule module)
+    {
+        if (module is IOnApplicationShutdown onApplicationShutdown)
         {
-            (module as IOnApplicationShutdown)?.OnApplicationShutdown(context);
+            await onApplicationShutdown.OnApplicationShutdownAsync(context);
         }
     }
 
-    public class OnPreApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
+    public override void Shutdown(ApplicationShutdownContext context, IAbpModule module)
     {
-        public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
+        (module as IOnApplicationShutdown)?.OnApplicationShutdown(context);
+    }
+}
+
+public class OnPreApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
+{
+    public async override Task InitializeAsync(ApplicationInitializationContext context, IAbpModule module)
+    {
+        if (module is IOnPreApplicationInitialization onPreApplicationInitialization)
         {
-            (module as IOnPreApplicationInitialization)?.OnPreApplicationInitialization(context);
+            await onPreApplicationInitialization.OnPreApplicationInitializationAsync(context);
         }
     }
 
-    public class OnPostApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
+    public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
     {
-        public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
+        (module as IOnPreApplicationInitialization)?.OnPreApplicationInitialization(context);
+    }
+}
+
+public class OnPostApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
+{
+    public async override Task InitializeAsync(ApplicationInitializationContext context, IAbpModule module)
+    {
+        if (module is IOnPostApplicationInitialization onPostApplicationInitialization)
         {
-            (module as IOnPostApplicationInitialization)?.OnPostApplicationInitialization(context);
+            await onPostApplicationInitialization.OnPostApplicationInitializationAsync(context);
         }
+    }
+
+    public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
+    {
+        (module as IOnPostApplicationInitialization)?.OnPostApplicationInitialization(context);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem
-{
-    public interface IWebContentFileProvider : IFileProvider
-    {
+namespace Volo.Abp.AspNetCore.VirtualFileSystem;
 
-    }
+public interface IWebContentFileProvider : IFileProvider
+{
+
 }

@@ -1,23 +1,22 @@
 ﻿using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.BlobStoring.Database.MongoDB
+namespace Volo.Abp.BlobStoring.Database.MongoDB;
+
+public static class BlobStoringMongoDbContextExtensions
 {
-    public static class BlobStoringMongoDbContextExtensions
+    public static void ConfigureBlobStoring(
+        this IMongoModelBuilder builder)
     {
-        public static void ConfigureBlobStoring(
-            this IMongoModelBuilder builder)
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<DatabaseBlobContainer>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers";
+        });
 
-            builder.Entity<DatabaseBlobContainer>(b =>
-            {
-                b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers";
-            });
-
-            builder.Entity<DatabaseBlob>(b =>
-            {
-                b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs";
-            });
-        }
+        builder.Entity<DatabaseBlob>(b =>
+        {
+            b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs";
+        });
     }
 }

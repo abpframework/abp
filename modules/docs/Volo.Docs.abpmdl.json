@@ -1,0 +1,103 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "app": {}
+    }
+  },
+  "packages": {
+    "Volo.Docs.Domain.Shared": {
+      "path": "src/Volo.Docs.Domain.Shared/Volo.Docs.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Domain": {
+      "path": "src/Volo.Docs.Domain/Volo.Docs.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Application.Contracts": {
+      "path": "src/Volo.Docs.Application.Contracts/Volo.Docs.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Application": {
+      "path": "src/Volo.Docs.Application/Volo.Docs.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.EntityFrameworkCore": {
+      "path": "src/Volo.Docs.EntityFrameworkCore/Volo.Docs.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.HttpApi": {
+      "path": "src/Volo.Docs.HttpApi/Volo.Docs.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.HttpApi.Client": {
+      "path": "src/Volo.Docs.HttpApi.Client/Volo.Docs.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Web": {
+      "path": "src/Volo.Docs.Web/Volo.Docs.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Admin.Application.Contracts": {
+      "path": "src/Volo.Docs.Admin.Application.Contracts/Volo.Docs.Admin.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Admin.Application": {
+      "path": "src/Volo.Docs.Admin.Application/Volo.Docs.Admin.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Admin.HttpApi": {
+      "path": "src/Volo.Docs.Admin.HttpApi/Volo.Docs.Admin.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Admin.HttpApi.Client": {
+      "path": "src/Volo.Docs.Admin.HttpApi.Client/Volo.Docs.Admin.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Admin.Web": {
+      "path": "src/Volo.Docs.Admin.Web/Volo.Docs.Admin.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.Application.Tests": {
+      "path": "test/Volo.Docs.Application.Tests/Volo.Docs.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Docs.Domain.Tests": {
+      "path": "test/Volo.Docs.Domain.Tests/Volo.Docs.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Docs.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Docs.EntityFrameworkCore.Tests/Volo.Docs.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Docs.TestBase": {
+      "path": "test/Volo.Docs.TestBase/Volo.Docs.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Docs.Admin.Application.Tests": {
+      "path": "test/Volo.Docs.Admin.Application.Tests/Volo.Docs.Admin.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "VoloDocs.EntityFrameworkCore": {
+      "path": "app/VoloDocs.EntityFrameworkCore/VoloDocs.EntityFrameworkCore.abppkg.json",
+      "folder": "app"
+    },
+    "VoloDocs.Web": {
+      "path": "app/VoloDocs.Web/VoloDocs.Web.abppkg.json",
+      "folder": "app"
+    },
+    "VoloDocs.Migrator": {
+      "path": "app/VoloDocs.Migrator/VoloDocs.Migrator.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Docs.MongoDB": {
+      "path": "src/Volo.Docs.MongoDB/Volo.Docs.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Docs.MongoDB.Tests": {
+      "path": "test/Volo.Docs.MongoDB.Tests/Volo.Docs.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    }
+  }
+}

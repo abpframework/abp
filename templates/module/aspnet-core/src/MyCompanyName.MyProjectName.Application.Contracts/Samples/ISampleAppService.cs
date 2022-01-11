@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace MyCompanyName.MyProjectName.Samples
-{
-    public interface ISampleAppService : IApplicationService
-    {
-        Task<SampleDto> GetAsync();
+namespace MyCompanyName.MyProjectName.Samples;
 
-        Task<SampleDto> GetAuthorizedAsync();
-    }
+public interface ISampleAppService : IApplicationService
+{
+    Task<SampleDto> GetAsync();
+
+    Task<SampleDto> GetAuthorizedAsync();
 }
