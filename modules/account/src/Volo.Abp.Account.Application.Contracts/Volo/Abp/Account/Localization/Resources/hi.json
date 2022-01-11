@@ -1,6 +1,7 @@
 {
   "culture": "hi",
   "texts": {
+    "Menu:Account": "लेखा",
     "UserName": "उपयोगकर्ता नाम",
     "EmailAddress": "ईमेल पता",
     "UserNameOrEmailAddress": "उपयोगकर्ता का नाम या ईमेल पता",
