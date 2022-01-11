@@ -38,14 +38,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
         IRebusSerializer serializer,
         IGuidGenerator guidGenerator,
-        IClock clock) :
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker) :
         base(
             serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         Rebus = rebus;
         Serializer = serializer;

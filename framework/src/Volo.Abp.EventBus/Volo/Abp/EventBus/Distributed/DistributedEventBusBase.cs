@@ -22,11 +22,13 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         IUnitOfWorkManager unitOfWorkManager,
         IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
         IGuidGenerator guidGenerator,
-        IClock clock
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker
     ) : base(
         serviceScopeFactory,
         currentTenant,
-        unitOfWorkManager)
+        unitOfWorkManager,
+        eventHandlerInvoker)
     {
         GuidGenerator = guidGenerator;
         Clock = clock;
