@@ -90,7 +90,7 @@ Our team is working to finalize the [eShopOnAbp](https://github.com/abpframework
 
 We were working on a new design for the [abp.io](https://abp.io/) websites for a while. We are making the final touches; the new design will be live very soon. Here a screenshot from the design work:
 
-![new-abp-io-design](D:\Github\abp\docs\en\Blog-Posts\2022-01-11 v5_1_Preview\new-abp-io-design.png)
+![new-abp-io-design](new-abp-io-design.png)
 
 [ABP Commercial](https://commercial.abp.io/) and [ABP Community](https://community.abp.io/) websites will also have new designs as a part of this update.
 
