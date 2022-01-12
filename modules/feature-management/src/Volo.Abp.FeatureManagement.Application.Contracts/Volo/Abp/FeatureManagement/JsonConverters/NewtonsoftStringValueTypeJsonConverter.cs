@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.DependencyInjection;
@@ -13,6 +14,13 @@ public class NewtonsoftStringValueTypeJsonConverter : JsonConverter, ITransientD
 {
     public override bool CanWrite => false;
 
+    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+
+    public NewtonsoftStringValueTypeJsonConverter(IOptions<AbpFeatureManagementApplicationContractsOptions> options)
+    {
+        Options = options.Value;
+    }
+    
     public override bool CanConvert(Type objectType)
     {
         return objectType == typeof(IStringValueType);
@@ -77,13 +85,11 @@ public class NewtonsoftStringValueTypeJsonConverter : JsonConverter, ITransientD
 
     protected virtual IValueValidator CreateValueValidatorByName(JToken jObject, string name)
     {
-        return name switch
+        foreach (var factory in Options.ValueValidatorFactory.Where(factory => factory.CanCreate(name)))
         {
-            "NULL" => new AlwaysValidValueValidator(),
-            "BOOLEAN" => new BooleanValueValidator(),
-            "NUMERIC" => new NumericValueValidator(),
-            "STRING" => new StringValueValidator(),
-            _ => throw new ArgumentException($"{nameof(IValueValidator)} named {name} was not found!")
-        };
+            return factory.Create();
+        }
+
+        throw new ArgumentException($"{nameof(IValueValidator)} named {name} was cannot be created!");
     }
 }

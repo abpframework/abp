@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.FeatureManagement.MongoDB",
+  "hash": "0b753d8d44423206f1e7292522638194",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement.MongoDB",
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementMongoDbModule"
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement.MongoDB",
+      "connectionStringName": "AbpFeatureManagement",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
+          "contentType": "databaseCollection",
+          "name": "AbpFeatureValues"
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "FeatureManagementMongoDbContext"
+    }
+  ]
+}

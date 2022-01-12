@@ -129,6 +129,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             TenantId = _currentUser.TenantId,
             ImpersonatorUserId = _currentUser.FindImpersonatorUserId(),
             ImpersonatorTenantId = _currentUser.FindImpersonatorTenantId(),
+            ImpersonatorUserName = _currentUser.FindImpersonatorUserName(),
+            ImpersonatorTenantName = _currentUser.FindImpersonatorTenantName(),
             UserName = _currentUser.UserName,
             SurName = _currentUser.SurName,
             Name = _currentUser.Name,

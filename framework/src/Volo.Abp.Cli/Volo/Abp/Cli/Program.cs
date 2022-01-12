@@ -18,6 +18,7 @@ public class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
             .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
+            .MinimumLevel.Override("Volo.Abp.IdentityModel", LogEventLevel.Information)
 #if DEBUG
                 .MinimumLevel.Override("Volo.Abp.Cli", LogEventLevel.Debug)
 #else

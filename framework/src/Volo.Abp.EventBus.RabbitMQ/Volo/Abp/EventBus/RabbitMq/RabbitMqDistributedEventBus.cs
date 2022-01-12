@@ -44,14 +44,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
-        IClock clock)
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker)
         : base(
             serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             distributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         ConnectionPool = connectionPool;
         Serializer = serializer;

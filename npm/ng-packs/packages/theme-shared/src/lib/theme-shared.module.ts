@@ -52,22 +52,16 @@ const declarationsWithExports = [
 ];
 
 @NgModule({
-  imports: [
-    CoreModule,
-    NgxDatatableModule,
-    NgxValidateCoreModule,
-    NgbPaginationModule,
-    EllipsisModule,
-  ],
-  declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
-  exports: [NgxDatatableModule, EllipsisModule, ...declarationsWithExports],
-  providers: [DatePipe],
-  entryComponents: [
-    HttpErrorWrapperComponent,
-    LoadingComponent,
-    ToastContainerComponent,
-    ConfirmationComponent,
-  ],
+    imports: [
+        CoreModule,
+        NgxDatatableModule,
+        NgxValidateCoreModule,
+        NgbPaginationModule,
+        EllipsisModule,
+    ],
+    declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
+    exports: [NgxDatatableModule, EllipsisModule, ...declarationsWithExports],
+    providers: [DatePipe]
 })
 export class BaseThemeSharedModule {}
 
