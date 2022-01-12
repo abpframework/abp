@@ -11,14 +11,14 @@ import {
 
 function Loading({ style, loading, opacity }) {
   return loading ? (
-    <View style={style.container}>
+    <View style={styles.container}>
       <View
         style={{
-          ...style.backdrop,
+          ...styles.backdrop,
           opacity: opacity || 0.6,
         }}
       />
-      <Spinner style={style.spinner} color={style.spinner.color} />
+      <Spinner style={styles.spinner} color={styles.spinner.color} />
     </View>
   ) : null;
 }

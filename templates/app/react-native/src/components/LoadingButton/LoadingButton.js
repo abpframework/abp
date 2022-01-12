@@ -5,9 +5,9 @@ import { StyleSheet } from 'react-native';
 
 function LoadingButton({ loading = false, style, children, ...props }) {
   return (
-    <Button style={style.button} {...props}>
+    <Button style={styles.button} {...props}>
       {children}
-      {loading ? <Spinner style={style.spinner} color={style.spinner.color || 'white'} /> : null}
+      {loading ? <Spinner style={styles.spinner} color={styles.spinner.color || 'white'} /> : null}
     </Button>
   );
 }

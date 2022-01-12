@@ -30,7 +30,7 @@ function FormButtons({
   };
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       {isShowRemove ? (
         <Button
           abpButton

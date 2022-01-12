@@ -75,14 +75,14 @@ function DataList({
           />
           {searchLoading ? (
             <View>
-              <Spinner style={style.spinner} color={style.spinner.color} />
+              <Spinner style={styles.spinner} color={styles.spinner.color} />
             </View>
           ) : (
             <Icon style={{ fontSize: 20, marginRight: 15 }} name="ios-search" />
           )}
         </InputGroup>
       </Item>
-      <View style={style.container}>
+      <View style={styles.container}>
         <List
           showsVerticalScrollIndicator
           scrollEnabled

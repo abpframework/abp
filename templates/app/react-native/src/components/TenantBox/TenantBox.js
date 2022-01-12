@@ -45,15 +45,15 @@ function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleT
 
   return (
     <>
-      <Segment style={style.container}>
+      <Segment style={styles.container}>
         <View>
-          <Text style={style.title}>{i18n.t('AbpUiMultiTenancy::Tenant')}</Text>
-          <Text style={style.tenant}>
+          <Text style={styles.title}>{i18n.t('AbpUiMultiTenancy::Tenant')}</Text>
+          <Text style={styles.tenant}>
             {tenant.name ? tenant.name : i18n.t('AbpUiMultiTenancy::NotSelected')}
           </Text>
         </View>
         <Button
-          style={{ ...style.switchButton, display: !showTenantSelection ? 'flex' : 'none' }}
+          style={{ ...styles.switchButton, display: !showTenantSelection ? 'flex' : 'none' }}
           onPress={() => toggleTenantSelection()}>
           <Text style={{ color: '#fff' }}>{i18n.t('AbpUiMultiTenancy::Switch')}</Text>
         </Button>
@@ -64,12 +64,12 @@ function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleT
             <Label abpLabel>{i18n.t('AbpUiMultiTenancy::Name')}</Label>
             <Input abpInput value={tenantName} onChangeText={setTenantName} autoCapitalize = 'none'/>
           </InputGroup>
-          <Text style={style.hint}>{i18n.t('AbpUiMultiTenancy::SwitchTenantHint')}</Text>
+          <Text style={styles.hint}>{i18n.t('AbpUiMultiTenancy::SwitchTenantHint')}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Button abpButton light style={style.button} onPress={() => toggleTenantSelection()}>
+            <Button abpButton light style={styles.button} onPress={() => toggleTenantSelection()}>
               <Text>{i18n.t('AbpAccount::Cancel')}</Text>
             </Button>
-            <Button abpButton style={style.button} onPress={() => findTenant()}>
+            <Button abpButton style={styles.button} onPress={() => findTenant()}>
               <Text>{i18n.t('AbpAccount::Save')}</Text>
             </Button>
           </View>
