@@ -246,7 +246,7 @@
     "CrossPlatform": "Cross Platform",
     "AbpSuiteExplanation8": "ABP Suite is built with .NET Core and it is cross platform. It runs as a web application on your local computer. You can run it on <strong>Windows</strong>, <strong>Mac</strong> and <strong>Linux</strong>",
     "OtherFeatures": "Other Features",
-    "OtherFeatures1": "Updates <strong>NuGet</strong> and <strong>NPM</strong> packages on your solution easily.",
+    "OtherFeatures1": "Updates NuGet and NPM packages on your solution easily.",
     "OtherFeatures2": "Regenerates already generated pages from scratch.",
     "OtherFeatures3": "Creates new solutions",
     "ThanksForCreatingProject": "Thanks for Creating Your Project!",
@@ -436,6 +436,7 @@
     "SupportForum": "Support Forum",
     "TrustedBy": "Trusted By",
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
-    "Plans": "Plans"
+    "Plans": "Plans",
+    "Save": "Save"
   }
 }
