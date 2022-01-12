@@ -49,33 +49,77 @@ This is an minor feature release, mostly with enhancements and improvements base
   }
 ````
 
-## What's new with 5.1?
+## What's new with ABP Framework 5.1?
 
 In this section, I will introduce some major features released with this version.
 
-### DRAFT list of things done
+### The new hosting model
 
-#### ABP Framework
+ABP startup application template now uses the new ASP.NET Core hosting APIs ([see the Microsoft's minimal APIs document](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0)) on application startup ([see the exact place in the ABP startup template](https://github.com/abpframework/abp/blob/46cdfbe7b06c93690181633be4e96bf62e7f34e2/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/Program.cs#L33-L40)). So, the `Startup.cs` file has been removed.
 
-* Use new hosting model for the app template. [#10928](https://github.com/abpframework/abp/pull/10928) - what to do for existing solutions?
-* Async application initialization methods on the AbpModule class [#6828](https://github.com/abpframework/abp/issues/6828)
-* Angular 13?
-* [#10552](https://github.com/abpframework/abp/pull/10696) Used file scoped namespaces :)
-* Support markdown in CMS-Kit comments [#10792](https://github.com/abpframework/abp/pull/10792)
-* eShopOnAbp is getting mature
-* Nightly builds are working again
-* Coming: New ABP.IO design!
+Old-style hosting logic will continue to work as long as ASP.NET Core supports it. It is recommended to switch to the new model if possible for your solution. See [this guide](https://docs.abp.io/en/abp/latest/Migration-Guides/Upgrading-Startup-Template) if you need to know how you can to do that.
+
+### Asynchronous startup lifecycle methods
+
+The new hosting model allows us to execute asynchronous code on application initialization in [ABP module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) classes. If you are using the new hosting model (which is default with 5.1 startup templates), you can override the `Async` versions of the module lifecycle methods.
+
+For example, you can now override the `ConfigureServicesAsync` (instead of `ConfigureServices`) or `OnApplicationInitializationAsync` (instead of `OnApplicationInitialization`) as shown in the following code block:
+
+````csharp
+public class MyModule : AbpModule
+{
+    public override async Task ConfigureServicesAsync(ServiceConfigurationContext context)
+    {
+        /* You can use await here and safely execute other async methods */
+    }
+
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        /* You can use await here and safely execute other async methods */
+    }
+}
+````
+
+If you override both of asynchronous and synchronous versions of the same method, only the asynchronous one will be executed. So, override only one of them based on your needs.
+
+### eShopOnABP is getting mature
+
+Our team is working to finalize the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) example solution, which is a reference **microservice solution** built with the ABP Framework. They will explain the project status and show what's done in the next **ABP Community Talks** meeting (see the *ABP Community Talks 2021.1* section below in this post).
+
+### The new ABP.IO design!
+
+We were working on a new design for the [abp.io](https://abp.io/) websites for a while. We are making the final touches; the new design will be live very soon. Here a screenshot from the design work:
+
+![new-abp-io-design](D:\Github\abp\docs\en\Blog-Posts\2022-01-11 v5_1_Preview\new-abp-io-design.png)
+
+[ABP Commercial](https://commercial.abp.io/) and [ABP Community](https://community.abp.io/) websites will also have new designs as a part of this update.
+
+### Other changes
+
+Here some other notable changes that come with this release:
+
+* Support markdown in [CMS-Kit comments ](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments)feature ([#10792](https://github.com/abpframework/abp/pull/10792))
+* Used file scoped namespaces for all the ABP Framework source code :) ([#10552](https://github.com/abpframework/abp/pull/10696))
 
 All issues & PRs in [5.1 milesone](https://github.com/abpframework/abp/milestone/60?closed=1).
 
-#### ABP Commercial
+### About the ABP Commercial
 
-* CMS Kit Pro: URL forwarding
-* LeptonX is coming for ABP Blazor and MVC UI too (share the sample dashboard)
+The core team is also working on the ABP Commercial (which provides pre-built modules, themes, tooling and support on top of the ABP Framework). We've done a lot of minor improvements and fixes to the modules and tooling.
 
-### Header 1
+One exiting new is about the **LeptonX theme**; We are working on to make it available in **MVC (Razor Pages)** and **Blazor** UI options too (in addition to the Angular UI). We are also adding more components, layout options, demo pages, etc... We are planning to release a beta version in the next weeks. Here an animated GIF from the dashboard we've prepared as a demonstration:
 
-TODO
+![leptonx-dash](leptonx-dash.gif)
+
+If you are wondering what is the LeptonX project, please see [that blog post](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release).
+
+As another visible functionality, we've added a new feature to the [CMS Kit Pro](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index) module that is used to forward a URL to another URL. This is a screenshot from the management UI:
+
+![url-forward](url-forward.png)
+
+This feature can be used to create short URLs in your application (like URL shortening services provide) or forward old pages to their new URLs.
+
+In addition to the new features shipped in every minor version, we are working on long-term projects for ABP.IO Platform and ABP Commercial (a little secret for now :). We will have announcements once these projects get mature.
 
 ## Community News
 
