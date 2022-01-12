@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "chart.js": "^3.5.1",
-    "ng-zorro-antd": "^12.0.1",
+    "ng-zorro-antd": "^13.0.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

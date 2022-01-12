@@ -1,0 +1,22 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "demo": {}
+    }
+  },
+  "packages": {
+    "Volo.ClientSimulation": {
+      "path": "src/Volo.ClientSimulation/Volo.ClientSimulation.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.ClientSimulation.Demo": {
+      "path": "demo/Volo.ClientSimulation.Demo/Volo.ClientSimulation.Demo.abppkg.json",
+      "folder": "demo"
+    },
+    "Volo.ClientSimulation.Web": {
+      "path": "src/Volo.ClientSimulation.Web/Volo.ClientSimulation.Web.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

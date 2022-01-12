@@ -39,13 +39,15 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IOptions<AbpAzureEventBusOptions> abpAzureEventBusOptions,
         IAzureServiceBusSerializer serializer,
         IAzureServiceBusMessageConsumerFactory messageConsumerFactory,
-        IPublisherPool publisherPool)
+        IPublisherPool publisherPool,
+        IEventHandlerInvoker eventHandlerInvoker)
         : base(serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         _options = abpAzureEventBusOptions.Value;
         _serializer = serializer;
