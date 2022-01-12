@@ -122,6 +122,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         if (provider != null)
         {
             modelBuilder.SetDatabaseProvider(provider.Value);
+
+            if (provider.Value == EfCoreDatabaseProvider.PostgreSql)
+            {
+                // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            }
         }
     }
 
