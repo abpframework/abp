@@ -1,42 +1,53 @@
-# ABP.IO Platform 5.1 RC.1 Has Been Released
+# ABP.IO Platform 5.1 Has Been Released
 
-Today, we are releasing the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version **5.1 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
+Today, we are releasing the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/) version 5.1 (with a version number `5.1.1`). This blog post introduces the new features and important changes in this new version.
 
-> **The planned release date for the [5.1 stable](https://github.com/abpframework/abp/milestone/64) version is February 8, 2022**.
+> **Warning**
+>
+> For a long time we were releasing RC (Release Candidate) versions a few weeks before every minor and major release. **This version has been released without a preview version.** This is because we've accidently released all the packages with a stable version number, without a `-rc.1` suffix and there is no clear way to unpublish all the NuGet and NPM packages. Sorry about that. However, it doesn't mean that this release is buggy. We've already resolved known problems. We will publish one or more patch releases if needed. You can follow [this milestone](https://github.com/abpframework/abp/milestone/64?closed=1) for known problems or submit your own bug report. If you are worried about its stability, you can wait for the next patch release.
 
-Please try this version and provide feedback for a more stable ABP version 5.1! Thank you all.
+## Get Started with the 5.1
 
-## Get Started with the 5.1 RC
+follow the steps below to try the version 5.1 today;
 
-follow the steps below to try the version 5.1 RC today;
-
-1) **Upgrade** the ABP CLI to the version `5.1.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the latest version using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 5.1.0-rc.1
+dotnet tool update Volo.Abp.Cli -g
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 5.1.0-rc.1
+dotnet tool install Volo.Abp.Cli -g
 ````
 
-2) Create a **new application** with the `--preview` option:
+2) Create a **new application**:
 
 ````bash
-abp new BookStore --preview
+abp new BookStore
 ````
 
 See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all the available options.
 
-> You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
+> You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page.
 
-You can use any IDE that supports .NET 6.0 development (e.g. [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)).
+You can use any IDE that supports .NET 6.x development (e.g. [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)).
 
 ### Migration Notes & Breaking Changes
 
-TODO: Startup template changes
+This is an minor feature release, mostly with enhancements and improvements based on the [version 5.0](https://blog.abp.io/abp/ABP-IO-Platform-5-0-Final-Has-Been-Released). There is no breaking change except the Angular UI upgrade. ABP 5.1 startup templates use **Angular 13**.
+
+### Angular UI
+
+**If you want to upgrade ABP Framework but want to continue with Angular 12**, add the following section to `package.json` file of the Angular project:
+
+````json
+"resolutions": {
+    "ng-zorro-antd": "^12.1.1",
+    "@ng-bootstrap/ng-bootstrap": "11.0.0-beta.2"
+  }
+````
 
 ## What's new with 5.1?
 
@@ -72,7 +83,7 @@ TODO
 
 ![abp-community-talks-2022-1](abp-community-talks-2022-1.png)
 
-This is the second episode of the ABP Community Talks and we are talking about microservice development with the ABP Framework, based on the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) reference solution. This live meeting will be at **January 20, 2022, 17:00 (UTC)** on YouTube.
+This is the second episode of the ABP Community Talks and we are talking about microservice development with the ABP Framework, based on the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) reference solution. We will also briefly talk about the changes that come with ABP version 5.1. This **live meeting** will be at **January 20, 2022, 17:00 (UTC)** on YouTube.
 
 **Join this event on the Kommunity platform: https://kommunity.com/volosoft/events/abp-community-talks-20221-microservice-development-acd0f44b**
 
