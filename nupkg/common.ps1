@@ -38,6 +38,24 @@ function Seperator
 	Write-Host ("_" * 100)  -ForegroundColor gray 
 }
 
+
+function Read-File {
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $filePath
+    )
+		
+	$pathExists = Test-Path -Path $filePath -PathType Leaf
+	if ($pathExists)
+	{
+		return Get-Content $filePath		
+	}
+	else{
+		Write-Error  "$filePath path does not exist!"
+	}
+}
+
 # List of solutions
 $solutions = (
     "framework",
