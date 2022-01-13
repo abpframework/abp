@@ -9,9 +9,10 @@
     "QuestionCount": "Remaining / total questions",
     "Unlimited": "Unlimited",
     "Owners": "Owners",
+    "Owner": "Owner",
     "AddMember": "Add member",
-    "AddOwner": "Add owner",
-    "AddDeveloper": "Add developer",
+    "AddNewOwner": "Add New Owner",
+    "AddNewDeveloper": "Add New Developer",
     "UserName": "Username",
     "Name": "Name",
     "EmailAddress": "Email address",
@@ -246,7 +247,7 @@
     "CrossPlatform": "Cross Platform",
     "AbpSuiteExplanation8": "ABP Suite is built with .NET Core and it is cross platform. It runs as a web application on your local computer. You can run it on <strong>Windows</strong>, <strong>Mac</strong> and <strong>Linux</strong>",
     "OtherFeatures": "Other Features",
-    "OtherFeatures1": "Updates NuGet and NPM packages on your solution easily.",
+    "OtherFeatures1": "Updates <strong>NuGet</strong> and <strong>NPM</strong> packages on your solution easily.",
     "OtherFeatures2": "Regenerates already generated pages from scratch.",
     "OtherFeatures3": "Creates new solutions",
     "ThanksForCreatingProject": "Thanks for Creating Your Project!",
@@ -381,7 +382,7 @@
     "TrialLicenseModelInvalidErrorMessage": "One of the following fields are invalid: Country Name, Company Size, Industry or Purpose Of Usage.",
     "Trial": "Trial",
     "Purchased": "Purchased",
-    "PurchaseLicense": "Purchase License",
+    "PurchaseLicense": "Purchase Now",
     "PurchaseTrialLicenseMessage": "Your license expiration date is {0}. <br> If you want to continue using the projects you created during your free trial period, you need to change the license keys in your <code>appsettings.secrets.json</code> files. Here is your license key:",
     "TrialLicenseExpireMessage": "You are using the trial license and your trial license will expire on {0}.",
     "TryForFree": "Try For Free",
@@ -436,7 +437,6 @@
     "SupportForum": "Support Forum",
     "TrustedBy": "Trusted By",
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
-    "Plans": "Plans",
-    "Save": "Save"
+    "Plans": "Plans"
   }
 }
