@@ -69,7 +69,7 @@
     "@abp/ng.theme.shared": "~5.1.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@ng-bootstrap/ng-bootstrap": "~12.0.0-beta.4",
-    "@ngneat/spectator": "^8.0.3",
+    "@ngneat/spectator": "^10.0.0",
     "@ngx-validate/core": "^0.1.1",
     "@nrwl/angular": "13.4.3",
     "@nrwl/cli": "13.4.3",
