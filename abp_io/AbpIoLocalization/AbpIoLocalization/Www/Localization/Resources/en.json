@@ -294,7 +294,7 @@
     "SeparateIdentityServer": "Separate Identity Server",
     "Preview": "Preview",
     "CreateANewSolution": "Create a new solution",
-    "ABPFrameworkFeatures": "ABP Framework Features",
+    "ABPFrameworkFeatures": "ABP Framework <span class=\"gradient-framework\">Features</span>",
     "Commercial": "Commercial",
     "ThirdPartyTools": "Third Party Tools",
     "Back": "Back",
