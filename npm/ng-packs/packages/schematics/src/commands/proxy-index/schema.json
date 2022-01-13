@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAbpIndexProxy",
+  "$id": "SchematicsAbpIndexProxy",
   "title": "ABP Index Proxy Schema",
   "type": "object",
   "properties": {
