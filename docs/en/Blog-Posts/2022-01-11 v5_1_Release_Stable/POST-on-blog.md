@@ -1,5 +1,3 @@
-# ABP.IO Platform 5.1 Has Been Released
-
 Today, we are releasing the [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) version 5.1 (with a version number `5.1.1`). This blog post introduces the new features and important changes in this new version.
 
 > **Warning**
@@ -90,7 +88,7 @@ Our team is working to finalize the [eShopOnAbp](https://github.com/abpframework
 
 We've been working on a new design for the [abp.io](https://abp.io/) websites for a while. We are adding the final touches; the new design will be live very soon. Here's a screenshot from the design work:
 
-![new-abp-io-design](new-abp-io-design.png)
+![new-abp-io-design.png](/api/blogging/files/www/04c9be6a819f74d7d7003a0165ff0d88.png)
 
 The [ABP Commercial](https://commercial.abp.io/) and [ABP Community](https://community.abp.io/) websites will also have new designs as part of this update.
 
@@ -109,13 +107,13 @@ The core team is also working on ABP Commercial (which provides pre-built module
 
 There's some exciting news about the **LeptonX theme**; We are working on making it available in the **MVC (Razor Pages)** and **Blazor** UI options too (in addition to Angular UI). We are also adding more components, layout options, demo pages, etc... We are planning to release a beta version in the next weeks. Here's an animated GIF from the dashboard we've prepared as a demonstration:
 
-![leptonx-dash](leptonx-dash.gif)
+![leptonx-dash-2.png](/api/blogging/files/www/1b50e6d6317b84f963ab3a016602cca7.png)
 
 If you are wondering what is the LeptonX project, please check out this [blog post](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release).
 
 As another visible functionality, we've added a new feature to the [CMS Kit Pro](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index) module that is used to forward a URL to another URL. This is a screenshot from the management UI:
 
-![url-forward](url-forward.png)
+![url-forward.png](/api/blogging/files/www/3104802a0898db35a15c3a0166002a3f.png)
 
 This feature can be used to create short URLs in your application (like URL shortening services providers) or forward old pages to their new URLs.
 
@@ -125,7 +123,7 @@ In addition to the new features shipped in every minor version, we are working o
 
 ### ABP Community Talks 2021.1
 
-![abp-community-talks-2022-1](abp-community-talks-2022-1.png)
+![abp-community-talks-2022-1.png](/api/blogging/files/www/79374b567169e34b283f3a016603708f.png)
 
 This is the second episode of the ABP Community Talks and we are talking about microservice development with the ABP Framework, based on the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) reference solution. We will also briefly talk about the changes that come with ABP version 5.1. This **live meeting** will be on **January 20, 2022, 17:00 (UTC)** on YouTube.
 
