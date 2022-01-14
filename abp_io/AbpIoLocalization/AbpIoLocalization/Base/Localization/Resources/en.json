@@ -76,6 +76,25 @@
     "CommercialNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "FreeDDDEBook": "Free DDD E-Book",
     "AdditionalServices": "Additional Services",
-    "Learn": "Learn"
+    "Learn": "Learn",
+    "AccountOverview": "Account Overview",
+    "MyOrganizations": "My Organizations",
+    "MySupportQuestions": "My Support Questions",
+    "MyProfile": "My Profile",
+    "Logout": "Logout",
+    "Home": "Home",
+    "Posts": "Posts",
+    "JoinTheABPCommunity": "Join the ABP Community",
+    "SubmitYourPost": "Submit Your Post",
+    "Modules": "Modules",
+    "Tools": "Tools",
+    "Pricing": "Pricing",
+    "ChangeLogs": "Change Logs",
+    "SubscribeToNewsletter": "Subscribe to the Newsletter",
+    "SubscribeToNewsletterDescription": "Get information about happenings in ABP like new releases, free sources, posts, and more.",
+    "EmailAddress": "E-mail Address",
+    "Subscribe": "Subscribe",
+    "WelcomeToABP": "Welcome to the ABP",
+    "EULA": "EULA"
   }
 }
