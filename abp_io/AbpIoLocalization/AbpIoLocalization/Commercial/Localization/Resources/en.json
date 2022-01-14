@@ -437,6 +437,8 @@
     "SupportForum": "Support Forum",
     "TrustedBy": "Trusted By",
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
-    "Plans": "Plans"
+    "Plans": "Plans",
+    "NameSurname": "Name Surname",
+    "Unspecified": "Unspecified"
   }
 }
