@@ -396,7 +396,7 @@
     "RemoveCurrentUserFromOrganizationWarningMessage": "You are removing yourself from your own organization. You will no longer be able to manage this organization, do you confirm?",
     "RenewExistingOrganizationOrCreateNewOneMessage": "You can renew the license of your organization(s) by clicking the below \"Extend Now\" button(s) and thus you can extend the license expiry date by 1 year. If you continue to checkout, you will have a new organization. Do you want to continue with a new organization?",
     "ExtendNow": "Extend Now",
-    "ContinueWithNewOrganization": "Continue with a new organization",
+    "CreateNewOrganization": "Create a new organization",
     "RenewLicenseEarly": "If I renew my license early, will I get the full year?",
     "RenewLicenseEarylExplanation": "When you renew your license before your license expiry date, 1 year will be added to your license expiry date. For example, if your license expires on {0}-06-06 and you renew it on {0}-01-01, your new license expiry date will be {1}-06-06.",
     "OpenSourceWebApplication": "Open source web application",
@@ -439,6 +439,7 @@
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
     "Plans": "Plans",
     "NameSurname": "Name Surname",
-    "Unspecified": "Unspecified"
+    "Unspecified": "Unspecified",
+    "LicenceType": "Licence Type"
   }
 }
