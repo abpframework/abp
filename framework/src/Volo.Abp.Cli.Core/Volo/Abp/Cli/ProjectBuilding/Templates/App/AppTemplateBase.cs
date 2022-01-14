@@ -182,6 +182,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
         else
         {
+            context.Symbols.Add("PUBLIC-REDIS");
             context.Symbols.Add("public-website");
         }
 

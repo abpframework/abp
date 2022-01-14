@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+  "hash": "91e3a724f35375f79d9505ca0e950b9e",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+      "connectionStringName": "AbpBlobStoring",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
+          "contentType": "databaseTable",
+          "name": "AbpBlobs"
+        },
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
+          "contentType": "databaseTable",
+          "name": "AbpBlobContainers"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "BlobStoringDbContext"
+    }
+  ]
+}

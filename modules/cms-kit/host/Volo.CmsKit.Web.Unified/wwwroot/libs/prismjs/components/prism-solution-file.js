@@ -1,4 +1,4 @@
-(function (Prism){
+(function (Prism) {
 
 	var guid = {
 		// https://en.wikipedia.org/wiki/Universally_unique_identifier#Format
@@ -33,7 +33,7 @@
 			alias: 'keyword'
 		},
 		'property': {
-			pattern: /^([ \t]*)[^\r\n"#=()]*[^\s"#=()](?=\s*=)/m,
+			pattern: /^([ \t]*)(?!\s)[^\r\n"#=()]*[^\s"#=()](?=\s*=)/m,
 			lookbehind: true,
 			inside: {
 				'guid': guid

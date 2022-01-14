@@ -1,0 +1,20 @@
+{
+  "name": "Volo.Blogging.Admin.Application",
+  "hash": "7b36c95fbcf2605d9ea2614cba9ed2b6",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging.Admin",
+      "contentType": "abpModule",
+      "name": "BloggingAdminApplicationModule"
+    },
+    {
+      "namespace": "Volo.Blogging.Admin.Blogs",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "BlogManagementAppService"
+    }
+  ]
+}

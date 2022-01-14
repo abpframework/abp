@@ -26,7 +26,7 @@ public class Book : Entity<Guid>
 如果你的实体Id类型为 `Guid`,有一些好的实践可以实现:
 
 * 创建一个构造函数,获取ID作为参数传递给基类.
-  * 如果没有为GUID Id斌值,**ABP框架会在保存时设置它**,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
+  * 如果没有为GUID Id赋值,**ABP框架会在保存时设置它**,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
 * 如果使用带参数的构造函数创建实体,那么还要创建一个 `private` 或 `protected`  构造函数. 当数据库提供程序从数据库读取你的实体时(反序列化时)将使用它.
 * 不要使用 `Guid.NewGuid()` 来设置Id! 在创建实体的代码中**使用[`IGuidGenerator`服务](Guid-Generation.md)**传递Id参数. `IGuidGenerator`经过优化可以产生连续的GUID.这对于关系数据库中的聚集索引非常重要.
 

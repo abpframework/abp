@@ -1,0 +1,59 @@
+{
+  "name": "Volo.Abp.BlobStoring.Database.Domain",
+  "hash": "744c78df1c9addf5e9f6657295f0529c",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database",
+      "contentType": "abpModule",
+      "name": "BlobStoringDatabaseDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "DatabaseBlob"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "DatabaseBlobContainer"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.BlobStoring.Database",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "DatabaseBlobContainer"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IDatabaseBlobContainerRepository"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.BlobStoring.Database",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "DatabaseBlob"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IDatabaseBlobRepository"
+    }
+  ]
+}

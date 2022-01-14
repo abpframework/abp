@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.FeatureManagement.JsonConverters;
 using Volo.Abp.Json;
 using Volo.Abp.Validation.StringValues;
 using Xunit;
@@ -14,6 +16,16 @@ public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicat
     public StringValueJsonConverter_Tests()
     {
         _jsonSerializer = GetRequiredService<IJsonSerializer>();
+    }
+
+    protected override void BeforeAddApplication(IServiceCollection services)
+    {
+        services.PreConfigure<AbpFeatureManagementApplicationContractsOptions>(options =>
+        {
+            options.ValueValidatorFactory.Add(new ValueValidatorFactory<UrlValueValidator>("URL"));
+        });
+        
+        base.BeforeAddApplication(services);
     }
 
     [Fact]
@@ -67,6 +79,13 @@ public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicat
                                     Name = "FeatureName",
                                     Key = "FeatureKey"
                                 }
+                            },
+                            new FeatureDto
+                            {
+                                ValueType = new FreeTextStringValueType
+                                {
+                                    Validator = new UrlValueValidator("https")
+                                }
                             }
                         }
                     }
@@ -95,5 +114,9 @@ public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicat
 
         featureListDto2.Groups[0].Features[3].Provider.Name.ShouldBe("FeatureName");
         featureListDto2.Groups[0].Features[3].Provider.Key.ShouldBe("FeatureKey");
+        
+        featureListDto2.Groups[0].Features[4].ValueType.ShouldBeOfType<FreeTextStringValueType>();
+        featureListDto2.Groups[0].Features[4].ValueType.Validator.ShouldBeOfType<UrlValueValidator>();
+        featureListDto2.Groups[0].Features[4].ValueType.Validator.As<UrlValueValidator>().Scheme.ShouldBe("https");
     }
 }

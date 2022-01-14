@@ -1,9 +1,6 @@
 (function () {
 
-	if (
-		(typeof self === 'undefined' || !self.Prism) &&
-		(typeof global === 'undefined' || !global.Prism)
-	) {
+	if (typeof Prism === 'undefined') {
 		return;
 	}
 
@@ -31,6 +28,15 @@
 	var mapper;
 	/** @type {string} */
 	var prefixString = '';
+
+
+	/**
+	 * @param {string} className
+	 * @param {string} language
+	 */
+	function apply(className, language) {
+		return prefixString + (mapper ? mapper(className, language) : className);
+	}
 
 
 	Prism.plugins.customClass = {
@@ -65,8 +71,17 @@
 		 */
 		prefix: function prefix(string) {
 			prefixString = string || '';
-		}
-	}
+		},
+		/**
+		 * Applies the current mapping and prefix to the given class name.
+		 *
+		 * @param {string} className A single class name.
+		 * @param {string} language The language of the code that contains this class name.
+		 *
+		 * If the language is unknown, pass `"none"`.
+		 */
+		apply: apply
+	};
 
 	Prism.hooks.add('wrap', function (env) {
 		if (adder) {
@@ -88,8 +103,8 @@
 		}
 
 		env.classes = env.classes.map(function (c) {
-			return prefixString + (mapper ? mapper(c, env.language) : c);
+			return apply(c, env.language);
 		});
 	});
 
-})();
+}());
