@@ -238,7 +238,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             foreach (var outgoingEvent in outgoingEventArray)
             {
                 pendingConfirms.TryAdd(channel.NextPublishSeqNo, outgoingEvent.Id);
-                await PublishInternalAsync(channel, outgoingEvent.EventName, outgoingEvent.EventData, null,
+                await PublishAsync(channel, outgoingEvent.EventName, outgoingEvent.EventData, null,
                     eventId: outgoingEvent.Id);
             }
 
@@ -293,11 +293,11 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     {
         using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
         {
-            return PublishInternalAsync(channel, eventName, body, properties, headersArguments, eventId);
+            return PublishAsync(channel, eventName, body, properties, headersArguments, eventId);
         }
     }
 
-    protected virtual Task PublishInternalAsync(
+    protected virtual Task PublishAsync(
         IModel channel,
         string eventName,
         byte[] body,
