@@ -704,13 +704,13 @@ public class SolutionModuleAdder : ITransientDependency
             new NugetPackageInfo
             {
                 Name = $"{module.Name}.Blazor.WebAssembly",
-                ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
+                ModuleClass = $"{module.Name}.Blazor.WebAssembly.{moduleProjectName}BlazorWebAssemblyModule",
                 Target = NuGetPackageTarget.BlazorWebAssembly
             },
             new NugetPackageInfo
             {
                 Name = $"{module.Name}.Blazor.Server",
-                ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
+                ModuleClass = $"{module.Name}.Blazor.Server.{moduleProjectName}BlazorServerModule",
                 Target = NuGetPackageTarget.BlazorServer
             },
             new NugetPackageInfo
