@@ -69,7 +69,7 @@
     "UpdateUserLinkedinInfo": "Example: https://www.linkedin.com/...",
     "UpdateUserCompanyInfo": "Example: Volosoft",
     "UpdateUserJobTitleInfo": "Example: Software Developer",
-    "UserName": "UserName",
+    "UserName": "Username",
     "Company": "Company",
     "PersonalWebsite": "Personal Website",
     "RegistrationDate": "Registration Date",
@@ -152,6 +152,16 @@
     "LeaveComment": "Leave Comment",
     "ReadMore": "Read more",
     "ShowMore": "Show More",
-    "NoPublishedPostsYet": "No published posts yet."
+    "NoPublishedPostsYet": "No published posts yet.",
+    "Name": "Name",
+    "Surname": "Surname",
+    "WebSite": "Web Site",
+    "FullURL": "Full URL",
+    "JobTitle": "Job Title",
+    "Prev": "Prev",
+    "Previous": "Previous",
+    "Next": "Next",
+    "Share": "Share",
+    "SortBy": "Sort by"
   }
 }
