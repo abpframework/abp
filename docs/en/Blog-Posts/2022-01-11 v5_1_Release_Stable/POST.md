@@ -4,11 +4,11 @@ Today, we are releasing the [ABP Framework](https://abp.io/) and the [ABP Commer
 
 > **Warning**
 >
-> For a long time we were releasing RC (Release Candidate) versions a few weeks before every minor and major release. **This version has been released without a preview version.** This is because we've accidently released all the packages with a stable version number, without a `-rc.1` suffix and there is no clear way to unpublish all the NuGet and NPM packages. Sorry about that. However, it doesn't mean that this release is buggy. We've already resolved known problems. We will publish one or more patch releases if needed. You can follow [this milestone](https://github.com/abpframework/abp/milestone/64?closed=1) for known problems or submit your own bug report. If you are worried about its stability, you can wait for the next patch release.
+> For a long time we were releasing RC (Release Candidate) versions a few weeks before every minor and major release. **This version has been released without a preview version.** This is because we've accidentally released all the packages with a stable version number, without a `-rc.1` suffix and there is no clear way to unpublish all the NuGet and NPM packages. Sorry about that. However, it doesn't mean that this release is buggy. We've already resolved known problems. We will publish one or more patch releases if needed. You can follow [this milestone](https://github.com/abpframework/abp/milestone/64?closed=1) for known problems or submit your own bug report. If you are worried about its stability, you can wait for the next patch release.
 
 ## Get Started with the 5.1
 
-follow the steps below to try the version 5.1 today;
+follow the steps below to try version 5.1 today;
 
 1) **Upgrade** the ABP CLI to the latest version using a command line terminal:
 
@@ -36,7 +36,7 @@ You can use any IDE that supports .NET 6.x development (e.g. [Visual Studio 2022
 
 ### Migration Notes & Breaking Changes
 
-This is an minor feature release, mostly with enhancements and improvements based on the [version 5.0](https://blog.abp.io/abp/ABP-IO-Platform-5-0-Final-Has-Been-Released). There is no breaking change except the Angular UI upgrade. ABP 5.1 startup templates use **Angular 13**.
+This is a minor feature release, mostly with enhancements and improvements based on the [version 5.0](https://blog.abp.io/abp/ABP-IO-Platform-5-0-Final-Has-Been-Released). There is no breaking change except the Angular UI upgrade. ABP 5.1 startup templates use **Angular 13**.
 
 ### Angular UI
 
@@ -88,7 +88,7 @@ Our team is working to finalize the [eShopOnAbp](https://github.com/abpframework
 
 ### The new ABP.IO design!
 
-We were working on a new design for the [abp.io](https://abp.io/) websites for a while. We are making the final touches; the new design will be live very soon. Here a screenshot from the design work:
+We were working on a new design for the [abp.io](https://abp.io/) websites for a while. We are making the final touches; the new design will be live very soon. Here is a screenshot from the design work:
 
 ![new-abp-io-design](new-abp-io-design.png)
 
@@ -96,7 +96,7 @@ We were working on a new design for the [abp.io](https://abp.io/) websites for a
 
 ### Other changes
 
-Here some other notable changes that come with this release:
+Here are some other notable changes that come with this release:
 
 * Support markdown in [CMS-Kit comments ](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments)feature ([#10792](https://github.com/abpframework/abp/pull/10792))
 * Used file scoped namespaces for all the ABP Framework source code :) ([#10552](https://github.com/abpframework/abp/pull/10696))
@@ -107,7 +107,7 @@ All issues & PRs in [5.1 milesone](https://github.com/abpframework/abp/milestone
 
 The core team is also working on the ABP Commercial (which provides pre-built modules, themes, tooling and support on top of the ABP Framework). We've done a lot of minor improvements and fixes to the modules and tooling.
 
-One exiting new is about the **LeptonX theme**; We are working on to make it available in **MVC (Razor Pages)** and **Blazor** UI options too (in addition to the Angular UI). We are also adding more components, layout options, demo pages, etc... We are planning to release a beta version in the next weeks. Here an animated GIF from the dashboard we've prepared as a demonstration:
+One exciting new is about the **LeptonX theme**; We are working on making it available in **MVC (Razor Pages)** and **Blazor** UI options too (in addition to the Angular UI). We are also adding more components, layout options, demo pages, etc... We are planning to release a beta version in the next weeks. Here is an animated GIF from the dashboard we've prepared as a demonstration:
 
 ![leptonx-dash](leptonx-dash.gif)
 
