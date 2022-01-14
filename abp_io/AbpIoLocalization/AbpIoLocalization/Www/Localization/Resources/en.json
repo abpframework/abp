@@ -10,7 +10,7 @@
     "DatabaseProvider": "Database provider",
     "DatabaseManagementSystem": "Database management system",
     "NTier": "N-Tier",
-    "IncludeUserInterface": "Include user interface",
+    "IncludeUserInterface": "Include User Interface",
     "CreateNow": "Create now",
     "TheStartupProject": "The startup project",
     "Tutorial": "Tutorial",
@@ -302,6 +302,20 @@
     "SeeMore": "See More",
     "DetailsOfTheEBook": "Details of the E-Book",
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
-    "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
+    "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text--white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "GetYourFreeEBook": "Get Your <span class=\"gradient-framework d-block\">Free DDD E-book </span>",
+    "EverythingYouNeedToKnow": "Everything you need to know.",
+    "MasteringTheABPFrameworkExplanation": "Written by the creator of ABP Framework, this book will help you to gain a complete understanding of the framework and modern web application development techniques.",
+    "PreOrderNow": "Pre-Order Now",
+    "UITheming": "UI Theming",
+    "UIThemingExplanation": "Create reusable UI themes and layouts or use one of the pre-build UI themes.",
+    "DataFilteringExplanation2": "Automatically filter on querying from database to easily implement patterns like soft-delete and multi-tenancy.",
+    "NeedHelp": "Need Help?",
+    "GiveYourProjectAName": "Give your project a name",
+    "SelectProjectType": "Select Project Type",
+    "SelectUIFramework": "Select UI Framework",
+    "SelectDatabaseProvider": "Select Database Provider",
+    "SelectDatabaseManagementSystem": "Select Database Management System",
+    "InstallingTheABPCLI": "Installing the ABP CLI"
   }
 }
