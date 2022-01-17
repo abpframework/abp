@@ -12,6 +12,9 @@ public partial class EntityAction<TItem> : ComponentBase
     [Parameter]
     public bool Visible { get; set; } = true;
 
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     internal bool HasPermission { get; set; } = true;
 
     [Parameter]
@@ -45,7 +48,7 @@ public partial class EntityAction<TItem> : ComponentBase
     [Inject]
     protected IUiMessageService UiMessageService { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await SetDefaultValuesAsync();
