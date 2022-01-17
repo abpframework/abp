@@ -105,7 +105,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 ### 配置连接字符串选择
 
-如果你的应用程序有多个数据库,你可以使用 `connectionStringName]` Attribute为你的DbContext配置连接字符串名称.例:
+如果你的应用程序有多个数据库,你可以使用 `[connectionStringName]` Attribute为你的DbContext配置连接字符串名称.例:
 
 ```csharp
 [ConnectionStringName("MySecondConnString")]
