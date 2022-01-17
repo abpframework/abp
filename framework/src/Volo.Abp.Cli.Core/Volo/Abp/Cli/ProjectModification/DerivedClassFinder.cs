@@ -54,8 +54,14 @@ public class DerivedClassFinder : ITransientDependency
     protected bool IsDerived(string csFile, string baseClass)
     {
         var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
-        var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
-        var classDeclaration = (namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>()).First();
+        var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+        var classDeclaration = (namespaceSyntax?.DescendantNodes().OfType<ClassDeclarationSyntax>())?.FirstOrDefault();
+
+        if (classDeclaration == null)
+        {
+            classDeclaration = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
+        }
+
         var baseTypeList = classDeclaration.BaseList?.Types.Select(t => t.ToString()).ToList();
 
         if (baseTypeList == null)
