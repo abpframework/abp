@@ -425,10 +425,10 @@ namespace AbpDemo.Orders
         {
             //Get a IQueryable<T> by including sub collections
             var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
-            
+
             //Apply additional LINQ extension methods
             var query = queryable.Where(x => x.Id == id);
-            
+
             //Execute the query and get the result
             var order = await AsyncExecuter.FirstOrDefaultAsync(query);
         }
@@ -576,7 +576,7 @@ Configure<AbpDbContextOptions>(options =>
     {
         opts.DbContextOptions.UseLazyLoadingProxies(); //Enable lazy loading
     });
-    
+
     options.UseSqlServer();
 });
 ````
@@ -874,7 +874,7 @@ Configure<AbpDbContextOptions>(options =>
 
 ### Customize Bulk Operations
 
-If you have better logic or using an external library for bulk operations, you can override the logic via implementing`IEfCoreBulkOperationProvider`.
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IEfCoreBulkOperationProvider`.
 
 - You may use example template below:
 
@@ -920,4 +920,3 @@ public class MyCustomEfCoreBulkOperationProvider
 ## See Also
 
 * [Entities](Entities.md)
-* [Repositories](Repositories.md)
