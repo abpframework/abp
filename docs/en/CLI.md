@@ -29,6 +29,7 @@ Here, the list of all available commands before explaining their details:
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
+* **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
 * **`list-modules`**: Lists names of open-source application modules.
@@ -144,6 +145,17 @@ abp update [options]
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
 * `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
+
+### clean
+
+Deletes all `BIN` and `OBJ` folders in the current folder.
+
+Usage:
+
+````bash
+abp clean
+````
+
 
 ### add-package
 

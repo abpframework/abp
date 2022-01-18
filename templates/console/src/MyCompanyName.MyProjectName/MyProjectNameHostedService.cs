@@ -1,41 +1,46 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName;
+
+public class MyProjectNameHostedService : IHostedService
 {
-    public class MyProjectNameHostedService : IHostedService
+    private IAbpApplicationWithInternalServiceProvider _abpApplication;
+
+    private readonly IConfiguration _configuration;
+    private readonly IHostEnvironment _hostEnvironment;
+
+    public MyProjectNameHostedService(IConfiguration configuration, IHostEnvironment hostEnvironment)
     {
-        private readonly IAbpApplicationWithExternalServiceProvider _application;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly HelloWorldService _helloWorldService;
+        _configuration = configuration;
+        _hostEnvironment = hostEnvironment;
+    }
 
-        public MyProjectNameHostedService(
-            IAbpApplicationWithExternalServiceProvider application,
-            IServiceProvider serviceProvider,
-            HelloWorldService helloWorldService)
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        _abpApplication =  await AbpApplicationFactory.CreateAsync<MyProjectNameModule>(options =>
         {
-            _application = application;
-            _serviceProvider = serviceProvider;
-            _helloWorldService = helloWorldService;
-        }
+            options.Services.ReplaceConfiguration(_configuration);
+            options.Services.AddSingleton(_hostEnvironment);
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _application.Initialize(_serviceProvider);
+            options.UseAutofac();
+            options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+        });
 
-            _helloWorldService.SayHello();
+        await _abpApplication.InitializeAsync();
 
-            return Task.CompletedTask;
-        }
+        var helloWorldService = _abpApplication.ServiceProvider.GetRequiredService<HelloWorldService>();
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _application.Shutdown();
+        await helloWorldService.SayHelloAsync();
+    }
 
-            return Task.CompletedTask;
-        }
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        await _abpApplication.ShutdownAsync();
     }
 }

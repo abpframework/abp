@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.EntityFrameworkCore.DistributedEvents
+﻿namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
+
+public interface ISqlRawDbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
+    where TDbContext : IHasEventInbox
 {
-    public interface ISqlRawDbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
-        where TDbContext : IHasEventInbox
-    {
-    }
 }

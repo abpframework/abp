@@ -1,8 +1,7 @@
 var abp = abp || {};
-(function($) {
-
+(function ($) {
     if (!$) {
-        throw "abp/jquery library requires the jquery library included to the page!";
+        throw 'abp/jquery library requires the jquery library included to the page!';
     }
 
     // ABP CORE OVERRIDES /////////////////////////////////////////////////////
@@ -56,38 +55,29 @@ var abp = abp || {};
             if (mutation.type === 'childList') {
                 if (mutation.addedNodes && mutation.removedNodes.length) {
                     for (var k = 0; k < mutation.removedNodes.length; k++) {
-                        abp.event.trigger(
-                            'abp.dom.nodeRemoved',
-                            {
-                                $el: $(mutation.removedNodes[k])
-                            }
-                        );
+                        abp.event.trigger('abp.dom.nodeRemoved', {
+                            $el: $(mutation.removedNodes[k]),
+                        });
                     }
                 }
 
                 if (mutation.addedNodes && mutation.addedNodes.length) {
                     for (var j = 0; j < mutation.addedNodes.length; j++) {
-                        abp.event.trigger(
-                            'abp.dom.nodeAdded',
-                            {
-                                $el: $(mutation.addedNodes[j])
-                            }
-                        );
+                        abp.event.trigger('abp.dom.nodeAdded', {
+                            $el: $(mutation.addedNodes[j]),
+                        });
                     }
                 }
             }
         }
     };
 
-    $(function(){
-        new MutationObserver(mutationObserverCallback).observe(
-            $('body')[0],
-            {
-                subtree: true,
-                childList: true
-            }
-        );
-    });    
+    $(function () {
+        new MutationObserver(mutationObserverCallback).observe($('body')[0], {
+            subtree: true,
+            childList: true,
+        });
+    });
 
     // AJAX ///////////////////////////////////////////////////////////////////
 
@@ -105,15 +95,24 @@ var abp = abp || {};
                 .done(function (data, textStatus, jqXHR) {
                     $dfd.resolve(data);
                     userOptions.success && userOptions.success(data);
-                }).fail(function (jqXHR) {
-                    if(jqXHR.statusText === 'abort') {
+                })
+                .fail(function (jqXHR) {
+                    if (jqXHR.statusText === 'abort') {
                         //ajax request is abort, ignore error handle.
                         return;
                     }
                     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
-                        abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
+                        abp.ajax.handleAbpErrorResponse(
+                            jqXHR,
+                            userOptions,
+                            $dfd
+                        );
                     } else {
-                        abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
+                        abp.ajax.handleNonAbpErrorResponse(
+                            jqXHR,
+                            userOptions,
+                            $dfd
+                        );
                     }
                 });
         }).promise();
@@ -129,28 +128,29 @@ var abp = abp || {};
             type: 'POST',
             contentType: 'application/json',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+                'X-Requested-With': 'XMLHttpRequest',
+            },
         },
 
         defaultError: {
             message: 'An error has occurred!',
-            details: 'Error detail not sent by server.'
+            details: 'Error detail not sent by server.',
         },
 
         defaultError401: {
             message: 'You are not authenticated!',
-            details: 'You should be authenticated (sign in) in order to perform this operation.'
+            details:
+                'You should be authenticated (sign in) in order to perform this operation.',
         },
 
         defaultError403: {
             message: 'You are not authorized!',
-            details: 'You are not allowed to perform this operation.'
+            details: 'You are not allowed to perform this operation.',
         },
 
         defaultError404: {
             message: 'Resource not found!',
-            details: 'The resource requested could not found on the server.'
+            details: 'The resource requested could not found on the server.',
         },
 
         logError: function (error) {
@@ -161,7 +161,9 @@ var abp = abp || {};
             if (error.details) {
                 return abp.message.error(error.details, error.message);
             } else {
-                return abp.message.error(error.message || abp.ajax.defaultError.message);
+                return abp.message.error(
+                    error.message || abp.ajax.defaultError.message
+                );
             }
         },
 
@@ -205,14 +207,18 @@ var abp = abp || {};
         handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
 
+            var responseJSON = jqXHR.responseJSON
+                ? jqXHR.responseJSON
+                : JSON.parse(jqXHR.responseText);
+
             if (userOptions.abpHandleError !== false) {
-                messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
+                messagePromise = abp.ajax.showError(responseJSON.error);
             }
 
-            abp.ajax.logError(jqXHR.responseJSON.error);
+            abp.ajax.logError(responseJSON.error);
 
-            $dfd && $dfd.reject(jqXHR.responseJSON.error, jqXHR);
-            userOptions.error && userOptions.error(jqXHR.responseJSON.error, jqXHR);
+            $dfd && $dfd.reject(responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);
@@ -231,9 +237,11 @@ var abp = abp || {};
 
         blockUI: function (options) {
             if (options.blockUI) {
-                if (options.blockUI === true) { //block whole page
+                if (options.blockUI === true) {
+                    //block whole page
                     abp.ui.setBusy();
-                } else { //block an element
+                } else {
+                    //block an element
                     abp.ui.setBusy(options.blockUI);
                 }
             }
@@ -241,9 +249,11 @@ var abp = abp || {};
 
         unblockUI: function (options) {
             if (options.blockUI) {
-                if (options.blockUI === true) { //unblock whole page
+                if (options.blockUI === true) {
+                    //unblock whole page
                     abp.ui.clearBusy();
-                } else { //unblock an element
+                } else {
+                    //unblock an element
                     abp.ui.clearBusy(options.blockUI);
                 }
             }
@@ -255,10 +265,17 @@ var abp = abp || {};
                 return;
             }
 
-            if (!settings.headers || settings.headers[abp.security.antiForgery.tokenHeaderName] === undefined) {
-                request.setRequestHeader(abp.security.antiForgery.tokenHeaderName, token);
+            if (
+                !settings.headers ||
+                settings.headers[abp.security.antiForgery.tokenHeaderName] ===
+                    undefined
+            ) {
+                request.setRequestHeader(
+                    abp.security.antiForgery.tokenHeaderName,
+                    token
+                );
             }
-        }
+        },
     });
 
     $(document).ajaxSend(function (event, request, settings) {
@@ -284,7 +301,7 @@ var abp = abp || {};
     var UrlStates = {
         LOADING: 'LOADING',
         LOADED: 'LOADED',
-        FAILED: 'FAILED'
+        FAILED: 'FAILED',
     };
 
     /* UrlInfo class */
@@ -331,7 +348,6 @@ var abp = abp || {};
     /* ResourceLoader API */
 
     abp.ResourceLoader = (function () {
-
         var _urlInfos = {};
 
         function getCacheKey(url) {
@@ -339,7 +355,6 @@ var abp = abp || {};
         }
 
         function appendTimeToUrl(url) {
-
             if (url.indexOf('?') < 0) {
                 url += '?';
             } else {
@@ -351,8 +366,12 @@ var abp = abp || {};
             return url;
         }
 
-        var _loadFromUrl = function (url, loadCallback, failCallback, serverLoader) {
-
+        var _loadFromUrl = function (
+            url,
+            loadCallback,
+            failCallback,
+            serverLoader
+        ) {
             var cacheKey = getCacheKey(url);
 
             var urlInfo = _urlInfos[cacheKey];
@@ -372,33 +391,31 @@ var abp = abp || {};
             _loadFromUrl(url, loadCallback, failCallback, function (urlInfo) {
                 $.get({
                     url: url,
-                    dataType: 'text'
+                    dataType: 'text',
                 })
-                .done(function (script) {
-                    $.globalEval(script);
-                    urlInfo.succeed();
-                })
-                .fail(function () {
-                    urlInfo.failed();
-                });
+                    .done(function (script) {
+                        $.globalEval(script);
+                        urlInfo.succeed();
+                    })
+                    .fail(function () {
+                        urlInfo.failed();
+                    });
             });
         };
 
         var _loadStyle = function (url) {
             _loadFromUrl(url, undefined, undefined, function (urlInfo) {
-
                 $('<link/>', {
                     rel: 'stylesheet',
                     type: 'text/css',
-                    href: appendTimeToUrl(url)
+                    href: appendTimeToUrl(url),
                 }).appendTo('head');
             });
         };
 
         return {
             loadScript: _loadScript,
-            loadStyle: _loadStyle
-        }
+            loadStyle: _loadStyle,
+        };
     })();
-
 })(jQuery);

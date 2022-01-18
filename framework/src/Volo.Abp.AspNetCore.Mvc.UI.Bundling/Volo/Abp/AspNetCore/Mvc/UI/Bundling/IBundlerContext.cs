@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+
+public interface IBundlerContext
 {
-    public interface IBundlerContext
-    {
-        string BundleRelativePath { get; }
+    string BundleRelativePath { get; }
 
-        IReadOnlyList<string> ContentFiles { get; }
+    IReadOnlyList<string> ContentFiles { get; }
 
-        bool IsMinificationEnabled { get; }
-    }
+    bool IsMinificationEnabled { get; }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.Account.Web",
+  "hash": "5fb2aa05261d4febe7ea7083d80fea74",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Account.Web",
+      "contentType": "abpModule",
+      "name": "AbpAccountWebModule"
+    }
+  ]
+}
