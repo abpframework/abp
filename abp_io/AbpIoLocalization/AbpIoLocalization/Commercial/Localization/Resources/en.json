@@ -457,7 +457,7 @@
     "AddDevelopers": "Add Developers",
     "StartDevelopment": "Start Development",
     "CreateAndRunApplicationUsingStartupTemplate": "Learn how to create and run a new web application using the ABP Commercial startup template.",
-    "CommunityDescription2": "<span class=\"fw-6\">community.abp.io</span> is a place where people can share ABP related articles. Search for articles, tutorials, code samples, case studies and meet people in the same lane as they are.",
+    "CommunityDescription2": "<span class=\"fw-6\">community.abp.io</span> is a place where people can share ABP related articles. Search for articles, tutorials, code samples, case studies and meet people in the same lane as you.",
     "UseABPSuiteExplanation": "Use ABP Suite to download the source-code of the modules and themes.",
     "ManageModulesWithSuite": "You can also manage your ABP modules with Suite.",
     "LearnHowToInstallSuite": "Learn how to install and use ABP Suite.",
