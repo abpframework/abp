@@ -278,7 +278,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
 
         var matches = Regex.Matches(stringBuilder.ToString(),
-            $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
+            $"({AppTemplate.TemplateName}|{AppNolayersTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
         foreach (Match match in matches)
         {
             templateList.Add((match.Groups[1].Value, match.Groups[2].Value));

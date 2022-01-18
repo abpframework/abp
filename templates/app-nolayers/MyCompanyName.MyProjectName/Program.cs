@@ -5,32 +5,39 @@ namespace MyCompanyName.MyProjectName;
 
 public class Program
 {
-    public static int Main(string[] args)
+    public async static Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
-            .MinimumLevel.Debug()
+        .MinimumLevel.Debug()
 #else
-            .MinimumLevel.Information()
+        .MinimumLevel.Information()
 #endif
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-            .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+        .Enrich.FromLogContext()
+        .WriteTo.Async(c => c.File("Logs/logs.txt"))
 #if DEBUG
-            .WriteTo.Async(c => c.Console())
+        .WriteTo.Async(c => c.Console())
 #endif
-            .CreateLogger();
+        .CreateLogger();
 
         try
         {
-            Log.Information("Starting web host.");
-            CreateHostBuilder(args).Build().Run();
+            Log.Information("Starting MyCompanyName.MyProjectName.");
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Host.AddAppSettingsSecretsJson()
+                .UseAutofac()
+                .UseSerilog();
+            await builder.AddApplicationAsync<MyProjectNameModule>();
+            var app = builder.Build();
+            await app.InitializeApplicationAsync();
+            await app.RunAsync();
             return 0;
         }
         catch (Exception ex)
         {
-            Log.Fatal(ex, "Host terminated unexpectedly!");
+            Log.Fatal(ex, "MyCompanyName.MyProjectName terminated unexpectedly!");
             return 1;
         }
         finally
@@ -38,14 +45,4 @@ public class Program
             Log.CloseAndFlush();
         }
     }
-
-    internal static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .AddAppSettingsSecretsJson()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-            .UseAutofac()
-            .UseSerilog();
 }

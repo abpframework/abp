@@ -53,39 +53,39 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    
+
     // Account module packages
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpAccountWebIdentityServerModule),
-    
+
     // Identity module packages
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityWebModule),
-    
+
     // Audit logging module packages
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    
+
     // Permission Management module packages
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    
+
     // Tenant Management module packages
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementHttpApiModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpTenantManagementWebModule),
-    
+
     // Feature Management module packages
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpFeatureManagementWebModule),
-    
+
     // Setting Management module packages
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -96,7 +96,7 @@ public class MyProjectNameModule : AbpModule
 {
     /* Single point to enable/disable multi-tenancy */
     private const bool IsMultiTenant = true;
-    
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -154,7 +154,7 @@ public class MyProjectNameModule : AbpModule
             );
         });
     }
-    
+
     private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication()
@@ -176,9 +176,26 @@ public class MyProjectNameModule : AbpModule
                 .AddVirtualJson("/Localization/MyProjectName");
 
             options.DefaultResourceType = typeof(MyProjectNameResource);
-            
+
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+            options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+            options.Languages.Add(new LanguageInfo("es", "es", "Español"));
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
@@ -242,7 +259,7 @@ public class MyProjectNameModule : AbpModule
              */
             options.AddDefaultRepositories(includeAllEntities: true);
         });
-        
+
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(configurationContext =>
@@ -275,22 +292,22 @@ public class MyProjectNameModule : AbpModule
         app.UseRouting();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
-        
+
         if (IsMultiTenant)
         {
             app.UseMultiTenancy();
         }
-        
+
         app.UseUnitOfWork();
         app.UseIdentityServer();
         app.UseAuthorization();
-        
+
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
         });
-        
+
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
