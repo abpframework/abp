@@ -7,8 +7,8 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.feature-management": "~5.1.1",
-    "@abp/ng.theme.shared": "~5.1.1",
+    "@abp/ng.feature-management": "~5.0.1",
+    "@abp/ng.theme.shared": "~5.0.1",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
