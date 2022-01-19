@@ -168,7 +168,7 @@
     "JoinTheABPCommunityInfo": "Get involved with a vibrant community and become a contributor to the ABP Framework!",
     "AllPosts": "All Posts",
     "SubmitYourPost": "Submit Your Post",
-    "DynamicClientProxyDocument": "See the dynamic client proxy documentations for <a href=\"{0}\">JavaScript</a> & <a href=\"{1}\">C#</a>.",
+    "DynamicClientProxyDocument": "See the dynamic client proxy documentation for <a href=\"{0}\">JavaScript</a> & <a href=\"{1}\">C#</a>.",
     "EmailSMSAbstractionsDocument": "See the <a href=\"{0}\">emailing</a> and <a href=\"{1}\">SMS sending</a> documents for more information.",
     "CreateProjectWizard": "This wizard creates a new project from the startup template which is properly configured to jump start to your project.",
     "TieredOption": "Creates a tiered solution where Web and Http API layers are physically separated. If not checked, creates a layered solution which is less complex and suitable for most scenarios.",
