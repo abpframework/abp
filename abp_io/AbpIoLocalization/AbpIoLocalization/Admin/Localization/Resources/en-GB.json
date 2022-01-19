@@ -214,6 +214,8 @@
     "Permission:SendWelcomeEmail": "Send Welcome Email",
     "SendWelcomeEmail": "Send Welcome Email",
     "SendWelcomeEmailWarningMessage": "Are you sure you want to send welcome email to the organization members?",
-    "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!"
+    "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!",
+    "AdditionalDeveloperCount": "Additional developer count",
+    "LicensePrice": "License price"
   }
 }

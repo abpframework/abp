@@ -306,9 +306,7 @@
     "PaymentTimeCannotBeFutureTime": "Payment time cannot be a future time!",
     "SaveAndDownload": "Save and Download",
     "BillingInfo": "Billing Info",
-    "GenerateInvoice": "Create Invoice",
     "DeleteInvoice" : "Delete Invoice",
-    "SuccessfullyDeleted": "Successfully deleted!",
     "PaymentStateSetTo" : "Payment state set to {0}",
     "ChangeState": "Change State",
     "Permission:TrialLicense" : "Trial License",
@@ -320,10 +318,8 @@
     "TrialLicenseEndDateFilter": "End date",
     "FirsName": "First name",
     "LastName": "Last name",
-    "Status": "Status",
     "StartDate": "Start date",
     "EndDate": "End date",
-    "CompanyName": "Company name",
     "PurchasedDate": "Purchased date",
     "OrganizationDetail": "Organization Detail",
     "SendActivationMail": "Send Activation Mail",
@@ -357,6 +353,8 @@
     "SendWelcomeEmail": "Send Welcome Email",
     "SendWelcomeEmailWarningMessage": "Are you sure you want to send welcome email to the organization members?",
     "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!",
-    "PaymentRequestId": "Payment Request Id"
+    "PaymentRequestId": "Payment Request Id",
+    "AdditionalDeveloperCount": "Additional developer count",
+    "LicensePrice": "License price"
   }
 }
