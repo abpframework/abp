@@ -52,6 +52,8 @@ public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
         {
             case AppTemplate.TemplateName:
                 return new AppTemplate();
+            case AppNoLayersTemplate.TemplateName:
+                return new AppNoLayersTemplate();
             case AppProTemplate.TemplateName:
                 return new AppProTemplate();
             case MicroserviceProTemplate.TemplateName:
