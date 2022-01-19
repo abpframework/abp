@@ -6,7 +6,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 public class AppNoLayersTemplate : AppTemplateBase
 {
     /// <summary>
-    /// "app".
+    /// "app-nolayers".
     /// </summary>
     public const string TemplateName = "app-nolayers";
 
