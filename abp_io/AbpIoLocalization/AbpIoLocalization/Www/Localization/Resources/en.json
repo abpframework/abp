@@ -286,7 +286,7 @@
     "AbpUpdateCommandExplanation": "Automatically updates all the ABP related NuGet and NPM packages in your solution.",
     "ExploreAllCLICommands": "Explore all CLI Commands",
     "ExploreDocumentationAndGuides": "Explore the comprehensive documentation and guides.",
-    "Documentations": "Documentations",
+    "Documentations": "Documentation",
     "Views": "Views",
     "ReadMore": "Read More",
     "EnterYouEmailToGetNews": "Enter your email to get the latest news about the ABP Framework",
