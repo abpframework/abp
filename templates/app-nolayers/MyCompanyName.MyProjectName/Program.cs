@@ -24,7 +24,6 @@ public class Program
 
         try
         {
-            Log.Information("Starting MyCompanyName.MyProjectName.");
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
@@ -32,11 +31,18 @@ public class Program
             await builder.AddApplicationAsync<MyProjectNameModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
+
+            Log.Information("Starting MyCompanyName.MyProjectName.");
             await app.RunAsync();
             return 0;
         }
         catch (Exception ex)
         {
+            if (ex.GetType().Name.Equals("StopTheHostException", StringComparison.Ordinal))
+            {
+                throw;
+            }
+
             Log.Fatal(ex, "MyCompanyName.MyProjectName terminated unexpectedly!");
             return 1;
         }
