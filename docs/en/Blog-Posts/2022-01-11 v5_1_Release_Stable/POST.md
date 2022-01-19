@@ -51,7 +51,7 @@ This is a minor feature release, mostly with enhancements and improvements based
 
 ### Blazor UI
 
-If you are using Blazor WebAssembly, open the `Program` class replace  `InitializeAsync` with `InitializeApplicationAsync`.
+If you are using Blazor WebAssembly, open the `Program` class and replace `InitializeAsync` with `InitializeApplicationAsync`.
 
 ## What's New with the ABP Framework 5.1?
 
