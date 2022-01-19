@@ -6,11 +6,7 @@
   },
   "dependencies": {
     "@abp/jquery": "~5.1.1",
-    "@abp/prismjs": "~5.1.1",
-    "@abp/codemirror": "~5.1.1",
-    "@abp/highlight.js": "~5.1.1",
-    "@abp/markdown-it": "~5.1.1",
-    "@toast-ui/editor": "^2.5.1"
+    "@abp/prismjs": "~5.1.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
