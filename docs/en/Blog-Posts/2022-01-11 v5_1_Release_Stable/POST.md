@@ -49,6 +49,10 @@ This is a minor feature release, mostly with enhancements and improvements based
   }
 ````
 
+### Blazor UI
+
+If you are using Blazor WebAssembly, open the `Program` class replace  `InitializeAsync` with `InitializeApplicationAsync`.
+
 ## What's New with the ABP Framework 5.1?
 
 In this section, I will introduce some major features released with this version.
