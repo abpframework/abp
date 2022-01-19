@@ -352,6 +352,8 @@
     "Permission:SendWelcomeEmail": "Hoşgeldin Emaili Gönder",
     "SendWelcomeEmail": "Hoşgeldin Emaili Gönder",
     "SendWelcomeEmailWarningMessage": "Organizasyon üyelerine hoşgeldin emaili göndermek istediğinden emin misin?",
-    "SendWelcomeEmailSuccessMessage": "Hoşgeldin emaili başarıyla gönderilmiştir!"
+    "SendWelcomeEmailSuccessMessage": "Hoşgeldin emaili başarıyla gönderilmiştir!",
+    "AdditionalDeveloperCount": "Ekstra geliştirici sayısı",
+    "LicensePrice": "Lisans ücreti"
   }
 }
