@@ -723,10 +723,6 @@
           "path": "Modules/Tenant-Management.md"
         },
         {
-          "text": "用户",
-          "path": "Modules/Users.md"
-        },
-        {
           "text": "虚拟文件浏览器",
           "path": "Modules/Virtual-File-Explorer.md"
         }
