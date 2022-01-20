@@ -68,7 +68,6 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
       password: passwordValidation,
     }),
     initialValues: {
-      isActive: true,
       lockoutEnabled: false,
       ...editingUser,
     },
@@ -229,19 +228,6 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                   </Stack>
                 </FormControl>
               ) : null}
-
-              <FormControl my="2">
-                <Stack mx="4">
-                  <Checkbox
-                    isChecked={formik.values.isActive}
-                    onPress={() =>
-                      formik.setFieldValue('isActive', !formik.values.isActive)
-                    }
-                  >
-                    {i18n.t('AbpIdentity::DisplayName:IsActive')}
-                  </Checkbox>
-                </Stack>
-              </FormControl>
 
               <FormControl my="2">
                 <Stack mx="4">
