@@ -250,7 +250,7 @@
     "OtherFeatures1": "Updates <strong>NuGet</strong> and <strong>NPM</strong> packages on your solution easily.",
     "OtherFeatures2": "Regenerates already generated pages from scratch.",
     "OtherFeatures3": "Creates new solutions",
-    "ThanksForCreatingProject": "Thanks for Creating Your Project!",
+    "ThanksForCreatingProject": "Your project has been successfully created!",
     "HotToRunSolution": "How to run your solution?",
     "HotToRunSolutionExplanation": "Check out the getting started document to learn how to configure and run your solution.",
     "GettingStarted": "Getting Started",
