@@ -121,7 +121,7 @@ function ManageProfileForm({ editingUser = {}, submit, cancel }) {
           <FormControl isRequired my="2">
             <Stack mx="4">
               <FormControl.Label>
-                {i18n.t('AbpIdentity::PhoneNumber')}
+                {i18n.t('AbpIdentity::EmailAddress')}
               </FormControl.Label>
               <Input
                 ref={emailRef}
