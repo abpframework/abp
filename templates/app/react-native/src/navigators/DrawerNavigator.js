@@ -1,20 +1,43 @@
-import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import React from 'react';
+import DrawerContent from '../components/DrawerContent/DrawerContent';
+import HamburgerIcon from '../components/HamburgerIcon/HamburgerIcon';
+import { LocalizationContext } from '../contexts/LocalizationContext';
 import HomeStackNavigator from './HomeNavigator';
 import SettingsStackNavigator from './SettingsNavigator';
-import UsersStackNavigator from './UsersNavigator';
 import TenantsStackNavigator from './TenantsNavigator';
-import DrawerContent from '../components/DrawerContent/DrawerContent';
+import UsersStackNavigator from './UsersNavigator';
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
+  const { t } = React.useContext(LocalizationContext);
+
   return (
     <Drawer.Navigator initialRouteName="Home" drawerContent={DrawerContent}>
-      <Drawer.Screen name="Home" component={HomeStackNavigator} />
-      <Drawer.Screen name="Users" component={UsersStackNavigator} />
-      <Drawer.Screen name="Tenants" component={TenantsStackNavigator} />
-      <Drawer.Screen name="Settings" component={SettingsStackNavigator} />
+      <Drawer.Screen
+        name="HomeStack"
+        component={HomeStackNavigator}
+        options={({ navigation }) => ({
+          title: t('::Menu:Home'),
+          headerLeft: () => <HamburgerIcon navigation={navigation} />,
+        })}
+      />
+      <Drawer.Screen
+        name="TenantsStack"
+        component={TenantsStackNavigator}
+        options={{ header: () => null }}
+      />
+      <Drawer.Screen
+        name="UsersStack"
+        component={UsersStackNavigator}
+        options={{ header: () => null }}
+      />
+      <Drawer.Screen
+        name="SettingsStack"
+        component={SettingsStackNavigator}
+        options={{ header: () => null }}
+      />
     </Drawer.Navigator>
   );
 }
